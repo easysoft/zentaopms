@@ -81,20 +81,71 @@ function loadProductBranches(productID)
     if(page == 'create') param = 'active';
     $('#branch').remove();
     $('#branch_chosen').remove();
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + executionID), function(data)
-    {
-        var $product = $('#product');
-        var $inputGroup = $product.closest('.input-group');
-        $inputGroup.find('.input-group-addon').toggleClass('hidden', !data);
-        if(data)
-        {
-            $inputGroup.append(data);
-            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px').chosen();
-        }
-        $inputGroup.fixInputGroup();
 
-        loadProductModules(productID, $('#branch').val());
-        loadProductPlans(productID, $('#branch').val());
+    var isSiblings = storyType == 'story' ? 'yes' : 'no';
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + executionID + "&withMainBranch=1&isSiblings=" + isSiblings), function(data)
+    {
+        if(storyType == 'story')
+        {
+            $('.switchBranch').toggleClass('hidden');
+            $('.switchBranch').toggleClass('disable');
+            $('tr[class^="addBranchesBox"]').remove();
+
+            if(data)
+            {
+                $.get(createLink('product', 'ajaxGetProductById', "productID=" + productID), function(data)
+                {
+                    $('.switchBranch #branchBox .input-group .input-group-addon').html(data.branchSourceName)
+                    $('.switchBranch #branchBox').closest('td').prev().html(data.branchName)
+                    $.cookie('branchSourceName', data.branchSourceName)
+                }, 'json')
+
+                /* reload branch */
+                $('#branches0').replaceWith(data);
+                $('#branches0' + "_chosen").remove();
+                $('#branches0').next('.picker').remove();
+                $('#branches0').chosen();
+
+                $.get(createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=0' + '&rootModuleID=0&returnType=html&fieldID=0' + '&needManage=true&extra=&currentModuleID=0'), function(moduleData)
+                {
+                    if(moduleData)
+                    {
+                        $('#modules0').replaceWith(moduleData);
+                        $('#modules0' + "_chosen").remove();
+                        $('#modules0').next('.picker').remove();
+                        $('#modules0').chosen();
+                    }
+                });
+
+                var expired = config.currentMethod == 'create' ? 'unexpired' : '';
+                $.get(createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=0' + '&planID=' + $('#plan').val() + '&fieldID=0' + '&needCreate=true&expired='+ expired +'&param=skipParent,' + config.currentMethod), function(planData)
+                {
+                    if(planData)
+                    {
+                        $('#plans0').replaceWith(planData);
+                        $('#plans0' + "_chosen").remove();
+                        $('#plans0').next('.picker').remove();
+                        $('#plans0').chosen();
+                    }
+                });
+            }
+        }
+        else
+        {
+            var $product = $('#product');
+            var $inputGroup = $product.closest('.input-group');
+            $inputGroup.find('.input-group-addon').toggleClass('hidden', !data);
+            if(data)
+            {
+                $inputGroup.append(data);
+                $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px').chosen();
+            }
+            $inputGroup.fixInputGroup();
+
+            loadProductModules(productID, $('#branch').val());
+            loadProductPlans(productID, $('#branch').val());
+        }
+
     })
 }
 

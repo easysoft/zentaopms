@@ -121,6 +121,7 @@ class story extends control
             $response['result'] = 'success';
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
             $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
             if(!$storyResult or dao::isError())
             {
@@ -157,7 +158,9 @@ class story extends control
                 $action = $fromObjectAction;
                 $extra  = $fromObjectID;
             }
-            $actionID = $this->action->create('story', $storyID, $action, '', $extra);
+            /* Create actions. */
+            $storyIds = $storyResult['ids'];
+            foreach($storyIds as $idItem) $actionID = $this->action->create('story', $idItem, $action, '', $extra);
 
             if($objectID != 0)
             {
