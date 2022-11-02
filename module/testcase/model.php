@@ -2259,9 +2259,10 @@ class testcaseModel extends model
             $data->order   = ++ $lastOrder;
             $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
 
-            $objectType = $objectInfo[$projectID]->type;
+            $object     = $objectInfo[$projectID];
+            $objectType = $object->type;
             if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
-            if(in_array($objectType, array('sprint', 'stage'))) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
+            if(in_array($objectType, array('sprint', 'stage')) and $object->multiple) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
         }
     }
 
