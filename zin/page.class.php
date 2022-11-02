@@ -70,7 +70,7 @@ class page
         /* Body. */
         if(!empty($this->top->layout))
         {
-            echo '<div id="mainMenu" class="clearfix">';
+            echo '<div id="mainMenu">';
             foreach($this->top->layout as $key => $block) $block->x();
             echo '</div>';
         }

@@ -49,7 +49,7 @@ class toolbar extends wg
      */
     public function toString()
     {
-        $html = '<div class="btn-toolBar pull-left">';
+        $html = '<nav id="featureBar" class="toolbar-nav"><menu class="nav">';
         foreach($this->tools as $tool)
         {
             if(is_string($tool))
@@ -59,6 +59,6 @@ class toolbar extends wg
             }
             $html .= $tool->toString();
         }
-        return $html . '</div>';
+        return $html . '</menu></nav>';
     }
 }

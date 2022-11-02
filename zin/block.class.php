@@ -27,6 +27,30 @@ class block
     private $type = 'v';
 
     /**
+     * Global language.
+     *
+     * @var    object
+     * @access private
+     */
+    private $lang;
+
+    /**
+     * Global config.
+     *
+     * @var    object
+     * @access private
+     */
+    private $config;
+
+    /**
+     * Global app.
+     *
+     * @var    object
+     * @access private
+     */
+    private $app;
+
+    /**
      * Construct function, init block data.
      *
      * @param  string $type

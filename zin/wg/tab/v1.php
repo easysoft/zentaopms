@@ -81,8 +81,8 @@ class tab extends wg
      */
     public function toString()
     {
-        $active = $this->isActive ? 'btn-active-text' : '';
+        $active = $this->isActive ? 'active' : '';
         $label  = "<span class='text'>{$this->text}</span>";
-        return html::a($this->link, $label, '', "class='btn btn-link $active'");
+        return "<li class='nav-item'>" . html::a($this->link, $label, '', "class='$active'") . '</li>';
     }
 }
