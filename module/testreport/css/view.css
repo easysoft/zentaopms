@@ -6,3 +6,4 @@
 .tab-pane > table:first-child {border-top: none;}
 .c-name {max-width: 100px;}
 #profile {vertical-align: unset;}
+.c-full-date {width: 190px;}
