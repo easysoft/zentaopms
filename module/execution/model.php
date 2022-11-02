@@ -2180,12 +2180,14 @@ class executionModel extends model
     public function getOrderedExecutions($executionID, $status, $num = 0)
     {
         $executionList = $this->getList($executionID, 'all', $status);
-        if(empty($executionIdList)) return $executionList;
+        if(empty($executionList)) return $executionList;
 
         $executions = $mineExecutions = $otherExecutions = $closedExecutions = array();
         foreach($executionList as $execution)
         {
+            if(empty($execution->multiple)) continue;
             if(!$this->app->user->admin and !$this->checkPriv($execution->id)) continue;
+
             if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
             {
                 $mineExecutions[$execution->id] = $execution;
