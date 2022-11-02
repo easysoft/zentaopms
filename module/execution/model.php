@@ -2458,15 +2458,19 @@ class executionModel extends model
 
         /* Link stories. */
         $executionStories = $this->loadModel('story')->getExecutionStoryPairs($executionID);
-        $lastOrder      = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $lastOrder        = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $stories          = $this->dao->findById($storyID)->fields("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($executionStories))->fetchAll('story');
         foreach($stories as $storyID)
         {
             if(!isset($executionStories[$storyID]))
             {
-                $story = $this->dao->findById($storyID)->fields("$executionID as project, id as story, product, version")->from(TABLE_STORY)->fetch();
-                $story->order = ++$lastOrder;
+                $story = zget($stories, $storyID, '');
+                if(empty($story)) continue;
+
+                $story->project = $executionID;
+                $story->order   = ++$lastOrder;
                 $this->dao->insert(TABLE_PROJECTSTORY)->data($story)->exec();
-                $this->action->create('story', $storyID, 'linked2execution', '', $executionID);
+                if($execution->multiple or $execution->type == 'project') $this->action->create('story', $storyID, 'linked2execution', '', $executionID);
             }
         }
     }
@@ -2800,7 +2804,7 @@ class executionModel extends model
 
             $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
             if($action == 'linked2execution' and $execution->type == 'kanban') $action = 'linked2kanban';
-            $this->action->create('story', $storyID, $action, '', $executionID);
+            if($execution->multiple or $execution->type == 'project') $this->action->create('story', $storyID, $action, '', $executionID);
         }
 
         if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
@@ -2821,6 +2825,7 @@ class executionModel extends model
         $linkedCases   = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('case', 'order');
         $lastCaseOrder = empty($linkedCases) ? 0 : reset($linkedCases);
         $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchPairs();
+        $execution     = $this->getById($executionID);
         foreach($cases as $caseID => $version)
         {
             if(isset($linkedCases[$caseID])) continue;
@@ -2834,9 +2839,8 @@ class executionModel extends model
 
             $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
 
-            $action = $executionID == $this->session->project ? 'linked2project' : 'linked2execution';
-
-            $this->action->create('case', $caseID, $action, '', $executionID);
+            $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
+            if($execution->multiple or $execution->type == 'project') $this->action->create('case', $caseID, $action, '', $executionID);
         }
     }
 
@@ -2918,8 +2922,8 @@ class executionModel extends model
 
         $this->loadModel('story')->setStage($storyID);
         $this->unlinkCases($executionID, $storyID);
-        $objectType = $executionID == $this->session->project ? 'unlinkedfromproject' : 'unlinkedfromexecution';
-        $this->loadModel('action')->create('story', $storyID, $objectType, '', $executionID);
+        $objectType = $execution->type == 'project' ? 'unlinkedfromproject' : 'unlinkedfromexecution';
+        if($execution->multiple or $execution->type == 'project') $this->loadModel('action')->create('story', $storyID, $objectType, '', $executionID);
 
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
         foreach($tasks as $taskID)
@@ -2942,12 +2946,13 @@ class executionModel extends model
     public function unlinkCases($executionID, $storyID)
     {
         $this->loadModel('action');
-        $cases = $this->dao->select('id')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchAll('id');
+        $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+        $cases     = $this->dao->select('id')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchAll('id');
         foreach($cases as $caseID => $case)
         {
             $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->andWhere('`case`')->eq($caseID)->limit(1)->exec();
-            $action = $executionID == $this->session->project ? 'unlinkedfromproject' : 'unlinkedfromexecution';
-            $this->action->create('case', $caseID, $action, '', $executionID);
+            $action = $execution->type == 'project' ? 'unlinkedfromproject' : 'unlinkedfromexecution';
+            if($execution->multiple or $execution->type == 'project') $this->action->create('case', $caseID, $action, '', $executionID);
         }
 
         $order = 1;
