@@ -161,7 +161,7 @@ class upgrade extends control
 
             if($systemMode == 'classic')
             {
-                $this->loadModel('setting')->setItem('system.common.global.mode', 'lean');
+                $this->loadModel('setting')->setItem('system.common.global.mode', 'light');
 
                 $programID = $this->loadModel('program')->createDefaultProgram();
                 $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
@@ -171,12 +171,12 @@ class upgrade extends control
 
                 $this->upgrade->upgradeInProjectMode($programID, $systemMode);
 
-                $this->loadModel('custom')->disableFeaturesByMode('lean');
+                $this->loadModel('custom')->disableFeaturesByMode('light');
 
                 $selectMode = false;
             }
             if(version_compare($openVersion, '18_0', '>=')) $selectMode = false;
-            if(version_compare($openVersion, '15_0', '>=') and $systemMode == 'new') $selectMode = false;
+            if(version_compare($openVersion, '15_0', '>=') and $systemMode == 'ALM') $selectMode = false;
 
             if($selectMode) $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
 
@@ -217,7 +217,7 @@ class upgrade extends control
             $this->setting->setItem('system.custom.sprintConcept', $sprintConcept);
 
             $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
-            if($mode == 'lean')
+            if($mode == 'light')
             {
                 $programID = $this->loadModel('program')->createDefaultProgram();
                 $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
@@ -225,19 +225,19 @@ class upgrade extends control
                 /* Set default program for product and project with no program. */
                 $this->upgrade->relateDefaultProgram($programID);
 
-                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=lean"));
+                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=light"));
 
                 $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
             }
-            if($mode == 'new')
+            if($mode == 'ALM')
             {
-                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=new"));
+                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=ALM"));
 
                 $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
             }
         }
 
-        $checkHistoryResult = $this->upgrade->checkHistoryDataForLeanMode();
+        $checkHistoryResult = $this->upgrade->checkHistoryDataForLightMode();
 
         $this->view->ur        = $checkHistoryResult['ur'];
         $this->view->cmmi      = $checkHistoryResult['cmmi'];
@@ -591,7 +591,7 @@ class upgrade extends control
             if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=moreLink"));
 
             $this->view->noMergedSprints = $noMergedSprints;
-            if(!$programID && $systemMode == 'lean') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
+            if(!$programID && $systemMode == 'light') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
         }
 
         /* Get no merged projects that link more then two products. */
@@ -656,19 +656,19 @@ class upgrade extends control
      * Select the merge mode when upgrading to zentaopms 18.0.
      *
      * @param  string  $fromVersion
-     * @param  string  $mode   lean | new
+     * @param  string  $mode   light | ALM
      * @access public
      * @return void
      */
-    public function selectMergeMode($fromVersion, $mode = 'lean')
+    public function selectMergeMode($fromVersion, $mode = 'light')
     {
         if($_POST)
         {
             $mergeMode = $this->post->projectType;
             if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
 
-            if($mode == 'lean') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
-            if($mode == 'new')  $programID = $this->loadModel('program')->createDefaultProgram();
+            if($mode == 'light') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
+            if($mode == 'ALM')   $programID = $this->loadModel('program')->createDefaultProgram();
 
             if($mergeMode == 'project')   $this->upgrade->upgradeInProjectMode($programID);
             if($mergeMode == 'execution') $this->upgrade->upgradeInExecutionMode($programID);

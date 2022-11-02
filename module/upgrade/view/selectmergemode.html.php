@@ -31,7 +31,7 @@
                       <?php echo $label;?>
                       <?php $tipLang = 'merge' . ucfirst($mode) . 'Tip';?>
                       <div class='tips text-gray'><?php echo $lang->upgrade->{$tipLang};?></div>
-                      <?php if($systemMode == 'new' && $mode != 'manually'):?>
+                      <?php if($systemMode == 'ALM' && $mode != 'manually'):?>
                       <div class='tips text-gray'><?php echo $lang->upgrade->createProgramTip;?></div>
                       <?php endif;?>
                     </label>

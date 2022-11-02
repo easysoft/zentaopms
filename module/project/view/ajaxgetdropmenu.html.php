@@ -53,14 +53,14 @@ foreach($projects as $programID => $programProjects)
 }
 $projectsPinYin = common::convert2Pinyin($projectNames);
 
-$myProjectsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$normalProjectsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$closedProjectsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$myProjectsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$normalProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$closedProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
 
 foreach($projects as $programID => $programProjects)
 {
     /* Add the program name before project. */
-    if(isset($programs[$programID]) and $config->systemMode == 'new')
+    if(isset($programs[$programID]) and $config->systemMode == 'ALM')
     {
         $programName = zget($programs, $programID);
 

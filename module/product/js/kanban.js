@@ -155,7 +155,7 @@ function initKanban()
         $kanban.kanban(
         {
             data:            data,
-            noLaneName:      isLeanMode,
+            noLaneName:      isLightMode,
             virtualize:      true,
             virtualCardList: true,
             calcColHeight:   calcColHeight

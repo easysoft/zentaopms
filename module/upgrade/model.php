@@ -7706,13 +7706,13 @@ class upgradeModel extends model
     }
 
     /**
-     * Check history data form lean mode.
-     * 简要迅捷模式历史数据是否存在
+     * Check history data form light mode.
+     * 检查轻量管理模式历史数据是否存在
      *
      * @access public
      * @return array
      */
-    public function checkHistoryDataForLeanMode()
+    public function checkHistoryDataForLightMode()
     {
         $returnData = array(
             'ur' => false,
@@ -7721,7 +7721,7 @@ class upgradeModel extends model
             'assetlib' => false,
         );
 
-        if($this->config->systemMode == 'new')
+        if($this->config->systemMode == 'ALM')
         {
             /* User requriement */
             $requirementStory = $this->dao->select('count(1) as total')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('total');

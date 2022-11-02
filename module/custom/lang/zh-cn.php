@@ -246,12 +246,12 @@ $lang->custom->saveFail       = '保存失败！';
 $lang->custom->page           = '页面';
 $lang->custom->changeModeTips = '历史删除数据不参与数据归并流程，切换模式后将不支持还原，请知悉';
 
-$lang->custom->changeModeTitleTips['new']   = '您确定要切换到综合模式吗？';
-$lang->custom->changeModeTitleTips['lean']  = '您确定要切换到迅捷模式吗？';
-$lang->custom->changeModeContentTips['new'] = '综合模式适用于中大型研发团队，切换综合模式后，系统将启用项目集等功能。';
+$lang->custom->changeModeTitleTips['ALM']   = '您确定要切换到全生命周期管理模式吗？';
+$lang->custom->changeModeTitleTips['light'] = '您确定要切换到轻量管理模式吗？';
+$lang->custom->changeModeContentTips['ALM'] = '全生命周期管理模式适用于中大型研发团队，切换全生命周期管理模式后，系统将启用项目集等功能。';
 
-$lang->custom->hasMoreData['yes'] = '切换到迅捷模式后，系统将关闭项目集功能，项目集的相关功能将会被隐藏。';
-$lang->custom->hasMoreData['no']  = '切换到迅捷模式后，系统将关闭项目集，%s等功能。';
+$lang->custom->hasMoreData['yes'] = '切换到轻量管理模式后，系统将关闭项目集功能，项目集的相关功能将会被隐藏。';
+$lang->custom->hasMoreData['no']  = '切换到轻量管理模式后，系统将关闭项目集，%s等功能。';
 
 $lang->custom->needClosedFunctions['waterfall'] = '瀑布项目';
 $lang->custom->needClosedFunctions['URStory']   = '用户需求';

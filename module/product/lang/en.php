@@ -189,7 +189,7 @@ $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Closed';
 
 global $config;
-if($config->systemMode == 'new')
+if($config->systemMode == 'ALM')
 {
     $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
 }

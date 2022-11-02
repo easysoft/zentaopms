@@ -293,9 +293,6 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');
 
-$lang->install->modeList['lean'] = 'Lean mode';
-$lang->install->modeList['new']  = 'Program mode';
-
 $lang->install->promotion = "Products also from EasyCorp:";
 
 $lang->install->chanzhi       = new stdclass();

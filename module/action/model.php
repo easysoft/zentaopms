@@ -1090,7 +1090,7 @@ class actionModel extends model
             ->markRight(1)
             /* Types excluded from Lite. */
             ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
-            ->beginIF($this->config->systemMode == 'lean')->andWhere('objectType')->notin('program')->fi()
+            ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()

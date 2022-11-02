@@ -634,7 +634,7 @@ class searchModel extends model
         }
         else
         {
-            if($this->config->systemMode == 'lean') unset($this->config->search->fields->program);
+            if($this->config->systemMode == 'light') unset($this->config->search->fields->program);
 
             foreach($this->config->search->fields as $objectType => $fields)
             {

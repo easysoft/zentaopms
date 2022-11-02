@@ -245,12 +245,12 @@ $lang->custom->saveFail       = 'Echec de la sauvegarde !';
 $lang->custom->page           = ' Page';
 $lang->custom->changeModeTips = 'Historical deleted data does not participate in the data merging process. After switching the mode, it will not support restoration. Please know.';
 
-$lang->custom->changeModeTitleTips['new']   = 'Please double confirm to switch to New mode.';
-$lang->custom->changeModeTitleTips['lean']  = 'Please double confirm to switch to Lean mode.';
-$lang->custom->changeModeContentTips['new'] = 'The new mode is suitable for medium and large R&D teams. After switching the new mode, the system will enable functions such as program sets.';
+$lang->custom->changeModeTitleTips['ALM']   = 'Please double confirm to switch to ALM Mode.';
+$lang->custom->changeModeTitleTips['light'] = 'Please double confirm to switch to Light Mode.';
+$lang->custom->changeModeContentTips['ALM'] = 'The ALM mode is suitable for medium and large R&D teams. After switching the ALM mode, the system will enable functions such as program sets.';
 
-$lang->custom->hasMoreData['yes'] = 'After switching to lean mode, the system will close the program function, and the related functions of the program will be hidden.';
-$lang->custom->hasMoreData['no']  = 'After switching to lean mode, the system will close functions such as program sets, %s.';
+$lang->custom->hasMoreData['yes'] = 'After switching to light mode, the system will close the program function, and the related functions of the program will be hidden.';
+$lang->custom->hasMoreData['no']  = 'After switching to light mode, the system will close functions such as program sets, %s.';
 
 $lang->custom->needClosedFunctions['waterfall'] = 'Waterfall';
 $lang->custom->needClosedFunctions['URStory']   = 'User Story';

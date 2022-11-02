@@ -1,14 +1,14 @@
 $(function()
 {
-    $("#useLean").click(function()
+    $("#useLight").click(function()
     {
-        $('#mode').val('lean');
+        $('#mode').val('light');
         $('form').submit();
     })
 
-    $("#useNew").click(function()
+    $("#useALM").click(function()
     {
-        $('#mode').val('new');
+        $('#mode').val('ALM');
         $('form').submit();
     })
 });

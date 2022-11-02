@@ -990,7 +990,7 @@ class projectModel extends model
         $this->config->project->search['params']['parent']['values'] = $programPairs;
 
         if(isset($this->config->setCode) and $this->config->setCode == 0) unset($this->config->project->search['fields']['code'], $this->config->project->search['params']['code']);
-        if($this->config->systemMode == 'lean') unset($this->config->project->search['fields']['parent'], $this->config->project->search['params']['parent']);
+        if($this->config->systemMode == 'light') unset($this->config->project->search['fields']['parent'], $this->config->project->search['params']['parent']);
 
         $this->loadModel('search')->setSearchParams($this->config->project->search);
     }
@@ -1096,7 +1096,7 @@ class projectModel extends model
             {
                 $projectName = $project->name;
 
-                if($this->config->systemMode == 'new')
+                if($this->config->systemMode == 'ALM')
                 {
                     $programID = zget($projectProgram, $project->id, '');
                     if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
@@ -1215,7 +1215,7 @@ class projectModel extends model
         if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
 
         /* Lean mode relation defaultProgram. */
-        if($this->config->systemMode == 'lean') $project->parent = $this->config->global->defaultProgram;
+        if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
 
         $linkedProductsCount = 0;
         if($project->hasProduct && isset($_POST['products']))

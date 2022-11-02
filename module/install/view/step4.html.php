@@ -37,15 +37,15 @@
             <thead>
               <tr>
                 <th colspan='2'><?php echo $this->lang->upgrade->mode;?></th>
-                <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['lean'];?></th>
-                <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['new'];?></th>
+                <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['light'];?></th>
+                <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['ALM'];?></th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->usage;?></td>
-                <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->leanUsage;?></td>
-                <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->newUsage;?></td>
+                <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->lightUsage;?></td>
+                <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->ALMUsage;?></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->program;?></td>
@@ -115,8 +115,8 @@
               </tr>
               <tr>
                 <td colspan='2' style="font-weight:bold;font-size:14px;"><?php echo $this->lang->upgrade->selectUsage;?></td>
-                <td colspan='2' class="text-center"><button class="btn" type="button" id='useLean'><?php echo $this->lang->upgrade->useLean;?></button></td>
-                <td colspan='2' class="text-center"><button class="btn" type="button" id='useNew'><?php echo $this->lang->upgrade->useNew;?></button></td>
+                <td colspan='2' class="text-center"><button class="btn" type="button" id='useLight'><?php echo $this->lang->upgrade->useLight;?></button></td>
+                <td colspan='2' class="text-center"><button class="btn" type="button" id='useALM'><?php echo $this->lang->upgrade->useALM;?></button></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->remark;?></td>

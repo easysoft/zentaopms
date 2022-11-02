@@ -56,14 +56,14 @@ foreach($products as $programID => $programProducts)
 }
 $productsPinYin = common::convert2Pinyin($productNames);
 
-$myProductsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$normalProductsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$closedProductsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$myProductsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$normalProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$closedProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
 
 foreach($products as $programID => $programProducts)
 {
     /* Add the program name before project. */
-    if($programID and $config->systemMode == 'new')
+    if($programID and $config->systemMode == 'ALM')
     {
         $programName = zget($programs, $programID);
 
@@ -76,7 +76,7 @@ foreach($products as $programID => $programProducts)
     {
         if($product->id == $productID) $currentProduct = $product;
         $selected    = $product->id == $productID ? 'selected' : '';
-        $productName = ($config->systemMode == 'new' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
+        $productName = ($config->systemMode == 'ALM' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
         $linkHtml    = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
         $locateTab   = ($module == 'testtask' and $method == 'browseUnits' and $app->tab == 'project') ? '' : "data-app='$app->tab'";
 

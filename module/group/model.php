@@ -291,7 +291,7 @@ class groupModel extends model
 
         foreach($productList as $id => $product)
         {
-            if(isset($programs[$product->program]) and $this->config->systemMode == 'new') $product->name = $programs[$product->program] . '/' . $product->name;
+            if(isset($programs[$product->program]) and $this->config->systemMode == 'ALM') $product->name = $programs[$product->program] . '/' . $product->name;
             $products[$product->id] = $product->name;
         }
 
