@@ -2761,8 +2761,12 @@ class story extends control
         /* If siblings == ,$siblingID, update siblings empty.*/
         if(count(explode(',', $siblings)) == 3) $siblings = '';
 
-        $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($siblingID)->exec();
-        $this->dao->update(TABLE_STORY)->set('siblings')->eq($siblings)->where('siblings')->like("%,{$_POST['siblingID']},%")->exec();
+        /* batchUnset siblingID from siblings.*/
+        $replaceSql = "UPDATE " . TABLE_STORY . " SET siblings = REPLACE(siblings,',$siblingID,', ',') WHERE `product` = $story->product";
+        $this->dbh->exec($replaceSql);
+
+        /* Update siblings to empty by siblingID and if siblings eq ','.*/
+        $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($siblingID)->orWhere('siblings')->eq(',')->exec();
 
         if(!dao::isError()) $this->loadModel('action')->create('story', $siblingID, 'relieved');
         return $this->send(array('result' => 'success', 'data' => $siblings));

@@ -77,7 +77,7 @@ $lang->story->order              = 'Order';
 $lang->story->saveDraft          = 'Save as draft';
 $lang->story->doNotSubmit        = 'Do Not Submit';
 $lang->story->currentBranch      = 'Current Branch';
-$lang->story->sibling            = 'Sibling story';
+$lang->story->siblings           = 'Siblings story';
 $lang->story->relieved           = 'Relieved';
 $lang->story->relievedSiblings   = 'Relieved Siblings';
 
