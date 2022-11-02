@@ -127,6 +127,12 @@ $(window).unload(function(){
      $('#plans_i__chosen').remove();
      $('#plans' + itemIndex).chosen();
      $('.addBranchesBox' + itemIndex + ' #planIdBox').css('flex', '0 0 ' + gap + 'px');
+
+     loadBranchForSiblings($('#product').val(), 0, itemIndex)
+     loadModuleForSiblings($('#product').val(), 0, itemIndex)
+     loadPlanForSiblings($('#product').val(), 0, itemIndex)
+     $('.addBranchesBox' + itemIndex + ' #branchBox .input-group .input-group-addon').html($.cookie('branchSourceName'))
+
      itemIndex ++;
  }
 

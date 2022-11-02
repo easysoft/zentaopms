@@ -56,16 +56,14 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               <?php if($branches and $type != 'story') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
               </div>
             </td>
-            <?php if($branches and $type == 'story'): ?>
-            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
+            <td colspan='2' id='assignedToBox' class='<?php if((!$branches and $type == 'story') or $type == 'requirement') echo "hidden"; ?> switchBranch'>
               <div class='input-group'>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
                 <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
-            <td class='w-60px'></td>
-            <?php else: ?>
-            <td colspan="2">
+            <td class='w-60px <?php if((!$branches and $type == 'story') or $type == 'requirement') echo "hidden"; ?> switchBranch'></td>
+            <td colspan="2" class='<?php if($branches and $type == 'story') echo "hidden"; ?> switchBranch'>
             <div class='input-group' id='moduleIdBox'>
               <div class="input-group-addon"><?php echo $lang->story->module;?></div>
               <?php
@@ -81,19 +79,17 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               ?>
               </div>
             </td>
-            <?php endif; ?>
           </tr>
           <?php $hiddenSource = strpos(",$showFields,", ',source,') !== false ? '' : 'hidden';?>
           <?php if($type == 'story'):?>
-          <?php if($branches): ?>
-          <tr>
+          <tr class='<?php if(!$branches) echo 'hidden'; ?> switchBranch' >
             <th><?php echo $lang->product->branchName[$product->type];?></th>
             <td colspan="4">
               <div class='input-group' style='display: flex;'>
                 <div class='table-col' id='branchBox'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
-                    <?php echo html::select('branches[0]', $branches, $branch, "onchange='loadBranchForBranch(this.value, 0);' class='form-control chosen control-branch'");?>
+                    <?php echo html::select('branches[0]', $branches, $branch, "onchange='loadBranchRelation(this.value, 0);' class='form-control chosen control-branch'");?>
                   </div>
                 </div>
                 <div class='table-col' id='moduleIdBox'>
@@ -116,14 +112,13 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               </div>
             </td>
           </tr>
-          <tr>
+          <tr class='<?php if(!$branches) echo "hidden"; ?> switchBranch' >
             <th></th>
             <td colspan="4" id="storyNoticeBranch">
-              <i class="icon-exclamation-sign"></i>&nbsp;<?php echo $lang->story->notice->branch;?>
+              <i class="icon-exclamation-sign"></i> <?php echo $lang->story->notice->branch;?>
             </td>
           </tr>
-          <?php else: ?>
-          <tr>
+          <tr class='<?php if($branches) echo "hidden"; ?> switchBranch'>
             <th class='planTh'><?php echo $lang->story->planAB;?></th>
             <td colspan="2">
               <div class='input-group' id='planIdBox'>
@@ -148,7 +143,6 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               </div>
             </td>
           </tr>
-          <?php endif; ?>
           <tr class='sourceBox <?php echo $hiddenSource;?>'>
             <th><?php echo $lang->story->source;?></th>
             <td colspan='2'>
@@ -360,7 +354,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <div class='table-col' id='branchBox' style='flex: 1 0 160px'>
             <div class='input-group'>
               <span class='input-group-addon fix-border'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
-              <?php echo html::select("branches[$i]", $branches, $branch, "onchange='loadBranchForBranch(this.value, $i);' class='form-control chosen control-branch'");?>
+              <?php echo html::select("branches[$i]", $branches, $branch, "onchange='loadBranchRelation(this.value, $i);' class='form-control chosen control-branch'");?>
             </div>
           </div>
           <div class='table-col' id='moduleIdBox' style='flex: 1 0 160px'>

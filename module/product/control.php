@@ -960,6 +960,22 @@ class product extends control
     }
 
     /**
+     * Ajax get product by id.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductById($productID)
+    {
+        $product = $this->product->getById($productID);
+
+        $product->branchSourceName = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        $product->branchName       = $this->lang->product->branchName[$product->type];
+        echo json_encode($product);
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
