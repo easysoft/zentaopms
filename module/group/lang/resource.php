@@ -1897,6 +1897,8 @@ $hasWaterfallTrack  = (strpos(",$config->disabledFeatures,", ',waterfallTrack,')
 $hasWaterfall       = (strpos(",$config->disabledFeatures,", ',waterfall,')       === false or $inUpgrade);
 $hasAssetlib        = (strpos(",$config->disabledFeatures,", ',assetlib,')        === false or $inUpgrade);
 $hasAssetlibCaselib = (strpos(",$config->disabledFeatures,", ',assetlibCaselib,') === false or $inUpgrade);
+$hasOtherDevops     = (strpos(",$config->disabledFeatures,", ',otherDevops,')     === false or $inUpgrade);
+$hasOtherKanban     = (strpos(",$config->disabledFeatures,", ',otherKanban,')     === false or $inUpgrade);
 
 if(!$hasWaterfall)
 {
@@ -1926,5 +1928,8 @@ if(!$hasAssetlib or !$hasAssetlibCaselib)
     unset($lang->resource->testcase->importFromLib);
     unset($lang->resource->testcase->importToLib);
 }
+
+if(!$hasOtherDevops) unset($lang->resource->repo);
+if(!$hasOtherKanban) unset($lang->resource->kanban);
 
 include (dirname(__FILE__) . '/changelog.php');
