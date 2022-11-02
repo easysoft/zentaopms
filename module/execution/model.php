@@ -2383,6 +2383,7 @@ class executionModel extends model
         $brotherProjects = $this->project->getBrotherProjects($project);
         $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
             ->where('project')->in($brotherProjects)
+            ->andWhere('multiple')->eq('1')
             ->andWhere('status')->ne('closed')
             ->fetchPairs('id');
 
