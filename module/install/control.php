@@ -242,7 +242,7 @@ class install extends control
             if($this->post->importDemoData) $this->install->importDemoData();
 
             $defaultProgram = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
-            if($this->config->systemMode == 'lean' and empty($defaultProgram))
+            if($this->config->systemMode == 'light' and empty($defaultProgram))
             {
                 /* Lean mode create default program. */
                 $programID = $this->loadModel('program')->createDefaultProgram();

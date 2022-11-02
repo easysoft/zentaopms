@@ -545,7 +545,7 @@ $(function()
 
         if($(this).val() == 'project')
         {
-            if(mode == 'lean') $('.programForm').hide();
+            if(mode == 'light') $('.programForm').hide();
             $('[name=projectAcl]').attr('disabled', 'disabled');
             $('[name=programAcl]').removeAttr('disabled');
         }
@@ -816,7 +816,7 @@ function hiddenProject()
     $('#programBox').show();
     if($('[name^=sprints]:checked').length == 0)
     {
-        if(mode == 'lean') $('#programBox').hide();
+        if(mode == 'light') $('#programBox').hide();
         $(".programParams input").attr('disabled' ,'disabled');
         $(".programParams select").attr('disabled' ,'disabled').trigger('chosen:updated');
         $('.programParams').hide();
@@ -847,7 +847,7 @@ function hiddenProject()
             $('.projectStatus').addClass('hidden');
             $('[name=projectAcl]').attr('disabled', 'disabled');
             $('[name=programAcl]').removeAttr('disabled');
-            if(mode == 'lean') $('.programForm').hide();
+            if(mode == 'light') $('.programForm').hide();
         }
 
         if(projectType == 'execution')
@@ -860,7 +860,7 @@ function hiddenProject()
             $('[name=projectAcl]').removeAttr('disabled');
         }
 
-        if(mode == 'lean')
+        if(mode == 'light')
         {
             $('form #newProgram0').prop('checked', false);
             toggleProgram($('form #newProgram0'));

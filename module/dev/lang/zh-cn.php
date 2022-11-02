@@ -159,7 +159,7 @@ $lang->dev->groupList['message']   = '消息';
 $lang->dev->groupList['search']    = '搜索';
 
 global $config;
-if($config->systemMode != 'new') unset($lang->dev->groupList['program']);
+if($config->systemMode != 'ALM') unset($lang->dev->groupList['program']);
 
 $lang->dev->endGroupList['admin']  = '后台';
 $lang->dev->endGroupList['system'] = '系统';

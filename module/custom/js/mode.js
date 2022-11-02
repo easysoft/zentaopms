@@ -6,7 +6,7 @@ $(function()
     {
         $('#submit').prop('disabled', 'disabled');
         if(mode != $(this).val()) $('#submit').prop('disabled', '');
-        $('#program').closest('tr').toggle(mode == 'new' && $(this).val() == 'lean');
+        $('#program').closest('tr').toggle(mode == 'ALM' && $(this).val() == 'light');
     });
 
 

@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
-<?php if($config->systemMode == 'new'):?>
+<?php if($config->systemMode == 'ALM'):?>
 <div id='showSettingsBox'>
   <div class="checkbox-primary checkbox">
     <input type="checkbox" value="1" id="showAllProjects" title="<?php echo $lang->program->showNotCurrentProjects;?>" <?php echo $config->product->showAllProjects ? 'checked' : '';?>>
@@ -62,7 +62,7 @@
   js::set('releaseList',      $releaseList);
   js::set('hourList',         $hourList);
   js::set('doingText',        $lang->product->doing);
-  js::set('isLeanMode',       $config->systemMode == 'lean');
+  js::set('isLightMode',      $config->systemMode == 'light');
   ?>
   <?php endif; ?>
 </div>

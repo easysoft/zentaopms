@@ -31,7 +31,7 @@
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
-          <?php if($this->config->systemMode == 'new'):?>
+          <?php if($this->config->systemMode == 'ALM'):?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
             <?php $attr = ($product->program and strpos(",{$this->app->user->view->programs},", ",{$product->program},") === false) ? 'disabled' : '';?>

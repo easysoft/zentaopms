@@ -61,7 +61,7 @@ $lang->mainNav->menuOrder[50] = 'report';
 $lang->mainNav->menuOrder[55] = 'system';
 $lang->mainNav->menuOrder[60] = 'admin';
 
-if($config->systemMode == 'lean') unset($lang->mainNav->program, $lang->mainNav->menuOrder[10]);
+if($config->systemMode == 'light') unset($lang->mainNav->program, $lang->mainNav->menuOrder[10]);
 
 /* My menu. */
 $lang->my->menu             = new stdclass();

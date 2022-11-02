@@ -293,9 +293,6 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo');
 
-$lang->install->modeList['lean'] = 'Lean mode';
-$lang->install->modeList['new']  = 'Program mode';
-
 $lang->install->promotion = "Autres produits de l'équipe Nature Easy Soft :";
 
 $lang->install->chanzhi       = new stdclass();

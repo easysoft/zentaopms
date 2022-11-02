@@ -22,7 +22,7 @@ class project extends control
     public function __construct($moduleName = '', $methodName = '', $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
-        $this->view->globalDisableProgram = $this->config->systemMode == 'lean';
+        $this->view->globalDisableProgram = $this->config->systemMode == 'light';
     }
 
     /**
@@ -853,7 +853,7 @@ class project extends control
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getById($projectID);
 
-        if($this->config->systemMode == 'new')
+        if($this->config->systemMode == 'ALM')
         {
             $programList = array_filter(explode(',', $project->path));
             array_pop($programList);

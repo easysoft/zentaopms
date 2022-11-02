@@ -623,13 +623,13 @@ class custom extends control
      */
     public function mode()
     {
-        $mode = zget($this->config->global, 'mode', 'lean');
+        $mode = zget($this->config->global, 'mode', 'light');
         if($this->post->mode and $this->post->mode != $mode) // If mode value change.
         {
             $mode    = fixer::input('post')->get('mode');
             $program = isset($_POST['program']) ? $_POST['program'] : 0;
 
-            if($mode == 'lean' and empty($program)) $program = $this->loadModel('program')->createDefaultProgram();
+            if($mode == 'light' and empty($program)) $program = $this->loadModel('program')->createDefaultProgram();
 
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             $this->setting->setItem('system.common.global.defaultProgram', $program);
@@ -639,21 +639,21 @@ class custom extends control
 
             $this->custom->disableFeaturesByMode($mode);
 
-            if($mode == 'lean') $this->custom->processProjectAcl();
+            if($mode == 'light') $this->custom->processProjectAcl();
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
 
         $this->app->loadLang('upgrade');
 
-        $this->lang->custom->changeModeContentTips['lean'] = $this->lang->custom->hasMoreData['yes'];
+        $this->lang->custom->changeModeContentTips['light'] = $this->lang->custom->hasMoreData['yes'];
 
         $counts = $this->custom->getCounts();
         foreach($counts as $function => $count)
         {
             if($count) unset($this->lang->custom->needClosedFunctions[$function]);
         }
-        if(!empty($this->lang->custom->needClosedFunctions)) $this->lang->custom->changeModeContentTips['lean'] = sprintf($this->lang->custom->hasMoreData['no'], implode($this->lang->comma, $this->lang->custom->needClosedFunctions));
+        if(!empty($this->lang->custom->needClosedFunctions)) $this->lang->custom->changeModeContentTips['light'] = sprintf($this->lang->custom->hasMoreData['no'], implode($this->lang->comma, $this->lang->custom->needClosedFunctions));
 
         $this->view->title      = $this->lang->custom->mode;
         $this->view->position[] = $this->lang->custom->common;

@@ -149,7 +149,7 @@ $lang->personnel->methodOrder[15] = 'whitelist';
 $lang->personnel->methodOrder[20] = 'addWhitelist';
 $lang->personnel->methodOrder[25] = 'unbindWhitelist';
 
-if($config->systemMode == 'new')
+if($config->systemMode == 'ALM')
 {
     $lang->resource->my->project = 'project';
 
@@ -158,7 +158,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->index               = 'index';
     $lang->resource->project->browse              = 'browse';
     $lang->resource->project->kanban              = 'kanban';
-//    $lang->resource->project->programTitle        = 'moduleOpen';
+  //$lang->resource->project->programTitle        = 'moduleOpen';
     $lang->resource->project->create              = 'create';
     $lang->resource->project->edit                = 'edit';
     $lang->resource->project->batchEdit           = 'batchEdit';

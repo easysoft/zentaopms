@@ -26,8 +26,8 @@
         <th class='text-top w-120px'><?php echo $lang->custom->mode;?></th>
         <td class='w-300px'>
           <p>
-            <label class="radio-inline"><input type="radio" name="mode" value="lean" <?php echo $mode == 'lean'? "checked='checked'" : '';?> id="modelean"><?php echo $lang->upgrade->to18Mode['lean'];?></label>
-            <label class="radio-inline"><input type="radio" name="mode" value="new" <?php echo $mode == 'new'? "checked='checked'" : '';?> id="modenew"><?php echo $lang->upgrade->to18Mode['new'];?></label>
+            <label class="radio-inline"><input type="radio" name="mode" value="light" <?php echo $mode == 'light'? "checked='checked'" : '';?> id="modelight"><?php echo $lang->upgrade->to18Mode['light'];?></label>
+            <label class="radio-inline"><input type="radio" name="mode" value="ALM" <?php echo $mode == 'ALM'? "checked='checked'" : '';?> id="modeALM"><?php echo $lang->upgrade->to18Mode['ALM'];?></label>
           </p>
         </td>
         <td></td>
@@ -37,7 +37,7 @@
         <th><?php echo $lang->custom->defaultProgram;?></th>
         <td>
           <?php
-          $disabled = $mode == 'lean' ? "disabled" : '';
+          $disabled = $mode == 'light' ? "disabled" : '';
           echo html::select('program', $program, $programID, "class='form-control chosen' $disabled" );
           ?>
         </td>

@@ -4,12 +4,12 @@ $config->product->orderBy         = 'isClosed,program_asc,order_asc';
 $config->product->showAllProjects = 0;
 
 $config->product->customBatchEditFields = 'line,PO,QD,RD,status,type,acl';
-if($config->systemMode == 'new') $config->product->customBatchEditFields = 'program,' . $config->product->customBatchEditFields;
+if($config->systemMode == 'ALM') $config->product->customBatchEditFields = 'program,' . $config->product->customBatchEditFields;
 
 $config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
 $config->product->custom->batchEditFields = 'line,PO,QD,RD';
-if($config->systemMode == 'new') $config->product->custom->batchEditFields .= ',program';
+if($config->systemMode == 'ALM') $config->product->custom->batchEditFields .= ',program';
 
 $config->product->list = new stdclass();
 $config->product->list->exportFields = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,bugs,unResolvedBugs,assignToNullBugs,bugFixedRate,plans,releases';
@@ -98,7 +98,7 @@ $config->product->all->search['module']                = 'product';
 $config->product->all->search['fields']['name']        = $lang->product->name;
 if(!isset($config->setCode) or $config->setCode == 1) $config->product->all->search['fields']['code'] = $lang->product->code;
 $config->product->all->search['fields']['id']          = $lang->product->id;
-if($config->systemMode == 'new')
+if($config->systemMode == 'ALM')
 {
     $config->product->all->search['fields']['program'] = $lang->product->program;
     $config->product->all->search['fields']['line']    = $lang->product->line;
@@ -115,7 +115,7 @@ $config->product->all->search['fields']['createdBy']   = $lang->product->created
 $config->product->all->search['params']['name']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 if(!isset($config->setCode) or $config->setCode == 1) $config->product->all->search['params']['code'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->all->search['params']['id']          = array('operator' => '=',       'control' => 'input',  'values' => '');
-if($config->systemMode == 'new') $config->product->all->search['params']['program'] = array('operator' => '=', 'control' => 'select', 'values' => '');
+if($config->systemMode == 'ALM') $config->product->all->search['params']['program'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->product->all->search['params']['line']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->all->search['params']['desc']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->all->search['params']['PO']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');

@@ -392,7 +392,7 @@ class programModel extends model
                 foreach($projects as $project)
                 {
                     if(helper::diffDate(helper::today(), $project->end) > 0) $project->delay = 1;
-                    if($this->config->systemMode == 'new' and !$this->config->program->showAllProjects and $project->parent != $product->program and strpos($project->path, ",{$product->program},") !== 0) continue;
+                    if($this->config->systemMode == 'ALM' and !$this->config->program->showAllProjects and $project->parent != $product->program and strpos($project->path, ",{$product->program},") !== 0) continue;
 
                     $status    = $project->status == 'wait' ? 'wait' : 'doing';
                     $execution = zget($doingExecutions, $project->id, array());
@@ -650,7 +650,7 @@ class programModel extends model
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        if($programTitle and $this->config->systemMode == 'new')
+        if($programTitle and $this->config->systemMode == 'ALM')
         {
             $programList = $this->getPairs();
             foreach($projectList as $id => $project)

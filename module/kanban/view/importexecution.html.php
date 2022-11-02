@@ -89,7 +89,7 @@
   <div class='table-empty-tip'><?php echo $lang->noData;?></div>
   <?php endif;?>
 </div>
-<?php if($config->systemMode == 'classic'):?>
+<?php if($config->systemMode == 'light'):?>
 <style>.input-group {width: 45% !important}</style>
 <?php else:?>
 <style>#project_chosen {width: 45% !important}</style>

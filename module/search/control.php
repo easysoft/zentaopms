@@ -20,8 +20,8 @@ class search extends control
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
-        if($this->config->edition != 'max')     unset($this->lang->search->modules['effort']);
-        if($this->config->systemMode == 'lean') unset($this->lang->search->modules['program']);
+        if($this->config->edition != 'max')      unset($this->lang->search->modules['effort']);
+        if($this->config->systemMode == 'light') unset($this->lang->search->modules['program']);
     }
 
     /**
@@ -236,7 +236,7 @@ class search extends control
         foreach($typeCount as $objectType => $count)
         {
             if(!isset($this->lang->search->modules[$objectType])) continue;
-            if($this->config->systemMode == 'lean' and $objectType == 'program') continue;
+            if($this->config->systemMode == 'light' and $objectType == 'program') continue;
 
             $typeList[$objectType] = $this->lang->search->modules[$objectType];
         }

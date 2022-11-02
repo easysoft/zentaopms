@@ -224,7 +224,7 @@ $lang->action->desc->reopen               = '$date, reopened by <strong>$actor</
 $lang->action->desc->merged               = '$date, merged by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->submitreview         = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->ganttmove            = '$date, sort by <strong>$actor</strong> .' . "\n";
-$lang->action->desc->switchtolean         = '$date, Switch from new mode to lean mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
+$lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
 $lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the sprints of the project from the $extra.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
@@ -394,7 +394,7 @@ $lang->action->label->tolib                 = 'imported';
 $lang->action->label->updatetolib           = 'updated';
 $lang->action->label->ganttmove             = 'sorted';
 $lang->action->label->submitreview          = 'submitted';
-$lang->action->label->switchtolean          = 'switch from new mode to lean mode';
+$lang->action->label->switchtolight         = 'switch from ALM mode to light mode';
 $lang->action->label->linkedrepo            = 'Linked Code Repo';
 $lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
 $lang->action->label->unlinkproduct         = 'Unlinked Product';
@@ -417,13 +417,13 @@ $lang->action->dynamicAction->program['activated'] = 'Activate Program';
 $lang->action->dynamicAction->program['deleted']   = 'Delete Program';
 $lang->action->dynamicAction->program['closed']    = 'Close Program';
 
-$lang->action->dynamicAction->project['opened']       = 'Create Project';
-$lang->action->dynamicAction->project['edited']       = 'Edit Project';
-$lang->action->dynamicAction->project['started']      = 'Start Project';
-$lang->action->dynamicAction->project['suspended']    = 'Suspend Project';
-$lang->action->dynamicAction->project['activated']    = 'Activate Project';
-$lang->action->dynamicAction->project['closed']       = 'Close Project';
-$lang->action->dynamicAction->project['switchtolean'] = 'Switch Mode';
+$lang->action->dynamicAction->project['opened']        = 'Create Project';
+$lang->action->dynamicAction->project['edited']        = 'Edit Project';
+$lang->action->dynamicAction->project['started']       = 'Start Project';
+$lang->action->dynamicAction->project['suspended']     = 'Suspend Project';
+$lang->action->dynamicAction->project['activated']     = 'Activate Project';
+$lang->action->dynamicAction->project['closed']        = 'Close Project';
+$lang->action->dynamicAction->project['switchtolight'] = 'Switch Mode';
 
 $lang->action->dynamicAction->product['opened']    = 'Create ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = 'Edit ' . $lang->productCommon;

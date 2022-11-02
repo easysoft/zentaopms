@@ -894,7 +894,7 @@ class customModel extends model
                     $this->user->updateUserView($executionPairs, 'sprint');
                 }
                 $changes = common::createChanges($project, $data);
-                $actionID = $this->action->create('project', $project->id, 'SwitchToLean');
+                $actionID = $this->action->create('project', $project->id, 'SwitchToLight');
                 $this->action->logHistory($actionID, $changes);
             }
         }
@@ -910,7 +910,7 @@ class customModel extends model
     public function disableFeaturesByMode($mode)
     {
         $disabledFeatures = '';
-        if($mode == 'lean')
+        if($mode == 'light')
         {
             foreach($this->config->custom->features as $feature)
             {

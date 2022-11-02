@@ -41,8 +41,8 @@
             <th class='w-70px'><?php echo $lang->group->allCheck . " <span data-toggle='tooltip' class='text-help' title='{$lang->group->allTips}' ><i class='icon-help'></i></sapn>";?></th>
             <th class='w-100px text-center'><?php echo $lang->actions;?></th>
           </tr>
-          <?php $hiddenProgram = $config->systemMode == 'new' ? '' : 'hidden';?>
-          <?php $rowspan       = $config->systemMode == 'new' ? 4 : 3;?>
+          <?php $hiddenProgram = $config->systemMode == 'ALM' ? '' : 'hidden';?>
+          <?php $rowspan       = $config->systemMode == 'ALM' ? 4 : 3;?>
           <?php if($projectAdmins):?>
           <?php foreach($projectAdmins as $account => $group):?>
           <tr class="line<?php echo $group->group;?>">
