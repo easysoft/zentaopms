@@ -76,7 +76,7 @@ $lang->admin->setModule->product        = '产品';
 $lang->admin->setModule->scrum          = '敏捷项目';
 $lang->admin->setModule->waterfall      = '瀑布项目';
 $lang->admin->setModule->assetlib       = '资产库';
-$lang->admin->setModule->other          = '其他功能';
+$lang->admin->setModule->other          = '通用功能';
 
 $lang->admin->setModule->repo           = '代码';
 $lang->admin->setModule->issue          = '问题';
