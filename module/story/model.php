@@ -6159,14 +6159,14 @@ class storyModel extends model
         /* Synchronize and record dynamics. */
         $this->loadModel('action');
         $siblings = explode(',', trim($siblings, ','));
-        foreach($siblings as $storyID)
+        foreach($siblings as $siblingID)
         {
-            $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq((int)$storyID)->exec();
+            $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq((int)$siblingID)->exec();
             if(!dao::isError())
             {
-                $this->setStage($storyID);
+                $this->setStage($siblingID);
 
-                $actionID = $this->action->create('story', $storyID, 'syncsiblings', '', "$operate|$storyID");
+                $actionID = $this->action->create('story', $siblingID, 'syncsiblings', '', "$operate|$storyID");
                 $this->action->logHistory($actionID, $changes);
             }
         }
