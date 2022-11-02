@@ -178,7 +178,7 @@ class story extends control
                     $this->action->create('story', $storyID, 'linked2project', '', $object->project);
 
                     $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
-                    $this->action->create('story', $storyID, $actionType, '', $objectID);
+                    if($object->multiple) $this->action->create('story', $storyID, $actionType, '', $objectID);
                 }
                 else
                 {

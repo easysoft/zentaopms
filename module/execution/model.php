@@ -2180,12 +2180,14 @@ class executionModel extends model
     public function getOrderedExecutions($executionID, $status, $num = 0)
     {
         $executionList = $this->getList($executionID, 'all', $status);
-        if(empty($executionIdList)) return $executionList;
+        if(empty($executionList)) return $executionList;
 
         $executions = $mineExecutions = $otherExecutions = $closedExecutions = array();
         foreach($executionList as $execution)
         {
+            if(empty($execution->multiple)) continue;
             if(!$this->app->user->admin and !$this->checkPriv($execution->id)) continue;
+
             if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
             {
                 $mineExecutions[$execution->id] = $execution;
@@ -2925,6 +2927,13 @@ class executionModel extends model
         $objectType = $execution->type == 'project' ? 'unlinkedfromproject' : 'unlinkedfromexecution';
         if($execution->multiple or $execution->type == 'project') $this->loadModel('action')->create('story', $storyID, $objectType, '', $executionID);
 
+        /* Sync unlink story in no multiple execution. */
+        if(empty($execution->multiple) and $execution->type != 'project')
+        {
+            $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($execution->project)->andWhere('story')->eq($storyID)->limit(1)->exec();
+            $this->loadModel('action')->create('story', $storyID, 'unlinkedfromproject', '', $execution->project);
+        }
+
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
         foreach($tasks as $taskID)
         {
@@ -2953,6 +2962,13 @@ class executionModel extends model
             $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->andWhere('`case`')->eq($caseID)->limit(1)->exec();
             $action = $execution->type == 'project' ? 'unlinkedfromproject' : 'unlinkedfromexecution';
             if($execution->multiple or $execution->type == 'project') $this->action->create('case', $caseID, $action, '', $executionID);
+
+            /* Sync unlink case in no multiple execution. */
+            if(empty($execution->multiple) and $execution->type != 'project')
+            {
+                $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($execution->project)->andWhere('`case`')->eq($caseID)->limit(1)->exec();
+                $this->loadModel('action')->create('case', $caseID, 'unlinkedfromproject', '', $execution->project);
+            }
         }
 
         $order = 1;
