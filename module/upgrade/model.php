@@ -1041,6 +1041,7 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.6.2'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.4.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
+            case: '17_7':
         }
 
         return $confirmContent;
