@@ -4357,7 +4357,11 @@ class storyModel extends model
             $menu .= $this->buildMenu('story', 'close',    $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
 
-            if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
+            $disabledFeatures = ",{$this->config->disabledFeatures},";
+            if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib') and strpos($disabledFeatures, ',assetlibStorylib,') === false and strpos($disabledFeatures, ',assetlib,') === false)
+            {
+                $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
+            }
 
             /* Print testcate actions. */
             if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))

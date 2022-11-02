@@ -533,8 +533,6 @@ class execution extends control
 
         $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
         $this->view->pager            = $pager;
-        $this->view->position[]       = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
-        $this->view->position[]       = $this->lang->execution->importTask;
         $this->view->tasks2Imported   = $tasks2ImportedList;
         $this->view->executions       = $executions;
         $this->view->executionID      = $execution->id;
