@@ -18,7 +18,7 @@ $config->admin->module = new stdclass();
 $config->admin->module->product   = array('roadmap', 'track', 'URStory');
 $config->admin->module->scrum     = array();
 $config->admin->module->waterfall = array('track');
-$config->admin->module->assetlib  = array('caselib');
+$config->admin->module->assetlib  = array();
 $config->admin->module->other     = array('devops', 'kanban');
 
 if(!isset($config->safe))       $config->safe = new stdclass();

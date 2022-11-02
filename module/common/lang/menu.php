@@ -777,7 +777,6 @@ $hasProductTrack    = strpos(",$config->disabledFeatures,", ',productTrack,')   
 $hasProductRoadmap  = strpos(",$config->disabledFeatures,", ',productRoadmap,')  === false;
 $hasScrumAuditplan  = strpos(",$config->disabledFeatures,", ',scrumAuditplan,')  === false;
 $hasScrumProcess    = strpos(",$config->disabledFeatures,", ',scrumProcess,')    === false;
-$hasAssetlibCaselib = strpos(",$config->disabledFeatures,", ',assetlibCaselib,') === false;
 $hasOtherDevops     = strpos(",$config->disabledFeatures,", ',otherDevops,')     === false;
 $hasOtherKanban     = strpos(",$config->disabledFeatures,", ',otherKanban,')     === false;
 
@@ -785,7 +784,6 @@ if(!$config->URAndSR)    unset($lang->product->menu->requirement, $lang->product
 if(!$hasProductRoadmap)  unset($lang->product->menu->roadmap,     $lang->product->menuOrder[30]);
 if(!$hasProductTrack)    unset($lang->product->menu->track,       $lang->product->menuOrder[40]);
 if(!$hasWaterfall)       unset($lang->admin->menu->model['dropMenu']->waterfall);
-if(!$hasAssetlibCaselib) unset($lang->qa->menu->caselib);
 
 if(!$hasOtherDevops)
 {
