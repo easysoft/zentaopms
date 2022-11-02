@@ -2758,9 +2758,6 @@ class story extends control
 
         $siblings = str_replace(",$siblingID", '', $story->siblings);
 
-        /* If siblings == ,$siblingID, update siblings empty.*/
-        if(count(explode(',', $siblings)) == 3) $siblings = '';
-
         /* batchUnset siblingID from siblings.*/
         $replaceSql = "UPDATE " . TABLE_STORY . " SET siblings = REPLACE(siblings,',$siblingID,', ',') WHERE `product` = $story->product";
         $this->dbh->exec($replaceSql);

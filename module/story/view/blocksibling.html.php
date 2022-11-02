@@ -8,6 +8,7 @@ js::set('cancel',      $lang->cancel);
 $canViewLinkStory = common::hasPriv('story', 'view');
 $canRelieved      = common::hasPriv('story', 'relieved');
 array_unshift($siblings, $story);
+$class = isonlybody() ? 'showinonlybody' : 'iframe';
 
 foreach($siblings as $sibling)
 {
@@ -15,8 +16,8 @@ foreach($siblings as $sibling)
     $title = $id . ' '. $sibling->title;
     $branch = $story->branch == $sibling->branch ? $lang->story->currentBranch : $branches[$sibling->branch];
     echo "<li title='$title' class='sibling'>";
-    echo "<span class='label label-outline label-badge'>{$branch}</span> ";
-    echo ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id", '', true), "$title", '', "class='iframe' data-width='80%'") : "$id $title");
+    echo "<span class='label label-outline label-badge' title='$branch'>{$branch}</span> ";
+    echo ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id", '', true), "$title", '', "class='$class viewlink' data-width='80%'") : "$id $title");
     if($canRelieved) echo "<a class='unlink hide' data-id='$id' data-toggle='popover'><i class='icon icon-unlink btn-info'></i></a>";
     echo "</li>";
 }
