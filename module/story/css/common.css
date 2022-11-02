@@ -28,3 +28,4 @@
 .popover .content {margin-left:25px;overflow: overlay;}
 .hide {display:none !important;}
 .sibling > a.iframe{padding:6px;white-space: nowrap;overflow: hidden;display: inline-flex;max-width: 80%;}
+.tooltip-inner {max-width: 500px;}
