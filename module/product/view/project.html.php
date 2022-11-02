@@ -83,7 +83,8 @@
             <?php
             if($config->systemMode == 'new')
             {
-                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name, '', "title='{$project->name} ({$lang->project->{$project->model}})'");
+                $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;
+                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), "<i class='text-muted icon icon-{$projectType}'></i> " . $project->name, '', "title='{$project->name}'");
             }
             else
             {

@@ -298,10 +298,8 @@ class task extends control
             $project       = $this->loadModel('project')->getByID($projectID);
             $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
 
-            /* Fix bug #26228 closed execution chose execution when create task.*/
-            $keys         = array_keys($executionList);
             $executionKey = 0;
-            $executionModifyList = $this->execution->getByIdList($keys);
+            $executionModifyList = $this->execution->getByIdList(array_keys($executionList));
             foreach($executionModifyList as $execution)
             {
                 if(!common::canModify('execution', $execution)) $executionKey = $execution->id;

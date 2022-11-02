@@ -69,7 +69,7 @@ $config->project->datatable->fieldList['PM']['pri']      = '2';
 
 $config->project->datatable->fieldList['status']['title']    = 'status';
 $config->project->datatable->fieldList['status']['fixed']    = 'left';
-$config->project->datatable->fieldList['status']['width']    = '65';
+$config->project->datatable->fieldList['status']['width']    = '75';
 $config->project->datatable->fieldList['status']['required'] = 'no';
 $config->project->datatable->fieldList['status']['sort']     = 'yes';
 $config->project->datatable->fieldList['status']['pri']      = '2';

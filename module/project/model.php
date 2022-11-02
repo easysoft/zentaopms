@@ -1978,7 +1978,7 @@ class projectModel extends model
             elseif($id == 'name')
             {
                 $class .= ' text-left';
-                $title  = "title='{$project->name}" . ($this->config->vision == 'lite' ? "'" : "({$this->lang->project->{$project->model}})'");
+                $title  = "title='{$project->name}'";
             }
             elseif($id == 'PM')
             {
@@ -2022,9 +2022,10 @@ class projectModel extends model
                     $prefix = '';
                     $suffix = '';
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
+                    $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;
                     if(!empty($suffix) or !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
-                    echo html::a($projectLink, $project->name, '', "class='text-ellipsis text-primary'");
+                    echo html::a($projectLink, "<i class='text-muted icon icon-{$projectType}'></i> " . $project->name, '', "class='text-ellipsis text-primary'");
                     if(!empty($suffix)) echo $suffix;
                     if(!empty($suffix) or !empty($prefix)) echo '</div>';
                     break;
