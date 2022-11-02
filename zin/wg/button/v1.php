@@ -43,7 +43,7 @@ class button extends wg
     public $newline = true;
 
     /**
-     * Construct function, init tab data.
+     * Construct function, init button data.
      *
      * @param  string $text
      * @access public
@@ -107,6 +107,12 @@ class button extends wg
         return $this;
     }
 
+    /**
+     * Get button html.
+     *
+     * @access public
+     * @return string
+     */
     public function toString()
     {
         return html::a($this->link, $this->text, $this->target, $this->misc . $this->toHx(), $this->newline);

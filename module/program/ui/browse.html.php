@@ -24,9 +24,10 @@ if(common::hasPriv('project', 'create'))
     $actionbar->append($button);
 }
 
-if(isset($lang->pageActions))
+if(common::hasPriv('program', 'create'))
 {
-    $actionbar->append($lang->pageActions);
+    $button = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
+    $actionbar->append($button);
 }
 
 $menu = block('h');

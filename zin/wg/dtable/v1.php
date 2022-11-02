@@ -1,6 +1,23 @@
 <?php
+/**
+ * The v1 file of dtable module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @author      Jinyong Zhu <zhujinyong@easycorp.ltd>
+ * @package     dtable
+ * @version     $Id
+ * @link        https://www.zentao.net
+ */
 class column extends wg
 {
+    /**
+     * Construct function, init table data.
+     *
+     * @param  string $name
+     * @param  string $title
+     * @access public
+     * @return void
+     */
     public function __construct($name, $title)
     {
         parent::__construct();
@@ -8,6 +25,13 @@ class column extends wg
         $this->title = $title;
     }
 
+    /**
+     * Set column width.
+     *
+     * @param  int    $width
+     * @access public
+     * @return object
+     */
     public function width($width)
     {
         $this->width = $width;
@@ -27,12 +51,26 @@ class column extends wg
         return $this;
     }
 
-    public function flex($width)
+    /**
+     * Set flex attribute of column.
+     *
+     * @param  int   $growValue
+     * @access public
+     * @return object
+     */
+    public function flex($growValue)
     {
-        $this->flex = $width;
+        $this->flex = (int)$growValue;
         return $this;
     }
 
+    /**
+     * Set fixed attribute of column.
+     *
+     * @param  string $position left|right
+     * @access public
+     * @return object
+     */
     public function fixed($position)
     {
         $this->fixed = $position;
@@ -44,7 +82,7 @@ class column extends wg
      *
      * @param  string|bool $type up|down|true|false
      * @access public
-     * @return void
+     * @return object
      */
     public function sortType($type)
     {
@@ -52,6 +90,12 @@ class column extends wg
         return $this;
     }
 
+    /**
+     * Set checkbox.
+     *
+     * @access public
+     * @return void
+     */
     public function checkbox()
     {
         $this->checkbox = 1;
@@ -61,16 +105,53 @@ class column extends wg
 
 class dtable
 {
+    /**
+     * Columns.
+     *
+     * @var    array
+     * @access public
+     */
     public $cols = array();
 
+    /**
+     * Search.
+     *
+     * @var    string
+     * @access public
+     */
     public $search = '';
 
+    /**
+     * Footer.
+     *
+     * @var    string
+     * @access public
+     */
     public $footer = '';
 
+    /**
+     * Form.
+     *
+     * @var string
+     * @access public
+     */
     public $form = '';
 
+    /**
+     * System config.
+     *
+     * @var    object
+     * @access public
+     */
     public $config;
 
+    /**
+     * Construct function, init dtable data.
+     *
+     * @param  string $text
+     * @access public
+     * @return void
+     */
     public function __construct($text = '')
     {
         global $config;
@@ -79,6 +160,14 @@ class dtable
         $this->text   = $text;
     }
 
+    /**
+     * Get column object.
+     *
+     * @param  string $name
+     * @param  string $title
+     * @access public
+     * @return object
+     */
     public function col($name, $title)
     {
         $col = new column($name, $title);
@@ -105,11 +194,26 @@ class dtable
         }
     }
 
+    /**
+     * Set table data.
+     *
+     * @param  array  $data
+     * @access public
+     * @return void
+     */
     public function data($data)
     {
         $this->data = $data;
     }
 
+    /**
+     * Set search html.
+     *
+     * @param  string $status
+     * @param  string $module
+     * @access public
+     * @return object
+     */
     public function search($status, $module)
     {
         $this->search = '<div class="cell' .  ($status == 'bySearch' ? " show" : "")  . '" id="queryBox" data-module="' . $module . '"></div>';
@@ -142,7 +246,7 @@ class dtable
     }
 
     /**
-     * Set form.
+     * Set form html.
      *
      * @param  string $formID
      * @param  string $class
@@ -156,7 +260,7 @@ class dtable
     }
 
     /**
-     * Print datatable.
+     * Get datatable.
      *
      * @access public
      * @return string

@@ -32,7 +32,7 @@ class actionbar extends wg
     /**
      * Set action data.
      *
-     * @param  object $item
+     * @param  object|string $item
      * @access public
      * @return void
      */
