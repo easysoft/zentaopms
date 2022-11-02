@@ -122,56 +122,89 @@ class story extends control
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-            if($this->post->branches and $this->post->modules)
+            $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
+            if(!$storyResult or dao::isError())
             {
-                foreach($this->post->branches as $key => $postBranch)
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+
+            $storyID   = $storyResult['id'];
+            $productID = $this->post->product ? $this->post->product : $productID;
+
+            if($storyResult['status'] == 'exists')
+            {
+                $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
+                if($objectID == 0)
                 {
-                    if(empty($this->post->modules[$key]))
-                    {
-                        $response['result']  = 'fail';
-                        $response['message'] = array(sprintf($this->lang->error->notempty, $this->lang->story->branch));
-                        return $this->send($response);
-                    }
+                    $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType=$storyType");
                 }
-
-                $storyIds     = array();
-                $checkDuplicate = 'yes';
-                foreach($this->post->branches as $key => $postBranchID)
+                else
                 {
-                   $postModuleID = $this->post->modules[$key];
-                   $postPlanID   = $this->post->plans[$key];
-
-                   $_POST['branch'] = $postBranchID;
-                   $_POST['module'] = $postModuleID;
-                   $_POST['plan']   = $postPlanID;
-
-                   $extra          .= ",checkDuplicate=$checkDuplicate,";
-                   $storyID        = $this->postStory($objectID, $bugID, $productID, $todoID, $storyType, $fromObjectIDKey = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $fromObjectAction = isset($fromObjectAction) ? $fromObjectAction: '', $extra);
-                   $checkDuplicate = 'no';
-                   $storyIds[]   = $storyID;
+                    $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
+                    $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
+                    $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID";
+                    $response['locate'] = $this->createLink($moduleName, 'story', $param);
                 }
+                return $this->send($response);
+            }
 
-                /* bind siblings story id */
-                if(count($storyIds) > 1)
+            /* bind siblings story id */
+            $storyIDs = $storyResult['ids'];
+            if(count($storyIDs) > 1)
+            {
+                foreach($storyIDs as $siblingsStoryID)
                 {
-                    foreach($storyIds as $siblingsStoryID)
+                    $siblingsArr = array();
+                    foreach($storyIDs as $idItem)
                     {
-
-                        $siblingsArr = array();
-                        foreach($storyIds as $id)
-                        {
-                            if($id != $siblingsStoryID) $siblingsArr[] = $id;
-                        }
-
+                        if($idItem != $siblingsStoryID) $siblingsArr[] = $idItem;
                         $siblings = ',' . implode(',', $siblingsArr) . ',';
                         $this->dao->update(TABLE_STORY)->set('siblings')->eq($siblings)->where('id')->eq($siblingsStoryID)->exec();
                     }
                 }
-
             }
-            else
+
+            $action = $bugID == 0 ? 'Opened' : 'Frombug';
+            $extra  = $bugID == 0 ? '' : $bugID;
+            /* Record related action, for example FromFeedback. */
+            if(isset($fromObjectID))
             {
-                $this->postStory($objectID, $bugID, $productID, $todoID, $storyType, $fromObjectIDKey = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $fromObjectAction = isset($fromObjectAction) ? $fromObjectAction: '', $extra);
+                $action = $fromObjectAction;
+                $extra  = $fromObjectID;
+            }
+            /* Create actions. */
+            foreach($storyIDs as $idItem) $actionID = $this->action->create('task', $idItem, $action, '', $extra);
+
+
+
+            if($objectID != 0)
+            {
+                $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
+                if($object->type != 'project')
+                {
+                    if($this->config->systemMode == 'new') $this->action->create('story', $storyID, 'linked2project', '', $object->project);
+
+                    $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
+                    $this->action->create('story', $storyID, $actionType, '', $objectID);
+                }
+                else
+                {
+                    $this->action->create('story', $storyID, 'linked2project', '', $objectID);
+                }
+            }
+
+            if($todoID > 0)
+            {
+                $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+                $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
+
+                if($this->config->edition == 'biz' || $this->config->edition == 'max')
+                {
+                    $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+                    if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+                }
             }
 
             $message = $this->executeHooks($storyID);
@@ -417,92 +450,6 @@ class story extends control
         $this->view->type             = $storyType;
 
         $this->display();
-    }
-
-    /**
-     * post a story.
-     *
-     * @param  int    $objectID
-     * @param  int    $bugID
-     * @param  int    $productID
-     * @param  int    $todoID
-     * @param  string $storyType requirement|story
-     * @param  string $fromObjectIDKey
-     * @param  string $fromObjectAction
-     * @param  string $extra for example feedbackID=0
-     * @param  string $storyType requirement|story
-     * @access public
-     * @return void
-     */
-    private function postStory($objectID, $bugID, $productID, $todoID, $storyType, $fromObjectIDKey, $fromObjectAction, $extra)
-    {
-        $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
-        if(!$storyResult or dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-            return $this->send($response);
-        }
-
-        $storyID   = $storyResult['id'];
-        $productID = $this->post->product ? $this->post->product : $productID;
-
-        if($storyResult['status'] == 'exists')
-        {
-            $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
-            if($objectID == 0)
-            {
-                $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType=$storyType");
-            }
-            else
-            {
-                $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
-                $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-                $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID";
-                $response['locate'] = $this->createLink($moduleName, 'story', $param);
-            }
-            return $this->send($response);
-        }
-
-        $action = $bugID == 0 ? 'Opened' : 'Frombug';
-        $extra  = $bugID == 0 ? '' : $bugID;
-        /* Record related action, for example FromFeedback. */
-        if(isset($fromObjectID))
-        {
-            $action = $fromObjectAction;
-            $extra  = $fromObjectID;
-        }
-        $actionID = $this->action->create('story', $storyID, $action, '', $extra);
-
-        if($objectID != 0)
-        {
-            $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
-            if($object->type != 'project')
-            {
-                if($this->config->systemMode == 'new') $this->action->create('story', $storyID, 'linked2project', '', $object->project);
-
-                $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
-                $this->action->create('story', $storyID, $actionType, '', $objectID);
-            }
-            else
-            {
-                $this->action->create('story', $storyID, 'linked2project', '', $objectID);
-            }
-        }
-
-        if($todoID > 0)
-        {
-            $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
-            $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
-
-            if($this->config->edition == 'biz' || $this->config->edition == 'max')
-            {
-                $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-                if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
-            }
-        }
-
-        return $storyID;
     }
 
     /**
