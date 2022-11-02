@@ -1,13 +1,13 @@
-update zt_kanban k
+update zt_kanban
 set 
-  k.colWidth    = if(k.colWidth < 200, 200, k.colWidth),
-  k.minColWidth = if(k.minColWidth < 200, 200, k.minColWidth),
-  k.maxColWidth = if(k.maxColWidth <= 200 and k.minColWidth <= 200, 201, k.maxColWidth)
-where k.colWidth < 200 or k.minColWidth < 200 or k.maxColWidth < 200;
+  colWidth    = if(colWidth < 200, 200, colWidth),
+  minColWidth = if(minColWidth < 200, 200, minColWidth),
+  maxColWidth = if(maxColWidth <= 200 and minColWidth <= 200, 201, maxColWidth)
+where colWidth < 200 or minColWidth < 200 or maxColWidth < 200;
 
-update zt_project p
+update zt_project
 set 
-  p.colWidth    = if(p.colWidth < 200, 200, p.colWidth),
-  p.minColWidth = if(p.minColWidth < 200, 200, p.minColWidth),
-  p.maxColWidth = if(p.maxColWidth <= 200 and p.minColWidth <= 200, 201, p.maxColWidth)
-where p.colWidth < 200 or p.minColWidth < 200 or p.maxColWidth < 200;
+  colWidth    = if(colWidth < 200, 200, colWidth),
+  minColWidth = if(minColWidth < 200, 200, minColWidth),
+  maxColWidth = if(maxColWidth <= 200 and minColWidth <= 200, 201, maxColWidth)
+where colWidth < 200 or minColWidth < 200 or maxColWidth < 200;
