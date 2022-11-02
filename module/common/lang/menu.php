@@ -375,15 +375,17 @@ $lang->execution->menu->settings['subMenu']->whitelist = array('link' => "$lang-
 $lang->execution->dividerMenu = ',story,build,';
 
 /* QA menu.*/
-$lang->qa->menu             = new stdclass();
-$lang->qa->menu->index      = array('link' => "$lang->dashboard|qa|index");
-$lang->qa->menu->bug        = array('link' => "{$lang->bug->common}|bug|browse|productID=%s", 'subModule' => 'bug');
-$lang->qa->menu->testcase   = array('link' => "{$lang->testcase->shortCommon}|testcase|browse|productID=%s", 'subModule' => 'testcase,story');
-$lang->qa->menu->testsuite  = array('link' => "{$lang->testcase->testsuite}|testsuite|browse|productID=%s", 'subModule' => 'testsuite');
-$lang->qa->menu->testtask   = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
-$lang->qa->menu->report     = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
-$lang->qa->menu->caselib    = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
-$lang->qa->menu->zahost     = array('link' => "{$lang->automation->common}|zahost|browse", 'subModule' => 'zahost,executionnode', 'alias' => 'browse');
+$lang->qa->menu                = new stdclass();
+$lang->qa->menu->index         = array('link' => "$lang->dashboard|qa|index");
+$lang->qa->menu->bug           = array('link' => "{$lang->bug->common}|bug|browse|productID=%s", 'subModule' => 'bug');
+$lang->qa->menu->testcase      = array('link' => "{$lang->testcase->shortCommon}|testcase|browse|productID=%s", 'subModule' => 'testcase,story');
+$lang->qa->menu->testsuite     = array('link' => "{$lang->testcase->testsuite}|testsuite|browse|productID=%s", 'subModule' => 'testsuite');
+$lang->qa->menu->testtask      = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
+$lang->qa->menu->report        = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
+$lang->qa->menu->caselib       = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
+$lang->qa->menu->automation    = array('link' => "{$lang->automation->common}:|automation|browse|productID=%s", 'subModule' => 'automation', 'alias' => '');
+$lang->qa->menu->zahost        = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
+$lang->qa->menu->executionnode = array('link' => "{$lang->executionnode->common}|executionnode|browse", 'subModule' => 'executionnode');
 
 /* QA menu order. */
 $lang->qa->menuOrder[5]  = 'product';
@@ -394,11 +396,7 @@ $lang->qa->menuOrder[25] = 'testsuite';
 $lang->qa->menuOrder[30] = 'testtask';
 $lang->qa->menuOrder[35] = 'report';
 $lang->qa->menuOrder[40] = 'caselib';
-$lang->qa->menuOrder[45] = 'zahost';
-
-$lang->qa->menu->zahost['subMenu'] = new stdclass();
-$lang->qa->menu->zahost['subMenu']->browse        = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
-$lang->qa->menu->zahost['subMenu']->executionnode = array('link' => "{$lang->executionnode->common}|executionnode|browse", 'subModule' => 'executionnode');
+$lang->qa->menuOrder[45] = 'automation';
 
 // $lang->qa->menu->automation['subMenu'] = new stdclass();
 // $lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->automation->common}|zahost|browse", 'alias' => 'create');
