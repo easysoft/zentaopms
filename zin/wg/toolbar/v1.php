@@ -54,7 +54,7 @@ class toolbar extends wg
         {
             if(is_string($tool))
             {
-                $html .= $tool;
+                $html .= "<li class='nav-item'>" . $tool . '</li>';
                 continue;
             }
             $html .= $tool->toString();

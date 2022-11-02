@@ -49,7 +49,7 @@ class actionbar extends wg
      */
     public function toString()
     {
-        $html = '<div class="pull-right">';
+        $html = '<nav id="actionBar">';
         foreach($this->actions as $action)
         {
             if(is_string($action))
@@ -60,6 +60,6 @@ class actionbar extends wg
 
             $html .= $action->toString();
         }
-        return $html . '</div>';
+        return $html . '</nav>';
     }
 }
