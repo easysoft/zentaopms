@@ -1863,7 +1863,7 @@ class productModel extends model
             $allTotal          = array_sum($product->stories) + array_sum($product->requirements);
             $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
 
-            $stats[] = $product;
+            $stats[$key] = $product;
         }
 
         return $stats;
