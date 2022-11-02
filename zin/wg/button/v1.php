@@ -27,20 +27,20 @@ class button extends wg
     public $target = '';
 
     /**
+     * Class.
+     *
+     * @var    string
+     * @access public
+     */
+    public $class = '';
+
+    /**
      * Miscellaneous.
      *
      * @var    string
      * @access public
      */
     public $misc = '';
-
-    /**
-     * Whether to wrap.
-     *
-     * @var    bool
-     * @access public
-     */
-    public $newline = true;
 
     /**
      * Construct function, init button data.
@@ -95,15 +95,15 @@ class button extends wg
     }
 
     /**
-     * Set button newline.
+     * Set class.
      *
-     * @param  bool   $newline
+     * @param  string $class
      * @access public
      * @return object
      */
-    public function newline($newline = true)
+    public function addClass($class)
     {
-        $this->newline = $newline;
+        $this->class = $class;
         return $this;
     }
 
@@ -115,6 +115,6 @@ class button extends wg
      */
     public function toString()
     {
-        return html::a($this->link, $this->text, $this->target, $this->misc . $this->toHx(), $this->newline);
+        return html::linkButton($this->text, $this->link, $this->target, $this->misc, $this->class);
     }
 }

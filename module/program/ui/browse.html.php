@@ -20,13 +20,13 @@ $toolbar->append('<a class="querybox-toggle" id="bysearchTab"><i class="icon ico
 $actionbar = actionbar();
 if(common::hasPriv('project', 'create'))
 {
-    $button = button('<i class="icon icon-plus"></i> ' . $this->lang->project->create)->link($this->createLink('project', 'createGuide', "programID=0&from=PGM"))->misc('class="btn btn-secondary" data-toggle="modal" data-target="#guideDialog"');
+    $button = button('<i class="icon icon-plus"></i> ' . $this->lang->project->create)->link($this->createLink('project', 'createGuide', "programID=0&from=PGM"))->addClass('btn secondary')->misc('data-toggle="modal" data-target="#guideDialog"');
     $actionbar->append($button);
 }
 
 if(common::hasPriv('program', 'create'))
 {
-    $button = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
+    $button = button("<i class='icon icon-plus'></i> " . $this->lang->program->create)->link($this->createLink('program', 'create'))->addClass('btn primary');
     $actionbar->append($button);
 }
 
