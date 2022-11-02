@@ -1326,10 +1326,16 @@ class testcaseModel extends model
      */
     public static function isClickable($case, $action, $module = 'testcase')
     {
+        global $config;
+
+        $hasAssetlib        = strpos(",$config->disabledFeatures,", ',assetlib,')        === false;
+        $hasAssetlibCaselib = strpos(",$config->disabledFeatures,", ',assetlibCaselib,') === false;
+
         $action = strtolower($action);
 
-        if($module == 'testcase' && $action == 'createbug') return $case->caseFails > 0;
-        if($module == 'testcase' && $action == 'review') return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
+        if($module == 'testcase' && $action == 'createbug')   return $case->caseFails > 0;
+        if($module == 'testcase' && $action == 'review')      return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
+        if($module == 'testcase' && $action == 'importtolib') return ($hasAssetlib and $hasAssetlibCaselib);
 
         return true;
     }

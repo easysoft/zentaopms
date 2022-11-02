@@ -19,13 +19,6 @@ list($productModule, $productMethod)     = explode('-', $config->productLink);
 list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
 list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
-$hasWaterfall      = strpos(",$config->disabledFeatures,", ',waterfall,')      === false;
-$hasProductTrack   = strpos(",$config->disabledFeatures,", ',productTrack,')   === false;
-$hasProductRoadmap = strpos(",$config->disabledFeatures,", ',productRoadmap,') === false;
-$hasScrumAuditplan = strpos(",$config->disabledFeatures,", ',scrumAuditplan,') === false;
-$hasScrumProcess   = strpos(",$config->disabledFeatures,", ',scrumProcess,')   === false;
-$hasScrumRepo      = strpos(",$config->disabledFeatures,", ',scrumRepo,')      === false;
-
 if(defined('TUTORIAL'))
 {
     $programModule   = 'program';
@@ -584,12 +577,8 @@ $lang->admin->menu->system    = array('link' => "{$lang->admin->system}|custom|m
 $lang->admin->menu->model['dropMenu'] = new stdclass();
 $lang->admin->menu->model['dropMenu']->allModel = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
 
-if($config->edition == 'max')
-{
-    if($hasScrumAuditplan) $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
-    if($hasScrumProcess)   $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|process|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
-}
-if($hasWaterfall) $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
+if($config->edition == 'max') $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
+$lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
 
 $lang->admin->menu->allModel['subMenu'] = new stdclass();
 $lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
@@ -783,7 +772,29 @@ $lang->navGroup->tree    = 'tree';
 $lang->navGroup->misc    = 'misc';
 $lang->navGroup->upgrade = 'upgrade';
 
-if(!$hasProductRoadmap) unset($lang->product->menu->roadmap,     $lang->product->menuOrder[30]);
-if(!$config->URAndSR)   unset($lang->product->menu->requirement, $lang->product->menuOrder[35]);
-if(!$hasProductTrack)   unset($lang->product->menu->track,       $lang->product->menuOrder[40]);
-if(!$hasScrumRepo)      unset($lang->scrum->menu->devops,        $lang->scrum->menuOrder[25]);
+$hasWaterfall       = strpos(",$config->disabledFeatures,", ',waterfall,')       === false;
+$hasProductTrack    = strpos(",$config->disabledFeatures,", ',productTrack,')    === false;
+$hasProductRoadmap  = strpos(",$config->disabledFeatures,", ',productRoadmap,')  === false;
+$hasScrumAuditplan  = strpos(",$config->disabledFeatures,", ',scrumAuditplan,')  === false;
+$hasScrumProcess    = strpos(",$config->disabledFeatures,", ',scrumProcess,')    === false;
+$hasScrumRepo       = strpos(",$config->disabledFeatures,", ',scrumRepo,')       === false;
+$hasAssetlibCaselib = strpos(",$config->disabledFeatures,", ',assetlibCaselib,') === false;
+
+if(!$config->URAndSR)    unset($lang->product->menu->requirement, $lang->product->menuOrder[35]);
+if(!$hasProductRoadmap)  unset($lang->product->menu->roadmap,     $lang->product->menuOrder[30]);
+if(!$hasProductTrack)    unset($lang->product->menu->track,       $lang->product->menuOrder[40]);
+if(!$hasScrumRepo)       unset($lang->scrum->menu->devops,        $lang->scrum->menuOrder[25]);
+if(!$hasWaterfall)       unset($lang->admin->menu->model['dropMenu']->waterfall);
+if(!$hasAssetlibCaselib) unset($lang->qa->menu->caselib);
+
+if(!$hasScrumAuditplan)
+{
+    if($hasScrumProcess)
+    {
+        $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|process|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
+    }
+    else
+    {
+        unset($lang->admin->menu->model['dropMenu']->scrum);
+    }
+}
