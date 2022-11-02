@@ -572,7 +572,7 @@ $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|custom|mode", 'subModule' => 'cron,backup,action,admin,search,convert,custom', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|custom|mode", 'subModule' => 'cron,backup,action,admin,search,convert', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
 
 $lang->admin->menu->model['dropMenu'] = new stdclass();
 $lang->admin->menu->model['dropMenu']->allModel = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
