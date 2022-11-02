@@ -1148,8 +1148,8 @@ class executionModel extends model
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
-            ->checkIF(!$execution->fluidBoard, 'colWidth', 'gt', 0)
-            ->batchCheckIF($execution->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF(!$execution->fluidBoard, 'colWidth', 'ge', 200)
+            ->batchCheckIF($execution->fluidBoard, 'minColWidth,maxColWidth', 'ge', 200)
             ->checkIF($execution->minColWidth and $execution->maxColWidth and $execution->fluidBoard, 'maxColWidth', 'gt', $execution->minColWidth)
             ->where('id')->eq((int)$executionID)
             ->exec();

@@ -539,7 +539,6 @@ $(document).ready(function()
 
     $('#showAllModule').change(function()
     {
-        var executionID = $('#execution').val();
         var moduleID    = $('#moduleIdBox #module').val();
         var extra       = $(this).prop('checked') ? 'allModule' : '';
         $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
