@@ -320,7 +320,7 @@ $lang->story->action->reviewed              = array('main' => '$date, recorded b
 $lang->story->action->rejectreviewed        = array('main' => '$date, recorded by <strong>$actor</strong>. The result is <strong>$extra</strong>. The reason is <strong>$reason</strong>.', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->recalled              = array('main' => '$date, recalled by <strong>$actor</strong>.');
 $lang->story->action->closed                = array('main' => '$date, closed by <strong>$actor</strong>. The reason is <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
-$lang->story->action->autoclosed            = array('main' => '$date, The system determines that the parent story is automatically closed because all child stories are closed.');
+$lang->story->action->closedbysystem        = array('main' => '$date, The system determines that the parent story is automatically closed because all child stories are closed.');
 $lang->story->action->reviewpassed          = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Pass</strong>.');
 $lang->story->action->reviewrejected        = array('main' => '$date, closed by <strong>System</strong>. The reason is <strong>Rejection</strong>.');
 $lang->story->action->reviewclarified       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>To Be Clarified</strong>. Please re-initiate the review after edit.');
