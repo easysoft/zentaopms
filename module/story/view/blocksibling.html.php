@@ -5,7 +5,6 @@ js::set('storyID',     $story->id);
 js::set('relieved',    $lang->story->relieved);
 js::set('relievedTip', $lang->story->relievedTip);
 js::set('cancel',      $lang->cancel);
-
 $canViewLinkStory = common::hasPriv('story', 'view');
 $canRelieved      = common::hasPriv('story', 'relieved');
 array_unshift($siblings, $story);

@@ -401,27 +401,27 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <?php if($product->type != 'normal' and $story->siblings):?>
-          <li><a href='#legendSiblings' data-toggle='tab'><?php echo $lang->story->siblings;?></a></li>
+          <?php if(!empty($siblings)):?>
+          <li class='active'><a href='#legendSiblings' data-toggle='tab'><?php echo $lang->story->siblings;?></a></li>
           <?php endif;?>
           <?php if($this->config->URAndSR):?>
-          <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
+          <li class='<?php if(empty($siblings)) echo 'active';?>'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
           <?php if($story->type == 'story'):?>
-          <li class="<?php if(!$this->config->URAndSR) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
+          <li class="<?php if(!$this->config->URAndSR and empty($siblings)) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <?php endif;?>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
-          <?php if($product->type != 'normal'):?>
-          <div class='tab-pane' id='legendSiblings'>
+          <?php if(!empty($siblings)):?>
+          <div class='tab-pane active' id='legendSiblings'>
             <ul class="list-unstyled">
                 <?php include './blocksibling.html.php';?>
             </ul>
           </div>
           <?php endif;?>
           <?php if($this->config->URAndSR):?>
-          <div class='tab-pane active' id='legendStories'>
+          <div class='tab-pane <?php if(empty($siblings)) echo 'active';?>' id='legendStories'>
             <ul class="list-unstyled">
               <?php
               $relation         = array();
@@ -442,7 +442,7 @@
           <?php endif;?>
 
           <?php if($story->type == 'story'):?>
-          <div class="tab-pane <?php if(!$this->config->URAndSR) echo 'active';?>" id='legendProjectAndTask'>
+          <div class="tab-pane <?php if(!$this->config->URAndSR and empty($siblings)) echo 'active';?>" id='legendProjectAndTask'>
             <ul class="list-unstyled">
               <?php
               foreach($story->tasks as $executionTasks)

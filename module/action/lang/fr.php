@@ -394,6 +394,7 @@ $lang->action->label->updatetolib           = 'MàJ';
 $lang->action->label->ganttmove             = 'sorted';
 $lang->action->label->submitreview          = 'submitted';
 $lang->action->label->syncsiblings          = 'synchronized changes';
+$lang->action->label->relieved              = 'relieved';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
