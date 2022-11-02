@@ -47,6 +47,7 @@
           </div>
         </td>
       </tr>
+      <?php if($this->config->systemMode == 'ALM'):?>
       <tr id='programBox' style='display:none'>
         <th class='text-right'><?php echo $lang->group->programList?></th>
         <td>
@@ -60,6 +61,7 @@
           <?php endif;?>
         </td>
       </tr>
+      <?php endif;?>
       <tr id='productBox' style='display:none'>
         <th class='text-right'><?php echo $lang->group->productList?></th>
         <td>
