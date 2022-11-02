@@ -1348,6 +1348,8 @@ function handleKanbanWidthAttr ()
     $('#colWidth, #minColWidth, #maxColWidth').attr('maxlength', '3');
     var fluidBoard = $("#mainContent input[name='fluidBoard'][checked='checked']").val() || 0;
     var addAttrEle = fluidBoard == 0 ? '#colWidth' : '#minColWidth, #maxColWidth';
+    var $fixedTip  = $('#colWidth + .fixedTip');
+    var $autoTip   = $('#maxColWidth + .autoTip');
     $(addAttrEle).closest('.width-radio-row').addClass('required');
     $('#colWidth').attr('disabled',fluidBoard == 1);
     $('#minColWidth, #maxColWidth').attr('disabled',fluidBoard == 0);
@@ -1356,6 +1358,18 @@ function handleKanbanWidthAttr ()
         $('#minColWidthLabel, #maxColWidthLabel').remove();
         $('#minColWidth, #maxColWidth').removeClass('has-error');
     });
+
+    if(fluidBoard == 1)
+    {
+        $fixedTip.addClass('hidden');
+        $autoTip.removeClass('hidden');
+    }
+    else
+    {
+        $fixedTip.removeClass('hidden');
+        $autoTip.addClass('hidden');
+    }
+
     $(document).on('change', "#mainContent input[name='fluidBoard']", function(e)
     {
         $('#colWidth').attr('disabled', e.target.value == 1);
@@ -1366,6 +1380,8 @@ function handleKanbanWidthAttr ()
             $('#minColWidth, #maxColWidth').closest('.width-radio-row').removeClass('required');
             $('#minColWidthLabel, #maxColWidthLabel').remove();
             $('#minColWidth, #maxColWidth').removeClass('has-error');
+            $fixedTip.removeClass('hidden');
+            $autoTip.addClass('hidden');
         }
         else if(e.target.value == 1 && $('#colWidthLabel'))
         {
@@ -1373,6 +1389,8 @@ function handleKanbanWidthAttr ()
             $('#colWidth').closest('.width-radio-row').removeClass('required');
             $('#colWidthLabel').remove();
             $('#colWidth').removeClass('has-error');
+            $fixedTip.addClass('hidden');
+            $autoTip.removeClass('hidden');
         }
     });
 }

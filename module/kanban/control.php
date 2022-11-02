@@ -1073,6 +1073,7 @@ class kanban extends control
         $kanban = $this->kanban->getByID($card->kanban);
         $space  = $this->kanban->getSpaceById($kanban->space);
 
+        $this->view->title       = 'CARD #' . $card->id . ' ' . $card->name;
         $this->view->card        = $card;
         $this->view->actions     = $this->action->getList('kanbancard', $cardID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
