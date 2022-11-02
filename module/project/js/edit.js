@@ -2,8 +2,34 @@ $(function()
 {
     $('#parent').change(function()
     {
-        var programID = $(this).val();
+        var programID      = $(this).val();
+        var lastSelectedID = $('#parent').attr('data-lastSelected');
+
         setAclList(programID);
+
+        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + lastSelectedID + "&selectedProgramID=" + programID), function(data)
+        {
+            var data = JSON.parse(data);
+            selectedParent     = programID != 0 ? data.selectedProgramPath[1] : 0;
+            lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
+
+            if(selectedParent != lastSelectedParent)
+            {
+                var productSelectHtml = data.allProducts;
+                var planSelectHtml    = data.plans;
+
+                $('#productsBox .row .col-sm-4 .input-group').each(function(index)
+                {
+                    var selectedProduct = $(this).find('[name^=products]').val();
+                    var selectedBranch  = $(this).find('[name^=branch]').val();
+                    var selectedPlan    = $('#plan' + index ).find('[name^=plans]').val();
+
+                    $(this).html(productSelectHtml);
+                    $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch).attr('data-plan', selectedPlan);
+                    $(this).find('[name^=products]').val(selectedProduct).chosen().change();
+                });
+            }
+        });
     });
 
     adjustProductBoxMargin();

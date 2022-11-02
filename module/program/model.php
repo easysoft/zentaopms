@@ -127,6 +127,7 @@ class programModel extends model
             ->beginIF($mode == 'assign')->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($views)->fi()
+            ->orderBy('t1.program, t1.order_asc')
             ->fetchGroup('program');
 
         /* Put products of current program first.*/
