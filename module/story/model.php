@@ -238,16 +238,16 @@ class storyModel extends model
         $product = $this->loadModel('product')->getById($story->product);
         if($product->type == 'normal' or $story->type == 'requirement')
         {
-            $this->post->branches = array(isset($story->branch) ? $story->branch : 0);
-            $this->post->modules  = array(isset($story->module) ? $story->module : 0);
-            $this->post->plans    = array(isset($story->plan) ? $story->plan : 0);
+            $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
+            $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
+            $this->post->plans    = isset($story->plan) ? array($story->plan) : array(0 => 0);
         }
 
         $storyIds    = array();
         $mainStoryID = 0;
-        foreach($this->post->branches as $key => $postBranch)
+        foreach($this->post->branches as $key => $branch)
         {
-            $story->branch = $postBranch;
+            $story->branch = $branch;
             $story->module = $this->post->modules[$key];
             $story->plan   = $this->post->plans[$key];
 
@@ -412,6 +412,22 @@ class storyModel extends model
                 if(empty($mainStoryID)) $mainStoryID = $storyID;
             }
         }
+
+        /* bind siblings story id */
+        if(count($storyIds) > 1)
+        {
+            foreach($storyIds as $siblingsStoryID)
+            {
+                $siblingsArr = array();
+                foreach($storyIds as $idItem)
+                {
+                    if($idItem != $siblingsStoryID) $siblingsArr[] = $idItem;
+                    $siblings = ',' . implode(',', $siblingsArr) . ',';
+                    $this->dao->update(TABLE_STORY)->set('siblings')->eq($siblings)->where('id')->eq($siblingsStoryID)->exec();
+                }
+            }
+        }
+
         return array('status' => 'created', 'id' => $mainStoryID, 'ids' => $storyIds);
     }
 

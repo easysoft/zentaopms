@@ -108,7 +108,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <td class="table-col c-actions text-left w-60px">
               <div>
-                <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='<?php echo $lang->story->addBranch;?>'><i class='icon-plus'></i></a>
+                <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='<?php echo sprintf($lang->story->addBranch, $lang->product->branchName[$product->type])?>'><i class='icon-plus'></i></a>
               </div>
             </td>
           </tr>
@@ -373,8 +373,8 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
       </td>
       <td class="table-col text-left w-60px c-actions">
         <div>
-          <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='<?php echo $lang->story->addBranch;?>'><i class='icon-plus'></i></a>
-          <a href='javascript:;' onclick='deleteBranchesBox(this)' class='btn btn-link' title='<?php echo $lang->story->deleteBranch;?>'><i class='icon icon-close'></i></a>
+          <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='<?php echo sprintf($lang->story->addBranch, $lang->product->branchName[$product->type])?>'><i class='icon-plus'></i></a>
+          <a href='javascript:;' onclick='deleteBranchesBox(this)' class='btn btn-link' title='<?php echo sprintf($lang->story->deleteBranch, $lang->product->branchName[$product->type])?>'><i class='icon icon-close'></i></a>
         </div>
       </td>
     </tr>

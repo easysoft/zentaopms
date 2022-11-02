@@ -150,22 +150,6 @@ class story extends control
                 return $this->send($response);
             }
 
-            /* bind siblings story id */
-            $storyIDs = $storyResult['ids'];
-            if(count($storyIDs) > 1)
-            {
-                foreach($storyIDs as $siblingsStoryID)
-                {
-                    $siblingsArr = array();
-                    foreach($storyIDs as $idItem)
-                    {
-                        if($idItem != $siblingsStoryID) $siblingsArr[] = $idItem;
-                        $siblings = ',' . implode(',', $siblingsArr) . ',';
-                        $this->dao->update(TABLE_STORY)->set('siblings')->eq($siblings)->where('id')->eq($siblingsStoryID)->exec();
-                    }
-                }
-            }
-
             $action = $bugID == 0 ? 'Opened' : 'Frombug';
             $extra  = $bugID == 0 ? '' : $bugID;
             /* Record related action, for example FromFeedback. */
@@ -175,9 +159,8 @@ class story extends control
                 $extra  = $fromObjectID;
             }
             /* Create actions. */
-            foreach($storyIDs as $idItem) $actionID = $this->action->create('task', $idItem, $action, '', $extra);
-
-
+            $storyIds = $storyResult['ids'];
+            foreach($storyIds as $idItem) $actionID = $this->action->create('story', $idItem, $action, '', $extra);
 
             if($objectID != 0)
             {
