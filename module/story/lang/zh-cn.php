@@ -79,6 +79,7 @@ $lang->story->doNotSubmit        = '保存暂不提交';
 $lang->story->currentBranch      = '当前分支';
 $lang->story->sibling            = '孪生需求';
 $lang->story->relieved           = '解除';
+$lang->story->relievedSiblings   = '解除孪生需求';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";

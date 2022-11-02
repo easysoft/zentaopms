@@ -79,6 +79,7 @@ $lang->story->doNotSubmit        = 'Do Not Submit';
 $lang->story->currentBranch      = 'Current Branch';
 $lang->story->sibling            = 'Sibling story';
 $lang->story->relieved           = 'Relieved';
+$lang->story->relievedSiblings   = 'Relieved Siblings';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Changer Story";
