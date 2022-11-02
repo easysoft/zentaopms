@@ -23,6 +23,9 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
 js::set('productID',      $productID);
 js::set('branch',         $branch);
 js::set('suiteID',        $suiteID);
+
+$hasAssetlib        = strpos(",$config->disabledFeatures,", ',assetlib,')        === false;
+$hasAssetlibCaselib = strpos(",$config->disabledFeatures,", ',assetlibCaselib,') === false;
 ?>
 <?php if($this->app->tab == 'project'):?>
 <style>
@@ -90,7 +93,7 @@ js::set('suiteID',        $suiteID);
       $canBatchCaseTypeChange     = common::hasPriv('testcase', 'batchCaseTypeChange');
       $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
       $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
-      $canImportToLib             = common::hasPriv('testcase', 'importToLib');
+      $canImportToLib             = (common::hasPriv('testcase', 'importToLib') and $hasAssetlib and $hasAssetlibCaselib);
       $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule or $canImportToLib);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>

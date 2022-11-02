@@ -1888,12 +1888,16 @@ $lang->dev->methodOrder[15] = 'editor';
 $lang->dev->methodOrder[20] = 'translate';
 
 global $config;
-$hasWaterfall      = (strpos(",$config->disabledFeatures,", ',waterfall,')      === false or (defined('IN_UPGRADE') and IN_UPGRADE));
-$hasProductTrack   = (strpos(",$config->disabledFeatures,", ',productTrack,')   === false or (defined('IN_UPGRADE') and IN_UPGRADE));
-$hasProductRoadmap = (strpos(",$config->disabledFeatures,", ',productRoadmap,') === false or (defined('IN_UPGRADE') and IN_UPGRADE));
-$hasWaterfallTrack = (strpos(",$config->disabledFeatures,", ',waterfallTrack,') === false or (defined('IN_UPGRADE') and IN_UPGRADE));
-$isURSR            = ($config->URAndSR             or (defined('IN_UPGRADE') and IN_UPGRADE));
-$hasProgram        = ($config->systemMode == 'new' or (defined('IN_UPGRADE') and IN_UPGRADE));
+$inUpgrade          = (defined('IN_UPGRADE') and IN_UPGRADE);
+$isURSR             = ($config->URAndSR             or $inUpgrade);
+$hasProgram         = ($config->systemMode == 'new' or $inUpgrade);
+$hasProductTrack    = (strpos(",$config->disabledFeatures,", ',productTrack,')    === false or $inUpgrade);
+$hasProductRoadmap  = (strpos(",$config->disabledFeatures,", ',productRoadmap,')  === false or $inUpgrade);
+$hasWaterfallTrack  = (strpos(",$config->disabledFeatures,", ',waterfallTrack,')  === false or $inUpgrade);
+$hasWaterfall       = (strpos(",$config->disabledFeatures,", ',waterfall,')       === false or $inUpgrade);
+$hasAssetlib        = (strpos(",$config->disabledFeatures,", ',assetlib,')        === false or $inUpgrade);
+$hasAssetlibCaselib = (strpos(",$config->disabledFeatures,", ',assetlibCaselib,') === false or $inUpgrade);
+
 if(!$hasWaterfall)
 {
     unset($lang->resource->design);
@@ -1911,8 +1915,16 @@ if(!$isURSR)
     unset($lang->resource->story->linkStory);
     unset($lang->resource->requirement);
 }
-if(!$hasProductTrack)   unset($lang->resource->product->track);
-if(!$hasProductRoadmap) unset($lang->resource->product->roadmap);
-if(!$hasWaterfallTrack) unset($lang->resource->projectstory->track);
+if(!$hasProductTrack)    unset($lang->resource->product->track);
+if(!$hasProductRoadmap)  unset($lang->resource->product->roadmap);
+if(!$hasWaterfallTrack)  unset($lang->resource->projectstory->track);
+if(!$hasAssetlib or !$hasAssetlibCaselib)
+{
+    unset($lang->resource->caselib);
+    unset($lang->resource->testcase->confirmLibcaseChange);
+    unset($lang->resource->testcase->ignoreLibcaseChange);
+    unset($lang->resource->testcase->importFromLib);
+    unset($lang->resource->testcase->importToLib);
+}
 
 include (dirname(__FILE__) . '/changelog.php');

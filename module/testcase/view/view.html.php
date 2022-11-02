@@ -15,6 +15,8 @@
 <?php $browseLink  = $app->session->caseList ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php js::set('tab', $app->tab);?>
+<?php $hasAssetlib        = strpos(",$config->disabledFeatures,", ',assetlib,')        === false;?>
+<?php $hasAssetlibCaselib = strpos(",$config->disabledFeatures,", ',assetlibCaselib,') === false;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if(!isonlybody()):?>
@@ -260,8 +262,8 @@
                 if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask' and !empty($case->product))
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromCaselib}>{$lang->testcase->changed}</span> ";
-                    if(common::hasPriv('testcase', 'confirmLibcaseChange')) echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
-                    if(common::hasPriv('testcase', 'ignoreLibcaseChange')) echo html::a($this->createLink('testcase', 'ignoreLibcaseChange', "caseID=$case->id"), $lang->testcase->ignore, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    if(common::hasPriv('testcase', 'confirmLibcaseChange') and $hasAssetlib and $hasAssetlibCaselib) echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    if(common::hasPriv('testcase', 'ignoreLibcaseChange') and $hasAssetlib and $hasAssetlibCaselib)  echo html::a($this->createLink('testcase', 'ignoreLibcaseChange', "caseID=$case->id"), $lang->testcase->ignore, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
                 ?>
