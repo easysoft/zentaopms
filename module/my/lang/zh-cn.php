@@ -101,7 +101,7 @@ $lang->my->auditMenu->audit->story    = '需求';
 $lang->my->auditMenu->audit->testcase = '用例';
 if($config->edition == 'max' and strpos(",$config->disabledFeatures,", ',waterfall,') === false) $lang->my->auditMenu->audit->project = '项目';
 if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = '反馈';
-if($config->edition != 'open') $lang->my->auditMenu->audit->oa       = '办公';
+if($config->edition != 'open' and strpos(",$config->disabledFeatures,", ',otherOa,') === false)  $lang->my->auditMenu->audit->oa      = '办公';
 
 $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->audit = new stdclass();
