@@ -3,8 +3,6 @@
 <?php $currentModule      = $isProjectApp ? 'project'  : 'testcase';?>
 <?php $currentMethod      = $isProjectApp ? 'testcase' : 'browse';?>
 <?php $projectParam       = $isProjectApp ? "projectID={$this->session->project}&" : '';?>
-<?php $hasAssetlib        = strpos(",$config->disabledFeatures,", ',assetlib,')        === false;?>
-<?php $hasAssetlibCaselib = strpos(",$config->disabledFeatures,", ',assetlibCaselib,') === false;?>
 <?php if(common::checkNotCN()):?>
 <style> .btn-toolbar>.btn {margin-right: 3px !important;}</style>
 <?php endif;?>
@@ -147,7 +145,7 @@
       if(common::hasPriv('testcase', 'import')) echo "<li>" . html::a($this->createlink('testcase', 'import', "productID=$productID&branch=$branch"), $lang->testcase->fileImport, '', "class='export' data-app={$app->tab}") . "</li>";
 
       $link  = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=0&orderBy=id_desc&browseType=&queryID=10&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
-      if(common::hasPriv('testcase', 'importFromLib') and $hasAssetlib and $hasAssetlibCaselib) echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', "data-app={$app->tab}") . "</li>";
+      if(common::hasPriv('testcase', 'importFromLib')) echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', "data-app={$app->tab}") . "</li>";
       ?>
       </ul>
     </div>

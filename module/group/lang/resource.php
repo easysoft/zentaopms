@@ -1896,7 +1896,6 @@ $hasProductRoadmap  = (strpos(",$config->disabledFeatures,", ',productRoadmap,')
 $hasWaterfallTrack  = (strpos(",$config->disabledFeatures,", ',waterfallTrack,')  === false or $inUpgrade);
 $hasWaterfall       = (strpos(",$config->disabledFeatures,", ',waterfall,')       === false or $inUpgrade);
 $hasAssetlib        = (strpos(",$config->disabledFeatures,", ',assetlib,')        === false or $inUpgrade);
-$hasAssetlibCaselib = (strpos(",$config->disabledFeatures,", ',assetlibCaselib,') === false or $inUpgrade);
 $hasOtherDevops     = (strpos(",$config->disabledFeatures,", ',otherDevops,')     === false or $inUpgrade);
 $hasOtherKanban     = (strpos(",$config->disabledFeatures,", ',otherKanban,')     === false or $inUpgrade);
 
@@ -1920,14 +1919,6 @@ if(!$isURSR)
 if(!$hasProductTrack)    unset($lang->resource->product->track);
 if(!$hasProductRoadmap)  unset($lang->resource->product->roadmap);
 if(!$hasWaterfallTrack)  unset($lang->resource->projectstory->track);
-if(!$hasAssetlib or !$hasAssetlibCaselib)
-{
-    unset($lang->resource->caselib);
-    unset($lang->resource->testcase->confirmLibcaseChange);
-    unset($lang->resource->testcase->ignoreLibcaseChange);
-    unset($lang->resource->testcase->importFromLib);
-    unset($lang->resource->testcase->importToLib);
-}
 
 if(!$hasOtherDevops) unset($lang->resource->repo);
 if(!$hasOtherKanban) unset($lang->resource->kanban);
