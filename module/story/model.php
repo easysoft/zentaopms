@@ -49,8 +49,9 @@ class storyModel extends model
 
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.story')->eq($storyID)
-            ->andWhere('t2.type')->in('sprint,stage,kanban')
+            ->where('t2.type')->in('sprint,stage,kanban')
+            ->beginIF($story->siblings)->andWhere('t1.story')->in(ltrim($story->siblings, ',') . $story->id)
+            ->beginIF(!$story->siblings)->andWhere('t1.story')->in($story->id)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
         $story->tasks  = $this->dao->select('id, name, assignedTo, execution, status, consumed, `left`,type')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->orderBy('id DESC')->fetchGroup('execution');
@@ -159,13 +160,20 @@ class storyModel extends model
         }
 
         /* Get affected bugs. */
-        $story->bugs = $this->dao->findByStory($story->id)->from(TABLE_BUG)
+        $story->bugs = $this->dao->select('*')->from(TABLE_BUG)
+            ->where('status')->ne('closed')
+            ->beginIF($story->siblings)->andWhere('story')->in(ltrim($story->siblings, ',') . $story->id)
+            ->beginIF(!$story->siblings)->andWhere('story')->in($story->id)
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
 
         /* Get affected cases. */
-        $story->cases = $this->dao->findByStory($story->id)->from(TABLE_CASE)->andWhere('deleted')->eq(0)->fetchAll();
+        $story->cases = $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($story->siblings)->andWhere('story')->in(ltrim($story->siblings, ',') . $story->id)
+            ->beginIF(!$story->siblings)->andWhere('story')->in($story->id)
+            ->fetchAll();
 
         return $story;
     }
