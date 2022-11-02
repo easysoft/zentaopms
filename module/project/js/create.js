@@ -150,27 +150,19 @@ function setParentProgram(parentProgram)
         {
             $('#budget').val('');
 
-            var select = data.allProducts;
-            var planSelect = data.plans;
+            var productSelectHtml = data.allProducts;
+            var planSelectHtml    = data.plans;
 
-            var index = 0;
-            $('#productsBox .row .col-sm-4 .input-group').each(function()
+            $('#productsBox .row .col-sm-4 .input-group').each(function(index)
             {
                 var selectedProduct = $(this).find('[name^=products]').val();
                 var selectedBranch  = $(this).find('[name^=branch]').val();
+                var selectedPlan    = $('#plan' + index ).find('[name^=plans]').val();
 
-                $(this).html(select);
-                $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch);
+                $(this).html(productSelectHtml);
+                $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch).attr('data-plan', selectedPlan);
                 $(this).find('[name^=products]').val(selectedProduct).chosen().change();
-
-                index ++;
             });
-
-            /* Hide product and plan dropdown controls. */
-            $('#plansBox .col-sm-4:not(:last)').remove();
-            $('#plansBox .col-sm-4').children().remove();
-            $('#plansBox .col-sm-4').prepend(planSelect);
-            $('#plansBox .col-sm-4 select').chosen();
         }
 
         if(parentProgram != 0)
@@ -282,6 +274,9 @@ function setAclList(programID)
  */
 function loadBranches(product)
 {
+    /* When selecting a product, delete a plan that is empty by default. */
+    $("#planDefault").remove();
+
     $("#productsBox select[name^='products']").each(function()
     {
         var $product = $(product);
@@ -348,9 +343,10 @@ function loadPlans(product, branchID)
 
     var productID = $(product).val();
     var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
+    var planID    = $(product).attr('data-plan') !== undefined ? $(product).attr('data-plan') : 0;
     var index     = $(product).attr('id').replace('products', '');
 
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent,multiple'), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent,multiple'), function(data)
     {
         if(data)
         {

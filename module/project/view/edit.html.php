@@ -65,7 +65,7 @@
               $programList = array($project->parent => $program->name);
           }
           ?>
-          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' $attr");?></td>
+          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' data-lastSelected='{$project->parent}' $attr");?></td>
           <td colspan='2'></td>
         </tr>
         <?php endif;?>
@@ -164,14 +164,7 @@
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\" data-last='" . $branchID . "'");?>
                 </div>
               </div>
-              <?php
-              if(in_array($product->id, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches))
-              {
-                  echo html::hidden("products[$i]", $product->id);
-                  echo html::hidden("branch[$i]", $branchID);
-              }
-              $i++;
-              ?>
+              <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4 <?php if($projectID) echo 'required';?>' style="padding-right: 6px;">

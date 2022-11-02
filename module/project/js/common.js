@@ -162,9 +162,9 @@ function loadBranches(product)
         }
     });
 
-    if($('#productsBox .input-group:last select:first').val() != 0)
+    if($('#productsBox .row .input-group:last select:first').val() != 0)
     {
-        var length = $('#productsBox .input-group').size();
+        var length = $('#productsBox .row .input-group').size();
         $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html() + '</div>');
         if($('#productsBox .input-group:last select').size() >= 2) $('#productsBox .input-group:last select:last').remove();
         $('#productsBox .input-group:last .chosen-container').remove();
@@ -179,7 +179,8 @@ function loadBranches(product)
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active"), function(data)
+    var oldBranch = $(product).attr('data-branch') !== undefined ? $(product).attr('data-branch') : 0;
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranch + "&param=active"), function(data)
     {
         if(data)
         {
@@ -206,12 +207,13 @@ function loadPlans(product, branchID)
 
     var productID = $(product).val();
     var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
+    var planID    = $(product).attr('data-plan') !== undefined ? $(product).attr('data-plan') : 0;
     var index     = $(product).attr('id').replace('products', '');
 
     $("input[name='products[" + index + "]']").remove();
     $("input[name='branch[" + index + "]']").remove();
 
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=unexpired&param=skipParent,multiple'), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent,multiple'), function(data)
     {
         if(data)
         {
