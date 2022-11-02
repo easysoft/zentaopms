@@ -2367,8 +2367,8 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
-            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'gt', 0)
-            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', 200)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'ge', 200)
             ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->where('id')->eq($kanbanID)
             ->exec();
@@ -3255,7 +3255,11 @@ class kanbanModel extends model
             $actions .= "</ul>";
         }
 
-        if(common::hasPriv('kanban', 'setting')) $actions .= html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting, '', "class='iframe btn btn-link' data-width='60%'");
+        if(common::hasPriv('kanban', 'setting'))
+        {
+            $width    = common::checkNotCN() ? '65%' : '60%';
+            $actions .= html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting, '', "class='iframe btn btn-link' data-width='$width'");
+        }
 
         $actions .= "</div>";
 
