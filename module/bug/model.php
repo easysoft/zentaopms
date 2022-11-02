@@ -3684,7 +3684,7 @@ class bugModel extends model
             if($groupID and $caseStep->parent == $groupID)
             {
                 $itemIndex ++;
-                $index = $stepIndex . '. ' . $itemIndex;
+                $index = $stepIndex . '.' . $itemIndex;
             }
             else
             {
