@@ -1658,7 +1658,7 @@ class programModel extends model
             $html = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
         break;
         case 'progress':
-            $html = round($progressList[$program->id]);
+            $html = isset($progressList[$program->id]) ? round($progressList[$program->id]) : 0;
         break;
         case 'actions':
             $html = $this->buildOperateMenu($program, 'browse');

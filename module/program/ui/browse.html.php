@@ -1,6 +1,7 @@
 <?php
 common::sortFeatureMenu();
-/* Toolbar. */
+
+/* Set toolbar. */
 $toolbar = toolbar();
 foreach($this->lang->program->featureBar['browse'] as $key => $label)
 {
@@ -12,8 +13,10 @@ if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid' and $has
 {
     $toolbar->append(html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : ''));
 }
+
 $toolbar->append('<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $lang->user->search . '</a>');
 
+/* Set actionbar. */
 $actionbar = actionbar();
 if(common::hasPriv('project', 'create'))
 {
@@ -21,9 +24,10 @@ if(common::hasPriv('project', 'create'))
     $actionbar->append($button);
 }
 
-if(isset($lang->pageActions))
+if(common::hasPriv('program', 'create'))
 {
-    $actionbar->append($lang->pageActions);
+    $button = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
+    $actionbar->append($button);
 }
 
 $menu = block('h');
