@@ -98,8 +98,14 @@ function loadProductBranches(productID)
     {
         if(storyType == 'story')
         {
-            $('.switchBranch').toggleClass('hidden');
-            $('.switchBranch').toggleClass('disable');
+            var newProductType = data ? 'normal' : 'branch';
+            if(originProductType != newProductType)
+            {
+                $('.switchBranch').toggleClass('hidden');
+                $('.switchBranch').toggleClass('disable');
+            }
+            originProductType = newProductType;
+
             $('tr[class^="addBranchesBox"]').remove();
 
             if(data)
@@ -119,7 +125,7 @@ function loadProductBranches(productID)
                 $('#branches0').next('.picker').remove();
                 $('#branches0').chosen();
 
-                $.get(createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=0' + '&rootModuleID=0&returnType=html&fieldID=0' + '&needManage=true&extra=&currentModuleID=0'), function(moduleData)
+                $.get(createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=0' + '&rootModuleID=0&returnType=html&fieldID=0' + '&needManage=false&extra=&currentModuleID=0'), function(moduleData)
                 {
                     if(moduleData)
                     {
@@ -131,7 +137,7 @@ function loadProductBranches(productID)
                 });
 
                 var expired = config.currentMethod == 'create' ? 'unexpired' : '';
-                $.get(createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=0' + '&planID=' + $('#plan').val() + '&fieldID=0' + '&needCreate=true&expired='+ expired +'&param=skipParent,' + config.currentMethod), function(planData)
+                $.get(createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=0' + '&planID=' + $('#plan').val() + '&fieldID=0' + '&needCreate=false&expired='+ expired +'&param=skipParent,' + config.currentMethod), function(planData)
                 {
                     if(planData)
                     {
