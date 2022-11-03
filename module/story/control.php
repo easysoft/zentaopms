@@ -2756,10 +2756,9 @@ class story extends control
     {
         $siblingID = !empty($_POST['siblingID']) ? $_POST['siblingID'] : 0;
         $story     = $this->story->getByID($siblingID);
+        $siblings  = explode(',', trim($story->siblings, ','));
 
         if(empty($story->siblings)) return $this->send(array('result' => 'fail'));
-
-        $siblings = str_replace(",$siblingID", '', $story->siblings);
 
         /* batchUnset siblingID from siblings.*/
         $replaceSql = "UPDATE " . TABLE_STORY . " SET siblings = REPLACE(siblings,',$siblingID,', ',') WHERE `product` = $story->product";
@@ -2769,6 +2768,6 @@ class story extends control
         $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($siblingID)->orWhere('siblings')->eq(',')->exec();
 
         if(!dao::isError()) $this->loadModel('action')->create('story', $siblingID, 'relieved');
-        return $this->send(array('result' => 'success', 'data' => $siblings));
+        return $this->send(array('result' => 'success', 'silbingsCount' => count($siblings)-1));
     }
 }
