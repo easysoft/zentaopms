@@ -1198,7 +1198,7 @@ class executionModel extends model
 
             if($percentTotal >100)
             {
-                dao::$errors['percent'] = sprintf($this->lang->execution->workloadTotal, $oldPercentTotal . '%');
+                dao::$errors['percent'] = sprintf($this->lang->execution->workloadTotal, '%', $oldPercentTotal . '%');
                 return false;
             }
         }
@@ -1211,7 +1211,7 @@ class executionModel extends model
 
             if($childrenTotalPercent > 100)
             {
-                dao::$errors['parent'] = sprintf($this->lang->execution->workloadTotal, $childrenTotalPercent . '%');
+                dao::$errors['parent'] = sprintf($this->lang->execution->workloadTotal, '%', $childrenTotalPercent . '%');
                 return false;
             }
         }

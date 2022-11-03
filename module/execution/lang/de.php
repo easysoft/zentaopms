@@ -372,7 +372,7 @@ $lang->execution->noExecution          = 'Keine Projekte. ';
 $lang->execution->noExecutions         = "No {$lang->execution->common}.";
 $lang->execution->noPrintData          = "No data can be printed.";
 $lang->execution->noMembers            = 'Keine Mitglieder. ';
-$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
+$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100%s, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip  = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip      = "({$lang->SRCommon} has never been linked under the project, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
 if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "Wählen Sie ein {$lang->executionCommon} Team zum Kopieren.";
