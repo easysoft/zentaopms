@@ -100,7 +100,7 @@ $lang->admin->setModule->practicelib    = '最佳实践库';
 $lang->admin->setModule->componentlib   = '组件库';
 $lang->admin->setModule->devops         = 'DevOps';
 $lang->admin->setModule->kanban         = '通用看板';
-$lang->admin->setModule->oa             = '办公';
+$lang->admin->setModule->OA             = '办公';
 $lang->admin->setModule->deploy         = '运维';
 $lang->admin->setModule->traincourse    = '学堂';
 
