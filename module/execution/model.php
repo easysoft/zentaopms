@@ -2895,7 +2895,6 @@ class executionModel extends model
                 ->exec();
     }
 
-
         $order   = 1;
         $stories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order')->fetchAll();
         foreach($stories as $executionstory)
