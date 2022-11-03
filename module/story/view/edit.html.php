@@ -24,6 +24,8 @@
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php js::set('storyStatus', $story->status);?>
 <?php js::set('lastReviewer', explode(',', $lastReviewer))?>
+<?php js::set('siblings', $story->siblings)?>
+<?php js::Set('relievedSiblingsTip', $lang->story->relievedSiblingsTip)?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
