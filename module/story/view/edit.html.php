@@ -24,6 +24,8 @@
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php js::set('storyStatus', $story->status);?>
 <?php js::set('lastReviewer', explode(',', $lastReviewer))?>
+<?php js::set('siblings', $story->siblings)?>
+<?php js::Set('relievedSiblingsTip', $lang->story->relievedSiblingsTip)?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -99,7 +101,7 @@
           <?php endif;?>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
           <?php if(!empty($siblings)):?>
-          <div class='detail' id='siblingList'>
+          <div class='detail' id='legendSiblings'>
             <div class='detail-title'>
               <?php echo $lang->story->changeSyncTip;?>
               <span data-toggle='tooltip' data-placement='right' title='<?php echo $lang->story->syncTip;?>'><i class='icon-help'></i></span>
@@ -107,12 +109,8 @@
             <div class='form-group'>
               <div>
                 <ul class='list-unstyled'>
-                  <?php foreach($siblings as $siblingID => $sibling):?>
-                  <li>
-                    <span class='label label-outline label-badge'><?php echo $branchTagOption[$sibling->branch];?></span>
-                    <?php echo $siblingID . ' ' . $sibling->title;?>
-                  </li>
-                  <?php endforeach;?>
+                  <?php $branches = $branchTagOption;?>
+                  <?php include './blocksibling.html.php';?>
                 </ul>
               </div>
             </div>

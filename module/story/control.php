@@ -121,6 +121,7 @@ class story extends control
             $response['result'] = 'success';
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
             $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
             if(!$storyResult or dao::isError())
             {
@@ -157,7 +158,9 @@ class story extends control
                 $action = $fromObjectAction;
                 $extra  = $fromObjectID;
             }
-            $actionID = $this->action->create('story', $storyID, $action, '', $extra);
+            /* Create actions. */
+            $storyIds = $storyResult['ids'];
+            foreach($storyIds as $idItem) $actionID = $this->action->create('story', $idItem, $action, '', $extra);
 
             if($objectID != 0)
             {
@@ -2753,18 +2756,18 @@ class story extends control
     {
         $siblingID = !empty($_POST['siblingID']) ? $_POST['siblingID'] : 0;
         $story     = $this->story->getByID($siblingID);
+        $siblings  = explode(',', trim($story->siblings, ','));
 
         if(empty($story->siblings)) return $this->send(array('result' => 'fail'));
 
-        $siblings = str_replace(",$siblingID", '', $story->siblings);
+        /* batchUnset siblingID from siblings.*/
+        $replaceSql = "UPDATE " . TABLE_STORY . " SET siblings = REPLACE(siblings,',$siblingID,', ',') WHERE `product` = $story->product";
+        $this->dbh->exec($replaceSql);
 
-        /* If siblings == ,$siblingID, update siblings empty.*/
-        if(count(explode(',', $siblings)) == 3) $siblings = '';
-
-        $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($siblingID)->exec();
-        $this->dao->update(TABLE_STORY)->set('siblings')->eq($siblings)->where('siblings')->like("%,{$_POST['siblingID']},%")->exec();
+        /* Update siblings to empty by siblingID and if siblings eq ','.*/
+        $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($siblingID)->orWhere('siblings')->eq(',')->exec();
 
         if(!dao::isError()) $this->loadModel('action')->create('story', $siblingID, 'relieved');
-        return $this->send(array('result' => 'success', 'data' => $siblings));
+        return $this->send(array('result' => 'success', 'silbingsCount' => count($siblings)-1));
     }
 }
