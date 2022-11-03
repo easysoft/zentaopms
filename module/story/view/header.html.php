@@ -11,6 +11,17 @@
  */
 function loadProduct(productID)
 {
+    if(siblings && productID != oldProductID)
+    {
+        confirmRelievedSiblings = confirm(relievedSiblingsTip);
+        if(!confirmRelievedSiblings)
+        {
+            $('#product').val(oldProductID);
+            $('#product').trigger("chosen:updated");
+            return false;
+        }
+    }
+
     if(typeof parentStory != 'undefined' && parentStory)
     {
         confirmLoadProduct = confirm(moveChildrenTips);

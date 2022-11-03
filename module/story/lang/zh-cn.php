@@ -99,12 +99,14 @@ $lang->story->successToTask    = '批量转任务成功';
 $lang->story->storyRound       = '第 %s 轮估算';
 $lang->story->float            = "『%s』应当是正数，可以是小数。";
 $lang->story->saveDraftSuccess = '存为草稿成功';
-$lang->story->changeSyncTip    = "该需求的修改会同步到如下的孪生需求";
-$lang->story->syncTip          = "孪生需求间除产品、分支 、模块、计划、阶段外均同步，孪生关系解除后不再同步";
-$lang->story->relievedTip      = "孪生关系解除后无法恢复，需求的内容不再同步，是否解除？";
-$lang->story->assignSyncTip    = "孪生需求均同步修改指派人";
-$lang->story->closeSyncTip     = "孪生需求均同步关闭";
-$lang->story->activateSyncTip  = "孪生需求均同步激活";
+
+$lang->story->changeSyncTip       = "该需求的修改会同步到如下的孪生需求";
+$lang->story->syncTip             = "孪生需求间除产品、分支 、模块、计划、阶段外均同步，孪生关系解除后不再同步";
+$lang->story->relievedTip         = "孪生关系解除后无法恢复，需求的内容不再同步，是否解除？";
+$lang->story->assignSyncTip       = "孪生需求均同步修改指派人";
+$lang->story->closeSyncTip        = "孪生需求均同步关闭";
+$lang->story->activateSyncTip     = "孪生需求均同步激活";
+$lang->story->relievedSiblingsTip = '产品调整后，本需求自动解除孪生关系，需求不再同步，是否保存？';
 
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';
@@ -483,6 +485,7 @@ $lang->story->operateList['closed']    = '关闭';
 $lang->story->operateList['activated'] = '激活';
 $lang->story->operateList['changed']   = '变更';
 $lang->story->operateList['reviewed']  = '评审';
+$lang->story->operateList['edited']    = '编辑';
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = "提{$lang->URCommon}";

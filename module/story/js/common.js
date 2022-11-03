@@ -109,7 +109,8 @@ $('[data-toggle="popover"]').each(function(item) {
 
 function relieve(index)
 {
-    $.post(relieveURL, {storyID:storyID, siblingID:index}, function(data){
+    $.post(relieveURL, {siblingID: index}, function(data)
+    {
         $('[data-id="' + index + '"]').popover('hide');
 
         if(data.result == 'success')

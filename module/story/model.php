@@ -910,6 +910,14 @@ class storyModel extends model
             ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview')
             ->get();
 
+        /* Relieve siblings when change product. */
+        if(!empty($oldStory->siblings) and $story->product != $oldStory->product)
+        {
+            $this->dbh->exec("UPDATE " . TABLE_STORY . " SET siblings = REPLACE(siblings, ',$storyID,', ',') WHERE `product` = $oldStory->product");
+            $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($storyID)->orWhere('siblings')->eq(',')->exec();
+            $oldStory->siblings = '';
+        }
+
         if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
         if($oldStory->type == 'requirement' and !isset($story->linkRequirements)) $story->linkRequirements = '';
         if($oldStory->status == 'changing' and $story->status == 'draft') $story->status = 'changing';
@@ -961,6 +969,19 @@ class storyModel extends model
                 ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))
                 ->exec();
 
+            /* Sync siblings. */
+            if(!empty($oldStory->siblings))
+            {
+                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                {
+                    $this->dao->delete()->from(TABLE_STORYREVIEW)
+                        ->where('story')->eq($siblingID)
+                        ->andWhere('version')->eq($oldStory->version)
+                        ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))
+                        ->exec();
+                }
+            }
+
             foreach($_POST['reviewer'] as $reviewer)
             {
                 if($oldStory->status == 'reviewing' and in_array($reviewer, array_keys($oldReviewer))) continue;
@@ -970,6 +991,16 @@ class storyModel extends model
                 $reviewData->version  = $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                /* Sync siblings. */
+                if(!empty($oldStory->siblings))
+                {
+                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    {
+                        $reviewData->story = $siblingID;
+                        $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                    }
+                }
             }
 
             if($oldStory->status == 'reviewing') $story = $this->updateStoryByReview($storyID, $oldStory, $story);
@@ -1007,6 +1038,18 @@ class storyModel extends model
                 $data->verify = $story->verify;
                 $data->files  = $story->files = $addedFiles . trim($storyFiles, ',');
                 $this->dao->update(TABLE_STORYSPEC)->data($data)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->exec();
+
+                /* Sync siblings. */
+                if(!empty($oldStory->siblings))
+                {
+                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    {
+                        $this->dao->update(TABLE_STORYSPEC)->data($data)
+                            ->where('story')->eq((int)$siblingID)
+                            ->andWhere('version')->eq($oldStory->version)
+                            ->exec();
+                    }
+                }
             }
 
             if($story->product != $oldStory->product)
@@ -1135,6 +1178,8 @@ class storyModel extends model
 
                 if(isset($story->finalResult)) $this->recordReviewAction($story);
             }
+
+            if(!empty($oldStory->siblings)) $this->syncSiblings($oldStory->id, $oldStory->siblings, $changes, 'Edited');
 
             return true;
         }
@@ -1549,14 +1594,26 @@ class storyModel extends model
         /* Fix bug #671. */
         $this->lang->story->closedReason = $this->lang->story->rejectedReason;
 
-        $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($this->post->result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
+        $this->dao->update(TABLE_STORYREVIEW)
+            ->set('result')->eq($this->post->result)
+            ->set('reviewDate')->eq($now)
+            ->where('story')->eq($storyID)
+            ->andWhere('version')->eq($oldStory->version)
+            ->andWhere('reviewer')->eq($this->app->user->account)
+            ->exec();
 
         /* Sync siblings. */
         if(!empty($oldStory->siblings))
         {
             foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
             {
-                $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($this->post->result)->set('reviewDate')->eq($now)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
+                $this->dao->update(TABLE_STORYREVIEW)
+                    ->set('result')->eq($this->post->result)
+                    ->set('reviewDate')->eq($now)
+                    ->where('story')->eq($siblingID)
+                    ->andWhere('version')->eq($oldStory->version)
+                    ->andWhere('reviewer')->eq($this->app->user->account)
+                    ->exec();
             }
         }
 
@@ -6210,6 +6267,8 @@ class storyModel extends model
             if(strpos('product,branch,module,plan,spec,verify,files,reviewers', $fieldName) !== false) continue;
             $syncFieldList[$fieldName] = $fieldValue;
         }
+
+        if(empty($syncFieldList)) return;
 
         /* Synchronize and record dynamics. */
         $this->loadModel('action');
