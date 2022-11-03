@@ -203,7 +203,7 @@ function loadModuleForSiblings(productID, branch, branchIndex)
 {
     /* Load module */
     var currentModule = 0;
-    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + branchIndex + '&needManage=true&extra=&currentModuleID=' + currentModule);
+    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + branchIndex + '&needManage=false&extra=&currentModuleID=' + currentModule);
     if(branchIndex > 0)
     {
         var $moduleIDBox = $('.addBranchesBox'+ branchIndex +' #moduleIdBox');
@@ -240,7 +240,7 @@ function loadPlanForSiblings(productID, branch, branchIndex)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
     var expired = config.currentMethod == 'create' ? 'unexpired' : '';
-    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=' + branchIndex + '&needCreate=true&expired='+ expired +'&param=skipParent,' + config.currentMethod);
+    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=' + branchIndex + '&needCreate=false&expired='+ expired +'&param=skipParent,' + config.currentMethod);
     if(branchIndex > 0)
     {
         var $planIdBox = $('.addBranchesBox'+ branchIndex +' #planIdBox');
