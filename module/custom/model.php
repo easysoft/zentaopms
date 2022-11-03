@@ -907,7 +907,7 @@ class customModel extends model
         $disabledFeatures = rtrim($disabledFeatures, ',');
         $this->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
 
-        $this->processMeasrecordCron($disabledFeatures);
+        $this->processMeasrecordCron();
     }
 
     /**
@@ -1057,17 +1057,21 @@ class customModel extends model
     /**
      * Process measrecord cron.
      *
-     * @param  string  $disabledFeatures
      * @access public
      * @return void
      */
-    public function processMeasrecordCron($disabledFeatures)
+    public function processMeasrecordCron()
     {
-        $cronStatus = 'normal';
+        $this->loadModel('setting');
+        $closedFeatures   = $this->setting->getItem('owner=system&module=common&section=&key=closedFeatures');
+        $disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
+        $disabledFeatures = $disabledFeatures . ',' . $closedFeatures;
 
-        $hasWaterfall           = strpos(",{$this->config->disabledFeatures},",  ',waterfall,')           === false;
-        $hasScrumMeasrecord     = strpos(",{$this->config->disabledFeatures},",  ',scrumMeasrecord,')     === false;
-        $hasWaterfallMeasrecord = (strpos(",{$this->config->disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+        $hasWaterfall           = strpos(",{$disabledFeatures},",  ',waterfall,')           === false;
+        $hasScrumMeasrecord     = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
+        $hasWaterfallMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+
+        $cronStatus = 'normal';
         if(!$hasScrumMeasrecord and !$hasWaterfallMeasrecord) $cronStatus = 'stop';
 
         $this->loadModel('cron');

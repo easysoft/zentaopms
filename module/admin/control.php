@@ -254,6 +254,7 @@ class admin extends control
             }
             $closedFeatures = rtrim($closedFeatures, ',');
             $this->loadModel('setting')->setItem('system.common.closedFeatures', $closedFeatures);
+            $this->loadModel('custom')->processMeasrecordCron();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
         $this->view->title            = $this->lang->admin->setModuleIndex;
