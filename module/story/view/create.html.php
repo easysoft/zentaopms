@@ -383,6 +383,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
 <?php js::set('storyModule', $lang->story->module);?>
 <?php js::set('storyPlan', $lang->story->plan);?>
 <?php js::set('storyType', $type);?>
+<?php js::set('originProductType', !empty($branches) ? 'normal' : 'branch');?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 
