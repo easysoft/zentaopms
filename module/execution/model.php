@@ -2866,7 +2866,7 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function unlinkStory($executionID, $storyID)
+    public function unlinkStory($executionID, $storyID, $laneID = 0, $columnID = 0)
     {
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         if($execution->type == 'project')
@@ -2876,6 +2876,24 @@ class executionModel extends model
             if(!empty($executionStories)) return print(js::alert($this->lang->execution->notAllowedUnlinkStory));
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+
+        /* Resolve TABLE_KANBANCELL's field cards. */
+        if($execution->type == 'kanban')
+        {
+            $cell = $this->dao->select('*')->from(TABLE_KANBANCELL)
+                ->where('kanban')->eq($executionID)
+                ->andWhere('`column`')->eq($columnID)
+                ->andWhere('lane')->eq($laneID)
+                ->fetch();
+            /* Resolve signal ','. */
+            $cell->cards = str_replace(",$storyID", '', $cell->cards);
+            if(strlen($cell->cards) == 1) $cell->cards = '';
+            $this->dao->update(TABLE_KANBANCELL)->data($cell)
+                ->where('kanban')->eq($executionID)
+                ->andWhere('`column`')->eq($columnID)
+                ->andWhere('lane')->eq($laneID)
+                ->exec();
+    }
 
         $order   = 1;
         $stories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order')->fetchAll();

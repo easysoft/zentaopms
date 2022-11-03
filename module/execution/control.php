@@ -3289,23 +3289,23 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function unlinkStory($executionID, $storyID, $confirm = 'no', $from = '')
+    public function unlinkStory($executionID, $storyID, $confirm = 'no', $from = '', $laneID = 0, $columnID = 0)
     {
         if($confirm == 'no')
         {
             $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
-            return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes&from=$from")));
+            return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes&from=$from&laneID=$laneID&columnID=$columnID")));
         }
         else
         {
             $execution = $this->execution->getByID($executionID);
-            $this->execution->unlinkStory($executionID, $storyID);
+            $this->execution->unlinkStory($executionID, $storyID, $laneID, $columnID);
             if($execution->type == 'kanban')
             {
                 /* Fix bug #29171. */
                 $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($execution->parent)->fetchAll('id');
                 $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
-                if(empty($executionStories)) $this->execution->unlinkStory($execution->parent, $storyID);
+                if(empty($executionStories)) $this->execution->unlinkStory($execution->parent, $storyID, $laneID, $columnID);
             }
 
             /* if kanban then reload and if ajax request then send result. */
