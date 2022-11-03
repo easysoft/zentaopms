@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']));?>
 <?php js::set('mode', $mode);?>
+<?php js::set('hasProgram', !empty($programs));?>
 <div id='mainContent' class='main-content'>
   <form id='modeForm' class="load-indicator main-form form-ajax"  method='post'>
     <div class='main-header'>
@@ -134,7 +135,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->custom->defaultProgram;?></th>
-            <td><?php echo html::select('program', $program, $programID, "class='form-control chosen'");?></td>
+            <td><?php echo html::select('program', $programs, $programID, "class='form-control chosen'");?></td>
           </tr>
         </table>
       </div>
