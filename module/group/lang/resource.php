@@ -1929,7 +1929,22 @@ if(!$hasAssetlib or !$hasAssetlibCaselib)
     unset($lang->resource->testcase->importToLib);
 }
 
-if(!$hasOtherDevops) unset($lang->resource->repo);
+if(!$hasOtherDevops)
+{
+    unset($lang->resource->repo);
+    unset($lang->resource->svn);
+    unset($lang->resource->git);
+    unset($lang->resource->app);
+    unset($lang->resource->ci);
+    unset($lang->resource->compile);
+    unset($lang->resource->jenkins);
+    unset($lang->resource->job);
+    unset($lang->resource->gitlab);
+    unset($lang->resource->gogs);
+    unset($lang->resource->gitea);
+    unset($lang->resource->sonarqube);
+    unset($lang->resource->mr);
+}
 if(!$hasOtherKanban) unset($lang->resource->kanban);
 
 include (dirname(__FILE__) . '/changelog.php');
