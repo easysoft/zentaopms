@@ -818,22 +818,6 @@ class customModel extends model
     }
 
     /**
-     * Get waterfall, assetLib, URStory counts.
-     *
-     * @access public
-     * @return array
-     */
-    public function getCounts()
-    {
-        $counts = array();
-        $counts['waterfall'] = $this->dao->select('COUNT(*) AS waterfallCount')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->fetch('waterfallCount');
-        $counts['URStory']   = $this->dao->select('COUNT(*) AS URStoryCount')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('URStoryCount');
-        if($this->config->edition == 'max') $counts['assetLib'] = $this->dao->select('COUNT(*) AS assetLibCount')->from(TABLE_ASSETLIB)->where('deleted')->eq('0')->fetch('assetLibCount');
-
-        return $counts;
-    }
-
-    /**
      * process project priv within a program set.
      *
      * @access public

@@ -11,26 +11,107 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('changeModeTitleTips', $lang->custom->changeModeTitleTips);?>
-<?php js::set('changeModeContentTips', $lang->custom->changeModeContentTips);?>
+<?php js::set('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']));?>
 <?php js::set('mode', $mode);?>
 <div id='mainContent' class='main-content'>
   <form id='modeForm' class="load-indicator main-form form-ajax"  method='post'>
     <div class='main-header'>
-      <div class='heading'>
-        <strong><?php echo $lang->custom->mode?></strong>
-      </div>
+      <h2><?php echo $lang->custom->mode;?></h2>
     </div>
-    <table class='table table-form'>
+    <table class='table table-form w-700px'>
       <tr>
-        <th class='text-top w-120px'><?php echo $lang->custom->mode;?></th>
-        <td class='w-300px'>
-          <p>
-            <label class="radio-inline"><input type="radio" name="mode" value="light" <?php echo $mode == 'light'? "checked='checked'" : '';?> id="modelight"><?php echo $lang->upgrade->to18Mode['light'];?></label>
-            <label class="radio-inline"><input type="radio" name="mode" value="ALM" <?php echo $mode == 'ALM'? "checked='checked'" : '';?> id="modeALM"><?php echo $lang->upgrade->to18Mode['ALM'];?></label>
-          </p>
+        <td colspan='2'><?php echo sprintf($lang->custom->currentModeTips, $lang->custom->modeList[$mode], $lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);?> </td>
+      </tr>
+      <tr>
+        <td>
+          <label class='radio-inline'><input type='radio' name='mode' value='light' <?php echo $mode == 'light'? "checked='checked'" : '';?> id="modelight"><strong><?php echo $lang->upgrade->to18Mode['light'];?></strong></label>
+          <p class='with-padding text-muted'><?php echo $lang->custom->modeIntrodutionList['light'];?></p>
         </td>
-        <td></td>
+        <td>
+          <label class='radio-inline'><input type='radio' name='mode' value='ALM' <?php echo $mode == 'ALM'? "checked='checked'" : '';?> id="modeALM"><strong><?php echo $lang->upgrade->to18Mode['ALM'];?></strong></label>
+          <p class='with-padding text-muted'><?php echo $lang->custom->modeIntrodutionList['ALM'];?></p>
+        </td>
+      </tr>
+      <tr>
+        <td colspan='2'>
+          <table class='table table-bordered'>
+            <thead>
+              <tr>
+                <th><?php echo $this->lang->upgrade->mode;?></th>
+                <th class="text-center"><?php echo $this->lang->upgrade->to18Mode['light'];?></th>
+                <th class="text-center"><?php echo $this->lang->upgrade->to18Mode['ALM'];?></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><?php echo $this->lang->upgrade->program;?></td>
+                <td class="text-center"><i class="icon text-red text-red icon-close"></i></td>
+                <td class="text-center"><i class="icon text-success text-success icon-check"></i></td>
+              </tr>
+              <tr>
+                <td><?php echo $this->lang->upgrade->productRR;?></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <tr>
+                <td><?php echo $this->lang->upgrade->productUR;?></td>
+                <td class="text-center"><i class="icon text-red icon-close"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <tr>
+                <td><?php echo $this->lang->upgrade->productLine;?></td>
+                <td class="text-center"><i class="icon text-red icon-close"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <tr>
+                <td><?php echo $this->lang->upgrade->projectScrum;?></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <?php if($config->edition == 'max'):?>
+              <tr>
+                <td><?php echo $this->lang->upgrade->scrumDetail;?></td>
+                <td class="text-center"><i class="icon text-red icon-close"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <?php endif;?>
+              <tr>
+                <td><?php echo $this->lang->upgrade->projectWaterfall;?></td>
+                <td class="text-center"><i class="icon text-red icon-close"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <tr>
+                <td><?php echo $this->lang->upgrade->projectKanban;?></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <tr>
+                <td><?php echo $this->lang->upgrade->execution;?></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <?php if($config->edition == 'max'):?>
+              <tr>
+                <td><?php echo $this->lang->upgrade->assetlib;?></td>
+                <td class="text-center"><i class="icon text-red icon-close"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <?php endif;?>
+              <?php if($config->edition == 'biz' or $config->edition == 'max'):?>
+              <tr>
+                <td><?php echo $this->lang->upgrade->oa;?></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+              <?php endif;?>
+              <tr>
+                <td><?php echo $this->lang->upgrade->vision;?></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
       </tr>
       <?php if($program):?>
       <tr class='hide'>
@@ -44,8 +125,7 @@
       </tr>
       <?php endif;?>
       <tr>
-        <td></td>
-        <td><?php echo html::submitButton($lang->custom->switch, 'disabled');?></td>
+        <td colspan='2'><?php echo html::submitButton($lang->custom->switch, 'disabled');?></td>
       </tr>
     </table>
   </form>

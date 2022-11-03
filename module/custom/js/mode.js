@@ -12,36 +12,18 @@ $(function()
 
     $(document).on('click', '#submit', function()
     {
-        if(mode == $('[name=mode]:checked').val()) return false;
+        var selectedMode = $('[name=mode]:checked').val();
 
-        if($(this).hasClass('canSubmit'))
+        if(mode == selectedMode) return false;
+
+        bootbox.confirm(changeModeTips, function(result)
         {
-            $(this).removeClass('canSubmit');
-            $('#confirmModal').modal('hide');
-            return true;
-        }
-
-        $(this).addClass('canSubmit');
-
-        var $mode = $('[name=mode]:checked').val();
-        var confirmTitle   = changeModeTitleTips[$mode];
-        var confirmContent = changeModeContentTips[$mode]
-
-        $('#confirmModal .modal-title').html(confirmTitle);
-        $('#confirmModal .modal-body').html(confirmContent);
-
-        $('#confirmModal').modal('show');
+            if(result)
+            {
+                $('#modeForm').submit();
+            }
+        });
 
         return false;
-    });
-
-    $(document).on('click', '.btn-confirm', function()
-    {
-        $('#submit').click();
-    });
-
-    $('#confirmModal').on('hide.zui.modal', function()
-    {
-        $('#submit').removeClass('canSubmit');
     });
 })
