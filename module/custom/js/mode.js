@@ -9,21 +9,32 @@ $(function()
         $('#program').closest('tr').toggle(mode == 'ALM' && $(this).val() == 'light');
     });
 
-
     $(document).on('click', '#submit', function()
     {
         var selectedMode = $('[name=mode]:checked').val();
-
         if(mode == selectedMode) return false;
 
-        bootbox.confirm(changeModeTips, function(result)
+        if(selectedMode == 'light')
         {
-            if(result)
+            $('#selectProgramModal').modal('show');
+        }
+        else
+        {
+            bootbox.confirm(changeModeTips, function(result)
             {
-                $('#modeForm').submit();
-            }
-        });
+                if(result) $('#modeForm').submit();
+            });
+        }
 
         return false;
+    });
+
+    $(document).on('click', '.btn-save', function()
+    {
+        setTimeout(function()
+        {
+            $('#selectProgramModal').modal('hide');
+            $('#modeForm').submit();
+        }, 1000);
     });
 })

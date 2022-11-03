@@ -57,6 +57,7 @@ $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Enable or Disable Code';
 $lang->custom->execution            = 'Execution';
 $lang->custom->defaultProgram       = 'Default program';
+$lang->custom->selectDefaultProgram = 'Please select default program';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -240,11 +241,12 @@ $lang->custom->sprintConceptList[1] = 'Program Product Sprint';
 
 $lang->custom->workingList['full'] = 'Full Management of Dev';
 
-$lang->custom->menuTip         = 'Click to show/hide navigation bar. Drag to swtich display order.';
-$lang->custom->saveFail        = 'Failed to save!';
-$lang->custom->page            = ' Page';
-$lang->custom->currentModeTips = 'You are currently using %s, you can switch to the %s.';
-$lang->custom->changeModeTips  = 'Please double confirm to switch to %s Mode.';
+$lang->custom->menuTip           = 'Click to show/hide the menu. Drag to switch display order.';
+$lang->custom->saveFail          = 'Failed to save!';
+$lang->custom->page              = ' Page';
+$lang->custom->currentModeTips   = 'You are currently using %s, you can switch to the %s.';
+$lang->custom->changeModeTips    = 'Please double confirm to switch to %s Mode.';
+$lang->custom->selectProgramTips = 'After switching to the Light Mode, in order to ensure the consistency of the data structure, you need to select a program as the default program, and subsequent new product and project data are associated with this default program.';
 
 $lang->custom->modeList['light'] = 'Light Mode';
 $lang->custom->modeList['ALM']   = 'ALM Mode';

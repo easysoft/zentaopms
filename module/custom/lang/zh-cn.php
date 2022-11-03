@@ -56,7 +56,8 @@ $lang->custom->dept                 = '部门';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = '是否启用代号';
 $lang->custom->execution            = '执行';
-$lang->custom->defaultProgram       = '选择默认项目集';
+$lang->custom->selectDefaultProgram = '请选择一个默认项目集';
+$lang->custom->defaultProgram       = '默认项目集';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -241,11 +242,12 @@ $lang->custom->sprintConceptList[1] = '项目 产品 冲刺';
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 
-$lang->custom->menuTip         = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
-$lang->custom->saveFail        = '保存失败！';
-$lang->custom->page            = '页面';
-$lang->custom->currentModeTips = '您当前使用的是%s, 您可以切换到%s';
-$lang->custom->changeModeTips  = '您确定要切换到%s吗？';
+$lang->custom->menuTip           = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
+$lang->custom->saveFail          = '保存失败！';
+$lang->custom->page              = '页面';
+$lang->custom->currentModeTips   = '您当前使用的是%s, 您可以切换到%s';
+$lang->custom->changeModeTips    = '您确定要切换到%s吗？';
+$lang->custom->selectProgramTips = '切换到轻量管理模式后，为确保数据结构一致，需要选择一个项目集作为默认项目集，后续新增的产品和项目数据都关联在这个默认的项目集下。';
 
 $lang->custom->modeList['light'] = '轻量级管理模式';
 $lang->custom->modeList['ALM']   = '全生命周期管理模式';

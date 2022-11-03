@@ -113,17 +113,6 @@
           </table>
         </td>
       </tr>
-      <?php if($program):?>
-      <tr class='hide'>
-        <th><?php echo $lang->custom->defaultProgram;?></th>
-        <td>
-          <?php
-          $disabled = $mode == 'light' ? "disabled" : '';
-          echo html::select('program', $program, $programID, "class='form-control chosen' $disabled" );
-          ?>
-        </td>
-      </tr>
-      <?php endif;?>
       <tr>
         <td colspan='2'><?php echo html::submitButton($lang->custom->switch, 'disabled');?></td>
       </tr>
@@ -131,24 +120,34 @@
   </form>
 </div>
 
-<div class='modal fade' id='confirmModal'>
+<div class='modal fade' id='selectProgramModal'>
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
         <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span class='sr-only'><?php echo $this->lang->close;?></span></button>
-        <h4 class='modal-title'></h4>
+        <h4 class='modal-title'><?php echo $lang->custom->selectDefaultProgram;?></h4>
       </div>
-      <div class='modal-body'></div>
+      <div class='modal-body'>
+        <div class='alert alert-primary'>
+          <p class='text-info'><?php echo $lang->custom->selectProgramTips;?></p>
+        </div>
+        <table class='table table-form'>
+          <tr>
+            <th><?php echo $lang->custom->defaultProgram;?></th>
+            <td><?php echo html::select('program', $program, $programID, "class='form-control chosen'");?></td>
+          </tr>
+        </table>
+      </div>
       <div class='modal-footer'>
-        <button type='button' class='btn btn-primary btn-wide btn-confirm'><?php echo $lang->confirm;?></button>
-        <button type='button' class='btn btn-default btn-wide' data-dismiss='modal'><?php echo $this->lang->cancel;?></button>
+        <button type='button' class='btn btn-primary btn-wide btn-save'><?php echo $lang->save;?></button>
       </div>
     </div>
   </div>
 </div>
 <style>
-#confirmModal .modal-header {border-bottom: 0px}
-#confirmModal .modal-header h4.modal-title{font-weight: 700}
-#confirmModal .modal-footer {border-top: 0px; text-align: center}
+#selectProgramModal .modal-dialog {width: 550px}
+#selectProgramModal .modal-header {border-bottom: 0px}
+#selectProgramModal .modal-header h4.modal-title{font-weight: 700}
+#selectProgramModal .modal-footer {border-top: 0px; text-align: center}
 </style>
 <?php include '../../common/view/footer.html.php';?>
