@@ -3298,7 +3298,15 @@ class execution extends control
         }
         else
         {
+            $execution = $this->execution->getByID($executionID);
             $this->execution->unlinkStory($executionID, $storyID);
+            if($execution->type == 'kanban')
+            {
+                /* Fix bug #29171. */
+                $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($execution->parent)->fetchAll('id');
+                $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
+                if(empty($executionStories)) $this->execution->unlinkStory($execution->parent, $storyID);
+            }
 
             /* if kanban then reload and if ajax request then send result. */
             if(helper::isAjaxRequest())
@@ -3316,7 +3324,6 @@ class execution extends control
                 return $this->send($response);
             }
 
-            $execution    = $this->execution->getByID($executionID);
             $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
             $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
             if($this->app->tab == 'execution' and $execution->type == 'kanban')
