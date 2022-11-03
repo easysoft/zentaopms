@@ -11,7 +11,7 @@
  */
 function loadProduct(productID)
 {
-    if(siblings && productID != oldProductID)
+    if(page == 'edit' && siblings && productID != oldProductID)
     {
         confirmRelievedSiblings = confirm(relievedSiblingsTip);
         if(!confirmRelievedSiblings)
