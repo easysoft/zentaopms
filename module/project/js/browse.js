@@ -4,14 +4,14 @@ $(function()
     {
         var involved = $(this).is(':checked') ? 1 : 0;
         $.cookie('involved', involved, {expires: config.cookieLife, path: config.webRoot});
-        window.location.reload();
+        location.href = location.href;
     });
 
     $('[id="switchButton"]').click(function()
     {
         var projectType = $(this).attr('data-type');
         $.cookie('projectType', projectType, {expires: config.cookieLife, path: config.webRoot});
-        window.location.reload();
+        location.href = location.href;
     });
 
     $('input[name^="showEdit"]').click(function()
