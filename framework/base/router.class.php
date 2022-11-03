@@ -1014,14 +1014,16 @@ class baseRouter
         if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
         if(!session_id()) session_start();
 
-        /* If request header has token, use it as session for authentication. */
-        if(isset($_SERVER['HTTP_TOKEN'])) session_id($_SERVER['HTTP_TOKEN']);
-
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
         if(isset($_GET[$this->config->sessionVar]))
         {
             helper::restartSession($_GET[$this->config->sessionVar]);
+            $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
+        }
+        else if(isset($_SERVER['HTTP_TOKEN'])) // If request header has token, use it as session for authentication.
+        {
+            helper::restartSession($_SERVER['HTTP_TOKEN']);
             $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
         }
 
