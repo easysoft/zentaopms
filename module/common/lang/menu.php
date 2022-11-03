@@ -405,7 +405,7 @@ $lang->qa->menuOrder[45] = 'automation';
 // $lang->qa->menu->automation['subMenu']->interface   = array('link' => '接口|automation|interface|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->environment = array('link' => '环境|automation|environment|productID=%s', 'alias' => '');
 
-$lang->qa->dividerMenu = ',bug,testtask,caselib,';
+$lang->qa->dividerMenu = ',bug,testtask,caselib,automation,';
 
 /* DevOps menu. */
 $lang->devops->menu          = new stdclass();
