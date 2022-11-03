@@ -16,7 +16,7 @@ class productsEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($programID = 0)
     {
@@ -108,7 +108,7 @@ class productsEntry extends entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -130,14 +130,14 @@ class productsEntry extends entry
         $product = $this->loadModel('product')->getByID($data->id);
         $product = $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user');
 
-        $this->send(200, $product);
+        return $this->send(200, $product);
     }
 
     /**
      * Get dropmenu.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getDropMenu()
     {
@@ -168,7 +168,7 @@ class productsEntry extends entry
                 }
             }
         }
-        $this->send(200, $dropMenu);
+        return $this->send(200, $dropMenu);
     }
 
     /**
@@ -176,7 +176,7 @@ class productsEntry extends entry
      *
      * @param  array  $products
      * @access public
-     * @return void
+     * @return string
      */
     public function mergeChildren($products)
     {

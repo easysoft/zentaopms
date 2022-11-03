@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class releaseEntry extends Entry
+class releaseEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $planID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($releaseID)
     {
@@ -37,7 +37,7 @@ class releaseEntry extends Entry
      *
      * @param  int    $releaseID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($releaseID)
     {
@@ -62,7 +62,7 @@ class releaseEntry extends Entry
      *
      * @param  int    $releaseID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($releaseID)
     {

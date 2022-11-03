@@ -15,7 +15,7 @@ class repoRulesEntry extends entry
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {
@@ -27,6 +27,6 @@ class repoRulesEntry extends entry
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $this->send(200, $data->rules);
+        return $this->send(200, $data->rules);
     }
 }

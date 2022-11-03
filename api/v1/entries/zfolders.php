@@ -15,7 +15,7 @@ class zfoldersEntry extends entry
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {
@@ -39,6 +39,6 @@ class zfoldersEntry extends entry
             );
         }
 
-        $this->send(200, array('nodes' => $nodes));
+        return $this->send(200, array('nodes' => $nodes));
     }
 }

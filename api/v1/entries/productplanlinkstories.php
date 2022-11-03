@@ -16,7 +16,7 @@ class productplanLinkStoriesEntry extends entry
      *
      * @param  int    $planID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($planID)
     {

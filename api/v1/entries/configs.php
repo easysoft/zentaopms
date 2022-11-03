@@ -15,7 +15,7 @@ class configsEntry extends baseEntry
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {
@@ -30,6 +30,6 @@ class configsEntry extends baseEntry
         $configs[] = array('key' => 'CRProduct',   'value' => $this->config->CRProduct);
         $configs[] = array('key' => 'CRExecution', 'value' => $this->config->CRExecution);
 
-        $this->send(200, $configs);
+        return $this->send(200, $configs);
     }
 }

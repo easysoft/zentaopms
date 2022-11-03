@@ -16,7 +16,7 @@ class zfileContentEntry extends entry
      *
      * @param  string $fileID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($fileID)
     {
