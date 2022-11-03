@@ -243,6 +243,16 @@ class storyModel extends model
             $this->post->plans    = isset($story->plan) ? array($story->plan) : array(0 => 0);
         }
 
+        /* check module */
+        foreach($this->post->modules as $module)
+        {
+            if(empty($module))
+            {
+                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->module);
+                return false;
+            }
+        }
+
         $storyIds    = array();
         $mainStoryID = 0;
         foreach($this->post->branches as $key => $branch)

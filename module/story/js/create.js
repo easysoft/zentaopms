@@ -217,7 +217,7 @@ function loadModuleForSiblings(productID, branch, branchIndex)
         $moduleIDBox.find('#modules' + branchIndex).chosen();
         if(branchIndex == 0)
         {
-            $('.switchBranch #moduleIdBox span:first-child').remove()
+            $('.switchBranch #moduleIdBox > span:first-child').remove()
         }
         $moduleIDBox.prepend("<span class='input-group-addon fix-border'>" + storyModule + "</span>" );
 
