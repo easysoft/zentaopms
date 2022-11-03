@@ -244,12 +244,16 @@ class storyModel extends model
         }
 
         /* check module */
-        foreach($this->post->modules as $module)
+        $requiredFields = "," . $this->config->story->create->requiredFields . ",";
+        if(strpos($requiredFields, ',module,') !== false)
         {
-            if(empty($module))
+            foreach($this->post->modules as $module)
             {
-                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->module);
-                return false;
+                if(empty($module))
+                {
+                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->module);
+                    return false;
+                }
             }
         }
 
@@ -262,9 +266,6 @@ class storyModel extends model
             $story->plan   = $this->post->plans[$key];
 
             if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $this->post->plan > 0 ? 'planned' : 'wait';
-
-            $requiredFields = "," . $this->config->story->create->requiredFields . ",";
-
             if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
             if(strpos($requiredFields, ',estimate,') !== false)
             {
