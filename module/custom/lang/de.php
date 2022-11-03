@@ -248,12 +248,11 @@ $lang->custom->currentModeTips   = 'You are currently using %s, you can switch t
 $lang->custom->changeModeTips    = 'Please double confirm to switch to %s Mode.';
 $lang->custom->selectProgramTips = 'After switching to the Light Mode, in order to ensure the consistency of the data structure, you need to select a program as the default program, and subsequent new product and project data are associated with this default program.';
 
-$lang->custom->changeModeTitleTips['ALM']   = 'Please double confirm to switch to ALM Mode.';
-$lang->custom->changeModeTitleTips['light'] = 'Please double confirm to switch to Light Mode.';
-$lang->custom->changeModeContentTips['ALM'] = 'The ALM mode is suitable for medium and large R&D teams. After switching the ALM mode, the system will enable functions such as program sets.';
+$lang->custom->modeList['light'] = 'Light Mode';
+$lang->custom->modeList['ALM']   = 'ALM Mode';
 
-$lang->custom->hasMoreData['yes'] = 'After switching to light mode, the system will close the program function, and the related functions of the program will be hidden.';
-$lang->custom->hasMoreData['no']  = 'After switching to light mode, the system will close functions such as program sets, %s.';
+$lang->custom->modeIntrodutionList['light'] = 'Light Mode suitable for small software development teams.';
+$lang->custom->modeIntrodutionList['ALM']   = 'ALM Mode suitable for medium and large software R&D teams';
 
 $lang->custom->needClosedFunctions['waterfall'] = 'Waterfall';
 $lang->custom->needClosedFunctions['URStory']   = 'User Story';

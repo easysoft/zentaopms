@@ -782,7 +782,11 @@ $hasOtherKanban     = strpos(",$config->disabledFeatures,", ',otherKanban,')    
 
 if(!$config->URAndSR)    unset($lang->product->menu->requirement, $lang->product->menuOrder[35]);
 if(!$hasProductRoadmap)  unset($lang->product->menu->roadmap,     $lang->product->menuOrder[30]);
-if(!$hasProductTrack)    unset($lang->product->menu->track,       $lang->product->menuOrder[40]);
+if(!$hasProductTrack)
+{
+    unset($lang->product->menu->track, $lang->product->menuOrder[40]);
+    $lang->product->dividerMenu = str_replace(',track,', ',doc,', $lang->product->dividerMenu);
+}
 if(!$hasWaterfall)       unset($lang->admin->menu->model['dropMenu']->waterfall);
 
 if(!$hasOtherDevops)

@@ -249,12 +249,11 @@ $lang->custom->currentModeTips   = '您当前使用的是%s, 您可以切换到%
 $lang->custom->changeModeTips    = '您确定要切换到%s吗？';
 $lang->custom->selectProgramTips = '切换到轻量管理模式后，为确保数据结构一致，需要选择一个项目集作为默认项目集，后续新增的产品和项目数据都关联在这个默认的项目集下。';
 
-$lang->custom->changeModeTitleTips['ALM']   = '您确定要切换到全生命周期管理模式吗？';
-$lang->custom->changeModeTitleTips['light'] = '您确定要切换到轻量管理模式吗？';
-$lang->custom->changeModeContentTips['ALM'] = '全生命周期管理模式适用于中大型研发团队，切换全生命周期管理模式后，系统将启用项目集等功能。';
+$lang->custom->modeList['light'] = '轻量级管理模式';
+$lang->custom->modeList['ALM']   = '全生命周期管理模式';
 
-$lang->custom->hasMoreData['yes'] = '切换到轻量管理模式后，系统将关闭项目集功能，项目集的相关功能将会被隐藏。';
-$lang->custom->hasMoreData['no']  = '切换到轻量管理模式后，系统将关闭项目集，%s等功能。';
+$lang->custom->modeIntrodutionList['light'] = '轻量级管理模式适用于小型软件研发团队';
+$lang->custom->modeIntrodutionList['ALM']   = '全生命周期管理模式适用于中大型软件研发团队';
 
 $lang->custom->needClosedFunctions['waterfall'] = '瀑布项目';
 $lang->custom->needClosedFunctions['URStory']   = '用户需求';
