@@ -16,7 +16,7 @@ class projectReleasesEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($projectID = 0)
     {
@@ -49,7 +49,7 @@ class projectReleasesEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($projectID = 0)
     {
@@ -72,6 +72,6 @@ class projectReleasesEntry extends entry
 
         $release = $this->loadModel('projectrelease')->getByID($data->id);
 
-        $this->send(201, $release);
+        return $this->send(201, $release);
     }
 }

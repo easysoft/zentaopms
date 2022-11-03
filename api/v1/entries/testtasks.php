@@ -16,7 +16,7 @@ class testtasksEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($projectID = 0)
     {
@@ -46,7 +46,7 @@ class testtasksEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     private function getProjectTesttasks($projectID)
     {
@@ -72,7 +72,7 @@ class testtasksEntry extends entry
      *
      * @access public
      * @param  int    $projectID
-     * @return void
+     * @return string
      */
     public function post($projectID = 0)
     {
@@ -103,6 +103,6 @@ class testtasksEntry extends entry
 
         $testtask = $this->loadModel('testtask')->getByID($data->id);
 
-        $this->send(201, $testtask);
+        return $this->send(201, $testtask);
     }
 }

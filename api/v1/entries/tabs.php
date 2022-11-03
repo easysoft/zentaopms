@@ -16,7 +16,7 @@ class tabsEntry extends baseEntry
      *
      * @param  string    $moduleName    work|
      * @access public
-     * @return void
+     * @return string
      */
     public function get($moduleName)
     {
@@ -76,6 +76,6 @@ class tabsEntry extends baseEntry
             }
         }
 
-        $this->send(200, array('tabs' => $menus));
+        return $this->send(200, array('tabs' => $menus));
     }
 }

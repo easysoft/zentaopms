@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class feedbackCloseEntry extends Entry
+class feedbackCloseEntry extends entry
 {
     /**
      * POST method.
      *
      * @param  int    $feedbackID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($feedbackID)
     {
@@ -36,6 +36,6 @@ class feedbackCloseEntry extends Entry
 
         $feedback = $this->loadModel('feedback')->getById($feedbackID);
 
-        $this->send(200, $feedback);
+        return $this->send(200, $feedback);
     }
 }

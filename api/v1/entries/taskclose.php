@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class taskCloseEntry extends Entry
+class taskCloseEntry extends entry
 {
     /**
      * POST method.
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($taskID)
     {
@@ -34,6 +34,6 @@ class taskCloseEntry extends Entry
 
         $task = $this->loadModel('task')->getByID($taskID);
 
-        $this->send(200, $task);
+        return $this->send(200, $task);
     }
 }

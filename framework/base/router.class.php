@@ -1008,14 +1008,14 @@ class baseRouter
             }
         }
 
-        /* If request header has token, use it as session for authentication. */
-        if(isset($_SERVER['HTTP_TOKEN'])) session_id($_SERVER['HTTP_TOKEN']);
-
         $sessionName = $this->config->sessionVar;
         session_name($sessionName);
         session_set_cookie_params(0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
         if(!session_id()) session_start();
+
+        /* If request header has token, use it as session for authentication. */
+        if(isset($_SERVER['HTTP_TOKEN'])) session_id($_SERVER['HTTP_TOKEN']);
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 

@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class storyCloseEntry extends Entry
+class storyCloseEntry extends entry
 {
     /**
      * POST method.
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($storyID)
     {
@@ -32,6 +32,6 @@ class storyCloseEntry extends Entry
 
         $story = $this->loadModel('story')->getByID($storyID);
 
-        $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 }

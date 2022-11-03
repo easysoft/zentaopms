@@ -9,13 +9,13 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class modulesEntry extends Entry
+class modulesEntry extends entry
 {
     /**
      * Get method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {

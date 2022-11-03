@@ -16,7 +16,7 @@ class productplansEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($productID = 0)
     {
@@ -63,7 +63,7 @@ class productplansEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($productID = 0)
     {
