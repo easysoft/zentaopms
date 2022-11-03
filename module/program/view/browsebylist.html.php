@@ -122,8 +122,7 @@ th.table-nest-title > .table-nest-toggle-global:before {width: 100%; left: 0 !im
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
 #programTableList .icon-kanban:before {content: '\e983';}
-#programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18 !important;}
-#programTableList > tr[data-type="program"] > .c-name:hover > a {color: #313c52 !important;}
+#programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18;}
 #programTableList > tr[data-nest-parent] {background: #f8f8f8;}
 </style>
 <?php js::set('originOrders', $originOrders);?>

@@ -130,8 +130,7 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 
 
 #programTableList > tr:hover {background: #E6F0FFCC;}
-#programTableList > tr[data-type="project"] > .c-name:hover > a {color: #1E6AEB !important;}
-#programTableList > tr[data-type="project"] > .c-name > a {color: #2463c7 !important;}
+#programTableList > tr > .c-name:hover > a {color: #1E6AEB !important;}
 .m-product-all #mainMenu > div.btn-toolbar.pull-right > a.btn.btn-link.iframe {color: #18A6FD;}
 
 #projectForm .c-name .label-danger,
