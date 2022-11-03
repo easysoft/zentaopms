@@ -10,14 +10,14 @@
  * @link        http://www.zentao.net
  **/
 
-class storyActiveEntry extends Entry
+class storyActiveEntry extends entry
 {
     /**
      * POST method.
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($storyID)
     {
@@ -34,7 +34,7 @@ class storyActiveEntry extends Entry
 
         $story = $this->loadModel('story')->getByID($storyID);
 
-        $this->send(200, $story);
+        return $this->send(200, $story);
     }
 }
 

@@ -16,7 +16,7 @@ class testsuitesEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($productID = 0)
     {
@@ -49,7 +49,7 @@ class testsuitesEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($productID = 0)
     {
@@ -74,6 +74,6 @@ class testsuitesEntry extends entry
 
         $suite = $this->loadModel('testsuite')->getByID($data->id);
 
-        $this->send(200, $this->format($suite, 'addedBy:user,addedDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool'));
+        return $this->send(200, $this->format($suite, 'addedBy:user,addedDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool'));
     }
 }

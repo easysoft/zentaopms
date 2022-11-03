@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class buildEntry extends Entry
+class buildEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $buildID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($buildID)
     {
@@ -37,7 +37,7 @@ class buildEntry extends Entry
      *
      * @param  int    $buildID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($buildID)
     {
@@ -55,7 +55,7 @@ class buildEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $build = $this->build->getByID($buildID);
-        $this->send(200, $this->format($build, 'builder:user,stories:idList,bugs:idList,deleted:bool'));
+        return $this->send(200, $this->format($build, 'builder:user,stories:idList,bugs:idList,deleted:bool'));
     }
 
     /**
@@ -63,7 +63,7 @@ class buildEntry extends Entry
      *
      * @param  int    $buildID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($buildID)
     {

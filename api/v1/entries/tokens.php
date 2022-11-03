@@ -15,7 +15,7 @@ class tokensEntry extends baseEntry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -29,7 +29,7 @@ class tokensEntry extends baseEntry
         if($user)
         {
             $this->user->login($user, $addAction);
-            $this->send(201, array('token' => session_id()));
+            return $this->send(201, array('token' => session_id()));
         }
         else
         {

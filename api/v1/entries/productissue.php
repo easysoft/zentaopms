@@ -17,7 +17,7 @@ class productIssueEntry extends entry
      *
      * @param  string $issueID, such as task-1, story-1, bug-1
      * @access public
-     * @return void
+     * @return string
      */
     public function get($issueID)
     {
@@ -142,7 +142,7 @@ class productIssueEntry extends entry
         }
         $issue->openedBy = $profileList[$issue->openedBy];
 
-        $this->send(200, array('issue' => $this->format($issue, 'openedDate:time,lastEditedDate:time')));
+        return $this->send(200, array('issue' => $this->format($issue, 'openedDate:time,lastEditedDate:time')));
     }
 
     /**

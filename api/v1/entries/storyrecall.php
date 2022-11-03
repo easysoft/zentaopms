@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class storyRecallEntry extends Entry
+class storyRecallEntry extends entry
 {
     /**
      * Delete method.
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($storyID)
     {

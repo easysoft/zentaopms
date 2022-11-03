@@ -16,7 +16,7 @@ class projectStoriesEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($projectID)
     {

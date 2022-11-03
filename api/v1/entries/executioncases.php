@@ -16,7 +16,7 @@ class executionCasesEntry extends entry
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($executionID = 0)
     {

@@ -15,7 +15,7 @@ class usersEntry extends entry
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {
@@ -51,7 +51,7 @@ class usersEntry extends entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -85,6 +85,6 @@ class usersEntry extends entry
         $user = $this->loadModel('user')->getByID($data->id, 'id');
         unset($user->password);
 
-        $this->send(201, $this->format($user, 'last:time,locked:time'));
+        return $this->send(201, $this->format($user, 'last:time,locked:time'));
     }
 }
