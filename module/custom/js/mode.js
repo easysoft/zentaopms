@@ -9,39 +9,32 @@ $(function()
         $('#program').closest('tr').toggle(mode == 'ALM' && $(this).val() == 'light');
     });
 
-
     $(document).on('click', '#submit', function()
     {
-        if(mode == $('[name=mode]:checked').val()) return false;
+        var selectedMode = $('[name=mode]:checked').val();
+        if(mode == selectedMode) return false;
 
-        if($(this).hasClass('canSubmit'))
+        if(selectedMode == 'light')
         {
-            $(this).removeClass('canSubmit');
-            $('#confirmModal').modal('hide');
-            return true;
+            $('#selectProgramModal').modal('show');
         }
-
-        $(this).addClass('canSubmit');
-
-        var $mode = $('[name=mode]:checked').val();
-        var confirmTitle   = changeModeTitleTips[$mode];
-        var confirmContent = changeModeContentTips[$mode]
-
-        $('#confirmModal .modal-title').html(confirmTitle);
-        $('#confirmModal .modal-body').html(confirmContent);
-
-        $('#confirmModal').modal('show');
+        else
+        {
+            bootbox.confirm(changeModeTips, function(result)
+            {
+                if(result) $('#modeForm').submit();
+            });
+        }
 
         return false;
     });
 
-    $(document).on('click', '.btn-confirm', function()
+    $(document).on('click', '.btn-save', function()
     {
-        $('#submit').click();
-    });
-
-    $('#confirmModal').on('hide.zui.modal', function()
-    {
-        $('#submit').removeClass('canSubmit');
+        setTimeout(function()
+        {
+            $('#selectProgramModal').modal('hide');
+            $('#modeForm').submit();
+        }, 1000);
     });
 })
