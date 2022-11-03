@@ -70,12 +70,14 @@
             <div class="width-radio-row">
                 <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0);?>
                 <?php echo html::input('colWidth', !empty($copyKanban->colWidth) ? $copyKanban->colWidth : $this->config->colWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->colWidth}' autocomplete='off'");?>px
+                <div class='fixedTip'><?php echo $lang->kanbancolumn->fixedTip;?></div>
             </div>
             <div class="width-radio-row mt10">
                 <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0);?>
                 <?php echo html::input('minColWidth', !empty($copyKanban->minColWidth) ? $copyKanban->minColWidth: $this->config->minColWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->minColWidth}' autocomplete='off'");?>px
                 <span class="input-divider">~</span>
                 <?php echo html::input('maxColWidth', !empty($copyKanban->maxColWidth) ? $copyKanban->maxColWidth: $this->config->maxColWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->maxColWidth}' autocomplete='off'");?>px
+                <div class='autoTip'><?php echo $lang->kanbancolumn->autoTip;?></div>
             </div>
         </td>
       </tr>
