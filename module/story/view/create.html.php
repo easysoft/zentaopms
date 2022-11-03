@@ -88,7 +88,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               <div class='input-group' style='display: flex;'>
                 <div class='table-col' id='branchBox'>
                   <div class='input-group'>
-                    <span class='input-group-addon fix-border'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
+                    <span class='input-group-addon'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
                     <?php echo html::select('branches[0]', $branches, $branch, "onchange='loadBranchRelation(this.value, 0);' class='form-control chosen control-branch'");?>
                   </div>
                 </div>
@@ -353,7 +353,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
         <div class='input-group' style='display: flex;'>
           <div class='table-col' id='branchBox' style='flex: 1 0 160px'>
             <div class='input-group'>
-              <span class='input-group-addon fix-border'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
+              <span class='input-group-addon'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
               <?php echo html::select("branches[$i]", $branches, $branch, "onchange='loadBranchRelation(this.value, $i);' class='form-control chosen control-branch'");?>
             </div>
           </div>

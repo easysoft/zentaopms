@@ -3623,6 +3623,7 @@ class storyModel extends model
             ->andWhere('status')->notin('closed,draft')
             ->andWhere('product')->eq($productID)
             ->andWhere('plan')->in('0,')
+            ->andWhere('siblings')->eq('')
             ->beginIF($append)->orWhere('id')->in($append)->fi()
             ->fetchPairs();
         return array(0 => '') + $stories ;
