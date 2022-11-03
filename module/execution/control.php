@@ -2564,6 +2564,12 @@ class execution extends control
         $projects   = $this->project->getPairsByProgram('', 'noclosed');
         $executions = $this->execution->getStatData(0, 'all', 0, 0, false, '', 'id_desc');
 
+        foreach($executions as $execution)
+        {
+            $execution->name = htmlspecialchars_decode($execution->name);
+            $execution->team = htmlspecialchars_decode($execution->team);
+        }
+
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
             ->andWhere('type')->eq('execution')
