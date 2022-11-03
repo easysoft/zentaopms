@@ -22,4 +22,4 @@
 .table.has-sort-head thead>tr>th>a:hover, .table.has-sort-head thead>tr>th>a:hover:after, .table.has-sort-head thead>tr>th>a:hover:before {color: #000;}
 
 #toggleFoldIcon:hover {cursor: pointer;}
-#toggleFoldIcon .icon-border {width: 20px; height: 20px; border-radius: 8px; border: 1px solid #D5E5FF;}
+#toggleFoldIcon .icon-border {width: 20px; height: 20px; border-radius: 8px;}
