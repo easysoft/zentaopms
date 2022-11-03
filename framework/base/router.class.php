@@ -1019,7 +1019,6 @@ class baseRouter
         if(isset($_GET[$this->config->sessionVar]))
         {
             helper::restartSession($_GET[$this->config->sessionVar]);
-            $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
         }
         else if(isset($_SERVER['HTTP_TOKEN'])) // If request header has token, use it as session for authentication.
         {
