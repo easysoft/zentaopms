@@ -41,7 +41,7 @@ $(function()
     {
         var current    = $(this).val();
         var last       = $(this).attr('data-last');
-        var lastBranch = $(this).attr('data-lastBranch');
+        var lastBranch = $(this).attr('data-lastBranch') !== undefined ? $(this).attr('data-lastBranch') : 0;
 
         $(this).attr('data-last', current);
 
@@ -58,7 +58,7 @@ $(function()
 
         if(current != last && $.inArray(last, unmodifiableProducts) != -1)
         {
-            if(lastBranch)
+            if(lastBranch != 0)
             {
                 if($.inArray(lastBranch, unmodifiableBranches) != -1)
                 {

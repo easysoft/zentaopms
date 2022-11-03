@@ -14,7 +14,7 @@ $(function()
         var selectedMode = $('[name=mode]:checked').val();
         if(mode == selectedMode) return false;
 
-        if(selectedMode == 'light')
+        if(selectedMode == 'light' && hasProgram)
         {
             $('#selectProgramModal').modal('show');
         }

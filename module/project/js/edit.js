@@ -43,8 +43,8 @@ $(function()
 
         $(this).attr('data-last', current);
 
-        var $branch  = $(this).closest('.has-branch').find("[name^='branch']");
-        if($branch !== undefined)
+        var $branch = $(this).closest('.has-branch').find("[name^='branch']");
+        if($branch.length)
         {
             var branchID = $branch.val();
             $(this).attr('data-lastBranch', branchID);
@@ -56,15 +56,9 @@ $(function()
 
         if(current != last && $.inArray(last, unmodifiableProducts) != -1)
         {
-            if(lastBranch)
+            if(lastBranch != 0)
             {
-                if($.inArray(lastBranch, unmodifiableBranches) != -1)
-                {
-                    if((lastBranch == 0 && unmodifiableMainBranches[last]) || lastBranch != 0)
-                    {
-                        bootbox.alert(unLinkProductTip.replace("%s", allProducts[last]));
-                    }
-                }
+                if($.inArray(lastBranch, unmodifiableBranches) != -1) bootbox.alert(unLinkProductTip.replace("%s", allProducts[last] + branchGroups[last][lastBranch]));
             }
             else
             {
