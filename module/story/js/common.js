@@ -109,13 +109,13 @@ $('[data-toggle="popover"]').each(function(item) {
 
 function relieve(index)
 {
-    $.post(relieveURL, {storyID:storyID, siblingID:index}, function(data){
+    $.post(relieveURL, {siblingID:index}, function(data){
         $('[data-id="' + index + '"]').popover('hide');
 
         if(data.result == 'success')
         {
-            if(data.data.length !== 0) $('[data-id="' + index + '"]').parent('li').remove();
-            if(data.data.length == 0 || index == storyID)
+            if(data.silbingsCount != 0) $('[data-id="' + index + '"]').parent('li').remove();
+            if(data.silbingsCount == 0 || index == storyID)
             {
                 $('[href="#legendSiblings"]').parent('li').next('li').addClass('active');;
                 $('[href="#legendSiblings"]').parent('li').remove();
