@@ -26,11 +26,11 @@
       <tr>
         <td>
           <label class='radio-inline'><input type='radio' name='mode' value='light' <?php echo $mode == 'light'? "checked='checked'" : '';?> id="modelight"><strong><?php echo $lang->upgrade->to18Mode['light'];?></strong></label>
-          <p class='with-padding text-muted'><?php echo $lang->custom->modeIntrodutionList['light'];?></p>
+          <p class='with-padding pd-l-20 text-muted'><?php echo $lang->custom->modeIntrodutionList['light'];?></p>
         </td>
         <td>
           <label class='radio-inline'><input type='radio' name='mode' value='ALM' <?php echo $mode == 'ALM'? "checked='checked'" : '';?> id="modeALM"><strong><?php echo $lang->upgrade->to18Mode['ALM'];?></strong></label>
-          <p class='with-padding text-muted'><?php echo $lang->custom->modeIntrodutionList['ALM'];?></p>
+          <p class='with-padding pd-l-20 text-muted'><?php echo $lang->custom->modeIntrodutionList['ALM'];?></p>
         </td>
       </tr>
       <tr>
@@ -118,37 +118,31 @@
         <td colspan='2'><?php echo html::submitButton($lang->custom->switch, 'disabled');?></td>
       </tr>
     </table>
-  </form>
-</div>
 
-<div class='modal fade' id='selectProgramModal'>
-  <div class='modal-dialog'>
-    <div class='modal-content'>
-      <div class='modal-header'>
-        <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span class='sr-only'><?php echo $this->lang->close;?></span></button>
-        <h4 class='modal-title'><?php echo $lang->custom->selectDefaultProgram;?></h4>
-      </div>
-      <div class='modal-body'>
-        <div class='alert alert-primary'>
-          <p class='text-info'><?php echo $lang->custom->selectProgramTips;?></p>
+    <div class='modal fade' id='selectProgramModal'>
+      <div class='modal-dialog'>
+        <div class='modal-content'>
+          <div class='modal-header'>
+            <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span class='sr-only'><?php echo $this->lang->close;?></span></button>
+            <h4 class='modal-title'><?php echo $lang->custom->selectDefaultProgram;?></h4>
+          </div>
+          <div class='modal-body'>
+            <div class='alert alert-primary'>
+              <p class='text-info'><?php echo $lang->custom->selectProgramTips;?></p>
+            </div>
+            <table class='table table-form'>
+              <tr>
+                <th><?php echo $lang->custom->defaultProgram;?></th>
+                <td><?php echo html::select('program', $programs, $programID, "class='form-control chosen'");?></td>
+              </tr>
+            </table>
+          </div>
+          <div class='modal-footer'>
+            <button type='button' class='btn btn-primary btn-wide btn-save'><?php echo $lang->save;?></button>
+          </div>
         </div>
-        <table class='table table-form'>
-          <tr>
-            <th><?php echo $lang->custom->defaultProgram;?></th>
-            <td><?php echo html::select('program', $programs, $programID, "class='form-control chosen'");?></td>
-          </tr>
-        </table>
-      </div>
-      <div class='modal-footer'>
-        <button type='button' class='btn btn-primary btn-wide btn-save'><?php echo $lang->save;?></button>
       </div>
     </div>
-  </div>
+  </form>
 </div>
-<style>
-#selectProgramModal .modal-dialog {width: 550px}
-#selectProgramModal .modal-header {border-bottom: 0px}
-#selectProgramModal .modal-header h4.modal-title{font-weight: 700}
-#selectProgramModal .modal-footer {border-top: 0px; text-align: center}
-</style>
 <?php include '../../common/view/footer.html.php';?>
