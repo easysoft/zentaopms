@@ -3271,7 +3271,7 @@ class ztSessionHandler
             if(strpos($sessData, 'user|') !== false)
             {
                 $rawSessContent = (string) file_get_contents($this->rawFile);
-                if(empty($rawSessContent)) file_put_contents($this->rawFile, $sessData);
+                if(strpos($rawSessContent, 'user|') === false) file_put_contents($this->rawFile, $sessData);
             }
 
             return true;
