@@ -2863,6 +2863,8 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  int    $storyID
+     * @param  int    $laneID
+     * @param  int    $columnID
      * @access public
      * @return void
      */
@@ -2886,7 +2888,7 @@ class executionModel extends model
                 ->andWhere('lane')->eq($laneID)
                 ->fetch();
             /* Resolve signal ','. */
-            $cell->cards = str_replace(",$storyID", '', $cell->cards);
+            $cell->cards = str_replace(",$storyID,", ',', $cell->cards);
             if(strlen($cell->cards) == 1) $cell->cards = '';
             $this->dao->update(TABLE_KANBANCELL)->data($cell)
                 ->where('kanban')->eq($executionID)
