@@ -99,9 +99,9 @@ $lang->my->auditMenu->audit = new stdclass();
 $lang->my->auditMenu->audit->all      = 'All';
 $lang->my->auditMenu->audit->story    = 'Story';
 $lang->my->auditMenu->audit->testcase = 'Case';
-if($config->edition == 'max' and strpos(",$config->disabledFeatures,", ',waterfall,') === false) $lang->my->auditMenu->audit->project = 'Project';
+if($config->edition == 'max' and helper::hasFeature('waterfall')) $lang->my->auditMenu->audit->project = 'Project';
 if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = 'Feedback';
-if($config->edition != 'open' and strpos(",$config->disabledFeatures,", ',otherOA,') === false)  $lang->my->auditMenu->audit->oa      = 'OA';
+if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->auditMenu->audit->oa = 'OA';
 
 $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->audit = new stdclass();

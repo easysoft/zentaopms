@@ -1752,16 +1752,9 @@ class block extends control
      */
     public function printAssignToMeBlock($longBlock = true)
     {
-        $hasWaterfall        = strpos(",{$this->config->disabledFeatures},",  ',waterfall,')        === false;
-        $hasScrumIssue       = strpos(",{$this->config->disabledFeatures},",  ',scrumIssue,')       === false;
-        $hasScrumRisk        = strpos(",{$this->config->disabledFeatures},",  ',scrumRisk,')        === false;
-        $hasScrumMeeting     = strpos(",{$this->config->disabledFeatures},",  ',scrumMeeting,')     === false;
-        $hasWaterfallIssue   = (strpos(",{$this->config->disabledFeatures},", ',waterfallIssue,')   === false and $hasWaterfall);
-        $hasWaterfallRisk    = (strpos(",{$this->config->disabledFeatures},", ',waterfallRisk,')    === false and $hasWaterfall);
-        $hasWaterfallMeeting = (strpos(",{$this->config->disabledFeatures},", ',waterfallMeeting,') === false and $hasWaterfall);
-        $hasIssue            = ($hasScrumIssue   or $hasWaterfallIssue);
-        $hasRisk             = ($hasScrumRisk    or $hasWaterfallRisk);
-        $hasMeeting          = ($hasScrumMeeting or $hasWaterfallMeeting);
+        $hasIssue   = helper::hasFeature('issue');
+        $hasRisk    = helper::hasFeature('risk');
+        $hasMeeting = helper::hasFeature('meeting');
 
         $hasViewPriv = array();
         if(common::hasPriv('todo',  'view'))                                                                                          $hasViewPriv['todo']        = true;

@@ -1888,54 +1888,46 @@ $lang->dev->methodOrder[15] = 'editor';
 $lang->dev->methodOrder[20] = 'translate';
 
 global $config;
-$inUpgrade          = (defined('IN_UPGRADE') and IN_UPGRADE);
-$isURSR             = ($config->URAndSR             or $inUpgrade);
-$hasProgram         = ($config->systemMode == 'ALM' or $inUpgrade);
-$hasProductTrack    = (strpos(",$config->disabledFeatures,", ',productTrack,')    === false or $inUpgrade);
-$hasProductRoadmap  = (strpos(",$config->disabledFeatures,", ',productRoadmap,')  === false or $inUpgrade);
-$hasWaterfallTrack  = (strpos(",$config->disabledFeatures,", ',waterfallTrack,')  === false or $inUpgrade);
-$hasWaterfall       = (strpos(",$config->disabledFeatures,", ',waterfall,')       === false or $inUpgrade);
-$hasAssetlib        = (strpos(",$config->disabledFeatures,", ',assetlib,')        === false or $inUpgrade);
-$hasOtherDevops     = (strpos(",$config->disabledFeatures,", ',otherDevops,')     === false or $inUpgrade);
-$hasOtherKanban     = (strpos(",$config->disabledFeatures,", ',otherKanban,')     === false or $inUpgrade);
-
-if(!$hasWaterfall)
+$inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);
+if(!$inUpgrade)
 {
-    unset($lang->resource->design);
-    unset($lang->resource->programplan);
-    unset($lang->resource->stage);
+    if(!$config->URAndSR)
+    {
+        unset($lang->resource->product->requirement);
+        unset($lang->resource->story->linkStory);
+        unset($lang->resource->requirement);
+    }
+    if($config->systemMode == 'light')
+    {
+        unset($lang->resource->program);
+        unset($lang->resource->project->programTitle);
+    }
+    if(!helper::hasFeature('waterfall'))
+    {
+        unset($lang->resource->design);
+        unset($lang->resource->programplan);
+        unset($lang->resource->stage);
+    }
+    if(!helper::hasFeature('product_track'))    unset($lang->resource->product->track);
+    if(!helper::hasFeature('product_roadmap'))  unset($lang->resource->product->roadmap);
+    if(!helper::hasFeature('waterfall_track'))  unset($lang->resource->projectstory->track);
+    if(!helper::hasFeature('devops'))
+    {
+        unset($lang->resource->repo);
+        unset($lang->resource->svn);
+        unset($lang->resource->git);
+        unset($lang->resource->app);
+        unset($lang->resource->ci);
+        unset($lang->resource->compile);
+        unset($lang->resource->jenkins);
+        unset($lang->resource->job);
+        unset($lang->resource->gitlab);
+        unset($lang->resource->gogs);
+        unset($lang->resource->gitea);
+        unset($lang->resource->sonarqube);
+        unset($lang->resource->mr);
+    }
+    if(!helper::hasFeature('kanban')) unset($lang->resource->kanban);
 }
-if(!$hasProgram)
-{
-    unset($lang->resource->program);
-    unset($lang->resource->project->programTitle);
-}
-if(!$isURSR)
-{
-    unset($lang->resource->product->requirement);
-    unset($lang->resource->story->linkStory);
-    unset($lang->resource->requirement);
-}
-if(!$hasProductTrack)    unset($lang->resource->product->track);
-if(!$hasProductRoadmap)  unset($lang->resource->product->roadmap);
-if(!$hasWaterfallTrack)  unset($lang->resource->projectstory->track);
-
-if(!$hasOtherDevops)
-{
-    unset($lang->resource->repo);
-    unset($lang->resource->svn);
-    unset($lang->resource->git);
-    unset($lang->resource->app);
-    unset($lang->resource->ci);
-    unset($lang->resource->compile);
-    unset($lang->resource->jenkins);
-    unset($lang->resource->job);
-    unset($lang->resource->gitlab);
-    unset($lang->resource->gogs);
-    unset($lang->resource->gitea);
-    unset($lang->resource->sonarqube);
-    unset($lang->resource->mr);
-}
-if(!$hasOtherKanban) unset($lang->resource->kanban);
 
 include (dirname(__FILE__) . '/changelog.php');

@@ -21,8 +21,8 @@
       <h2 class='text-center'><?php echo $lang->project->chooseProgramType; ?></h2>
       <div class='row'>
         <?php
-        $hasWaterfall = strpos(",$config->disabledFeatures,", ',waterfall,') === false;
-        $colClass = $hasWaterfall ? 'col-xs-4' : 'col-xs-6';
+        $hasWaterfall = helper::hasFeature('waterfall');
+        $colClass     = $hasWaterfall ? 'col-xs-4' : 'col-xs-6';
         ?>
         <div class='<?php echo $colClass?>'>
         <?php $tab = $from == 'global' ? 'project' : $app->tab;?>

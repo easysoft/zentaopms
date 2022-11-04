@@ -258,13 +258,10 @@ $lang->project->currencySymbol['NZD'] = 'NZ$';
 $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
-$lang->project->modelList['']          = "";
-$lang->project->modelList['scrum']     = "Scrum";
-$lang->project->modelList['waterfall'] = "瀑布";
-$lang->project->modelList['kanban']    = "看板";
-
-global $config;
-if(strpos(",$config->disabledFeatures,", ',waterfall,') !== false) unset($lang->project->modelList['waterfall']);
+$lang->project->modelList['']       = "";
+$lang->project->modelList['scrum']  = "Scrum";
+if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "瀑布";
+$lang->project->modelList['kanban'] = "看板";
 
 $lang->project->featureBar['browse']['all']       = '全部';
 $lang->project->featureBar['browse']['undone']    = '未完成';
