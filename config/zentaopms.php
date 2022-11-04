@@ -408,3 +408,10 @@ $config->showMainMenu = true;
 $config->maxPriValue  = '256';
 
 $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
+
+$config->featureGroup = new stdclass();
+$config->featureGroup->product   = array('roadmap', 'track', 'URStory');
+$config->featureGroup->scrum     = array();
+$config->featureGroup->waterfall = array('track');
+$config->featureGroup->assetlib  = array();
+$config->featureGroup->other     = array('devops', 'kanban');

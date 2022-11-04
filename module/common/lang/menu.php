@@ -772,39 +772,31 @@ $lang->navGroup->tree    = 'tree';
 $lang->navGroup->misc    = 'misc';
 $lang->navGroup->upgrade = 'upgrade';
 
-$hasWaterfall       = strpos(",$config->disabledFeatures,", ',waterfall,')       === false;
-$hasProductTrack    = strpos(",$config->disabledFeatures,", ',productTrack,')    === false;
-$hasProductRoadmap  = strpos(",$config->disabledFeatures,", ',productRoadmap,')  === false;
-$hasScrumAuditplan  = strpos(",$config->disabledFeatures,", ',scrumAuditplan,')  === false;
-$hasScrumProcess    = strpos(",$config->disabledFeatures,", ',scrumProcess,')    === false;
-$hasOtherDevops     = strpos(",$config->disabledFeatures,", ',otherDevops,')     === false;
-$hasOtherKanban     = strpos(",$config->disabledFeatures,", ',otherKanban,')     === false;
-
-if(!$config->URAndSR)    unset($lang->product->menu->requirement, $lang->product->menuOrder[35]);
-if(!$hasProductRoadmap)  unset($lang->product->menu->roadmap,     $lang->product->menuOrder[30]);
-if(!$hasProductTrack)
+if(!$config->URAndSR) unset($lang->product->menu->requirement, $lang->product->menuOrder[35]);
+if(!helper::hasFeature('product_roadmap')) unset($lang->product->menu->roadmap, $lang->product->menuOrder[30]);
+if(!helper::hasFeature('product_track'))
 {
     unset($lang->product->menu->track, $lang->product->menuOrder[40]);
     $lang->product->dividerMenu = str_replace(',track,', ',doc,', $lang->product->dividerMenu);
 }
-if(!$hasWaterfall)       unset($lang->admin->menu->model['dropMenu']->waterfall);
+if(!helper::hasFeature('waterfall')) unset($lang->admin->menu->model['dropMenu']->waterfall);
 
-if(!$hasOtherDevops)
+if(!helper::hasFeature('devops'))
 {
     unset($lang->mainNav->devops,         $lang->mainNav->menuOrder[35]);
     unset($lang->scrum->menu->devops,     $lang->scrum->menuOrder[25]);
     unset($lang->waterfall->menu->devops, $lang->waterfall->menuOrder[35]);
 }
 
-if(!$hasOtherKanban)
+if(!helper::hasFeature('kanban'))
 {
     unset($lang->mainNav->kanban, $lang->mainNav->menuOrder[40]);
     $lang->dividerMenu = str_replace(',kanban,' , ',doc,', $lang->dividerMenu);
 }
 
-if(!$hasScrumAuditplan)
+if($config->edition == 'max' and !helper::hasFeature('scrum_auditplan'))
 {
-    if($hasScrumProcess)
+    if(!helper::hasFeature('scrum_process'))
     {
         $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|process|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
     }

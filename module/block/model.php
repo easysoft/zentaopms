@@ -774,17 +774,6 @@ class blockModel extends model
      */
     public function getAssignToMeParams()
     {
-        $hasWaterfall        = strpos(",{$this->config->disabledFeatures},",  ',waterfall,')        === false;
-        $hasScrumIssue       = strpos(",{$this->config->disabledFeatures},",  ',scrumIssue,')       === false;
-        $hasScrumRisk        = strpos(",{$this->config->disabledFeatures},",  ',scrumRisk,')        === false;
-        $hasScrumMeeting     = strpos(",{$this->config->disabledFeatures},",  ',scrumMeeting,')     === false;
-        $hasWaterfallIssue   = (strpos(",{$this->config->disabledFeatures},", ',waterfallIssue,')   === false and $hasWaterfall);
-        $hasWaterfallRisk    = (strpos(",{$this->config->disabledFeatures},", ',waterfallRisk,')    === false and $hasWaterfall);
-        $hasWaterfallMeeting = (strpos(",{$this->config->disabledFeatures},", ',waterfallMeeting,') === false and $hasWaterfall);
-        $hasIssue            = ($hasScrumIssue   or $hasWaterfallIssue);
-        $hasRisk             = ($hasScrumRisk    or $hasWaterfallRisk);
-        $hasMeeting          = ($hasScrumMeeting or $hasWaterfallMeeting);
-
         $params = new stdclass();
         $params->todoCount['name']    = $this->lang->block->todoCount;
         $params->todoCount['default'] = 20;
@@ -800,21 +789,21 @@ class blockModel extends model
 
         if($this->config->edition == 'max')
         {
-            if($hasRisk)
+            if(helper::hasFeature('risk'))
             {
                 $params->riskCount['name']    = $this->lang->block->riskCount;
                 $params->riskCount['default'] = 20;
                 $params->riskCount['control'] = 'input';
             }
 
-            if($hasIssue)
+            if(helper::hasFeature('issue'))
             {
                 $params->issueCount['name']    = $this->lang->block->issueCount;
                 $params->issueCount['default'] = 20;
                 $params->issueCount['control'] = 'input';
             }
 
-            if($hasMeeting)
+            if(helper::hasFeature('meeting'))
             {
                 $params->meetingCount['name']    = $this->lang->block->meetingCount;
                 $params->meetingCount['default'] = 20;

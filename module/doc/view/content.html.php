@@ -1,8 +1,5 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
 <?php $sessionString = session_name() . '=' . session_id();?>
-<?php $hasAssetlib             = strpos(",$config->disabledFeatures,", ',assetlib,')             === false;?>
-<?php $hasAssetlibPracticelib  = strpos(",$config->disabledFeatures,", ',assetlibPracticelib,')  === false;?>
-<?php $hasAssetlibComponentlib = strpos(",$config->disabledFeatures,", ',assetlibComponentlib,') === false;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell" id="content">
@@ -49,8 +46,8 @@
 
             <?php if($this->config->edition == 'max' and $this->app->tab == 'project'):?>
             <?php
-            $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and $hasAssetlib and $hasAssetlibPracticelib);
-            $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and $hasAssetlib and $hasAssetlibComponentlib);
+            $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
+            $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
 
             if($canImportToPracticeLib or $canImportToComponentLib)
             {
