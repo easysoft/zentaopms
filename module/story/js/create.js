@@ -237,10 +237,8 @@ function loadModuleForSiblings(productID, branch, branchIndex)
 function loadPlanForSiblings(productID, branch, branchIndex)
 {
     /* Load plan */
-    if(typeof(branch) == 'undefined') branch = 0;
-    if(!branch) branch = 0;
-    var expired = config.currentMethod == 'create' ? 'unexpired' : '';
-    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=' + branchIndex + '&needCreate=false&expired='+ expired +'&param=skipParent,' + config.currentMethod);
+    if(branch == '0') branch = '';
+    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=' + branchIndex + '&needCreate=false&expired=unexpired&param=skipParent,' + config.currentMethod);
     if(branchIndex > 0)
     {
         var $planIdBox = $('.addBranchesBox'+ branchIndex +' #planIdBox');
