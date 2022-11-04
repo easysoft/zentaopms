@@ -3336,9 +3336,12 @@ class bugModel extends model
                 }
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $bug->pri . "' title='" . zget($this->lang->bug->priList, $bug->pri, $bug->pri) . "'>";
-                echo zget($this->lang->bug->priList, $bug->pri, $bug->pri);
-                echo "</span>";
+                if($bug->pri)
+                {
+                    echo "<span class='label-pri label-pri-" . $bug->pri . "' title='" . zget($this->lang->bug->priList, $bug->pri, $bug->pri) . "'>";
+                    echo zget($this->lang->bug->priList, $bug->pri, $bug->pri);
+                    echo "</span>";
+                }
                 break;
             case 'confirmed':
                 $class = 'confirm' . $bug->confirmed;
