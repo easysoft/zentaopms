@@ -33,7 +33,7 @@
             <div class="checkbox"> <?php echo html::radio('sprintConcept', $lang->custom->sprintConceptList, zget($this->config->custom, 'sprintConcept', '0'))?> </div>
           </div>
         </li>
-        <?php if(strpos(",{$this->config->disabledFeatures},", ',productURStory,') === false):?>
+        <?php if(strpos(",{$this->config->disabledFeatures},", ',productUR,') === false):?>
         <li>
           <div class="form-group">
             <label><?php echo $lang->custom->conceptQuestions['URAndSR']?></label>

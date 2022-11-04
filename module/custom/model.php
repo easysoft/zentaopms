@@ -916,7 +916,7 @@ class customModel extends model
      * @access public
      * @return int
      */
-    public function hasProductURStoryData()
+    public function hasProductURData()
     {
         return $this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->count();
     }
