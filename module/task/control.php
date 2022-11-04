@@ -76,6 +76,12 @@ class task extends control
         {
             $task        = $this->task->getByID($taskID);
             $executionID = $task->execution;
+
+            /* Emptying consumed hours when copy task. */
+            if($task->mode == 'multi')
+            {
+                foreach($task->team as $teamMember) $teamMember->consumed = 0;
+            }
         }
 
         if($todoID > 0)
