@@ -25,6 +25,7 @@ thead > tr > th{width:150px;}
 .c-team {width:100px; padding:0px 0px 8px 0px !important;}
 .c-estimate-1 {width:50px;padding:0px 0px 8px 8px !important;}
 #showData .load-indicator{width: 100px; height: 500px;}
+.picker-selection-text{white-space: nowrap; overflow: hidden; display: block;}
 </style>
 <?php if(!empty($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
