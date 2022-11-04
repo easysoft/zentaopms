@@ -154,7 +154,7 @@ $config->hourPointCommonList['pt'][0] = 'horas de trabalho';
 $config->hourPointCommonList['pt'][1] = 'Ponto da história';
 $config->hourPointCommonList['pt'][2] = 'Ponto de função';
 
-$config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
+$config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopms/38.html?fullScreen=zentao';
 $config->manualUrl['int']  = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html?fullScreen=zentao';
 
 /* Supported charsets. */
