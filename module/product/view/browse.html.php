@@ -310,7 +310,7 @@ js::set('storyType',     $storyType);
       $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story' and (!$isProjectStory or $projectHasProduct or ($isProjectStory and isset($project->model) and $project->model == 'scrum')));
       $canBatchAssignTo     = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
       $canBatchUnlink       = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
-      $canBatchImportToLib  = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
+      $canBatchImportToLib  = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib') and helper::hasFeature('storylib'));
 
       $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch);
       ?>
