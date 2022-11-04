@@ -2262,7 +2262,7 @@ class kanbanModel extends model
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
             ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', 200)
             ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'ge', 200)
-            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
+            ->checkIF($kanban->minColWidth >= 200 and $kanban->maxColWidth >= 200 and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->check('name', 'unique', "space = {$kanban->space}")
             ->exec();
 
@@ -2369,7 +2369,7 @@ class kanbanModel extends model
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
             ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', 200)
             ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'ge', 200)
-            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
+            ->checkIF($kanban->minColWidth >= 200 and $kanban->maxColWidth >= 200 and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->where('id')->eq($kanbanID)
             ->exec();
 

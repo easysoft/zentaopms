@@ -1150,7 +1150,7 @@ class executionModel extends model
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
             ->checkIF(!$execution->fluidBoard, 'colWidth', 'ge', 200)
             ->batchCheckIF($execution->fluidBoard, 'minColWidth,maxColWidth', 'ge', 200)
-            ->checkIF($execution->minColWidth and $execution->maxColWidth and $execution->fluidBoard, 'maxColWidth', 'gt', $execution->minColWidth)
+            ->checkIF($execution->minColWidth >= 200 and $execution->maxColWidth >= 200 and $execution->fluidBoard, 'maxColWidth', 'gt', $execution->minColWidth)
             ->where('id')->eq((int)$executionID)
             ->exec();
     }
