@@ -2260,8 +2260,8 @@ class kanbanModel extends model
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
-            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'gt', 0)
-            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', 200)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'ge', 200)
             ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->check('name', 'unique', "space = {$kanban->space}")
             ->exec();

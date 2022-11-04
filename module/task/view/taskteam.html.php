@@ -163,7 +163,15 @@ $(document).ready(function()
     var adjustButtons = function()
     {
         var $deleteBtn = $taskTeamEditor.find('.btn-delete');
-        if ($deleteBtn.length == 1) $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
+        if($deleteBtn.length == 1)
+        {
+            $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
+        }
+        else if(config.currentMethod == 'create')
+        {
+            $deleteBtn.removeClass('disabled').removeAttr('disabled');
+        }
+
     };
 
     var disableMembers = function()
@@ -260,13 +268,18 @@ $(document).ready(function()
         setLineNumber();
     }).on('click', '.btn-delete', function()
     {
+        if($(this).hasClass('disabledDeleted')) return;
+
         var $row = $(this).closest('tr');
         <?php if(!empty($task->team)):?>
         if(!checkRemove($row.index())) return;
         <?php endif;?>
+
+        $taskTeamEditor.find('.btn-delete').addClass('disabledDeleted');
         $row.addClass('highlight').fadeOut(700, function()
         {
             $row.remove();
+            $taskTeamEditor.find('.btn-delete').removeClass('disabledDeleted');
             disableMembers();
             adjustButtons();
             setLineNumber();
