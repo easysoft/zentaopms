@@ -3191,7 +3191,9 @@ class storyModel extends model
         if(!$executionID) return array();
         $execution = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
 
-        $type = strtolower($type);
+        $orderBy = str_replace('branch_', 't2.branch_', $orderBy);
+        $type    = strtolower($type);
+
         if($type == 'bysearch')
         {
             $queryID  = (int)$param;
