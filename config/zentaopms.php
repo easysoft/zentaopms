@@ -228,6 +228,11 @@ $config->openMethods[] = 'project.createguide';
 $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
 
+$config->openModules = array();
+$config->openModules[] = 'install';
+$config->openModules[] = 'upgrade';
+$config->openModules[] = 'im';
+
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
