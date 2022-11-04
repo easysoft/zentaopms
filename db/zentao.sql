@@ -7564,6 +7564,7 @@ CREATE TABLE IF NOT EXISTS `zt_vm` (
   `osCpu` tinyint(2) NOT NULL DEFAULT 0,
   `osMemory` smallint(6) NOT NULL DEFAULT 0,
   `osDisk` smallint(6) NOT NULL DEFAULT 0,
+  `unit` enum('GB','TB') NOT NULL DEFAULT 'GB',
   `status` varchar(50) NOT NULL DEFAULT '',
   `destroyAt` datetime NULL,
   `macAddress` varchar(255) NOT NULL DEFAULT '',
