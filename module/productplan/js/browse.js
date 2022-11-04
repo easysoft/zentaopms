@@ -41,8 +41,10 @@ $(function()
     $('.switchButton').click(function()
     {
         var viewType = $(this).attr('data-type');
+        var branchID = $(this).val();
         $.cookie('viewType', viewType, {expires:config.cookieLife, path:config.webRoot});
-        window.location.reload();
+        var link = createLink('productplan', 'browse', "productID=" + productID + '&branch=' + branchID);
+        location.href = link;
     });
 
     $('#branch').change(function()
