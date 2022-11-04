@@ -1413,6 +1413,7 @@ class kanban extends control
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->tickets2Imported  = $this->ticket->getTicketByProduct($selectedProductID, 'noclosed|nodone', 'id_desc', $pager);
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager             = $pager;
         $this->view->kanbanID          = $kanbanID;
         $this->view->regionID          = $regionID;
