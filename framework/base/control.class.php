@@ -938,7 +938,7 @@ class baseControl
                 $data[$key] = str_replace('%22', '"', urlencode($value));
             }
 
-            if(defined('RUN_MODE') and RUN_MODE == 'api')
+            if(defined('RUN_MODE') and in_array(RUN_MODE, array('api', 'xuanxuan')))
             {
                 print(urldecode(json_encode($data)));
                 $response = helper::removeUTF8Bom(ob_get_clean());
