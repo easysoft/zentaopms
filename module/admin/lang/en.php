@@ -100,7 +100,7 @@ $lang->admin->setModule->practicelib    = 'Practice Lib';
 $lang->admin->setModule->componentlib   = 'Component Lib';
 $lang->admin->setModule->devops         = 'DevOps';
 $lang->admin->setModule->kanban         = 'Kanban';
-$lang->admin->setModule->oa             = 'OA';
+$lang->admin->setModule->OA             = 'OA';
 $lang->admin->setModule->deploy         = 'Deploy';
 $lang->admin->setModule->traincourse    = 'Traincourse';
 
