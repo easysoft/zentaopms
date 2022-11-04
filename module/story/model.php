@@ -271,6 +271,7 @@ class storyModel extends model
         }
 
         $storyIds    = array();
+        $storyFile   = array();
         $mainStoryID = 0;
         foreach($this->post->branches as $key => $branch)
         {
@@ -316,6 +317,8 @@ class storyModel extends model
 
                 $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
                 $files = $this->file->saveUpload($story->type, $storyID, 1);
+                /* Multi branch sync files */
+                !empty($files) ? $storyFile = $files : $files = $storyFile;
 
                 $data          = new stdclass();
                 $data->story   = $storyID;
