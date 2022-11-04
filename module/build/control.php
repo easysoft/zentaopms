@@ -559,7 +559,7 @@ class build extends control
         $this->loadModel('product');
 
         $execution = $this->execution->getByID($build->execution);
-        if(!$execution->hasProduct and !$execution->multiple) unset($this->config->product->search['fields']['plan']);
+        if(empty($execution->hasProduct) and empty($execution->multiple)) unset($this->config->product->search['fields']['plan']);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
