@@ -2260,9 +2260,9 @@ class kanbanModel extends model
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
-            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', 200)
-            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'ge', 200)
-            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', $this->config->minColWidth)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth', 'ge', $this->config->minColWidth)
+            ->checkIF($kanban->minColWidth >= $this->config->minColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->check('name', 'unique', "space = {$kanban->space}")
             ->exec();
 
@@ -2367,9 +2367,9 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
-            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', 200)
-            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'ge', 200)
-            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', $this->config->minColWidth)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth', 'ge', $this->config->minColWidth)
+            ->checkIF($kanban->minColWidth >= $this->config->minColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->where('id')->eq($kanbanID)
             ->exec();
 
