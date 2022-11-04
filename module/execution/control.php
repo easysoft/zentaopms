@@ -3286,6 +3286,8 @@ class execution extends control
      * @param  int    $storyID
      * @param  string $confirm    yes|no
      * @param  string $from taskkanban
+     * @param  int    $laneID
+     * @param  int    $columnID
      * @access public
      * @return void
      */

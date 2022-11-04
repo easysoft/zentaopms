@@ -2863,6 +2863,8 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  int    $storyID
+     * @param  int    $laneID
+     * @param  int    $columnID
      * @access public
      * @return void
      */
