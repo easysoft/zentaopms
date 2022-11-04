@@ -54,7 +54,12 @@ class storyModel extends model
             ->beginIF(!$story->siblings)->andWhere('t1.story')->in($story->id)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
-        $story->tasks  = $this->dao->select('id, name, assignedTo, execution, status, consumed, `left`,type')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->orderBy('id DESC')->fetchGroup('execution');
+        $story->tasks  = $this->dao->select('id, name, assignedTo, execution, status, consumed, `left`,type')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->beginIF($story->siblings)->andWhere('story')->in(ltrim($story->siblings, ',') . $story->id)
+            ->beginIF(!$story->siblings)->andWhere('story')->in($story->id)
+            ->orderBy('id DESC')
+            ->fetchGroup('execution');
         $story->stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
         //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
         //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
