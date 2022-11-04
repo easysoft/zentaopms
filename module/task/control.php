@@ -306,9 +306,9 @@ class task extends control
 
             $executionKey = 0;
             $executionModifyList = $this->execution->getByIdList(array_keys($executionList));
-            foreach($executionModifyList as $execution)
+            foreach($executionModifyList as $modifykey)
             {
-                if(!common::canModify('execution', $execution)) $executionKey = $execution->id;
+                if(!common::canModify('execution', $modifykey)) $executionKey = $modifykey->id;
                 if($executionKey) unset($executionList[$executionKey]);
             }
             $executionAll = $executionList;
