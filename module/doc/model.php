@@ -2342,7 +2342,7 @@ class docModel extends model
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objectTitle}'>
-      <span class='text'>{$objectTitle}</span>
+      <div class='nobr'>{$objectTitle}</div>
       <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
