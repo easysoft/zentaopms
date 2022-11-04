@@ -58,6 +58,7 @@ $lang->custom->setCode              = 'Enable or Disable Code';
 $lang->custom->execution            = 'Execution';
 $lang->custom->defaultProgram       = 'Default program';
 $lang->custom->selectDefaultProgram = 'Please select default program';
+$lang->custom->modeManagement       = 'Mode Management';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';

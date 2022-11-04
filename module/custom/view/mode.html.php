@@ -17,7 +17,7 @@
 <div id='mainContent' class='main-content'>
   <form id='modeForm' class="load-indicator main-form form-ajax"  method='post'>
     <div class='main-header'>
-      <h2><?php echo $lang->custom->mode;?></h2>
+      <h2><?php echo $lang->custom->modeManagement;?></h2>
     </div>
     <table class='table table-form w-700px'>
       <tr>
