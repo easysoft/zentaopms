@@ -1756,10 +1756,11 @@ class treeModel extends model
             }
         }
 
-        if($type == 'story')
+        if($type == 'story' or $type == 'chart')
         {
+            $objectType = $type == 'story' ? 'module' : 'chartgroup';
             $this->loadModel('action');
-            if(!empty($createIdList)) $actionID = $this->action->create('module', $rootID, 'created', '', implode(',', $createIdList));
+            if(!empty($createIdList)) $actionID = $this->action->create($objectType, $rootID, 'created', '', implode(',', $createIdList));
 
             if(!empty($editIdList))
             {
@@ -1778,7 +1779,7 @@ class treeModel extends model
                         $changes[] = $change;
                     }
                 }
-                $actionID = $this->action->create('module', $rootID, 'edited', '', implode(',', $editIdList));
+                $actionID = $this->action->create($objectType, $rootID, 'edited', '', implode(',', $editIdList));
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1814,8 +1815,9 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
 
-        if($self->type == 'story')
+        if($self->type == 'story' or $self->type == 'chart')
         {
+            $objectType = $self->type == 'story' ? 'module' : 'chartgroup';
             $rootID     = isset($module->root) ? $module->root : $self->root;
             $newModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
 
@@ -1829,11 +1831,11 @@ class treeModel extends model
                     break;
                 }
             }
-            $actionID = $this->loadModel('action')->create('module', $self->root, 'edited', '', $moduleID);
+            $actionID = $this->loadModel('action')->create($objectType, $self->root, 'edited', '', $moduleID);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             if(isset($module->root) and $module->root != $self->root)
             {
-                $actionID = $this->action->create('module', $rootID, 'edited', '', $moduleID);
+                $actionID = $this->action->create($objectType, $rootID, 'edited', '', $moduleID);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1927,11 +1929,12 @@ class treeModel extends model
         $childs = $this->getAllChildId($moduleID);
         $childs[$moduleID] = $moduleID;
 
+        $objectType = (!empty($module->type) and $module->type == 'chart') ? 'chartgroup' : 'module';
         /* Mark deletion when delete a module. */
         $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->in($childs)->exec();
         foreach($childs as $childID)
         {
-            $this->loadModel('action')->create('module', $childID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+            $this->loadModel('action')->create($objectType, $childID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
         }
 
         $this->fixModulePath($module->root, $module->type);
@@ -1959,6 +1962,9 @@ class treeModel extends model
                 $this->dao->update(TABLE_BUG)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $this->dao->update(TABLE_CASE)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $cookieName = 'storyModule';
+                break;
+            case 'chart':
+                $this->dao->update(TABLE_CHART)->set('`group`')->eq($module->parent)->where('`group`')->in($childs)->exec();
                 break;
         }
         if(strpos($this->session->{$module->type . 'List'}, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $this->session->{$module->type . 'List'}));
