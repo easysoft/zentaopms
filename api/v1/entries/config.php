@@ -40,8 +40,7 @@ class configEntry extends baseEntry
                 $config['value'] = $this->config->systemMode;
                 break;
             default:
-                $this->sendError(400, 'No configuration.');
-                return;
+                return $this->sendError(400, 'No configuration.');
         }
 
         return $this->send(200, $config);

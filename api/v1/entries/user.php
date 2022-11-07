@@ -445,6 +445,6 @@ class userEntry extends entry
         $control->delete($userID);
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

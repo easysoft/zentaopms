@@ -54,7 +54,7 @@ class releaseEntry extends entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $release = $this->release->getByID($releaseID);
-        $this->sendSuccess(200, $this->format($release, 'date:date,deleted:bool'));
+        return $this->sendSuccess(200, $this->format($release, 'date:date,deleted:bool'));
     }
 
     /**
@@ -70,6 +70,6 @@ class releaseEntry extends entry
         $control->delete($releaseID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

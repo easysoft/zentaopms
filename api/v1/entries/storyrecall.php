@@ -24,7 +24,7 @@ class storyRecallEntry extends entry
         $control->recall($storyID);
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }
 

@@ -87,6 +87,6 @@ class productplanEntry extends entry
         $control->delete($planID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }
