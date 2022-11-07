@@ -74,11 +74,13 @@ class caselibModel extends model
      * @param  int   $libID
      * @param  bool  $setImgSize
      * @access public
-     * @return object
+     * @return object|bool
      */
     public function getById($libID, $setImgSize = false)
     {
         $lib = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq((int)$libID)->fetch();
+        if(!$lib) return false;
+
         $lib = $this->loadModel('file')->replaceImgURL($lib, 'desc');
         if($setImgSize) $lib->desc = $this->file->setImgSize($lib->desc);
         return $lib;

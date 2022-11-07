@@ -543,13 +543,13 @@ class task extends control
      * Edit a task.
      *
      * @param  int    $taskID
-     * @param  bool   $comment
+     * @param  string $comment
      * @param  string $kanbanGroup
      * @param  string $from
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = false, $kanbanGroup = 'default', $from = '')
+    public function edit($taskID, $comment = 'false', $kanbanGroup = 'default', $from = '')
     {
         $this->commonAction($taskID);
         $task = $this->task->getById($taskID);
@@ -558,7 +558,7 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = array();
-            if($comment == false)
+            if(!$comment or $comment == 'false')
             {
                 $changes = $this->task->update($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
@@ -951,11 +951,6 @@ class task extends control
      */
     public function view($taskID)
     {
-        $this->session->set('executionList', $this->app->getURI(true), 'execution');
-
-        $this->commonAction($taskID);
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
-
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);
         if(!$task)
@@ -963,6 +958,11 @@ class task extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
+
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
+        $this->commonAction($taskID);
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $execution = $this->execution->getById($task->execution);
         if(!isonlybody() and $execution->type == 'kanban')
