@@ -3,11 +3,13 @@
 #mainContent {min-height: 500px;}
 #mainContent .main-header {padding-bottom: 5px;}
 #linearefforts {margin-top: -18px;}
-#linearefforts .nav-tabs{margin-bottom: 10px;}
+#linearefforts .nav-tabs {margin-bottom: 10px;}
+#linearefforts .nav-tabs > li.active > a {color: #313c52 !important;}
 #linearefforts div.caption {height:25px; margin: 10px 0px;}
 #linearefforts div.caption .account{font-weight: bolder;}
-#linearefforts .tabs ul > li > a { padding-top: 6px; padding-bottom: 4px;}
-#linearefforts .table thead > tr > th { padding-right: 10px;}
+#linearefforts .tabs ul > li > a {padding-top: 6px; padding-bottom: 4px;}
+#linearefforts .table thead > tr > th {padding-right: 10px;}
+#toggleFoldIcon {margin-bottom: 10px;}
 </style>
 <?php
 $this->app->loadLang('execution');
@@ -155,4 +157,7 @@ ksort($myOrders);
     <?php endif;?>
   </div>
 </div>
+<?php endif;?>
+<?php if($i > 4):?>
+<style>#legendMyEffort > .table {margin-bottom: 5px;}</style>
 <?php endif;?>
