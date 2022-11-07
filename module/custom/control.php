@@ -654,6 +654,10 @@ class custom extends control
                 {
                     $disabledFeatures['scrum'][] = $feature;
                 }
+                elseif($feature == 'waterfall')
+                {
+                    $disabledFeatures[] = 'project' . ucfirst($feature);
+                }
                 else
                 {
                     $disabledFeatures[] = $feature;
