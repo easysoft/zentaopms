@@ -125,28 +125,8 @@ function loadProductBranches(productID)
                 $('#branches0').next('.picker').remove();
                 $('#branches0').chosen();
 
-                $.get(createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=0' + '&rootModuleID=0&returnType=html&fieldID=0' + '&needManage=false&extra=&currentModuleID=0'), function(moduleOption)
-                {
-                    if(moduleOption)
-                    {
-                        $('#modules0').replaceWith(moduleOption);
-                        $('#modules0' + "_chosen").remove();
-                        $('#modules0').next('.picker').remove();
-                        $('#modules0').chosen();
-                    }
-                });
-
-                var expired = config.currentMethod == 'create' ? 'unexpired' : '';
-                $.get(createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=0' + '&planID=' + $('#plan').val() + '&fieldID=0' + '&needCreate=false&expired='+ expired +'&param=skipParent,' + config.currentMethod), function(planOption)
-                {
-                    if(planOption)
-                    {
-                        $('#plans0').replaceWith(planOption);
-                        $('#plans0' + "_chosen").remove();
-                        $('#plans0').next('.picker').remove();
-                        $('#plans0').chosen();
-                    }
-                });
+                loadModuleForSiblings(productID, 0, 0)
+                loadPlanForSiblings(productID, 0, 0)
             }
         }
         else
