@@ -8,10 +8,12 @@ INSERT INTO `zt_module` (`root`, `branch`, `name`, `parent`, `path`, `grade`, `o
 (0, 0, '项目', 0, ',0,', 1, 20, 'chart', 'system', '', '', '0'),
 (0, 0, '测试', 0, ',0,', 1, 30, 'chart', 'system', '', '', '0'),
 (0, 0, '组织', 0, ',0,', 1, 40, 'chart', 'system', '', '', '0');
+UPDATE `zt_module` SET `root` = 1 where `owner` = 'system';
 
 UPDATE `zt_chart` SET `group` = (SELECT `id` FROM `zt_module` WHERE `type` = 'bi' AND `name` = '产品' limit 1);
 UPDATE `zt_module` SET `path` = CONCAT(',', `id`, ',') WHERE `type` = 'bi' AND `name` in ('产品', '项目', '测试', '组织');
 
+DROP TABLE IF EXISTS `zt_dimension`;
 CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(90) NOT NULL,
@@ -25,3 +27,7 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
   PRIMARY KEY (`id`),
   KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `zt_dimension` (`name`, `code`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES('default', 'default', '', 'system', CURDATE(), 'system', CURDATE());
+
+ALTER TABLE `zt_report` ADD `root` int(8) NOT NULL default 1 AFTER `name`;
+ALTER TABLE `zt_chart`  ADD `root` int(8) NOT NULL default 1 AFTER `name`;
