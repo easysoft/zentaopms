@@ -29,5 +29,7 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `zt_dimension` (`name`, `code`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES('default', 'default', '', 'system', CURDATE(), 'system', CURDATE());
 
-ALTER TABLE `zt_report` ADD `root` int(8) NOT NULL default 1 AFTER `name`;
-ALTER TABLE `zt_chart`  ADD `root` int(8) NOT NULL default 1 AFTER `name`;
+ALTER TABLE `zt_report`    ADD `dimension` int(8) NOT NULL default 1 AFTER `name`;
+ALTER TABLE `zt_chart`     ADD `dimension` int(8) NOT NULL default 1 AFTER `name`;
+ALTER TABLE `zt_dataset`   ADD `dimension` int(8) NOT NULL default 1 AFTER `name`;
+ALTER TABLE `zt_dashboard` ADD `dimension` int(8) NOT NULL default 1 AFTER `name`;
