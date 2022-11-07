@@ -720,6 +720,7 @@ $lang->action->label->gitlab       = 'GitLab Server|gitlab|view|id=%s';
 $lang->action->label->stage        = 'Stage|stage|browse|';
 $lang->action->label->module       = 'Module|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = 'Ticket|ticket|view|id=%s';
+$lang->action->label->chartgroup   = 'Group';
 
 /* Object type. */
 $lang->action->search = new stdclass();

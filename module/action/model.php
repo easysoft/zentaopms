@@ -1620,6 +1620,13 @@ class actionModel extends model
             $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
         }
 
+        if($action->objectType == 'chartgroup' and $action->action != 'deleted')
+        {
+            $group  = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
+            if(empty($group)) $action->objectLink = '';
+            if(!empty($group)) $action->objectLink = helper::createLink('chart', 'browseGroup', "rootID=$group->root");
+        }
+
         if($action->objectType == 'branch' and $action->action == 'mergedbranch')
         {
             $action->objectLink = 'javascript:void(0)';
