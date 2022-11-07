@@ -1073,6 +1073,7 @@ class kanban extends control
         $kanban = $this->kanban->getByID($card->kanban);
         $space  = $this->kanban->getSpaceById($kanban->space);
 
+        $this->view->title       = 'CARD #' . $card->id . ' ' . $card->name;
         $this->view->card        = $card;
         $this->view->actions     = $this->action->getList('kanbancard', $cardID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
@@ -1412,6 +1413,7 @@ class kanban extends control
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->tickets2Imported  = $this->ticket->getTicketByProduct($selectedProductID, 'noclosed|nodone', 'id_desc', $pager);
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager             = $pager;
         $this->view->kanbanID          = $kanbanID;
         $this->view->regionID          = $regionID;

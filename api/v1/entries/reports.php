@@ -15,7 +15,7 @@ class reportsEntry extends entry
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {

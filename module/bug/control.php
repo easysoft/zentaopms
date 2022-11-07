@@ -1149,7 +1149,7 @@ class bug extends control
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
-        if($bug->assignedTo and !isset($assignedToList[$bug->assignedTo]))
+        if($bug->assignedTo and !isset($assignedToList[$bug->assignedTo]) and $bug->assignedTo != 'closed')
         {
             /* Fix bug #28378. */
             $assignedTo = $this->user->getById($bug->assignedTo);

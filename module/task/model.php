@@ -109,7 +109,7 @@ class taskModel extends model
             ->cleanINT('execution,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamConsumed,teamLeft,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
             ->add('version', 1)
             ->get();
 
@@ -1136,7 +1136,7 @@ class taskModel extends model
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
-        if(count(array_filter($this->post->team)) > 1)
+        if($this->post->team and count(array_filter($this->post->team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
             if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
@@ -2291,6 +2291,12 @@ class taskModel extends model
             return false;
         }
 
+        if(empty($task->left))
+        {
+            dao::$errors[] = sprintf($this->lang->task->error->notempty, $this->lang->task->left);
+            return false;
+        }
+
         if(!empty($oldTask->team))
         {
             $this->manageTaskTeam($oldTask->mode, $oldTask->id, $task->status);
@@ -3017,8 +3023,16 @@ class taskModel extends model
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
         if($estimate->isLast and $consumed == 0 and $task->status != 'wait')
         {
-            $data->status = 'wait';
-            $data->left   = $task->estimate;
+            $data->status       = 'wait';
+            $data->left         = $task->estimate;
+            $data->finishedBy   = '';
+            $data->canceledBy   = '';
+            $data->closedBy     = '';
+            $data->closedReason = '';
+            $data->finishedDate = '0000-00-00 00:00:00';
+            $data->canceledDate = '0000-00-00 00:00:00';
+            $data->closedDate   = '0000-00-00 00:00:00';
+            if($task->assignedTo == 'closed') $data->assignedTo = $this->app->user->account;
         }
         elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
         {
@@ -3751,7 +3765,8 @@ class taskModel extends model
                 }
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $task->pri . "' title='" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
+                $priClass = $task->pri ? "label-pri label-pri-{$task->pri}" : '';
+                echo "<span class='$priClass' title='" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
                 echo zget($this->lang->task->priList, $task->pri, $task->pri);
                 echo "</span>";
                 break;

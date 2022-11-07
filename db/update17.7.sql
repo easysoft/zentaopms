@@ -12,3 +12,16 @@ ALTER TABLE `zt_vmtemplate` ADD `editedBy` varchar(30) NOT NULL;
 ALTER TABLE `zt_vmtemplate` ADD `editedDate` datetime NOT NULL;
 ALTER TABLE `zt_vm` ADD `osVersion` varchar(50) NOT NULL DEFAULT '' AFTER `osCategory`;
 ALTER TABLE `zt_vm` ADD `unit` enum('GB','TB') NOT NULL DEFAULT 'GB' AFTER `osDisk`;
+update zt_kanban
+set
+  colWidth    = if(colWidth < 200, 200, colWidth),
+  minColWidth = if(minColWidth < 200, 200, minColWidth),
+  maxColWidth = if(maxColWidth <= 200 and minColWidth <= 200, 201, maxColWidth)
+where colWidth < 200 or minColWidth < 200 or maxColWidth < 200;
+
+update zt_project
+set
+  colWidth    = if(colWidth < 200, 200, colWidth),
+  minColWidth = if(minColWidth < 200, 200, minColWidth),
+  maxColWidth = if(maxColWidth <= 200 and minColWidth <= 200, 201, maxColWidth)
+where colWidth < 200 or minColWidth < 200 or maxColWidth < 200;

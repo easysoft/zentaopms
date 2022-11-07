@@ -2184,7 +2184,6 @@ class bugModel extends model
 
         if(!empty($stepResults))
         {
-            $i = 1;
             $bugStep = '';
             $bugResult = '';
             $bugExpect = '';
@@ -2193,13 +2192,17 @@ class bugModel extends model
                 if(!isset($caseSteps[$stepId])) continue;
                 $step = $caseSteps[$stepId];
 
-                $stepResult = (!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) ? '' : $stepResults[$stepId]['real'];
-                $bugStep   .= $i . '. ' . $step->desc . "<br />";
-                $bugResult .= $i . '. ' . $stepResult . "<br />";
-                $bugExpect .= $i . '. ' . $step->expect . "<br />";
+                $i = $this->getCaseStepIndex($step);
 
-                $i++;
+                $stepDesc   = str_replace("\n", "<br />", $step->desc);
+                $stepExpect = str_replace("\n", "<br />", $step->expect);
+                $stepResult = (!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) ? '' : $stepResults[$stepId]['real'];
+
+                $bugStep   .= $i . '. ' . $stepDesc . "<br />";
+                $bugResult .= $i . '. ' . $stepResult . "<br />";
+                $bugExpect .= $i . '. ' . $stepExpect . "<br />";
             }
+
             $bugSteps .= $bugStep   ? str_replace('<br/>', '', $this->lang->bug->tplStep)   . $bugStep   : $this->lang->bug->tplStep;
             $bugSteps .= $bugResult ? str_replace('<br/>', '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
             $bugSteps .= $bugExpect ? str_replace('<br/>', '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
@@ -2257,7 +2260,7 @@ class bugModel extends model
         $products = $this->session->product;
         preg_match('/`product` IN \((?P<productIdList>.+)\)/', $this->reportCondition(), $matchs);
         if(!empty($matchs) and isset($matchs['productIdList'])) $products = str_replace('\'', '', $matchs['productIdList']);
-        $builds = $this->loadModel('build')->getBuildPairs($products, $branch = 0, $params = '');
+        $builds = $this->loadModel('build')->getBuildPairs($products, $branch = 0, $params = 'hasDeleted');
 
         /* Deal with the situation that a bug maybe associate more than one openedBuild. */
         foreach($datas as $buildIDList => $data)
@@ -3333,9 +3336,12 @@ class bugModel extends model
                 }
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $bug->pri . "' title='" . zget($this->lang->bug->priList, $bug->pri, $bug->pri) . "'>";
-                echo zget($this->lang->bug->priList, $bug->pri, $bug->pri);
-                echo "</span>";
+                if($bug->pri)
+                {
+                    echo "<span class='label-pri label-pri-" . $bug->pri . "' title='" . zget($this->lang->bug->priList, $bug->pri, $bug->pri) . "'>";
+                    echo zget($this->lang->bug->priList, $bug->pri, $bug->pri);
+                    echo "</span>";
+                }
                 break;
             case 'confirmed':
                 $class = 'confirm' . $bug->confirmed;
@@ -3660,5 +3666,43 @@ class bugModel extends model
 
         if(in_array($object, array('build','resolvedBuild'))) $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
         return array('' => '', 0 => '') + $relatedObjects;
+    }
+
+    /**
+     * Return index of a case's step.
+     *
+     * @param  object    $caseStep
+     * @access public
+     * @return int
+     */
+    public function getCaseStepIndex($caseStep)
+    {
+        static $index     = 0;
+        static $stepIndex = 0;
+        static $itemIndex = 0;
+        static $groupID   = 0;
+
+        if($caseStep->type == 'item')
+        {
+            if($groupID and $caseStep->parent == $groupID)
+            {
+                $itemIndex ++;
+                $index = $stepIndex . '.' . $itemIndex;
+            }
+            else
+            {
+                $stepIndex ++;
+                $index = $stepIndex;
+            }
+        }
+        else
+        {
+            if($caseStep->type == 'group') $groupID = $caseStep->id;
+            $stepIndex ++;
+            $itemIndex = 0;
+            $index = $stepIndex;
+        }
+
+        return $index;
     }
 }

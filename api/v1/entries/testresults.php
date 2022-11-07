@@ -16,7 +16,7 @@ class testresultsEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($caseID = 0)
     {
@@ -50,7 +50,7 @@ class testresultsEntry extends entry
      *
      * @param  int    $caseID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($caseID = 0)
     {
@@ -83,6 +83,6 @@ class testresultsEntry extends entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
-        $this->send(200, array());
+        return $this->send(200, array());
     }
 }

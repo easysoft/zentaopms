@@ -15,6 +15,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
+<?php js::set('executionID', $execution->id);?>
 <?php js::set('ditto', $lang->task->ditto);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('vision', $config->vision);?>
@@ -62,7 +63,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $execution->id)'");?></td>
           <td>
             <div class="checkbox-primary c-modulel">
-              <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
+              <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo '';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
             </div>
           </td>
           <td></td>

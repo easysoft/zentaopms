@@ -51,13 +51,28 @@
         <tr class='text-left'>
           <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), sprintf('%03d', $caseID));?></td>
           <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), $case->title);?></td>
-          <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
+          <td class='c-pri'><span class='<?php if($case->pri) echo 'label-pri label-pri-' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-          <td class='<?php echo $case->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
+          <td class='status-testcase status-<?php echo $case->status;?>'>
+            <?php
+            if($case->needconfirm)
+            {
+                print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>");
+            }
+            elseif(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
+            {
+                print("<span class='status-story status-changed' title='{$this->lang->testcase->changed}'>{$this->lang->testcase->changed}</span>");
+            }
+            else
+            {
+                print("<span class='status-testcase status-{$case->status}'>" . $this->processStatus('testcase', $case) . "</span>");
+            }
+            ?>
+          </td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
           <td><?php echo helper::isZeroDate($case->lastRunDate) ? '' : substr($case->lastRunDate, 5, 11);?></td>
-          <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
+          <td class='result-testcase <?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
         </tr>
         <?php endforeach;?>
       </tbody>

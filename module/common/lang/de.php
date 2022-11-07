@@ -166,7 +166,7 @@ $lang->qa->common            = 'QA';
 $lang->devops->common        = 'DevOps';
 $lang->doc->common           = 'Doc';
 $lang->repo->common          = 'Code';
-$lang->report->common        = 'Statistic';
+$lang->report->common        = 'Statistics';
 $lang->system->common        = 'System';
 $lang->admin->common         = 'Admin';
 $lang->story->common         = 'Story';
@@ -177,7 +177,7 @@ $lang->testtask->common      = 'Request';
 $lang->score->common         = 'Score';
 $lang->build->common         = 'Build';
 $lang->testreport->common    = 'Report';
-$lang->automation->common    = 'Automation:';
+$lang->automation->common    = 'Automation';
 $lang->zahost->common        = 'ZAhost';
 $lang->executionnode->common = 'Execution Node';
 $lang->team->common          = 'Team';
@@ -274,9 +274,10 @@ $lang->product->kanban = $lang->productCommon . ' Kanban';
 
 $lang->project->report = 'Report';
 
-$lang->report->weekly = 'Weekly';
-$lang->report->annual = 'Annual Summary';
-$lang->report->notice = new stdclass();
+$lang->report->weekly       = 'Weekly';
+$lang->report->annual       = 'Annual Summary';
+$lang->report->pivotTable   = 'Pivot Table';
+$lang->report->notice       = new stdclass();
 $lang->report->notice->help = 'Hinweis: Berichte wurde auf Basis der Suche generiert. Bitte suchen Sie in der Liste bevor Sie einen Bericht generieren.';
 
 $lang->testcase->case      = 'Test Case';

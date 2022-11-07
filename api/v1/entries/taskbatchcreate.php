@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class taskBatchCreateEntry extends Entry
+class taskBatchCreateEntry extends entry
 {
     /**
      * POST method.
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($executionID = 0)
     {

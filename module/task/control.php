@@ -76,6 +76,12 @@ class task extends control
         {
             $task        = $this->task->getByID($taskID);
             $executionID = $task->execution;
+
+            /* Emptying consumed hours when copy task. */
+            if($task->mode == 'multi')
+            {
+                foreach($task->team as $teamMember) $teamMember->consumed = 0;
+            }
         }
 
         if($todoID > 0)
@@ -297,6 +303,16 @@ class task extends control
             $executionList = $this->execution->getByProject($projectID, 'all', 0, true);
             $project       = $this->loadModel('project')->getByID($projectID);
             $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
+
+            $executionKey = 0;
+            $executionModifyList = $this->execution->getByIdList(array_keys($executionList));
+            foreach($executionModifyList as $modifykey)
+            {
+                if(!common::canModify('execution', $modifykey)) $executionKey = $modifykey->id;
+                if($executionKey) unset($executionList[$executionKey]);
+            }
+            $executionAll = $executionList;
+
             if(isset($project->model) and $project->model == 'waterfall')
             {
                 foreach($executionList as $key => $val)
@@ -304,10 +320,6 @@ class task extends control
                     $values = str_replace($replace, $project->name, $val);
                     $executionAll[$key] = $values;
                 }
-            }
-            else
-            {
-                $executionAll = $executionList;
             }
         }
         $executions = $this->config->systemMode == 'classic' ? $executions : $executionAll;
@@ -1220,7 +1232,7 @@ class task extends control
         {
             if(empty($orderBy))
             {
-                $orderBy = 'order_asc,id';
+                $orderBy = 'id_desc';
             }
             else
             {
@@ -1228,14 +1240,35 @@ class task extends control
                 $orderBy .= preg_replace('/(order_|date_)/', ',id_', $orderBy);
             }
         }
-        if(!$orderBy) $orderBy = 'date_asc';
 
-        $this->view->title   = $this->lang->task->record;
-        $this->view->task    = $task;
-        $this->view->from    = $from;
-        $this->view->orderBy = $orderBy;
-        $this->view->efforts = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
-        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
+        if(!$orderBy) $orderBy = 'id_desc';
+
+        /* Set the fold state of the current task. */
+        $referer = strtolower($_SERVER['HTTP_REFERER']);
+        if(strpos($referer, 'recordestimate') and $this->cookie->taskEffortFold !== false)
+        {
+            $taskEffortFold = $this->cookie->taskEffortFold;
+        }
+        else
+        {
+            $taskEffortFold = 0;
+            $currentAccount = $this->app->user->account;
+            if($task->assignedTo == $currentAccount) $taskEffortFold = 1;
+            if(!empty($task->team))
+            {
+                $teamMember = array_column($task->team, 'account');
+                if(in_array($currentAccount, $teamMember)) $taskEffortFold = 1;
+            }
+        }
+
+        $this->view->title          = $this->lang->task->record;
+        $this->view->task           = $task;
+        $this->view->from           = $from;
+        $this->view->orderBy        = $orderBy;
+        $this->view->efforts        = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->taskEffortFold = $taskEffortFold;
+
         $this->display();
     }
 
@@ -1632,7 +1665,6 @@ class task extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
-
     }
 
     /**
@@ -1860,6 +1892,16 @@ class task extends control
 
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
 
+        if(!empty($this->view->task->team))
+        {
+            $teamAccounts = array_column($this->view->task->team, 'account');
+            $teamMembers  = array();
+            foreach($this->view->members as $account => $name)
+            {
+                if(!$account or in_array($account, $teamAccounts)) $teamMembers[$account] = $name;
+            }
+            $this->view->teamMembers = $teamMembers;
+        }
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');

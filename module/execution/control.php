@@ -41,11 +41,15 @@ class execution extends control
         $this->loadModel('project');
 
         if(defined('IN_UPGRADE') and IN_UPGRADE) return false;
-        $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
-        $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
-        if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
+
+        if(isset($this->app->user))
         {
-            if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
+            $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
+            $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
+            if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
+            {
+                if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
+            }
         }
     }
 
@@ -3282,19 +3286,29 @@ class execution extends control
      * @param  int    $storyID
      * @param  string $confirm    yes|no
      * @param  string $from taskkanban
+     * @param  int    $laneID
+     * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function unlinkStory($executionID, $storyID, $confirm = 'no', $from = '')
+    public function unlinkStory($executionID, $storyID, $confirm = 'no', $from = '', $laneID = 0, $columnID = 0)
     {
         if($confirm == 'no')
         {
             $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
-            return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes&from=$from")));
+            return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes&from=$from&laneID=$laneID&columnID=$columnID")));
         }
         else
         {
-            $this->execution->unlinkStory($executionID, $storyID);
+            $execution = $this->execution->getByID($executionID);
+            $this->execution->unlinkStory($executionID, $storyID, $laneID, $columnID);
+            if($execution->type == 'kanban')
+            {
+                /* Fix bug #29171. */
+                $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($execution->parent)->fetchAll('id');
+                $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
+                if(empty($executionStories)) $this->execution->unlinkStory($execution->parent, $storyID, $laneID, $columnID);
+            }
 
             /* if kanban then reload and if ajax request then send result. */
             if(helper::isAjaxRequest())
@@ -3312,7 +3326,6 @@ class execution extends control
                 return $this->send($response);
             }
 
-            $execution    = $this->execution->getByID($executionID);
             $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
             $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
             if($this->app->tab == 'execution' and $execution->type == 'kanban')

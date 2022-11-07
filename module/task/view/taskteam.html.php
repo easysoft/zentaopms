@@ -3,7 +3,19 @@
 #taskTeamEditor .estimateBox span {background-color: #fff;}
 #taskTeamEditor .estimateBox input {background-color: #fff; border-right-width: 0px;}
 #taskTeamEditor input, #taskTeamEditor span, #taskTeamEditor .chosen-container > a {border-color: #eee;}
+#taskTeamEditor td.sort-handler {padding-bottom: 11px;}
 </style>
+<?php if($app->rawMethod != 'create'):?>
+<style>
+#modalTeam .modal-dialog {width: 855px;}
+#taskTeamEditor .hourBox {padding-bottom: 1px;}
+</style>
+<?php endif;?>
+<?php if($app->rawMethod == 'assignto'):?>
+<style>
+#taskTeamEditor td.sort-handler {width: 70px !important;}
+</style>
+<?php endif;?>
 <?php $hiddenArrow = (empty($task->mode) or $task->mode == 'linear') ? '' : 'hidden';?>
 <?php $i = 1;?>
 <?php if(!empty($task->team)):?>
@@ -35,7 +47,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     <?php echo html::hidden("teamSource[]", $member->account);?>
     <?php if($memberDisabled) echo html::hidden("team[]", $member->account);?>
   </td>
-  <td>
+  <td class='hourBox'>
     <div class='input-group'>
       <div class="input-control has-icon-right">
         <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->estimate}'" . ($hourDisabled ? ' readonly' : ''))?>
@@ -51,7 +63,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
       </div>
     </div>
   </td>
-  <td class='w-130px sort-handler'>
+  <td class='w-100px sort-handler'>
     <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
     <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
     <?php if(isset($task->mode) and $task->mode == 'linear'):?>
@@ -71,7 +83,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     <?php echo html::select("team[]", $members, '', "class='form-control chosen' data-placeholder='{$lang->task->assignedTo}'")?>
     <?php echo html::hidden("teamSource[]", '');?>
   </td>
-  <td class='w-130px'>
+  <td class='hourBox'>
     <?php if(empty($task->team)):?>
     <div class='input-group estimateBox'>
       <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
@@ -110,7 +122,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <?php if(isset($task->status)):?>
 <?php js::set('taskStatus', $task->status);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
-<?php if($newRowCount == 0 and $app->rawMethod == 'edit'):?>
+<?php if($newRowCount == 0 and $app->rawMethod == 'edit' and $task->mode == 'linear'):?>
 <tr>
   <td colspan='4'>
     <div class='alert alert-info'><?php printf($lang->task->noticeManageTeam, zget($lang->task->statusList, $task->status));?></div>
@@ -151,7 +163,15 @@ $(document).ready(function()
     var adjustButtons = function()
     {
         var $deleteBtn = $taskTeamEditor.find('.btn-delete');
-        if ($deleteBtn.length == 1) $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
+        if($deleteBtn.length == 1)
+        {
+            $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
+        }
+        else if(config.currentMethod == 'create')
+        {
+            $deleteBtn.removeClass('disabled').removeAttr('disabled');
+        }
+
     };
 
     var disableMembers = function()
@@ -248,13 +268,18 @@ $(document).ready(function()
         setLineNumber();
     }).on('click', '.btn-delete', function()
     {
+        if($(this).hasClass('disabledDeleted')) return;
+
         var $row = $(this).closest('tr');
         <?php if(!empty($task->team)):?>
         if(!checkRemove($row.index())) return;
         <?php endif;?>
+
+        $taskTeamEditor.find('.btn-delete').addClass('disabledDeleted');
         $row.addClass('highlight').fadeOut(700, function()
         {
             $row.remove();
+            $taskTeamEditor.find('.btn-delete').removeClass('disabledDeleted');
             disableMembers();
             adjustButtons();
             setLineNumber();

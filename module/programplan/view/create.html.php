@@ -56,6 +56,9 @@
         <thead>
           <tr class='text-center'>
             <th class='c-name required'><?php echo $name;?></th>
+            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <th class='c-code required'><?php echo $lang->execution->code;?></th>
+            <?php endif;?>
             <th class='c-pm <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>'><?php echo $lang->programplan->PM;?></th>
             <th class='c-percent <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>'>
               <?php echo $lang->programplan->percent;?>
@@ -82,6 +85,9 @@
             <?php foreach($stages as $stage):?>
             <tr>
               <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='<?php echo $stage->name;?>' class='form-control' /></td>
+              <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+              <td><?php echo html::input("codes[$i]", isset($stage->code) ? $stage->code : '', "class='form-control'");?></td>
+              <?php endif;?>
               <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control picker-select'");?></td>
               <td <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>>
                 <div class='input-group'>
@@ -113,6 +119,9 @@
             <?php echo html::hidden("planIDList[$i]", $plan->id);?>
             <tr>
               <td><input type='text' name="names[<?php echo $i;?>]" id='names<?php echo $i;?>' value='<?php echo $plan->name;?>' class='form-control' /></td>
+              <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+              <td><?php echo html::input("codes[$i]", $plan->code, "class='form-control'");?></td>
+              <?php endif;?>
               <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, $plan->PM, "class='form-control picker-select'");?></td>
               <td <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>>
                 <div class='input-group'>
@@ -142,6 +151,9 @@
           <?php for($j = 0; $j < 5; $j ++):?>
           <tr class='addedItem'>
             <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='' class='form-control' /></td>
+            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <td><?php echo html::input("codes[$i]", '', "class='form-control'");?></td>
+            <?php endif;?>
             <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control picker-select'");?></td>
             <td <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>>
               <div class='input-group'>
@@ -183,6 +195,9 @@
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
       <td><input type='text' name='<?php echo "names[$i]";?>' id='names<?php echo $i;?>' class='form-control' /></td>
+      <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+      <td><?php echo html::input("codes[$i]", '', "class='form-control'");?></td>
+      <?php endif;?>
       <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control' id='PM$i'");?></td>
       <?php echo html::hidden("planIDList[$i]", 0);?>
       <td <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>>

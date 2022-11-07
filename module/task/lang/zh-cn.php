@@ -60,6 +60,9 @@ $lang->task->replace             = '替换';
 $lang->task->myEffort            = '我的日志';
 $lang->task->allEffort           = '团队日志';
 $lang->task->teamOrder           = '工序';
+$lang->task->manageTeam          = '维护团队';
+$lang->task->unfoldEffort        = '展开日志';
+$lang->task->foldEffort          = '收起日志';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
@@ -282,6 +285,8 @@ $lang->task->error->alreadyConsumed   = '当前选中的父任务已有消耗。
 $lang->task->error->date              = '日期不能大于今天';
 $lang->task->error->leftEmptyAB       = '任务状态为%s时，预计剩余不能为0';
 $lang->task->error->leftEmpty         = 'Task#%s任务状态为%s时，剩余不能为0';
+$lang->task->error->notempty          = '%s必须大于0。';
+$lang->task->error->teamLeftEmpty     = '请维护团队工时。';
 
 /* Report. */
 $lang->task->report         = new stdclass();

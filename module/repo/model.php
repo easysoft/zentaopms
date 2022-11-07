@@ -1085,7 +1085,7 @@ class repoModel extends model
         $logs = array_reverse($logs, true);
         foreach($logs as $i => $log)
         {
-            if($lastInDB->revision == $log->revision)
+            if(isset($lastInDB->revision) and $lastInDB->revision == $log->revision)
             {
                 unset($logs[$i]);
                 continue;
@@ -2182,38 +2182,6 @@ class repoModel extends model
             ->andWhere('SCM')->eq('Gitlab')
             ->andWhere('path')->in($projectIDs)
             ->fetchPairs('path', 'product');
-    }
-
-    /**
-     * Sync the latest commit.
-     *
-     * @param int $repoID
-     * @param string $branchID
-     * @access public
-     * @return void
-     */
-    public function syncCommit($repoID, $branchID)
-    {
-        $repo = $this->getRepoByID($repoID);
-        $this->scm = $this->app->loadClass('scm');
-        $this->scm->setEngine($repo);
-
-        $latestInDB = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repoID)
-            ->beginIF($repo->SCM == 'Git' and $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
-            ->beginIF($repo->SCM == 'Gitlab' and $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
-            ->orderBy('t1.time desc')
-            ->limit(1)
-            ->fetch();
-        $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
-        $revision = $version == 1 ? 'HEAD' : ($repo->SCM == 'Git' ? $latestInDB->commit : $latestInDB->revision);
-
-        $logs        = $this->scm->getCommits('since' . $revision, $this->config->repo->batchNum, $branchID);
-        $commitCount = $this->saveCommit($repoID, $logs, $version, $branchID);
-        $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
-
-        $this->fixCommit($repoID);
     }
 
     /**

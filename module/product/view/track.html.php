@@ -75,7 +75,7 @@
             <?php if($i > 0) echo '<tr>';?>
               <td>
                 <?php if(isset($story->parent) and $story->parent > 0):?><span class="label label-badge label-light" title="<?php echo $this->lang->story->children;?>"><?php echo $this->lang->story->childrenAB;?></span><?php endif;?>
-                <?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-app='$tab'");?>
+                <?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '', "title='$story->title' data-app='$tab'");?>
               </td>
               <td>
                 <?php foreach($story->tasks as $taskID => $task):?>

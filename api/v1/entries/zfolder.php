@@ -16,7 +16,7 @@ class zfolderEntry extends entry
      *
      * @param  string $folderID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($folderID)
     {
@@ -43,6 +43,6 @@ class zfolderEntry extends entry
             }
         }
 
-        $this->send(200, array('nodes' => $nodes));
+        return $this->send(200, array('nodes' => $nodes));
     }
 }

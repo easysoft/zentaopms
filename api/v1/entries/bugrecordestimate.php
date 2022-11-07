@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class bugRecordEstimateEntry extends Entry
+class bugRecordEstimateEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $bugID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($bugID)
     {
@@ -31,7 +31,7 @@ class bugRecordEstimateEntry extends Entry
 
         $effort = $data->data->efforts;
 
-        $this->send(200, array('effort' => $effort));
+        return $this->send(200, array('effort' => $effort));
     }
 
     /**
@@ -39,7 +39,7 @@ class bugRecordEstimateEntry extends Entry
      *
      * @param  int    $bugID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($bugID)
     {
@@ -56,6 +56,6 @@ class bugRecordEstimateEntry extends Entry
 
         $bug = $this->loadModel('bug')->getByID($bugID);
 
-        $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 }

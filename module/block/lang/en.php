@@ -94,8 +94,8 @@ $lang->block->remove             = 'Remove';
 $lang->block->refresh            = 'Refresh';
 $lang->block->nbsp               = ' ';
 $lang->block->hidden             = 'Hide';
-$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s<em class='label-action'>%s</em>%s<a href='%s' title='%s'>%s</a></span>";
-$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<em class='label-action'>%s</em>%s<span class='label-name'>%s</span></span>";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s<span class='label-action'>%s</span>%s<a href='%s' title='%s'>%s</a></span>";
+$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<span class='label-action'>%s</span>%s<span class='label-name'>%s</span></span>";
 $lang->block->cannotPlaceInLeft  = 'Cannot place the block at left side.';
 $lang->block->cannotPlaceInRight = 'Cannot place the block at right side.';
 
@@ -342,7 +342,7 @@ $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Order by';
 
 $lang->block->availableBlocks              = new stdclass();
-$lang->block->availableBlocks->todo        = 'schedule';
+$lang->block->availableBlocks->todo        = 'Schedule';
 $lang->block->availableBlocks->task        = 'Tasks';
 $lang->block->availableBlocks->bug         = 'Bugs';
 $lang->block->availableBlocks->case        = 'Cases';
@@ -357,8 +357,8 @@ $lang->block->availableBlocks->testtask    = 'Requests';
 $lang->block->availableBlocks->risk        = 'Risks';
 $lang->block->availableBlocks->issue       = 'Issues';
 $lang->block->availableBlocks->meeting     = 'Meetings';
-$lang->block->availableBlocks->feedback    = 'My Feedbacks';
-$lang->block->availableBlocks->ticket      = 'Ticket';
+$lang->block->availableBlocks->feedback    = 'Feedbacks';
+$lang->block->availableBlocks->ticket      = 'Tickets';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;

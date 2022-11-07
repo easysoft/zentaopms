@@ -313,6 +313,11 @@ class user extends control
         {
             $cases = $this->loadModel('testcase')->getByOpenedBy($account, $sort, $pager);
         }
+
+        /* Process case for check story changed. */
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendData($cases);
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
 
         /* Assign. */

@@ -94,11 +94,26 @@
           <td class='c-name' title='<?php echo $case->taskName;?>'><?php echo $case->taskName;?></td>
           <?php endif;?>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
-          <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
+          <td class='status-testcase status-<?php echo $case->status;?> nobr'>
+            <?php
+            if($case->needconfirm)
+            {
+                print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>");
+            }
+            elseif(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
+            {
+                print("<span class='status-story status-changed' title='{$this->lang->testcase->changed}'>{$this->lang->testcase->changed}</span>");
+            }
+            else
+            {
+                print("<span class='status-testcase status-{$case->status}'>" . $this->processStatus('testcase', $case) . "</span>");
+            }
+            ?>
+          </td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
           <td><?php echo helper::isZeroDate($case->lastRunDate) ? '' : substr($case->lastRunDate, 5, 11);?></td>
-          <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
+          <td class='result-testcase <?php echo $case->lastRunResult;?>'><?php echo $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted;?></td>
           <td class='c-actions'>
             <?php
             if($canBeChanged)

@@ -576,7 +576,7 @@ function renderStoryItem(item, $item, col)
     if(scaleSize <= 2)
     {
         var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
-        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml    = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + hourUnit + '</span>') : '';
         var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id, '', col.type);
         var $infos = $item.find('.infos');
@@ -642,7 +642,7 @@ function renderBugItem(item, $item, col)
     {
         var idHtml       = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var severityHtml = scaleSize <= 1 ? ('<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>') : '';
-        var priHtml      = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml      = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var avatarHtml   = renderUserAvatar(item.assignedTo, 'bug', item.id, '', col.type);
 
         var $infos = $item.find('.infos');
@@ -707,7 +707,7 @@ function renderTaskItem(item, $item, col)
 
     if(scaleSize <= 2)
     {
-        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml    = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = scaleSize <= 1 && item.status != 'wait' ? ('<span class="info info-estimate text-muted">' + taskLang.leftAB + ' ' + item.left + 'h</span>') : ('<span class="info info-estimate text-muted">' + taskLang.estimateAB + ' ' + item.estimate + 'h</span>');
         var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id, '', col.type);
 
@@ -1328,7 +1328,7 @@ function createStoryMenu(options)
     if(priv.canCreateTask && showAction && story.status == 'active') items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canBatchCreateTask && showAction && story.status == 'active') items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateStory && story.$col.type == 'closed') items.push({label: executionLang.activate, icon: 'magic', url: createLink('story', 'activate', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'false'), attrs: {target: 'hiddenwin'}});
+    if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id + '&confirm=no&from=' + '&laneID=' + story.lane + '&columnID=' + story.column, '', 'false'), attrs: {target: 'hiddenwin'}});
     if(priv.canDeleteStory) items.push({label: storyLang.delete, icon: 'trash', onClick: function(){deleteCard('story', story.id, story.$lane.region)}});
     return items;
 }

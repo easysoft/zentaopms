@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class feedbackAssignToEntry extends Entry
+class feedbackAssignToEntry extends entry
 {
     /**
      * POST method.
      *
      * @param  int    $feedbackID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($feedbackID)
     {
@@ -34,6 +34,6 @@ class feedbackAssignToEntry extends Entry
 
         $feedback = $this->loadModel('feedback')->getById($feedbackID);
 
-        $this->send(200, $this->format($feedback, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
+        return $this->send(200, $this->format($feedback, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 }

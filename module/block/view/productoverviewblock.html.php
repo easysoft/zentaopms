@@ -11,12 +11,12 @@
  */
 ?>
 <style>
-  .block-overview .status-list li + li {margin-top: 5px;}
-  .block-overview .status-list li > strong {font-size: 16px;}
-  .progress-pie {position: relative;}
-  .progress-pie .progress-info {position: absolute; width: 100%; height: 100%; left: 0; top: 0; text-align: center; padding-top: 25px;}
-  .progress-pie .progress-info > small {display: block; color: #A6AAB8; line-height: 14px;}
-  .progress-pie .progress-info > strong {display: block; font-size: 36px; line-height: 40px;}
+.block-overview .status-list li + li {margin-top: 5px;}
+.block-overview .status-list li > strong {font-size: 16px;}
+.progress-pie {position: relative;}
+.progress-pie .progress-info {position: absolute; width: 100%; height: 100%; left: 0; top: 0; text-align: center; padding-top: 25px;}
+.progress-pie .progress-info > small {display: block; color: #A6AAB8; line-height: 14px;}
+.progress-pie .progress-info > strong {display: block; font-size: 32px; line-height: 40px;}
 </style>
 <div class="panel-body table-row">
   <div class="col-6 text-middle text-center">
@@ -24,14 +24,14 @@
       <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
       <div class="progress-info">
       <small><?php echo $lang->product->all;?></small>
-      <strong><?php echo empty($total) ? 0 : html::a($this->createLink('product', 'all', "browseType=all"), $total);?></strong>
+      <strong class='text-primary'><?php echo empty($total) ? 0 : html::a($this->createLink('product', 'all', "browseType=all"), $total, '', "class='text-primary'");?></strong>
       </div>
     </div>
   </div>
   <div class="col-6 text-middle">
     <ul class="list-unstyled status-list">
-    <li><span class="status-product status-unclosed"><?php echo $lang->product->statusList['normal'];?></span> &nbsp; <strong><?php echo empty($normal) ? 0 : html::a($this->createLink('product', 'all', "browseType=noclosed"), $normal);?></strong></li>
-    <li><span class="status-product status-closed"><?php echo $lang->product->statusList['closed'];?></span> &nbsp; <strong><?php echo empty($closed) ? 0 : html::a($this->createLink('product', 'all', "browseType=closed"), $closed);?></strong></li>
+    <li><span class="status-product status-unclosed"><?php echo $lang->product->statusList['normal'];?></span> &nbsp; <strong class='text-primary'><?php echo empty($normal) ? 0 : html::a($this->createLink('product', 'all', "browseType=noclosed"), $normal, '', "class='text-primary'");?></strong></li>
+    <li><span class="status-product status-closed"><?php echo $lang->product->statusList['closed'];?></span> &nbsp; <strong class='text-primary'><?php echo empty($closed) ? 0 : html::a($this->createLink('product', 'all', "browseType=closed"), $closed, '', "class='text-primary'");?></strong></li>
     </ul>
   </div>
 </div>

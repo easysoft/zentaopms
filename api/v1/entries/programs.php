@@ -9,13 +9,13 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class programsEntry extends Entry
+class programsEntry extends entry
 {
     /**
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {
@@ -71,7 +71,7 @@ class programsEntry extends Entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -89,14 +89,14 @@ class programsEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $program = $this->loadModel('program')->getByID($data->id);
-        $this->send(201, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
+        return $this->send(201, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
     }
 
     /**
      * Get drop menu.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getDropMenu()
     {
@@ -122,6 +122,6 @@ class programsEntry extends Entry
             }
         }
 
-        $this->send(200, $dropMenu);
+        return $this->send(200, $dropMenu);
     }
 }

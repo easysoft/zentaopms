@@ -1325,6 +1325,8 @@ class actionModel extends model
      */
     public function getRelatedDataByActions($actions)
     {
+        $this->loadModel('user');
+
         $objectNames     = array();
         $relatedProjects = array();
         $requirements    = array();
@@ -1346,9 +1348,10 @@ class actionModel extends model
                 if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
                 {
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
+                    if($objectType == 'gapanalysis') $users = $this->user->getPairs('noletter');
                     foreach($objectInfo as $object)
                     {
-                        $objectName[$object->id]     = $object->name;
+                        $objectName[$object->id]     = $objectType == 'gapanalysis' ? zget($users, $object->name) : $object->name;
                         $relatedProject[$object->id] = $object->project;
                     }
                 }

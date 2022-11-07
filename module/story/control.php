@@ -1243,6 +1243,8 @@ class story extends control
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
         if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
+
         $story = $this->story->mergeReviewer($story, true);
 
         $this->story->replaceURLang($story->type);
@@ -1602,6 +1604,7 @@ class story extends control
     {
         $this->app->loadLang('bug');
         $story = $this->story->getById($storyID);
+        $this->commonAction($storyID);
 
         if(!empty($_POST))
         {

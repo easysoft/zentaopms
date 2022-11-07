@@ -27,6 +27,7 @@ $config->upgrade->maxVersion['max3_6_1']     = '17_6';
 $config->upgrade->maxVersion['max3_6_2']     = '17_6_1';
 $config->upgrade->maxVersion['max3_6_3']     = '17_6_2';
 $config->upgrade->maxVersion['max3_7']       = '17_7';
+$config->upgrade->maxVersion['max3_8']       = '17_8';
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']       = '9_5_1';
@@ -92,6 +93,7 @@ $config->upgrade->bizVersion['biz7_6']       = '17_6';
 $config->upgrade->bizVersion['biz7_6_1']     = '17_6_1';
 $config->upgrade->bizVersion['biz7_6_2']     = '17_6_2';
 $config->upgrade->bizVersion['biz7_7']       = '17_7';
+$config->upgrade->bizVersion['biz7_8']       = '17_8';
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -375,6 +377,18 @@ $config->delete['17_2'][] = 'extension/lite/workflowlayout/ext/view/admin.flow.h
 $config->delete['17_2'][] = 'extension/lite/workflowrelation/ext/view/admin.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/extension/lite/workflowrule/ext/view/browse.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/extension/lite/workflowrule/ext/view/view.flow.html.hook.php';
+$config->delete['17_8'][] = 'extension/biz/common/ext/lang/zh-cn/crystal.php';
+$config->delete['17_8'][] = 'extension/biz/common/ext/lang/zh-tw/crystal.php';
+$config->delete['17_8'][] = 'extension/biz/common/ext/lang/en/crystal.php';
+$config->delete['17_8'][] = 'extension/biz/common/ext/lang/de/crystal.php';
+$config->delete['17_8'][] = 'extension/biz/common/ext/lang/fr/crystal.php';
+$config->delete['17_8'][] = 'extension/biz/common/ext/lang/vi/crystal.php';
+$config->delete['17_8'][] = 'extension/max/common/ext/lang/zh-cn/crystal.php';
+$config->delete['17_8'][] = 'extension/max/common/ext/lang/zh-tw/crystal.php';
+$config->delete['17_8'][] = 'extension/max/common/ext/lang/en/crystal.php';
+$config->delete['17_8'][] = 'extension/max/common/ext/lang/de/crystal.php';
+$config->delete['17_8'][] = 'extension/max/common/ext/lang/fr/crystal.php';
+$config->delete['17_8'][] = 'extension/max/common/ext/lang/vi/crystal.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dept', 'design', 'dev', 'doc', 'durationestimation', 'entry', 'execution', 'executionnode', 'extension', 'file', 'git', 'gitlab', 'group', 'gitea', 'gogs', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectrelease', 'projectstory', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'port', 'zahost');
 

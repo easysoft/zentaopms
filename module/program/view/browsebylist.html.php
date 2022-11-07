@@ -1,5 +1,5 @@
 <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='programTableList' data-preserve-nested='true'>
+<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='programTableList' data-preserve-nested='true' data-nest-level-indent='22'>
   <table class='table has-sort-head table-fixed table-nested' id='programList'>
     <?php $vars = "status=$status&orderBy=%s";?>
     <thead>
@@ -61,8 +61,7 @@
           &nbsp;<span class="icon icon-cards-view" style="color: #888fa1;"></span>
           <?php echo ($app->user->admin or strpos(",{$app->user->view->programs},", ",$program->id,") !== false) ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
           <?php else:?>
-          <?php $projectType = $lang->project->{$program->model};?>
-          <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', "class='text-ellipsis text-primary' title='{$program->name} ($projectType)'");?>
+          <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', "class='text-ellipsis text-primary' title='{$program->name}'");?>
           <?php
           if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
           {
@@ -123,8 +122,7 @@ th.table-nest-title > .table-nest-toggle-global:before {width: 100%; left: 0 !im
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
 #programTableList .icon-kanban:before {content: '\e983';}
-#programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18 !important;}
-#programTableList > tr[data-type="program"] > .c-name:hover > a {color: #313c52 !important;}
+#programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18;}
 #programTableList > tr[data-nest-parent] {background: #f8f8f8;}
 </style>
 <?php js::set('originOrders', $originOrders);?>

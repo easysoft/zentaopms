@@ -66,7 +66,7 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "class='$class' data-width='80%' style='color: $task->color' title='$task->name'");?>
           </td>
           <td><span class='label-pri label-pri-<?php echo $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-          <td class='<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></td>
+          <td class='status-task status-<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></td>
           <td class='text-left nobr' title="<?php echo $task->executionName?>"><?php echo html::a($this->createLink('execution', 'browse', "executionID=$task->executionID"), $task->executionName);?></td>
           <td class="deadline text-center <?php if(isset($task->delay)) echo 'delayed';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo '<span>' . $task->deadline . '</span>';?></td>
           <td class='hours' title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . $lang->execution->workHourUnit;?></td>

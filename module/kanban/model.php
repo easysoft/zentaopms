@@ -512,17 +512,40 @@ class kanbanModel extends model
      */
     public function importCard($kanbanID, $regionID, $groupID, $columnID)
     {
-        $data = fixer::input('post')->get();
+        $data         = fixer::input('post')->get();
         $importIDList = $data->cards;
         $targetLaneID = $data->targetLane;
-
-        $oldCardsKanban = $this->dao->select('id,kanban')->from(TABLE_KANBANCARD)->where('id')->in($importIDList)->fetchPairs();
+        $cardList     = $this->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->in($importIDList)->fetchAll('id');
 
         $updateData = new stdClass();
         $updateData->kanban = $kanbanID;
         $updateData->region = $regionID;
         $updateData->group  = $groupID;
         $this->dao->update(TABLE_KANBANCARD)->data($updateData)->where('id')->in($importIDList)->exec();
+
+        $kanban         = $this->getByID($kanbanID);
+        $oldCardsKanban = array();
+        $kanbanUsers    = trim($kanban->owner) . ',' . trim($kanban->team);
+        $users          = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
+
+        foreach($cardList as $cardID => $card)
+        {
+            $oldCardsKanban[$cardID] = $card->kanban;
+            if(empty($card->assignedTo)) continue;
+            $assignedToList = explode(',', $card->assignedTo);
+            foreach($assignedToList as $index => $account)
+            {
+                if(!isset($users[$account])) unset($assignedToList[$index]);
+            }
+
+            $assignedTo = implode(',', $assignedToList);
+            $assignedTo = trim($assignedTo, ',');
+
+            if($card->assignedTo != $assignedTo)
+            {
+                $this->dao->update(TABLE_KANBANCARD)->set('assignedTo')->eq($assignedTo)->where('id')->eq($cardID)->exec();
+            }
+        }
 
         if(!dao::isError())
         {
@@ -2237,9 +2260,9 @@ class kanbanModel extends model
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
-            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'gt', 0)
-            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
-            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', $this->config->minColWidth)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth', 'ge', $this->config->minColWidth)
+            ->checkIF($kanban->minColWidth >= $this->config->minColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->check('name', 'unique', "space = {$kanban->space}")
             ->exec();
 
@@ -2344,9 +2367,9 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
-            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'gt', 0)
-            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
-            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', $this->config->minColWidth)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth', 'ge', $this->config->minColWidth)
+            ->checkIF($kanban->minColWidth >= $this->config->minColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->where('id')->eq($kanbanID)
             ->exec();
 
@@ -3232,7 +3255,11 @@ class kanbanModel extends model
             $actions .= "</ul>";
         }
 
-        if(common::hasPriv('kanban', 'setting')) $actions .= html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting, '', "class='iframe btn btn-link' data-width='60%'");
+        if(common::hasPriv('kanban', 'setting'))
+        {
+            $width    = common::checkNotCN() ? '65%' : '60%';
+            $actions .= html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting, '', "class='iframe btn btn-link' data-width='$width'");
+        }
 
         $actions .= "</div>";
 

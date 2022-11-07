@@ -116,13 +116,7 @@
               <?php foreach($task->children as $child):?>
               <tr class='text-center'>
                 <td><?php echo $child->id;?></td>
-                <td>
-                  <?php
-                  echo "<span class='label-pri label-pri-" . $child->pri . "'>";
-                  echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
-                  echo "</span>";
-                  ?>
-                </td>
+                <td><?php if($child->pri) echo "<span class='label-pri label-pri-" . $child->pri . "'>" . zget($this->lang->task->priList, $child->pri, $child->pri) . "</span>";?></td>
                 <td class='text-left' title='<?php echo $child->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('task', 'view', "taskID=$child->id", '', true); ?>"><?php echo $child->name;?></a></td>
                 <td><?php echo $child->deadline;?></td>
                 <td id='assignedTo'><?php $this->task->printAssignedHtml($child, $users);?></td>
@@ -131,9 +125,9 @@
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'finish',   "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'close', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list');
                   common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);

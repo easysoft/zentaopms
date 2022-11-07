@@ -4,13 +4,15 @@
 <style>
 .block-dynamic .timeline > li .timeline-text {max-width: 600px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-height: 20px;}
 .block-dynamic .panel-body {padding-top: 0;}
-.timeline>li:before {left: -26px;}
-.timeline>li+li:after {left: -23px;}
+.timeline > li:before {left: -26px;}
+.timeline > li + li:after {left: -23px;}
 .timeline-text {margin-left: -18px;}
 .block-dynamic .label-action {padding: 0 6px;}
 .block-dynamic .label-action + a {padding-left: 6px;}
-.timeline>li.active:before {left: -30px;}
-.timeline>li>div:after {left: -27px;}
+.timeline > li.active:before {left: -30px;}
+.timeline > li > div:after {left: -27px;}
+.timeline > li > div > .timeline-tag, .timeline > li > div > .timeline-text > .label-action {color: #838A9D;}
+.timeline > li > div > .timeline-text > a {color: #313C52;}
 </style>
 <div class='panel-body scrollbar-hover'>
   <ul class="timeline timeline-tag-left no-margin">

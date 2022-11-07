@@ -2861,7 +2861,7 @@ class userModel extends model
         $personalData['createdDocs']   = $this->dao->select($count)->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('lib')->in(array_keys($allLibs))->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['finishedTasks'] = $this->dao->select($t1Count)->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
-            ->leftjoin(TABLE_TASKTEAM)->alias('t3')->on('t1.id = t3.task')
+            ->leftjoin(TABLE_TASKTEAM)->alias('t3')->on("t1.id = t3.task and t3.account = '{$account}'")
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.finishedBy', true)->eq($account)
