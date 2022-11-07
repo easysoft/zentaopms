@@ -85,8 +85,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   </div>
   <form class="main-form form-ajax not-watch">
     <div class="example">
-      <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
-      <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
+      <?php if($app->rawModule != 'review') echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
+      <?php if($app->rawModule == 'review') unset($lang->programplan->stageCustom->date); ?>
       <?php echo html::checkbox('stageCustom', $lang->programplan->stageCustom, $selectCustom);?>
       <div class='btn btn-link'>
         <strong><?php echo $lang->execution->gantt->format . '：';?></strong>
