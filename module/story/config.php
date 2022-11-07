@@ -50,7 +50,7 @@ $config->story->custom->createFields      = $config->story->list->customCreateFi
 $config->story->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
 $config->story->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
 
-$config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto,lanes,regions,';
+$config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto,lanes,regions,branch,pri,';
 
 global $lang, $app;
 $config->story->datatable = new stdclass();
