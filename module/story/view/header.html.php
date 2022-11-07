@@ -93,10 +93,10 @@ function loadProductBranches(productID)
     $('#branch').remove();
     $('#branch_chosen').remove();
 
-    var isSiblings = storyType == 'story' ? 'yes' : 'no';
+    var isSiblings = storyType == 'story' && page == 'create' ? 'yes' : 'no';
     $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + executionID + "&withMainBranch=1&isSiblings=" + isSiblings), function(data)
     {
-        if(storyType == 'story')
+        if(storyType == 'story' && page == 'create')
         {
             var newProductType = data ? 'normal' : 'branch';
             if(originProductType != newProductType)
