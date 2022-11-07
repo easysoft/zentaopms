@@ -564,6 +564,23 @@ $(function()
     if(showFields.indexOf('delay') != -1) gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
 
+    gantt.templates.task_end_date = function(data)
+    {
+        return gantt.templates.task_date(new Date(date.valueOf() - 1));
+    }
+    var gridDateToStr = gantt.date.date_to_str("%Y-%m-%d");
+    gantt.templates.grid_date_format = function(date, column)
+    {
+        if(column === "end_date")
+        {
+            return gridDateToStr(new Date(date.valueOf() - 1));
+        }
+        else
+        {
+            return gridDateToStr(date);
+        }
+    }
+
     endField = gantt.config.columns.pop();
     endField.resize = false;
     gantt.config.columns.push(endField);
