@@ -467,17 +467,7 @@ class task extends control
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Set Custom*/
-        if($this->config->systemMode == 'new')
-        {
-            $project = $this->project->getByID($execution->project);
-            if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
-        }
-
-        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field)
-        {
-            if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
-            $customFields[$field] = $this->lang->task->$field;
-        }
+        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
         $showFields = $this->config->task->custom->batchCreateFields;
         if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
@@ -779,24 +769,7 @@ class task extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Set Custom*/
-        if(isset($execution))
-        {
-            if($this->config->systemMode == 'new')
-            {
-                $project = $this->project->getByID($execution->project);
-                if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
-            }
-
-            foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
-            {
-                if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
-                $customFields[$field] = $this->lang->task->$field;
-            }
-        }
-        else
-        {
-            foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
-        }
+        foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
