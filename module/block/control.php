@@ -759,8 +759,9 @@ class block extends control
      */
     public function printPlanBlock()
     {
-        $this->session->set('productList', $this->app->getURI(true), 'product');
-        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+        $uri = $this->createLink('my', 'index');
+        $this->session->set('productList', $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
 
         $this->app->loadLang('productplan');
         $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
@@ -1285,7 +1286,7 @@ class block extends control
      */
     public function printWaterfallIssueBlock()
     {
-        $uri = $this->app->getURI(true);
+        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('issueList', $uri, 'project');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
@@ -1300,7 +1301,7 @@ class block extends control
      */
     public function printWaterfallRiskBlock()
     {
-        $uri = $this->app->getURI(true);
+        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('riskList', $uri, 'project');
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
@@ -1491,8 +1492,9 @@ class block extends control
      */
     public function printScrumRoadMapBlock($productID = 0, $roadMapID = 0)
     {
-        $this->session->set('releaseList',     $this->app->getURI(true), 'product');
-        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
 
         $products  = $this->loadModel('product')->getPairs('', $this->session->project);
         if(!is_numeric($productID)) $productID = key($products);
@@ -1518,10 +1520,11 @@ class block extends control
      */
     public function printScrumTestBlock()
     {
-        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
-        $this->session->set('productList',  $this->app->getURI(true), 'product');
-        $this->session->set('projectList',  $this->app->getURI(true), 'project');
-        $this->session->set('buildList',    $this->app->getURI(true), 'execution');
+        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
+        $this->session->set('testtaskList', $uri, 'qa');
+        $this->session->set('productList',  $uri, 'product');
+        $this->session->set('projectList',  $uri, 'project');
+        $this->session->set('buildList',    $uri, 'execution');
         $this->app->loadLang('testtask');
 
         $count  = zget($this->params, 'count', 10);
