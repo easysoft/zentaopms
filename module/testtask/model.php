@@ -1495,7 +1495,7 @@ class testtaskModel extends model
         if($col->show)
         {
             $class = "c-$id ";
-            if($id == 'status') $class .= $run->status;
+            if($id == 'status') $class .= $run->status . " status-testcase status-{$run->caseStatus}";
             if($id == 'title')  $class .= ' text-left';
             if($id == 'id')     $class .= ' cell-id';
             if($id == 'lastRunResult') $class .= "result-testcase $run->lastRunResult";
@@ -1555,7 +1555,10 @@ class testtaskModel extends model
                 }
                 else
                 {
-                    $status = $this->processStatus('testcase', $run);
+                    $case = new stdClass();
+                    $case->status = $run->caseStatus;
+
+                    $status = $this->processStatus('testcase', $case);
                     if($run->status == $status) $status = $this->processStatus('testtask', $run);
                     echo $status;
                 }
