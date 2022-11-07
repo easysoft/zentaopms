@@ -122,6 +122,6 @@ class bugEntry extends entry
         $control->delete($bugID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

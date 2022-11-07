@@ -67,7 +67,7 @@ class docEntry extends entry
 
         $this->getData();
         $story = $this->story->getByID($storyID);
-        $this->sendSuccess(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool'));
+        return $this->sendSuccess(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool'));
     }
 
     /**
@@ -83,6 +83,6 @@ class docEntry extends entry
         $control->delete($storyID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

@@ -70,6 +70,6 @@ class riskEntry extends entry
         $control->delete($riskID, 'true');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }
