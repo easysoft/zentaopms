@@ -1436,7 +1436,15 @@ class testcaseModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(!empty($fieldNames)) dao::$errors = sprintf($this->lang->testcase->noRequireTip, implode(',', $fieldNames));
+        if(!empty($fieldNames))
+        {
+            $tipContent = '';
+            foreach($requiredFields as $field)
+            {
+                if(isset($fieldNames[$field])) $tipContent .= ",{$fieldNames[$field]}";
+            }
+            dao::$errors = sprintf($this->lang->testcase->noRequireTip, trim($tipContent, ','));
+        }
 
         if(dao::isError()) return false;
 
