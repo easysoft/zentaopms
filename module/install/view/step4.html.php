@@ -123,7 +123,7 @@
                 <td colspan='4'><?php echo $this->lang->upgrade->remarkDesc;?></td>
               </tr>
             </tbody>
-            <?php echo html::hidden('mode','')?>
+            <?php echo html::hidden('mode', '');?>
           </table>
         </div>
       </div>

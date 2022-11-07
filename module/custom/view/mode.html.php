@@ -44,72 +44,33 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><?php echo $this->lang->upgrade->program;?></td>
-                <td class="text-center"><i class="icon text-red text-red icon-close"></i></td>
-                <td class="text-center"><i class="icon text-success text-success icon-check"></i></td>
-              </tr>
-              <tr>
-                <td><?php echo $this->lang->upgrade->productRR;?></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <tr>
-                <td><?php echo $this->lang->upgrade->productUR;?></td>
-                <td class="text-center"><i class="icon text-red icon-close"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <tr>
-                <td><?php echo $this->lang->upgrade->productLine;?></td>
-                <td class="text-center"><i class="icon text-red icon-close"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <tr>
-                <td><?php echo $this->lang->upgrade->projectScrum;?></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <?php if($config->edition == 'max'):?>
-              <tr>
-                <td><?php echo $this->lang->upgrade->scrumDetail;?></td>
-                <td class="text-center"><i class="icon text-red icon-close"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              <?php foreach($config->custom->allFeatures as $feature):?>
+              <?php if($feature == 'scrumDetail'):?>
+              <?php if($disabledScrumFeatures):?>
+              <tr class='text-center'>
+                <td class='text-left'><?php echo sprintf($this->lang->custom->scrum->common, $disabledScrumFeatures);?></td>
+                <td><i class="icon text-red icon-close"></i></td>
+                <td><i class="icon text-success icon-check"></i></td>
               </tr>
               <?php endif;?>
-              <tr>
-                <td><?php echo $this->lang->upgrade->projectWaterfall;?></td>
-                <td class="text-center"><i class="icon text-red icon-close"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <tr>
-                <td><?php echo $this->lang->upgrade->projectKanban;?></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <tr>
-                <td><?php echo $this->lang->upgrade->execution;?></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <?php if($config->edition == 'max'):?>
-              <tr>
-                <td><?php echo $this->lang->upgrade->assetlib;?></td>
-                <td class="text-center"><i class="icon text-red icon-close"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              <?php if($enabledScrumFeatures):?>
+              <tr class='text-center'>
+                <td class='text-left'><?php echo sprintf($this->lang->custom->scrum->common, $enabledScrumFeatures);?></td>
+                <td><i class="icon text-success icon-check"></i></td>
+                <td><i class="icon text-success icon-check"></i></td>
               </tr>
               <?php endif;?>
-              <?php if($config->edition == 'biz' or $config->edition == 'max'):?>
-              <tr>
-                <td><?php echo $this->lang->upgrade->oa;?></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
+              <?php else:?>
+              <tr class="text-center">
+                <td class='text-left'><?php echo $this->lang->upgrade->$feature;?></td>
+                <td>
+                  <?php $class = in_array($feature, $disabledFeatures) ? 'text-red icon-close' : 'text-success icon-check';?>
+                  <i class="icon <?php echo $class;?>"></i>
+                </td>
+                <td><i class="icon text-success text-success icon-check"></i></td>
               </tr>
               <?php endif;?>
-              <tr>
-                <td><?php echo $this->lang->upgrade->vision;?></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-                <td class="text-center"><i class="icon text-success icon-check"></i></td>
-              </tr>
+              <?php endforeach;?>
             </tbody>
           </table>
         </td>

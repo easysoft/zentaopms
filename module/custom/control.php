@@ -644,14 +644,48 @@ class custom extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
 
+        $disabledFeatures = array('program', 'productLine');
+        foreach($this->config->custom->features as $feature)
+        {
+            $function = 'has' . ucfirst($feature) . 'Data';
+            if(!$this->custom->$function())
+            {
+                if(strpos($feature, 'scrum') !== false)
+                {
+                    $disabledFeatures['scrum'][] = $feature;
+                }
+                else
+                {
+                    $disabledFeatures[] = $feature;
+                }
+            }
+        }
+
+        $enabledScrumFeatures  = array();
+        $disabledScrumFeatures = array();
+        foreach($this->config->custom->scrumFeatures as $scrumFeature)
+        {
+            if(in_array('scrum' . ucfirst($scrumFeature), $disabledFeatures['scrum']))
+            {
+                $disabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+            }
+            else
+            {
+                $enabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+            }
+        }
+
         $this->app->loadLang('upgrade');
 
-        $this->view->title      = $this->lang->custom->mode;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->view->title;
-        $this->view->mode       = $mode;
-        $this->view->programs   = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
-        $this->view->programID  = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
+        $this->view->title                 = $this->lang->custom->mode;
+        $this->view->position[]            = $this->lang->custom->common;
+        $this->view->position[]            = $this->view->title;
+        $this->view->mode                  = $mode;
+        $this->view->programs              = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programID             = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
+        $this->view->disabledFeatures      = $disabledFeatures;
+        $this->view->enabledScrumFeatures  = implode($this->lang->comma, $enabledScrumFeatures);
+        $this->view->disabledScrumFeatures = implode($this->lang->comma, $disabledScrumFeatures);
 
         $this->display();
     }
