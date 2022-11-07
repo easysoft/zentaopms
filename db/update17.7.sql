@@ -10,8 +10,8 @@ INSERT INTO `zt_module` (`root`, `branch`, `name`, `parent`, `path`, `grade`, `o
 (0, 0, '组织', 0, ',0,', 1, 40, 'chart', 'system', '', '', '0');
 UPDATE `zt_module` SET `root` = 1 where `owner` = 'system';
 
-UPDATE `zt_chart` SET `group` = (SELECT `id` FROM `zt_module` WHERE `type` = 'bi' AND `name` = '产品' limit 1);
-UPDATE `zt_module` SET `path` = CONCAT(',', `id`, ',') WHERE `type` = 'bi' AND `name` in ('产品', '项目', '测试', '组织');
+UPDATE `zt_chart` SET `group` = (SELECT `id` FROM `zt_module` WHERE `type` = 'chart' AND `name` = '产品' limit 1);
+UPDATE `zt_module` SET `path` = CONCAT(',', `id`, ',') WHERE `type` = 'chart' AND `name` in ('产品', '项目', '测试', '组织');
 
 DROP TABLE IF EXISTS `zt_dimension`;
 CREATE TABLE IF NOT EXISTS `zt_dimension` (
