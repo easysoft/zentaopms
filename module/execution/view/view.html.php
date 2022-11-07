@@ -372,7 +372,7 @@
               <div class="detail-content">
                 <table class='table table-data data-stats'>
                   <tbody>
-                    <tr class='statsTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
+                    <tr class='statsTr'><td></td><td></td><td></td><td></td></tr>
                     <tr>
                       <td colspan="4">
                         <?php $progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;?>
