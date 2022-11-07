@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="table-row">
-          <div class="detail-content article-content table-col">
+          <div class="detail-content article-content table-col load-indicator">
             <?php if($doc->keywords):?>
             <p class='keywords'>
               <?php foreach($doc->keywords as $keywords):?>
@@ -103,7 +103,7 @@
             }
             elseif($doc->contentType == 'markdown')
             {
-                echo "<textarea id='markdownContent'></textarea>";
+                echo "<textarea id='markdownContent'>{$doc->content}</textarea>";
             }
             else
             {
