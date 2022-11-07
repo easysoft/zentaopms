@@ -166,6 +166,9 @@ class my extends control
         {
             $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
             $feedbackCount = $pager->recTotal;
+
+            $ticketList  = $this->ticket->getList('assignedtome', 'id_desc', $pager);
+            $ticketCount = $pager->recTotal;
         }
 
         if($isMax)
@@ -200,9 +203,6 @@ class my extends control
             /* Get the number of meetings assigned to me. */
             $meetings     = $this->meeting->getListByUser('futureMeeting', 'id_desc', 0, $pager);
             $meetingCount = $pager->recTotal;
-
-            $ticketList  = $this->ticket->getList('assignedtome', 'id_desc', $pager);
-            $ticketCount = $pager->recTotal;
         }
 
 echo <<<EOF
@@ -219,7 +219,11 @@ if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;
 var isMax = $isMax;
 var isBiz = $isBiz;
 
-if(isBiz !== 0 || isMax !== 0) var feedbackCount = $feedbackCount;
+if(isBiz !== 0 || isMax !== 0)
+{
+    var feedbackCount = $feedbackCount;
+    var ticketCount   = $ticketCount;
+}
 
 if(isMax !== 0)
 {
@@ -228,7 +232,6 @@ if(isMax !== 0)
     var reviewCount  = $reviewCount;
     var qaCount      = $qaCount;
     var meetingCount = $meetingCount;
-    var ticketCount  = $ticketCount;
 }
 </script>
 EOF;
