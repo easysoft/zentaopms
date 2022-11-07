@@ -2280,6 +2280,9 @@ class execution extends control
         $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
 
+        $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
+        if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
+
         $execution->projectInfo = $this->loadModel('project')->getByID($execution->project);
 
         if($this->config->systemMode == 'new')
@@ -2288,9 +2291,6 @@ class execution extends control
             array_pop($programList);
             $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
         }
-
-        $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
-        if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
         if($execution->type == 'kanban' and defined('RUN_MODE') and RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
 
