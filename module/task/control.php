@@ -543,13 +543,13 @@ class task extends control
      * Edit a task.
      *
      * @param  int    $taskID
-     * @param  bool   $comment
+     * @param  string $comment
      * @param  string $kanbanGroup
      * @param  string $from
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = false, $kanbanGroup = 'default', $from = '')
+    public function edit($taskID, $comment = 'false', $kanbanGroup = 'default', $from = '')
     {
         $this->commonAction($taskID);
         $task = $this->task->getById($taskID);
@@ -558,7 +558,7 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = array();
-            if($comment == false)
+            if($comment == 'false' or $comment == false)
             {
                 $changes = $this->task->update($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
