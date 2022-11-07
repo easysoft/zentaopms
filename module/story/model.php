@@ -1798,6 +1798,15 @@ class storyModel extends model
 
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->exec();
+            }
+        }
+
         if(isset($_POST['reviewer']))
         {
             foreach($this->post->reviewer as $reviewer)
@@ -1809,12 +1818,25 @@ class storyModel extends model
                 $reviewData->version  = $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                /* Sync siblings. */
+                if(!empty($oldStory->siblings))
+                {
+                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    {
+                        $reviewData->story = $siblingID;
+                        $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                    }
+                }
             }
             $story->status = 'reviewing';
         }
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->eq($storyID)->exec();
-        if(!dao::isError()) return common::createChanges($oldStory, $story);
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'submitReview');
+        if(!dao::isError()) return $changes;
 
         return false;
     }
