@@ -558,7 +558,7 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = array();
-            if($comment == 'false' or $comment == false)
+            if(!$comment or $comment == 'false')
             {
                 $changes = $this->task->update($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
