@@ -1731,8 +1731,15 @@ class story extends control
         $stories = $this->story->getByList($storyIdList);
         $productStoryList = array();
         $productList      = array();
+        $ignoreSiblings   = array();
         foreach($stories as $story)
         {
+            if(!empty($ignoreSiblings) and isset($ignoreSiblings[$story->id]))
+            {
+                unset($stories[$story->id]);
+                continue;
+            }
+
             if($story->parent == -1)
             {
                 $skipStory[] = $story->id;
@@ -1747,6 +1754,11 @@ class story extends control
             $storyProduct = isset($productList[$story->product]) ? $productList[$story->product] : $this->product->getByID($story->product);
             $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
             if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
+
+            if(!empty($story->siblings))
+            {
+                foreach(explode(',', trim($story->siblings, ',')) as $siblingID) $ignoreSiblings[$siblingID] = $siblingID;
+            }
         }
 
         if($this->post->comments)
@@ -1764,6 +1776,8 @@ class story extends control
 
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : '') . "|$preStatus");
                     $this->action->logHistory($actionID, $changes);
+
+                    if(!empty($stories[$storyID]->siblings)) $this->story->syncSiblings($storyID, $stories[$storyID]->siblings, $changes, 'Closed');
                 }
             }
 
