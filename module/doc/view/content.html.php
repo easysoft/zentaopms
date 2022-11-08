@@ -103,7 +103,7 @@
             }
             elseif($doc->contentType == 'markdown')
             {
-                echo "<textarea id='markdownContent'></textarea>";
+                echo "<textarea id='markdownContent'>{$doc->content}</textarea>";
             }
             else
             {
