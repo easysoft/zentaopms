@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="table-row">
-          <div class="detail-content article-content table-col load-indicator">
+          <div class="detail-content article-content table-col">
             <?php if($doc->keywords):?>
             <p class='keywords'>
               <?php foreach($doc->keywords as $keywords):?>
