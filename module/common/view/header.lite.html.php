@@ -27,7 +27,7 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
       css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
       if(defined('ZUI3'))
       {
-          css::import('https://zui.cyy.oop.cc/dist/zui-custom/assets/style.4d294030.css');
+          css::import('https://ztui.sh.oop.cc/assets/style.4d294030.css');
           css::import('https://zui.cyy.oop.cc/dist/zui-custom/zui-custom.css');
       }
 
