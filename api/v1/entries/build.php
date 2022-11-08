@@ -29,7 +29,7 @@ class buildEntry extends entry
         /* Exception handling. */
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $this->sendError(400, 'error');
+        return $this->sendError(400, 'error');
     }
 
     /**
@@ -71,6 +71,6 @@ class buildEntry extends entry
         $control->delete($buildID, 'true');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

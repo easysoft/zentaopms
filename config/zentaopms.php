@@ -402,13 +402,16 @@ $config->objectTables['repo']          = TABLE_REPO;
 $config->objectTables['zahost']        = TABLE_ZAHOST;
 $config->objectTables['executionnode'] = TABLE_VM;
 
-$config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+$config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+$config->disabledFeatures = '';
+$config->closedFeatures   = '';
 
 $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
+$config->programPriv->noSprint  = array('task', 'story', 'tree', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder');
+$config->programPriv->scrum     = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
 $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('task', 'workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
@@ -417,3 +420,10 @@ $config->showMainMenu = true;
 $config->maxPriValue  = '256';
 
 $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
+
+$config->featureGroup = new stdclass();
+$config->featureGroup->product   = array('roadmap', 'track', 'URStory');
+$config->featureGroup->scrum     = array();
+$config->featureGroup->waterfall = array('track');
+$config->featureGroup->assetlib  = array();
+$config->featureGroup->other     = array('devops', 'kanban');

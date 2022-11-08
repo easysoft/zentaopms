@@ -1,4 +1,4 @@
-<?php 
+<?php
 if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}
 $clientLang   = $app->getClientLang();
 $webRoot      = $this->app->getWebRoot();
@@ -81,7 +81,7 @@ $xuanExtFile = $extensionRoot . 'xuan/common/ext/view/header.xuanxuan.html.hook.
 if(file_exists($xuanExtFile)) include $xuanExtFile;
 ?>
 </head>
-<?php 
+<?php
 $bodyClass = $this->app->getViewType() == 'xhtml' ? 'allow-self-open' : '';
 if(isset($pageBodyClass)) $bodyClass = $bodyClass . ' ' . $pageBodyClass;
 if($this->moduleName == 'index' && $this->methodName == 'index') $bodyClass .= ' menu-' . ($this->cookie->hideMenu ? 'hide' : 'show');

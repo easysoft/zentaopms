@@ -16,6 +16,7 @@ div.divider {vertical-align: middle;}
 .main-row .side-col .nav li.active div a {background: #e3f2fd; color: #000; border-radius: 4px;}
 .main-row .side-col .nav li.currentPage div a {background: #006af1; color: #fff; border-radius: 4px;}
 .main-row .side-col .nav li div a {width: 80%; display: inline-block; padding: 5px 15px; margin-bottom: 5px;}
+.main-row > [class*=" col-"], .main-row > [class*="-col"], .main-row > [class^=col-] {vertical-align: middle}
 
 #lineBox > .cell {height: 700px; overflow: scroll;}
 #source > .cell {padding: 0; position: relative; height: 700px;}
@@ -32,8 +33,9 @@ div.divider {vertical-align: middle;}
 #lineList .checkbox-primary {display: inline-block;}
 .main-row .side-col .check-allLine > label {font-weight: 700}
 .sprintGroup {margin-left: 6px;}
-.programParams td > label:first-child {margin-right: 10px;}
+.programParams td > label:first-child {margin-right: 30px;}
 .programParams td > label:last-child {margin-left: 0px;}
+.programParams > tbody > tr > td {padding: 7px 30px;}
 
 .projectList .scroll-handle .checkbox-primary {display: inline-block;}
 .sprintGroup .sprintItem .checkbox-primary {display: inline-block;}

@@ -17,6 +17,11 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if(!empty($branchesAndTags)):?>
+    <?php if($this->app->tab == 'project'):?>
+    <div class='btn-group'>
+    <?php echo $this->repo->getSwitcher($repoID);?>
+    </div>
+    <?php endif;?>
     <div class='btn-group'>
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $branchesAndTags[$branchID];?>'><?php echo $branchesAndTags[$branchID];?></span> <span class='caret'></span></a>
       <div id='dropMenuBranch' class='dropdown-menu search-list' data-ride='searchList' data-url=''>
@@ -90,6 +95,7 @@
     <?php if(common::hasPriv('repo', 'downloadCode')): ?>
     <button type="button" class="btn btn-primary" data-toggle="popover" id="downloadCode" title="<?php echo $lang->repo->downloadCode;?>"><i class='icon icon-sm icon-download'></i> <?php echo $lang->repo->download;?> <i class='icon icon-sm icon-caret-down'></i></button>
     <?php endif;?>
+    <?php if(common::hasPriv('repo', 'create') and $currentProject and !$currentProject->hasProduct) echo html::a(helper::createLink('repo', 'create', "objectID=$objectID"), "<i class='icon icon-plus'></i> " . $this->lang->repo->createAction, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">

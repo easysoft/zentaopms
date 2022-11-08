@@ -348,7 +348,7 @@ class doc extends control
             unset($this->lang->doc->menu->product['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
             unset($this->lang->doc->menu->execution['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->project['subMenu']);
         }
 
         $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
@@ -506,8 +506,8 @@ class doc extends control
 
             unset($this->lang->doc->menu->product['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
-            if($this->config->systemMode == 'classic') unset($this->lang->doc->menu->execution['subMenu']);
+            unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->execution['subMenu']);
 
             /* High light menu. */
             if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)
@@ -626,7 +626,6 @@ class doc extends control
         {
             $doc        = $this->doc->getByID($docID);
             $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
-            if($this->config->systemMode == 'classic' and $objectType == 'project') $objectType = 'execution';
             $this->doc->delete(TABLE_DOC, $docID);
 
             /* Delete doc files. */
@@ -1131,7 +1130,6 @@ class doc extends control
         $lib = $this->doc->getLibById($libID);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $libID;
 
-        if($this->config->systemMode == 'classic' and $type == 'project') $type = 'execution';
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID, $appendLib);
 
         /* Set Custom. */

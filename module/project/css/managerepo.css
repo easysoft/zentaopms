@@ -1,0 +1,5 @@
+#reposBox .repo {border: 1px solid #ddd; margin-bottom: 5px; position: relative; height: 40px; border-radius: 4px;}
+#reposBox .repo:hover {background: #f1f1f1;}
+#reposBox .repo.checked,
+#reposBox .repo.checked:hover {background: #E5FFE6; border: 1px solid #229F24;}
+#reposBox .repo .checkbox-primary {padding: 9px; cursor: pointer;}

@@ -2,7 +2,6 @@ $(function()
 {
     var page = window.page || '';
     var flow = window.flow;
-    if(typeof(systemMode) == undefined) var systemMode = '';
 
     $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
 
@@ -294,13 +293,6 @@ function loadProductStories(productID)
  */
 function loadProductProjects(productID)
 {
-    if(systemMode == 'classic')
-    {
-        var projectID = $('#execution').find("option:selected").val();
-        loadProductExecutions(productID, projectID);
-        return true;
-    }
-
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
@@ -327,12 +319,22 @@ function loadProductExecutions(productID, projectID = 0)
     branch   = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    var execution = $('#execution').val();
+    if(projectID != 0 && projectExecutionPairs[projectID] !== undefined)
+    {
+        $('#executionIdBox').parents('.executionBox').hide();
+        var execution = projectExecutionPairs[projectID];
+    }
+    else
+    {
+        $('#executionIdBox').parents('.executionBox').show();
+        var execution = $('#execution').val();
+    }
+
     link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=&executionID=' + execution);
     $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();
-        if(typeof(bugExecution) == 'string' && systemMode != 'classic') $('#executionIdBox').prepend("<span class='input-group-addon' id='executionBox' style='border-left-width: 0px;'>" + bugExecution + "</span>");
+        if(typeof(bugExecution) == 'string') $('#executionIdBox').prepend("<span class='input-group-addon' id='executionBox' style='border-left-width: 0px;'>" + bugExecution + "</span>");
         if(required) $(this).find('#execution_chosen').addClass('required');
         changeAssignedTo(projectID);
     });

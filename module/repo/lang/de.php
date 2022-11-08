@@ -3,6 +3,7 @@ $lang->repo->common          = 'Repo';
 $lang->repo->browse          = 'View';
 $lang->repo->viewRevision    = 'View Revision';
 $lang->repo->product         = 'Product';
+$lang->repo->projects        = 'Project';
 $lang->repo->execution       = $lang->execution->common;
 $lang->repo->create          = 'Create';
 $lang->repo->maintain        = 'Repo List';

@@ -1169,15 +1169,7 @@ class productplanModel extends model
 
             if($canClickExecution)
             {
-                $executionLink = $this->config->systemMode == 'new' ? '#projects' : helper::createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$plan->product");
-                if($this->config->systemMode == 'new')
-                {
-                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
-                }
-                else
-                {
-                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn' title='{$this->lang->productplan->createExecution}'");
-                }
+                $menu .= html::a('#projects', '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
             }
             elseif($canCreateExec)
             {
@@ -1191,7 +1183,7 @@ class productplanModel extends model
 
             if($canLinkStory and $plan->parent >= 0)
             {
-                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
+                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
             }
             elseif($canLinkStory)
             {
@@ -1200,17 +1192,17 @@ class productplanModel extends model
 
             if($canLinkBug and $plan->parent >= 0)
             {
-                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
+                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
             }
             elseif($canLinkBug)
             {
                 $menu .= "<button type='button' class='disabled btn'><i class='icon-bug' title='{$this->lang->productplan->linkBug}'></i></button>";
             }
 
-            $menu .= $this->buildMenu('productplan', 'edit', $params, $plan, $type);
+            $menu .= $this->buildMenu($this->app->rawModule, 'edit', $params, $plan, $type);
         }
 
-        $menu .= $this->buildMenu('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
+        $menu .= $this->buildMenu($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
 
         if($type == 'browse' and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
         {
@@ -1225,7 +1217,7 @@ class productplanModel extends model
             $menu .= $this->buildFlowMenu('productplan', $plan, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $editClickable   = $this->buildMenu('productplan', 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
+            $editClickable   = $this->buildMenu($this->app->rawModule, 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
             $deleteClickable = $this->buildMenu('productplan', 'delete', $params, $plan, $type, '', '', '', '', '', '', false);
             if($canEdit and $editClickable) $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
             if($canDelete and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");

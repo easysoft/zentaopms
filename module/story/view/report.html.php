@@ -85,6 +85,7 @@
   </div>
 </div>
 <?php js::set('productID', $productID);?>
+<?php js::set('projectID', $projectID);?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('branchID', $branchID);?>
 <?php js::set('moduleID', $moduleID);?>

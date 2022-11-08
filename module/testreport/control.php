@@ -135,7 +135,7 @@ class testreport extends control
             $executions[$report->execution] = $report->execution;
             foreach(explode(',', $report->tasks) as $taskID) $tasks[$taskID] = $taskID;
         }
-        if($executions) $executions = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchPairs('id', 'name');
+        if($executions) $executions = $this->dao->select('id,name,multiple')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchAll('id');
         if($tasks)      $tasks      = $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($tasks)->fetchPairs('id', 'name');
 
         $this->view->title      = $title . $this->lang->colon . $this->lang->testreport->common;
@@ -146,6 +146,7 @@ class testreport extends control
         $this->view->orderBy      = $orderBy;
         $this->view->objectID     = $objectID;
         $this->view->objectType   = $objectType;
+        $this->view->object       = $object;
         $this->view->extra        = $extra;
         $this->view->pager        = $pager;
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');

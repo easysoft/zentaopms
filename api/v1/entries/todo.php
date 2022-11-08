@@ -77,6 +77,6 @@ class todoEntry extends entry
         $control->delete($todoID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

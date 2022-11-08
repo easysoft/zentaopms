@@ -465,7 +465,7 @@ class baseEntry
             {
                 $module = $this->app->moduleName;
                 $name   = isset($this->app->lang->$module->$field) ? $this->app->lang->$module->$field : $field;
-                $this->sendError(400, sprintf($this->app->lang->error->notempty, $name));
+                throw EndResponseException::create($this->sendError(400, sprintf($this->app->lang->error->notempty, $name)));
             }
         }
     }

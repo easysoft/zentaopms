@@ -319,6 +319,8 @@ $lang->action->label->suspend               = 'suspended';
 $lang->action->label->resume                = 'resumed';
 $lang->action->label->reboot                = 'reboot';
 $lang->action->label->destroy               = 'destroyed';
+$lang->action->label->linkedrepo            = 'Linked Code Repo';
+$lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -566,14 +568,7 @@ $lang->action->label->release     = 'Phát hành|release|view|productID=%s';
 $lang->action->label->story       = 'Câu chuyện|story|view|storyID=%s';
 $lang->action->label->program     = "Program|program|pgmproduct|programID=%s";
 $lang->action->label->project     = "Project|program|index|projectID=%s";
-if($config->systemMode == 'new')
-{
-    $lang->action->label->execution = "Execution|execution|task|executionID=%s";
-}
-else
-{
-    $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
-}
+$lang->action->label->execution   = "Execution|execution|task|executionID=%s";
 $lang->action->label->task        = 'Nhiệm vụ|task|view|taskID=%s';
 $lang->action->label->build       = 'Bản dựng|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';

@@ -36,8 +36,8 @@
   <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->my->byQuery;?></a>
 </div>
 <div id="mainContent">
-<?php $dataModule = $app->rawMethod == 'work' ? 'workTask' : 'contributeTask';?>
-<div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
+  <?php $dataModule = $app->rawMethod == 'work' ? 'workTask' : 'contributeTask';?>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <?php if(empty($tasks)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->task->noTask;?></span></p>
@@ -70,12 +70,8 @@
             <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->task->name);?></th>
             <th class='c-pri' title=<?php echo $lang->task->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
             <th class='c-status'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-            <?php if($config->systemMode == 'new'):?>
             <th class='c-project'><?php common::printOrderLink('project',   $orderBy, $vars, $lang->my->projects);?></th>
             <th class='c-project'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->task->execution);?></th>
-            <?php else:?>
-            <th class='c-project'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->my->executions);?></th>
-            <?php endif;?>
             <?php if($type != 'assignedTo'): ?>
             <th class='c-user assigned-title'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->task->assignedTo);?></th>
             <?php endif;?>
@@ -126,14 +122,12 @@
               <?php $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));?>
               <?php $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");?>
             </td>
-            <?php if($config->systemMode == 'new'):?>
-            <?php $projectName = isset($projects[$task->execution]->name) ? $projects[$task->execution]->name : '';?>
-            <?php $projectID   = isset($projects[$task->execution]->id) ? $projects[$task->execution]->id : 0;?>
-            <td class='c-project' title="<?php echo $projectName?>">
-              <?php echo ($projectName and $projectID) ? html::a($this->createLink('project', 'index', "projectID=$projectID"), $projectName) : '';?>
+            <td class='c-project' title="<?php echo $task->projectName?>">
+              <?php echo ($task->projectName and $task->project) ? html::a($this->createLink('project', 'index', "projectID=$task->project"), $task->projectName) : '';?>
             </td>
-            <?php endif;?>
-            <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '');?></td>
+            <td class='c-project' title="<?php if($task->executionMultiple) echo $task->executionName;?>">
+              <?php if($task->executionMultiple) echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '');?>
+            </td>
             <?php if($type != 'assignedTo'): ?>
             <td class="c-assignedTo has-btn" title="<?php echo zget($users, $task->assignedTo);?>"> <?php $this->task->printAssignedHtml($task, $users);?></td>
             <?php endif;?>
@@ -203,14 +197,12 @@
                 <?php $storyChanged = (!empty($child->storyStatus) and $child->storyStatus == 'active' and $child->latestStoryVersion > $child->storyVersion and !in_array($child->status, array('cancel', 'closed')));?>
                 <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$child->status}'> " . $this->processStatus('task', $child) . "</span>");?>
               </td>
-              <?php if($config->systemMode == 'new'):?>
-              <?php $projectName = isset($projects[$child->execution]->name) ? $projects[$child->execution]->name : '';?>
-              <?php $projectID   = isset($projects[$child->execution]->id) ? $projects[$child->execution]->id : 0;?>
-              <td class='c-project' title="<?php echo $projectName;?>">
-                <?php echo ($projectName and $projectID) ? html::a($this->createLink('project', 'view', "projectID=$projectID"), $projectName) : '';?>
+              <td class='c-project' title="<?php echo $task->projectName;?>">
+                <?php echo ($task->projectName and $task->project) ? html::a($this->createLink('project', 'view', "projectID=$task->project"), $task->projectName) : '';?>
               </td>
-              <?php endif;?>
-              <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '');?></td>
+              <td class='c-project' title="<?php if($child->executionMultiple) echo $child->projectName;?>">
+                <?php if($child->executionMultiple) echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '');?>
+              </td>
               <?php if($type != 'assignedTo'): ?>
               <td class="c-assignedTo has-btn" title="<?php echo zget($users, $child->assignedTo);?>"> <?php $this->task->printAssignedHtml($child, $users);?></td>
               <?php endif;?>

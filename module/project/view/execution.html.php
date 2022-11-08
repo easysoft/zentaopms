@@ -14,6 +14,7 @@
 <?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if($project->hasProduct):?>
     <div class='btn-group'>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
@@ -30,6 +31,7 @@
         ?>
       </ul>
     </div>
+    <?php endif;?>
     <?php common::sortFeatureMenu('execution', 'all');?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php $label = "<span class='text'>$label</span>";?>

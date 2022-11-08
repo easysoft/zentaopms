@@ -231,6 +231,8 @@ $lang->action->desc->suspend              = '$date, the execution node is suspen
 $lang->action->desc->resume               = '$date, the execution node is resumed by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->reboot               = '$date, the execution node is reboot by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->destroy              = '$date, the execution node is destroyed by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the sprints of the project from the $extra.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -405,6 +407,10 @@ $lang->action->label->suspend               = 'suspended';
 $lang->action->label->resume                = 'resumed';
 $lang->action->label->reboot                = 'reboot';
 $lang->action->label->destroy               = 'destroyed';
+$lang->action->label->switchtolight         = 'switch from ALM mode to light mode';
+$lang->action->label->linkedrepo            = 'Linked Code Repo';
+$lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
+$lang->action->label->unlinkproduct         = 'Unlinked Product';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -424,12 +430,13 @@ $lang->action->dynamicAction->program['activated'] = 'Activate Program';
 $lang->action->dynamicAction->program['deleted']   = 'Delete Program';
 $lang->action->dynamicAction->program['closed']    = 'Close Program';
 
-$lang->action->dynamicAction->project['opened']    = 'Create Project';
-$lang->action->dynamicAction->project['edited']    = 'Edit Project';
-$lang->action->dynamicAction->project['started']   = 'Start Project';
-$lang->action->dynamicAction->project['suspended'] = 'Suspend Project';
-$lang->action->dynamicAction->project['activated'] = 'Activate Project';
-$lang->action->dynamicAction->project['closed']    = 'Close Project';
+$lang->action->dynamicAction->project['opened']        = 'Create Project';
+$lang->action->dynamicAction->project['edited']        = 'Edit Project';
+$lang->action->dynamicAction->project['started']       = 'Start Project';
+$lang->action->dynamicAction->project['suspended']     = 'Suspend Project';
+$lang->action->dynamicAction->project['activated']     = 'Activate Project';
+$lang->action->dynamicAction->project['closed']        = 'Close Project';
+$lang->action->dynamicAction->project['switchtolight'] = 'Switch Mode';
 
 $lang->action->dynamicAction->product['opened']    = 'Create ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = 'Edit ' . $lang->productCommon;
@@ -710,14 +717,7 @@ $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
 $lang->action->label->program     = "Program|program|product|programID=%s";
 $lang->action->label->project     = "Project|project|index|projectID=%s";
-if($config->systemMode == 'new')
-{
-    $lang->action->label->execution = "Execution|execution|task|executionID=%s";
-}
-else
-{
-    $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
-}
+$lang->action->label->execution   = "Execution|execution|task|executionID=%s";
 
 $lang->action->label->task         = 'Task|task|view|taskID=%s';
 $lang->action->label->build        = 'Build|build|view|buildID=%s';

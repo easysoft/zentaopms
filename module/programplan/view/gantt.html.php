@@ -85,8 +85,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   </div>
   <form class="main-form form-ajax not-watch">
     <div class="example">
-      <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
-      <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
+      <?php if($app->rawModule != 'review') echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
+      <?php if($app->rawModule == 'review') unset($lang->programplan->stageCustom->date); ?>
       <?php echo html::checkbox('stageCustom', $lang->programplan->stageCustom, $selectCustom);?>
       <div class='btn btn-link'>
         <strong><?php echo $lang->execution->gantt->format . '：';?></strong>
@@ -113,7 +113,15 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   $typeHtml .= '<ul class="dropdown-menu">';
   foreach($lang->programplan->ganttBrowseType as $browseType => $typeName)
   {
-      $typeHtml .= '<li ' . ($ganttType == $browseType ? "class='active'" : '') . '>' . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$browseType"), $typeName) . '</li>';
+
+      if($app->rawModule == 'review' and $app->rawMethod == 'assess')
+      {
+        $typeHtml .= '<li ' . ($ganttType == $browseType ? "class='active'" : '') . '>' . html::a($this->createLink('review', 'assess', "reivewID=$reviewID&from=&type=$browseType"), $typeName) . '</li>';
+      }
+      else
+      {
+        $typeHtml .= '<li ' . ($ganttType == $browseType ? "class='active'" : '') . '>' . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$browseType"), $typeName) . '</li>';
+      }
   }
   $typeHtml .= '</ul></div>';
   ?>
@@ -563,6 +571,23 @@ $(function()
     if(showFields.indexOf('consumed') != -1) gantt.config.columns.push({name: 'consumed', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('delay') != -1) gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
+
+    gantt.templates.task_end_date = function(data)
+    {
+        return gantt.templates.task_date(new Date(date.valueOf() - 1));
+    }
+    var gridDateToStr = gantt.date.date_to_str("%Y-%m-%d");
+    gantt.templates.grid_date_format = function(date, column)
+    {
+        if(column === "end_date")
+        {
+            return gridDateToStr(new Date(date.valueOf() - 1));
+        }
+        else
+        {
+            return gridDateToStr(date);
+        }
+    }
 
     endField = gantt.config.columns.pop();
     endField.resize = false;

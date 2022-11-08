@@ -16,6 +16,9 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('columnID', $columnID);?>
 <?php js::set('methodName', $this->app->rawMethod);?>
+<?php if(count($releases2Imported) <= 3):?>
+<style>#importReleaseForm, .table-empty-tip {margin-bottom: 120px}</style>
+<?php endif;?>
 <div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
@@ -40,9 +43,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-name'><?php echo $lang->release->name;?></th>
-          <?php if($config->systemMode == 'new'):?>
           <th class='c-name'><?php echo $lang->release->project;?></th>
-          <?php endif;?>
           <th class='c-name'><?php echo $lang->release->build;?></th>
           <th class='c-date'><?php echo $lang->release->date;?></th>
         </tr>
@@ -64,9 +65,7 @@
           <?php else:?>
           <td title='<?php echo $release->name;?>'><?php echo $release->name;?></td>
           <?php endif;?>
-          <?php if($config->systemMode == 'new'):?>
           <td title='<?php echo $release->projectName;?>'><?php echo $release->projectName;?></td>
-          <?php endif;?>
           <td title='<?php echo $release->buildName;?>'><?php echo $release->buildName;?></td>
           <td title='<?php echo $release->date;?>'><?php echo $release->date;?></td>
         </tr>

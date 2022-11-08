@@ -82,6 +82,7 @@ $lang->program->manageMembers           = 'Program Team';
 $lang->program->confirmChangePRJUint    = 'Synchronize the budget unit of the subprograms and the projects of the program? If yes, please the current exchange rate.';
 $lang->program->exRateNotNegative       = 'The『exchange rate』should not be negative.';
 $lang->program->changePRJUnit           = 'Update the budget unit of the project';
+$lang->program->showNotCurrentProjects  = 'Display project information of non current program';
 
 $lang->program->progress         = 'Progress';
 $lang->program->children         = 'Child';
@@ -163,3 +164,5 @@ $lang->program->kanban->doingExecutions = 'Ongoing Executions';
 $lang->program->kanban->normalReleases  = 'Normal Releases';
 
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
+
+$lang->program->defaultProgram = 'Default program';

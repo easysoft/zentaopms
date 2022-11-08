@@ -1235,6 +1235,7 @@ class userModel extends model
             ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
             ->beginIF($status == 'openedbyme')->andWhere('openedBy')->eq($account)->fi()
+            ->beginIF($type == 'execution')->andWhere('t2.multiple')->eq('1')->fi()
             ->beginIF($type == 'execution' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($type == 'project' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.account')->eq($account)
@@ -1758,7 +1759,7 @@ class userModel extends model
             if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
             if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
             if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
-            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage,kanban')->fi()->fetchAll('id');
+            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
 
             /* Get admins. */
             $manageObjects = array();
@@ -1940,8 +1941,7 @@ class userModel extends model
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('1=1')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('type')->eq('execution')->fi()
+            ->andWhere('type')->eq('project')
             ->andWhere('root')->in(array_keys($projectProducts))
             ->andWhere('root')->ne(0)
             ->query();
@@ -2070,8 +2070,8 @@ class userModel extends model
         /* Set opened sprints and stages into userview. */
         $openedSprints = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('acl')->eq('open')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage,kanban')->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('project')->in($userView->projects)->fi()
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->andWhere('project')->in($userView->projects)
             ->fetchAll('id');
 
         $openedSprints     = join(',', array_keys($openedSprints));
@@ -2529,7 +2529,7 @@ class userModel extends model
         }
 
         /* Judge sprint auth. */
-        if(($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') and $project->acl == 'private' and $this->config->systemMode == 'new')
+        if(($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') and $project->acl == 'private')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if(empty($parent)) return false;
@@ -2624,7 +2624,7 @@ class userModel extends model
         }
 
         /* Judge sprint auth. */
-        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private' && $this->config->systemMode == 'new')
+        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             $users[$parent->openedBy] = $parent->openedBy;
@@ -2989,7 +2989,7 @@ class userModel extends model
      */
     public function processAccountSort($users = array())
     {
-        if(isset($users[$this->app->user->account]))
+        if(isset($this->app->user->account) and isset($users[$this->app->user->account]))
         {
             $currentUser = array();
             $currentUser[$this->app->user->account] = $users[$this->app->user->account];

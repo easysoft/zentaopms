@@ -124,6 +124,6 @@ class storyEntry extends entry
         $control->delete($storyID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

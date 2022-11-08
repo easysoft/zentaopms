@@ -169,7 +169,6 @@ $lang->story->design         = 'Designs';
 $lang->story->case           = 'Cases';
 $lang->story->bug            = 'Bugs';
 $lang->story->repoCommit     = 'Commits';
-$lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
@@ -274,7 +273,7 @@ $lang->story->lblClose    = 'Đóng';
 $lang->story->lblTBC      = 'Nhiệm vụ/Bug/Tình huống';
 
 $lang->story->checkAffection   = 'Ảnh hưởng';
-$lang->story->affectedProjects = $config->systemMode == 'new' ? "{$lang->project->common}s/{$lang->execution->common}s" : "{$lang->project->common}s";
+$lang->story->affectedProjects = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs     = 'Bugs';
 $lang->story->affectedCases    = 'Tình huống';
 

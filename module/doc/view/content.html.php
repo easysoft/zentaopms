@@ -46,8 +46,8 @@
 
             <?php if($this->config->edition == 'max' and $this->app->tab == 'project'):?>
             <?php
-            $canImportToPracticeLib  = common::hasPriv('doc', 'importToPracticeLib');
-            $canImportToComponentLib = common::hasPriv('doc', 'importToComponentLib');
+            $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
+            $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
 
             if($canImportToPracticeLib or $canImportToComponentLib)
             {

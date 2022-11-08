@@ -65,6 +65,6 @@ class departmentEntry extends entry
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

@@ -156,16 +156,18 @@ $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
 
 $lang->common->common        = 'Module Commun';
+$lang->common->story         = 'Story';
 $lang->my->common            = 'My';
 $lang->program->common       = 'Program';
 $lang->product->common       = 'Product';
 $lang->project->common       = 'Project';
-$lang->execution->common     = $config->systemMode == 'new' ? 'Execution' : $lang->executionCommon;
+$lang->execution->common     = 'Execution';
 $lang->kanban->common        = 'Kanban';
 $lang->qa->common            = 'QA';
 $lang->devops->common        = 'DevOps';
 $lang->doc->common           = 'Doc';
 $lang->repo->common          = 'Code';
+$lang->repo->codeRepo        = 'Code Repo';
 $lang->report->common        = 'Statistics';
 $lang->system->common        = 'System';
 $lang->admin->common         = 'Admin';
@@ -183,6 +185,7 @@ $lang->executionnode->common = 'Execution Node';
 $lang->team->common          = 'Team';
 $lang->user->common          = 'User';
 $lang->custom->common        = 'Custom';
+$lang->custom->mode          = 'Mode';
 $lang->extension->common     = 'Extension';
 $lang->company->common       = 'Company';
 $lang->dept->common          = 'Dept';
@@ -202,6 +205,7 @@ $lang->backup->common        = 'Backup';
 $lang->action->trash         = 'Recycle';
 $lang->app->common           = 'APP';
 $lang->app->serverLink       = 'Server Link';
+$lang->review->common        = 'Review';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -291,6 +295,7 @@ $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
 $lang->devops->set      = 'Set';
 
+$lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';
 $lang->admin->entry       = 'Application';
 $lang->admin->data        = 'Data';
@@ -339,8 +344,8 @@ $lang->exportTypeList['all']      = 'Toutes les Données';
 $lang->exportTypeList['selected'] = 'Données sélectionnées';
 
 $lang->visionList = array();
-$lang->visionList['rnd']  = 'R&D';
-$lang->visionList['lite'] = 'Lite';
+$lang->visionList['rnd']  = 'Full Feature Interface';
+$lang->visionList['lite'] = 'Operation Management Interface';
 
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';

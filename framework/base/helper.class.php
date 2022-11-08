@@ -136,7 +136,7 @@ class baseHelper
          */
         if($viewType == $app->getViewType())
         {
-            $link .= $moduleName . '/';
+            $link .= $moduleName . '.' . $viewType;
             return self::processOnlyBodyParam($link, $onlyBody);
         }
 

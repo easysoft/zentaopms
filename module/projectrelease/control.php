@@ -326,9 +326,22 @@ class projectrelease extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->release = $this->release->getById($releaseID);
-        $this->view->actions = $this->loadModel('action')->getList('release', $releaseID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $release = $this->release->getByID($releaseID);
+        $project = $this->loadModel('project')->getByID($release->project);
+
+        if(!$project->hasProduct)
+        {
+            unset($this->lang->release->notifyList['FB']);
+            unset($this->lang->release->notifyList['PO']);
+            unset($this->lang->release->notifyList['QD']);
+        }
+
+        if(!$project->multiple) unset($this->lang->release->notifyList['ET']);
+
+        $this->view->release    = $release;
+        $this->view->actions    = $this->loadModel('action')->getList('release', $releaseID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->notifyList = $this->lang->release->notifyList;
         $this->display();
     }
 
@@ -510,6 +523,7 @@ class projectrelease extends control
 
         $release = $this->projectrelease->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);
+        $project = $this->loadModel('project')->getByID($release->project);
         $this->commonAction($release->project, $release->product);
         $this->loadModel('story');
         $this->loadModel('tree');
@@ -523,6 +537,7 @@ class projectrelease extends control
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
+        if(!$project->hasProduct and !$project->multiple) unset($this->config->product->search['fields']['plan']);
         $this->config->product->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
@@ -541,6 +556,7 @@ class projectrelease extends control
             $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branchName);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
+        if($this->view->project->model == 'waterfall' && empty($this->view->project->hasProduct)) unset($this->config->product->search['fields']['plan']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')
@@ -631,6 +647,7 @@ class projectrelease extends control
         /* Set menu. */
         $release = $this->projectrelease->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);
+        $project = $this->loadModel('project')->getByID($release->project);
         $this->commonAction($release->project, $release->product);
 
         /* Load pager. */
@@ -642,6 +659,7 @@ class projectrelease extends control
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         unset($this->config->bug->search['fields']['product']);
         unset($this->config->bug->search['fields']['project']);
+        if(!$project->hasProduct and !$project->multiple) unset($this->config->bug->search['fields']['plan']);
         $this->config->bug->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
@@ -662,6 +680,7 @@ class projectrelease extends control
             $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branchName);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
+        if($this->view->project->model == 'waterfall' && empty($this->view->project->hasProduct)) unset($this->config->bug->search['fields']['plan']);
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         $allBugs     = array();

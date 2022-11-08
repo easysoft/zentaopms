@@ -3,6 +3,7 @@ $lang->repo->common          = '代碼';
 $lang->repo->browse          = '瀏覽';
 $lang->repo->viewRevision    = '查看修訂';
 $lang->repo->product         = '所屬產品';
+$lang->repo->projects        = '所屬項目';
 $lang->repo->execution       = '所屬' . $lang->execution->common;
 $lang->repo->create          = '創建';
 $lang->repo->maintain        = '版本庫列表';

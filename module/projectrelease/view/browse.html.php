@@ -49,9 +49,11 @@
       <tr>
         <th class='c-id'><?php echo $lang->release->id;?></th>
         <th><?php echo $lang->release->name;?></th>
-        <th class='c-build'><?php echo $lang->release->build;?></th>
+        <?php if($project->hasProduct):?>
         <th class='c-product'><?php echo $lang->release->product;?></th>
+        <?php endif;?>
         <th class='c-execution'><?php echo $lang->executionCommon;?></th>
+        <th class='c-build'><?php echo $lang->release->build;?></th>
         <th class='c-status text-center'><?php echo $lang->release->status;?></th>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <?php
@@ -71,9 +73,12 @@
           echo html::a(inlink('view', "release=$release->id"), $release->name, '', "data-app='$from'") . $flagIcon;
           ?>
         </td>
-        <td title='<?php echo $release->buildName?>'><?php echo empty($release->execution) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
+        <?php if($project->hasProduct):?>
         <td title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
+        <?php endif;?>
         <td title='<?php echo $release->executionName?>'><?php echo $release->executionName?></td>
+        <?php $dataApp = (!$project->hasProduct and !$project->multiple) ? 'data-app=project' : '';?>
+        <td title='<?php echo $release->buildName?>'><?php echo empty($release->execution) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '', "$dataApp");?></td>
         <?php $status = $this->processStatus('release', $release);?>
         <td class='c-status text-center' title='<?php echo $status;?>'>
           <span class="status-release status-<?php echo $release->status?>"><?php echo $status;?></span>

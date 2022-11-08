@@ -186,6 +186,7 @@ class portModel extends model
     public function export($model = '')
     {
         ini_set('memory_limit', '-1');
+        ini_set('max_execution_time','100');
 
         $fields = $this->post->exportFields;
 
@@ -193,6 +194,17 @@ class portModel extends model
         $fieldList = $this->initFieldList($model, $fields);
 
         $rows = $this->getRows($model, $fieldList);
+        if($model == 'story')
+        {
+            $product = $this->loadModel('product')->getByID((int)$this->session->storyPortParams['productID']);
+            if($product and $product->shadow)
+            {
+                foreach($rows as $id => $row)
+                {
+                    $rows[$id]->product = '';
+                }
+            }
+        }
 
         $list = $this->setListValue($model, $fieldList);
         if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
@@ -399,8 +411,8 @@ class portModel extends model
         /* If empty values put system datas .*/
         if(empty($values))
         {
-            if(strpos($this->modelConfig->sysLangFields, $field) and !empty($this->modelLang->{$field.'List'})) return $this->modelLang->{$field.'List'};
-            if(strpos($this->modelConfig->sysDataFields, $field) and !empty($this->portConfig->sysDataList[$field])) return $this->portConfig->sysDataList[$field];
+            if(strpos($this->modelConfig->sysLangFields, $field) !== false and !empty($this->modelLang->{$field.'List'})) return $this->modelLang->{$field.'List'};
+            if(strpos($this->modelConfig->sysDataFields, $field) !== false and !empty($this->portConfig->sysDataList[$field])) return $this->portConfig->sysDataList[$field];
         }
 
         if(is_array($values) and $withKey)
@@ -1316,6 +1328,9 @@ class portModel extends model
      */
     public function readExcel($model = '', $pagerID = 1, $insert = '', $filter = '')
     {
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time','100');
+
         /* Formatting excel data .*/
         $formatDatas  = $this->format($model, $filter);
         /* Get page by datas.*/

@@ -74,6 +74,6 @@ class issueEntry extends entry
         $control->delete($issueID, 'true');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }
