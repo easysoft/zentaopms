@@ -186,6 +186,7 @@ class portModel extends model
     public function export($model = '')
     {
         ini_set('memory_limit', '-1');
+        ini_set('max_execution_time','100');
 
         $fields = $this->post->exportFields;
 
@@ -1316,6 +1317,9 @@ class portModel extends model
      */
     public function readExcel($model = '', $pagerID = 1, $insert = '', $filter = '')
     {
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time','100');
+
         /* Formatting excel data .*/
         $formatDatas  = $this->format($model, $filter);
         /* Get page by datas.*/

@@ -719,7 +719,7 @@ class productplanModel extends model
             $plan->parent = $oldPlans[$planID]->parent;
             $plan->id     = $planID;
 
-            if(empty($plan->title)) return print(js::alter(sprintf($this->lang->productplan->errorNoTitle, $planID)));
+            if(empty($plan->title)) return print(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
             if($plan->begin > $plan->end and !empty($plan->end)) return print(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
 
             if($plan->begin == '') $plan->begin = $this->config->productplan->future;

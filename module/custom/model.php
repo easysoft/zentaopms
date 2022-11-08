@@ -692,11 +692,12 @@ class customModel extends model
                     continue;
                 }
 
-                $fields = join(',', $data->requiredFields[$method]);
-                foreach(explode(',', $systemField) as $field)
+                $fields       = join(',', $data->requiredFields[$method]);
+                $systemFields = array_reverse(explode(',', $systemField));
+                foreach($systemFields as $field)
                 {
                     $field = trim($field);
-                    if(strpos(",$fields,", ",$field,") === false) $fields .= ",$field";
+                    if(strpos(",$fields,", ",$field,") === false) $fields = "$field,$fields";
                 }
 
                 $requiredFields[$method]['requiredFields'] = $fields;

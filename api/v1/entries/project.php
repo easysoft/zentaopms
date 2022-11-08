@@ -139,6 +139,6 @@ class projectEntry extends entry
         $control->delete($projectID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

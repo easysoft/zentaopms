@@ -21,5 +21,7 @@
 .table.has-sort-head thead>tr>th>a:after, .table.has-sort-head thead>tr>th>a:before {top: -7px;}
 .table.has-sort-head thead>tr>th>a:hover, .table.has-sort-head thead>tr>th>a:hover:after, .table.has-sort-head thead>tr>th>a:hover:before {color: #000;}
 
+.taskEffort thead > tr > th {padding-right: 10px !important;}
 #toggleFoldIcon:hover {cursor: pointer;}
 #toggleFoldIcon .icon-border {width: 20px; height: 20px; border-radius: 8px;}
+#toggleFoldIcon {margin-bottom: 10px;}

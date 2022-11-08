@@ -140,7 +140,7 @@ class sso extends control
             $key    = $this->config->sso->key;
             $auth   = md5($code . $userIP . $token . $key);
 
-            $callback = urlencode($common->getSysURL() . inlink('logout', "type=return"));
+            $callback = urlencode(common::getSysURL() . inlink('logout', "type=return"));
             $location = $this->config->sso->addr;
             if(strpos($location, '&') !== false)
             {

@@ -14,14 +14,6 @@ $(function()
         if($title.width() < headerWidth + buttonWidth + 16) $title.width(headerWidth + buttonWidth + 30);
     });
 
-    $('#storyList td.has-child .story-toggle').each(function()
-    {
-        var $td = $(this).closest('td');
-        var labelWidth = 0;
-        if($td.find('.label').length > 0) labelWidth = $td.find('.label').width();
-        $td.find('a').eq(0).css('max-width', $td.width() - labelWidth - 60);
-    });
-
     $('#toTaskButton').on('click', function()
     {
         var planID = $('#plan').val();

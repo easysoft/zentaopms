@@ -76,6 +76,12 @@ class task extends control
         {
             $task        = $this->task->getByID($taskID);
             $executionID = $task->execution;
+
+            /* Emptying consumed hours when copy task. */
+            if($task->mode == 'multi')
+            {
+                foreach($task->team as $teamMember) $teamMember->consumed = 0;
+            }
         }
 
         if($todoID > 0)
@@ -300,9 +306,9 @@ class task extends control
 
             $executionKey = 0;
             $executionModifyList = $this->execution->getByIdList(array_keys($executionList));
-            foreach($executionModifyList as $execution)
+            foreach($executionModifyList as $modifykey)
             {
-                if(!common::canModify('execution', $execution)) $executionKey = $execution->id;
+                if(!common::canModify('execution', $modifykey)) $executionKey = $modifykey->id;
                 if($executionKey) unset($executionList[$executionKey]);
             }
             $executionAll = $executionList;
@@ -461,17 +467,7 @@ class task extends control
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Set Custom*/
-        if($this->config->systemMode == 'new')
-        {
-            $project = $this->project->getByID($execution->project);
-            if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
-        }
-
-        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field)
-        {
-            if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
-            $customFields[$field] = $this->lang->task->$field;
-        }
+        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
         $showFields = $this->config->task->custom->batchCreateFields;
         if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
@@ -547,13 +543,13 @@ class task extends control
      * Edit a task.
      *
      * @param  int    $taskID
-     * @param  bool   $comment
+     * @param  string $comment
      * @param  string $kanbanGroup
      * @param  string $from
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = false, $kanbanGroup = 'default', $from = '')
+    public function edit($taskID, $comment = 'false', $kanbanGroup = 'default', $from = '')
     {
         $this->commonAction($taskID);
         $task = $this->task->getById($taskID);
@@ -562,7 +558,7 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = array();
-            if($comment == false)
+            if(!$comment or $comment == 'false')
             {
                 $changes = $this->task->update($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
@@ -773,24 +769,7 @@ class task extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Set Custom*/
-        if(isset($execution))
-        {
-            if($this->config->systemMode == 'new')
-            {
-                $project = $this->project->getByID($execution->project);
-                if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
-            }
-
-            foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
-            {
-                if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
-                $customFields[$field] = $this->lang->task->$field;
-            }
-        }
-        else
-        {
-            foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
-        }
+        foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
@@ -972,11 +951,6 @@ class task extends control
      */
     public function view($taskID)
     {
-        $this->session->set('executionList', $this->app->getURI(true), 'execution');
-
-        $this->commonAction($taskID);
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
-
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);
         if(!$task)
@@ -984,6 +958,11 @@ class task extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
+
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
+        $this->commonAction($taskID);
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $execution = $this->execution->getById($task->execution);
         if(!isonlybody() and $execution->type == 'kanban')

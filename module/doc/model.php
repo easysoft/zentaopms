@@ -2342,7 +2342,7 @@ class docModel extends model
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objectTitle}'>
-      <span class='text'>{$objectTitle}</span>
+      <div class='nobr'>{$objectTitle}</div>
       <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
@@ -2404,7 +2404,7 @@ EOT;
             $output  .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
-    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libName} <span class='caret'></span>
+    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'><div class='nobr'>{$libName}</div> <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
       <div class="input-control search-box has-icon-left has-icon-right search-example">

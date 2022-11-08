@@ -49,7 +49,7 @@ $lang->block->contribute   = 'Personal Contribution';
 $lang->block->finish       = 'Terminé';
 
 $lang->block->leftToday           = 'Reste à faire';
-$lang->block->myTask              = 'Mes Tâches';
+$lang->block->myTask              = 'Tâches';
 $lang->block->myStory             = 'Stories';
 $lang->block->myBug               = 'Bugs';
 $lang->block->myExecution         = 'Unclosed ' . $lang->executionCommon . 's';

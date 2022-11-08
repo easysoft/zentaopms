@@ -71,7 +71,7 @@ class executionModel extends model
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
 
             $this->lang->execution->menu           = new stdclass();
-            $this->lang->execution->menu->kanban   = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s");
+            $this->lang->execution->menu->kanban   = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s", 'subModule' => 'task');
             $this->lang->execution->menu->CFD      = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
             $this->lang->execution->menu->build    = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
             $this->lang->execution->menu->settings = array('link' => "{$this->lang->settings}|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
@@ -1148,9 +1148,9 @@ class executionModel extends model
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
-            ->checkIF(!$execution->fluidBoard, 'colWidth', 'ge', 200)
-            ->batchCheckIF($execution->fluidBoard, 'minColWidth,maxColWidth', 'ge', 200)
-            ->checkIF($execution->minColWidth and $execution->maxColWidth and $execution->fluidBoard, 'maxColWidth', 'gt', $execution->minColWidth)
+            ->checkIF(!$execution->fluidBoard, 'colWidth', 'ge', $this->config->minColWidth)
+            ->batchCheckIF($execution->fluidBoard, 'minColWidth', 'ge', $this->config->minColWidth)
+            ->checkIF($execution->minColWidth >= $this->config->minColWidth and $execution->fluidBoard, 'maxColWidth', 'gt', $execution->minColWidth)
             ->where('id')->eq((int)$executionID)
             ->exec();
     }
@@ -2863,10 +2863,12 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  int    $storyID
+     * @param  int    $laneID
+     * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function unlinkStory($executionID, $storyID)
+    public function unlinkStory($executionID, $storyID, $laneID = 0, $columnID = 0)
     {
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         if($execution->type == 'project')
@@ -2876,6 +2878,24 @@ class executionModel extends model
             if(!empty($executionStories)) return print(js::alert($this->lang->execution->notAllowedUnlinkStory));
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+
+        /* Resolve TABLE_KANBANCELL's field cards. */
+        if($execution->type == 'kanban')
+        {
+            $cell = $this->dao->select('*')->from(TABLE_KANBANCELL)
+                ->where('kanban')->eq($executionID)
+                ->andWhere('`column`')->eq($columnID)
+                ->andWhere('lane')->eq($laneID)
+                ->fetch();
+            /* Resolve signal ','. */
+            $cell->cards = str_replace(",$storyID,", ',', $cell->cards);
+            if(strlen($cell->cards) == 1) $cell->cards = '';
+            $this->dao->update(TABLE_KANBANCELL)->data($cell)
+                ->where('kanban')->eq($executionID)
+                ->andWhere('`column`')->eq($columnID)
+                ->andWhere('lane')->eq($laneID)
+                ->exec();
+    }
 
         $order   = 1;
         $stories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order')->fetchAll();

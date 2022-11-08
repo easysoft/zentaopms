@@ -70,7 +70,7 @@
           <td title='<?php echo zget($this->lang->ticket->statusList, $ticket->status, $ticket->status);?>'><?php echo zget($this->lang->ticket->statusList, $ticket->status, $ticket->status);?></td>
           <td title='<?php echo zget($this->lang->ticket->typeList, $ticket->type, $ticket->type);?>'><?php echo zget($this->lang->ticket->typeList, $ticket->type, $ticket->type);?></td>
           <td title='<?php echo $ticket->openedDate;?>'><?php echo $ticket->openedDate;?></td>
-          <td title='<?php echo $ticket->assignedTo;?>'><?php echo $ticket->assignedTo;?></td>
+          <td title='<?php echo zget($users, $ticket->assignedTo);?>'><?php echo zget($users, $ticket->assignedTo);?></td>
         </tr>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>

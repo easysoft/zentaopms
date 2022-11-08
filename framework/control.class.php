@@ -35,7 +35,7 @@ class control extends baseControl
 
         $this->app->setOpenApp();
 
-        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE != 'api')) $this->setPreference();
+        if(defined('IN_USE') or (defined('RUN_MODE') and !in_array(RUN_MODE, array('api', 'xuanxuan')))) $this->setPreference();
 
         if(!isset($this->config->bizVersion)) return false;
 
@@ -50,12 +50,12 @@ class control extends baseControl
 
                     if(isset($this->config->{$this->moduleName}->exportFields))
                     {
-                        foreach($exportFields  as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
+                        foreach($exportFields as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
                     }
 
                     if(isset($this->config->{$this->moduleName}->list->exportFields))
                     {
-                        foreach($exportFields  as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
+                        foreach($exportFields as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
                     }
 
                     foreach($exportFields as $flowField => $exportField)
