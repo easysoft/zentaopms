@@ -2496,6 +2496,8 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
+        if($status == 'active') $storyStatus = $status;
+
         if($executionID)
         {
             $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type);

@@ -162,7 +162,7 @@ class design extends control
         $this->view->position[] = $this->lang->design->create;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID);
+        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, 'all', 0, 'active');
         $this->view->productID  = $productID;
         $this->view->type       = $type;
         $this->view->project    = $this->loadModel('project')->getByID($projectID);
