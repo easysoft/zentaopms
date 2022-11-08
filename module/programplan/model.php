@@ -1289,8 +1289,7 @@ class programplanModel extends model
             ->andWhere('code')->in($codes)
             ->beginIF($planIDList)->andWhere('id')->notin($planIDList)->fi()
             ->fetch('code');
-        if($code) return $code;
-        return true;
+        return $code ? $code : true;
     }
 
     /**
