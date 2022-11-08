@@ -665,18 +665,24 @@ class custom extends control
             }
         }
 
-        $enabledScrumFeatures  = array();
-        $disabledScrumFeatures = array();
-        foreach($this->config->custom->scrumFeatures as $scrumFeature)
+        if($this->config->edition == 'max')
         {
-            if(in_array('scrum' . ucfirst($scrumFeature), $disabledFeatures['scrum']))
+            $enabledScrumFeatures  = array();
+            $disabledScrumFeatures = array();
+            foreach($this->config->custom->scrumFeatures as $scrumFeature)
             {
-                $disabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+                if(in_array('scrum' . ucfirst($scrumFeature), $disabledFeatures['scrum']))
+                {
+                    $disabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+                }
+                else
+                {
+                    $enabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+                }
             }
-            else
-            {
-                $enabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
-            }
+
+            $this->view->enabledScrumFeatures  = implode($this->lang->comma, $enabledScrumFeatures);
+            $this->view->disabledScrumFeatures = implode($this->lang->comma, $disabledScrumFeatures);
         }
 
         $this->app->loadLang('upgrade');
@@ -688,8 +694,6 @@ class custom extends control
         $this->view->programs              = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
         $this->view->programID             = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
         $this->view->disabledFeatures      = $disabledFeatures;
-        $this->view->enabledScrumFeatures  = implode($this->lang->comma, $enabledScrumFeatures);
-        $this->view->disabledScrumFeatures = implode($this->lang->comma, $disabledScrumFeatures);
 
         $this->display();
     }
