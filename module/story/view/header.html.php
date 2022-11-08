@@ -128,6 +128,11 @@ function loadProductBranches(productID)
                 loadModuleForSiblings(productID, 0, 0)
                 loadPlanForSiblings(productID, 0, 0)
             }
+            else
+            {
+                loadProductModules(productID, 0);
+                loadProductPlans(productID, 0);
+            }
         }
         else
         {
@@ -191,7 +196,7 @@ function loadProductPlans(productID, branch)
     if(!branch) branch = 0;
     var expired = config.currentMethod == 'create' ? 'unexpired' : '';
     planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,' + config.currentMethod);
-    var $planIdBox = $('#planIdBox');
+    var $planIdBox = $('.switchBranch #planIdBox');
     $planIdBox.load(planLink, function()
     {
         $planIdBox.find('#plan').chosen();

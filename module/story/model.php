@@ -2542,9 +2542,15 @@ class storyModel extends model
         $storyIdList = $this->post->storyIdList;
         $assignedTo  = $this->post->assignedTo;
         $oldStories  = $this->getByList($storyIdList);
+        $ignoreStories = '';
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+            if($oldStory->status == 'closed')
+            {
+                $ignoreStories .= "#{$storyID},";
+                continue;
+            }
             if($assignedTo == $oldStory->assignedTo) continue;
 
             $story = new stdclass();
@@ -2556,6 +2562,11 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
 
             $allChanges[$storyID] = common::createChanges($oldStory, $story);
+        }
+        if($ignoreStories)
+        {
+            $ignoreStories = trim($ignoreStories, ',');
+            echo js::alert(sprintf($this->lang->story->ignoreClosedStory, $ignoreStories));
         }
         return $allChanges;
     }
