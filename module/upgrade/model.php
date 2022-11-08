@@ -722,7 +722,9 @@ class upgradeModel extends model
                 break;
             case 'biz7_6_2':
                 $this->processFeedbackModule();
-
+                break;
+            case 'biz7_8':
+                $this->processReportModule();
         }
     }
 
@@ -7574,5 +7576,39 @@ class upgradeModel extends model
 
         /* Delete history module */
         $this->dao->delete()->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->exec();
+    }
+
+    /**
+     * Add default modules of report and process report modules.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processReportModule()
+    {
+        $this->app->loadLang('report');
+
+        $group = new stdclass();
+        $group->grade = 1;
+        $group->type  = 'report';
+        $group->owner = 'system';
+        $group->order = 10;
+
+        $groups = array();
+        foreach($this->lang->report->moduleList as $code => $name)
+        {
+            if(!$code || !$name) continue;
+
+            $group->name = $name;
+            $this->dao->replace(TABLE_MODULE)->data($group)->exec();
+
+            $groupID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_REPORT)->set("`module` = REPLACE(`module`, '$code', $groupID)")->exec();
+
+            $group->order += 10;
+        }
+        $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")->where('type')->eq('report')->andWhere('grade')->eq('1')->andWhere('path')->eq('')->exec();
+
+        return !dao::isError();
     }
 }
