@@ -43,6 +43,7 @@ $lang->tree->confirmDelete        = '该模块及其子模块都会被删除，�
 $lang->tree->confirmDeleteMenu    = '该目录及其子目录都会被删除，您确定删除吗？';
 $lang->tree->confirmDelCategory   = '该分类及其子分类都会被删除，您确定删除吗？';
 $lang->tree->confirmDeleteLine    = "您确定删除该{$lang->productCommon}线吗？";
+$lang->tree->confirmDeleteGroup   = '该分组及其子分组都会被删除，您确定删除吗？';
 $lang->tree->confirmRoot          = "模块的所属{$lang->productCommon}修改，会关联修改该模块下的{$lang->SRCommon}、Bug、用例的所属{$lang->productCommon}，以及{$lang->executionCommon}和{$lang->productCommon}的关联关系。该操作比较危险，请谨慎操作。是否确认修改？";
 $lang->tree->confirmRoot4Doc      = "修改所属文档库，会同时修改该分类下文档的关联关系。该操作比较危险，请谨慎操作。是否确认修改？";
 $lang->tree->noSubmodule          = "当前模块下没有可复制的子模块！";

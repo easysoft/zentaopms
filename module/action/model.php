@@ -1267,7 +1267,7 @@ class actionModel extends model
                 $objectName  = ($objectType == 'productplan' or $objectType == 'ticket') ? 'title' : 'name';
                 $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
             }
-            elseif($action->objectType == 'module' and !empty($action->extra) and $action->action != 'deleted')
+            elseif(strpos(',module,chartgroup,', ",$action->objectType,") !== false and !empty($action->extra) and $action->action != 'deleted')
             {
                 $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
                 $action->objectName = implode(',', $modules);
@@ -1443,6 +1443,16 @@ class actionModel extends model
 
             if(!is_array($objectLabel)) $actionObjectLabel = $objectLabel;
             if(is_array($objectLabel) and isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
+
+            if($objectType == 'module' and $actionType == 'deleted')
+            {
+                $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch('type');
+                if($moduleType == 'doc')
+                {
+                    $this->app->loadLang('doc');
+                    $actionObjectLabel = $this->lang->doc->menuTitle;
+                }
+            }
         }
 
         if($this->config->edition == 'max' and $objectType == 'assetlib')
@@ -1620,19 +1630,14 @@ class actionModel extends model
             $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
         }
 
+        if($action->objectType == 'chartgroup' and $action->action != 'deleted')
+        {
+            $action->objectLink = helper::createLink('chart', 'browseGroup', "rootID=$action->objectID");
+        }
+
         if($action->objectType == 'branch' and $action->action == 'mergedbranch')
         {
             $action->objectLink = 'javascript:void(0)';
-        }
-
-        if($action->objectType == 'module')
-        {
-            $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch('type');
-            if($moduleType == 'doc')
-            {
-                $this->app->loadLang('doc');
-                $action->objectLabel = $this->lang->doc->menuTitle;
-            }
         }
 
         if($action->objectType == 'review')

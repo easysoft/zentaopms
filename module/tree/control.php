@@ -382,7 +382,7 @@ class tree extends control
         {
             $this->view->optionMenu = $this->tree->getTaskOptionMenu($module->root);
         }
-        else
+        else if($type != 'chart')
         {
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch);
         }
@@ -486,6 +486,7 @@ class tree extends control
             if($module->type == 'doc') $confirmLang = $this->lang->tree->confirmDeleteMenu;
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
             if($module->type == 'host') $confirmLang = $this->lang->tree->confirmDeleteHost;
+            if($module->type == 'chart') $confirmLang = $this->lang->tree->confirmDeleteGroup;
             die(js::confirm($confirmLang, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
         }
         else
