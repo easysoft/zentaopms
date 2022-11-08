@@ -113,15 +113,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   $typeHtml .= '<ul class="dropdown-menu">';
   foreach($lang->programplan->ganttBrowseType as $browseType => $typeName)
   {
-
-      if($app->rawModule == 'review' and $app->rawMethod == 'assess')
-      {
-        $typeHtml .= '<li ' . ($ganttType == $browseType ? "class='active'" : '') . '>' . html::a($this->createLink('review', 'assess', "reivewID=$reviewID&from=&type=$browseType"), $typeName) . '</li>';
-      }
-      else
-      {
-        $typeHtml .= '<li ' . ($ganttType == $browseType ? "class='active'" : '') . '>' . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$browseType"), $typeName) . '</li>';
-      }
+    $typeHtml .= '<li ' . ($ganttType == $browseType ? "class='active'" : '') . '>' . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$browseType"), $typeName) . '</li>';
   }
   $typeHtml .= '</ul></div>';
   ?>
