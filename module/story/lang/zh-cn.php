@@ -321,6 +321,7 @@ $lang->story->errorDuplicateStory   = $lang->SRCommon . '%s不存在';
 $lang->story->confirmRecallChange   = "撤销变更后，需求内容会回退至变更前的版本，您确定要撤销吗？";
 $lang->story->confirmRecallReview   = "您确定要撤回评审吗？";
 $lang->story->noStoryToTask         = "只有激活的{$lang->SRCommon}才能转为任务！";
+$lang->story->ignoreClosedStory     = "{$lang->SRCommon} %s 状态为已关闭，本次操作已被过滤。";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";
