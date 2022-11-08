@@ -941,6 +941,16 @@ class story extends control
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
 
+        /* Filter siblings. */
+        $siblings = '';
+        foreach($stories as $id => $story)
+        {
+            if(empty($story->siblings)) continue;
+            $siblings .= "#$id ";
+            unset($stories[$id]);
+        }
+        if(!empty($siblings)) echo js::alert(sprintf($this->lang->story->batchEditTip, $siblings));
+
         $this->loadModel('branch');
         if($productID and !$executionID)
         {

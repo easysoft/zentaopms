@@ -107,6 +107,7 @@ $lang->story->assignSyncTip       = "孪生需求均同步修改指派人";
 $lang->story->closeSyncTip        = "孪生需求均同步关闭";
 $lang->story->activateSyncTip     = "孪生需求均同步激活";
 $lang->story->relievedSiblingsTip = '产品调整后，本需求自动解除孪生关系，需求不再同步，是否保存？';
+$lang->story->batchEditTip        = "{$lang->SRCommon} %s为孪生需求，本次操作已被过滤。";
 
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';

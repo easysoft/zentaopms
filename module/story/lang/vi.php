@@ -100,6 +100,7 @@ $lang->story->assignSyncTip       = "Both twin stories modify the assignor synch
 $lang->story->closeSyncTip        = "Twin stories are closed synchronously";
 $lang->story->activateSyncTip     = "Twin stories are activated synchronously";
 $lang->story->relievedSiblingsTip = "After product adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
+$lang->story->batchEditTip        = "{$lang->SRCommon} %sis twin stories, and this operation has been filtered.";
 
 $lang->story->id             = 'ID';
 $lang->story->parent         = 'Mẹ';
