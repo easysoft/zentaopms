@@ -1392,6 +1392,21 @@ class treeModel extends model
     }
 
     /**
+     * Create report link.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  array  $extra
+     * @access public
+     * @return string
+     */
+    public function createReportLink($type, $module, $extra)
+    {
+        $dimension = zget($extra, 'dimension', 0);
+        return html::a(helper::createLink('report', 'browsereport', "dimension={$dimension}&module={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
+    }
+
+    /**
      * Get sons of a module.
      *
      * @param  int    $rootID
