@@ -1078,7 +1078,7 @@ class product extends control
     public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
     {
         $param    = strtolower($param);
-        if(strpos($param, 'getpairsforstory') === false)
+        if(strpos($param, 'forstory') === false)
         {
             $plans = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
         }
