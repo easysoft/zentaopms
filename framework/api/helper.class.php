@@ -94,8 +94,6 @@ class helper extends baseHelper
         }
     }
 
-
-
     /**
      * Encode json for $.parseJSON
      *
