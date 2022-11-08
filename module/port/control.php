@@ -151,6 +151,8 @@ class port extends control
 
         $this->loadModel($model);
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
+        if($model == 'testcase' and !empty($_SESSION[$model . 'TemplateFields'])) $this->config->$model->templateFields = implode(',', $importFields);
+
         $fields       = $this->port->initFieldList($model, $importFields, false);
         $formatDatas  = $this->port->format($model, $filter);
         $datas        = $this->port->getPageDatas($formatDatas, $pagerID);
