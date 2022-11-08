@@ -42,16 +42,7 @@ $rows = array();
 $this->loadModel('project');
 foreach($programs as $program)
 {
-    $row = new stdclass();
-    foreach($this->config->program->dtable->fieldList as $field)
-    {
-        $fieldName = $field['name'];
-        $row->$fieldName = $this->program->buildCell($field, $program, $users, $usersAvatar, $userIdPairs, $PMList, $progressList);
-    }
-
-    $row->id     = $program->id;
-    $row->parent = $program->parent;
-    $rows[] = $row;
+    $rows[] = $this->program->buildRowData($program, $PMList, $progressList);
 }
 
 $table->search($status, $moduleName);

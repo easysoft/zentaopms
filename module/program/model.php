@@ -1595,75 +1595,34 @@ class programModel extends model
     }
 
     /**
-     * Build datatable cell.
+     * Build row data.
      *
-     * @param  array  $field
-     * @param  object $program
-     * @param  array  $users
-     * @param  array  $userIdPairs
+     * @param  string $program
      * @param  array  $PMList
      * @param  array  $progressList
      * @access public
-     * @return string
+     * @return object
      */
-    public function buildCell($field, $program, $users, $usersAvatar, $userIdPairs, $PMList, $progressList)
+    public function buildRowData($program, $PMList, $progressList)
     {
-        $id   = $field['name'];
-        $html = '';
-        switch($id)
-        {
-        case 'name':
-            if($program->type == 'program') $icon = ' icon-program';
-            if($program->type == 'project') $icon = ' icon-common icon-' . $program->model;
-            $class = $program->type == 'program' ? ' table-nest-toggle' : '';
-            $html  = "<span class='table-nest-icon icon $class $icon'></span>";
+        $row = new stdclass();
 
-            if($program->type == 'program')
-            {
-                $html .= "<span class='icon icon-cards-view' style='color: #888fa1;'></span>";
-                $html .= ($this->app->user->admin or strpos(",{$this->app->user->view->programs},", ",$program->id,") !== false) ? html::a(helper::createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;
-            }
-            else
-            {
-                $projectType = $this->lang->project->{$program->model};
-                $html .= html::a(helper::createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', "class='text-ellipsis text-primary' title='{$program->name} ($projectType)'");
+        $manager       = isset($PMList[$program->PM]) ? $PMList[$program->PM] : '';
+        $programBudget = $this->project->getBudgetWithUnit($program->budget);
 
-                if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
-                {
-                    $delay = helper::diffDate(helper::today(), $program->end);
-                    if($delay > 0) $html .= "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
-                }
-            }
-        break;
-        case 'status':
-            $html = "<span class='status-program status-{$program->status}'>" . zget($this->lang->project->statusList, $program->status, '') . '</span>';
-        break;
-        case 'pm':
-            if(!empty($program->PM))
-            {
-                $userName = zget($users, $program->PM);
-                $html     = html::smallAvatar(array('avatar' => $usersAvatar[$program->PM], 'account' => $program->PM, 'name' => $userName), (($program->type == 'program' and $program->grade == 1 )? 'avatar-circle avatar-top avatar-' : 'avatar-circle avatar-') . zget($userIdPairs, $program->PM));
-                $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';
-                $html    .= html::a(helper::createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
-            }
-        break;
-        case 'budget':
-            $programBudget = $this->project->getBudgetWithUnit($program->budget);
-            $html          = $program->budget != 0 ? zget($this->lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $this->lang->project->future;
-        break;
-        case 'begin':
-            $html = $program->begin;
-        break;
-        case 'end':
-            $html = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
-        break;
-        case 'progress':
-            $html = isset($progressList[$program->id]) ? round($progressList[$program->id]) : 0;
-        break;
-        case 'actions':
-            $html = $this->buildOperateMenu($program, 'browse');
-        break;
-        }
-        return $html;
+        $row->id       = $program->id;
+        $row->parent   = $program->parent ? $program->parent : '';
+        $row->asParent = $program->type == 'program';
+        $row->type     = $program->type;
+        $row->name     = $program->name;
+        $row->status   = $program->status;
+        $row->PM       = empty($manager) ? '' : $manager->realname;
+        $row->PMAvatar = empty($manager) ? '' : $manager->avatar;
+        $row->budget   = $program->budget != 0 ? zget($this->lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $this->lang->project->future;
+        $row->begin    = $program->begin;
+        $row->end      = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
+        $row->progress = isset($progressList[$program->id]) ? round($progressList[$program->id]) : 0;
+
+        return $row;
     }
 }

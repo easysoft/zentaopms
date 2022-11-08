@@ -93,12 +93,52 @@ class column extends wg
     /**
      * Set checkbox.
      *
+     * @param  bool   $value
      * @access public
-     * @return void
+     * @return object
      */
-    public function checkbox()
+    public function checkbox($value)
     {
-        $this->checkbox = 1;
+        $this->checkbox = $value;
+        return $this;
+    }
+
+    /**
+     * Set nested Toggle.
+     *
+     * @param  bool   $value
+     * @access public
+     * @return object
+     */
+    public function nestedToggle($value)
+    {
+        $this->nestedToggle = $value;
+        return $this;
+    }
+
+    /**
+     * Set column icon.
+     *
+     * @param  string $icon
+     * @access public
+     * @return object
+     */
+    public function iconRender($icon)
+    {
+        $this->iconRender = $icon;
+        return $this;
+    }
+
+    /**
+     * Set status list.
+     *
+     * @param  array $statusList
+     * @access public
+     * @return object
+     */
+    public function statusMap($statusList)
+    {
+        $this->statusMap = $statusList;
         return $this;
     }
 }
@@ -269,14 +309,9 @@ class dtable
     {
         $html = '';
         if(!empty($this->search)) $html .= $this->search;
-        if(!empty($this->form))   $html .= $this->form;
 
         $html .= '<div class="dtable"></div>';
-
-        if(!empty($this->footer)) $html .= $this->footer;
-        if(!empty($this->form))   $html .= '</form>';
-
-        $html .= '<script>new zui.DTable(".dtable", {plugins: ["nested", "rich", "checkable", "sortable"], cols: ' . json_encode($this->cols) . ', data: ' . json_encode($this->data) . '})</script>';
+        $html .= '<script>dtableWithZentao = new zui.DTable(".dtable", {cols: ' . json_encode($this->cols) . ', data: ' . json_encode($this->data) . ', nested: true, checkable: true})</script>';
 
         return $html;
     }
