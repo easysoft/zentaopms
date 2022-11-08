@@ -1756,16 +1756,32 @@ class storyModel extends model
      */
     public function recallChange($storyID)
     {
-        $story = $this->getById($storyID);
+        $oldStory = $this->getById($storyID);
+
+        $story = clone $oldStory;
 
         /* Update story title and version and status. */
-        $preVersion = $story->version - 1;
-        $preTitle   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($preVersion)->fetch('title');
-        $this->dao->update(TABLE_STORY)->set('title')->eq($preTitle)->set('version')->eq($preVersion)->set('status')->eq('active')->where('id')->eq($storyID)->exec();
+        $story->version = $oldStory->version - 1;
+        $story->title   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->fetch('title');
+        $story->status  = 'active';
+        $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
 
         /* Delete versions that is after this version. */
-        $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->exec();
-        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->exec();
+        $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
+
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($siblingID)->andWHere('version')->eq($oldStory->version)->exec();
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->exec();
+            }
+        }
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'recalledChange');
     }
 
     /**
