@@ -31,6 +31,7 @@
 <?php
 $executionCounts      = array();
 $executionNames       = array();
+$currentExecution     = '';
 $tabActive            = '';
 $myExecutions         = 0;
 $others               = 0;
@@ -57,16 +58,16 @@ foreach($executions as $projectID => $projectExecutions)
 }
 $executionsPinYin = common::convert2Pinyin($executionNames);
 
-$myExecutionsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProject">';
-$normalExecutionsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProject">';
-$closedExecutionsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProject">';
+$myExecutionsHtml     = '<ul class="tree tree-angles" data-ride="tree">';
+$normalExecutionsHtml = '<ul class="tree tree-angles" data-ride="tree">';
+$closedExecutionsHtml = '<ul class="tree tree-angles" data-ride="tree">';
 
 $kanbanLink = $this->createLink('execution', 'kanban', "executionID=%s");
 $taskLink   = $this->createLink('execution', 'task', "executionID=%s");
 foreach($executions as $projectID => $projectExecutions)
 {
     /* Adapt to the old version. */
-    if($projectID and $config->systemMode == 'new')
+    if($projectID)
     {
         $projectName = zget($projects, $projectID);
 
@@ -82,11 +83,13 @@ foreach($executions as $projectID => $projectExecutions)
         if(isset($execution->type) and $execution->type == 'kanban' and !$isKanbanMethod) $executionLink = $kanbanLink;
         if(isset($execution->type) and $execution->type != 'kanban' and strpos(',kanban,cfd,', ",$method,") !== false) $executionLink = $taskLink;
 
+        if($execution->id == $executionID) $currentExecution = $execution;
         $selected = $execution->id == $executionID ? 'selected' : '';
         if(!empty($execution->children))
         {
             foreach($execution->children as $id)
             {
+                if($execution->id == $executionID) $currentExecution = $execution;
                 $selected = $id == $executionID ? 'selected' : '';
                 if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
                 {
@@ -112,7 +115,7 @@ foreach($executions as $projectID => $projectExecutions)
                 }
             }
         }
-        else if($execution->grade == 1 or $config->systemMode == 'classic')
+        else if($execution->grade == 1)
         {
             if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
             {
@@ -180,10 +183,14 @@ $closedExecutionsHtml .= '</ul>';
    <div class='list-group executions'><?php echo $closedExecutionsHtml;?></div>
   </div>
 </div>
-<script>scrollToSelected();</script>
 <script>
 $(function()
 {
+    <?php if($currentExecution->status == 'done' or $currentExecution->status == 'closed'):?>
+    $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
+    <?php else:?>
+    scrollToSelected();
+    <?php endif;?>
     $('.nav-tabs li span').hide();
     $('.nav-tabs li.active').find('span').show();
 

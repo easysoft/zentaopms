@@ -175,7 +175,6 @@ $lang->story->design           = '相关设计';
 $lang->story->case             = '相关用例';
 $lang->story->bug              = '相关Bug';
 $lang->story->repoCommit       = '相关提交';
-$lang->story->noRequirement    = '无需求';
 $lang->story->one              = '一个';
 $lang->story->field            = '同步的字段';
 $lang->story->completeRate     = '完成率';
@@ -281,7 +280,7 @@ $lang->story->lblClose             = "关闭{$lang->SRCommon}";
 $lang->story->lblTBC               = '任务Bug用例';
 
 $lang->story->checkAffection       = '影响范围';
-$lang->story->affectedProjects     = $config->systemMode == 'new' ? "影响的{$lang->project->common}或{$lang->execution->common}" : "影响的{$lang->project->common}";
+$lang->story->affectedProjects     = "影响的{$lang->project->common}或{$lang->execution->common}";
 $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
 
@@ -321,6 +320,7 @@ $lang->story->action->reviewed              = array('main' => '$date, 由 <stron
 $lang->story->action->rejectreviewed        = array('main' => '$date, 由 <strong>$actor</strong> 记录评审意见，评审意见为 <strong>$extra</strong>，原因为 <strong>$reason</strong>。', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->recalled              = array('main' => '$date, 由 <strong>$actor</strong> 撤销评审。');
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
+$lang->story->action->closedbysystem        = array('main' => '$date, 系统判定由于关闭了所有子需求，自动关闭父需求。');
 $lang->story->action->reviewpassed          = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>确认通过</strong>。');
 $lang->story->action->reviewrejected        = array('main' => '$date, 由 <strong>系统</strong> 关闭，原因为 <strong>拒绝</strong>。');
 $lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>有待明确</strong>，请编辑后重新发起评审。');

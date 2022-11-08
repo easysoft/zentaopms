@@ -36,10 +36,6 @@ $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "Không có {$lang->productCommon}";
 $lang->group->noneProject        = "No Project";
 
-global $config;
-if($config->systemMode == 'new') $lang->group->noneProject = 'No Project';
-if($config->systemMode == 'classic') $lang->group->noneProject = "No {$lang->executionCommon}";
-
 $lang->group->id      = 'ID';
 $lang->group->name    = 'Nhóm';
 $lang->group->desc    = 'Mô tả';

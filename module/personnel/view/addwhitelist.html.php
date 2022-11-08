@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('objectID', $objectID);?>
 <?php js::set('objectType', $objectType);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectCommon', $lang->projectCommon);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>

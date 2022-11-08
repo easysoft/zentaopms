@@ -17,6 +17,7 @@ $lang->my->doc             = "My Docs";
 $lang->my->createProgram   = 'Create Program';
 $lang->my->project         = "My Projects";
 $lang->my->execution       = "My {$lang->executionCommon}s";
+$lang->my->audit           = 'Review';
 $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
 $lang->my->profile         = 'My Profile';
@@ -54,10 +55,10 @@ $lang->my->contributeAction = 'My Contribute';
 $lang->my->profileAction    = 'Profile';
 $lang->my->dynamicAction    = 'Dynamic';
 
-$lang->my->myExecutions = "My Stage/Sprint/Iteration";
+$lang->my->myExecutions = "My Executions";
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
-$lang->my->projects     = 'Project';
+$lang->my->projects     = 'Projects';
 $lang->my->executions   = 'Executions';
 
 $lang->my->executionMenu = new stdclass();
@@ -80,6 +81,33 @@ $lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
 $lang->my->storyMenu->closedByMe   = 'ClosedByMe';
 $lang->my->storyMenu->assignedByMe = 'AssignedByMe';
 
+$lang->my->auditField = new stdclass();
+$lang->my->auditField->title  = 'Title';
+$lang->my->auditField->time   = 'Time';
+$lang->my->auditField->type   = 'Type';
+$lang->my->auditField->result = 'Result';
+$lang->my->auditField->status = 'Status';
+
+$lang->my->auditField->oaTitle['attend']   = '%s application for attend: %s';
+$lang->my->auditField->oaTitle['leave']    = '%s application for leave: %s';
+$lang->my->auditField->oaTitle['makeup']   = '%s application for makeup:%s';
+$lang->my->auditField->oaTitle['overtime'] = '%s application for overtime: %s';
+$lang->my->auditField->oaTitle['lieu']     = '%s application for lieu: %s';
+
+$lang->my->auditMenu = new stdclass();
+$lang->my->auditMenu->audit = new stdclass();
+$lang->my->auditMenu->audit->all      = 'All';
+$lang->my->auditMenu->audit->story    = 'Story';
+$lang->my->auditMenu->audit->testcase = 'Case';
+if($config->edition == 'max' and helper::hasFeature('waterfall')) $lang->my->auditMenu->audit->project = 'Project';
+if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = 'Feedback';
+if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->auditMenu->audit->oa = 'OA';
+
+$lang->my->contributeMenu = new stdclass();
+$lang->my->contributeMenu->audit = new stdclass();
+$lang->my->contributeMenu->audit->reviewedbyme = 'ReviewedByMe';
+$lang->my->contributeMenu->audit->createdbyme  = 'CreatedByMe';
+
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = 'Doing';
 $lang->my->projectMenu->wait       = 'Waiting';
@@ -95,13 +123,12 @@ $lang->my->form->lblAccount = 'Account Info';
 $lang->my->programLink   = 'Program Default Page';
 $lang->my->productLink   = 'Product Default Page';
 $lang->my->projectLink   = 'Project Default Page';
-if($config->systemMode == 'classic') $lang->my->executionLink = $lang->executionCommon . ' Default Page';
-if($config->systemMode == 'new') $lang->my->executionLink = $lang->executionCommon . ' Default Page';
+$lang->my->executionLink = 'Execution Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'By default, you go to the program list, where you can view all of the programs';
 $lang->my->programLinkList['program-project'] = 'By default, you go to the list of items in the most recent program, and you can view all items under the current program';
-if($config->systemMode == 'new') $lang->my->programLinkList['program-kanban'] = 'Enter the Program Kanban by default, and check the progress of all Programs';
+$lang->my->programLinkList['program-kanban']  = 'Enter the Program Kanban by default, and check the progress of all Programs';
 
 $lang->my->productLinkList = array();
 $lang->my->productLinkList['product-index']     = 'The default access to the product home page, you can understand the company’s overall product status';
@@ -110,22 +137,18 @@ $lang->my->productLinkList['product-dashboard'] = 'By default, go to the latest 
 $lang->my->productLinkList['product-browse']    = 'By default, go to the list of requirements for the most recent product and see the requirements under the current product';
 $lang->my->productLinkList['product-kanban']    = 'Enter the Product Kanban by default, and check the progress of all Products';
 
-global $config;
 $lang->my->projectLinkList = array();
 $lang->my->projectLinkList['project-browse']    = 'By default, you go to the project list, where you can view all the projects';
 $lang->my->projectLinkList['project-execution'] = 'Go to Project-Exection by default. You can check all information in Execution';
 $lang->my->projectLinkList['project-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
-if($config->systemMode == 'new') $lang->my->projectLinkList['project-kanban'] = 'Enter the Project Kanban by default, and check the progress of all Projects';
+$lang->my->projectLinkList['project-kanban']    = 'Enter the Project Kanban by default, and check the progress of all Projects';
 
 $lang->my->executionLinkList = array();
-if($config->systemMode == 'new')
-{
-    $lang->my->executionLinkList['execution-all']             = 'Enter the execution list by default, you can view all executions';
-    $lang->my->executionLinkList['execution-task']            = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
-    $lang->my->executionLinkList['execution-executionkanban'] = 'By default, you can enter the execution Kanban to view the execution status of projects in progress';
-}
-if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
+$lang->my->executionLinkList['execution-all']             = 'Enter the execution list by default, you can view all executions';
+$lang->my->executionLinkList['execution-task']            = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
+$lang->my->executionLinkList['execution-executionkanban'] = 'By default, you can enter the execution Kanban to view the execution status of projects in progress';
 
+$lang->my->confirmReview['pass'] = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'><span style='color: #0c60e1'>"Young Blue"</span> theme is available now!</p>
 <div>

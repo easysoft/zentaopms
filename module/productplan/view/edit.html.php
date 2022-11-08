@@ -25,6 +25,7 @@
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tbody>
+          <?php if(!$product->shadow):?>
           <tr>
             <th><?php echo $lang->productplan->product;?></th>
             <td class='muted'><?php echo $product->name;?></td><td></td><td></td>
@@ -34,6 +35,7 @@
             <th><?php echo $lang->product->branch;?></th>
             <td><?php echo html::select('branch', $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control'");?></td><td></td><td></td>
           </tr>
+          <?php endif;?>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->title;?></th>

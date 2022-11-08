@@ -98,6 +98,8 @@
             <?php
             foreach($setting as $key => $value)
             {
+                if(!$project->hasProduct and $project->model != 'scrum' and $value->id == 'plan') continue;
+
                 if($value->show)
                 {
                     $this->datatable->printHead($value, $orderBy, $vars, $canBatchAssignTo);
@@ -114,7 +116,12 @@
         $arrtibute    = $canBeChanged ? '' : 'disabled';
         ?>
         <tr data-id='<?php echo $bug->id?>'>
-          <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $projectPairs);?>
+        <?php foreach($setting as $value)
+        {
+            if(!$project->hasProduct and $project->model != 'scrum' and $value->id == 'plan') continue;
+            $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $projectPairs);
+        }
+        ?>
         </tr>
         <?php endforeach;?>
         </tbody>

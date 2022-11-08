@@ -158,7 +158,6 @@ $lang->story->design         = '相關設計';
 $lang->story->case           = '相關用例';
 $lang->story->bug            = '相關Bug';
 $lang->story->repoCommit     = '相關提交';
-$lang->story->noRequirement  = '無需求';
 $lang->story->one            = '一個';
 $lang->story->field          = '同步的欄位';
 $lang->story->completeRate   = '完成率';
@@ -261,7 +260,7 @@ $lang->story->lblClose             = "關閉{$lang->SRCommon}";
 $lang->story->lblTBC               = '任務Bug用例';
 
 $lang->story->checkAffection       = '影響範圍';
-$lang->story->affectedProjects     = $config->systemMode == 'new' ? "影響的{$lang->project->common}或{$lang->execution->common}" : "影響的{$lang->project->common}";
+$lang->story->affectedProjects     = "影響的{$lang->project->common}或{$lang->execution->common}";
 $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 

@@ -233,8 +233,7 @@ $(function()
         if($item.children('.release').length)     icon = '<i class="icon icon-publish">';
         if($item.children('.ticket').length)      icon = '<i class="icon icon-file-text">';
 
-        if($item.children('.execution').length && systemMode == 'new')     icon = '<i class="icon icon-run">';
-        if($item.children('.execution').length && systemMode == 'classic') icon = '<i class="icon icon-project">';
+        if($item.children('.execution').length) icon = '<i class="icon icon-run">';
 
         $item.children('.cardName').prepend(icon);
     });

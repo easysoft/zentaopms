@@ -60,13 +60,13 @@ class testcase extends control
             else
             {
                 $mode     = ($this->app->methodName == 'create' and empty($this->config->CRProduct)) ? 'noclosed' : '';
-                $products = $this->product->getPairs($mode);
+                $products = $this->product->getPairs($mode, 0, '', 'all');
             }
             if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID")));
         }
         else
         {
-            $products = $this->product->getPairs();
+            $products = $this->product->getPairs('', 0, '', 'all');
         }
         $this->view->products = $this->products = $products;
     }
@@ -118,6 +118,8 @@ class testcase extends control
             $linkedProducts = $this->product->getProducts($projectID, 'all', '', false);
             $this->products = count($linkedProducts) > 1 ? array('0' => $this->lang->product->all) + $linkedProducts : $linkedProducts;
             $productID      = count($linkedProducts) > 1 ? $productID : key($linkedProducts);
+            $hasProduct     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
+            if(!$hasProduct) unset($this->config->testcase->search['fields']['product']);
 
             $this->loadModel('project')->setMenu($projectID);
         }
@@ -163,7 +165,8 @@ class testcase extends control
         $actionURL = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['onMenuBar'] = 'yes';
 
-        $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL, $projectID);
+        $searchProducts = $this->product->getPairs('', 0, '', 'all');
+        $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
 
         $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
 
@@ -406,6 +409,7 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
+            if($this->testcase->getStatus('create') == 'wait') $this->action->create('case', $caseID, 'submitReview');
 
             /* If the story is linked project, make the case link the project. */
             $this->testcase->syncCase2Project($caseResult['caseInfo'], $caseID);
@@ -571,6 +575,7 @@ class testcase extends control
         $this->view->precondition     = $precondition;
         $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
+        $this->view->hiddenProduct    = !empty($product->shadow);
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->branch           = $branch;
         $this->view->product          = $product;
@@ -857,6 +862,9 @@ class testcase extends control
     {
         $this->loadModel('story');
 
+        $case = $this->testcase->getById($caseID);
+        if(!$case) return print(js::error($this->lang->notFound) . js::locate('back'));
+
         $testtasks = $this->loadModel('testtask')->getGroupByCases($caseID);
         $testtasks = empty($testtasks[$caseID]) ? array() : $testtasks[$caseID];
 
@@ -874,6 +882,8 @@ class testcase extends control
                 $action = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('case', $caseID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($case->status != 'wait' and $this->post->status == 'wait') $this->action->create('case', $caseID, 'submitReview');
             }
 
             $this->executeHooks($caseID);
@@ -888,8 +898,6 @@ class testcase extends control
             }
         }
 
-        $case = $this->testcase->getById($caseID);
-        if(!$case) return print(js::error($this->lang->notFound) . js::locate('back'));
         if($case->auto == 'unit')
         {
             $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
@@ -1392,6 +1400,8 @@ class testcase extends control
         $objectID  = 0;
         if($this->app->tab == 'project') $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
+
+        unset($this->config->testcase->search['fields']['product']);
         $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
         /* Get cases to link. */
@@ -1405,7 +1415,7 @@ class testcase extends control
 
         /* Assign. */
         $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
-        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), $this->products[$case->product]);
+        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), zget($this->products, $case->product, ''));
         $this->view->position[] = html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title);
         $this->view->position[] = $this->lang->testcase->linkCases;
         $this->view->case       = $case;
@@ -1441,6 +1451,15 @@ class testcase extends control
         $objectID  = 0;
         if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
+
+        /* Unset search field 'plan' in single project. */
+        unset($this->config->bug->search['fields']['product']);
+        if($case->project and ($this->app->tab == 'project' or $this->app->tab == 'execution'))
+        {
+            $project = $this->loadModel('project')->getById($case->project);
+            if(!$project->hasProduct and $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
+        }
+
         $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
         /* Get cases to link. */
@@ -1601,8 +1620,19 @@ class testcase extends control
             $orderBy = '`' . $field . '`_' . $sort;
         }
 
-        $product = $this->loadModel('product')->getById($productID);
-        if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
+        $product  = $this->loadModel('product')->getById($productID);
+        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        if($product->type != 'normal')
+        {
+            $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
+        }
+        else
+        {
+            $this->config->testcase->exportFields = str_replace('branch,', '', $this->config->testcase->exportFields);
+        }
+
+        if($product->shadow) $this->config->testcase->exportFields = str_replace('product,', '', $this->config->testcase->exportFields);
+
         if($_POST)
         {
             $this->loadModel('file');
@@ -1664,7 +1694,6 @@ class testcase extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs();
             $branches = $this->loadModel('branch')->getPairs($productID);
 
             /* Get related objects id lists. */
@@ -1804,12 +1833,11 @@ class testcase extends control
         }
 
         $fileName    = $this->lang->testcase->common;
-        $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
         $browseType  = isset($this->lang->testcase->featureBar['browse'][$browseType]) ? $this->lang->testcase->featureBar['browse'][$browseType] : '';
 
         if($taskID) $taskName = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch('name');
 
-        $this->view->fileName        = $productName . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
+        $this->view->fileName        = zget($products, $productID, '') . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
         $this->view->allExportFields = $this->config->testcase->exportFields;
         $this->view->customExport    = true;
         $this->display();

@@ -1,10 +1,11 @@
 <?php js::set('productID', $productID);?>
 <?php
-$iCharges     = 0;
-$others       = 0;
-$closeds      = 0;
-$tab          = 'project';
-$productNames = array();
+$iCharges       = 0;
+$others         = 0;
+$closeds        = 0;
+$tab            = 'project';
+$productNames   = array();
+$currentProduct = '';
 
 foreach($products as $product)
 {
@@ -20,6 +21,7 @@ $closedProductsHtml = '';
 
 foreach($products as $product)
 {
+    if($product->id == $productID) $currentProduct = $product;
     $selected    = $product->id == $productID ? 'selected' : '';
     $productName = $product->name;
     $linkHtml    = sprintf($link, $product->id);
@@ -61,4 +63,13 @@ foreach($products as $product)
    <div class='list-group'><?php echo $closedProductsHtml;?></div>
   </div>
 </div>
-<script>scrollToSelected();</script>
+<script>
+$(function()
+{
+    <?php if($currentProduct->status == 'closed'):?>
+    $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
+    <?php else:?>
+    scrollToSelected();
+    <?php endif;?>
+});
+</script>

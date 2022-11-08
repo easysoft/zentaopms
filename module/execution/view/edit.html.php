@@ -23,10 +23,10 @@
         <small><?php echo $lang->arrow . ' ' . $lang->execution->edit;?></small>
       </h2>
     </div>
-    <?php if($config->systemMode == 'new') echo html::hidden('project', $project->id);?>
+    <?php echo html::hidden('project', $project->id);?>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <?php if($config->systemMode == 'new' and isset($project)):?>
+        <?php if(isset($project)):?>
         <?php if($project->model == 'scrum'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
@@ -139,7 +139,9 @@
         </tr>
         <?php endif;?>
         <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
-        <tr>
+        <?php $hidden = 'hide'?>
+        <?php if(!empty($project->hasProduct)) $hidden = ''?>
+        <tr class="<?php echo $hidden;?>">
           <th><?php echo $lang->execution->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="2">
           <?php $class = $execution->grade == 2 ? "readonly='readonly'" : '';?>
@@ -150,19 +152,12 @@
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <div class='col-sm-4'>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $class onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='". $product->type ."'");?>
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $class onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='". $product->type ."' data-lastBranch='" . $branchID . "'");?>
                   <span class='input-group-addon fix-border'></span>
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' $class onchange=\"loadPlans('#products{$i}', this.value)\" data-last='" . $branchID . "'");?>
                 </div>
               </div>
-              <?php
-              if(in_array($product->id, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches))
-              {
-                  echo html::hidden("products[$i]", $product->id);
-                  echo html::hidden("branch[$i]", $branchID);
-              }
-              $i++;
-              ?>
+              <?php $i++; ?>
               <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4'>
@@ -174,7 +169,8 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <?php if(isset($project->model) and $project->model == 'scrum') $hidden = '';?>
+        <tr class="<?php echo $hidden?>">
           <th><?php echo $lang->execution->linkPlan;?></th>
           <td id="plansBox" colspan="2">
             <div class='row'>
@@ -231,7 +227,8 @@
 <?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
 <?php js::set('linkedStoryIDList', $linkedStoryIDList)?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
-<?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
 <?php js::set('confirmSync', $lang->execution->confirmSync);?>
-<?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('allProducts', $allProducts);?>
+<?php js::set('branchGroups', $branchGroups);?>
+<?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>
 <?php include '../../common/view/footer.html.php';?>

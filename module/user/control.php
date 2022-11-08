@@ -1048,6 +1048,7 @@ class user extends control
         session_destroy();
         setcookie('za', false);
         setcookie('zp', false);
+        setcookie('tab', false);
 
         if($this->app->getViewType() == 'json') return print(json_encode(array('status' => 'success')));
         $vars = !empty($referer) ? "referer=$referer" : '';

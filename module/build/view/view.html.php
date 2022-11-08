@@ -316,7 +316,7 @@ tbody tr td:first-child input {display: none;}
             <div class='detail-title'><?php echo $lang->build->basicInfo?></div>
             <div class='detail-content'>
               <table class='table table-data table-condensed table-borderless table-fixed'>
-                <tr>
+              <tr class="<?php echo $hidden;?>">
                   <th><?php echo $lang->build->product;?></th>
                   <td><?php echo $build->productName;?></td>
                 </tr>

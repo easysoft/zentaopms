@@ -88,7 +88,7 @@ $config->testcase->datatable->fieldList['id']['required'] = 'yes';
 
 $config->testcase->datatable->fieldList['product']['title']      = 'priAB';
 $config->testcase->datatable->fieldList['product']['control']    = 'hidden';
-$config->testcase->datatable->fieldList['product']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&product&id,name');
+$config->testcase->datatable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => '&0&&all');
 
 $config->testcase->datatable->fieldList['module']['title']      = 'module';
 $config->testcase->datatable->fieldList['module']['control']    = 'select';

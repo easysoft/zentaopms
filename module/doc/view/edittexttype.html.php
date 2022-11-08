@@ -56,13 +56,13 @@
 .modal-title {font-size: 14px !important; font-weight: 700 !important;}
 #basicInfoBox tfoot td {padding-bottom: 0;}
 </style>
-<?php $backLink = $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}");?>
+<?php $backLink = $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}") . "#app={$this->app->tab}";?>
 <div id="mainContent" class="main-content">
   <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
       <tbody>
         <tr id='headerBox'>
-          <td width='90px'><?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-secondary');?></td>
+          <td width='90px'><?php echo html::a($backLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "id='backBtn' class='btn btn-secondary'");?></td>
           <td class="doc-title" colspan='3'><?php echo html::input('title', $doc->title, "placeholder='{$lang->doc->titlePlaceholder}' class='form-control' required");?></td>
           <td class="text-right">
             <?php echo html::submitButton('', "data-placement='bottom'", 'btn btn-primary');?>

@@ -175,7 +175,6 @@ $lang->story->design           = 'Designs';
 $lang->story->case             = 'Cases';
 $lang->story->bug              = 'Bugs';
 $lang->story->repoCommit       = 'Commits';
-$lang->story->noRequirement    = 'No Requirements';
 $lang->story->one              = 'One';
 $lang->story->field            = 'Synchronized fields';
 $lang->story->completeRate     = 'Completion Rate';
@@ -281,7 +280,7 @@ $lang->story->lblClose    = 'Fermer';
 $lang->story->lblTBC      = 'Tâche/Bug/CasTest';
 
 $lang->story->checkAffection       = 'Influence';
-$lang->story->affectedProjects     = $config->systemMode == 'new' ? "{$lang->project->common}s/{$lang->execution->common}s" : "{$lang->project->common}s";
+$lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'CasTests';
 
@@ -321,8 +320,9 @@ $lang->story->action->reviewed              = array('main' => '$date, validée p
 $lang->story->action->rejectreviewed        = array('main' => '$date, validée par <strong>$actor</strong>. Le résultat est <strong>$extra</strong>. La raison est <strong>$reason</strong>.', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->recalled              = array('main' => '$date, recalled by <strong>$actor</strong>.');
 $lang->story->action->closed                = array('main' => '$date, Fermée par <strong>$actor</strong>. La raison est <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->closedbysystem        = array('main' => '$date, The system determines that the parent story is automatically closed because all child stories are closed.');
 $lang->story->action->reviewpassed          = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Pass</strong>.');
-$lang->story->action->reviewrejected        = array('main' => '$date, closed by <strong>System</strong>. The reasion is <strong>Rejection</strong>.');
+$lang->story->action->reviewrejected        = array('main' => '$date, closed by <strong>System</strong>. The reason is <strong>Rejection</strong>.');
 $lang->story->action->reviewclarified       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>To Be Clarified</strong>. Please re-initiate the review after edit.');
 $lang->story->action->reviewreverted        = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Undo Change</strong>.');
 $lang->story->action->linked2plan           = array('main' => '$date, planifiée par <strong>$actor</strong> au Plan <strong>$extra</strong>');

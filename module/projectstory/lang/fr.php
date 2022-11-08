@@ -6,6 +6,10 @@ $lang->projectstory->story   = "{$lang->SRCommon} List";
 $lang->projectstory->version = "Version";
 $lang->projectstory->order   = "Order";
 
+$lang->projectstory->storyCommon = 'Project Story';
+$lang->projectstory->storyList   = 'Project Story List';
+$lang->projectstory->storyView   = 'Project Story Detail';
+
 $lang->projectstory->common            = "Project {$lang->SRCommon}";
 $lang->projectstory->index             = "{$lang->SRCommon} Home";
 $lang->projectstory->view              = "{$lang->SRCommon} Detail";

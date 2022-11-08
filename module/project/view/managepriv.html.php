@@ -146,6 +146,11 @@ $(document).ready(function()
 
         $parent.find('input[value=browse]').prop('checked', $parent.find('input[name^=actions]:not(input[value=browse]):checked').length > 0);
     })
+
+    <?php if(!$project->multiple):?>
+    $('#project').append($('#execution').html());
+    $('#execution').parent().remove();
+    <?php endif;?>
 });
 </script>
 <?php include '../../common/view/footer.html.php'; ?>

@@ -147,7 +147,7 @@ class port extends control
     {
         $filter = '';
         if($model == 'task') $filter = 'estimate';
-        if($model == 'story' and $this->session->storyType) $this->loadModel('story')->replaceUserRequirementLang();
+        if($model == 'story' and $this->session->storyType == 'requirement') $this->loadModel('story')->replaceUserRequirementLang();
 
         $this->loadModel($model);
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
@@ -155,6 +155,19 @@ class port extends control
         $formatDatas  = $this->port->format($model, $filter);
         $datas        = $this->port->getPageDatas($formatDatas, $pagerID);
 
+        if($model == 'story')
+        {
+            $product = $this->loadModel('product')->getByID($this->session->storyPortParams['productID']);
+            if($product->type == 'normal') unset($fields['branch']);
+            if($this->session->storyType == 'requirement') unset($fields['plan']);
+        }
+
+        if($model == 'bug')
+        {
+            $product = $this->loadModel('product')->getByID($this->session->bugPortParams['productID']);
+            if($product->type == 'normal') unset($fields['branch']);
+            if($product->shadow and ($this->app->tab == 'execution' or $this->app->tab == 'project')) unset($fields['product']);
+        }
         if($model == 'task') $datas = $this->task->processDatas4Task($datas);
         $html = $this->port->buildNextList($datas->datas, $lastID, $fields, $pagerID, $model);
         die($html);

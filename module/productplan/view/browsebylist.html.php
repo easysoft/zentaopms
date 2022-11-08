@@ -17,6 +17,7 @@
 #productplanList .c-actions .btn+.btn {margin-left: -1px;}
 #productplanList .c-actions .btn {display: block; float: left;}
 </style>
+<?php $isProjectplan = $app->rawModule == 'projectplan';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php common::sortFeatureMenu();?>
@@ -25,9 +26,11 @@
     <?php $label   = "<span class='text'>{$menuItem->text}</span>";?>
     <?php $label  .= $menuItem->name == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';?>
     <?php $active  = $menuItem->name == $browseType ? 'btn-active-text' : '';?>
-    <?php echo html::a($this->inlink('browse', "productID=$productID&branch=&browseType={$menuItem->name}"), $label, '', "class='btn btn-link $active' id='{$menuItem->name}'");?>
+    <?php $params  = "productID=$productID&branch=&browseType={$menuItem->name}";?>
+    <?php $link    = $isProjectplan ? $this->createLink('projectplan', 'browse', $params) : $this->createLink('productplan', 'browse', $params);?>
+    <?php echo html::a($link, $label, '', "class='btn btn-link $active' id='{$menuItem->name}'");?>
     <?php endforeach;?>
-    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i><?php echo $lang->searchAB;?></a>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->searchAB;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group panel-actions">
@@ -35,7 +38,7 @@
       <?php echo html::a('#',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon switchButton' title='{$lang->productplan->kanban}' data-type='kanban'");?>
     </div>
     <?php if(common::canModify('product', $product)):?>
-    <?php common::printLink('productplan', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>
+    <?php common::printLink($app->rawModule, 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
 </div>
@@ -47,8 +50,17 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
-      <?php if(common::canModify('product', $product) and common::hasPriv('productplan', 'create') and empty($productPlansNum)):?>
-      <?php echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
+      <?php if(common::canModify('product', $product) and empty($productPlansNum)):?>
+      <?php
+      if(common::hasPriv('projectplan', 'create') and $isProjectplan)
+      {
+          echo html::a($this->createLink('projectplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");
+      }
+      elseif(common::hasPriv('productplan', 'create'))
+      {
+          echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");
+      }
+      ?>
       <?php endif;?>
     </p>
   </div>
@@ -119,7 +131,8 @@
       <tr class='<?php echo $class;?>' data-id="<?php echo $plan->id;?>" data-parent="<?php echo $plan->parent;?>">
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
-          <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $attribute) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
+          <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $attribute);?>
+          <?php echo $isProjectplan ? html::a(helper::createLink('projectplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id)) : html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
           <?php else:?>
           <?php echo sprintf('%03d', $plan->id);?>
           <?php endif;?>
@@ -136,7 +149,7 @@
 
           echo "<div class='plan-name has-prefix {$class}'>";
           if($plan->parent > 0) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
-          echo html::a(inlink('view', "id=$plan->id"), $plan->title);
+          echo html::a($this->createLink($app->rawModule, 'view', "id=$plan->id"), $plan->title);
           if(!empty($expired)) echo $expired;
           if(isset($plan->children)) echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-right"></i></a>';
           echo '</div>';

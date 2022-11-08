@@ -250,6 +250,7 @@ class groupModel extends model
         $productList = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
             ->where('vision')->eq($this->config->vision)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->fetchAll('id');
 
         /* Get the list of program sets under administrator permission. */
@@ -283,14 +284,14 @@ class groupModel extends model
                     unset($executions[$object->parent]);
                 }
 
-                $object->name = (isset($objects[$object->project]) and $this->config->systemMode == 'new') ? $objects[$object->project]->name . '/' . $object->name : $object->name;
+                $object->name = isset($objects[$object->project]) ? $objects[$object->project]->name . '/' . $object->name : $object->name;
                 $executions[$object->id] = $object->name;
             }
         }
 
         foreach($productList as $id => $product)
         {
-            if(isset($programs[$product->program]) and $this->config->systemMode == 'new') $product->name = $programs[$product->program] . '/' . $product->name;
+            if(isset($programs[$product->program]) and $this->config->systemMode == 'ALM') $product->name = $programs[$product->program] . '/' . $product->name;
             $products[$product->id] = $product->name;
         }
 
@@ -402,6 +403,7 @@ class groupModel extends model
      */
     public function updatePrivByGroup($groupID, $menu, $version)
     {
+        /* Delete old. */
         /* Set priv when have version. */
         if($version)
         {
@@ -416,27 +418,20 @@ class groupModel extends model
                     $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->andWhere('module')->eq($module)->andWhere('method')->eq($method)->exec();
                 }
             }
-
-            /* Replace new. */
-            if($this->post->actions)
-            {
-                foreach($this->post->actions as $moduleName => $moduleActions)
-                {
-                    foreach($moduleActions as $actionName)
-                    {
-                        $data         = new stdclass();
-                        $data->group  = $groupID;
-                        $data->module = $moduleName;
-                        $data->method = $actionName;
-                        $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-                    }
-                }
-            }
-            return true;
         }
-
-        /* Delete old. */
-        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->andWhere('module')->in($this->getMenuModules($menu))->exec();
+        else
+        {
+            foreach($this->getMenuModules($menu) as $moduleName)
+            {
+                $methodList = (array)zget($this->lang->resource, $moduleName, array());
+                $methodList = array_keys($methodList);
+                $this->dao->delete()->from(TABLE_GROUPPRIV)
+                    ->where('`group`')->eq($groupID)
+                    ->andWhere('module')->eq($moduleName)
+                    ->beginIF($methodList)->andWhere('method')->in($methodList)->fi()
+                    ->exec();
+            }
+        }
 
         /* Insert new. */
         if($this->post->actions)
@@ -453,7 +448,6 @@ class groupModel extends model
                 }
             }
         }
-
         return true;
     }
 
@@ -468,6 +462,23 @@ class groupModel extends model
     {
         $actions  = $this->post->actions;
         $oldGroup = $this->getByID($groupID);
+        $projects = isset($actions['projects']) ? $actions['projects'] : array();
+        $sprints  = isset($actions['sprints'])  ? $actions['sprints']  : array();
+
+        /* Add shadow productID when select noProduct project or execution. */
+        if(($projects or $sprints) and isset($actions['products']))
+        {
+            /* Get all noProduct projects and executions . */
+            $noProductList       = $this->loadModel('project')->getNoProductList();
+            $shadowProductIDList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
+            $noProductObjects    = array_merge($projects, $sprints);
+
+            foreach($noProductObjects as $objectID)
+            {
+                if(isset($noProductList[$objectID])) $actions['products'][] = $noProductList[$objectID]->product;
+            }
+        }
+
         if(isset($_POST['allchecker']))$actions['views']   = array();
         if(!isset($actions['actions']))$actions['actions'] = array();
 
@@ -573,18 +584,36 @@ class groupModel extends model
         $allUsers = $this->dao->select('account')->from(TABLE_PROJECTADMIN)->fetchPairs();
         $this->dao->delete()->from(TABLE_PROJECTADMIN)->exec();
 
-        $members      = $this->post->members      ? $this->post->members      : array();
-        $programs     = $this->post->program      ? $this->post->program      : array();
-        $projects     = $this->post->project      ? $this->post->project      : array();
-        $products     = $this->post->product      ? $this->post->product      : array();
-        $executions   = $this->post->execution    ? $this->post->execution    : array();
-        $programAll   = $this->post->programAll   ? $this->post->programAll   : '';
-        $projectAll   = $this->post->projectAll   ? $this->post->projectAll   : '';
-        $productAll   = $this->post->productAll   ? $this->post->productAll   : '';
-        $executionAll = $this->post->executionAll ? $this->post->executionAll : '';
+        $members       = $this->post->members      ? $this->post->members      : array();
+        $programs      = $this->post->program      ? $this->post->program      : array();
+        $projects      = $this->post->project      ? $this->post->project      : array();
+        $products      = $this->post->product      ? $this->post->product      : array();
+        $executions    = $this->post->execution    ? $this->post->execution    : array();
+        $programAll    = $this->post->programAll   ? $this->post->programAll   : '';
+        $projectAll    = $this->post->projectAll   ? $this->post->projectAll   : '';
+        $productAll    = $this->post->productAll   ? $this->post->productAll   : '';
+        $executionAll  = $this->post->executionAll ? $this->post->executionAll : '';
+        $noProductList = $this->loadModel('project')->getNoProductList();
+        $shadowProductIDList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
 
         foreach($members as $lineID => $accounts)
         {
+            $programs[$lineID]   = isset($programs[$lineID])   ? $programs[$lineID]   : array();
+            $projects[$lineID]   = isset($projects[$lineID])   ? $projects[$lineID]   : array();
+            $products[$lineID]   = isset($products[$lineID])   ? $products[$lineID]   : array();
+            $executions[$lineID] = isset($executions[$lineID]) ? $executions[$lineID] : array();
+
+            if(($projects[$lineID] or $executions[$lineID]) and !empty($products[$lineID]))
+            {
+                $objects = array_merge($projects[$lineID], $executions[$lineID]);
+                foreach($objects as $objectID)
+                {
+                    if(isset($noProductList[$objectID])) $products[$lineID][] = $noProductList[$objectID]->product;
+                }
+            }
+
+            if($executionAll[$lineID] or $projectAll[$lineID]) $products[$lineID] = array_merge($products[$lineID], $shadowProductIDList);
+
             if(empty($accounts)) continue;
             foreach($accounts as $account)
             {
