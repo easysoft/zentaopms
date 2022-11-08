@@ -18,16 +18,27 @@ li.tree-item-story > .tree-actions .tree-action[data-type=sort] {display: none;}
 li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none;}
 </style>
 <?php endif;?>
+<?php if($viewType == 'report'):?>
+<style>
+#modulesTree > li[data-owner=system] > .tree-actions > a[data-type=delete] {display: none;}
+#modulesTree > li > ul > li a[data-type=subModules] {display: none;}
+</style>
+<?php endif;?>
 <?php js::set('viewType', $viewType);?>
 <?php js::set('rootID', $rootID);?>
 <?php js::set('noSubmodule', $lang->tree->noSubmodule);?>
+<script>
+if(viewType == 'report') $('#subNavbar a').not('[href*=report][href*=browsereport]').closest('li').removeClass('active');
+if(viewType == 'dashboard') $('#subNavbar a').not('[href*=dashboard][href*=browse]').closest('li').removeClass('active');
+</script>
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
 <?php
 $name = $lang->tree->name;
-if($viewType == 'line') $name = $lang->tree->line;
-if($viewType == 'api')  $name = $lang->tree->dir;
-if($viewType == 'doc')  $name = $lang->doc->catalogName;
+if($viewType == 'line')   $name = $lang->tree->line;
+if($viewType == 'api')    $name = $lang->tree->dir;
+if($viewType == 'doc')    $name = $lang->doc->catalogName;
+if($viewType == 'report') $name = $lang->tree->reportGroup;
 if($viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->cate;
 
 $childTitle = $lang->tree->child;
@@ -236,6 +247,7 @@ $(function()
             $li.append($toggle);
             if(item.nodeType || item.type) $li.addClass('tree-item-' + (item.nodeType || item.type));
             $li.toggleClass('active', <?php echo $currentModuleID ?> === item.id);
+            $li.attr('data-owner', item.owner);
             return true;
         },
         actions:
@@ -334,6 +346,11 @@ $(function()
     {
         $('#navbar li[data-id="browse"]').removeClass('active');
         $('#navbar li[data-id="' + viewType +'"]').addClass('active');
+    }
+    if(viewType == 'report')
+    {
+        $('#modulesTree > li[data-owner=system] > .tree-actions > a[data-type=delete]').remove();
+        $('#modulesTree > li > ul > li a[data-type=subModules]').remove();
     }
 });
 
