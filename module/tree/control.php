@@ -250,6 +250,15 @@ class tree extends control
             $title      = $this->lang->tree->manageTrainpost;
             $position[] = $this->lang->tree->manageTrainpost;
         }
+        elseif($viewType == 'report')
+        {
+            $title      = $this->lang->tree->manageReport;
+            $position[] = $this->lang->tree->manageReport;
+
+            $root = new stdclass();
+            $root->name = $this->lang->tree->report;
+            $this->view->root = $root;
+        }
         elseif(strpos($viewType, 'datasource') !== false)
         {
             $params = explode('_', $viewType);
@@ -294,14 +303,13 @@ class tree extends control
             }
         }
 
-        $parentModules               = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
         $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
-        $this->view->parentModules   = $parentModules;
+        $this->view->parentModules   = $this->tree->getParents($currentModuleID);
         $this->view->branch          = $branch;
         $this->view->from            = $from;
         $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType, $branch);
