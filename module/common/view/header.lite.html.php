@@ -45,9 +45,6 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
         js::import('https://zui.cyy.oop.cc/dist/zui-custom/zui-custom.umd.cjs');
         js::import('https://unpkg.com/htmx.org@1.8.2');
       }
-      else
-      {
-      }
 
       if(!in_array($clientLang, $commonLang)) js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js?t=' . $timestamp);
       js::import($jsRoot . 'my.full.js?t=' . $timestamp);
