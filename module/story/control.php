@@ -2120,12 +2120,27 @@ class story extends control
     {
         if(!empty($_POST) && isset($_POST['storyIdList']))
         {
-            $allChanges  = $this->story->batchAssignTo();
+            $allChanges = $this->story->batchAssignTo();
             if(dao::isError()) return print(js::error(dao::getError()));
+
+            $assignedSiblings = array();
+            $oldStories       = $this->story->getByList($this->post->storyIdList);
             foreach($allChanges as $storyID => $changes)
             {
                 $actionID = $this->action->create('story', $storyID, 'Assigned', '', $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
+
+                /* Sync siblings. */
+                if(!empty($oldStories[$storyID]->siblings))
+                {
+                    $siblings = $oldStories[$storyID]->siblings;
+                    foreach(explode(',', $siblings) as $siblingID)
+                    {
+                        if(in_array($siblingID, $this->post->storyIdList) or isset($assignedSiblings[$siblingID])) $siblings = str_replace(",$siblingID,", ',', $siblings);
+                    }
+                    $this->story->syncSiblings($storyID, trim($siblings, ','), $changes, 'Assigned');
+                    foreach(explode(',', trim($siblings, ',')) as $assignedID) $assignedSiblings[$assignedID] = $assignedID;
+                }
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
