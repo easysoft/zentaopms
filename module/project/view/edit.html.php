@@ -192,6 +192,13 @@
             </div>
           </td>
         </tr>
+        <?php if($project->model == 'waterfall'):?>
+        <?php $class    = (!$project->division and count($linkedProducts) < 2) ? 'hide' : '';?>
+        <?php $disabled = !empty($executions) ? "disabled='disabled'" : '';?>
+        <tr class='<?php echo $class;?> division'>
+          <th><?php echo $lang->project->division;?></th>
+          <td colspan='3'><?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?></td>
+        </tr>
         <?php endif;?>
         <?php if($project->model == 'kanban'):?>
         <tr>

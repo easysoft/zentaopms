@@ -1712,8 +1712,30 @@ class execution extends control
             $this->view->linkedBranches = $linkedBranches;
         }
 
+        if(!empty($project) and !$project->division)
+        {
+            $products = $this->loadModel('product')->getProducts($projectID);
+            $branches = $this->project->getBranchesByProject($projectID);
+            $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
+
+            $linkedBranches = array();
+            foreach($products as $productID => $product)
+            {
+                foreach($branches[$productID] as $branchID => $branch)
+                {
+                    $linkedBranches[$productID][$branchID] = $branchID;
+                    $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                }
+            }
+
+            $this->view->branches       = $branches;
+            $this->view->linkedBranches = $linkedBranches;
+        }
+
         if(!empty($_POST))
         {
+            if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
+
             $executionID = $this->execution->create($copyExecutionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1825,6 +1847,7 @@ class execution extends control
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->view->project             = $project;
+        $this->view->division            = !empty($project) ? $project->division : 1;
         $this->display();
     }
 

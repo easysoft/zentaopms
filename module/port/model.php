@@ -213,7 +213,8 @@ class portModel extends model
         $exportDatas = $this->getExportDatas($fieldList, $rows);
 
         $fields = $exportDatas['fields'];
-        $rows   = $exportDatas['rows'];
+        $rows   = !empty($exportDatas['rows']) ? $exportDatas['rows'] : array();
+
         if($this->config->edition != 'open') list($fields, $rows) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $rows, $model);
 
         $this->post->set('rows',   $rows);
@@ -843,10 +844,25 @@ class portModel extends model
      */
     public function getQueryDatas($model = '')
     {
-        $queryCondition = $this->session->{$model . 'QueryCondition'};
-        $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
+        $queryCondition    = $this->session->{$model . 'QueryCondition'};
+        $onlyCondition     = $this->session->{$model . 'OnlyCondition'};
+        $transferCondition = $this->session->{$model . 'TransferCondition'};
 
         $modelDatas = array();
+
+        if($transferCondition)
+        {
+            $selectKey = 'id';
+            $stmt = $this->dbh->query($transferCondition);
+            while($row = $stmt->fetch())
+            {
+                if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;
+                $modelDatas[$row->id] = $row;
+            }
+
+            return $modelDatas;
+        }
+
         if($onlyCondition and $queryCondition)
         {
             $table = zget($this->config->objectTables, $model);

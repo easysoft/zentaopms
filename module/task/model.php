@@ -4058,6 +4058,7 @@ class taskModel extends model
             }
         }
         $list .= '</td>';
+        if(!empty($execution->division) and $this->app->rawModule == 'project') $list .= '<td></td>';
         $list .= "<td class='status-{$task->status} text-center'>" . $this->processStatus('task', $task) . '</td>';
         $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= helper::isZeroDate($task->estStarted) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->estStarted . '</td>';

@@ -134,6 +134,7 @@ $lang->project->realBeganAB        = '实际开始';
 $lang->project->realEndAB          = '实际完成';
 $lang->project->realBegan          = '实际开始日期';
 $lang->project->realEnd            = '实际完成日期';
+$lang->project->division           = '按产品创建阶段';
 $lang->project->bygrid             = '看板';
 $lang->project->bylist             = '列表';
 $lang->project->bycard             = '卡片';
@@ -189,6 +190,9 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = '我负责的项目';
 $lang->project->typeList['other'] = '其他项目';
 
+$lang->project->divisionList['1'] = '开启';
+$lang->project->divisionList['0'] = '关闭';
+
 $lang->project->waitProjects    = '未开始的项目';
 $lang->project->doingProjects   = '进行中的项目';
 $lang->project->doingExecutions = '进行中的执行(最近1个)';
@@ -204,6 +208,7 @@ $lang->project->changeProgram          = '%s > 修改项目集';
 $lang->project->changeProgramTip       = '修改项目集后，该项目关联产品的项目集也会被修改，请确认是否修改。';
 $lang->project->linkedProjectsTip      = '关联的项目如下';
 $lang->project->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
+$lang->project->noticeDivsion          = '当前项目关联多个产品，可以点击确认开启按产品创建阶段的模式，点击取消则保持现状。';
 $lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此项目中";
 $lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
 $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";
