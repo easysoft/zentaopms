@@ -475,3 +475,4 @@ $lang->story->operateList['reviewed']       = 'reviewed';
 $lang->story->operateList['edited']         = 'edited';
 $lang->story->operateList['submitreview']   = 'submit review';
 $lang->story->operateList['recalledchange'] = 'recalled change';
+$lang->story->operateList['recalled']       = 'recalled review';

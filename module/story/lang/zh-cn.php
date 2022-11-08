@@ -488,6 +488,7 @@ $lang->story->operateList['reviewed']       = '评审';
 $lang->story->operateList['edited']         = '编辑';
 $lang->story->operateList['submitreview']   = '提交评审';
 $lang->story->operateList['recalledchange'] = '撤销变更';
+$lang->story->operateList['recalled']       = '撤销评审';
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = "提{$lang->URCommon}";

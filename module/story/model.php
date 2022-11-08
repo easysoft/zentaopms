@@ -1740,11 +1740,26 @@ class storyModel extends model
      */
     public function recallReview($storyID)
     {
-        $story     = $this->getById($storyID);
-        $isChanged = $story->changedBy ? true : false;
-        $status    = $isChanged ? 'changing' : 'draft';
-        $this->dao->update(TABLE_STORY)->set('status')->eq($status)->where('id')->eq($storyID)->exec();
-        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->exec();
+        $oldStory  = $this->getById($storyID);
+        $isChanged = $oldStory->changedBy ? true : false;
+
+        $story = clone $oldStory;
+        $story->status = $isChanged ? 'changing' : 'draft';
+        $this->dao->update(TABLE_STORY)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
+
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
+
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->exec();
+            }
+        }
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'recalled');
     }
 
     /**
@@ -1758,9 +1773,8 @@ class storyModel extends model
     {
         $oldStory = $this->getById($storyID);
 
-        $story = clone $oldStory;
-
         /* Update story title and version and status. */
+        $story = clone $oldStory;
         $story->version = $oldStory->version - 1;
         $story->title   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->fetch('title');
         $story->status  = 'active';
