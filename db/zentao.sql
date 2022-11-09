@@ -7312,8 +7312,39 @@ CREATE TABLE IF NOT EXISTS `zt_host` (
   `cloudAccount` varchar(255) NOT NULL DEFAULT '',
   `cloudPassword` varchar(255) NOT NULL DEFAULT '',
   `couldVPC` varchar(255) NOT NULL DEFAULT '',
+  `vnc` int(11) NOT NULL,
+  `registerDate` datetime NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_executionnode`;
+CREATE TABLE `zt_executionnode` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `hostID` int(11) unsigned NOT NULL DEFAULT 0,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `imageID` int(11) unsigned NOT NULL DEFAULT 0,
+  `osCategory` varchar(32) NOT NULL DEFAULT '',
+  `osType` varchar(32) NOT NULL DEFAULT '',
+  `osVersion` varchar(32) NOT NULL DEFAULT '',
+  `osLang` varchar(32) NOT NULL DEFAULT '',
+  `memory` float unsigned NOT NULL,
+  `disk` float unsigned NOT NULL,
+  `status` char(20) NOT NULL,
+  `mac` char(64) NOT NULL,
+  `vnc` int(11) unsigned NOT NULL DEFAULT 0,
+  `registerDate` datetime NOT NULL,
+  `createdBy` datetime NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` datetime NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_service`;
 CREATE TABLE IF NOT EXISTS `zt_service` (
