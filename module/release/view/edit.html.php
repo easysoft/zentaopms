@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->release->build;?></th>
-            <td><?php echo html::select('build', $builds, $release->build, "class='form-control chosen' required"); ?></td>
+            <td><?php echo html::select('build[]', $builds, $release->build, "class='form-control chosen' required multiple"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>
