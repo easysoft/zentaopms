@@ -2704,7 +2704,7 @@ class story extends control
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
-            $this->session->set('storyPortParams', array('productID' => $productID, 'executionID' => $executionID));
+            $this->session->set('storyTransferParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
             if(!$productID)
             {
@@ -2721,7 +2721,7 @@ class story extends control
             }
 
             $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
-            $this->fetch('port', 'export', 'model=story');
+            $this->fetch('transfer', 'export', 'model=story');
         }
 
         $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;

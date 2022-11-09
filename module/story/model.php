@@ -5849,7 +5849,7 @@ class storyModel extends model
      */
     public function getRelatedObjects($object, $pairs = '')
     {
-        $storys = $this->loadModel('port')->getQueryDatas('story');
+        $storys = $this->loadModel('transfer')->getQueryDatas('story');
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();

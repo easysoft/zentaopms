@@ -3648,7 +3648,7 @@ class bugModel extends model
     public function getRelatedObjects($object, $pairs = '')
     {
         /* Get bugs. */
-        $bugs = $this->loadModel('port')->getQueryDatas('bug');
+        $bugs = $this->loadModel('transfer')->getQueryDatas('bug');
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();
