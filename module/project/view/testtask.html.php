@@ -105,10 +105,7 @@
             {
                 common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
                 common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
-                if(common::hasPriv('execution', 'testreport'))
-                {
-                    echo html::a($this->createLink('execution', 'testreport', "executionID=$task->execution&objectType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-summary"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="project"');
-                }
+                common::printIcon('project', 'testreport', "projectID=$task->project&objectType=project&extra=$task->id", '', 'list', 'summary', '', '', false, "data-app='project'", $this->lang->testreport->common);
                 common::printIcon('testtask', 'edit',   "taskID=$task->id", $task, 'list');
                 common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin');
             }

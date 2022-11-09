@@ -654,7 +654,7 @@ class docModel extends model
         if($version == $doc->version and ((empty($docContent->files) and $docFiles) or ($docContent->files and count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
         {
             unset($docContent->id);
-            $doc->version        += 1;
+            $doc->version       += 1;
             $docContent->version = $doc->version;
             $docContent->files   = join(',', array_keys($docFiles));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
