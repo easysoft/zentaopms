@@ -89,7 +89,7 @@ class testresultsEntry extends entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
-        $this->send(200, array());
+        return $this->send(200, array());
     }
 
     /**
