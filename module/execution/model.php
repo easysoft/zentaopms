@@ -4744,21 +4744,10 @@ class executionModel extends model
 
         if($execution->type == 'stage')
         {
-            if($execution->grade == 1 && $this->loadModel('programplan')->isCreateTask($execution->id))
-            {
-                common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
-            }
-            else
-            {
-                if($execution->grade == 2)
-                {
-                    echo "<button class='btn' disabled='disabled' style='margin-right: 4px;'><i class='icon-split disabled icon-search'></i></button>";
-                }
-                else
-                {
-                    echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn"') : '';
-                }
-            }
+            $isCreateTask = $this->loadModel('programplan')->isCreateTask($execution->id);
+            $disabled     = ($execution->grade == 1 && $isCreateTask) ? '' : ' disabled';
+            $title        = !$isCreateTask ? $this->lang->programplan->error->createdTask : $this->lang->programplan->createSubPlan;
+            common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', $disabled, '', '', $title);
         }
 
         if($execution->type == 'stage')
