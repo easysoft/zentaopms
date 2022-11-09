@@ -2633,4 +2633,21 @@ class testcaseModel extends model
         }
         return $stepData;
     }
+
+    /**
+     * Get modules for datatable.
+     *
+     * @param int $productID
+     * @access public
+     * @return void
+     */
+    public function getDatatableModules($productID)
+    {
+        $branches = $this->loadModel('branch')->getPairs($productID);
+        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'case', '');
+        if(count($branches) <= 1) return $modules;
+
+        foreach($branches as $branchID => $branchName) $modules += $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
+        return $modules;
+    }
 }

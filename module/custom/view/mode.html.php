@@ -45,7 +45,7 @@
             </thead>
             <tbody>
               <?php foreach($config->custom->allFeatures as $feature):?>
-              <?php if($feature == 'scrumDetail'):?>
+              <?php if($this->config->edition == 'max' && $feature == 'scrumDetail'):?>
               <?php if($disabledScrumFeatures):?>
               <tr class='text-center'>
                 <td class='text-left'><?php echo sprintf($this->lang->custom->scrum->common, $disabledScrumFeatures);?></td>
