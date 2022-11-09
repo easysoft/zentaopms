@@ -724,7 +724,9 @@ class upgradeModel extends model
                 $this->processFeedbackModule();
                 break;
             case 'biz7_8':
-                $this->processReportModule();
+                $this->addDefaultModules('chart');
+                $modules = $this->addDefaultModules('report');
+                $this->processReportModules($modules);
         }
     }
 
@@ -7579,35 +7581,56 @@ class upgradeModel extends model
     }
 
     /**
-     * Add default modules of report and process report modules.
+     * Add default modules.
      *
+     * @param  string $type
      * @access public
-     * @return bool
+     * @return array
      */
-    public function processReportModule()
+    public function addDefaultModules($type = 'report')
     {
         $this->app->loadLang('report');
 
         $group = new stdclass();
         $group->grade = 1;
-        $group->type  = 'report';
+        $group->type  = $type;
         $group->owner = 'system';
         $group->order = 10;
 
-        $groups = array();
-        foreach($this->lang->report->moduleList as $code => $name)
+        $modules = array();
+        foreach($this->lang->crystal->moduleList as $code => $name)
         {
             if(!$code || !$name) continue;
 
             $group->name = $name;
             $this->dao->replace(TABLE_MODULE)->data($group)->exec();
 
-            $groupID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_REPORT)->set("`module` = REPLACE(`module`, '$code', $groupID)")->exec();
+            $modules[$code] => $this->dao->lastInsertID();
 
             $group->order += 10;
         }
-        $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")->where('type')->eq('report')->andWhere('grade')->eq('1')->andWhere('path')->eq('')->exec();
+        $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")
+            ->where('type')->eq($type)
+            ->andWhere('grade')->eq('1')
+            ->andWhere('path')->eq('')->exec();
+
+        return $modules;
+    }
+
+    /**
+     * Process report modules.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function processReportModules($modules)
+    {
+        foreach($modules as $code => $module)
+        {
+            if(!$code || !$module) continue;
+            $this->dao->update(TABLE_REPORT)->set("`module` = REPLACE(`module`, '$code', $module)")->exec();
+        }
 
         return !dao::isError();
     }
