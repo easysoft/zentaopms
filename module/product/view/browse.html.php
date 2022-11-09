@@ -507,9 +507,9 @@ js::set('storyType',     $storyType);
             </ul>
           </div>
 
+          <?php if(($product->type != 'normal' and $branchID != 'all') or $product->type == 'normal'):?>
           <?php $isShowModuleBTN = ($isProjectStory and $browseType != 'bybranch') ? false : true;?>
           <?php if($canBatchChangeModule and $productID and $isShowModuleBTN):?>
-          <?php if(($product->type != 'normal' and $branchID != 'all') or $product->type == 'normal')?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 8;?>
@@ -566,6 +566,7 @@ js::set('storyType',     $storyType);
               </div>
             </div>
           </div>
+          <?php endif;?>
           <?php endif;?>
 
           <?php if($canBatchAssignTo):?>
