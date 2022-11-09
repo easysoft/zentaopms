@@ -60,7 +60,7 @@ class testresultsEntry extends entry
         $case    = $this->loadModel('testcase')->getByID($caseID);
         $runID   = $this->param('runID', 0);
         $version = $this->param('version', $case->version);
-        $steps   = $this->getStepKeys($runID, $caseID, $version);
+        $steps   = $this->getStepIDList($runID, $caseID, $version);
 
         $this->setPost('case',  $caseID);
         $this->setPost('version', $version);
@@ -99,7 +99,7 @@ class testresultsEntry extends entry
      * @access public
      * @return array
      */
-    public function getStepKeys($runID, $caseID, $version)
+    public function getStepIDList($runID, $caseID, $version)
     {
         if($runID)
         {
