@@ -643,9 +643,7 @@ class docModel extends model
         {
             foreach($files as $file)
             {
-                $pathName       = $this->file->getRealPathName($file->pathname);
-                $file->webPath  = $this->file->webPath . $pathName;
-                $file->realPath = $this->file->savePath . $pathName;
+                $this->loadModel('file')->setFileWebAndRealPaths($file);
                 if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
             }
         }
@@ -1748,9 +1746,7 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
-            $pathName       = $this->file->getRealPathName($file->pathname);
-            $file->realPath = $this->file->savePath . $pathName;
-            $file->webPath  = $this->file->webPath . $pathName;
+            $this->file->setFileWebAndRealPaths($file);
         }
 
         return $files;

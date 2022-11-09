@@ -1397,9 +1397,7 @@ class testtaskModel extends model
         $stepFiles   = array();
         foreach($files as $file)
         {
-            $pathName = $this->file->getRealPathName($file->pathname);
-            $file->webPath  = $this->file->webPath . $pathName;
-            $file->realPath = $this->file->savePath . $pathName;
+            $this->file->setFileWebAndRealPaths($file);
             if($file->objectType == 'caseResult')
             {
                 $resultFiles[$file->objectID][$file->id] = $file;
