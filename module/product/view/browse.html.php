@@ -494,9 +494,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             </ul>
           </div>
 
+          <?php if(($product->type != 'normal' and $branchID != 'all') or $product->type == 'normal'):?>
           <?php $isShowModuleBTN = ($this->app->tab == 'project' and $browseType != 'bybranch') ? false : true;?>
           <?php if($canBatchChangeModule and $productID and $isShowModuleBTN):?>
-          <?php if(($product->type != 'normal' and $branchID != 'all') or $product->type == 'normal')?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 8;?>
@@ -553,6 +553,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
               </div>
             </div>
           </div>
+          <?php endif;?>
           <?php endif;?>
 
           <?php if($canBatchAssignTo):?>
