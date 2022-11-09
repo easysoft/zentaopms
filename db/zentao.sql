@@ -1280,10 +1280,10 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `project` mediumint(8) unsigned NOT NULL,
+  `project` varchar(255) NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
-  `branch` mediumint(8) unsigned NOT NULL default '0',
-  `build` mediumint(8) unsigned NOT NULL,
+  `branch` varchar(255) unsigned NOT NULL default '0',
+  `build` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL default '',
   `marker` enum('0','1') NOT NULL default '0',
   `date` date NOT NULL,
