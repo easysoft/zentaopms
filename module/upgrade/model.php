@@ -7607,7 +7607,7 @@ class upgradeModel extends model
             $group->name = $name;
             $this->dao->replace(TABLE_MODULE)->data($group)->exec();
 
-            $modules[$code] => $this->dao->lastInsertID();
+            $modules[$code] = $this->dao->lastInsertID();
 
             $group->order += 10;
         }
