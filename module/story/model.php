@@ -2592,11 +2592,13 @@ class storyModel extends model
 
             $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
+
         if($ignoreStories)
         {
             $ignoreStories = trim($ignoreStories, ',');
             echo js::alert(sprintf($this->lang->story->ignoreClosedStory, $ignoreStories));
         }
+
         return $allChanges;
     }
 
@@ -6190,7 +6192,16 @@ class storyModel extends model
 
         /* Get related objects title or names. */
         $relatedSpecs = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
+
+        $fileIdList = array();
+        foreach($relatedSpecs as $relatedSpec)
+        {
+            if(!empty($relatedSpec[0]->files)) $fileIdList[] = $relatedSpec[0]->files;
+        }
+        $fileIdList   = array_unique($fileIdList);
         $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $filesInfo    = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('id')->in($fileIdList)->andWhere('extra')->ne('editor')->fetchAll('id');
+
         foreach($stories as $story)
         {
             $story->spec   = '';
@@ -6201,6 +6212,11 @@ class storyModel extends model
                 $story->title  = $storySpec->title;
                 $story->spec   = $storySpec->spec;
                 $story->verify = $storySpec->verify;
+
+                if(!empty($storySpec->files) and empty($relatedFiles[$story->id]) and !empty($filesInfo[$storySpec->files]))
+                {
+                    $relatedFiles[$story->id][0] = $filesInfo[$storySpec->files];
+                }
             }
 
             if($this->post->fileType == 'csv')
