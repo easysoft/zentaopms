@@ -359,7 +359,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           </div>
           <div class='table-col' id='moduleIdBox' style='flex: 1 0 160px'>
             <div class='input-group'>
-              <span class='input-group-addon fix-border'><?php echo $lang->story->module?></span>
+              <span class='input-group-addon'><?php echo $lang->story->module?></span>
               <?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?>
             </div>
           </div>

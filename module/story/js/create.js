@@ -118,6 +118,24 @@ $(window).unload(function(){
  */
  function addBranchesBox(obj)
  {
+    if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length) return false;
+
+    var selectedVal = [];
+    $(".table-form select[id^='branches']").each(function()
+    {
+        var selectedProduct = $(this).val();
+        if($.inArray(selectedProduct, selectedVal) < 0) selectedVal.push(selectedProduct);
+    });
+
+    var branch = 0;
+    $('.table-form #branches0 option').each(function(){
+        if($.inArray($(this).val(), selectedVal) < 0)
+        {
+            branch = $(this).val();
+            return false;
+        }
+    });
+
      var item = $('#addBranchesBox').html().replace(/%i%/g, itemIndex);
      $(obj).closest('tr').after('<tr class="addBranchesBox' + itemIndex + '">' + item  + '</tr>');
      $('#branches_i__chosen').remove();
@@ -128,13 +146,53 @@ $(window).unload(function(){
      $('#plans' + itemIndex).chosen();
      $('.addBranchesBox' + itemIndex + ' #planIdBox').css('flex', '0 0 ' + gap + 'px');
 
-     loadBranchForSiblings($('#product').val(), 0, itemIndex)
+     $.ajaxSettings.async = false;
+     loadBranchForSiblings($('#product').val(), branch, itemIndex)
      loadModuleForSiblings($('#product').val(), 0, itemIndex)
      loadPlanForSiblings($('#product').val(), 0, itemIndex)
+     $.ajaxSettings.async = true;
      $('.addBranchesBox' + itemIndex + ' #branchBox .input-group .input-group-addon').html($.cookie('branchSourceName'))
+
+     disableSelectedBranches();
+
+    if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
+    {
+        $('.icon-plus').parent().css('pointer-events', 'none')
+        $('.icon-plus').parent().addClass('disabled')
+    }
 
      itemIndex ++;
  }
+
+ /**
+ * Make the selected branch non clickable.
+ *
+ * @return void
+ */
+function disableSelectedBranches()
+{
+    $(".table-form select[id^='branches'] option[disabled='disabled']").removeAttr('disabled');
+
+    var selectedVal = [];
+    $(".table-form select[id^='branches']").each(function()
+    {
+        var selectedBranch = $(this).val();
+        if($.inArray(selectedBranch, selectedVal) < 0) selectedVal.push(selectedBranch);
+
+    })
+
+    $(".table-form select[id^='branches']").each(function()
+    {
+        var selectedBranch = $(this).val();
+        $(this).find('option').each(function()
+        {
+            var optionVal = $(this).attr('value');
+            if(optionVal != selectedBranch && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
+        })
+    })
+
+    $(".table-form select[id^=branches]").trigger('chosen:updated');
+}
 
  /**
   * Delete branch box.
@@ -146,6 +204,11 @@ $(window).unload(function(){
  function deleteBranchesBox(obj)
  {
      $(obj).closest('tr').remove();
+
+     disableSelectedBranches();
+
+     $('.icon-plus').parent().css('pointer-events', 'auto')
+     $('.icon-plus').parent().removeClass('disabled')
  }
 
  /**
@@ -161,8 +224,12 @@ function loadBranchRelation(branch, branchIndex)
     var productID = $('#product').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
+    $.ajaxSettings.async = false;
     loadModuleForSiblings(productID, branch, branchIndex)
     loadPlanForSiblings(productID, branch, branchIndex)
+    $.ajaxSettings.async = true;
+
+    disableSelectedBranches()
 }
 
 /**
@@ -177,7 +244,7 @@ function loadBranchRelation(branch, branchIndex)
 function loadBranchForSiblings(productID, branch, branchIndex)
 {
     var isSiblings = storyType == 'story' ? 'yes' : 'no';
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=active&projectID=" + executionID + "&withMainBranch=1&isSiblings=" + isSiblings + "&fieldID=" + branchIndex), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=" + branch + "&param=active&projectID=" + executionID + "&withMainBranch=1&isSiblings=" + isSiblings + "&fieldID=" + branchIndex), function(data)
     {
         if(data)
         {
