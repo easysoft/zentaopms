@@ -165,36 +165,6 @@ $(window).unload(function(){
  }
 
  /**
- * Make the selected branch non clickable.
- *
- * @return void
- */
-function disableSelectedBranches()
-{
-    $(".table-form select[id^='branches'] option[disabled='disabled']").removeAttr('disabled');
-
-    var selectedVal = [];
-    $(".table-form select[id^='branches']").each(function()
-    {
-        var selectedBranch = $(this).val();
-        if($.inArray(selectedBranch, selectedVal) < 0) selectedVal.push(selectedBranch);
-
-    })
-
-    $(".table-form select[id^='branches']").each(function()
-    {
-        var selectedBranch = $(this).val();
-        $(this).find('option').each(function()
-        {
-            var optionVal = $(this).attr('value');
-            if(optionVal != selectedBranch && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
-        })
-    })
-
-    $(".table-form select[id^=branches]").trigger('chosen:updated');
-}
-
- /**
   * Delete branch box.
   *
   * @param  obj  $obj
@@ -210,6 +180,35 @@ function disableSelectedBranches()
      $('.icon-plus').parent().css('pointer-events', 'auto')
      $('.icon-plus').parent().removeClass('disabled')
  }
+
+ /**
+ * Make the selected branch non clickable.
+ *
+ * @return void
+ */
+function disableSelectedBranches()
+{
+    $(".table-form select[id^='branches'] option[disabled='disabled']").removeAttr('disabled');
+
+    var selectedVal = [];
+    $(".table-form select[id^='branches']").each(function()
+    {
+        var selectedBranch = $(this).val();
+        if($.inArray(selectedBranch, selectedVal) < 0) selectedVal.push(selectedBranch);
+    })
+
+    $(".table-form select[id^='branches']").each(function()
+    {
+        var selectedBranch = $(this).val();
+        $(this).find('option').each(function()
+        {
+            var optionVal = $(this).attr('value');
+            if(optionVal != selectedBranch && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
+        })
+    })
+
+    $(".table-form select[id^=branches]").trigger('chosen:updated');
+}
 
  /**
  * Load branch for multi branch or multi platform.
