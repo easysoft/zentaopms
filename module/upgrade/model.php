@@ -724,8 +724,8 @@ class upgradeModel extends model
                 $this->processFeedbackModule();
                 break;
             case 'biz7_8':
-                $this->addDefaultModules('chart');
-                $modules = $this->addDefaultModules('report');
+                $this->addDefaultModules4BI('chart');
+                $modules = $this->addDefaultModules4BI('report');
                 $this->processReportModules($modules);
         }
     }
@@ -7581,17 +7581,19 @@ class upgradeModel extends model
     }
 
     /**
-     * Add default modules.
+     * Add default modules for BI.
      *
      * @param  string $type
+     * @param  int    $dimension
      * @access public
      * @return array
      */
-    public function addDefaultModules($type = 'report')
+    public function addDefaultModules4BI($type = 'report', $dimension = 1)
     {
         $this->app->loadLang('report');
 
         $group = new stdclass();
+        $group->root  = $dimension;
         $group->grade = 1;
         $group->type  = $type;
         $group->owner = 'system';
