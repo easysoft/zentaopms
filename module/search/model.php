@@ -789,7 +789,8 @@ class searchModel extends model
             }
             elseif($module == 'story' or $module == 'requirement')
             {
-                $story = $objectList[$module][$record->objectID];
+                $story  = $objectList[$module][$record->objectID];
+                $module = 'story';
                 if(!empty($story->lib))
                 {
                     $module = 'assetlib';
