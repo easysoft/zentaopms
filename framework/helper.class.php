@@ -99,24 +99,19 @@ class helper extends baseHelper
             if($feature == 'product' or $feature == 'scrum' or $feature == 'waterfall') return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
 
             $hasFeature = false;
+            $isFeature  = false;
             foreach($config->featureGroup as $group => $modules)
             {
-                if($feature == $group)
+                foreach($modules as $module)
                 {
-                    foreach($modules as $module)
+                    if($feature == $group or $feature == $module)
                     {
+                        $isFeature = true;
                         if(helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
                     }
                 }
-                else
-                {
-                    foreach($modules as $module)
-                    {
-                        if($feature == $module and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
-                    }
-                }
             }
-            return $hasFeature && strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+            return !$isFeature or ($hasFeature && strpos(",$config->disabledFeatures,", ",{$feature},") === false);
         }
     }
 

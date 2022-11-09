@@ -139,7 +139,7 @@ $config->story->datatable->fieldList['assignedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['product']['title']      = 'product';
 $config->story->datatable->fieldList['product']['control']    = 'hidden';
-$config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
+$config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'transfer', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
 
 $config->story->datatable->fieldList['branch']['title']      = 'branch';
 $config->story->datatable->fieldList['branch']['fixed']      = 'no';

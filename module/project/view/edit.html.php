@@ -192,6 +192,7 @@
             </div>
           </td>
         </tr>
+        <?php endif;?>
         <?php if($project->model == 'waterfall'):?>
         <?php $class    = (!$project->division and count($linkedProducts) < 2) ? 'hide' : '';?>
         <?php $disabled = !empty($executions) ? "disabled='disabled'" : '';?>
