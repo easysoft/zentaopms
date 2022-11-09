@@ -7600,21 +7600,23 @@ class upgradeModel extends model
         $group->order = 10;
 
         $modules = array();
-        foreach($this->lang->crystal->moduleList as $code => $name)
+        foreach($this->lang->crystal->moduleList as $module => $name)
         {
-            if(!$code || !$name) continue;
+            if(!$module || !$name) continue;
 
-            $group->name = $name;
+            $group->name      = $name;
+            $group->collector = $module;
             $this->dao->replace(TABLE_MODULE)->data($group)->exec();
 
-            $modules[$code] = $this->dao->lastInsertID();
+            $modules[$module] => $this->dao->lastInsertID();
 
             $group->order += 10;
         }
         $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")
             ->where('type')->eq($type)
             ->andWhere('grade')->eq('1')
-            ->andWhere('path')->eq('')->exec();
+            ->andWhere('path')->eq('')
+            ->exec();
 
         return $modules;
     }
