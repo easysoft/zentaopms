@@ -1675,9 +1675,10 @@ class storyModel extends model
         $actions = array();
         $this->loadModel('action');
 
-        $oldStories   = $this->getByList($storyIdList);
-        $hasResult    = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
-        $reviewerList = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
+        $reviewedSiblings = array();
+        $oldStories       = $this->getByList($storyIdList);
+        $hasResult        = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
+        $reviewerList     = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
         foreach($storyIdList as $storyID)
         {
             if(!$storyID) continue;
@@ -1704,6 +1705,21 @@ class storyModel extends model
 
             $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
 
+            /* Sync siblings. */
+            if(!empty($oldStory->siblings))
+            {
+                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                {
+                    $this->dao->update(TABLE_STORYREVIEW)
+                        ->set('result')->eq($result)
+                        ->set('reviewDate')->eq($now)
+                        ->where('story')->eq($siblingID)
+                        ->andWhere('version')->eq($oldStory->version)
+                        ->andWhere('reviewer')->eq($this->app->user->account)
+                        ->exec();
+                }
+            }
+
             /* Update the story status by review rules. */
             $reviewedBy = explode(',', trim($story->reviewedBy, ','));
             if($isSuperReviewer !== false)
@@ -1726,6 +1742,19 @@ class storyModel extends model
             $story->id         = $storyID;
             $story->version    = $oldStory->version;
             $actions[$storyID] = $this->recordReviewAction($story, $result, $reason);
+
+            /* Sync siblings. */
+            $changes = common::createChanges($oldStory, $story);
+            if(!empty($oldStory->siblings))
+            {
+                $siblings = $oldStory->siblings;
+                foreach(explode(',', $siblings) as $siblingID)
+                {
+                    if(in_array($siblingID, $storyIdList) or isset($reviewedSiblings[$siblingID])) $siblings = str_replace(",$siblingID,", ',', $siblings);
+                }
+                $this->syncSiblings($storyID, trim($siblings, ','), $changes, 'Reviewed');
+                foreach(explode(',', trim($siblings, ',')) as $reviewedID) $reviewedSiblings[$reviewedID] = $reviewedID;
+            }
         }
 
         return $actions;

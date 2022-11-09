@@ -1515,7 +1515,7 @@ class story extends control
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
-        $actions     = $this->story->batchReview($storyIdList, $result, $reason);
+        $this->story->batchReview($storyIdList, $result, $reason);
 
         if(dao::isError()) return print(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
