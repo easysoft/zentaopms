@@ -8,70 +8,64 @@ $(function()
     });
 
     if($.cookie('editProject') == 1) $('input#editProject1').prop('checked', 'true');
-    dtableWithZentao.render({checkable: $('input#editProject1').is(':checked')});
-
-    if($('input#editProject1').prop('checked'))
-    {
-        setTimeout(function()
+    var isEditMode = $('input#editProject1').is(':checked');
+    dtableWithZentao.render({
+        checkable: isEditMode,
+        canRowCheckable(id)
         {
-            showEditCheckbox(true);
-        }, 100);
-    }
-
-    $(document).on('click', ":checkbox[name^='projectIdList']", function()
-    {
-        var notCheckedLength = $(":checkbox[name^='projectIdList']:not(:checked)").length;
-        var checkedLength    = $(":checkbox[name^='projectIdList']:checked").length;
-
-        if(checkedLength > 0) $('#programForm').addClass('has-row-checked');
-        if(notCheckedLength == 0) $('.table-footer #checkAll').prop('checked', true);
-        if(checkedLength == 0)
-        {
-            $('.table-footer #checkAll').prop('checked', false);
-            $('#programForm').removeClass('has-row-checked');
-        }
-
-        var summary = checkedProjects.replace('%s', checkedLength);
-        if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('items', 'item');
-        var statistic = "<div id='projectsSummary' class='table-statistic'>" + summary + "</div>";
-        if(checkedLength > 0)
-        {
-            $('#programSummary').addClass('hidden');
-            $('#projectsSummary').remove();
-            $('.editCheckbox').after(statistic);
-        }
-        else
-        {
-            $('#programSummary').removeClass('hidden');
-            $('#projectsSummary').addClass('hidden');
-        }
-
+            const rowInfo = this.getRowInfo(id);
+            return rowInfo.data?.type === 'project';
+        },
+        footToolbar: {
+            items: [
+                {size: 'sm', text: editLang, btnType: 'primary', className: 'edit-btn'},
+            ],
+        },
+        footPager: {
+            items: [
+                {type: 'info', text: pagerLang.totalCountAB},
+                {type: 'size-menu', text: pagerLang.pageSizeAB},
+                {type: 'link', page: 'first', icon: 'icon-first-page', hint: pagerLang.firstPage},
+                {type: 'link', page: 'prev', icon: 'icon-angle-left', hint: pagerLang.previousPage},
+                {type: 'info', text: '{page}/{pageTotal}'},
+                {type: 'link', page: 'next', icon: 'icon-angle-right', hint: pagerLang.nextPage},
+                {type: 'link', page: 'last', icon: 'icon-last-page', hint: pagerLang.lastPage},
+            ],
+            page: pageID,
+            recTotal: recTotal,
+            recPerPage: recPerPage,
+            linkCreator: pagerLink,
+            },
+            footer() {
+                const statistic = () => {
+                    const checkedCount = this.getChecks().length;
+                    const text = isEditMode && checkedCount ? checkedProjects.replace('%s', checkedCount) : programSummary;
+                    return [{children: text, className: 'text-dark'}];
+                };
+                if (isEditMode) {
+                    return [
+                        'checkbox',
+                        'toolbar',
+                        statistic,
+                        'flex',
+                        'pager',
+                    ];
+                }
+                return [
+                    statistic,
+                    'flex',
+                    'pager',
+                ];
+            },
     });
 
-    $(document).on('click', ".table-footer #checkAll", function()
+    $('.dtable').on('click', ".edit-btn", function()
     {
-        if($(this).prop('checked'))
-        {
-            $(":checkbox[name^='projectIdList']").prop('checked', true);
-            $('#programForm').addClass('has-row-checked');
-            var checkedLength = $(":checkbox[name^='projectIdList']:checked").length;
-            var summary = checkedProjects.replace('%s', checkedLength);
-            if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('items', 'item');
-            var statistic = "<div id='projectsSummary' class='table-statistic'>" + summary + "</div>";
-            $('#programSummary').addClass('hidden');
-            $('#projectsSummary').remove();
-            $('.editCheckbox').after(statistic);
-            $(this).next('label').addClass('hover');
-        }
-        else
-        {
-            $(":checkbox[name^='projectIdList']").prop('checked', false);
-            $('#programForm').removeClass('has-row-checked');
-            $('#programSummary').removeClass('hidden');
-            $('#projectsSummary').addClass('hidden');
-            $(this).next('label').removeClass('hover');
-        }
+        console.log(11111);
+        debugger
     });
+
+    if(status == 'bySearch') $('.dtable-footer').hide();
 
     /* Solve the problem that clicking the browser back button causes the checkbox to be selected by default. */
     setTimeout(function()
@@ -83,45 +77,3 @@ $(function()
         $('.table-footer #checkAll').prop('checked', false);
     }, 10);
 });
-
-function showEditCheckbox(show)
-{
-    $('.icon-project,.icon-waterfall,.icon-scrum,.icon-kanban').each(function()
-    {
-        var $this      = $(this);
-        var $row       = $(this).closest('.dtable-row');
-        var projectID  = $row.attr('data-id');
-        var $firstCell = $row.find('.dtable-flexable .dtable-cell-content').first().find('.dtable-cell-html');
-        if(show)
-        {
-            var marginLeft = $firstCell.find('span.table-nest-icon').css('margin-left');
-
-            $firstCell.prepend("<div class='checkbox-primary'><input type='checkbox' name='projectIdList[]' value='" + projectID + "' id='projectIdList" + projectID + "'/><label for='projectIdList" + projectID + "'></lable></div>");
-            $firstCell.find('.checkbox-primary').css('margin-left', marginLeft).css('width', '14');
-            $firstCell.find('span.table-nest-icon').css('margin-left', '0');
-        }
-        else
-        {
-            var marginLeft = $firstCell.find('.checkbox-primary').css('margin-left');
-            $firstCell.find('span.table-nest-icon').css('margin-left', marginLeft);
-            $firstCell.find('[name^="projectIdList"]').parent().remove();
-        }
-    });
-
-    if(show && hasProject)
-    {
-        var tableFooter = "<div class='editCheckbox'><div class='checkbox-primary check-all'><input type='checkbox' id='checkAll' /><label>" + selectAll + "</label></div><div class='table-actions btn-toolbar'><button type='submit' class='btn'>" + edit + "</button></div></div>";
-        $('#programForm').attr('action', createLink('project', 'batchEdit', 'from=program'));
-        $('.table-footer').prepend(tableFooter).show();
-        $('body').scroll();
-    }
-    else
-    {
-        $('#programForm').removeClass('has-row-checked');
-        $('#projectsSummary').addClass('hidden');
-        $('#programSummary').removeClass('hidden');
-        $('#programForm').find('.editCheckbox').remove();
-        if($('#programForm .pager').length == 0) $('.table-footer').hide();
-        $('#programForm').removeAttr('action');
-    }
-}

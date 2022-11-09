@@ -426,6 +426,8 @@ $lang->pager->totalCount   = '共 <strong>{recTotal}</strong> 项';
 $lang->pager->pageSize     = '每页 <strong>{recPerPage}</strong> 项';
 $lang->pager->itemsRange   = '第 <strong>{start}</strong> ~ <strong>{end}</strong> 项';
 $lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</strong> 页';
+$lang->pager->totalCountAB = '共 {recTotal} 项';
+$lang->pager->pageSizeAB   = '每页 {recPerPage} 项';
 
 $lang->colorPicker           = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的颜色值';

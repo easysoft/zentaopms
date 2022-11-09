@@ -24,11 +24,14 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
   {
       $timestamp = time();
 
-      css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
       if(defined('ZUI3'))
       {
           css::import('https://ztui.sh.oop.cc/assets/style.4d294030.css');
           css::import('https://zui.cyy.oop.cc/dist/zui-custom/zui-custom.css');
+      }
+      else
+      {
+          css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
       }
 
       css::import($defaultTheme . 'style.css?t=' . $timestamp);
