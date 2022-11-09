@@ -33,7 +33,7 @@ thead > tr > th{width:150px;}
 <?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->port->import;?></h2>
+    <h2><?php echo $lang->transfer->import;?></h2>
   </div>
   <p><?php echo sprintf($lang->file->importSummary, $allCount, html::input('maxImport', $config->file->maxImport, "style='width:50px'"), ceil($allCount / $config->file->maxImport));?></p>
   <p><?php echo html::commonButton($lang->import, "id='import'", 'btn btn-primary');?></p>
