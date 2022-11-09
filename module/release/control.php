@@ -126,10 +126,10 @@ class release extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $message = $this->executeHooks($releaseID);
-            if($message) $this->lang->saveSuccess = $message;
+            $result  = $this->executeHooks($releaseID);
+            $message = $result ? $result : $this->lang->saveSuccess;
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -137,11 +137,10 @@ class release extends control
 
         /* Get release and build. */
         $release = $this->release->getById((int)$releaseID);
-        $this->commonAction($release->product, $release->branch);
-        $build = $this->build->getById($release->build);
+        $this->commonAction($release->product);
 
-        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $release->project, 'project', $release->build, false);
-        $releasedBuilds = $this->release->getReleasedBuilds($release->product, $release->branch);
+        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', 0, 'project', $release->build, false);
+        $releasedBuilds = $this->release->getReleasedBuilds($release->product);
         foreach($releasedBuilds as $releasedBuild)
         {
             if($releasedBuild != $build->id) unset($builds[$releasedBuild]);
@@ -151,7 +150,6 @@ class release extends control
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
-        $this->view->build      = $build;
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
