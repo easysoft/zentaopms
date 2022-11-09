@@ -126,10 +126,10 @@ class release extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $message = $this->executeHooks($releaseID);
-            if($message) $this->lang->saveSuccess = $message;
+            $result  = $this->executeHooks($releaseID);
+            $message = $result ? $result : $this->lang->saveSuccess;
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -137,10 +137,10 @@ class release extends control
 
         /* Get release and build. */
         $release = $this->release->getById((int)$releaseID);
-        $this->commonAction($release->product, $release->branch);
+        $this->commonAction($release->product);
 
-        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $release->project, 'project', $release->build, false);
-        $releasedBuilds = $this->release->getReleasedBuilds($release->product, $release->branch);
+        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', 0, 'project', $release->build, false);
+        $releasedBuilds = $this->release->getReleasedBuilds($release->product);
         foreach($releasedBuilds as $releasedBuild)
         {
             if(strpos(',' . trim($release->build, ',') . ',', ",{$releasedBuild},") === false) unset($builds[$releasedBuild]);

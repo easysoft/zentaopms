@@ -279,11 +279,9 @@ class releaseModel extends model
         /* Init vars. */
         $releaseID  = (int)$releaseID;
         $oldRelease = $this->getById($releaseID);
-        $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('id', $releaseID)
-            ->add('branch',  (int)$branch)
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
             ->join('build', ',')
@@ -298,9 +296,14 @@ class releaseModel extends model
         /* update release project and branch */
         if($release->build)
         {
-            $buildInfo = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
-            $release->branch  = $buildInfo->branch;
-            $release->project = $buildInfo->project;
+            $builds = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+            foreach($builds as $build)
+            {
+                $branches[$build->branch]  = $build->branch;
+                $projects[$build->project] = $build->project;
+            }
+            $release->branch  = implode(',', $branches);
+            $release->project = implode(',', $projects);
         }
 
         $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles')
