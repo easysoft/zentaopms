@@ -79,7 +79,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('ganttType', $ganttType);?>
 <?php js::set('showFields', $this->config->programplan->ganttCustom->ganttFields);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
-<?php js::set('zooming', $zooming);?>
+<?php js::set('zooming', isset($zooming) ? $zooming : 'day');?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <?php if($this->app->getModuleName() == 'programplan'):?>
   <div class='btn-toolbar pull-left'>
