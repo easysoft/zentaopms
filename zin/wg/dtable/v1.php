@@ -149,6 +149,7 @@ class column extends wg
                 {
                     $actionsMap->$action = new stdclass();
                     $actionsMap->$action->icon = $config->actionsMap->icon->$action;
+                    if(isset($actionsList['hint'][$action])) $actionsMap->$action->hint = $actionsList['hint'][$action];
                 }
             }
             elseif($actionType == 'other' or $actionType == 'more')
@@ -163,7 +164,8 @@ class column extends wg
                 {
                     $item = new stdclass();
                     $item->name = $action;
-                    $item->icon = $config->actionsMap->icon;
+                    $item->icon = $config->actionsMap->icon->$action;
+                    if(isset($actionsList['text'][$action])) $item->text = $actionsList['text'][$action];
                     $items[] = $item;
                 }
                 $actionsMap->$actionType->dropdown->items = $items;

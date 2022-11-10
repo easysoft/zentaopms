@@ -1628,19 +1628,125 @@ class programModel extends model
         return $row;
     }
 
+    /**
+     * Build actions data.
+     *
+     * @param  object $program
+     * @access public
+     * @return array
+     */
     public function buildActions($program)
     {
-        $actions = array();
+        $this->loadModel('project');
+
+        $actionsMap         = array();
+        $canStartProgram    = common::hasPriv('program', 'start');
+        $canSuspendProgram  = common::hasPriv('program', 'suspend');
+        $canCloseProgram    = common::hasPriv('program', 'close');
+        $canActivateProgram = common::hasPriv('program', 'activate');
+        $canStartProject    = common::hasPriv('project', 'start');
+        $canSuspendProject  = common::hasPriv('project', 'suspend');
+        $canCloseProject    = common::hasPriv('project', 'close');
+        $canActivateProject = common::hasPriv('project', 'activate');
+
         if($program->type == 'program' && strpos(",{$this->app->user->view->programs},", ",$program->id,") !== false)
         {
-            if($program->status == 'wait' || $program->status == 'suspended') $actions[] = 'start';
-            if($program->status == 'doing') $actions[] = 'close';
-            if($program->status == 'closed') $actions[] = 'activate';
-            if(common::hasPriv('program', 'suspend') || (common::hasPriv('program', 'close') && $program->status != 'doing') || (common::hasPriv('program', 'activate') && $program->status != 'closed'))
+            if(($program->status == 'wait' or $program->status == 'suspended') and $canStartProgram) $actionsMap[] = 'start';
+            if($program->status == 'doing' and $canCloseProgram) $actionsMap[] = 'close';
+            if($program->status == 'closed' and $canActivateProgram) $actionsMap[] = 'activate';
+            if($canSuspendProgram or ($canClose && $program->status != 'doing') or ($canActivateProgram and $program->status != 'closed'))
             {
-                $actions[] = 'other';
+                $other = new stdclass();
+                $other->name            = 'other';
+                $other->dropdown        = new stdclass();
+                $other->dropdown->items = array();
+
+                $otherActions = array('suspend', 'close', 'activate');
+                foreach($otherActions as $action)
+                {
+                    if(!common::hasPriv('program', $action)) continue;
+
+                    $item = new stdclass();
+                    $item->name = $action;
+                    $item->text = $this->lang->program->$action;
+                    if(!$this->isClickable($program, $action)) $item->disabled = true;
+
+                    $other->dropdown->items[] = $item;
+                }
+
+                $actionsMap[] = $other;
+            }
+
+            if(common::hasPriv('program', 'edit')) $actionsMap[] = 'edit';
+            if(common::hasPriv('program', 'create'))
+            {
+                $item = new stdclass();
+                $item->name = 'create';
+                if($program->status == 'closed') $item->disabled = true;
+                $actionsMap[] = $item;
+            }
+            if(common::hasPriv('program', 'delete')) $actionsMap[] = 'delete';
+        }
+        elseif($program->type == 'project')
+        {
+            if(($program->status == 'wait' or $program->status == 'suspended') and $canStartProject) $actionsMap[] = 'start';
+            if($program->status == 'doing' and $canCloseProject)  $actionsMap[] = 'close';
+            if($program->status == 'closed' and $canActivateProject)  $actionsMap[] = 'activate';
+            if($canSuspendProject or ($canCloseProject and $program->status != 'doing') or ($canActivateProject and $program->status != 'closed'))
+            {
+                $other = new stdclass();
+                $other->name            = 'other';
+                $other->dropdown        = new stdclass();
+                $other->dropdown->items = array();
+
+                $otherActions = array('suspend', 'close', 'activate');
+                foreach($otherActions as $action)
+                {
+                    if(!common::hasPriv('project', $action)) continue;
+
+                    $item = new stdclass();
+                    $item->name = $action;
+                    $item->text = $this->lang->project->$action;
+                    if(!$this->project->isClickable($program, $action)) $item->disabled = true;
+
+                    $other->dropdown->items[] = $item;
+                }
+
+                $actionsMap[] = $other;
+            }
+            if(common::hasPriv('project', 'edit')) $actionsMap[] = 'edit';
+            if(common::hasPriv('project', 'team')) $actionsMap[] = 'team';
+            if(common::hasPriv('project', 'group'))
+            {
+                $item = new stdclass();
+                $item->name = 'group';
+                if($program->type == 'kanban') $item->disabled = true;
+                $actionsMap[] = $item;
+            }
+
+            if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
+            {
+                $more = new stdclass();
+                $more->name            = 'more';
+                $more->dropdown        = new stdclass();
+                $more->dropdown->items = array();
+
+                $moreActions = array('manageProducts', 'whitelist', 'delete');
+                foreach($moreActions as $action)
+                {
+                    if(!common::hasPriv('project', $action)) continue;
+
+                    $item = new stdclass();
+                    $item->name = $action;
+                    $item->text = $this->lang->project->$action;
+                    if($action == 'whitelist' and $program->acl == 'open') $item->disabled = true;
+
+                    $more->dropdown->items[] = $item;
+                }
+
+                $actionsMap[] = $more;
             }
         }
-        return $actions;
+        return $actionsMap;
     }
 }
