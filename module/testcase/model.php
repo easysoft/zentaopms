@@ -1932,6 +1932,7 @@ class testcaseModel extends model
         }
         else
         {
+            $this->app->loadLang('branch');
             $productInfo = $this->loadModel('product')->getByID($productID);
             $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
             $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID) + array('all' => $this->lang->branch->all);
