@@ -1359,7 +1359,7 @@ class execution extends control
 
         $productTasks = array();
 
-        $tasks = $this->testtask->getExecutionTasks($executionID, $orderBy, $pager);
+        $tasks = $this->testtask->getExecutionTasks($executionID, 'execution', $orderBy, $pager);
         foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
 
         $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->testtask->common;

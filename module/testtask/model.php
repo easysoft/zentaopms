@@ -194,14 +194,15 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionTasks($executionID, $orderBy = 'id_desc', $pager = null)
+    public function getExecutionTasks($executionID, $objectType = 'execution', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name AS buildName')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
-            ->where('t1.execution')->eq((int)$executionID)
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($objectType == 'execution')->andWhere('t1.execution')->eq((int)$executionID)->fi()
+            ->beginIF($objectType == 'project')->andWhere('t1.project')->eq((int)$executionID)->fi()
             ->andWhere('t1.auto')->ne('unit')
-            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
