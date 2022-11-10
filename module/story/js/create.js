@@ -157,8 +157,8 @@ $(window).unload(function(){
 
     if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
     {
-        $('.icon-plus').parent().css('pointer-events', 'none')
-        $('.icon-plus').parent().addClass('disabled')
+        $('.table-col .icon-plus').parent().css('pointer-events', 'none')
+        $('.table-col .icon-plus').parent().addClass('disabled')
     }
 
      itemIndex ++;
