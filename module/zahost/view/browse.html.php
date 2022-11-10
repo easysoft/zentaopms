@@ -51,7 +51,6 @@
           <th class='c-disk'>       <?php common::printOrderLink('diskSize',        $orderBy, $vars, $lang->zahost->diskSize);?></th>
           <th class='c-software'>   <?php common::printOrderLink('virtualSoftware', $orderBy, $vars, $lang->zahost->virtualSoftware);?></th>
           <th class='c-status'>     <?php common::printOrderLink('t2.status',       $orderBy, $vars, $lang->zahost->status);?></th>
-          <th class='c-instanceNum'><?php common::printOrderLink('instanceNum',     $orderBy, $vars, $lang->zahost->instanceNum);?></th>
           <th class='c-datetime'>   <?php common::printOrderLink('registerDate',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
@@ -68,7 +67,6 @@
           <td><?php echo $host->diskSize . zget($lang->zahost->unitList, $host->unit);?></td>
           <td><?php echo $host->virtualSoftware;?></td>
           <td><?php echo zget($lang->host->statusList, $host->status);?></td>
-          <td><?php echo $host->instanceNum;?></td>
           <td><?php echo helper::isZeroDate($host->registerDate) ? '' : $host->registerDate;?></td>
           <td class='c-actions'>
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>

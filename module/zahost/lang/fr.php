@@ -16,12 +16,12 @@ $lang->zahost->editTemplate   = 'Edit Template';
 $lang->zahost->deleteTemplate = 'Delete Template';
 
 $lang->zahost->name        = 'Nom';
-$lang->zahost->IP          = 'IP';
+$lang->zahost->IP          = 'IP/Domain';
 $lang->zahost->publicIP    = 'IP';
 $lang->zahost->cpuCores    = 'CPU Cores';
 $lang->zahost->memory      = 'Mémoire Espace';
 $lang->zahost->diskSize    = 'Disque Espace';
-$lang->zahost->instanceNum = 'Max instances';
+$lang->zahost->desc        = 'Description';
 $lang->zahost->type        = 'Type';
 $lang->zahost->status      = 'Status';
 
@@ -38,6 +38,27 @@ $lang->zahost->osCategory = 'System';
 $lang->zahost->osVersion  = 'Os Version No';
 $lang->zahost->osLang     = 'Language';
 $lang->zahost->imageName  = 'Image File';
+
+$lang->zahost->initHost = new stdclass;
+$lang->zahost->initHost->checkStatus = "Check Service Status";
+$lang->zahost->initHost->not_install = "Not installed";
+$lang->zahost->initHost->not_available = "Installed, Not Started";
+$lang->zahost->initHost->ready = "Ready";
+$lang->zahost->initHost->next = "Next";
+$lang->zahost->initHost->initSuccessNotice = "The initialization was successful, click Next to complete the next steps.";
+$lang->zahost->initHost->initFailNotice = "Initialization failed, check the init script execution log and try the following two solutions:<br/>1. Re-execute the script <br/>2. Review the initialization FAQ";
+$lang->zahost->initHost->serviceStatus = [
+    "kvm" => 'not_install',
+    "novnc" => 'not_install',
+    "websockify" => 'not_install',
+];
+$lang->zahost->initHost->title = "Initialize Host";
+$lang->zahost->initHost->descTitle = "Follow these steps to complete the initialization on the host:";
+$lang->zahost->initHost->descLi = [
+    "Download the init script to the host：wget xxx -o xxx",
+    "Execute the init script on the host and execute the command example under Ubuntu：xxxx"
+];
+$lang->zahost->initHost->statusTitle = "Service Status";
 
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = 'Nom';

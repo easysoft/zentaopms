@@ -27,6 +27,7 @@ $lang->executionnode->osLang          = '系统语言';
 $lang->executionnode->cpu             = 'CPU核心数';
 $lang->executionnode->osMemory        = '内存';
 $lang->executionnode->osDisk          = '硬盘';
+$lang->executionnode->desc            = '描述';
 $lang->executionnode->status          = '状态';
 $lang->executionnode->macAddress      = 'MAC地址';
 $lang->executionnode->vnc             = 'VNC端口';

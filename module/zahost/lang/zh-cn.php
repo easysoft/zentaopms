@@ -16,12 +16,12 @@ $lang->zahost->editTemplate   = '编辑虚拟机模板';
 $lang->zahost->deleteTemplate = '删除虚拟机模板';
 
 $lang->zahost->name        = '名称';
-$lang->zahost->IP          = 'IP';
+$lang->zahost->IP          = 'IP/域名';
 $lang->zahost->publicIP    = 'IP';
 $lang->zahost->memory      = '内存';
 $lang->zahost->cpuCores    = 'CPU核心数';
 $lang->zahost->diskSize    = '硬盘容量';
-$lang->zahost->instanceNum = '最大实例数';
+$lang->zahost->desc        = '描述';
 $lang->zahost->type        = '类型';
 $lang->zahost->status      = '状态';
 
@@ -38,6 +38,27 @@ $lang->zahost->osCategory = '操作系统平台';
 $lang->zahost->osVersion  = '操作系统版本号';
 $lang->zahost->osLang     = '系统语言';
 $lang->zahost->imageName  = '镜像文件';
+
+$lang->zahost->initHost = new stdclass;
+$lang->zahost->initHost->checkStatus = "检测服务状态";
+$lang->zahost->initHost->not_install = "未安装";
+$lang->zahost->initHost->not_available = "已安装，未启动";
+$lang->zahost->initHost->ready = "已就绪";
+$lang->zahost->initHost->next = "下一步";
+$lang->zahost->initHost->initSuccessNotice = "初始化成功，请点击下一步完成后续操作。";
+$lang->zahost->initHost->initFailNotice = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：<br/>1. 重新执行脚本 <br/>2. 查看初始化常见问题";
+$lang->zahost->initHost->serviceStatus = [
+    "kvm" => 'not_install',
+    "novnc" => 'not_install',
+    "websockify" => 'not_install',
+];
+$lang->zahost->initHost->title = "初始化宿主机";
+$lang->zahost->initHost->descTitle = "请按照以下步骤在宿主机上完成初始化：";
+$lang->zahost->initHost->descLi = [
+    "下载初始化脚本至宿主机：wget xxx -o xxx",
+    "在宿主机上执行初始化脚本，Ubuntu下执行命令示例：xxxx"
+];
+$lang->zahost->initHost->statusTitle = "服务状态";
 
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = '名称';

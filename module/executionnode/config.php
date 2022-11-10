@@ -19,6 +19,9 @@ $config->executionnode->os->cpu['6']  = '6';
 $config->executionnode->os->cpu['8']  = '8';
 $config->executionnode->os->cpu['12'] = '12';
 $config->executionnode->os->cpu['16'] = '16';
+$config->executionnode->os->cpu['24'] = '24';
+$config->executionnode->os->cpu['32'] = '32';
+$config->executionnode->os->cpu['64'] = '64';
 
 $config->executionnode->os->type = array();
 $config->executionnode->os->type['windows']['winServer'] = 'Windows Server';
@@ -49,3 +52,7 @@ $config->executionnode->search['params']['status']     = array('operator' => '='
 $config->executionnode->search['params']['osCpu']      = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $config->executionnode->os->cpu);
 $config->executionnode->search['params']['osMemory']   = array('operator' => '=', 'control' => 'input',  'values' => '');
 $config->executionnode->search['params']['osDisk']     = array('operator' => '=', 'control' => 'input',  'values' => '');
+
+$config->executionnode->editor = new stdclass();
+$config->executionnode->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->executionnode->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');

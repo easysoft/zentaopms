@@ -62,13 +62,13 @@ class zahost extends control
     {
         if($_POST)
         {
-            $this->zahost->create();
+            $hostID = $this->zahost->create();
             if(dao::isError())
             {
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('inithost', "hostID=$hostID")));
         }
 
         $this->view->title = $this->lang->zahost->create;
@@ -310,5 +310,36 @@ class zahost extends control
         if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => $imageList));
 
         return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage))));
+    }
+
+    /*
+     * Init host.
+     *
+     * @param  int      $hostID
+     * @return void
+     */
+    public function initHost($hostID)
+    {
+        $this->view->title        = $this->lang->zahost->vmTemplate->common;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->hostID       = $hostID;
+
+        $this->display();
+    }
+
+    /**
+     * Check service status by ajax.
+     *
+     * @param  int    $hostID
+     * @param  int    $templateID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetServiceStatus($hostID)
+    {
+        $host      = $this->zahost->getById($hostID);
+        $serviceStatus = $this->zahost->getServiceStatus($host);
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
     }
 }

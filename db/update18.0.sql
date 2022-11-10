@@ -3,13 +3,9 @@ ALTER TABLE `zt_project` ADD `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1
 ALTER table `zt_project` ADD `multiple` enum('0', '1') NOT NULL DEFAULT '1';
 ALTER TABLE `zt_repo` ADD `projects` varchar(255) NOT NULL AFTER `product`;
 
-ALTER TABLE `zt_host` ADD `vnc` int NOT NULL;
-ALTER TABLE `zt_host` ADD `registerDate`  datetime NOT NULL;
-ALTER TABLE `zt_host` ADD `createdBy` varchar(30) NOT NULL;
-ALTER TABLE `zt_host` ADD `createdDate` datetime NOT NULL AFTER `createdBy`;
-ALTER TABLE `zt_host` ADD `editedBy` varchar(30) NOT NULL AFTER `createdDate`;
-ALTER TABLE `zt_host` ADD `editedDate` datetime NOT NULL AFTER `editedBy`;
-ALTER TABLE `zt_host` ADD `deleted` enum ('0', '1') NOT NULL DEFAULT '0' AFTER `editedDate`;
+ALTER TABLE `zt_host` ADD `desc` text NOT NULL AFTER `token`;
+ALTER TABLE `zt_host` CHANGE COLUMN `publicIP` `address` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,CHANGE COLUMN `cpuCores` `cpu` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,CHANGE COLUMN `diskSize` `disk` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,CHANGE COLUMN `heartbeatTime` `heartbeat` datetime NOT NULL;
+
 CREATE TABLE `zt_executionnode` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `hostID` int(11) unsigned NOT NULL DEFAULT 0,
@@ -21,8 +17,8 @@ CREATE TABLE `zt_executionnode` (
   `osLang` varchar(32) NOT NULL DEFAULT '',
   `memory` float unsigned NOT NULL,
   `disk` float unsigned NOT NULL,
-  `status` char(20) NOT NULL,
-  `mac` char(64) NOT NULL,
+  `status` varchar(20) NOT NULL,
+  `mac` varchar(64) NOT NULL,
   `vnc` int(11) unsigned NOT NULL DEFAULT 0,
   `registerDate` datetime NOT NULL,
   `createdBy` datetime NOT NULL,
@@ -31,7 +27,31 @@ CREATE TABLE `zt_executionnode` (
   `editedDate` datetime NOT NULL,
   `deleted` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_image` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `address` varchar(64) NOT NULL DEFAULT '',
+  `from` varchar(64) NOT NULL DEFAULT '',
+  `path` varchar(64) NOT NULL DEFAULT '',
+  `status` varchar(20) NOT NULL DEFAULT '',
+  `osCategory` varchar(32) NOT NULL DEFAULT '',
+  `osType` varchar(32) NOT NULL DEFAULT '',
+  `osVersion` varchar(32) NOT NULL DEFAULT '',
+  `osLang` varchar(32) NOT NULL DEFAULT '',
+  `memory` float unsigned NOT NULL,
+  `disk` float unsigned NOT NULL,
+  `fileSize` float unsigned NOT NULL,
+  `md5` varchar(64) NOT NULL,
+  `registerDate` datetime NOT NULL,
+  `createdBy` datetime NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` datetime NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE VIEW `ztv_normalproduct` AS SELECT * FROM `zt_product` WHERE `shadow` = 0;
 

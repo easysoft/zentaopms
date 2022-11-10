@@ -69,7 +69,7 @@ class zahostModel extends model
         if(!dao::isError())
         {
             $this->loadModel('action')->create('zahost', $hostID, 'created');
-            return true;
+            return $hostID;
         }
 
         return false;
@@ -363,5 +363,24 @@ class zahostModel extends model
     public function getTemplateByID($templateID)
     {
         return $this->dao->select('*')->from(TABLE_VMTEMPLATE)->where('id')->eq($templateID)->fetch();
+    }
+
+    /**
+     * Get service status from ZAgent server.
+     *
+     * @param  object $host
+     * @access public
+     * @return array
+     */
+    public function getServiceStatus($host)
+    {
+        $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/service/check", json_encode(array("services" => "all"))));
+        if(empty($result) || $result->code != 'success')
+        {
+            $result = new stdclass;
+            $result->data = $this->lang->zahost->initHost->serviceStatus;
+        }
+
+        return $result->data;
     }
 }

@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -20,13 +21,13 @@
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
           <tr>
+            <th><?php echo $lang->executionnode->hostName;?></th>
+            <td><?php echo html::select('hostID', $hostPairs, '', "class='form-control chosen'")?></td>
+          </tr>
+          <tr>
             <th class='w-120px'><?php echo $lang->executionnode->name;?></th>
             <td class='p-25f'><?php echo html::input('name', '', "class='form-control' placeholder=\"{$lang->executionnode->nameValid}\"");?></td>
             <td></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->executionnode->hostName;?></th>
-            <td><?php echo html::select('hostID', $hostPairs, '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->executionnode->vmTemplate;?></th>
@@ -71,6 +72,11 @@
           <tr>
             <th><?php echo $lang->executionnode->osLang;?></th>
             <td><?php echo html::input('osLang', '', "class='form-control' disabled")?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->executionnode->desc ?></th>
+            <td colspan='2'><?php echo html::textarea('desc', '', "class='form-control'")?></td>
+            <td></td>
           </tr>
           <tr>
             <td colspan="2" class='text-center form-actions'>

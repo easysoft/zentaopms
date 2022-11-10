@@ -11,6 +11,7 @@
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -19,6 +20,10 @@
       </div>
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
+          <tr>
+            <th><?php echo $lang->zahost->virtualSoftware;?></th>
+            <td><?php echo html::select('virtualSoftware', $lang->zahost->softwareList, $host->virtualSoftware, "class='form-control chosen'");?></td>
+          </tr>
           <tr>
             <th><?php echo $lang->zahost->zaHostType;?></th>
             <td><?php echo html::select('hostType', $lang->zahost->zaHostTypeList, $host->hostType, "class='form-control chosen'");?></td>
@@ -34,14 +39,14 @@
           </tr>
           <tr>
             <th><?php echo $lang->zahost->cpuCores;?></th>
-            <td><?php echo html::input('cpuCores', $host->cpuCores, "class='form-control'");?></td>
+            <td><?php echo html::select('cpuCores', $config->zahost->cpuCoreList, $host->cpuCores, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zahost->memory;?></th>
             <td>
               <div class='input-group'>
                 <?php echo html::input('memory', $host->memory, "class='form-control'");?>
-                <span class="input-group-addon"><?php echo $lang->zahost->unitList['GB'];?></span>
+                <span class="input-group-addon" id="memory-addon"><?php echo $lang->zahost->unitList['GB'];?></span>
               </div>
             </td>
           </tr>
@@ -57,12 +62,9 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->zahost->virtualSoftware;?></th>
-            <td><?php echo html::select('virtualSoftware', $lang->zahost->softwareList, $host->virtualSoftware, "class='form-control chosen'");?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->zahost->instanceNum?></th>
-            <td><?php echo html::input('instanceNum', $host->instanceNum, "class='form-control'");?></td>
+            <th><?php echo $lang->zahost->desc ?></th>
+            <td colspan='2'><?php echo html::textarea('desc', $host->desc, "class='form-control'")?></td>
+            <td></td>
           </tr>
           <tr>
             <td colspan='2' class='text-center form-actions'>

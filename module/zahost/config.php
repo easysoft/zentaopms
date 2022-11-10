@@ -26,6 +26,7 @@ $config->zahost->os->type['windows']['winxp']     = 'Windows XP';
 $config->zahost->os->type['linux']['ubuntu']      = 'Ubuntu';
 $config->zahost->os->type['linux']['centos']      = 'CentOS';
 $config->zahost->os->type['linux']['debian']      = 'Debian';
+$config->zahost->cpuCoreList = [1 => 1, 2 => 2, 4 => 4, 6 => 6, 8 => 8, 10 => 10, 12 => 12, 16 => 16, 24 => 24, 32 => 32, 64 => 64];
 
 global $lang;
 $config->zahost->search['module'] = 'zahost';
@@ -38,7 +39,6 @@ $config->zahost->search['fields']['memory']          = $lang->zahost->memory;
 $config->zahost->search['fields']['diskSize']        = $lang->zahost->diskSize;
 $config->zahost->search['fields']['virtualSoftware'] = $lang->zahost->virtualSoftware;
 $config->zahost->search['fields']['status']          = $lang->zahost->status;
-$config->zahost->search['fields']['instanceNum']     = $lang->zahost->instanceNum;
 $config->zahost->search['fields']['createdBy']       = $lang->zahost->createdBy;
 $config->zahost->search['fields']['createdDate']     = $lang->zahost->createdDate;
 $config->zahost->search['fields']['registerDate']    = $lang->zahost->registerDate;
@@ -60,6 +60,10 @@ $config->zahost->search['params']['createdDate']     = array('operator' => '=', 
 $config->zahost->search['params']['registerDate']    = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
 $config->zahost->search['params']['editedBy']        = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->zahost->search['params']['editedDate']      = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+
+$config->zahost->editor = new stdclass();
+$config->zahost->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->zahost->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 
 $config->vmTemplate = new stdclass();
 $config->vmTemplate->os = new stdClass();
