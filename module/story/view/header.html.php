@@ -107,6 +107,8 @@ function loadProductBranches(productID)
             originProductType = newProductType;
 
             $('tr[class^="addBranchesBox"]').remove();
+            $('.table-col .icon-plus').parent().css('pointer-events', 'auto')
+            $('.table-col .icon-plus').parent().removeClass('disabled')
 
             if(data)
             {
