@@ -1004,7 +1004,6 @@ class baseRouter
                     array($ztSessionHandler, "destroy"),
                     array($ztSessionHandler, "gc")
                 );
-                register_shutdown_function('session_write_close');
             }
         }
 
@@ -3169,6 +3168,7 @@ class ztSessionHandler
     {
         $this->tagID = $tagID;
         ini_set('session.save_handler', 'files');
+        register_shutdown_function('session_write_close');
     }
 
     /**
