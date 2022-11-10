@@ -162,15 +162,17 @@ class build extends control
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($build->project);
         if($this->app->tab == 'execution') $this->execution->setMenu($build->execution);
 
+        $builds = array();
         if($build->execution)
         {
             $productGroups = $this->product->getProducts($build->execution);
-            $branches = $this->loadModel('branch')->getList($build->product, $build->execution, 'all');
+            $branches      = $this->loadModel('branch')->getList($build->product, $build->execution, 'all');
         }
         else
         {
             $productGroups = $this->product->getProducts($build->project);
-            $branches = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
+            $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
+            $builds        = $this->build->getBuildPairs($build->product, $build->branch, 'noempty,notrunk,separate,noproject');
         }
 
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
@@ -207,6 +209,7 @@ class build extends control
         $this->view->products        = $products;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter', $build->builder);
         $this->view->build           = $build;
+        $this->view->builds          = $builds;
         $this->view->testtaskID      = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($build->id)->andWhere('deleted')->eq(0)->fetch('id');
         $this->display();
     }

@@ -18,7 +18,6 @@ $().ready(function()
             });
         }
     });
-    if(!executionID) $('#product').change();
 });
 
 function loadExecutions(oldExecutionID)

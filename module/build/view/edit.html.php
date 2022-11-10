@@ -42,13 +42,14 @@
           </td>
           <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
         </tr>
+        <?php $disabled = $testtaskID ? 'disabled' : '';?>
         <?php if(!$build->execution):?>
         <tr>
           <th><?php echo $lang->build->common;?></th>
-          <td id='buildBox'><?php echo html::select('builds', array(), '', "class='form-control chosen' multiple");?></td>
+          <td id='buildBox'><?php echo html::select('builds[]', $builds, $build->builds, "class='form-control chosen' multiple $disabled");?></td>
+          <td><?php if($disabled) echo $lang->build->notice->changeBuilds;?></td>
         </tr>
         <?php elseif(!empty($multipleProject)):?>
-        <?php $disabled = $testtaskID ? 'disabled' : '';?>
         <th><?php echo $lang->build->execution;?></th>
         <td id='executionsBox'><?php echo html::select('execution', $executions, $build->execution, "class='form-control chosen' required $disabled");?></td>
         <td><?php if($disabled) echo $lang->build->notice->changeExecution;?></td>

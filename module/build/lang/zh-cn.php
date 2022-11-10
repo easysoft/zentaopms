@@ -55,6 +55,7 @@ $lang->build->emptyExecution =  $lang->executionCommon . '不能为空。';
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "已经关联{$lang->SRCommon}、Bug或提交测试单的版本，不能修改其所属{$lang->productCommon}";
 $lang->build->notice->changeExecution = "提交测试单的版本，不能修改其所属{$lang->executionCommon}";
+$lang->build->notice->changeBuilds    = "提交测试单的版本，不能修改关联版本";
 
 $lang->build->finishStories = " 本次共完成 %s 个{$lang->SRCommon}";
 $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';
