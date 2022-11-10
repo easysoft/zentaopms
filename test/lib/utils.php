@@ -72,14 +72,22 @@ function ztfExtract($dir)
  * @access public
  * @return void
  */
-function zdRun()
+function zdRun($dataVersion = '', $dbFile = '')
 {
-    global $config, $dao;
+    global $config, $dao, $db;
 
     $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
     include LIB_ROOT . 'spyc.php';
 
-    $zdRoot = dirname(dirname(__FILE__)) . '/data/';
+    if($dataVersion && $dbFile)
+    {
+        $db->replaceDBConfig($dbFile);
+        $zdRoot = dirname(dirname(__FILE__)) . "/data/{$dataVersion}/";
+    }
+    else
+    {
+        $zdRoot = dirname(dirname(__FILE__)) . '/data/';
+    }
     $zdPath = RUNTIME_ROOT . 'zd';
 
     set_time_limit(0);
@@ -100,7 +108,7 @@ function zdRun()
         $tmpCommonPath = RUNTIME_ROOT . 'tmp/common';
         if(file_exists($tmpCommonPath)) system("rm -rf $tmpCommonPath");
         system("cp -r {$zdRoot}common $tmpCommonPath");
-        system("find {$zdRoot}sql/ -type f -delete");
+        if(file_exists("{$zdRoot}sql/")) system("find {$zdRoot}sql/ -type f -delete");
 
         /* Generate SQL files. */
         $tables = array();
