@@ -58,7 +58,7 @@ $config->program->dtable = new stdclass();
 
 $config->program->dtable->fieldList['name']['name']         = 'name';
 $config->program->dtable->fieldList['name']['title']        = $lang->nameAB;
-$config->program->dtable->fieldList['name']['type']         = 'link';
+$config->program->dtable->fieldList['name']['type']         = 'html';
 $config->program->dtable->fieldList['name']['flex']         = 1;
 $config->program->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->dtable->fieldList['name']['checkbox']     = true;

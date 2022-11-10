@@ -361,6 +361,12 @@ class dtable
         return $html;
     }
 
+    /**
+     * Set icon render function.
+     *
+     * @access public
+     * @return string
+     */
     public function setIconRender()
     {
         $html  = 'columns[' . $this->iconRender . '].iconRender = iconRender;';
