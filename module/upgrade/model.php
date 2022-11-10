@@ -7471,6 +7471,9 @@ class upgradeModel extends model
      */
     public function fixWeeklyReport()
     {
+        if(!isset($this->app->user)) $this->app->user = new stdclass();
+        $this->app->user->admin = true;
+
         $this->loadModel('weekly');
         $projects = $this->dao->select('id,begin,end')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('model')->eq('waterfall')->fetchAll('id');
 
