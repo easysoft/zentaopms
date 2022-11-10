@@ -10,6 +10,14 @@
  */
 class program extends control
 {
+    /**
+     * Construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
@@ -757,5 +765,17 @@ class program extends control
         if(!$program) return print(js::error($this->lang->notFound) . js::locate('back'));
 
         echo $this->fetch('program', 'product', "programID=$programID");
+    }
+
+    /**
+     * Ajax set show setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSetShowSetting()
+    {
+        $data = fixer::input('post')->get();
+        $this->loadModel('setting')->updateItem("{$this->app->user->account}.program.showAllProjects", $data->showAllProjects);
     }
 }

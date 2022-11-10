@@ -33,6 +33,7 @@
         <div class="tile-amount"><?php echo empty($data['createdCases']) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=testcase&type=openedbyme'), (int)$data['createdCases']);?></div>
       </div>
       <?php if($this->config->edition == 'max'):?>
+      <?php if(helper::hasFeature('risk')):?>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdRisks;?></div>
         <div class="tile-amount"><?php echo empty($data['createdRisks']) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=risk'), (int)$data['createdRisks']);?></div>
@@ -41,6 +42,8 @@
         <div class="tile-title"><?php echo $lang->block->resolvedRisks;?></div>
         <div class="tile-amount"><?php echo $data['resolvedRisks'];?></div>
       </div>
+      <?php endif;?>
+      <?php if(helper::hasFeature('issue')):?>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdIssues;?></div>
         <div class="tile-amount"><?php echo empty($data['createdIssues']) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=issue'), (int)$data['createdIssues']);?></div>
@@ -49,6 +52,7 @@
         <div class="tile-title"><?php echo $lang->block->resolvedIssues;?></div>
         <div class="tile-amount"><?php echo $data['resolvedIssues'];?></div>
       </div>
+      <?php endif;?>
       <?php endif;?>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdDocs;?></div>

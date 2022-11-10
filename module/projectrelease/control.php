@@ -132,7 +132,7 @@ class projectrelease extends control
         $this->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs(array_keys($this->products), 'all', 'notrunk,withbranch', $projectID, 'project');
+        $builds         = $this->build->getBuildPairs($this->view->product->id, $this->view->branch, 'notrunk,withbranch', $projectID, 'project');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
@@ -183,25 +183,29 @@ class projectrelease extends control
 
         /* Get release and build. */
         $release = $this->projectrelease->getById((int)$releaseID);
-        $this->commonAction($release->project, $release->product, $release->branch);
-        $build = $this->build->getById($release->build);
+        if(!$this->session->project) $this->session->set('project', explode(',', trim($release->project, ','))[0], 'project');
+
+        $this->commonAction($this->session->project, $release->product, $release->branch);
+        $bindBuilds = $this->build->getByList($release->build);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $release->project, 'project', '', false);
-        $releasedBuilds = $this->projectrelease->getReleasedBuilds($release->project);
+        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $this->session->project, 'project', '', false);
+        $releasedBuilds = $this->projectrelease->getReleasedBuilds($this->session->project);
         foreach($releasedBuilds as $releasedBuild)
         {
-            if($releasedBuild != $build->id) unset($builds[$releasedBuild]);
+            foreach(explode(',', trim($releasedBuild, ',')) as $bindBuildID)
+            {
+                if(!isset($bindBuilds[$bindBuildID])) unset($builds[$bindBuildID]);
+            }
         }
         unset($builds['trunk']);
 
         /* Set project menu. */
-        $this->project->setMenu($release->project);
+        $this->project->setMenu($this->session->project);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
-        $this->view->build      = $build;
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
@@ -326,9 +330,22 @@ class projectrelease extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->release = $this->release->getById($releaseID);
-        $this->view->actions = $this->loadModel('action')->getList('release', $releaseID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $release = $this->release->getByID($releaseID);
+        $project = $this->loadModel('project')->getByID($release->project);
+
+        if(!$project->hasProduct)
+        {
+            unset($this->lang->release->notifyList['FB']);
+            unset($this->lang->release->notifyList['PO']);
+            unset($this->lang->release->notifyList['QD']);
+        }
+
+        if(!$project->multiple) unset($this->lang->release->notifyList['ET']);
+
+        $this->view->release    = $release;
+        $this->view->actions    = $this->loadModel('action')->getList('release', $releaseID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->notifyList = $this->lang->release->notifyList;
         $this->display();
     }
 
@@ -510,6 +527,7 @@ class projectrelease extends control
 
         $release = $this->projectrelease->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);
+        $project = $this->loadModel('project')->getByID($release->project);
         $this->commonAction($release->project, $release->product);
         $this->loadModel('story');
         $this->loadModel('tree');
@@ -523,6 +541,7 @@ class projectrelease extends control
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
+        if(!$project->hasProduct and !$project->multiple) unset($this->config->product->search['fields']['plan']);
         $this->config->product->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
@@ -541,6 +560,7 @@ class projectrelease extends control
             $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branchName);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
+        if($this->view->project->model == 'waterfall' && empty($this->view->project->hasProduct)) unset($this->config->product->search['fields']['plan']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')
@@ -631,6 +651,7 @@ class projectrelease extends control
         /* Set menu. */
         $release = $this->projectrelease->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);
+        $project = $this->loadModel('project')->getByID($release->project);
         $this->commonAction($release->project, $release->product);
 
         /* Load pager. */
@@ -642,6 +663,7 @@ class projectrelease extends control
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         unset($this->config->bug->search['fields']['product']);
         unset($this->config->bug->search['fields']['project']);
+        if(!$project->hasProduct and !$project->multiple) unset($this->config->bug->search['fields']['plan']);
         $this->config->bug->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
@@ -662,6 +684,7 @@ class projectrelease extends control
             $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branchName);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
+        if($this->view->project->model == 'waterfall' && empty($this->view->project->hasProduct)) unset($this->config->bug->search['fields']['plan']);
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         $allBugs     = array();
@@ -752,5 +775,24 @@ class projectrelease extends control
         if(dao::isError()) return print(js::error(dao::getError()));
         $actionID = $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
         return print(js::reload('parent'));
+    }
+
+    /**
+     * Ajax load builds.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    public function ajaxLoadBuilds($projectID, $productID, $branch = 0)
+    {
+        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk,withbranch', $projectID, 'project');
+        $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
+        foreach($releasedBuilds as $build) unset($builds[$build]);
+        unset($builds['trunk']);
+
+        return print(html::select('build[]', $builds, '', "class='form-control chosen' multiple"));
     }
 }

@@ -36,6 +36,12 @@
       $productViewLink  = $this->createLink('product', 'browse', "productID={$testtask->product}");
       $buildViewLink    = $this->createLink('build', 'view', "buildID={$testtask->build}");
       $testtaskViewLink = $this->createLink('testtask', 'view', "testtaskID={$testtask->id}");
+
+      if($testtask->shadow)
+      {
+          $testtask->productName = zget($projects, $testtask->project);
+          $productViewLink = $this->createLink('projectstory', 'story', "projectID={$testtask->project}&productID={$testtask->product}");
+      }
       ?>
       <tr class='text-center' <?php echo $appid?>>
         <?php if($longBlock):?>

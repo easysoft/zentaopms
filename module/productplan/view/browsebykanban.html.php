@@ -32,6 +32,7 @@
 .dropdown-menu > li > .disabled {pointer-events: none; color: #838a9d;}
 </style>
 <?php js::set('kanbanData', $kanbanData);?>
+<?php js::set('rawModule', $app->rawModule);?>
 <?php js::set('productplanLang', $lang->productplan);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -52,7 +53,7 @@
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
       <?php foreach($lang->productplan->orderList as $order => $label):?>
       <?php $active = $orderBy == $order ? 'active' : '';?>
-        <li class='<?php echo $active;?>'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branchID&browseType=$browseType&queryID=$queryID&orderBy=$order"), $label);?></li>
+        <li class='<?php echo $active;?>'><?php echo html::a($this->createLink($app->rawModule, 'browse', "productID=$productID&branch=$branchID&browseType=$browseType&queryID=$queryID&orderBy=$order"), $label);?></li>
       <?php endforeach;?>
       </ul>
     </div>
@@ -61,7 +62,7 @@
       <?php echo html::a('javascript:;',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary switchButton' title='{$lang->productplan->kanban}' data-type='kanban'");?>
     </div>
     <?php if(common::canModify('product', $product)):?>
-    <?php common::printLink('productplan', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>
+    <?php common::printLink($app->rawModule, 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
 </div>

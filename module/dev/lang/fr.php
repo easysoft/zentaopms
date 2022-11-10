@@ -158,6 +158,9 @@ $lang->dev->groupList['api']       = 'API';
 $lang->dev->groupList['message']   = 'Message';
 $lang->dev->groupList['search']    = 'Search';
 
+global $config;
+if($config->systemMode != 'ALM') unset($lang->dev->groupList['program']);
+
 $lang->dev->endGroupList['admin']  = 'Admin';
 $lang->dev->endGroupList['system'] = 'Syst?me';
 $lang->dev->endGroupList['other']  = 'Autres';

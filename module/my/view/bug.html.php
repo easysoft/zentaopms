@@ -62,9 +62,9 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
           <th class='c-severity' title='<?php echo $lang->bug->severity;?>'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
           <th class='c-pri' title='<?php echo $lang->bug->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
 
           <th class='c-type'><?php common::printOrderLink('type', $orderBy, $vars, $lang->bug->type);?></th>
           <th class='c-product'><?php common::printOrderLink('product', $orderBy, $vars, $lang->bug->product);?></th>
@@ -121,12 +121,23 @@
             <?php endif;?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
-          <?php $param = $config->productLink == 'product-all' ? '' : "productID=$bug->product";?>
+          <td class='text-left nobr'>
+            <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title='{$bug->title}'");?>
+            <?php if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion"), "[" . $this->lang->testcase->common . "#$bug->case]", '', "class='bug' title='$bug->case'");?>
+          </td>
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <td class='text-left nobr'>
             <?php
-            $productLink = explode('-', $config->productLink);
-            echo html::a($this->createLink('product', $productLink[1], $param), $bug->productName, null, "title={$bug->productName}");
+            if(isset($bug->shadow))
+            {
+                echo html::a($this->createLink('project', 'browse'), $bug->productName, null, "title={$bug->productName}");
+            }
+            else
+            {
+                $productLink = explode('-', $config->productLink);
+                $param       = $config->productLink == 'product-all' ? '' : "productID=$bug->product";
+                echo html::a($this->createLink('product', $productLink[1], $param), $bug->productName, null, "title={$bug->productName}");
+            }
             ?>
           </td>
           <?php if($type != 'openedBy'): ?>

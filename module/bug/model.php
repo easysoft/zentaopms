@@ -66,7 +66,7 @@ class bugModel extends model
             ->setDefault('openedBuild', '')
             ->setDefault('notifyEmail', '')
             ->setDefault('deadline', '0000-00-00')
-            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
+            ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
             ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
@@ -88,9 +88,6 @@ class bugModel extends model
         if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
-
-        /* Use classic mode to replace required project. */
-        if($this->config->systemMode == 'classic' and strpos($this->config->bug->create->requiredFields, 'project') !== false) $this->config->bug->create->requiredFields = str_replace('project', 'execution', $this->config->bug->create->requiredFields);
 
         $this->dao->insert(TABLE_BUG)->data($bug)
             ->autoCheck()
@@ -288,7 +285,7 @@ class bugModel extends model
                 }
             }
 
-            if($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa') $bug->project = $this->session->project;
+            if($this->lang->navGroup->bug != 'qa') $bug->project = $this->session->project;
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
@@ -698,7 +695,8 @@ class bugModel extends model
             ->add('id', $bugID)
             ->cleanInt('product,module,severity,project,execution,story,task,branch')
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
-            ->setDefault('product,module,execution,story,task,duplicateBug,branch', 0)
+            ->setDefault('module,execution,story,task,duplicateBug,branch', 0)
+            ->setDefault('product', $oldBug->product)
             ->setDefault('openedBuild', '')
             ->setDefault('os', '')
             ->setDefault('browser', '')
@@ -1602,7 +1600,7 @@ class bugModel extends model
     {
         $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
         $productParams = ($productID and isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
-        $productParams = $productParams + array('all' => $this->lang->bug->allProduct);
+        $productParams = $productParams + array('all' => $this->lang->all);
         $projectParams = $this->getProjects($productID);
         $projectParams = $projectParams + array('all' => $this->lang->bug->allProject);
 
@@ -1617,7 +1615,7 @@ class bugModel extends model
 
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
-        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $projectParams;
+        $this->config->bug->search['params']['project']['values']       = $projectParams;
         $this->config->bug->search['params']['product']['values']       = $productParams;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
         $this->config->bug->search['params']['module']['values']        = $modules;
@@ -1753,7 +1751,7 @@ class bugModel extends model
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
 
         if($type != 'bySearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
-        return $this->dao->select("t1.*,t2.name as productName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
+        return $this->dao->select("t1.*, t2.name AS productName, t2.shadow, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq('0')
@@ -2041,8 +2039,7 @@ class bugModel extends model
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->in(array_keys($projects))
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('t1.type')->eq('execution')->fi()
+            ->andWhere('t1.type')->eq('project')
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
             ->fetchAll('account');
@@ -2953,7 +2950,7 @@ class bugModel extends model
         }
         else
         {
-            $productParis  = $this->loadModel('product')->getPairs();
+            $productParis  = $this->loadModel('product')->getPairs('', 0, '', 'all');
             $productIDList = array_keys($productParis);
 
             if(!empty($productIDList))
@@ -3622,7 +3619,8 @@ class bugModel extends model
         if($type == 'view') $menu .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);
         if($type == 'view' && $this->app->tab != 'product')
         {
-            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product' id='tostory'", $this->lang->bug->toStory);
+            $tab   = $this->app->tab == 'qa' ? 'product' : $this->app->tab;
+            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='$tab' id='tostory'", $this->lang->bug->toStory);
             if(common::hasPriv('task', 'create') and !isonlybody()) $menu .= html::a('#toTask', "<i class='icon icon-check'></i><span class='text'>{$this->lang->bug->toTask}</span>", '', "data-app='qa' data-toggle='modal' class='btn btn-link'");
             $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }
@@ -3650,7 +3648,7 @@ class bugModel extends model
     public function getRelatedObjects($object, $pairs = '')
     {
         /* Get bugs. */
-        $bugs = $this->loadModel('port')->getQueryDatas('bug');
+        $bugs = $this->loadModel('transfer')->getQueryDatas('bug');
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();

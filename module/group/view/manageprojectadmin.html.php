@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php if($config->systemMode == 'classic' and $this->app->getClientLang() == 'en'):?>
+<?php if(common::checkNotCN()):?>
 <style>
 .addon-execution {padding: 0px 20px}
 </style>
@@ -41,29 +41,43 @@
             <th class='w-70px'><?php echo $lang->group->allCheck . " <span data-toggle='tooltip' class='text-help' title='{$lang->group->allTips}' ><i class='icon-help'></i></sapn>";?></th>
             <th class='w-100px text-center'><?php echo $lang->actions;?></th>
           </tr>
-          <?php if($config->systemMode == 'new'):?>
+          <?php $hiddenProgram = $config->systemMode == 'ALM' ? '' : 'hidden';?>
+          <?php $rowspan       = $config->systemMode == 'ALM' ? 4 : 3;?>
           <?php if($projectAdmins):?>
           <?php foreach($projectAdmins as $account => $group):?>
           <tr class="line<?php echo $group->group;?>">
-            <td rowspan='4'>
+            <td rowspan='<?php echo $rowspan?>'>
               <div class='group-item'><?php echo html::select("members[$group->group][]", $allUsers, $account, "class='form-control picker-select' multiple");?></div>
             </td>
-            <td>
+            <td class='<?php echo $hiddenProgram?>'>
               <div class='input-group'>
                 <?php $disabled = $group->programs == 'all' ? "disabled='disabled'" : '';?>
                 <span class='input-group-addon addon-program'> <?php echo $lang->group->manageProgram;?></span>
                 <?php echo html::select("program[$group->group][]", $programs, $group->programs == 'all' ? '' : $group->programs, "class='form-control picker-select' multiple $disabled");?>
               </div>
             </td>
-            <td>
+            <td class='<?php echo $hiddenProgram?>'>
               <?php echo html::checkbox("programAll[$group->group]", array(1 => ''), $group->programs == 'all' ? 1 : '', "onchange=toggleDisabled(this);");?>
             </td>
-            <td rowspan='4' class='text-center'>
+            <?php if($hiddenProgram):?>
+            <td>
+              <div class='input-group'>
+                <?php $disabled = $group->projects == 'all' ? "disabled='disabled'" : '';?>
+                <span class='input-group-addon addon-project'> <?php echo $lang->group->manageProject;?></span>
+                <?php echo html::select("project[$group->group][]", $projects, $group->projects == 'all' ? '' : $group->projects, "class='form-control picker-select' multiple $disabled");?>
+              </div>
+            </td>
+            <td>
+              <?php echo html::checkbox("projectAll[$group->group]", array(1 => ''), $group->projects == 'all' ? 1 : '', "onchange=toggleDisabled(this);");?>
+            </td>
+            <?php endif;?>
+            <td rowspan='<?php echo $rowspan?>' class='text-center'>
               <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
               <?php $hidden = count($projectAdmins) == 1 ? 'hidden' : ''?>
               <button type="button" class="btn btn-link btn-icon btn-delete <?php echo $hidden;?>" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
             </td>
           </tr>
+          <?php if(empty($hiddenProgram)):?>
           <tr class="line<?php echo $group->group;?>">
             <td>
               <div class='input-group'>
@@ -76,6 +90,7 @@
               <?php echo html::checkbox("projectAll[$group->group]", array(1 => ''), $group->projects == 'all' ? 1 : '', "onchange=toggleDisabled(this);");?>
             </td>
           </tr>
+          <?php endif;?>
           <tr class="line<?php echo $group->group;?>">
             <td>
               <div class='input-group'>
@@ -103,23 +118,35 @@
           <?php endforeach;?>
           <?php else:?>
           <tr class='line1'>
-            <td rowspan='4'>
+            <td rowspan='<?php echo $rowspan;?>'>
               <div class='group-item'><?php echo html::select('members[1][]', $allUsers, '', "class='form-control picker-select' multiple");?></div>
             </td>
-            <td>
+            <td class='<?php echo $hiddenProgram?>'>
               <div class='input-group'>
                 <span class='input-group-addon addon-program'> <?php echo $lang->group->manageProgram;?></span>
                 <?php echo html::select('program[1][]', $programs, '', "class='form-control picker-select' multiple");?>
               </div>
             </td>
-            <td>
+            <td class='<?php echo $hiddenProgram?>'>
               <?php echo html::checkbox('programAll[1]', array(1 => ''), '', "onchange=toggleDisabled(this);");?>
             </td>
-            <td rowspan='4' class='text-center'>
+            <?php if($hiddenProgram):?>
+            <td>
+              <div class='input-group'>
+                <span class='input-group-addon addon-project'> <?php echo $lang->group->manageProject;?></span>
+                <?php echo html::select('project[1][]', $projects, '', "class='form-control picker-select' multiple");?>
+              </div>
+            </td>
+            <td>
+              <?php echo html::checkbox('projectAll[1]', array(1 => ''), '', "onchange=toggleDisabled(this);");?>
+            </td>
+            <?php endif?>
+            <td rowspan='<?php echo $rowspan;?>' class='text-center'>
               <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
               <button type="button" class="btn btn-link btn-icon btn-delete hidden" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
             </td>
           </tr>
+          <?php if(empty($hiddenProgram)):?>
           <tr class='line1'>
             <td>
               <div class='input-group'>
@@ -131,6 +158,7 @@
               <?php echo html::checkbox('projectAll[1]', array(1 => ''), '', "onchange=toggleDisabled(this);");?>
             </td>
           </tr>
+          <?php endif?>
           <tr class='line1'>
             <td>
               <div class='input-group'>
@@ -153,74 +181,6 @@
               <?php echo html::checkbox('executionAll[1]', array(1 => ''), '', "onchange=toggleDisabled(this);");?>
             </td>
           </tr>
-          <?php endif;?>
-          <?php else:?>
-          <?php if($projectAdmins):?>
-          <?php foreach($projectAdmins as $account => $group):?>
-          <tr class="line<?php echo $group->group;?>">
-            <td rowspan='2'>
-              <div class='group-item'><?php echo html::select("members[$group->group][]", $allUsers, $account, "class='form-control picker-select' multiple");?></div>
-            </td>
-            <td>
-              <div class='input-group'>
-                <?php $disabled = $group->products == 'all' ? "disabled='disabled'" : '';?>
-                <span class='input-group-addon addon-product'> <?php echo $lang->group->manageProduct;?></span>
-                <?php echo html::select("product[$group->group][]", $products, $group->products == 'all' ? '' : $group->products, "class='form-control picker-select' multiple $disabled");?>
-              </div>
-            </td>
-            <td>
-              <?php echo html::checkbox("productAll[$group->group]", array(1 => ''), $group->products == 'all' ? 1 : '', "onchange=toggleDisabled(this);");?>
-            </td>
-            <td rowspan='2' class='text-center'>
-              <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-              <?php $hidden = count($projectAdmins) == 1 ? 'hidden' : '';?>
-              <button type="button" class="btn btn-link btn-icon btn-delete <?php echo $hidden;?>" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
-            </td>
-          </tr>
-          <tr class="line<?php echo $group->group;?>">
-            <td>
-              <div class='input-group'>
-                <?php $disabled = $group->executions == 'all' ? "disabled='disabled'" : '';?>
-                <span class='input-group-addon addon-execution'> <?php echo $lang->group->manageExecution;?></span>
-                <?php echo html::select("execution[$group->group][]", $executions, $group->executions == 'all' ? '' : $group->executions, "class='form-control picker-select' multiple $disabled");?>
-              </div>
-            </td>
-            <td>
-              <?php echo html::checkbox("executionAll[$group->group]", array(1 => ''), $group->executions == 'all' ? 1 : '', "onchange=toggleDisabled(this);");?>
-            </td>
-          </tr>
-          <?php endforeach;?>
-          <?php else:?>
-          <tr class='line1'>
-            <td rowspan='2'>
-              <div class='group-item'><?php echo html::select('members[1][]', $allUsers, '', "class='form-control picker-select' multiple");?></div>
-            </td>
-            <td>
-              <div class='input-group'>
-                <span class='input-group-addon addon-product'> <?php echo $lang->group->manageProduct;?></span>
-                <?php echo html::select('product[1][]', $products, '', "class='form-control picker-select' multiple");?>
-              </div>
-            </td>
-            <td>
-              <?php echo html::checkbox('productAll[1]', array(1 => ''), '', "onchange=toggleDisabled(this);");?>
-            </td>
-            <td rowspan='2' class='text-center'>
-              <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-              <button type="button" class="btn btn-link btn-icon btn-delete hidden" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
-            </td>
-          </tr>
-          <tr class='line1'>
-            <td>
-              <div class='input-group'>
-                <span class='input-group-addon addon-execution'> <?php echo $lang->group->manageExecution;?></span>
-                <?php echo html::select('execution[1][]', $executions, '', "class='form-control picker-select' multiple");?>
-              </div>
-            </td>
-            <td>
-              <?php echo html::checkbox('executionAll[1]', array(1 => ''), '', "onchange=toggleDisabled(this);");?>
-            </td>
-          </tr>
-          <?php endif;?>
           <?php endif;?>
           <tr>
             <td class='text-center form-actions' colspan='4'>

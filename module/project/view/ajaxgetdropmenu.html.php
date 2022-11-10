@@ -35,6 +35,7 @@ $tabActive          = '';
 $myProjects         = 0;
 $others             = 0;
 $dones              = 0;
+$currentProject     = '';
 
 foreach($projects as $programID => $programProjects)
 {
@@ -52,14 +53,14 @@ foreach($projects as $programID => $programProjects)
 }
 $projectsPinYin = common::convert2Pinyin($projectNames);
 
-$myProjectsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$normalProjectsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$closedProjectsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$myProjectsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$normalProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$closedProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
 
 foreach($projects as $programID => $programProjects)
 {
     /* Add the program name before project. */
-    if(isset($programs[$programID]) and $config->systemMode == 'new')
+    if(isset($programs[$programID]) and $config->systemMode == 'ALM')
     {
         $programName = zget($programs, $programID);
 
@@ -70,14 +71,19 @@ foreach($projects as $programID => $programProjects)
 
     foreach($programProjects as $index => $project)
     {
-        $selected    = $project->id == $projectID ? 'selected' : '';
-        $icon        = '<i class="icon icon-sprint"></i> ';
+        if($project->id == $projectID) $currentProject = $project;
+        $selected = $project->id == $projectID ? 'selected' : '';
+        $icon     = '<i class="icon icon-sprint"></i> ';
 
         if($project->model != 'waterfall' and (in_array($module, $config->waterfallModules) or $method == 'track'))
         {
             $link = helper::createLink('project', 'index', "projectID=%s");
         }
         elseif($project->model == 'kanban' and (($module == 'project' and !in_array($method, array('build', 'view', 'manageproducts', 'team', 'whitelist', 'managemembers', 'addwhitelist'))) or $module != 'project'))
+        {
+            $link = helper::createLink('project', 'index', "projectID=%s");
+        }
+        elseif(empty($project->multiple))
         {
             $link = helper::createLink('project', 'index', "projectID=%s");
         }
@@ -159,10 +165,15 @@ $closedProjectsHtml .= '</ul>';
    <div class='list-group projects'><?php echo $closedProjectsHtml;?></div>
   </div>
 </div>
-<script>scrollToSelected();</script>
 <script>
 $(function()
 {
+    <?php if($currentProject->status == 'done' or $currentProject->status == 'closed'):?>
+    $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
+    <?php else:?>
+    scrollToSelected();
+    <?php endif;?>
+
     $('.nav-tabs li span').hide();
     $('.nav-tabs li.active').find('span').show();
 

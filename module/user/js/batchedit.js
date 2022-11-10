@@ -21,16 +21,3 @@ $(document).on('change', 'select', function()
         $(this).trigger("change");
     }
 })
-
-$('select[id^="visions"]').each(function()
-{
-    var i      = $(this).attr('id').replace(/[^0-9]/ig, '');
-    var vision = $('#visions1 option:selected').val();
-
-    $.post(createLink('user', 'ajaxGetGroup', "visions=" + vision + '&i=' + i + '&selected=' + $('#group' + i).val()), function(data)
-    {
-         $('#group' + i).replaceWith(data);
-         $('#group' + i + '_chosen').remove();
-         $('#group' + i).chosen();
-    })
-})

@@ -234,6 +234,36 @@ class admin extends control
     }
 
     /**
+     * Set closed features config.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setModule()
+    {
+        if($_POST)
+        {
+            $closedFeatures = '';
+            if(isset($_POST['module']))
+            {
+                foreach($this->post->module as $module => $options)
+                {
+                    $checked = reset($options);
+                    if(!$checked) $closedFeatures .= "$module,";
+                }
+            }
+            $closedFeatures = rtrim($closedFeatures, ',');
+            $this->loadModel('setting')->setItem('system.common.closedFeatures', $closedFeatures);
+            $this->loadModel('custom')->processMeasrecordCron();
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
+        }
+        $this->view->title            = $this->lang->admin->setModuleIndex;
+        $this->view->closedFeatures   = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=closedFeatures');
+        $this->view->disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
+        $this->display();
+    }
+
+    /**
      * Certify ztEmail.
      *
      * @param  string $email

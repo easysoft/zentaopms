@@ -163,7 +163,7 @@ class projectModel extends model
 
         $project = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->eq($projectID)
-            ->beginIF($this->config->systemMode == 'new')->andWhere('`type`')->in($type)->fi()
+            ->andWhere('`type`')->in($type)
             ->fetch();
 
         if(!$project) return false;
@@ -171,6 +171,23 @@ class projectModel extends model
         if($project->end == '0000-00-00') $project->end = '';
         $project = $this->loadModel('file')->replaceImgURL($project, 'desc');
         return $project;
+    }
+
+    /**
+     * Get a project by its shadow product.
+     *
+     * @param  int    $product
+     * @access public
+     * @return object
+     */
+    public function getByShadowProduct($product)
+    {
+        return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->eq($product)
+            ->andWhere('t2.type')->eq('project')
+            ->limit(1)
+            ->fetch();
     }
 
     /**
@@ -197,12 +214,11 @@ class projectModel extends model
             ->groupBy('t1.root')
             ->fetchAll('root');
 
-        $condition = $this->config->systemMode == 'classic' ? 't2.id as project' : 't2.parent as project';
+        $condition = 't2.project as project';
         $estimates = $this->dao->select("$condition, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.parent')->lt(1)
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.parent')->in($projectIdList)->fi()
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.id')->in($projectIdList)->fi()
+            ->andWhere('t2.project')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('project')
@@ -543,8 +559,10 @@ class projectModel extends model
     public function getProjectLink($module, $method, $projectID)
     {
         $link    = helper::createLink('project', 'index', "projectID=%s");
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
-        if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,repo,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord', ',' . $module . ',') !== false)
+        if(empty($project->multiple)) return $link;
+        if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,repo,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord,', ',' . $module . ',') !== false)
         {
             if($module == 'project' and $method == 'execution')
             {
@@ -617,17 +635,17 @@ class projectModel extends model
             }
             elseif($module == 'repo')
             {
-                $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s") . "#app=project";
+                $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s") . '#app=project';
             }
             elseif($module == 'doc')
             {
-                $link = helper::createLink($module, 'tablecontents', "type=project&objectID=%s") . "#app=project";
+                $link = helper::createLink($module, 'tablecontents', "type=project&objectID=%s") . '#app=project';
             }
             elseif($module == 'build')
             {
                 if($method == 'create')
                 {
-                    $link = helper::createLink($module, $method, "executionID=&productID=&projectID=%s") . "#app=project";
+                    $link = helper::createLink($module, $method, "executionID=&productID=&projectID=%s") . '#app=project';
                 }
                 else
                 {
@@ -660,7 +678,7 @@ class projectModel extends model
             {
                 if($method == 'projectsummary')
                 {
-                    $link = helper::createLink($module, $method, "projectID=%s"). "#app=project";
+                    $link = helper::createLink($module, $method, "projectID=%s") . '#app=project';
                 }
                 else
                 {
@@ -751,6 +769,21 @@ class projectModel extends model
     }
 
     /**
+     * Get project pairs.
+     *
+     * @access public
+     * @return object
+     */
+    public function getPairs()
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchPairs();
+    }
+
+    /**
      * Get project pairs by programID.
      *
      * @param  int    $programID
@@ -759,10 +792,11 @@ class projectModel extends model
      * @param  string $orderBy
      * @param  string $excludedModel
      * @param  string $model
+     * @param  bool   $multiple
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '')
+    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '', $multiple = false)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -773,6 +807,7 @@ class projectModel extends model
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
+            ->beginIF($multiple)->andWhere('multiple')->eq(1)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
@@ -826,18 +861,20 @@ class projectModel extends model
      * Get project pairs by id list.
      *
      * @param  array  $projectIdList
-     * @param  string $mode
+     * @param  string $model
+     * @param  string $param
      * @access public
      * @return array
      */
-    public function getPairsByIdList($projectIdList = array(), $mode = '')
+    public function getPairsByIdList($projectIdList = array(), $model = '', $param = '')
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF($projectIdList)->andWhere('id')->in($projectIdList)->fi()
-            ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($mode != 'all' and !empty($mode))->andWhere('model')->in($mode)->fi()
+            ->beginIF(!$this->app->user->admin and $model != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($model != 'all' and !empty($model))->andWhere('model')->in($model)->fi()
+            ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->fetchPairs('id', 'name');
     }
 
@@ -873,6 +910,64 @@ class projectModel extends model
             ->fetchGroup('productID', 'branchID');
     }
 
+    /**
+     * Get No product project|execution List.
+     *
+     * @access public
+     * @return array
+     */
+    public function getNoProductList()
+    {
+        return $this->dao->select('t1.product, t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t2.hasProduct')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get project and execution pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectExecutionPairs()
+    {
+        return $this->dao->select('project, id')->from(TABLE_PROJECT)->where('multiple')->eq('0')->andWhere('deleted')->eq('0')->fetchPairs();
+    }
+
+    /**
+     * Process the project privs according to the project model.
+     *
+     * @param  string $model    sprint | waterfall | noSprint
+     * @access public
+     * @return object
+     */
+    public function processProjectPrivs($model = 'waterfall')
+    {
+        if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
+
+        $this->app->loadLang('group');
+
+        $privs    = new stdclass();
+        $resource = $this->lang->resource;
+        foreach($resource as $module => $methods)
+        {
+            if(!$methods) continue;
+            if(!in_array($module, $this->config->programPriv->$model)) continue;
+
+            foreach($methods as $method => $label)
+            {
+                if(isset($this->config->project->includedPriv[$module]) and !in_array($method, $this->config->project->includedPriv[$module])) continue;
+
+                if(!isset($privs->$module)) $privs->$module = new stdclass();
+                $privs->$module->$method = $label;
+            }
+        }
+
+        return $privs;
+    }
+
     /*
      * Build search form
      *
@@ -893,6 +988,10 @@ class projectModel extends model
         $programPairs  = array(0 => '');
         $programPairs += $this->loadModel('program')->getPairs();
         $this->config->project->search['params']['parent']['values'] = $programPairs;
+
+        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($this->config->project->search['fields']['code'], $this->config->project->search['params']['code']);
+        if($this->config->systemMode == 'light') unset($this->config->project->search['fields']['parent'], $this->config->project->search['params']['parent']);
+
         $this->loadModel('search')->setSearchParams($this->config->project->search);
     }
 
@@ -964,6 +1063,7 @@ class projectModel extends model
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!empty($append))->orWhere('id')->in($append)->fi()
             ->orderBy($orderBy)
@@ -996,8 +1096,11 @@ class projectModel extends model
             {
                 $projectName = $project->name;
 
-                $programID = zget($projectProgram, $project->id, '');
-                if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+                if($this->config->systemMode == 'ALM')
+                {
+                    $programID = zget($projectProgram, $project->id, '');
+                    if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+                }
 
                 $pairs[$project->id] = $projectName;
             }
@@ -1101,7 +1204,7 @@ class projectModel extends model
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
-            ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->add('type', 'project')
@@ -1111,8 +1214,11 @@ class projectModel extends model
             ->get();
         if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
 
+        /* Lean mode relation defaultProgram. */
+        if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
+
         $linkedProductsCount = 0;
-        if(isset($_POST['products']))
+        if($project->hasProduct && isset($_POST['products']))
         {
             foreach($_POST['products'] as $product)
             {
@@ -1126,7 +1232,7 @@ class projectModel extends model
             $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
 
             /* Judge products not empty. */
-            if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
+            if($project->hasProduct && empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
                 dao::$errors['products0'] = $this->lang->project->productNotEmpty;
                 return false;
@@ -1160,7 +1266,7 @@ class projectModel extends model
         }
 
         /* When select create new product, product name cannot be empty and duplicate. */
-        if(isset($_POST['newProduct']))
+        if($project->hasProduct && isset($_POST['newProduct']))
         {
             if(empty($_POST['productName']))
             {
@@ -1227,7 +1333,7 @@ class projectModel extends model
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                 $teamMembers[$account] = $member;
             }
-            if($this->config->systemMode == 'new') $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
+            $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
@@ -1263,13 +1369,14 @@ class projectModel extends model
             $lib->vision  = zget($project, 'vision', 'rnd');
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-            $this->updateProducts($projectID);
+            if($project->hasProduct) $this->updateProducts($projectID);
 
-            if(isset($_POST['newProduct']) or (!$project->parent and empty($linkedProductsCount)))
+            if(!$project->hasProduct or isset($_POST['newProduct']) or (!$project->parent and empty($linkedProductsCount)))
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name           = $this->post->productName ? $this->post->productName : $project->name;
+                $product->name           = $project->hasProduct && $this->post->productName ? $this->post->productName : $project->name;
+                $product->shadow         = (int)empty($project->hasProduct);
                 $product->bind           = $this->post->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl            = $project->acl == 'open' ? 'open' : 'private';
@@ -1292,15 +1399,18 @@ class projectModel extends model
 
                 $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
 
-                /* Create doc lib. */
-                $this->app->loadLang('doc');
-                $lib = new stdclass();
-                $lib->product = $productID;
-                $lib->name    = $this->lang->doclib->main['product'];
-                $lib->type    = 'product';
-                $lib->main    = '1';
-                $lib->acl     = 'default';
-                $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+                if($project->hasProduct)
+                {
+                    /* Create doc lib. */
+                    $this->app->loadLang('doc');
+                    $lib = new stdclass();
+                    $lib->product = $productID;
+                    $lib->name    = $this->lang->doclib->main['product'];
+                    $lib->type    = 'product';
+                    $lib->main    = '1';
+                    $lib->acl     = 'default';
+                    $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+                }
             }
 
             /* Save order. */
@@ -1333,6 +1443,8 @@ class projectModel extends model
 
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
+            if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->createDefaultSprint($projectID);
+
             return $projectID;
         }
     }
@@ -1353,7 +1465,7 @@ class projectModel extends model
         $project = fixer::input('post')
             ->add('id', $projectID)
             ->callFunc('name', 'trim')
-            ->setDefault('team', mb_substr($this->post->name, 0, 30))
+            ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
@@ -1368,11 +1480,9 @@ class projectModel extends model
             ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->get();
 
-        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)
-            ->where('project')->eq($project->id)
-            ->andWhere('deleted')->eq('0')
-            ->fetchAll();
-        if(!empty($executionsCount))
+        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->fetch('count');
+
+        if(!empty($executionsCount) and $oldProject->multiple)
         {
             $minExecutionBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
             $maxExecutionEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
@@ -1419,12 +1529,14 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$oldProject->parent' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
         if(dao::isError()) return false;
+
+        if(!$oldProject->hasProduct && $oldProject->name != $project->name) $this->updateProductName($project->name, $projectID);
 
         /* Get team and language item. */
         $this->loadModel('user');
@@ -1465,7 +1577,6 @@ class projectModel extends model
 
         if(!dao::isError())
         {
-            $this->updateProductProgram($oldProject->parent, $project->parent, $_POST['products']);
             $this->updateProducts($projectID, $_POST['products']);
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
@@ -1485,9 +1596,27 @@ class projectModel extends model
             $oldWhitelist = explode(',', $oldProject->whitelist) and $oldWhitelist = array_filter($oldWhitelist);
             $newWhitelist = explode(',', $project->whitelist) and $newWhitelist = array_filter($newWhitelist);
             if(count($oldWhitelist) == count($newWhitelist) and count(array_diff($oldWhitelist, $newWhitelist)) == 0) unset($project->whitelist);
+
             /* Add linkedproducts changes. */
             $oldProject->linkedProducts = implode(',', $linkedProducts);
             $project->linkedProducts    = implode(',', $_POST['products']);
+
+            $unlinkedProducts = array_diff($linkedProducts, $_POST['products']);
+            if(!empty($unlinkedProducts))
+            {
+                $products = $this->dao->select('name')->from(TABLE_PRODUCT)->where('id')->in($unlinkedProducts)->fetchPairs();
+                $this->loadModel('action')->create('project', $projectID, 'unlinkproduct', '', implode(',', $products));
+            }
+
+            /* Activate or close the shadow product of the project. */
+            if(!$oldProject->hasProduct && $oldProject->status != $project->status && strpos('doing,closed', $project->status) !== false)
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+                if($project->status == 'doing') $this->product->activate($productID);
+                if($project->status == 'closed') $this->product->close($productID);
+            }
+
+            if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
             return common::createChanges($oldProject, $project);
         }
@@ -1539,6 +1668,7 @@ class projectModel extends model
         }
         if(dao::isError()) return false;
 
+        $this->loadModel('execution');
         $this->lang->error->unique = $this->lang->error->repeat;
         foreach($projects as $projectID => $project)
         {
@@ -1560,16 +1690,15 @@ class projectModel extends model
             if(dao::isError())
             {
                 $errors = dao::getError();
-                foreach($errors as $key => $error)
-                {
-                    dao::$errors[$key][0] = 'ID' . $projectID . $error[0];
-                }
+                foreach($errors as $key => $error) dao::$errors[$key][0] = 'ID' . $projectID . $error[0];
 
                 return false;
             }
 
             if(!dao::isError())
             {
+                if(!$oldProject->hasProduct && $oldProject->name != $project->name) $this->updateProductName($project->name, $projectID);
+
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
                 $this->updateProductProgram($oldProject->parent, $project->parent, $linkedProducts);
 
@@ -1578,6 +1707,8 @@ class projectModel extends model
                 if($project->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'project', $projectID);
                 if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
                 $this->executeHooks($projectID);
+
+                if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->execution->syncNoMultipleSprint($projectID);
             }
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
@@ -1620,7 +1751,11 @@ class projectModel extends model
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
 
-        if(!dao::isError()) return common::createChanges($oldProject, $project);
+        if(!dao::isError())
+        {
+            if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'start');
+            return common::createChanges($oldProject, $project);
+        }
     }
 
     /**
@@ -1680,7 +1815,11 @@ class projectModel extends model
             ->where('id')->eq((int)$projectID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldProject, $project);
+        if(!dao::isError())
+        {
+            if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'suspend');
+            return common::createChanges($oldProject, $project);
+        }
     }
 
     /**
@@ -1722,6 +1861,10 @@ class projectModel extends model
             ->where('id')->eq((int)$projectID)
             ->exec();
 
+        if(dao::isError()) return false;
+
+        if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
+
         /* Readjust task. */
         if($this->post->readjustTime and $this->post->readjustTask)
         {
@@ -1757,7 +1900,14 @@ class projectModel extends model
             }
         }
 
-        if(!dao::isError()) return common::createChanges($oldProject, $project);
+        /* Activate the shadow product of the project. */
+        if(!$oldProject->hasProduct)
+        {
+            $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+            $this->product->activate($productID);
+        }
+
+        return common::createChanges($oldProject, $project);
     }
 
     /**
@@ -1800,13 +1950,56 @@ class projectModel extends model
             ->exec();
 
         /* When it has multiple errors, only the first one is prompted */
-        if(dao::isError() and count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
-
-        if(!dao::isError())
+        if(dao::isError())
         {
-            $this->loadModel('score')->create('project', 'close', $oldProject);
-            return common::createChanges($oldProject, $project);
+           if(count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
+
+           return false;
         }
+
+        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'close');
+
+        /* Close the shadow product of the project. */
+        if(!$oldProject->hasProduct)
+        {
+            $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+            unset($_POST);
+            $this->product->close($productID);
+        }
+
+        $this->loadModel('score')->create('project', 'close', $oldProject);
+        return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Modify the execution status when changing the status of no execution project.
+     *
+     * @param  int    $projectID
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function changeExecutionStatus($projectID, $status)
+    {
+        if(!in_array($status, array('start', 'suspend', 'activate', 'close'))) return false;
+        $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch('id');
+        if(!$executionID) return false;
+        return $this->loadModel('execution')->$status($executionID);
+    }
+
+    /**
+     * Update a product's name as its project.
+     *
+     * @param  string $projectName
+     * @param  int    $projectID
+     * @access public
+     * @return bool
+     */
+    public function updateProductName($projectName, $projectID)
+    {
+        $product = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
+        $this->dao->update(TABLE_PRODUCT)->set('name')->eq($projectName)->where('id')->eq($product)->exec();
+        return !dao::isError();
     }
 
     /**
@@ -1935,7 +2128,7 @@ class projectModel extends model
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
 
         /* Remove execution members. */
-        if($removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))
+        if($this->post->removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))
         {
             $this->dao->delete()->from(TABLE_TEAM)
                 ->where('root')->in($childSprints)
@@ -1943,6 +2136,8 @@ class projectModel extends model
                 ->andWhere('account')->in($removedAccounts)
                 ->exec();
         }
+
+        if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
     }
 
     /**
@@ -1961,7 +2156,7 @@ class projectModel extends model
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
         $account      = $this->app->user->account;
         $id           = $col->id;
-        $projectLink  = $this->config->systemMode == 'new' ? helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('execution', 'task', "projectID=$project->id");
+        $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id);
 
         if($col->show)
         {
@@ -2050,6 +2245,9 @@ class projectModel extends model
                 case 'status':
                     echo "<span class='status-task text-center  status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
                     break;
+                case 'hasProduct':
+                    echo zget($this->lang->project->projectTypeList, $project->hasProduct);
+                    break;
                 case 'budget':
                     echo $budgetTitle;
                     break;
@@ -2117,10 +2315,50 @@ class projectModel extends model
     public function updateProducts($projectID, $products = '')
     {
         $this->loadModel('user');
+
+        $members = array_keys($this->getTeamMembers($projectID));
+
+        /* Link products of other programs. */
+        if($_POST['otherProducts'])
+        {
+            $products      = array();
+            $otherProducts = $_POST['otherProducts'];
+            foreach($otherProducts as $index => $otherProduct)
+            {
+                if(!$otherProduct) continue;
+
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->plan    = 0;
+
+                if(strpos($otherProduct, '_') !== false)
+                {
+                    $params = explode('_', $otherProduct);
+                    $data->product = $params[0];
+                    $data->branch  = $params[1];
+                }
+                else
+                {
+                    $data->product = $otherProduct;
+                    $data->branch  = 0;
+                }
+
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+
+                $products[] = $data->product;
+            }
+
+            $this->user->updateUserView($products, 'product', $members);
+
+            return !dao::isError();
+        }
+
+        /* Link products of current program of the project. */
         $products           = isset($_POST['products']) ? $_POST['products'] : $products;
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
+
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
-        $members = array_keys($this->getTeamMembers($projectID));
+
         if(empty($products))
         {
             $this->user->updateUserView(array_keys($oldProjectProducts), 'product', $members);
@@ -2165,6 +2403,12 @@ class projectModel extends model
         {
             $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq((int)$projectID)->fetchPairs('id');
             $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
+
+            if(!empty($_POST['division']))
+            {
+                $this->dao->update(TABLE_PROJECT)->set('division')->eq('1')->where('id')->eq((int)$projectID)->exec();
+                $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
+            }
         }
 
         $oldProductKeys = array_keys($oldProjectProducts);
@@ -2201,13 +2445,12 @@ class projectModel extends model
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
 
         $project = $this->getByID($projectID);
-        $type    = $this->config->systemMode == 'new' ? $project->type : 'project';
         if(empty($project)) return array();
 
         return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
-            ->andWhere('t1.type')->eq($type)
+            ->andWhere('t1.type')->eq($project->type)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($this->config->vision)->andWhere("CONCAT(',', t2.visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->fetchAll('account');
@@ -2226,10 +2469,7 @@ class projectModel extends model
         if(empty($project)) return array();
 
         $type = 'project';
-        if($this->config->systemMode == 'new')
-        {
-            if($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') $type = 'execution';
-        }
+        if($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') $type = 'execution';
 
         $members = $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
@@ -2432,6 +2672,7 @@ class projectModel extends model
         $model    = 'scrum';
         $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
         $project  = $this->getByID($objectID);
+
         if($project and $project->model == 'waterfall') $model = $project->model;
         if($project and $project->model == 'kanban')
         {
@@ -2447,6 +2688,45 @@ class projectModel extends model
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
         }
 
+        if(empty($project->hasProduct))
+        {
+            unset($lang->project->menu->settings['subMenu']->products);
+            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
+            $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+
+            if(isset($project->model) and $project->model == 'scrum')
+            {
+                $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
+            }
+            else
+            {
+                unset($lang->project->menu->projectplan);
+            }
+
+            if(!empty($this->config->URAndSR) && $project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
+            {
+                $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+
+                if($project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
+                {
+                    $lang->project->menu->story = $lang->project->menu->storyGroup;
+                    $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
+                    $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
+                    $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
+                }
+
+                unset($lang->project->menu->settings['subMenu']->products);
+            }
+        }
+        else
+        {
+            unset($lang->project->menu->settings['subMenu']->module);
+            unset($lang->project->menu->settings['subMenu']->managerepo);
+            unset($lang->project->menu->projectplan);
+        }
+
+        if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
+
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
@@ -2455,9 +2735,8 @@ class projectModel extends model
 
         if(isset($project->model) and $project->model == 'waterfall')
         {
-            global $lang;
-            $lang->project->createExecution = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
-            $lang->project->lastIteration   = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
+            $lang->project->createExecution = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
+            $lang->project->lastIteration   = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
 
             $this->loadModel('execution');
             $lang->executionCommon = $lang->project->stage;
@@ -2465,14 +2744,111 @@ class projectModel extends model
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        $this->lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
+        $lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
 
         $this->saveState($objectID, $this->getPairsByProgram());
 
-        if(isset($project->acl) and $project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
+        if(isset($project->acl) and $project->acl == 'open') unset($lang->project->menu->settings['subMenu']->whitelist);
 
         common::setMenuVars('project', $objectID);
+
+        $this->setNoMultipleMenu($objectID);
         return $objectID;
+    }
+
+    /**
+     * Set multi-scrum menu.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function setNoMultipleMenu($objectID)
+    {
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
+
+        $this->session->set('multiple', true);
+
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('multiple')->eq('0')->fetch();
+        if(empty($project)) return;
+
+        if(!in_array($project->type, array('project', 'sprint', 'kanban'))) return;
+
+        if($project->type == 'project')
+        {
+            $model       = $project->model;
+            $projectID   = $project->id;
+            $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
+                ->where('project')->eq($projectID)
+                ->andWhere('multiple')->eq('0')
+                ->andWhere('type')->eq('sprint')
+                ->andWhere('deleted')->eq('0')
+                ->fetch('id');
+        }
+        else
+        {
+            $model       = $project->type == 'kanban' ? 'kanban' : 'scrum';
+            $executionID = $project->id;
+            $projectID   = $project->project;
+        }
+        if(empty($projectID) or empty($executionID)) return;
+
+        $this->session->set('project', $projectID, 'project');
+        $this->session->set('multiple', false);
+
+        $navGroup = zget($this->lang->navGroup, $moduleName);
+        $this->lang->$navGroup->menu        = $this->lang->project->noMultiple->{$model}->menu;
+        $this->lang->$navGroup->menuOrder   = $this->lang->project->noMultiple->{$model}->menuOrder;
+        $this->lang->$navGroup->dividerMenu = $this->lang->project->noMultiple->{$model}->dividerMenu;
+
+        /* Single execution and has no product project menu. */
+        if(!$project->hasProduct and !$project->multiple and !empty($this->config->URAndSR))
+        {
+            if(isset($this->lang->$navGroup->menu->storyGroup))
+            {
+                $this->lang->$navGroup->menu->story = $this->lang->$navGroup->menu->storyGroup;
+                $this->lang->$navGroup->menu->story['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['link'], '%s', $projectID);
+
+                $this->lang->$navGroup->menu->story['dropMenu']->story['link']       = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->story['link'], '%s', $projectID);
+                $this->lang->$navGroup->menu->story['dropMenu']->requirement['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectID);
+            }
+        }
+
+        if(isset($this->lang->$navGroup->menu->storyGroup)) unset($this->lang->$navGroup->menu->storyGroup);
+        foreach($this->lang->$navGroup->menu as $label => $menu)
+        {
+            $objectID = 0;
+            if(strpos($this->config->project->multiple['project'], ",{$label},") !== false) $objectID = $projectID;
+            if(strpos($this->config->project->multiple['execution'], ",{$label},") !== false)
+            {
+                $objectID = $executionID;
+                $this->lang->$navGroup->menu->{$label}['subModule'] = 'project';
+            }
+            $this->lang->$navGroup->menu->$label = commonModel::setMenuVarsEx($menu, $objectID);
+            if(isset($menu['subMenu']))
+            {
+                foreach($menu['subMenu'] as $key1 => $subMenu) $this->lang->$navGroup->menu->{$label}['subMenu']->$key1 = common::setMenuVarsEx($subMenu, $objectID);
+            }
+
+            if(!isset($menu['dropMenu'])) continue;
+            foreach($menu['dropMenu'] as $key2 => $dropMenu)
+            {
+                $this->lang->$navGroup->menu->{$label}['dropMenu']->$key2 = common::setMenuVarsEx($dropMenu, $objectID);
+
+                if(!isset($dropMenu['subMenu'])) continue;
+                foreach($dropMenu['subMenu'] as $key3 => $subMenu) $this->lang->$navGroup->menu->{$label}['dropMenu']->$key3 = common::setMenuVarsEx($subMenu, $objectID);
+            }
+        }
+
+        /* If objectID is set, cannot use homeMenu. */
+        unset($this->lang->project->homeMenu);
+        $this->lang->switcherMenu         = $this->getSwitcher($projectID, $moduleName, $methodName);
+        $this->lang->project->menu        = $this->lang->$navGroup->menu;
+        $this->lang->project->menuOrder   = $this->lang->$navGroup->menuOrder;
+        $this->lang->project->dividerMenu = $this->lang->$navGroup->dividerMenu;
+
+        $this->loadModel('common')->resetProjectPriv($projectID);
     }
 
     /**
@@ -2491,14 +2867,9 @@ class projectModel extends model
         {
             if($module == '') continue;
 
-            $type = '';
+            $type  = '';
             $table = constant('TABLE_'. strtoupper($module));
-            $object = new stdclass();
-
-            if($table == TABLE_EXECUTION)
-            {
-                $type = $model == 'scrum' ? 'sprint' : 'stage';
-            }
+            if($module == 'execution') $type = $model == 'scrum' ? 'sprint' : 'stage';
 
             $object = $this->getDataByProject($table, $projectID, $type);
             if(!empty($object)) return false;
@@ -2580,7 +2951,7 @@ class projectModel extends model
         $menu   = '';
         $params = "projectID=$project->id";
 
-        $moduleName = $this->config->systemMode == 'classic' ? "execution" : "project";
+        $moduleName = "project";
         if($project->status == 'wait' || $project->status == 'suspended')
         {
             $menu .= $this->buildMenu($moduleName, 'start', $params, $project, 'browse', 'play', '', 'iframe', true);
@@ -2603,14 +2974,14 @@ class projectModel extends model
         $from     = $project->from == 'project' ? 'project' : 'pgmproject';
         $iframe   = $this->app->tab == 'program' ? 'iframe' : '';
         $onlyBody = $this->app->tab == 'program' ? true : '';
-        $dataApp  = $this->config->systemMode == 'classic' ? "data-app=execution" : "data-app=project";
+        $dataApp  = "data-app=project";
 
         $menu .= $this->buildMenu($moduleName, 'edit', $params, $project, 'browse', 'edit', '', $iframe, $onlyBody, $dataApp);
 
         if($this->config->vision != 'lite')
         {
             $menu .= $this->buildMenu($moduleName, 'team', $params, $project, 'browse', 'group', '', '', '', $dataApp, $this->lang->execution->team);
-            if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'group', "$params&programID={$project->programID}", $project, 'browse', 'lock', '', '', '', $dataApp);
+            $menu .= $this->buildMenu('project', 'group', "$params&programID={$project->programID}", $project, 'browse', 'lock', '', '', '', $dataApp);
 
             if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
             {
@@ -2618,7 +2989,7 @@ class projectModel extends model
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                 $menu .= $this->buildMenu($moduleName, 'manageProducts', $params . "&from={$this->app->tab}", $project, 'browse', 'link', '', 'btn-action', '', '', $this->lang->project->manageProducts);
-                if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);
+                $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);
                 $menu .= $this->buildMenu($moduleName, "delete", $params, $project, 'browse', 'trash', 'hiddenwin', 'btn-action');
                 $menu .= "</ul>";
                 $menu .= "</div>";
@@ -2627,10 +2998,107 @@ class projectModel extends model
         else
         {
             $menu .= $this->buildMenu($moduleName, 'team', $params, $project, 'browse', 'group', '', '', '', $dataApp, $this->lang->execution->team);
-            if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);
+            $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);
             $menu .= $this->buildMenu($moduleName, "delete", $params, $project, 'browse', 'trash', 'hiddenwin', 'btn-action');
         }
 
         return $menu;
+    }
+
+    /**
+     * Update linked repos. This method only for project without product.
+     *
+     * @param  int    $projectID
+     * @param  array  $repos
+     * @access public
+     * @return void
+     */
+    public function updateRepoRelations($projectID, $repos)
+    {
+        $this->loadModel('action');
+        $this->loadModel('product');
+
+        $linkedRepos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere("CONCAT(',', projects, ',')")->like("%,$projectID,%")
+            ->fetchAll('id');
+
+        /* 1. Delete old relations. */
+        /* Get relations should be deleted. */
+        $shouldDeleteRepos = array_diff(array_keys($linkedRepos), $repos);
+        foreach($shouldDeleteRepos as $repoID)
+        {
+            /* Remove project id form this repo. */
+            $repo        = zget($linkedRepos, $repoID, null);
+            $oldProjects = explode(',', $repo->projects);
+            $newProjects = array_filter($oldProjects, function($oldProjectID) use ($projectID)
+            {
+                return $projectID != $oldProjectID;
+            });
+
+            /* Remove products */
+            $shadowProduct = $this->loadModel('product')->getShadowProductByProject($projectID);
+            $oldProducts   = explode(',', $repo->product);
+            $newProducts   = array_filter($oldProducts, function($oldProductID)use($shadowProduct)
+            {
+                return $oldProductID != $shadowProduct->id;
+            });
+
+            $this->dao->update(TABLE_REPO)
+                ->set('product')->eq(implode(',', $newProducts))
+                ->set('projects')->eq(implode(',', $newProjects))
+                ->where('id')->eq($repo->id)->exec();
+
+            /* Save action log. */
+            $this->action->create('project', $projectID, 'unlinkedRepo', $repo->name);
+        }
+
+        /* 2. Add new relations. */
+        $products      = $this->product->getProductPairsByProject($projectID); // There will be only one (shadow) product for project without product.
+        $addedProducts = array_keys($products);
+
+        $addedRepos = array_diff($repos, array_keys($linkedRepos));
+        $newRepos   = $this->dao->select('*')->from(TABLE_REPO)->where('id')->in($addedRepos)->fetchAll();
+        foreach($newRepos as $repo)
+        {
+            $oldProducts = explode(',', $repo->product);
+            $newProducts = array_merge($oldProducts, $addedProducts);
+            $newProducts = array_unique($newProducts);
+
+            $oldProjects   = explode(',', $repo->projects);
+            $oldProjects[] = $projectID;
+            $newProjects   = array_unique($oldProjects);
+
+            $this->dao->update(TABLE_REPO)
+                ->set('product')->eq(implode(',', $newProducts))
+                ->set('projects')->eq(implode(',', $newProjects))
+                ->where('id')->eq($repo->id)->exec();
+
+            $this->action->create('project', $projectID, 'linkedRepo', $repo->name);
+        }
+    }
+
+    /**
+     * Get linked repo pairs by project id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function linkedRepoPairs($projectID)
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere("CONCAT(',', projects, ',')")->like("%,$projectID,%")
+            ->fetchAll();
+
+        $repoPairs = array();
+        foreach($repos as $repo)
+        {
+            $scm = $repo->SCM == 'Subversion' ? 'svn' : strtolower($repo->SCM);
+            $repoPairs[$repo->id] = "[{$scm}] " . $repo->name;
+        }
+
+        return $repoPairs;
     }
 }

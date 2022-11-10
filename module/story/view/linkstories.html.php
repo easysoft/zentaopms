@@ -34,7 +34,9 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-pri' title=<?php echo $lang->pri;?>><?php echo $lang->priAB;?></th>
+          <?php if(!empty($product->shadow)):?>
           <th class='c-product'><?php echo $lang->story->product;?></th>
+          <?php endif;?>
           <th class='c-title'><?php echo $lang->story->title;?></th>
           <th class='c-status'><?php echo $lang->story->statusAB;?></th>
           <th class='c-user'><?php echo $lang->story->openedByAB;?></th>
@@ -54,7 +56,9 @@
             <?php printf('%03d', $story2Link->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $story2Link->pri?>' title='<?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?>'><?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?></span></td>
+          <?php if(!empty($product->shadow)):?>
           <td class='nobr' title="<?php echo $products[$story2Link->product]?>"><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
+          <?php endif;?>
           <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title);?></td>
           <td><?php echo $this->processStatus('story', $story2Link);?></td>
           <td><?php echo zget($users, $story2Link->openedBy);?></td>

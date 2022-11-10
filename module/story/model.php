@@ -305,7 +305,7 @@ class storyModel extends model
             if($executionID != 0)
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
-                if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+                if($executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
 
                 $this->loadModel('kanban');
 
@@ -1162,7 +1162,7 @@ class storyModel extends model
                 $changes = common::createChanges($oldParentStory, $newParentStory);
                 $action  = '';
                 if($status == 'active') $action = 'Activated';
-                if($status == 'closed') $action = 'Closed';
+                if($status == 'closed') $action = 'closedbysystem';
                 if($action)
                 {
                     $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', '', '', false);
@@ -2203,7 +2203,7 @@ class storyModel extends model
             $data[$i]->pri        = $tasks->pri[$i];
             $data[$i]->estimate   = $tasks->estimate[$i];
             $data[$i]->left       = $tasks->estimate[$i];
-            $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
+            $data[$i]->project    = $projectID;
             $data[$i]->execution  = $executionID;
             $data[$i]->estStarted = $estStarted;
             $data[$i]->deadline   = $deadline;
@@ -2999,7 +2999,7 @@ class storyModel extends model
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
-        $products    = empty($executionID) ? $this->product->getList() : $this->product->getProducts($executionID);
+        $products    = empty($executionID) ? $this->product->getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 'all') : $this->product->getProducts($executionID);
 
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
@@ -3363,6 +3363,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq((int)$executionID)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.type')->eq('story')
             ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
@@ -3498,15 +3499,16 @@ class storyModel extends model
     /**
      * Get stories of a user.
      *
-     * @param  string $account
-     * @param  string $type         the query type
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $storyType    requirement|story
+     * @param  string     $account
+     * @param  string     $type         the query type
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  string     $storyType    requirement|story
+     * @param  string|int $shadow       all | 0 | 1
      * @access public
      * @return array
      */
-    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story', $includeLibStories = true)
+    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story', $includeLibStories = true, $shadow = 0)
     {
         $sql = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
@@ -3525,6 +3527,7 @@ class storyModel extends model
             ->beginIF($type == 'closedBy')->andWhere('t1.closedBy')->eq($account)->fi()
             ->fi()
             ->beginIF($includeLibStories == false and $this->config->edition == 'max')->andWhere('t1.lib')->eq('0')->fi()
+            ->beginIF($shadow !== 'all')->andWhere('t2.shadow')->eq((int)$shadow)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -4180,6 +4183,14 @@ class storyModel extends model
      */
     public static function isClickable($story, $action)
     {
+        static $shadowProducts = array();
+        if(empty($shadowProducts[$story->product]))
+        {
+            global $dbh;
+            $stmt = $dbh->query('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
+            foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
+        }
+
         $action = strtolower($action);
 
         global $app, $config;
@@ -4200,7 +4211,7 @@ class storyModel extends model
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
-        if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait' or !empty($story->plan))) return false;
+        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product]) && $story->stage != 'projected') or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
 
         return true;
     }
@@ -4288,12 +4299,10 @@ class storyModel extends model
                     if($canClose and ($canBatchCreate or $canCreateCase)) $menu .= "<div class='dividing-line'></div>";
                 }
 
-                if($storyType == 'requirement') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'iframe showinonlybody', true, "data-app='{$this->app->tab}'");
 
-                $tab = $this->app->tab == 'project' ? 'project' : 'qa';
-                if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
-
-                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite')
+                $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
+                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $this->lang->story->subdivide;
@@ -4310,7 +4319,8 @@ class storyModel extends model
                         }
                     }
 
-                    if($storyType == 'story') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                    $executionID = empty($execution) ? 0 : $execution->id;
+                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
                 }
 
                 if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite')
@@ -4318,7 +4328,7 @@ class storyModel extends model
                     if($canCreateCase and ($canClose or $canUnlinkStory)) $menu .= "<div class='dividing-line'></div>";
 
                     $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                    $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
+                    if($execution->hasProduct) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
                 }
 
                 if($this->app->tab == 'product' and $storyType == 'story')
@@ -4327,7 +4337,6 @@ class storyModel extends model
 
                     $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
                 }
-
             }
             else
             {
@@ -4345,13 +4354,18 @@ class storyModel extends model
 
             $menu .= $this->buildMenu('story', 'review', $params . "&from=product&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody');
 
-            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
+            $executionID = empty($execution) ? 0 : $execution->id;
+            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
 
             $menu .= $this->buildMenu('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'close',    $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
 
-            if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
+            $disabledFeatures = ",{$this->config->disabledFeatures},";
+            if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib') and strpos($disabledFeatures, ',assetlibStorylib,') === false and strpos($disabledFeatures, ',assetlib,') === false)
+            {
+                $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
+            }
 
             /* Print testcate actions. */
             if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
@@ -4386,7 +4400,7 @@ class storyModel extends model
             $menu .= "<div class='divider'></div>";
 
             $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type);
-            $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '', "data-width='1050'");
+            $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, $type, 'copy', '', '', '', "data-width='1050'");
             $menu .= $this->buildMenu('story', 'delete', $params . "&confirm=no&from=&storyType=$story->type", $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
         }
 
@@ -4409,7 +4423,7 @@ class storyModel extends model
                 $canBatchCreateTask = common::hasPriv('task', 'batchCreate');
                 $canCreateCase      = ($hasDBPriv and common::hasPriv('testcase', 'create'));
                 $canEstimate        = common::hasPriv('execution', 'storyEstimate', $execution);
-                $canUnlinkStory     = common::hasPriv('execution', 'unlinkStory', $execution);
+                $canUnlinkStory     = (common::hasPriv('execution', 'unlinkStory', $execution) and ($execution->hasProduct or $execution->multiple));
 
                 if(strpos('draft,changing', $story->status) !== false)
                 {
@@ -4437,33 +4451,56 @@ class storyModel extends model
                 if(commonModel::isTutorialMode())
                 {
                     $wizardParams = helper::safe64Encode($param);
-                    $menu .=  html::a(helper::createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$this->lang->execution->wbs}' data-app='execution'");
+                    $menu .=  html::a(helper::createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$this->lang->execution->wbs}' data-app='{$this->app->tab}'");
                 }
                 else
                 {
-                    if($hasDBPriv) $menu .= common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create ' . $toTaskDisabled);
+                    if($hasDBPriv and $storyType == 'story') $menu .= common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create ' . $toTaskDisabled);
                 }
 
                 $this->lang->task->batchCreate = $this->lang->execution->batchWBS;
-                if($hasDBPriv) $menu .= common::printIcon('task', 'batchCreate', "executionID=$executionID&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
+                if($hasDBPriv and $storyType == 'story') $menu .= common::printIcon('task', 'batchCreate', "executionID=$executionID&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
 
                 if(($canSubmitReview or $canReview or $canRecall or $canCreateTask or $canBatchCreateTask) and ($canCreateCase or $canEstimate or $canUnlinkStory))
                 {
-                        $menu .= "<div class='dividing-line'></div>";
+                    $menu .= "<div class='dividing-line'></div>";
                 }
 
-                if($canEstimate)
+                if($canEstimate and $storyType == 'story')
                 {
                     $menu .= common::buildIconButton('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='470px'");
                 }
 
                 $this->lang->testcase->batchCreate = $this->lang->testcase->create;
-                if($canCreateCase)
+                if($canCreateCase and $storyType == 'story')
                 {
-                    $menu .= common::buildIconButton('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id", '', 'list', 'sitemap', '', '', '', "data-app='qa'");
+                    $menu .= common::buildIconButton('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id", '', 'list', 'sitemap', '', 'iframe', true, "data-app='{$this->app->tab}'");
                 }
 
                 if(($canEstimate or $canCreateCase) and $canUnlinkStory) $menu .= "<div class='dividing-line'></div>";
+
+                $executionID = empty($execution) ? 0 : $execution->id;
+                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
+                {
+                    $isClick = $this->isClickable($story, 'batchcreate');
+                    $title   = $this->lang->story->subdivide;
+                    if(!$isClick and $story->status != 'closed')
+                    {
+                        if($story->parent > 0)
+                        {
+                            $title = $this->lang->story->subDivideTip['subStory'];
+                        }
+                        else
+                        {
+                            if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
+                            if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
+                        }
+                    }
+
+                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, 'browse', 'split', '', 'showinonlybody', '', '', $title);
+                }
+
+                if(common::hasPriv('story', 'close', "storyType={$story->type}") and !$execution->multiple and !$execution->hasProduct) $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, 'browse', '', '', 'iframe', true);
 
                 if($canUnlinkStory)
                 {
@@ -4655,7 +4692,7 @@ class storyModel extends model
         $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=0&storyType=$story->type");
         $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
 
-        if($tab == 'project')
+        if($tab == 'project' and $this->session->multiple)
         {
             $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id&project={$this->session->project}");
             $canView   = common::hasPriv('projectstory', 'view');
@@ -4937,14 +4974,13 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                if($tab == 'execution')
+                if($tab == 'execution' || ($tab == 'project' && isset($_SESSION['multiple']) && empty($_SESSION['multiple'])))
                 {
                     $menuType = 'execution';
                 }
                 else
                 {
                     $menuType = 'browse';
-                    $execution = '';
                 }
                 echo $this->buildOperateMenu($story, $menuType, $execution, $storyType);
                 break;
@@ -5813,7 +5849,7 @@ class storyModel extends model
      */
     public function getRelatedObjects($object, $pairs = '')
     {
-        $storys = $this->loadModel('port')->getQueryDatas('story');
+        $storys = $this->loadModel('transfer')->getQueryDatas('story');
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();

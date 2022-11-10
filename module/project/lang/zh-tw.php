@@ -55,6 +55,10 @@ $lang->project->selectProgram     = '項目集篩選';
 $lang->project->teamMember        = '團隊成員';
 $lang->project->unlinkMember      = '移除成員';
 $lang->project->copyTeamTitle     = '選擇一個項目團隊來複制';
+$lang->project->manageRepo        = '關聯代碼庫';
+$lang->project->linkedRepo        = '已關聯代碼庫';
+$lang->project->unlinkedRepo      = '未關聯代碼庫';
+$lang->project->linkRepoFailed    = '關聯代碼庫失敗。';
 
 /* Fields. */
 $lang->project->common             = '項目';

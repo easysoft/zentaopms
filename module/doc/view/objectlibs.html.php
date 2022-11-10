@@ -46,10 +46,7 @@ $('#pageNav .btn-group.angle-btn').click(function()
     if($(this).hasClass('opened')) return;
     $(this).addClass('opened');
 
-    setTimeout(function()
-    {
-        scrollToSelected();
-    }, 100);
+    scrollToSelected();
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

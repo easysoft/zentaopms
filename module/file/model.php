@@ -590,9 +590,9 @@ class fileModel extends model
             return in_array($productID, array_keys($grantProducts));
         }
 
-        if(!empty($projectID)   and strpos(",{$this->app->user->view->projects},", ",$projectID,")  === false) return false;
-        if(!empty($productID)   and strpos(",{$this->app->user->view->products},", ",$productID,")  === false) return false;
-        if(!empty($executionID) and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false) return false;
+        if((isset($projectID)   and $projectID   > 0) and strpos(",{$this->app->user->view->projects},", ",$projectID,")  === false) return false;
+        if((isset($productID)   and $productID   > 0) and strpos(",{$this->app->user->view->products},", ",$productID,")  === false) return false;
+        if((isset($executionID) and $executionID > 0) and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false) return false;
 
         return true;
     }

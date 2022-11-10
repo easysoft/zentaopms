@@ -14,6 +14,7 @@
 <?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if($project->division):?>
     <div class='btn-group'>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
@@ -30,6 +31,7 @@
         ?>
       </ul>
     </div>
+    <?php endif;?>
     <?php common::sortFeatureMenu('execution', 'all');?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php $label = "<span class='text'>$label</span>";?>
@@ -40,6 +42,10 @@
     <?php if(common::hasPriv('execution', 'task')) echo html::checkbox('showTask', array('1' => $lang->programplan->stageCustom->task), '', $this->cookie->showTask ? 'checked=checked' : '');?>
   </div>
   <div class='btn-toolbar pull-right'>
+    <div class="btn-group">
+      <?php echo html::a('', "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->project->bylist}'");?>
+      <?php echo html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"), "<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->programplan->gantt}'");?>
+    </div>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
      <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
      <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
@@ -79,6 +85,7 @@
               <?php endif;?>
             </div>
           </th>
+          <?php if($project->division) echo "<th class='text-left c-product'>{$lang->project->product}</th>";?>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
           <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
@@ -93,6 +100,7 @@
       </thead>
       <tbody id="executionTableList">
         <?php foreach($executionStats as $execution):?>
+        <?php $execution->division = $project->division;?>
         <?php $this->execution->printNestedList($execution, false, $users, $productID);?>
         <?php endforeach;?>
       </tbody>
