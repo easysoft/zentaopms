@@ -2636,7 +2636,19 @@ class storyModel extends model
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
-        if($story->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
+        if($story->status == 'active')
+        {
+            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
+
+            /* Sync siblings. */
+            if(!empty($oldStory->siblings))
+            {
+                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                {
+                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->exec();
+                }
+            }
+        }
 
         $this->setStage($storyID);
 
@@ -6305,22 +6317,33 @@ class storyModel extends model
      * Get the story status after activation.
      *
      * @param  int    $storyID
+     * @param  bool   $hasSiblings
      * @access public
      * @return void
      */
-    public function getActivateStatus($storyID)
+    public function getActivateStatus($storyID, $hasSiblings = true)
     {
         $status     = 'active';
+        $action     = $hasSiblings ? 'closed,reviewrejected,syncsiblings' : 'closed,reviewrejected';
         $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
+            ->andWhere('action')->in($action)
             ->orderBy('id_desc')
             ->fetch();
 
         $lastAction = $lastRecord->action;
-        $preStatus  = $lastRecord->extra;
-        if(strpos($preStatus, '|') !== false) $preStatus = substr($preStatus, strpos($preStatus, '|') + 1);
-        if(strpos('closed,reviewrejected', $lastAction) !== false) $status = $preStatus;
+        if(strpos('closed,reviewrejected', $lastAction) !== false)
+        {
+            $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
+        }
+
+        /* When activating twin story, you need to check the status of the twin story selected when closing. */
+        if($lastAction == 'syncsiblings')
+        {
+            $syncStoryID = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 0;
+            $status      = $this->getActivateStatus($syncStoryID, false);
+        }
 
         return $status;
     }
