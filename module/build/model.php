@@ -311,6 +311,12 @@ class buildModel extends model
         $build->stories = '';
         $build->bugs    = '';
 
+        if($projectID)
+        {
+            $project = $this->loadModel('project')->getByID($projectID);
+            if(!$project->multiple) $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetch('id');
+        }
+
         $build = fixer::input('post')
             ->setDefault('project', $projectID)
             ->setDefault('product', 0)
