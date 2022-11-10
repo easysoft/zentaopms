@@ -8,7 +8,8 @@ $(function()
     });
 
     if($.cookie('editProject') == 1) $('input#editProject1').prop('checked', 'true');
-    var isEditMode = $('input#editProject1').is(':checked');
+    var isEditMode    = $('input#editProject1').is(':checked');
+    var projectIdList = [];
     dtableWithZentao.render({
         checkable: isEditMode,
         canRowCheckable(id)
@@ -40,6 +41,8 @@ $(function()
                 const statistic = () => {
                     const checkedCount = this.getChecks().length;
                     const text = isEditMode && checkedCount ? checkedProjects.replace('%s', checkedCount) : programSummary;
+
+                    projectIdList = this.getChecks();
                     return [{children: text, className: 'text-dark'}];
                 };
                 if (isEditMode) {
@@ -59,10 +62,21 @@ $(function()
             },
     });
 
-    $('.dtable').on('click', ".edit-btn", function()
+    $(document).on('click', ".dtable-footer .edit-btn.toolbar-item", function()
     {
-        console.log(11111);
-        debugger
+        var batchEditLink = createLink('project', 'batchEdit');
+        var tempform      = document.createElement("form");
+        tempform.action   = batchEditLink;
+        tempform.method   = "post";
+        tempform.style.display = "none";
+
+        var opt   = document.createElement("input");
+        opt.name  = 'projectIdList';
+        opt.value = projectIdList;
+
+        tempform.appendChild(opt);
+        document.body.appendChild(tempform);
+        tempform.submit();
     });
 
     if(status == 'bySearch') $('.dtable-footer').hide();
