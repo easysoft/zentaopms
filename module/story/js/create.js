@@ -148,8 +148,8 @@ $(window).unload(function(){
 
      $.ajaxSettings.async = false;
      loadBranchForSiblings($('#product').val(), branch, itemIndex)
-     loadModuleForSiblings($('#product').val(), 0, itemIndex)
-     loadPlanForSiblings($('#product').val(), 0, itemIndex)
+     loadModuleForSiblings($('#product').val(), branch, itemIndex)
+     loadPlanForSiblings($('#product').val(), branch, itemIndex)
      $.ajaxSettings.async = true;
      $('.addBranchesBox' + itemIndex + ' #branchBox .input-group .input-group-addon').html($.cookie('branchSourceName'))
 
