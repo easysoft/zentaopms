@@ -644,7 +644,7 @@ class custom extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
 
-        $disabledFeatures = array('program', 'productLine', 'scrum' => array());
+        $disabledFeatures = array('program', 'productLine', 'scrum' => array('scrumMeasrecord'));
         foreach($this->config->custom->features as $feature)
         {
             $function = 'has' . ucfirst($feature) . 'Data';
