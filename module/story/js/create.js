@@ -66,6 +66,12 @@ $(function()
         $('.table-col .icon-plus').parent().css('pointer-events', 'none')
         $('.table-col .icon-plus').parent().addClass('disabled')
     }
+
+    $.get(createLink('product', 'ajaxGetProductById', "productID=" + $('#product').val()), function(data)
+    {console.log(data)
+        $.cookie('branchSourceName', data.branchSourceName)
+        $.cookie('branchName', data.branchName)
+    }, 'json')
 });
 
 /**

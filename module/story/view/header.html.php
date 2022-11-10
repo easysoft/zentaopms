@@ -114,12 +114,9 @@ function loadProductBranches(productID)
             {
                 gap = $('#product').closest('td').next().width();
                 $('#planIdBox').css('flex', '0 0 ' + gap + 'px')
-                $.get(createLink('product', 'ajaxGetProductById', "productID=" + productID), function(data)
-                {
-                    $('.switchBranch #branchBox .input-group .input-group-addon').html(data.branchSourceName)
-                    $('.switchBranch #branchBox').closest('td').prev().html(data.branchName)
-                    $.cookie('branchSourceName', data.branchSourceName)
-                }, 'json')
+
+                $('.switchBranch #branchBox .input-group .input-group-addon').html($.cookie('branchSourceName'))
+                $('.switchBranch #branchBox').closest('td').prev().html($.cookie('branchName'))
 
                 /* reload branch */
                 $('#branches0').replaceWith(data);
