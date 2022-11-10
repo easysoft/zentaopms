@@ -1226,4 +1226,17 @@ class fileModel extends model
     {
         return filesize($file->realPath);
     }
+
+    /**
+     * Save file to local storage temporarily.
+     *
+     * @param  object $file
+     * @access public
+     * @return string
+     */
+    public function saveAsTempFile($file)
+    {
+        /* If the storage type is local, do nothing. */
+        if($this->config->file->storageType == 'fs') return $file->realPath;
+    }
 }
