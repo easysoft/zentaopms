@@ -237,6 +237,9 @@ $lang->project->methodOrder[190] = 'manageRepo';
 
 $lang->resource->projectbuild = new stdclass();
 $lang->resource->projectbuild->browse = 'browse';
+$lang->resource->projectbuild->create = 'create';
+$lang->resource->projectbuild->edit   = 'edit';
+$lang->resource->projectbuild->delete = 'delete';
 
 $lang->projectbuild->methodOrder[5] = 'browse';
 
@@ -953,15 +956,17 @@ $lang->resource->build->unlinkBug        = 'unlinkBug';
 $lang->resource->build->batchUnlinkBug   = 'batchUnlinkBug';
 
 $lang->build->methodOrder[5]  = 'create';
-$lang->build->methodOrder[10] = 'edit';
-$lang->build->methodOrder[15] = 'delete';
-$lang->build->methodOrder[20] = 'view';
-$lang->build->methodOrder[25] = 'linkStory';
-$lang->build->methodOrder[30] = 'unlinkStory';
-$lang->build->methodOrder[35] = 'batchUnlinkStory';
-$lang->build->methodOrder[40] = 'linkBug';
-$lang->build->methodOrder[45] = 'unlinkBug';
-$lang->build->methodOrder[50] = 'batchUnlinkBug';
+$lang->build->methodOrder[10] = 'createProjectBuild';
+$lang->build->methodOrder[15] = 'edit';
+$lang->build->methodOrder[20] = 'editProjectBuild';
+$lang->build->methodOrder[25] = 'delete';
+$lang->build->methodOrder[30] = 'view';
+$lang->build->methodOrder[35] = 'linkStory';
+$lang->build->methodOrder[40] = 'unlinkStory';
+$lang->build->methodOrder[45] = 'batchUnlinkStory';
+$lang->build->methodOrder[50] = 'linkBug';
+$lang->build->methodOrder[55] = 'unlinkBug';
+$lang->build->methodOrder[60] = 'batchUnlinkBug';
 
 /* QA. */
 $lang->resource->qa = new stdclass();
