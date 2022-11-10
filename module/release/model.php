@@ -212,8 +212,10 @@ class releaseModel extends model
 
                 if($this->post->sync == 'true')
                 {
-                    $release->stories .= $build->stories;
-                    $release->bugs    .= $build->bugs;
+                    $build->stories = trim($build->stories, ',');
+                    $build->bugs    = trim($build->bugs, ',');
+                    if($build->stories) $release->stories .= ',' . $build->stories;
+                    if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
                 }
             }
 

@@ -132,7 +132,7 @@ class projectrelease extends control
         $this->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs(array_keys($this->products), 'all', 'notrunk,withbranch', $projectID, 'project');
+        $builds         = $this->build->getBuildPairs($this->view->product->id, $this->view->branch, 'notrunk,withbranch', $projectID, 'project');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
@@ -183,25 +183,29 @@ class projectrelease extends control
 
         /* Get release and build. */
         $release = $this->projectrelease->getById((int)$releaseID);
-        $this->commonAction($release->project, $release->product, $release->branch);
-        $build = $this->build->getById($release->build);
+        if(!$this->session->project) $this->session->set('project', explode(',', trim($release->project, ','))[0], 'project');
+
+        $this->commonAction($this->session->project, $release->product, $release->branch);
+        $bindBuilds = $this->build->getByList($release->build);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $release->project, 'project', '', false);
-        $releasedBuilds = $this->projectrelease->getReleasedBuilds($release->project);
+        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $this->session->project, 'project', '', false);
+        $releasedBuilds = $this->projectrelease->getReleasedBuilds($this->session->project);
         foreach($releasedBuilds as $releasedBuild)
         {
-            if($releasedBuild != $build->id) unset($builds[$releasedBuild]);
+            foreach(explode(',', trim($releasedBuild, ',')) as $bindBuildID)
+            {
+                if(!isset($bindBuilds[$bindBuildID])) unset($builds[$bindBuildID]);
+            }
         }
         unset($builds['trunk']);
 
         /* Set project menu. */
-        $this->project->setMenu($release->project);
+        $this->project->setMenu($this->session->project);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
-        $this->view->build      = $build;
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
@@ -771,5 +775,24 @@ class projectrelease extends control
         if(dao::isError()) return print(js::error(dao::getError()));
         $actionID = $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
         return print(js::reload('parent'));
+    }
+
+    /**
+     * Ajax load builds.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    public function ajaxLoadBuilds($projectID, $productID, $branch = 0)
+    {
+        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk,withbranch', $projectID, 'project');
+        $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
+        foreach($releasedBuilds as $build) unset($builds[$build]);
+        unset($builds['trunk']);
+
+        return print(html::select('build[]', $builds, '', "class='form-control chosen' multiple"));
     }
 }

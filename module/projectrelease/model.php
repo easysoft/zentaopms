@@ -74,8 +74,10 @@ class projectreleaseModel extends model
      */
     public function getLast($projectID)
     {
+        $project = (int)$projectID;
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
-            ->where('project')->eq((int)$projectID)
+            ->where('deleted')->eq(0)
+            ->andWhere("FIND_IN_SET($projectID, project)")
             ->orderBy('date DESC')
             ->limit(1)
             ->fetch();
@@ -92,9 +94,12 @@ class projectreleaseModel extends model
     {
         $releases = $this->dao->select('build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
-            ->andWhere('project')->eq($projectID)
-            ->fetchAll('build');
-        return array_keys($releases);
+            ->andWhere("FIND_IN_SET($projectID, project)")
+            ->fetchAll();
+
+        $buildIdList = array();
+        foreach($releases as $release) $buildIdList = array_merge($buildIdList, explode(',', trim($release->build, ',')));
+        return $buildIdList;
     }
 
     /**
@@ -109,14 +114,13 @@ class projectreleaseModel extends model
         /* Init vars. */
         $releaseID  = (int)$releaseID;
         $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
-        $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
         /* Check build if build is required. */
         if(strpos($this->config->release->edit->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
-            ->add('branch',  (int)$branch)
             ->setDefault('mailto', '')
+            ->join('build', ',')
             ->join('mailto', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
             ->cleanInt('product')
@@ -127,7 +131,7 @@ class projectreleaseModel extends model
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
-            ->check('name', 'unique', "id != '$releaseID' AND product = '{$release->product}' AND branch = '$branch' AND deleted = '0'")
+            ->check('name', 'unique', "id != '$releaseID' AND product = '{$oldRelease->product}' AND branch = '{$oldRelease->branch}' AND deleted = '0'")
             ->where('id')->eq((int)$releaseID)
             ->exec();
         if(!dao::isError())
