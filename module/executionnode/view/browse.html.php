@@ -49,7 +49,7 @@
         <tr>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
           <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->executionnode->name);?></th>
-          <th class='c-ip'><?php common::printOrderLink('publicIP', $orderBy, $vars, $lang->executionnode->ip);?></th>
+          <th class='c-ip'><?php common::printOrderLink('address', $orderBy, $vars, $lang->executionnode->ip);?></th>
           <th class='c-cpu'><?php common::printOrderLink('osCpu', $orderBy, $vars, $lang->executionnode->cpu);?></th>
           <th class='c-number'><?php common::printOrderLink('osMemory', $orderBy, $vars, $lang->executionnode->osMemory);?></th>
           <th class='c-number'><?php common::printOrderLink('osDisk', $orderBy, $vars, $lang->executionnode->osDisk);?></th>

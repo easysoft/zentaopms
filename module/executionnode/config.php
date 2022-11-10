@@ -44,7 +44,7 @@ $config->executionnode->search['fields']['osCpu']      = $lang->executionnode->c
 $config->executionnode->search['fields']['osMemory']   = $lang->executionnode->osMemory;
 $config->executionnode->search['fields']['osDisk']     = $lang->executionnode->osDisk;
 $config->executionnode->search['fields']['macAddress'] = $lang->executionnode->macAddress;
-$config->executionnode->search['fields']['publicIP']   = $lang->executionnode->ip;
+$config->executionnode->search['fields']['address']   = $lang->executionnode->ip;
 $config->executionnode->search['params']['name']       = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->executionnode->search['params']['osType']     = array('operator' => '=', 'control' => 'select',  'values' => array('' => '') + $config->executionnode->os->type['windows'] + $config->executionnode->os->type['linux']);
 $config->executionnode->search['params']['hostID']     = array('operator' => '=', 'control' => 'select', 'values' => '');
