@@ -68,7 +68,7 @@ $(function()
     }
 
     $.get(createLink('product', 'ajaxGetProductById', "productID=" + $('#product').val()), function(data)
-    {console.log(data)
+    {
         $.cookie('branchSourceName', data.branchSourceName)
         $.cookie('branchName', data.branchName)
     }, 'json')
