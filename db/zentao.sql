@@ -323,6 +323,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `execution` mediumint(8) unsigned NOT NULL default '0',
+  `builds` varchar(255) NOT NULL,
   `name` char(150) NOT NULL,
   `scmPath` char(255) NOT NULL,
   `filePath` char(255) NOT NULL,
