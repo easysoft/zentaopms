@@ -60,6 +60,18 @@ $(function()
     });
 
     $(document).on('change', '#module', loadURS);
+
+    if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
+    {
+        $('.table-col .icon-plus').parent().css('pointer-events', 'none')
+        $('.table-col .icon-plus').parent().addClass('disabled')
+    }
+
+    $.get(createLink('product', 'ajaxGetProductById', "productID=" + $('#product').val()), function(data)
+    {
+        $.cookie('branchSourceName', data.branchSourceName)
+        $.cookie('branchName', data.branchName)
+    }, 'json')
 });
 
 /**
@@ -148,8 +160,8 @@ $(window).unload(function(){
 
      $.ajaxSettings.async = false;
      loadBranchForSiblings($('#product').val(), branch, itemIndex)
-     loadModuleForSiblings($('#product').val(), 0, itemIndex)
-     loadPlanForSiblings($('#product').val(), 0, itemIndex)
+     loadModuleForSiblings($('#product').val(), branch, itemIndex)
+     loadPlanForSiblings($('#product').val(), branch, itemIndex)
      $.ajaxSettings.async = true;
      $('.addBranchesBox' + itemIndex + ' #branchBox .input-group .input-group-addon').html($.cookie('branchSourceName'))
 
