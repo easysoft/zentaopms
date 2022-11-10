@@ -382,17 +382,11 @@
                 <div class='detail-title'><?php echo $lang->files?></div>
                 <div class='detail-content article-content'>
                   <?php
-                  if($release->files)
+                  if($release->files) echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
+                  foreach($release->buildInfos as $buildID => $buildInfo)
                   {
-                      echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
-                  }
-                  elseif($release->filePath)
-                  {
-                      echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
-                  }
-                  elseif($release->scmPath)
-                  {
-                      echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+                      if($buildInfo->filePath) echo $lang->release->filePath . html::a($buildInfo->filePath, $buildInfo->filePath, '_blank');
+                      if($buildInfo->scmPath)  echo $lang->release->scmPath . html::a($buildInfo->scmPath, $buildInfo->scmPath, '_blank');
                   }
                   ?>
                 </div>
