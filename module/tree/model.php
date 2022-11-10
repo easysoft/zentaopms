@@ -1771,7 +1771,7 @@ class treeModel extends model
             }
         }
 
-        if($type == 'story' or $type == 'chart')
+        if($type == 'story' or strpos($this->config->tree->groupTypes, ",$type,") !== false)
         {
             $objectType = $type == 'story' ? 'module' : 'chartgroup';
             $this->loadModel('action');
@@ -1830,7 +1830,7 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
 
-        if($self->type == 'story' or $self->type == 'chart')
+        if($self->type == 'story' or strpos($this->config->tree->groupTypes, ",$self->type,") !== false)
         {
             $objectType = $self->type == 'story' ? 'module' : 'chartgroup';
             $rootID     = isset($module->root) ? $module->root : $self->root;
@@ -1944,7 +1944,7 @@ class treeModel extends model
         $childs = $this->getAllChildId($moduleID);
         $childs[$moduleID] = $moduleID;
 
-        $objectType = (!empty($module->type) and $module->type == 'chart') ? 'chartgroup' : 'module';
+        $objectType = (!empty($module->type) and strpos($this->config->tree->groupTypes, ",$module->type,") !== false) ? 'chartgroup' : 'module';
         /* Mark deletion when delete a module. */
         $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->in($childs)->exec();
         foreach($childs as $childID)
