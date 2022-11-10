@@ -384,7 +384,7 @@ class actionModel extends model
 
                     $name   = $execution->name;
                     $method = $execution->type == 'kanban' ? 'kanban' : 'view';
-                    $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name);
+                    $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name, '', "data-app='execution'");
                 }
             }
             elseif($actionName == 'linked2project')
