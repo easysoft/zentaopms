@@ -61,7 +61,7 @@ $config->program->dtable->fieldList['name']['type']         = 'link';
 $config->program->dtable->fieldList['name']['flex']         = 1;
 $config->program->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->dtable->fieldList['name']['checkbox']     = true;
-//$config->program->dtable->fieldList['name']['iconRender']   = 'icon-cards-view text-gray';
+$config->program->dtable->fieldList['name']['iconRender']   = true;
 
 $config->program->dtable->fieldList['status']['name']      = 'status';
 $config->program->dtable->fieldList['status']['title']     = $lang->program->status;
@@ -99,8 +99,27 @@ $config->program->dtable->fieldList['progress']['title'] = $lang->program->progr
 $config->program->dtable->fieldList['progress']['width'] = 100;
 $config->program->dtable->fieldList['progress']['type']  = 'circleProgress';
 
-$config->program->dtable->fieldList['actions']['name']  = 'actions';
-$config->program->dtable->fieldList['actions']['title'] = $lang->actions;
-$config->program->dtable->fieldList['actions']['width'] = 160;
-$config->program->dtable->fieldList['actions']['type']  = 'html';
-$config->program->dtable->fieldList['actions']['fixed'] = 'right';
+$config->program->dtable->fieldList['actions']['name']                 = 'actions';
+$config->program->dtable->fieldList['actions']['title']                = $lang->actions;
+$config->program->dtable->fieldList['actions']['width']                = 160;
+$config->program->dtable->fieldList['actions']['type']                 = 'actions';
+$config->program->dtable->fieldList['actions']['fixed']                = 'right';
+$config->program->dtable->fieldList['actions']['module']               = 'program';
+
+global $app;
+$app->loadLang('project');
+$config->program->actionsMap['normal']            = array('start', 'suspend', 'close', 'activate', 'edit', 'create', 'delete', 'team', 'group');
+$config->program->actionsMap['other']             = array('start', 'suspend', 'close', 'activate');
+$config->program->actionsMap['more']              = array('link', 'whitelist', 'delete');
+$config->program->actionsMap['hint']['create']    = $lang->program->children;
+$config->program->actionsMap['hint']['delete']    = $lang->delete;
+$config->program->actionsMap['hint']['team']      = $lang->project->team;
+$config->program->actionsMap['hint']['group']     = $lang->project->group;
+$config->program->actionsmap['text']['start']     = $lang->program->start;
+$config->program->actionsmap['text']['suspend']   = $lang->program->suspend;
+$config->program->actionsmap['text']['close']     = $lang->close;
+$config->program->actionsmap['text']['activate']  = $lang->program->activate;
+$config->program->actionsMap['text']['delete']    = $lang->delete;
+$config->program->actionsmap['text']['link']      = $lang->project->manageProducts;
+$config->program->actionsmap['text']['whitelist'] = $lang->project->whitelist;
+$config->program->actionsMap['text']['delete']    = $lang->delete;

@@ -412,4 +412,4 @@ $config->maxPriValue  = '256';
 $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
 
 $config->dtable = new stdclass();
-$config->dtable->colVars = array('width', 'type', 'flex', 'fixed', 'sortType', 'checkbox', 'nestedToggle', 'iconRender', 'statusMap');
+$config->dtable->colVars = array('width', 'type', 'flex', 'fixed', 'sortType', 'checkbox', 'nestedToggle', 'statusMap', 'actionsMap');

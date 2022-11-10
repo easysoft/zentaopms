@@ -44,7 +44,6 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
 
       if(defined('ZUI3'))
       {
-        js::import('https://zui.cyy.oop.cc/dist/zui-custom/zui-custom.js');
         js::import('https://zui.cyy.oop.cc/dist/zui-custom/zui-custom.umd.cjs');
         js::import('https://unpkg.com/htmx.org@1.8.2');
       }

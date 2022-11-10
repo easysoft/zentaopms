@@ -1614,6 +1614,7 @@ class programModel extends model
         $row->parent   = $program->parent ? $program->parent : '';
         $row->asParent = $program->type == 'program';
         $row->type     = $program->type;
+        $row->model    = $program->model;
         $row->name     = $program->name;
         $row->status   = $program->status;
         $row->PM       = empty($manager) ? '' : $manager->realname;
@@ -1622,7 +1623,24 @@ class programModel extends model
         $row->begin    = $program->begin;
         $row->end      = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
         $row->progress = isset($progressList[$program->id]) ? round($progressList[$program->id]) : 0;
+        $row->actions  = $this->buildActions($program);
 
         return $row;
+    }
+
+    public function buildActions($program)
+    {
+        $actions = array();
+        if($program->type == 'program' && strpos(",{$this->app->user->view->programs},", ",$program->id,") !== false)
+        {
+            if($program->status == 'wait' || $program->status == 'suspended') $actions[] = 'start';
+            if($program->status == 'doing') $actions[] = 'close';
+            if($program->status == 'closed') $actions[] = 'activate';
+            if(common::hasPriv('program', 'suspend') || (common::hasPriv('program', 'close') && $program->status != 'doing') || (common::hasPriv('program', 'activate') && $program->status != 'closed'))
+            {
+                $actions[] = 'other';
+            }
+        }
+        return $actions;
     }
 }

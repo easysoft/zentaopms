@@ -179,6 +179,10 @@ if(file_exists($myConfig)) include $myConfig;
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
 
+/* 数据表格操作配置文件。dtable actions settings. */
+$actionsMapConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'actionsmap.php';
+if(file_exists($actionsMapConfig)) include $actionsMapConfig;
+
 /* API路由配置。API route settings. */
 $routesConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'routes.php';
 if(file_exists($routesConfig)) include $routesConfig;

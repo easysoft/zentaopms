@@ -117,19 +117,6 @@ class column extends wg
     }
 
     /**
-     * Set column icon.
-     *
-     * @param  string $icon
-     * @access public
-     * @return object
-     */
-    public function iconRender($icon)
-    {
-        $this->iconRender = $icon;
-        return $this;
-    }
-
-    /**
      * Set status list.
      *
      * @param  array $statusList
@@ -139,6 +126,51 @@ class column extends wg
     public function statusMap($statusList)
     {
         $this->statusMap = $statusList;
+        return $this;
+    }
+
+    /**
+     * Set actions list.
+     *
+     * @param  string $module
+     * @access public
+     * @return object
+     */
+    public function actionsMap($module)
+    {
+        global $config, $lang;
+        $actionsMap  = new stdclass();
+        $actionsList = $config->$module->actionsMap;
+        foreach($actionsList as $actionType => $actions)
+        {
+            if($actionType == 'normal')
+            {
+                foreach($actions as $action)
+                {
+                    $actionsMap->$action = new stdclass();
+                    $actionsMap->$action->icon = $config->actionsMap->icon->$action;
+                }
+            }
+            elseif($actionType == 'other' or $actionType == 'more')
+            {
+                $actionsMap->$actionType = new stdclass();
+                $actionsMap->$actionType = $config->actionsMap->$actionType;
+
+                $actionsMap->$actionType->hint = $lang->more;
+
+                $items = array();
+                foreach($actions as $action)
+                {
+                    $item = new stdclass();
+                    $item->name = $action;
+                    $item->icon = $config->actionsMap->icon;
+                    $items[] = $item;
+                }
+                $actionsMap->$actionType->dropdown->items = $items;
+            }
+        }
+
+        $this->actionsMap = $actionsMap;
         return $this;
     }
 }
@@ -224,13 +256,18 @@ class dtable
      */
     public function buildCols($fieldList)
     {
+        $index = 0;
         foreach($fieldList as $field)
         {
             $col = $this->col($field['name'], $field['title']);
             foreach($field as $attr => $value)
             {
                 if(in_array($attr, $this->config->dtable->colVars)) $col->$attr($value);
+                if($field['name'] == 'actions' and $attr == 'module') $col->actionsMap($value);
+                if($attr == 'iconRender') $this->iconRender = $index;
             }
+
+            $index ++;
         }
     }
 
@@ -311,8 +348,27 @@ class dtable
         if(!empty($this->search)) $html .= $this->search;
 
         $html .= '<div class="dtable"></div>';
-        $html .= '<script>dtableWithZentao = new zui.DTable(".dtable", {cols: ' . json_encode($this->cols) . ', data: ' . json_encode($this->data) . ', nested: true, checkable: true})</script>';
+        $html .= '<script>';
+        $html .= 'var columns = ' . json_encode($this->cols) . ';console.log(columns);';
 
+        if(isset($this->iconRender)) $html .= $this->setIconRender();
+
+        $html .= 'dtableWithZentao = new zui.DTable(".dtable", {cols: columns, data: ' . json_encode($this->data) . ', nested: true, checkable: true}); var datas = ' . json_encode($this->data) . ';console.log(datas);';
+        $html .= '</script>';
+
+        return $html;
+    }
+
+    public function setIconRender()
+    {
+        $html  = 'columns[' . $this->iconRender . '].iconRender = iconRender;';
+        $html .= <<<EOF
+function iconRender(e)
+{
+    if(e.data.type == 'program') return 'icon-cards-view text-gray';
+    if(e.data.type == 'project') return 'icon icon-common icon-' + e.data.model + "'";
+};
+EOF;
         return $html;
     }
 }
