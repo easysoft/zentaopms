@@ -60,6 +60,12 @@ $(function()
     });
 
     $(document).on('change', '#module', loadURS);
+
+    if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
+    {
+        $('.table-col .icon-plus').parent().css('pointer-events', 'none')
+        $('.table-col .icon-plus').parent().addClass('disabled')
+    }
 });
 
 /**
