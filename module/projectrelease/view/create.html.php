@@ -34,21 +34,21 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->release->build;?></th>
-            <td><?php echo html::select('build', $builds, '', "onchange='showProducts(this.value)' class='form-control chosen'");?></td>
-            <td>
-              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->release->tips;?>"></icon>
-            </td>
-          </tr>
-          <tr id='productBox' <?php if(!$project->hasProduct) echo "class='hide'";?> >
             <th><?php echo $lang->release->product;?></th>
             <td>
               <div class='input-group'>
-              <?php echo html::select('product', $products, '', "onchange='loadBranches(this.value)' class='form-control chosen'");?>
-              <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "class='form-control chosen control-branch'");?>
+              <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value)' class='form-control chosen'");?>
+              <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "class='form-control chosen control-branch' onchange='loadBuilds()'");?>
               </div>
             </td>
             <td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->release->build;?></th>
+            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple");?></td>
+            <td>
+              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->release->tips;?>"></icon>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>
