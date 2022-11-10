@@ -351,8 +351,15 @@
                     </tr>
                     <tr>
                       <th><?php echo $lang->release->build;?></th>
-                      <td title='<?php echo $release->buildName?>'>
-                          <?php echo ($release->execution) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
+                      <td>
+                        <?php
+                        $buildHtml = array();
+                        foreach($release->buildInfos as $buildID => $buildInfo)
+                        {
+                            $buildHtml[] = html::a($this->createLink('build', 'view', "buildID=$buildID"), $buildInfo->name);
+                        }
+                        echo join(', ', $buildHtml);
+                        ?>
                       </td>
                     </tr>
                     <tr>
