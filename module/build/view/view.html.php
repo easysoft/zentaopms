@@ -328,6 +328,10 @@ tbody tr td:first-child input {display: none;}
                   <td><?php echo $branchName;?></td>
                 </tr>
                 <?php endif;?>
+                <tr>
+                  <th><?php echo $lang->build->name;?></th>
+                  <td><?php echo $build->name;?></td>
+                </tr>
                 <?php if($build->execution):?>
                 <tr>
                   <th><?php echo $lang->build->execution;?></th>
@@ -345,10 +349,6 @@ tbody tr td:first-child input {display: none;}
                   </td>
                 </tr>
                 <?php endif;?>
-                <tr>
-                  <th><?php echo $lang->build->name;?></th>
-                  <td><?php echo $build->name;?></td>
-                </tr>
                 <tr>
                   <th><?php echo $lang->build->builder;?></th>
                   <td><?php echo zget($users, $build->builder);?></td>
