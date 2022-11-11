@@ -13,8 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
-    <?php echo html::a($this->createLink('zahost', 'browse'), "<span class='text'>{$lang->zahost->image->browseImage}</span>", '', "class='btn btn-link btn-active-text'");?>
-    <a href='#' class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon-search icon'></i> <?php echo $lang->zahost->byQuery;?></a>
+    <?php echo html::a($this->createLink('zahost', 'browseimage', "hostID=$hostID"), "<span class='text'>{$lang->zahost->image->browseImage}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <a href='#' class='hidden btn btn-link querybox-toggle' id='bysearchTab'><i class='icon-search icon'></i> <?php echo $lang->zahost->byQuery;?></a>
   </div>
   <?php if(common::hasPriv('zahost', 'createImage')):?>
   <div class="btn-toolbar pull-right" id='createActionMenu'>
@@ -49,7 +49,7 @@
         <th class='c-os'><?php common::printOrderLink('osVersion', $orderBy, $vars, $lang->zahost->image->osVersion);?></th>
         <th class='c-lang'><?php common::printOrderLink('osLang', $orderBy, $vars, $lang->zahost->image->osLang);?></th>
         <th><?php echo $lang->zahost->status;?></th>
-        <th class='c-actions-2 text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-3'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -63,11 +63,11 @@
         <td><?php echo zget($config->zahost->os->type[$image->osCategory], $image->osType);?></td>
         <td><?php echo zget($lang->zahost->versionList[$image->osType], $image->osVersion);?></td>
         <td><?php echo zget($lang->zahost->langList, $image->osLang);?></td>
-        <td><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>
+        <td class='download-status'><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>
         <td class='c-actions'>
-          <?php common::printIcon('zahost', 'downloadImage', "id={$image->id}", $image, 'list', 'download');?>
-          <?php if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "id={$image->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->image->downloadImage}' class='btn'");?>
-          <?php common::printIcon('zahost', 'editImage', "id={$image->id}", $image, 'list', 'edit');?>
+          <?php common::printIcon('zahost', 'ajaxdownloadImage', "id={$image->id}", $image, 'list', 'download');?>
+          <?php //if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "id={$image->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->image->downloadImage}' class='btn'");?>
+          <?php //common::printIcon('zahost', 'editImage', "id={$image->id}", $image, 'list', 'edit');?>
           <?php //if(common::hasPriv('zahost', 'deleteImage')) echo html::a($this->createLink('zahost', 'deleteImage', "id={$image->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");?>
         </td>
       </tr>

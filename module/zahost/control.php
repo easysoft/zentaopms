@@ -143,6 +143,19 @@ class zahost extends control
         return print(js::locate($this->createLink('zahost', 'browse'), 'parent'));
     }
 
+    /**
+     * Show image list page.
+     *
+     * @param  int    $hostID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
     public function browseImage($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->session->set('imageList', $this->app->getURI(true));
