@@ -40,11 +40,13 @@ $lang->zahost->osLang     = '系统语言';
 $lang->zahost->imageName  = '镜像文件';
 
 $lang->zahost->initHost = new stdclass;
+$lang->zahost->initHost->statusTitle = "服务状态";
 $lang->zahost->initHost->checkStatus = "检测服务状态";
 $lang->zahost->initHost->not_install = "未安装";
 $lang->zahost->initHost->not_available = "已安装，未启动";
 $lang->zahost->initHost->ready = "已就绪";
 $lang->zahost->initHost->next = "下一步";
+
 $lang->zahost->initHost->initSuccessNotice = "初始化成功，请点击下一步完成后续操作。";
 $lang->zahost->initHost->initFailNotice = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：<br/>1. 重新执行脚本 <br/>2. 查看初始化常见问题";
 $lang->zahost->initHost->serviceStatus = [
@@ -58,7 +60,32 @@ $lang->zahost->initHost->descLi = [
     "下载初始化脚本至宿主机：wget xxx -o xxx",
     "在宿主机上执行初始化脚本，Ubuntu下执行命令示例：xxxx"
 ];
-$lang->zahost->initHost->statusTitle = "服务状态";
+
+$lang->zahost->image = new stdclass;
+$lang->zahost->image->list          = '镜像列表';
+$lang->zahost->image->browseImage   = '镜像列表';
+$lang->zahost->image->createImage   = '创建镜像';
+$lang->zahost->image->choseImage    = '选择镜像';
+$lang->zahost->image->downloadImage = '下载镜像';
+$lang->zahost->image->startDowload  = '开始下载';
+
+$lang->zahost->image->name       = '名称';
+$lang->zahost->image->common     = '镜像';
+$lang->zahost->image->memory     = $lang->zahost->memory;
+$lang->zahost->image->disk       = $lang->zahost->diskSize;
+$lang->zahost->image->osType     = $lang->zahost->osType;
+$lang->zahost->image->osCategory = $lang->zahost->osCategory;
+$lang->zahost->image->osVersion  = $lang->zahost->osVersion;
+$lang->zahost->image->osLang     = $lang->zahost->osLang;
+$lang->zahost->image->imageName  = $lang->zahost->imageName;
+
+$lang->zahost->image->imageEmpty = '无镜像';
+
+$lang->zahost->image->statusList['waiting']     = '未下载';
+$lang->zahost->image->statusList['downloading'] = '下载中';
+$lang->zahost->image->statusList['finish']      = '已下载';
+$lang->zahost->image->statusList['fail']        = '下载失败';
+
 
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = '名称';

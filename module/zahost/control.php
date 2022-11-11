@@ -143,6 +143,63 @@ class zahost extends control
         return print(js::locate($this->createLink('zahost', 'browse'), 'parent'));
     }
 
+    public function browseImage($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->session->set('imageList', $this->app->getURI(true));
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $imageList = $this->zahost->getImageList($hostID, $browseType, $param, $orderBy, $pager);
+
+        $this->view->title      = $this->lang->zahost->image->list;
+        $this->view->hostID     = $hostID;
+        $this->view->imageList  = $imageList;
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->browseType = $browseType;
+
+        $this->display();
+    }
+
+    /**
+     * Create template.
+     *
+     * @access public
+     * @return void
+     */
+    public function createImage($hostID)
+    {
+        $host = $this->zahost->getById($hostID);
+        if($_POST)
+        {
+            $this->zahost->createImage();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browseTemplate', "id={$hostID}")));
+        }
+
+        $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
+        $this->view->host         = $host;
+        $this->display();
+    }
+
+    /**
+     * Sent download image request to Host.
+     *
+     * @param  int    $imageID
+     * @access public
+     * @return object
+     */
+    public function ajaxDownloadImage($imageID)
+    {
+        $image = $this->zahost->getImageByID($imageID);
+
+        $this->zahost->downloadImage($image);
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->startDowload)));
+    }
+
     /**
      * Create template.
      *
@@ -302,11 +359,9 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function ajaxImageList($hostID, $templateID = 0)
+    public function ajaxImageList()
     {
-        $host      = $this->zahost->getById($hostID);
-        $imageList = $this->zahost->getImageList($host, $templateID);
-
+        $imageList = array('1' => 'Ubuntu20');
         if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => $imageList));
 
         return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage))));

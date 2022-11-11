@@ -254,8 +254,8 @@ define('TABLE_TESTRUN',       '`' . $config->db->prefix . 'testrun`');
 define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testresult`');
 define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 define('TABLE_ZAHOST',        '`' . $config->db->prefix . 'host`');
-define('TABLE_EXECUTIONNODE',        '`' . $config->db->prefix . 'executionnode`');
-define('TABLE_IMAGE',        '`' . $config->db->prefix . 'image`');
+define('TABLE_EXECUTIONNODE', '`' . $config->db->prefix . 'executionnode`');
+define('TABLE_IMAGE',         '`' . $config->db->prefix . 'image`');
 
 if(!defined('TABLE_ASSET')) define('TABLE_ASSET', '`' . $config->db->prefix . 'asset`');
 if(!defined('TABLE_VMTEMPLATE')) define('TABLE_VMTEMPLATE', '`' . $config->db->prefix . 'vmtemplate`');
