@@ -3,12 +3,12 @@
 $(function()
 {
     var queryBox = $('#queryBox');
-    new zui.SearchForm(queryBox, options);
-    function showSearchForm() queryBox.toggleClass('hidden');
+    options = JSON.parse(options);
+    new zui.SearchForm(queryBox[0], options);
 
     $(document).on('click', '#searchFormBtn', function()
     {
-        showSearchForm();
+        queryBox.toggleClass('hidden');
     });
 });
 </script>

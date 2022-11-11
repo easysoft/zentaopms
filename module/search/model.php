@@ -1373,7 +1373,7 @@ class searchModel extends model
     {
         $options = new stdclass();
         $options->selectOptions = array();
-        $options->items         = array();
+        $options->data          = array();
         foreach($this->lang->search->operators as $value => $text)
         {
             $option = new stdclass();
@@ -1398,7 +1398,7 @@ class searchModel extends model
 
                 $data->items[] = $item;
             }
-            $options->items[] = $data;
+            $options->data[] = $data;
         }
 
         return $options;
