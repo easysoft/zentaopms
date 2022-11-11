@@ -79,13 +79,15 @@ $lang->zahost->image->osVersion  = $lang->zahost->osVersion;
 $lang->zahost->image->osLang     = $lang->zahost->osLang;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
 
-$lang->zahost->image->imageEmpty = '无镜像';
+$lang->zahost->image->statusList['created']    = '已创建';
+$lang->zahost->image->statusList['canceled']   = '已取消';
+$lang->zahost->image->statusList['inprogress'] = '下载中';
+$lang->zahost->image->statusList['completed']  = '已下载';
+$lang->zahost->image->statusList['failed']     = '下载失败';
 
-$lang->zahost->image->statusList['waiting']     = '未下载';
-$lang->zahost->image->statusList['downloading'] = '下载中';
-$lang->zahost->image->statusList['finish']      = '已下载';
-$lang->zahost->image->statusList['fail']        = '下载失败';
-
+$lang->zahost->image->imageEmpty           = '无镜像';
+$lang->zahost->image->downloadImageFail    = '创建下载镜像任务失败';
+$lang->zahost->image->downloadImageSuccess = '创建下载镜像任务成功';
 
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = '名称';

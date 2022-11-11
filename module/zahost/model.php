@@ -230,19 +230,80 @@ class zahostModel extends model
      */
     public function downloadImage($image)
     {
-        $host = $this->getById($image->hostID);
-        $downloadApi = 'http://' . $host->address . '/api/v1/download/add';
+        $host   = $this->getById($image->hostID);
+        $apiUrl = 'http://' . $host->publicIP. '/api/v1/download/add';
 
         $apiParams['md5']  = $image->md5;
-        $apiParams['task'] = 1;
         $apiParams['url']  = $image->address;
+        $apiParams['task'] = intval($image->id);
 
-        $response = json_decode(commonModel::http($downloadApi, $apiParams));
+        $response = json_decode(commonModel::http($apiUrl, array($apiParams), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
 
+        if($response and $response->code == 'success')
+        {
+            $this->dao->update(TABLE_IMAGE)
+                ->set('status')->eq('created')
+                ->where('id')->eq($image->id)->exec();
+            return true;
+        }
+
+        dao::$errors[] = $this->lang->zahost->image->downloadImageFail;
+        return false;
+    }
+
+    /**
+     * Query image download progress.
+     *
+     * @param  object $image
+     * @access public
+     * @return string Return Status code.
+     */
+    public function queryDownloadImageStatus($image)
+    {
+        $host   = $this->getById($image->hostID);
+        $apiUrl = 'http://' . $host->publicIP. '/api/v1/task/status';
+
+        $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array(), 'json'));
+        if(!$result or $result->code != 'success') return $image->status;
+
+        foreach($result->data as $status => $group)
+        {
+            $task = array_filter($group, function($task)
+            {
+                $task->id == $image->id;
+            });
+
+            if($task)
+            {
+                $image->status = $status;
+                break;
+            }
+        }
+
+        $this->dao->update(TABLE_IMAGE)->set('status')->eq($status)->where('id')->eq($image->id)->exec();
+        return $image->status;
+    }
+
+    /**
+     * Query download image status.
+     *
+     * @param  object $image
+     * @access public
+     * @return object
+     */
+    public function downloadImageStatus($image)
+    {
+        $host      = $this->getById($image->hostID);
+        $statusApi = 'http://' . $host->address . '/api/v1/task/status';
+
+        $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array(), 'json'));
+
+        a($response);
         if($response->code == 200) return true;
 
         dao::$errors[] = $response->msg;
         return false;
+
     }
 
     /**

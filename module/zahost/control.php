@@ -209,8 +209,32 @@ class zahost extends control
         $image = $this->zahost->getImageByID($imageID);
 
         $this->zahost->downloadImage($image);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->startDowload));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->downloadImageSuccess));
+    }
+
+    /**
+     * Query downloading progress of images of host.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return void
+     */
+    public function ajaxImageDownloadProgress($hostID)
+    {
+        $statusList = array();
+
+        $imageList = $this->zahost->getImageList($hostID);
+        foreach($imageList as $image)
+        {
+            $statusCode = $this->zahost->queryDownloadImageStatus($image);
+            $statusName = zget($this->lang->zahost->image->statusList, $statusCode,'');
+
+            $statusList[$image->id] = array('statusCode' => $statusCode, 'statusName' => $statusName);
+        }
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $statusList));
     }
 
     /**

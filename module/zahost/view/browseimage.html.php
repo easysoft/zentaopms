@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('hostID', $hostID);?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <?php echo html::a($this->createLink('zahost', 'browseimage', "hostID=$hostID"), "<span class='text'>{$lang->zahost->image->browseImage}</span>", '', "class='btn btn-link btn-active-text'");?>
@@ -63,7 +64,7 @@
         <td><?php echo zget($config->zahost->os->type[$image->osCategory], $image->osType);?></td>
         <td><?php echo zget($lang->zahost->versionList[$image->osType], $image->osVersion);?></td>
         <td><?php echo zget($lang->zahost->langList, $image->osLang);?></td>
-        <td class='download-status'><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>
+        <td class='image-status-<?php echo $image->id;?>'><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>
         <td class='c-actions'>
           <?php common::printIcon('zahost', 'ajaxdownloadImage', "id={$image->id}", $image, 'list', 'download');?>
           <?php //if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "id={$image->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->image->downloadImage}' class='btn'");?>
