@@ -3079,9 +3079,9 @@ class storyModel extends model
         {
             $storyQuery = str_replace($allBranch, '1', $storyQuery);
         }
-        elseif($branch !== 'all' and $queryProductID != 'all')
+        elseif($branch !== 'all' and $branch !== '' and strpos($storyQuery, '`branch` =') === false and $queryProductID != 'all')
         {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in($branch)";
+            $storyQuery .= " AND `branch` in($branch)";
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
