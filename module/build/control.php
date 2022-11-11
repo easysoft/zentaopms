@@ -389,11 +389,10 @@ class build extends control
      * @param  string|int $branch
      * @param  int        $index        the index of batch create bug.
      * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
-     * @param  string     $extra
      * @access public
      * @return string
      */
-    public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 'all', $index = 0, $type = 'normal', $extra = '')
+    public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 'all', $index = 0, $type = 'normal')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
@@ -416,11 +415,6 @@ class build extends control
             if($isJsonView) return print(json_encode($builds));
             return print(html::select($varName, $builds, $build, "class='form-control'"));
         }
-
-        $builds = $this->build->getBuildPairs($productID, $branch, $type);
-        if($isJsonView) return print(json_encode($builds));
-        if(strpos($extra, 'multiple') !== false) $varName .= '[]';
-        return print(html::select($varName, $builds, $build, "class='form-control chosen' $extra"));
     }
 
     /**
@@ -433,10 +427,11 @@ class build extends control
      * @param  int        $index        the index of batch create bug.
      * @param  bool       $needCreate   if need to append the link of create build
      * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
+     * @param  string     $extra
      * @access public
      * @return string
      */
-    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal')
+    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal', $extra = '')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
@@ -457,6 +452,12 @@ class build extends control
             if($isJsonView)  return print(json_encode($builds));
             return print(html::select($varName, $builds, $build, "class='form-control'"));
         }
+
+        if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+        $builds = $this->build->getBuildPairs($productID, $branch, $type, $projectID, 'project', $build);
+        if(strpos($extra, 'multiple') !== false) $varName .= '[]';
+        if($isJsonView) return print(json_encode($builds));
+        return print(html::select($varName, $builds, $build, "class='form-control chosen' $extra"));
     }
 
     /**
