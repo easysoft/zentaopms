@@ -645,7 +645,7 @@ class custom extends control
         }
 
         $disabledFeatures = array('program', 'productLine', 'scrum' => array('scrumMeasrecord'));
-        foreach($this->config->custom->features as $feature)
+        foreach($this->config->custom->dataFeatures as $feature)
         {
             $function = 'has' . ucfirst($feature) . 'Data';
             if(!$this->custom->$function())

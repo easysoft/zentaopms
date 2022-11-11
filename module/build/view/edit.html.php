@@ -45,7 +45,7 @@
         <?php $disabled = $testtaskID ? 'disabled' : '';?>
         <?php if(!$build->execution):?>
         <tr>
-          <th><?php echo $lang->build->common;?></th>
+          <th><?php echo $lang->build->builds;?></th>
           <td id='buildBox'><?php echo html::select('builds[]', $builds, $build->builds, "class='form-control chosen' multiple $disabled");?></td>
           <td><?php if($disabled) echo $lang->build->notice->changeBuilds;?></td>
         </tr>

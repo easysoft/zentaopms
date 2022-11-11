@@ -3263,11 +3263,12 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
+        touch($sessFile);
+        touch($this->rawFile);
         if(md5_file($sessFile) == md5($sessData)) return true;
 
         if(file_put_contents($sessFile, $sessData, LOCK_EX))
         {
-            touch($this->rawFile);
             if(strpos($sessData, 'user|') !== false)
             {
                 $rawSessContent = (string) file_get_contents($this->rawFile, false, null, 0, 1024 * 2);

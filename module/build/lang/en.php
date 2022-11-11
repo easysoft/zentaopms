@@ -33,6 +33,7 @@ $lang->build->project        = 'Project';
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
+$lang->build->builds         = 'Linked Builds';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Date';
 $lang->build->builder        = 'Builder';

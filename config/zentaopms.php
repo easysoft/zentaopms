@@ -418,7 +418,7 @@ $config->dtable = new stdclass();
 $config->dtable->colVars = array('width', 'type', 'flex', 'fixed', 'sortType', 'checkbox', 'nestedToggle', 'statusMap', 'actionsMap');
 
 $config->featureGroup = new stdclass();
-$config->featureGroup->product   = array('roadmap', 'track', 'URStory');
+$config->featureGroup->product   = array('roadmap', 'track', 'UR');
 $config->featureGroup->scrum     = array();
 $config->featureGroup->waterfall = array('track');
 $config->featureGroup->assetlib  = array();

@@ -73,8 +73,8 @@ $lang->productplan->cannotDeleteParent = "不能删除父计划";
 $lang->productplan->selectProjects     = "请选择所属项目";
 $lang->productplan->projectNotEmpty    = '所属项目不能为空。';
 $lang->productplan->nextStep           = "下一步";
-$lang->productplan->summary            = "本页共 <strong>%s</strong> 个计划，父计划 <strong>%s</strong>，子计划 <strong>%s</strong>。";
-$lang->productplan->checkedSummary     = "共选中 <strong>%total%</strong> 个计划，父计划 <strong>%parent%</strong>，子计划 <strong>%child%</strong>。";
+$lang->productplan->summary            = "本页共 <strong>%s</strong> 个计划，父计划 <strong>%s</strong>，子计划 <strong>%s</strong>，独立计划 <strong>%s</strong>。";
+$lang->productplan->checkedSummary     = "共选中 <strong>%total%</strong> 个计划，父计划 <strong>%parent%</strong>，子计划 <strong>%child%</strong>，独立计划 <strong>%independent%</strong>。";
 
 $lang->productplan->id         = '编号';
 $lang->productplan->product    = $lang->productCommon;

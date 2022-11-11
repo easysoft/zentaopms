@@ -103,29 +103,10 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
       <?php endif;?>
     </div>
   </div>
-  <form class="main-form form-ajax not-watch">
-    <div class="example">
-      <?php if($app->rawModule != 'review') echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
-      <?php if($app->rawModule == 'review') unset($lang->programplan->stageCustom->date); ?>
-      <?php echo html::checkbox('stageCustom', $lang->programplan->stageCustom, $selectCustom);?>
-      <div class='btn btn-link'>
-        <strong><?php echo $lang->execution->gantt->format . '：';?></strong>
-        <?php echo html::radio('zooming', $lang->execution->gantt->zooming, 'day', "onchange='zoomTasks(this)'");?>
-      </div>
-      <div class='btn btn-link' id='ganttPris'>
-        <strong><?php echo $lang->task->pri . " : "?></strong>
-        <?php foreach($lang->execution->gantt->progressColor as $pri => $color):?>
-        <?php if($pri <= 4):?>
-        <span style="background:<?php echo $color?>"><?php echo $pri;?></span> &nbsp;
-        <?php endif;?>
-        <?php endforeach;?>
-      </div>
-    </div>
-  </form>
   <div class="pull-right btn-toolbar flax">
     <div class="btn-group">
       <?php echo html::a($this->createLink('project', 'execution', "status=all&projectID=$projectID"),"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->project->bylist}'");?>
-      <?php echo html::a('',"<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->programplan->gantt}'");?>
+      <?php echo html::a('',"<i class='icon-gantt-alt'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->programplan->gantt}'");?>
     </div>
     <a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> <?php echo $lang->programplan->full;?></a>
     <div class='button-group'>
