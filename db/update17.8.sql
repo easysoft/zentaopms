@@ -25,4 +25,3 @@ ALTER TABLE `zt_dashboard` ADD `dimension` int(8) NOT NULL default 0 AFTER `name
 UPDATE `zt_chart`     SET `dimension` = 1 WHERE `dimension` = 0;
 UPDATE `zt_report`    SET `dimension` = 1 WHERE `dimension` = 0;
 UPDATE `zt_dashboard` SET `dimension` = 1 WHERE `dimension` = 0;
-UPDATE `zt_module`    SET `root` = 1      WHERE `root` = 0 AND `type` in ('chart', 'dashboard', 'report');
