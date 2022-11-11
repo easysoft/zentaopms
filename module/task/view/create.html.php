@@ -86,7 +86,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
         </tr>
         <tr class='hidden modeBox'>
           <th><?php echo $lang->task->mode;?></th>
-          <td><?php echo html::select('mode', $lang->task->modeList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('mode', $lang->task->modeList, $task->mode, "class='form-control chosen'");?></td>
         </tr>
         <?php if($execution->type == 'kanban'):?>
         <tr>
