@@ -44,7 +44,7 @@ class fileModel extends model
     {
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq((int)$objectID)
+            ->andWhere('objectID')->in($objectID)
             ->andWhere('extra')->ne('editor')
             ->beginIF($extra)->andWhere('extra')->eq($extra)
             ->andWhere('deleted')->eq('0')

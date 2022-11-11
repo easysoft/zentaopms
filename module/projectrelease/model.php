@@ -23,10 +23,9 @@ class projectreleaseModel extends model
      */
     public function getByID($releaseID, $setImgSize = false)
     {
-        $release = $this->dao->select('t1.*, t2.id as buildID, t2.filePath, t2.scmPath, t2.name as buildName, t2.execution, t3.name as productName, t3.type as productType')
+        $release = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')
             ->from(TABLE_RELEASE)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.id')->eq((int)$releaseID)
             ->orderBy('t1.id DESC')
             ->fetch();
@@ -34,8 +33,9 @@ class projectreleaseModel extends model
 
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
-        $release->files = $this->file->getByObject('release', $releaseID);
-        if(empty($release->files))$release->files = $this->file->getByObject('build', $release->buildID);
+        $release->files      = $this->file->getByObject('release', $releaseID);
+        $release->buildInfos = $this->dao->select('id,project,product,name,scmPath,filePath')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+        if(empty($release->files))$release->files = $this->file->getByObject('build', $release->build);
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
         return $release;
     }
@@ -51,15 +51,12 @@ class projectreleaseModel extends model
      */
     public function getList($projectID, $type = 'all', $orderBy = 't1.date_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.execution, t4.name as executionName')
-            ->from(TABLE_RELEASE)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
-            ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t3.execution = t4.id')
-            ->where('t1.project')->eq((int)$projectID)
+            ->where('t1.deleted')->eq(0)
+            ->andWhere("FIND_IN_SET($projectID, t1.project)")
             ->beginIF($type != 'all' && $type != 'review')->andWhere('t1.status')->eq($type)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
-            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

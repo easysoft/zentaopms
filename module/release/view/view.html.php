@@ -351,8 +351,16 @@
                     </tr>
                     <tr>
                       <th><?php echo $lang->release->build;?></th>
-                      <td title='<?php echo $release->buildName?>'>
-                          <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
+                      <td>
+                        <?php
+                        $i = 1;
+                        foreach($release->builds as $build)
+                        {
+                            $buildDivision = $i == count($release->builds) ? '' : $lang->comma;
+                            echo (($build->project) ? html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name, '_blank') : $build->name) . $buildDivision;
+                            $i++;
+                        }
+                        ?>
                       </td>
                     </tr>
                     <tr>
@@ -379,13 +387,19 @@
                   {
                       echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false', 'object' => $release, 'method' => 'view', 'showDelete' => false));
                   }
-                  elseif($release->filePath)
+                  if($release->builds)
                   {
-                      echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
-                  }
-                  elseif($release->scmPath)
-                  {
-                      echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+                      foreach($release->builds as $build)
+                      {
+                          if($build->filePath)
+                          {
+                              echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
+                          }
+                          elseif($build->scmPath)
+                          {
+                              echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+                          }
+                      }
                   }
                   ?>
                 </div>

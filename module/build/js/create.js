@@ -5,37 +5,15 @@ $().ready(function()
         $('#name').val($(this).text()).focus();
     });
 
-});
-/**
- * Load products.
- *
- * @param  int $executionID
- * @access public
- * @return void
- */
-function loadProducts(executionID)
-{
-    $('#product').remove();
-    $('#product_chosen').remove();
-    $('#branch').remove();
-    $('#branch_chosen').remove();
-    $('#noProduct').remove();
-    $.get(createLink('product', 'ajaxGetProducts', 'executionID=' + executionID), function(data)
+    $(document).on('change', '#product, #branch', function()
     {
-        if(data)
+        var productID = $('#product').val();
+        var branch    = $('#branch').val();
+        $.get(createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&type=noempty,notrunk,separate,noproject&extra=multiple'), function(data)
         {
-            if(data.indexOf("required") != -1)
-            {
-                $('#productBox').addClass('required');
-            }
-            else
-            {
-                $('#productBox').removeClass('required');
-            }
-
-            $('#productBox').append(data);
-            $('#product').chosen();
-            loadBranches($("#product").val());
-        }
+            if(data) $('#buildBox').html(data);
+            $('#builds').chosen();
+        });
     });
-}
+    $('#product').change();
+});

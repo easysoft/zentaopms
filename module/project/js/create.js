@@ -221,6 +221,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
         $('#plansBox').closest('tr').addClass('hidden');
         $('#plansBox .col-sm-4').find('select').attr('disabled', true).trigger("chosen:updated");
+        $('.division').addClass('hide');
 
         /* Displays the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', true);
@@ -235,6 +236,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
         $('#plansBox').closest('tr').removeClass('hidden');
         $('#plansBox .col-sm-4').find('select').removeAttr('disabled', true).trigger("chosen:updated");
+        if($('#plansBox .col-sm-4').find('select').length > 1) $('.division').removeClass('hide');
 
         /* Hide the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', false);

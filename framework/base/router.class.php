@@ -1004,7 +1004,6 @@ class baseRouter
                     array($ztSessionHandler, "destroy"),
                     array($ztSessionHandler, "gc")
                 );
-                register_shutdown_function('session_write_close');
             }
         }
 
@@ -3169,6 +3168,7 @@ class ztSessionHandler
     {
         $this->tagID = $tagID;
         ini_set('session.save_handler', 'files');
+        register_shutdown_function('session_write_close');
     }
 
     /**
@@ -3265,13 +3265,13 @@ class ztSessionHandler
         $sessFile = $this->getSessionFile($id);
         if(md5_file($sessFile) == md5($sessData)) return true;
 
-        if(file_put_contents($sessFile, $sessData))
+        if(file_put_contents($sessFile, $sessData, LOCK_EX))
         {
-            if(!file_exists($this->rawFile)) touch($this->rawFile);
+            touch($this->rawFile);
             if(strpos($sessData, 'user|') !== false)
             {
-                $rawSessContent = (string) file_get_contents($this->rawFile);
-                if(strpos($rawSessContent, 'user|') === false) file_put_contents($this->rawFile, $sessData);
+                $rawSessContent = (string) file_get_contents($this->rawFile, false, null, 0, 1024 * 2);
+                if(strpos($rawSessContent, 'user|') === false) file_put_contents($this->rawFile, $sessData, LOCK_EX);
             }
 
             return true;
@@ -3290,9 +3290,10 @@ class ztSessionHandler
     public function destroy($id)
     {
         $sessFile = $this->getSessionFile($id);
-        unlink($sessFile);
-        unlink($this->rawFile);
+        if(file_exists($sessFile)) unlink($sessFile);
+        if(file_exists($this->rawFile)) unlink($this->rawFile);
         touch($sessFile);
+        touch($this->rawFile);
         return true;
     }
 

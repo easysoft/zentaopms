@@ -740,6 +740,19 @@ class baseHelper
 
         session_write_close();
         session_id($sessionID);
+        if(ini_get('session.save_handler') == 'user' and isset($_GET['tid']))
+        {
+            $ztSessionHandler = new ztSessionHandler($_GET['tid']);
+            session_set_save_handler(
+                array($ztSessionHandler, "open"),
+                array($ztSessionHandler, "close"),
+                array($ztSessionHandler, "read"),
+                array($ztSessionHandler, "write"),
+                array($ztSessionHandler, "destroy"),
+                array($ztSessionHandler, "gc")
+            );
+            register_shutdown_function('session_write_close');
+        }
         session_start();
     }
 
