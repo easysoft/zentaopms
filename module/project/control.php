@@ -1087,7 +1087,7 @@ class project extends control
             ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->leftjoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
             ->where('t1.project')->eq($projectID)
-            ->andWhere('t1.type')->eq('stage')
+            ->andWhere('t1.type')->in('kanban,sprint,stage')
             ->groupBy('t1.id')
             ->fetchPairs();
 

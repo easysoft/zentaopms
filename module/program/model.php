@@ -663,7 +663,7 @@ class programModel extends model
 
                 $programName = isset($programList[$programID]) ? $programList[$programID] : '';
 
-                $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
+                if($programName) $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
             }
         }
         return $projectList;

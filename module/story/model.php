@@ -2743,7 +2743,7 @@ class storyModel extends model
      * @param  int           $limit
      * @param  string        $type
      * @param  string        $storyType    requirement|story
-     * @param  bool          $hasParent
+     * @param  bool|string   $hasParent
      * @access public
      * @return array
      */
@@ -2755,7 +2755,7 @@ class storyModel extends model
             ->beginIF($productID)->andWhere('t1.product')->in($productID)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
-            ->beginIF(!$hasParent)->andWhere('t1.parent')->ge(0)->fi()
+            ->beginIF(!$hasParent or $hasParent == 'false')->andWhere('t1.parent')->ge(0)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.type')->eq($storyType)
             ->andWhere('t1.deleted')->eq(0)
@@ -3079,9 +3079,9 @@ class storyModel extends model
         {
             $storyQuery = str_replace($allBranch, '1', $storyQuery);
         }
-        elseif($branch !== 'all' and $queryProductID != 'all')
+        elseif($branch !== 'all' and $branch !== '' and strpos($storyQuery, '`branch` =') === false and $queryProductID != 'all')
         {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in($branch)";
+            $storyQuery .= " AND `branch` in($branch)";
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
@@ -4358,7 +4358,7 @@ class storyModel extends model
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
             $menu .= $this->buildMenu('story', 'recall', $params . "&from=view&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
-            $menu .= $this->buildMenu('story', 'review', $params . "&from=product&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'review', $params . "&from={$this->app->tab}&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody');
 
             $executionID = empty($execution) ? 0 : $execution->id;
             if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
@@ -4441,7 +4441,7 @@ class storyModel extends model
                     {
                         $reviewDisabled = in_array($this->app->user->account, $story->notReview) and ($story->status == 'draft' or $story->status == 'changing') ? '' : 'disabled';
                         $story->from = 'execution';
-                        $menu .= common::printIcon('story', 'review', "story={$story->id}&from=story", $story, 'list', 'search', '', $reviewDisabled, false, "data-group=execution");
+                        $menu .= common::printIcon('story', 'review', "story={$story->id}&from=execution", $story, 'list', 'search', '', $reviewDisabled, false, "data-group=execution");
                     }
                 }
 
@@ -5782,8 +5782,7 @@ class storyModel extends model
 
         if(isset($story->finalResult))
         {
-            $isChanged = $story->changedBy ? true : false;
-            if($story->finalResult == 'reject')  $this->action->create('story', $story->id, 'ReviewRejected', '', $isChanged ? 'changing' : 'draft');
+            if($story->finalResult == 'reject')  $this->action->create('story', $story->id, 'ReviewRejected');
             if($story->finalResult == 'pass')    $this->action->create('story', $story->id, 'ReviewPassed');
             if($story->finalResult == 'clarify') $this->action->create('story', $story->id, 'ReviewClarified');
             if($story->finalResult == 'revert')  $this->action->create('story', $story->id, 'ReviewReverted');
@@ -6074,13 +6073,13 @@ class storyModel extends model
         $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
+            ->andWhere('action')->in('closed,reviewrejected')
             ->orderBy('id_desc')
             ->fetch();
 
         $lastAction = $lastRecord->action;
-        $preStatus  = $lastRecord->extra;
-        if(strpos($preStatus, '|') !== false) $preStatus = substr($preStatus, strpos($preStatus, '|') + 1);
-        if(strpos('closed,reviewrejected', $lastAction) !== false) $status = $preStatus;
+        if($lastAction == 'reviewrejected') $status = 'draft';
+        if($lastAction == 'closed') $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
 
         return $status;
     }
