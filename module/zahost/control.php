@@ -197,7 +197,7 @@ class zahost extends control
 
         $this->zahost->downloadImage($image);
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->startDowload)));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->startDowload));
     }
 
     /**
