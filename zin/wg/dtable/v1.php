@@ -159,16 +159,19 @@ class column extends wg
 
                 $actionsMap->$actionType->hint = $lang->more;
 
-                $items = array();
-                foreach($actions as $action)
+                if($actionType == 'more')
                 {
-                    $item = new stdclass();
-                    $item->name = $action;
-                    $item->icon = $config->actionsMap->icon->$action;
-                    if(isset($actionsList['text'][$action])) $item->text = $actionsList['text'][$action];
-                    $items[] = $item;
+                    $items = array();
+                    foreach($actions as $action)
+                    {
+                        $item = new stdclass();
+                        $item->name = $action;
+                        $item->icon = $config->actionsMap->icon->$action;
+                        if(isset($actionsList['text'][$action])) $item->text = $actionsList['text'][$action];
+                        $items[] = $item;
+                    }
+                    $actionsMap->$actionType->dropdown->items = $items;
                 }
-                $actionsMap->$actionType->dropdown->items = $items;
             }
         }
 
