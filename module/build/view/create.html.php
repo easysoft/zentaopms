@@ -44,7 +44,7 @@
         </tr>
         <?php if($app->tab == 'project' && !empty($multipleProject)):?>
         <tr>
-          <th><?php echo $lang->build->common;?></th>
+          <th><?php echo $lang->build->builds;?></th>
           <td id='buildBox'><?php echo html::select('builds', array(), '', "class='form-control chosen' multiple");?></td>
         </tr>
         <?php endif;?>

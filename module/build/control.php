@@ -316,6 +316,7 @@ class build extends control
         $this->view->build        = $build;
         $this->view->buildPairs   = $this->build->getBuildPairs(0, 'all', 'noempty,notrunk', $objectID, $objectType);
         $this->view->builds       = $this->build->getByList(array_keys($this->view->buildPairs));
+        $this->view->executions   = $executions;
         $this->view->actions      = $this->loadModel('action')->getList('build', $buildID);
         $this->view->link         = $link;
         $this->view->param        = $param;

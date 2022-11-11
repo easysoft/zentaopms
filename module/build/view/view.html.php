@@ -328,6 +328,23 @@ tbody tr td:first-child input {display: none;}
                   <td><?php echo $branchName;?></td>
                 </tr>
                 <?php endif;?>
+                <?php if($build->execution):?>
+                <tr>
+                  <th><?php echo $lang->build->execution;?></th>
+                  <td><?php echo zget($executions, $build->execution);?></td>
+                </tr>
+                <?php else:?>
+                <tr>
+                  <th><?php echo $lang->build->builds;?></th>
+                  <td>
+                    <?php $builds = '';?>
+                    <?php foreach(explode(',', $build->builds) as $buildID):?>
+                    <?php $builds .= html::a($this->createLink('build', 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;?>
+                    <?php endforeach;?>
+                    <?php echo rtrim($builds, $lang->comma);?>
+                  </td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->build->name;?></th>
                   <td><?php echo $build->name;?></td>

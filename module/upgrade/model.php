@@ -7525,8 +7525,8 @@ class upgradeModel extends model
             $project->status         = $sprint->status;
             $project->begin          = $sprint->begin;
             $project->end            = isset($sprint->end) ? $sprint->end : LONG_TIME;
-            $project->realBegan      = $sprint->realBegan;
-            $project->realEnd        = $sprint->realEnd;
+            $project->realBegan      = zget($sprint, 'realBegan', '');
+            $project->realEnd        = zget($sprint, 'realEnd', '');
             $project->days           = $this->computeDaysDelta($project->begin, $project->end);
             $project->PM             = $sprint->PM;
             $project->auth           = 'extend';
