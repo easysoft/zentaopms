@@ -48,7 +48,7 @@
         <thead>
           <tr>
             <th class='c-id'><?php echo $lang->idAB;?></th>
-            <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
+            <?php if(isset($project) and $project->model == 'scrum'):?>
             <th class='c-project required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->projectName;?></th>
             <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
@@ -82,7 +82,7 @@
           ?>
           <tr>
             <td><?php echo sprintf('%03d', $executionID) . html::hidden("executionIDList[$executionID]", $executionID);?></td>
-            <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
+            <?php if(isset($project) and $project->model == 'scrum'):?>
             <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$executionID]", $allProjects, $executions[$executionID]->project, "class='form-control picker-select' data-lastselected='{$executions[$executionID]->project}' onchange='changeProject(this, $executionID, {$executions[$executionID]->project})'");?></td>
             <?php endif;?>
             <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control'");?></td>

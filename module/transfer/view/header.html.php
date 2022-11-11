@@ -19,12 +19,13 @@ form{overflow-x: scroll}
 #maxImport:focus {outline: none;}
 .pointorNone{pointer-events:none;}
 thead > tr > th{width:150px;}
-.c-pri{width:100px}
-.c-precondition{width:200px;}
+.c-pri{width:80px}
+.c-name, .c-story,.c-precondition{width:200px;}
 .c-id{width:50px}
 .c-team {width:100px; padding:0px 0px 8px 0px !important;}
 .c-estimate-1 {width:50px;padding:0px 0px 8px 8px !important;}
 #showData .load-indicator{width: 100px; height: 500px;}
+.picker-selection-text{white-space: nowrap; overflow: hidden; display: block;}
 </style>
 <?php if(!empty($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
@@ -32,7 +33,7 @@ thead > tr > th{width:150px;}
 <?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->port->import;?></h2>
+    <h2><?php echo $lang->transfer->import;?></h2>
   </div>
   <p><?php echo sprintf($lang->file->importSummary, $allCount, html::input('maxImport', $config->file->maxImport, "style='width:50px'"), ceil($allCount / $config->file->maxImport));?></p>
   <p><?php echo html::commonButton($lang->import, "id='import'", 'btn btn-primary');?></p>

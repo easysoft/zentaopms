@@ -136,6 +136,6 @@ class productEntry extends entry
         $control->delete($productID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

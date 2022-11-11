@@ -17,10 +17,13 @@ $config->custom->requiredModules[15] = 'story';
 $config->custom->requiredModules[20] = 'productplan';
 $config->custom->requiredModules[25] = 'release';
 
-if($config->systemMode == 'new') $config->custom->requiredModules[30] = 'project';
+$config->custom->requiredModules[30] = 'project';
 $config->custom->requiredModules[35] = 'execution';
 $config->custom->requiredModules[40] = 'task';
 $config->custom->requiredModules[45] = 'build';
+
+$config->custom->allFeatures  = array('program', 'productRR', 'productUR', 'productLine', 'projectScrum', 'projectWaterfall', 'projectKanban', 'execution', 'vision');
+$config->custom->dataFeatures = array('waterfall', 'productUR');
 
 $config->custom->requiredModules[50] = 'bug';
 $config->custom->requiredModules[55] = 'testcase';

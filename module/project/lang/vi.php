@@ -51,6 +51,9 @@ $lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
 $lang->project->testreport        = 'Testreport';
 $lang->project->selectProgram     = 'Program filtering';
 $lang->project->teamMember        = 'Team Member';
+$lang->project->manageRepo        = 'Manage Repo';
+$lang->project->linkedRepo        = 'Link Repo';
+$lang->project->unlinkedRepo      = 'Unlink Repo';
 
 /* Fields. */
 $lang->project->common             = 'Project';
@@ -60,6 +63,7 @@ $lang->project->name               = 'Name';
 $lang->project->category           = 'Category';
 $lang->project->desc               = 'Description';
 $lang->project->code               = 'Code';
+$lang->project->hasProduct         = 'Has Product';
 $lang->project->copy               = 'Copy';
 $lang->project->begin              = 'Begin';
 $lang->project->end                = 'End';
@@ -75,6 +79,7 @@ $lang->project->dateRange          = 'Duration';
 $lang->project->to                 = ' to ';
 $lang->project->realEnd            = 'Actual End';
 $lang->project->realBegan          = 'Actual Began';
+$lang->project->division           = 'Create Stages by Product';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';
@@ -109,15 +114,22 @@ $lang->project->future             = 'TBD';
 $lang->project->moreProject        = 'More Project';
 $lang->project->days               = 'Available Days';
 
+/* Project Kanban. */
+$lang->project->projectTypeList = array();
+$lang->project->projectTypeList[1] = 'Has Product';
+$lang->project->projectTypeList[0] = 'No Product';
+
 $lang->project->productNotEmpty        = 'Please link products or create products.';
 $lang->project->existProductName       = 'Product name already exists.';
 $lang->project->changeProgram          = '%s > Change project';
 $lang->project->changeProgramTip       = 'After modifying the project set, the products linked with the project will also modify the project set to which it belongs. Please confirm whether to modify it.';
 $lang->project->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->project->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
+$lang->project->noticeDivsion          = "The current project is associated with multiple products, you can click Confirm to open the mode by {$lang->productCommon} creation stage, click Cancel to keep the status quo.";
 $lang->project->linkStoryByPlanTips    = "This action will associate all {$lang->SRCommon} under the selected plan to this project";
 $lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
 $lang->project->noDevStage             = 'There is no R&D stage under this project, or you do not have access permissions. The creation of builds is not supported at the moment.';
+$lang->project->linkRepoFailed         = 'Failed to link projects and code repositories.';
 
 $lang->project->tenThousand = '';
 

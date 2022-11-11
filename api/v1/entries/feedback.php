@@ -79,7 +79,7 @@ class feedbackEntry extends entry
         $control->delete($feedbackID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }
 

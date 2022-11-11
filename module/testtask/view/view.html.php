@@ -62,12 +62,14 @@
         <div class="detail-content">
           <table class="table table-data table-fixed">
             <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
+            <?php if(!empty($execution->multiple)):?>
             <tr>
               <th class='w-90px'><?php echo $lang->testtask->execution;?></th>
               <td><?php echo $isOnlybody ? $task->executionName : html::a($this->createLink('execution', 'story', "executionID=$task->execution"), $task->executionName, '', "title='{$task->executionName}'");?></td>
             </tr>
+            <?php endif;?>
             <tr>
-              <th><?php echo $lang->testtask->build;?></th>
+              <th class='w-90px'><?php echo $lang->testtask->build;?></th>
               <td>
                 <?php
                 if($task->build == 'trunk')

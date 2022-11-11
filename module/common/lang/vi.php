@@ -126,6 +126,7 @@ $lang->nameAB       = 'Name';
 $lang->common = new stdclass();
 $lang->common->common  = 'Module chung';
 $lang->devops->common  = 'DevOps';
+$lang->repo->codeRepo  = 'Code Repo';
 $lang->app->common     = 'APP';
 $lang->app->serverLink = 'Server Link';
 
@@ -137,24 +138,17 @@ list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
 /* Main menu. */
 $lang->mainNav = new stdclass();
-$lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
-$lang->mainNav->product = "<i class='icon icon-menu-product'></i> Product|$productModule|$productMethod|";
-if($config->systemMode == 'new')
-{
-    $lang->mainNav->project   = "<i class='icon icon-project'></i> Project|$projectModule|$projectMethod|";
-    $lang->mainNav->execution = "<i class='icon icon-run'></i> Execution|$executionModule|$executionMethod|";
-}
-else
-{
-    $lang->mainNav->execution = "<i class='icon icon-run'></i> $lang->executionCommon|$executionModule|$executionMethod|";
-}
-$lang->mainNav->qa      = '<i class="icon icon-test"></i> Test|qa|index|';
-$lang->mainNav->repo    = '<i class="icon icon-code1"></i> Code|repo|browse|';
-$lang->mainNav->doc     = '<i class="icon icon-doc"></i> Doc|doc|index|';
-$lang->mainNav->report  = "<i class='icon icon-statistic'></i> Statistic|report|productsummary|";
-$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|company|browse|';
-$lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
-if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> Program|$programModule|$programMethod|";
+$lang->mainNav->my        = '<i class="icon icon-menu-my"></i> My|my|index|';
+$lang->mainNav->product   = "<i class='icon icon-menu-product'></i> Product|$productModule|$productMethod|";
+$lang->mainNav->project   = "<i class='icon icon-project'></i> Project|$projectModule|$projectMethod|";
+$lang->mainNav->execution = "<i class='icon icon-run'></i> Execution|$executionModule|$executionMethod|";
+$lang->mainNav->qa        = '<i class="icon icon-test"></i> Test|qa|index|';
+$lang->mainNav->repo      = '<i class="icon icon-code1"></i> Code|repo|browse|';
+$lang->mainNav->doc       = '<i class="icon icon-doc"></i> Doc|doc|index|';
+$lang->mainNav->report    = "<i class='icon icon-statistic'></i> Statistic|report|productsummary|";
+$lang->mainNav->system    = '<i class="icon icon-menu-users"></i> System|company|browse|';
+$lang->mainNav->admin     = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
+if($config->systemMode == 'ALM') $lang->mainNav->program = "<i class='icon icon-program'></i> Program|$programModule|$programMethod|";
 
 $lang->dividerMenu = ',qa,report,admin,';
 
@@ -166,14 +160,7 @@ $lang->program->menu->browse = array('link' => 'Program|program|browse|', 'alias
 
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
-if($config->systemMode == 'new')
-{
-    $lang->project->menu->browse = array('link' => 'Project|project|browse|');
-}
-else
-{
-    $lang->project->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
-}
+$lang->project->menu->browse = array('link' => 'Project|project|browse|');
 
 $lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
 
@@ -302,15 +289,8 @@ $lang->my->menu = new stdclass();
 
 $lang->my->menu->index       = 'Index|my|index';
 $lang->my->menu->myWork      = array('link' => 'Work|my|work|mode=task');
-if($config->systemMode == 'new')
-{
-    $lang->my->menu->myProject   = array('link' => 'Project|my|project|');
-    $lang->my->menu->myExecution = 'Execution|my|execution|type=undone';
-}
-else
-{
-    $lang->my->menu->myExecution = $lang->executionCommon . '|my|execution|type=undone';
-}
+$lang->my->menu->myProject   = array('link' => 'Project|my|project|');
+$lang->my->menu->myExecution = 'Execution|my|execution|type=undone';
 $lang->my->menu->contribute  = array('link' => 'Contribute|my|contribute|mode=task');
 $lang->my->menu->dynamic     = 'Dynamic|my|dynamic|';
 $lang->my->menu->score       = 'Score|my|score|';

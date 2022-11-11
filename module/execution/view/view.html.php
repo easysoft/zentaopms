@@ -288,7 +288,7 @@
                 </p>
               </div>
             </div>
-            <?php if($this->config->systemMode == 'new'):?>
+            <?php if($this->config->systemMode == 'ALM'):?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->parent;?></strong>
@@ -312,7 +312,6 @@
               </div>
             </div>
             <?php endif;?>
-            <?php if($this->config->systemMode == 'new'):?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->project;?></strong>
@@ -326,12 +325,11 @@
                 </div>
               </div>
             </div>
-            <?php endif;?>
-            <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
+            <?php if(!in_array($execution->attribute, array('request', 'design', 'review')) and $execution->projectInfo->hasProduct): ?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->execution->manageProducts;?></strong>
-                <?php if(common::hasPriv('execution', 'manageproducts')) common::printLink('execution', 'manageproducts', "executionID=$execution->id", strtoupper($lang->more), '', "class='btn btn-link pull-right muted'");?>
+                <?php if(common::hasPriv('execution', 'manageproducts') and $execution->type != 'stage') common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">
@@ -346,7 +344,8 @@
                 </div>
               </div>
             </div>
-            <?php endif; ?>
+            <?php endif;?>
+            <?php if($execution->projectInfo->hasProduct or $execution->projectInfo->model == 'scrum'):?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">
@@ -367,12 +366,13 @@
                 </div>
               </div>
             </div>
+            <?php endif;?>
             <div class='detail'>
               <div class='detail-title'><strong><?php echo $lang->execution->lblStats;?></strong></div>
               <div class="detail-content">
                 <table class='table table-data data-stats'>
                   <tbody>
-                    <tr class='statsTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
+                    <tr class='statsTr'><td></td><td></td><td></td><td></td></tr>
                     <tr>
                       <td colspan="4">
                         <?php $progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;?>

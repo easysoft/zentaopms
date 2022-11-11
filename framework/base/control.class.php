@@ -212,7 +212,7 @@ class baseControl
          * 检查用户是否登录，如果没有登录，跳转到登录页面。
          * Check the user has logon or not, if not, goto the login page.
          */
-        if($this->config->installed && !in_array($this->moduleName, array('install', 'upgrade')) && empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
+        if($this->config->installed && !in_array($this->moduleName, $this->config->openModules) && empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
         {
             $uri = $this->app->getURI(true);
             if($this->moduleName == 'message' and $this->methodName == 'ajaxgetmessage')
@@ -230,7 +230,7 @@ class baseControl
 
         /**
          * 如果客户端是手机的话，视图文件增加m.前缀。
-         * If the clent is mobile, add m. as prefix for view file.
+         * If the client is mobile, add m. as prefix for view file.
          */
         $this->setClientDevice();
         $this->setDevicePrefix();
@@ -927,6 +927,12 @@ class baseControl
         if($type != 'json') die();
 
         $data = (array)$data;
+
+        /* Make sure locate in this tab. */
+        global $lang;
+        $moduleName = $this->app->rawModule;
+        if(isset($lang->navGroup->{$moduleName}) and $lang->navGroup->{$moduleName} != $this->app->tab and isset($data['locate']) and $data['locate'][0] == '/' and !helper::inOnlyBodyMode()) $data['locate'] .= "#app={$this->app->tab}";
+
         if(helper::isAjaxRequest() or $this->viewType == 'json')
         {
             /* Process for zh-cn in json. */
@@ -938,7 +944,7 @@ class baseControl
                 $data[$key] = str_replace('%22', '"', urlencode($value));
             }
 
-            if(defined('RUN_MODE') and RUN_MODE == 'api')
+            if(defined('RUN_MODE') and in_array(RUN_MODE, array('api', 'xuanxuan')))
             {
                 print(urldecode(json_encode($data)));
                 $response = helper::removeUTF8Bom(ob_get_clean());

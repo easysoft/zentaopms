@@ -46,7 +46,7 @@ $account = $this->app->user->account;
             $wizardParams = helper::safe64Encode("execution=$execution->id");
             echo html::a($this->createLink('tutorial', 'wizard', "module=execution&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->execution->linkStory}", '', "class='btn btn-primary'");
         }
-        else
+        elseif($execution->hasProduct)
         {
             common::printLink('execution', 'linkStory', "execution=$execution->id", "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-primary'");
         }

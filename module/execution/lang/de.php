@@ -146,8 +146,7 @@ $lang->execution->estimate = 'estimate';
 $lang->execution->consumed = 'consumed';
 $lang->execution->left     = 'Left';
 
-if($this->config->systemMode == 'new')     $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
+$lang->execution->copyTeamTip = "copy Project/project team members";
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Aktivieren';
@@ -195,16 +194,8 @@ $lang->execution->statusList['suspended'] = 'Ausgesetzt';
 $lang->execution->statusList['closed']    = 'Geschlossen';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
-}
-else
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
-}
+$lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
+$lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 
 $lang->execution->kanbanAclList['private'] = 'Private';
 $lang->execution->kanbanAclList['open']    = 'Inherited Project';
@@ -279,8 +270,8 @@ $lang->execution->importBug           = 'Importiere Bugs';
 $lang->execution->tree                = 'Baum';
 $lang->execution->treeTask            = 'Aufgabe anzeigen';
 $lang->execution->treeStory           = 'Story anzeigen';
-$lang->execution->treeOnlyTask        = 'Show Task Only';
-$lang->execution->treeOnlyStory       = 'Show Story Only';
+$lang->execution->treeViewTask        = 'Tree View Task';
+$lang->execution->treeViewStory       = 'Tree View Story';
 $lang->execution->storyKanban         = 'Story Kanban';
 $lang->execution->storySort           = 'Story sortieren';
 $lang->execution->importPlanStory     = '' . $lang->executionCommon . ' wurde erstellt!\nMöchten Sie Storys aus dem Plan importieren?';
@@ -372,11 +363,10 @@ $lang->execution->noExecution          = 'Keine Projekte. ';
 $lang->execution->noExecutions         = "No {$lang->execution->common}.";
 $lang->execution->noPrintData          = "No data can be printed.";
 $lang->execution->noMembers            = 'Keine Mitglieder. ';
-$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
+$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100%s, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip  = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip      = "({$lang->SRCommon} has never been linked under the project, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "Wählen Sie ein {$lang->executionCommon} Team zum Kopieren.";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Wählen Sie ein {$lang->executionCommon} Team zum Kopieren.";
+$lang->execution->copyTeamTitle        = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";
 
 /* Interactive prompts. */
 $lang->execution->confirmDelete               = "Möchten Sie {$lang->executionCommon}[%s] löschen?";

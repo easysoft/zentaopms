@@ -26,3 +26,6 @@
 
 .scroll {overflow-x: hidden; overflow-y: auto;}
 .fix-table-copy-wrapper thead > tr > th:first-child {background: none!important;}
+
+#showSettingsBox {text-align:right; margin-top:-15px; margin-right:4px;}
+#showSettingsBox .checkbox-primary {display:inline-block;}

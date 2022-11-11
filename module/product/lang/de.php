@@ -106,6 +106,7 @@ $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
 $lang->product->name           = 'Name';
 $lang->product->code           = 'Alias';
+$lang->product->shadow         = "Shadow {$lang->productCommon}";
 $lang->product->line           = "{$lang->productCommon} Line";
 $lang->product->lineName       = "{$lang->productCommon} Line Name";
 $lang->product->order          = 'Sortierung';
@@ -188,13 +189,13 @@ $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Geschlossen';
 
 global $config;
-if($config->systemMode == 'new')
+if($config->systemMode == 'ALM')
 {
     $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
 }
 else
 {
-    $lang->product->aclList['private'] = "Privat {$lang->productCommon} ({$lang->executionCommon} Nur Teammitglieder)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated project can access)";
 }
 $lang->product->aclList['open']    = "Standard (Benutzer mit Rechten für {$lang->productCommon} können zugreifen.)";
 //$lang->product->aclList['custom']  = 'Benutzerdefiniert (Teammitglieder und Whitelist Benutzer haben Zugriff.)';

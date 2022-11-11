@@ -23,6 +23,7 @@ $lang->admin->getCaptcha      = 'Obtenir le Code de vérification';
 $lang->admin->register        = 'Register';
 $lang->admin->resetPWDSetting = 'Reset password Setting';
 $lang->admin->tableEngine     = 'Table Engine';
+$lang->admin->setModuleIndex  = 'Set Module';
 
 $lang->admin->api            = 'API';
 $lang->admin->log            = 'Log';
@@ -64,6 +65,44 @@ $lang->admin->registerNotice->success    = "Vous êtes enregistré !";
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Lier au compte';
 $lang->admin->bind->success = "Le compte est associé !";
+
+$lang->admin->setModule = new stdclass();
+$lang->admin->setModule->module         = 'Module';
+$lang->admin->setModule->optional       = 'Optional';
+$lang->admin->setModule->opened         = 'Opened';
+$lang->admin->setModule->closed         = 'Closed';
+
+$lang->admin->setModule->product        = 'Product';
+$lang->admin->setModule->scrum          = 'Scrum Project';
+$lang->admin->setModule->waterfall      = 'Waterfall Project';
+$lang->admin->setModule->assetlib       = 'Assetlib';
+$lang->admin->setModule->other          = 'Other';
+
+$lang->admin->setModule->repo           = 'Repo';
+$lang->admin->setModule->issue          = 'Issue';
+$lang->admin->setModule->risk           = 'Risk';
+$lang->admin->setModule->opportunity    = 'Opportunity';
+$lang->admin->setModule->process        = 'Process';
+$lang->admin->setModule->measrecord     = 'Measrecord';
+$lang->admin->setModule->auditplan      = 'QA';
+$lang->admin->setModule->meeting        = 'Meeting';
+$lang->admin->setModule->roadmap        = 'Roadmap';
+$lang->admin->setModule->track          = 'Track';
+$lang->admin->setModule->UR             = 'URStroy';
+$lang->admin->setModule->researchplan   = 'Researchplan';
+$lang->admin->setModule->gapanalysis    = 'Gapanalysis';
+$lang->admin->setModule->storylib       = 'Story Lib';
+$lang->admin->setModule->caselib        = 'Case Lib';
+$lang->admin->setModule->issuelib       = 'Issue Lib';
+$lang->admin->setModule->risklib        = 'Risk Lib';
+$lang->admin->setModule->opportunitylib = 'Opportunity Lib';
+$lang->admin->setModule->practicelib    = 'Practice Lib';
+$lang->admin->setModule->componentlib   = 'Component Lib';
+$lang->admin->setModule->devops         = 'DevOps';
+$lang->admin->setModule->kanban         = 'Kanban';
+$lang->admin->setModule->OA             = 'OA';
+$lang->admin->setModule->deploy         = 'Deploy';
+$lang->admin->setModule->traincourse    = 'Traincourse';
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common                   = 'Politique de sécurité';

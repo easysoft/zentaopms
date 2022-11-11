@@ -50,7 +50,7 @@ $config->story->custom->createFields      = $config->story->list->customCreateFi
 $config->story->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
 $config->story->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
 
-$config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto,lanes,regions,';
+$config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto,lanes,regions,branch,pri,';
 
 global $lang, $app;
 $config->story->datatable = new stdclass();
@@ -139,7 +139,7 @@ $config->story->datatable->fieldList['assignedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['product']['title']      = 'product';
 $config->story->datatable->fieldList['product']['control']    = 'hidden';
-$config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
+$config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'transfer', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
 
 $config->story->datatable->fieldList['branch']['title']      = 'branch';
 $config->story->datatable->fieldList['branch']['fixed']      = 'no';
@@ -254,5 +254,5 @@ $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->ca
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
-$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '220' : '210';
+$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '230' : '210';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';

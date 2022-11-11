@@ -74,11 +74,13 @@ class caselibModel extends model
      * @param  int   $libID
      * @param  bool  $setImgSize
      * @access public
-     * @return object
+     * @return object|bool
      */
     public function getById($libID, $setImgSize = false)
     {
         $lib = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq((int)$libID)->fetch();
+        if(!$lib) return false;
+
         $lib = $this->loadModel('file')->replaceImgURL($lib, 'desc');
         if($setImgSize) $lib->desc = $this->file->setImgSize($lib->desc);
         return $lib;
@@ -181,7 +183,7 @@ class caselibModel extends model
         $lib = fixer::input('post')
             ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
             ->setForce('type', 'library')
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa', 'project', $this->session->project)
+            ->setIF($this->lang->navGroup->caselib != 'qa', 'project', $this->session->project)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid')
@@ -263,7 +265,7 @@ class caselibModel extends model
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq((int)$libID)->fi()
-                ->beginIF($this->config->systemMode == 'new' and $this->app->tab != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+                ->beginIF($this->app->tab != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq(0)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)->fetchAll();
@@ -582,7 +584,7 @@ class caselibModel extends model
                 $data[$i]->status       = $forceNotReview ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
                 $data[$i]->project      = 0;
-                if($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa' and $this->session->project) $data[$i]->project = $this->session->project;
+                if($this->lang->navGroup->caselib != 'qa' and $this->session->project) $data[$i]->project = $this->session->project;
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()

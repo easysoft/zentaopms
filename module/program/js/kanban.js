@@ -131,9 +131,14 @@ function calcColHeight(col, lane, colCards, colHeight)
     return colCards.length * 62;
 }
 
-$(function()
+/**
+ * Init kanban.
+ *
+ * @access public
+ * @return void
+ */
+function initKanban()
 {
-    /* Init all kanbans */
     $.each(kanbanGroup, function(key, programsData)
     {
         var $kanban = $('#kanban-' + key);
@@ -146,4 +151,23 @@ $(function()
             calcColHeight:   calcColHeight
         });
     });
+}
+
+$(function()
+{
+    /* Init all kanbans */
+    initKanban();
+
+    $('#showAllProjects').click(function()
+    {
+        var showAllProjects = $(this).prop('checked') ? 1 : 0;
+        $.post(createLink('program', 'ajaxSetShowSetting'), {"showAllProjects": showAllProjects}, function()
+        {
+            $.get(createLink('program', 'kanban'), function(data)
+            {
+                $('#kanbanList').html($(data).find('#kanbanList').html());
+                initKanban();
+            });
+        })
+    })
 });

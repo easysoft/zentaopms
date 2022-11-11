@@ -157,10 +157,23 @@ class group extends control
             $this->app->user->admin = true;
             $changeAdmin            = true;
         }
+
+        $executionProject = $this->dao->select('t1.id, t2.name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.id')->in($this->app->user->view->sprints)
+            ->fetchPairs();
+
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
+        foreach($executions as $id => $name)
+        {
+            if(isset($executionProject[$id])) $executions[$id] = $executionProject[$id] . ' / ' . $name;
+        }
+
         $this->view->group      = $group;
         $this->view->programs   = $this->loadModel('program')->getParentPairs('', '', false);
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram('', 'all', true, 'order_desc');
-        $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
+        $this->view->executions = $executions;
         $this->view->products   = $this->loadModel('product')->getPairs();
         if(!empty($changeAdmin)) $this->app->user->admin = false;
 
@@ -208,14 +221,6 @@ class group extends control
             $this->group->sortResource();
             $group      = $this->group->getById($groupID);
             $groupPrivs = $this->group->getPrivs($groupID);
-
-            if($this->config->systemMode == 'classic')
-            {
-                if(isset($groupPrivs['project']['browse']))
-                {
-                    $groupPrivs['project']['list'] = 'list';
-                }
-            }
 
             $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
             $this->view->position[] = $group->name;
@@ -277,12 +282,9 @@ class group extends control
         $groupUsers   = $this->group->getUserPairs($groupID);
         $allUsers     = $this->loadModel('dept')->getDeptUserPairs($deptID);
         $otherUsers   = array_diff_assoc($allUsers, $groupUsers);
+        $outsideUsers = $this->user->getPairs('outside|noclosed|noletter|noempty');
 
-        if($this->config->systemMode == 'new')
-        {
-            $outsideUsers = $this->user->getPairs('outside|noclosed|noletter|noempty');
-            $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
-        }
+        $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
 
         $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;

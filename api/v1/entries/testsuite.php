@@ -53,6 +53,6 @@ class testsuiteEntry extends entry
 
         $this->getData();
 
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

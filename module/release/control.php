@@ -70,21 +70,21 @@ class release extends control
         {
             $releaseID = $this->release->create($productID, $branch);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
-            $message = $this->executeHooks($releaseID);
-            if($message) $this->lang->saveSuccess = $message;
+            $result = $this->executeHooks($releaseID);
+            $message = $result ? $result : $this->lang->saveSuccess;
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $releaseID));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
         $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk|withbranch', 0, 'execution', '', false);
         $releasedBuilds = $this->release->getReleasedBuilds($productID, $branch);
         foreach($releasedBuilds as $build) unset($builds[$build]);
-        unset($builds['trunk']);
 
         /* Get the builds of the linked stories or bugs. */
         $notEmptyBuilds = array();
@@ -126,10 +126,10 @@ class release extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $message = $this->executeHooks($releaseID);
-            if($message) $this->lang->saveSuccess = $message;
+            $result  = $this->executeHooks($releaseID);
+            $message = $result ? $result : $this->lang->saveSuccess;
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -137,21 +137,18 @@ class release extends control
 
         /* Get release and build. */
         $release = $this->release->getById((int)$releaseID);
-        $this->commonAction($release->product, $release->branch);
-        $build = $this->build->getById($release->build);
+        $this->commonAction($release->product);
 
-        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $release->project, 'project', $release->build, false);
-        $releasedBuilds = $this->release->getReleasedBuilds($release->product, $release->branch);
+        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', 0, 'project', $release->build, false);
+        $releasedBuilds = $this->release->getReleasedBuilds($release->product);
         foreach($releasedBuilds as $releasedBuild)
         {
-            if($releasedBuild != $build->id) unset($builds[$releasedBuild]);
+            if(strpos(',' . trim($release->build, ',') . ',', ",{$releasedBuild},") === false) unset($builds[$releasedBuild]);
         }
-        unset($builds['trunk']);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
-        $this->view->build      = $build;
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
@@ -201,7 +198,7 @@ class release extends control
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
-        foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
+        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)

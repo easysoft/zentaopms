@@ -654,7 +654,7 @@ class docModel extends model
         if($version == $doc->version and ((empty($docContent->files) and $docFiles) or ($docContent->files and count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
         {
             unset($docContent->id);
-            $doc->version        += 1;
+            $doc->version       += 1;
             $docContent->version = $doc->version;
             $docContent->files   = join(',', array_keys($docFiles));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
@@ -1569,6 +1569,7 @@ class docModel extends model
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('sprint,stage,kanban')
+                ->andWhere('multiple')->eq('1')
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_asc')
@@ -1577,7 +1578,7 @@ class docModel extends model
             $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
-                $execution->name = $this->config->systemMode == 'new' ? zget($projectPairs, $execution->project) . ' / ' . $execution->name : $execution->name;
+                $execution->name = zget($projectPairs, $execution->project) . ' / ' . $execution->name;
 
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
                 {
@@ -2336,13 +2337,13 @@ class docModel extends model
 
         if($this->app->tab == 'doc' and $type != 'custom' and $type != 'book')
         {
-            $objectTitle = ($this->config->systemMode == 'new' and $type == 'execution') ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
+            $objectTitle = $type == 'execution' ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
 
             $output = <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objectTitle}'>
-      <span class='text'>{$objectTitle}</span>
+      <div class='nobr'>{$objectTitle}</div>
       <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
@@ -2404,7 +2405,7 @@ EOT;
             $output  .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
-    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libName} <span class='caret'></span>
+    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'><div class='nobr'>{$libName}</div> <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
       <div class="input-control search-box has-icon-left has-icon-right search-example">

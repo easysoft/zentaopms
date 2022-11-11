@@ -1,10 +1,14 @@
 $(function()
 {
     if(typeof(rawModule) == 'undefined') rawModule = 'product';
-    if(rawModule != 'projectstory')
+
+    $('#navbar .nav li').removeClass('active');
+    $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+
+    if(rawModule == 'projectstory' && !projectHasProduct && URAndSR)
     {
-        $('#navbar .nav li').removeClass('active');
-        $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+        $('#navbar .nav>li[data-id=story]').addClass('active');
+        $('#navbar .nav>li[data-id=story]>a').html($('.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
     }
 
     $(document).ready(function(){
@@ -12,14 +16,6 @@ $(function()
         var headerWidth = $('#storyList thead th.c-title a').innerWidth();
         var buttonWidth = $('#storyList thead th.c-title button').innerWidth();
         if($title.width() < headerWidth + buttonWidth + 16) $title.width(headerWidth + buttonWidth + 30);
-    });
-
-    $('#storyList td.has-child .story-toggle').each(function()
-    {
-        var $td = $(this).closest('td');
-        var labelWidth = 0;
-        if($td.find('.label').length > 0) labelWidth = $td.find('.label').width();
-        $td.find('a').eq(0).css('max-width', $td.width() - labelWidth - 60);
     });
 
     $('#toTaskButton').on('click', function()

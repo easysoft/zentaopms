@@ -40,6 +40,7 @@ Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
 EOT;
 
+$lang->install->selectMode          = "Select mode";
 $lang->install->introduction        = "ZenTao 15.0+ Feature Introduction";
 $lang->install->howToUse            = "How do you like to use ZenTao?";
 $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4';
@@ -259,11 +260,11 @@ $lang->install->groupList['LIMITED']['desc']      = 'Users can only edit content
 $lang->install->groupList['PROJECTADMIN']['name'] = 'Project Admin';
 $lang->install->groupList['PROJECTADMIN']['desc'] = 'Project Admins manage project privileges';
 $lang->install->groupList['LITEADMIN']['name']    = 'LITEADMIN';
-$lang->install->groupList['LITEADMIN']['desc']    = 'Lite Admin';
+$lang->install->groupList['LITEADMIN']['desc']    = 'Operation Management Interface Admin';
 $lang->install->groupList['LITEPROJECT']['name']  = 'LITEPROJECT';
-$lang->install->groupList['LITEPROJECT']['desc']  = 'Lite Rroject';
+$lang->install->groupList['LITEPROJECT']['desc']  = 'Operation Management Interface Project';
 $lang->install->groupList['LITETEAM']['name']     = 'LITETEAM';
-$lang->install->groupList['LITETEAM']['desc']     = 'Lite Team';
+$lang->install->groupList['LITETEAM']['desc']     = 'Operation Management Interface Team';
 
 $lang->install->cronList[''] = 'Monitor Cron';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';
@@ -291,9 +292,6 @@ $lang->install->joinZentao         = <<<EOT
 EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');
-
-$lang->install->modeList['classic'] = 'Classic mode';
-$lang->install->modeList['new']     = 'Program mode';
 
 $lang->install->promotion = "Products also from EasyCorp:";
 

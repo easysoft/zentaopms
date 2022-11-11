@@ -191,8 +191,8 @@ global $config;
 /* Legend list. */
 $lang->bug->legendBasicInfo             = 'Basis Info';
 $lang->bug->legendAttatch               = 'Anlagen';
-$lang->bug->legendPRJExecStoryTask      = $config->systemMode == 'new' ? 'Project/' . $lang->executionCommon . '/Story/Task' : $lang->executionCommon . '/Story/Task';
-$lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Story/Task';
+$lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
+$lang->bug->legendExecStoryTask         = 'Porject/Story/Task';
 $lang->bug->lblTypeAndSeverity          = 'Typ/Schwere';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Reproduktionsschritte';

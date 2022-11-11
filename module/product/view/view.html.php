@@ -160,10 +160,8 @@
                   <tr>
                     <th><?php echo $lang->story->statusList['reviewing']  . $space . $lang->story->common;?></th>
                     <td><strong><?php echo $product->stories['reviewing']?></strong></td>
-                    <?php if($config->systemMode == 'new'):?>
                     <th><?php echo $lang->product->projects?></th>
                     <td><strong><?php echo $product->projects?></strong></td>
-                    <?php endif;?>
                     <th><?php echo $lang->product->executions?></th>
                     <td><strong><?php echo $product->executions?></strong></td>
                   </tr>

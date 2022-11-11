@@ -634,6 +634,8 @@ class searchModel extends model
         }
         else
         {
+            if($this->config->systemMode == 'light') unset($this->config->search->fields->program);
+
             foreach($this->config->search->fields as $objectType => $fields)
             {
                 $module = $objectType;
@@ -787,7 +789,8 @@ class searchModel extends model
             }
             elseif($module == 'story' or $module == 'requirement')
             {
-                $story = $objectList[$module][$record->objectID];
+                $story  = $objectList[$module][$record->objectID];
+                $module = 'story';
                 if(!empty($story->lib))
                 {
                     $module = 'assetlib';

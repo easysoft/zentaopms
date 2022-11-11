@@ -12,9 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
+<?php $hideProduct = (isset($project->hasProduct) and $project->hasProduct == '0');?>
+<?php if(!$hideProduct):?>
+<style>.table-footer {margin-left: 205px}</style>
+<?php endif;?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php if(!empty($tasks)):?>
+    <?php if(!empty($tasks) and !$hideProduct):?>
     <div class="pull-left table-group-btns">
       <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->testtask->collapseAll;?> <i class="icon-fold-all muted"></i></button>
       <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->testtask->expandAll;?> <i class="icon-unfold-all muted"></i></button>
@@ -55,8 +59,8 @@ $doneCount    = 0;
       <thead>
         <?php $vars = "executionID=$executionID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <?php $canTestReport = ($canBeChanged and common::hasPriv('testreport', 'browse'));?>
-        <tr class='<?php if($total) echo 'divider'; ?>'>
-          <th class='c-side text-center'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
+        <tr class='<?php if($total and !$hideProduct) echo 'divider'; ?>'>
+          <th class='c-side text-center <?php if($hideProduct) echo 'hide';?>'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
             <?php if($canTestReport):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -84,7 +88,7 @@ $doneCount    = 0;
         <?php if($task->status == 'done')    $doneCount ++;?>
         <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?> data-status='<?php echo $task->status;?>'>
           <?php if($task == reset($productTasks)):?>
-          <td rowspan='<?php echo count($productTasks);?>' class='c-side text-left group-toggle'>
+          <td rowspan='<?php echo count($productTasks);?>' class='c-side text-left group-toggle <?php if($hideProduct) echo 'hide';?>'>
             <a class='text-primary' title='<?php echo $productName;?>'><i class='icon icon-caret-down'></i> <?php echo $productName;?></a>
             <div class='small'><span class='text-muted'><?php echo $lang->testtask->allTasks;?></span> <?php echo count($productTasks);?></div>
           </td>
@@ -111,10 +115,7 @@ $doneCount    = 0;
             {
                 common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
                 common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
-                if(common::hasPriv('execution', 'testreport'))
-                {
-                    echo html::a($this->createLink('execution', 'testreport', "executionID=$executionID&objctType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-summary"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="execution"');
-                }
+                common::printIcon('execution', 'testreport', "executionID=$executionID&objectType=execution&extra=$task->id", '', 'list', 'summary', '', '', false, "data-app='execution'", $this->lang->testreport->common);
                 common::printIcon('testtask', 'edit',   "taskID=$task->id", $task, 'list');
                 common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin');
             }
