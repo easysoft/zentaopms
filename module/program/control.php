@@ -106,6 +106,7 @@ class program extends control
         $this->view->PMList       = $PMList;
         $this->view->progressList = $this->program->getProgressList();
         $this->view->hasProject   = $hasProject;
+        $this->view->param        = $param;
 
         // $this->display();
         $this->render();

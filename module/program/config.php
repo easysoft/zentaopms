@@ -63,37 +63,38 @@ $config->program->dtable->fieldList['name']['flex']         = 1;
 $config->program->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->dtable->fieldList['name']['checkbox']     = true;
 $config->program->dtable->fieldList['name']['iconRender']   = true;
+$config->program->dtable->fieldList['name']['sortType']     = false;
 
 $config->program->dtable->fieldList['status']['name']      = 'status';
 $config->program->dtable->fieldList['status']['title']     = $lang->program->status;
 $config->program->dtable->fieldList['status']['width']     = 65;
 $config->program->dtable->fieldList['status']['type']      = 'status';
-$config->program->dtable->fieldList['status']['sortType']  = 1;
+$config->program->dtable->fieldList['status']['sortType']  = true;
 $config->program->dtable->fieldList['status']['statusMap'] = $lang->program->statusList;
 
 $config->program->dtable->fieldList['PM']['name']     = 'PM';
 $config->program->dtable->fieldList['PM']['title']    = $lang->program->PM;
 $config->program->dtable->fieldList['PM']['width']    = 100;
 $config->program->dtable->fieldList['PM']['type']     = 'avatarBtn';
-$config->program->dtable->fieldList['PM']['sortType'] = 1;
+$config->program->dtable->fieldList['PM']['sortType'] = true;
 
 $config->program->dtable->fieldList['budget']['name']     = 'budget';
 $config->program->dtable->fieldList['budget']['title']    = $lang->program->budget;
 $config->program->dtable->fieldList['budget']['width']    = 100;
 $config->program->dtable->fieldList['budget']['type']     = 'format';
-$config->program->dtable->fieldList['budget']['sortType'] = 1;
+$config->program->dtable->fieldList['budget']['sortType'] = true;
 
 $config->program->dtable->fieldList['begin']['name']     = 'begin';
 $config->program->dtable->fieldList['begin']['title']    = $lang->program->begin;
 $config->program->dtable->fieldList['begin']['width']    = 100;
 $config->program->dtable->fieldList['begin']['type']     = 'datetime';
-$config->program->dtable->fieldList['begin']['sortType'] = 1;
+$config->program->dtable->fieldList['begin']['sortType'] = true;
 
 $config->program->dtable->fieldList['end']['name']     = 'end';
 $config->program->dtable->fieldList['end']['title']    = $lang->program->end;
 $config->program->dtable->fieldList['end']['width']    = 100;
 $config->program->dtable->fieldList['end']['type']     = 'datetime';
-$config->program->dtable->fieldList['end']['sortType'] = 1;
+$config->program->dtable->fieldList['end']['sortType'] = true;
 
 $config->program->dtable->fieldList['progress']['name']  = 'progress';
 $config->program->dtable->fieldList['progress']['title'] = $lang->program->progressAB;

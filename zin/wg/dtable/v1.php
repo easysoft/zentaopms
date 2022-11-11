@@ -223,6 +223,22 @@ class dtable
     public $config;
 
     /**
+     * Sort Link.
+     *
+     * @var    string
+     * @access public
+     */
+    public $sortLink = '';
+
+    /**
+     * Order by.
+     *
+     * @var    string
+     * @access public
+     */
+    public $orderBy = 'id_desc';
+
+    /**
      * Construct function, init dtable data.
      *
      * @param  string $text
@@ -303,42 +319,17 @@ class dtable
     }
 
     /**
-     * Set the table footer.
+     * Set sort link and orderBy.
      *
-     * @param  object $pager
-     * @param  string $class
-     * @param  string $summary
-     * @param  string $summaryID
+     * @param mixed $link
      * @access public
-     * @return void
+     * @return object
      */
-    public function footer($pager = null, $class = '', $summary = '', $summaryID = '')
+    public function setSort($link, $orderBy)
     {
-        $footerHtml  = "<div class='table-footer $class'>";
-        if($summary) $footerHtml .= "<div id='$summaryID' class='table-statistic'>$summary</div>";
-        if($pager)
-        {
-            ob_start();
-            $pager->show('right', 'pagerjs');
-            $footerHtml .= ob_get_clean();
-        }
-        $footerHtml .= '</div>';
-
-        $this->footer = $footerHtml;
-    }
-
-    /**
-     * Set form html.
-     *
-     * @param  string $formID
-     * @param  string $class
-     * @param  string $attr
-     * @access public
-     * @return void
-     */
-    public function form($formID = '', $class = '', $attr = '')
-    {
-        $this->form = "<form class='$class' id='$formID' method='post' $attr>";
+        $this->sortLink = $link;
+        $this->orderBy  = $orderBy;
+        return $this;
     }
 
     /**
@@ -355,10 +346,19 @@ class dtable
         $html .= '<div class="dtable"></div>';
         $html .= '<script>';
         $html .= 'var columns = ' . json_encode($this->cols) . ';console.log(columns);';
+        $html .= <<<EOF
+function createSortLink(col)
+{
+    var sort    = '$this->orderBy';
+    var orderBy = col.name + '_asc';
+    if(sort == orderBy) orderBy = col.name + '_desc';
+    return `$this->sortLink`;
+}
+EOF;
 
         if(isset($this->iconRender)) $html .= $this->setIconRender();
 
-        $html .= 'dtableWithZentao = new zui.DTable(".dtable", {cols: columns, data: ' . json_encode($this->data) . ', nested: true, checkable: true}); var datas = ' . json_encode($this->data) . ';console.log(datas);';
+        $html .= 'dtableWithZentao = new zui.DTable(".dtable", {cols: columns, data: ' . json_encode($this->data) . ', nested: true, checkable: true, sortLink: createSortLink}); var datas = ' . json_encode($this->data) . ';console.log(datas);';
         $html .= '</script>';
 
         return $html;

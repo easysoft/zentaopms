@@ -14,7 +14,7 @@ if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid' and $has
     $toolbar->append(html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : ''));
 }
 
-$toolbar->append('<a id="searchFormBtn"><i class="icon icon-search"></i> <span>' . $lang->user->search . '</span></a>');
+$toolbar->append('<a class="querybox-toggle" id="searchFormBtn"><i class="icon icon-search"></i> <span>' . $lang->user->search . '</span></a>');
 
 /* Set actionbar. */
 $actionbar = actionbar();
@@ -46,7 +46,8 @@ foreach($programs as $program)
 }
 
 $table->search($status, $moduleName);
-$table->form('programForm', 'main-table', "data-preserve-nested='true'");
+$sortLink = $this->createLink('program', 'browse', "status=$status&orderBy=\${orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&param=$param");
+$table->setSort($sortLink, $orderBy);
 $table->data($rows);
 
 $content = block();

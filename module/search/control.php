@@ -64,7 +64,15 @@ class search extends control
         $this->view->queryID      = $queryID;
         $this->view->style        = empty($style) ? 'full' : $style;
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
-        $this->display();
+        if($module == 'program')
+        {
+            a($fields);
+            $this->render();
+        }
+        else
+        {
+            $this->display();
+        }
     }
 
     /**
