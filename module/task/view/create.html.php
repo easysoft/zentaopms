@@ -43,8 +43,8 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
     </div>
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
-        <?php if(($execution->type != 'kanban' or $this->config->vision == 'lite') and $execution->multiple):?>
-        <tr>
+        <?php if($execution->type != 'kanban' or $this->config->vision == 'lite'):?>
+        <tr class="<?php echo !$execution->multiple ? 'hidden' : '';?>">
           <th><?php echo $lang->task->execution;?></th>
           <td><?php echo html::select('execution', $executions, $execution->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
         </tr>
