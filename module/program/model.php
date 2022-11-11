@@ -1717,13 +1717,19 @@ class programModel extends model
         $manager       = isset($PMList[$program->PM]) ? $PMList[$program->PM] : '';
         $programBudget = $this->project->getBudgetWithUnit($program->budget);
         $link          = $program->type == 'program' ? helper::createLink('program', 'product', "programID=$program->id") : helper::createLink('project', 'index', "projectID=$program->id");
+        $name          = html::a($link, $program->name, '', "title=$program->name");
+        if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
+        {
+            $delay = helper::diffDate(helper::today(), $program->end);
+            if($delay > 0) $name .= "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
+        }
 
         $row->id       = $program->id;
         $row->parent   = $program->parent ? $program->parent : '';
         $row->asParent = $program->type == 'program';
         $row->type     = $program->type;
         $row->model    = $program->model;
-        $row->name     = html::a($link, $program->name, '', "title=$program->name");
+        $row->name     = $name;
         $row->status   = $program->status;
         $row->PM       = empty($manager) ? '' : $manager->realname;
         $row->PMAvatar = empty($manager) ? '' : $manager->avatar;
