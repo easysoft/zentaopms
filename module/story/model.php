@@ -3189,15 +3189,22 @@ class storyModel extends model
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
 
         if(!$executionID) return array();
-        $execution = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
+        $executions = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($executionID)->fetchAll('id');
+        $hasProject = false;
+        $hasExecution = false;
+        foreach($executions as $execution)
+        {
+            if($execution->type == 'project') $hasProject   = true;
+            if($execution->type != 'project') $hasExecution = true;
+        }
 
         $orderBy = str_replace('branch_', 't2.branch_', $orderBy);
         $type    = strtolower($type);
 
+        $products = $this->loadModel('product')->getProducts($executionID);
         if($type == 'bysearch')
         {
             $queryID  = (int)$param;
-            $products = $this->loadModel('product')->getProducts($executionID);
 
             if($this->session->executionStoryQuery == false) $this->session->set('executionStoryQuery', ' 1 = 1');
             if($queryID)
@@ -3228,7 +3235,6 @@ class storyModel extends model
             }
             $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
 
-            $products  = $this->loadModel('product')->getProducts($executionID);
             if($products) $productID = key($products);
             $review = $this->getRevertStoryIDList($productID);
 
@@ -3250,7 +3256,7 @@ class storyModel extends model
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
                 ->where($storyQuery)
-                ->andWhere('t1.project')->eq((int)$executionID)
+                ->andWhere('t1.project')->in($executionID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t2.type')->eq($storyType)
@@ -3289,18 +3295,18 @@ class storyModel extends model
             $stories = $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
-                ->where('t1.project')->eq((int)$executionID)
+                ->where('t1.project')->in($executionID)
                 ->andWhere('t2.type')->eq($storyType)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
-                ->beginIF($execution->type == 'project')
-                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
+                ->beginIF($hasProject)
+                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
                 ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
                 ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn($storyIdList)->fi()
                 ->fi()
-                ->beginIF($execution->type != 'project')
+                ->beginIF($hasExecution)
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
                 ->beginIF($this->session->executionStoryBrowseType and strpos('changing|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->fi()
