@@ -66,7 +66,7 @@ class search extends control
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
         if($module == 'program')
         {
-            a($fields);
+            $this->view->options = $this->search->setOptions($fields, $this->view->fieldParams);
             $this->render();
         }
         else

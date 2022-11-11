@@ -1360,4 +1360,47 @@ class searchModel extends model
 
         return $object;
     }
+
+    /**
+     * Set search form options.
+     *
+     * @param  array $fields
+     * @param  array $fieldParams
+     * @access public
+     * @return object
+     */
+    public function setOptions($fields, $fieldParams)
+    {
+        $options = new stdclass();
+        $options->selectOptions = array();
+        $options->items         = array();
+        foreach($this->lang->search->operators as $value => $text)
+        {
+            $option = new stdclass();
+            $option->value = $value;
+            $option->text  = $text;
+
+            $options->selectOptions[] = $option;
+        }
+
+        for($i = 0; $i < 6; $i++)
+        {
+            $data = new stdclass();
+            if($i == 0) $data->label = $this->lang->search->group1;
+            if($i == 3) $data->label = $this->lang->search->group2;
+            $data->items = array();
+            foreach($fieldParams as $field => $param)
+            {
+                $item = new stdclass();
+                $item->text  = $fields[$field];
+                $item->value = $field;
+                $item->type  = $param['control'];
+
+                $data->items[] = $item;
+            }
+            $options->items[] = $data;
+        }
+
+        return $options;
+    }
 }
