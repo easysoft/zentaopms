@@ -1084,7 +1084,7 @@ class product extends control
         }
         else
         {
-            $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch, $param);
+            $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch == 0 ? 'all' : $branch, $param);
         }
         $field    = $fieldID !== '' ? "plans[$fieldID]" : 'plan';
         $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';

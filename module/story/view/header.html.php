@@ -203,9 +203,12 @@ function loadProductPlans(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
-    var expired = config.currentMethod == 'create' ? 'unexpired' : '';
-    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,' + config.currentMethod);
+
+    var param      = rawMethod == 'edit' ? 'skipParent|forStory' : 'skipParent';
+    var expired    = config.currentMethod == 'create' ? 'unexpired' : '';
+    var planLink   = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent|forStory|' + config.currentMethod);
     var $planIdBox = rawMethod == 'create' ? $('.switchBranch #planIdBox') : $('#planIdBox');
+
     $planIdBox.load(planLink, function()
     {
         $planIdBox.find('#plan').chosen();
