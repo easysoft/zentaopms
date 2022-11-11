@@ -101,7 +101,6 @@
   </div>
 </div>
 
-
 <?php if(!$project->division and count($linkedProducts) == 1):?>
 <?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
 <?php js::set('divisionList', $lang->project->divisionList);?>
