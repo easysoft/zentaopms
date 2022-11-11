@@ -6,7 +6,7 @@ $(document).on('click', '.ajaxPager', function()
 $('#product').change(function()
 {
     productID = $(this).val();
-    var link = createLink('design', 'ajaxGetProductStories', 'productID=' + productID + '&projectID=' + projectID);
+    var link = createLink('design', 'ajaxGetProductStories', 'productID=' + productID + '&projectID=' + projectID + '&status=active&hasParent=false');
     $.post(link, function(data)
     {
         $('#story').replaceWith(data);
