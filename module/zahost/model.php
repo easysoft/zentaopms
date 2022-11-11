@@ -261,26 +261,25 @@ class zahostModel extends model
     public function queryDownloadImageStatus($image)
     {
         $host   = $this->getById($image->hostID);
-        $apiUrl = 'http://' . $host->publicIP. '/api/v1/task/status';
+        $apiUrl = 'http://' . $host->publicIP. '/api/v1/task/getStatus';
 
-        $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array(), 'json'));
+        $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
         if(!$result or $result->code != 'success') return $image->status;
 
         foreach($result->data as $status => $group)
         {
-            $task = array_filter($group, function($task)
+            $task = array_filter($group, function($task) use($image)
             {
-                $task->id == $image->id;
+                return $task->task == $image->id;
             });
 
             if($task)
             {
-                $image->status = $status;
-                break;
+                $this->dao->update(TABLE_IMAGE)->set('status')->eq($status)->where('id')->eq($image->id)->exec();
+                return $status;
             }
         }
 
-        $this->dao->update(TABLE_IMAGE)->set('status')->eq($status)->where('id')->eq($image->id)->exec();
         return $image->status;
     }
 
