@@ -172,36 +172,77 @@ class zahostModel extends model
     }
 
     /**
+     * Get image by ID.
+     *
+     * @param  int    $imageID
+     * @access public
+     * @return object
+     */
+    public function getImageByID($imageID)
+    {
+        return $this->dao->select('*')->from(TABLE_IMAGE)->where('deleted')->eq(0)->andWhere('id')->eq($imageID)->fetch();
+    }
+
+    /**
      * Get image files from ZAgent server.
      *
-     * @param  object $host
-     * @param  int    $templateID
+     * @param  object $hostID
      * @access public
      * @return array
      */
-    public function getImageList($host, $templateID = 0)
+    public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
     {
-        $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl"));
-        if(empty($result) || $result->code != 200)
-        {
-            $result = new stdclass;
-            $result->data = array();
-        }
-
-        $usedImageList = $this->dao->select('imageName')->from(TABLE_VMTEMPLATE)->where('hostID')->eq($host->hostID)->fetchAll('imageName');
-
-        $imageList = array();
-        foreach($result->data as $image)
-        {
-            if(array_key_exists($image->name, $usedImageList)) continue;
-
-            $imageList[] = array('name' => $image->name);
-        }
-
-        /* Template ID is not empty means editing template. */
-        if($templateID) foreach($usedImageList as $usedImage) $imageList[] = array('name' => $usedImage->imageName);
+        $imageList = $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('hostID')->eq($hostID)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
 
         return $imageList;
+    }
+
+    /**
+     * create image.
+     *
+     * @access public
+     * @return void
+     */
+    public function createImage()
+    {
+        $vmImage = fixer::input('post')
+            ->get();
+
+        $this->dao->insert(TABLE_IMAGE)->data($vmImage)
+            ->batchCheck($this->config->zahost->createimage->requiredFields, 'notempty')
+            ->autoCheck()->exec();
+        if(dao::isError()) return false;
+
+        $imageID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('image', $imageID, 'Created');
+    }
+
+    /**
+     * Send download image command to HOST.
+     *
+     * @param  object    $image
+     * @access public
+     * @return bool
+     */
+    public function downloadImage($image)
+    {
+        $host = $this->getById($image->hostID);
+        $downloadApi = 'http://' . $host->address . '/api/v1/download/add';
+
+        $apiParams['md5']  = $image->md5;
+        $apiParams['task'] = 1;
+        $apiParams['url']  = $image->address;
+
+        $response = json_decode(commonModel::http($downloadApi, $apiParams));
+
+        if($response->code == 200) return true;
+
+        dao::$errors[] = $response->msg;
+        return false;
     }
 
     /**

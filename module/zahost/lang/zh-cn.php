@@ -39,6 +39,32 @@ $lang->zahost->osVersion  = '操作系统版本号';
 $lang->zahost->osLang     = '系统语言';
 $lang->zahost->imageName  = '镜像文件';
 
+$lang->zahost->image = new stdclass;
+$lang->zahost->image->list          = '镜像列表';
+$lang->zahost->image->browseImage   = '镜像列表';
+$lang->zahost->image->createImage   = '创建镜像';
+$lang->zahost->image->choseImage    = '选择镜像';
+$lang->zahost->image->downloadImage = '下载镜像';
+$lang->zahost->image->startDowload  = '开始下载';
+
+$lang->zahost->image->name       = '名称';
+$lang->zahost->image->common     = '镜像';
+$lang->zahost->image->memory     = $lang->zahost->memory;
+$lang->zahost->image->disk       = $lang->zahost->diskSize;
+$lang->zahost->image->osType     = $lang->zahost->osType;
+$lang->zahost->image->osCategory = $lang->zahost->osCategory;
+$lang->zahost->image->osVersion  = $lang->zahost->osVersion;
+$lang->zahost->image->osLang     = $lang->zahost->osLang;
+$lang->zahost->image->imageName  = $lang->zahost->imageName;
+
+$lang->zahost->image->imageEmpty = '无镜像';
+
+$lang->zahost->image->statusList['waiting']     = '未下载';
+$lang->zahost->image->statusList['downloading'] = '下载中';
+$lang->zahost->image->statusList['finish']      = '已下载';
+$lang->zahost->image->statusList['fail']        = '下载失败';
+
+
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = '名称';
 $lang->zahost->vmTemplate->common     = '虚拟机模板';
