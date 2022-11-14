@@ -80,11 +80,4 @@ $encodePath = $this->repo->encodePath($entry);
 </div>
 <?php endif;?>
 <a href='' class='iframe' data-width='90%' id='linkObject'></a>
-<div id='reviewBugs' class='hidden'>
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
-    <h4 class="modal-title"><?php echo $lang->repo->viewBugs;?></h4>
-  </div>
-  <div class='review-bug-list'></div>
-</div>
 <?php include '../../common/view/footer.html.php';?>
