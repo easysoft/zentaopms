@@ -336,7 +336,6 @@ class buildModel extends model
             ->remove('resolvedBy,allchecker,files,labels,uid')
             ->get();
 
-
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)
             ->autoCheck()
