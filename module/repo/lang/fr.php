@@ -1,5 +1,6 @@
 <?php
 $lang->repo->common          = 'Référentiel';
+$lang->repo->codeRepo        = 'Référentiel';
 $lang->repo->browse          = 'Aff';
 $lang->repo->viewRevision    = 'Aff Modifs';
 $lang->repo->product         = 'Product';
@@ -112,6 +113,7 @@ $lang->repo->linkStory          = 'Link ' . $lang->SRCommon;
 $lang->repo->linkBug            = 'Link Bug';
 $lang->repo->linkTask           = 'Link Task';
 $lang->repo->unlink             = 'Unlink';
+$lang->repo->viewBugs           = 'View Bugs';
 
 $lang->repo->title      = 'Titre';
 $lang->repo->status     = 'Statut';

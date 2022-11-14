@@ -1,5 +1,6 @@
 <?php
 $lang->repo->common          = 'Repo';
+$lang->repo->codeRepo        = 'Repo';
 $lang->repo->browse          = 'View';
 $lang->repo->viewRevision    = 'View Revision';
 $lang->repo->product         = 'Product';
@@ -112,6 +113,7 @@ $lang->repo->linkStory          = 'Link ' . $lang->SRCommon;
 $lang->repo->linkBug            = 'Link Bug';
 $lang->repo->linkTask           = 'Link Task';
 $lang->repo->unlink             = 'Unlink';
+$lang->repo->viewBugs           = 'View Bugs';
 
 $lang->repo->title      = 'Title';
 $lang->repo->status     = 'Status';

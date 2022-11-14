@@ -113,6 +113,7 @@ $lang->repo->linkStory          = '关联' . $lang->SRCommon;
 $lang->repo->linkBug            = '关联Bug';
 $lang->repo->linkTask           = '关联任务';
 $lang->repo->unlink             = '取消关联';
+$lang->repo->viewBugs           = '查看Bug';
 
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';
