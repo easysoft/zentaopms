@@ -112,7 +112,7 @@ $config->program->dtable->fieldList['actions']['module'] = 'program';
 global $app;
 $app->loadLang('project');
 $config->program->actionsMap['normal']            = array('start', 'suspend', 'close', 'activate', 'edit', 'create', 'delete', 'team', 'group');
-$config->program->actionsMap['other']             = true;
+$config->program->actionsMap['other']             = array('start', 'suspend', 'close', 'activate');
 $config->program->actionsMap['more']              = array('link', 'whitelist', 'delete');
 $config->program->actionsMap['hint']['create']    = $lang->program->children;
 $config->program->actionsMap['hint']['delete']    = $lang->delete;

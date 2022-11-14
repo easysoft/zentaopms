@@ -169,21 +169,12 @@ class column extends wg
             {
                 $actionsMap->$actionType = new stdclass();
                 $actionsMap->$actionType = $config->actionsMap->$actionType;
-
                 $actionsMap->$actionType->hint = $lang->more;
-
-                if($actionType == 'more')
+                foreach($actions as $action)
                 {
-                    $items = array();
-                    foreach($actions as $action)
-                    {
-                        $item = new stdclass();
-                        $item->name = $action;
-                        $item->icon = $config->actionsMap->icon->$action;
-                        if(isset($actionsList['text'][$action])) $item->text = $actionsList['text'][$action];
-                        $items[] = $item;
-                    }
-                    $actionsMap->$actionType->dropdown->items = $items;
+                    if(isset($actionsMap->$action)) continue;
+                    $actionsMap->$action = new stdclass();
+                    $actionsMap->$action->icon = $config->actionsMap->icon->$action;
                 }
             }
         }
