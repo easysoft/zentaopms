@@ -17,12 +17,18 @@ $(function()
     $(document).on("change", '#imageID', function()
     {
         var imageID = $('#imageID').val();
-        var link       = createLink('executionnode', 'ajaxGetImage', 'imageID=' + imageID);
+        var link    = createLink('executionnode', 'ajaxGetImage', 'imageID=' + imageID);
         $.get(link, function(data)
         {
             data = JSON.parse(data);
             console.log(data);
             $('#os').val(data.os);
+            if(data.memory != 0){
+                $('#memory').val(data.memory);
+            }
+            if(data.memory != 0){
+                $('#disk').val(data.disk);
+            }
         });
     });
 

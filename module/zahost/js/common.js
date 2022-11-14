@@ -8,7 +8,7 @@ $(function()
         {
             var resultData = JSON.parse(response);
             var options    = '';
-            if(resultData.result == 'success')
+            if(resultData.result == 'success' && typeof resultData.data == 'object')
             {
                 resultData.data.forEach(function(item)
                 {

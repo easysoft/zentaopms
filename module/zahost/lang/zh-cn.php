@@ -48,7 +48,8 @@ $lang->zahost->initHost->ready = "已就绪";
 $lang->zahost->initHost->next = "下一步";
 
 $lang->zahost->initHost->initSuccessNotice = "初始化成功，请点击下一步完成后续操作。";
-$lang->zahost->initHost->initFailNotice = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：<br/>1. 重新执行脚本 <br/>2. 查看初始化常见问题";
+$lang->zahost->initHost->initFailNoticeTitle = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
+$lang->zahost->initHost->initFailNoticeDesc = "1. 重新执行脚本 <br/>2. 查看初始化常见问题";
 $lang->zahost->initHost->serviceStatus = [
     "kvm" => 'not_install',
     "novnc" => 'not_install',

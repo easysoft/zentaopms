@@ -32,8 +32,7 @@
 
         <div class="text-center host-action">
           <button type='button' id='checkServiceStatus' class='btn btn-info margin-top-18'><?php echo $lang->zahost->initHost->checkStatus; ?></button>
-          <!-- <a href="" class='btn btn-primary margin-top-18'><?php echo $lang->zahost->initHost->next; ?></a> -->
-          <?php echo html::a($this->createLink('zahost', 'browseImage', "hostID={$hostID}"), $lang->zahost->initHost->next, '', "title='{$lang->zahost->initHost->next}' class='btn btn-primary margin-top-18'");?>
+          <?php echo html::a($this->createLink('zahost', 'browseImage', "hostID={$hostID}"), $lang->zahost->initHost->next, '', "title='{$lang->zahost->initHost->next}' class='btn btn-primary margin-top-18' disabled='disabled' id='jumpToImageList'");?>
         </div>
   </div>
 </div>
