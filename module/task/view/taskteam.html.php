@@ -11,6 +11,11 @@
 #taskTeamEditor .hourBox {padding-bottom: 1px;}
 </style>
 <?php endif;?>
+<?php if($app->rawMethod == 'create' and !empty($task->mode)):?>
+<style>
+#modalTeam .modal-dialog {width: 570px;}
+</style>
+<?php endif;?>
 <?php if($app->rawMethod == 'assignto'):?>
 <style>
 #taskTeamEditor td.sort-handler {width: 70px !important;}
