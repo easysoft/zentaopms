@@ -311,10 +311,15 @@ class buildModel extends model
         $build->stories = '';
         $build->bugs    = '';
 
-        if($projectID)
+        if($projectID && !$executionID)
         {
             $project = $this->loadModel('project')->getByID($projectID);
             if(!$project->multiple) $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetch('id');
+        }
+        else if($executionID && !$projectID)
+        {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            $projectID = $execution->project;
         }
 
         $build = fixer::input('post')
