@@ -15,17 +15,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <?php echo html::a($this->createLink('zahost', 'browseimage', "hostID=$hostID"), "<span class='text'>{$lang->zahost->image->browseImage}</span>", '', "class='btn btn-link btn-active-text'");?>
-    <a href='#' class='hidden btn btn-link querybox-toggle' id='bysearchTab'><i class='icon-search icon'></i> <?php echo $lang->zahost->byQuery;?></a>
   </div>
-  <?php if(common::hasPriv('zahost', 'createImage')):?>
-  <div class="btn-toolbar pull-right" id='createActionMenu'>
-    <?php
-    $misc = "class='btn btn-primary'";
-    $link = $this->createLink('zahost', 'createImage', "hostID={$hostID}");
-    echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->zahost->image->createImage, '', $misc);
-    ?>
-  </div>
-  <?php endif;?>
 </div>
 <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>' data-module='vmTemplate'></div>
 <div id='mainContent' class='main-table'>
@@ -34,7 +24,6 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->zahost->image->imageEmpty;?></span>
-      <?php if(common::hasPriv('zahost', 'createImage')) common::printLink('zahost', 'createImage', "hostID={$hostID}", '<i class="icon icon-plus"></i> ' . $lang->zahost->image->createImage, '', 'class="btn btn-info"');?>
     </p>
   </div>
   <?php else:?>
