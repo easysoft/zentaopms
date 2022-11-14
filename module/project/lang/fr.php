@@ -365,6 +365,7 @@ $lang->project->begigLetterExecution = 'La date de début du projet "%s" doit ê
 $lang->project->endGreateExecution   = 'La date de fin du projet "%s" doit être ≥ à la date de fin maximale d\'exécution: %s.';
 $lang->project->childLongTime        = "If a child as long-term projects, the parent should be long-term too.";
 $lang->project->confirmUnlinkMember  = "Do you want to remove this user from project?";
+$lang->project->divisionTips         = "The current project is a single set stage, click [Enable] to change to multiple sets of stages, each set of stages is only associated with one product.";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";

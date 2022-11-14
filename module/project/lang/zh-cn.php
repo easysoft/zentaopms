@@ -365,6 +365,7 @@ $lang->project->begigLetterExecution = '项目的开始日期应小于等于执�
 $lang->project->endGreateExecution   = '项目的完成日期应大于等于执行的最大完成日期：%s';
 $lang->project->childLongTime        = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->project->confirmUnlinkMember  = "您确定从该项目中移除该用户吗？";
+$lang->project->divisionTips         = "当前项目为单套阶段，点击[开启]可以变为多套阶段，每套阶段只关联一个{$lang->productCommon}。";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
