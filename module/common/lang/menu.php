@@ -791,6 +791,7 @@ if(!helper::hasFeature('devops'))
     unset($lang->mainNav->devops,         $lang->mainNav->menuOrder[35]);
     unset($lang->scrum->menu->devops,     $lang->scrum->menuOrder[25]);
     unset($lang->waterfall->menu->devops, $lang->waterfall->menuOrder[35]);
+    unset($lang->execution->menu->devops, $lang->execution->menuOrder[45]);
 }
 
 if(!helper::hasFeature('kanban'))
