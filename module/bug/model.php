@@ -1979,7 +1979,7 @@ class bugModel extends model
         }
         if(empty($executionIdList)) return array();
 
-        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetch();
+        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll();
         $minBegin   = '';
         $maxEnd     = '';
         foreach($executions as $execution)
@@ -2077,8 +2077,11 @@ class bugModel extends model
      *
      * @param  int    $buildID
      * @param  int    $productID
+     * @param  string $branch
+     * @param  string $linkedBugs
+     * @param  object $pager
      * @access public
-     * @return object
+     * @return array
      */
     public function getReleaseBugs($buildID, $productID, $branch = 0, $linkedBugs = '', $pager = null)
     {
@@ -2101,7 +2104,7 @@ class bugModel extends model
             ->andWhere('product')->eq($productID)
             ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
-            ->andWhere("$condition)")
+            ->andWhere("($condition)")
             ->andWhere('deleted')->eq(0)
             ->orderBy('openedDate ASC')
             ->page($pager)
