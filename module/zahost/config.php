@@ -6,6 +6,8 @@ $config->zahost->create->ipFields       = 'publicIP';
 $config->zahost->edit = new stdclass();
 $config->zahost->edit->requiredFields = 'name,hostType,cpuCores,memory,diskSize,virtualSoftware,instanceNum';
 
+$config->zahost->imageListUrl = 'https://pkg.qucheng.com/zenagent/list.json';
+
 $config->zahost->createtemplate = new stdclass();
 $config->zahost->createtemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang,imageName';
 

@@ -12,7 +12,6 @@ $(function()
             {
                 $('.image-status-' + imageID).text(statusList[imageID].statusName);
             }
-
         });
     }, 5000);
 });

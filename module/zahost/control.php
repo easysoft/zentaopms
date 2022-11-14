@@ -200,13 +200,18 @@ class zahost extends control
     /**
      * Sent download image request to Host.
      *
-     * @param  int    $imageID
+     * @param  int    $hostID
+     * @param  string $imageName
      * @access public
      * @return object
      */
-    public function ajaxDownloadImage($imageID)
+    public function ajaxDownloadImage($hostID, $imageName)
     {
-        $image = $this->zahost->getImageByID($imageID);
+        $image = $this->zahost->getImageByName($imageName);
+        if(empty($image))
+        {
+            $image = $this->zahost->createImage($hostID, $imageName);
+        }
 
         $this->zahost->downloadImage($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));

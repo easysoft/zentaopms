@@ -184,6 +184,18 @@ class zahostModel extends model
     }
 
     /**
+     * Get image by name.
+     *
+     * @param  string $imageName
+     * @access public
+     * @return object
+     */
+    public function getImageByName($imageName)
+    {
+        return $this->dao->select('*')->from(TABLE_IMAGE)->where('deleted')->eq(0)->andWhere('name')->eq($imageName)->fetch();
+    }
+
+    /**
      * Get image files from ZAgent server.
      *
      * @param  object $hostID
@@ -192,11 +204,30 @@ class zahostModel extends model
      */
     public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
     {
-        $imageList = $this->dao->select('*')->from(TABLE_IMAGE)
+        $imageList = json_decode(file_get_contents($this->config->zahost->imageListUrl));
+
+        $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('hostID')->eq($hostID)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('name');
+
+        foreach($imageList as &$image)
+        {
+            $downloadedImage = zget($downloadedImageList, $image->name, '');
+            if(empty($downloadedImage))
+            {
+                $image->id     = 0;
+                $image->status = '';
+            }
+            else
+            {
+                $image->id     = $downloadedImage->id;
+                $image->status = $downloadedImage->status;
+            }
+
+            $image->hostID = $hostID;
+        }
 
         return $imageList;
     }
@@ -204,21 +235,28 @@ class zahostModel extends model
     /**
      * create image.
      *
+     * @param  int    $hostID
+     * @param  string $imageName
      * @access public
-     * @return void
+     * @return object
      */
-    public function createImage()
+    public function createImage($hostID, $imageName)
     {
-        $vmImage = fixer::input('post')
-            ->get();
+        $imageList = json_decode(file_get_contents($this->config->zahost->imageListUrl));
 
-        $this->dao->insert(TABLE_IMAGE)->data($vmImage)
-            ->batchCheck($this->config->zahost->createimage->requiredFields, 'notempty')
-            ->autoCheck()->exec();
+        $imageData = new stdclass;
+        foreach($imageList  as $item) if($item->name == $imageName) $imageData = $item;
+
+        $imageData->hostID = $hostID;
+        $imageData->status = 'created';
+
+        $this->dao->insert(TABLE_IMAGE)->data($imageData)->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $imageID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('image', $imageID, 'Created');
+
+        return $this->getImageByID($imageID);
     }
 
     /**
