@@ -693,7 +693,7 @@ class projectrelease extends control
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $searchModules = array();
-        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'story', 0, explode(',', $release->branch));
+        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'bug', 0, explode(',', $release->branch));
         foreach($moduleGroups as $modules) $searchModules += $modules;
         $this->config->bug->search['params']['module']['values'] = $searchModules;
 
