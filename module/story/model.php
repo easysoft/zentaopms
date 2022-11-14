@@ -4220,11 +4220,7 @@ class storyModel extends model
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         /* Adjust code, hide split entry, fix bug #29432. */
         if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
-        if($action == 'batchcreate')
-        {
-            a($story);
-            a($shadowProducts);exit;
-        }
+
         return true;
     }
 
