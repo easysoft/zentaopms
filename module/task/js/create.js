@@ -28,6 +28,32 @@ $(function()
 })
 
 /**
+ * Show team menu.
+ *
+ * @access public
+ * @return void
+ */
+function showTeamMenu()
+{
+    if($('[name^=multiple]').prop('checked'))
+    {
+        $('#assignedTo, #assignedTo_chosen').addClass('hidden');
+        $('#assignedTo').next('.picker').addClass('hidden');
+        $('.team-group').removeClass('hidden');
+        $('.modeBox').removeClass('hidden');
+        $('#estimate').attr('readonly', true);
+    }
+    else
+    {
+        $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
+        $('#assignedTo').next('.picker').removeClass('hidden');
+        $('.team-group').addClass('hidden');
+        $('.modeBox').addClass('hidden');
+        $('#estimate').attr('readonly', false);
+    }
+    $('#dataPlanGroup').fixInputGroup();
+}
+/**
  * Load module, stories and members.
  *
  * @param  int    $executionID
@@ -518,23 +544,7 @@ $(document).ready(function()
     /* Show team menu. */
     $('[name^=multiple]').change(function()
     {
-        if($(this).prop('checked'))
-        {
-            $('#assignedTo, #assignedTo_chosen').addClass('hidden');
-            $('#assignedTo').next('.picker').addClass('hidden');
-            $('.team-group').removeClass('hidden');
-            $('.modeBox').removeClass('hidden');
-            $('#estimate').attr('readonly', true);
-        }
-        else
-        {
-            $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
-            $('#assignedTo').next('.picker').removeClass('hidden');
-            $('.team-group').addClass('hidden');
-            $('.modeBox').addClass('hidden');
-            $('#estimate').attr('readonly', false);
-        }
-        $('#dataPlanGroup').fixInputGroup();
+        showTeamMenu();
     });
 
     $('#showAllModule').change(function()
