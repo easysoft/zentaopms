@@ -7636,6 +7636,17 @@ class upgradeModel extends model
             $this->dao->update(TABLE_REPORT)->set("`module` = REPLACE(`module`, '$code', $module)")->exec();
         }
 
+        /* Create default dimension. */
+        $this->app->loadLang('dimension');
+        $dimension              = new stdclass();
+        $dimension->name        = $this->lang->dimension->default;
+        $dimension->code        = 'default_dimension';
+        $dimension->desc        = 'default dimension';
+        $dimension->createdBy   = 'system';
+        $dimension->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
+
         return !dao::isError();
     }
 }
