@@ -31,6 +31,10 @@ class projectreleaseModel extends model
             ->fetch();
         if(!$release) return false;
 
+        $release->project = trim($release->project, ',');
+        $release->branch  = trim($release->branch, ',');
+        $release->build   = trim($release->build, ',');
+
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
         $release->files      = $this->file->getByObject('release', $releaseID);
