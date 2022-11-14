@@ -1,5 +1,13 @@
 $(function()
 {
+    var orderList  = orderBy.split('_');
+    var orderField = orderList[0];
+    var orderType  = orderList[1];
+    setTimeout(function()
+    {
+        $(document).find('.dtable-header div[data-col="' + orderField + '"] > a').addClass(orderType == 'asc' ? 'sort-up' : 'sort-down');
+    }, 100);
+
     $('input#editProject1').click(function()
     {
         var editProject = $(this).is(':checked') ? 1 : 0;
