@@ -120,6 +120,13 @@ $lang->program->beyondParentBudget = 'The remaining budget of the owned program 
 $lang->program->checkedProjects    = "Pour s électionner l'élément% s";
 $lang->program->budgetOverrun      = "Le budget du programme a dépassé le budget restant du programme parent:";
 
+$lang->program->tip = new stdclass();
+$lang->program->tip->closed     = 'The program has been closed. Re-close is not available.';
+$lang->program->tip->notSuspend = 'The program has been closed. Suspend is not available.';
+$lang->program->tip->suspended  = 'The program has been suspended. Re-suspended is not available.';
+$lang->program->tip->actived    = 'The program has been activated. Re-activated is not available.';
+$lang->program->tip->notCreate  = 'The program has been closed. Adding sub-programs is not available.';
+
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';
 $lang->program->endList[186] = 'Half year';

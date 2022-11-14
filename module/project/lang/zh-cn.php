@@ -224,6 +224,14 @@ $lang->project->allSummary             = '本页共 <strong>%s</strong> 个项�
 $lang->project->checkedSummary         = '选中 <strong>%total%</strong> 个项目。';
 $lang->project->checkedAllSummary      = '选中 <strong>%total%</strong> 个项目，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，已挂起 <strong>%suspended%</strong>，已关闭 <strong>%closed%</strong> 。';
 
+$lang->project->tip = new stdclass();
+$lang->project->tip->closed     = '该项目已是关闭状态，无须关闭。';
+$lang->project->tip->notSuspend = '该项目已关闭，不可进行挂起操作。';
+$lang->project->tip->suspended  = '该项目已是挂起状态，无须挂起。';
+$lang->project->tip->actived    = '该项目已是激活状态，无须激活。';
+$lang->project->tip->group      = '该项目是看板项目，无法进行项目权限分组。';
+$lang->project->tip->whitelist  = '该项目是公开项目，无须维护白名单。';
+
 $lang->project->tenThousand    = '万';
 $lang->project->hundredMillion = '亿';
 

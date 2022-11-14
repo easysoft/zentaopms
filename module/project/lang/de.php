@@ -224,6 +224,14 @@ $lang->project->allSummary             = 'Total projects: <strong>%s</strong>, W
 $lang->project->checkedSummary         = 'Seleted: <strong>%total%</strong>.';
 $lang->project->checkedAllSummary      = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>, Suspended: <strong>%suspended%</strong>, Closed: <strong>%closed%</strong>.';
 
+$lang->project->tip = new stdclass();
+$lang->project->tip->closed     = 'The project has been closed. Re-close is not available.';
+$lang->project->tip->notSuspend = 'The project has been closed. Suspend is not available.';
+$lang->project->tip->suspended  = 'The project has been suspended. Re-suspend is not available.';
+$lang->project->tip->actived    = 'The project has been activated. Re-activated is not available.';
+$lang->project->tip->group      = "It's a Kanban project. Editing privilege group is not available.";
+$lang->project->tip->whitelist  = "It's a public project with open permissions. No need to edit whitelists.";
+
 $lang->project->tenThousand    = '';
 $lang->project->hundredMillion = 'Hundred Million';
 
@@ -296,6 +304,13 @@ $lang->project->kanbanAclList['open']    = "Open (accessible with project view p
 $lang->project->kanbanSubAclList['private'] = "Private (Only the project leader, team members can access)";
 $lang->project->kanbanSubAclList['open']    = "Open (accessible with project view permissions)";
 $lang->project->kanbanSubAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members can access)';
+
+global $config;
+if($config->systemMode == 'light')
+{
+    unset($lang->project->subAclList['program']);
+    unset($lang->project->kanbanSubAclList['program']);
+}
 
 $lang->project->authList['extend'] = 'Inherit (system privilege and project privilege)';
 $lang->project->authList['reset']  = 'Reset (project privilege only)';

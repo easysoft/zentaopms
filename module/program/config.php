@@ -43,14 +43,14 @@ $config->program->search['params']['name']           = array('operator' => 'incl
 $config->program->search['params']['status']         = array('operator' => '=',       'control' => 'select', 'values' => array('' => '') + $lang->program->statusList);
 $config->program->search['params']['desc']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->program->search['params']['PM']             = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->program->search['params']['openedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->program->search['params']['begin']          = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->program->search['params']['end']            = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->program->search['params']['openedDate']     = array('operator' => '=',       'control' => 'date',   'values' => '');
+$config->program->search['params']['begin']          = array('operator' => '=',       'control' => 'date',   'values' => '');
+$config->program->search['params']['end']            = array('operator' => '=',       'control' => 'date',   'values' => '');
 $config->program->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->program->search['params']['lastEditedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->program->search['params']['realBegan']      = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->program->search['params']['realEnd']        = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->program->search['params']['closedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->program->search['params']['lastEditedDate'] = array('operator' => '=',       'control' => 'date',   'values' => '');
+$config->program->search['params']['realBegan']      = array('operator' => '=',       'control' => 'date',   'values' => '');
+$config->program->search['params']['realEnd']        = array('operator' => '=',       'control' => 'date',   'values' => '');
+$config->program->search['params']['closedDate']     = array('operator' => '=',       'control' => 'date',   'values' => '');
 
 /* Data table field config. */
 global $lang;

@@ -120,6 +120,13 @@ $lang->program->beyondParentBudget = '已超出所属项目集的剩余预算';
 $lang->program->checkedProjects    = '已选择%s项';
 $lang->program->budgetOverrun      = '项目集的预算超出了父项目集的剩余预算：';
 
+$lang->program->tip = new stdclass();
+$lang->program->tip->closed     = '该项目集已是关闭状态，无须关闭。';
+$lang->program->tip->notSuspend = '该项目集已关闭，不可进行挂起操作。';
+$lang->program->tip->suspended  = '该项目集已是挂起状态，无须挂起。';
+$lang->program->tip->actived    = '该项目集已是激活状态，无须激活。';
+$lang->program->tip->notCreate  = '该项目集已关闭，不可进行添加子项目集的操作。';
+
 $lang->program->endList[31]  = '一个月';
 $lang->program->endList[93]  = '三个月';
 $lang->program->endList[186] = '半年';

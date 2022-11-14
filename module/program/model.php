@@ -1794,6 +1794,10 @@ class programModel extends model
                     $item->name = $action;
                     $item->text = $this->lang->program->$action;
                     if(!$this->isClickable($program, $action)) $item->disabled = true;
+                    if($action == 'close' and $program->status == 'closed')      $item->hint = $this->lang->program->tip->closed;
+                    if($action == 'suspend' and $program->status == 'closed')    $item->hint = $this->lang->program->tip->notSuspend;
+                    if($action == 'suspend' and $program->status == 'suspended') $item->hint = $this->lang->program->tip->suspended;
+                    if($action == 'activate' and $program->status == 'doing')    $item->hint = $this->lang->program->tip->actived;
 
                     $other->items[] = $item;
                 }
@@ -1808,7 +1812,11 @@ class programModel extends model
                 $item = new stdclass();
                 $item->name = $action;
                 $item->hint = $this->lang->program->$action;
-                if($action == 'create' and $program->status == 'closed') $item->disabled = true;
+                if($action == 'create' and $program->status == 'closed')
+                {
+                    $item->disabled = true;
+                    $item->hint     = $this->lang->program->tip->notCreate;
+                }
 
                 $actionsMap[] = $item;
             }
@@ -1843,6 +1851,10 @@ class programModel extends model
                     $item->name = $action;
                     $item->text = $this->lang->project->$action;
                     if(!$this->project->isClickable($program, $action)) $item->disabled = true;
+                    if($action == 'close' and $program->status == 'closed')      $item->hint = $this->lang->project->tip->closed;
+                    if($action == 'suspend' and $program->status == 'closed')    $item->hint = $this->lang->project->tip->notSuspend;
+                    if($action == 'suspend' and $program->status == 'suspended') $item->hint = $this->lang->project->tip->suspended;
+                    if($action == 'activate' and $program->status == 'doing')    $item->hint = $this->lang->project->tip->actived;
 
                     $other->items[] = $item;
                 }
@@ -1855,28 +1867,34 @@ class programModel extends model
             {
                 $item = new stdclass();
                 $item->name = 'group';
-                if($program->type == 'kanban') $item->disabled = true;
+                if($program->model == 'kanban')
+                {
+                    $item->disabled = true;
+                    $item->hint     = $this->lang->project->tip->group;
+                }
                 $actionsMap[] = $item;
             }
 
             if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
             {
                 $more = new stdclass();
-                $more->name            = 'more';
-                $more->dropdown        = new stdclass();
-                $more->dropdown->items = array();
-
+                $more->name  = 'more';
+                $more->items = array();
                 $moreActions = array('manageProducts', 'whitelist', 'delete');
                 foreach($moreActions as $action)
                 {
                     if(!common::hasPriv('project', $action)) continue;
 
                     $item = new stdclass();
-                    $item->name = $action;
+                    $item->name = $action == 'manageProducts' ? 'link' : $action;
                     $item->text = $this->lang->project->$action;
-                    if($action == 'whitelist' and $program->acl == 'open') $item->disabled = true;
+                    if($action == 'whitelist' and $program->acl == 'open')
+                    {
+                        $item->disabled = true;
+                        $item->hint     = $this->lang->project->tip->whitelist;
+                    }
 
-                    $more->dropdown->items[] = $item;
+                    $more->items[] = $item;
                 }
 
                 $actionsMap[] = $more;
