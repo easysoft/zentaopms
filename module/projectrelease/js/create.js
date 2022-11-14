@@ -45,9 +45,10 @@ function loadBranches(productID)
         if(data)
         {
             $inputGroup.append(data);
+            $inputGroup.find('#branch').attr('onchange', 'loadBuilds()');
             $('#branch').css('width', '120px').chosen();
-            loadBuilds();
         }
+        loadBuilds();
         $inputGroup.fixInputGroup();
     })
 }
