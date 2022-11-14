@@ -1420,7 +1420,7 @@ class testtask extends control
         $this->view->case    = $case;
         $this->view->runID   = $runID;
         $this->view->results = $results;
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $branch = 0, $params = '');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $case->branch, $params = '');
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         $this->display();

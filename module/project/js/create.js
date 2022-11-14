@@ -221,6 +221,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
         $('#plansBox').closest('tr').addClass('hidden');
         $('#plansBox .col-sm-4').find('select').attr('disabled', true).trigger("chosen:updated");
+        $('.division').addClass('hide');
 
         /* Displays the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', true);
@@ -235,6 +236,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
         $('#plansBox').closest('tr').removeClass('hidden');
         $('#plansBox .col-sm-4').find('select').removeAttr('disabled', true).trigger("chosen:updated");
+        if($('#plansBox .col-sm-4').find('select').length > 1) $('.division').removeClass('hide');
 
         /* Hide the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', false);
@@ -277,9 +279,11 @@ function loadBranches(product)
     /* When selecting a product, delete a plan that is empty by default. */
     $("#planDefault").remove();
 
+    var chosenProducts = 0;
     $("#productsBox select[name^='products']").each(function()
     {
         var $product = $(product);
+        if($(this).val() > 0) chosenProducts ++;
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
             bootbox.alert(errorSameProducts);
@@ -288,6 +292,8 @@ function loadBranches(product)
             return false;
         }
     });
+
+    (chosenProducts > 1 && model == 'waterfall') ? $('.division').removeClass('hide') : $('.division').addClass('hide');
 
     if($('#productsBox .row .input-group:last select:first').val() != 0)
     {

@@ -1,6 +1,6 @@
 <script>
 $('#showData > tbody').addClass('load-indicator loading');
-$.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pagerID=<?php echo $pagerID;?>'), function(data)
+$.get(createLink('transfer', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pagerID=<?php echo $pagerID;?>'), function(data)
 {
     $('#showData > tbody').append(data);
     if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
@@ -8,6 +8,8 @@ $.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pag
     $('.form-date').datetimepicker({minView: 2, format: "yyyy-mm-dd"});
     $('.form-datetime').datetimepicker('update');
     $('#showData > tbody').removeClass('load-indicator loading');
+
+    if(typeof(getTbodyLoaded) == 'function') getTbodyLoaded();
 })
 
 window.addEventListener('scroll', this.handleScroll);
@@ -31,7 +33,7 @@ function loadData($showmore)
 {
     $showmore.removeClass('showmore');
     var lastID = $showmore.attr('data-id');
-    var url    = createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=' + lastID + '&pagerID=<?php echo $pagerID;?>');
+    var url    = createLink('transfer', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=' + lastID + '&pagerID=<?php echo $pagerID;?>');
     $.get(url, function(data)
     {
         $showmore.after(data);
@@ -93,7 +95,7 @@ $('#showData').on('mouseenter', '.picker', function(e){
     if($('#' + id).attr('isInit')) return;
 
     $.ajaxSettings.async = false;
-    $.get(createLink('port', 'ajaxGetOptions', 'model=<?php echo $model;?>&field=' + field + '&value=' + value + '&index=' + index), function(data)
+    $.get(createLink('transfer', 'ajaxGetOptions', 'model=<?php echo $model;?>&field=' + field + '&value=' + value + '&index=' + index), function(data)
     {
         $('#' + id).parent().html(data);
         $('#' + id).picker({chosenMode: true});

@@ -23,6 +23,8 @@ class product extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(!isset($this->app->user)) return;
+
         /* Load need modules. */
         $this->loadModel('story');
         $this->loadModel('release');
@@ -338,7 +340,7 @@ class product extends control
         $this->view->productName     = $productName;
         $this->view->moduleID        = $moduleID;
         $this->view->stories         = $stories;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, $branch === 'all' ? '' : $branch, '', true);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, '', true);
         $this->view->productPlans    = isset($productPlans) ? array(0 => '') + $productPlans : array();
         $this->view->summary         = $this->product->summary($stories, $storyType);
         $this->view->moduleTree      = $moduleTree;
@@ -878,27 +880,6 @@ class product extends control
         $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
 
         $this->display();
-    }
-
-    /**
-     * Ajax get products.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetProducts($executionID)
-    {
-        $this->loadModel('build');
-        $products = $this->product->getProductPairsByProject($executionID);
-        if(empty($products))
-        {
-            return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
-        }
-        else
-        {
-            return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
-        }
     }
 
     /**

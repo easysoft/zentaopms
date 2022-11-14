@@ -739,6 +739,7 @@ class execution extends control
         /* Load these models. */
         $this->loadModel('story');
         $this->loadModel('user');
+        $this->loadModel('product');
         $this->loadModel('datatable');
         $this->app->loadLang('datatable');
         $this->app->loadLang('testcase');
@@ -1240,7 +1241,6 @@ class execution extends control
      */
     public function testreport($executionID = 0, $objectType = 'execution', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
         echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
@@ -1272,15 +1272,16 @@ class execution extends control
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('execution', 'build', "executionID=$executionID&type=bysearch&queryID=myQueryID");
 
+        $this->loadModel('build');
         $product = $param ? $this->loadModel('product')->getById($param) : '';
         if($product and $product->type != 'normal')
         {
-            $this->loadModel('build');
             $this->loadModel('branch');
             $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $executionID);
             $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
             $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
         }
+        if(!$execution->hasProduct) unset($this->config->build->search['fields']['product']);
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'execution');
 
         /* Get builds. */
@@ -1359,7 +1360,7 @@ class execution extends control
 
         $productTasks = array();
 
-        $tasks = $this->testtask->getExecutionTasks($executionID, $orderBy, $pager);
+        $tasks = $this->testtask->getExecutionTasks($executionID, 'execution', $orderBy, $pager);
         foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
 
         $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->testtask->common;
@@ -1712,8 +1713,30 @@ class execution extends control
             $this->view->linkedBranches = $linkedBranches;
         }
 
+        if(!empty($project) and !$project->division)
+        {
+            $products = $this->loadModel('product')->getProducts($projectID);
+            $branches = $this->project->getBranchesByProject($projectID);
+            $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
+
+            $linkedBranches = array();
+            foreach($products as $productID => $product)
+            {
+                foreach($branches[$productID] as $branchID => $branch)
+                {
+                    $linkedBranches[$productID][$branchID] = $branchID;
+                    $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                }
+            }
+
+            $this->view->branches       = $branches;
+            $this->view->linkedBranches = $linkedBranches;
+        }
+
         if(!empty($_POST))
         {
+            if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
+
             $executionID = $this->execution->create($copyExecutionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1803,7 +1826,7 @@ class execution extends control
         $this->view->code                = $code;
         $this->view->team                = $team;
         $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
-        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed|nomultiple');
+        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed');
         $this->view->copyProjects        = $copyProjects;
         $this->view->copyExecutions      = array('' => '') + $this->execution->getList($copyProjectID);
         $this->view->executionID         = $executionID;
@@ -1825,6 +1848,7 @@ class execution extends control
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->view->project             = $project;
+        $this->view->division            = !empty($project) ? $project->division : 1;
         $this->display();
     }
 

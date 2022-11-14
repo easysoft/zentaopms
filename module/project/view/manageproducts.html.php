@@ -100,4 +100,36 @@
     </form>
   </div>
 </div>
+
+<?php if(!$project->division and count($linkedProducts) == 1):?>
+<?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
+<?php js::set('divisionList', $lang->project->divisionList);?>
+<script>
+$('#submit').click(function()
+{
+    bootbox.confirm(
+      {
+          'message' : noticeDivsion,
+          'buttons':{
+              confirm:{
+                  label: divisionList['1'],
+                  className: 'btn'
+              },
+              cancel:{
+                  label: divisionList['0'],
+                  className: 'btn-primary'
+              },
+          },
+          callback: function(result)
+          {
+              if(result) $('div.form-actions').append("<input type='hidden' value='1' name='division'>");
+              $('form').submit();
+          }
+      }
+    );
+
+    return false;
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

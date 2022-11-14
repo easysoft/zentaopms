@@ -2332,8 +2332,8 @@ class bug extends control
     {
         if($_POST)
         {
-            $this->loadModel('port');
-            $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
+            $this->loadModel('transfer');
+            $this->session->set('bugTransferParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
             if(!$productID)
             {
                 $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
@@ -2343,7 +2343,7 @@ class bug extends control
                 $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
             }
 
-            $this->port->export('bug');
+            $this->transfer->export('bug');
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
         $product = $this->loadModel('product')->getByID($productID);

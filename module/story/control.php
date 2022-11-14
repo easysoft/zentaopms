@@ -1218,8 +1218,26 @@ class story extends control
             }
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
-            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
+
+            if($this->app->tab == 'project')
+            {
+                $module = 'projectstory';
+                $method = 'view';
+                $params = "storyID=$storyID";
+            }
+            elseif($this->app->tab == 'execution')
+            {
+                $module = 'execution';
+                $method = 'storyView';
+                $params = "storyID=$storyID";
+            }
+            else
+            {
+                $module = 'story';
+                $method = 'view';
+                $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+            }
+            return print(js::locate($this->createLink($module, $method, $params), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1541,10 +1559,27 @@ class story extends control
                 }
             }
 
-            $module = $from == 'project' ? 'projectstory' : 'story';
             if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
-            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
+
+            if($from == 'project')
+            {
+                $module = 'projectstory';
+                $method = 'view';
+                $params = "storyID=$storyID";
+            }
+            elseif($from == 'execution')
+            {
+                $module = 'execution';
+                $method = 'storyView';
+                $params = "storyID=$storyID";
+            }
+            else
+            {
+                $module = 'story';
+                $method = 'view';
+                $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+            }
+            return print(js::locate($this->createLink($module, $method, $params), 'parent'));
         }
 
         /* Get story and product. */
@@ -1647,7 +1682,28 @@ class story extends control
             $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
             $this->loadModel('action')->create('story', $storyID, $action);
 
-            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+            if($from == 'view')
+            {
+                if($this->app->tab == 'project')
+                {
+                    $module = 'projectstory';
+                    $method = 'view';
+                    $params = "storyID=$storyID";
+                }
+                elseif($this->app->tab == 'execution')
+                {
+                    $module = 'execution';
+                    $method = 'storyView';
+                    $params = "storyID=$storyID";
+                }
+                else
+                {
+                    $module = 'story';
+                    $method = 'view';
+                    $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+                }
+                return print(js::locate($this->createLink($module, $method, $params), 'parent'));
+            }
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             return print(js::locate($locateLink, 'parent'));
@@ -2706,7 +2762,7 @@ class story extends control
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
-            $this->session->set('storyPortParams', array('productID' => $productID, 'executionID' => $executionID));
+            $this->session->set('storyTransferParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
             if(!$productID)
             {
@@ -2723,7 +2779,7 @@ class story extends control
             }
 
             $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
-            $this->fetch('port', 'export', 'model=story');
+            $this->fetch('transfer', 'export', 'model=story');
         }
 
         $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;

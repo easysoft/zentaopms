@@ -766,6 +766,7 @@ class project extends control
         $this->view->linkedProducts           = $linkedProducts;
         $this->view->linkedBranches           = $linkedBranches;
         $this->view->branches                 = $branches;
+        $this->view->executions               = $this->execution->getPairs($projectID);
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
@@ -1080,15 +1081,25 @@ class project extends control
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
-        $showToggleIcon = false;
+        $executionStats  = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
+        $showToggleIcon  = false;
+        $productNameList = $this->dao->select('t1.id,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+            ->leftjoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.type')->in('kanban,sprint,stage')
+            ->groupBy('t1.id')
+            ->fetchPairs();
+
         foreach($executionStats as $execution)
         {
-            if(!empty($execution->tasks) or !empty($execution->children))
+            $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
+
+            if(!empty($execution->children))
             {
-                $showToggleIcon = true;
-                break;
+                foreach($execution->children as $childrenID => $children) $children->productName = isset($productNameList[$childrenID]) ? $productNameList[$childrenID] : '';
             }
+            if(!empty($execution->tasks) or !empty($execution->children)) $showToggleIcon = true;
         }
 
         $this->view->executionStats = $executionStats;
@@ -2156,15 +2167,15 @@ class project extends control
                 if($executionID) $this->execution->updateProducts($executionID);
             }
 
-            $newProducts    = $this->product->getProducts($projectID);
-            $oldProductIDs  = array_keys($oldProducts);
-            $newProductIDs  = array_keys($newProducts);
-            $diffProductIDs = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
-            if($diffProductIDs) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
+            $oldProducts  = array_keys($oldProducts);
+            $newProducts  = $this->product->getProducts($projectID);
+            $newProducts  = array_keys($newProducts);
+            $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
+            if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
             if($project->multiple)
             {
-                $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
+                $unlinkedProducts = array_diff($oldProducts, $newProducts);
                 if(!empty($unlinkedProducts))
                 {
                     $unlinkedProductPairs = array();
@@ -2257,6 +2268,7 @@ class project extends control
         $this->view->linkedProducts           = $linkedProducts;
         $this->view->linkedBranches           = $linkedBranches;
         $this->view->branches                 = $branches;
+        $this->view->project                  = $project;
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;

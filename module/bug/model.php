@@ -1969,25 +1969,40 @@ class bugModel extends model
      */
     public function getProductLeftBugs($build, $productID, $branch = '', $linkedBugs = '', $pager = null)
     {
-        $build = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($build)->fetch();
-        if(empty($build->execution)) return array();
+        $builds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($build)->fetchAll('id');
 
-        $execution    = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($build->execution)->fetch();
+        $executionIdList = array();
+        foreach($builds as $build)
+        {
+            if(empty($build->execution)) continue;
+            $executionIdList[$build->execution] = $build->execution;
+        }
+        if(empty($executionIdList)) return array();
+
+        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetch();
+        $minBegin   = '';
+        $maxEnd     = '';
+        foreach($executions as $execution)
+        {
+            if(empty($minBegin) or $minBegin > $execution->begin) $minBegin = $execution->begin;
+            if(empty($maxEnd)   or $maxEnd   < $execution->end)   $maxEnd   = $execution->end;
+        }
+
         $beforeBuilds = $this->dao->select('t1.id')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.status')->ne('done')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.date')->lt($execution->begin)
+            ->andWhere('t1.date')->lt($minBegin)
             ->fetchPairs('id', 'id');
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
             ->andWhere('toStory')->eq(0)
-            ->andWhere('openedDate')->ge($execution->begin)
-            ->andWhere('openedDate')->le($execution->end)
-            ->andWhere("(status = 'active' OR resolvedDate > '{$execution->end}')")
+            ->andWhere('openedDate')->ge($minBegin)
+            ->andWhere('openedDate')->le($maxEnd)
+            ->andWhere("(status = 'active' OR resolvedDate > '{$maxEnd}')")
             ->andWhere('openedBuild')->notin($beforeBuilds)
             ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in("0,$branch")->fi()
@@ -2067,17 +2082,26 @@ class bugModel extends model
      */
     public function getReleaseBugs($buildID, $productID, $branch = 0, $linkedBugs = '', $pager = null)
     {
-        $execution = $this->dao->select('t1.id,t1.begin')->from(TABLE_EXECUTION)->alias('t1')
+        $executions = $this->dao->select('t1.id,t1.begin')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.id = t2.execution')
-            ->where('t2.id')->eq($buildID)
-            ->fetch();
+            ->where('t2.id')->in($buildID)
+            ->fetchAll('id');
+
+        $condition = 'execution NOT ' . helper::dbIN(array_keys($executions));
+        $minBegin  = '';
+        foreach($executions as $execution)
+        {
+            if(empty($minBegin) or $minBegin > $execution->begin) $minBegin = $execution->begin;
+            $condition .= " OR (execution = '{$execution->id}' AND openedDate < '{$execution->begin}')";
+        }
+
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('resolvedDate')->ge($execution->begin)
+            ->where('resolvedDate')->ge($minBegin)
             ->andWhere('resolution')->ne('postponed')
             ->andWhere('product')->eq($productID)
             ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
-            ->andWhere("(execution != '$execution->id' OR (execution = '$execution->id' and openedDate < '$execution->begin'))")
+            ->andWhere("$condition)")
             ->andWhere('deleted')->eq(0)
             ->orderBy('openedDate ASC')
             ->page($pager)
@@ -3648,7 +3672,7 @@ class bugModel extends model
     public function getRelatedObjects($object, $pairs = '')
     {
         /* Get bugs. */
-        $bugs = $this->loadModel('port')->getQueryDatas('bug');
+        $bugs = $this->loadModel('transfer')->getQueryDatas('bug');
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();

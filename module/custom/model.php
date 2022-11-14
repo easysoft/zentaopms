@@ -897,7 +897,7 @@ class customModel extends model
         $disabledFeatures = '';
         if($mode == 'light')
         {
-            foreach($this->config->custom->features as $feature)
+            foreach($this->config->custom->dataFeatures as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
                 if(!$this->$function()) $disabledFeatures .= "$feature,";

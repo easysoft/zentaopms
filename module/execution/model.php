@@ -64,6 +64,9 @@ class executionModel extends model
     public function setMenu($executionID, $buildID = 0, $extra = '')
     {
         $execution = $this->getByID($executionID);
+
+        if($execution->type == 'stage') unset($this->lang->execution->menu->settings['subMenu']->products);
+
         if($execution and $execution->type == 'kanban')
         {
             global $lang;
@@ -329,6 +332,12 @@ class executionModel extends model
         $project = $this->loadModel('project')->getByID($_POST['project']);
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
+
+        if($project->model == 'waterfall')
+        {
+            $this->checkWorkload('create', $_POST['percent'], $project);
+            if(dao::isError()) return false;
+        }
 
         $this->config->execution->create->requiredFields .= ',project';
 
@@ -1179,15 +1188,16 @@ class executionModel extends model
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.grade')->eq(1)
                 ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t2.parent')->eq($oldExecution)
+                ->andWhere('t2.parent')->eq($oldExecution->id)
                 ->fetch('total');
 
+            if(!$oldPercentTotal) $oldPercentTotal = 0;
             if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
             if(!empty($oldExecution) and $oldExecution->grade == 1) $percentTotal = $oldPercentTotal - $oldExecution->percent + $this->post->percent;
 
             if($percentTotal > 100)
             {
-                dao::$errors['percent'] = sprintf($this->lang->execution->workloadTotal, $oldPercentTotal . '%');
+                dao::$errors['percent'] = sprintf($this->lang->execution->workloadTotal, '%', $oldPercentTotal . '%');
                 return false;
             }
         }
@@ -1200,7 +1210,7 @@ class executionModel extends model
 
             if($childrenTotalPercent > 100)
             {
-                dao::$errors['parent'] = sprintf($this->lang->execution->workloadTotal, $childrenTotalPercent . '%');
+                dao::$errors['parent'] = sprintf($this->lang->execution->workloadTotal, '%', $childrenTotalPercent . '%');
                 return false;
             }
         }
@@ -1656,7 +1666,7 @@ class executionModel extends model
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
-        if(isset($project->model) and $project->model == 'waterfall' and $project->hasProduct)
+        if(isset($project->model) and $project->model == 'waterfall' and $project->hasProduct and $project->division)
         {
             $executionList = array();
             $executionProducts = $this->dao->select('t1.project,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -4717,6 +4727,7 @@ class executionModel extends model
                 }
             }
         }
+        if(!empty($execution->division)) echo "<td class='text-left' title='{$execution->productName}'>{$execution->productName}</td>";
         echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
@@ -4733,21 +4744,10 @@ class executionModel extends model
 
         if($execution->type == 'stage')
         {
-            if($execution->grade == 1 && $this->loadModel('programplan')->isCreateTask($execution->id))
-            {
-                common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
-            }
-            else
-            {
-                if($execution->grade == 2)
-                {
-                    echo "<button class='btn' disabled='disabled' style='margin-right: 4px;'><i class='icon-split disabled icon-search'></i></button>";
-                }
-                else
-                {
-                    echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn"') : '';
-                }
-            }
+            $isCreateTask = $this->loadModel('programplan')->isCreateTask($execution->id);
+            $disabled     = ($execution->grade == 1 && $isCreateTask) ? '' : ' disabled';
+            $title        = !$isCreateTask ? $this->lang->programplan->error->createdTask : $this->lang->programplan->createSubPlan;
+            common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', $disabled, '', '', $title);
         }
 
         if($execution->type == 'stage')
@@ -4778,7 +4778,11 @@ class executionModel extends model
 
         if(!empty($execution->children))
         {
-            foreach($execution->children as $child) $this->printNestedList($child, true, $users, $productID);
+            foreach($execution->children as $child)
+            {
+                $child->division = $execution->division;
+                $this->printNestedList($child, true, $users, $productID);
+            }
         }
 
         if(!empty($execution->tasks))
