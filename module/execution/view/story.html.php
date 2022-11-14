@@ -221,7 +221,7 @@
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars = "executionID={$execution->id}&storyType=$storyType&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
       if(!$execution->hasProduct and !$execution->multiple)
