@@ -4218,7 +4218,7 @@ class storyModel extends model
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
-        /* Adjust code, hide split entry, fix bug #29432. */
+        /* Adjust code, hide split entry. */
         if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
 
         return true;
@@ -4489,7 +4489,7 @@ class storyModel extends model
 
                 $executionID = empty($execution) ? 0 : $execution->id;
 
-                /* Adjust code, hide split entry, fix bug #29432. */
+                /* Adjust code, hide split entry. */
                 if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct and false)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
