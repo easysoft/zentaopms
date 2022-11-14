@@ -2473,7 +2473,7 @@ class executionModel extends model
         /* Link stories. */
         $executionStories = $this->loadModel('story')->getExecutionStoryPairs($executionID);
         $lastOrder        = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
-        $stories          = $this->dao->findById($storyID)->fields("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($executionStories))->fetchAll('story');
+        $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($executionStories))->fetchAll('story');
         foreach($stories as $storyID)
         {
             if(!isset($executionStories[$storyID]))
@@ -4727,7 +4727,7 @@ class executionModel extends model
                 }
             }
         }
-        if(!empty($execution->division)) echo "<td class='text-left' title='{$execution->productName}'>{$execution->productName}</td>";
+        if(!empty($execution->division) and $execution->hasProduct) echo "<td class='text-left' title='{$execution->productName}'>{$execution->productName}</td>";
         echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';

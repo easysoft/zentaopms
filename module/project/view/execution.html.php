@@ -14,7 +14,7 @@
 <?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php if($project->division):?>
+    <?php if($project->division and $project->hasProduct):?>
     <div class='btn-group'>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
@@ -85,7 +85,7 @@
               <?php endif;?>
             </div>
           </th>
-          <?php if($project->division) echo "<th class='text-left c-product'>{$lang->project->product}</th>";?>
+          <?php if($project->division and $project->hasProduct) echo "<th class='text-left c-product'>{$lang->project->product}</th>";?>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
           <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
