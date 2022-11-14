@@ -30,48 +30,36 @@
             <td></td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->vmTemplate;?></th>
-            <td id="template"><?php echo html::select('templateID', '', '', "class='form-control chosen'")?></td>
+            <th><?php echo $lang->executionnode->image;?></th>
+            <td id="template"><?php echo html::select('imageID', '', '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->executionnode->cpu;?></th>
-            <td><?php echo html::select('osCpu', $config->executionnode->os->cpu, '', "class='form-control chosen'")?></td>
+            <td><?php echo html::select('cpu', $config->executionnode->os->cpu, '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->osMemory;?></th>
+            <th><?php echo $lang->executionnode->memory;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::input('osMemory', '', "class='form-control'");?>
-                <span class="input-group-addon"><?php echo $lang->zahost->unitList['GB'];?></span>
+                <?php echo html::input('memory', '', "class='form-control'");?>
+                <span class="input-group-addon" id="memory-addon"><?php echo $lang->zahost->unitList['GB'];?></span>
               </div>
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->osDisk;?></th>
+            <th><?php echo $lang->executionnode->disk;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::input('osDisk', '', "class='form-control'");?>
+                <?php echo html::input('disk', '', "class='form-control'");?>
                 <span class='input-group-addon fix-border fix-padding' id='unit'>
-                  <?php echo html::select('unit', $lang->zahost->unitList, 'GB', "class='form-control chosen w-50px'");?>
+                  <?php echo $lang->zahost->unitList['GB'];?>
                 </span>
               </div>
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->osCategory;?></th>
-            <td><?php echo html::input('osCategory', '', "class='form-control' disabled")?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->executionnode->osType;?></th>
-            <td><?php echo html::input('osType', '', "class='form-control' disabled")?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->executionnode->osVersion;?></th>
-            <td><?php echo html::input('osVersion', '', "class='form-control' disabled")?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->executionnode->osLang;?></th>
-            <td><?php echo html::input('osLang', '', "class='form-control' disabled")?></td>
+            <th><?php echo $lang->executionnode->os;?></th>
+            <td><?php echo html::input('os', '', "class='form-control' readonly='readonly'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->executionnode->desc ?></th>

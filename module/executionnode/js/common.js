@@ -5,29 +5,26 @@ $(function()
     $('#hostID').change(function()
     {
         var hostID = $('#hostID').val();
-        var link   = createLink('executionnode', 'ajaxGetTemplates', 'hostID=' + hostID);
+        var link   = createLink('executionnode', 'ajaxGetImages', 'hostID=' + hostID);
         $.get(link, function(data)
         {
             $('#template').html('').append(data);
-            $('#templateID').chosen().trigger("chosen:updated");
-            $('#templateID').change();
+            $('#imageID').chosen().trigger("chosen:updated");
+            $('#imageID').change();
         });
     });
 
-    $(document).on("change", '#templateID', function()
+    $(document).on("change", '#imageID', function()
     {
-        var templateID = $('#templateID').val();
-        var link       = createLink('executionnode', 'ajaxGetTemplateInfo', 'templateID=' + templateID);
+        var imageID = $('#imageID').val();
+        var link       = createLink('executionnode', 'ajaxGetImage', 'imageID=' + imageID);
         $.get(link, function(data)
         {
             data = JSON.parse(data);
             console.log(data);
-            $('#osCategory').val(data.osCategoryName);
-            $('#osType').val(data.osTypeName);
-            $('#osVersion').val(data.osVersionName);
-            $('#osLang').val(data.osLangName);
+            $('#os').val(data.os);
         });
     });
 
-    if(typeof templateID == 'undefined' || !templateID) $('#osCategory').change();
+    if(typeof imageID == 'undefined' || !imageID) $('#os').change();
 })

@@ -48,7 +48,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->vm->vnc;?></th>
-          <td><?php echo $vm->vncPort;?></td>
+          <td><?php echo $vm->vnc;?></td>
           <th><?php echo $lang->vm->status;?></th>
           <td><?php echo zget($lang->vm->statusList, $vm->status);?></td>
         </tr>

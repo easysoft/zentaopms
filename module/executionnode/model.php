@@ -52,32 +52,24 @@ class executionnodemodel extends model
             return false;
         }
 
-        /* Get Vmtemplate. */
-        $vmTemplate = $this->getVmTemplateByID($data->imageID);
-        $data->osCategory = $vmTemplate->osCategory;
-        $data->osType     = $vmTemplate->osType;
-        $data->osVersion  = $vmTemplate->osVersion;
-        $data->osLang     = $vmTemplate->osLang;
+        /* Get image. */
+        $image = $this->getImageByID($data->imageID);
 
         /* Get host info. */
-        $host = $this->getHostByID($vmTemplate->hostID);
+        $host = $this->getHostByID($data->hostID);
 
         /* Gen mac address */
-        $macAddress = $this->genMacAddress();
+        $mac = $this->genmac();
 
         /* Prepare create params. */
         $agnetUrl = 'http://' . $host->address . ':' . $this->config->executionnode->defaultPort;
         $param    = array(
-            'vmMacAddress' => $macAddress,
-            'osCategory'   => $vmTemplate->osCategory,
-            'osType'       => $vmTemplate->osType,
-            'osLang'       => $data->osLang,
-            'osVersion'    => $vmTemplate->osVersion,
-            'vmTemplate'   => $vmTemplate->imageName,
-            'vmUniqueName' => $data->name,
-            'vmCpu'        => (int)$data->osCpu,
-            'vmDiskSize'   => (int)$data->osDisk,
-            'vmMemorySize' => (int)$data->osMemory,
+            'os'           => $image->osCategory,
+            'path'         => $image->path,
+            'name'         => $data->name,
+            'cpu'          => (int)$data->cpu,
+            'disk'         => (int)$data->disk,
+            'memory'       => (int)$data->memory,
         );
 
         $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null));
@@ -87,23 +79,20 @@ class executionnodemodel extends model
             dao::$errors[] = $this->lang->executionnode->notFoundAgent;
             return false;
         }
-        if($result->code != 1)
+        if($result->code != 'success')
         {
             dao::$errors[] = $this->lang->executionnode->createVmFail;
             return false;
         }
 
         /* Prepare create execution node data. */
-        $data->imageID  = $data->imageID;
+        $data->imageID     = $data->imageID;
         $data->hostID      = $host->id;
-        $data->macAddress  = $macAddress;
+        $data->mac         = $mac;
         $data->status      = static::STATUS_RUNNING;
         $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
-        $data->osCategory  = $vmTemplate->osCategory;
-        $data->osType      = $vmTemplate->osType;
-        $data->osArch      = $vmTemplate->osArch;
-        $data->vncPort     = (int)$result->data->vncPort;
+        $data->vnc     = (int)$result->data->vnc;
 
         /* Save execution node. */
         $this->dao->insert(TABLE_EXECUTIONNODE)->data($data)->autoCheck()->exec();
@@ -137,7 +126,7 @@ class executionnodemodel extends model
         $data   = json_decode($result, true);
         if(empty($data)) return $this->lang->executionnode->notFoundAgent;
 
-        if($data['code'] != 1) return zget($this->lang->executionnode->apiError, $data['code'], $data['msg']);
+        if($data['code'] != 'success') return zget($this->lang->executionnode->apiError, $data['code'], $data['msg']);
 
         if($type != 'reboot')
         {
@@ -161,24 +150,23 @@ class executionnodemodel extends model
         $node = $this->getVMByID($id);
         $host = $this->getHostByID($node->hostID);
 
-        $req = array( 'vmUniqueName' => $node->name );
+        $req = array( 'name' => $node->name );
 
         /* Prepare create params. */
         if($host)
         {
             $agnetUrl = 'http://' . $host->address . ':' . $this->config->executionnode->defaultPort;
-            $result = commonModel::http($agnetUrl . '/api/v1/kvm/' . $node->name . '/destroy', json_encode($req));
+            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req));
 
             $data = json_decode($result, true);
             if(empty($data)) return $this->lang->executionnode->notFoundAgent;
 
-            if($data['code'] != 1) return zget($this->lang->executionnode->apiError, $data['code'], $data['msg']);
+            if($data['code'] != 'success') return zget($this->lang->executionnode->apiError, $data['code'], $data['msg']);
         }
 
         /* delete execution node. */
         $this->dao->update(TABLE_EXECUTIONNODE)
             ->set('deleted')->eq(1)
-            ->set('destroyAt')->eq(helper::now())
             ->where('id')->eq($id)
             ->exec();
         $this->loadModel('action')->create('executionnode', $id, 'destroy');
@@ -286,9 +274,9 @@ class executionnodemodel extends model
             }
             else
             {
-                if($this->session->vmQuery == false) $this->session->set('vmQuery', ' 1 = 1');
+                if($this->session->executionnodeQuery == false) $this->session->set('executionnodeQuery', ' 1 = 1');
             }
-            $query = $this->session->vmQuery;
+            $query = $this->session->executionnodeQuery;
             $query = str_replace('`id`', 't1.`id`', $query);
             $query = str_replace('`name`', 't1.`name`', $query);
             $query = str_replace('`status`', 't1.`status`', $query);
@@ -342,27 +330,13 @@ class executionnodemodel extends model
     }
 
     /**
-     * Get BaseImage by name.
+     * Get Image.
      *
      * @param  int $id
      * @access public
      * @return object
      */
-    public function getBaseImageByID($id)
-    {
-        return $this->dao->select('*')->from(TABLE_BASEIMAGE)
-            ->where('id')->eq($id)
-            ->fetch();
-    }
-
-    /**
-     * Get VM template.
-     *
-     * @param  int $id
-     * @access public
-     * @return object
-     */
-    public function getVmTemplateByID($id)
+    public function getImageByID($id)
     {
         return $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('id')->eq($id)
@@ -390,22 +364,6 @@ class executionnodemodel extends model
     }
 
     /**
-     * Get baseImage list by params.
-     *
-     * @param  string $osCategory
-     * @param  string $osType
-     * @access public
-     * @return array
-     */
-    public function getBaseImageList($osCategory = '', $osType = '')
-    {
-        return $this->dao->select('*')->from(TABLE_BASEIMAGE)
-            ->where('osCategory')->eq($osCategory)
-            ->andwhere('osType')->eq($osType)
-            ->fetchAll('id');
-    }
-
-    /**
      * Get VM template list.
      *
      * @param  string $orderBy
@@ -413,7 +371,7 @@ class executionnodemodel extends model
      * @access public
      * @return array
      */
-    public function getVmTemplateList($orderBy = 'id_desc', $pager = null)
+    public function getimageList($orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_IMAGE)->orderBy($orderBy)->page($pager)->fetchAll();
     }
@@ -427,7 +385,7 @@ class executionnodemodel extends model
      * @access public
      * @return array
      */
-    public function getVmTemplatePairs($osCategory = '', $osType = '', $osVersion = '')
+    public function getimagePairs($osCategory = '', $osType = '', $osVersion = '')
     {
         return $this->dao->select('id,name')->from(TABLE_IMAGE)
             ->where('osCategory')->eq($osCategory)
@@ -461,7 +419,7 @@ class executionnodemodel extends model
     public function getVMByMac($mac)
     {
         return $this->dao->select('*')->from(TABLE_EXECUTIONNODE)
-            ->where('macAddress')->eq($mac)
+            ->where('mac')->eq($mac)
             ->fetch();
     }
 
@@ -470,7 +428,7 @@ class executionnodemodel extends model
      *
      * @return void
      */
-    private function genMacAddress()
+    private function genmac()
     {
         $buf = array(
             0x1C,
@@ -490,7 +448,7 @@ class executionnodemodel extends model
         {
             return $mac;
         }
-        $this->genMacAddress();
+        $this->genmac();
     }
 
     /**
@@ -503,20 +461,20 @@ class executionnodemodel extends model
     public function getVncUrl($vmID)
     {
         $vm = $this->getVMByID($vmID);
-        if(empty($vm) or empty($vm->hostID) or empty($vm->vncPort)) return false;
+        if(empty($vm) or empty($vm->hostID) or empty($vm->vnc)) return false;
 
         $host = $this->getHostByID($vm->hostID);
         if(empty($host)) return false;
 
         $agnetUrl = 'http://' . $host->address . ':' . $host->agentPort . static::KVM_TOKEN_PATH;
-        $result   = json_decode(commonModel::http("$agnetUrl?port={$vm->vncPort}"));
+        $result   = json_decode(commonModel::http("$agnetUrl?port={$vm->vnc}"));
 
-        if(empty($result) or $result->code != 1) return false;
+        if(empty($result) or $result->code != 'success') return false;
 
         $returnData = new stdClass();
         $returnData->hostIP    = $host->address;
         $returnData->agentPort = $host->agentPort;
-        $returnData->vncPort   = $vm->vncPort;
+        $returnData->vnc   = $vm->vnc;
         $returnData->token     = $result->data->token;
         return $returnData;
     }

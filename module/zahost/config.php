@@ -1,16 +1,16 @@
 <?php
 $config->zahost->create = new stdclass();
-$config->zahost->create->requiredFields = 'name,hostType,publicIP,cpuCores,memory,diskSize,virtualSoftware,instanceNum';
-$config->zahost->create->ipFields       = 'publicIP';
+$config->zahost->create->requiredFields = 'name,hostType,address,cpu,memory,disk,virtualSoftware';
+$config->zahost->create->ipFields       = 'address';
 
 $config->zahost->edit = new stdclass();
-$config->zahost->edit->requiredFields = 'name,hostType,cpuCores,memory,diskSize,virtualSoftware,instanceNum';
+$config->zahost->edit->requiredFields = 'name,hostType,cpu,memory,disk,virtualSoftware';
 
 $config->zahost->createtemplate = new stdclass();
-$config->zahost->createtemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang,imageName';
+$config->zahost->createtemplate->requiredFields = 'name,cpuCoreNum,memorySize,disk,osCategory,osType,osVersion,osLang,imageName';
 
 $config->zahost->edittemplate = new stdclass();
-$config->zahost->edittemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang,imageName';
+$config->zahost->edittemplate->requiredFields = 'name,cpuCoreNum,memorySize,disk,osCategory,osType,osVersion,osLang,imageName';
 
 $config->zahost->os = new stdClass();
 $config->zahost->os->list = array();
@@ -33,10 +33,10 @@ $config->zahost->search['module'] = 'zahost';
 $config->zahost->search['fields']['name']            = $lang->zahost->name;
 $config->zahost->search['fields']['id']              = $lang->zahost->id;
 $config->zahost->search['fields']['type']            = $lang->zahost->type;
-$config->zahost->search['fields']['publicIP']        = $lang->zahost->IP;
-$config->zahost->search['fields']['cpuCores']        = $lang->zahost->cpuCores;
+$config->zahost->search['fields']['address']        = $lang->zahost->IP;
+$config->zahost->search['fields']['cpu']        = $lang->zahost->cpu;
 $config->zahost->search['fields']['memory']          = $lang->zahost->memory;
-$config->zahost->search['fields']['diskSize']        = $lang->zahost->diskSize;
+$config->zahost->search['fields']['disk']        = $lang->zahost->disk;
 $config->zahost->search['fields']['virtualSoftware'] = $lang->zahost->virtualSoftware;
 $config->zahost->search['fields']['status']          = $lang->zahost->status;
 $config->zahost->search['fields']['createdBy']       = $lang->zahost->createdBy;
@@ -48,10 +48,10 @@ $config->zahost->search['fields']['editedDate']      = $lang->zahost->editedDate
 $config->zahost->search['params']['name']            = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->zahost->search['params']['id']              = array('operator' => '=', 'control' => 'input',  'values' => '');
 $config->zahost->search['params']['type']            = array('operator' => '=', 'control' => 'input',  'values' => $lang->zahost->zaHostType);
-$config->zahost->search['params']['publicIP']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->zahost->search['params']['cpuCores']        = array('operator' => '=', 'control' => 'input',  'values' => '');
+$config->zahost->search['params']['address']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->zahost->search['params']['cpu']        = array('operator' => '=', 'control' => 'input',  'values' => '');
 $config->zahost->search['params']['memory']          = array('operator' => '=', 'control' => 'input',  'values' => '');
-$config->zahost->search['params']['diskSize']        = array('operator' => '=', 'control' => 'input',  'values' => '');
+$config->zahost->search['params']['disk']        = array('operator' => '=', 'control' => 'input',  'values' => '');
 $config->zahost->search['params']['virtualSoftware'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->zahost->search['params']['status']          = array('operator' => '=', 'control' => 'select',  'values' => $lang->zahost->statusList);
 $config->zahost->search['params']['instanceNum']     = array('operator' => '=', 'control' => 'input',  'values' => '');
@@ -111,15 +111,15 @@ $config->vmTemplate->os->type['linux']['debian']      = 'Debian';
 $config->vmTemplate->search['module'] = 'vmTemplate';
 $config->vmTemplate->search['fields']['id']         = $lang->zahost->id;
 $config->vmTemplate->search['fields']['name']       = $lang->zahost->name;
-$config->vmTemplate->search['fields']['cpuCoreNum'] = $lang->zahost->cpuCores;
+$config->vmTemplate->search['fields']['cpuCoreNum'] = $lang->zahost->cpu;
 $config->vmTemplate->search['fields']['memorySize'] = $lang->zahost->memory;
-$config->vmTemplate->search['fields']['diskSize']   = $lang->zahost->diskSize;
+$config->vmTemplate->search['fields']['disk']   = $lang->zahost->disk;
 $config->vmTemplate->search['fields']['osType']     = $lang->zahost->vmTemplate->osType;
 $config->vmTemplate->search['fields']['osVersion']  = $lang->zahost->vmTemplate->osVersion;
 
 $config->vmTemplate->search['params']['id']         = array('operator' => '=', 'control' => 'input',  'values' => '');
 $config->vmTemplate->search['params']['name']       = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->vmTemplate->search['params']['memorySize'] = array('operator' => '=', 'control' => 'select',  'values' => array('' => '') + $config->vmTemplate->os->memory);
-$config->vmTemplate->search['params']['diskSize']   = array('operator' => '=', 'control' => 'select',  'values' => array('' => '') + $config->vmTemplate->os->disk);
+$config->vmTemplate->search['params']['disk']   = array('operator' => '=', 'control' => 'select',  'values' => array('' => '') + $config->vmTemplate->os->disk);
 $config->vmTemplate->search['params']['osType']     = array('operator' => '=', 'control' => 'select',  'values' => array('' => '') + $config->vmTemplate->os->type['windows'] + $config->vmTemplate->os->type['linux']);
 $config->vmTemplate->search['params']['cpuCoreNum'] = array('operator' => '=', 'control' => 'select',  'values' => array('' => '') + $config->vmTemplate->os->cpu);

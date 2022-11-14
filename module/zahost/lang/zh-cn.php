@@ -17,10 +17,10 @@ $lang->zahost->deleteTemplate = '删除虚拟机模板';
 
 $lang->zahost->name        = '名称';
 $lang->zahost->IP          = 'IP/域名';
-$lang->zahost->publicIP    = 'IP';
+$lang->zahost->address     = 'IP/域名';
 $lang->zahost->memory      = '内存';
-$lang->zahost->cpuCores    = 'CPU核心数';
-$lang->zahost->diskSize    = '硬盘容量';
+$lang->zahost->cpu         = 'CPU核心数';
+$lang->zahost->disk        = '硬盘容量';
 $lang->zahost->desc        = '描述';
 $lang->zahost->type        = '类型';
 $lang->zahost->status      = '状态';
@@ -32,7 +32,7 @@ $lang->zahost->editedDate   = '最后修改时间';
 $lang->zahost->registerDate = '最后注册时间';
 
 $lang->zahost->memorySize = $lang->zahost->memory;
-$lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
+$lang->zahost->cpuCoreNum = $lang->zahost->cpu         ;
 $lang->zahost->osType     = '操作系统版本';
 $lang->zahost->osCategory = '操作系统平台';
 $lang->zahost->osVersion  = '操作系统版本号';
@@ -57,8 +57,8 @@ $lang->zahost->initHost->serviceStatus = [
 $lang->zahost->initHost->title = "初始化宿主机";
 $lang->zahost->initHost->descTitle = "请按照以下步骤在宿主机上完成初始化：";
 $lang->zahost->initHost->descLi = [
-    "下载初始化脚本至宿主机：wget xxx -o xxx",
-    "在宿主机上执行初始化脚本，Ubuntu下执行命令示例：xxxx"
+    "下载初始化脚本至宿主机：wget https://pkg-1308438674.cos.ap-shanghai.myqcloud.com/zenagent/zagentenv",
+    "在宿主机上执行初始化脚本，Ubuntu下执行命令示例：./zagentenv"
 ];
 
 $lang->zahost->image = new stdclass;
@@ -72,7 +72,7 @@ $lang->zahost->image->startDowload  = '开始下载';
 $lang->zahost->image->name       = '名称';
 $lang->zahost->image->common     = '镜像';
 $lang->zahost->image->memory     = $lang->zahost->memory;
-$lang->zahost->image->disk       = $lang->zahost->diskSize;
+$lang->zahost->image->disk       = $lang->zahost->disk;
 $lang->zahost->image->osType     = $lang->zahost->osType;
 $lang->zahost->image->osCategory = $lang->zahost->osCategory;
 $lang->zahost->image->osVersion  = $lang->zahost->osVersion;
@@ -90,9 +90,9 @@ $lang->zahost->image->statusList['fail']        = '下载失败';
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = '名称';
 $lang->zahost->vmTemplate->common     = '虚拟机模板';
-$lang->zahost->vmTemplate->cpuCoreNum = $lang->zahost->cpuCores;
+$lang->zahost->vmTemplate->cpuCoreNum = $lang->zahost->cpu         ;
 $lang->zahost->vmTemplate->memorySize = $lang->zahost->memory;
-$lang->zahost->vmTemplate->diskSize   = $lang->zahost->diskSize;
+$lang->zahost->vmTemplate->diskSize   = $lang->zahost->disk;
 $lang->zahost->vmTemplate->osType     = $lang->zahost->osType;
 $lang->zahost->vmTemplate->osCategory = $lang->zahost->osCategory;
 $lang->zahost->vmTemplate->osVersion  = $lang->zahost->osVersion;

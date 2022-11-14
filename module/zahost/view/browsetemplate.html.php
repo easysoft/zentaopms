@@ -44,7 +44,7 @@
         <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->zahost->name);?></th>
         <th class='c-number'><?php common::printOrderLink('cpuCoreNum', $orderBy, $vars, $lang->zahost->cpuCoreNum);?></th>
         <th class='c-number'><?php common::printOrderLink('memorySize', $orderBy, $vars, $lang->zahost->memory);?></th>
-        <th class='c-number'><?php common::printOrderLink('diskSize', $orderBy, $vars, $lang->zahost->diskSize);?></th>
+        <th class='c-number'><?php common::printOrderLink('diskSize', $orderBy, $vars, $lang->zahost->disk);?></th>
         <th class='c-os'><?php common::printOrderLink('osCategory', $orderBy, $vars, $lang->zahost->osCategory);?></th>
         <th class='c-os'><?php common::printOrderLink('osType', $orderBy, $vars, $lang->zahost->osType);?></th>
         <th class='c-os'><?php common::printOrderLink('osVersion', $orderBy, $vars, $lang->zahost->osVersion);?></th>

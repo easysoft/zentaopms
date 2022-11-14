@@ -354,9 +354,9 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function ajaxCheckPublicIP($IP)
+    public function ajaxCheckaddress($IP)
     {
-        if(!validater::checkIP($IP)) return $this->send(array('result' => 'fail', 'message' => array('publicIP' => array(sprintf($this->lang->zahost->notice->ip, $this->lang->zahost->publicIP)))));
+        if(!validater::checkIP($IP)) return $this->send(array('result' => 'fail', 'message' => array('address' => array(sprintf($this->lang->zahost->notice->ip, $this->lang->zahost->address)))));
 
         $secret = md5(time());
         $registerCommand = sprintf($this->lang->zahost->notice->registerCommand, $this->server->server_addr, $this->server->server_port, $IP, $secret);

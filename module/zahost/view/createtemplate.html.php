@@ -26,7 +26,7 @@
         <td></td>
       </tr>
       <tr>
-        <th><?php echo $lang->zahost->cpuCores;?></th>
+        <th><?php echo $lang->zahost->cpu         ;?></th>
         <td><?php echo html::input('cpuCoreNum', '', "class='form-control'");?></td>
       </tr>
       <tr>
@@ -39,7 +39,7 @@
         </td>
       </tr>
       <tr>
-        <th><?php echo $lang->zahost->diskSize;?></th>
+        <th><?php echo $lang->zahost->disk;?></th>
         <td>
           <div class='input-group'>
             <?php echo html::input('diskSize', '', "class='form-control'");?>

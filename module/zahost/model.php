@@ -33,22 +33,16 @@ class zahostModel extends model
     public function create()
     {
         $hostInfo = fixer::input('post')
-            ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
+            ->setDefault('cpuNumber,cpu,disk,memory', 0)
             ->get();
 
         $this->dao->table = 'zahost';
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
-            ->batchCheck('cpuCores,diskSize,instanceNum', 'gt', 0)
-            ->batchCheck('diskSize,memory', 'float')
+            ->batchCheck('cpu,disk', 'gt', 0)
+            ->batchCheck('disk,memory', 'float')
             ->autoCheck();
         if(dao::isError()) return false;
-
-        if(!preg_match('/((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/', $hostInfo->publicIP))
-        {
-            dao::$errors['publicIP'][] = sprintf($this->lang->zahost->notice->ip, $this->lang->zahost->publicIP);
-            return false;
-        }
 
         $this->dao->update(TABLE_ASSET)->data($hostInfo)->check('name', 'unique');
         if(dao::isError()) return false;
@@ -89,7 +83,7 @@ class zahostModel extends model
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float');
+            ->batchCheck('disk,memory', 'float');
         if(dao::isError()) return false;
 
         $assetInfo['name']       = $hostInfo->name;
@@ -103,8 +97,8 @@ class zahostModel extends model
         if(dao::isError()) return false;
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo, 'name')->autoCheck()
-            ->batchCheck('cpuCores,diskSize,instanceNum', 'gt', 0)
-            ->batchCheck('diskSize,memory', 'float')
+            ->batchCheck('cpu,disk', 'gt', 0)
+            ->batchCheck('disk,memory', 'float')
             ->where('id')->eq($hostID)->exec();
         return common::createChanges($oldHost, $hostInfo);
     }
@@ -119,13 +113,13 @@ class zahostModel extends model
     public function createTemplate($host)
     {
         $template = fixer::input('post')
-            ->setIF($this->post->diskSize > 0, 'diskSize', $this->post->diskSize * 1024)
+            ->setIF($this->post->disk > 0, 'disk', $this->post->disk * 1024)
             ->setDefault('imageName', '')
             ->get();
 
         $this->dao->insert(TABLE_VMTEMPLATE)->data($template)
             ->batchCheck($this->config->zahost->createtemplate->requiredFields, 'notempty')
-            ->batchCheck('cpuCoreNum,diskSize,memorySize', 'gt', 0)
+            ->batchCheck('cpuCoreNum,disk,memorySize', 'gt', 0)
             ->autoCheck();
         if(dao::isError()) return false;
 
@@ -151,12 +145,12 @@ class zahostModel extends model
     {
         $oldHost      = $this->getTemplateById($templateID);
         $templateInfo = fixer::input('post')
-            ->setIF($this->post->diskSize > 0, 'diskSize', $this->post->diskSize * 1024)
+            ->setIF($this->post->disk > 0, 'disk', $this->post->disk * 1024)
             ->get();
 
         $this->dao->update(TABLE_VMTEMPLATE)->data($templateInfo)
             ->batchCheck($this->config->zahost->edittemplate->requiredFields, 'notempty')
-            ->batchCheck('cpuCoreNum,diskSize,memorySize', 'gt', 0)
+            ->batchCheck('cpuCoreNum,disk,memorySize', 'gt', 0)
             ->autoCheck();
         if(dao::isError()) return false;
 
@@ -373,13 +367,25 @@ class zahostModel extends model
         foreach($templateList as $template)
         {
             $template->unit = zget($this->lang->zahost->unitList, 'MB');
-            if($template->diskSize > 1024)
+            if($template->disk > 1024)
             {
-                $template->diskSize = round($template->diskSize / 1024);
+                $template->disk = round($template->disk / 1024);
                 $template->unit     = zget($this->lang->zahost->unitList, 'GB');
             }
         }
         return $templateList;
+    }
+
+    /**
+     * Get image pairs by host.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array
+     */
+    public function getImagePairs($hostID)
+    {
+        return $this->dao->select('id,name')->from(TABLE_IMAGE)->where('hostID')->eq($hostID)->fetchPairs();
     }
 
     /**
@@ -415,7 +421,7 @@ class zahostModel extends model
      */
     public function getServiceStatus($host)
     {
-        $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/service/check", json_encode(array("services" => "all"))));
+        $result = json_decode(commonModel::http("http://{$host->address}:8086/api/v1/service/check", json_encode(array("services" => "all"))));
         if(empty($result) || $result->code != 'success')
         {
             $result = new stdclass;

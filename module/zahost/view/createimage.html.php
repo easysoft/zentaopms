@@ -43,7 +43,7 @@
         </td>
       </tr>
       <tr>
-        <th><?php echo $lang->zahost->diskSize;?></th>
+        <th><?php echo $lang->zahost->disk;?></th>
         <td>
           <div class='input-group'>
             <?php echo html::input('disk', '', "class='form-control'");?>

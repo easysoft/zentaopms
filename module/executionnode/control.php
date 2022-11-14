@@ -58,7 +58,7 @@ class executionnode extends control
     /**
      * Create node page.
      *
-     * @param  int    $templateID
+     * @param  int    $imageID
      * @access public
      * @return void
      */
@@ -179,28 +179,26 @@ class executionnode extends control
      * @access public
      * @return void
      */
-    public function ajaxGetTemplates($hostID)
+    public function ajaxGetImages($hostID)
     {
-        $templatePairs = $this->loadModel('zahost')->getTemplatePairs($hostID);
-        return print(html::select('templateID', $templatePairs, '', "class='form-control chosen'"));
+        $templatePairs = $this->loadModel('zahost')->getImagePairs($hostID);
+
+        return print(html::select('imageID', $templatePairs, '', "class='form-control chosen'"));
     }
 
     /**
      * Ajax get template info.
      *
-     * @param  int    $templateID
+     * @param  int    $imageID
      * @access public
      * @return void
      */
-    public function ajaxGetTemplateInfo($templateID)
+    public function ajaxGetImage($imageID)
     {
-        $template = $this->loadModel('zahost')->getTemplateByID($templateID);
+        $template = $this->loadModel('zahost')->getImageByID($imageID);
         if($template)
         {
-            $template->osCategoryName = zget($this->config->zahost->os->list, $template->osCategory);
-            $template->osTypeName     = zget($this->config->zahost->os->type[$template->osCategory], $template->osType);
-            $template->osVersionName  = zget($this->lang->zahost->versionList[$template->osType], $template->osVersion);
-            $template->osLangName     = zget($this->lang->zahost->langList, $template->osLang);
+            $template->os = $template->osCategory;
         }
         return print(json_encode($template));
     }

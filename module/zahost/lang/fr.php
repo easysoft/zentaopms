@@ -17,10 +17,10 @@ $lang->zahost->deleteTemplate = 'Delete Template';
 
 $lang->zahost->name        = 'Nom';
 $lang->zahost->IP          = 'IP/Domain';
-$lang->zahost->publicIP    = 'IP';
-$lang->zahost->cpuCores    = 'CPU Cores';
+$lang->zahost->address     = 'IP';
+$lang->zahost->cpu         = 'CPU Cores';
 $lang->zahost->memory      = 'Mémoire Espace';
-$lang->zahost->diskSize    = 'Disque Espace';
+$lang->zahost->disk    = 'Disque Espace';
 $lang->zahost->desc        = 'Description';
 $lang->zahost->type        = 'Type';
 $lang->zahost->status      = 'Status';
@@ -32,7 +32,7 @@ $lang->zahost->editedDate   = "Date d'édition";
 $lang->zahost->registerDate = "RegisterDate";
 
 $lang->zahost->memorySize = $lang->zahost->memory;
-$lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
+$lang->zahost->cpuCoreNum = $lang->zahost->cpu         ;
 $lang->zahost->osType     = 'Os Version';
 $lang->zahost->osCategory = 'System';
 $lang->zahost->osVersion  = 'Os Version No';
@@ -55,17 +55,17 @@ $lang->zahost->initHost->serviceStatus = [
 $lang->zahost->initHost->title = "Initialize Host";
 $lang->zahost->initHost->descTitle = "Follow these steps to complete the initialization on the host:";
 $lang->zahost->initHost->descLi = [
-    "Download the init script to the host：wget xxx -o xxx",
-    "Execute the init script on the host and execute the command example under Ubuntu：xxxx"
+    "Download the init script to the host：wget https://pkg-1308438674.cos.ap-shanghai.myqcloud.com/zenagent/zagentenv",
+    "Execute the init script on the host and execute the command example under Ubuntu：./zagentenv"
 ];
 $lang->zahost->initHost->statusTitle = "Service Status";
 
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = 'Nom';
 $lang->zahost->vmTemplate->common     = 'VM Template';
-$lang->zahost->vmTemplate->cpuCoreNum = $lang->zahost->cpuCores;
+$lang->zahost->vmTemplate->cpuCoreNum = $lang->zahost->cpu         ;
 $lang->zahost->vmTemplate->memorySize = $lang->zahost->memory;
-$lang->zahost->vmTemplate->diskSize   = $lang->zahost->diskSize;
+$lang->zahost->vmTemplate->diskSize   = $lang->zahost->disk;
 $lang->zahost->vmTemplate->osType     = $lang->zahost->osType;
 $lang->zahost->vmTemplate->osCategory = $lang->zahost->osCategory;
 $lang->zahost->vmTemplate->osVersion  = $lang->zahost->osVersion;

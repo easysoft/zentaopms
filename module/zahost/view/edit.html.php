@@ -35,11 +35,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->zahost->IP;?></th>
-            <td><?php echo html::input('publicIP', $host->publicIP, "class='form-control' disabled");?></td>
+            <td><?php echo html::input('address', $host->address, "class='form-control' disabled");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->zahost->cpuCores;?></th>
-            <td><?php echo html::select('cpuCores', $config->zahost->cpuCoreList, $host->cpuCores, "class='form-control chosen'");?></td>
+            <th><?php echo $lang->zahost->cpu         ;?></th>
+            <td><?php echo html::select('cpu', $config->zahost->cpuCoreList, $host->cpu, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zahost->memory;?></th>
@@ -51,12 +51,12 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->zahost->diskSize;?></th>
+            <th><?php echo $lang->zahost->disk;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::input('diskSize', $host->diskSize, "class='form-control'");?>
+                <?php echo html::input('disk', $host->disk, "class='form-control'");?>
                 <span class='input-group-addon fix-border fix-padding' id='unit'>
-                  <?php echo html::select('unit', $lang->zahost->unitList, $host->unit, "class='form-control chosen w-50px'");?>
+                  <?php echo $lang->zahost->unitList['GB'];?>
                 </span>
               </div>
             </td>

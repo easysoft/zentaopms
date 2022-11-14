@@ -11,21 +11,21 @@ CREATE TABLE `zt_executionnode` (
   `hostID` int(11) unsigned NOT NULL DEFAULT 0,
   `name` varchar(64) NOT NULL DEFAULT '',
   `imageID` int(11) unsigned NOT NULL DEFAULT 0,
-  `osCategory` varchar(32) NOT NULL DEFAULT '',
-  `osType` varchar(32) NOT NULL DEFAULT '',
-  `osVersion` varchar(32) NOT NULL DEFAULT '',
-  `osLang` varchar(32) NOT NULL DEFAULT '',
+  `cpu` int(11) unsigned NOT NULL DEFAULT 0,
+  `os` varchar(128) NOT NULL DEFAULT '',
+  `unit` enum('GB','TB') NOT NULL DEFAULT 'GB',
   `memory` float unsigned NOT NULL,
   `disk` float unsigned NOT NULL,
   `status` varchar(20) NOT NULL,
   `mac` varchar(64) NOT NULL,
   `vnc` int(11) unsigned NOT NULL DEFAULT 0,
+  `desc` text NOT NULL,
   `registerDate` datetime NOT NULL,
-  `createdBy` datetime NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
-  `editedBy` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `deleted` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -46,11 +46,11 @@ CREATE TABLE `zt_image` (
   `fileSize` float unsigned NOT NULL,
   `md5` varchar(64) NOT NULL,
   `registerDate` datetime NOT NULL,
-  `createdBy` datetime NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
-  `editedBy` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `deleted` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

@@ -2,7 +2,7 @@ $('#checkServiceStatus').click(function(){
     $.get(createLink('zahost', 'ajaxGetServiceStatus', 'hostID=' + hostID), function(response)
     {
         var resultData = JSON.parse(response);
-        let html = "<h4 style='margin-top: 30px;'>" + zahostLang.initHost.statusTitle + "</h4>";
+        let html = "<h4 style='margin-top: 20px;'>" + zahostLang.initHost.statusTitle + "</h4>";
         let isSuccess = true
 
         for (let key in resultData.data) {
@@ -15,9 +15,9 @@ $('#checkServiceStatus').click(function(){
         };
         
         if(isSuccess){
-            html += '<h5>' + zahostLang.initHost.initSuccessNotice + '</h5>'
+            html += '<h4>' + zahostLang.initHost.initSuccessNotice + '</h4>'
         }else{
-            html += '<h5>' + zahostLang.initHost.initFailNotice + '<a href="https://github.com/easysoft/zenagent/" target="_blank">https://github.com/easysoft/zenagent/</a></h5>'
+            html += '<h4><div><span class="dot-symbol">' + zahostLang.initHost.initFailNotice + '</span></div><a href="https://github.com/easysoft/zenagent/" target="_blank">https://github.com/easysoft/zenagent/</a></h4>'
         }
         $('#statusContainer').html(html)
     });
