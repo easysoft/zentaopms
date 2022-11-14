@@ -2086,6 +2086,7 @@ class bugModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.id = t2.execution')
             ->where('t2.id')->in($buildID)
             ->fetchAll('id');
+        if(empty($executions)) return array();
 
         $condition = 'execution NOT ' . helper::dbIN(array_keys($executions));
         $minBegin  = '';
