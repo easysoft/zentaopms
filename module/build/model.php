@@ -347,6 +347,7 @@ class buildModel extends model
         if(!dao::isError())
         {
             $buildID = $this->dao->lastInsertID();
+            $this->linkChildBuilds($buildID, $build->builds);
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
             $this->file->saveUpload('build', $buildID);
             $this->loadModel('score')->create('build', 'create', $buildID);
@@ -386,6 +387,8 @@ class buildModel extends model
         if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(!dao::isError())
         {
+            $addBuilds = array_diff(explode(',', $build->builds), explode(',', $oldBuild->builds));
+            if($addBuilds) $this->linkChildBuilds($buildID, $addBuilds);
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
             return common::createChanges($oldBuild, $build);
         }
@@ -559,6 +562,33 @@ class buildModel extends model
 
         $this->loadModel('action');
         foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
+    }
+
+    /**
+     * Bugs and stories associated with child builds.
+     *
+     * @param  int    $buildID
+     * @param  string    $childBuilds
+     * @access public
+     * @return void
+     */
+    public function linkChildBuilds($buildID, $childBuilds)
+    {
+        $build     = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
+        $buildList = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->in($childBuilds)->fetchAll();
+
+        foreach($buildList as $buildInfo)
+        {
+            if($buildInfo->bugs)    $build->bugs    .= ",{$buildInfo->bugs}";
+            if($buildInfo->stories) $build->stories .= ",{$buildInfo->stories}";
+        }
+
+        $build->bugs    = explode(',', $build->bugs);
+        $build->bugs    = join(',', array_filter($build->bugs));
+        $build->stories = explode(',', $build->stories);
+        $build->stories = join(',', array_filter($build->stories));
+
+        $this->dao->update(TABLE_BUILD)->data($build)->where('id')->eq($buildID)->exec();
     }
 
     /**
