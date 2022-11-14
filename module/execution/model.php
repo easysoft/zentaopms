@@ -2473,7 +2473,7 @@ class executionModel extends model
         /* Link stories. */
         $executionStories = $this->loadModel('story')->getExecutionStoryPairs($executionID);
         $lastOrder        = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
-        $stories          = $this->dao->findById($storyID)->fields("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($executionStories))->fetchAll('story');
+        $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($executionStories))->fetchAll('story');
         foreach($stories as $storyID)
         {
             if(!isset($executionStories[$storyID]))
