@@ -39,6 +39,19 @@ class column extends wg
     }
 
     /**
+     * Set column min width.
+     *
+     * @param  int    $width
+     * @access public
+     * @return object
+     */
+    public function minWidth($width)
+    {
+        $this->minWidth = $width;
+        return $this;
+    }
+
+    /**
      * Set the column output type.
      *
      * @param  string $type link|avatar|circleProgress|html

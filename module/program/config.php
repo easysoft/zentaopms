@@ -58,6 +58,7 @@ $config->program->dtable = new stdclass();
 
 $config->program->dtable->fieldList['name']['name']         = 'name';
 $config->program->dtable->fieldList['name']['title']        = $lang->nameAB;
+$config->program->dtable->fieldList['name']['width']        = 356;
 $config->program->dtable->fieldList['name']['type']         = 'html';
 $config->program->dtable->fieldList['name']['flex']         = 1;
 $config->program->dtable->fieldList['name']['nestedToggle'] = true;
@@ -67,39 +68,39 @@ $config->program->dtable->fieldList['name']['sortType']     = false;
 
 $config->program->dtable->fieldList['status']['name']      = 'status';
 $config->program->dtable->fieldList['status']['title']     = $lang->program->status;
-$config->program->dtable->fieldList['status']['width']     = 65;
+$config->program->dtable->fieldList['status']['minWidth']  = 60;
 $config->program->dtable->fieldList['status']['type']      = 'status';
 $config->program->dtable->fieldList['status']['sortType']  = true;
 $config->program->dtable->fieldList['status']['statusMap'] = $lang->program->statusList;
 
 $config->program->dtable->fieldList['PM']['name']     = 'PM';
 $config->program->dtable->fieldList['PM']['title']    = $lang->program->PM;
-$config->program->dtable->fieldList['PM']['width']    = 100;
+$config->program->dtable->fieldList['PM']['minWidth'] = 100;
 $config->program->dtable->fieldList['PM']['type']     = 'avatarBtn';
 $config->program->dtable->fieldList['PM']['sortType'] = true;
 
 $config->program->dtable->fieldList['budget']['name']     = 'budget';
 $config->program->dtable->fieldList['budget']['title']    = $lang->program->budget;
-$config->program->dtable->fieldList['budget']['width']    = 100;
+$config->program->dtable->fieldList['budget']['minWidth'] = 70;
 $config->program->dtable->fieldList['budget']['type']     = 'format';
 $config->program->dtable->fieldList['budget']['sortType'] = true;
 
 $config->program->dtable->fieldList['begin']['name']     = 'begin';
 $config->program->dtable->fieldList['begin']['title']    = $lang->program->begin;
-$config->program->dtable->fieldList['begin']['width']    = 100;
+$config->program->dtable->fieldList['begin']['minWidth'] = 90;
 $config->program->dtable->fieldList['begin']['type']     = 'datetime';
 $config->program->dtable->fieldList['begin']['sortType'] = true;
 
 $config->program->dtable->fieldList['end']['name']     = 'end';
 $config->program->dtable->fieldList['end']['title']    = $lang->program->end;
-$config->program->dtable->fieldList['end']['width']    = 100;
+$config->program->dtable->fieldList['end']['minWidth'] = 90;
 $config->program->dtable->fieldList['end']['type']     = 'datetime';
 $config->program->dtable->fieldList['end']['sortType'] = true;
 
-$config->program->dtable->fieldList['progress']['name']  = 'progress';
-$config->program->dtable->fieldList['progress']['title'] = $lang->program->progressAB;
-$config->program->dtable->fieldList['progress']['width'] = 100;
-$config->program->dtable->fieldList['progress']['type']  = 'circleProgress';
+$config->program->dtable->fieldList['progress']['name']     = 'progress';
+$config->program->dtable->fieldList['progress']['title']    = $lang->program->progressAB;
+$config->program->dtable->fieldList['progress']['minWidth'] = 100;
+$config->program->dtable->fieldList['progress']['type']     = 'circleProgress';
 
 $config->program->dtable->fieldList['actions']['name']   = 'actions';
 $config->program->dtable->fieldList['actions']['title']  = $lang->actions;
