@@ -207,7 +207,7 @@ class zahost extends control
      */
     public function ajaxDownloadImage($hostID, $imageName)
     {
-        $image = $this->zahost->getImageByName($imageName);
+        $image = $this->zahost->getImageByNameAndHostID($imageName, $hostID);
         if(empty($image))
         {
             $image = $this->zahost->createImage($hostID, $imageName);
