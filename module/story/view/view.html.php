@@ -53,7 +53,7 @@
     <?php
     $otherParam = 'storyID=&projectID=';
     $tab        = 'product';
-    if($this->app->rawModule == 'projectstory')
+    if($this->app->rawModule == 'projectstory' or $this->app->tab == 'project')
     {
         $otherParam = "storyID=&projectID={$this->session->project}";
         $tab        = 'project';

@@ -343,7 +343,7 @@ function setStories(moduleID, executionID)
         $("#story").addClass('filled').chosen();
 
         /* If there is no story option, select will be hidden and text will be displayed; otherwise, the opposite is true */
-        if($('#story option').length > 1)
+        if($('#story option').length > 1 || parseInt(hasProduct) == 0)
         {
             $('#story').parent().removeClass('hidden');
             $('#storyBox').addClass('hidden');
