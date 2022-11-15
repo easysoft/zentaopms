@@ -11,7 +11,8 @@ $config->project->editor->activate = array('id' => 'comment', 'tools' => 'simple
 $config->project->editor->view     = array('id' => 'lastComment', 'tools' => 'simpleTools');
 
 $config->project->list = new stdclass();
-$config->project->list->exportFields = 'id,parent,code,name,hasProduct,linkedProducts,status,begin,end,budget,PM,end,desc';
+$config->project->list->exportFields = 'id,code,name,hasProduct,linkedProducts,status,begin,end,budget,PM,end,desc';
+if($config->systemMode == 'ALM') $config->project->list->exportFields = substr_replace($config->project->list->exportFields, ',parent', 2, 0);
 
 $config->project->create = new stdclass();
 $config->project->edit   = new stdclass();
