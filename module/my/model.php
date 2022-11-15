@@ -1301,6 +1301,7 @@ class myModel extends model
             $review->time   = $action->date;
             $review->result = strtolower($action->extra);
             $review->status = $objectType == 'attend' ? $object->reviewStatus : $object->status;
+            if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
 
             if($review->type == 'review') $review->type = 'project';
             if($review->type == 'case')   $review->type = 'testcase';

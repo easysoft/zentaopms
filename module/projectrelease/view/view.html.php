@@ -358,7 +358,7 @@
                         {
                             $buildHtml[] = html::a($this->createLink($buildInfo->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $buildInfo->name, '', "data-app='project'");
                         }
-                        echo join(', ', $buildHtml);
+                        echo join($lang->comma, $buildHtml);
                         ?>
                       </td>
                     </tr>
