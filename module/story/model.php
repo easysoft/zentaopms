@@ -5878,6 +5878,7 @@ class storyModel extends model
      *
      * @param  int    $executionID
      * @param  string $orderBy
+     * @param  string $storyType
      * @access public
      * @return void
      */
