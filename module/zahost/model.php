@@ -178,6 +178,18 @@ class zahostModel extends model
     }
 
     /**
+     * Get image by name.
+     *
+     * @param  string $imageName
+     * @access public
+     * @return object
+     */
+    public function getImageByName($imageName)
+    {
+        return $this->dao->select('*')->from(TABLE_IMAGE)->where('deleted')->eq(0)->andWhere('name')->eq($imageName)->fetch();
+    }
+
+    /**
      * Get image files from ZAgent server.
      *
      * @param  object $hostID
@@ -186,11 +198,30 @@ class zahostModel extends model
      */
     public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
     {
-        $imageList = $this->dao->select('*')->from(TABLE_IMAGE)
+        $imageList = json_decode(file_get_contents($this->config->zahost->imageListUrl));
+
+        $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('hostID')->eq($hostID)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('name');
+
+        foreach($imageList as &$image)
+        {
+            $downloadedImage = zget($downloadedImageList, $image->name, '');
+            if(empty($downloadedImage))
+            {
+                $image->id     = 0;
+                $image->status = '';
+            }
+            else
+            {
+                $image->id     = $downloadedImage->id;
+                $image->status = $downloadedImage->status;
+            }
+
+            $image->hostID = $hostID;
+        }
 
         return $imageList;
     }
@@ -198,21 +229,28 @@ class zahostModel extends model
     /**
      * create image.
      *
+     * @param  int    $hostID
+     * @param  string $imageName
      * @access public
-     * @return void
+     * @return object
      */
-    public function createImage()
+    public function createImage($hostID, $imageName)
     {
-        $vmImage = fixer::input('post')
-            ->get();
+        $imageList = json_decode(file_get_contents($this->config->zahost->imageListUrl));
 
-        $this->dao->insert(TABLE_IMAGE)->data($vmImage)
-            ->batchCheck($this->config->zahost->createimage->requiredFields, 'notempty')
-            ->autoCheck()->exec();
+        $imageData = new stdclass;
+        foreach($imageList  as $item) if($item->name == $imageName) $imageData = $item;
+
+        $imageData->hostID = $hostID;
+        $imageData->status = 'created';
+
+        $this->dao->insert(TABLE_IMAGE)->data($imageData)->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $imageID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('image', $imageID, 'Created');
+
+        return $this->getImageByID($imageID);
     }
 
     /**
@@ -224,19 +262,79 @@ class zahostModel extends model
      */
     public function downloadImage($image)
     {
-        $host = $this->getById($image->hostID);
-        $downloadApi = 'http://' . $host->address . '/api/v1/download/add';
+        $host   = $this->getById($image->hostID);
+        $apiUrl = 'http://' . $host->publicIP. '/api/v1/download/add';
 
         $apiParams['md5']  = $image->md5;
-        $apiParams['task'] = 1;
         $apiParams['url']  = $image->address;
+        $apiParams['task'] = intval($image->id);
 
-        $response = json_decode(commonModel::http($downloadApi, $apiParams));
+        $response = json_decode(commonModel::http($apiUrl, array($apiParams), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
 
+        if($response and $response->code == 'success')
+        {
+            $this->dao->update(TABLE_IMAGE)
+                ->set('status')->eq('created')
+                ->where('id')->eq($image->id)->exec();
+            return true;
+        }
+
+        dao::$errors[] = $this->lang->zahost->image->downloadImageFail;
+        return false;
+    }
+
+    /**
+     * Query image download progress.
+     *
+     * @param  object $image
+     * @access public
+     * @return string Return Status code.
+     */
+    public function queryDownloadImageStatus($image)
+    {
+        $host   = $this->getById($image->hostID);
+        $apiUrl = 'http://' . $host->publicIP. '/api/v1/task/getStatus';
+
+        $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+        if(!$result or $result->code != 'success') return $image->status;
+
+        foreach($result->data as $status => $group)
+        {
+            $task = array_filter($group, function($task) use($image)
+            {
+                return $task->task == $image->id;
+            });
+
+            if($task)
+            {
+                $this->dao->update(TABLE_IMAGE)->set('status')->eq($status)->where('id')->eq($image->id)->exec();
+                return $status;
+            }
+        }
+
+        return $image->status;
+    }
+
+    /**
+     * Query download image status.
+     *
+     * @param  object $image
+     * @access public
+     * @return object
+     */
+    public function downloadImageStatus($image)
+    {
+        $host      = $this->getById($image->hostID);
+        $statusApi = 'http://' . $host->address . '/api/v1/task/status';
+
+        $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array(), 'json'));
+
+        a($response);
         if($response->code == 200) return true;
 
         dao::$errors[] = $response->msg;
         return false;
+
     }
 
     /**

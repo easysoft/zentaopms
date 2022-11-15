@@ -200,17 +200,46 @@ class zahost extends control
     /**
      * Sent download image request to Host.
      *
-     * @param  int    $imageID
+     * @param  int    $hostID
+     * @param  string $imageName
      * @access public
      * @return object
      */
-    public function ajaxDownloadImage($imageID)
+    public function ajaxDownloadImage($hostID, $imageName)
     {
-        $image = $this->zahost->getImageByID($imageID);
+        $image = $this->zahost->getImageByName($imageName);
+        if(empty($image))
+        {
+            $image = $this->zahost->createImage($hostID, $imageName);
+        }
 
         $this->zahost->downloadImage($image);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->startDowload));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->downloadImageSuccess));
+    }
+
+    /**
+     * Query downloading progress of images of host.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return void
+     */
+    public function ajaxImageDownloadProgress($hostID)
+    {
+        $statusList = array();
+
+        $imageList = $this->zahost->getImageList($hostID);
+        foreach($imageList as $image)
+        {
+            $statusCode = $this->zahost->queryDownloadImageStatus($image);
+            $statusName = zget($this->lang->zahost->image->statusList, $statusCode,'');
+
+            $statusList[$image->id] = array('statusCode' => $statusCode, 'statusName' => $statusName);
+        }
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $statusList));
     }
 
     /**

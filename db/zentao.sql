@@ -7344,7 +7344,7 @@ CREATE TABLE `zt_image` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `hostID` int(11) unsigned NOT NULL DEFAULT 0,
   `name` varchar(64) NOT NULL DEFAULT '',
-  `address` varchar(64) NOT NULL DEFAULT '',
+  `address` varchar(500) NOT NULL DEFAULT '',
   `from` varchar(64) NOT NULL DEFAULT '',
   `path` varchar(64) NOT NULL DEFAULT '',
   `status` varchar(20) NOT NULL DEFAULT '',
