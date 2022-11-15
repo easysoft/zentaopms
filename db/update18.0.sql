@@ -45,6 +45,7 @@ CREATE TABLE `zt_image` (
   `disk` float unsigned NOT NULL,
   `fileSize` float unsigned NOT NULL,
   `md5` varchar(64) NOT NULL,
+  `desc` text NOT NULL,
   `registerDate` datetime NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,

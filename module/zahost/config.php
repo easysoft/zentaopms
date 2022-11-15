@@ -3,6 +3,8 @@ $config->zahost->create = new stdclass();
 $config->zahost->create->requiredFields = 'name,hostType,address,cpu,memory,disk,virtualSoftware';
 $config->zahost->create->ipFields       = 'address';
 
+$config->zahost->defaultPort = '8086';
+
 $config->zahost->edit = new stdclass();
 $config->zahost->edit->requiredFields = 'name,hostType,cpu,memory,disk,virtualSoftware';
 

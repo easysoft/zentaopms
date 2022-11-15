@@ -263,7 +263,7 @@ class zahostModel extends model
     public function downloadImage($image)
     {
         $host   = $this->getById($image->hostID);
-        $apiUrl = 'http://' . $host->publicIP. '/api/v1/download/add';
+        $apiUrl = 'http://' . $host->address. ':' . $this->config->zahost->defaultPort . '/api/v1/download/add';
 
         $apiParams['md5']  = $image->md5;
         $apiParams['url']  = $image->address;
@@ -293,7 +293,7 @@ class zahostModel extends model
     public function queryDownloadImageStatus($image)
     {
         $host   = $this->getById($image->hostID);
-        $apiUrl = 'http://' . $host->publicIP. '/api/v1/task/getStatus';
+        $apiUrl = 'http://' . $host->address . ':' . $this->config->zahost->defaultPort . '/api/v1/task/getStatus';
 
         $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
         if(!$result or $result->code != 'success') return $image->status;
@@ -483,7 +483,7 @@ class zahostModel extends model
      */
     public function getImagePairs($hostID)
     {
-        return $this->dao->select('id,name')->from(TABLE_IMAGE)->where('hostID')->eq($hostID)->fetchPairs();
+        return $this->dao->select('id,name')->from(TABLE_IMAGE)->where('hostID')->eq($hostID)->andWhere('status')->eq('completed')->fetchPairs();
     }
 
     /**
