@@ -70,8 +70,9 @@ $lang->zahost->image->choseImage    = '选择镜像';
 $lang->zahost->image->downloadImage = '下载镜像';
 $lang->zahost->image->startDowload  = '开始下载';
 
-$lang->zahost->image->name       = '名称';
 $lang->zahost->image->common     = '镜像';
+$lang->zahost->image->name       = '名称';
+$lang->zahost->image->desc       = '说明';
 $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->disk;
 $lang->zahost->image->osType     = $lang->zahost->osType;

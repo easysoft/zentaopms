@@ -244,7 +244,7 @@ class zahostModel extends model
         $imageData->hostID = $hostID;
         $imageData->status = 'created';
 
-        $this->dao->insert(TABLE_IMAGE)->data($imageData)->autoCheck()->exec();
+        $this->dao->insert(TABLE_IMAGE)->data($imageData, 'desc')->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $imageID = $this->dao->lastInsertID();
@@ -263,7 +263,7 @@ class zahostModel extends model
     public function downloadImage($image)
     {
         $host   = $this->getById($image->hostID);
-        $apiUrl = 'http://' . $host->address. ':' . $this->config->zahost->defaultPort . '/api/v1/download/add';
+        $apiUrl = 'http://' . $host->address . ':' . $this->config->zahost->defaultPort . '/api/v1/download/add';
 
         $apiParams['md5']  = $image->md5;
         $apiParams['url']  = $image->address;
@@ -300,19 +300,31 @@ class zahostModel extends model
 
         foreach($result->data as $status => $group)
         {
-            $task = array_filter($group, function($task) use($image)
+            $currentTask = null;
+            foreach($group as $task)
             {
-                return $task->task == $image->id;
-            });
+                if($task->task == $image->id )
+                {
+                    $currentTask = $task;
+                    break;
+                }
+            }
 
-            if($task)
+            if($currentTask)
             {
-                $this->dao->update(TABLE_IMAGE)->set('status')->eq($status)->where('id')->eq($image->id)->exec();
-                return $status;
+                $image->rate   = $currentTask->rate;
+                $image->status = $status;
+
+                $this->dao->update(TABLE_IMAGE)
+                    ->set('status')->eq($status)
+                    ->set('path')->eq($currentTask->path)
+                    ->where('id')->eq($image->id)->exec();
+
+                break;
             }
         }
 
-        return $image->status;
+        return $image;
     }
 
     /**

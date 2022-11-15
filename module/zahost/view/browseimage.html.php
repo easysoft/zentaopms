@@ -27,10 +27,11 @@
     </p>
   </div>
   <?php else:?>
-  <table class='table has-sort-head table-fixed' id='vmList'>
+  <table class='table has-sort-head table-fixed' id='imageList'>
     <thead>
       <tr>
         <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->zahost->image->name);?></th>
+        <th class=''><?php echo $lang->zahost->image->desc;?></th>
         <th class='c-number'><?php common::printOrderLink('memory', $orderBy, $vars, $lang->zahost->image->memory);?></th>
         <th class='c-number'><?php common::printOrderLink('disk', $orderBy, $vars, $lang->zahost->image->disk);?></th>
         <th><?php echo $lang->zahost->status;?></th>
@@ -41,6 +42,7 @@
       <?php foreach($imageList as $image):?>
       <tr>
         <td title="<?php echo $image->name;?>"><?php echo $image->name;?></td>
+        <td><?php echo $image->desc;?></td>
         <td><?php echo $image->memory . zget($this->lang->zahost->unitList, 'GB');?></td>
         <td><?php echo $image->disk . zget($this->lang->zahost->unitList, 'GB');?></td>
         <td class='image-status-<?php echo zget($image, 'id', 0);?>'><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>

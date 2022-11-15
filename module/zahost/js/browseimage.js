@@ -10,7 +10,10 @@ $(function()
             console.log(statusList);
             for(var imageID in statusList)
             {
-                $('.image-status-' + imageID).text(statusList[imageID].statusName);
+                if(statusList[imageID].statusCode)
+                {
+                  $('.image-status-' + imageID).text(statusList[imageID].status);
+                }
             }
         });
     }, 5000);
