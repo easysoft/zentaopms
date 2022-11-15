@@ -105,7 +105,8 @@
     </div>
     <?php else:?>
     <div class="table-empty-tip">
-      <p><span class="text-muted"><?php echo $lang->{$app->rawModule}->whyNoStories;?></p>
+      <?php $emptyTips = ($app->rawModule == 'execution' and !$project->hasProduct) ? 'projectNoStories' : 'whyNoStories';?>
+      <p><span class="text-muted"><?php echo $lang->{$app->rawModule}->{$emptyTips};?></p>
     </div>
     <?php endif;?>
   </form>
