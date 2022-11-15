@@ -17,7 +17,7 @@ $lang->zahost->deleteTemplate = 'Delete Template';
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'IP/Domain';
-$lang->zahost->address     = 'IP';
+$lang->zahost->address     = 'IP/Domain';
 $lang->zahost->cpu         = 'CPU Cores';
 $lang->zahost->memory      = 'Memory Size';
 $lang->zahost->disk    = 'Disk Size';
