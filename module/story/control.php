@@ -1085,7 +1085,7 @@ class story extends control
         }
 
         /* Set ditto option for users. */
-        $users = $this->loadModel('user')->getPairs('nodeleted');
+        $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
