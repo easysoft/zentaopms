@@ -1375,11 +1375,14 @@ class searchModel extends model
     public function setOptions($fields, $fieldParams, $queries = array())
     {
         $options = new stdclass();
-        $options->searchMethod    = array();
-        $options->fieldsData      = array();
-        $options->savedQueryTitle = $this->lang->search->savedQuery;
-        $options->andOr           = array();
-        $options->groupName       = array($this->lang->search->group1, $this->lang->search->group2);
+        $options->searchMethod      = array();
+        $options->fieldsData        = array();
+        $options->savedQueryTitle   = $this->lang->search->savedQuery;
+        $options->andOr             = array();
+        $options->groupName         = array($this->lang->search->group1, $this->lang->search->group2);
+        $options->searchBtnText     = $this->lang->search->common;
+        $options->resetBtnText      = $this->lang->search->reset;
+        $options->saveSearchBtnText = $this->lang->search->saveCondition;
         foreach($this->lang->search->andor as $value => $title)
         {
             $andOr = new stdclass();
