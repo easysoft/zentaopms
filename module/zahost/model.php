@@ -181,12 +181,16 @@ class zahostModel extends model
      * Get image by name.
      *
      * @param  string $imageName
+     * @param  int    $hostID
      * @access public
      * @return object
      */
-    public function getImageByName($imageName)
+    public function getImageByNameAndHostID($imageName, $hostID)
     {
-        return $this->dao->select('*')->from(TABLE_IMAGE)->where('deleted')->eq(0)->andWhere('name')->eq($imageName)->fetch();
+        return $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('deleted')->eq(0)
+            ->andWhere('hostID')->eq($hostID)
+            ->andWhere('name')->eq($imageName)->fetch();
     }
 
     /**
