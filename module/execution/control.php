@@ -657,7 +657,6 @@ class execution extends control
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
 
-
         $this->loadModel('tree');
         $bugModules = array();
         foreach($products as $productID => $productName)
@@ -692,7 +691,6 @@ class execution extends control
             unset($this->config->bug->search['fields']['product']);
             if($project->model !== 'scrum') unset($this->config->bug->search['fields']['plan']);
         }
-
         unset($this->config->bug->search['params']['resolvedBy']);
         unset($this->config->bug->search['params']['closedBy']);
         unset($this->config->bug->search['params']['status']);
