@@ -605,7 +605,7 @@ class project extends control
         $this->config->executionCommonList[$this->app->getClientLang()][1];
 
         $withProgram = $this->config->systemMode == 'ALM' ? true : false;
-        $allProducts = array('0' => '') + $this->program->getProductPairs(0, 'all', 'noclosed', '', $shadow, $withProgram);
+        $allProducts = array('0' => '') + $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
 
         $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
