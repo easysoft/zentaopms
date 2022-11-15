@@ -51,8 +51,8 @@
       <tr>
         <th class='c-id'><?php echo $lang->release->id;?></th>
         <th class="c-name"><?php echo $lang->release->name;?></th>
-        <th class='text-center c-build'><?php echo $lang->release->build;?></th>
-        <th class='text-center c-project'><?php echo $lang->release->project;?></th>
+        <th class='text-center c-build'><?php echo $lang->release->includedBuild;?></th>
+        <th class='text-center c-project'><?php echo $lang->release->relatedProject;?></th>
         <th class='text-center c-status'><?php echo $lang->release->status;?></th>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <?php
