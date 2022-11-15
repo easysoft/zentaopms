@@ -1,6 +1,6 @@
 <?php
 /**
- *本文件主要进行生成每个脚本文件对应的测试数据yaml文件。
+ * 本文件主要进行生成每个脚本文件对应的测试数据yaml文件。
  *
  * All request of entries should be routed by this router.
  *
@@ -8,10 +8,21 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      liyang <liyang@easycorp.ltd>
  * @package     ZenTaoPMS
- * @version     $Id: $
+ * @version     1.0
  * @link        http://www.zentao.net/
  */
-class yaml
+
+/**
+ * Set fields for test data yaml file.
+ *
+ * @copyright Copyright 2009-2022 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @author    liyang <liyang@easycorp.ltd>
+ * @package
+ * @license   LGPL
+ * @version   1.0
+ * @Link      https://www.zentao.net
+ */
+class field
 {
     /**
      * Global config.
@@ -22,12 +33,12 @@ class yaml
     public $config;
 
     /**
-     * Filed Arr.
+     * Field Arr.
      *
      * @var array
      * @access public
      */
-    public  $fieldArr = array();
+    public $fieldArr = array();
 
     /**
      * Field.
@@ -72,7 +83,7 @@ class yaml
     }
 
     /**
-     * Set yaml filed.
+     * Set yaml field.
      *
      * @param  string    $value
      * @access public
@@ -86,7 +97,7 @@ class yaml
     }
 
     /**
-     * Set filed rang.
+     * Set field rang.
      *
      * @param  string    $range
      * @access public
@@ -118,7 +129,7 @@ class yaml
      * @access public
      * @return object
      */
-    function postfix($postfix)
+    public function postfix($postfix)
     {
         $this->fieldArr[$this->field]['postfix'] = $postfix;
         return $this;
@@ -131,7 +142,7 @@ class yaml
      * @access public
      * @return object
      */
-    function type($type)
+    public function type($type)
     {
         $this->fieldArr[$this->field]['type'] =  $type;
         return $this;
@@ -144,24 +155,24 @@ class yaml
      * @access public
      * @return object
      */
-    function format($format)
+    public function format($format)
     {
         $this->fieldArr[$this->field]['format'] =  $format;
         return $this;
     }
 
     /**
-     * set field fields.
+     * Set field fields.
      *
      * @param  array    $fields
      * @access public
      * @return object
      */
-    function fields($fields)
+    public function fields($fields)
     {
         if(!is_array($fields))
         {
-            echo "fileds must be an array";
+            echo "fields must be an array";
             return;
         }
 
@@ -170,31 +181,32 @@ class yaml
     }
 
     /**
-     * get field array value.
+     * Get field array.
      *
      * @access public
      * @return array
      */
-    function getField()
+    public function getFields()
     {
+        var_dump($this->fieldArr);
         return $this->fieldArr;
     }
 
     /**
      * Assembly field generation rules.
      *
-     * @param  array     $filedArr
+     * @param  array     $fieldArr
      * @access public
      * @return array
      */
-    function setFieldRule($filedArr)
+    public function setFieldRule($fieldArr)
     {
         $ruleArr = array();
         $index   = 0;
 
-        foreach($filedArr as $filed => $rule)
+        foreach($fieldArr as $field => $rule)
         {
-            $ruleArr[$index]['field'] = $filed;
+            $ruleArr[$index]['field'] = $field;
 
             if(array_key_exists('fields', $rule))
             {
@@ -202,7 +214,7 @@ class yaml
             }
             else
             {
-                if(!empty($rule['range'])) $ruleArr[$index]['range']   = $rule['range'];
+                if(!empty($rule['range'])) $ruleArr[$index]['range'] = $rule['range'];
             }
 
             if(!empty($rule['prefix']))  $ruleArr[$index]['prefix']  = $rule['prefix'];
@@ -224,23 +236,37 @@ class yaml
      * @access public
      * @return void
      */
-    function build($model, $name, $version = '')
+    public function build($model, $name, $version = '')
     {
         if(!is_dir($this->yamlDir . "/{$model}/data")) mkdir($this->yamlDir . "/{$model}/data", 0700);
         $yamlFile = $this->yamlDir . "/{$model}/data/{$name}.yaml";
 
         $yamlDataArr = array();
 
-        $yamlDataArr['title']   = "zt_{$name}";
-        $yamlDataArr['author']  = "auto_{$name}";
+        $yamlDataArr['title']  = "zt_{$name}";
+        $yamlDataArr['author'] = "auto_{$name}";
         $version ? $yamlDataArr['version'] = $version : $yamlDataArr['version'] = '1.0';
 
         if(empty($this->fieldArr)) return;
         $yamlDataArr['fields'] = $this->setFieldRule($this->fieldArr);
 
-        yaml_emit_file($yamlFile, $yamlDataArr);
+        yaml_emit_file($yamlFile, $yamlDataArr, YAML_UTF8_ENCODING);
     }
+}
 
+/**
+ * Create test data from yaml file.
+ *
+ * @copyright Copyright 2009-2022 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @author    liyang <liyang@easycorp.ltd>
+ * @package
+ * @uses      field
+ * @license   LGPL
+ * @version   1.0
+ * @Link      https://www.zentao.net
+ */
+class yaml extends field
+{
     /**
      * Insert the data into database.
      *
@@ -252,8 +278,8 @@ class yaml
      */
     function insertDB($model, $file, $tableName, $rows, $isClear = false)
     {
-        $yamlFile     = $this->yamlDir . "/{$model}/data/{$file}.yaml";
-        $tableSqlDir  = $this->yamlDir . "/{$model}/data/sql";
+        $yamlFile    = $this->yamlDir . "/{$model}/data/{$file}.yaml";
+        $tableSqlDir = $this->yamlDir . "/{$model}/data/sql";
 
         if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0700);
         $dumpCommand = "mysqldump -u%s -p%s -h%s -P%s %s %s > {$tableSqlDir}/{$tableName}.sql";
@@ -269,7 +295,7 @@ class yaml
         $dbUser    = $this->config->db->user;
         $dbPWD     = $this->config->db->password;
 
-        $command  = "$zdPath -c %s -d %s -n %d -t %s --trim -dns mysql://%s:%s@%s:%s/%s#utf8";
+        $command = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
         if($isClear === true) $command .= ' --clear';
         $execYaml = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
         $execDump = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
@@ -290,11 +316,11 @@ class yaml
         $tableSql = $this->yamlDir . "/{$model}/data/sql/$tableName.sql";
         if(!is_file($tableSql)) return false;
 
-        $dbName    = $this->config->db->name;
-        $dbHost    = $this->config->db->host;
-        $dbPort    = $this->config->db->port;
-        $dbUser    = $this->config->db->user;
-        $dbPWD     = $this->config->db->password;
+        $dbName = $this->config->db->name;
+        $dbHost = $this->config->db->host;
+        $dbPort = $this->config->db->port;
+        $dbUser = $this->config->db->user;
+        $dbPWD  = $this->config->db->password;
 
         $command     = "mysql -u%s -p%s -h%s -P%s %s < %s";
         $execRestore = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableSql);
