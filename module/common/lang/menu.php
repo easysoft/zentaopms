@@ -312,7 +312,7 @@ $lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="
 $lang->kanbanProject = new stdclass();
 $lang->kanbanProject->menu = new stdclass();
 $lang->kanbanProject->menu->index    = array('link' => "{$lang->kanban->common}|project|index|project=%s");
-$lang->kanbanProject->menu->build    = array('link' => "{$lang->build->common}|project|build|project=%s");
+$lang->kanbanProject->menu->build    = array('link' => "{$lang->build->common}|project|build|project=%s", 'subModule' => 'projectbuild');
 $lang->kanbanProject->menu->settings = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
 
 $lang->kanbanProject->dividerMenu = '';
