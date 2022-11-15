@@ -2849,6 +2849,17 @@ class projectModel extends model
         $this->lang->project->menuOrder   = $this->lang->$navGroup->menuOrder;
         $this->lang->project->dividerMenu = $this->lang->$navGroup->dividerMenu;
 
+        if(empty($project->hasProduct))
+        {
+            unset($this->lang->project->menu->settings['subMenu']->products);
+        }
+        else
+        {
+            unset($this->lang->project->menu->settings['subMenu']->module);
+            unset($this->lang->project->menu->settings['subMenu']->managerepo);
+            unset($this->lang->project->menu->projectplan);
+        }
+
         $this->loadModel('common')->resetProjectPriv($projectID);
     }
 
