@@ -27,10 +27,10 @@ UPDATE `zt_dashboard` SET `dimension` = 1 WHERE `dimension` = 0;
 
 CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(6) NOT NULL DEFAULT 'custom',
+  `group` mediumint(8) unsigned NOT NULL,
   `name` varchar(155) NOT NULL,
   `code` varchar(50) NOT NULL,
-  `table` varchar(57) NOT NULL,
+  `view` varchar(57) NOT NULL,
   `sql` text NOT NULL,
   `fields` mediumtext NOT NULL,
   `objects` mediumtext NOT NULL,
