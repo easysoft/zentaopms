@@ -334,7 +334,7 @@ tbody tr td:first-child input {display: none;}
                 </tr>
                 <?php if($build->execution):?>
                 <tr>
-                  <th><?php echo $lang->build->execution;?></th>
+                  <th><?php echo empty($multipleProject) ? $lang->build->project : $lang->build->execution;?></th>
                   <td><?php echo zget($executions, $build->execution);?></td>
                 </tr>
                 <?php else:?>
