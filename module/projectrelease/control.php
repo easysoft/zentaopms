@@ -372,7 +372,7 @@ class projectrelease extends control
             $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
             foreach($builds as $build)
             {
-                if(empty($build->execution)) $this->build->delete(TABLE_BUILD, $build->id);
+                if(empty($build->execution) and empty($build->builds) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
             }
 
             $message = $this->executeHooks($releaseID);
@@ -390,7 +390,6 @@ class projectrelease extends control
                 {
                     $response['result']  = 'success';
                     $response['message'] = '';
-                    $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->in($release->build)->andWhere('name')->eq($release->name)->exec();
                 }
                 return $this->send($response);
             }
