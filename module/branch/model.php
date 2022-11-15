@@ -126,7 +126,7 @@ class branchModel extends model
 
         if($executionID)
         {
-            $branches = array('0' => $this->lang->branch->main, 'all' => $this->lang->branch->all) + $branches;
+            $branches = array('all' => $this->lang->branch->all, '0' => $this->lang->branch->main) + $branches;
             return $branches;
         }
 
