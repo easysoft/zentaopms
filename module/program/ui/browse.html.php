@@ -14,7 +14,8 @@ if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid' and $has
     $toolbar->append(html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : ''));
 }
 
-$toolbar->append('<a class="querybox-toggle" id="searchFormBtn"><i class="icon icon-search"></i> <span>' . $lang->user->search . '</span></a>');
+$searchClass = $status == 'bySearch' ? 'active' : '';
+$toolbar->append("<a class='querybox-toggle $searchClass' id='searchFormBtn'><i class='icon icon-search'></i> <span>" . $lang->user->search . '</span></a>');
 
 /* Set actionbar. */
 $actionbar = actionbar();
