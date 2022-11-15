@@ -23,6 +23,7 @@ $lang->executionnode->ip              = 'IP';
 $lang->executionnode->osArch          = 'Arch';
 $lang->executionnode->cpu             = 'CPU Cores';
 $lang->executionnode->memory          = 'Memory Size';
+$lang->executionnode->desc            = 'Description';
 $lang->executionnode->disk            = 'Disk Size';
 $lang->executionnode->status          = 'Status';
 $lang->executionnode->mac             = 'MAC';
