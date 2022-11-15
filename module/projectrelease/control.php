@@ -83,15 +83,12 @@ class projectrelease extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $releases = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
-        $productIdList = array();
-        foreach($releases as $release) $productIdList[$release->product] = $release->product;
 
         $this->view->title       = $objectName . $this->lang->colon . $this->lang->release->browse;
         $this->view->execution   = $execution;
         $this->view->project     = $project;
         $this->view->products    = $this->loadModel('product')->getProducts($projectID);
         $this->view->releases    = $releases;
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productIdList, 'all', 'notrunk,withbranch', $projectID, 'project');
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->type        = $type;
