@@ -172,7 +172,7 @@ class build extends control
         {
             $productGroups = $this->product->getProducts($build->project);
             $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
-            $builds        = $this->build->getBuildPairs($build->product, $build->branch, 'noempty,notrunk,separate,noproject');
+            $builds        = $this->build->getBuildPairs($build->product, $build->branch, 'noempty,notrunk,separate,noproject', $build->project, 'project');
         }
 
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
@@ -292,7 +292,7 @@ class build extends control
         $this->view->storyPager = $storyPager;
 
         $generatedBugPager = new pager($type == 'generatedBug' ? $recTotal : 0, $recPerPage, $type == 'generatedBug' ? $pageID : 1);
-        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, 'all', $build->id, $type, $param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
+        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, $param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
         $this->view->generatedBugPager = $generatedBugPager;
 
         $this->executeHooks($buildID);

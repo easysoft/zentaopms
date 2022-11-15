@@ -31,7 +31,7 @@ class releaseModel extends model
             ->fetch();
         if(!$release) return false;
 
-        $release->builds = $this->dao->select('id, filePath, scmPath, name, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+        $release->builds = $this->dao->select('id, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
 
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
@@ -66,7 +66,7 @@ class releaseModel extends model
             ->page($pager)
             ->fetchAll();
 
-        $builds = $this->dao->select("t1.id, t1.name, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
+        $builds = $this->dao->select("t1.id, t1.name, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = t3.id')
