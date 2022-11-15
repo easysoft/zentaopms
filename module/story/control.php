@@ -396,6 +396,7 @@ class story extends control
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
+        $this->view->hiddenParent  = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
         $this->view->teamUsers     = array();
@@ -409,6 +410,7 @@ class story extends control
             {
                 $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
                 $this->view->hiddenProduct = true;
+                $this->view->hiddenParent  = true;
 
                 if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
                 if(!$project->multiple)          $this->view->hiddenPlan = true;
@@ -883,6 +885,7 @@ class story extends control
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
+        $this->view->hiddenParent  = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
         $this->view->teamUsers     = array();
@@ -892,6 +895,7 @@ class story extends control
             $project = $this->project->getByShadowProduct($product->id);
             $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
             $this->view->hiddenProduct = true;
+            $this->view->hiddenParent  = true;
 
             if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
             if(!$project->multiple)          $this->view->hiddenPlan = true;
