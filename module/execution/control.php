@@ -1733,9 +1733,27 @@ class execution extends control
             $this->view->linkedBranches = $linkedBranches;
         }
 
+        if(!$project->hasProduct)
+        {
+            $shadowProduct = $this->loadModel('product')->getShadowProductByProject($project->id);
+            $productPlan   = $this->loadModel('productplan')->getPairs($shadowProduct->id, '0,0', 'noclosed,unexpired', true);
+        }
+
         if(!empty($_POST))
         {
             if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
+
+            /* No product execution link plans. */
+            if(!$project->hasProduct and !empty($_POST['plans']))
+            {
+                $plansItem = array();
+                foreach($_POST['plans'] as $planItem)
+                {
+                    if(empty($planItem[0][0])) continue;
+                    $plansItem[] = $planItem[0][0];
+                }
+                $_POST['plans'] = array($_POST['products'][0] => array(0 => $plansItem));
+            }
 
             $executionID = $this->execution->create($copyExecutionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

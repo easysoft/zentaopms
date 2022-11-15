@@ -42,10 +42,12 @@
     <?php if(common::hasPriv('execution', 'task')) echo html::checkbox('showTask', array('1' => $lang->programplan->stageCustom->task), '', $this->cookie->showTask ? 'checked=checked' : '');?>
   </div>
   <div class='btn-toolbar pull-right'>
+    <?php if($project->model == 'waterfall'):?>
     <div class="btn-group">
       <?php echo html::a('', "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->project->bylist}'");?>
       <?php echo html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"), "<i class='icon-gantt-alt'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->programplan->gantt}'");?>
     </div>
+    <?php endif;?>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
      <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
      <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
