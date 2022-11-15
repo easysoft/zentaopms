@@ -320,6 +320,7 @@ class zahostModel extends model
                 $image->status = $status;
 
                 $this->dao->update(TABLE_IMAGE)
+                    ->set('osCategory')->eq($image->os)
                     ->set('status')->eq($status)
                     ->set('path')->eq($currentTask->path)
                     ->where('id')->eq($image->id)->exec();
