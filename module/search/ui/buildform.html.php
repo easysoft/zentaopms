@@ -1,6 +1,7 @@
 <?php js::set('options', json_encode($options));?>
 <?php js::set('canSaveQuery', !empty($_SESSION[$module . 'Query']));?>
 <?php js::set('formSession', $_SESSION[$module . 'Form'])?>
+<?php js::set('onMenuBar', $onMenuBar);?>
 <script>
 $(function()
 {
@@ -17,7 +18,7 @@ $(function()
     $searchForm.append('<input type="hidden" name="module" value="' + module +'" />');
     $searchForm.append('<input type="hidden" name="actionURL" value="' + actionURL +'" />');
     $searchForm.find('.btn-submit-form').attr('type', 'submit');
-    $searchForm.find('.search-form-footer .save-query').attr('href', createLink('search', 'saveQuery', 'module=' + module + '&onMenuBar=yes'));
+    $searchForm.find('.search-form-footer .save-query').attr('href', createLink('search', 'saveQuery', 'module=' + module + '&onMenuBar=' + onMenuBar));
     $(document).on('click', '#searchFormBtn', function()
     {
         queryBox.toggleClass('hidden');
