@@ -253,6 +253,7 @@
           foreach($setting as $key => $value)
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
               if($value->show)
               {
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
@@ -271,6 +272,7 @@
           <?php foreach($setting as $key => $value)
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
               $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution, $showBranch);
           }
           ?>
@@ -285,6 +287,7 @@
           <?php foreach($setting as $key => $value)
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
               $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution);
           }?>
           </tr>
