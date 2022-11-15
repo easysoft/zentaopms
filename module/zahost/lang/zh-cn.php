@@ -58,7 +58,7 @@ $lang->zahost->initHost->serviceStatus = [
 $lang->zahost->initHost->title = "初始化宿主机";
 $lang->zahost->initHost->descTitle = "请按照以下步骤在宿主机上完成初始化：";
 $lang->zahost->initHost->descLi = [
-    "下载初始化脚本至宿主机：wget https://pkg-1308438674.cos.ap-shanghai.myqcloud.com/zenagent/zagentenv",
+    "下载初始化脚本至宿主机：wget https://pkg.qucheng.com/zenagent/zagentenv",
     "在宿主机上执行初始化脚本，Ubuntu下执行命令示例：./zagentenv"
 ];
 
