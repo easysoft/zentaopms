@@ -61,6 +61,31 @@ $lang->zahost->initHost->descLi = [
 ];
 $lang->zahost->initHost->statusTitle = "Service Status";
 
+$lang->zahost->image = new stdclass;
+$lang->zahost->image->list          = 'Image List';
+$lang->zahost->image->browseImage   = 'Image List';
+$lang->zahost->image->createImage   = 'Create Image';
+$lang->zahost->image->choseImage    = 'Select Image';
+$lang->zahost->image->downloadImage = 'Download Image';
+$lang->zahost->image->startDowload  = 'Start Download';
+
+$lang->zahost->image->common     = 'Image';
+$lang->zahost->image->name       = 'Name';
+$lang->zahost->image->desc       = 'Description';
+$lang->zahost->image->memory     = $lang->zahost->memory;
+$lang->zahost->image->disk       = $lang->zahost->disk;
+$lang->zahost->image->osType     = $lang->zahost->osType;
+$lang->zahost->image->osCategory = $lang->zahost->osCategory;
+$lang->zahost->image->osVersion  = $lang->zahost->osVersion;
+$lang->zahost->image->osLang     = $lang->zahost->osLang;
+$lang->zahost->image->imageName  = $lang->zahost->imageName;
+
+$lang->zahost->image->statusList['created']    = 'Created';
+$lang->zahost->image->statusList['canceled']   = 'Canceled';
+$lang->zahost->image->statusList['inprogress'] = 'Inprogress';
+$lang->zahost->image->statusList['completed']  = 'Completed';
+$lang->zahost->image->statusList['failed']     = 'Failed';
+
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = 'Nom';
 $lang->zahost->vmTemplate->common     = 'VM Template';
