@@ -2777,7 +2777,7 @@ class story extends control
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
-            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
+            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy, $storyType));
             $this->fetch('transfer', 'export', 'model=story');
         }
 
@@ -2816,7 +2816,7 @@ class story extends control
         if(isset($project->hasProduct) && !$project->hasProduct)
         {
             $filterFields = array('product,', 'branch,');
-            if($project->model != 'scrum') $filterFields[] = 'plan';
+            if($project->model != 'scrum') $filterFields[] = 'plan,';
             $this->config->story->exportFields = str_replace($filterFields, '', $this->config->story->exportFields);
         }
 
