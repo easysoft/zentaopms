@@ -1366,40 +1366,63 @@ class searchModel extends model
      *
      * @param  array $fields
      * @param  array $fieldParams
+     * @param  array $queries
      * @access public
      * @return object
      */
-    public function setOptions($fields, $fieldParams)
+    public function setOptions($fields, $fieldParams, $queries = array())
     {
         $options = new stdclass();
-        $options->selectOptions = array();
-        $options->data          = array();
-        foreach($this->lang->search->operators as $value => $text)
+        $options->searchMethod    = array();
+        $options->fieldsData      = array();
+        $options->savedQueryTitle = $this->lang->search->savedQuery;
+        $options->andOr           = array();
+        $options->groupName       = array($this->lang->search->group1, $this->lang->search->group2);
+        foreach($this->lang->search->andor as $value => $title)
         {
-            $option = new stdclass();
-            $option->value = $value;
-            $option->text  = $text;
+            $andOr = new stdclass();
+            $andOr->value = $value;
+            $andOr->title = $title;
 
-            $options->selectOptions[] = $option;
+            $options->andOr[] = $andOr;
         }
 
-        for($i = 0; $i < 6; $i++)
+        foreach($this->lang->search->operators as $value => $title)
+        {
+            $operator = new stdclass();
+            $operator->value = $value;
+            $operator->title = $title;
+
+            $options->searchMethod[] = $operator;
+        }
+
+        foreach($fieldParams as $field => $param)
         {
             $data = new stdclass();
-            if($i == 0) $data->label = $this->lang->search->group1;
-            if($i == 3) $data->label = $this->lang->search->group2;
-            $data->items = array();
-            foreach($fieldParams as $field => $param)
-            {
-                $item = new stdclass();
-                $item->text  = $fields[$field];
-                $item->value = $field;
-                $item->type  = $param['control'];
+            $data->fields   = $fields[$field];
+            $data->key      = $field;
+            $data->control  = $param['control'];
+            $data->operator = $param['operator'];
 
-                $data->items[] = $item;
-            }
-            $options->data[] = $data;
+            if($field == 'id') $data->placeholder = $this->lang->search->queryTips;
+            if(!empty($param['values']) and is_array($param['values'])) $data->values = $param['values'];
+
+            $options->fieldsData[] = $data;
         }
+
+        $savedQuery = array();
+        foreach($queries as $query)
+        {
+            if(empty($query->id)) continue;
+            $savedQuery[] = $query;
+        }
+
+        if(!empty($savedQuery)) $options->savedQuery = $savedQuery;
+
+        $options->formConfig  = new stdclass();
+        $options->formConfig->method = 'post';
+        $options->formConfig->action = helper::createLink('search', 'buildQuery');
+        $options->formConfig->target = 'hiddenwin';
 
         return $options;
     }
