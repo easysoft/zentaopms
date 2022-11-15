@@ -52,6 +52,7 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
       <div class="content panel">
         <div class='btn-toolbar'>
           <div class="btn btn-left pull-left"><i class="icon icon-chevron-left"></i></div>
+          <div class="btn btn-close pull-right"><i class="icon icon-close"></i></div>
           <?php if($canLinkStory or $canLinkBug or $canLinkTask or $canUnlinkObject):?>
           <div class="dropdown pull-right">
             <button class="btn" type="button" data-toggle="context-dropdown"><i class="icon icon-ellipsis-v icon-rotate-90"></i></button>

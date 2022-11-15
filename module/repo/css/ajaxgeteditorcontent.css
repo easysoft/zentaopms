@@ -15,6 +15,7 @@
 #relationTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex;}
 #relationTabs .tab-nav-link .title {max-width: 300px; display: inline-block; white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis; padding: 0 5px;}
 #related .content, #related .btn {background-color: #F4F5F7; border: none;}
+#related .btn.pull-right {margin-right: 0;}
 #related .nav-tabs > li.active > a:before {background: none; height: 0;}
 #related .table-empty-tip {padding: 35px 10px;}
 .repoCode .binary a .icon-download {font-size: 50px;}
