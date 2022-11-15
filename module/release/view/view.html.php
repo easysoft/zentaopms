@@ -357,7 +357,7 @@
                         foreach($release->builds as $build)
                         {
                             $buildDivision = $i == count($release->builds) ? '' : $lang->comma;
-                            echo (($build->project) ? html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name, '_blank') : $build->name) . $buildDivision;
+                            echo (($build->project) ? html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$build->id"), $build->name) : $build->name) . $buildDivision;
                             $i++;
                         }
                         ?>

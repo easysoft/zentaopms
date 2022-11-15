@@ -51,8 +51,8 @@
       <tr>
         <th class='c-id'><?php echo $lang->release->id;?></th>
         <th class="c-name"><?php echo $lang->release->name;?></th>
-        <th class='text-center c-build'><?php echo $lang->release->build;?></th>
-        <th class='text-center c-build'><?php echo $lang->release->project;?></th>
+        <th class='text-center c-build'><?php echo $lang->release->includedBuild;?></th>
+        <th class='text-center c-project'><?php echo $lang->release->relatedProject;?></th>
         <th class='text-center c-status'><?php echo $lang->release->status;?></th>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <?php
@@ -82,7 +82,7 @@
           <?php if($product->type != 'normal'):?>
           <span class='label label-outline label-badge'><?php echo $build->branchName;?></span>
           <?php endif;?>
-          <?php echo html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name);?>
+          <?php echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$build->id"), $build->name);?>
         </td>
         <td><?php echo $build->projectName;?></td>
         <?php if($i == 1):?>

@@ -47,7 +47,13 @@
         <tr>
           <th><?php echo $lang->build->builds;?></th>
           <td id='buildBox'><?php echo html::select('builds[]', $builds, $build->builds, "class='form-control chosen' multiple $disabled");?></td>
-          <td><?php if($disabled) echo $lang->build->notice->changeBuilds;?></td>
+          <td>
+            <?php if($disabled):?>
+            <?php echo $lang->build->notice->changeBuilds;?>
+            <?php else:?>
+            <?php echo $lang->build->notice->autoRelation;?>
+            <?php endif;?>
+          </td>
         </tr>
         <?php elseif(!empty($multipleProject)):?>
         <th><?php echo $lang->build->execution;?></th>

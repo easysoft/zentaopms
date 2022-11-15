@@ -792,11 +792,11 @@ class projectModel extends model
      * @param  string $orderBy
      * @param  string $excludedModel
      * @param  string $model
-     * @param  bool   $multiple
+     * @param  string $param multiple|product
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '', $multiple = false)
+    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '', $param = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -807,7 +807,8 @@ class projectModel extends model
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
-            ->beginIF($multiple)->andWhere('multiple')->eq(1)->fi()
+            ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq(1)->fi()
+            ->beginIF(strpos($param, 'product') !== false)->andWhere('hasProduct')->eq(1)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
@@ -2847,6 +2848,17 @@ class projectModel extends model
         $this->lang->project->menu        = $this->lang->$navGroup->menu;
         $this->lang->project->menuOrder   = $this->lang->$navGroup->menuOrder;
         $this->lang->project->dividerMenu = $this->lang->$navGroup->dividerMenu;
+
+        if(empty($project->hasProduct))
+        {
+            unset($this->lang->project->menu->settings['subMenu']->products);
+        }
+        else
+        {
+            unset($this->lang->project->menu->settings['subMenu']->module);
+            unset($this->lang->project->menu->settings['subMenu']->managerepo);
+            unset($this->lang->project->menu->projectplan);
+        }
 
         $this->loadModel('common')->resetProjectPriv($projectID);
     }

@@ -159,14 +159,14 @@ class transfer extends control
 
         if($model == 'story')
         {
-            $product = $this->loadModel('product')->getByID($this->session->storyPortParams['productID']);
+            $product = $this->loadModel('product')->getByID($this->session->storyTransferParams['productID']);
             if($product->type == 'normal') unset($fields['branch']);
             if($this->session->storyType == 'requirement') unset($fields['plan']);
         }
 
         if($model == 'bug')
         {
-            $product = $this->loadModel('product')->getByID($this->session->bugPortParams['productID']);
+            $product = $this->loadModel('product')->getByID($this->session->bugTransferParams['productID']);
             if($product->type == 'normal') unset($fields['branch']);
             if($product->shadow and ($this->app->tab == 'execution' or $this->app->tab == 'project')) unset($fields['product']);
         }

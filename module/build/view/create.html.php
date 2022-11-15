@@ -45,7 +45,8 @@
         <?php if($app->tab == 'project' && !empty($multipleProject)):?>
         <tr>
           <th><?php echo $lang->build->builds;?></th>
-          <td id='buildBox'><?php echo html::select('builds', array(), '', "class='form-control chosen' multiple");?></td>
+          <td id='buildBox'><?php echo html::select('builds[]', array(), '', "class='form-control chosen' multiple");?></td>
+          <td><?php echo $lang->build->notice->autoRelation;?></td>
         </tr>
         <?php endif;?>
         <tr>

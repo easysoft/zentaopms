@@ -161,7 +161,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <tr>
             <th><?php echo $hiddenURS ? $lang->story->parent : $lang->story->requirement;?></th>
             <td colspan="2" class="<?php if($hiddenURS) echo 'hidden';?>"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
-            <td colspan="2">
+            <td colspan="2" <?php if($hiddenParent) echo 'hidden';?>>
               <div class='input-group' id='moduleIdBox'>
                 <?php if(!$hiddenURS):?>
                 <div class="input-group-addon"><?php echo $lang->story->parent;?></div>
@@ -171,7 +171,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
           </tr>
           <?php else:?>
-          <tr>
+          <tr <?php if($hiddenParent) echo 'hidden';?>>
             <th><?php echo $lang->story->parent;?></th>
             <td colspan="4"><?php echo html::select('parent', $stories, '', "class='form-control chosen'");?></td>
           </tr>
@@ -297,8 +297,12 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <tr>
             <td colspan="5" class="text-center form-actions">
               <?php echo html::hidden('type', $type);?>
+              <?php if(defined('TUTORIAL')):?>
+              <?php echo html::submitButton();?>
+              <?php else:?>
               <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
               <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
+              <?php endif;?>
               <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton('', $source == 'bug' ? 'data-app=qa' : '');?>
             </td>
           </tr>

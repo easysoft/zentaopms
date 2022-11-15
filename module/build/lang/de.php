@@ -57,6 +57,7 @@ $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
 $lang->build->notice->changeExecution = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
 $lang->build->notice->changeBuilds    = "The version of the submitted test order cannot be modified builds";
+$lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the project version";
 
 $lang->build->finishStories = "  %s {$lang->SRCommon} sind abgeschlossen.";
 $lang->build->resolvedBugs  = '  %s Bugs sind gelöst.';

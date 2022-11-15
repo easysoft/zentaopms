@@ -83,15 +83,12 @@ class projectrelease extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $releases = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
-        $productIdList = array();
-        foreach($releases as $release) $productIdList[$release->product] = $release->product;
 
         $this->view->title       = $objectName . $this->lang->colon . $this->lang->release->browse;
         $this->view->execution   = $execution;
         $this->view->project     = $project;
         $this->view->products    = $this->loadModel('product')->getProducts($projectID);
         $this->view->releases    = $releases;
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productIdList, 'all', 'notrunk,withbranch', $projectID, 'project');
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->type        = $type;
@@ -372,7 +369,7 @@ class projectrelease extends control
             $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
             foreach($builds as $build)
             {
-                if(empty($build->execution)) $this->build->delete(TABLE_BUILD, $build->id);
+                if(empty($build->execution) and empty($build->builds) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
             }
 
             $message = $this->executeHooks($releaseID);
@@ -390,7 +387,6 @@ class projectrelease extends control
                 {
                     $response['result']  = 'success';
                     $response['message'] = '';
-                    $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->in($release->build)->andWhere('name')->eq($release->name)->exec();
                 }
                 return $this->send($response);
             }
@@ -693,7 +689,7 @@ class projectrelease extends control
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $searchModules = array();
-        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'story', 0, explode(',', $release->branch));
+        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'bug', 0, explode(',', $release->branch));
         foreach($moduleGroups as $modules) $searchModules += $modules;
         $this->config->bug->search['params']['module']['values'] = $searchModules;
 

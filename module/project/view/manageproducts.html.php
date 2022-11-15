@@ -23,9 +23,11 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->manageProducts;?></span></span>
   </div>
 
+  <?php if($this->config->systemMode == 'ALM'):?>
   <div class='btn-toolbar pull-right'>
     <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#otherProductsModal'><i class='icon icon-link'></i> <?php echo $lang->project->manageOtherProducts; ?></button>
   </div>
+  <?php endif;?>
 </div>
 <div id='mainContent'>
   <div class='cell'>
@@ -46,9 +48,34 @@
             </div>
           </div>
           <?php echo html::hidden("branch[$i]", $branchID);?>
-          <?php if(!isset($branchGroups[$productID])) unset($currentProducts[$productID]);?>
-          <?php if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);?>
-          <?php if(isset($branchGroups[$productID]) and empty($branchGroups[$productID])) unset($currentProducts[$productID]);?>
+
+          <?php
+          if(!isset($branchGroups[$productID]))
+          {
+              if($this->config->systemMode == 'ALM')
+              {
+                  unset($currentProducts[$productID]);
+              }
+              else
+              {
+                  unset($allProducts[$productID]);
+              }
+          }
+
+          if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+
+          if(isset($branchGroups[$productID]) and empty($branchGroups[$productID]))
+          {
+              if($this->config->systemMode == 'ALM')
+              {
+                  unset($currentProducts[$productID]);
+              }
+              else
+              {
+                  unset($allProducts[$productID]);
+              }
+          }
+          ?>
           <?php $i++;?>
           <?php endforeach;?>
           <?php endforeach;?>
@@ -57,7 +84,10 @@
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->project->unlinkedProducts;?></div>
         <div class='detail-content row'>
-          <?php foreach($currentProducts as $productID => $productName):?>
+          <?php
+          $unlinkedProducts = $this->config->systemMode == 'ALM' ? $currentProducts : $allProducts;
+          foreach($unlinkedProducts as $productID => $productName):
+          ?>
           <div class='col-sm-4'>
             <div class='product<?php echo isset($branchGroups[$productID]) ? ' has-branch' : ''?>'>
               <div class="checkbox-primary" title='<?php echo $productName;?>'>
@@ -75,6 +105,8 @@
         <?php echo html::hidden("post", 'post');?>
         <?php echo html::submitButton();?>
       </div>
+
+      <?php if($this->config->systemMode == 'ALM'):?>
       <div class='modal fade' id='otherProductsModal'>
         <div class='modal-content'>
           <div class='modal-dialog w-600px'>
@@ -97,6 +129,7 @@
           </div>
         </div>
       </div>
+      <?php endif;?>
     </form>
   </div>
 </div>
