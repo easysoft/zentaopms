@@ -1685,12 +1685,12 @@ class execution extends control
             $branchGroups  = $this->execution->getBranchByProduct(array_keys($products), $projectID);
 
             $linkedBranches = array();
-            foreach($products as $productID => $product)
+            foreach($products as $productIndex => $product)
             {
-                foreach($branches[$productID] as $branchID => $branch)
+                foreach($branches[$productIndex] as $branchID => $branch)
                 {
-                    $linkedBranches[$productID][$branchID] = $branchID;
-                    $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                    $linkedBranches[$productIndex][$branchID] = $branchID;
+                    $productPlans[$productIndex][$branchID]   = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
@@ -1720,12 +1720,12 @@ class execution extends control
             $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
 
             $linkedBranches = array();
-            foreach($products as $productID => $product)
+            foreach($products as $productIndex => $product)
             {
-                foreach($branches[$productID] as $branchID => $branch)
+                foreach($branches[$productIndex] as $branchID => $branch)
                 {
-                    $linkedBranches[$productID][$branchID] = $branchID;
-                    $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                    $linkedBranches[$productIndex][$branchID] = $branchID;
+                    $productPlans[$productIndex][$branchID]   = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
