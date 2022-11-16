@@ -190,8 +190,8 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = 'Projects Ownedbyme';
 $lang->project->typeList['other'] = 'Other Projects';
 
-$lang->project->divisionList['1'] = 'Create by project';
-$lang->project->divisionList['0'] = 'Create by product';
+$lang->project->divisionList['0'] = 'Create by project';
+$lang->project->divisionList['1'] = 'Create by product';
 
 $lang->project->waitProjects    = 'Waiting Projects';
 $lang->project->doingProjects   = 'Ongoing Projects';

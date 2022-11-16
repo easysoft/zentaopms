@@ -103,6 +103,7 @@ $lang->custom->object['user']      = 'Utilisateur';
 $lang->custom->object['block']     = 'Bloc';
 $lang->custom->object['flow']      = 'Flow';
 $lang->custom->object['score']     = 'Score';
+$lang->custom->object['mode']      = 'Mode';
 
 $lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
