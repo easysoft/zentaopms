@@ -1375,8 +1375,8 @@ class searchModel extends model
     public function setOptions($fields, $fieldParams, $queries = array())
     {
         $options = new stdclass();
-        $options->searchMethod      = array();
-        $options->fieldsData        = array();
+        $options->operators         = array();
+        $options->fields            = array();
         $options->savedQueryTitle   = $this->lang->search->savedQuery;
         $options->andOr             = array();
         $options->groupName         = array($this->lang->search->group1, $this->lang->search->group2);
@@ -1398,21 +1398,21 @@ class searchModel extends model
             $operator->value = $value;
             $operator->title = $title;
 
-            $options->searchMethod[] = $operator;
+            $options->operators[] = $operator;
         }
 
         foreach($fieldParams as $field => $param)
         {
             $data = new stdclass();
-            $data->fields   = $fields[$field];
-            $data->key      = $field;
+            $data->label    = $fields[$field];
+            $data->name     = $field;
             $data->control  = $param['control'];
             $data->operator = $param['operator'];
 
             if($field == 'id') $data->placeholder = $this->lang->search->queryTips;
             if(!empty($param['values']) and is_array($param['values'])) $data->values = $param['values'];
 
-            $options->fieldsData[] = $data;
+            $options->fields[] = $data;
         }
 
         $savedQuery = array();
