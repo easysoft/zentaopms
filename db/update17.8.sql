@@ -41,3 +41,6 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` in ('create', 'browse', 'edit', 'delete');
+DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
