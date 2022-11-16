@@ -3086,7 +3086,7 @@ class projectModel extends model
                 ->set('projects')->eq(implode(',', $newProjects))
                 ->where('id')->eq($repo->id)->exec();
 
-            $this->action->create('project', $projectID, 'linkedRepo', $repo->name);
+            $this->action->create('project', $projectID, 'linkedRepo', '', $repo->name);
         }
     }
 
