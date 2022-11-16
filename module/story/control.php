@@ -2819,9 +2819,9 @@ class story extends control
         /* Unset product field when in single project.  */
         if(isset($project->hasProduct) && !$project->hasProduct)
         {
-            $filterFields = array('product,', 'branch,');
-            if($project->model != 'scrum') $filterFields[] = 'plan,';
-            $this->config->story->exportFields = str_replace($filterFields, '', $this->config->story->exportFields);
+            $filterFields = array(', product,', ', branch,');
+            if($project->model != 'scrum') $filterFields[] = ', plan,';
+            $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
         }
 
         $this->view->fileName        = $fileName;
