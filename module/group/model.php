@@ -154,7 +154,7 @@ class groupModel extends model
      * Get group by account.
      *
      * @param  string    $account
-     * @param  string    $vision
+     * @param  string    $visions
      * @access public
      * @return array
      */
