@@ -527,7 +527,7 @@ class extensionModel extends model
         $this->app->loadClass('pclzip', true);
         $zip = new pclzip($packageFile);
         $files = $zip->listContent();
-        $removePath = $files[0]['filename'];
+        $removePath = substr($files[0]['filename'], 0, strpos($files[0]['filename'], '/'));
         if($zip->extract(PCLZIP_OPT_PATH, $extensionPath, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
         {
             $return->result = 'fail';
