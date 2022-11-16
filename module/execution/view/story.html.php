@@ -81,7 +81,7 @@
     if($productID) common::printIcon('story', 'report', "productID=$productID&branchID=&storyType=$storyType&browseType=$type&moduleID=$param&chartType=pie&projectID=$execution->id", '', 'button', 'bar-chart muted');
     common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id&browseType=$type&storyType=$storyType", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe'");
 
-    $canLinkStory = $execution->hasProduct or $execution->multiple;
+    $canLinkStory = $execution->multiple;
     if(common::canModify('execution', $execution))
     {
         $this->lang->story->create = $this->lang->execution->createStory;
@@ -254,6 +254,7 @@
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
               if($value->show)
               {
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
@@ -273,6 +274,7 @@
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
               $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution, $showBranch);
           }
           ?>
@@ -288,6 +290,7 @@
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
               $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution);
           }?>
           </tr>
