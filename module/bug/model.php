@@ -1943,7 +1943,7 @@ class bugModel extends model
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
-                ->beginIF($build)->andWhere("CONCAT(',', t1.openedBuild, ',') like '%,$build,%'")->fi()
+                ->beginIF($build)->andWhere("FIND_IN_SET($build, t1.openedBuild)")->fi()
                 ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
@@ -1972,11 +1972,8 @@ class bugModel extends model
         $builds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($build)->fetchAll('id');
 
         $executionIdList = array();
-        foreach($builds as $build)
-        {
-            if(empty($build->execution)) continue;
-            $executionIdList[$build->execution] = $build->execution;
-        }
+        foreach($builds as $build) $executionIdList[$build->execution] = empty($build->execution) ? $build->project : $build->execution;
+        $executionIdList = array_unique($executionIdList);
         if(empty($executionIdList)) return array();
 
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll();
@@ -2085,13 +2082,15 @@ class bugModel extends model
      */
     public function getReleaseBugs($buildID, $productID, $branch = 0, $linkedBugs = '', $pager = null)
     {
-        $executions = $this->dao->select('t1.id,t1.begin')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.id = t2.execution')
-            ->where('t2.id')->in($buildID)
-            ->fetchAll('id');
+        $builds = $this->dao->select('id,project,execution')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
+        $executionIdList = array();
+        foreach($builds as $build) $executionIdList[] = empty($build->execution) ? $build->project : $build->execution;
+        $executionIdList = array_unique($executionIdList);
+        if(empty($executionIdList)) return array();
 
-        $condition = 'execution NOT ' . helper::dbIN(array_keys($executions));
-        $minBegin  = '';
+        $executions = $this->dao->select('id,begin')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll('id');
+        $condition  = 'execution NOT ' . helper::dbIN($executionIdList);
+        $minBegin   = '';
         foreach($executions as $execution)
         {
             if(empty($minBegin) or $minBegin > $execution->begin) $minBegin = $execution->begin;
