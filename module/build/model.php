@@ -284,14 +284,16 @@ class buildModel extends model
      * Get last build.
      *
      * @param  int    $executionID
+     * @param  int    $projectID
      * @access public
      * @return bool | object
      */
-    public function getLast($executionID)
+    public function getLast($executionID = 0, $projectID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_BUILD)
-            ->where('execution')->eq((int)$executionID)
-            ->andWhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
+            ->beginIF($executionID)->andWhere('execution')->eq((int)$executionID)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
             ->orderBy('date DESC,id DESC')
             ->limit(1)
             ->fetch();
