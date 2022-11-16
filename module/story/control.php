@@ -396,6 +396,7 @@ class story extends control
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
+        $this->view->hiddenParent  = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
         $this->view->teamUsers     = array();
@@ -409,6 +410,7 @@ class story extends control
             {
                 $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
                 $this->view->hiddenProduct = true;
+                $this->view->hiddenParent  = true;
 
                 if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
                 if(!$project->multiple)          $this->view->hiddenPlan = true;
@@ -883,6 +885,7 @@ class story extends control
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
+        $this->view->hiddenParent  = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
         $this->view->teamUsers     = array();
@@ -892,6 +895,7 @@ class story extends control
             $project = $this->project->getByShadowProduct($product->id);
             $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
             $this->view->hiddenProduct = true;
+            $this->view->hiddenParent  = true;
 
             if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
             if(!$project->multiple)          $this->view->hiddenPlan = true;
@@ -1085,7 +1089,7 @@ class story extends control
         }
 
         /* Set ditto option for users. */
-        $users = $this->loadModel('user')->getPairs('nodeleted');
+        $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
@@ -1218,8 +1222,26 @@ class story extends control
             }
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
-            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
+
+            if($this->app->tab == 'project')
+            {
+                $module = 'projectstory';
+                $method = 'view';
+                $params = "storyID=$storyID";
+            }
+            elseif($this->app->tab == 'execution')
+            {
+                $module = 'execution';
+                $method = 'storyView';
+                $params = "storyID=$storyID";
+            }
+            else
+            {
+                $module = 'story';
+                $method = 'view';
+                $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+            }
+            return print(js::locate($this->createLink($module, $method, $params), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1539,10 +1561,27 @@ class story extends control
                 }
             }
 
-            $module = $from == 'project' ? 'projectstory' : 'story';
             if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
-            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
+
+            if($from == 'project')
+            {
+                $module = 'projectstory';
+                $method = 'view';
+                $params = "storyID=$storyID";
+            }
+            elseif($from == 'execution')
+            {
+                $module = 'execution';
+                $method = 'storyView';
+                $params = "storyID=$storyID";
+            }
+            else
+            {
+                $module = 'story';
+                $method = 'view';
+                $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+            }
+            return print(js::locate($this->createLink($module, $method, $params), 'parent'));
         }
 
         /* Get story and product. */
@@ -1645,7 +1684,28 @@ class story extends control
             $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
             $this->loadModel('action')->create('story', $storyID, $action);
 
-            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+            if($from == 'view')
+            {
+                if($this->app->tab == 'project')
+                {
+                    $module = 'projectstory';
+                    $method = 'view';
+                    $params = "storyID=$storyID";
+                }
+                elseif($this->app->tab == 'execution')
+                {
+                    $module = 'execution';
+                    $method = 'storyView';
+                    $params = "storyID=$storyID";
+                }
+                else
+                {
+                    $module = 'story';
+                    $method = 'view';
+                    $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+                }
+                return print(js::locate($this->createLink($module, $method, $params), 'parent'));
+            }
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             return print(js::locate($locateLink, 'parent'));
@@ -1965,6 +2025,8 @@ class story extends control
      */
     public function batchToTask($executionID = 0, $projectID = 0)
     {
+        if($this->app->tab == 'execution' and $executionID) $this->loadModel('execution')->setMenu($executionID);
+
         if(!empty($_POST['name']))
         {
             $response['result']  = 'success';
@@ -2188,7 +2250,8 @@ class story extends control
         $this->view->story      = $story;
         $this->view->storyType  = $storyType;
         $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = ($this->config->vision == 'lite' || !empty($product->shadow)) ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
+        $this->view->users      = $this->config->vision == 'lite' ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
+
         $this->display();
     }
 
@@ -2649,6 +2712,7 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
 
+        $this->products = $this->product->getPairs('', 0, '', 'all');
         if($this->app->tab == 'project')
         {
             $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
@@ -2668,11 +2732,12 @@ class story extends control
                 unset($this->lang->story->report->charts['storysPerPlan']);
             }
         }
+        else
+        {
+            $this->product->setMenu($productID, $branchID);
+        }
 
         if($storyType != 'story') unset($this->lang->story->report->charts['storysPerStage']);
-
-        $this->products = $this->product->getPairs('', 0, '', 'all');
-        $this->product->setMenu($productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
         $this->view->position[]    = $this->products[$productID];
@@ -2704,7 +2769,7 @@ class story extends control
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
-            $this->session->set('storyPortParams', array('productID' => $productID, 'executionID' => $executionID));
+            $this->session->set('storyTransferParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
             if(!$productID)
             {
@@ -2720,8 +2785,8 @@ class story extends control
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
-            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
-            $this->fetch('port', 'export', 'model=story');
+            $this->post->set('rows', $this->story->getExportStories($executionID, $orderBy, $storyType));
+            $this->fetch('transfer', 'export', 'model=story');
         }
 
         $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
@@ -2758,9 +2823,9 @@ class story extends control
         /* Unset product field when in single project.  */
         if(isset($project->hasProduct) && !$project->hasProduct)
         {
-            $filterFields = array('product,', 'branch,');
-            if($project->model != 'scrum') $filterFields[] = 'plan';
-            $this->config->story->exportFields = str_replace($filterFields, '', $this->config->story->exportFields);
+            $filterFields = array(', product,', ', branch,');
+            if($project->model != 'scrum') $filterFields[] = ', plan,';
+            $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
         }
 
         $this->view->fileName        = $fileName;

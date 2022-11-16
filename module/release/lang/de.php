@@ -30,6 +30,7 @@ $lang->release->confirmUnlinkBug   = "Möchten Sie diesen Bug löschen?";
 $lang->release->existBuild         = '『Build』『%s』 existiert bereits. Sie können den 『name』 ändern oder ein anderes 『build』 wählen.';
 $lang->release->noRelease          = 'Keine Releases. ';
 $lang->release->errorDate          = 'The release date should not be greater than today.';
+$lang->release->tips               = 'If no build is selected for a release, a build with the same name as the release is created by default.';
 
 $lang->release->basicInfo = 'Basis Info';
 
@@ -38,6 +39,8 @@ $lang->release->product        = $lang->productCommon;
 $lang->release->branch         = 'Platform/Branch';
 $lang->release->project        = 'Project';
 $lang->release->build          = 'Build';
+$lang->release->includedBuild  = 'Included Build';
+$lang->release->relatedProject = 'Related Project';
 $lang->release->name           = 'Name';
 $lang->release->marker         = 'Meilensteine';
 $lang->release->date           = 'Datum';

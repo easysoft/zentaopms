@@ -23,19 +23,20 @@ class releaseModel extends model
      */
     public function getByID($releaseID, $setImgSize = false)
     {
-        $release = $this->dao->select('t1.*, t2.id as buildID, t2.filePath, t2.scmPath, t2.name as buildName, t2.project, t3.name as productName, t3.type as productType')
+        $release = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')
             ->from(TABLE_RELEASE)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.id')->eq((int)$releaseID)
             ->orderBy('t1.id DESC')
             ->fetch();
         if(!$release) return false;
 
+        $release->builds = $this->dao->select('id, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
         $release->files = $this->file->getByObject('release', $releaseID);
-        if(empty($release->files))$release->files = $this->file->getByObject('build', $release->buildID);
+        if(empty($release->files))$release->files = $this->file->getByObject('build', $release->build);
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
         return $release;
     }
@@ -53,19 +54,38 @@ class releaseModel extends model
      */
     public function getList($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as projectName')
+        $releases = $this->dao->select('t1.*, t2.name as productName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->like(",{$branch},")->fi()
             ->beginIF($type != 'all' && $type != 'review')->andWhere('t1.status')->eq($type)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+
+        $builds = $this->dao->select("t1.id, t1.name, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
+            ->from(TABLE_BUILD)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = t3.id')
+            ->fetchAll('id');
+
+        foreach($releases as $release)
+        {
+            $releaseBuilds = array();
+            foreach(explode(',', $release->build) as $buildID)
+            {
+                if(!$buildID or !isset($builds[$buildID])) continue;
+
+                $releaseBuilds[] = $builds[$buildID];
+            }
+
+            $release->builds = $releaseBuilds;
+        }
+
+        return $releases;
     }
 
     /**
@@ -96,12 +116,19 @@ class releaseModel extends model
      */
     public function getReleasedBuilds($productID, $branch = 'all')
     {
-        $releases = $this->dao->select('build')->from(TABLE_RELEASE)
+        $builds = $this->dao->select('build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
             ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
-            ->fetchAll('build');
-        return array_keys($releases);
+            ->fetchPairs('build');
+
+        $buildIDList = array();
+        foreach($builds as $build)
+        {
+            $build = explode(',', $build);
+            $buildIDList = array_merge($buildIDList, $build);
+        }
+        return $buildIDList;
     }
 
     /**
@@ -146,6 +173,7 @@ class releaseModel extends model
             ->setDefault('stories', '')
             ->setDefault('createdBy',   $this->app->user->account)
             ->setDefault('createdDate', helper::now())
+            ->join('build', ',')
             ->join('stories', ',')
             ->join('bugs', ',')
             ->join('mailto', ',')
@@ -196,14 +224,24 @@ class releaseModel extends model
 
         if($release->build)
         {
-            $buildInfo = $this->dao->select('project, branch, stories, bugs')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
-            $release->branch  = $buildInfo->branch;
-            $release->project = $buildInfo->project;
-            if($this->post->sync == 'true')
+            $builds = $this->dao->select('project, branch, stories, bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+            foreach($builds as $build)
             {
-                $release->stories = $buildInfo->stories;
-                $release->bugs    = $buildInfo->bugs;
+                $branches[$build->branch]  = $build->branch;
+                $projects[$build->project] = $build->project;
+
+                if($this->post->sync == 'true')
+                {
+                    $build->stories = trim($build->stories, ',');
+                    $build->bugs    = trim($build->bugs, ',');
+                    if($build->stories) $release->stories .= ',' . $build->stories;
+                    if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
+                }
             }
+
+            $release->build   = ',' . trim($release->build, ',') . ',';
+            $release->branch  = ',' . trim(implode(',', $branches), ',') . ',';
+            $release->project = ',' . trim(implode(',', $projects), ',') . ',';
         }
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_RELEASE)->data($release)
@@ -264,13 +302,12 @@ class releaseModel extends model
         /* Init vars. */
         $releaseID  = (int)$releaseID;
         $oldRelease = $this->getById($releaseID);
-        $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('id', $releaseID)
-            ->add('branch',  (int)$branch)
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
+            ->join('build', ',')
             ->join('mailto', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
             ->cleanInt('product')
@@ -282,9 +319,15 @@ class releaseModel extends model
         /* update release project and branch */
         if($release->build)
         {
-            $buildInfo = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
-            $release->branch  = $buildInfo->branch;
-            $release->project = $buildInfo->project;
+            $builds = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+            foreach($builds as $build)
+            {
+                $branches[$build->branch]  = $build->branch;
+                $projects[$build->project] = $build->project;
+            }
+            $release->build   = ',' . trim($release->build, ',') . ',';
+            $release->branch  = ',' . trim(implode(',', $branches), ',') . ',';
+            $release->project = ',' . trim(implode(',', $projects), ',') . ',';
         }
 
         $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles')

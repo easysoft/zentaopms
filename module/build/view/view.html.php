@@ -35,8 +35,9 @@ tbody tr td:first-child input {display: none;}
       echo "<ul class='dropdown-menu'>";
       foreach($buildPairs as $id => $name)
       {
+          $buildInfo = zget($builds, $id);
           echo '<li' . ($id == $build->id ? " class='active'" : '') . '>';
-          echo html::a($this->createLink('build', 'view', "buildID=$id"), $name);
+          echo html::a($this->createLink($buildInfo->execution ? 'build' : 'projectbuild', 'view', "buildID=$id") . "#app={$app->tab}", $name);
           echo '</li>';
       }
       echo '</ul>';
@@ -53,6 +54,7 @@ tbody tr td:first-child input {display: none;}
   </div>
   <?php endif;?>
 </div>
+<?php $module = $build->execution ? 'build' : 'projectbuild';?>
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
   <?php $countStories = count($stories); $countBugs = count($bugs); $countGeneratedBugs = count($generatedBugs);?>
@@ -64,13 +66,13 @@ tbody tr td:first-child input {display: none;}
     </ul>
     <div class='tab-content'>
       <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkStory') and !isonlybody()):?>
+        <?php if($canBeChanged and common::hasPriv($module, 'linkStory') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo inlink('batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
+        <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo $this->createLink($module, 'batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
           <table class='table has-sort-head' id='storyList'>
-            <?php $canBatchUnlink = ($canBeChanged and common::hasPriv('build', 'batchUnlinkStory'));?>
+            <?php $canBatchUnlink = ($canBeChanged and common::hasPriv($module, 'batchUnlinkStory'));?>
             <?php $vars = "buildID={$build->id}&type=story&link=$link&param=$param&orderBy=%s";?>
             <thead>
               <tr class='text-center'>
@@ -133,9 +135,9 @@ tbody tr td:first-child input {display: none;}
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
-                  if($canBeChanged and common::hasPriv('build', 'unlinkStory'))
+                  if($canBeChanged and common::hasPriv($module, 'unlinkStory'))
                   {
-                      $unlinkURL = inlink('unlinkStory', "buildID=$build->id&story=$story->id");
+                      $unlinkURL = $this->createLink($module, 'unlinkStory', "buildID=$build->id&story=$story->id");
                       echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->build->unlinkStory}'");
                   }
                   ?>
@@ -163,13 +165,13 @@ tbody tr td:first-child input {display: none;}
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkBug') and !isonlybody()):?>
+        <?php if($canBeChanged and common::hasPriv($module, 'linkBug') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
+        <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo $this->createLink($module, 'batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
           <table class='table has-sort-head' id='bugList'>
-            <?php $canBatchUnlink = $canBeChanged and common::hasPriv('build', 'batchUnlinkBug');?>
+            <?php $canBatchUnlink = $canBeChanged and common::hasPriv($module, 'batchUnlinkBug');?>
             <?php $vars = "buildID={$build->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
             <thead>
               <tr class='text-center'>
@@ -214,9 +216,9 @@ tbody tr td:first-child input {display: none;}
                 <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
                 <td class='c-actions'>
                   <?php
-                  if($canBeChanged and common::hasPriv('build', 'unlinkBug'))
+                  if($canBeChanged and common::hasPriv($module, 'unlinkBug'))
                   {
-                      $unlinkURL = inlink('unlinkBug', "buildID=$build->id&bug=$bug->id");
+                      $unlinkURL = $this->createLink($module, 'unlinkBug', "buildID=$build->id&bug=$bug->id");
                       echo html::a("###", '<i class="icon-unlink"></i>', '', "onclick='ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)' class='btn' title='{$lang->build->unlinkBug}'");
                   }
                   ?>
@@ -330,6 +332,23 @@ tbody tr td:first-child input {display: none;}
                   <th><?php echo $lang->build->name;?></th>
                   <td><?php echo $build->name;?></td>
                 </tr>
+                <?php if($build->execution):?>
+                <tr>
+                  <th><?php echo empty($multipleProject) ? $lang->build->project : $lang->build->execution;?></th>
+                  <td><?php echo zget($executions, $build->execution);?></td>
+                </tr>
+                <?php else:?>
+                <tr>
+                  <th><?php echo $lang->build->builds;?></th>
+                  <td>
+                    <?php $builds = '';?>
+                    <?php foreach(explode(',', $build->builds) as $buildID):?>
+                    <?php if($buildID) $builds .= html::a($this->createLink('build', 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;?>
+                    <?php endforeach;?>
+                    <?php echo rtrim($builds, $lang->comma);?>
+                  </td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->build->builder;?></th>
                   <td><?php echo zget($users, $build->builder);?></td>
@@ -369,6 +388,7 @@ tbody tr td:first-child input {display: none;}
 </div>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>
+<?php js::set('currentModule', $module)?>
 <?php js::set('buildID', $build->id)?>
 <?php js::set('type', $type)?>
 <?php include '../../common/view/footer.html.php';?>

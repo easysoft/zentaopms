@@ -23,6 +23,7 @@ function ajaxRefresh()
     {
         $data = $(data);
         $('#actionbox ol.histories-list').html($data.find('#actionbox ol.histories-list').html());
+        $('#actionbox ol.histories-list form.comment-edit-form').ajaxForm();
         $('.side-col').html($data.find('.side-col').html());
 
         if($('#actionbox ol.histories-list #lastComment').length > 0) $('#actionbox ol.histories-list #lastComment').kindeditor();

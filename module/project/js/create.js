@@ -146,7 +146,9 @@ function setParentProgram(parentProgram)
         selectedParent     = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
         lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
 
-        if(selectedParent != lastSelectedParent)
+        var hasProduct = $('[name=hasProduct]:checked').val();
+
+        if((selectedParent != lastSelectedParent) && hasProduct == 1)
         {
             $('#budget').val('');
 
@@ -158,8 +160,10 @@ function setParentProgram(parentProgram)
                 var selectedProduct = $(this).find('[name^=products]').val();
                 var selectedBranch  = $(this).find('[name^=branch]').val();
                 var selectedPlan    = $('#plan' + index ).find('[name^=plans]').val();
+                var newProductHtml  = $(this).find('span.input-group-addon');
 
                 $(this).html(productSelectHtml);
+                $(this).append(newProductHtml);
                 $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch).attr('data-plan', selectedPlan);
                 $(this).find('[name^=products]').val(selectedProduct).chosen().change();
             });
@@ -221,6 +225,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
         $('#plansBox').closest('tr').addClass('hidden');
         $('#plansBox .col-sm-4').find('select').attr('disabled', true).trigger("chosen:updated");
+        $('.division').addClass('hide');
 
         /* Displays the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', true);
@@ -235,6 +240,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
         $('#plansBox').closest('tr').removeClass('hidden');
         $('#plansBox .col-sm-4').find('select').removeAttr('disabled', true).trigger("chosen:updated");
+        if($('#plansBox .col-sm-4').find('select').length > 1) $('.division').removeClass('hide');
 
         /* Hide the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', false);

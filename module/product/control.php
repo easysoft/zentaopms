@@ -100,7 +100,7 @@ class product extends control
         $accounts     = array();
         $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy, $pager);
         $product      = $this->product->getByID($productID);
-        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc');
+        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
 
         foreach($projectStats as $project)
         {
@@ -110,8 +110,6 @@ class product extends control
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
-        $this->view->position[]   = $this->products[$productID];
-        $this->view->position[]   = $this->lang->product->project;
         $this->view->projectStats = $projectStats;
         $this->view->PMList       = $PMList;
         $this->view->productID    = $productID;
@@ -340,7 +338,7 @@ class product extends control
         $this->view->productName     = $productName;
         $this->view->moduleID        = $moduleID;
         $this->view->stories         = $stories;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, $branch === 'all' ? '' : $branch, '', true);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, '', true);
         $this->view->productPlans    = isset($productPlans) ? array(0 => '') + $productPlans : array();
         $this->view->summary         = $this->product->summary($stories, $storyType);
         $this->view->moduleTree      = $moduleTree;
@@ -880,27 +878,6 @@ class product extends control
         $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
 
         $this->display();
-    }
-
-    /**
-     * Ajax get products.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetProducts($executionID)
-    {
-        $this->loadModel('build');
-        $products = $this->product->getProductPairsByProject($executionID);
-        if(empty($products))
-        {
-            return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
-        }
-        else
-        {
-            return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
-        }
     }
 
     /**

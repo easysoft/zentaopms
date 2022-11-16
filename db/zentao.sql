@@ -323,6 +323,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `execution` mediumint(8) unsigned NOT NULL default '0',
+  `builds` varchar(255) NOT NULL,
   `name` char(150) NOT NULL,
   `scmPath` char(255) NOT NULL,
   `filePath` char(255) NOT NULL,
@@ -1150,7 +1151,6 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `project` mediumint(8) NOT NULL DEFAULT 0,
   `model` char(30) NOT NULL,
   `type` char(30) NOT NULL DEFAULT 'sprint',
-  `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `lifetime` char(30) NOT NULL DEFAULT '',
   `budget` varchar(30) NOT NULL DEFAULT '0',
   `budgetUnit` char(30) NOT NULL DEFAULT 'CNY',
@@ -1164,6 +1164,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `grade` tinyint(3) unsigned NOT NULL,
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
+  `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `begin` date NOT NULL,
   `end` date NOT NULL,
   `realBegan` date NOT NULL,
@@ -1196,6 +1197,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `whitelist` text NOT NULL,
   `order` mediumint(8) unsigned NOT NULL,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `division` enum('0','1') NOT NULL DEFAULT '1',
   `displayCards` smallint(6) NOT NULL default '0',
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `multiple` enum('0','1') NOT NULL DEFAULT '1',
@@ -1280,10 +1282,10 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `project` mediumint(8) unsigned NOT NULL,
+  `project` varchar(255) NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
-  `branch` mediumint(8) unsigned NOT NULL default '0',
-  `build` mediumint(8) unsigned NOT NULL,
+  `branch` varchar(255) NOT NULL default '0',
+  `build` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL default '',
   `marker` enum('0','1') NOT NULL default '0',
   `date` date NOT NULL,
@@ -6338,6 +6340,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat` (
   `mergedChats` text NOT NULL DEFAULT '',
   `adminInvite` enum('0','1') NOT NULL DEFAULT '0',
   `avatar` text NOT NULL DEFAULT '',
+  `archiveDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `gid` (`gid`),
   KEY `name` (`name`),
@@ -6404,7 +6407,8 @@ CREATE TABLE IF NOT EXISTS `zt_im_message` (
   KEY `mgid` (`gid`),
   KEY `mcgid` (`cgid`),
   KEY `muser` (`user`),
-  KEY `mtype` (`type`)
+  KEY `mtype` (`type`),
+  UNIQUE `unique_msg`(`index`, `cgid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_message_backup`;
