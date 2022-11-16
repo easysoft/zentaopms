@@ -1733,7 +1733,7 @@ class execution extends control
             $this->view->linkedBranches = $linkedBranches;
         }
 
-        if(!empty($project->hasProduct))
+        if(empty($project->hasProduct))
         {
             $shadowProduct = $this->loadModel('product')->getShadowProductByProject($project->id);
             $productPlan   = $this->loadModel('productplan')->getPairs($shadowProduct->id, '0,0', 'noclosed,unexpired', true);
@@ -1744,7 +1744,7 @@ class execution extends control
             if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
 
             /* No product execution link plans. */
-            if(!empty($project->hasProduct) and !empty($_POST['plans']))
+            if(empty($project->hasProduct) and !empty($_POST['plans']))
             {
                 $plansItem = array();
                 foreach($_POST['plans'] as $planItem)
