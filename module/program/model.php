@@ -88,7 +88,6 @@ class programModel extends model
         $dao = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($programID !== '')->andWhere('program')->eq($programID)->fi()
             ->beginIF($shadow !== 'all')->andWhere('shadow')->eq((int)$shadow)->fi()
             ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
