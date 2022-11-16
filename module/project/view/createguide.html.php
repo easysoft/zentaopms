@@ -25,7 +25,10 @@
         $colClass     = $hasWaterfall ? 'col-xs-4' : 'col-xs-6';
         ?>
         <div class='<?php echo $colClass?>'>
-        <?php $tab = $from == 'global' ? 'project' : $app->tab;?>
+          <?php
+          $tab = $from == 'global' ? 'project' : $app->tab;
+          if($tab == 'product') $tab = 'project';
+          ?>
           <div class='project-type text-center'>
             <?php echo html::a($this->createLink("project", "create", "model=scrum&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', "data-app='{$tab}' class='createButton'")?>
             <h3><?php echo $lang->project->scrum; ?></h3>
