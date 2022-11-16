@@ -356,9 +356,9 @@
                         $buildHtml = array();
                         foreach($release->buildInfos as $buildID => $buildInfo)
                         {
-                            $buildHtml[] = html::a($this->createLink('build', 'view', "buildID=$buildID"), $buildInfo->name);
+                            $buildHtml[] = html::a($this->createLink($buildInfo->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $buildInfo->name, '', "data-app='project'");
                         }
-                        echo join(', ', $buildHtml);
+                        echo join($lang->comma, $buildHtml);
                         ?>
                       </td>
                     </tr>

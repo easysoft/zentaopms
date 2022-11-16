@@ -180,7 +180,7 @@ class execution extends control
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList', $uri, 'execution');
+        $this->app->session->set('taskList', $uri . "#app={$this->app->tab}", 'execution');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
@@ -685,12 +685,12 @@ class execution extends control
         unset($this->config->bug->search['fields']['resolvedDate']);
         unset($this->config->bug->search['fields']['closedDate']);
         unset($this->config->bug->search['fields']['branch']);
+        if(empty($execution->multiple) && empty($execution->hasProduct)) unset($this->config->bug->search['fields']['plan']);
         if(empty($project->hasProduct))
         {
             unset($this->config->bug->search['fields']['product']);
             if($project->model !== 'scrum') unset($this->config->bug->search['fields']['plan']);
         }
-
         unset($this->config->bug->search['params']['resolvedBy']);
         unset($this->config->bug->search['params']['closedBy']);
         unset($this->config->bug->search['params']['status']);
@@ -998,7 +998,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function bug($executionID = 0, $productID = 0, $branch = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($executionID = 0, $productID = 0, $branch = 'all', $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
@@ -1165,7 +1165,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testcase($executionID = 0, $productID = 0, $branchID = 0, $type = 'all', $moduleID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($executionID = 0, $productID = 0, $branchID = 'all', $type = 'all', $moduleID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testcase');
         $this->loadModel('testtask');
@@ -1733,9 +1733,27 @@ class execution extends control
             $this->view->linkedBranches = $linkedBranches;
         }
 
+        if(!empty($project->hasProduct))
+        {
+            $shadowProduct = $this->loadModel('product')->getShadowProductByProject($project->id);
+            $productPlan   = $this->loadModel('productplan')->getPairs($shadowProduct->id, '0,0', 'noclosed,unexpired', true);
+        }
+
         if(!empty($_POST))
         {
             if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
+
+            /* No product execution link plans. */
+            if(!empty($project->hasProduct) and !empty($_POST['plans']))
+            {
+                $plansItem = array();
+                foreach($_POST['plans'] as $planItem)
+                {
+                    if(empty($planItem[0][0])) continue;
+                    $plansItem[] = $planItem[0][0];
+                }
+                $_POST['plans'] = array($_POST['products'][0] => array(0 => $plansItem));
+            }
 
             $executionID = $this->execution->create($copyExecutionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1808,7 +1826,7 @@ class execution extends control
 
         $this->loadModel('product');
         $allProducts   = $this->product->getProductPairsByProject($projectID, 'noclosed');
-        $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : '', 'noclosed', '', 'order_asc', '', isset($project->model) ? $project->model : '', true);
+        $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : '', 'noclosed', '', 'order_asc', '', isset($project->model) ? $project->model : '', 'multiple');
         $copyProjectID = ($projectID == 0) ? key($copyProjects) : $projectID;
 
         if(!empty($project->hasProduct)) $allProducts = array(0 => '') + $allProducts;
@@ -1826,7 +1844,7 @@ class execution extends control
         $this->view->code                = $code;
         $this->view->team                = $team;
         $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
-        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed');
+        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed,multiple');
         $this->view->copyProjects        = $copyProjects;
         $this->view->copyExecutions      = array('' => '') + $this->execution->getList($copyProjectID);
         $this->view->executionID         = $executionID;

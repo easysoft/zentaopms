@@ -123,7 +123,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                     </div>
                   </td>
                 </tr>
-                <tr class='<?php if($product->shadow and zget($project, 'model') != 'scrum') echo 'hide'?>'>
+                <tr class='<?php if(!($product->shadow and zget($project, 'model') == 'scrum' and $project->multiple)) echo 'hide'?>'>
                   <th><?php echo $lang->bug->productplan;?></th>
                   <td>
                     <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen'");?></span>

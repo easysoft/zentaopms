@@ -1869,7 +1869,7 @@ class bugModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->beginIF(empty($build))->andWhere('t1.project')->eq($projectID)->fi()
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
-                ->beginIF(!empty($productID))->andWhere('t1.branch')->eq($branchID)->fi()
+                ->beginIF(!empty($productID) and $branchID != 'all')->andWhere('t1.branch')->eq($branchID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
@@ -1888,19 +1888,19 @@ class bugModel extends model
     /**
      * Get bugs of a execution.
      *
-     * @param  int    $executionID
-     * @param  int    $productID
-     * @param  int    $branchID
-     * @param  int    $build
-     * @param  string $type
-     * @param  int    $param
-     * @param  string $orderBy
-     * @param  string $excludeBugs
-     * @param  object $pager
+     * @param  int          $executionID
+     * @param  int          $productID
+     * @param  int          $branchID
+     * @param  string|array $builds
+     * @param  string       $type
+     * @param  int          $param
+     * @param  string       $orderBy
+     * @param  string       $excludeBugs
+     * @param  object       $pager
      * @access public
      * @return array
      */
-    public function getExecutionBugs($executionID, $productID = 0, $branchID = 'all', $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
+    public function getExecutionBugs($executionID, $productID = 0, $branchID = 'all', $builds = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
     {
         $type = strtolower($type);
         if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
@@ -1935,15 +1935,28 @@ class bugModel extends model
         }
         else
         {
+            $condition = '';
+            if($builds)
+            {
+                if(!is_array($builds)) $builds = explode(',', $builds);
+
+                $conditions = array();
+                foreach($builds as $build)
+                {
+                    if($build) $conditions[] = "FIND_IN_SET('$build', t1.openedBuild)";
+                }
+                $condition = join(' OR ', $conditions);
+                $condition = "($condition)";
+            }
             $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
                 ->where('t1.deleted')->eq(0)
                 ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t1.branch')->eq($branchID)->fi()
-                ->beginIF(empty($build))->andWhere('t1.execution')->eq($executionID)->fi()
+                ->beginIF(empty($builds))->andWhere('t1.execution')->eq($executionID)->fi()
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
-                ->beginIF($build)->andWhere("CONCAT(',', t1.openedBuild, ',') like '%,$build,%'")->fi()
+                ->beginIF($condition)->andWhere("$condition")->fi()
                 ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)

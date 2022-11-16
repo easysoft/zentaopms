@@ -74,3 +74,6 @@ $lang->tutorial->tasks['createTask']['desc'] = "<p>将执行{$lang->SRCommon}分
 $lang->tutorial->tasks['createBug']         = array('title' => '提Bug');
 $lang->tutorial->tasks['createBug']['nav']  = array('app' => 'qa', 'module' => 'bug', 'method' => 'create', 'menuModule' => 'bug', 'menu' => 'bug', 'target' => '.create-bug-btn', 'vars' => 'productID=0', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '提Bug');
 $lang->tutorial->tasks['createBug']['desc'] = "<p>在系统中提交一个Bug：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 测试 <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> 提Bug</span>；</li><li data-target='form'>在表单中填写Bug信息；</li><li data-target='submit'>保存Bug信息。</li></ul>";
+
+global $config;
+if($config->systemMode == 'light') unset($lang->tutorial->tasks['createProgram']);

@@ -38,7 +38,7 @@
             <td>
               <div class='input-group'>
               <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value)' class='form-control chosen'");?>
-              <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "class='form-control chosen control-branch'");?>
+              <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBuilds()' class='form-control chosen control-branch'");?>
               </div>
             </td>
             <td></td>
