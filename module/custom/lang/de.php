@@ -56,8 +56,8 @@ $lang->custom->dept                 = 'Dept';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Enable or Disable Code';
 $lang->custom->execution            = 'Execution';
-$lang->custom->defaultProgram       = 'Default program';
 $lang->custom->selectDefaultProgram = 'Please select default program';
+$lang->custom->defaultProgram       = 'Default program';
 $lang->custom->modeManagement       = 'Mode Management';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
@@ -103,6 +103,7 @@ $lang->custom->object['user']      = 'User';
 $lang->custom->object['block']     = 'ClosedBlock';
 $lang->custom->object['flow']      = 'Flow';
 $lang->custom->object['score']     = 'Score';
+$lang->custom->object['mode']      = 'Mode';
 
 $lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';

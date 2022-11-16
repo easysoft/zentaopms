@@ -792,6 +792,8 @@ if(!helper::hasFeature('devops'))
     unset($lang->scrum->menu->devops,     $lang->scrum->menuOrder[25]);
     unset($lang->waterfall->menu->devops, $lang->waterfall->menuOrder[35]);
     unset($lang->execution->menu->devops, $lang->execution->menuOrder[45]);
+    unset($lang->project->noMultiple->scrum->menu->devops, $lang->project->noMultiple->scrum->menuOrder[35]);
+    unset($lang->scrum->menu->settings['subMenu']->managerepo);
 }
 
 if(!helper::hasFeature('kanban'))

@@ -215,6 +215,7 @@ class execution extends control
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
         $this->config->execution->search['onMenuBar'] = 'yes';
+        if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
         $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
 
         /* team member pairs. */
@@ -685,7 +686,7 @@ class execution extends control
         unset($this->config->bug->search['fields']['resolvedDate']);
         unset($this->config->bug->search['fields']['closedDate']);
         unset($this->config->bug->search['fields']['branch']);
-        if(empty($execution->multiple) && empty($execution->hasProduct)) unset($this->config->bug->search['fields']['plan']);
+        if(empty($execution->multiple) and empty($execution->hasProduct)) unset($this->config->bug->search['fields']['plan']);
         if(empty($project->hasProduct))
         {
             unset($this->config->bug->search['fields']['product']);

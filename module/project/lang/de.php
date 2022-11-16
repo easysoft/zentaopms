@@ -300,6 +300,13 @@ $lang->project->kanbanSubAclList['private'] = "Private (Only the project leader,
 $lang->project->kanbanSubAclList['open']    = "Open (accessible with project view permissions)";
 $lang->project->kanbanSubAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members can access)';
 
+global $config;
+if($config->systemMode == 'light')
+{
+    unset($lang->project->subAclList['program']);
+    unset($lang->project->kanbanSubAclList['program']);
+}
+
 $lang->project->authList['extend'] = 'Inherit (system privilege and project privilege)';
 $lang->project->authList['reset']  = 'Reset (project privilege only)';
 
