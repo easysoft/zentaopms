@@ -1972,7 +1972,7 @@ class bugModel extends model
         $builds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($build)->fetchAll('id');
 
         $executionIdList = array();
-        foreach($builds as $build) $executionIdList[$build->execution] = empty($build->execution) ? $build->project : $build->execution;
+        foreach($builds as $build) $executionIdList[] = empty($build->execution) ? $build->project : $build->execution;
         $executionIdList = array_unique($executionIdList);
         if(empty($executionIdList)) return array();
 
