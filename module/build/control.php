@@ -119,7 +119,7 @@ class build extends control
         $this->view->executionID   = $executionID;
         $this->view->products      = $products;
         $this->view->projectID     = $projectID;
-        $this->view->lastBuild     = $this->build->getLast($executionID);
+        $this->view->lastBuild     = $this->build->getLast($executionID, $projectID);
         $this->view->productGroups = $productGroups;
         $this->view->users         = $this->user->getPairs('nodeleted|noclosed');
         $this->display();
