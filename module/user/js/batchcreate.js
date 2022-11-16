@@ -186,3 +186,55 @@ $(document).on('change', "select[id^='visions']", function()
         }(n)));
     }
 });
+
+/**
+ * Show or hide companies based on user type.
+ *
+ * @param  type $type
+ * @access public
+ * @return void
+ */
+function changeType(type)
+{
+    if(type == 'inside')
+    {
+        $('#companyBox').addClass('hide');
+        $('select[id^=dept], input[id^=join]').closest('td').removeClass('hide');
+        $('select[id^=company]').closest('td').addClass('hide');
+        $('th.c-dept, th.c-join').removeClass('hide');
+        $('th.c-company').addClass('hide');
+    }
+    else
+    {
+        $('#companyBox').removeClass('hide');
+        $('select[id^=dept], input[id^=join]').closest('td').addClass('hide');
+        $('select[id^=company]').closest('td').removeClass('hide');
+        $('th.c-dept, th.c-join').addClass('hide');
+        $('th.c-company').removeClass('hide');
+    }
+    $('#userType').val(type);
+}
+
+$(function()
+{
+    $(":checkbox[name^='new']").change(function()
+    {
+        var companyNode     = $(this).prop('checked') ? $(this).closest('span').prevAll('select') : $(this).closest('span').prevAll('input');
+        var companyNodeID   = $(companyNode).attr('id');
+        var companyNodeName = $(companyNode).attr('name');
+
+        if($(this).prop('checked'))
+        {
+            $(companyNode).replaceWith("<input name='" + companyNodeName + "' id='" + companyNodeID + "' class='form-control'/>");
+            $('#' + companyNodeID + '_chosen').remove();
+        }
+        else
+        {
+            var i        = companyNodeID.replace(/[^0-9]/ig, '');
+            var dataHtml = $(companies).attr('id', companyNodeID).attr('name', companyNodeName).prop('outerHTML');
+            $('#' + companyNodeID).replaceWith(dataHtml);
+            if(i == 1) $('#' + companyNodeID).find('option[value="ditto"]').remove();
+            $('#' + companyNodeID).chosen();
+        }
+    })
+});
