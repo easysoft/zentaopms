@@ -1174,12 +1174,12 @@ class project extends control
         $products = $this->product->getProducts($projectID);
 
         if(!$project->multiple) unset($this->config->bug->datatable->fieldList['execution']);
-
         if(!$project->hasProduct)
         {
             unset($this->config->bug->search['fields']['product']);
             if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
         }
+        if(!$project->multiple and !$project->hasProduct) unset($this->config->bug->search['fields']['plan']);
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
