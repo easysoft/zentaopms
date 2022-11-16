@@ -25,14 +25,6 @@
 class field
 {
     /**
-     * Global config.
-     *
-     * @var object
-     * @access public
-     */
-    public $config;
-
-    /**
      * Field Arr.
      *
      * @var array
@@ -47,40 +39,6 @@ class field
      * @access private
      */
     private $field;
-
-    /**
-     * Yaml Dir root.
-     *
-     * @var int
-     * @access public
-     */
-    public $yamlDir;
-
-    /**
-     * __construct function load config.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        global $config;
-        $this->config  = $config;
-        $this->yamlDir = dirname(__FILE__, 2) . '/model';
-    }
-
-    /**
-     * Magic method, return fild.
-     *
-     * @param  string    $property_name
-     * @access protected
-     * @return object
-     */
-    public function __get($property_name)
-    {
-        $this->setField($property_name);
-        return $this;
-    }
 
     /**
      * Set yaml field.
@@ -144,7 +102,7 @@ class field
      */
     public function type($type)
     {
-        $this->fieldArr[$this->field]['type'] =  $type;
+        $this->fieldArr[$this->field]['type'] = $type;
         return $this;
     }
 
@@ -157,7 +115,7 @@ class field
      */
     public function format($format)
     {
-        $this->fieldArr[$this->field]['format'] =  $format;
+        $this->fieldArr[$this->field]['format'] = $format;
         return $this;
     }
 
@@ -176,7 +134,7 @@ class field
             return;
         }
 
-        $this->fieldArr[$this->field]['fields'] =  $fields;
+        $this->fieldArr[$this->field]['fields'] = $fields;
         return $this;
     }
 
@@ -188,7 +146,6 @@ class field
      */
     public function getFields()
     {
-        var_dump($this->fieldArr);
         return $this->fieldArr;
     }
 
@@ -226,32 +183,6 @@ class field
 
         return $ruleArr;
     }
-
-    /**
-     * Build yaml file.
-     *
-     * @param  string    $model
-     * @param  string    $name
-     * @param  string    $version
-     * @access public
-     * @return void
-     */
-    public function build($model, $name, $version = '')
-    {
-        if(!is_dir($this->yamlDir . "/{$model}/data")) mkdir($this->yamlDir . "/{$model}/data", 0700);
-        $yamlFile = $this->yamlDir . "/{$model}/data/{$name}.yaml";
-
-        $yamlDataArr = array();
-
-        $yamlDataArr['title']  = "zt_{$name}";
-        $yamlDataArr['author'] = "auto_{$name}";
-        $version ? $yamlDataArr['version'] = $version : $yamlDataArr['version'] = '1.0';
-
-        if(empty($this->fieldArr)) return;
-        $yamlDataArr['fields'] = $this->setFieldRule($this->fieldArr);
-
-        yaml_emit_file($yamlFile, $yamlDataArr, YAML_UTF8_ENCODING);
-    }
 }
 
 /**
@@ -265,21 +196,106 @@ class field
  * @version   1.0
  * @Link      https://www.zentao.net
  */
-class yaml extends field
+class yaml
 {
+    /**
+     * Set fields for yaml file.
+     *
+     * @var int
+     * @access public
+     */
+    public $field;
+
+    /**
+     * Global config.
+     *
+     * @var object
+     * @access public
+     */
+    public $config;
+
+    /**
+     * The generated data table name.
+     *
+     * @var string
+     * @access public
+     */
+    public $tableName;
+
+    /**
+     * __construct function load config and tableName.
+     * @param  string $tableName
+     * @access public
+     * @return void
+     */
+    public function __construct($tableName)
+    {
+        global $config;
+        $this->config    = $config;
+        $this->tableName = $tableName;
+        $this->field     = new field();
+    }
+
+    /**
+     * Magic method, return fild.
+     *
+     * @param  string    $property_name
+     * @access protected
+     * @return object
+     */
+    public function __get($property_name)
+    {
+        $this->field->setField($property_name);
+        return $this->field;
+    }
+
+    /**
+     * Build yaml file and insert table.
+     *
+     * @param  int     $rows
+     * @param  bool    $isDefault
+     * @param  string  $version
+     * @access public
+     * @return void
+     */
+    public function gen($rows, $isDefault = false, $version = '')
+    {
+        $runFileDir  = $_SERVER['PWD'];
+        $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
+
+        if(!is_dir("$runFileDir/data")) mkdir("$runFileDir/data", 0700);
+        $yamlFile = "{$runFileDir}/data/{$this->tableName}_{$runFileName}.yaml";
+
+        $yamlDataArr = array();
+
+        $yamlDataArr['title']  = "zt_{$this->tableName}";
+        $yamlDataArr['author'] = "auto_{$runFileName}";
+        $version ? $yamlDataArr['version'] = $version : $yamlDataArr['version'] = '1.0';
+
+        if(empty($this->field->fieldArr)) return;
+        $yamlDataArr['fields'] = $this->field->setFieldRule($this->field->fieldArr);
+
+        yaml_emit_file($yamlFile, $yamlDataArr, YAML_UTF8_ENCODING);
+
+        $isDefault === true ? $this->insertDB($yamlFile, $this->tableName, $rows, true) : $this->insertDB($yamlFile, $this->tableName, $rows);
+    }
+
     /**
      * Insert the data into database.
      *
-     * @param  string    $model
+     * @param  string    $yamlFile
      * @param  string    $tableName
      * @param  int       $rows
+     * @param  bool      $isDefault
+     * @param  bool      $isClear
      * @access public
      * @return string
      */
-    function insertDB($model, $file, $tableName, $rows, $isClear = false)
+    function insertDB($yamlFile, $tableName, $rows, $isDefault = false, $isClear = true)
     {
-        $yamlFile    = $this->yamlDir . "/{$model}/data/{$file}.yaml";
-        $tableSqlDir = $this->yamlDir . "/{$model}/data/sql";
+        if($isDefault === true) $yamlFile = dirname(dirname(__FILE__)) . "/data/{$tableName}.yaml";
+
+        $tableSqlDir = "{$_SERVER['PWD']}/data/sql";
 
         if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0700);
         $dumpCommand = "mysqldump -u%s -p%s -h%s -P%s %s %s > {$tableSqlDir}/{$tableName}.sql";
@@ -306,14 +322,13 @@ class yaml extends field
     /**
      * Restore table data.
      *
-     * @param  string    $model
      * @param  string    $tableName
      * @access public
      * @return mixed
      */
-    public function restoreTable($model, $tableName)
+    public function restoreTable($tableName)
     {
-        $tableSql = $this->yamlDir . "/{$model}/data/sql/$tableName.sql";
+        $tableSql = "{$_SERVER['PWD']}/data/sql/$tableName.sql";
         if(!is_file($tableSql)) return false;
 
         $dbName = $this->config->db->name;
@@ -326,4 +341,16 @@ class yaml extends field
         $execRestore = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableSql);
         system($execRestore);
     }
+}
+
+/**
+ * Return yaml class
+ *
+ * @param  string $table
+ * @access public
+ * @return mixed
+ */
+function zdTable($table)
+{
+    return new yaml($table);
 }
