@@ -190,8 +190,8 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = 'Projects Ownedbyme';
 $lang->project->typeList['other'] = 'Other Projects';
 
-$lang->project->divisionList['1'] = 'Create by project';
-$lang->project->divisionList['0'] = 'Create by product';
+$lang->project->divisionList['0'] = 'Create by project';
+$lang->project->divisionList['1'] = 'Create by product';
 
 $lang->project->waitProjects    = 'Waiting Projects';
 $lang->project->doingProjects   = 'Ongoing Projects';
@@ -296,6 +296,13 @@ $lang->project->kanbanAclList['open']    = "Open (accessible with project view p
 $lang->project->kanbanSubAclList['private'] = "Private (Only the project leader, team members can access)";
 $lang->project->kanbanSubAclList['open']    = "Open (accessible with project view permissions)";
 $lang->project->kanbanSubAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members can access)';
+
+global $config;
+if($config->systemMode == 'light')
+{
+    unset($lang->project->subAclList['program']);
+    unset($lang->project->kanbanSubAclList['program']);
+}
 
 $lang->project->authList['extend'] = 'Inherit (system privilege and project privilege)';
 $lang->project->authList['reset']  = 'Reset (project privilege only)';
