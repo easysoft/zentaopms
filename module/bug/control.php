@@ -286,6 +286,9 @@ class bug extends control
             }
         }
 
+        $project = $this->loadModel('project')->getByShadowProduct($productID);
+        if(!$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
+
         $this->qa->setMenu($this->products, $productID, $branchID);
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);

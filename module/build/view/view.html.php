@@ -334,7 +334,7 @@ tbody tr td:first-child input {display: none;}
                 </tr>
                 <?php if($build->execution):?>
                 <tr>
-                  <th><?php echo $lang->build->execution;?></th>
+                  <th><?php echo empty($multipleProject) ? $lang->build->project : $lang->build->execution;?></th>
                   <td><?php echo zget($executions, $build->execution);?></td>
                 </tr>
                 <?php else:?>
@@ -343,7 +343,7 @@ tbody tr td:first-child input {display: none;}
                   <td>
                     <?php $builds = '';?>
                     <?php foreach(explode(',', $build->builds) as $buildID):?>
-                    <?php $builds .= html::a($this->createLink('build', 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;?>
+                    <?php if($buildID) $builds .= html::a($this->createLink('build', 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;?>
                     <?php endforeach;?>
                     <?php echo rtrim($builds, $lang->comma);?>
                   </td>

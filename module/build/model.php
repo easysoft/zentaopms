@@ -284,14 +284,16 @@ class buildModel extends model
      * Get last build.
      *
      * @param  int    $executionID
+     * @param  int    $projectID
      * @access public
      * @return bool | object
      */
-    public function getLast($executionID)
+    public function getLast($executionID = 0, $projectID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_BUILD)
-            ->where('execution')->eq((int)$executionID)
-            ->andWhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
+            ->beginIF($executionID)->andWhere('execution')->eq((int)$executionID)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
             ->orderBy('date DESC,id DESC')
             ->limit(1)
             ->fetch();
@@ -311,10 +313,15 @@ class buildModel extends model
         $build->stories = '';
         $build->bugs    = '';
 
-        if($projectID)
+        if($projectID && !$executionID)
         {
             $project = $this->loadModel('project')->getByID($projectID);
             if(!$project->multiple) $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetch('id');
+        }
+        else if($executionID && !$projectID)
+        {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            $projectID = $execution->project;
         }
 
         $build = fixer::input('post')
@@ -342,6 +349,7 @@ class buildModel extends model
         if(!dao::isError())
         {
             $buildID = $this->dao->lastInsertID();
+            $this->linkChildBuilds($buildID, $build->builds);
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
             $this->file->saveUpload('build', $buildID);
             $this->loadModel('score')->create('build', 'create', $buildID);
@@ -381,6 +389,8 @@ class buildModel extends model
         if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(!dao::isError())
         {
+            $addBuilds = array_diff(explode(',', $build->builds), explode(',', $oldBuild->builds));
+            if($addBuilds) $this->linkChildBuilds($buildID, $addBuilds);
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
             return common::createChanges($oldBuild, $build);
         }
@@ -554,6 +564,33 @@ class buildModel extends model
 
         $this->loadModel('action');
         foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
+    }
+
+    /**
+     * Bugs and stories associated with child builds.
+     *
+     * @param  int    $buildID
+     * @param  string $childBuildIDList
+     * @access public
+     * @return void
+     */
+    public function linkChildBuilds($buildID, $childBuildIDList)
+    {
+        $build       = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
+        $childBuilds = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->in($childBuildIDList)->fetchAll();
+
+        foreach($childBuilds as $childBuild)
+        {
+            if($childBuild->bugs)    $build->bugs    .= ",{$childBuild->bugs}";
+            if($childBuild->stories) $build->stories .= ",{$childBuild->stories}";
+        }
+
+        $build->bugs    = explode(',', $build->bugs);
+        $build->bugs    = join(',', array_unique(array_filter($build->bugs)));
+        $build->stories = explode(',', $build->stories);
+        $build->stories = join(',', array_unique(array_filter($build->stories)));
+
+        $this->dao->update(TABLE_BUILD)->data($build)->where('id')->eq($buildID)->exec();
     }
 
     /**

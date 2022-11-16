@@ -47,8 +47,8 @@ $lang->misc->zentao->cowin['feedback']     = "Feedback";
 $lang->misc->zentao->cowin['recommend']    = "Plus...";
 
 $lang->misc->zentao->service['zentaotrain'] = 'ZenTao Training';
-$lang->misc->zentao->service['idc']         = 'Zentao Cloud';
-$lang->misc->zentao->service['custom']      = 'Zentao Custom';
+$lang->misc->zentao->service['idc']         = 'ZenTao Cloud';
+$lang->misc->zentao->service['custom']      = 'ZenTao Custom';
 
 global $config;
 $lang->misc->zentao->others['chanzhi']  = "<img src='{$config->webRoot}theme/default/images/main/chanzhi.ico' /> Zsite";
@@ -100,7 +100,7 @@ $lang->misc->feature->close          = 'Close';
 $lang->misc->feature->downloadFile   = 'Download introduction';
 $lang->misc->feature->tutorialDesc   = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 $lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
-$lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R & D affairs in <span style='color: #0c60e1'>[R&D]</span> and daily office affairs in <span style='color: #0c60e1'>[Lite]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
+$lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
 
 $lang->misc->releaseDate['17.8']        = '2022-11-02';

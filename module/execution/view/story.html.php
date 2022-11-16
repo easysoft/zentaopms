@@ -79,9 +79,9 @@
     <?php endif;?>
     <?php
     if($productID) common::printIcon('story', 'report', "productID=$productID&branchID=&storyType=$storyType&browseType=$type&moduleID=$param&chartType=pie&projectID=$execution->id", '', 'button', 'bar-chart muted');
-    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe'");
+    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id&browseType=$type&storyType=$storyType", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe'");
 
-    $canLinkStory = $execution->hasProduct or $execution->multiple;
+    $canLinkStory = $execution->multiple;
     if(common::canModify('execution', $execution))
     {
         $this->lang->story->create = $this->lang->execution->createStory;
@@ -221,7 +221,7 @@
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars = "executionID={$execution->id}&storyType=$storyType&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
       if(!$execution->hasProduct and !$execution->multiple)
@@ -253,6 +253,8 @@
           foreach($setting as $key => $value)
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
               if($value->show)
               {
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
@@ -271,6 +273,8 @@
           <?php foreach($setting as $key => $value)
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
               $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution, $showBranch);
           }
           ?>
@@ -285,6 +289,8 @@
           <?php foreach($setting as $key => $value)
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
               $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution);
           }?>
           </tr>

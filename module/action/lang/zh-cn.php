@@ -933,3 +933,5 @@ $lang->action->desc->deletemr                     = '$date, 由 <strong>$actor</
 $lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合并了 <a href="$extra">代码</a>。';
 $lang->action->desc->approve                      = '$date, 由 <strong>$actor</strong> 审核通过。';
 $lang->action->desc->reject                       = '$date, 由 <strong>$actor</strong> 拒绝。';
+$lang->action->desc->linkedrepo                   = '$date, 由 <strong>$actor</strong> 关联代码库 $extra';
+$lang->action->desc->unlinkedrepo                 = '$date, 由 <strong>$actor</strong> 取消了项目与代码库 $extra 的关联';

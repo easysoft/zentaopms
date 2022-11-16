@@ -100,7 +100,7 @@ class product extends control
         $accounts     = array();
         $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy, $pager);
         $product      = $this->product->getByID($productID);
-        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc');
+        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
 
         foreach($projectStats as $project)
         {
@@ -110,8 +110,6 @@ class product extends control
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
-        $this->view->position[]   = $this->products[$productID];
-        $this->view->position[]   = $this->lang->product->project;
         $this->view->projectStats = $projectStats;
         $this->view->PMList       = $PMList;
         $this->view->productID    = $productID;

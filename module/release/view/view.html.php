@@ -353,13 +353,12 @@
                       <th><?php echo $lang->release->build;?></th>
                       <td>
                         <?php
-                        $i = 1;
+                        $buildHtml = array();
                         foreach($release->builds as $build)
                         {
-                            $buildDivision = $i == count($release->builds) ? '' : $lang->comma;
-                            echo (($build->project) ? html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name, '_blank') : $build->name) . $buildDivision;
-                            $i++;
+                            $buildHtml[] = html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$build->id"), $build->name, '', "data-app='project'");
                         }
+                        echo join($lang->comma, $buildHtml);
                         ?>
                       </td>
                     </tr>

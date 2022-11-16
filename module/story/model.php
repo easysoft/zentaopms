@@ -4218,7 +4218,8 @@ class storyModel extends model
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
-        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product]) && $story->stage != 'projected') or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
+        /* Adjust code, hide split entry. */
+        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
 
         return true;
     }
@@ -4487,7 +4488,9 @@ class storyModel extends model
                 if(($canEstimate or $canCreateCase) and $canUnlinkStory) $menu .= "<div class='dividing-line'></div>";
 
                 $executionID = empty($execution) ? 0 : $execution->id;
-                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
+
+                /* Adjust code, hide split entry. */
+                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct and false)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $this->lang->story->subdivide;
@@ -5875,13 +5878,16 @@ class storyModel extends model
      *
      * @param  int    $executionID
      * @param  string $orderBy
+     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function getExportStorys($executionID, $orderBy = 'id_desc')
+    public function getExportStorys($executionID, $orderBy = 'id_desc', $storyType = 'story')
     {
         $this->loadModel('file');
         $this->loadModel('branch');
+
+        $this->replaceURLang($storyType);
         $storyLang   = $this->lang->story;
         $storyConfig = $this->config->story;
 

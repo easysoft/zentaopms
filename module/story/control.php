@@ -396,6 +396,7 @@ class story extends control
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
+        $this->view->hiddenParent  = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
         $this->view->teamUsers     = array();
@@ -409,6 +410,7 @@ class story extends control
             {
                 $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
                 $this->view->hiddenProduct = true;
+                $this->view->hiddenParent  = true;
 
                 if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
                 if(!$project->multiple)          $this->view->hiddenPlan = true;
@@ -883,6 +885,7 @@ class story extends control
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
+        $this->view->hiddenParent  = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
         $this->view->teamUsers     = array();
@@ -892,6 +895,7 @@ class story extends control
             $project = $this->project->getByShadowProduct($product->id);
             $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
             $this->view->hiddenProduct = true;
+            $this->view->hiddenParent  = true;
 
             if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
             if(!$project->multiple)          $this->view->hiddenPlan = true;
@@ -1085,7 +1089,7 @@ class story extends control
         }
 
         /* Set ditto option for users. */
-        $users = $this->loadModel('user')->getPairs('nodeleted');
+        $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
@@ -2246,7 +2250,8 @@ class story extends control
         $this->view->story      = $story;
         $this->view->storyType  = $storyType;
         $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = ($this->config->vision == 'lite' || !empty($product->shadow)) ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
+        $this->view->users      = $this->config->vision == 'lite' ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
+
         $this->display();
     }
 
@@ -2778,7 +2783,7 @@ class story extends control
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
-            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
+            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy, $storyType));
             $this->fetch('transfer', 'export', 'model=story');
         }
 
@@ -2816,9 +2821,9 @@ class story extends control
         /* Unset product field when in single project.  */
         if(isset($project->hasProduct) && !$project->hasProduct)
         {
-            $filterFields = array('product,', 'branch,');
-            if($project->model != 'scrum') $filterFields[] = 'plan';
-            $this->config->story->exportFields = str_replace($filterFields, '', $this->config->story->exportFields);
+            $filterFields = array(', product,', ', branch,');
+            if($project->model != 'scrum') $filterFields[] = ', plan,';
+            $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
         }
 
         $this->view->fileName        = $fileName;
