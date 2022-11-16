@@ -5882,7 +5882,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function getExportStorys($executionID, $orderBy = 'id_desc', $storyType = 'story')
+    public function getExportStories($executionID, $orderBy = 'id_desc', $storyType = 'story')
     {
         $this->loadModel('file');
         $this->loadModel('branch');
