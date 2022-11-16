@@ -1058,6 +1058,7 @@ class myModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t2.reviewer')->eq($this->app->user->account)
             ->andWhere('t2.result')->eq('')
+            ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.status')->eq('reviewing')
             ->orderBy($orderBy)
             ->query();
@@ -1263,6 +1264,7 @@ class myModel extends model
         $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`,extra')->from(TABLE_ACTION)
             ->where('actor')->eq($this->app->user->account)
             ->andWhere('objectType')->in($this->config->my->reviewObjectType)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere($condition)
             ->groupBy('objectType,objectID')
             ->orderBy($orderBy)
