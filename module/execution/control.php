@@ -686,7 +686,7 @@ class execution extends control
         unset($this->config->bug->search['fields']['resolvedDate']);
         unset($this->config->bug->search['fields']['closedDate']);
         unset($this->config->bug->search['fields']['branch']);
-        if(empty($execution->multiple) && empty($execution->hasProduct)) unset($this->config->bug->search['fields']['plan']);
+        if(empty($execution->multiple) and empty($execution->hasProduct)) unset($this->config->bug->search['fields']['plan']);
         if(empty($project->hasProduct))
         {
             unset($this->config->bug->search['fields']['product']);
