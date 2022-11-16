@@ -146,7 +146,9 @@ function setParentProgram(parentProgram)
         selectedParent     = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
         lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
 
-        if(selectedParent != lastSelectedParent)
+        var hasProduct = $('[name=hasProduct]:checked').val();
+
+        if((selectedParent != lastSelectedParent) && hasProduct == 1)
         {
             $('#budget').val('');
 
