@@ -146,7 +146,9 @@ function setParentProgram(parentProgram)
         selectedParent     = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
         lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
 
-        if(selectedParent != lastSelectedParent)
+        var hasProduct = $('[name=hasProduct]:checked').val();
+
+        if((selectedParent != lastSelectedParent) && hasProduct == 1)
         {
             $('#budget').val('');
 
@@ -158,8 +160,10 @@ function setParentProgram(parentProgram)
                 var selectedProduct = $(this).find('[name^=products]').val();
                 var selectedBranch  = $(this).find('[name^=branch]').val();
                 var selectedPlan    = $('#plan' + index ).find('[name^=plans]').val();
+                var newProductHtml  = $(this).find('span.input-group-addon');
 
                 $(this).html(productSelectHtml);
+                $(this).append(newProductHtml);
                 $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch).attr('data-plan', selectedPlan);
                 $(this).find('[name^=products]').val(selectedProduct).chosen().change();
             });

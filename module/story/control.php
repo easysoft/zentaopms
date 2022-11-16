@@ -2025,6 +2025,8 @@ class story extends control
      */
     public function batchToTask($executionID = 0, $projectID = 0)
     {
+        if($this->app->tab == 'execution' and $executionID) $this->loadModel('execution')->setMenu($executionID);
+
         if(!empty($_POST['name']))
         {
             $response['result']  = 'success';
@@ -2710,6 +2712,7 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
 
+        $this->products = $this->product->getPairs('', 0, '', 'all');
         if($this->app->tab == 'project')
         {
             $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
@@ -2729,11 +2732,12 @@ class story extends control
                 unset($this->lang->story->report->charts['storysPerPlan']);
             }
         }
+        else
+        {
+            $this->product->setMenu($productID, $branchID);
+        }
 
         if($storyType != 'story') unset($this->lang->story->report->charts['storysPerStage']);
-
-        $this->products = $this->product->getPairs('', 0, '', 'all');
-        $this->product->setMenu($productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
         $this->view->position[]    = $this->products[$productID];
@@ -2781,7 +2785,7 @@ class story extends control
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
-            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy, $storyType));
+            $this->post->set('rows', $this->story->getExportStories($executionID, $orderBy, $storyType));
             $this->fetch('transfer', 'export', 'model=story');
         }
 
@@ -2819,9 +2823,9 @@ class story extends control
         /* Unset product field when in single project.  */
         if(isset($project->hasProduct) && !$project->hasProduct)
         {
-            $filterFields = array('product,', 'branch,');
-            if($project->model != 'scrum') $filterFields[] = 'plan,';
-            $this->config->story->exportFields = str_replace($filterFields, '', $this->config->story->exportFields);
+            $filterFields = array(', product,', ', branch,');
+            if($project->model != 'scrum') $filterFields[] = ', plan,';
+            $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
         }
 
         $this->view->fileName        = $fileName;

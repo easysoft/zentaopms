@@ -88,6 +88,7 @@ class programModel extends model
         $dao = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($programID !== '')->andWhere('program')->eq($programID)->fi()
             ->beginIF($shadow !== 'all')->andWhere('shadow')->eq((int)$shadow)->fi()
             ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
@@ -99,7 +100,7 @@ class programModel extends model
         $productPrograms = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
 
         /* Put products of current program first.*/
-        if($mode != 'assign' && $programID)
+        if(!empty($products) and $mode != 'assign' and $programID)
         {
             $currentProgramProducts = $products[$programID];
             unset($products[$programID]);
