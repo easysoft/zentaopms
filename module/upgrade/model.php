@@ -7640,8 +7640,7 @@ class upgradeModel extends model
         $this->app->loadLang('dimension');
         $dimension              = new stdclass();
         $dimension->name        = $this->lang->dimension->default;
-        $dimension->code        = 'default_dimension';
-        $dimension->desc        = 'default dimension';
+        $dimension->code        = 'efficiency';
         $dimension->createdBy   = 'system';
         $dimension->createdDate = helper::now();
 
