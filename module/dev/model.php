@@ -94,36 +94,18 @@ class devModel extends model
     {
         if($type == 'enum' or $type == 'set')
         {
-            $rangeBegin  = $firstPOS + 2;                       // Remove the first quote.
-            $rangeEnd    = strrpos($rawField->type, ')') - 1;   // Remove the last quote.
-            $range       = substr($rawField->type, $rangeBegin, $rangeEnd - $rangeBegin);
-            $field['type'] = $rawField->type;
+            $rangeBegin = $firstPOS + 2;                       // Remove the first quote.
+            $rangeEnd   = strrpos($rawField->type, ')') - 1;   // Remove the last quote.
+            $range      = substr($rawField->type, $rangeBegin, $rangeEnd - $rangeBegin);
+            $field['type']             = $rawField->type;
             $field['options']['enum']  = str_replace("','", ',', $range);
         }
-        elseif($type == 'varchar')
+        elseif($type == 'varchar' or $type == 'char' or $type == 'int')
         {
             $begin  = $firstPOS + 1;
             $end    = strpos($rawField->type, ')', $begin);
             $length = substr($rawField->type, $begin, $end - $begin);
-            $field['type']   = 'varchar';
-            $field['options']['max'] = $length;
-            $field['options']['min'] = 0;
-        }
-        elseif($type == 'char')
-        {
-            $begin  = $firstPOS + 1;
-            $end    = strpos($rawField->type, ')', $begin);
-            $length = substr($rawField->type, $begin, $end - $begin);
-            $field['type']   = 'char';
-            $field['options']['max'] = $length;
-            $field['options']['min'] = 0;
-        }
-        elseif($type == 'int')
-        {
-            $begin  = $firstPOS + 1;
-            $end    = strpos($rawField->type, ')', $begin);
-            $length = substr($rawField->type, $begin, $end - $begin);
-            $field['type'] = 'int';
+            $field['type']           = $type;
             $field['options']['max'] = $length;
             $field['options']['min'] = 0;
         }
@@ -131,14 +113,11 @@ class devModel extends model
         {
             $field['type'] = 'float';
         }
-        elseif($type == 'date')
-        {
-            $field['type'] = 'date';
-        }
         else
         {
             $field['type'] = $type;
         }
+
         return $field;
     }
 
