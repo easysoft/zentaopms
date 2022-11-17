@@ -115,6 +115,9 @@ class design extends control
         $pager   = pager::init(0, $recPerPage, $pageID);
         $designs = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
 
+        $project = $this->loadModel('project')->getByID($projectID);
+        $this->view->hiddenProduct = $project->hasProduct ? false : true;
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
         $this->view->position[] = $this->lang->design->browse;
 
