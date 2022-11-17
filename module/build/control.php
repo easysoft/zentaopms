@@ -54,7 +54,7 @@ class build extends control
 
             if(defined('TUTORIAL')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true)); // Fix bug #21095.
 
-            $buildID = $this->build->create($executionID, $projectID);
+            $buildID = $this->build->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
 
@@ -72,6 +72,8 @@ class build extends control
         if($this->app->tab == 'project')
         {
             $this->project->setMenu($projectID);
+            $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter');
+            $executionID   = empty($executionID) ? key($executions) : $executionID;
             $productGroups = $this->product->getProducts($projectID);
             $branchGroups  = $this->project->getBranchesByProject($projectID);
             $this->session->set('project', $projectID);
@@ -79,6 +81,7 @@ class build extends control
         elseif($this->app->tab == 'execution')
         {
             $execution     = $this->execution->getByID($executionID);
+            $executions    = $this->execution->getPairs($execution->project);
             $projectID     = $execution->project;
             $productGroups = $this->product->getProducts($executionID);
             $branchGroups  = $this->project->getBranchesByProject($executionID);
@@ -89,6 +92,7 @@ class build extends control
         {
             $execution     = $this->execution->getByID($executionID);
             $projectID     = $execution ? $execution->project : 0;
+            $executions    = $this->execution->getPairs($projectID);
             $productGroups = $this->product->getProducts($executionID);
             $branchGroups  = $this->project->getBranchesByProject($executionID);
         }
@@ -119,6 +123,7 @@ class build extends control
         $this->view->executionID   = $executionID;
         $this->view->products      = $products;
         $this->view->projectID     = $projectID;
+        $this->view->executions    = $executions;
         $this->view->lastBuild     = $this->build->getLast($executionID, $projectID);
         $this->view->productGroups = $productGroups;
         $this->view->users         = $this->user->getPairs('nodeleted|noclosed');

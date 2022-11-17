@@ -19,6 +19,14 @@
     </div>
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
+        <tr class="<?php echo ($app->tab == 'project' and !empty($multipleProject)) ? '' : 'hidden';?>">
+          <th><?php echo $lang->build->type;?></th>
+          <td><?php echo html::radio('type', $lang->build->typeList, 'execution');?></td>
+        </tr>
+        <tr class="<?php echo !empty($multipleProject) ? '' : 'hidden';?>">
+          <th><?php echo $lang->executionCommon;?></th>
+          <td><?php echo html::select('execution', $executions, $executionID, "onchange='loadProducts(this.value);' class='form-control chosen' required");?></td>
+        </tr>
         <tr class="<?php echo $hidden;?>">
           <th><?php echo $lang->build->product;?></th>
           <?php if(!empty($products)):?>
@@ -42,13 +50,11 @@
           <?php endif;?>
           <td></td>
         </tr>
-        <?php if($app->tab == 'project' && !empty($multipleProject)):?>
-        <tr>
+        <tr class='hide'>
           <th><?php echo $lang->build->builds;?></th>
           <td id='buildBox'><?php echo html::select('builds[]', array(), '', "class='form-control chosen' multiple");?></td>
           <td><?php echo $lang->build->notice->autoRelation;?></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->build->name;?></th>
           <td><?php echo html::input('name', '', "class='form-control' required");?></td>
@@ -86,6 +92,7 @@
         <tr>
           <td colspan="3" class="text-center form-actions">
             <?php echo html::submitButton();?>
+            <?php echo html::hidden('project', $projectID);?>
             <?php echo html::backButton();?>
           </td>
         </tr>
