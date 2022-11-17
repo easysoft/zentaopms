@@ -66,7 +66,7 @@ class releaseModel extends model
             ->page($pager)
             ->fetchAll();
 
-        $builds = $this->dao->select("t1.id, t1.name, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
+        $builds = $this->dao->select("t1.id, t1.name, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = t3.id')
@@ -171,6 +171,7 @@ class releaseModel extends model
             ->setIF($projectID, 'project', $projectID)
             ->setIF($this->post->build == false, 'build', 0)
             ->setDefault('stories', '')
+            ->setDefault('bugs',    '')
             ->setDefault('createdBy',   $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->join('build', ',')
@@ -224,7 +225,7 @@ class releaseModel extends model
 
         if($release->build)
         {
-            $builds = $this->dao->select('project, branch, stories, bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+            $builds = $this->dao->select('id,project,branch,stories,bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
             foreach($builds as $build)
             {
                 $branches[$build->branch]  = $build->branch;
@@ -237,6 +238,11 @@ class releaseModel extends model
                     if($build->stories) $release->stories .= ',' . $build->stories;
                     if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
                 }
+            }
+            if($this->post->sync == 'true' and $release->bugs)
+            {
+                $releaseBugs   = $this->loadModel('bug')->getReleaseBugs(array_keys($builds), $release->product, $release->branch);
+                $release->bugs = join(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));
             }
 
             $release->build   = ',' . trim($release->build, ',') . ',';
@@ -305,6 +311,7 @@ class releaseModel extends model
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('id', $releaseID)
+            ->setDefault('build',  '')
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
             ->join('build', ',')

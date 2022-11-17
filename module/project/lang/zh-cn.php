@@ -193,6 +193,9 @@ $lang->project->typeList['other'] = '其他项目';
 $lang->project->divisionList['0'] = '按项目创建';
 $lang->project->divisionList['1'] = "按{$lang->productCommon}创建";
 
+$lang->project->divisionSwitchList['0'] = '关闭';
+$lang->project->divisionSwitchList['1'] = "开启";
+
 $lang->project->waitProjects    = '未开始的项目';
 $lang->project->doingProjects   = '进行中的项目';
 $lang->project->doingExecutions = '进行中的执行(最近1个)';
@@ -208,7 +211,7 @@ $lang->project->changeProgram          = '%s > 修改项目集';
 $lang->project->changeProgramTip       = '修改项目集后，该项目关联产品的项目集也会被修改，请确认是否修改。';
 $lang->project->linkedProjectsTip      = '关联的项目如下';
 $lang->project->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
-$lang->project->noticeDivsion          = "当前项目为单套阶段，点击[按项目创建]可以变为多套阶段，每套阶段只关联一个{$lang->productCommon}。";
+$lang->project->noticeDivsion          = "当前项目为单套阶段，点击[开启]可以变为多套阶段，每套阶段只关联一个{$lang->productCommon}。";
 $lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此项目中";
 $lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
 $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";

@@ -509,8 +509,14 @@ class release extends control
         $executionIdList = array();
         foreach($builds as $build)
         {
-            if(empty($build->execution)) continue;
-            $executionIdList[$build->execution] = $build->execution;
+            if(!empty($build->execution))
+            {
+                $executionIdList[$build->execution] = $build->execution;
+            }
+            elseif(!empty($build->project))
+            {
+                $executionIdList[$build->project] = $build->project;
+            }
         }
 
         if($browseType == 'bySearch')

@@ -136,7 +136,7 @@
 
 <?php if(!$project->division and count($linkedProducts) == 1):?>
 <?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
-<?php js::set('divisionList', $lang->project->divisionList);?>
+<?php js::set('divisionSwitchList', $lang->project->divisionSwitchList);?>
 <script>
 $('#submit').click(function()
 {
@@ -145,11 +145,11 @@ $('#submit').click(function()
           'message' : noticeDivsion,
           'buttons':{
               confirm:{
-                  label: divisionList['1'],
+                  label: divisionSwitchList['1'],
                   className: 'btn'
               },
               cancel:{
-                  label: divisionList['0'],
+                  label: divisionSwitchList['0'],
                   className: 'btn-primary'
               },
           },

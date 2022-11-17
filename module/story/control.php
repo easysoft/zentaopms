@@ -972,6 +972,7 @@ class story extends control
             $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
             {
+                if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
                 $this->project->setMenu($executionID);
             }
             else
@@ -2025,6 +2026,8 @@ class story extends control
      */
     public function batchToTask($executionID = 0, $projectID = 0)
     {
+        if($this->app->tab == 'execution' and $executionID) $this->loadModel('execution')->setMenu($executionID);
+
         if(!empty($_POST['name']))
         {
             $response['result']  = 'success';
@@ -2710,6 +2713,7 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
 
+        $this->products = $this->product->getPairs('', 0, '', 'all');
         if($this->app->tab == 'project')
         {
             $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
@@ -2723,17 +2727,19 @@ class story extends control
                 $this->loadModel('execution')->setMenu($projectID);
             }
 
-            if(!$project->hasProduct and !$project->multiple)
+            if(!$project->hasProduct)
             {
                 unset($this->lang->story->report->charts['storysPerProduct']);
-                unset($this->lang->story->report->charts['storysPerPlan']);
+
+                if(!$project->multiple) unset($this->lang->story->report->charts['storysPerPlan']);
             }
+        }
+        else
+        {
+            $this->product->setMenu($productID, $branchID);
         }
 
         if($storyType != 'story') unset($this->lang->story->report->charts['storysPerStage']);
-
-        $this->products = $this->product->getPairs('', 0, '', 'all');
-        $this->product->setMenu($productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
         $this->view->position[]    = $this->products[$productID];
@@ -2781,7 +2787,7 @@ class story extends control
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
-            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy, $storyType));
+            $this->post->set('rows', $this->story->getExportStories($executionID, $orderBy, $storyType));
             $this->fetch('transfer', 'export', 'model=story');
         }
 

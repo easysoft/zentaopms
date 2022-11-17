@@ -425,9 +425,19 @@ class userModel extends model
                 }
 
                 $data[$i] = new stdclass();
-                $data[$i]->dept     = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
+                if($users->userType == 'outside')
+                {
+                    $data[$i]->company    = $users->company[$i] == 'ditto' ? (isset($prev['company']) ? $prev['company'] : 0) : $users->company[$i];
+                    $data[$i]->newCompany = isset($users->new[$i]) ? true : false;
+                    $data[$i]->type       = 'outside';
+                }
+                else
+                {
+                    $data[$i]->dept = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
+                    $data[$i]->join = empty($users->join[$i]) ? '0000-00-00' : ($users->join[$i]);
+                    $data[$i]->type = 'inside';
+                }
                 $data[$i]->account  = $users->account[$i];
-                $data[$i]->type     = 'inside';
                 $data[$i]->realname = $users->realname[$i];
                 $data[$i]->role     = $role;
                 $data[$i]->group    = in_array('ditto', isset($users->group[$i]) ? $users->group[$i] : array()) ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
@@ -435,7 +445,6 @@ class userModel extends model
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5(trim($users->password[$i]));
                 $data[$i]->commiter = $users->commiter[$i];
-                $data[$i]->join     = empty($users->join[$i]) ? '0000-00-00' : ($users->join[$i]);
                 $data[$i]->skype    = $users->skype[$i];
                 $data[$i]->qq       = $users->qq[$i];
                 $data[$i]->dingding = $users->dingding[$i];
@@ -474,6 +483,7 @@ class userModel extends model
                 }
 
                 $accounts[$i]     = $data[$i]->account;
+                $prev['company']  = $data[$i]->company;
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
                 $prev['group']    = $data[$i]->group;
@@ -486,6 +496,16 @@ class userModel extends model
         $userIDList = array();
         foreach($data as $user)
         {
+            if($user->type == 'outside' and $user->newCompany)
+            {
+                $company = new stdClass();
+                $company->name = $user->company;
+                $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+
+                $user->company = $this->dao->lastInsertID();
+            }
+            unset($user->newCompany);
+
             if(is_array($user->group))
             {
                 foreach($user->group as $group)
@@ -547,8 +567,6 @@ class userModel extends model
             ->remove('new, password1, password2, groups,verifyPassword, passwordStrength,passwordLength')
             ->get();
 
-        /* Fix bug for api requests using json. */
-        if($this->app->getViewType() == 'json') $this->post->verifyPassword = md5(md5($this->post->verifyPassword) . $this->session->rand);
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
         {
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
