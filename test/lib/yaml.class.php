@@ -22,7 +22,7 @@
  * @version   1.0
  * @Link      https://www.zentao.net
  */
-class field
+class fields
 {
     /**
      * Field Arr.
@@ -126,7 +126,7 @@ class field
      * @access public
      * @return object
      */
-    public function fields($fields)
+    public function setFields($fields)
     {
         if(!is_array($fields))
         {
@@ -204,7 +204,7 @@ class yaml
      * @var int
      * @access public
      */
-    public $field;
+    public $fields;
 
     /**
      * Global config.
@@ -233,7 +233,7 @@ class yaml
         global $config;
         $this->config    = $config;
         $this->tableName = $tableName;
-        $this->field     = new field();
+        $this->fields    = new fields();
     }
 
     /**
@@ -245,20 +245,19 @@ class yaml
      */
     public function __get($property_name)
     {
-        $this->field->setField($property_name);
-        return $this->field;
+        $this->fields->setField($property_name);
+        return $this->fields;
     }
 
     /**
      * Build yaml file and insert table.
      *
      * @param  int     $rows
-     * @param  bool    $isDefault
      * @param  string  $version
      * @access public
      * @return void
      */
-    public function gen($rows, $isDefault = false, $version = '')
+    public function gen($rows, $version = '')
     {
         $runFileDir  = $_SERVER['PWD'];
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
@@ -272,12 +271,18 @@ class yaml
         $yamlDataArr['author'] = "auto_{$runFileName}";
         $version ? $yamlDataArr['version'] = $version : $yamlDataArr['version'] = '1.0';
 
-        if(empty($this->field->fieldArr)) return;
-        $yamlDataArr['fields'] = $this->field->setFieldRule($this->field->fieldArr);
+        if(empty($this->fields->fieldArr))
+        {
+            $yamlFile = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        }
+        else
+        {
+            $yamlDataArr['fields'] = $this->fields->setFieldRule($this->fields->fieldArr);
 
-        yaml_emit_file($yamlFile, $yamlDataArr, YAML_UTF8_ENCODING);
+            yaml_emit_file($yamlFile, $yamlDataArr, YAML_UTF8_ENCODING);
+        }
 
-        $isDefault === true ? $this->insertDB($yamlFile, $this->tableName, $rows, true) : $this->insertDB($yamlFile, $this->tableName, $rows);
+        $this->insertDB($yamlFile, $this->tableName, $rows);
     }
 
     /**
@@ -286,15 +291,12 @@ class yaml
      * @param  string    $yamlFile
      * @param  string    $tableName
      * @param  int       $rows
-     * @param  bool      $isDefault
      * @param  bool      $isClear
      * @access public
      * @return string
      */
-    function insertDB($yamlFile, $tableName, $rows, $isDefault = false, $isClear = true)
+    function insertDB($yamlFile, $tableName, $rows, $isClear = true)
     {
-        if($isDefault === true) $yamlFile = dirname(dirname(__FILE__)) . "/data/{$tableName}.yaml";
-
         $tableSqlDir = "{$_SERVER['PWD']}/data/sql";
 
         if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0700);

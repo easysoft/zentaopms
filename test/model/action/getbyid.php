@@ -10,6 +10,9 @@ $action->objectType->range("product,story,productplan,release,project");
 $action->action->range("common,extra,opened,created,changed");
 $action->comment->range("1-5")->prefix("这是一个系统日志测试备注");
 $action->gen(5);
+
+//zdTable('action')->gen(5);
+
 /**
 
 title=测试 actionModel->getById();
