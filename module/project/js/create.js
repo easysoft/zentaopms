@@ -167,6 +167,7 @@ function setParentProgram(parentProgram)
                 $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch).attr('data-plan', selectedPlan);
                 $(this).find('[name^=products]').val(selectedProduct).chosen().change();
             });
+            $('#productsBox .row .col-sm-4:last').find('.input-group').append($('#productsBox .addProduct .input-group:first .input-group-addon').prop('outerHTML'));
         }
 
         if(parentProgram != 0)

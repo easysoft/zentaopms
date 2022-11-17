@@ -168,6 +168,8 @@ class releaseModel extends model
         $release = fixer::input('post')
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
+            ->add('stories', '')
+            ->add('bugs',    '')
             ->setIF($projectID, 'project', $projectID)
             ->setIF($this->post->build == false, 'build', 0)
             ->setDefault('stories', '')
@@ -224,7 +226,7 @@ class releaseModel extends model
 
         if($release->build)
         {
-            $builds = $this->dao->select('project, branch, stories, bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+            $builds = $this->dao->select('id,project,branch,stories,bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
             foreach($builds as $build)
             {
                 $branches[$build->branch]  = $build->branch;
@@ -237,6 +239,11 @@ class releaseModel extends model
                     if($build->stories) $release->stories .= ',' . $build->stories;
                     if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
                 }
+            }
+            if($this->post->sync == 'true' and $release->bugs)
+            {
+                $releaseBugs   = $this->loadModel('bug')->getReleaseBugs(array_keys($builds), $release->product, $release->branch);
+                $release->bugs = join(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));
             }
 
             $release->build   = ',' . trim($release->build, ',') . ',';
