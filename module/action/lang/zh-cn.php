@@ -152,6 +152,7 @@ $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube项目';
 $lang->action->objectTypes['stage']            = '阶段';
 $lang->action->objectTypes['patch']            = '补丁';
 $lang->action->objectTypes['repo']             = '代码库';
+$lang->action->objectTypes['dataview']         = '数据表';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
