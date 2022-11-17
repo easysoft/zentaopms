@@ -571,7 +571,7 @@
                     </ul>
                   </td>
                 </tr>
-                <?php if($story->type == 'story'):?>
+                <?php if($story->type == 'story' && helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>
                   <td class='pd-0'>
