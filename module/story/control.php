@@ -2714,7 +2714,7 @@ class story extends control
         $this->story->replaceURLang($storyType);
 
         $this->products = $this->product->getPairs('', 0, '', 'all');
-        if($this->app->tab == 'project')
+        if(strpos('project,execution', $this->app->tab) !== false)
         {
             $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
