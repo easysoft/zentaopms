@@ -1630,9 +1630,9 @@ class actionModel extends model
             $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
         }
 
-        if($action->objectType == 'chartgroup' and $action->action != 'deleted')
+        if($action->objectType == 'chartgroup')
         {
-            $action->objectLink = helper::createLink('chart', 'browseGroup', "rootID=$action->objectID");
+            $action->objectLink = '';
         }
 
         if($action->objectType == 'branch' and $action->action == 'mergedbranch')
