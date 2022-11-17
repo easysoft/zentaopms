@@ -2727,10 +2727,11 @@ class story extends control
                 $this->loadModel('execution')->setMenu($projectID);
             }
 
-            if(!$project->hasProduct and !$project->multiple)
+            if(!$project->hasProduct)
             {
                 unset($this->lang->story->report->charts['storysPerProduct']);
-                unset($this->lang->story->report->charts['storysPerPlan']);
+
+                if(!$project->multiple) unset($this->lang->story->report->charts['storysPerPlan']);
             }
         }
         else
