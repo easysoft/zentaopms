@@ -266,7 +266,7 @@ $lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|de
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
 $lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s");
 $lang->waterfall->menu->devops     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
-$lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|project|build|project=%s");
+$lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|project|build|project=%s", 'subModule' => 'projectbuild');
 $lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 
