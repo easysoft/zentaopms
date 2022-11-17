@@ -98,7 +98,7 @@ tbody tr td:first-child input {display: none;}
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <?php echo html::checkbox('unlinkStories', array($story->id => sprintf('%03d', $story->id)));?>
+                  <?php echo html::checkbox('unlinkStories', array($story->id => sprintf('%03d', $story->id)), '', strpos(",$build->stories,", ",$story->id,") !== false ? '' : "disabled");?>
                   <?php else:?>
                   <?php printf('%03d', $story->id);?>
                   <?php endif;?>
@@ -198,7 +198,7 @@ tbody tr td:first-child input {display: none;}
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)));?>
+                  <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)), '', strpos(",$build->bugs,", ",$bug->id,") !== false ? '' : "disabled");?>
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>

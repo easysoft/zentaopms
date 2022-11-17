@@ -31,6 +31,7 @@ class buildModel extends model
             ->fetch();
         if(!$build) return false;
 
+        $build = $this->linkChildBuilds($build);
         $build = $this->loadModel('file')->replaceImgURL($build, 'desc');
         $build->files = $this->file->getByObject('build', $buildID);
         if($setImgSize) $build->desc = $this->file->setImgSize($build->desc);
@@ -349,7 +350,6 @@ class buildModel extends model
         if(!dao::isError())
         {
             $buildID = $this->dao->lastInsertID();
-            $this->linkChildBuilds($buildID, $build->builds);
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
             $this->file->saveUpload('build', $buildID);
             $this->loadModel('score')->create('build', 'create', $buildID);
@@ -389,8 +389,6 @@ class buildModel extends model
         if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(!dao::isError())
         {
-            $addBuilds = array_diff(explode(',', $build->builds), explode(',', $oldBuild->builds));
-            if($addBuilds) $this->linkChildBuilds($buildID, $addBuilds);
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
             return common::createChanges($oldBuild, $build);
         }
@@ -569,28 +567,28 @@ class buildModel extends model
     /**
      * Bugs and stories associated with child builds.
      *
-     * @param  int    $buildID
-     * @param  string $childBuildIDList
+     * @param  object  $build
      * @access public
-     * @return void
+     * @return object
      */
-    public function linkChildBuilds($buildID, $childBuildIDList)
+    public function linkChildBuilds($build)
     {
-        $build       = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
-        $childBuilds = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->in($childBuildIDList)->fetchAll();
+        $build->allBugs    = $build->bugs;
+        $build->allStories = $build->stories;
+        $childBuilds = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
 
         foreach($childBuilds as $childBuild)
         {
-            if($childBuild->bugs)    $build->bugs    .= ",{$childBuild->bugs}";
-            if($childBuild->stories) $build->stories .= ",{$childBuild->stories}";
+            if($childBuild->bugs)    $build->allBugs    .= ",{$childBuild->bugs}";
+            if($childBuild->stories) $build->allStories .= ",{$childBuild->stories}";
         }
 
-        $build->bugs    = explode(',', $build->bugs);
-        $build->bugs    = join(',', array_unique(array_filter($build->bugs)));
-        $build->stories = explode(',', $build->stories);
-        $build->stories = join(',', array_unique(array_filter($build->stories)));
+        $build->allBugs    = explode(',', $build->allBugs);
+        $build->allBugs    = join(',', array_unique(array_filter($build->allBugs)));
+        $build->allStories = explode(',', $build->allStories);
+        $build->allStories = join(',', array_unique(array_filter($build->allStories)));
 
-        $this->dao->update(TABLE_BUILD)->data($build)->where('id')->eq($buildID)->exec();
+        return $build;
     }
 
     /**

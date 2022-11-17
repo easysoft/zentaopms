@@ -255,7 +255,7 @@ class build extends control
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('id')->in($build->bugs)
+            ->where('id')->in($build->allBugs)
             ->andWhere('deleted')->eq(0)
             ->beginIF($type == 'bug')->orderBy($sort)->fi()
             ->page($bugPager)
@@ -264,7 +264,7 @@ class build extends control
         /* Get stories and stages. */
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories    = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
-            ->where('id')->in($build->stories)
+            ->where('id')->in($build->allStories)
             ->andWhere('deleted')->eq(0)
             ->beginIF($type == 'story')->orderBy($sort)->fi()
             ->page($storyPager)
@@ -277,10 +277,14 @@ class build extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($build->project);
+            $objectType = 'project';
+            $objectID   = $build->project;
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($build->execution);
+            $objectType = 'execution';
+            $objectID   = $build->execution;
         }
 
         $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
@@ -296,18 +300,6 @@ class build extends control
         $this->view->generatedBugPager = $generatedBugPager;
 
         $this->executeHooks($buildID);
-
-        if($this->app->tab == 'execution')
-        {
-            $objectType = 'execution';
-            $objectID   = $build->execution;
-        }
-        else
-        {
-            $objectType = 'project';
-            $objectID   = $build->project;
-        }
-
 
         /* Assign. */
         $this->view->canBeChanged = common::canBeChanged('build', $build); // Determines whether an object is editable.
@@ -611,11 +603,11 @@ class build extends control
         $executionID = $build->execution ? $build->execution : $build->project;
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $build->branch, $queryID, 'id', $executionID, 'story', $build->stories, $pager);
+            $allStories = $this->story->getBySearch($build->product, $build->branch, $queryID, 'id', $executionID, 'story', $build->allStories, $pager);
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($executionID, $build->product, 0, 't1.`order`_desc', 'byBranch', $build->branch, 'story', $build->stories, $pager);
+            $allStories = $this->story->getExecutionStories($executionID, $build->product, 0, 't1.`order`_desc', 'byBranch', $build->branch, 'story', $build->allStories, $pager);
         }
 
         $this->view->allStories   = $allStories;
@@ -735,11 +727,11 @@ class build extends control
         $executionID = $build->execution ? $build->execution : $build->project;
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($build->product, $build->branch, $queryID, 'id_desc', $build->bugs, $pager, $build->project);
+            $allBugs = $this->bug->getBySearch($build->product, $build->branch, $queryID, 'id_desc', $build->allBugs, $pager, $build->project);
         }
         else
         {
-            $allBugs = $this->bug->getExecutionBugs($executionID, 0, 'all', $buildID, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
+            $allBugs = $this->bug->getExecutionBugs($executionID, 0, 'all', $buildID, 'noclosed', 0, 'status_desc,id_desc', $build->allBugs, $pager);
         }
 
         $this->view->allBugs    = $allBugs;
