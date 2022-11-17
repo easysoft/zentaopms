@@ -571,11 +571,8 @@ class projectrelease extends control
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $executionIdList = array();
-        foreach($builds as $build)
-        {
-            if(empty($build->execution)) continue;
-            $executionIdList[$build->execution] = $build->execution;
-        }
+        foreach($builds as $build) $executionIdList[] = empty($build->execution) ? $build->project : $build->execution;
+        $executionIdList = array_unique($executionIdList);
 
         $allStories = array();
         if($browseType == 'bySearch')

@@ -215,6 +215,7 @@ class execution extends control
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
         $this->config->execution->search['onMenuBar'] = 'yes';
+        if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
         $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
 
         /* team member pairs. */
@@ -685,7 +686,7 @@ class execution extends control
         unset($this->config->bug->search['fields']['resolvedDate']);
         unset($this->config->bug->search['fields']['closedDate']);
         unset($this->config->bug->search['fields']['branch']);
-        if(empty($execution->multiple) && empty($execution->hasProduct)) unset($this->config->bug->search['fields']['plan']);
+        if(empty($execution->multiple) and empty($execution->hasProduct)) unset($this->config->bug->search['fields']['plan']);
         if(empty($project->hasProduct))
         {
             unset($this->config->bug->search['fields']['product']);
@@ -1685,12 +1686,12 @@ class execution extends control
             $branchGroups  = $this->execution->getBranchByProduct(array_keys($products), $projectID);
 
             $linkedBranches = array();
-            foreach($products as $productID => $product)
+            foreach($products as $productIndex => $product)
             {
-                foreach($branches[$productID] as $branchID => $branch)
+                foreach($branches[$productIndex] as $branchID => $branch)
                 {
-                    $linkedBranches[$productID][$branchID] = $branchID;
-                    $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                    $linkedBranches[$productIndex][$branchID] = $branchID;
+                    $productPlans[$productIndex][$branchID]   = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
@@ -1720,12 +1721,12 @@ class execution extends control
             $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
 
             $linkedBranches = array();
-            foreach($products as $productID => $product)
+            foreach($products as $productIndex => $product)
             {
-                foreach($branches[$productID] as $branchID => $branch)
+                foreach($branches[$productIndex] as $branchID => $branch)
                 {
-                    $linkedBranches[$productID][$branchID] = $branchID;
-                    $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                    $linkedBranches[$productIndex][$branchID] = $branchID;
+                    $productPlans[$productIndex][$branchID]   = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
@@ -1733,7 +1734,7 @@ class execution extends control
             $this->view->linkedBranches = $linkedBranches;
         }
 
-        if(empty($project->hasProduct))
+        if(isset($project->hasProduct) and empty($project->hasProduct))
         {
             $shadowProduct = $this->loadModel('product')->getShadowProductByProject($project->id);
             $productPlan   = $this->loadModel('productplan')->getPairs($shadowProduct->id, '0,0', 'noclosed,unexpired', true);
@@ -1744,7 +1745,7 @@ class execution extends control
             if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
 
             /* No product execution link plans. */
-            if(empty($project->hasProduct) and !empty($_POST['plans']))
+            if(isset($project->hasProduct) and empty($project->hasProduct) and !empty($_POST['plans']))
             {
                 $plansItem = array();
                 foreach($_POST['plans'] as $planItem)

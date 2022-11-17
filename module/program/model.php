@@ -99,7 +99,7 @@ class programModel extends model
         $productPrograms = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
 
         /* Put products of current program first.*/
-        if($mode != 'assign' && $programID)
+        if(!empty($products) and $mode != 'assign' and $programID)
         {
             $currentProgramProducts = $products[$programID];
             unset($products[$programID]);
