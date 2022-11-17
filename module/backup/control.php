@@ -337,11 +337,12 @@ class backup extends control
         {
             $this->app->loadLang('extension');
 
-            $search = dirname($this->app->getBasePath()) . DS;
+            $search = $this->app->getBasePath();
             $pos    = strpos($statusFile, $search);
-            if($pos !== false) $statusFile = substr_replace($statusFile, '', $pos, strlen($search));
+            $okFile = $statusFile;
+            if($pos !== false) $okFile = substr_replace($statusFile, '', $pos, strlen($search));
 
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $okFile, $statusFile);
             return print($this->display());
         }
 
