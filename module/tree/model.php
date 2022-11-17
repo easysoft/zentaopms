@@ -1981,6 +1981,12 @@ class treeModel extends model
             case 'chart':
                 $this->dao->update(TABLE_CHART)->set('`group`')->eq($module->parent)->where('`group`')->in($childs)->exec();
                 break;
+            case 'report':
+                $this->dao->update(TABLE_REPORT)->set('`module`')->eq($module->parent)->where('`module`')->in($childs)->exec();
+                break;
+            case 'dataview':
+                $this->dao->update(TABLE_DATAVIEW)->set('`group`')->eq($module->parent)->where('`group`')->in($childs)->exec();
+                break;
         }
         if(strpos($this->session->{$module->type . 'List'}, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $this->session->{$module->type . 'List'}));
         if($cookieName) setcookie($cookieName, 0, time() - 3600, $this->config->webRoot, '', $this->config->cookieSecure, false);
