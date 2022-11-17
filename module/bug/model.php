@@ -1959,21 +1959,17 @@ class bugModel extends model
     /**
      * Get product left bugs.
      *
-     * @param  int    $build
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $linkedBugs
-     * @param  object $pager
+     * @param  int|string $buildIdList
+     * @param  int        $productID
+     * @param  int        $branch
+     * @param  string     $linkedBugs
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getProductLeftBugs($build, $productID, $branch = '', $linkedBugs = '', $pager = null)
+    public function getProductLeftBugs($buildIdList, $productID, $branch = '', $linkedBugs = '', $pager = null)
     {
-        $builds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($build)->fetchAll('id');
-
-        $executionIdList = array();
-        foreach($builds as $build) $executionIdList[] = empty($build->execution) ? $build->project : $build->execution;
-        $executionIdList = array_unique($executionIdList);
+        $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
         if(empty($executionIdList)) return array();
 
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll();
@@ -2072,29 +2068,26 @@ class bugModel extends model
     /**
      * Get bugs according to buildID and productID.
      *
-     * @param  int    $buildID
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  string $linkedBugs
-     * @param  object $pager
+     * @param  int|string $buildIdList
+     * @param  int        $productID
+     * @param  string     $branch
+     * @param  string     $linkedBugs
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getReleaseBugs($buildID, $productID, $branch = 0, $linkedBugs = '', $pager = null)
+    public function getReleaseBugs($buildIdList, $productID, $branch = 0, $linkedBugs = '', $pager = null)
     {
-        $builds = $this->dao->select('id,project,execution')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
-        $executionIdList = array();
-        foreach($builds as $build) $executionIdList[] = empty($build->execution) ? $build->project : $build->execution;
-        $executionIdList = array_unique($executionIdList);
+        $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
         if(empty($executionIdList)) return array();
 
-        $executions = $this->dao->select('id,begin')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll('id');
+        $executions = $this->dao->select('id,type,begin')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll('id');
         $condition  = 'execution NOT ' . helper::dbIN($executionIdList);
         $minBegin   = '';
         foreach($executions as $execution)
         {
             if(empty($minBegin) or $minBegin > $execution->begin) $minBegin = $execution->begin;
-            $condition .= " OR (execution = '{$execution->id}' AND openedDate < '{$execution->begin}')";
+            $condition .= " OR (`execution` = '{$execution->id}' AND openedDate < '{$execution->begin}')";
         }
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
@@ -2107,8 +2100,40 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('openedDate ASC')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
         return $bugs;
+    }
+
+    /**
+     * Get linked execution by build id list.
+     *
+     * @param  string $buildIdList
+     * @access public
+     * @return array
+     */
+    public function getLinkedExecutionByIdList($buildIdList)
+    {
+        $builds = $this->dao->select('id,execution')->from(TABLE_BUILD)->where('id')->in($buildIdList)->fetchAll('id');
+
+        $executionIdList   = array();
+        $linkedBuildIdList = array();
+        foreach($builds as $build)
+        {
+            if($build->builds) $linkedBuildIdList = array_merge($linkedBuildIdList, explode(',', $build->builds));
+
+            if(empty($build->execution)) continue;
+            $executionIdList[$build->execution] = $build->execution;
+        }
+        if($linkedBuildIdList)
+        {
+            $linkedBuilds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in(array_unique($linkedBuildIdList))->fetchAll('id');
+            foreach($linkedBuilds as $build)
+            {
+                if(empty($build->execution)) continue;
+                $executionIdList[$build->execution] = $build->execution;
+            }
+        }
+        return $executionIdList;
     }
 
     /**
