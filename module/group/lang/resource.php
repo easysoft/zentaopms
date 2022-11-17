@@ -237,7 +237,6 @@ $lang->project->methodOrder[190] = 'manageRepo';
 
 $lang->resource->projectbuild = new stdclass();
 $lang->resource->projectbuild->browse           = 'browse';
-$lang->resource->projectbuild->create           = 'create';
 $lang->resource->projectbuild->edit             = 'edit';
 $lang->resource->projectbuild->view             = 'view';
 $lang->resource->projectbuild->delete           = 'delete';
@@ -249,7 +248,6 @@ $lang->resource->projectbuild->unlinkBug        = 'unlinkBug';
 $lang->resource->projectbuild->batchUnlinkBug   = 'batchUnlinkBug';
 
 $lang->projectbuild->methodOrder[5]  = 'browse';
-$lang->projectbuild->methodOrder[10] = 'create';
 $lang->projectbuild->methodOrder[15] = 'edit';
 $lang->projectbuild->methodOrder[20] = 'view';
 $lang->projectbuild->methodOrder[25] = 'delete';

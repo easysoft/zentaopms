@@ -34,6 +34,7 @@ $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
 $lang->build->builds         = 'Linked Builds';
+$lang->build->type           = 'Type';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Date';
 $lang->build->builder        = 'Builder';
@@ -73,3 +74,7 @@ $lang->build->action->buildopened = '$date, created by <strong>$actor</strong>, 
 $lang->backhome = 'back';
 
 $lang->build->featureBar['browse']['all'] = 'Build List';
+
+$lang->build->typeList = array();
+$lang->build->typeList['execution'] = "{$lang->executionCommon}版本";
+$lang->build->typeList['project']   = '项目版本';

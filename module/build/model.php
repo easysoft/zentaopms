@@ -302,41 +302,30 @@ class buildModel extends model
     /**
      * Create a build
      *
-     * @param  int    $executionID
-     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function create($executionID = 0, $projectID = 0)
+    public function create()
     {
         $build = new stdclass();
         $build->stories = '';
         $build->bugs    = '';
 
-        if($projectID && !$executionID)
-        {
-            $project = $this->loadModel('project')->getByID($projectID);
-            if(!$project->multiple) $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetch('id');
-        }
-        else if($executionID && !$projectID)
-        {
-            $execution = $this->loadModel('execution')->getByID($executionID);
-            $projectID = $execution->project;
-        }
-
         $build = fixer::input('post')
-            ->setDefault('project', $projectID)
+            ->setDefault('project', 0)
+            ->setDefault('execution', 0)
             ->setDefault('product', 0)
             ->setDefault('branch', 0)
             ->setDefault('builds', '')
             ->cleanInt('product,branch')
-            ->add('execution', $executionID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->join('builds', ',')
-            ->remove('resolvedBy,allchecker,files,labels,uid')
+            ->remove('resolvedBy,allchecker,files,labels,type,uid')
             ->get();
+
+        if($this->post->type == 'project') $build->execution = 0;
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)
