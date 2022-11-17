@@ -204,26 +204,6 @@
                   <?php echo html::hidden('status', $story->status);?>
                 </td>
               </tr>
-              <?php if(0 and strpos('draft,changing', $story->status) !== false and $story->type == 'story'):?>
-              <tr>
-                <th><?php echo $lang->story->stage;?></th>
-                <td>
-                <?php
-                if($story->stages and $branchTagOption)
-                {
-                    foreach($story->stages as $branch => $stage)
-                    {
-                        if(isset($branchTagOption[$branch])) echo '<p>' . $branchTagOption[$branch] . html::select("stages[$branch]", $lang->story->stageList, $stage, "class='form-control chosen'") . '</p>';
-                    }
-                }
-                else
-                {
-                    echo html::select('stage', $lang->story->stageList, $story->stage, "class='form-control chosen'");
-                }
-                ?>
-                </td>
-              </tr>
-              <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->category;?></th>
                 <td><?php echo html::select('category', $lang->story->categoryList, $story->category, "class='form-control chosen'");?></td>
