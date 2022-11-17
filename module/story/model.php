@@ -3082,7 +3082,7 @@ class storyModel extends model
         }
         elseif($branch !== 'all' and $branch !== '' and strpos($storyQuery, '`branch` =') === false and $queryProductID != 'all')
         {
-            $storyQuery .= " AND `branch` in($branch)";
+            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` " . helper::dbIN($branch);
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
@@ -5882,7 +5882,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function getExportStorys($executionID, $orderBy = 'id_desc', $storyType = 'story')
+    public function getExportStories($executionID, $orderBy = 'id_desc', $storyType = 'story')
     {
         $this->loadModel('file');
         $this->loadModel('branch');

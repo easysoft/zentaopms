@@ -2,6 +2,22 @@
 class projectModel extends model
 {
     /**
+     * Check the privilege.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($projectID)
+    {
+        if(empty($projectID)) return false;
+
+        /* If is admin, return true. */
+        if($this->app->user->admin) return true;
+        return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
+    }
+
+    /**
      * Get Multiple linked products for project.
      *
      * @param  int    $projectID

@@ -40,7 +40,7 @@ class projectStory extends control
         if($projectID)
         {
             $project = $this->loadModel('project')->getByID($projectID);
-            if(!$project->hasProduct) $productID = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
+            if(!$project->hasProduct) $productID = $this->loadModel('product')->getShadowProductByProject($projectID)->id;
         }
 
         $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
