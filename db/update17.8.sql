@@ -5,6 +5,7 @@ ALTER TABLE `zt_repo` ADD `projects` varchar(255) NOT NULL AFTER `product`;
 ALTER TABLE `zt_release` CHANGE `project` `project` varchar(255) NOT NULL;
 ALTER TABLE `zt_release` CHANGE `branch` `branch` varchar(255) NOT NULL;
 ALTER TABLE `zt_release` CHANGE `build` `build` varchar(255) NOT NULL;
+ALTER TABLE `zt_release` ADD `shadow` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `branch`;
 
 CREATE OR REPLACE VIEW `ztv_normalproduct` AS SELECT * FROM `zt_product` WHERE `shadow` = 0;
 
