@@ -2173,15 +2173,15 @@ class project extends control
                 if($executionID) $this->execution->updateProducts($executionID);
             }
 
-            $oldProducts  = array_keys($oldProducts);
-            $newProducts  = $this->product->getProducts($projectID);
-            $newProducts  = array_keys($newProducts);
-            $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
+            $newProducts   = $this->product->getProducts($projectID);
+            $oldProductIDs = array_keys($oldProducts);
+            $newProductIDs = array_keys($newProducts);
+            $diffProducts  = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
             if($project->multiple)
             {
-                $unlinkedProducts = array_diff($oldProducts, $newProducts);
+                $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
                 if(!empty($unlinkedProducts))
                 {
                     $unlinkedProductPairs = array();
