@@ -198,12 +198,13 @@ class holidayModel extends model
     {
         if(empty($begin) or empty($end) or $begin == '0000-00-00' or $end == '0000-00-00') return array();
 
+        $this->app->loadConfig('execution');
         $actualDays = array();
         $currentDay = $begin;
 
         $holidays    = $this->getHolidays($begin, $end);
         $workingDays = $this->getWorkingDays($begin, $end);
-        $weekend     = isset($this->config->project->weekend) ? $this->config->project->weekend : 2;
+        $weekend     = isset($this->config->execution->weekend) ? $this->config->execution->weekend : 2;
 
         $holidaysFlip    = array_flip($holidays);
         $workingDaysFlip = array_flip($workingDays);

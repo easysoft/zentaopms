@@ -1232,6 +1232,8 @@ CREATE TABLE `zt_im_chat` (
   `pinnedMessages` text NOT NULL,
   `mergedChats` text NOT NULL DEFAULT '',
   `adminInvite` enum('0','1') NOT NULL DEFAULT '0',
+  `avatar` text NOT NULL DEFAULT '',
+  `archiveDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `gid` (`gid`),
   KEY `name` (`name`),

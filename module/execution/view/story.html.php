@@ -243,7 +243,9 @@
       $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
       $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
       $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
-      $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+      $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
+
+      $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask or $canBatchAssignTo));
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table tablesorter has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -321,6 +323,37 @@
             </ul>
             <?php endif;?>
           </div>
+
+          <?php if($canBatchAssignTo):?>
+          <div class="btn-group dropup">
+            <button data-toggle="dropdown" type="button" class="btn assignedTo"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
+            <?php
+            $withSearch = count($users) > 10;
+            $actionLink = $this->createLink('story', 'batchAssignTo', "storyType=$storyType");
+            echo html::select('assignedTo', $users, '', 'class="hidden"');
+            ?>
+            <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
+              <?php if($withSearch):?>
+              <?php $usersPinYin = common::convert2Pinyin($users);?>
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
+                <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
+                <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+              </div>
+              <?php endif;?>
+              <div class="list-group">
+              <?php foreach ($users as $key => $value):?>
+              <?php
+              if(empty($key) or $key == 'closed') continue;
+              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
+              echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\", \"#storyList\")", $value, '', $searchKey);
+              ?>
+              <?php endforeach;?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
+
           <?php
           if($canBatchClose)
           {

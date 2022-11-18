@@ -150,7 +150,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
-              <?php if($division):?>
+              <?php if($project->model == 'scrum' or empty($products)):?>
               <div class='col-sm-4'>
                 <div class="input-group">
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>

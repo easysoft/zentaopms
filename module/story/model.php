@@ -4944,6 +4944,9 @@ class storyModel extends model
             case 'assignedDate':
                 echo helper::isZeroDate($story->assignedDate) ? '' : substr($story->assignedDate, 5, 11);
                 break;
+            case 'activatedDate':
+                echo helper::isZeroDate($story->activatedDate) ? '' : substr($story->activatedDate, 5, 11);
+                break;
             case 'reviewedBy':
                 echo $story->reviewedBy;
                 break;

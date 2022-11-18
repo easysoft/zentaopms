@@ -15,7 +15,7 @@
 <div id='mainContent' class="main-row">
   <div class="col-12 main-col">
     <div class="row">
-    <?php $isRoadmap = common::hasPriv('product', 'roadmap');?>
+    <?php $isRoadmap = (common::hasPriv('product', 'roadmap') and helper::hasFeature('product_roadmap'));?>
     <?php if($isRoadmap):?>
       <div class="col-sm-6">
         <div class="panel block-release">

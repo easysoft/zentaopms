@@ -33,6 +33,7 @@ $lang->build->project        = 'Project';
 $lang->build->branch         = 'Plateforme/Branche';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
+$lang->build->type           = 'Type';
 $lang->build->builds         = 'Linked Builds';
 $lang->build->name           = 'Nom';
 $lang->build->date           = 'Date';
@@ -73,3 +74,7 @@ $lang->build->action->buildopened = '$date, Build <strong>$extra</strong> créé
 $lang->backhome = 'Retour';
 
 $lang->build->featureBar['browse']['all'] = 'Build List';
+
+$lang->build->typeList = array();
+$lang->build->typeList['execution'] = "{$lang->executionCommon}版本";
+$lang->build->typeList['project']   = '项目版本';
