@@ -300,6 +300,24 @@ class executionnodemodel extends model
             ->fetchAll();
     }
 
+    /**
+     * Get node list by hostid.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  object $pager
+     * @return void
+     */
+    public function getListByHost($hostID, $orderBy = 'id_desc')
+    {
+        return $this->dao->select('id, name, vnc, cpu, memory, disk, os, status')->from(TABLE_EXECUTIONNODE)
+            ->where('deleted')->eq(0)
+            ->andWhere("hostID")->eq($hostID)
+            ->orderBy($orderBy)
+            ->fetchAll();
+    }
+
 
     /**
      * Get Host by id.

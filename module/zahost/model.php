@@ -247,6 +247,8 @@ class zahostModel extends model
 
         $imageData->hostID = $hostID;
         $imageData->status = 'created';
+        $imageData->osCategory = $imageData->os;
+        unset($imageData->os);
 
         $this->dao->insert(TABLE_IMAGE)->data($imageData, 'desc')->autoCheck()->exec();
         if(dao::isError()) return false;
@@ -305,11 +307,11 @@ class zahostModel extends model
         foreach($result->data as $status => $group)
         {
             $currentTask = null;
-            foreach($group as $task)
+            foreach($group as $host)
             {
-                if($task->task == $image->id )
+                if($host->task == $image->id )
                 {
-                    $currentTask = $task;
+                    $currentTask = $host;
                     break;
                 }
             }
@@ -433,6 +435,42 @@ class zahostModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+    /**
+     * Build test task menu.
+     *
+     * @param  object $host
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($host, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'Menu';
+        return $this->$function($host);
+    }
+
+    /**
+     * Build test task view menu.
+     *
+     * @param  object $host
+     * @access public
+     * @return string
+     */
+    public function buildOperateViewMenu($host)
+    {
+        if($host->deleted) return '';
+
+        $menu   = '';
+        $params = "hostID=$host->hostID";
+
+        $menu .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
+
+        $params = "hostID=$host->assetID";
+        $menu .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin');
+
+        return $menu;
     }
 
     /**

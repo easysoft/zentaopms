@@ -12,7 +12,7 @@
 class zahost extends control
 {
     /**
-     * View host.
+     * View host list.
      *
      * @param  string $browseType
      * @param  string $param
@@ -49,6 +49,26 @@ class zahost extends control
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
 
+        $this->display();
+    }
+
+    /**
+     * View host.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function view($id, $orderBy = 'id_desc')
+    {
+        $this->view->title      = $this->lang->zahost->view;
+        $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->zahost->common);
+        $this->view->position[] = $this->lang->zahost->view;
+
+        $this->view->zahost     = $this->zahost->getById($id);
+        $this->view->orderBy    = $orderBy;
+        $this->view->nodeList   = $this->loadModel("executionnode")->getListByHost($this->view->zahost->hostID, $orderBy);
+        $this->view->actions    = $this->loadModel('action')->getList('zahost', $id);
         $this->display();
     }
 

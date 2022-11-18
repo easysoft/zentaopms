@@ -1,15 +1,17 @@
 <?php
 $lang->zahost->id             = 'ID';
 $lang->zahost->common         = '宿主机';
-$lang->zahost->browse         = '主机列表';
+$lang->zahost->common         = '宿主机';
+$lang->zahost->browse         = '宿主机列表';
 $lang->zahost->create         = '添加宿主机';
-$lang->zahost->view           = '主机详情';
+$lang->zahost->view           = '宿主机详情';
 $lang->zahost->edit           = '编辑';
 $lang->zahost->editAction     = '编辑宿主机';
 $lang->zahost->delete         = '删除';
 $lang->zahost->deleteAction   = '删除宿主机';
 $lang->zahost->byQuery        = '搜索';
 $lang->zahost->all            = '全部主机';
+$lang->zahost->browseNode     = '执行节点列表';
 $lang->zahost->browseTemplate = '虚拟机模板列表';
 $lang->zahost->createTemplate = '创建虚拟机模板';
 $lang->zahost->editTemplate   = '编辑虚拟机模板';
@@ -108,7 +110,7 @@ $lang->zahost->langList['zh_cn'] = '简体中文';
 $lang->zahost->langList['zh_tw'] = '繁体中文';
 $lang->zahost->langList['en_us'] = '美式英语';
 
-$lang->zahost->empty         = '暂时没有主机';
+$lang->zahost->empty         = '暂时没有宿主机';
 $lang->zahost->templateEmpty = '暂时没有模板';
 
 $lang->zahost->statusList['ready']  = '准备中';

@@ -59,7 +59,7 @@
         <?php foreach($hostList as $host):?>
         <tr class='text-left'>
           <td><?php printf('%03d', $host->hostID);?></td>
-          <td title='<?php echo $host->name?>'><?php echo common::hasPriv('zahost', 'browsetemplate') ? html::a($this->inlink('browsetemplate', "id=$host->hostID"), $host->name) : $host->name;?></td>
+          <td title='<?php echo $host->name?>'><?php echo html::a($this->inlink('view', "id=$host->hostID"), $host->name, '', "");?></td>
           <td><?php echo zget($lang->zahost->zaHostTypeList, $host->hostType);?></td>
           <td><?php echo $host->address;?></td>
           <td><?php echo $host->cpu;?></td>
