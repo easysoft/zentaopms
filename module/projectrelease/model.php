@@ -114,13 +114,17 @@ class projectreleaseModel extends model
      */
     public function getReleasedBuilds($projectID)
     {
-        $releases = $this->dao->select('build')->from(TABLE_RELEASE)
+        $releases = $this->dao->select('shadow,build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere("FIND_IN_SET($projectID, project)")
             ->fetchAll();
 
         $buildIdList = array();
-        foreach($releases as $release) $buildIdList = array_merge($buildIdList, explode(',', trim($release->build, ',')));
+        foreach($releases as $release)
+        {
+            $buildIdList   = array_merge($buildIdList, explode(',', trim($release->build, ',')));
+            $buildIdList[] = $release->shadow;
+        }
         return $buildIdList;
     }
 
