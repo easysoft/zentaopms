@@ -116,19 +116,30 @@ class releaseModel extends model
      */
     public function getReleasedBuilds($productID, $branch = 'all')
     {
-        $builds = $this->dao->select('build')->from(TABLE_RELEASE)
+        $releases = $this->dao->select('branch,shadow,build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
-            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
-            ->fetchPairs('build');
+            ->fetchAll();
 
-        $buildIDList = array();
-        foreach($builds as $build)
+        $buildIdList = array();
+        foreach($releases as $release)
         {
-            $build = explode(',', $build);
-            $buildIDList = array_merge($buildIDList, $build);
+            if($branch != 'all')
+            {
+                $inBranch = false;
+                foreach(explode(',', trim($release->branch, ',')) as $branchID)
+                {
+                    if(empty($branchID)) continue;
+                    if(strpos(",{$branch},", ",{$branchID},") !== false) $inBranch = true;
+                }
+                if(!$inBranch) continue;
+            }
+
+            $builds = explode(',', $release->build);
+            $buildIdList   = array_merge($buildIdList, $builds);
+            $buildIdList[] = $release->shadow;
         }
-        return $buildIDList;
+        return $buildIdList;
     }
 
     /**

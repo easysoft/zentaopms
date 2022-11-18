@@ -280,8 +280,9 @@ class buildModel extends model
                 if($branch !== 'all')
                 {
                     $inBranch = false;
-                    foreach(explode(',', trim( $release->branch, ',')) as $branchID)
+                    foreach(explode(',', trim($release->branch, ',')) as $branchID)
                     {
+                        if(empty($branchID)) continue;
                         if(strpos(",{$branchs},", ",{$branchID},") !== false) $inBranch = true;
                     }
                     if(!$inBranch) continue;
