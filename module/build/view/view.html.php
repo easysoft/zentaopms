@@ -95,10 +95,11 @@ tbody tr td:first-child input {display: none;}
             </thead>
             <tbody class='text-center'>
               <?php foreach($stories as $storyID => $story):?>
+              <?php $unlinkClass = strpos(",$build->stories,", ",$story->id,") !== false ? '' : "disabled";?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <?php echo html::checkbox('unlinkStories', array($story->id => sprintf('%03d', $story->id)), '', strpos(",$build->stories,", ",$story->id,") !== false ? '' : "disabled");?>
+                  <?php echo html::checkbox('unlinkStories', array($story->id => sprintf('%03d', $story->id)), '', $unlinkClass);?>
                   <?php else:?>
                   <?php printf('%03d', $story->id);?>
                   <?php endif;?>
@@ -138,7 +139,7 @@ tbody tr td:first-child input {display: none;}
                   if($canBeChanged and common::hasPriv($module, 'unlinkStory'))
                   {
                       $unlinkURL = $this->createLink($module, 'unlinkStory', "buildID=$build->id&story=$story->id");
-                      echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->build->unlinkStory}'");
+                      echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->build->unlinkStory}' $unlinkClass");
                   }
                   ?>
                 </td>
@@ -194,11 +195,12 @@ tbody tr td:first-child input {display: none;}
             </thead>
             <tbody class='text-center'>
               <?php foreach($bugs as $bug):?>
-              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <?php $bugLink     = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <?php $unlinkClass = strpos(",$build->bugs,", ",$bug->id,") !== false ? '' : "disabled";?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)), '', strpos(",$build->bugs,", ",$bug->id,") !== false ? '' : "disabled");?>
+                  <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)), '', $unlinkClass);?>
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
@@ -219,7 +221,7 @@ tbody tr td:first-child input {display: none;}
                   if($canBeChanged and common::hasPriv($module, 'unlinkBug'))
                   {
                       $unlinkURL = $this->createLink($module, 'unlinkBug', "buildID=$build->id&bug=$bug->id");
-                      echo html::a("###", '<i class="icon-unlink"></i>', '', "onclick='ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)' class='btn' title='{$lang->build->unlinkBug}'");
+                      echo html::a("###", '<i class="icon-unlink"></i>', '', (!$unlinkClass ? "onclick='ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)'" : '') . "class='btn' title='{$lang->build->unlinkBug}' $unlinkClass");
                   }
                   ?>
                 </td>
