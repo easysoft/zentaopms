@@ -885,6 +885,14 @@ function setBranchRelated(branchID, productID, num)
         $('#plans' + num).parent('td').load(planLink, function()
         {
             $('#plans' + num).chosen();
+            if(planID == 1)
+            {
+                $(this).find('option').each(function()
+                {
+                    if($(this).val() == 'ditto') $(this).remove();
+                });
+                $('#plans' + num).chosen().trigger('chosen:updated');
+            }
         });
     }
 }

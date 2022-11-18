@@ -1243,8 +1243,12 @@ class bug extends control
             $branchProduct = $product->type == 'normal' ? false : true;
 
             /* Set plans. */
-            $plans = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
-            $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
+            foreach($bugs as $bug)
+            {
+                $plans      = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
+                $plans      = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
+                $bug->plans = $plans;
+            }
 
             /* Set branches and modules. */
             $branches        = 0;
