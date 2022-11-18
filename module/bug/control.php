@@ -2357,6 +2357,8 @@ class bug extends control
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
             if($product->shadow) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
         }
 
