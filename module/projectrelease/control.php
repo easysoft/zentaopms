@@ -157,12 +157,12 @@ class projectrelease extends control
         $this->loadModel('story');
         $this->loadModel('bug');
         $this->loadModel('build');
-        $this->app->loadConfig('release');
+        $this->loadModel('release');
         $this->config->projectrelease->create = $this->config->release->create;
 
         if(!empty($_POST))
         {
-            $changes = $this->projectrelease->update($releaseID);
+            $changes = $this->release->update($releaseID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('release', $releaseID);
             if($changes or $files)

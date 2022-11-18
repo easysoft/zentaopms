@@ -36,9 +36,7 @@
           <tr>
             <th><?php echo $lang->release->build;?></th>
             <td><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple");?></td>
-            <td>
-              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->release->tips;?>"></icon>
-            </td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>

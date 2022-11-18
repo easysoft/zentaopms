@@ -261,18 +261,24 @@ class buildModel extends model
         /* if the build has been released and replace is true, replace build name with release name. */
         if($replace)
         {
-            $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
-                ->where('build')->in(array_keys($builds))
-                ->andWhere('product')->in($products)
-                ->beginIF($branch !== 'all')->andWhere('branch')->in("$branchs")->fi()
-                ->andWhere('deleted')->eq(0)
-                ->fetchPairs();
-            foreach($releases as $buildID => $releaseName)
+            $releases = $this->dao->select('t1.id,t1.shadow,t1.build,t1.name')->from(TABLE_RELEASE)->alias('t1')
+                ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
+                ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
+                ->where('t2.id')->in(array_keys($builds))
+                ->andWhere('t1.product')->in($products)
+                ->beginIF($branch !== 'all')->andWhere('t3.id')->in($branchs)->fi()
+                ->andWhere('t1.deleted')->eq(0)
+                ->fetchAll('id');
+            foreach($releases as $release)
             {
-                $branchName = $allBuilds[$buildID]->branchName ? $allBuilds[$buildID]->branchName : $this->lang->branch->main;
-                if($allBuilds[$buildID]->productType != 'normal')
+                $releaseName = $release->name;
+                foreach(explode(',', trim($release->build, ',')) as $buildID)
                 {
-                    $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+                    $branchName = $allBuilds[$buildID]->branchName ? $allBuilds[$buildID]->branchName : $this->lang->branch->main;
+                    $buildName  = $releaseName;
+                    if($allBuilds[$buildID]->productType != 'normal') $buildName = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+                    if($release->shadow and !isset($builds[$release->shadow])) $builds[$release->shadow] = $buildName;
+                    if(isset($builds[$buildID])) unset($builds[$buildID]);
                 }
             }
         }

@@ -30,7 +30,6 @@ $lang->release->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->release->existBuild         = '『版本』已经有『%s』这条记录了。您可以更改『发布名称』或者选择一个『版本』。';
 $lang->release->noRelease          = '暂时没有发布。';
 $lang->release->errorDate          = '发布日期不能大于今天。';
-$lang->release->tips               = '如果发布未选择任何版本，系统会默认创建一个和该发布同名的版本。';
 
 $lang->release->basicInfo = '基本信息';
 
