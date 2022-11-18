@@ -3,57 +3,92 @@ ALTER TABLE `zt_project` ADD `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1
 ALTER table `zt_project` ADD `multiple` enum('0', '1') NOT NULL DEFAULT '1';
 ALTER TABLE `zt_repo` ADD `projects` varchar(255) NOT NULL AFTER `product`;
 
-ALTER TABLE `zt_host` ADD `desc` text NOT NULL AFTER `token`;
-ALTER TABLE `zt_host` CHANGE COLUMN `publicIP` `address` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,CHANGE COLUMN `cpuCores` `cpu` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,CHANGE COLUMN `diskSize` `disk` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,CHANGE COLUMN `heartbeatTime` `heartbeat` datetime NOT NULL;
+ALTER TABLE `zt_host` 
+DROP COLUMN `cabinet`,
+DROP COLUMN `cpuRate`,
+DROP COLUMN `diskType`,
+DROP COLUMN `unit`,
+DROP COLUMN `nic`,
+DROP COLUMN `webserver`,
+DROP COLUMN `database`,
+DROP COLUMN `language`,
+DROP COLUMN `instanceNum`,
+DROP COLUMN `pri`,
+DROP COLUMN `tags`,
+DROP COLUMN `bridgeID`,
+DROP COLUMN `cloudKey`,
+DROP COLUMN `cloudSecret`,
+DROP COLUMN `cloudRegion`,
+DROP COLUMN `cloudNamespace`,
+DROP COLUMN `cloudUser`,
+DROP COLUMN `cloudAccount`,
+DROP COLUMN `cloudPassword`,
+DROP COLUMN `couldVPC`,
+ADD COLUMN `name` varchar(255) NOT NULL DEFAULT '' AFTER `id`,
+MODIFY COLUMN `type` varchar(30) NOT NULL DEFAULT 'normal' AFTER `name`,
+MODIFY COLUMN `hostType` varchar(30) NOT NULL DEFAULT '' AFTER `type`,
+MODIFY COLUMN `mac` varchar(128) NOT NULL AFTER `hostType`,
+MODIFY COLUMN `memory` varchar(30) NOT NULL AFTER `mac`,
+MODIFY COLUMN `diskSize` varchar(30) NOT NULL AFTER `memory`,
+MODIFY COLUMN `status` varchar(50) NOT NULL AFTER `diskSize`,
+MODIFY COLUMN `secret` varchar(50) NOT NULL DEFAULT '' AFTER `status`,
+ADD COLUMN `desc` text NOT NULL AFTER `secret`,
+CHANGE COLUMN `token` `tokenSN` varchar(50) NOT NULL DEFAULT '' AFTER `desc`,
+CHANGE COLUMN `expiredDate` `tokenTime` datetime NOT NULL AFTER `tokenSN`,
+CHANGE COLUMN `virtualSoftware` `vsoft` varchar(30) NOT NULL DEFAULT '' AFTER `tokenTime`,
+CHANGE COLUMN `heartbeatTime` `heartbeat` datetime NOT NULL AFTER `vsoft`,
+CHANGE COLUMN `agentPort` `zap` varchar(10) NOT NULL AFTER `heartbeat`,
+MODIFY COLUMN `provider` varchar(255) NOT NULL DEFAULT '' AFTER `zap`,
+ADD COLUMN `vnc` int(11) NOT NULL AFTER `provider`,
+ADD COLUMN `parent` int(11) unsigned NOT NULL DEFAULT '0' AFTER `vnc`,
+ADD COLUMN `image` int(11) unsigned NOT NULL DEFAULT '0' AFTER `parent`,
+ADD COLUMN `group` varchar(128) NOT NULL DEFAULT '' AFTER `osVersion`,
+ADD COLUMN `createdBy` varchar(30) NOT NULL,
+ADD COLUMN  `createdDate` datetime NOT NULL,
+ADD COLUMN  `editedBy` varchar(30) NOT NULL,
+ADD COLUMN  `editedDate` datetime NOT NULL,
+ADD COLUMN  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE COLUMN `privateIP` `intranet` varchar(128) NOT NULL AFTER `cpuCores`,
+CHANGE COLUMN `publicIP` `extranet` varchar(128) NOT NULL AFTER `intranet`;
 
-CREATE TABLE `zt_executionnode` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `hostID` int(11) unsigned NOT NULL DEFAULT 0,
-  `name` varchar(64) NOT NULL DEFAULT '',
-  `imageID` int(11) unsigned NOT NULL DEFAULT 0,
-  `cpu` int(11) unsigned NOT NULL DEFAULT 0,
-  `os` varchar(128) NOT NULL DEFAULT '',
-  `unit` enum('GB','TB') NOT NULL DEFAULT 'GB',
-  `memory` float unsigned NOT NULL,
-  `disk` float unsigned NOT NULL,
-  `status` varchar(20) NOT NULL,
-  `mac` varchar(64) NOT NULL,
-  `vnc` int(11) unsigned NOT NULL DEFAULT 0,
-  `desc` text NOT NULL,
-  `registerDate` datetime NOT NULL,
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+UPDATE zt_host h,
+zt_asset a 
+SET h.`name` = a.`name`,
+h.`createdBy` = a.`createdBy`,
+h.`createdDate` = a.`createdDate`,
+h.`editedBy` = a.`editedBy`,
+h.`editedDate` = a.`editedDate`,
+h.`group` = a.`group`,
+h.`type` = a.`type`,
+h.`deleted` = a.`deleted`
+WHERE
+	h.`assetID` = a.`id`;
+
+ALTER TABLE `zt_host` DROP COLUMN `assetID`,
+
+DROP TABLE IF EXISTS `zt_asset`;
+DROP TABLE IF EXISTS `zt_baseimagebrowser`;
+DROP TABLE IF EXISTS `zt_browser`;
+DROP TABLE IF EXISTS `zt_baseimage`;
+DROP TABLE IF EXISTS `zt_vmtemplate`;
+DROP TABLE IF EXISTS `zt_vm`;
 
 CREATE TABLE `zt_image` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `hostID` int(11) unsigned NOT NULL DEFAULT 0,
+  `host` int(11) unsigned NOT NULL DEFAULT 0,
   `name` varchar(64) NOT NULL DEFAULT '',
-  `address` varchar(500) NOT NULL DEFAULT '',
-  `from` varchar(64) NOT NULL DEFAULT '',
   `path` varchar(64) NOT NULL DEFAULT '',
   `status` varchar(20) NOT NULL DEFAULT '',
-  `osCategory` varchar(32) NOT NULL DEFAULT '',
-  `osType` varchar(32) NOT NULL DEFAULT '',
-  `osVersion` varchar(32) NOT NULL DEFAULT '',
-  `osLang` varchar(32) NOT NULL DEFAULT '',
+  `os` varchar(32) NOT NULL DEFAULT '',
   `memory` float unsigned NOT NULL,
   `disk` float unsigned NOT NULL,
   `fileSize` float unsigned NOT NULL,
   `md5` varchar(64) NOT NULL,
   `desc` text NOT NULL,
-  `registerDate` datetime NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE VIEW `ztv_normalproduct` AS SELECT * FROM `zt_product` WHERE `shadow` = 0;
 
