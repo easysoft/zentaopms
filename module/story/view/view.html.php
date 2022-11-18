@@ -319,7 +319,11 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
-                  <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
+                  <td>
+                    <?php if($story->pri):?>
+                    <span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->estimate;?></th>
