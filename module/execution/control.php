@@ -1608,7 +1608,8 @@ class execution extends control
      */
     public function create($projectID = '', $executionID = 0, $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
     {
-        if($this->app->tab == 'doc') unset($this->lang->doc->menu->execution['subMenu']);
+        if($this->app->tab == 'doc')     unset($this->lang->doc->menu->execution['subMenu']);
+        if($this->app->tab == 'project') $this->project->setMenu($projectID);
 
         $project = $this->project->getByID($projectID);
         if(!empty($project) and $project->model == 'kanban')
