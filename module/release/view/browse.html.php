@@ -51,8 +51,8 @@
       <tr>
         <th class='c-id'><?php echo $lang->release->id;?></th>
         <th class="c-name"><?php echo $lang->release->name;?></th>
-        <th class='text-center c-build'><?php echo $lang->release->build;?></th>
-        <th class='text-center c-build'><?php echo $lang->release->project;?></th>
+        <th class='c-build'><?php echo $lang->release->includedBuild;?></th>
+        <th class='c-project'><?php echo $lang->release->relatedProject;?></th>
         <th class='text-center c-status'><?php echo $lang->release->status;?></th>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <?php
@@ -63,6 +63,10 @@
       </tr>
     </thead>
     <tbody>
+      <?php
+      $this->loadModel('project');
+      $this->loadModel('execution');
+      ?>
       <?php foreach($releases as $release):?>
       <?php $canBeChanged = common::canBeChanged('release', $release);?>
       <?php $buildCount    = count($release->builds);?>
@@ -82,7 +86,13 @@
           <?php if($product->type != 'normal'):?>
           <span class='label label-outline label-badge'><?php echo $build->branchName;?></span>
           <?php endif;?>
-          <?php echo html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name);?>
+          <?php
+          $moduleName   = $build->execution ? 'build' : 'projectbuild';
+          $canClickable = false;
+          if($moduleName == 'projectbuild' and $this->project->checkPriv($build->project)) $canClickable = true;
+          if($moduleName == 'build' and $this->execution->checkPriv($build->execution))    $canClickable = true;
+          echo $canClickable ? html::a($this->createLink($moduleName, 'view', "buildID=$build->id"), $build->name, '', "data-app='project'") : $build->name;
+          ?>
         </td>
         <td><?php echo $build->projectName;?></td>
         <?php if($i == 1):?>

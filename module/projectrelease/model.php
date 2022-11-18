@@ -31,10 +31,14 @@ class projectreleaseModel extends model
             ->fetch();
         if(!$release) return false;
 
+        $release->project = trim($release->project, ',');
+        $release->branch  = trim($release->branch, ',');
+        $release->build   = trim($release->build, ',');
+
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
         $release->files      = $this->file->getByObject('release', $releaseID);
-        $release->buildInfos = $this->dao->select('id,project,product,name,scmPath,filePath')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+        $release->buildInfos = $this->dao->select('id,project,product,execution,name,scmPath,filePath')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
         if(empty($release->files))$release->files = $this->file->getByObject('build', $release->build);
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
         return $release;
@@ -51,7 +55,7 @@ class projectreleaseModel extends model
      */
     public function getList($projectID, $type = 'all', $orderBy = 't1.date_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere("FIND_IN_SET($projectID, t1.project)")
@@ -60,6 +64,26 @@ class projectreleaseModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+
+        $buildIdList = array();
+        foreach($releases as $release)
+        {
+            $release->project = trim($release->project, ',');
+            $release->branch  = trim($release->branch, ',');
+            $release->build   = trim($release->build, ',');
+            $buildIdList = array_merge($buildIdList, explode(',', $release->build));
+        }
+
+        $builds = $this->dao->select("id,project,product,execution,name,scmPath,filePath")->from(TABLE_BUILD)->where('id')->in(array_unique($buildIdList))->fetchAll('id');
+        foreach($releases as $release)
+        {
+            foreach(explode(',', $release->build) as $buildID)
+            {
+                if(empty($buildID)) continue;
+                $release->buildInfos[$buildID] = $builds[$buildID];
+            }
+        }
+        return $releases;
     }
 
     /**

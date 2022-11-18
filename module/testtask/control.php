@@ -127,7 +127,7 @@ class testtask extends control
         $this->view->branch      = $branch;
         $this->view->beginTime   = $beginTime;
         $this->view->endTime     = $endTime;
-        $this->view->product     = $this->product->getByID($productID);
+        $this->view->product     = $product;
 
         $this->display();
     }

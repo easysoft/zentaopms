@@ -161,6 +161,8 @@
               <th class='thWidth'><?php echo $lang->testcase->module;?></th>
               <td>
                 <?php
+                $tab = $this->app->tab;
+
                 if(empty($modulePath))
                 {
                     echo "/";
@@ -174,7 +176,7 @@
 
                     foreach($modulePath as $key => $module)
                     {
-                        if($this->app->tab == 'qa' || $this->app->tab == 'ops')
+                        if($tab == 'qa' || $tab == 'ops')
                         {
                             if($isLibCase)
                             {
@@ -185,8 +187,8 @@
                                 if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
                             }
                         }
-                        if($this->app->tab == 'project' and !common::printLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                        if($this->app->tab == 'execution') echo $module->name;
+                        if($tab == 'project' and !common::printLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if($tab == 'execution' or $tab == 'product') echo $module->name;
                         if(isset($modulePath[$key + 1])) echo $lang->arrow;
                     }
                 }
@@ -199,7 +201,7 @@
               <td>
                 <?php
                 $class = isonlybody() ? 'showinonlybody' : 'iframe';
-                $param = $this->app->tab == 'project' ? "&version=0&projectID={$this->session->project}" : '';
+                $param = $tab == 'project' ? "&version=0&projectID={$this->session->project}" : '';
                 if(isset($case->storyTitle))
                 {
                     if(common::hasPriv('story', 'view'))

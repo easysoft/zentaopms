@@ -65,11 +65,10 @@
     <tbody>
       <?php foreach($releases as $release):?>
       <?php
-      $linkedBuilds = explode(',', trim($release->build, ','));
-      $buildCount   = count($linkedBuilds);
-      foreach($linkedBuilds as $i => $buildID):
+      $i = 0;
+      $buildCount = count($release->buildInfos);
+      foreach($release->buildInfos as $buildID => $build):
       ?>
-      <?php $buildName = zget($builds, $buildID, '');?>
       <?php if($i == 0):?>
       <?php $rowspan = $buildCount > 1 ? "rowspan='$buildCount'" : '';?>
       <tr data-type='<?php echo $release->status;?>'>
@@ -83,7 +82,7 @@
         <?php if($project->hasProduct):?>
         <td <?php echo $rowspan?> title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
         <?php endif;?>
-        <td class='c-build' title='<?php echo $buildName;?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$buildID"), $buildName, '', "data-app='project'");?></td>
+        <td class='c-build' title='<?php echo $build->name;?>'><?php echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project'");?></td>
         <?php $status = $this->processStatus('release', $release);?>
         <td <?php echo $rowspan?> class='c-status text-center' title='<?php echo $status;?>'>
           <span class="status-release status-<?php echo $release->status?>"><?php echo $status;?></span>
@@ -94,9 +93,10 @@
       </tr>
       <?php else:?>
       <tr>
-        <td class='c-build' title='<?php echo $buildName;?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$buildID"), $buildName, '', "data-app='project'");?></td>
+        <td class='c-build' title='<?php echo $build->name;?>'><?php echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project'");?></td>
       </tr>
       <?php endif;?>
+      <?php $i++; ?>
       <?php endforeach;?>
       <?php endforeach;?>
     </tbody>

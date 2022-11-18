@@ -322,7 +322,6 @@ class testcase extends control
         {
             $this->loadModel('project')->setMenu($this->session->project);
             $this->app->rawModule = 'qa';
-            $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', "projectID=$projectID", $branchID);
@@ -348,8 +347,6 @@ class testcase extends control
         $stories  = array_chunk($stories, $pager->recPerPage);
 
         $this->view->title      = $this->lang->story->zeroCase;
-        $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
-        $this->view->position[] = $this->lang->story->zeroCase;
 
         $this->view->stories    = empty($stories) ? $stories : $stories[$pageID - 1];
         $this->view->users      = $this->user->getPairs('noletter');

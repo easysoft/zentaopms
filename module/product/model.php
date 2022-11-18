@@ -440,7 +440,7 @@ class productModel extends model
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t2.deleted')->eq(0)
-            ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
+            ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
@@ -1137,7 +1137,7 @@ class productModel extends model
 
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) or $branchParam == 'all') ? '' : $branchParam);
 
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
 
@@ -1235,10 +1235,11 @@ class productModel extends model
      * @param  int    $branch
      * @param  int    $appendProject
      * @param  string $status all|closed|unclosed
+     * @param  string $param  multiple|
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status = '')
+    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status = '', $param = '')
     {
         $product = $this->getById($productID);
 
@@ -1246,6 +1247,7 @@ class productModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->beginIF($status == 'closed')->andWhere('t2.status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'multiple') !== false)->andWhere('t2.multiple')->ne('0')->fi()
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($product->type != 'normal' and $branch !== '')->andWhere('t1.branch')->in($branch)->fi()
@@ -1398,15 +1400,20 @@ class productModel extends model
     {
         if(empty($productID)) return array();
 
-        $project = $this->loadModel('project')->getByID($projectID);
-        $orderBy = $project && $project->model == 'waterfall' ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
+        $projects     = $this->loadModel('project')->getByIdList($projectID);
+        $hasWaterfall = false;
+        foreach($projects as $project)
+        {
+            if($project->model == 'waterfall') $hasWaterfall = true;
+        }
+        $orderBy = $hasWaterfall ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
         $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->in('sprint,kanban,stage')
-            ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
+            ->beginIF($projectID)->andWhere('t2.project')->in($projectID)->fi()
             ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
@@ -1417,7 +1424,7 @@ class productModel extends model
 
         /* The waterfall project needs to show the hierarchy and remove the parent stage. */
         $executionPairs = array('0' => '');
-        if($project && $project->model == 'waterfall')
+        if($hasWaterfall)
         {
             foreach($executions as $id => $execution)
             {

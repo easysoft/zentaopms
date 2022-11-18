@@ -1,1 +1,1 @@
-#legendRelated .table-data tbody>tr>th {width: 125px;}
+#legendRelated .table-data tbody>tr>th, #legendLifeTime .table-data tbody>tr>th {width: 125px;}

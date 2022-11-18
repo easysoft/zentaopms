@@ -115,6 +115,9 @@ class design extends control
         $pager   = pager::init(0, $recPerPage, $pageID);
         $designs = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
 
+        $project = $this->loadModel('project')->getByID($projectID);
+        $this->view->hiddenProduct = $project->hasProduct ? false : true;
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
         $this->view->position[] = $this->lang->design->browse;
 
@@ -169,7 +172,7 @@ class design extends control
         $this->view->position[] = $this->lang->design->create;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active');
+        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
         $this->view->productID  = $productID;
         $this->view->projectID  = $projectID;
         $this->view->type       = $type;
@@ -472,15 +475,17 @@ class design extends control
      *
      * @param  int    $productID
      * @param  int    $projectID
+     * @param  string $status
+     * @param  string $hasParent
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $projectID)
+    public function ajaxGetProductStories($productID, $projectID, $status = 'all', $hasParent = 'true')
     {
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
 
-        $stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $stories = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, $status, 'id_desc', 0, 'full', 'story', $hasParent);
 
         return print(html::select('story', $stories, '', "class='form-control'"));
     }

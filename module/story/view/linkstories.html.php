@@ -90,9 +90,9 @@ $(function()
         var output = '';
         $('#linkStoriesForm').find('tr.checked').each(function(){
             var storyID        = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
-            var storyTitle     = "#" + storyID + ' ' + $(this).find('td').eq(3).attr('title');
+            var storyTitle     = "#" + storyID + ' ' + $(this).find('td').eq(2).attr('title');
             var linkStoryField = storyType == 'story' ? 'linkStories' : 'linkRequirements';
-            var checkbox       = "<li><div class='checkbox-primary' title='" + $(this).find('td').eq(3).attr('title') + "'><input type='checkbox' checked='checked' name='" + linkStoryField + "[]' " + "value=" + storyID + " /><label class='linkStoryTitle'>" + storyTitle + "</label></div></li>";
+            var checkbox       = "<li><div class='checkbox-primary' title='" + $(this).find('td').eq(2).attr('title') + "'><input type='checkbox' checked='checked' name='" + linkStoryField + "[]' " + "value=" + storyID + " /><label class='linkStoryTitle'>" + storyTitle + "</label></div></li>";
 
             output += checkbox;
         });

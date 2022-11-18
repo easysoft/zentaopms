@@ -80,7 +80,7 @@
                 </thead>
                 <tbody>
                   <?php foreach($stories as $storyID => $story):?>
-                  <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$projectID", '', true);?>
+                  <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->project}", '', true);?>
                   <tr>
                     <td class='c-id text-left'>
                       <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
@@ -356,9 +356,9 @@
                         $buildHtml = array();
                         foreach($release->buildInfos as $buildID => $buildInfo)
                         {
-                            $buildHtml[] = html::a($this->createLink('build', 'view', "buildID=$buildID"), $buildInfo->name);
+                            $buildHtml[] = html::a($this->createLink($buildInfo->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $buildInfo->name, '', "data-app='project'");
                         }
-                        echo join(', ', $buildHtml);
+                        echo join($lang->comma, $buildHtml);
                         ?>
                       </td>
                     </tr>
