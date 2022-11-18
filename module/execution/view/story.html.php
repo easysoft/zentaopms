@@ -184,9 +184,6 @@
   </div>
   <div class="main-col">
     <div id='queryBox' data-module='executionStory' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
-      <div class="table-header fixed-right">
-        <nav class="btn-toolbar pull-right setting"></nav>
-      </div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
@@ -217,6 +214,9 @@
       </p>
     </div>
     <?php else:?>
+    <div class="table-header fixed-right">
+      <nav class="btn-toolbar pull-right setting"></nav>
+    </div>
     <form class='main-table table-story skip-iframe-modal' method='post' id='executionStoryForm'>
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
