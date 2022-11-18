@@ -2295,12 +2295,13 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $executionID
+     * @param  string $mode
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($projectID, $executionID = 0)
+    public function ajaxGetExecutions($projectID, $executionID = 0, $mode = '')
     {
-        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, 'all');
+        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, 'all', $mode);
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
         return print(html::select('execution', $executions, $executionID, "class='form-control'"));
