@@ -247,7 +247,7 @@ class productplanModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
             ->where('t1.product')->in($product)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== '' and $branch != 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.begin desc')
@@ -255,6 +255,8 @@ class productplanModel extends model
 
         $plans     = $this->reorder4Children($plans);
         $planPairs = array();
+        $mainplan  = array();
+        $this->app->loadLang('bug');
         $this->app->loadLang('branch');
         foreach($plans as $plan)
         {
@@ -263,8 +265,14 @@ class productplanModel extends model
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
+            if(empty($plan->branchName))
+            {
+                $mainplan = $planPairs[$plan->id];
+                unset($planPairs[$plan->id]);
+            }
         }
-        return array('' => '') + $planPairs;
+        array_splice($planPairs, 0, 0, $mainplan);
+        return array('' => '', 'ditto' => $this->lang->bug->ditto) + $planPairs;
     }
 
     /**
