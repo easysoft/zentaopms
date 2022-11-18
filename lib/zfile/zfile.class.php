@@ -223,7 +223,7 @@ class zfile
     * 
     * @param  string    $patern
     * @access public
-    * @return avoid
+    * @return void
     */
     public function batchRemoveFile($patern)
     {
