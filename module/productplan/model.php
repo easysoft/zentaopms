@@ -255,6 +255,7 @@ class productplanModel extends model
 
         $plans     = $this->reorder4Children($plans);
         $planPairs = array();
+        $mainplan  = array();
         $this->app->loadLang('bug');
         $this->app->loadLang('branch');
         foreach($plans as $plan)
