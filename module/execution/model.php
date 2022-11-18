@@ -4944,6 +4944,7 @@ class executionModel extends model
             {
                 $title = " title='{$execution->name}'";
                 if(!empty($execution->children)) $class .= ' has-child';
+                if(isset($execution->delay)) $class .= ' delay';
             }
 
             if($id == 'teamCount')
