@@ -113,7 +113,7 @@
         <?php if($isStage):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
-          <td>
+          <td class='required'>
             <div class='input-group'>
               <?php echo html::input('percent', '', "class='form-control'");?>
               <span class='input-group-addon'>%</span>
