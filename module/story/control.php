@@ -1053,19 +1053,10 @@ class story extends control
             $branchTagOption = array();
             $products        = array();
 
-            if($executionID)
-            {
-                /* The stories of project or execution. */
-                $execution = $this->execution->getByID($executionID);
-                $products  = $this->loadModel('product')->getProducts($executionID);
-            }
-            else
-            {
-                /* The stories of my. */
-                $productIdList = array();
-                foreach($stories as $story) $productIdList[$story->product] = $story->product;
-                $products = $this->product->getByIdList($productIdList);
-            }
+            /* Get product id list by the stories. */
+            $productIdList = array();
+            foreach($stories as $story) $productIdList[$story->product] = $story->product;
+            $products = $this->product->getByIdList($productIdList);
 
             foreach($products as $storyProduct)
             {
@@ -1133,8 +1124,6 @@ class story extends control
             }
         }
 
-        $this->view->position[]        = $this->lang->story->common;
-        $this->view->position[]        = $this->lang->story->batchEdit;
         $this->view->title             = $this->lang->story->batchEdit;
         $this->view->users             = $users;
         $this->view->priList           = array('0' => '', 'ditto' => $this->lang->story->ditto) + $this->lang->story->priList;
