@@ -2425,6 +2425,12 @@ class bug extends control
         $products = array();
         if(!empty($extra)) $products = $this->product->getProducts($extra, 'all', 'program desc, line desc, ');
 
+        if($this->config->systemMode == 'ALM')
+        {
+            $this->view->programs = $this->loadModel('program')->getPairs(true);
+            $this->view->lines    = $this->product->getLinePairs();
+        }
+
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
         $this->view->module    = $module;
@@ -2432,8 +2438,6 @@ class bug extends control
         $this->view->extra     = $extra;
         $this->view->products  = $products;
         $this->view->projectID = $this->session->project;
-        $this->view->programs  = $this->loadModel('program')->getPairs(true);
-        $this->view->lines     = $this->product->getLinePairs();
         $this->display();
     }
 
