@@ -882,17 +882,20 @@ function setBranchRelated(branchID, productID, num)
     {
         planID   = $('#plans' + num).val();
         planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID=' + num + '&needCreate=false&expired=&param=skipParent');
+        $.ajaxSettings.async = false;
         $('#plans' + num).parent('td').load(planLink, function()
         {
             $('#plans' + num).chosen();
-            if(planID == 1)
+            var firstBugID = $('.table-form tbody').first('tr').find('input[id^=bugIDList]').val();
+            if(num == firstBugID)
             {
-                $(this).find('option').each(function()
+                $('#plans' + firstBugID).find('option').each(function()
                 {
                     if($(this).val() == 'ditto') $(this).remove();
+                    $('#plans' + firstBugID).trigger('chosen:updated');
                 });
-                $('#plans' + num).chosen().trigger('chosen:updated');
             }
         });
+        $.ajaxSettings.async = true;
     }
 }
