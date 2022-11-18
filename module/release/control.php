@@ -302,7 +302,11 @@ class release extends control
 
             $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
             $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
-            if(empty($build->execution)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
+            $this->loadModel('build')->delete(TABLE_BUILD, $release->shadow);
+            foreach($builds as $build)
+            {
+                if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
+            }
 
             $message = $this->executeHooks($releaseID);
             if($message) $response['message'] = $message;
@@ -320,7 +324,6 @@ class release extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                     $release = $this->release->getById($releaseID);
-                    $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->build)->andWhere('name')->eq($release->name)->exec();
                 }
 
                 return $this->send($response);

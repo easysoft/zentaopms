@@ -367,9 +367,10 @@ class projectrelease extends control
 
             $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
             $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+            $this->loadModel('build')->delete(TABLE_BUILD, $release->shadow);
             foreach($builds as $build)
             {
-                if(empty($build->execution) and empty($build->builds) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
+                if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
             }
 
             $message = $this->executeHooks($releaseID);

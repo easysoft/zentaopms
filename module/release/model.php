@@ -189,6 +189,7 @@ class releaseModel extends model
             $shadowBuild->product      = $release->product;
             $shadowBuild->builds       = $release->build;
             $shadowBuild->name         = $release->name;
+            $shadowBuild->date         = $release->date;
             $shadowBuild->createdBy    = $this->app->user->account;
             $shadowBuild->createdDate  = helper::now();
             $this->dao->insert(TABLE_BUILD)->data($shadowBuild)->exec();
@@ -320,7 +321,12 @@ class releaseModel extends model
             ->exec();
         if(!dao::isError())
         {
-            if($release->build != $oldRelease->build) $this->dao->update(TABLE_BUILD)->set('builds')->eq($release->build)->where('id')->eq($oldRelease->shadow)->exec();
+            $shadowBuild = array();
+            if($release->name != $oldRelease->name)   $shadowBuild['name']   = $release->name;
+            if($release->build != $oldRelease->build) $shadowBuild['builds'] = $release->build;
+            if($release->date != $oldRelease->date)   $shadowBuild['date']   = $release->date;
+            if($shadowBuild) $this->dao->update(TABLE_BUILD)->data($shadowBuild)->where('id')->eq($oldRelease->shadow)->exec();
+
             $this->file->processFile4Object('release', $oldRelease, $release);
             return common::createChanges($oldRelease, $release);
         }
