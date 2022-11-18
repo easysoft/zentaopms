@@ -102,4 +102,5 @@
 </div>
 <?php js::set('productID', $productID)?>
 <?php js::set('branch', $branch)?>
+<?php js::set('app', $app->tab)?>
 <?php include '../../common/view/footer.html.php';?>
