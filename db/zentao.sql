@@ -6407,8 +6407,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_message` (
   KEY `mgid` (`gid`),
   KEY `mcgid` (`cgid`),
   KEY `muser` (`user`),
-  KEY `mtype` (`type`),
-  UNIQUE `unique_msg`(`index`, `cgid`)
+  KEY `mtype` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_message_backup`;

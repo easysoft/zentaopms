@@ -881,6 +881,27 @@ class product extends control
     }
 
     /**
+     * Ajax get products.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProducts($executionID)
+    {
+        $this->loadModel('build');
+        $products = $this->product->getProductPairsByProject($executionID);
+        if(empty($products))
+        {
+            return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
+        }
+        else
+        {
+            return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+        }
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID

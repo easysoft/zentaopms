@@ -2714,7 +2714,7 @@ class story extends control
         $this->story->replaceURLang($storyType);
 
         $this->products = $this->product->getPairs('', 0, '', 'all');
-        if($this->app->tab == 'project')
+        if(strpos('project,execution', $this->app->tab) !== false)
         {
             $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
@@ -2727,10 +2727,11 @@ class story extends control
                 $this->loadModel('execution')->setMenu($projectID);
             }
 
-            if(!$project->hasProduct and !$project->multiple)
+            if(!$project->hasProduct)
             {
                 unset($this->lang->story->report->charts['storysPerProduct']);
-                unset($this->lang->story->report->charts['storysPerPlan']);
+
+                if(!$project->multiple) unset($this->lang->story->report->charts['storysPerPlan']);
             }
         }
         else

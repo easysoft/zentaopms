@@ -72,7 +72,7 @@ $lang->programplan->stageCustom->date = '顯示日期';
 $lang->programplan->stageCustom->task = '顯示任務';
 
 $lang->programplan->error                  = new stdclass();
-$lang->programplan->error->percentNumber   = '"工作量比例"必須為數字';
+$lang->programplan->error->percentNumber   = '"工作量占比"必須為數字';
 $lang->programplan->error->planFinishSmall = '"計劃完成時間"必須大於"計劃開始時間"';
 $lang->programplan->error->percentOver     = '工作量占比累計不應當超過100%';
 $lang->programplan->error->createdTask     = '已分解任務,不可添加子階段';

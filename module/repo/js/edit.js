@@ -1,6 +1,6 @@
 $(function()
 {
-    scmChanged(scm, true);
+    scmChanged(repoSCM, true);
     $('#submit').mousedown(function()
     {
         $form = $(this).closest('form');
@@ -86,6 +86,7 @@ function scmChanged(scm, isFirstRequest = false)
     if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')
     {
         $('.account-fields').addClass('hidden');
+        if(['Git', 'Gitea', 'Gogs'].indexOf(repoSCM) === -1) $('#client').val('');
 
         $('.tips-git').removeClass('hidden');
         $('.tips-svn').addClass('hidden');
