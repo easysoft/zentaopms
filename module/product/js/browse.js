@@ -5,7 +5,7 @@ $(function()
     $('#navbar .nav li').removeClass('active');
     $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
 
-    if(rawModule == 'projectstory' && !projectHasProduct && URAndSR)
+    if(vision != 'lite' && rawModule == 'projectstory' && !projectHasProduct && URAndSR)
     {
         $('#navbar .nav>li[data-id=story]').addClass('active');
         $('#navbar .nav>li[data-id=story]>a').html($('.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
