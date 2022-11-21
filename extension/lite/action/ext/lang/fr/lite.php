@@ -1,6 +1,7 @@
 <?php
 $lang->action->label->execution = "Kanban|execution|task|executionID=%s";
 $lang->action->label->task      = 'Task|task|view|taskID=%s';
+$lang->action->label->module    = 'Table des matières|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 
 /* Object type. */
 $lang->action->objectTypes['execution'] = 'Project' . $lang->executionCommon;
