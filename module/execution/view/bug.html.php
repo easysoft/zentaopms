@@ -125,6 +125,7 @@
             foreach($setting as $value)
             {
                 if(!$project->hasProduct and $project->model != 'scrum' and $value->id == 'plan') continue;
+                if(!$project->hasProduct and $value->id == 'branch') continue;
                 if($value->show)
                 {
                     if(common::checkNotCN() and $value->id == 'severity')  $value->name = $lang->bug->severity;
@@ -154,6 +155,7 @@
           <?php foreach($setting as $value)
           {
               if(!$project->hasProduct and $project->model != 'scrum' and $value->id == 'plan') continue;
+              if(!$project->hasProduct and $value->id == 'branch') continue;
               $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $projectPairs);
           }
           ?>
