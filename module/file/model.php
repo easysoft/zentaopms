@@ -1119,12 +1119,9 @@ class fileModel extends model
      */
     public function getImageSize($file)
     {
-
-        if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) === false) return array(0, 0, $$file->extension);
-
         if($this->config->file->storageType == 'fs')
         {
-            return file_exists($file->realPath) ? getimagesize($file->realPath) : array(0, 0, $$file->extension);
+            return file_exists($file->realPath) ? getimagesize($file->realPath) : array(0, 0, $file->extension);
         }
         else if($this->config->file->storageType == 's3')
         {
