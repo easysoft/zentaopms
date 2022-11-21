@@ -13,3 +13,4 @@
 .linkStoryTr > td {padding-left: 0px !important;}
 .removeButton {margin-left: -10px;}
 .resolution {white-space: nowrap; overflow: hidden;}
+.body-modal #mainMenu+#mainContent.main-row {padding: 0px 10px 0;}

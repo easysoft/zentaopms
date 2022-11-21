@@ -881,6 +881,27 @@ class product extends control
     }
 
     /**
+     * Ajax get products.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProducts($executionID)
+    {
+        $this->loadModel('build');
+        $products = $this->product->getProductPairsByProject($executionID);
+        if(empty($products))
+        {
+            return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
+        }
+        else
+        {
+            return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+        }
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
@@ -924,10 +945,11 @@ class product extends control
      * @param  string $number
      * @param  int    $executionID
      * @param  string $from showImport
+     * @param  string mode
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0, $from = '')
+    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0, $from = '', $mode = '')
     {
         if($this->app->tab == 'execution' and $this->session->execution)
         {
@@ -935,7 +957,7 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
-        $mode  = ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
+        $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
         $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));

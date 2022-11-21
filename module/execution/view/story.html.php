@@ -184,9 +184,6 @@
   </div>
   <div class="main-col">
     <div id='queryBox' data-module='executionStory' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
-      <div class="table-header fixed-right">
-        <nav class="btn-toolbar pull-right setting"></nav>
-      </div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
@@ -217,6 +214,9 @@
       </p>
     </div>
     <?php else:?>
+    <div class="table-header fixed-right">
+      <nav class="btn-toolbar pull-right setting"></nav>
+    </div>
     <form class='main-table table-story skip-iframe-modal' method='post' id='executionStoryForm'>
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
@@ -243,7 +243,9 @@
       $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
       $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
       $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
-      $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+      $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
+
+      $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask or $canBatchAssignTo));
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table tablesorter has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -252,6 +254,7 @@
           <?php
           foreach($setting as $key => $value)
           {
+              if(!$execution->hasProduct and $value->id == 'branch') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
               if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
@@ -272,6 +275,7 @@
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
           <?php foreach($setting as $key => $value)
           {
+              if(!$execution->hasProduct and $value->id == 'branch') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
               if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
@@ -288,6 +292,7 @@
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
           <?php foreach($setting as $key => $value)
           {
+              if(!$execution->hasProduct and $value->id == 'branch') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
               if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
@@ -321,6 +326,37 @@
             </ul>
             <?php endif;?>
           </div>
+
+          <?php if($canBatchAssignTo):?>
+          <div class="btn-group dropup">
+            <button data-toggle="dropdown" type="button" class="btn assignedTo"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
+            <?php
+            $withSearch = count($users) > 10;
+            $actionLink = $this->createLink('story', 'batchAssignTo', "storyType=$storyType");
+            echo html::select('assignedTo', $users, '', 'class="hidden"');
+            ?>
+            <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
+              <?php if($withSearch):?>
+              <?php $usersPinYin = common::convert2Pinyin($users);?>
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
+                <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
+                <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+              </div>
+              <?php endif;?>
+              <div class="list-group">
+              <?php foreach ($users as $key => $value):?>
+              <?php
+              if(empty($key) or $key == 'closed') continue;
+              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
+              echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\", \"#storyList\")", $value, '', $searchKey);
+              ?>
+              <?php endforeach;?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
+
           <?php
           if($canBatchClose)
           {

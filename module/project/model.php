@@ -2,6 +2,22 @@
 class projectModel extends model
 {
     /**
+     * Check the privilege.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($projectID)
+    {
+        if(empty($projectID)) return false;
+
+        /* If is admin, return true. */
+        if($this->app->user->admin) return true;
+        return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
+    }
+
+    /**
      * Get Multiple linked products for project.
      *
      * @param  int    $projectID
@@ -3003,7 +3019,7 @@ class projectModel extends model
                 $menu .= "<div class='btn-group'>";
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu($moduleName, 'manageProducts', $params . "&from={$this->app->tab}", $project, 'browse', 'link', '', 'btn-action', '', '', $this->lang->project->manageProducts);
+                if($project->hasProduct) $menu .= $this->buildMenu($moduleName, 'manageProducts', $params . "&from={$this->app->tab}", $project, 'browse', 'link', '', 'btn-action', '', '', $this->lang->project->manageProducts);
                 $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);
                 $menu .= $this->buildMenu($moduleName, "delete", $params, $project, 'browse', 'trash', 'hiddenwin', 'btn-action');
                 $menu .= "</ul>";

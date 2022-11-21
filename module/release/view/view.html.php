@@ -356,7 +356,12 @@
                         $buildHtml = array();
                         foreach($release->builds as $build)
                         {
-                            $buildHtml[] = html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$build->id"), $build->name, '', "data-app='project'");
+                            $moduleName   = $build->execution ? 'build' : 'projectbuild';
+                            $canClickable = false;
+                            if($moduleName == 'projectbuild' and $this->loadModel('project')->checkPriv($build->project)) $canClickable = true;
+                            if($moduleName == 'build' and $this->loadModel('execution')->checkPriv($build->execution))    $canClickable = true;
+
+                            $buildHtml[] = $canClickable ? html::a($this->createLink($moduleName, 'view', "buildID=$build->id"), $build->name, '', "data-app='project'") : $build->name;
                         }
                         echo join($lang->comma, $buildHtml);
                         ?>

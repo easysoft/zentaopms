@@ -18,7 +18,7 @@
 .user-addon{padding-right: 16px; padding-left: 16px;}
 </style>
 <?php endif;?>
-<?php js::set('scm', $repo->SCM);?>
+<?php js::set('repoSCM', $repo->SCM);?>
 <?php js::set('objectID', $objectID);?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>

@@ -157,12 +157,12 @@ class projectrelease extends control
         $this->loadModel('story');
         $this->loadModel('bug');
         $this->loadModel('build');
-        $this->app->loadConfig('release');
+        $this->loadModel('release');
         $this->config->projectrelease->create = $this->config->release->create;
 
         if(!empty($_POST))
         {
-            $changes = $this->projectrelease->update($releaseID);
+            $changes = $this->release->update($releaseID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('release', $releaseID);
             if($changes or $files)
@@ -367,9 +367,10 @@ class projectrelease extends control
 
             $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
             $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+            $this->loadModel('build')->delete(TABLE_BUILD, $release->shadow);
             foreach($builds as $build)
             {
-                if(empty($build->execution) and empty($build->builds) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
+                if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
             }
 
             $message = $this->executeHooks($releaseID);
@@ -571,11 +572,8 @@ class projectrelease extends control
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $executionIdList = array();
-        foreach($builds as $build)
-        {
-            if(empty($build->execution)) continue;
-            $executionIdList[$build->execution] = $build->execution;
-        }
+        foreach($builds as $build) $executionIdList[] = empty($build->execution) ? $build->project : $build->execution;
+        $executionIdList = array_unique($executionIdList);
 
         $allStories = array();
         if($browseType == 'bySearch')

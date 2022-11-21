@@ -124,7 +124,7 @@
         {
             plan.progress = !plan.tasks.length ? 0 : plan.progress / plan.tasks.length;
             var $plan = $('<div class="gantt-plan"></div>');
-            $plan.append('<div class="strong" title="' + plan.text + '">' + plan.text + '</div>');
+            $plan.append('<div class="strong" title="' + plan.name + '">' + plan.text + '</div>');
             $plans.append($plan);
 
             var $bar = $('<div class="gantt-bar"></div>');

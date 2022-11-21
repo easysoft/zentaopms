@@ -67,11 +67,12 @@
       <?php
       $i = 0;
       $buildCount = count($release->buildInfos);
+      $rowspan    = $buildCount > 1 ? "rowspan='$buildCount'" : '';
+      if($buildCount == 0) $release->buildInfos = array('');
       foreach($release->buildInfos as $buildID => $build):
       ?>
-      <?php if($i == 0):?>
-      <?php $rowspan = $buildCount > 1 ? "rowspan='$buildCount'" : '';?>
       <tr data-type='<?php echo $release->status;?>'>
+        <?php if($i == 0):?>
         <td <?php echo $rowspan?>><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td <?php echo $rowspan?>>
           <?php
@@ -82,7 +83,9 @@
         <?php if($project->hasProduct):?>
         <td <?php echo $rowspan?> title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
         <?php endif;?>
-        <td class='c-build' title='<?php echo $build->name;?>'><?php echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project'");?></td>
+        <?php endif;?>
+        <td class='c-build'><?php if($buildCount) echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project' title='<?php echo $build->name;?>'");?></td>
+        <?php if($i == 0):?>
         <?php $status = $this->processStatus('release', $release);?>
         <td <?php echo $rowspan?> class='c-status text-center' title='<?php echo $status;?>'>
           <span class="status-release status-<?php echo $release->status?>"><?php echo $status;?></span>
@@ -90,12 +93,8 @@
         <td <?php echo $rowspan?> class='text-center'><?php echo $release->date;?></td>
         <?php foreach($extendFields as $extendField) echo "<td $rowspan>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
         <td <?php echo $rowspan?> class='c-actions'><?php echo $this->projectrelease->buildOperateMenu($release, 'browse');?></td>
+        <?php endif;?>
       </tr>
-      <?php else:?>
-      <tr>
-        <td class='c-build' title='<?php echo $build->name;?>'><?php echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project'");?></td>
-      </tr>
-      <?php endif;?>
       <?php $i++; ?>
       <?php endforeach;?>
       <?php endforeach;?>

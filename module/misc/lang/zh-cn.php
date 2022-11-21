@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "手机访问";
 $lang->misc->noGDLib     = "请用手机浏览器访问：<strong>%s</strong>";
-$lang->misc->copyright   = "&copy; 2009 - 2018 <a href='http://www.cnezsoft.com' target='_blank'>青岛易软天创网络科技有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.easycorp.cn' target='_blank'>青岛易软天创网络科技有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
 $lang->misc->checkTable  = "检查修复数据表";
 $lang->misc->needRepair  = "修复表";
 $lang->misc->repairTable = "数据库表可能因为断电原因损坏，需要检查修复！！";
@@ -193,7 +193,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['18.0.beta1'][] = array('title' => '主要对禅道多项核心流程进行改进，新增无产品项目、无迭代项目；支持项目跨项目集关联产品；支持轻量管理模式和全生命周期管理模式进行切换。', 'desc' => '');
+$lang->misc->feature->all['18.0.beta1'][] = array('title' => '主要对禅道多项核心流程进行改进，新增项目型项目、无迭代项目；支持项目跨项目集关联产品；支持轻量管理模式和全生命周期管理模式进行切换。', 'desc' => '');
 $lang->misc->feature->all['17.8'][]       = array('title' => '列表状态颜色、仪表盘颜色的改版和任务日志页面的优化。', 'desc' => '');
 $lang->misc->feature->all['17.7'][]       = array('title' => '过渡版本表格优化完成。新增工单功能，优化了反馈功能。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.6.2'][]     = array('title' => '禅道更新叶兰绿、禅道蓝、青春蓝三大主题。实现附件批量上传功能。修复Bug。', 'desc' => '');

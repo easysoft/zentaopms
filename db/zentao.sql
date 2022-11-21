@@ -1285,6 +1285,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `project` varchar(255) NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` varchar(255) NOT NULL default '0',
+  `shadow` mediumint(8) unsigned NOT NULL default '0',
   `build` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL default '',
   `marker` enum('0','1') NOT NULL default '0',
@@ -6407,8 +6408,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_message` (
   KEY `mgid` (`gid`),
   KEY `mcgid` (`cgid`),
   KEY `muser` (`user`),
-  KEY `mtype` (`type`),
-  UNIQUE `unique_msg`(`index`, `cgid`)
+  KEY `mtype` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_message_backup`;

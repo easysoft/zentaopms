@@ -74,7 +74,9 @@
       </tbody>
     </table>
     <div class='table-footer'>
+      <?php if(!empty($revisions)):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <?php endif;?>
       <div class="table-actions btn-toolbar">
         <?php echo html::submitButton('', '', 'btn btn-primary')?>
       </div>

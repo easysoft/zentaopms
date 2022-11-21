@@ -1972,24 +1972,17 @@ class bugModel extends model
     /**
      * Get product left bugs.
      *
-     * @param  int    $build
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $linkedBugs
-     * @param  object $pager
+     * @param  int|string $buildIdList
+     * @param  int        $productID
+     * @param  int        $branch
+     * @param  string     $linkedBugs
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getProductLeftBugs($build, $productID, $branch = '', $linkedBugs = '', $pager = null)
+    public function getProductLeftBugs($buildIdList, $productID, $branch = '', $linkedBugs = '', $pager = null)
     {
-        $builds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($build)->fetchAll('id');
-
-        $executionIdList = array();
-        foreach($builds as $build)
-        {
-            if(empty($build->execution)) continue;
-            $executionIdList[$build->execution] = $build->execution;
-        }
+        $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
         if(empty($executionIdList)) return array();
 
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll();
@@ -2088,28 +2081,26 @@ class bugModel extends model
     /**
      * Get bugs according to buildID and productID.
      *
-     * @param  int    $buildID
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  string $linkedBugs
-     * @param  object $pager
+     * @param  int|string $buildIdList
+     * @param  int        $productID
+     * @param  string     $branch
+     * @param  string     $linkedBugs
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getReleaseBugs($buildID, $productID, $branch = 0, $linkedBugs = '', $pager = null)
+    public function getReleaseBugs($buildIdList, $productID, $branch = 0, $linkedBugs = '', $pager = null)
     {
-        $executions = $this->dao->select('t1.id,t1.begin')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.id = t2.execution')
-            ->where('t2.id')->in($buildID)
-            ->fetchAll('id');
-        if(empty($executions)) return array();
+        $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
+        if(empty($executionIdList)) return array();
 
-        $condition = 'execution NOT ' . helper::dbIN(array_keys($executions));
-        $minBegin  = '';
+        $executions = $this->dao->select('id,type,begin')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll('id');
+        $condition  = 'execution NOT ' . helper::dbIN($executionIdList);
+        $minBegin   = '';
         foreach($executions as $execution)
         {
             if(empty($minBegin) or $minBegin > $execution->begin) $minBegin = $execution->begin;
-            $condition .= " OR (execution = '{$execution->id}' AND openedDate < '{$execution->begin}')";
+            $condition .= " OR (`execution` = '{$execution->id}' AND openedDate < '{$execution->begin}')";
         }
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
@@ -2122,8 +2113,40 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('openedDate ASC')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
         return $bugs;
+    }
+
+    /**
+     * Get linked execution by build id list.
+     *
+     * @param  string $buildIdList
+     * @access public
+     * @return array
+     */
+    public function getLinkedExecutionByIdList($buildIdList)
+    {
+        $builds = $this->dao->select('id,execution')->from(TABLE_BUILD)->where('id')->in($buildIdList)->fetchAll('id');
+
+        $executionIdList   = array();
+        $linkedBuildIdList = array();
+        foreach($builds as $build)
+        {
+            if($build->builds) $linkedBuildIdList = array_merge($linkedBuildIdList, explode(',', $build->builds));
+
+            if(empty($build->execution)) continue;
+            $executionIdList[$build->execution] = $build->execution;
+        }
+        if($linkedBuildIdList)
+        {
+            $linkedBuilds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in(array_unique($linkedBuildIdList))->fetchAll('id');
+            foreach($linkedBuilds as $build)
+            {
+                if(empty($build->execution)) continue;
+                $executionIdList[$build->execution] = $build->execution;
+            }
+        }
+        return $executionIdList;
     }
 
     /**
@@ -3467,19 +3490,7 @@ class bugModel extends model
                 echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);
                 break;
             case 'openedBuild':
-                $builds = array_flip($builds);
-                foreach(explode(',', $bug->openedBuild) as $build)
-                {
-                    $buildID = zget($builds, $build, '');
-                    if($buildID == 'trunk')
-                    {
-                        echo $build . ' ';
-                    }
-                    elseif($buildID and common::hasPriv('build', 'view'))
-                    {
-                        echo html::a(helper::createLink('build', 'view', "buildID=$buildID"), $build, '', "title='$bug->openedBuild'") . ' ';
-                    }
-                }
+                echo $bug->openedBuild;
                 break;
             case 'assignedTo':
                 $this->printAssignedHtml($bug, $users);

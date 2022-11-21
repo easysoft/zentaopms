@@ -1,5 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('projectID', $projectID);?>
+<?php js::set('project', $project);?>
 <?php js::set('edit', $lang->edit);?>
 <?php js::set('selectAll', $lang->selectAll);?>
 <?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
@@ -87,15 +88,15 @@
               <?php endif;?>
             </div>
           </th>
-          <?php if($project->division and $project->hasProduct) echo "<th class='text-left c-product'>{$lang->project->product}</th>";?>
+          <?php if($project->division and $project->hasProduct) echo "<th class='text-left w-100px'>{$lang->project->product}</th>";?>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
-          <th class='c-user'><?php echo $lang->execution->owner;?></th>
+          <th class='w-50px'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
           <th class='c-date'><?php echo $lang->programplan->end;?></th>
-          <th class='c-hours text-right'><?php echo $lang->task->estimateAB;?></th>
-          <th class='c-hours text-right'><?php echo $lang->task->consumedAB;?></th>
-          <th class='c-hours text-right'><?php echo $lang->task->leftAB;?> </th>
-          <th class='c-hours'><?php echo $lang->project->progress;?></th>
+          <th class='w-50px text-right'><?php echo $lang->task->estimateAB;?></th>
+          <th class='w-50px text-right'><?php echo $lang->task->consumedAB;?></th>
+          <th class='w-50px text-right'><?php echo $lang->task->leftAB;?> </th>
+          <th class='w-50px'><?php echo $lang->project->progress;?></th>
           <th class='c-progress'><?php echo $lang->execution->burn;?> </th>
           <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>

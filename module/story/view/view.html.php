@@ -319,7 +319,11 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
-                  <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
+                  <td>
+                    <?php if($story->pri):?>
+                    <span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->estimate;?></th>
@@ -415,7 +419,7 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <?php if($this->config->URAndSR && !$hiddenURS):?>
+          <?php if($this->config->URAndSR and !$hiddenURS):?>
           <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
           <?php if($story->type == 'story'):?>
@@ -424,7 +428,7 @@
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
-          <?php if($this->config->URAndSR && !$hiddenURS):?>
+          <?php if($this->config->URAndSR and !$hiddenURS):?>
           <div class='tab-pane active' id='legendStories'>
             <ul class="list-unstyled">
               <?php
@@ -571,7 +575,7 @@
                     </ul>
                   </td>
                 </tr>
-                <?php if($story->type == 'story'):?>
+                <?php if($story->type == 'story' and helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>
                   <td class='pd-0'>

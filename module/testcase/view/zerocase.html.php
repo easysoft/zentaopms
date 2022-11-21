@@ -139,7 +139,8 @@
 
         if(common::hasPriv('story', 'batchChangeStage'))
         {
-            echo "<div class='btn-group dropup'>";
+            $class = count($stories) <= 3 ? 'dropdown' : 'dropup';
+            echo "<div class='btn-group $class'>";
             echo html::commonButton($lang->story->stageAB . "<span class='caret'></span>", "data-toggle='dropdown'");
             echo "<ul class='dropdown-menu'>";
             $lang->story->stageList[''] = $lang->null;

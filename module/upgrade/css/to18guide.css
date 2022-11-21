@@ -9,8 +9,7 @@
 #mainContent tr th {background-color: rgb(241, 241, 241);}
 #mainContent tr td {background-color: rgb(255, 255, 255); border-bottom: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238);}
 
-#useLight {background-color: #ddd!important; padding: 6px 85px;}
-#useALM {background-color: #ddd!important; padding: 6px 85px;}
+#useLight, #useALM {border: #93969b 1px solid; padding: 6px 85px;}
 
 #mainContent .datatable {cursor: default;}
 .container {padding-top: 20px;}

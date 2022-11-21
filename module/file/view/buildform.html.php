@@ -3,7 +3,7 @@ $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
 js::set('dangerExtensions', ',' . $this->config->file->dangers . ',');
 js::set('maxUploadSize', $maxUploadSize);
 ?>
-<div class="file-input-list" data-append-way="before" data-provide="fileInputList" data-each-file-max-size="<?php echo $maxUploadSize; ?>" data-file-size-error="<?php echo sprintf($lang->file->errorFileSize, $maxUploadSize); ?>">
+<div class="file-input-list" data-append-way="before" data-filedName="<?php echo $filesName;?>" data-provide="fileInputList" data-each-file-max-size="<?php echo $maxUploadSize; ?>" data-file-size-error="<?php echo sprintf($lang->file->errorFileSize, $maxUploadSize); ?>">
   <div class="file-input">
     <div class="file-input-edit input-group">
       <div class="input-group-cell"><i class="icon icon-paper-clip text-muted"></i></div>

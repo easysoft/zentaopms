@@ -32,9 +32,9 @@
       <?php $vars = "projectID=$projectID&productID=$productID&type=$type&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <thead>
           <tr>
-            <th class="text-left w-60px">    <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
-            <th class="text-left">           <?php common::printOrderLink('name',        $orderBy, $vars, $lang->design->name);?></th>
-            <th class="text-left w-150px">   <?php common::printOrderLink('product',     $orderBy, $vars, $lang->design->product);?></th>
+            <th class="text-left w-60px"> <?php common::printOrderLink('id',   $orderBy, $vars, $lang->idAB);?></th>
+            <th class="text-left">        <?php common::printOrderLink('name', $orderBy, $vars, $lang->design->name);?></th>
+            <th class="text-left w-150px <?php echo $hiddenProduct ? 'hidden' : '';?>"><?php common::printOrderLink('product', $orderBy, $vars, $lang->design->product);?></th>
             <th class="text-left w-100px">   <?php common::printOrderLink('type',        $orderBy, $vars, $lang->design->type);?></th>
             <th class="c-assignedTo w-120px"><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->design->assignedTo);?></th>
             <th class="text-left w-120px">   <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->design->createdByAB);?></th>
@@ -47,7 +47,7 @@
           <tr>
             <td calss="c-id">         <?php printf('%03d', $design->id);?></td>
             <td class="c-name" title="<?php echo $design->name;?>"><?php echo common::hasPriv('design', 'view') ? html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name) : $design->name;?></td>
-            <td class="c-product">    <?php echo zget($products, $design->product);?></td>
+            <td class="c-product <?php echo $hiddenProduct ? 'hidden' : '';?>"><?php echo zget($products, $design->product);?></td>
             <td class="c-type">       <?php echo zget($lang->design->typeList, $design->type);?></td>
             <td class="c-assignedTo"> <?php echo $this->design->printAssignedHtml($design, $users);?></td>
             <td class="c-createdBy">  <?php echo zget($users, $design->createdBy);?></td>
@@ -55,9 +55,9 @@
             <td class='c-actions text-center'>
               <?php
               $vars = "design={$design->id}";
-              common::printIcon('design', 'edit',       $vars, $design, 'list', 'alter');
-              common::printIcon('design', 'viewCommit', $vars, $design, 'list', 'list-alt', '', 'iframe showinonlybody', true);
-              common::printIcon('design', 'delete',     $vars, $design, 'list', 'trash', 'hiddenwin');
+              common::printIcon('design', 'edit',   $vars, $design, 'list', 'alter');
+              if(helper::hasFeature('devops')) common::printIcon('design', 'viewCommit', $vars, $design, 'list', 'list-alt', '', 'iframe showinonlybody', true);
+              common::printIcon('design', 'delete', $vars, $design, 'list', 'trash', 'hiddenwin');
               ?>
             </td>
           </tr>

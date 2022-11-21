@@ -155,3 +155,15 @@ function getProgramByProduct(productID)
         $('#productProgram').val(data);
     })
 }
+
+/**
+ * Toggle show execution.
+ *
+ * @param  bool $multiple
+ * @access public
+ * @return void
+ */
+function toggleExecution(multiple)
+{
+    $('#executionIdBox').closest('tr').toggleClass('hidden', !multiple);
+}

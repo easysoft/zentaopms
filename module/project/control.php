@@ -2173,15 +2173,15 @@ class project extends control
                 if($executionID) $this->execution->updateProducts($executionID);
             }
 
-            $oldProducts  = array_keys($oldProducts);
-            $newProducts  = $this->product->getProducts($projectID);
-            $newProducts  = array_keys($newProducts);
-            $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
+            $newProducts   = $this->product->getProducts($projectID);
+            $oldProductIDs = array_keys($oldProducts);
+            $newProductIDs = array_keys($newProducts);
+            $diffProducts  = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
             if($project->multiple)
             {
-                $unlinkedProducts = array_diff($oldProducts, $newProducts);
+                $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
                 if(!empty($unlinkedProducts))
                 {
                     $unlinkedProductPairs = array();
@@ -2237,13 +2237,14 @@ class project extends control
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed');
         if($this->config->systemMode == 'ALM')
         {
+            $topProgramID           = $this->program->getTopByPath($project->path);
             $productsGroupByProgram = $this->product->getProductsGroupByProgram();
 
             $currentProducts = array();
             $otherProducts   = array();
             foreach($productsGroupByProgram as $programID => $programProducts)
             {
-                if($programID != $project->parent)
+                if($programID != $topProgramID)
                 {
                     foreach($programProducts as $productID => $productName)
                     {
@@ -2295,12 +2296,13 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $executionID
+     * @param  string $mode
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($projectID, $executionID = 0)
+    public function ajaxGetExecutions($projectID, $executionID = 0, $mode = '')
     {
-        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, 'all');
+        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, 'all', $mode);
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
         return print(html::select('execution', $executions, $executionID, "class='form-control'"));

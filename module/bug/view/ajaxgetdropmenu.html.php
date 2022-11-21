@@ -22,8 +22,8 @@ $productsHtml   = count($products) > 1 ? html::a($linkHtml, $this->lang->bug->al
 foreach($products as $product)
 {
     $selected     = $product->id == $productID ? 'selected' : '';
-    $productName  = $product->program ? zget($programs, $product->program, '') . '/' : '';
-    $productName .= $product->line ? zget($lines, $product->line, '') . '/' . $product->name : $product->name;
+    $productName  = ($product->program and $this->config->systemMode == 'ALM') ? zget($programs, $product->program, '') . '/' : '';
+    $productName .= ($this->config->systemMode == 'ALM' and $product->line) ? zget($lines, $product->line, '') . '/' . $product->name : $product->name;
     $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
     $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
     $productsHtml .= html::a($linkHtml, $productName, '', "class='text-primary $selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='{$this->app->tab}'");

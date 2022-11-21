@@ -972,6 +972,7 @@ class story extends control
             $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
             {
+                if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
                 $this->project->setMenu($executionID);
             }
             else
@@ -1052,19 +1053,10 @@ class story extends control
             $branchTagOption = array();
             $products        = array();
 
-            if($executionID)
-            {
-                /* The stories of project or execution. */
-                $execution = $this->execution->getByID($executionID);
-                $products  = $this->loadModel('product')->getProducts($executionID);
-            }
-            else
-            {
-                /* The stories of my. */
-                $productIdList = array();
-                foreach($stories as $story) $productIdList[$story->product] = $story->product;
-                $products = $this->product->getByIdList($productIdList);
-            }
+            /* Get product id list by the stories. */
+            $productIdList = array();
+            foreach($stories as $story) $productIdList[$story->product] = $story->product;
+            $products = $this->product->getByIdList($productIdList);
 
             foreach($products as $storyProduct)
             {
@@ -1132,8 +1124,6 @@ class story extends control
             }
         }
 
-        $this->view->position[]        = $this->lang->story->common;
-        $this->view->position[]        = $this->lang->story->batchEdit;
         $this->view->title             = $this->lang->story->batchEdit;
         $this->view->users             = $users;
         $this->view->priList           = array('0' => '', 'ditto' => $this->lang->story->ditto) + $this->lang->story->priList;
@@ -2025,7 +2015,7 @@ class story extends control
      */
     public function batchToTask($executionID = 0, $projectID = 0)
     {
-        if($this->app->tab == 'execution' and $executionID) $this->loadModel('execution')->setMenu($executionID);
+        if($executionID) $this->loadModel('execution')->setMenu($executionID);
 
         if(!empty($_POST['name']))
         {
@@ -2713,7 +2703,7 @@ class story extends control
         $this->story->replaceURLang($storyType);
 
         $this->products = $this->product->getPairs('', 0, '', 'all');
-        if($this->app->tab == 'project')
+        if(strpos('project,execution', $this->app->tab) !== false)
         {
             $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
@@ -2726,10 +2716,11 @@ class story extends control
                 $this->loadModel('execution')->setMenu($projectID);
             }
 
-            if(!$project->hasProduct and !$project->multiple)
+            if(!$project->hasProduct)
             {
                 unset($this->lang->story->report->charts['storysPerProduct']);
-                unset($this->lang->story->report->charts['storysPerPlan']);
+
+                if(!$project->multiple) unset($this->lang->story->report->charts['storysPerPlan']);
             }
         }
         else

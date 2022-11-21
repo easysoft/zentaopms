@@ -575,6 +575,7 @@ class upgradeModel extends model
                 }
                 $this->xuanSetMuteForHiddenGroups();
                 $this->xuanNotifyGroupHiddenUsers();
+                $this->initShadowBuilds();
                 break;
         }
 
@@ -7557,7 +7558,6 @@ class upgradeModel extends model
 
             $projectID = $this->dao->lastInsertId();
 
-            $this->action->create('project', $projectID, 'openedbysystem');
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             $project->id = $projectID;
@@ -7567,6 +7567,14 @@ class upgradeModel extends model
             $this->processMergedData($programID, $projectID, '', $productIdList, array($sprint->id));
 
             if($fromMode == 'classic') $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
+            $this->dao->update(TABLE_ACTION)
+                ->set('objectID')->eq($projectID)
+                ->set('objectType')->eq('project')
+                ->set('execution')->eq('0')
+                ->set('project')->eq($projectID)
+                ->where('objectType')->eq('execution')
+                ->andWhere('objectID')->eq($sprint->id)
+                ->exec();
         }
 
         $this->fixProjectPath($programID);
@@ -7941,5 +7949,32 @@ class upgradeModel extends model
         $sender->realname = $this->lang->upgrade->archiveChangeNoticeTitle;
         $this->loadModel('im')->messageCreateNotify(array_keys($noticeUsers), '', '', $this->lang->upgrade->archiveChangeNoticeContent, 'text', '', array(), $sender);
         return !dao::isError();
+    }
+
+    /**
+     * Init shadow builds.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initShadowBuilds()
+    {
+        $releases = $this->dao->select('id,product,shadow,build,name,date,createdBy,createdDate,deleted')->from(TABLE_RELEASE)->where('shadow')->eq(0)->fetchAll();
+        foreach($releases as $release)
+        {
+            $shadowBuild = new stdclass();
+            $shadowBuild->product     = $release->product;
+            $shadowBuild->builds      = $release->build;
+            $shadowBuild->name        = $release->name;
+            $shadowBuild->date        = $release->date;
+            $shadowBuild->createdBy   = $release->createdBy;
+            $shadowBuild->createdDate = $release->createdDate;
+            $shadowBuild->deleted     = $release->deleted;
+            $this->dao->insert(TABLE_BUILD)->data($shadowBuild)->exec();
+
+            $shadowBuildID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_RELEASE)->set('shadow')->eq($shadowBuildID)->where('id')->eq($release->id)->exec();
+        }
+        return true;
     }
 }
