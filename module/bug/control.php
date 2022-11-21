@@ -2048,7 +2048,11 @@ class bug extends control
             if(!$project->hasProduct)
             {
                 unset($this->config->bug->search['fields']['product']);
-                if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
+                if(!$project->multiple)
+                {
+                    unset($this->config->bug->search['fields']['execution']);
+                    unset($this->config->bug->search['fields']['plan']);
+                }
             }
         }
 
