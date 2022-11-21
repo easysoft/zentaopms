@@ -541,6 +541,8 @@ class project extends control
                 }
 
                 $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;
+                $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+                if(!empty($systemMode) and $systemMode == 'light') $parent = 0;
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=$parent&browseType=all", '', '', $projectID)));
             }
         }
