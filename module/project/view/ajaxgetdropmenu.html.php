@@ -53,9 +53,9 @@ foreach($projects as $programID => $programProjects)
 }
 $projectsPinYin = common::convert2Pinyin($projectNames);
 
-$myProjectsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$normalProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$closedProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$myProjectsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$normalProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$closedProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
 
 $indexLink = helper::createLink('project', 'index', "projectID=%s");
 foreach($projects as $programID => $programProjects)
@@ -144,7 +144,7 @@ foreach($projects as $programID => $programProjects)
         }
 
         /* If the project is the last one in the program, print the closed label. */
-        if(isset($programs[$programID]) and !isset($programProjects[$index + 1]))
+        if($config->systemMode == 'ALM' and isset($programs[$programID]) and !isset($programProjects[$index + 1]))
         {
             if($projectCounts[$programID]['myProject']) $myProjectsHtml     .= '</ul></li>';
             if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '</ul></li>';
