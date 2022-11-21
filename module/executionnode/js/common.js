@@ -1,36 +1,36 @@
 $(function()
 {
-    if(config.currentMethod == 'create') $('#hostID').change();
+    if(config.currentMethod == 'create') $('#parent').change();
 
-    $('#hostID').change(function()
+    $('#parent').change(function()
     {
-        var hostID = $('#hostID').val();
+        var hostID = $('#parent').val();
         var link   = createLink('executionnode', 'ajaxGetImages', 'hostID=' + hostID);
         $.get(link, function(data)
         {
             $('#template').html('').append(data);
-            $('#imageID').chosen().trigger("chosen:updated");
-            $('#imageID').change();
+            $('#image').chosen().trigger("chosen:updated");
+            $('#image').change();
         });
     });
 
-    $(document).on("change", '#imageID', function()
+    $(document).on("change", '#image', function()
     {
-        var imageID = $('#imageID').val();
-        var link    = createLink('executionnode', 'ajaxGetImage', 'imageID=' + imageID);
+        var image = $('#image').val();
+        var link    = createLink('executionnode', 'ajaxGetImage', 'image=' + image);
         $.get(link, function(data)
         {
             data = JSON.parse(data);
             console.log(data);
-            $('#os').val(data.os);
+            $('#osName').val(data.osName);
             if(data.memory != 0){
                 $('#memory').val(data.memory);
             }
             if(data.memory != 0){
-                $('#disk').val(data.disk);
+                $('#diskSize').val(data.disk);
             }
         });
     });
 
-    if(typeof imageID == 'undefined' || !imageID) $('#os').change();
+    if(typeof image == 'undefined' || !image) $('#os').change();
 })

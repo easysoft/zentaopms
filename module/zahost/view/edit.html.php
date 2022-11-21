@@ -35,11 +35,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->zahost->IP;?></th>
-            <td><?php echo html::input('address', $host->address, "class='form-control' disabled");?></td>
+            <td><?php echo html::input('extranet', $host->extranet, "class='form-control' disabled");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->zahost->cpu;?></th>
-            <td><?php echo html::select('cpu', $config->zahost->cpuCoreList, $host->cpu, "class='form-control chosen'");?></td>
+            <th><?php echo $lang->zahost->cpuCores;?></th>
+            <td><?php echo html::select('cpuCores', $config->zahost->cpuCoreList, $host->cpuCores, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zahost->memory;?></th>

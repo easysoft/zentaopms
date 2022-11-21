@@ -11,10 +11,6 @@ $lang->zahost->deleteAction   = 'Delete Host';
 $lang->zahost->byQuery        = 'Search';
 $lang->zahost->all            = 'All';
 $lang->zahost->browseNode     = 'ExecutionNode Browse';
-$lang->zahost->browseTemplate = 'Template Browse';
-$lang->zahost->createTemplate = 'Create Template';
-$lang->zahost->editTemplate   = 'Edit Template';
-$lang->zahost->deleteTemplate = 'Delete Template';
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'Extranet Address';
@@ -33,9 +29,9 @@ $lang->zahost->editedDate   = 'EditedDate';
 $lang->zahost->registerDate = 'RegisterDate';
 
 $lang->zahost->memorySize = $lang->zahost->memory;
-$lang->zahost->cpuCoreNum = $lang->zahost->cpu         ;
+$lang->zahost->cpuCoreNum = $lang->zahost->cpuCores         ;
 $lang->zahost->osType     = 'Os Version';
-$lang->zahost->osCategory = 'System';
+$lang->zahost->os         = 'System';
 $lang->zahost->osVersion  = 'Os Version No';
 $lang->zahost->osLang     = 'Language';
 $lang->zahost->imageName  = 'Image File';
@@ -74,11 +70,8 @@ $lang->zahost->image->common     = 'Image';
 $lang->zahost->image->name       = 'Name';
 $lang->zahost->image->desc       = 'Description';
 $lang->zahost->image->memory     = $lang->zahost->memory;
-$lang->zahost->image->diskSize   = $lang->zahost->diskSize;
-$lang->zahost->image->osType     = $lang->zahost->osType;
-$lang->zahost->image->osCategory = $lang->zahost->osCategory;
-$lang->zahost->image->osVersion  = $lang->zahost->osVersion;
-$lang->zahost->image->osLang     = $lang->zahost->osLang;
+$lang->zahost->image->disk       = $lang->zahost->diskSize;
+$lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
 
 $lang->zahost->image->statusList['created']    = 'Created';
@@ -93,7 +86,6 @@ $lang->zahost->langList['zh_tw'] = 'Traditional Chinese';
 $lang->zahost->langList['en_us'] = 'American English';
 
 $lang->zahost->empty         = 'No Host';
-$lang->zahost->templateEmpty = 'No Template';
 
 $lang->zahost->statusList['ready']  = 'Ready';
 $lang->zahost->statusList['online'] = 'Online';
@@ -108,7 +100,6 @@ $lang->zahost->zaHostType                 = 'Type';
 $lang->zahost->zaHostTypeList['physical'] = 'Physical';
 
 $lang->zahost->confirmDelete           = 'Do you want to delete this host?';
-$lang->zahost->confirmDeleteVMTemplate = 'Do you want to delete this VM template？';
 
 $lang->zahost->notice = new stdclass();
 $lang->zahost->notice->ip              = '『%s』incorrect format!';

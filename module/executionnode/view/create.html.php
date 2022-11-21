@@ -22,7 +22,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->executionnode->hostName;?></th>
-            <td><?php echo html::select('hostID', $hostPairs, '', "class='form-control chosen'")?></td>
+            <td><?php echo html::select('parent', $hostPairs, '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
             <th class='w-120px'><?php echo $lang->executionnode->name;?></th>
@@ -31,11 +31,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->executionnode->image;?></th>
-            <td id="template"><?php echo html::select('imageID', '', '', "class='form-control chosen'")?></td>
+            <td id="template"><?php echo html::select('image', '', '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->cpu;?></th>
-            <td><?php echo html::select('cpu', $config->executionnode->os->cpu, '', "class='form-control chosen'")?></td>
+            <th><?php echo $lang->executionnode->cpuCores;?></th>
+            <td><?php echo html::select('cpuCores', $config->executionnode->os->cpuCores, '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->executionnode->memory;?></th>
@@ -47,10 +47,10 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->disk;?></th>
+            <th><?php echo $lang->executionnode->diskSize;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::input('disk', '', "class='form-control'");?>
+                <?php echo html::input('diskSize', '', "class='form-control'");?>
                 <span class='input-group-addon fix-border fix-padding' id='unit'>
                   <?php echo $lang->zahost->unitList['GB'];?>
                 </span>
@@ -58,8 +58,8 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->os;?></th>
-            <td><?php echo html::input('os', '', "class='form-control' readonly='readonly'")?></td>
+            <th><?php echo $lang->executionnode->osName;?></th>
+            <td><?php echo html::input('osName', '', "class='form-control' readonly='readonly'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->executionnode->desc ?></th>

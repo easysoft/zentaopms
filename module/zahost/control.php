@@ -263,23 +263,6 @@ class zahost extends control
     }
 
     /**
-     * Check IP format and generate secret.
-     *
-     * @param  string $IP
-     * @access public
-     * @return void
-     */
-    public function ajaxCheckaddress($IP)
-    {
-        if(!validater::checkIP($IP)) return $this->send(array('result' => 'fail', 'message' => array('address' => array(sprintf($this->lang->zahost->notice->ip, $this->lang->zahost->address)))));
-
-        $secret = md5(time());
-        $registerCommand = sprintf($this->lang->zahost->notice->registerCommand, $this->server->server_addr, $this->server->server_port, $IP, $secret);
-
-        return $this->send(array('result' => 'success', 'message' => '', 'data' => array('registerCommand' => $registerCommand, 'secret' => $secret)));
-    }
-
-    /**
      * Get image list by ajax.
      *
      * @param  int    $hostID
@@ -320,7 +303,7 @@ class zahost extends control
      */
     public function ajaxGetServiceStatus($hostID)
     {
-        $host      = $this->zahost->getById($hostID);
+        $host          = $this->zahost->getById($hostID);
         $serviceStatus = $this->zahost->getServiceStatus($host);
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));

@@ -183,7 +183,7 @@ class executionnode extends control
     {
         $templatePairs = $this->loadModel('zahost')->getImagePairs($hostID);
 
-        return print(html::select('imageID', $templatePairs, '', "class='form-control chosen'"));
+        return print(html::select('image', $templatePairs, '', "class='form-control chosen'"));
     }
 
     /**
@@ -196,10 +196,6 @@ class executionnode extends control
     public function ajaxGetImage($imageID)
     {
         $template = $this->loadModel('zahost')->getImageByID($imageID);
-        if($template)
-        {
-            $template->os = $template->osCategory;
-        }
         return print(json_encode($template));
     }
 }

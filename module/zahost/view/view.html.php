@@ -42,7 +42,7 @@
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->address;?>:</div>
+                <div class="col-4 text-right"><?php echo $lang->zahost->extranet;?>:</div>
                 <div class="col-8"><?php echo $zahost->address;?></div>
               </div>
             </div>

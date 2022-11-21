@@ -34,12 +34,12 @@
             <td><?php echo html::input('name', '', "class='form-control'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->zahost->IP;?></th>
-            <td><?php echo html::input('address', '', "class='form-control'");?></td>
+            <th><?php echo $lang->zahost->extranet;?></th>
+            <td><?php echo html::input('extranet', '', "class='form-control'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->zahost->cpu;?></th>
-            <td><?php echo html::select('cpu', $config->zahost->cpuCoreList, '2', "class='form-control chosen'");?></td>
+            <th><?php echo $lang->zahost->cpuCores;?></th>
+            <td><?php echo html::select('cpuCores', $config->zahost->cpuCoreList, '2', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zahost->memory;?></th>

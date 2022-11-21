@@ -94,7 +94,7 @@ class zahostModel extends model
      */
     public function getImageByID($imageID)
     {
-        return $this->dao->select('*')->from(TABLE_IMAGE)->where('deleted')->eq(0)->andWhere('id')->eq($imageID)->fetch();
+        return $this->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
     }
 
     /**
@@ -108,8 +108,7 @@ class zahostModel extends model
     public function getImageByNameAndHostID($imageName, $hostID)
     {
         return $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('deleted')->eq(0)
-            ->andWhere('hostID')->eq($hostID)
+            ->where('host')->eq($hostID)
             ->andWhere('name')->eq($imageName)->fetch();
     }
 
@@ -125,7 +124,7 @@ class zahostModel extends model
         $imageList = json_decode(file_get_contents($this->config->zahost->imageListUrl));
 
         $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('hostID')->eq($hostID)
+            ->where('host')->eq($hostID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('name');
@@ -144,7 +143,7 @@ class zahostModel extends model
                 $image->status = $downloadedImage->status;
             }
 
-            $image->hostID = $hostID;
+            $image->host = $hostID;
         }
 
         return $imageList;
@@ -165,10 +164,9 @@ class zahostModel extends model
         $imageData = new stdclass;
         foreach($imageList  as $item) if($item->name == $imageName) $imageData = $item;
 
-        $imageData->hostID = $hostID;
+        $imageData->host = $hostID;
         $imageData->status = 'created';
-        $imageData->osCategory = $imageData->os;
-        unset($imageData->os);
+        $imageData->os = $imageData->os;
 
         $this->dao->insert(TABLE_IMAGE)->data($imageData, 'desc')->autoCheck()->exec();
         if(dao::isError()) return false;
@@ -188,8 +186,8 @@ class zahostModel extends model
      */
     public function downloadImage($image)
     {
-        $host   = $this->getById($image->hostID);
-        $apiUrl = 'http://' . $host->address . ':' . $this->config->zahost->defaultPort . '/api/v1/download/add';
+        $host   = $this->getById($image->host);
+        $apiUrl = 'http://' . $host->extranet . ':' . $this->config->zahost->defaultPort . '/api/v1/download/add';
 
         $apiParams['md5']  = $image->md5;
         $apiParams['url']  = $image->address;
@@ -218,8 +216,8 @@ class zahostModel extends model
      */
     public function queryDownloadImageStatus($image)
     {
-        $host   = $this->getById($image->hostID);
-        $apiUrl = 'http://' . $host->address . ':' . $this->config->zahost->defaultPort . '/api/v1/task/getStatus';
+        $host   = $this->getById($image->host);
+        $apiUrl = 'http://' . $host->extranet . ':' . $this->config->zahost->defaultPort . '/api/v1/task/getStatus';
 
         $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
         if(!$result or $result->code != 'success') return $image->status;
@@ -242,7 +240,6 @@ class zahostModel extends model
                 $image->status = $status;
 
                 $this->dao->update(TABLE_IMAGE)
-                    ->set('osCategory')->eq($image->os)
                     ->set('status')->eq($status)
                     ->set('path')->eq($currentTask->path)
                     ->where('id')->eq($image->id)->exec();
@@ -263,8 +260,8 @@ class zahostModel extends model
      */
     public function downloadImageStatus($image)
     {
-        $host      = $this->getById($image->hostID);
-        $statusApi = 'http://' . $host->address . '/api/v1/task/status';
+        $host      = $this->getById($image->host);
+        $statusApi = 'http://' . $host->extranet . '/api/v1/task/status';
 
         $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array(), 'json'));
 
@@ -377,11 +374,11 @@ class zahostModel extends model
         if($host->deleted) return '';
 
         $menu   = '';
-        $params = "hostID=$host->hostID";
+        $params = "hostID=$host->id";
 
         $menu .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
 
-        $params = "hostID=$host->assetID";
+        $params = "hostID=$host->id";
         $menu .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin');
 
         return $menu;
@@ -396,7 +393,7 @@ class zahostModel extends model
      */
     public function getImagePairs($hostID)
     {
-        return $this->dao->select('id,name')->from(TABLE_IMAGE)->where('hostID')->eq($hostID)->andWhere('status')->eq('completed')->fetchPairs();
+        return $this->dao->select('id,name')->from(TABLE_IMAGE)->where('host')->eq($hostID)->andWhere('status')->eq('completed')->fetchPairs();
     }
 
     /**
@@ -408,7 +405,7 @@ class zahostModel extends model
      */
     public function getServiceStatus($host)
     {
-        $result = json_decode(commonModel::http("http://{$host->address}:8086/api/v1/service/check", json_encode(array("services" => "all"))));
+        $result = json_decode(commonModel::http("http://{$host->extranet}:8086/api/v1/service/check", json_encode(array("services" => "all"))));
         if(empty($result) || $result->code != 'success')
         {
             $result = new stdclass;
