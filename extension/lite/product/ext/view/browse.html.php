@@ -39,6 +39,7 @@ js::set('rawModule', $this->app->rawModule);
 js::set('productType', $this->app->tab == 'product' ? $product->type : '');
 js::set('projectHasProduct', $projectHasProduct);
 js::set('URAndSR', $this->config->URAndSR);
+js::set('vision',  $this->config->vision);
 ?>
 <style>
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
