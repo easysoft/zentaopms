@@ -250,7 +250,7 @@ class execution extends control
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->setModule    = true;
+        $this->view->setModule    = !$execution->multiple ? false : true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch   = $showBranch;
         $this->view->projectName  = $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name;
