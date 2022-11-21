@@ -255,7 +255,7 @@ class productplanModel extends model
 
         $plans     = $this->reorder4Children($plans);
         $planPairs = array();
-        $mainplan  = array();
+        $mainPlan  = array();
         $this->app->loadLang('bug');
         $this->app->loadLang('branch');
         foreach($plans as $plan)
@@ -267,11 +267,11 @@ class productplanModel extends model
             if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
             if(empty($plan->branchName))
             {
-                $mainplan = $planPairs[$plan->id];
+                $mainPlan = $planPairs[$plan->id];
                 unset($planPairs[$plan->id]);
             }
         }
-        array_splice($planPairs, 0, 0, $mainplan);
+        array_splice($planPairs, 0, 0, $mainPlan);
         return array('' => '', 'ditto' => $this->lang->bug->ditto) + $planPairs;
     }
 
