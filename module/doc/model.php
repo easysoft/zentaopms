@@ -91,7 +91,7 @@ class docModel extends model
 
         $products   = $this->loadModel('product')->getPairs();
         $projects   = $this->loadModel('project')->getPairsByProgram();
-        $executions = $this->loadModel('execution')->getPairs();
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
         $waterfalls = array();
         if(empty($objectID) and ($type == 'all' or $type == 'execution'))
         {
