@@ -710,19 +710,19 @@ class baseDAO
      */
     public function getColumns($stmt)
     {
-        /* 如果是SQL查询语句，先执行查询获得 PDO stmt. */
-        /* If it is SQL string, query to get PDO stmt. */
+        /* 如果$stmt是SQL查询语句，先执行查询获得 PDO stmt. */
+        /* If $stmt is a SQL string, query to get PDO stmt. */
         if(is_string($stmt)) $stmt = $this->query($stmt);
 
-        $fields = array();
         try
         {
+            $columns = array();
             for($columnIndex = 0; $columnIndex < $stmt->columnCount(); $columnIndex++)
             {
-                $fields[] = $stmt->getColumnMeta($columnIndex);
+                $columns[] = $stmt->getColumnMeta($columnIndex);
             }
 
-            return $fields;
+            return $columns;
         }
         catch (PDOException $e)
         {
