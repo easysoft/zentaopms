@@ -41,7 +41,8 @@ class executionnodemodel extends model
 
         /* Batch check fields. */
         $this->lang->vm = $this->lang->executionnode;
-        $this->dao->update(TABLE_EXECUTIONNODE)->data($data)
+        $data->type = 'node';
+        $this->dao->update(TABLE_ZAHOST)->data($data)
             ->batchCheck($this->config->executionnode->create->requiredFields, 'notempty')
             ->check('name', 'unique');
         if(dao::isError()) return false;
@@ -56,7 +57,7 @@ class executionnodemodel extends model
         $image = $this->getImageByID($data->imageID);
 
         /* Get host info. */
-        $host = $this->getHostByID($data->hostID);
+        $host = $this->getHostByID($data->parent);
 
         /* Gen mac address */
         $mac = $this->genmac();
@@ -87,7 +88,7 @@ class executionnodemodel extends model
 
         /* Prepare create execution node data. */
         $data->imageID     = $data->imageID;
-        $data->hostID      = $host->id;
+        $data->parent      = $host->id;
         $data->mac         = $mac;
         $data->status      = static::STATUS_RUNNING;
         $data->createdBy   = $this->app->user->account;
@@ -95,7 +96,7 @@ class executionnodemodel extends model
         $data->vnc     = (int)$result->data->vnc;
 
         /* Save execution node. */
-        $this->dao->insert(TABLE_EXECUTIONNODE)->data($data)->autoCheck()->exec();
+        $this->dao->insert(TABLE_ZAHOST)->data($data)->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $nodeID = $this->dao->lastInsertID();
@@ -115,7 +116,7 @@ class executionnodemodel extends model
     public function handleVM($id, $type)
     {
         $node = $this->getVMByID($id);
-        $host = $this->getHostByID($node->hostID);
+        $host = $this->getHostByID($node->parent);
 
         /* Prepare create params. */
         $agnetUrl = 'http://' . $host->address . ':' . $this->config->executionnode->defaultPort;
@@ -131,7 +132,7 @@ class executionnodemodel extends model
         if($type != 'reboot')
         {
             $status = $type == 'suspend' ? 'suspend' : 'running';
-            $this->dao->update(TABLE_EXECUTIONNODE)->set('status')->eq($status)->where('id')->eq($id)->exec();
+            $this->dao->update(TABLE_ZAHOST)->set('status')->eq($status)->where('id')->eq($id)->exec();
         }
 
         $this->loadModel('action')->create('executionnode', $id, ucfirst($type));
@@ -148,7 +149,7 @@ class executionnodemodel extends model
     public function destroy($id)
     {
         $node = $this->getVMByID($id);
-        $host = $this->getHostByID($node->hostID);
+        $host = $this->getHostByID($node->parent);
 
         $req = array( 'name' => $node->name );
 
@@ -165,7 +166,7 @@ class executionnodemodel extends model
         }
 
         /* delete execution node. */
-        $this->dao->update(TABLE_EXECUTIONNODE)
+        $this->dao->update(TABLE_ZAHOST)
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
             ->exec();
@@ -222,7 +223,7 @@ class executionnodemodel extends model
      */
     public function update($id, $data)
     {
-        $this->dao->update(TABLE_EXECUTIONNODE)->data($data)
+        $this->dao->update(TABLE_ZAHOST)->data($data)
             ->where('id')->eq($id)
             ->exec();
     }
@@ -238,7 +239,7 @@ class executionnodemodel extends model
     public function setVmName($vm, $id)
     {
         $name = sprintf('test-%s-%s-%s-%s-%d', $vm['osCategory'], $vm['osType'], $vm['osArch'], $vm['osLang'], $id);
-        $this->dao->update(TABLE_EXECUTIONNODE)->data(array('name' => $name))
+        $this->dao->update(TABLE_ZAHOST)->data(array('name' => $name))
             ->where('id')->eq($id)
             ->exec();
         $vm['name'] = $name;
@@ -282,17 +283,17 @@ class executionnodemodel extends model
             $query = str_replace('`status`', 't1.`status`', $query);
             $query = str_replace('`osCategory`', 't1.`osCategory`', $query);
             $query = str_replace('`osType`', 't1.`osType`', $query);
-            $query = str_replace('`hostID`', 't1.`hostID`', $query);
+            $query = str_replace('`parent`', 't1.`parent`', $query);
             $query = str_replace('`osVersion`', 't4.`osVersion`', $query);
         }
 
         $orderBy = str_replace('osVersion', 't4.osVersion', $orderBy);
 
-        return $this->dao->select('t1.*, t3.name as hostName, t2.address as hostIP,t4.osVersion')->from(TABLE_EXECUTIONNODE)->alias('t1')
-            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.hostID = t2.id')
-            ->leftJoin(TABLE_ASSET)->alias('t3')->on('t3.id = t2.assetID')
-            ->leftJoin(TABLE_IMAGE)->alias('t4')->on('t4.id = t1.imageID')
+        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as hostIP,t3.osVersion')->from(TABLE_ZAHOST)->alias('t1')
+            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
+            ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.imageID')
             ->where('t1.deleted')->eq(0)
+            ->andWhere("t1.type")->eq("node")
             ->andWhere("(t1.createdBy = '{$this->app->user->account}')")
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
@@ -301,7 +302,7 @@ class executionnodemodel extends model
     }
 
     /**
-     * Get node list by hostid.
+     * Get node list by hostID.
      *
      * @param  string $browseType
      * @param  int    $param
@@ -311,9 +312,9 @@ class executionnodemodel extends model
      */
     public function getListByHost($hostID, $orderBy = 'id_desc')
     {
-        return $this->dao->select('id, name, vnc, cpu, memory, disk, os, status')->from(TABLE_EXECUTIONNODE)
+        return $this->dao->select('id, name, vnc, cpu, memory, disk, os, status')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)
-            ->andWhere("hostID")->eq($hostID)
+            ->andWhere("parent")->eq($hostID)
             ->orderBy($orderBy)
             ->fetchAll();
     }
@@ -420,10 +421,9 @@ class executionnodemodel extends model
      */
     public function getVMByID($id)
     {
-        return $this->dao->select('t1.*, t3.name as hostName, t2.address as ip,t4.osVersion')->from(TABLE_EXECUTIONNODE)->alias('t1')
-            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.hostID = t2.id')
-            ->leftJoin(TABLE_ASSET)->alias('t3')->on('t3.id = t2.assetID')
-            ->leftJoin(TABLE_IMAGE)->alias('t4')->on('t4.id = t1.imageID')
+        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t3.osVersion')->from(TABLE_ZAHOST)->alias('t1')
+            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
+            ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.imageID')
             ->where('t1.id')->eq($id)
             ->fetch();
     }
@@ -436,8 +436,9 @@ class executionnodemodel extends model
      */
     public function getVMByMac($mac)
     {
-        return $this->dao->select('*')->from(TABLE_EXECUTIONNODE)
+        return $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
+            ->andWhere("type")->eq('node')
             ->fetch();
     }
 
@@ -479,9 +480,9 @@ class executionnodemodel extends model
     public function getVncUrl($vmID)
     {
         $vm = $this->getVMByID($vmID);
-        if(empty($vm) or empty($vm->hostID) or empty($vm->vnc)) return false;
+        if(empty($vm) or empty($vm->parent) or empty($vm->vnc)) return false;
 
-        $host = $this->getHostByID($vm->hostID);
+        $host = $this->getHostByID($vm->parent);
         if(empty($host)) return false;
 
         $agnetUrl = 'http://' . $host->address . ':' . $host->agentPort . static::KVM_TOKEN_PATH;

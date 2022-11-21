@@ -42,14 +42,14 @@
       <thead>
         <tr>
           <?php $vars = "browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
-          <th class='c-id'>         <?php common::printOrderLink('t1.id',           $orderBy, $vars, $lang->idAB);?></th>
+          <th class='c-id'>         <?php common::printOrderLink('id',              $orderBy, $vars, $lang->idAB);?></th>
           <th class='c-name'>       <?php common::printOrderLink('name',            $orderBy, $vars, $lang->zahost->name);?></th>
-          <th class='c-type'>       <?php common::printOrderLink('t1.type',         $orderBy, $vars, $lang->zahost->type);?></th>
-          <th class='c-ip'>         <?php common::printOrderLink('address',        $orderBy, $vars, $lang->zahost->IP);?></th>
-          <th class='c-cpu'>        <?php common::printOrderLink('cpu',            $orderBy, $vars, $lang->zahost->cpu         );?></th>
+          <th class='c-type'>       <?php common::printOrderLink('type',            $orderBy, $vars, $lang->zahost->type);?></th>
+          <th class='c-ip'>         <?php common::printOrderLink('address',         $orderBy, $vars, $lang->zahost->IP);?></th>
+          <th class='c-cpu'>        <?php common::printOrderLink('cpu',             $orderBy, $vars, $lang->zahost->cpu         );?></th>
           <th class='c-memory'>     <?php common::printOrderLink('memory',          $orderBy, $vars, $lang->zahost->memory);?></th>
-          <th class='c-disk'>       <?php common::printOrderLink('disk',            $orderBy, $vars, $lang->zahost->disk);?></th>
-          <th class='c-software'>   <?php common::printOrderLink('virtualSoftware', $orderBy, $vars, $lang->zahost->virtualSoftware);?></th>
+          <th class='c-diskSize'>       <?php common::printOrderLink('diskSize',            $orderBy, $vars, $lang->zahost->diskSize);?></th>
+          <th class='c-software'>   <?php common::printOrderLink('vsoft', $orderBy, $vars, $lang->zahost->vsoft);?></th>
           <th class='c-status'>     <?php common::printOrderLink('t2.status',       $orderBy, $vars, $lang->zahost->status);?></th>
           <th class='c-datetime'>   <?php common::printOrderLink('registerDate',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
@@ -64,8 +64,8 @@
           <td><?php echo $host->address;?></td>
           <td><?php echo $host->cpu;?></td>
           <td><?php echo $host->memory . $lang->zahost->unitList['GB'];?></td>
-          <td><?php echo $host->disk . zget($lang->zahost->unitList, $host->unit);?></td>
-          <td><?php echo $host->virtualSoftware;?></td>
+          <td><?php echo $host->diskSize . zget($lang->zahost->unitList, $host->unit);?></td>
+          <td><?php echo $host->vsoft;?></td>
           <td><?php echo zget($lang->host->statusList, $host->status);?></td>
           <td><?php echo helper::isZeroDate($host->registerDate) ? '' : $host->registerDate;?></td>
           <td class='c-actions'>

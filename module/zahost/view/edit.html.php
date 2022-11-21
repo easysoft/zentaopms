@@ -21,8 +21,8 @@
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->zahost->virtualSoftware;?></th>
-            <td><?php echo html::select('virtualSoftware', $lang->zahost->softwareList, $host->virtualSoftware, "class='form-control chosen'");?></td>
+            <th><?php echo $lang->zahost->vsoft;?></th>
+            <td><?php echo html::select('vsoft', $lang->zahost->softwareList, $host->vsoft, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zahost->zaHostType;?></th>
@@ -38,7 +38,7 @@
             <td><?php echo html::input('address', $host->address, "class='form-control' disabled");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->zahost->cpu         ;?></th>
+            <th><?php echo $lang->zahost->cpu;?></th>
             <td><?php echo html::select('cpu', $config->zahost->cpuCoreList, $host->cpu, "class='form-control chosen'");?></td>
           </tr>
           <tr>
@@ -51,10 +51,10 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->zahost->disk;?></th>
+            <th><?php echo $lang->zahost->diskSize;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::input('disk', $host->disk, "class='form-control'");?>
+                <?php echo html::input('diskSize', $host->diskSize, "class='form-control'");?>
                 <span class='input-group-addon fix-border fix-padding' id='unit'>
                   <?php echo $lang->zahost->unitList['GB'];?>
                 </span>

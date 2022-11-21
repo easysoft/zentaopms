@@ -23,7 +23,7 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $browseType = strtolower($browseType);
         $param      = (int)$param;
@@ -67,7 +67,7 @@ class zahost extends control
 
         $this->view->zahost     = $this->zahost->getById($id);
         $this->view->orderBy    = $orderBy;
-        $this->view->nodeList   = $this->loadModel("executionnode")->getListByHost($this->view->zahost->hostID, $orderBy);
+        $this->view->nodeList   = $this->loadModel("executionnode")->getListByHost($this->view->zahost->parent, $orderBy);
         $this->view->actions    = $this->loadModel('action')->getList('zahost', $id);
         $this->display();
     }
@@ -140,7 +140,7 @@ class zahost extends control
             return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "assetID=$assetID&confirm=yes")));
         }
 
-        $this->dao->update(TABLE_ASSET)->set('deleted')->eq(1)->where('id')->eq($assetID)->exec();
+        $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($assetID)->exec();
         $this->loadModel('action')->create('zahost', $assetID, 'deleted');
 
         /* if ajax request, send result. */
@@ -260,140 +260,6 @@ class zahost extends control
         }
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $statusList));
-    }
-
-    /**
-     * Create template.
-     *
-     * @access public
-     * @return void
-     */
-    public function createTemplate($hostID)
-    {
-        $host = $this->zahost->getById($hostID);
-        if($_POST)
-        {
-            $this->zahost->createTemplate($host);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browseTemplate', "id={$hostID}")));
-        }
-
-        $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
-        $this->view->host         = $host;
-        $this->display();
-    }
-
-    /**
-     * Edit template
-     *
-     * @param  int    $templateID
-     * @access public
-     * @return void
-     */
-    public function editTemplate($templateID)
-    {
-        $template = $this->zahost->getTemplateById($templateID);
-        if($_POST)
-        {
-            $changes = $this->zahost->updateTemplate($templateID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('vmtemplate', $templateID, 'Edited');
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            }
-
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browsetemplate', "hostID={$template->hostID}")));
-        }
-
-        $this->view->title        = $this->lang->zahost->edit;
-        $this->view->template     = $template;
-        $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
-        $this->display();
-    }
-
-    /**
-     * Delete host.
-     *
-     * @param  int    $templateID
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function deleteTemplate($templateID, $confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->zahost->confirmDeleteVMTemplate, inlink('deleteTemplate', "templateID=$templateID&confirm=yes")));
-        }
-
-        $template = $this->zahost->getTemplateById($templateID);
-        $this->dao->delete()->from(TABLE_VMTEMPLATE)->where('id')->eq($templateID)->exec();
-        $this->loadModel('action')->create('vmtemplate', $templateID, 'deleted');
-
-        /* if ajax request, send result. */
-        if($this->server->ajax)
-        {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            $this->send($response);
-        }
-
-        if(isonlybody()) return print(js::reload('parent.parent'));
-        return print(js::locate($this->createLink('zahost', 'browsetemplate', "hostID={$template->hostID}"), 'parent'));
-    }
-
-    /*
-     * Browse VM template.
-     *
-     * @param  int      $hostID
-     * @param  string   $browseType
-     * @param  string   $param
-     * @param  string   $orderBy
-     * @param  int      $recTotal
-     * @param  int      $recPerPage
-     * @param  int      $pageID
-     * @access public
-     * @return void
-     */
-    public function browseTemplate($hostID, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {
-        $browseType = strtolower($browseType);
-        $this->app->loadClass('pager', true);
-
-        $queryID      = ($browseType == 'bysearch')  ? (int)$param : 0;
-        $pager        = pager::init($recTotal, $recPerPage, $pageID);
-        $templateList = $this->zahost->getVMTemplateList($hostID, $browseType, $queryID, $orderBy, $pager);
-
-        /* Build the search form. */
-        $actionURL = $this->createLink('zahost', 'browseTemplate', "hostID=$hostID&browseType=bySearch&queryID=myQueryID");
-        $this->config->vmTemplate->search['actionURL'] = $actionURL;
-        $this->config->vmTemplate->search['queryID']   = $queryID;
-        $this->config->vmTemplate->search['onMenuBar'] = 'no';
-        $this->loadModel('search')->setSearchParams($this->config->vmTemplate->search);
-
-        $this->view->title        = $this->lang->zahost->vmTemplate->common;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->templateList = $templateList;
-        $this->view->hostID       = $hostID;
-        $this->view->pager        = $pager;
-        $this->view->param        = $param;
-        $this->view->orderBy      = $orderBy;
-        $this->view->browseType   = $browseType;
-
-        $this->display();
     }
 
     /**

@@ -42,15 +42,15 @@ class hostHeartbeatEntry extends baseEntry
         }
 
         $this->dao = $this->loadModel('common')->dao;
-        $assetID = $this->dao->select('assetID')->from(TABLE_HOST)
+        $assetID = $this->dao->select('id')->from(TABLE_HOST)
             ->beginIF($secret)->where('secret')->eq($secret)->fi()
-            ->beginIF(!$secret)->where('token')->eq($token)
-            ->andWhere('expiredDate')->gt($now)->fi()
+            ->beginIF(!$secret)->where('tokenSN')->eq($token)
+            ->andWhere('tokenTime')->gt($now)->fi()
             ->fetch('assetID');
         if(!$assetID) return $this->sendError(400, 'Secret error.');
 
         $this->dao->update(TABLE_HOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
-        $this->dao->update(TABLE_ASSET)->set('registerDate')->eq($now)->where('id')->eq($assetID)->exec();
+        $this->dao->update(TABLE_HOST)->set('heartbeat')->eq($now)->where('id')->eq($assetID)->exec();
 
         if(!$secret) return $this->sendSuccess(200, 'success');
 

@@ -254,12 +254,7 @@ define('TABLE_TESTRUN',       '`' . $config->db->prefix . 'testrun`');
 define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testresult`');
 define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 define('TABLE_ZAHOST',        '`' . $config->db->prefix . 'host`');
-define('TABLE_EXECUTIONNODE', '`' . $config->db->prefix . 'executionnode`');
 define('TABLE_IMAGE',         '`' . $config->db->prefix . 'image`');
-
-if(!defined('TABLE_ASSET')) define('TABLE_ASSET', '`' . $config->db->prefix . 'asset`');
-if(!defined('TABLE_VMTEMPLATE')) define('TABLE_VMTEMPLATE', '`' . $config->db->prefix . 'vmtemplate`');
-if(!defined('TABLE_VM')) define('TABLE_VM', '`' . $config->db->prefix . 'vm`');
 
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
@@ -402,7 +397,6 @@ $config->objectTables['stage']         = TABLE_STAGE;
 $config->objectTables['apistruct']     = TABLE_APISTRUCT;
 $config->objectTables['repo']          = TABLE_REPO;
 $config->objectTables['zahost']        = TABLE_ZAHOST;
-$config->objectTables['executionnode'] = TABLE_EXECUTIONNODE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';
