@@ -282,7 +282,7 @@ class buildModel extends model
                     $inBranch = false;
                     foreach(explode(',', trim($release->branch, ',')) as $branchID)
                     {
-                        if(empty($branchID)) continue;
+                        if($branchID === '') continue;
                         if(strpos(",{$branchs},", ",{$branchID},") !== false) $inBranch = true;
                     }
                     if(!$inBranch) continue;
@@ -294,6 +294,7 @@ class buildModel extends model
                 $builds[$release->date][$release->shadow] = $releaseName;
                 foreach(explode(',', trim($release->build, ',')) as $buildID)
                 {
+                    if(!isset($allBuilds[$buildID])) continue;
                     $build = $allBuilds[$buildID];
                     unset($builds[$build->date][$buildID]);
                 }
