@@ -5115,7 +5115,6 @@ class executionModel extends model
         $_POST = array();
         $_POST['project']     = $projectID;
         $_POST['name']        = $project->name;
-        $_POST['code']        = $project->code;
         $_POST['begin']       = $project->begin;
         $_POST['end']         = $project->end;
         $_POST['status']      = 'wait';
@@ -5129,6 +5128,7 @@ class executionModel extends model
         $_POST['RD']          = '';
         $_POST['multiple']    = '0';
         $_POST['hasProduct']  = $project->hasProduct;
+        if($project->code) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)
