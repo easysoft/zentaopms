@@ -26,7 +26,7 @@
             url:      manualUrl || $helpLink.attr('href'),
             external: true,
             text:     manualText || $helpLink.text(),
-            appUrl:  config.webRoot + '#app=help'
+            appUrl:   config.webRoot + '#app=help'
         };
         var $menuMainNav = $('#menuMainNav').empty();
         window.appsMenuItems.forEach(function(item)
@@ -564,7 +564,7 @@
         /* The magic number "111" is the space between dropdown trigger
            btn and the bottom of screen */
         var listStyle = {maxHeight: 'initial', top: moreMenuHeight > 111 ? 111 - moreMenuHeight : ''};
-        if($list[0].getBoundingClientRect)
+        if($list[0] && $list[0].getBoundingClientRect)
         {
             var btnBounding = $list.prev('a')[0].getBoundingClientRect();
             if(btnBounding.height)
@@ -803,7 +803,7 @@ $(function()
     {
         var val        = $searchQuery.val();
         var searchType = changeSearchObject();
-        if(val !== null && val !== "")
+        if(val)
         {
             var isQuickGo = !reg.test(val);
             $dropmenu.toggleClass('show-quick-go', isQuickGo);

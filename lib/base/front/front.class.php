@@ -111,6 +111,15 @@ class baseHTML
         if(strlen(trim($title)) == 0) $title = $href;
         $newline = $newline ? "\n" : '';
 
+        /* Make sure href is opened in the same tab. */
+        if(strpos($misc, 'data-app=') === false)
+        {
+            global $app, $lang;
+            $module  = $app->rawModule;
+            $dataApp = (isset($lang->navGroup->$module) and $lang->navGroup->$module != $app->tab) ? "data-app='{$app->tab}'" : '';
+            $misc   .= ' ' . $dataApp;
+        }
+
         return "<a href='$href' $misc>$title</a>$newline";
     }
 
@@ -500,6 +509,14 @@ class baseHTML
         $currentMethod = $app->getMethodName();
         $gobackList    = isset($_COOKIE['goback']) ? json_decode($_COOKIE['goback'], true) : array();
         $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
+
+        /* Make sure href is opened in the same tab. */
+        if(strpos($misc, 'data-app=') === false)
+        {
+            $module  = $app->rawModule;
+            $dataApp = (isset($lang->navGroup->$module) and $lang->navGroup->$module != $app->tab) ? "data-app='{$app->tab}'" : '';
+            $misc   .= ' ' . $dataApp;
+        }
 
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
         if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", strtolower($refererLink)))

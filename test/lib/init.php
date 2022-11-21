@@ -60,6 +60,7 @@ $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
 /* init testDB. */
 include $testPath . 'config/config.php';
 include $testPath. 'lib/db.class.php';
+include $testPath. 'lib/yaml.class.php';
 include $testPath. 'lib/rest.php';
 $db   = new db();
 

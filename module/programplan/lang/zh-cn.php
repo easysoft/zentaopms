@@ -62,6 +62,8 @@ $lang->programplan->hideCriticalPath = '隐藏关键路径';
 $lang->programplan->showCriticalPath = '显示关键路径';
 $lang->programplan->delay            = '是否延期';
 $lang->programplan->delayDays        = '延期天数';
+$lang->programplan->settingGantt     = '设置甘特图';
+$lang->programplan->viewSetting      = '显示设置';
 
 $lang->programplan->errorBegin       = '阶段的开始时间不能小于所属项目的开始时间%s';
 $lang->programplan->errorEnd         = '阶段的结束时间不能大于所属项目的结束时间%s';
@@ -100,7 +102,7 @@ $lang->programplan->ganttCustom['delay']        = '是否延期';
 $lang->programplan->ganttCustom['delayDays']    = '延期天数';
 
 $lang->programplan->error                  = new stdclass();
-$lang->programplan->error->percentNumber   = '"工作量比例"必须为数字';
+$lang->programplan->error->percentNumber   = '"工作量占比"必须为数字';
 $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"计划开始时间"';
 $lang->programplan->error->percentOver     = '工作量占比累计不应当超过100%';
 $lang->programplan->error->createdTask     = '已分解任务，不可添加子阶段';

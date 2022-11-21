@@ -15,8 +15,8 @@ function loadBranches(productID)
         oldBranch = productGroups[productID]['branches'];
     }
 
-    executionID = currentTab == 'execution' ? executionID : $('#execution').val();
-    $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + executionID), function(data)
+    projectID = currentTab == 'execution' ? executionID : projectID;
+    $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + projectID), function(data)
     {
         if(data)
         {
@@ -25,3 +25,5 @@ function loadBranches(productID)
         }
     });
 }
+
+function loadBranch() {return false;}

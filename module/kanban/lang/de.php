@@ -85,7 +85,7 @@ $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = 'Build';
 $lang->kanban->importTicket        = 'Ticket';
 $lang->kanban->allKanban           = 'All Kanban';
-$lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
+$lang->kanban->allProjects         = 'All Projects';
 $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
@@ -128,7 +128,7 @@ $lang->kanban->cardCountTip        = 'Please enter the number of cards';
 
 $lang->kanban->selectedKanban  = 'Please select Kanban';
 $lang->kanban->selectedProduct = 'Please select Product';
-$lang->kanban->selectedProject = 'Please select ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Project');
+$lang->kanban->selectedProject = 'Please select Project';
 $lang->kanban->selectedLane    = 'Target Lane';
 
 $lang->kanban->aclGroup['open']    = 'Open';

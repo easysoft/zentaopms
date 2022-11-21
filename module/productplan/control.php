@@ -40,7 +40,14 @@ class productplan extends control
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
+        if($product->shadow)
+        {
+            $projectID = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetch('project');
+            $this->loadModel('project')->setMenu($projectID);
+        }
+
         $this->view->product         = $product;
+        $this->view->projectID       = isset($projectID) ? $projectID : 0;
         $this->view->branch          = $branch;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
@@ -52,6 +59,7 @@ class productplan extends control
      *
      * @param string $productID
      * @param int    $branchID
+     * @param int    $parent
      *
      * @access public
      * @return void
@@ -72,7 +80,7 @@ class productplan extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refreshPlan()'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('productplan', 'browse', "productID=$productID&branch=$branchID&browseType=all")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branchID&browseType=all")));
         }
 
         $this->commonAction($productID, $branchID);
@@ -139,7 +147,7 @@ class productplan extends control
             }
             $message = $this->executeHooks($planID);
             if($message) $this->lang->saveSuccess = $message;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "planID=$planID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($this->app->rawModule, 'view', "planID=$planID")));
         }
 
         $plan = $this->productplan->getByID($planID);
@@ -292,7 +300,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'undone', $queryID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = '', $browseType = 'undone', $queryID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $branchID = $branch === '' ? 'all' : $branch;
         if(!$branch) $branch = 0;
@@ -316,7 +324,7 @@ class productplan extends control
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$queryID : 0;
-        $actionURL = $this->createLink('productplan', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $actionURL = $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         $this->productplan->buildSearchForm($queryID, $actionURL, $product);
 
         if($viewType == 'kanban')
@@ -362,7 +370,7 @@ class productplan extends control
         $this->view->orderBy          = $orderBy;
         $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
         $this->view->pager            = $pager;
-        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch, '', $status = 'closed');
+        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch, '', $status = 'closed', 'multiple');
         $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
         $this->view->queryID          = $queryID;
         $this->display();
@@ -619,7 +627,7 @@ class productplan extends control
      */
     public function ajaxGetProjects($productID, $branch = 0)
     {
-        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch, '', $status = 'closed');
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch, '', $status = 'closed', 'multiple');
         echo html::select('project', $projects, key($projects), "class='form-control chosen'");
     }
 
@@ -795,7 +803,6 @@ class productplan extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
-        if($this->config->systemMode == 'classic') unset($this->config->bug->search['fields']['project']);
         $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
@@ -804,7 +811,7 @@ class productplan extends control
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getBuildPairs($productID, $branch = 'all', $params = '');
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($plan->product, 'bug', 0, $plan->branch);
-        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $this->product->getProjectPairsByProduct($productID, $plan->branch);
+        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairsByProduct($productID, $plan->branch);
 
         unset($this->config->bug->search['fields']['product']);
         if($this->session->currentProductType == 'normal')

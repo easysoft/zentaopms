@@ -49,9 +49,7 @@ $lang->custom->switch               = "切換";
 $lang->custom->oneUnit              = "一個{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "請先設置{$lang->hourCommon}轉換為%s的換算係數";
 $lang->custom->superReviewers       = "超級評審人";
-
-if($config->systemMode == 'new') $lang->custom->execution = '執行';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
+$lang->custom->execution            = '執行';
 
 $lang->custom->unitList['efficiency'] = '工時/';
 $lang->custom->unitList['manhour']    = '人時/';
@@ -81,7 +79,7 @@ $lang->custom->numberError = '區間必須大於零';
 $lang->custom->closedExecution = '已關閉' . $lang->custom->execution;
 $lang->custom->closedProduct   = '已關閉' . $lang->productCommon;
 
-if($config->systemMode == 'new') $lang->custom->object['project']   = '項目';
+$lang->custom->object['project']   = '項目';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['story']     = $lang->SRCommon;
@@ -202,17 +200,9 @@ $lang->custom->weekendList[2] = '雙休';
 $lang->custom->weekendList[1] = '單休';
 
 global $config;
-if($config->systemMode == 'classic')
-{
-    $lang->custom->sprintConceptList[0] = '產品 - 項目';
-    $lang->custom->sprintConceptList[1] = '產品 - 迭代';
-    $lang->custom->sprintConceptList[2] = '產品 - 衝刺';
-}
-else
-{
-    $lang->custom->sprintConceptList[0] = '項目 - 產品 - 迭代';
-    $lang->custom->sprintConceptList[1] = '項目 - 產品 - 衝刺';
-}
+$lang->custom->sprintConceptList[0] = '產品 - 項目';
+$lang->custom->sprintConceptList[1] = '產品 - 迭代';
+$lang->custom->sprintConceptList[2] = '產品 - 衝刺';
 
 $lang->custom->workingList['full'] = '完整研發管理工具';
 

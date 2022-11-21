@@ -225,6 +225,8 @@ $lang->action->desc->reopen               = '$date, reopened by <strong>$actor</
 $lang->action->desc->merged               = '$date, merged by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->submitreview         = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->ganttmove            = '$date, sort by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the sprints of the project from the $extra.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -393,6 +395,10 @@ $lang->action->label->tolib                 = 'Importé';
 $lang->action->label->updatetolib           = 'MàJ';
 $lang->action->label->ganttmove             = 'sorted';
 $lang->action->label->submitreview          = 'submitted';
+$lang->action->label->switchtolight         = 'switch from ALM mode to light mode';
+$lang->action->label->linkedrepo            = 'Linked Code Repo';
+$lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
+$lang->action->label->unlinkproduct         = 'Unlinked Product';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
@@ -412,12 +418,13 @@ $lang->action->dynamicAction->program['activated'] = 'Activate Program';
 $lang->action->dynamicAction->program['deleted']   = 'Delete Program';
 $lang->action->dynamicAction->program['closed']    = 'Close Program';
 
-$lang->action->dynamicAction->project['opened']    = 'Créer ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['edited']    = 'Editer ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['started']   = 'Commencer ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['suspended'] = 'Suspendre ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['activated'] = 'Activer ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['closed']    = 'Fermer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['opened']        = 'Créer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['edited']        = 'Editer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['started']       = 'Commencer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['suspended']     = 'Suspendre ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['activated']     = 'Activer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['closed']        = 'Fermer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['switchtolight'] = 'Switch Mode';
 
 $lang->action->dynamicAction->product['opened']    = 'Créer ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = 'Editer ' . $lang->productCommon;
@@ -681,14 +688,7 @@ $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
 $lang->action->label->program     = "Program|program|pgmproduct|programID=%s";
 $lang->action->label->project     = "Project|program|index|projectID=%s";
-if($config->systemMode == 'new')
-{
-    $lang->action->label->execution = "Execution|execution|task|executionID=%s";
-}
-else
-{
-    $lang->action->label->execution = "Execution|execution|task|executionID=%s";
-}
+$lang->action->label->execution   = "Execution|execution|task|executionID=%s";
 
 $lang->action->label->task         = 'Tâche|task|view|taskID=%s';
 $lang->action->label->build        = 'Build|build|view|buildID=%s';
@@ -904,3 +904,5 @@ $lang->action->desc->deletemr                     = '$date, <strong>$actor</stro
 $lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged <a href="$extra">code</a>.';
 $lang->action->desc->approve                      = '$date, <strong>$actor</strong> approved.';
 $lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
+$lang->action->desc->linkedrepo                   = '$date, <strong>$actor</strong> linked repo $extra';
+$lang->action->desc->unlinkedrepo                 = '$date, <strong>$actor</strong> unlinked repo $extra';

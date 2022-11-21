@@ -28,7 +28,7 @@
         <th class='text-left'><?php echo $lang->story->title;?></th>
         <th class='c-status'><?php echo $lang->story->status;?></th>
         <th class='c-reason'><?php echo $lang->story->closedReason;?></th>
-        <th class='w-p40'><?php echo $lang->story->comment;?></th>
+        <th class='w-p30'><?php echo $lang->story->comment;?></th>
       </tr>
     </thead>
       <?php foreach($stories as $storyID => $story):?>
@@ -43,7 +43,7 @@
               <td class='pd-0'>
                 <?php echo html::select("closedReasons[$storyID]", $reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");?>
               </td>
-              <td class='pd-0 w-p40' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
+              <td class='pd-0 w-p60 text-left' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
                 <?php echo html::select("duplicateStoryIDList[$storyID]", array('' => '') + $productStoryList[$story->product][$story->branch], $story->duplicateStory ? $story->duplicateStory : '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?>
               </td>
               <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($story->closedReason != 'subdivided') echo "style='display:none'";?>>

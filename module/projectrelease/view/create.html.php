@@ -26,25 +26,32 @@
             <th><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' required");?></td>
             <td>
+              <?php if(!$product->shadow):?>
               <div id='markerBox' class='checkbox-primary'>
                 <input id='marker' name='marker' value='1' type='checkbox' />
                 <label for='marker'><?php echo $lang->release->marker;?></label>
               </div>
+              <?php endif;?>
               <?php if($lastRelease) echo '(' . $lang->release->last . ': ' . $lastRelease->name . ')';?>
             </td>
           </tr>
+          <?php if($product->shadow):?>
+          <?php echo html::hidden('product', $product->id);?>
+          <?php else:?>
           <tr>
-            <th><?php echo $lang->release->build;?></th>
-            <td><?php echo html::select('build', $builds, '', "onchange='showProducts(this.value)' class='form-control chosen'");?></td><td></td>
-          </tr>
-          <tr id='productBox'>
             <th><?php echo $lang->release->product;?></th>
             <td>
               <div class='input-group'>
-              <?php echo html::select('product', $products, '', "onchange='loadBranches(this.value)' class='form-control chosen'");?>
-              <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "class='form-control chosen control-branch'");?>
+              <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value)' class='form-control chosen'");?>
+              <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBuilds()' class='form-control chosen control-branch'");?>
               </div>
             </td>
+            <td></td>
+          </tr>
+          <?php endif;?>
+          <tr>
+            <th><?php echo $lang->release->build;?></th>
+            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple");?></td>
             <td></td>
           </tr>
           <tr>

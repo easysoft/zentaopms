@@ -33,7 +33,6 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-pri' title=<?php echo $lang->pri;?>><?php echo $lang->priAB;?></th>
-          <th><?php echo $lang->bug->product;?></th>
           <th><?php echo $lang->bug->title;?></th>
           <th class='c-type'><?php echo $lang->bug->type;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
@@ -52,7 +51,6 @@
             <?php printf('%03d', $bug2Link->id);?>
           </td>
           <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri)?>'><?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri)?></span></td>
-          <td class='c-name'><?php echo html::a($this->createLink('product', 'browse', "productID={$bug2Link->product}&branch={$bug2Link->branch}"), $products[$bug2Link->product], '_blank');?></td>
           <td class='c-name' title='<?php echo $bug2Link->title;?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug2Link->id"), $bug2Link->title, '_blank');?></td>
           <td><?php echo zget($lang->bug->typeList, $bug2Link->type);?></td>
           <td><?php echo zget($users, $bug2Link->openedBy);?></td>
@@ -83,7 +81,7 @@ $(function()
         var output = '';
         $('#linkBugsForm').find('tr.checked').each(function(){
             var bugID    = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
-            var bugTitle = "#" + bugID + ' ' + $(this).find('td').eq(3).attr('title');
+            var bugTitle = "#" + bugID + ' ' + $(this).find('td').eq(2).attr('title');
             var checkbox = "<li title='" + bugTitle + "'><div class='checkbox-primary'><input type='checkbox' checked='checked' name='linkBug[]' " + "value=" + bugID + " /><label class='linkBugTitle'>" + bugTitle + "</label></div></li>";
 
             output += checkbox;

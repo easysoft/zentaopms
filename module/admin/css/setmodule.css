@@ -1,0 +1,3 @@
+.group-item {display: block; width: 140px; float: left; font-size: 14px;}
+.group-item .checkbox-inline label {padding-left: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.table-condensed td, .table-condensed th {padding: 10px;}

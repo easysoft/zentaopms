@@ -48,6 +48,7 @@ class task extends control
         $executions  = $this->execution->getPairs(0, 'all', isset($execution) ? (!common::canModify('execution', $execution) ? 'noclosed' : '') : 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $execution   = $this->execution->getById($executionID);
+
         $this->execution->setMenu($executionID);
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
@@ -61,6 +62,7 @@ class task extends control
 
         $task = new stdClass();
         $task->module     = $moduleID;
+        $task->mode       = '';
         $task->assignedTo = '';
         $task->name       = '';
         $task->story      = $storyID;
@@ -116,9 +118,6 @@ class task extends control
             $this->view->regionPairs = $regionPairs;
             $this->view->lanePairs   = $lanePairs;
         }
-
-        /* Set menu. */
-        $this->execution->setMenu($execution->id);
 
         if(!empty($_POST))
         {
@@ -297,7 +296,7 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
-        $executionAll = array();
+        $executions = array();
         if(!empty($projectID))
         {
             $executionList = $this->execution->getByProject($projectID, 'all', 0, true);
@@ -318,11 +317,14 @@ class task extends control
                 foreach($executionList as $key => $val)
                 {
                     $values = str_replace($replace, $project->name, $val);
-                    $executionAll[$key] = $values;
+                    $executions[$key] = $values;
                 }
             }
+            else
+            {
+                $executions = $executionList;
+            }
         }
-        $executions = $this->config->systemMode == 'classic' ? $executions : $executionAll;
 
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         /* Stories that can be used to create test tasks. */
@@ -385,7 +387,7 @@ class task extends control
         {
             $taskLink = $this->createLink('my', 'work', 'mode=task');
         }
-        elseif($this->app->tab == 'project')
+        elseif($this->app->tab == 'project' and $execution->multiple)
         {
             $taskLink = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
         }
@@ -467,7 +469,14 @@ class task extends control
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        $project = $this->project->getByID($execution->project);
+        if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+
+        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field)
+        {
+            if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
+            $customFields[$field] = $this->lang->task->$field;
+        }
 
         $showFields = $this->config->task->custom->batchCreateFields;
         if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
@@ -624,8 +633,6 @@ class task extends control
             }
         }
 
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
-
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
@@ -660,7 +667,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $executions;
+        $this->view->executions    = $executions;
         $this->display();
     }
 
@@ -769,7 +776,21 @@ class task extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        if(isset($execution))
+        {
+            $project = $this->project->getByID($execution->project);
+            if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
+
+            foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
+            {
+                if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
+                $customFields[$field] = $this->lang->task->$field;
+            }
+        }
+        else
+        {
+            foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        }
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
@@ -996,9 +1017,6 @@ class task extends control
 
         /* Update action. */
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
-
-        /* Set menu. */
-        if($this->app->tab == 'execution') $this->execution->setMenu($execution->id);
 
         $this->executeHooks($taskID);
 
@@ -2066,6 +2084,9 @@ class task extends control
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
         }
+
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if(!$execution->multiple) unset($this->lang->task->report->charts['tasksPerExecution']);
 
         $executions = $this->execution->getPairs();
 

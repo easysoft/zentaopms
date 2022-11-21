@@ -26,20 +26,30 @@
 <?php endif;?>
   <form class='form-ajax' method='post'>
     <div class='modal-body'>
-      <div class="form-group">
-        <label><?php echo $lang->custom->conceptQuestions['overview']?></label>
-        <div class="checkbox"> <?php echo html::radio('sprintConcept', $lang->custom->sprintConceptList, zget($this->config->custom, 'sprintConcept', '0'))?> </div>
-      </div>
-      <div class="form-group">
-        <label><?php echo $lang->custom->conceptQuestions['URAndSR']?></label>
-        <div class="checkbox"> <?php echo html::radio('URAndSR', $lang->custom->conceptOptions->URAndSR, zget($this->config->custom, 'URAndSR', '0'));?></div>
-      </div>
-      <?php if($this->config->edition != 'max'):?>
-      <div class="form-group">
-        <label id='storypoint'><?php echo $lang->custom->conceptQuestions['storypoint'];?></label>
-        <div class="checkbox"> <?php echo html::radio('hourPoint', $lang->custom->conceptOptions->hourPoint, zget($this->config->custom, 'hourPoint'))?> </div>
-      </div>
-      <?php endif;?>
+      <ol>
+        <li>
+          <div class="form-group">
+            <label><?php echo $lang->custom->conceptQuestions['overview']?></label>
+            <div class="checkbox"> <?php echo html::radio('sprintConcept', $lang->custom->sprintConceptList, zget($this->config->custom, 'sprintConcept', '0'))?> </div>
+          </div>
+        </li>
+        <?php if(strpos(",{$this->config->disabledFeatures},", ',productUR,') === false):?>
+        <li>
+          <div class="form-group">
+            <label><?php echo $lang->custom->conceptQuestions['URAndSR']?></label>
+            <div class="checkbox"> <?php echo html::radio('URAndSR', $lang->custom->conceptOptions->URAndSR, zget($this->config->custom, 'URAndSR', '0'));?></div>
+          </div>
+        </li>
+        <?php endif;?>
+        <?php if($this->config->edition != 'max'):?>
+        <li>
+          <div class="form-group">
+            <label id='storypoint'><?php echo $lang->custom->conceptQuestions['storypoint'];?></label>
+            <div class="checkbox"> <?php echo html::radio('hourPoint', $lang->custom->conceptOptions->hourPoint, zget($this->config->custom, 'hourPoint'))?> </div>
+          </div>
+        </li>
+        <?php endif;?>
+      </ol>
       <div class="form-group">
         <label></label>
         <div><?php echo html::submitButton();?></div>

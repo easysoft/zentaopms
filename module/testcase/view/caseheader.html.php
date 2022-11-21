@@ -1,8 +1,8 @@
 <?php js::set('flow', $config->global->flow);?>
-<?php $isProjectApp  = $this->app->tab == 'project'?>
-<?php $currentModule = $isProjectApp ? 'project'  : 'testcase';?>
-<?php $currentMethod = $isProjectApp ? 'testcase' : 'browse';?>
-<?php $projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';?>
+<?php $isProjectApp       = $this->app->tab == 'project'?>
+<?php $currentModule      = $isProjectApp ? 'project'  : 'testcase';?>
+<?php $currentMethod      = $isProjectApp ? 'testcase' : 'browse';?>
+<?php $projectParam       = $isProjectApp ? "projectID={$this->session->project}&" : '';?>
 <?php if(common::checkNotCN()):?>
 <style> .btn-toolbar>.btn {margin-right: 3px !important;}</style>
 <?php endif;?>

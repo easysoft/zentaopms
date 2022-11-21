@@ -158,7 +158,6 @@ $lang->story->design         = '相關設計';
 $lang->story->case           = '相關用例';
 $lang->story->bug            = '相關Bug';
 $lang->story->repoCommit     = '相關提交';
-$lang->story->noRequirement  = '無需求';
 $lang->story->one            = '一個';
 $lang->story->field          = '同步的欄位';
 $lang->story->completeRate   = '完成率';
@@ -261,7 +260,7 @@ $lang->story->lblClose             = "關閉{$lang->SRCommon}";
 $lang->story->lblTBC               = '任務Bug用例';
 
 $lang->story->checkAffection       = '影響範圍';
-$lang->story->affectedProjects     = $config->systemMode == 'new' ? "影響的{$lang->project->common}或{$lang->execution->common}" : "影響的{$lang->project->common}";
+$lang->story->affectedProjects     = "影響的{$lang->project->common}或{$lang->execution->common}";
 $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 
@@ -276,7 +275,7 @@ $lang->story->mustChooseResult      = '必須選擇評審意見';
 $lang->story->mustChoosePreVersion  = '必須選擇回溯的版本';
 $lang->story->noStory               = "暫時沒有{$lang->SRCommon}。";
 $lang->story->noRequirement         = "暫時沒有{$lang->URCommon}。";
-$lang->story->ignoreChangeStage     = "{$lang->SRCommon} %s 為草稿狀態或已關閉狀態，沒有修改其階段。";
+$lang->story->ignoreChangeStage     = "{$lang->SRCommon} %s 為草稿狀態或已關閉狀態，本次操作已被過濾。";
 $lang->story->cannotDeleteParent    = "不能刪除父{$lang->SRCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所屬產品會將其下的子{$lang->SRCommon}也移動到所選產品下。";
 $lang->story->changeTips            = '該軟件需求關聯的用戶需求有變更，點擊“不變更”忽略此條變更，點擊“變更”來進行該軟件需求的變更。';

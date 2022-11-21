@@ -68,13 +68,14 @@
               <th><?php echo $lang->design->type;?></th>
               <td><?php echo zget($lang->design->typeList, $design->type);?></td>
             </tr>
-            <tr>
+            <tr <?php if(empty($project->hasProduct)) echo "class='hide'";?>>
               <th><?php echo $lang->design->product;?></th>
               <td><?php echo $design->productName;?></td>
             </tr>
             <tr>
               <th><?php echo $lang->design->story;?></th>
-              <td><?php echo $design->story ? html::a($this->createLink('story', 'view', "id=$design->story"), zget($stories, $design->story)) : '';?></td>
+              <?php $moduleName = empty($project->hasProduct) ? 'projectstory' : 'story';?>
+              <td><?php echo $design->story ? html::a($this->createLink($moduleName, 'view', "id=$design->story"), zget($stories, $design->story)) : '';?></td>
             </tr>
             <tr>
               <th><?php echo $lang->design->submission;?></th>

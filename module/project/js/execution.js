@@ -116,6 +116,11 @@ $(function()
             return (checkedTotal ? checkedSummary : pageSummary).replace('%total%', $rows.length).replace('%wait%', checkedWait).replace('%doing%', checkedDoing);
         }
     })
+
+    if(project.division && project.hasProduct && $('#executionList thead th.table-nest-title').width() < 240)
+    {
+        $('#executionList thead th.table-nest-title').width(240)
+    }
 })
 
 window.addEventListener('scroll', this.handleScroll)

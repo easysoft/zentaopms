@@ -71,6 +71,7 @@ $filter->mr           = new stdclass();
 $filter->ci           = new stdclass();
 $filter->tree         = new stdclass();
 $filter->productplan  = new stdclass();
+$filter->projectplan  = new stdclass();
 $filter->kanban       = new stdclass();
 
 $filter->index->index             = new stdclass();
@@ -173,6 +174,7 @@ $filter->ci->checkCompileStatus   = new stdclass();
 $filter->execution->export        = new stdclass();
 $filter->tree->browse             = new stdclass();
 $filter->productplan->browse      = new stdclass();
+$filter->projectplan->browse      = new stdclass();
 $filter->kanban->space            = new stdclass();
 $filter->execution->kanban        = new stdclass();
 $filter->execution->all           = new stdclass();
@@ -300,6 +302,7 @@ $filter->story->track->cookie['preBranch']          = 'reg::word';
 $filter->story->track->cookie['preProductID']       = 'int';
 
 $filter->productplan->browse->cookie['viewType'] = 'code';
+$filter->projectplan->browse->cookie['viewType'] = 'code';
 
 $filter->task->create->cookie['lastTaskModule']         = 'int';
 $filter->task->export->cookie['checkedItem']            = 'reg::checked';

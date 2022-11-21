@@ -24,12 +24,12 @@ js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('systemMode'             , $config->systemMode);
 js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
 js::set('tab'                    , $this->app->tab);
 js::set('bugID'                  , $bug->id);
 js::set('bugBranch'              , $bug->branch);
 js::set('isClosedBug'            , $bug->status == 'closed');
+js::set('projectExecutionPairs'  , $projectExecutionPairs);
 if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
 if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
@@ -96,7 +96,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
               <tbody>
-                <tr>
+                <tr<?php if($product->shadow) echo " class='hide'";?>>
                   <th class='w-80px'><?php echo $lang->bug->product;?></th>
                   <td>
                     <div class='input-group'>
@@ -106,7 +106,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   </td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->bug->module;?></th>
+                  <th class='w-80px'><?php echo $lang->bug->module;?></th>
                   <td>
                     <div class='input-group' id='moduleIdBox'>
                     <?php
@@ -123,7 +123,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                     </div>
                   </td>
                 </tr>
-                <tr>
+                <tr class='<?php if(!($product->shadow and zget($project, 'model') == 'scrum' and $project->multiple)) echo 'hide'?>'>
                   <th><?php echo $lang->bug->productplan;?></th>
                   <td>
                     <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen'");?></span>
@@ -204,16 +204,15 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
             </table>
           </div>
           <div class='detail'>
-            <div class='detail-title'><?php echo $config->systemMode == 'class' ? $lang->bug->legendExecStoryTask : $lang->bug->legendPRJExecStoryTask;?></div>
+            <div class='detail-title'><?php echo !empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask;?></div>
             <table class='table table-form'>
               <tbody>
-                <?php if($config->systemMode == 'new'):?>
                 <tr>
                   <th class='w-85px'><?php echo $lang->bug->project;?></th>
                   <td><span id='projectBox'><?php echo html::select('project', $projects, $bug->project, "class='form-control chosen' onchange='loadProductExecutions($bug->product, this.value)'");?></span></td>
                 </tr>
-                <?php endif;?>
-                <tr>
+                <?php $executionClass = ($execution and !$execution->multiple) ? 'hide' : '';?>
+                <tr class="executionBox <?php echo $executionClass;?>" >
                   <th class='w-85px' id='executionBox'><?php echo $lang->bug->execution;?></th>
                   <td><span id='executionIdBox'><?php echo html::select('execution', $executions, $bug->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></span></td>
                 </tr>

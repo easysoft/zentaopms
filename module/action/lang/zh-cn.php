@@ -99,7 +99,7 @@ $lang->action->objectTypes['productplan']      = '计划';
 $lang->action->objectTypes['release']          = '发布';
 $lang->action->objectTypes['program']          = '项目集';
 $lang->action->objectTypes['project']          = '项目';
-$lang->action->objectTypes['execution']        = $config->systemMode == 'new' ? '执行' : $lang->executionCommon;
+$lang->action->objectTypes['execution']        = '执行';
 $lang->action->objectTypes['task']             = '任务';
 $lang->action->objectTypes['build']            = '版本';
 $lang->action->objectTypes['job']              = '构建';
@@ -225,6 +225,8 @@ $lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
 $lang->action->desc->submitreview         = '$date, 由 <strong>$actor</strong> 提交评审。' . "\n";
 $lang->action->desc->ganttmove            = '$date, 由 <strong>$actor</strong> 排序。' . "\n";
+$lang->action->desc->switchtolight        = '$date, 由 <strong>'. $lang->admin->system .'</strong> 从全生命周期管理模式切换为轻量管理模式。' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, 系统判断由于迭代所属项目与$extra取消关联，同步将迭代与$extra取消关联。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -393,6 +395,10 @@ $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
 $lang->action->label->ganttmove             = '排序了';
 $lang->action->label->submitreview          = '提交了评审';
+$lang->action->label->switchtolight         = '从全生命周期管理模式切换为轻量管理模式';
+$lang->action->label->linkedrepo            = '关联代码库到';
+$lang->action->label->unlinkedrepo          = '取消了项目与代码库的关联';
+$lang->action->label->unlinkproduct         = '取消了与产品的关联';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -412,12 +418,13 @@ $lang->action->dynamicAction->program['activated'] = '激活项目集';
 $lang->action->dynamicAction->program['deleted']   = '删除项目集';
 $lang->action->dynamicAction->program['closed']    = '关闭项目集';
 
-$lang->action->dynamicAction->project['opened']    = '创建项目';
-$lang->action->dynamicAction->project['edited']    = '编辑项目';
-$lang->action->dynamicAction->project['started']   = '开始项目';
-$lang->action->dynamicAction->project['suspended'] = '延期项目';
-$lang->action->dynamicAction->project['activated'] = '激活项目';
-$lang->action->dynamicAction->project['closed']    = '关闭项目';
+$lang->action->dynamicAction->project['opened']        = '创建项目';
+$lang->action->dynamicAction->project['edited']        = '编辑项目';
+$lang->action->dynamicAction->project['started']       = '开始项目';
+$lang->action->dynamicAction->project['suspended']     = '延期项目';
+$lang->action->dynamicAction->project['activated']     = '激活项目';
+$lang->action->dynamicAction->project['closed']        = '关闭项目';
+$lang->action->dynamicAction->project['switchtolight'] = '切换模式';
 
 $lang->action->dynamicAction->product['opened']    = '创建' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = '编辑' . $lang->productCommon;
@@ -681,14 +688,7 @@ $lang->action->label->release     = '发布|release|view|productID=%s';
 $lang->action->label->story       = "{$lang->SRCommon}|story|view|storyID=%s";
 $lang->action->label->program     = "项目集|program|product|programID=%s";
 $lang->action->label->project     = "项目|project|index|projectID=%s";
-if($config->systemMode == 'new')
-{
-    $lang->action->label->execution = "执行|execution|task|executionID=%s";
-}
-else
-{
-    $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
-}
+$lang->action->label->execution   = "执行|execution|task|executionID=%s";
 
 $lang->action->label->task         = '任务|task|view|taskID=%s';
 $lang->action->label->build        = '版本|build|view|buildID=%s';
@@ -904,3 +904,5 @@ $lang->action->desc->deletemr                     = '$date, 由 <strong>$actor</
 $lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合并了 <a href="$extra">代码</a>。';
 $lang->action->desc->approve                      = '$date, 由 <strong>$actor</strong> 审核通过。';
 $lang->action->desc->reject                       = '$date, 由 <strong>$actor</strong> 拒绝。';
+$lang->action->desc->linkedrepo                   = '$date, 由 <strong>$actor</strong> 关联代码库 $extra';
+$lang->action->desc->unlinkedrepo                 = '$date, 由 <strong>$actor</strong> 取消了项目与代码库 $extra 的关联';

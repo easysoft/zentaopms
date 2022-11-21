@@ -20,6 +20,7 @@ $(function()
             $(select).trigger("chosen:updated");
         }
     });
+    $('.pager a.pager-item').attr('data-app', app);
 })
 
 /**

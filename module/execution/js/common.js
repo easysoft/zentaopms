@@ -124,13 +124,15 @@ function loadBranches(product)
 {
     if($('#productsBox .input-group:last select:first').val() != 0)
     {
-        var length = $('#productsBox .input-group').size();
-        $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html().replace('required', '') + '</div>');
-        if($('#productsBox .input-group:last select').size() >= 2) $('#productsBox .input-group:last select:last').remove();
-        $('#productsBox .input-group:last .chosen-container').remove();
-        $('#productsBox .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
-        $('#productsBox .input-group:last .chosen').chosen();
-
+        if(model !== 'waterfall')
+        {
+            var length = $('#productsBox .input-group').size();
+            $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html().replace('required', '') + '</div>');
+            if($('#productsBox .input-group:last select').size() >= 2) $('#productsBox .input-group:last select:last').remove();
+            $('#productsBox .input-group:last .chosen-container').remove();
+            $('#productsBox .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
+            $('#productsBox .input-group:last .chosen').chosen();
+        }
         adjustProductBoxMargin();
     }
 
@@ -138,11 +140,11 @@ function loadBranches(product)
     if($inputgroup.find('select').size() >= 2) $inputgroup.removeClass('has-branch').find('select:last').remove();
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
-    var projectID = (typeof(systemMode) != 'undefined' && systemMode == 'new') ? $('#project').val() : 0;
+    var projectID = $('#project').val();
     if(typeof(projectID) == 'undefined') projectID = 0;
 
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=&param=active&projectID=" + projectID + "&withMainBranch=true"), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active&projectID=" + projectID + "&withMainBranch=true"), function(data)
     {
         if(data)
         {

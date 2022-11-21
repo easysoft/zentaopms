@@ -66,32 +66,57 @@ class programModel extends model
      * @param  string       $mode       all|assign
      * @param  string       $status     all|noclosed
      * @param  string|array $append
+     * @param  string|int   $shadow     all | 0 | 1
+     * @param  bool         $withProgram
      * @access public
      * @return array
      */
-    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all', $append = '')
+    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all', $append = '', $shadow = 0, $withProgram = false)
     {
         /* Get the top programID. */
         if($programID)
         {
             $program   = $this->getByID($programID);
-            $path      = explode(',', $program->path);
-            $path      = array_filter($path);
+            $path      = array_filter(explode(',', $program->path));
             $programID = current($path);
         }
 
         /* When mode equals assign and programID equals 0, you can query the standalone product. */
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
+        $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
 
-        $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
+        $dao = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($shadow !== 'all')->andWhere('shadow')->eq((int)$shadow)->fi()
             ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($views)->fi()
-            ->fetchPairs('id', 'name');
-        return $products;
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($views)->fi();
+
+        if(!$withProgram) return $dao->fetchPairs('id', 'name');
+
+        $products = $dao->orderBy('program,order')->fetchGroup('program');
+        $productPrograms = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
+
+        /* Put products of current program first.*/
+        if(!empty($products) and $mode != 'assign' and $programID)
+        {
+            $currentProgramProducts = $products[$programID];
+            unset($products[$programID]);
+            array_unshift($products, $currentProgramProducts);
+        }
+
+        $productPairs = array();
+        foreach($products as $programProducts)
+        {
+            foreach($programProducts as $product)
+            {
+                $programName = zget($productPrograms, $product->program, '') . '/';
+                $productPairs[$product->id] = $programName . $product->name;
+            }
+        }
+
+        return $productPairs;
     }
 
     /**
@@ -271,9 +296,8 @@ class programModel extends model
             ->fetchGroup('product');
 
         /* Get all products linked projects. */
-        $projectGroup = $this->dao->select('DISTINCT t1.product, t2.id, t2.name, t2.status, t2.end')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
+        $projectGroup = $this->dao->select('t1.product,t2.id,t2.name,t2.status,t2.end,t2.parent,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->in($productPairs)
             ->andWhere('t2.type')->eq('project')
@@ -296,6 +320,7 @@ class programModel extends model
             ->where('type')->in('sprint,stage,kanban')
             ->andWhere('status')->eq('doing')
             ->andWhere('deleted')->eq(0)
+            ->andWhere('multiple')->ne(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy('id_asc')
             ->fetchAll('project');
@@ -336,6 +361,7 @@ class programModel extends model
                 foreach($projects as $project)
                 {
                     if(helper::diffDate(helper::today(), $project->end) > 0) $project->delay = 1;
+                    if($this->config->systemMode == 'ALM' and !$this->config->program->showAllProjects and $project->parent != $product->program and strpos($project->path, ",{$product->program},") !== 0) continue;
 
                     $status    = $project->status == 'wait' ? 'wait' : 'doing';
                     $execution = zget($doingExecutions, $project->id, array());
@@ -569,9 +595,9 @@ class programModel extends model
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
+            ->beginIF($browseType == 'bysearch' and $query)->andWhere($query)->fi()
+            ->andWhere('t1.type')->eq('project')
+            ->beginIF($this->cookie->involved or $involved)->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone' or $browseType == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'review')
@@ -579,8 +605,7 @@ class programModel extends model
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->cookie->involved or $involved)
             ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t1.PM')->eq($this->app->user->account)
@@ -594,7 +619,7 @@ class programModel extends model
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        if($programTitle and $this->config->systemMode == 'new')
+        if($programTitle and $this->config->systemMode == 'ALM')
         {
             $programList = $this->getPairs();
             foreach($projectList as $id => $project)
@@ -607,7 +632,7 @@ class programModel extends model
 
                 $programName = isset($programList[$programID]) ? $programList[$programID] : '';
 
-                $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
+                if($programName) $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
             }
         }
         return $projectList;
@@ -1592,5 +1617,56 @@ class programModel extends model
             }
         }
         return $menu;
+    }
+
+    /**
+     * Create default program.
+     *
+     * @access public
+     * @return int
+     */
+    public function createDefaultProgram()
+    {
+        $defaultProgram = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
+        if($defaultProgram)
+        {
+            $program = $this->dao->select('id')->from(TABLE_PROGRAM)->where('id')->eq($defaultProgram)->andWhere('deleted')->eq(0)->fetch();
+            if($program) return $defaultProgram;
+        }
+
+        $program = $this->dao->select('id')->from(TABLE_PROGRAM)->where('name')->eq($this->lang->program->defaultProgram)->andWhere('deleted')->eq(0)->fetch();
+        if($program) return $program->id;
+
+        $account  = isset($this->app->user->account) ? $this->app->user->account : '';
+        $minBegin = $this->dao->select('min(begin) as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
+
+        $program = new stdclass();
+        $program->name          = $this->lang->program->defaultProgram;
+        $program->type          = 'program';
+        $program->budgetUnit    = 'CNY';
+        $program->status        = 'doing';
+        $program->auth          = 'extend';
+        $program->begin         = !empty($minBegin) ? $minBegin : helper::today();
+        $program->end           = LONG_TIME;
+        $program->openedBy      = $account;
+        $program->openedDate    = helper::now();
+        $program->openedVersion = $this->config->version;
+        $program->acl           = 'open';
+        $program->grade         = 1;
+        $program->vision        = 'rnd';
+
+        $this->app->loadLang('program');
+        $this->app->loadLang('project');
+        $this->lang->project->name = $this->lang->program->name;
+
+        $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
+        if(dao::isError()) return false;
+
+        $programID = $this->dao->lastInsertId();
+
+        $this->dao->update(TABLE_PROGRAM)->set('path')->eq(",{$programID},")->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
+        $this->loadModel('action')->create('program', $programID, 'openedbysystem');
+
+        return $programID;
     }
 }

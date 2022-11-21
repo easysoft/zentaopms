@@ -12,6 +12,8 @@ $(function()
         e.preventDefault();
     });
 
+    if($('#executionList thead th.c-name').width() < 260) $('#executionList thead th.c-name').width(260);
+
     $('#executionTableList').on('sort.sortable', function(e, data)
     {
         var list = '';

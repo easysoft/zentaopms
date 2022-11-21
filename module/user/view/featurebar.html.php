@@ -39,7 +39,7 @@
     $active = $methodName == 'testcase' ? ' btn-active-text' : '';
     common::printLink('user', 'testcase', "userID={$user->id}", $label, '', "class='btn btn-link $active testcaseTab'");
 
-    if($this->config->systemMode == 'new')
+    if($this->config->systemMode == 'ALM')
     {
         $label  = "<span class='text'>{$lang->user->execution}</span>";
         $active = $methodName == 'execution' ? ' btn-active-text' : '';

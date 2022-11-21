@@ -25,7 +25,7 @@
         echo html::a(inlink('build', "executionID=$executionID&type=$featureType"), $label, '',"class='btn btn-link $activeClass' data-app={$app->tab} id='$featureType'");
     }
     ?>
-    <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
+    <div class="input-control space w-150px <?php echo $hidden;?>"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
   </div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   <div class="btn-toolbar pull-right">
@@ -49,8 +49,8 @@
       <thead>
         <tr>
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
+          <th class="c-name w-200px text-left <?php echo $hidden;?>"><?php echo $lang->build->product;?></th>
           <th class="c-name text-left"><?php echo $lang->build->name;?></th>
-          <th class="c-name w-200px text-left"><?php echo $lang->build->product;?></th>
           <th class="c-url"><?php echo $lang->build->scmPath;?></th>
           <th class="c-url"><?php echo $lang->build->filePath;?></th>
           <th class="c-date"><?php echo $lang->build->date;?></th>
@@ -63,11 +63,11 @@
         <?php foreach($builds as $index => $build):?>
         <tr data-id="<?php echo $productID;?>">
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink('build', 'view', "buildID=$build->id"), sprintf('%03d', $build->id));?></td>
+          <td class="c-name text-left <?php echo $hidden;?>" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
           <td class="c-name">
             <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?>
           </td>
-          <td class="c-name text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
           <td class="c-url" title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
           <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
           <td class="c-date"><?php echo $build->date?></td>

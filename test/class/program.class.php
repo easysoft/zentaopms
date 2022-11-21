@@ -51,6 +51,19 @@ class programTest
     }
 
     /**
+     * Create default program.
+     *
+     * @access public
+     * @return void
+     */
+    public function createDefaultProgramTest()
+    {
+        $programID = $this->program->createDefaultProgram();
+
+        return $programID;
+    }
+
+    /**
      * Test get list.
      *
      * @param  mixed  $status

@@ -247,7 +247,7 @@ class productplanModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
             ->where('t1.product')->in($product)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== '' and $branch != 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.begin desc')
@@ -255,6 +255,8 @@ class productplanModel extends model
 
         $plans     = $this->reorder4Children($plans);
         $planPairs = array();
+        $mainPlan  = array();
+        $this->app->loadLang('bug');
         $this->app->loadLang('branch');
         foreach($plans as $plan)
         {
@@ -263,8 +265,14 @@ class productplanModel extends model
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
+            if(empty($plan->branchName))
+            {
+                $mainPlan = $planPairs[$plan->id];
+                unset($planPairs[$plan->id]);
+            }
         }
-        return array('' => '') + $planPairs;
+        array_splice($planPairs, 0, 0, $mainPlan);
+        return array('' => '', 'ditto' => $this->lang->bug->ditto) + $planPairs;
     }
 
     /**
@@ -531,22 +539,21 @@ class productplanModel extends model
             ->get();
 
         $parentPlan = $this->getByID($plan->parent);
-
+        $futureTime = $this->config->productplan->future;
 
         if($plan->parent > 0)
         {
-            if($parentPlan->begin !== $this->config->productplan->future)
+            if($parentPlan->begin !== $futureTime)
             {
                 if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
             }
-            if($parentPlan->end !== $this->config->productplan->future)
+            if($parentPlan->end !== $futureTime)
             {
-                if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+                if($plan->end !== $futureTime and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
-        elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
+        elseif($oldPlan->parent == -1 and ($plan->begin != $futureTime or $plan->end != $futureTime))
         {
-            $plan->parent = -1;
             $childPlans   = $this->getChildren($planID);
             $minBegin     = $plan->begin;
             $maxEnd       = $plan->end;
@@ -556,8 +563,8 @@ class productplanModel extends model
                 if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
                 if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
             }
-            if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $oldPlan->title, $plan->begin, $minBegin);
-            if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $oldPlan->title, $plan->end, $maxEnd);
+            if($minBegin < $plan->begin and $minBegin != $futureTime) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $oldPlan->title, $plan->begin, $minBegin);
+            if($maxEnd > $plan->end and $maxEnd != $futureTime) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $oldPlan->title, $plan->end, $maxEnd);
         }
 
         if(dao::isError()) return false;
@@ -647,7 +654,11 @@ class productplanModel extends model
         $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
 
         /* If the subplan is empty, update the plan. */
-        if(empty($childStatus)) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq(0)->where('id')->eq($parentID)->exec();
+        if(empty($childStatus))
+        {
+            $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq(0)->set('status')->eq('wait')->where('id')->eq($parentID)->exec();
+            return;
+        }
 
         if(count($childStatus) == 1 and isset($childStatus['wait']))
         {
@@ -1169,15 +1180,7 @@ class productplanModel extends model
 
             if($canClickExecution)
             {
-                $executionLink = $this->config->systemMode == 'new' ? '#projects' : helper::createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$plan->product");
-                if($this->config->systemMode == 'new')
-                {
-                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
-                }
-                else
-                {
-                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn' title='{$this->lang->productplan->createExecution}'");
-                }
+                $menu .= html::a('#projects', '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
             }
             elseif($canCreateExec)
             {
@@ -1191,7 +1194,7 @@ class productplanModel extends model
 
             if($canLinkStory and $plan->parent >= 0)
             {
-                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
+                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
             }
             elseif($canLinkStory)
             {
@@ -1200,17 +1203,17 @@ class productplanModel extends model
 
             if($canLinkBug and $plan->parent >= 0)
             {
-                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
+                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
             }
             elseif($canLinkBug)
             {
                 $menu .= "<button type='button' class='disabled btn'><i class='icon-bug' title='{$this->lang->productplan->linkBug}'></i></button>";
             }
 
-            $menu .= $this->buildMenu('productplan', 'edit', $params, $plan, $type);
+            $menu .= $this->buildMenu($this->app->rawModule, 'edit', $params, $plan, $type);
         }
 
-        $menu .= $this->buildMenu('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
+        $menu .= $this->buildMenu($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
 
         if($type == 'browse' and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
         {
@@ -1225,7 +1228,7 @@ class productplanModel extends model
             $menu .= $this->buildFlowMenu('productplan', $plan, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $editClickable   = $this->buildMenu('productplan', 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
+            $editClickable   = $this->buildMenu($this->app->rawModule, 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
             $deleteClickable = $this->buildMenu('productplan', 'delete', $params, $plan, $type, '', '', '', '', '', '', false);
             if($canEdit and $editClickable) $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
             if($canDelete and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");

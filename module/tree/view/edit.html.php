@@ -34,7 +34,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
     <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'>
         <?php if($showProduct):?>
-        <tr>
+        <tr class="<?php if($hiddenProduct) echo 'hidden';?>">
           <th class='thWidth'><?php echo $lang->tree->product;?></th>
           <td>
             <div class='input-group'>

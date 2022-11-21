@@ -12,8 +12,9 @@
 <?php js::set('confirmUnlinkStory', $lang->execution->confirmUnlinkStory)?>
 <?php js::set('canBeChanged', $canBeChanged)?>
 <?php
-$cols    = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
-$account = $this->app->user->account;
+$cols         = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
+$account      = $this->app->user->account;
+$canLinkStory = $execution->hasProduct or $execution->multiple;
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -46,7 +47,7 @@ $account = $this->app->user->account;
             $wizardParams = helper::safe64Encode("execution=$execution->id");
             echo html::a($this->createLink('tutorial', 'wizard', "module=execution&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->execution->linkStory}", '', "class='btn btn-primary'");
         }
-        else
+        elseif($execution->hasProduct)
         {
             common::printLink('execution', 'linkStory', "execution=$execution->id", "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-primary'");
         }
@@ -59,9 +60,24 @@ $account = $this->app->user->account;
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->story->noStory;?></span>
-      <?php if($canBeChanged and common::hasPriv('execution', 'linkStory')):?>
-      <?php echo html::a($this->createLink('execution', 'linkStory', "execution=$execution->id"), "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-info'");?>
-      <?php endif;?>
+      <?php
+      if(common::canModify('execution', $execution))
+      {
+          if($canLinkStory and $canBeChanged and common::hasPriv('execution', 'linkStory'))
+          {
+              echo html::a($this->createLink('execution', 'linkStory', "execution=$execution->id"), "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-info'");
+          }
+          else
+          {
+              $storyModuleID = (int)$this->cookie->storyModuleParam;
+              if(common::hasPriv('story', 'create'))
+              {
+                  $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
+                  echo html::a($createStoryLink, "<i class='icon icon-plus'></i> " . $lang->execution->createStory, '', "class='btn btn-info' data-app=$app->tab");
+              }
+          }
+      }
+      ?>
     </p>
   </div>
   <?php else:?>

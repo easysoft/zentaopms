@@ -22,7 +22,7 @@ class programsEntry extends entry
         $_COOKIE['showClosed'] = $this->param('showClosed', 0);
         $mergeChildren = $this->param('mergeChildren', 0);
 
-        $this->config->systemMode = 'new';
+        $this->config->systemMode = 'ALM';
 
         $fields = $this->param('fields', '');
         if(stripos(strtolower(",{$fields},"), ",dropmenu,") !== false) return $this->getDropMenu();

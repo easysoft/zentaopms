@@ -35,7 +35,8 @@
           </tr>
           <tr>
             <th><?php echo $lang->release->build;?></th>
-            <td><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></td>
+            <td><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple");?></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>
