@@ -2280,6 +2280,7 @@ CREATE TABLE `zt_release` (
   `project` varchar(255) NOT NULL,
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` varchar(255) NOT NULL,
+  `shadow` mediumint(8) unsigned NOT NULL default '0',
   `build` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `marker` enum('0','1') NOT NULL DEFAULT '0',
