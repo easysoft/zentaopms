@@ -587,12 +587,12 @@ function loadProjectBuilds(projectID)
 function loadExecutionBuilds(executionID, num)
 {
     if(typeof(num) == 'undefined') num = '';
-    var branch = $('#branch' + num).val();
-
-    if(typeof(branch) == 'undefined') var branch = 0;
-
+    var branch         = $('#branch' + num).val();
     var oldOpenedBuild = $('#openedBuild' + num).val() ? $('#openedBuild' + num).val() : 0;
     var productID      = $('#product' + num).val();
+
+    if(typeof(branch) == 'undefined') var branch = 0;
+    if(typeof(productID) == 'undefined') var productID = 0;
 
     if(page == 'create')
     {
