@@ -20,8 +20,8 @@
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
         <tr class="<?php echo ($app->tab == 'project' and !empty($multipleProject)) ? '' : 'hidden';?>">
-          <th><?php echo $lang->build->type;?></th>
-          <td><?php echo html::radio('type', $lang->build->typeList, 'execution');?></td>
+          <th><?php echo $lang->build->integrated;?></th>
+          <td><?php echo html::radio('isIntegrated', $lang->build->isIntegrated, 'no');?></td>
         </tr>
         <tr class="<?php echo !empty($multipleProject) ? '' : 'hidden';?>">
           <th><?php echo $lang->executionCommon;?></th>

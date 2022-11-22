@@ -33,7 +33,8 @@ $lang->build->project        = 'Project';
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
-$lang->build->type           = 'Type';
+$lang->build->integrated     = 'Integrated';
+$lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Linked Builds';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Datum';
@@ -74,6 +75,6 @@ $lang->build->action->buildopened = '$date, erstellt von <strong>$actor</strong>
 
 $lang->backhome = 'zurück';
 
-$lang->build->typeList = array();
-$lang->build->typeList['execution'] = "{$lang->executionCommon} Build";
-$lang->build->typeList['project']   = 'Project Build';
+$lang->build->isIntegrated = array();
+$lang->build->isIntegrated['no']  = 'No';
+$lang->build->isIntegrated['yes'] = 'Yes';
