@@ -189,7 +189,7 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .severity-issue.severity-4, .c-severity .severity-3 {color: #313C52;}
 
 .label-pri, .label-selector > .label {color: #9EA3B0; border-color: #9EA3B0;}
-.label-pri-1, .label-selector > .label-pri[data-value="1"] {color: #FF4912; border-color: #FF4912;}
+.label-pri-1, .label-selector > .label-pri[data-value="1"] {color: #FB2B2B; border-color: #FB2B2B;}
 .label-pri-2, .label-selector > .label-pri[data-value="2"] {color: #F38F19; border-color: #F38F19;}
 .label-pri-3, .label-selector > .label-pri[data-value="3"] {color: #37B2FE; border-color: #37B2FE;}
 .label-pri-4, .label-pri-5, .label-selector > .label-pri[data-value="4"], .label-selector > .label-pri[data-value="5"] {color: #9EA3B0; border-color: #9EA3B0;}
