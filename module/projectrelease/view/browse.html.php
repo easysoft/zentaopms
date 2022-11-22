@@ -50,9 +50,9 @@
         <th class='c-id'><?php echo $lang->release->id;?></th>
         <th><?php echo $lang->release->name;?></th>
         <?php if($project->hasProduct):?>
-        <th class='c-product'><?php echo $lang->release->product;?></th>
+        <th class='c-product'><?php echo $lang->projectrelease->product;?></th>
         <?php endif;?>
-        <th class='c-build'><?php echo $lang->release->build;?></th>
+        <th class='c-build'><?php echo $lang->release->includedBuild;?></th>
         <th class='c-status text-center'><?php echo $lang->release->status;?></th>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <?php

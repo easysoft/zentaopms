@@ -50,7 +50,7 @@
           </tr>
           <?php endif;?>
           <tr>
-            <th><?php echo $lang->release->build;?></th>
+            <th><?php echo $lang->release->includedBuild;?></th>
             <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
             <td></td>
           </tr>
