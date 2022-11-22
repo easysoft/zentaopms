@@ -23,7 +23,7 @@
       <table class='table table-form'>
         <tbody>
           <tr>
-            <th><?php echo $lang->release->name;?></th>
+            <th class='w-120px'><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' required");?></td>
             <td>
               <div id='markerBox' class='checkbox-primary'>

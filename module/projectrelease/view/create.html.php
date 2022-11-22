@@ -23,7 +23,7 @@
       <table class='table table-form'>
         <tbody>
           <tr>
-            <th><?php echo $lang->release->name;?></th>
+            <th class='w-120px'><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' required");?></td>
             <td>
               <?php if(!$product->shadow):?>
@@ -92,4 +92,5 @@
     </form>
   </div>
 </div>
+<?php js::set('multipleSelect', $lang->build->placeholder->multipleSelect);?>
 <?php include '../../common/view/footer.html.php';?>

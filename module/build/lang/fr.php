@@ -65,16 +65,15 @@ $lang->build->resolvedBugs  = '  Bugs Résolus %s';
 $lang->build->createdBugs   = '  Bugs Signalés %s';
 
 $lang->build->placeholder = new stdclass();
-$lang->build->placeholder->scmPath  = ' Répertoire des codes sources, ex: chemin de la bibliothèque Subversion / GitSource';
-$lang->build->placeholder->filePath = ' Chemin de téléchargement pour ce Build.';
+$lang->build->placeholder->scmPath        = ' Répertoire des codes sources, ex: chemin de la bibliothèque Subversion / GitSource';
+$lang->build->placeholder->filePath       = ' Chemin de téléchargement pour ce Build.';
+$lang->build->placeholder->multipleSelect = "Support select multiple builds";
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, Build <strong>$extra</strong> créé par <strong>$actor</strong>.' . "\n";
 
 $lang->backhome = 'Retour';
 
-$lang->build->featureBar['browse']['all'] = 'Build List';
-
 $lang->build->typeList = array();
-$lang->build->typeList['execution'] = "{$lang->executionCommon}版本";
-$lang->build->typeList['project']   = '项目版本';
+$lang->build->typeList['execution'] = "{$lang->executionCommon} Build";
+$lang->build->typeList['project']   = 'Project Build';

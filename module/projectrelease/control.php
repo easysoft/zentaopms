@@ -130,7 +130,7 @@ class projectrelease extends control
         $this->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($this->view->product->id, $this->view->branch, 'notrunk,withbranch', $projectID, 'project');
+        $builds         = $this->build->getBuildPairs($this->view->product->id, $this->view->branch, 'notrunk,withbranch|noproject', $projectID, 'project');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
@@ -187,7 +187,7 @@ class projectrelease extends control
         $bindBuilds = $this->build->getByList($release->build);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $this->session->project, 'project', '', false);
+        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch|noproject', $this->session->project, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($this->session->project);
         foreach($releasedBuilds as $releasedBuild)
         {
@@ -808,7 +808,7 @@ class projectrelease extends control
      */
     public function ajaxLoadBuilds($projectID, $productID, $branch = 0)
     {
-        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk,withbranch', $projectID, 'project');
+        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk,withbranch,noproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
