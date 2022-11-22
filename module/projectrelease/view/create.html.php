@@ -51,7 +51,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->release->build;?></th>
-            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple");?></td>
+            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
             <td></td>
           </tr>
           <tr>
