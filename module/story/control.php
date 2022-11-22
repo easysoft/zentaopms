@@ -2359,13 +2359,13 @@ class story extends control
             $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
-            unset($this->config->product->search['fields']['plan']);
             unset($this->config->product->search['fields']['stage']);
         }
         else
         {
             $this->lang->story->title = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
         }
+        unset($this->config->product->search['fields']['plan']);
 
         if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
 
