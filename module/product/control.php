@@ -431,9 +431,13 @@ class product extends control
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
 
+        $gobackLink = '';
+        if(isset($output['from']) and $output['from'] == 'qa') $gobackLink = $this->createLink('qa', 'index');
+        if(isset($output['from']) and $output['from'] == 'global') $gobackLink = $this->createLink('product', 'all');
+
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
-        $this->view->gobackLink = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('product', 'all') : '';
+        $this->view->gobackLink = $gobackLink;
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->programID  = $programID;
         $this->view->poUsers    = $poUsers;
@@ -1190,7 +1194,8 @@ class product extends control
         elseif($moduleName == 'qa')
         {
             $this->loadModel('qa')->setMenu(array(), 0);
-            $this->app->rawModule = $activeMenu;
+            $this->app->rawModule   = $activeMenu;
+            $this->view->moduleName = $moduleName;
 
             if($activeMenu == 'testcase')   unset($this->lang->qa->menu->testcase['subMenu']);
             if($activeMenu == 'testsuite')  unset($this->lang->qa->menu->testcase['subMenu']);

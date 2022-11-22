@@ -2015,7 +2015,7 @@ class story extends control
      */
     public function batchToTask($executionID = 0, $projectID = 0)
     {
-        if($executionID) $this->loadModel('execution')->setMenu($executionID);
+        if($this->app->tab == 'execution' and $executionID) $this->loadModel('execution')->setMenu($executionID);
 
         if(!empty($_POST['name']))
         {
@@ -2414,7 +2414,11 @@ class story extends control
         $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
         $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
 
-        if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
+        if(!empty($product->shadow))
+        {
+            unset($this->config->product->search['fields']['product']);
+            unset($this->config->product->search['fields']['plan']);
+        }
 
         /* Build search form. */
         $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);

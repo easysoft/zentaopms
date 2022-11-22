@@ -2129,7 +2129,7 @@ class execution extends control
         }
 
         /* Set custom. */
-        foreach(explode(',', $this->config->execution->customBatchEditFields) as $field) $customFields[$field] = $this->lang->execution->$field;
+        foreach(explode(',', $this->config->execution->customBatchEditFields) as $field) $customFields[$field] = str_replace($this->lang->executionCommon, $this->lang->execution->common, $this->lang->execution->$field);
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->execution->custom->batchEditFields;
 

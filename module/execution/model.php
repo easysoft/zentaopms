@@ -566,8 +566,8 @@ class executionModel extends model
             if($oldExecution->type == 'stage' and $field == 'name') $this->lang->project->name = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->project->name);
         }
 
-        $relationExecutionsID = $this->getRelatedExecutions($executionID);
-        $relationExecutionsID = !empty($relationExecutionsID) ? implode(',', array_keys($relationExecutionsID)) : '';
+        $relatedExecutionsID = $this->getRelatedExecutions($executionID);
+        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '';
 
         /* Update data. */
         $this->lang->error->unique = $this->lang->error->repeat;
@@ -578,7 +578,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkIF(!empty($execution->name), 'name', 'unique', "id in ('$relationExecutionsID') and type in ('sprint','stage', 'kanban') and `project` = $executionProject and `deleted` = '0'")
+            ->checkIF(!empty($execution->name), 'name', 'unique', "id in ('$relatedExecutionsID') and type in ('sprint','stage', 'kanban') and `project` = $executionProject and `deleted` = '0'")
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($executionID)
