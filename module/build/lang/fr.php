@@ -33,7 +33,7 @@ $lang->build->project        = 'Project';
 $lang->build->branch         = 'Plateforme/Branche';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
-$lang->build->type           = 'Type';
+$lang->build->integrated     = 'Integrated';
 $lang->build->builds         = 'Linked Builds';
 $lang->build->name           = 'Nom';
 $lang->build->date           = 'Date';
@@ -75,6 +75,6 @@ $lang->backhome = 'Retour';
 
 $lang->build->featureBar['browse']['all'] = 'Build List';
 
-$lang->build->typeList = array();
-$lang->build->typeList['execution'] = "{$lang->executionCommon}版本";
-$lang->build->typeList['project']   = '项目版本';
+$lang->build->isIntegrated = array();
+$lang->build->isIntegrated['no']  = 'No';
+$lang->build->isIntegrated['yes'] = 'Yes';
