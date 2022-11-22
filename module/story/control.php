@@ -2414,7 +2414,11 @@ class story extends control
         $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
         $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
 
-        if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
+        if(!empty($product->shadow))
+        {
+            unset($this->config->product->search['fields']['product']);
+            unset($this->config->product->search['fields']['plan']);
+        }
 
         /* Build search form. */
         $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
