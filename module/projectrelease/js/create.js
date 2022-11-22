@@ -23,7 +23,10 @@ function loadBuilds()
 {
     var productID = $('#product').val();
     var branch    = $('#branch').length == 0 ? 0 : $('#branch').val();
-    $('#buildBox').load(createLink('projectrelease', 'ajaxLoadBuilds', "projectID=" + projectID + "&productID=" + productID + "&branch=" + branch), function(){$('#build').chosen();});
+    $('#buildBox').load(createLink('projectrelease', 'ajaxLoadBuilds', "projectID=" + projectID + "&productID=" + productID + "&branch=" + branch), function()
+    {
+        $('#build').attr('data-placeholder', multipleSelect).chosen();
+    });
 }
 
 /**
