@@ -23,7 +23,7 @@
       <table class='table table-form'>
         <tbody>
           <tr>
-            <th><?php echo $lang->release->name;?></th>
+            <th class='w-120px'><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' required");?></td>
             <td>
               <?php if(!$product->shadow):?>
@@ -50,8 +50,8 @@
           </tr>
           <?php endif;?>
           <tr>
-            <th><?php echo $lang->release->build;?></th>
-            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple");?></td>
+            <th><?php echo $lang->release->includedBuild;?></th>
+            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
             <td></td>
           </tr>
           <tr>
@@ -92,4 +92,5 @@
     </form>
   </div>
 </div>
+<?php js::set('multipleSelect', $lang->build->placeholder->multipleSelect);?>
 <?php include '../../common/view/footer.html.php';?>

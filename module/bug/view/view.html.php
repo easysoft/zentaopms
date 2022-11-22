@@ -422,6 +422,7 @@
                   <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask", '', true), "#$bug->toTask $bug->toTaskTitle", '', "class='iframe' data-width='80%'");?></td>
                 </tr>
                 <?php endif;?>
+                <?php if(helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->bug->linkMR;?></th>
                   <td>
@@ -434,6 +435,7 @@
                     ?>
                   </td>
                 </tr>
+                <?php endif;?>
               </tbody>
             </table>
           </div>

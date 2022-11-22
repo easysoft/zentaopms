@@ -235,7 +235,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t5')->on('t1.product = t5.id')
             ->where('1=1')
             ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
-            ->beginIF(strpos($params, 'noproject') !== false)->andWhere('t1.execution')->ne(0)->fi()
+            ->beginIF(strpos($params, 'noproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
             ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
@@ -350,10 +350,10 @@ class buildModel extends model
             ->add('createdDate', helper::now())
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->join('builds', ',')
-            ->remove('resolvedBy,allchecker,files,labels,type,uid')
+            ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid')
             ->get();
 
-        if($this->post->type == 'project') $build->execution = 0;
+        if($this->post->isIntegrated == 'yes') $build->execution = 0;
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)

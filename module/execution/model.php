@@ -64,6 +64,7 @@ class executionModel extends model
     public function setMenu($executionID, $buildID = 0, $extra = '')
     {
         $execution = $this->getByID($executionID);
+        if(!$execution) return;
 
         if($execution->type == 'stage') unset($this->lang->execution->menu->settings['subMenu']->products);
 
@@ -3160,6 +3161,23 @@ class executionModel extends model
         $accounts      = array_unique($accounts);
         $limited       = array_values($limited);
         $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->fetchPairs();
+
+        foreach($accounts as $key => $account)
+        {
+            if(empty($account)) continue;
+
+            if(!empty($execution->days) and (int)$days[$key] > $execution->days)
+            {
+                dao::$errors['message'][] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
+                return false;
+            }    
+            if((float)$hours[$key] > 24)
+            {
+                dao::$errors['message'][] = $this->lang->execution->errorHours;
+                return false;
+            }    
+        }
+
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->exec();
 
         $executionMember = array();
@@ -5115,7 +5133,6 @@ class executionModel extends model
         $_POST = array();
         $_POST['project']     = $projectID;
         $_POST['name']        = $project->name;
-        $_POST['code']        = $project->code;
         $_POST['begin']       = $project->begin;
         $_POST['end']         = $project->end;
         $_POST['status']      = 'wait';
@@ -5129,6 +5146,7 @@ class executionModel extends model
         $_POST['RD']          = '';
         $_POST['multiple']    = '0';
         $_POST['hasProduct']  = $project->hasProduct;
+        if($project->code) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)

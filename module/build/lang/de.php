@@ -33,7 +33,8 @@ $lang->build->project        = 'Project';
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
-$lang->build->type           = 'Type';
+$lang->build->integrated     = 'Integrated';
+$lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Linked Builds';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Datum';
@@ -65,16 +66,15 @@ $lang->build->resolvedBugs  = '  %s Bugs sind gelöst.';
 $lang->build->createdBugs   = '  %s Bugs wurden erstellt.';
 
 $lang->build->placeholder = new stdclass();
-$lang->build->placeholder->scmPath  = ' Source code repository, z.B. Subversion/Git Pfad';
-$lang->build->placeholder->filePath = ' Pfad zum Download für diese Build.';
+$lang->build->placeholder->scmPath        = ' Source code repository, z.B. Subversion/Git Pfad';
+$lang->build->placeholder->filePath       = ' Pfad zum Download für diese Build.';
+$lang->build->placeholder->multipleSelect = "Support select multiple builds";
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, erstellt von <strong>$actor</strong>, Build <strong>$extra</strong>.' . "\n";
 
 $lang->backhome = 'zurück';
 
-$lang->build->featureBar['browse']['all'] = 'Build List';
-
-$lang->build->typeList = array();
-$lang->build->typeList['execution'] = "{$lang->executionCommon}版本";
-$lang->build->typeList['project']   = '项目版本';
+$lang->build->isIntegrated = array();
+$lang->build->isIntegrated['no']  = 'No';
+$lang->build->isIntegrated['yes'] = 'Yes';

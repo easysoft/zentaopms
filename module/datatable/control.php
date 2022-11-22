@@ -106,6 +106,7 @@ class datatable extends control
 
             if(!$project->multiple) unset($cols['execution']);
             if(!$project->hasProduct and $project->model != 'scrum') unset($cols['plan']);
+            if(!$project->hasProduct) unset($cols['branch']);
         }
 
         if($moduleName == 'execution' and $method == 'bug')
@@ -113,12 +114,14 @@ class datatable extends control
             $execution = $this->loadModel('execution')->getByID($this->session->execution);
             $project   = $this->loadModel('project')->getByID($execution->project);
             if(!$project->hasProduct and $project->model != 'scrum') unset($cols['plan']);
+            if(!$project->hasProduct) unset($cols['branch']);
         }
 
         if($moduleName == 'execution' and $method == 'story')
         {
             $execution = $this->loadModel('execution')->getByID($this->session->execution);
             if(!$execution->hasProduct and !$execution->multiple) unset($cols['plan']);
+            if(!$execution->hasProduct) unset($cols['branch']);
         }
 
         $this->view->cols    = $cols;

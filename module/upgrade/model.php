@@ -7558,7 +7558,6 @@ class upgradeModel extends model
 
             $projectID = $this->dao->lastInsertId();
 
-            $this->action->create('project', $projectID, 'openedbysystem');
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             $project->id = $projectID;
@@ -7568,6 +7567,14 @@ class upgradeModel extends model
             $this->processMergedData($programID, $projectID, '', $productIdList, array($sprint->id));
 
             if($fromMode == 'classic') $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
+            $this->dao->update(TABLE_ACTION)
+                ->set('objectID')->eq($projectID)
+                ->set('objectType')->eq('project')
+                ->set('execution')->eq('0')
+                ->set('project')->eq($projectID)
+                ->where('objectType')->eq('execution')
+                ->andWhere('objectID')->eq($sprint->id)
+                ->exec();
         }
 
         $this->fixProjectPath($programID);

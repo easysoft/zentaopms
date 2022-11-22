@@ -20,8 +20,8 @@
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
         <tr class="<?php echo ($app->tab == 'project' and !empty($multipleProject)) ? '' : 'hidden';?>">
-          <th><?php echo $lang->build->type;?></th>
-          <td><?php echo html::radio('type', $lang->build->typeList, 'execution');?></td>
+          <th><?php echo $lang->build->integrated;?></th>
+          <td><?php echo html::radio('isIntegrated', $lang->build->isIntegrated, 'no');?></td>
         </tr>
         <tr class="<?php echo !empty($multipleProject) ? '' : 'hidden';?>">
           <th><?php echo $lang->executionCommon;?></th>
@@ -52,7 +52,7 @@
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->build->builds;?></th>
-          <td id='buildBox'><?php echo html::select('builds[]', array(), '', "class='form-control chosen' multiple");?></td>
+          <td id='buildBox'><?php echo html::select('builds[]', array(), '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
           <td><?php echo $lang->build->notice->autoRelation;?></td>
         </tr>
         <tr>
@@ -104,4 +104,5 @@
 <?php js::set('projectID', $projectID);?>
 <?php js::set('executionID', $executionID);?>
 <?php js::set('currentTab', $this->app->tab);?>
+<?php js::set('multipleSelect', $lang->build->placeholder->multipleSelect);?>
 <?php include '../../common/view/footer.html.php';?>

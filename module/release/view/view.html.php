@@ -350,7 +350,7 @@
                       <td><?php echo $release->name;?></td>
                     </tr>
                     <tr>
-                      <th><?php echo $lang->release->build;?></th>
+                      <th><?php echo $lang->release->includedBuild;?></th>
                       <td>
                         <?php
                         $buildHtml = array();

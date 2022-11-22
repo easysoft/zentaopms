@@ -51,7 +51,9 @@
             </th>
             <?php endif;?>
             <th class='table-nest-title text-left c-name' rowspan="2">
+              <?php if($config->systemMode == 'ALM'):?>
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
+              <?php endif;?>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
             <th class='c-PO' rowspan="2">
@@ -118,7 +120,7 @@
                   echo html::smallAvatar(array('avatar' => $usersAvatar[$programPM], 'account' => $programPM, 'name' => $userName), 'avatar-circle avatar-top avatar-' . zget($userIdPairs, $programPM));
 
                   $userID = isset($userIdPairs[$programPM]) ? $userIdPairs[$programPM] : '';
-                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
+                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' class='iframe' data-width='600'");
               }
               ?>
             </td>
@@ -221,7 +223,7 @@
                   echo html::smallAvatar(array('avatar' => $usersAvatar[$product->PO], 'account' => $product->PO, 'name' => $userName), 'avatar-circle avatar-' . zget($userIdPairs, $product->PO));
 
                   $userID = isset($userIdPairs[$product->PO]) ? $userIdPairs[$product->PO] : '';
-                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
+                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' class='iframe' data-width='600'");
               }
               ?>
             </td>

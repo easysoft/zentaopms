@@ -1231,6 +1231,28 @@ class productModel extends model
     /**
      * Get project pairs by product.
      *
+     * @param  array  $productIDList
+     * @param  int    $branch
+     * @param  int    $appendProject
+     * @param  string $status all|closed|unclosed
+     * @access public
+     * @return array
+     */
+    public function getProjectPairsByProductIDList($productIDList, $branch = 0, $appendProject = 0, $status = '')
+    {
+        $projectParis = array();
+        foreach($productIDList as $productID)
+        {
+            $projects     = $this->getProjectPairsByProduct($productID, $branch, $appendProject, $status);
+            $projectParis = $projectParis + $projects;
+        }
+
+        return $projectParis;
+    }
+
+    /**
+     * Get project pairs by product.
+     *
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $appendProject
@@ -2324,7 +2346,7 @@ class productModel extends model
             {
                 parse_str($extra, $output);
                 $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
-                $link      = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : '') . "&groupBy=&projectID=$projectID") . "#app=project";
+                $link      = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : 'all') . "&groupBy=&projectID=$projectID") . "#app=project";
             }
             elseif($module == 'testcase' and $method == 'browse')
             {

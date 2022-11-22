@@ -2239,13 +2239,14 @@ class project extends control
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed');
         if($this->config->systemMode == 'ALM')
         {
+            $topProgramID           = $this->program->getTopByPath($project->path);
             $productsGroupByProgram = $this->product->getProductsGroupByProgram();
 
             $currentProducts = array();
             $otherProducts   = array();
             foreach($productsGroupByProgram as $programID => $programProducts)
             {
-                if($programID != $project->parent)
+                if($programID != $topProgramID)
                 {
                     foreach($programProducts as $productID => $productName)
                     {

@@ -76,6 +76,7 @@
               <?php endif;?>
               <?php $tab = '';?>
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
+              <?php if($action->objectType == 'module' and $config->vision == 'lite') $tab = "data-app='project'";?>
               <span class="label-name">
               <?php
               if(empty($action->objectName) and $action->objectID)
