@@ -25,6 +25,7 @@ class devModel extends model
                 $tables[$group][$subTable] = $table;
             }
         }
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
         return $tables;
     }
 
@@ -60,6 +61,7 @@ class devModel extends model
         }
         catch (PDOException $e)
         {
+            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
             $this->sqlError($e);
         }
 
