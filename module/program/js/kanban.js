@@ -53,7 +53,7 @@ function processKanbanData(key, programsData)
 
             /* unclosed products */
             var productID = product.id;
-            var productItem = {id: 'product-' + productID, _id: productID, name: product.name};
+            var productItem = {id: 'product-' + productID, _id: productID, name: product.name, shadow: product.shadow};
             items.unclosedProduct = [productItem];
 
             /* plans */

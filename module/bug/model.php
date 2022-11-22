@@ -2126,7 +2126,7 @@ class bugModel extends model
      */
     public function getLinkedExecutionByIdList($buildIdList)
     {
-        $builds = $this->dao->select('id,execution')->from(TABLE_BUILD)->where('id')->in($buildIdList)->fetchAll('id');
+        $builds = $this->dao->select('id,execution,builds')->from(TABLE_BUILD)->where('id')->in($buildIdList)->fetchAll('id');
 
         $executionIdList   = array();
         $linkedBuildIdList = array();

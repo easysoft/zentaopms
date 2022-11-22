@@ -274,7 +274,7 @@ class programModel extends model
         $involvedPrograms = $this->getInvolvedPrograms($this->app->user->account);
 
         /* Get all products under programs. */
-        $productGroup = $this->dao->select('id, program, name')->from(TABLE_PRODUCT)
+        $productGroup = $this->dao->select('id, program, name, shadow')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('program')->in(array_keys($programs))
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
@@ -285,7 +285,12 @@ class programModel extends model
         $productPairs = array();
         foreach($productGroup as $programID => $products)
         {
-            foreach($products as $product) $productPairs[$product->id] = $product->id;
+            foreach($products as $product)
+            {
+                $productPairs[$product->id] = $product->id;
+
+                if($product->shadow) $product->name = $product->name . ' (' . $this->lang->project->common . ')';
+            }
         }
 
         /* Get all plans under products. */
