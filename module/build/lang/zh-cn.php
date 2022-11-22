@@ -65,8 +65,9 @@ $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';
 $lang->build->createdBugs   = ' 本次共产生 %s 个Bug';
 
 $lang->build->placeholder = new stdclass();
-$lang->build->placeholder->scmPath  = ' 软件源代码库，如Subversion、Git库地址';
-$lang->build->placeholder->filePath = ' 该版本软件包下载存储地址';
+$lang->build->placeholder->scmPath        = ' 软件源代码库，如Subversion、Git库地址';
+$lang->build->placeholder->filePath       = ' 该版本软件包下载存储地址';
+$lang->build->placeholder->multipleSelect = "版本支持多选";
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$extra</strong>。' . "\n";
