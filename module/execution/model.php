@@ -3161,6 +3161,23 @@ class executionModel extends model
         $accounts      = array_unique($accounts);
         $limited       = array_values($limited);
         $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->fetchPairs();
+
+        foreach($accounts as $key => $account)
+        {
+            if(empty($account)) continue;
+
+            if(!empty($execution->days) and (int)$days[$key] > $execution->days)
+            {
+                dao::$errors['message'][] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
+                return false;
+            }    
+            if((float)$hours[$key] > 24)
+            {
+                dao::$errors['message'][] = $this->lang->execution->errorHours;
+                return false;
+            }    
+        }
+
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->exec();
 
         $executionMember = array();

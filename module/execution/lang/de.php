@@ -146,7 +146,9 @@ $lang->execution->estimate = 'estimate';
 $lang->execution->consumed = 'consumed';
 $lang->execution->left     = 'Left';
 
-$lang->execution->copyTeamTip = "copy Project/project team members";
+$lang->execution->copyTeamTip        = "copy Project/project team members";
+$lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';
+$lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』';
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Aktivieren';
