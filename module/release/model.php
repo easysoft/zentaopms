@@ -210,7 +210,15 @@ class releaseModel extends model
 
         if($release->build)
         {
-            $builds = $this->dao->select('id,project,branch,stories,bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+            $builds = $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+            $linkedBuilds = array();
+            foreach($builds as $build)
+            {
+                $build->builds = trim($build->builds, ',');
+                if(empty($build->builds)) continue;
+                $linkedBuilds = array_merge($linkedBuilds, explode(',', $build->builds));
+            }
+            if($linkedBuilds) $builds += $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($linkedBuilds)->fetchAll('id');
             foreach($builds as $build)
             {
                 $branches[$build->branch]  = $build->branch;
