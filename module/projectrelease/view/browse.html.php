@@ -73,7 +73,7 @@
       ?>
       <tr data-type='<?php echo $release->status;?>'>
         <?php if($i == 0):?>
-        <td <?php echo $rowspan?>><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
+        <td class='c-id' <?php echo $rowspan?>><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td <?php echo $rowspan?>>
           <?php
           $flagIcon = $release->marker ? "<icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';
