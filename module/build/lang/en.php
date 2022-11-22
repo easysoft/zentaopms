@@ -34,6 +34,7 @@ $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
 $lang->build->integrated     = 'Integrated';
+$lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Linked Builds';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Date';
