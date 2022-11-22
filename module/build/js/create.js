@@ -12,7 +12,7 @@ $().ready(function()
         $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&needCreate=&type=noempty,notrunk,separate,noproject&extra=multiple'), function(data)
         {
             if(data) $('#buildBox').html(data);
-            $('#builds').chosen();
+            $('#builds').attr('data-placeholder', multipleSelect).chosen();
         });
     });
 

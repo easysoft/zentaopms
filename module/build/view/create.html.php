@@ -52,7 +52,7 @@
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->build->builds;?></th>
-          <td id='buildBox'><?php echo html::select('builds[]', array(), '', "class='form-control chosen' multiple");?></td>
+          <td id='buildBox'><?php echo html::select('builds[]', array(), '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
           <td><?php echo $lang->build->notice->autoRelation;?></td>
         </tr>
         <tr>
@@ -104,4 +104,5 @@
 <?php js::set('projectID', $projectID);?>
 <?php js::set('executionID', $executionID);?>
 <?php js::set('currentTab', $this->app->tab);?>
+<?php js::set('multipleSelect', $lang->build->placeholder->multipleSelect);?>
 <?php include '../../common/view/footer.html.php';?>
