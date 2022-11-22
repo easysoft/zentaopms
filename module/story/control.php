@@ -2015,7 +2015,7 @@ class story extends control
      */
     public function batchToTask($executionID = 0, $projectID = 0)
     {
-        if($executionID) $this->loadModel('execution')->setMenu($executionID);
+        if($this->app->tab == 'execution' and $executionID) $this->loadModel('execution')->setMenu($executionID);
 
         if(!empty($_POST['name']))
         {
