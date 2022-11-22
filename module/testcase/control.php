@@ -321,8 +321,6 @@ class testcase extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->app->rawModule = 'qa';
-            $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', "projectID=$projectID", $branchID);

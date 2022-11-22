@@ -127,7 +127,7 @@ class my extends control
         $storyCount           = $assignedToStoryCount + $reviewByStoryCount;
 
         $requirementCount = 0;
-        $isOpenedURAndSR  = $this->config->URAndSR;
+        $isOpenedURAndSR  = $this->config->URAndSR ? 1 : 0;
         if($isOpenedURAndSR)
         {
             /* Get the number of requirements assigned to me. */

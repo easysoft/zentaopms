@@ -253,6 +253,7 @@ class repoModel extends model
     public function update($id)
     {
         $repo = $this->getRepoByID($id);
+        if(!$this->checkConnection()) return false;
 
         $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
 

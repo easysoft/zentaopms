@@ -2724,6 +2724,7 @@ class storyModel extends model
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq($type)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
@@ -2936,6 +2937,7 @@ class storyModel extends model
 
         $stories = $sql->where('t1.product')->in($productID)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq($type)
             ->beginIF($branch != 'all')->andWhere("t1.branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("t1.module")->in($modules)->fi()
@@ -2973,6 +2975,7 @@ class storyModel extends model
             ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->andWhere('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('stage')->in('developed,released')
             ->andWhere('status')->ne('closed')
             ->orderBy($orderBy)
@@ -3150,6 +3153,7 @@ class storyModel extends model
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq($type)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
@@ -4943,6 +4947,9 @@ class storyModel extends model
                 break;
             case 'assignedDate':
                 echo helper::isZeroDate($story->assignedDate) ? '' : substr($story->assignedDate, 5, 11);
+                break;
+            case 'activatedDate':
+                echo helper::isZeroDate($story->activatedDate) ? '' : substr($story->activatedDate, 5, 11);
                 break;
             case 'reviewedBy':
                 echo $story->reviewedBy;

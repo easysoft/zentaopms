@@ -77,6 +77,7 @@ class projectreleaseModel extends model
         $builds = $this->dao->select("id,project,product,execution,name,scmPath,filePath")->from(TABLE_BUILD)->where('id')->in(array_unique($buildIdList))->fetchAll('id');
         foreach($releases as $release)
         {
+            $release->buildInfos = array();
             foreach(explode(',', $release->build) as $buildID)
             {
                 if(empty($buildID)) continue;
@@ -113,53 +114,18 @@ class projectreleaseModel extends model
      */
     public function getReleasedBuilds($projectID)
     {
-        $releases = $this->dao->select('build')->from(TABLE_RELEASE)
+        $releases = $this->dao->select('shadow,build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere("FIND_IN_SET($projectID, project)")
             ->fetchAll();
 
         $buildIdList = array();
-        foreach($releases as $release) $buildIdList = array_merge($buildIdList, explode(',', trim($release->build, ',')));
-        return $buildIdList;
-    }
-
-    /**
-     * Update a release.
-     *
-     * @param  int    $releaseID
-     * @access public
-     * @return void
-     */
-    public function update($releaseID)
-    {
-        /* Init vars. */
-        $releaseID  = (int)$releaseID;
-        $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
-
-        /* Check build if build is required. */
-        if(strpos($this->config->release->edit->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
-
-        $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
-            ->setDefault('mailto', '')
-            ->join('build', ',')
-            ->join('mailto', ',')
-            ->setIF(!$this->post->marker, 'marker', 0)
-            ->cleanInt('product')
-            ->remove('files,labels,allchecker,uid')
-            ->get();
-
-        $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_RELEASE)->data($release)
-            ->autoCheck()
-            ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
-            ->check('name', 'unique', "id != '$releaseID' AND product = '{$oldRelease->product}' AND branch = '{$oldRelease->branch}' AND deleted = '0'")
-            ->where('id')->eq((int)$releaseID)
-            ->exec();
-        if(!dao::isError())
+        foreach($releases as $release)
         {
-            $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
-            return common::createChanges($oldRelease, $release);
+            $buildIdList   = array_merge($buildIdList, explode(',', trim($release->build, ',')));
+            $buildIdList[] = $release->shadow;
         }
+        return $buildIdList;
     }
 
     /**

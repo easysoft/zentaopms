@@ -44,7 +44,7 @@
                         $selected       = ($branchName == $branchID and $branchOrTag == 'branch') ? 'selected' : '';
                         $base64BranchID = helper::safe64Encode(base64_encode($branchName));
                         $branchLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID");
-                        echo "<li data-idx='$branchName' data-id='branch-$branchName'><a href='$branchLink' id='branch-$branchName' class='$selected branch-or-tag text-ellipsis' title='$branchName' data-key='$branchName'>$branchName</a></li>";
+                        echo "<li data-idx='$branchName' data-id='branch-$branchName'><a href='$branchLink' data-app='{$app->tab}' id='branch-$branchName' class='$selected branch-or-tag text-ellipsis' title='$branchName' data-key='$branchName'>$branchName</a></li>";
                     }
                     ?>
                   </ul>
@@ -59,7 +59,7 @@
                         $selected    = ($tagName == $branchID and $branchOrTag == 'tag') ? 'selected' : '';
                         $base64TagID = helper::safe64Encode(base64_encode($tagName));
                         $tagLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64TagID&objectID=$objectID&path=&revision=HEAD&refresh=0&branchOrTag=tag");
-                        echo "<li data-idx='$tagName' data-id='tag-$tagName'><a href='$tagLink' id='tag-$tagName' class='$selected branch-or-tag text-ellipsis' title='$tagName' data-key='$tagName'>$tagName</a></li>";
+                        echo "<li data-idx='$tagName' data-id='tag-$tagName'><a href='$tagLink' id='tag-$tagName' class='$selected branch-or-tag text-ellipsis' title='$tagName' data-key='$tagName' data-app='{$app->tab}'>$tagName</a></li>";
                     }
                     ?>
                   </ul>

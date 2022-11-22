@@ -1244,8 +1244,12 @@ class bug extends control
             $branchProduct = $product->type == 'normal' ? false : true;
 
             /* Set plans. */
-            $plans = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
-            $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
+            foreach($bugs as $bug)
+            {
+                $plans      = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
+                $plans      = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
+                $bug->plans = $plans;
+            }
 
             /* Set branches and modules. */
             $branches        = 0;
@@ -2045,7 +2049,11 @@ class bug extends control
             if(!$project->hasProduct)
             {
                 unset($this->config->bug->search['fields']['product']);
-                if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
+                if(!$project->multiple)
+                {
+                    unset($this->config->bug->search['fields']['execution']);
+                    unset($this->config->bug->search['fields']['plan']);
+                }
             }
         }
 
@@ -2354,6 +2362,8 @@ class bug extends control
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
             if($product->shadow) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
         }
 
@@ -2426,6 +2436,12 @@ class bug extends control
         $products = array();
         if(!empty($extra)) $products = $this->product->getProducts($extra, 'all', 'program desc, line desc, ');
 
+        if($this->config->systemMode == 'ALM')
+        {
+            $this->view->programs = $this->loadModel('program')->getPairs(true);
+            $this->view->lines    = $this->product->getLinePairs();
+        }
+
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
         $this->view->module    = $module;
@@ -2433,8 +2449,6 @@ class bug extends control
         $this->view->extra     = $extra;
         $this->view->products  = $products;
         $this->view->projectID = $this->session->project;
-        $this->view->programs  = $this->loadModel('program')->getPairs(true);
-        $this->view->lines     = $this->product->getLinePairs();
         $this->display();
     }
 

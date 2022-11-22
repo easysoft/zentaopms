@@ -31,6 +31,7 @@ class buildModel extends model
             ->fetch();
         if(!$build) return false;
 
+        $build = $this->linkChildBuilds($build);
         $build = $this->loadModel('file')->replaceImgURL($build, 'desc');
         $build->files = $this->file->getByObject('build', $buildID);
         if($setImgSize) $build->desc = $this->file->setImgSize($build->desc);
@@ -226,7 +227,7 @@ class buildModel extends model
         }
 
         $branchs = strpos($params, 'separate') === false ? "0,$branch" : $branch;
-        $allBuilds = $this->dao->select('t1.id, t1.name, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
+        $allBuilds = $this->dao->select('t1.id, t1.name, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
             ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on("FIND_IN_SET(t1.id,t3.build)")
@@ -234,7 +235,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t5')->on('t1.product = t5.id')
             ->where('1=1')
             ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
-            ->beginIF(strpos($params, 'noproject') !== false)->andWhere('t1.execution')->ne(0)->fi()
+            ->beginIF(strpos($params, 'noproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
             ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
@@ -242,9 +243,10 @@ class buildModel extends model
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
         /* Set builds and filter done executions and terminate releases. */
-        $builds = array();
+        $builds      = array();
+        $buildIdList = array();
         $this->app->loadLang('branch');
-        foreach($allBuilds as $key => $build)
+        foreach($allBuilds as $id => $build)
         {
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
@@ -252,32 +254,58 @@ class buildModel extends model
             if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
             $branchName = $build->branchName ? $build->branchName : $this->lang->branch->main;
 
-            $builds[$key] = $build->name;
-            if(strpos($params, 'withbranch') !== false and $build->productType != 'normal') $builds[$key] = $branchName . '/' . $builds[$key];
+            $buildName = $build->name;
+            if(strpos($params, 'withbranch') !== false and $build->productType != 'normal') $buildName = $branchName . '/' . $buildName;
+
+            $buildIdList[$id] = $id;
+            $builds[$build->date][$id] = $buildName;
         }
 
-        if(!$builds) return $sysBuilds + $selectedBuilds;
+        if(empty($builds)) return $sysBuilds + $selectedBuilds;
 
         /* if the build has been released and replace is true, replace build name with release name. */
         if($replace)
         {
-            $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
-                ->where('build')->in(array_keys($builds))
-                ->andWhere('product')->in($products)
-                ->beginIF($branch !== 'all')->andWhere('branch')->in("$branchs")->fi()
-                ->andWhere('deleted')->eq(0)
-                ->fetchPairs();
-            foreach($releases as $buildID => $releaseName)
+            $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
+                ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
+                ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
+                ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
+                ->where('t2.id')->in($buildIdList)
+                ->andWhere('t1.product')->in($products)
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t1.shadow')->ne(0)
+                ->fetchAll('id');
+            foreach($releases as $release)
             {
-                $branchName = $allBuilds[$buildID]->branchName ? $allBuilds[$buildID]->branchName : $this->lang->branch->main;
-                if($allBuilds[$buildID]->productType != 'normal')
+                if($branch !== 'all')
                 {
-                    $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+                    $inBranch = false;
+                    foreach(explode(',', trim($release->branch, ',')) as $branchID)
+                    {
+                        if($branchID === '') continue;
+                        if(strpos(",{$branchs},", ",{$branchID},") !== false) $inBranch = true;
+                    }
+                    if(!$inBranch) continue;
+                }
+
+                $releaseName = $release->name;
+                $branchName  = $release->branchName ? $release->branchName : $this->lang->branch->main;
+                if($release->productType != 'normal') $releaseName = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+                $builds[$release->date][$release->shadow] = $releaseName;
+                foreach(explode(',', trim($release->build, ',')) as $buildID)
+                {
+                    if(!isset($allBuilds[$buildID])) continue;
+                    $build = $allBuilds[$buildID];
+                    unset($builds[$build->date][$buildID]);
                 }
             }
         }
 
-        return $sysBuilds + $builds + $selectedBuilds;
+        krsort($builds);
+        $buildPairs = array();
+        foreach($builds as $date => $childBuilds) $buildPairs += $childBuilds;
+
+        return $sysBuilds + $buildPairs + $selectedBuilds;
     }
 
     /**
@@ -302,41 +330,30 @@ class buildModel extends model
     /**
      * Create a build
      *
-     * @param  int    $executionID
-     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function create($executionID = 0, $projectID = 0)
+    public function create()
     {
         $build = new stdclass();
         $build->stories = '';
         $build->bugs    = '';
 
-        if($projectID && !$executionID)
-        {
-            $project = $this->loadModel('project')->getByID($projectID);
-            if(!$project->multiple) $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetch('id');
-        }
-        else if($executionID && !$projectID)
-        {
-            $execution = $this->loadModel('execution')->getByID($executionID);
-            $projectID = $execution->project;
-        }
-
         $build = fixer::input('post')
-            ->setDefault('project', $projectID)
+            ->setDefault('project', 0)
+            ->setDefault('execution', 0)
             ->setDefault('product', 0)
             ->setDefault('branch', 0)
             ->setDefault('builds', '')
             ->cleanInt('product,branch')
-            ->add('execution', $executionID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->join('builds', ',')
-            ->remove('resolvedBy,allchecker,files,labels,uid')
+            ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid')
             ->get();
+
+        if($this->post->isIntegrated == 'yes') $build->execution = 0;
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)
@@ -349,7 +366,6 @@ class buildModel extends model
         if(!dao::isError())
         {
             $buildID = $this->dao->lastInsertID();
-            $this->linkChildBuilds($buildID, $build->builds);
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
             $this->file->saveUpload('build', $buildID);
             $this->loadModel('score')->create('build', 'create', $buildID);
@@ -389,8 +405,6 @@ class buildModel extends model
         if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(!dao::isError())
         {
-            $addBuilds = array_diff(explode(',', $build->builds), explode(',', $oldBuild->builds));
-            if($addBuilds) $this->linkChildBuilds($buildID, $addBuilds);
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
             return common::createChanges($oldBuild, $build);
         }
@@ -569,28 +583,28 @@ class buildModel extends model
     /**
      * Bugs and stories associated with child builds.
      *
-     * @param  int    $buildID
-     * @param  string $childBuildIDList
+     * @param  object  $build
      * @access public
-     * @return void
+     * @return object
      */
-    public function linkChildBuilds($buildID, $childBuildIDList)
+    public function linkChildBuilds($build)
     {
-        $build       = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
-        $childBuilds = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->in($childBuildIDList)->fetchAll();
+        $build->allBugs    = $build->bugs;
+        $build->allStories = $build->stories;
+        $childBuilds = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
 
         foreach($childBuilds as $childBuild)
         {
-            if($childBuild->bugs)    $build->bugs    .= ",{$childBuild->bugs}";
-            if($childBuild->stories) $build->stories .= ",{$childBuild->stories}";
+            if($childBuild->bugs)    $build->allBugs    .= ",{$childBuild->bugs}";
+            if($childBuild->stories) $build->allStories .= ",{$childBuild->stories}";
         }
 
-        $build->bugs    = explode(',', $build->bugs);
-        $build->bugs    = join(',', array_unique(array_filter($build->bugs)));
-        $build->stories = explode(',', $build->stories);
-        $build->stories = join(',', array_unique(array_filter($build->stories)));
+        $build->allBugs    = explode(',', $build->allBugs);
+        $build->allBugs    = join(',', array_unique(array_filter($build->allBugs)));
+        $build->allStories = explode(',', $build->allStories);
+        $build->allStories = join(',', array_unique(array_filter($build->allStories)));
 
-        $this->dao->update(TABLE_BUILD)->data($build)->where('id')->eq($buildID)->exec();
+        return $build;
     }
 
     /**

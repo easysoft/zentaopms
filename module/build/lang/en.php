@@ -33,6 +33,8 @@ $lang->build->project        = 'Project';
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
+$lang->build->integrated     = 'Integrated';
+$lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Linked Builds';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Date';
@@ -64,12 +66,15 @@ $lang->build->resolvedBugs  = '  Resolved Bug %s';
 $lang->build->createdBugs   = '  Reported Bug %s';
 
 $lang->build->placeholder = new stdclass();
-$lang->build->placeholder->scmPath  = ' Source code repository, e.g. Subversion/Git Library path';
-$lang->build->placeholder->filePath = ' Download path for this Build.';
+$lang->build->placeholder->scmPath        = ' Source code repository, e.g. Subversion/Git Library path';
+$lang->build->placeholder->filePath       = ' Download path for this Build.';
+$lang->build->placeholder->multipleSelect = "Support select multiple builds";
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, created by <strong>$actor</strong>, Build <strong>$extra</strong>.' . "\n";
 
 $lang->backhome = 'back';
 
-$lang->build->featureBar['browse']['all'] = 'Build List';
+$lang->build->isIntegrated = array();
+$lang->build->isIntegrated['no']  = 'No';
+$lang->build->isIntegrated['yes'] = 'Yes';

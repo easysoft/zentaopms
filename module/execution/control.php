@@ -250,7 +250,7 @@ class execution extends control
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->setModule    = true;
+        $this->view->setModule    = !$execution->multiple ? false : true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch   = $showBranch;
         $this->view->projectName  = $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name;
@@ -1608,7 +1608,8 @@ class execution extends control
      */
     public function create($projectID = '', $executionID = 0, $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
     {
-        if($this->app->tab == 'doc') unset($this->lang->doc->menu->execution['subMenu']);
+        if($this->app->tab == 'doc')     unset($this->lang->doc->menu->execution['subMenu']);
+        if($this->app->tab == 'project') $this->project->setMenu($projectID);
 
         $project = $this->project->getByID($projectID);
         if(!empty($project) and $project->model == 'kanban')
@@ -2680,6 +2681,12 @@ class execution extends control
         $projects   = $this->project->getPairsByProgram('', 'noclosed');
         $executions = $this->execution->getStatData(0, 'all', 0, 0, false, '', 'id_desc');
 
+        foreach($executions as $execution)
+        {
+            $execution->name = htmlspecialchars_decode($execution->name);
+            $execution->team = htmlspecialchars_decode($execution->team);
+        }
+
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
             ->andWhere('type')->eq('execution')
@@ -3133,9 +3140,11 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->manageMembers($executionID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('action')->create('team', $executionID, 'managedTeam');
             $link = $this->session->teamList ? $this->session->teamList : $this->createLink('execution', 'team', "executionID=$executionID");
-            return print(js::locate($link, 'parent'));
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 
         /* Load model. */

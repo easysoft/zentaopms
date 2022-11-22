@@ -5,6 +5,18 @@ $(function()
         const hasProduct = $('[name=hasProduct]:checked').val();
 
         $('#productTitle, #linkPlan').closest('tr').toggle(hasProduct == 1);
+
+        if(hasProduct == 0) $('.division').addClass('hide');
+
+        if(hasProduct == 1)
+        {
+            var chosenProducts = 0;
+            $("#productsBox select[name^='products']").each(function()
+            {
+                if($(this).val() > 0) chosenProducts ++;
+            });
+            if(chosenProducts > 1) $('.division').removeClass('hide');
+        }
     });
 
     $('[name=hasProduct]').change();

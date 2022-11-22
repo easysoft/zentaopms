@@ -50,20 +50,34 @@ class repoTest
 
     public function getListTest($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($projectID, $SCM, $orderBy, $pager);
+        $objects = $this->objectModel->getList($projectID , $SCM, $orderBy , $pager );
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        if(!empty($objects))
+        {
+           return $objects[1]->name;
+        }
+        else
+        {
+           return 'empty';
+        }
     }
 
     public function getListBySCMTest($scm, $type = 'all')
     {
-        $objects = $this->objectModel->getListBySCM($scm, $type);
+        $objects = $this->objectModel->getListBySCM($scm, $type = 'all');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        if(!empty($objects))
+        {
+            return $objects[0]->name;
+        }
+        else
+        {
+            return 'empty';
+        }
     }
 
     public function createTest($list)

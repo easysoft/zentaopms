@@ -113,7 +113,7 @@
         <?php if($isStage):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
-          <td>
+          <td class='required'>
             <div class='input-group'>
               <?php echo html::input('percent', '', "class='form-control'");?>
               <span class='input-group-addon'>%</span>
@@ -150,7 +150,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
-              <?php if($division):?>
+              <?php if((isset($project->model) and $project->model == 'scrum') or empty($products)):?>
               <div class='col-sm-4'>
                 <div class="input-group">
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>

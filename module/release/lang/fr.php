@@ -30,7 +30,6 @@ $lang->release->confirmUnlinkBug   = "Voulez-vous retirer ce bug de la release ?
 $lang->release->existBuild         = '『Build』『%s』existant. Vous pouvez changer『name』ou choisir un『build』.';
 $lang->release->noRelease          = 'Pas de release à ce jour.';
 $lang->release->errorDate          = "La date de release ne doit pas être supérieure à aujourd'hui.";
-$lang->release->tips               = 'If no build is selected for a release, a build with the same name as the release is created by default.';
 
 $lang->release->basicInfo = 'Infos de Base';
 
@@ -64,9 +63,9 @@ $lang->release->all            = 'Tout';
 $lang->release->notify         = 'Notify';
 $lang->release->notifyUsers    = 'Notify Users';
 $lang->release->mailto         = 'Mailto';
-$lang->release->mailContent    = '<p>Dear users,</p><p style                                                                                               = "margin-left: 30px;">The following requirements and bugs you feedback have been released in the %s. Please contact your account manager to check the latest version.</p>';
-$lang->release->storyList      = '<p style                                                                                                                 = "margin-left: 30px;">Story List：%s。</p>';
-$lang->release->bugList        = '<p style                                                                                                                 = "margin-left: 30px;">Bug List：%s。</p>';
+$lang->release->mailContent    = '<p>Dear users,</p><p style="margin-left: 30px;">The following requirements and bugs you feedback have been released in the %s. Please contact your account manager to check the latest version.</p>';
+$lang->release->storyList      = '<p style="margin-left: 30px;">Story List：%s。</p>';
+$lang->release->bugList        = '<p style="margin-left: 30px;">Bug List：%s。</p>';
 $lang->release->pageAllSummary = 'Total releases: <strong>%total%</strong>, Normal: <strong>%normal%</strong>, Terminate: <strong>%terminate%</strong>.';
 $lang->release->pageSummary    = "Total releases: <strong>%s</strong>.";
 

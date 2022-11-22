@@ -2126,7 +2126,7 @@ class bugModel extends model
      */
     public function getLinkedExecutionByIdList($buildIdList)
     {
-        $builds = $this->dao->select('id,execution')->from(TABLE_BUILD)->where('id')->in($buildIdList)->fetchAll('id');
+        $builds = $this->dao->select('id,execution,builds')->from(TABLE_BUILD)->where('id')->in($buildIdList)->fetchAll('id');
 
         $executionIdList   = array();
         $linkedBuildIdList = array();
@@ -3490,19 +3490,7 @@ class bugModel extends model
                 echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);
                 break;
             case 'openedBuild':
-                $builds = array_flip($builds);
-                foreach(explode(',', $bug->openedBuild) as $build)
-                {
-                    $buildID = zget($builds, $build, '');
-                    if($buildID == 'trunk')
-                    {
-                        echo $build . ' ';
-                    }
-                    elseif($buildID and common::hasPriv('build', 'view'))
-                    {
-                        echo html::a(helper::createLink('build', 'view', "buildID=$buildID"), $build, '', "title='$bug->openedBuild'") . ' ';
-                    }
-                }
+                echo $bug->openedBuild;
                 break;
             case 'assignedTo':
                 $this->printAssignedHtml($bug, $users);

@@ -139,8 +139,8 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        $products  = $this->loadModel('product')->getProductPairsByProject($objectID);
-        $products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->andWhere('shadow')->eq(0)->fetchPairs('id', 'name'); /* Remove shadow products. */
+        $products = $this->loadModel('product')->getProductPairsByProject($objectID);
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->andWhere('shadow')->eq(0)->fetchPairs('id', 'name'); // Remove shadow products.
 
         $shadowProduct = null;
         if($this->app->tab == 'project' && $objectID) $shadowProduct = $this->loadModel('product')->getShadowProductByProject($objectID);
@@ -150,7 +150,8 @@ class repo extends control
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
-        $this->view->relatedProjects = array();
+        $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->relatedProjects = $this->app->tab == 'project' ? array($objectID) : array();
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID        = $objectID;
         $this->view->shadowProduct   = $shadowProduct;
@@ -1655,12 +1656,7 @@ class repo extends control
             ->get();
 
         /* Get all projects that can be accessed. */
-        $accessProjects = array();
-        foreach($postData->products as $productID)
-        {
-            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            $accessProjects = $accessProjects + $projects;
-        }
+        $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($postData->products);
 
         $selectedProjects = array_intersect(array_keys($accessProjects), $postData->projects);
 

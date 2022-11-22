@@ -33,6 +33,8 @@ $lang->build->project        = '所属项目';
 $lang->build->branch         = '平台/分支';
 $lang->build->branchName     = '所属%s';
 $lang->build->execution      = '所属' . $lang->executionCommon;
+$lang->build->integrated     = '集成版本';
+$lang->build->singled        = '单一版本';
 $lang->build->builds         = '关联版本';
 $lang->build->name           = '名称编号';
 $lang->build->date           = '打包日期';
@@ -64,10 +66,15 @@ $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';
 $lang->build->createdBugs   = ' 本次共产生 %s 个Bug';
 
 $lang->build->placeholder = new stdclass();
-$lang->build->placeholder->scmPath  = ' 软件源代码库，如Subversion、Git库地址';
-$lang->build->placeholder->filePath = ' 该版本软件包下载存储地址';
+$lang->build->placeholder->scmPath        = ' 软件源代码库，如Subversion、Git库地址';
+$lang->build->placeholder->filePath       = ' 该版本软件包下载存储地址';
+$lang->build->placeholder->multipleSelect = "版本支持多选";
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$extra</strong>。' . "\n";
 
 $lang->backhome = '返回';
+
+$lang->build->isIntegrated = array();
+$lang->build->isIntegrated['no']  = '否';
+$lang->build->isIntegrated['yes'] = '是';

@@ -130,7 +130,7 @@ class projectrelease extends control
         $this->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($this->view->product->id, $this->view->branch, 'notrunk,withbranch', $projectID, 'project');
+        $builds         = $this->build->getBuildPairs($this->view->product->id, $this->view->branch, 'notrunk,withbranch|noproject', $projectID, 'project');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
@@ -157,12 +157,12 @@ class projectrelease extends control
         $this->loadModel('story');
         $this->loadModel('bug');
         $this->loadModel('build');
-        $this->app->loadConfig('release');
+        $this->loadModel('release');
         $this->config->projectrelease->create = $this->config->release->create;
 
         if(!empty($_POST))
         {
-            $changes = $this->projectrelease->update($releaseID);
+            $changes = $this->release->update($releaseID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('release', $releaseID);
             if($changes or $files)
@@ -187,7 +187,7 @@ class projectrelease extends control
         $bindBuilds = $this->build->getByList($release->build);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $this->session->project, 'project', '', false);
+        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch|noproject', $this->session->project, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($this->session->project);
         foreach($releasedBuilds as $releasedBuild)
         {
@@ -367,9 +367,10 @@ class projectrelease extends control
 
             $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
             $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+            $this->loadModel('build')->delete(TABLE_BUILD, $release->shadow);
             foreach($builds as $build)
             {
-                if(empty($build->execution) and empty($build->builds) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
+                if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
             }
 
             $message = $this->executeHooks($releaseID);
@@ -807,7 +808,7 @@ class projectrelease extends control
      */
     public function ajaxLoadBuilds($projectID, $productID, $branch = 0)
     {
-        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk,withbranch', $projectID, 'project');
+        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk,withbranch,noproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
