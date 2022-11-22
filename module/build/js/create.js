@@ -16,9 +16,9 @@ $().ready(function()
         });
     });
 
-    $('input[name=type]').change(function()
+    $('input[name=isIntegrated]').change(function()
     {
-        if($(this).val() == 'execution')
+        if($(this).val() == 'no')
         {
             $('#execution').closest('tr').show();
             $('#buildBox').closest('tr').hide();
