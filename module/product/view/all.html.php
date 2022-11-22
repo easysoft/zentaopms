@@ -51,7 +51,9 @@
             </th>
             <?php endif;?>
             <th class='table-nest-title text-left c-name' rowspan="2">
+              <?php if($config->systemMode == 'ALM'):?>
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
+              <?php endif;?>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
             <th class='c-PO' rowspan="2">
