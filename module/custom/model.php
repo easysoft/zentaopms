@@ -819,6 +819,55 @@ class customModel extends model
     }
 
     /**
+     * Compute features.
+     *
+     * @access public
+     * @return array
+     */
+    public function computeFeatures()
+    {
+        $disabledFeatures = array('program', 'productLine', 'scrum' => array('scrumMeasrecord'));
+        foreach($this->config->custom->dataFeatures as $feature)
+        {
+            $function = 'has' . ucfirst($feature) . 'Data';
+            if(!$this->$function())
+            {
+                if(strpos($feature, 'scrum') !== false)
+                {
+                    $disabledFeatures['scrum'][] = $feature;
+                }
+                elseif($feature == 'waterfall')
+                {
+                    $disabledFeatures[] = 'project' . ucfirst($feature);
+                }
+                else
+                {
+                    $disabledFeatures[] = $feature;
+                }
+            }
+        }
+
+        $enabledScrumFeatures  = array();
+        $disabledScrumFeatures = array();
+        if($this->config->edition == 'max')
+        {
+            foreach($this->config->custom->scrumFeatures as $scrumFeature)
+            {
+                if(in_array('scrum' . ucfirst($scrumFeature), $disabledFeatures['scrum']))
+                {
+                    $disabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+                }
+                else
+                {
+                    $enabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+                }
+            }
+        }
+
+        return array($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures);
+    }
+
+    /**
      * process project priv within a program set.
      *
      * @access public

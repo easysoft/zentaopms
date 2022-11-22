@@ -25,12 +25,12 @@
       </tr>
       <tr>
         <td>
-          <label class='radio-inline'><input type='radio' name='mode' value='light' <?php echo $mode == 'light'? "checked='checked'" : '';?> id="modelight"><strong><?php echo $lang->upgrade->to18Mode['light'];?></strong></label>
-          <p class='with-padding pd-l-20 text-muted'><?php echo $lang->custom->modeIntrodutionList['light'];?></p>
+          <label class='radio-inline'><input type='radio' name='mode' value='light' <?php echo $mode == 'light'? "checked='checked'" : '';?> id="modelight"><strong><?php echo $lang->custom->modeList['light'];?></strong></label>
+          <p class='with-padding pd-l-20 text-muted'><?php echo $lang->custom->modeIntroductionList['light'];?></p>
         </td>
         <td>
-          <label class='radio-inline'><input type='radio' name='mode' value='ALM' <?php echo $mode == 'ALM'? "checked='checked'" : '';?> id="modeALM"><strong><?php echo $lang->upgrade->to18Mode['ALM'];?></strong></label>
-          <p class='with-padding pd-l-20 text-muted'><?php echo $lang->custom->modeIntrodutionList['ALM'];?></p>
+          <label class='radio-inline'><input type='radio' name='mode' value='ALM' <?php echo $mode == 'ALM'? "checked='checked'" : '';?> id="modeALM"><strong><?php echo $lang->custom->modeList['ALM'];?></strong></label>
+          <p class='with-padding pd-l-20 text-muted'><?php echo $lang->custom->modeIntroductionList['ALM'];?></p>
         </td>
       </tr>
       <tr>
@@ -38,38 +38,29 @@
           <table class='table table-bordered'>
             <thead>
               <tr>
-                <th><?php echo $this->lang->upgrade->mode;?></th>
-                <th class="text-center"><?php echo $this->lang->upgrade->to18Mode['light'];?></th>
-                <th class="text-center"><?php echo $this->lang->upgrade->to18Mode['ALM'];?></th>
+                <th><?php echo $this->lang->custom->mode;?></th>
+                <th class="text-center"><?php echo $lang->custom->modeList['light'];?></th>
+                <th class="text-center"><?php echo $lang->custom->modeList['ALM'];?></th>
               </tr>
             </thead>
             <tbody>
+              <?php foreach($disabledFeatures as $feature):?>
+              <?php if(is_array($feature) && empty($disabledScrumFeatures)) continue;?>
+              <tr class='text-center'>
+                <td class='text-left'><?php echo (is_array($feature) && !empty($disabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+                <td><i class='icon text-red icon-close'></i></td>
+                <td><i class='icon text-success icon-check'></i></td>
+              </tr>
+              <?php endforeach;?>
+
               <?php foreach($config->custom->allFeatures as $feature):?>
-              <?php if($this->config->edition == 'max' && $feature == 'scrumDetail'):?>
-              <?php if($disabledScrumFeatures):?>
+              <?php if(in_array($feature, $disabledFeatures)) continue;?>
+              <?php if($feature == 'scrumDetail' && empty($enabledScrumFeatures)) continue;?>
               <tr class='text-center'>
-                <td class='text-left'><?php echo sprintf($this->lang->custom->scrum->common, $disabledScrumFeatures);?></td>
-                <td><i class="icon text-red icon-close"></i></td>
-                <td><i class="icon text-success icon-check"></i></td>
+                <td class='text-left'><?php echo ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+                <td><i class='icon text-success icon-check'></i></td>
+                <td><i class='icon text-success icon-check'></i></td>
               </tr>
-              <?php endif;?>
-              <?php if($enabledScrumFeatures):?>
-              <tr class='text-center'>
-                <td class='text-left'><?php echo sprintf($this->lang->custom->scrum->common, $enabledScrumFeatures);?></td>
-                <td><i class="icon text-success icon-check"></i></td>
-                <td><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <?php endif;?>
-              <?php else:?>
-              <tr class="text-center">
-                <td class='text-left'><?php echo $this->lang->upgrade->$feature;?></td>
-                <td>
-                  <?php $class = in_array($feature, $disabledFeatures) ? 'text-red icon-close' : 'text-success icon-check';?>
-                  <i class="icon <?php echo $class;?>"></i>
-                </td>
-                <td><i class="icon text-success text-success icon-check"></i></td>
-              </tr>
-              <?php endif;?>
               <?php endforeach;?>
             </tbody>
           </table>
