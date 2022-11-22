@@ -64,6 +64,7 @@ class executionModel extends model
     public function setMenu($executionID, $buildID = 0, $extra = '')
     {
         $execution = $this->getByID($executionID);
+        if(!$execution) return;
 
         if($execution->type == 'stage') unset($this->lang->execution->menu->settings['subMenu']->products);
 
