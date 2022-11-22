@@ -2365,9 +2365,12 @@ class story extends control
         {
             $this->lang->story->title = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
         }
-        unset($this->config->product->search['fields']['plan']);
 
-        if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
+        if(!empty($product->shadow)) 
+        {
+            unset($this->config->product->search['fields']['plan']);
+            unset($this->config->product->search['fields']['product']);
+        }
 
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType", '', true);
