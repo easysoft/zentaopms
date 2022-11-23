@@ -7612,7 +7612,7 @@ class upgradeModel extends model
         foreach($projects as $year => $sprints)
         {
             $project = new stdclass();
-            $project->name           = $year;
+            $project->name           = $year > 0 ? $year : $this->lang->upgrade->unknownDate;
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;
