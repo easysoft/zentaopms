@@ -177,7 +177,7 @@ class upgrade extends control
             }
             if(version_compare($openVersion, '15_0', '>=') and $systemMode == 'new')
             {
-                $this->loadModel('setting')->setItem('system.common.global.mode', 'new');
+                $this->loadModel('setting')->setItem('system.common.global.mode', 'ALM');
                 $selectMode = false;
             }
             if(version_compare($openVersion, '18_0', '>=')) $selectMode = false;
