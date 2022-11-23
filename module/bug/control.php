@@ -227,7 +227,7 @@ class bug extends control
         $this->view->product         = $product;
         $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch);
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch, 'nodeletereleased');
         $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
@@ -933,7 +933,7 @@ class bug extends control
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all', '');
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all', 'nodeletereleased');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
 
@@ -1079,7 +1079,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->edit;
 
         /* Assign. */
-        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty');
+        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,nodeletereleased');
         if($executionID)
         {
             $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch', $executionID, 'execution');
@@ -1933,7 +1933,7 @@ class bug extends control
 
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty', 0, 'execution', $bug->openedBuild);
         $this->view->actions = $this->action->getList('bug', $bugID);
 
         $this->display();

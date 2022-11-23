@@ -202,7 +202,7 @@ class buildModel extends model
      *
      * @param int|array  $products
      * @param string|int $branch
-     * @param string     $params   noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled, can be a set of them
+     * @param string     $params   noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|nodeletereleased, can be a set of them
      * @param string|int $objectID
      * @param string     $objectType
      * @param int|array  $buildIdList
@@ -221,8 +221,8 @@ class buildModel extends model
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
                 ->beginIF($products)->andWhere('product')->in($products)->fi()
-                ->beginIF($objectType === 'execution')->andWhere('execution')->eq($objectID)->fi()
-                ->beginIF($objectType === 'project')->andWhere('project')->eq($objectID)->fi()
+                ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
+                ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
                 ->fetchPairs();
         }
 
@@ -297,7 +297,7 @@ class buildModel extends model
                 {
                     if(!isset($allBuilds[$buildID])) continue;
                     $build = $allBuilds[$buildID];
-                    unset($builds[$build->date][$buildID]);
+                    if(strpos($params, 'nodeletereleased') === false) unset($builds[$build->date][$buildID]);
                 }
             }
         }
