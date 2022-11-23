@@ -2247,8 +2247,8 @@ class bugModel extends model
 
         if(!empty($stepResults))
         {
-            $bugStep = '';
-            $bugResult = '';
+            $bugStep   = '';
+            $bugResult = isset($stepResults[0]) ? $stepResults[0]['real'] : '';
             $bugExpect = '';
             foreach($steps as $stepId)
             {
