@@ -728,6 +728,7 @@ class bugModel extends model
             ->setIF($this->post->assignedTo  == '' and $oldBug->status           == 'closed', 'assignedTo', 'closed')
             ->setIF($this->post->resolution  == '' and $this->post->resolvedDate =='', 'status', 'active')
             ->setIF($this->post->resolution  != '', 'confirmed', 1)
+            ->setIF($this->post->resolution  != '' and $this->post->resolution != 'duplicate', 'duplicateBug', 0)
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF(!$this->post->linkBug, 'linkBug', '')
             ->setIF($this->post->case === '', 'case', 0)
@@ -839,8 +840,9 @@ class bugModel extends model
             {
                 $oldBug = $oldBugs[$bugID];
 
-                $os       = array_filter($data->os[$bugID]);
-                $browsers = array_filter($data->browsers[$bugID]);
+                $os           = array_filter($data->os[$bugID]);
+                $browsers     = array_filter($data->browsers[$bugID]);
+                $duplicateBug = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
 
                 $bug = new stdclass();
                 $bug->id             = $bugID;
@@ -861,7 +863,7 @@ class bugModel extends model
                 $bug->os             = implode(',', $os);
                 $bug->browser        = implode(',', $browsers);
                 $bug->resolution     = $data->resolutions[$bugID];
-                $bug->duplicateBug   = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
+                $bug->duplicateBug   = ($bug->resolution  != '' and $bug->resolution != 'duplicate') ? 0 : $duplicateBug;
 
                 if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
                 if($bug->resolution != '') $bug->confirmed = 1;
