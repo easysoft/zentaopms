@@ -16,29 +16,29 @@
   <div class='main-col main-content'>
     <div class='center-block'>
       <div class='main-header'>
-        <h2><?php echo $lang->executionnode->create;?></h2>
+        <h2><?php echo $lang->zanode->create;?></h2>
       </div>
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->executionnode->hostName;?></th>
+            <th><?php echo $lang->zanode->hostName;?></th>
             <td><?php echo html::select('parent', $hostPairs, '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
-            <th class='w-120px'><?php echo $lang->executionnode->name;?></th>
-            <td class='p-25f'><?php echo html::input('name', '', "class='form-control' placeholder=\"{$lang->executionnode->nameValid}\"");?></td>
+            <th class='w-120px'><?php echo $lang->zanode->name;?></th>
+            <td class='p-25f'><?php echo html::input('name', '', "class='form-control' placeholder=\"{$lang->zanode->nameValid}\"");?></td>
             <td></td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->image;?></th>
+            <th><?php echo $lang->zanode->image;?></th>
             <td id="template"><?php echo html::select('image', '', '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->cpuCores;?></th>
-            <td><?php echo html::select('cpuCores', $config->executionnode->os->cpuCores, '', "class='form-control chosen'")?></td>
+            <th><?php echo $lang->zanode->cpuCores;?></th>
+            <td><?php echo html::select('cpuCores', $config->zanode->os->cpuCores, '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->memory;?></th>
+            <th><?php echo $lang->zanode->memory;?></th>
             <td>
               <div class='input-group'>
                 <?php echo html::input('memory', '', "class='form-control'");?>
@@ -47,7 +47,7 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->diskSize;?></th>
+            <th><?php echo $lang->zanode->diskSize;?></th>
             <td>
               <div class='input-group'>
                 <?php echo html::input('diskSize', '', "class='form-control'");?>
@@ -58,11 +58,11 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->osName;?></th>
+            <th><?php echo $lang->zanode->osName;?></th>
             <td><?php echo html::input('osName', '', "class='form-control' readonly='readonly'")?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->executionnode->desc ?></th>
+            <th><?php echo $lang->zanode->desc ?></th>
             <td colspan='2'><?php echo html::textarea('desc', '', "class='form-control'")?></td>
             <td></td>
           </tr>

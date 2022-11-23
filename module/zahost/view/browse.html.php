@@ -45,10 +45,10 @@
           <th class='c-id'>         <?php common::printOrderLink('id',              $orderBy, $vars, $lang->idAB);?></th>
           <th class='c-name'>       <?php common::printOrderLink('name',            $orderBy, $vars, $lang->zahost->name);?></th>
           <th class='c-type'>       <?php common::printOrderLink('type',            $orderBy, $vars, $lang->zahost->type);?></th>
-          <th class='c-ip'>         <?php common::printOrderLink('address',         $orderBy, $vars, $lang->zahost->IP);?></th>
-          <th class='c-cpu'>        <?php common::printOrderLink('cpu',             $orderBy, $vars, $lang->zahost->cpu         );?></th>
+          <th class='c-ip'>         <?php common::printOrderLink('extranet',         $orderBy, $vars, $lang->zahost->extranet);?></th>
+          <th class='c-cpu'>        <?php common::printOrderLink('cpuCores',             $orderBy, $vars, $lang->zahost->cpuCores);?></th>
           <th class='c-memory'>     <?php common::printOrderLink('memory',          $orderBy, $vars, $lang->zahost->memory);?></th>
-          <th class='c-diskSize'>       <?php common::printOrderLink('diskSize',            $orderBy, $vars, $lang->zahost->diskSize);?></th>
+          <th class='c-diskSize'>   <?php common::printOrderLink('diskSize',            $orderBy, $vars, $lang->zahost->diskSize);?></th>
           <th class='c-software'>   <?php common::printOrderLink('vsoft', $orderBy, $vars, $lang->zahost->vsoft);?></th>
           <th class='c-status'>     <?php common::printOrderLink('t2.status',       $orderBy, $vars, $lang->zahost->status);?></th>
           <th class='c-datetime'>   <?php common::printOrderLink('registerDate',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
@@ -61,13 +61,13 @@
           <td><?php printf('%03d', $host->hostID);?></td>
           <td title='<?php echo $host->name?>'><?php echo html::a($this->inlink('view', "id=$host->hostID"), $host->name, '', "");?></td>
           <td><?php echo zget($lang->zahost->zaHostTypeList, $host->hostType);?></td>
-          <td><?php echo $host->address;?></td>
-          <td><?php echo $host->cpu;?></td>
+          <td><?php echo $host->extranet;?></td>
+          <td><?php echo $host->cpuCores;?></td>
           <td><?php echo $host->memory . $lang->zahost->unitList['GB'];?></td>
           <td><?php echo $host->diskSize . zget($lang->zahost->unitList, $host->unit);?></td>
           <td><?php echo $host->vsoft;?></td>
           <td><?php echo zget($lang->host->statusList, $host->status);?></td>
-          <td><?php echo helper::isZeroDate($host->registerDate) ? '' : $host->registerDate;?></td>
+          <td><?php echo helper::isZeroDate($host->heartbeat) ? '' : $host->heartbeat;?></td>
           <td class='c-actions'>
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
             <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");;?>

@@ -163,7 +163,7 @@ $routes['/reports'] = 'reports';
 
 $routes['/host/heartbeat'] = 'hostHeartbeat';
 
-$routes['/executionnode/heartbeat'] = 'executionnodeHeartbeat';
+$routes['/zanode/heartbeat'] = 'zanodeHeartbeat';
 
 $routes['/z/folders']           = 'zfolders';
 $routes['/z/folders/:id']       = 'zfolder';

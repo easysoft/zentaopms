@@ -67,7 +67,7 @@ class zahost extends control
 
         $this->view->zahost     = $this->zahost->getById($id);
         $this->view->orderBy    = $orderBy;
-        $this->view->nodeList   = $this->loadModel("executionnode")->getListByHost($this->view->zahost->parent, $orderBy);
+        $this->view->nodeList   = $this->loadModel("zanode")->getListByHost($this->view->zahost->parent, $orderBy);
         $this->view->actions    = $this->loadModel('action')->getList('zahost', $id);
         $this->display();
     }

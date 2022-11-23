@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-class executionnode extends control
+class zanode extends control
 {
 
     /**
@@ -33,18 +33,18 @@ class executionnode extends control
 
         $queryID  = ($browseType == 'bysearch')  ? (int)$param : 0;
         $pager    = pager::init($recTotal, $recPerPage, $pageID);
-        $nodeList = $this->executionnode->getListByQuery($browseType, $queryID, $orderBy, $pager);
+        $nodeList = $this->zanode->getListByQuery($browseType, $queryID, $orderBy, $pager);
         $hosts    = $this->loadModel('zahost')->getPairs('host');
 
         /* Build the search form. */
-        $actionURL = $this->createLink('executionnode', 'browse', "browseType=bySearch&queryID=myQueryID");
-        $this->config->executionnode->search['actionURL'] = $actionURL;
-        $this->config->executionnode->search['queryID']   = $queryID;
-        $this->config->executionnode->search['onMenuBar'] = 'no';
-        $this->config->executionnode->search['params']['hostID']['values'] = array('' => '') + $hosts;
-        $this->loadModel('search')->setSearchParams($this->config->executionnode->search);
+        $actionURL = $this->createLink('zanode', 'browse', "browseType=bySearch&queryID=myQueryID");
+        $this->config->zanode->search['actionURL'] = $actionURL;
+        $this->config->zanode->search['queryID']   = $queryID;
+        $this->config->zanode->search['onMenuBar'] = 'no';
+        $this->config->zanode->search['params']['hostID']['values'] = array('' => '') + $hosts;
+        $this->loadModel('search')->setSearchParams($this->config->zanode->search);
 
-        $this->view->title      = $this->lang->executionnode->common;
+        $this->view->title      = $this->lang->zanode->common;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->nodeList   = $nodeList;
         $this->view->pager      = $pager;
@@ -66,12 +66,12 @@ class executionnode extends control
     {
         if(!empty($_POST))
         {
-            $this->executionnode->create();
+            $this->zanode->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title     = $this->lang->executionnode->create;
+        $this->view->title     = $this->lang->zanode->create;
         $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs('host');
 
         return $this->display();
@@ -86,9 +86,9 @@ class executionnode extends control
      */
     public function view($id)
     {
-        $this->view->title   = $this->lang->executionnode->view;
-        $this->view->node    = $this->executionnode->getVMByID($id);
-        $this->view->actions = $this->loadModel('action')->getList('executionnode', $id);
+        $this->view->title   = $this->lang->zanode->view;
+        $this->view->node    = $this->zanode->getVMByID($id);
+        $this->view->actions = $this->loadModel('action')->getList('zanode', $id);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
@@ -139,7 +139,7 @@ class executionnode extends control
      */
     public function handleVM($nodeID, $type)
     {
-        $error = $this->executionnode->handleVM($nodeID, $type);
+        $error = $this->zanode->handleVM($nodeID, $type);
 
         if($error)
         {
@@ -147,7 +147,7 @@ class executionnode extends control
         }
         else
         {
-            return print(js::alert($this->lang->executionnode->actionSuccess) . js::reload('parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
         }
     }
 
@@ -159,7 +159,7 @@ class executionnode extends control
      */
     public function destroy($nodeID)
     {
-        $error = $this->executionnode->destroy($nodeID);
+        $error = $this->zanode->destroy($nodeID);
 
         if($error)
         {
@@ -167,8 +167,8 @@ class executionnode extends control
         }
         else
         {
-            if(isonlybody()) return print(js::alert($this->lang->executionnode->actionSuccess) . js::reload('parent.parent'));
-            return print(js::alert($this->lang->executionnode->actionSuccess) . js::reload('parent'));
+            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
         }
     }
 

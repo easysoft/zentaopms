@@ -10,7 +10,7 @@ $lang->zahost->delete         = 'Supprimer';
 $lang->zahost->deleteAction   = 'Supprimer Hôte';
 $lang->zahost->byQuery        = 'Recherche';
 $lang->zahost->all            = 'Tous les hôtes';
-$lang->zahost->browseNode     = 'ExecutionNode Browse';
+$lang->zahost->browseNode     = 'ZAnode Browse';
 
 $lang->zahost->name        = 'Nom';
 $lang->zahost->IP          = 'IP/Domain';

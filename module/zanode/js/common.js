@@ -5,7 +5,7 @@ $(function()
     $('#parent').change(function()
     {
         var hostID = $('#parent').val();
-        var link   = createLink('executionnode', 'ajaxGetImages', 'hostID=' + hostID);
+        var link   = createLink('zanode', 'ajaxGetImages', 'hostID=' + hostID);
         $.get(link, function(data)
         {
             $('#template').html('').append(data);
@@ -17,7 +17,7 @@ $(function()
     $(document).on("change", '#image', function()
     {
         var image = $('#image').val();
-        var link    = createLink('executionnode', 'ajaxGetImage', 'image=' + image);
+        var link    = createLink('zanode', 'ajaxGetImage', 'image=' + image);
         $.get(link, function(data)
         {
             data = JSON.parse(data);

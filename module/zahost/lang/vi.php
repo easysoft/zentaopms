@@ -10,11 +10,7 @@ $lang->zahost->delete         = 'Delete';
 $lang->zahost->deleteAction   = 'Delete Host';
 $lang->zahost->byQuery        = 'Search';
 $lang->zahost->all            = 'All';
-$lang->zahost->browseNode     = 'ExecutionNode Browse';
-$lang->zahost->browseTemplate = 'Template Browse';
-$lang->zahost->createTemplate = 'Create Template';
-$lang->zahost->editTemplate   = 'Edit Template';
-$lang->zahost->deleteTemplate = 'Delete Template';
+$lang->zahost->browseNode     = 'ZAnode Browse';
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'IP/Domain';

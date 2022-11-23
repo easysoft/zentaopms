@@ -43,7 +43,7 @@
             <div class="col-4">
               <div class="main-row">
                 <div class="col-4 text-right"><?php echo $lang->zahost->extranet;?>:</div>
-                <div class="col-8"><?php echo $zahost->address;?></div>
+                <div class="col-8"><?php echo $zahost->extranet;?></div>
               </div>
             </div>
             <div class="col-4">
@@ -62,8 +62,8 @@
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->cpu;?>:</div>
-                <div class="col-8"><?php echo $zahost->cpu;?></div>
+                <div class="col-4 text-right"><?php echo $lang->zahost->cpuCores;?>:</div>
+                <div class="col-8"><?php echo $zahost->cpuCores;?></div>
               </div>
             </div>
             <div class="col-4">
@@ -87,22 +87,22 @@
             <thead>
               <tr>
                 <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->zahost->name);?></th>
-                <th class='c-cpu'><?php common::printOrderLink('cpu', $orderBy, $vars, $lang->executionnode->cpu);?></th>
-                <th class='c-number'><?php common::printOrderLink('memory', $orderBy, $vars, $lang->executionnode->memory);?></th>
-                <th class='c-number'><?php common::printOrderLink('diskSize', $orderBy, $vars, $lang->executionnode->diskSize);?></th>
-                <th class='c-os'><?php common::printOrderLink('os', $orderBy, $vars, $lang->executionnode->os);?></th>
-                <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->executionnode->status);?></th>
+                <th class='c-cpu'><?php common::printOrderLink('cpuCores', $orderBy, $vars, $lang->zanode->cpuCores);?></th>
+                <th class='c-number'><?php common::printOrderLink('memory', $orderBy, $vars, $lang->zanode->memory);?></th>
+                <th class='c-number'><?php common::printOrderLink('diskSize', $orderBy, $vars, $lang->zanode->diskSize);?></th>
+                <th class='c-os'><?php common::printOrderLink('osName', $orderBy, $vars, $lang->zanode->osName);?></th>
+                <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->zanode->status);?></th>
               </tr>
             </thead>
             <tbody>
               <?php foreach($nodeList as $node):?>
               <tr>
                 <td title="<?php echo $node->name;?>"><?php echo $node->name;?></td>
-                <td><?php echo zget($config->executionnode->os->cpu, $node->cpu);?></td>
+                <td><?php echo zget($config->zanode->os->cpuCores, $node->cpuCores);?></td>
                 <td><?php echo $node->memory . $this->lang->zahost->unitList['GB'];?></td>
-                <td><?php echo $node->diskSize . zget($this->lang->zahost->unitList, $node->unit);?></td>
-                <td><?php echo zget($config->executionnode->os->list, $node->os);?></td>
-                <td><?php echo zget($lang->executionnode->statusList, $node->status);?></td>
+                <td><?php echo $node->diskSize . $this->lang->zahost->unitList['GB'];?></td>
+                <td><?php echo $node->osName;?></td>
+                <td><?php echo zget($lang->zanode->statusList, $node->status);?></td>
               </tr>
               <?php endforeach;?>
             </tbody>

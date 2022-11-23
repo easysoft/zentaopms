@@ -48,7 +48,7 @@ $config->action->objectNameFields['gogs']          = 'name';
 $config->action->objectNameFields['stage']         = 'name';
 $config->action->objectNameFields['apistruct']     = 'name';
 $config->action->objectNameFields['repo']          = 'name';
-$config->action->objectNameFields['executionnode'] = 'name';
+$config->action->objectNameFields['zanode']        = 'name';
 
 $config->action->commonImgSize = 870;
 

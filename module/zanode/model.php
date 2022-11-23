@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-class executionnodemodel extends model
+class zanodemodel extends model
 {
 
     const STATUS_CREATED      = 'created';
@@ -39,16 +39,16 @@ class executionnodemodel extends model
         $data = fixer::input('post')->get();
 
         /* Batch check fields. */
-        $this->lang->vm = $this->lang->executionnode;
+        $this->lang->vm = $this->lang->zanode;
         $data->type = 'node';
         $this->dao->update(TABLE_ZAHOST)->data($data)
-            ->batchCheck($this->config->executionnode->create->requiredFields, 'notempty')
+            ->batchCheck($this->config->zanode->create->requiredFields, 'notempty')
             ->check('name', 'unique');
         if(dao::isError()) return false;
 
         if(!preg_match("/^(?!_)(?!-)(?!\.)[a-zA-Z0-9\_\.\-]+$/", $data->name))
         {
-            dao::$errors[] = $this->lang->executionnode->nameValid;
+            dao::$errors[] = $this->lang->zanode->nameValid;
             return false;
         }
 
@@ -62,7 +62,7 @@ class executionnodemodel extends model
         $mac = $this->genmac();
 
         /* Prepare create params. */
-        $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->executionnode->defaultPort;
+        $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->zanode->defaultPort;
         $param    = array(
             'os'           => $image->os,
             'path'         => $image->path,
@@ -76,12 +76,12 @@ class executionnodemodel extends model
 
         if(empty($result))
         {
-            dao::$errors[] = $this->lang->executionnode->notFoundAgent;
+            dao::$errors[] = $this->lang->zanode->notFoundAgent;
             return false;
         }
         if($result->code != 'success')
         {
-            dao::$errors[] = $this->lang->executionnode->createVmFail;
+            dao::$errors[] = $this->lang->zanode->createVmFail;
             return false;
         }
 
@@ -101,7 +101,7 @@ class executionnodemodel extends model
         $nodeID = $this->dao->lastInsertID();
 
         /* update action log. */
-        $this->loadModel('action')->create('executionnode', $nodeID, 'Created');
+        $this->loadModel('action')->create('zanode', $nodeID, 'Created');
         return true;
     }
 
@@ -118,15 +118,15 @@ class executionnodemodel extends model
         $host = $this->getHostByID($node->parent);
 
         /* Prepare create params. */
-        $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->executionnode->defaultPort;
+        $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->zanode->defaultPort;
         $path     = '/api/v1/kvm/' . $node->name . '/' . $type;
         $param    = array('vmUniqueName' => $node->name);
 
         $result = commonModel::http($agnetUrl . $path, $param);
         $data   = json_decode($result, true);
-        if(empty($data)) return $this->lang->executionnode->notFoundAgent;
+        if(empty($data)) return $this->lang->zanode->notFoundAgent;
 
-        if($data['code'] != 'success') return zget($this->lang->executionnode->apiError, $data['code'], $data['msg']);
+        if($data['code'] != 'success') return zget($this->lang->zanode->apiError, $data['code'], $data['msg']);
 
         if($type != 'reboot')
         {
@@ -134,7 +134,7 @@ class executionnodemodel extends model
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq($status)->where('id')->eq($id)->exec();
         }
 
-        $this->loadModel('action')->create('executionnode', $id, ucfirst($type));
+        $this->loadModel('action')->create('zanode', $id, ucfirst($type));
         return;
     }
 
@@ -155,13 +155,13 @@ class executionnodemodel extends model
         /* Prepare create params. */
         if($host)
         {
-            $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->executionnode->defaultPort;
+            $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->zanode->defaultPort;
             $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req));
 
             $data = json_decode($result, true);
-            if(empty($data)) return $this->lang->executionnode->notFoundAgent;
+            if(empty($data)) return $this->lang->zanode->notFoundAgent;
 
-            if($data['code'] != 'success') return zget($this->lang->executionnode->apiError, $data['code'], $data['msg']);
+            if($data['code'] != 'success') return zget($this->lang->zanode->apiError, $data['code'], $data['msg']);
         }
 
         /* delete execution node. */
@@ -169,7 +169,7 @@ class executionnodemodel extends model
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
             ->exec();
-        $this->loadModel('action')->create('executionnode', $id, 'destroy');
+        $this->loadModel('action')->create('zanode', $id, 'destroy');
         return;
     }
 
@@ -183,7 +183,7 @@ class executionnodemodel extends model
     public function getNodeCreateActionByID($id)
     {
         return $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq('executionnode')
+            ->where('objectType')->eq('zanode')
             ->andWhere('objectID')->eq($id)
             ->andWhere('action')->eq('created')
             ->fetch();
@@ -256,9 +256,9 @@ class executionnodemodel extends model
             }
             else
             {
-                if($this->session->executionnodeQuery == false) $this->session->set('executionnodeQuery', ' 1 = 1');
+                if($this->session->zanodeQuery == false) $this->session->set('zanodeQuery', ' 1 = 1');
             }
-            $query = $this->session->executionnodeQuery;
+            $query = $this->session->zanodeQuery;
             $query = str_replace('`id`', 't1.`id`', $query);
             $query = str_replace('`name`', 't1.`name`', $query);
             $query = str_replace('`status`', 't1.`status`', $query);
@@ -266,7 +266,7 @@ class executionnodemodel extends model
             $query = str_replace('`parent`', 't1.`parent`', $query);
         }
 
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as hostIP,t3.os')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as hostIP,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.deleted')->eq(0)
@@ -289,7 +289,7 @@ class executionnodemodel extends model
      */
     public function getListByHost($hostID, $orderBy = 'id_desc')
     {
-        return $this->dao->select('id, name, vnc, cpu, memory, disk, os, status')->from(TABLE_ZAHOST)
+        return $this->dao->select('id, name, vnc, cpuCores, memory, diskSize, osName, status')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)
             ->andWhere("parent")->eq($hostID)
             ->orderBy($orderBy)
@@ -360,7 +360,7 @@ class executionnodemodel extends model
      */
     public function getNodeByID($id)
     {
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t3.os')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
