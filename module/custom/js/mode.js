@@ -2,17 +2,10 @@ $(function()
 {
     $('#modeTab').addClass('btn-active-text');
 
-    $('[name=mode]').change(function()
+    $('#useLight, #useALM').click(function()
     {
-        $('#submit').prop('disabled', 'disabled');
-        if(mode != $(this).val()) $('#submit').prop('disabled', '');
-        $('#program').closest('tr').toggle(mode == 'ALM' && $(this).val() == 'light');
-    });
-
-    $(document).on('click', '#submit', function()
-    {
-        var selectedMode = $('[name=mode]:checked').val();
-        if(mode == selectedMode) return false;
+        var selectedMode = $(this).data('mode');
+        $('#mode').val(selectedMode);
 
         if(selectedMode == 'light' && hasProgram)
         {
@@ -27,7 +20,7 @@ $(function()
         }
 
         return false;
-    });
+    })
 
     $(document).on('click', '.btn-save', function()
     {
