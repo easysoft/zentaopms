@@ -221,10 +221,9 @@ class productplanModel extends model
             ->beginIF($branch !== '')->andWhere('branch')->eq($branch)->fi()
             ->andWhere('parent')->le(0)
             ->andWhere('deleted')->eq(0)
+            ->beginIF($exclude)->andWhere('status')->notin($exclude)
             ->orderBy('id_desc')
             ->fetchPairs();
-
-        if($exclude) unset($planPairs[$exclude]);
 
         return $planPairs;
     }
