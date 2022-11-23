@@ -836,7 +836,7 @@ class testcase extends control
         $this->view->caseModule = empty($case->module) ? '' : $this->tree->getById($case->module);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        $this->view->preAndNext = !isOnlybody() ? $this->loadModel('common')->getPreAndNextObject('testcase', $caseID) : '';
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
         $this->view->isLibCase  = $isLibCase;
         $this->view->caseFails  = $caseFails;
