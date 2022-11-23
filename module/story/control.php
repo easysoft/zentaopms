@@ -1349,7 +1349,7 @@ class story extends control
         $product       = $this->product->getByID($story->product);
         $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch();
         $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
         $modulePath    = $this->tree->getParents($story->module);
@@ -2366,7 +2366,7 @@ class story extends control
             $this->lang->story->title = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
         }
 
-        if(!empty($product->shadow)) 
+        if(!empty($product->shadow))
         {
             unset($this->config->product->search['fields']['plan']);
             unset($this->config->product->search['fields']['product']);
