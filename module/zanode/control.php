@@ -24,7 +24,7 @@ class zanode extends control
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $browseType = strtolower($browseType);
 
@@ -41,7 +41,7 @@ class zanode extends control
         $this->config->zanode->search['actionURL'] = $actionURL;
         $this->config->zanode->search['queryID']   = $queryID;
         $this->config->zanode->search['onMenuBar'] = 'no';
-        $this->config->zanode->search['params']['hostID']['values'] = array('' => '') + $hosts;
+        $this->config->zanode->search['params']['host']['values'] = array('' => '') + $hosts;
         $this->loadModel('search')->setSearchParams($this->config->zanode->search);
 
         $this->view->title      = $this->lang->zanode->common;
@@ -78,7 +78,7 @@ class zanode extends control
     }
 
     /**
-     * View VM.
+     * View Node.
      *
      * @param  int    $id
      * @access public
@@ -87,7 +87,7 @@ class zanode extends control
     public function view($id)
     {
         $this->view->title   = $this->lang->zanode->view;
-        $this->view->node    = $this->zanode->getVMByID($id);
+        $this->view->zanode    = $this->zanode->getNodeByID($id);
         $this->view->actions = $this->loadModel('action')->getList('zanode', $id);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
 
@@ -95,7 +95,7 @@ class zanode extends control
     }
 
     /**
-     * Suspend VM.
+     * Suspend Node.
      *
      * @param  int    $nodeID
      * @access public
@@ -103,11 +103,11 @@ class zanode extends control
      */
     public function suspend($nodeID)
     {
-        $this->handleVM($nodeID, 'suspend');
+        $this->handleNode($nodeID, 'suspend');
     }
 
     /**
-     * Reboot VM.
+     * Reboot Node.
      *
      * @param  int    $nodeID
      * @access public
@@ -115,11 +115,11 @@ class zanode extends control
      */
     public function reboot($nodeID)
     {
-        $this->handleVM($nodeID, 'reboot');
+        $this->handleNode($nodeID, 'reboot');
     }
 
     /**
-     * Resume VM.
+     * Resume Node.
      *
      * @param  int    $nodeID
      * @access public
@@ -127,7 +127,7 @@ class zanode extends control
      */
     public function resume($nodeID)
     {
-        $this->handleVM($nodeID, 'resume');
+        $this->handleNode($nodeID, 'resume');
     }
 
     /**
@@ -137,9 +137,9 @@ class zanode extends control
      * @param  string $type
      * @return void
      */
-    public function handleVM($nodeID, $type)
+    public function handleNode($nodeID, $type)
     {
-        $error = $this->zanode->handleVM($nodeID, $type);
+        $error = $this->zanode->handleNode($nodeID, $type);
 
         if($error)
         {

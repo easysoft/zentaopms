@@ -10,8 +10,8 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/kindeditor.html.php'; ?>
 <?php $browseLink = $this->session->zahostList ? $this->session->zahostList : $this->createLink('zahost', 'browse', "");?>
 <?php $vars = "id={$zahost->hostID}&orderBy=%s";?>
 <div id='mainMenu' class='clearfix'>
@@ -19,7 +19,7 @@
     <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, "data-app='{$app->tab}'", 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
-      <span class='label label-id'><?php echo $zahost->assetID;?></span>
+      <span class='label label-id'><?php echo $zahost->id;?></span>
       <span class='text' title='<?php echo $zahost->name;?>'><?php echo $zahost->name;?></span>
       <?php if($zahost->deleted):?>
       <span class='label label-danger'><?php echo $lang->zahost->deleted;?></span>

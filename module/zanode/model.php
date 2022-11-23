@@ -236,7 +236,7 @@ class zanodemodel extends model
      * @param  object $pager
      * @return void
      */
-    public function getListByQuery($browseType = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getListByQuery($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $pager = null)
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -246,12 +246,12 @@ class zanodemodel extends model
                 $query = $this->loadModel('search')->getQuery($param);
                 if($query)
                 {
-                    $this->session->set('vmQuery', $query->sql);
-                    $this->session->set('vmForm',  $query->form);
+                    $this->session->set('nodeQuery', $query->sql);
+                    $this->session->set('nodeForm',  $query->form);
                 }
                 else
                 {
-                    $this->session->set('vmQuery', ' 1 = 1');
+                    $this->session->set('nodeQuery', ' 1 = 1');
                 }
             }
             else
@@ -264,9 +264,10 @@ class zanodemodel extends model
             $query = str_replace('`status`', 't1.`status`', $query);
             $query = str_replace('`os`', 't1.`os`', $query);
             $query = str_replace('`parent`', 't1.`parent`', $query);
+            $query = str_replace('`hostID`', 't2.`id`', $query);
         }
 
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as hostIP,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.deleted')->eq(0)
@@ -435,5 +436,20 @@ class zanodemodel extends model
         $returnData->vnc   = $vm->vnc;
         $returnData->token     = $result->data->token;
         return $returnData;
+    }
+
+    public function buildOperateMenu($node)
+    {
+        if($node->deleted) return '';
+
+        $menu   = '';
+        $params = "id=$node->id";
+
+        $menu .= $this->buildMenu('zanode', 'edit',   $params, $node, 'view');
+
+        $params = "id=$node->id";
+        $menu .= $this->buildMenu('zanode', 'delete', $params, $node, 'view', 'trash', 'hiddenwin');
+
+        return $menu;
     }
 }
