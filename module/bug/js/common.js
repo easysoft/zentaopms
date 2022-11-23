@@ -293,14 +293,15 @@ function loadProductStories(productID)
  */
 function loadProductProjects(productID)
 {
+    required = $('#project_chosen').hasClass('required');
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + oldProjectID);
     $('#projectBox').load(link, function()
     {
         $(this).find('select').chosen();
         var projectID = $('#project').find("option:selected").val();
+        if(required) $(this).find('#project_chosen').addClass('required');
         loadProductExecutions(productID, projectID);
     });
 }
