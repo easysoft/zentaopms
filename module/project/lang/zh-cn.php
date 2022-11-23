@@ -183,7 +183,7 @@ $lang->project->kanban             = '看板';
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
 $lang->project->projectTypeList[1] = '产品型项目';
-$lang->project->projectTypeList[0] = '无产品项目';
+$lang->project->projectTypeList[0] = '项目型项目';
 
 /* Project Kanban. */
 $lang->project->typeList = array();

@@ -46,7 +46,7 @@
         <?php if(!$build->execution):?>
         <tr>
           <th><?php echo $lang->build->builds;?></th>
-          <td id='buildBox'><?php echo html::select('builds[]', $builds, $build->builds, "class='form-control chosen' multiple $disabled");?></td>
+          <td id='buildBox'><?php echo html::select('builds[]', $builds, $build->builds, "class='form-control chosen' multiple $disabled data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
           <td>
             <?php if($disabled):?>
             <?php echo $lang->build->notice->changeBuilds;?>
@@ -104,4 +104,5 @@
 <?php js::set('builds', $build->builds)?>
 <?php js::set('executionID', $build->execution)?>
 <?php js::set('currentTab', $this->app->tab);?>
+<?php js::set('multipleSelect', $lang->build->placeholder->multipleSelect);?>
 <?php include '../../common/view/footer.html.php';?>

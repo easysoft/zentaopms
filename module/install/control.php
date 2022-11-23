@@ -217,8 +217,14 @@ class install extends control
         else
         {
             $this->app->loadLang('upgrade');
-            $this->view->edition = $this->config->edition;
-            $this->view->title   = $this->lang->install->selectMode;
+
+            list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->loadModel('custom')->computeFeatures();
+
+            $this->view->title                 = $this->lang->install->selectMode;
+            $this->view->edition               = $this->config->edition;
+            $this->view->disabledFeatures      = $disabledFeatures;
+            $this->view->enabledScrumFeatures  = $enabledScrumFeatures;
+            $this->view->disabledScrumFeatures = $disabledScrumFeatures;
             $this->display();
         }
     }

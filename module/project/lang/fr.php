@@ -182,8 +182,8 @@ $lang->project->kanban             = 'Kanban';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
-$lang->project->projectTypeList[1] = 'Has Product';
-$lang->project->projectTypeList[0] = 'No Product';
+$lang->project->projectTypeList[1] = 'Product-based';
+$lang->project->projectTypeList[0] = 'Non-product-based';
 
 /* Project Kanban. */
 $lang->project->typeList = array();

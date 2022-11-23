@@ -177,7 +177,7 @@ class build extends control
         {
             $productGroups = $this->product->getProducts($build->project);
             $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
-            $builds        = $this->build->getBuildPairs($build->product, $build->branch, 'noempty,notrunk,separate,noproject', $build->project, 'project');
+            $builds        = $this->build->getBuildPairs($build->product, $build->branch, 'noempty,notrunk,separate', $build->project, 'project', $build->builds, false);
         }
 
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
@@ -450,7 +450,7 @@ class build extends control
         }
 
         if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
-        $builds = $this->build->getBuildPairs($productID, $branch, $type, $projectID, 'project', $build);
+        $builds = $this->build->getBuildPairs($productID, $branch, $type, $projectID, 'project', $build, false);
         if(strpos($extra, 'multiple') !== false) $varName .= '[]';
         if($isJsonView) return print(json_encode($builds));
         return print(html::select($varName, $builds, $build, "class='form-control chosen' $extra"));

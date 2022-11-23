@@ -88,10 +88,7 @@
         <?php endif;?>
         <tr>
           <th id='projectType'><?php echo $lang->project->type;?></th>
-          <td>
-            <?php echo zget($lang->project->projectTypeList, $project->hasProduct);?>
-            <?php echo html::hidden('hasProduct', $project->hasProduct);?>
-          </td>
+          <td colspan='3'><?php echo nl2br(html::radio('hasProduct', $lang->project->projectTypeList, $project->hasProduct, 'disabled'));?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>

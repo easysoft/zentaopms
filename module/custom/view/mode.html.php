@@ -19,66 +19,55 @@
     <div class='main-header'>
       <h2><?php echo $lang->custom->modeManagement;?></h2>
     </div>
-    <table class='table table-form w-700px'>
-      <tr>
-        <td colspan='2'><?php echo sprintf($lang->custom->currentModeTips, $lang->custom->modeList[$mode], $lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);?> </td>
-      </tr>
-      <tr>
-        <td>
-          <label class='radio-inline'><input type='radio' name='mode' value='light' <?php echo $mode == 'light'? "checked='checked'" : '';?> id="modelight"><strong><?php echo $lang->upgrade->to18Mode['light'];?></strong></label>
-          <p class='with-padding pd-l-20 text-muted'><?php echo $lang->custom->modeIntrodutionList['light'];?></p>
-        </td>
-        <td>
-          <label class='radio-inline'><input type='radio' name='mode' value='ALM' <?php echo $mode == 'ALM'? "checked='checked'" : '';?> id="modeALM"><strong><?php echo $lang->upgrade->to18Mode['ALM'];?></strong></label>
-          <p class='with-padding pd-l-20 text-muted'><?php echo $lang->custom->modeIntrodutionList['ALM'];?></p>
-        </td>
-      </tr>
-      <tr>
-        <td colspan='2'>
-          <table class='table table-bordered'>
-            <thead>
-              <tr>
-                <th><?php echo $this->lang->upgrade->mode;?></th>
-                <th class="text-center"><?php echo $this->lang->upgrade->to18Mode['light'];?></th>
-                <th class="text-center"><?php echo $this->lang->upgrade->to18Mode['ALM'];?></th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach($config->custom->allFeatures as $feature):?>
-              <?php if($this->config->edition == 'max' && $feature == 'scrumDetail'):?>
-              <?php if($disabledScrumFeatures):?>
-              <tr class='text-center'>
-                <td class='text-left'><?php echo sprintf($this->lang->custom->scrum->common, $disabledScrumFeatures);?></td>
-                <td><i class="icon text-red icon-close"></i></td>
-                <td><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <?php endif;?>
-              <?php if($enabledScrumFeatures):?>
-              <tr class='text-center'>
-                <td class='text-left'><?php echo sprintf($this->lang->custom->scrum->common, $enabledScrumFeatures);?></td>
-                <td><i class="icon text-success icon-check"></i></td>
-                <td><i class="icon text-success icon-check"></i></td>
-              </tr>
-              <?php endif;?>
-              <?php else:?>
-              <tr class="text-center">
-                <td class='text-left'><?php echo $this->lang->upgrade->$feature;?></td>
-                <td>
-                  <?php $class = in_array($feature, $disabledFeatures) ? 'text-red icon-close' : 'text-success icon-check';?>
-                  <i class="icon <?php echo $class;?>"></i>
-                </td>
-                <td><i class="icon text-success text-success icon-check"></i></td>
-              </tr>
-              <?php endif;?>
-              <?php endforeach;?>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td colspan='2'><?php echo html::submitButton($lang->custom->switch, 'disabled');?></td>
-      </tr>
-    </table>
+    <div class='main-table'>
+      <p class='strong'><?php echo sprintf($lang->custom->currentModeTips, $lang->custom->modeList[$mode], $lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);?> </p>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th><?php echo $this->lang->custom->mode;?></th>
+            <th class='text-center'><?php echo $lang->custom->modeList['light'];?></th>
+            <th class='text-center'><?php echo $lang->custom->modeList['ALM'];?></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><?php echo $lang->custom->usage;?></td>
+            <td class='text-center'><?php echo $lang->custom->modeIntroductionList['light'];?></td>
+            <td class='text-center'><?php echo $lang->custom->modeIntroductionList['ALM'];?></td>
+          </tr>
+          <?php foreach($disabledFeatures as $feature):?>
+          <?php if(is_array($feature) && empty($disabledScrumFeatures)) continue;?>
+          <tr class='text-center'>
+            <td class='text-left'><?php echo (is_array($feature) && !empty($disabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+            <td><i class='icon text-red icon-close'></i></td>
+            <td><i class='icon text-success icon-check'></i></td>
+          </tr>
+          <?php endforeach;?>
+
+          <?php foreach($config->custom->allFeatures as $feature):?>
+          <?php if(in_array($feature, $disabledFeatures)) continue;?>
+          <?php if($feature == 'scrumDetail' && empty($enabledScrumFeatures)) continue;?>
+          <tr class='text-center'>
+            <td class='text-left'><?php echo ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+            <td><i class='icon text-success icon-check'></i></td>
+            <td><i class='icon text-success icon-check'></i></td>
+          </tr>
+          <?php endforeach;?>
+          <tr class='text-center'>
+            <td class='text-left strong'><?php echo $this->lang->custom->selectUsage;?></td>
+            <td>
+              <?php $primaryClass = $mode == 'light' ? 'disabled' : 'btn-primary';?>
+              <?php echo html::commonButton($lang->custom->useLight, "id='useLight' data-mode='light'", "btn btn-wide $primaryClass");?>
+            </td>
+            <td>
+              <?php $primaryClass = $mode == 'ALM' ? 'disabled' : 'btn-primary';?>
+              <?php echo html::commonButton($lang->custom->useALM, "id='useALM' data-mode='ALM'", "btn btn-wide $primaryClass");?>
+              <?php echo html::hidden('mode', $mode);?>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class='modal fade' id='selectProgramModal'>
       <div class='modal-dialog'>

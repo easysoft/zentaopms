@@ -54,12 +54,11 @@ class releaseModel extends model
      */
     public function getList($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $pager = null)
     {
-        $releases = $this->dao->select('t1.*, t2.name as productName')
-            ->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->beginIF($branch !== 'all')->andWhere('t1.branch')->like(",{$branch},")->fi()
+            ->beginIF($branch !== 'all')->andWhere("FIND_IN_SET($branch, t1.branch)")->fi()
             ->beginIF($type != 'all' && $type != 'review')->andWhere('t1.status')->eq($type)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->orderBy($orderBy)
@@ -211,7 +210,15 @@ class releaseModel extends model
 
         if($release->build)
         {
-            $builds = $this->dao->select('id,project,branch,stories,bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+            $builds = $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+            $linkedBuilds = array();
+            foreach($builds as $build)
+            {
+                $build->builds = trim($build->builds, ',');
+                if(empty($build->builds)) continue;
+                $linkedBuilds = array_merge($linkedBuilds, explode(',', $build->builds));
+            }
+            if($linkedBuilds) $builds += $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($linkedBuilds)->fetchAll('id');
             foreach($builds as $build)
             {
                 $branches[$build->branch]  = $build->branch;

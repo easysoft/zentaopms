@@ -175,8 +175,12 @@ class upgrade extends control
 
                 $selectMode = false;
             }
+            if(version_compare($openVersion, '15_0', '>=') and $systemMode == 'new')
+            {
+                $this->loadModel('setting')->setItem('system.common.global.mode', 'new');
+                $selectMode = false;
+            }
             if(version_compare($openVersion, '18_0', '>=')) $selectMode = false;
-            if(version_compare($openVersion, '15_0', '>=') and $systemMode == 'ALM') $selectMode = false;
 
             if($selectMode) $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
 
@@ -237,14 +241,13 @@ class upgrade extends control
             }
         }
 
-        $checkHistoryResult = $this->upgrade->checkHistoryDataForLightMode();
+        list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->loadModel('custom')->computeFeatures();
 
-        $this->view->ur        = $checkHistoryResult['ur'];
-        $this->view->cmmi      = $checkHistoryResult['cmmi'];
-        $this->view->waterfall = $checkHistoryResult['waterfall'];
-        $this->view->assetlib  = $checkHistoryResult['assetlib'];
-        $this->view->title     = $this->lang->upgrade->selectMode;
-        $this->view->edition   = $this->config->edition;
+        $this->view->title                 = $this->lang->custom->selectUsage;
+        $this->view->edition               = $this->config->edition;
+        $this->view->disabledFeatures      = $disabledFeatures;
+        $this->view->enabledScrumFeatures  = $enabledScrumFeatures;
+        $this->view->disabledScrumFeatures = $disabledScrumFeatures;
         $this->display();
     }
 

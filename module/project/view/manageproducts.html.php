@@ -38,10 +38,11 @@
           <?php $i = 0;?>
           <?php foreach($linkedProducts as $productID => $linkedProduct):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
+          <?php $disabled = in_array($productID, $unmodifiableProducts) ? "disabled='disabled'" : '';?>
           <div class='col-sm-4'>
             <div class='product checked <?php echo isset($allBranches[$productID]) ? ' has-branch' : ''?>'>
               <div class="checkbox-primary" title='<?php echo $linkedProduct->name;?>'>
-                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked id='products{$productID}'>";?>
+                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked $disabled id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $linkedProduct->name;?>'><?php echo $linkedProduct->name;?></label>
               </div>
               <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' data-drop_direction='down' disabled='disabled'");?>

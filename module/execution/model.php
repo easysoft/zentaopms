@@ -64,6 +64,7 @@ class executionModel extends model
     public function setMenu($executionID, $buildID = 0, $extra = '')
     {
         $execution = $this->getByID($executionID);
+        if(!$execution) return;
 
         if($execution->type == 'stage') unset($this->lang->execution->menu->settings['subMenu']->products);
 
@@ -565,8 +566,8 @@ class executionModel extends model
             if($oldExecution->type == 'stage' and $field == 'name') $this->lang->project->name = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->project->name);
         }
 
-        $relationExecutionsID = $this->getRelatedExecutions($executionID);
-        $relationExecutionsID = !empty($relationExecutionsID) ? implode(',', array_keys($relationExecutionsID)) : '';
+        $relatedExecutionsID = $this->getRelatedExecutions($executionID);
+        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '';
 
         /* Update data. */
         $this->lang->error->unique = $this->lang->error->repeat;
@@ -577,7 +578,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkIF(!empty($execution->name), 'name', 'unique', "id in ('$relationExecutionsID') and type in ('sprint','stage', 'kanban') and `project` = $executionProject and `deleted` = '0'")
+            ->checkIF(!empty($execution->name), 'name', 'unique', "id in ('$relatedExecutionsID') and type in ('sprint','stage', 'kanban') and `project` = $executionProject and `deleted` = '0'")
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($executionID)
@@ -3160,6 +3161,23 @@ class executionModel extends model
         $accounts      = array_unique($accounts);
         $limited       = array_values($limited);
         $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->fetchPairs();
+
+        foreach($accounts as $key => $account)
+        {
+            if(empty($account)) continue;
+
+            if(!empty($execution->days) and (int)$days[$key] > $execution->days)
+            {
+                dao::$errors['message'][] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
+                return false;
+            }    
+            if((float)$hours[$key] > 24)
+            {
+                dao::$errors['message'][] = $this->lang->execution->errorHours;
+                return false;
+            }    
+        }
+
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->exec();
 
         $executionMember = array();
@@ -5115,7 +5133,6 @@ class executionModel extends model
         $_POST = array();
         $_POST['project']     = $projectID;
         $_POST['name']        = $project->name;
-        $_POST['code']        = $project->code;
         $_POST['begin']       = $project->begin;
         $_POST['end']         = $project->end;
         $_POST['status']      = 'wait';
@@ -5129,6 +5146,7 @@ class executionModel extends model
         $_POST['RD']          = '';
         $_POST['multiple']    = '0';
         $_POST['hasProduct']  = $project->hasProduct;
+        if($project->code) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)

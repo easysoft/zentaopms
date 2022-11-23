@@ -541,6 +541,8 @@ class project extends control
                 }
 
                 $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;
+                $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+                if(!empty($systemMode) and $systemMode == 'light') $parent = 0;
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=$parent&browseType=all", '', '', $projectID)));
             }
         }
@@ -2028,6 +2030,7 @@ class project extends control
             $executionIdList = $this->loadModel('execution')->getPairs($projectID);
 
             /* Delete shadow product.*/
+            $project = $this->project->getByID($projectID);
             if(!$project->hasProduct)
             {
                 $productID = $this->loadModel('product')->getProductIDByProject($projectID);
@@ -2237,13 +2240,14 @@ class project extends control
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed');
         if($this->config->systemMode == 'ALM')
         {
+            $topProgramID           = $this->program->getTopByPath($project->path);
             $productsGroupByProgram = $this->product->getProductsGroupByProgram();
 
             $currentProducts = array();
             $otherProducts   = array();
             foreach($productsGroupByProgram as $programID => $programProducts)
             {
-                if($programID != $project->parent)
+                if($programID != $topProgramID)
                 {
                     foreach($programProducts as $productID => $productName)
                     {

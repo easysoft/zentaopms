@@ -823,6 +823,7 @@ class reportModel extends model
         /* Get changed executions in this year. */
         $executions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq(0)
             ->andwhere('type')->eq('sprint')
+            ->andwhere('multiple')->eq('1')
             ->andWhere('LEFT(begin, 4)', true)->eq($year)
             ->orWhere('LEFT(end, 4)')->eq($year)
             ->markRight(1)

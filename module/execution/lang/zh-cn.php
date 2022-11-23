@@ -146,7 +146,9 @@ $lang->execution->estimate = '预计';
 $lang->execution->consumed = '消耗';
 $lang->execution->left     = '剩余';
 
-$lang->execution->copyTeamTip = "可以选择复制项目或{$lang->execution->common}团队的成员";
+$lang->execution->copyTeamTip         = "可以选择复制项目或{$lang->execution->common}团队的成员";
+$lang->execution->daysGreaterProject  = '可用工日不能大于执行的可用工日『%s』';
+$lang->execution->errorHours          = '可用工时/天不能大于『24』';
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";

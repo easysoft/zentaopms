@@ -99,7 +99,7 @@ class programModel extends model
         $productPrograms = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
 
         /* Put products of current program first.*/
-        if(!empty($products) and $mode != 'assign' and $programID)
+        if(!empty($products) and isset($products[$programID]) and $mode != 'assign' and $programID)
         {
             $currentProgramProducts = $products[$programID];
             unset($products[$programID]);
@@ -274,7 +274,7 @@ class programModel extends model
         $involvedPrograms = $this->getInvolvedPrograms($this->app->user->account);
 
         /* Get all products under programs. */
-        $productGroup = $this->dao->select('id, program, name')->from(TABLE_PRODUCT)
+        $productGroup = $this->dao->select('id, program, name, shadow')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('program')->in(array_keys($programs))
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
@@ -285,7 +285,12 @@ class programModel extends model
         $productPairs = array();
         foreach($productGroup as $programID => $products)
         {
-            foreach($products as $product) $productPairs[$product->id] = $product->id;
+            foreach($products as $product)
+            {
+                $productPairs[$product->id] = $product->id;
+
+                if($product->shadow) $product->name = $product->name . ' (' . $this->lang->project->common . ')';
+            }
         }
 
         /* Get all plans under products. */

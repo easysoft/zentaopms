@@ -21,7 +21,7 @@
 </div>
 <?php else:?>
 <div class="table-empty-tip">
-  <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('product', 'create', '', "<i class='icon icon-plus'></i> " . $lang->product->create, '', "class='btn btn-info' data-app='product'");?></p>
+  <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('product', 'create', "programID=0&extra=from=$moduleName", "<i class='icon icon-plus'></i> " . $lang->product->create, '', "class='btn btn-info' data-app='product'");?></p>
 </div>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

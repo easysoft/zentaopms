@@ -2359,7 +2359,6 @@ class story extends control
             $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
-            unset($this->config->product->search['fields']['plan']);
             unset($this->config->product->search['fields']['stage']);
         }
         else
@@ -2367,7 +2366,11 @@ class story extends control
             $this->lang->story->title = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
         }
 
-        if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
+        if(!empty($product->shadow)) 
+        {
+            unset($this->config->product->search['fields']['plan']);
+            unset($this->config->product->search['fields']['product']);
+        }
 
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType", '', true);
@@ -2414,7 +2417,11 @@ class story extends control
         $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
         $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
 
-        if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
+        if(!empty($product->shadow))
+        {
+            unset($this->config->product->search['fields']['product']);
+            unset($this->config->product->search['fields']['plan']);
+        }
 
         /* Build search form. */
         $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
