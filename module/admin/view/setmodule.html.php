@@ -20,7 +20,7 @@
       <table class='table table-condensed table-bordered active-disabled table-fixed'>
         <thead class='text-center'>
           <tr>
-            <th class='w-200px'><?php echo $lang->admin->setModule->module;?></th>
+            <th class='w-150px'><?php echo $lang->admin->setModule->module;?></th>
             <th><?php echo $lang->admin->setModule->optional;?></th>
           </tr>
         </thead>

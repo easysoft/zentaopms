@@ -20,6 +20,8 @@ body {margin-bottom: 25px;}
 .assignedTo{border-radius: 4px !important;}
 </style>
 <?php
+$storyString     = '';
+$reviewStoryTips = '';
 $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
 $unfoldStories     = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories     = zget($unfoldStories, $productID, array());
@@ -401,7 +403,6 @@ js::set('vision',        $this->config->vision);
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
-            $storyString = '';
             foreach($stories as $story)
             {
                 $storyProductIds[$story->product] = $story->product;

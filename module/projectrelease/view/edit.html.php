@@ -27,6 +27,7 @@
           <tr>
             <th class='w-120px'><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', $release->name, "class='form-control' required");?></td>
+            <?php if(!$product->shadow):?>
             <td>
               <?php $checked = !empty($release->marker) ? "checked='checked'" : '';?>
               <div id='markerBox' class='checkbox-primary'>
@@ -34,6 +35,7 @@
                 <label for='marker'><?php echo $lang->release->marker;?></label>
               </div>
             </td>
+            <?php endif;?>
           </tr>
           <tr>
             <th><?php echo $lang->release->includedBuild;?></th>
