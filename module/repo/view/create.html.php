@@ -23,10 +23,14 @@
       </div>
       <form id='repoForm' method='post' class='form-ajax'>
         <table class='table table-form'>
+          <?php if($this->app->tab =='project'):?>
+          <?php echo html::hidden('product', implode(',', array_keys($products)));?>
+          <?php else:?>
           <tr>
             <th><?php echo $lang->repo->product;?></th>
             <td class='required'><?php echo html::select('product[]', $products, empty($objectID) ? '' : array_keys($products), "class='form-control chosen' multiple");?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->repo->projects;?></th>
             <td id='projectContainer'><?php echo html::select('projects[]', $projects, $relatedProjects, "class='form-control chosen' multiple");?></td>
