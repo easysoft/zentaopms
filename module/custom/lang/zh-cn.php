@@ -265,7 +265,6 @@ $lang->custom->features['productRR']        = '产品-研发需求';
 $lang->custom->features['productUR']        = '产品-用户需求';
 $lang->custom->features['productLine']      = '产品-产品线';
 $lang->custom->features['projectScrum']     = '项目-敏捷模型';
-$lang->custom->features['scrumDetail']      = '敏捷项目-问题、风险、机会、过程、QA、会议、度量';
 $lang->custom->features['projectWaterfall'] = '项目-瀑布模型';
 $lang->custom->features['projectKanban']    = '项目-看板模型';
 $lang->custom->features['execution']        = '执行';
