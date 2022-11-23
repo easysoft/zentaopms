@@ -205,6 +205,7 @@ $lang->action->desc->estimated            = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->run                  = '$date, 由 <strong>$actor</strong> 执行。' . "\n";
 $lang->action->desc->syncprogram          = '$date, 由 <strong>$actor</strong> 启动(因项目开始而启动项目集)。' . "\n";
 $lang->action->desc->syncproject          = '$date, 系统判断由于' . $lang->executionCommon .'开始，将项目状态置为进行中。' . "\n";
+$lang->action->desc->syncmultipleproject  = '$date, 系统判断由于任务开始，将项目状态置为进行中。' . "\n";
 $lang->action->desc->syncexecution        = '$date, 系统判断由于任务开始，将' . $lang->executionCommon . '状态置为进行中。' . "\n";
 $lang->action->desc->syncexecutionbychild = '$date, 系统判断由于子阶段开始，将' . $lang->executionCommon . '状态置为进行中。' . "\n";
 $lang->action->desc->importfromgitlab     = '$date, 由 <strong>$actor</strong> 从Gitlab的Issue关联创建。' . "\n";

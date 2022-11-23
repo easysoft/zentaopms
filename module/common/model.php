@@ -125,7 +125,8 @@ class commonModel extends model
                  ->where('id')->eq($projectID)
                  ->exec();
 
-            $this->loadModel('action')->create('project', $projectID, 'syncproject');
+            $actionType = $project->multiple ? 'syncproject' : 'syncmultipleproject';
+            $this->loadModel('action')->create('project', $projectID, $actionType);
         }
         return $project;
     }
