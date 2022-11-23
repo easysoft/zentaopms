@@ -81,7 +81,7 @@
       <tbody>
         <?php foreach($stories as $story):?>
         <?php
-        $storyLink    = $this->createLink('story', 'view', "id=$story->id");
+        $storyLink    = $this->createLink('story', 'view', "id=$story->id", '', $story->shadow ? true : false);
         $canBeChanged = common::canBeChanged('story', $story);
         ?>
         <tr data-id='<?php echo $story->id?>'>
@@ -95,7 +95,8 @@
             <?php printf('%03d', $story->id);?>
           </td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>' title='<?php echo $story->title;?>'>
-            <?php echo common::hasPriv('story', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'") : $story->title;?>
+            <?php $class = $story->shadow ? "class='iframe'" : '';?>
+            <?php echo common::hasPriv('story', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product' $class") : $story->title;?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-right"></i></a>';;?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
