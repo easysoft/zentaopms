@@ -31,7 +31,7 @@ class buildModel extends model
             ->fetch();
         if(!$build) return false;
 
-        $build = $this->linkChildBuilds($build);
+        $build = $this->joinChildBuilds($build);
         $build = $this->loadModel('file')->replaceImgURL($build, 'desc');
         $build->files = $this->file->getByObject('build', $buildID);
         if($setImgSize) $build->desc = $this->file->setImgSize($build->desc);
@@ -588,7 +588,7 @@ class buildModel extends model
      * @access public
      * @return object
      */
-    public function linkChildBuilds($build)
+    public function joinChildBuilds($build)
     {
         $build->allBugs    = $build->bugs;
         $build->allStories = $build->stories;
