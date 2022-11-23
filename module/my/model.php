@@ -351,7 +351,7 @@ class myModel extends model
         {
             $orderBy    = (strpos($orderBy, 'priOrder') !== false or strpos($orderBy, 'severityOrder') !== false) ? $orderBy : "t1.$orderBy";
             $nameField  = $objectType == 'bug' ? 'productName' : 'productTitle';
-            $select     = "t1.*, t2.name AS {$nameField}, t2.shadow, " . (strpos($orderBy, 'severity') !== false ? "IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder" : "IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder");
+            $select     = "t1.*, t2.name AS {$nameField}, t2.shadow AS shadow, " . (strpos($orderBy, 'severity') !== false ? "IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder" : "IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder");
             $objectList = $this->dao->select($select)->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
                 ->where('t1.deleted')->eq(0)
@@ -816,7 +816,7 @@ class myModel extends model
                 $storyIDList[$storyID] = $storyID;
             }
 
-            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
+            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
@@ -835,7 +835,7 @@ class myModel extends model
         }
         else
         {
-            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
+            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
