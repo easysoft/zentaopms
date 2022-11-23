@@ -838,16 +838,22 @@ class reportModel extends model
             ->orderBy('`order` desc')
             ->fetchAll('id');
 
-        $teamExecutions = $this->dao->select('*')->from(TABLE_TEAM)
-            ->where('type')->eq('execution')
+        $teamExecutions = $this->dao->select('t1.root')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.type')->eq('execution')
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
+            ->andWhere('t2.multiple')->eq('1')
             ->andWhere('LEFT(`join`, 4)')->eq($year)
             ->fetchPairs('root', 'root');
-        $taskExecutions = $this->dao->select('execution')->from(TABLE_TASK)
-            ->where('LEFT(finishedDate, 4)')->eq($year)
-            ->andWhere('deleted')->eq(0)
+
+        $taskExecutions = $this->dao->select('t1.execution')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+            ->where('LEFT(t1.finishedDate, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
+            ->andWhere('t2.multiple')->eq('1')
+            ->andWhere('t1.deleted')->eq(0)
             ->fetchPairs('execution', 'execution');
+
         if($teamExecutions or $taskExecutions)
         {
             $executions += $this->dao->select('id,name')->from(TABLE_EXECUTION)

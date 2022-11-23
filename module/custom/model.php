@@ -826,7 +826,7 @@ class customModel extends model
      */
     public function computeFeatures()
     {
-        $disabledFeatures = array('program', 'productLine', 'scrum' => array('scrumMeasrecord'));
+        $disabledFeatures = array('program', 'productLine');
         foreach($this->config->custom->dataFeatures as $feature)
         {
             $function = 'has' . ucfirst($feature) . 'Data';
@@ -834,6 +834,7 @@ class customModel extends model
             {
                 if(strpos($feature, 'scrum') !== false)
                 {
+                    if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
                     $disabledFeatures['scrum'][] = $feature;
                 }
                 elseif($feature == 'waterfall')
@@ -846,6 +847,8 @@ class customModel extends model
                 }
             }
         }
+        if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
+        $disabledFeatures['scrum'][] = 'scrumMeasrecord';
 
         $enabledScrumFeatures  = array();
         $disabledScrumFeatures = array();
