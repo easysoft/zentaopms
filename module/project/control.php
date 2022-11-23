@@ -2288,6 +2288,7 @@ class project extends control
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->branchGroups             = $branchGroups;
+        $this->view->executions               = $this->execution->getPairs($projectID);
         $this->view->allBranches              = $this->branch->getByProducts(array_keys($allProducts), 'ignoreNormal');
         $this->view->allProducts              = $allProducts;
 
