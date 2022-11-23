@@ -74,8 +74,8 @@ class build extends control
             $this->project->setMenu($projectID);
             $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter');
             $executionID   = empty($executionID) ? key($executions) : $executionID;
-            $productGroups = $this->product->getProducts($projectID);
-            $branchGroups  = $this->project->getBranchesByProject($projectID);
+            $productGroups = $this->product->getProducts($executionID);
+            $branchGroups  = $this->project->getBranchesByProject($executionID);
             $this->session->set('project', $projectID);
         }
         elseif($this->app->tab == 'execution')
