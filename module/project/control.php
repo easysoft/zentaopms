@@ -2030,6 +2030,7 @@ class project extends control
             $executionIdList = $this->loadModel('execution')->getPairs($projectID);
 
             /* Delete shadow product.*/
+            $project = $this->project->getByID($projectID);
             if(!$project->hasProduct)
             {
                 $productID = $this->loadModel('product')->getProductIDByProject($projectID);
