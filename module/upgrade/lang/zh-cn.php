@@ -77,6 +77,7 @@ $lang->upgrade->selectMergeMode = '请选择数据归并方式';
 $lang->upgrade->mergeMode       = '数据归并方式：';
 $lang->upgrade->begin           = '开始日期';
 $lang->upgrade->end             = '结束日期';
+$lang->upgrade->unknownDate     = '无明确时间的项目';
 $lang->upgrade->selectProject   = '目标项目';
 $lang->upgrade->programName     = '项目集名称';
 $lang->upgrade->projectName     = '项目名称';
