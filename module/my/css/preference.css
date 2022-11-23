@@ -1,1 +1,3 @@
 .tip {margin-top: 10px;}
+.table-form>tbody>tr>th {white-space: nowrap; !important}
+.table-form>tbody>tr>td {width: 75%; !important}
