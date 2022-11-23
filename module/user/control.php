@@ -635,10 +635,10 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
-        $visionList = $this->user->getVisionList();
+        $userVisionList = $this->user->getVisionList();
 
         $user       = $this->user->getById($userID, 'id');
-        $userGroups = $this->loadModel('group')->getByAccount($user->account, implode(',', array_keys($visionList)));
+        $userGroups = $this->loadModel('group')->getByAccount($user->account, count($userVisionList) > 1 ? true : false);
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
         $position[] = $this->lang->user->edit;
@@ -650,7 +650,7 @@ class user extends control
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq(0)->fetchPairs('id', 'name');
         $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visionList = $visionList;
+        $this->view->visionList = $userVisionList;
 
         $this->display();
     }
