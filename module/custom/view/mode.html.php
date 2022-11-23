@@ -56,12 +56,14 @@
           <tr class='text-center'>
             <td class='text-left strong'><?php echo $this->lang->custom->selectUsage;?></td>
             <td>
-              <?php $primaryClass = $mode == 'light' ? 'disabled' : 'btn-primary';?>
-              <?php echo html::commonButton($lang->custom->useLight, "id='useLight' data-mode='light'", "btn btn-wide $primaryClass");?>
+              <?php $primaryClass = $mode == 'light' ? '' : 'btn-primary';?>
+              <?php $disabled     = $mode == 'light' ? 'disabled' : '';?>
+              <?php echo html::commonButton($lang->custom->useLight, "id='useLight' data-mode='light' $disabled", "btn btn-wide $primaryClass");?>
             </td>
             <td>
-              <?php $primaryClass = $mode == 'ALM' ? 'disabled' : 'btn-primary';?>
-              <?php echo html::commonButton($lang->custom->useALM, "id='useALM' data-mode='ALM'", "btn btn-wide $primaryClass");?>
+              <?php $primaryClass = $mode == 'ALM' ? '' : 'btn-primary';?>
+              <?php $disabled     = $mode == 'ALM' ? 'disabled' : '';?>
+              <?php echo html::commonButton($lang->custom->useALM, "id='useALM' data-mode='ALM' $disabled", "btn btn-wide $primaryClass");?>
               <?php echo html::hidden('mode', $mode);?>
             </td>
           </tr>
