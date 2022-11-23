@@ -634,9 +634,6 @@ class custom extends control
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             $this->setting->setItem('system.common.global.defaultProgram', $program);
 
-            /* Set default program for product and project with no program. */
-            $this->loadModel('upgrade')->relateDefaultProgram($program);
-
             $this->custom->disableFeaturesByMode($mode);
 
             if($mode == 'light') $this->custom->processProjectAcl();
