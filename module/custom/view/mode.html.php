@@ -53,7 +53,7 @@
             <td><i class='icon text-success icon-check'></i></td>
           </tr>
           <?php endforeach;?>
-          <tr class='text-center'>
+          <tr class='text-center select-mode'>
             <td class='text-left strong'><?php echo $this->lang->custom->selectUsage;?></td>
             <td>
               <?php $primaryClass = $mode == 'light' ? '' : 'btn-primary';?>

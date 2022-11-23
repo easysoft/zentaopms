@@ -3,4 +3,5 @@
 #selectProgramModal .modal-header {border-bottom: 0px}
 #selectProgramModal .modal-header h4.modal-title{font-weight: 700}
 #selectProgramModal .modal-footer {border-top: 0px; text-align: center}
+.main-table tbody > tr.select-mode:hover{background: unset;}
 .btn-wide {padding: 6px 85px;}
