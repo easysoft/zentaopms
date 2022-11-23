@@ -401,10 +401,16 @@ js::set('vision',        $this->config->vision);
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
-            foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
-            $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
-            $disabled       = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink     = $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType");
+            $storyString = '';
+            foreach($stories as $story)
+            {
+                $storyProductIds[$story->product] = $story->product;
+                if(!in_array($this->app->user->account, $story->reviewer)) $storyString .= $story->title . ',';
+            }
+            $reviewStoryTips = sprintf($lang->product->reviewStory, '', $storyString);
+            $storyProductID  = count($storyProductIds) > 1 ? 0 : $productID;
+            $disabled        = $canBatchEdit ? '' : "disabled='disabled'";
+            $actionLink      = $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType");
             ?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch) echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch):?>
@@ -694,6 +700,10 @@ js::set('vision',        $this->config->vision);
     </div>
   </div>
 </div>
+<?php
+js::set('storyString', $storyString);
+js::set('reviewStory', $reviewStoryTips);
+?>
 <script>
 var moduleID = <?php echo $moduleID?>;
 var branchID = $.cookie('storyBranch');

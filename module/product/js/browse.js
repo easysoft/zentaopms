@@ -27,6 +27,11 @@ $(function()
         }
     })
 
+    $('#reviewItem ~ ul > li').on('click', function()
+    {
+        if(storyString !== '') alert(reviewStory);
+    });
+
     $(document).on('click', '.story-toggle', function(e)
     {
         var $toggle = $(this);
