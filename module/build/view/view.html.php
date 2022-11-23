@@ -321,17 +321,17 @@ tbody tr td:first-child input {display: none;}
             <div class='detail-content'>
               <table class='table table-data table-condensed table-borderless table-fixed'>
               <tr class="<?php echo $hidden;?>">
-                  <th><?php echo $lang->build->product;?></th>
+                  <th class='w-100px'><?php echo $lang->build->product;?></th>
                   <td><?php echo $build->productName;?></td>
                 </tr>
                 <?php if($build->productType != 'normal'):?>
                 <tr>
-                  <th><?php echo $lang->product->branch;?></th>
+                  <th class='w-100px'><?php echo $lang->product->branch;?></th>
                   <td><?php echo $branchName;?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th><?php echo $lang->build->name;?></th>
+                  <th class='w-100px'><?php echo $lang->build->name;?></th>
                   <td><?php echo $build->name;?></td>
                 </tr>
                 <?php if($build->execution):?>

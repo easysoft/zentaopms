@@ -553,7 +553,7 @@ class productModel extends model
             {
                 if($product->line == $id)
                 {
-                    $product->name = $name . '/' . $product->name;
+                    if($this->config->systemMode == 'ALM') $product->name = $name . '/' . $product->name;
                     $productList[] = $product;
                     unset($products[$key]);
                 }
