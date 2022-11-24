@@ -27,11 +27,6 @@ $(function()
         }
     })
 
-    $('#reviewItem ~ ul > li').on('click', function()
-    {
-        if(storyString !== '') alert(reviewStory);
-    });
-
     $(document).on('click', '.story-toggle', function(e)
     {
         var $toggle = $(this);
@@ -77,6 +72,38 @@ $(function()
             storyIdList += $(this).val() + ',';
             $('#storyIdList').val(storyIdList);
         });
+    });
+
+    $('#reviewItem ~ ul > li').on('click', function()
+    {
+        var storyIDList     = new Array();
+        var storyString     = '';
+        var reviewStoryTips = '';
+        $("input[name^='storyIdList']:checked").each(function()
+        {
+            storyIDList.push($(this).val());
+        });
+
+        $.each(storyIDList, function(storyKey, storyValue)
+        {
+            var getStoryReview = createLink('product', 'ajaxGetReviewers', "productID=" + productID + "&storyID=" + storyValue);
+
+            $.ajaxSettings.async = false;
+            $.get(getStoryReview, function(data)
+            {
+                var reviewer = new Array();
+                $(data).find('option:selected').each(function()
+                {
+                    reviewer.push($(this).val());
+                });
+
+                if($.inArray(account, reviewer) == -1) storyString += ' #' + storyValue;
+            });
+            $.ajaxSettings.async = true;
+        });
+
+        reviewStoryTips = reviewStory.replace("%s", storyString);
+        if(storyString !== '') alert(reviewStoryTips);
     });
 
     $('#batchUnlinkStory').click(function()
