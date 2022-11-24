@@ -323,6 +323,7 @@ class buildModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($executionID)->andWhere('execution')->eq((int)$executionID)->fi()
             ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
+            ->beginIF($projectID && !$executionID)->andWhere('execution')->eq('0')->fi()
             ->orderBy('date DESC,id DESC')
             ->limit(1)
             ->fetch();
