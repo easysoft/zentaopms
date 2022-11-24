@@ -171,6 +171,17 @@ class upgrade extends control
 
                 $this->upgrade->upgradeInProjectMode($programID, $systemMode);
 
+                $this->upgrade->computeObjectMembers();
+                $this->upgrade->initUserView();
+                $this->upgrade->setDefaultPriv();
+                $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
+
+                $hourPoint = $this->loadModel('setting')->getItem('owner=system&module=custom&key=hourPoint');
+                if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
+
+                $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
+                $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
+
                 $this->loadModel('custom')->disableFeaturesByMode('light');
 
                 $selectMode = false;
