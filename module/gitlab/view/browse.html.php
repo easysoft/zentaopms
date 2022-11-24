@@ -55,9 +55,8 @@
           <td class='text' title='<?php echo $gitlab->url;?>'><?php echo html::a($gitlab->url, $gitlab->url, '_target');?></td>
           <td class='c-actions'>
             <?php
-            $disabled = $gitlab->isBindUser ? true : false;
             common::printIcon('gitlab', 'edit', "gitlabID=$id", '', 'list', 'edit');
-            echo common::buildIconButton('gitlab', 'bindUser', "gitlabID=$id", '', 'list', 'link', '', '', false, '', '', 0, $disabled);
+            echo common::buildIconButton('gitlab', 'bindUser', "gitlabID=$id", '', 'list', 'link');
             common::printIcon('gitlab', 'delete', "gitlabID=$id", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>
