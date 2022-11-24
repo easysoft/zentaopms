@@ -195,7 +195,10 @@
         <?php $disabled = !empty($executions) ? "disabled='disabled'" : '';?>
         <tr class='<?php echo $class;?> division'>
           <th><?php echo $lang->project->division;?></th>
-          <td colspan='3'><?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?></td>
+          <td colspan='3'>
+            <?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->divisionTips;?>"></icon>
+          </td>
         </tr>
         <?php endif;?>
         <?php if($project->model == 'kanban'):?>
