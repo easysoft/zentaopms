@@ -49,8 +49,8 @@
         <?php foreach($cases as $case):?>
         <?php $caseID = $type == 'case2Him' ? $case->case : $case->id?>
         <tr class='text-left'>
-          <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), sprintf('%03d', $caseID));?></td>
-          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), $case->title);?></td>
+          <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), sprintf('%03d', $caseID), '', "data-app='qa'");?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), $case->title, '', "data-app='qa'");?></td>
           <td class='c-pri'><span class='<?php if($case->pri) echo 'label-pri label-pri-' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
           <td class='status-testcase status-<?php echo $case->status;?>'>

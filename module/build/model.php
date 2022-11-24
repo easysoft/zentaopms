@@ -31,7 +31,7 @@ class buildModel extends model
             ->fetch();
         if(!$build) return false;
 
-        $build = $this->linkChildBuilds($build);
+        $build = $this->joinChildBuilds($build);
         $build = $this->loadModel('file')->replaceImgURL($build, 'desc');
         $build->files = $this->file->getByObject('build', $buildID);
         if($setImgSize) $build->desc = $this->file->setImgSize($build->desc);
@@ -202,7 +202,7 @@ class buildModel extends model
      *
      * @param int|array  $products
      * @param string|int $branch
-     * @param string     $params   noempty|notrunk|noterminate|withbranch, can be a set of them
+     * @param string     $params   noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|withreleased, can be a set of them
      * @param string|int $objectID
      * @param string     $objectType
      * @param int|array  $buildIdList
@@ -221,8 +221,8 @@ class buildModel extends model
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
                 ->beginIF($products)->andWhere('product')->in($products)->fi()
-                ->beginIF($objectType === 'execution')->andWhere('execution')->eq($objectID)->fi()
-                ->beginIF($objectType === 'project')->andWhere('project')->eq($objectID)->fi()
+                ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
+                ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
                 ->fetchPairs();
         }
 
@@ -235,7 +235,8 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t5')->on('t1.product = t5.id')
             ->where('1=1')
             ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
-            ->beginIF(strpos($params, 'noproject') !== false)->andWhere('t1.project')->ne(0)->fi()
+            ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
+            ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
             ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
             ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
@@ -296,7 +297,7 @@ class buildModel extends model
                 {
                     if(!isset($allBuilds[$buildID])) continue;
                     $build = $allBuilds[$buildID];
-                    unset($builds[$build->date][$buildID]);
+                    if(strpos($params, 'withreleased') === false) unset($builds[$build->date][$buildID]);
                 }
             }
         }
@@ -587,7 +588,7 @@ class buildModel extends model
      * @access public
      * @return object
      */
-    public function linkChildBuilds($build)
+    public function joinChildBuilds($build)
     {
         $build->allBugs    = $build->bugs;
         $build->allStories = $build->stories;

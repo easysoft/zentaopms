@@ -221,10 +221,9 @@ class productplanModel extends model
             ->beginIF($branch !== '')->andWhere('branch')->eq($branch)->fi()
             ->andWhere('parent')->le(0)
             ->andWhere('deleted')->eq(0)
+            ->beginIF($exclude)->andWhere('status')->notin($exclude)
             ->orderBy('id_desc')
             ->fetchPairs();
-
-        if($exclude) unset($planPairs[$exclude]);
 
         return $planPairs;
     }
@@ -255,8 +254,6 @@ class productplanModel extends model
 
         $plans     = $this->reorder4Children($plans);
         $planPairs = array();
-        $mainPlan  = array();
-        $this->app->loadLang('bug');
         $this->app->loadLang('branch');
         foreach($plans as $plan)
         {
@@ -265,14 +262,8 @@ class productplanModel extends model
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
-            if(empty($plan->branchName))
-            {
-                $mainPlan = $planPairs[$plan->id];
-                unset($planPairs[$plan->id]);
-            }
         }
-        array_splice($planPairs, 0, 0, $mainPlan);
-        return array('' => '', 'ditto' => $this->lang->bug->ditto) + $planPairs;
+        return array('' => '') + $planPairs;
     }
 
     /**

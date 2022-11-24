@@ -424,6 +424,6 @@ $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'fe
 $config->featureGroup = new stdclass();
 $config->featureGroup->product   = array('roadmap', 'track', 'UR');
 $config->featureGroup->scrum     = array();
-$config->featureGroup->waterfall = array('track');
+$config->featureGroup->waterfall = array();
 $config->featureGroup->assetlib  = array();
 $config->featureGroup->other     = array('devops', 'kanban');

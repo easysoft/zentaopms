@@ -71,7 +71,9 @@
         <tr data-id="<?php echo $productID;?>">
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink($module, 'view', "buildID=$build->id"), sprintf('%03d', $build->id), '', "data-app='project'");?></td>
           <td class="c-name" title='<?php echo $build->name;?>'>
-            <span class='label label-outline label-info'><?php echo $build->execution ? $lang->build->singled : $lang->build->integrated;?></span>
+            <?php if(!$build->execution):?>
+            <span class='icon icon-code-fork text-muted'></span>
+            <?php endif;?>
             <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink($module, 'view', "buildID=$build->id"), $build->name, '', "data-app='project'");?>
           </td>

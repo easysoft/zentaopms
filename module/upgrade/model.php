@@ -7567,14 +7567,6 @@ class upgradeModel extends model
             $this->processMergedData($programID, $projectID, '', $productIdList, array($sprint->id));
 
             if($fromMode == 'classic') $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
-            $this->dao->update(TABLE_ACTION)
-                ->set('objectID')->eq($projectID)
-                ->set('objectType')->eq('project')
-                ->set('execution')->eq('0')
-                ->set('project')->eq($projectID)
-                ->where('objectType')->eq('execution')
-                ->andWhere('objectID')->eq($sprint->id)
-                ->exec();
         }
 
         $this->fixProjectPath($programID);
@@ -7612,7 +7604,7 @@ class upgradeModel extends model
         foreach($projects as $year => $sprints)
         {
             $project = new stdclass();
-            $project->name           = $year;
+            $project->name           = $year > 0 ? $year : $this->lang->upgrade->unknownDate;
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;

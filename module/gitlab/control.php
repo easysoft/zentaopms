@@ -43,13 +43,6 @@ class gitlab extends control
 
         /* Admin user don't need bind. */
         $gitlabList = $this->gitlab->getList($orderBy, $pager);
-        $myGitLabs  = $this->gitlab->getGitLabListByAccount();
-
-        foreach($gitlabList as $gitlab)
-        {
-            $gitlab->isBindUser = true;
-            if(!$this->app->user->admin and !isset($myGitLabs[$gitlab->id])) $gitlab->isBindUser = false;
-        }
 
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
         $this->view->gitlabList = $gitlabList;

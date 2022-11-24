@@ -85,6 +85,8 @@ class productModel extends model
 
         if(empty($products)) return;
 
+        if($this->app->tab == 'project' and strpos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
+
         $this->app->loadLang('product');
         if(!$isQaModule and !$productID and !$isFeedbackModel)
         {
@@ -553,7 +555,7 @@ class productModel extends model
             {
                 if($product->line == $id)
                 {
-                    $product->name = $name . '/' . $product->name;
+                    if($this->config->systemMode == 'ALM') $product->name = $name . '/' . $product->name;
                     $productList[] = $product;
                     unset($products[$key]);
                 }

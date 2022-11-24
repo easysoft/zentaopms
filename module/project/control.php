@@ -2030,6 +2030,7 @@ class project extends control
             $executionIdList = $this->loadModel('execution')->getPairs($projectID);
 
             /* Delete shadow product.*/
+            $project = $this->project->getByID($projectID);
             if(!$project->hasProduct)
             {
                 $productID = $this->loadModel('product')->getProductIDByProject($projectID);
@@ -2239,7 +2240,8 @@ class project extends control
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed');
         if($this->config->systemMode == 'ALM')
         {
-            $topProgramID           = $this->program->getTopByPath($project->path);
+            $paths = explode(',', trim($project->path, ','));
+            $topProgramID           = count($paths) > 1 ? $this->program->getTopByPath($project->path) : 0;
             $productsGroupByProgram = $this->product->getProductsGroupByProgram();
 
             $currentProducts = array();
@@ -2287,6 +2289,7 @@ class project extends control
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->branchGroups             = $branchGroups;
+        $this->view->executions               = $this->execution->getPairs($projectID);
         $this->view->allBranches              = $this->branch->getByProducts(array_keys($allProducts), 'ignoreNormal');
         $this->view->allProducts              = $allProducts;
 

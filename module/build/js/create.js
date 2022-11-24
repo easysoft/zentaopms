@@ -9,7 +9,7 @@ $().ready(function()
     {
         var productID = $('#product').val();
         var branch    = $('#branch').length > 0 ? $('#branch').val() : '';
-        $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&needCreate=&type=noempty,notrunk,separate,noproject&extra=multiple'), function(data)
+        $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
         {
             if(data) $('#buildBox').html(data);
             $('#builds').attr('data-placeholder', multipleSelect).chosen();
