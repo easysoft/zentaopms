@@ -253,6 +253,10 @@ class block extends control
         $shortBlocks = $longBlocks = array();
         foreach($blocks as $key => $block)
         {
+            if($block->block == 'waterfallrisk'  and !helper::hasFeature('waterfall_risk'))  continue;
+            if($block->block == 'waterfallissue' and !helper::hasFeature('waterfall_issue')) continue;
+            if($block->block == 'scrumrisk'      and !helper::hasFeature('scrum_risk'))      continue;
+            if($block->block == 'scrumissue'     and !helper::hasFeature('scrum_issue'))     continue;
             if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
             {
                 unset($blocks[$key]);
