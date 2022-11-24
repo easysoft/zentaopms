@@ -97,13 +97,11 @@ $(function()
                     reviewer.push($(this).val());
                 });
 
-                if($.inArray(account, reviewer) == -1)
-                {
-                  storyString += ' #' + storyValue;
-                }
+                if($.inArray(account, reviewer) == -1) storyString += ' #' + storyValue;
             });
             $.ajaxSettings.async = true;
         });
+
         reviewStoryTips = reviewStory.replace("%s", storyString);
         if(storyString !== '') alert(reviewStoryTips);
     });
