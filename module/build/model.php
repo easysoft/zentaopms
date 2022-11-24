@@ -202,7 +202,7 @@ class buildModel extends model
      *
      * @param int|array  $products
      * @param string|int $branch
-     * @param string     $params   noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|nodeletereleased, can be a set of them
+     * @param string     $params   noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|withreleased, can be a set of them
      * @param string|int $objectID
      * @param string     $objectType
      * @param int|array  $buildIdList
@@ -297,7 +297,7 @@ class buildModel extends model
                 {
                     if(!isset($allBuilds[$buildID])) continue;
                     $build = $allBuilds[$buildID];
-                    if(strpos($params, 'nodeletereleased') === false) unset($builds[$build->date][$buildID]);
+                    if(strpos($params, 'withreleased') === false) unset($builds[$build->date][$buildID]);
                 }
             }
         }
@@ -606,6 +606,24 @@ class buildModel extends model
         $build->allStories = join(',', array_unique(array_filter($build->allStories)));
 
         return $build;
+    }
+
+    /**
+     * Adjust the action is clickable.
+     *
+     * @param  string $bug
+     * @param  string $action
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public static function isClickable($object, $action, $module = 'bug')
+    {
+        $action = strtolower($action);
+
+        if($module == 'testtask' && $action == 'create') return !!$object->execution;
+
+        return true;
     }
 
     /**
