@@ -69,11 +69,17 @@ function loadProducts(executionID)
     loadLastBuild();
 }
 
+/**
+ * Load last build
+ *
+ * @access public
+ * @return void
+ */
 function loadLastBuild()
 {
-   var executionID = $('#execution').val();
-   $.get(createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
-   {
-       if(data) $('#lastBuildBox').html(data);
-   });
+    var executionID = $('#execution').val();
+    $.get(createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
+    {
+        if(data) $('#lastBuildBox').html(data);
+    });
 }
