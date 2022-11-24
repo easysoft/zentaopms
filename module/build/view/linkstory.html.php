@@ -72,7 +72,7 @@
         <?php echo html::submitButton($lang->build->linkStory, '', 'btn btn-secondary');?>
       </div>
       <div class="btn-toolbar">
-        <?php echo html::a(inlink('view', "buildID={$build->id}&type=story"), $lang->goback, '', "class='btn'");?>
+        <?php echo html::a(inlink('view', "buildID={$build->id}&type=story") . "#app={$app->tab}", $lang->goback, '', "class='btn'");?>
       </div>
       <div class='table-statistic'></div>
       <?php $pager->show('right', 'pagerjs');?>
