@@ -1,6 +1,6 @@
 $().ready(function()
 {
-    $('#lastBuildBtn').click(function()
+    $(document).on('click', '#lastBuildBtn', function()
     {
         $('#name').val($(this).text()).focus();
     });
@@ -66,4 +66,14 @@ function loadProducts(executionID)
             loadBranches($("#product").val());
         }
     });
+    loadLastBuild();
+}
+
+function loadLastBuild()
+{
+   var executionID = $('#execution').val();
+   $.get(createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
+   {
+       if(data) $('#lastBuildBox').html(data);
+   });
 }
