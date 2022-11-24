@@ -812,7 +812,7 @@ class transferModel extends model
         if($modelDatas) $modelDatas = $this->updateChildDatas($modelDatas);
 
         /* Deal linkStories datas. */
-        if($modelDatas) $modelDatas = $this->updateLinkStories($modelDatas);
+        if($modelDatas and isset($fieldList['linkStories'])) $modelDatas = $this->updateLinkStories($modelDatas);
 
         return $modelDatas;
     }
