@@ -24,7 +24,7 @@ function changeParams(obj)
 
     var params = window.btoa('begin=' + begin + '&end=' + end + '&days=' + days + '&workday=' + workday + '&dept=' + dept + '&assign=' + assign);
     var link = createLink('report', 'preview', 'dimension=' + dimension + '&group=' + group + '&module=report&method=workload&params=' + params);
-    location.href=link;
+    location.href = link;
 }
 
 /**

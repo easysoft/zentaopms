@@ -32,5 +32,5 @@ function changeDate(begin, end)
 
     var params = window.btoa('begin=' + begin + '&end=' + end);
     var link = createLink('report', 'preview', 'dimension=' + dimension + '&group=' + group + '&module=report&method=projectdeviation&params=' + params);
-    location.href =l ink;
+    location.href = link;
 }
