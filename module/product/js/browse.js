@@ -99,8 +99,8 @@ $(function()
 
                 if($.inArray(account, reviewer) == -1)
                 {
-                  var title       = $('.datatable-rows tbody > tr[data-id="' + storyValue + '"]').find('.c-title').text();
-                  storyString    += title + ' ';
+                  var title    = $('.datatable-rows tbody > tr[data-id="' + storyValue + '"]').find('.c-title').text();
+                  storyString += title + ' ';
                 }
             });
             $.ajaxSettings.async = true;
