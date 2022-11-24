@@ -44,7 +44,24 @@ class report extends control
      */
     public function index()
     {
-        $this->locate(inlink('productSummary'));
+        $this->locate(inlink('preview'));
+    }
+
+    /**
+     * Preview a report.
+     *
+     * @param  int    $dimension
+     * @param  string $group
+     * @param  string $module
+     * @param  string $method
+     * @param  string $params
+     * @access public
+     * @return void
+     */
+    public function preview($dimension = 0, $group = '', $module = 'report', $method = '', $params = '')
+    {
+        $this->prepare4Preview($dimension, $group, $module, $method, $params);
+        $this->display();
     }
 
     /**

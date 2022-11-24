@@ -10,7 +10,8 @@
  * @link        http://www.zentao.net
  */
 $lang->report->index              = 'Report Home';
-$lang->report->list               = 'Report';
+$lang->report->list               = 'Pivot Table';
+$lang->report->preview            = 'View Pivot Table';
 $lang->report->item               = 'Item';
 $lang->report->value              = 'Value';
 $lang->report->percent            = '%';
@@ -53,13 +54,13 @@ $lang->report->dept             = 'Department';
 $lang->report->deviationChart   = 'Project Deviation Chart';
 
 $lang->reportList = new stdclass();
-$lang->reportList->project = new stdclass();
 $lang->reportList->product = new stdclass();
+$lang->reportList->project = new stdclass();
 $lang->reportList->test    = new stdclass();
 $lang->reportList->staff   = new stdclass();
 
-$lang->reportList->project->lists[10] = "{$lang->execution->common} Deviation|report|projectdeviation";
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
+$lang->reportList->project->lists[10] = "{$lang->execution->common} Deviation|report|projectdeviation";
 $lang->reportList->test->lists[10]    = 'Bug Reported Summary|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug Assigned Summary|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Team Workload Summary|report|workload';

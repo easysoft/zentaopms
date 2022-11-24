@@ -22,7 +22,8 @@ function changeParams(obj)
         for(i = 0 ; i < endarray.length ; i++) end = end + endarray[i];
     }
 
-    var link = createLink('report', 'workload', 'begin=' + begin + '&end=' + end + '&days=' + days + '&workday=' + workday + '&dept=' + dept + '&assign=' + assign);
+    var params = window.btoa('begin=' + begin + '&end=' + end + '&days=' + days + '&workday=' + workday + '&dept=' + dept + '&assign=' + assign);
+    var link = createLink('report', 'preview', 'dimension=' + dimension + '&group=' + group + '&module=report&method=workload&params=' + params);
     location.href=link;
 }
 

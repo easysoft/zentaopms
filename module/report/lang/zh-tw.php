@@ -10,7 +10,8 @@
  * @link        http://www.zentao.net
  */
 $lang->report->index      = '統計首頁';
-$lang->report->list       = '統計報表';
+$lang->report->list       = '透视表';
+$lang->report->preview    = '查看透视表';
 $lang->report->item       = '條目';
 $lang->report->value      = '值';
 $lang->report->percent    = '百分比';
@@ -51,13 +52,13 @@ $lang->report->dept             = '部門';
 $lang->report->deviationChart   = "{$lang->execution->common}偏差曲綫";
 
 $lang->reportList = new stdclass();
-$lang->reportList->project = new stdclass();
 $lang->reportList->product = new stdclass();
+$lang->reportList->project = new stdclass();
 $lang->reportList->test    = new stdclass();
 $lang->reportList->staff   = new stdclass();
 
-$lang->reportList->project->lists[10] = "{$lang->execution->common}偏差報表|report|projectdeviation";
 $lang->reportList->product->lists[10] = $lang->productCommon . '彙總表|report|productsummary';
+$lang->reportList->project->lists[10] = "{$lang->execution->common}偏差報表|report|projectdeviation";
 $lang->reportList->test->lists[10]    = 'Bug創建表|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
 $lang->reportList->staff->lists[10]   = '員工負載表|report|workload';

@@ -11,6 +11,7 @@
  */
 $lang->report->index      = 'Trang báo cáo';
 $lang->report->list       = 'Báo cáo';
+$lang->report->preview    = 'View Pivot Table';
 $lang->report->item       = 'Hạng mục';
 $lang->report->value      = 'Giá trị';
 $lang->report->percent    = '%';
@@ -51,13 +52,13 @@ $lang->report->dept             = 'Phòng/Ban';
 $lang->report->deviationChart   = 'Biểu đồ chênh lệcthực hiệnh';
 
 $lang->reportList = new stdclass();
-$lang->reportList->project = new stdclass();
 $lang->reportList->product = new stdclass();
+$lang->reportList->project = new stdclass();
 $lang->reportList->test    = new stdclass();
 $lang->reportList->staff   = new stdclass();
 
-$lang->reportList->project->lists[10] = 'Chênh lệchthực hiện|reportprojectdeviation';
 $lang->reportList->product->lists[10] = 'Tóm tắt '.$lang->productCommon . '|report|productsummary';
+$lang->reportList->project->lists[10] = 'Chênh lệchthực hiện|reportprojectdeviation';
 $lang->reportList->test->lists[10]    = 'Báo cáo Bug|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bàn giao Bug|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Lượng công việc đội nhóm|report|workload';
