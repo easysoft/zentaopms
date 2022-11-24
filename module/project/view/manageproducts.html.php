@@ -38,7 +38,8 @@
           <?php $i = 0;?>
           <?php foreach($linkedProducts as $productID => $linkedProduct):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
-          <?php $disabled = in_array($productID, $unmodifiableProducts) ? "disabled='disabled'" : '';?>
+          <?php $cannotUnlink = in_array($productID, $unmodifiableProducts) and $project->model == 'waterfall';?>
+          <?php $disabled = $cannotUnlink ? "disabled='disabled'" : '';?>
           <div class='col-sm-4'>
             <div class='product checked <?php echo isset($allBranches[$productID]) ? ' has-branch' : ''?>'>
               <div class="checkbox-primary" title='<?php echo $linkedProduct->name;?>'>
@@ -48,6 +49,7 @@
               <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' data-drop_direction='down' disabled='disabled'");?>
             </div>
           </div>
+          <?php if($cannotUnlink) echo html::hidden("products[$i]", $productID);?>
           <?php echo html::hidden("branch[$i]", $branchID);?>
 
           <?php
