@@ -609,6 +609,24 @@ class buildModel extends model
     }
 
     /**
+     * Adjust the action is clickable.
+     *
+     * @param  string $bug
+     * @param  string $action
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public static function isClickable($object, $action, $module = 'bug')
+    {
+        $action = strtolower($action);
+
+        if($module == 'testtask' && $action == 'create') return !!$object->execution;
+
+        return true;
+    }
+
+    /**
      * Build action menu.
      *
      * @param  object $build
