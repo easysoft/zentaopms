@@ -120,7 +120,7 @@
                 <?php if($project->deleted):?>
                 <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                 <?php endif; ?>
-                <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $project->lifetime);?></span>
+                <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $project->lifetime, '');?></span>
                 <?php if(isset($project->delay)):?>
                 <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
                 <?php else:?>
