@@ -2,6 +2,7 @@
 $lang->zanode->common          = '执行节点';
 $lang->zanode->browse          = '执行节点列表';
 $lang->zanode->create          = '创建执行节点';
+$lang->zanode->editAction      = '编辑执行节点';
 $lang->zanode->view            = '执行节点详情';
 $lang->zanode->suspend         = '暂停执行节点';
 $lang->zanode->destroy         = '销毁执行节点';
@@ -38,6 +39,7 @@ $lang->zanode->confirmShutdown = "您确定关闭执行节点吗？";
 $lang->zanode->confirmSuspend  = "您确定暂停执行节点吗？";
 $lang->zanode->confirmResume   = "您确定恢复执行节点吗？";
 $lang->zanode->actionSuccess   = '操作成功';
+$lang->zanode->deleted         = "已删除";
 
 $lang->zanode->notFoundAgent = '没有发现Agent服务';
 $lang->zanode->createVmFail  = '创建执行节点失败';

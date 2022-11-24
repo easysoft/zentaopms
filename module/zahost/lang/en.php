@@ -4,6 +4,7 @@ $lang->zahost->common         = 'ZAhost';
 $lang->zahost->browse         = 'Host List';
 $lang->zahost->create         = 'Add Host';
 $lang->zahost->view           = 'Host View';
+$lang->zahost->init           = 'Init Host';
 $lang->zahost->edit           = 'Edit';
 $lang->zahost->editAction     = 'Edit Host';
 $lang->zahost->delete         = 'Delete';
@@ -11,6 +12,7 @@ $lang->zahost->deleteAction   = 'Delete Host';
 $lang->zahost->byQuery        = 'Search';
 $lang->zahost->all            = 'All';
 $lang->zahost->browseNode     = 'ZAnode Browse';
+$lang->zahost->deleted        = "Deleted";
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'Extranet Address';

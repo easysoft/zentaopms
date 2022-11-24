@@ -4,6 +4,7 @@ $lang->zahost->common         = 'ZAhost';
 $lang->zahost->browse         = 'Host List';
 $lang->zahost->create         = 'Add Host';
 $lang->zahost->view           = 'Host View';
+$lang->zahost->init           = 'Init Host';
 $lang->zahost->edit           = 'Edit';
 $lang->zahost->editAction     = 'Edit Host';
 $lang->zahost->delete         = 'Delete';
@@ -11,10 +12,11 @@ $lang->zahost->deleteAction   = 'Delete Host';
 $lang->zahost->byQuery        = 'Search';
 $lang->zahost->all            = 'All';
 $lang->zahost->browseNode     = 'ZAnode Browse';
+$lang->zahost->deleted        = "Deleted";
 
 $lang->zahost->name        = 'Name';
-$lang->zahost->IP          = 'IP/Domain';
-$lang->zahost->extranet    = 'IP';
+$lang->zahost->IP          = 'Extranet Address';
+$lang->zahost->extranet    = 'Extranet Address';
 $lang->zahost->cpuCores    = 'CPU Cores';
 $lang->zahost->memory      = 'Memory Size';
 $lang->zahost->diskSize    = 'diskSize Size';
@@ -30,7 +32,9 @@ $lang->zahost->registerDate = 'RegisterDate';
 
 $lang->zahost->memorySize = $lang->zahost->memory;
 $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
+$lang->zahost->osType     = 'Os Version';
 $lang->zahost->os         = 'System';
+$lang->zahost->osVersion  = 'Os Version No';
 $lang->zahost->osLang     = 'Language';
 $lang->zahost->imageName  = 'Image File';
 
@@ -69,7 +73,7 @@ $lang->zahost->image->name       = 'Name';
 $lang->zahost->image->desc       = 'Description';
 $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->diskSize;
-$lang->zahost->image->os         = $lang->zahost->osCategory;
+$lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
 
 $lang->zahost->image->statusList['created']    = 'Created';

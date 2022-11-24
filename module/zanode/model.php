@@ -214,17 +214,25 @@ class zanodemodel extends model
     }
 
     /**
-     * Update Node attribute.
+     * Update Node.
      *
      * @param  int $id
-     * @param  array $data
      * @return void
      */
-    public function update($id, $data)
+    public function update($id)
     {
-        $this->dao->update(TABLE_ZAHOST)->data($data)
-            ->where('id')->eq($id)
-            ->exec();
+        $oldHost              = $this->getNodeById($id);
+        $hostInfo             = fixer::input('post')->get();
+        $hostInfo->editedBy   = $this->app->user->account;
+        $hostInfo->editedDate = helper::now();
+
+        $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
+            ->batchCheck($this->config->zanode->edit->requiredFields, 'notempty');
+        if(dao::isError()) return false;
+
+        $this->dao->update(TABLE_ZAHOST)->data($hostInfo)->autoCheck()
+            ->where('id')->eq($id)->exec();
+        return common::createChanges($oldHost, $hostInfo);
     }
 
     /**
@@ -433,7 +441,7 @@ class zanodemodel extends model
         $returnData = new stdClass();
         $returnData->hostIP    = $host->extranet;
         $returnData->agentPort = $host->agentPort;
-        $returnData->vnc   = $vm->vnc;
+        $returnData->vnc       = $vm->vnc;
         $returnData->token     = $result->data->token;
         return $returnData;
     }

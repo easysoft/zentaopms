@@ -5,6 +5,7 @@ $lang->zahost->common         = '宿主机';
 $lang->zahost->browse         = '宿主机列表';
 $lang->zahost->create         = '添加宿主机';
 $lang->zahost->view           = '宿主机详情';
+$lang->zahost->init           = '初始化宿主机';
 $lang->zahost->edit           = '编辑';
 $lang->zahost->editAction     = '编辑宿主机';
 $lang->zahost->delete         = '删除';
@@ -12,6 +13,7 @@ $lang->zahost->deleteAction   = '删除宿主机';
 $lang->zahost->byQuery        = '搜索';
 $lang->zahost->all            = '全部主机';
 $lang->zahost->browseNode     = '执行节点列表';
+$lang->zahost->deleted        = "已删除";
 
 $lang->zahost->name        = '名称';
 $lang->zahost->IP          = 'IP/域名';

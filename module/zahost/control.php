@@ -286,7 +286,7 @@ class zahost extends control
      */
     public function initHost($hostID)
     {
-        $this->view->title        = $this->lang->zahost->vmTemplate->common;
+        $this->view->title        = $this->lang->zahost->init;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->hostID       = $hostID;
 

@@ -4,6 +4,7 @@ $lang->zahost->common         = 'ZAhost';
 $lang->zahost->browse         = 'Hôte Liste';
 $lang->zahost->create         = 'Ajouter Hôte';
 $lang->zahost->view           = 'Hôte Détail';
+$lang->zahost->init           = 'Init Host';
 $lang->zahost->edit           = 'Éditer';
 $lang->zahost->editAction     = 'Éditer Hôte';
 $lang->zahost->delete         = 'Supprimer';

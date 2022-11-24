@@ -4,14 +4,16 @@ $(function()
 
     $('#parent').change(function()
     {
-        var hostID = $('#parent').val();
-        var link   = createLink('zanode', 'ajaxGetImages', 'hostID=' + hostID);
-        $.get(link, function(data)
-        {
-            $('#template').html('').append(data);
-            $('#image').chosen().trigger("chosen:updated");
-            $('#image').change();
-        });
+        if(config.currentMethod == 'create'){
+            var hostID = $('#parent').val();
+            var link   = createLink('zanode', 'ajaxGetImages', 'hostID=' + hostID);
+            $.get(link, function(data)
+            {
+                $('#template').html('').append(data);
+                $('#image').chosen().trigger("chosen:updated");
+                $('#image').change();
+            });
+        }
     });
 
     $(document).on("change", '#image', function()
