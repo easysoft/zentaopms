@@ -58,7 +58,7 @@
         <tr>
           <th class='w-120px'><?php echo $lang->build->name;?></th>
           <td><?php echo html::input('name', '', "class='form-control' required");?></td>
-          <td class='text-muted'>
+          <td class='text-muted' id='lastBuildBox'>
             <?php if($lastBuild):?>
             <div class='help-block'> &nbsp; <?php echo $lang->build->last . ': <a class="code label label-badge label-light" id="lastBuildBtn">' . $lastBuild->name . '</a>';?></div>
             <?php endif;?>

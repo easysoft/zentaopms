@@ -532,6 +532,20 @@ class build extends control
     }
 
     /**
+     * Ajax get last build.
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetLastBuild($projectID, $executionID)
+    {
+        $lastBuild = $this->build->getLast($executionID, $projectID);
+        echo "<div class='help-block'> &nbsp; " . $this->lang->build->last . ": <a class='code label label-badge label-light' id='lastBuildBtn'>" . $lastBuild->name . "</a></div>";
+    }
+
+    /**
      * Link stories.
      *
      * @param  int    $buildID

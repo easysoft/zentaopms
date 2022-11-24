@@ -1,6 +1,6 @@
 $().ready(function()
 {
-    $('#lastBuildBtn').click(function()
+    $(document).on('click', '#lastBuildBtn', function()
     {
         $('#name').val($(this).text()).focus();
     });
@@ -65,5 +65,21 @@ function loadProducts(executionID)
             $('#product').chosen();
             loadBranches($("#product").val());
         }
+    });
+    loadLastBuild();
+}
+
+/**
+ * Load last build
+ *
+ * @access public
+ * @return void
+ */
+function loadLastBuild()
+{
+    var executionID = $('#execution').val();
+    $.get(createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
+    {
+        if(data) $('#lastBuildBox').html(data);
     });
 }
