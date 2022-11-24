@@ -104,7 +104,7 @@
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $project->budgetUnit);?></span>
               <?php else:?>
               <span class='input-group-addon'></span>
-              <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control w-70px'");?>
+              <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control w-80px'");?>
               <?php endif;?>
             </div>
           </td>
