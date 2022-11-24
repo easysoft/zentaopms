@@ -91,6 +91,8 @@ class release extends control
         $buildList      = $this->build->getByList(array_keys($builds));
         foreach($buildList as $build)
         {
+            if($build->execution || empty($build->builds)) continue;
+
             $childBuilds = $this->build->getByList($build->builds);
             foreach($childBuilds as $childBuild)
             {
