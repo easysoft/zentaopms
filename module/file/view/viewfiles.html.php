@@ -38,8 +38,8 @@ $(document).ready(function()
  /**
  * Delete a file.
  *
- * @param  int    fileID
- * @param  object obj
+ * @param  int    $fileID
+ * @param  object $obj
  * @access public
  * @return void
  */
@@ -58,10 +58,10 @@ function deleteFile(fileID, obj)
 /**
  * Download a file, append the mouse to the link. Thus we call decide to open the file in browser no download it.
  *
- * @param  int    fileID
- * @param  int    extension
- * @param  int    imageWidth
- * @param  string fileTitle
+ * @param  int    $fileID
+ * @param  int    $extension
+ * @param  int    $imageWidth
+ * @param  string $fileTitle
  * @access public
  * @return void
  */
