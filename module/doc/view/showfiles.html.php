@@ -84,12 +84,8 @@
           <div class='col'>
             <div class='lib-file'>
               <?php
-              $imageWidth = 0;
-              if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false and file_exists($file->realPath))
-              {
-                  $imageSize  = getimagesize($file->realPath);
-                  $imageWidth = $imageSize ? $imageSize[0] : 0;
-              }
+              $imageSize  = $this->loadModel('file')->getImageSize($file);
+              $imageWidth = $imageSize[0];
 
               $fileID = $file->id;
               $url    = helper::createLink('file', 'download', 'fileID=' . $fileID);

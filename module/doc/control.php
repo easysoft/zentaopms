@@ -623,6 +623,7 @@ class doc extends control
      */
     public function delete($docID, $confirm = 'no', $from = 'list')
     {
+        $this->loadModel('file');
         if($confirm == 'no')
         {
             $type = $this->dao->select('type')->from(TABLE_DOC)->where('id')->eq($docID)->fetch('type');
@@ -644,7 +645,7 @@ class doc extends control
                 $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
 
                 $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-                if(empty($fileRecord)) @unlink($file->realPath);
+                if(empty($fileRecord)) $this->file->unlinkFile($file);
             }
 
             /* if ajax request, send result. */
