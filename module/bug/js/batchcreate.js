@@ -16,6 +16,8 @@ $(function()
         saveCustomFields('batchCreateFields', 10, $titleCol, 150);
         return false;
     });
+
+    $('#dropMenu').css('z-index', 9999);
 })
 
 /**

@@ -256,7 +256,7 @@
           {
               if(!$execution->hasProduct and $value->id == 'branch') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
-              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'stage') continue;
               if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
               if($value->show)
               {
@@ -277,7 +277,7 @@
           {
               if(!$execution->hasProduct and $value->id == 'branch') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
-              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'stage') continue;
               if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
               $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution, $showBranch);
           }
@@ -294,7 +294,7 @@
           {
               if(!$execution->hasProduct and $value->id == 'branch') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
-              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'stage') continue;
+              if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'stage') continue;
               if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'taskCount') continue;
               $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution);
           }?>
