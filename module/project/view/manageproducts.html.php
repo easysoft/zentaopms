@@ -137,35 +137,8 @@
   </div>
 </div>
 
-<?php if(!$project->division and count($linkedProducts) == 1 and empty($executions)):?>
+<?php $noticeSwitch = (!$project->division and count($linkedProducts) == 1 and empty($executions));?>
+<?php js::set('noticeSwitch', $noticeSwitch);?>
 <?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
 <?php js::set('divisionSwitchList', $lang->project->divisionSwitchList);?>
-<script>
-$('#submit').click(function()
-{
-    bootbox.confirm(
-      {
-          'message' : noticeDivsion,
-          'buttons':{
-              confirm:{
-                  label: divisionSwitchList['1'],
-                  className: 'btn'
-              },
-              cancel:{
-                  label: divisionSwitchList['0'],
-                  className: 'btn-primary'
-              },
-          },
-          callback: function(result)
-          {
-              if(result) $('div.form-actions').append("<input type='hidden' value='1' name='division'>");
-              $('form').submit();
-          }
-      }
-    );
-
-    return false;
-})
-</script>
-<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

@@ -69,6 +69,46 @@ $(function()
             }
         });
 
-        $('form#productsBox').submit();
+        if(noticeSwitch)
+        {
+            notice();
+        }
+        else
+        {
+            $('form#productsBox').submit();
+        }
     });
+
+    $('#submit').click(function()
+    {
+        if(noticeSwitch)
+        {
+            notice();
+            return false;
+        }
+    })
 });
+
+function notice()
+{
+    bootbox.confirm(
+        {
+            'message' : noticeDivsion,
+            'buttons':{
+                confirm:{
+                    label: divisionSwitchList['1'],
+                    className: 'btn'
+                },
+                cancel:{
+                    label: divisionSwitchList['0'],
+                    className: 'btn-primary'
+                },
+            },
+            callback: function(result)
+            {
+                if(result) $('div.form-actions').append("<input type='hidden' value='1' name='division'>");
+                $('form#productsBox').submit();
+            }
+        }
+    );
+}
