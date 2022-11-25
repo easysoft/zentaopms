@@ -2369,6 +2369,11 @@ class projectModel extends model
             }
 
             $this->user->updateUserView($products, 'product', $members);
+            if((int)$projectID > 0 and !empty($_POST['division']))
+            {
+                $this->dao->update(TABLE_PROJECT)->set('division')->eq('1')->where('id')->eq((int)$projectID)->exec();
+                $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
+            }
 
             return !dao::isError();
         }
