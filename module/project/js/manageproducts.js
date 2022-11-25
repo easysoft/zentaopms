@@ -69,7 +69,22 @@ $(function()
             }
         });
 
-        if(noticeSwitch)
+        var checkedProducts = [];
+        var otherProducts = $('#otherProducts').val();
+        for(key in otherProducts)
+        {
+            var productBranch = otherProducts[key].split('_');
+            var selectProduct = productBranch[0];
+            if(checkedProducts.indexOf(selectProduct) == -1) checkedProducts.push(selectProduct);
+        }
+
+        $('input[name^="products"]:checked').each(function()
+        {
+            var value = $(this).val();
+            if(checkedProducts.indexOf(value) == -1) checkedProducts.push(value);
+        })
+
+        if(noticeSwitch && checkedProducts.length > 1)
         {
             notice();
         }
@@ -81,14 +96,14 @@ $(function()
 
     $('#submit').click(function()
     {
-        var checkProducts = [];
+        var checkedProducts = [];
         $('input[name^="products"]:checked').each(function()
         {
             var value = $(this).val();
-            if(checkProducts.indexOf(value) == -1) checkProducts.push(value);
+            if(checkedProducts.indexOf(value) == -1) checkedProducts.push(value);
         })
 
-        if(noticeSwitch && checkProducts.length > 1)
+        if(noticeSwitch && checkedProducts.length > 1)
         {
             notice();
             return false;
