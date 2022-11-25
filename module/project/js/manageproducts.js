@@ -81,7 +81,14 @@ $(function()
 
     $('#submit').click(function()
     {
-        if(noticeSwitch)
+        var checkProducts = [];
+        $('input[name^="products"]:checked').each(function()
+        {
+            var value = $(this).val();
+            if(checkProducts.indexOf(value) == -1) checkProducts.push(value);
+        })
+
+        if(noticeSwitch && checkProducts.length > 1)
         {
             notice();
             return false;
