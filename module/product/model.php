@@ -101,7 +101,7 @@ class productModel extends model
 
         if($isQaModule and $this->app->tab == 'project')
         {
-            if($this->app->tab == 'project')   $extra = $currentMethod == 'testcase' ? $extra : $this->session->project;
+            if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : $this->session->project;
             if($this->app->tab == 'execution') $extra = $this->session->execution;
         }
 
@@ -2346,9 +2346,13 @@ class productModel extends model
             }
             elseif($module == 'testcase' and in_array($method, array('groupCase', 'zeroCase')) and $this->app->tab == 'project')
             {
-                parse_str($extra, $output);
-                $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
-                $link      = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : 'all') . "&groupBy=&projectID=$projectID") . "#app=project";
+                $projectID = $extra;
+                if(strpos($extra, 'projecID') !== false)
+                {
+                    parse_str($extra, $output);
+                    $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
+                }
+                $link = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : 'all') . "&groupBy=&projectID=$projectID") . "#app=project";
             }
             elseif($module == 'testcase' and $method == 'browse')
             {
