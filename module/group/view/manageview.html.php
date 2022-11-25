@@ -105,7 +105,7 @@
         <th class='text-right text-top'><?php echo $lang->group->dynamic?></th>
         <td class='pl-0px pt-0px'>
           <table class='table table-form'>
-            <?php foreach($lang->mainNav as $module => $title):?>
+            <?php a($lang->mainNav);foreach($lang->mainNav as $module => $title):?>
             <?php if(!is_string($title)) continue;?>
             <?php
             /* Ignore null actions menus. */
@@ -134,7 +134,7 @@
                 </div>
               </th>
               <td>
-                <?php if(isset($lang->action->dynamicAction->$module)):?>
+                <?php if(isset($lang->action->dynamicAction->$module)): a($lang->action->dynamicAction);?>
                 <div class='clearfix'>
                   <?php foreach($lang->action->dynamicAction->$module as $action => $actionTitle):?>
                   <div class='action-item'>
