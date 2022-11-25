@@ -652,6 +652,7 @@ class custom extends control
         $this->view->disabledFeatures      = $disabledFeatures;
         $this->view->enabledScrumFeatures  = $enabledScrumFeatures;
         $this->view->disabledScrumFeatures = $disabledScrumFeatures;
+        $this->view->currentModeTips       = sprintf($this->lang->custom->currentModeTips, $this->lang->custom->modeList[$mode], $this->lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);
 
         $this->display();
     }
