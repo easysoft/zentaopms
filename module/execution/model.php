@@ -1578,6 +1578,8 @@ class executionModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchPairs();
+
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
 
@@ -1637,6 +1639,12 @@ class executionModel extends model
                     $executions[$execution->parent]->children[$key] = $execution;
                     unset($executions[$key]);
                 }
+            }
+
+            /* Bind execution product */
+            if(!empty($projectProductIdList) and !empty($projectProductIdList[$execution->id]))
+            {
+                $execution->product = $projectProductIdList[$execution->id];
             }
         }
         return array_values($executions);

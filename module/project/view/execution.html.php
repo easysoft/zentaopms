@@ -104,7 +104,8 @@
       <tbody id="executionTableList">
         <?php foreach($executionStats as $execution):?>
         <?php $execution->division = $project->division;?>
-        <?php $this->execution->printNestedList($execution, false, $users, $productID);?>
+        <?php $executionProductID = (empty($productID) and !empty($execution->product)) ? $execution->product : $productID;?>
+        <?php $this->execution->printNestedList($execution, false, $users, $executionProductID);?>
         <?php endforeach;?>
       </tbody>
     </table>
