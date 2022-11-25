@@ -24,7 +24,7 @@
 #swapper li {padding-top: 0; padding-bottom: 0;}
 #swapper .tree li>.list-toggle {top: -1px;}
 
-#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
+#dropMenu div#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
 #gray-line {width:230px; height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 </style>
 <?php
@@ -35,6 +35,7 @@ $tabActive          = '';
 $myProjects         = 0;
 $others             = 0;
 $dones              = 0;
+$currentProject     = '';
 
 foreach($projects as $programID => $programProjects)
 {
@@ -52,14 +53,15 @@ foreach($projects as $programID => $programProjects)
 }
 $projectsPinYin = common::convert2Pinyin($projectNames);
 
-$myProjectsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$normalProjectsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$closedProjectsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$myProjectsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$normalProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$closedProjectsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
 
+$indexLink = helper::createLink('project', 'index', "projectID=%s");
 foreach($projects as $programID => $programProjects)
 {
     /* Add the program name before project. */
-    if(isset($programs[$programID]) and $config->systemMode == 'new')
+    if(isset($programs[$programID]) and $config->systemMode == 'ALM')
     {
         $programName = zget($programs, $programID);
 
@@ -70,16 +72,42 @@ foreach($projects as $programID => $programProjects)
 
     foreach($programProjects as $index => $project)
     {
-        $selected    = $project->id == $projectID ? 'selected' : '';
-        $icon        = '<i class="icon icon-sprint"></i> ';
+        if($project->id == $projectID) $currentProject = $project;
+        $selected = $project->id == $projectID ? 'selected' : '';
+        $icon     = '<i class="icon icon-sprint"></i> ';
 
         if($project->model != 'waterfall' and (in_array($module, $config->waterfallModules) or $method == 'track'))
         {
-            $link = helper::createLink('project', 'index', "projectID=%s");
+            $link = $indexLink;
+        }
+        elseif($project->model == 'scrum' and
+            (
+                (in_array($module, array('issue', 'risk', 'meeting')) and !helper::hasFeature("scrum_{$module}")) or
+                ($module == 'report' and $method == 'projectsummary' and !helper::hasFeature("scrum_measrecord"))
+            ))
+        {
+            $link = $indexLink;
+        }
+        elseif($project->model == 'waterfall' and
+            (
+                (in_array($module, array('issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'meeting')) and !helper::hasFeature("waterfall_{$module}")) or
+                ($module == 'pssp' and !helper::hasFeature("waterfall_process")) or
+                ($module == 'report' and $method == 'projectsummary' and !helper::hasFeature("scrum_measrecord"))
+            ))
+        {
+            $link = $indexLink;
         }
         elseif($project->model == 'kanban' and (($module == 'project' and !in_array($method, array('build', 'view', 'manageproducts', 'team', 'whitelist', 'managemembers', 'addwhitelist'))) or $module != 'project'))
         {
-            $link = helper::createLink('project', 'index', "projectID=%s");
+            $link = $indexLink;
+        }
+        elseif(empty($project->hasProduct) and $module == 'project' and $method == 'manageproducts')
+        {
+            $link = $indexLink;
+        }
+        elseif(empty($project->multiple))
+        {
+            $link = $indexLink;
         }
         else
         {
@@ -116,7 +144,7 @@ foreach($projects as $programID => $programProjects)
         }
 
         /* If the project is the last one in the program, print the closed label. */
-        if(isset($programs[$programID]) and !isset($programProjects[$index + 1]))
+        if($config->systemMode == 'ALM' and isset($programs[$programID]) and !isset($programProjects[$index + 1]))
         {
             if($projectCounts[$programID]['myProject']) $myProjectsHtml     .= '</ul></li>';
             if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '</ul></li>';
@@ -159,10 +187,15 @@ $closedProjectsHtml .= '</ul>';
    <div class='list-group projects'><?php echo $closedProjectsHtml;?></div>
   </div>
 </div>
-<script>scrollToSelected();</script>
 <script>
 $(function()
 {
+    <?php if($currentProject->status == 'done' or $currentProject->status == 'closed'):?>
+    $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
+    <?php else:?>
+    scrollToSelected();
+    <?php endif;?>
+
     $('.nav-tabs li span').hide();
     $('.nav-tabs li.active').find('span').show();
 

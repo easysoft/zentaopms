@@ -296,7 +296,7 @@ class deptTest
      * @access public
      * @return array
      */
-    public function getUsersTest($browseType = 'inside', $deptID = 0, $count, $orderBy = 'id', $pager = null)
+    public function getUsersTest($browseType = 'inside', $deptID = 0, $count = 0, $orderBy = 'id', $pager = null)
     {
         $objects = $this->objectModel->getUsers($browseType, $deptID, $pager, $orderBy);
 
@@ -317,7 +317,7 @@ class deptTest
      * @access public
      * @return array
      */
-    public function getDeptUserPairsTest($deptID = 0, $count, $key = 'account', $type = 'inside', $params = '')
+    public function getDeptUserPairsTest($deptID = 0, $count = 0, $key = 'account', $type = 'inside', $params = '')
     {
         $objects = $this->objectModel->getDeptUserPairs($deptID, $key, $type, $params);
 

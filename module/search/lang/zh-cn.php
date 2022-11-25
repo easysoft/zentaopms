@@ -90,12 +90,13 @@ $lang->search->modules['product']     = $lang->productCommon;
 $lang->search->modules['release']     = '发布';
 $lang->search->modules['testtask']    = '测试单';
 $lang->search->modules['testsuite']   = '测试套件';
-$lang->search->modules['testreport']  = '报告';
+$lang->search->modules['testreport']  = '测试报告';
 $lang->search->modules['productplan'] = '计划';
 $lang->search->modules['program']     = '项目集';
 $lang->search->modules['project']     = '项目';
 $lang->search->modules['execution']   = $lang->executionCommon;
-$lang->search->modules['story']       = '需求';
+$lang->search->modules['story']       = $lang->SRCommon;
+$lang->search->modules['requirement'] = $lang->URCommon;
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;

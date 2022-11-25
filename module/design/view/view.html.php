@@ -16,7 +16,7 @@
 <?php js::set('projectID', $design->project);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php $browseLink = $app->session->designList != false ? $app->session->designList : $this->createLink('design', 'browse', "productID=$design->product");?>
+    <?php $browseLink = $app->session->designList != false ? $app->session->designList : $this->createLink('design', 'browse', "projectID=$design->project");?>
     <?php if(!isonlybody()) echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <div class="page-title">
@@ -42,12 +42,15 @@
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php common::printBack($this->session->designList);?>
+        <?php
+        $backLink = $this->createLink('design', 'browse', "projectID=$design->project");
+        common::printBack($app->session->designList != false ? $app->session->designList : $backLink);
+        ?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$design->deleted):?>
         <?php
         common::printIcon('design', 'assignTo',   "designID=$design->id", $design, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('design', 'linkCommit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true, "id='linkCommit'");
+        if(helper::hasFeature('devops')) common::printIcon('design', 'linkCommit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true, "id='linkCommit'");
         common::printIcon('design', 'edit',       "designID=$design->id", $design, 'button', 'alter');
         common::printIcon('design', 'delete',     "designID=$design->id", $design, 'button', 'trash', 'hiddenwin');
         ?>
@@ -65,13 +68,14 @@
               <th><?php echo $lang->design->type;?></th>
               <td><?php echo zget($lang->design->typeList, $design->type);?></td>
             </tr>
-            <tr>
+            <tr <?php if(empty($project->hasProduct)) echo "class='hide'";?>>
               <th><?php echo $lang->design->product;?></th>
               <td><?php echo $design->productName;?></td>
             </tr>
             <tr>
               <th><?php echo $lang->design->story;?></th>
-              <td><?php echo $design->story ? html::a($this->createLink('story', 'view', "id=$design->story"), zget($stories, $design->story)) : '';?></td>
+              <?php $moduleName = empty($project->hasProduct) ? 'projectstory' : 'story';?>
+              <td><?php echo $design->story ? html::a($this->createLink($moduleName, 'view', "id=$design->story"), zget($stories, $design->story)) : '';?></td>
             </tr>
             <tr>
               <th><?php echo $lang->design->submission;?></th>

@@ -9,13 +9,13 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class fileEntry extends Entry
+class fileEntry extends entry
 {
     /**
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get($fileID)
     {
@@ -26,13 +26,13 @@ class fileEntry extends Entry
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $this->send(200, $data);
+        return $this->send(200, $data);
     }
     /**
      * PUT method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function put($fileID)
     {
@@ -40,6 +40,6 @@ class fileEntry extends Entry
         $action = $this->param('action', '');
         if($action == 'remove') unset($_SESSION['album']['used'][$uid][$fileID]);
 
-        $this->send(200, array('id' => $fileID));
+        return $this->send(200, array('id' => $fileID));
     }
 }

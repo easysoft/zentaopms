@@ -10,9 +10,9 @@ title=测试 devModel::getTables();
 cid=1
 pid=1
 
-获取所有表my分组todo表         >> zt_todo
+获取所有表my分组todo表 >> zt_todo
 获取所有表product分组product表 >> zt_product
-获取所有表other分组acl表       >> zt_acl
+获取所有表other分组acl表 >> zt_acl
 
 */
 

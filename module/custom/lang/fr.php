@@ -33,7 +33,6 @@ $lang->custom->URStory              = "User requirements";
 $lang->custom->SRStory              = "Software requirements";
 $lang->custom->epic                 = "Epic";
 $lang->custom->default              = "Default";
-$lang->custom->mode                 = "Mode";
 $lang->custom->scrumStory           = "Story";
 $lang->custom->waterfallCommon      = "Waterfall";
 $lang->custom->buildin              = "Buildin";
@@ -56,9 +55,10 @@ $lang->custom->role                 = 'Role';
 $lang->custom->dept                 = 'Dept';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Activer ou Désactiver le Code';
-
-if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = 'Execution';
+$lang->custom->execution            = 'Execution';
+$lang->custom->selectDefaultProgram = 'Please select default program';
+$lang->custom->defaultProgram       = 'Default program';
+$lang->custom->modeManagement       = 'Mode Management';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -89,7 +89,7 @@ $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
-if($config->systemMode == 'new') $lang->custom->object['project']   = 'Project';
+$lang->custom->object['project']   = 'Project';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['kanban']    = $lang->custom->kanban;
@@ -101,10 +101,11 @@ $lang->custom->object['testtask']  = 'Build';
 $lang->custom->object['todo']      = 'Agenda';
 $lang->custom->object['user']      = 'Utilisateur';
 $lang->custom->object['block']     = 'Bloc';
-$lang->custom->object['flow']      = '流程';
-$lang->custom->object['score']     = '积分';
+$lang->custom->object['flow']      = 'Flow';
+$lang->custom->object['score']     = 'Score';
+$lang->custom->object['mode']      = 'Mode';
 
-if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
 $lang->custom->menuOrder[15] = 'execution';
 $lang->custom->menuOrder[20] = 'kanban';
@@ -237,25 +238,54 @@ $lang->custom->weekendList[2] = '2-Jour';
 $lang->custom->weekendList[1] = '1-Jour';
 
 global $config;
-if($config->systemMode == 'classic')
-{
-    $lang->custom->sprintConceptList[0] = 'Product - Project';
-    $lang->custom->sprintConceptList[1] = 'Product - Iteration';
-    $lang->custom->sprintConceptList[2] = 'Product - Sprint';
-}
-else
-{
-    $lang->custom->sprintConceptList[0] = 'Product - Project';
-    $lang->custom->sprintConceptList[1] = 'Product - Iteration';
-}
+$lang->custom->sprintConceptList[0] = 'Program Product Iteration';
+$lang->custom->sprintConceptList[1] = 'Program Product Sprint';
 
 $lang->custom->workingList['full'] = 'Application Lifecycle Management';
 
-$lang->custom->menuTip          = "Cliquez pour montrer/cacher le menu. Déplacez pour changer l'ordre d'affichage.";
-$lang->custom->saveFail         = 'Echec de la sauvegarde !';
-$lang->custom->page             = ' Page';
-$lang->custom->changeClassicTip = 'The Program module will be hidden, if you switch to the classic mode.';
-$lang->custom->changeModeTips   = 'Historical deleted data does not participate in the data merging process. After switching the mode, it will not support restoration. Please know.';
+$lang->custom->menuTip           = 'Click to show/hide the menu. Drag to switch display order.';
+$lang->custom->saveFail          = 'Failed to save!';
+$lang->custom->page              = ' Page';
+$lang->custom->usage             = 'Usage scenarios';
+$lang->custom->selectUsage       = 'Select a scenario';
+$lang->custom->useLight          = 'Use Light Mode';
+$lang->custom->useALM            = 'Use ALM Mode';
+$lang->custom->currentModeTips   = 'You are currently using %s, you can switch to the %s.';
+$lang->custom->changeModeTips    = 'Please double confirm to switch to %s Mode.';
+$lang->custom->selectProgramTips = 'After switching to the Light Mode, in order to ensure the consistency of the data structure, you need to select a program as the default program, and subsequent new product and project data are associated with this default program.';
+
+$lang->custom->modeList['light'] = 'Light Mode';
+$lang->custom->modeList['ALM']   = 'ALM Mode';
+
+$lang->custom->modeIntroductionList['light'] = 'Provides the core function of project management, suitable for small R&D teams';
+$lang->custom->modeIntroductionList['ALM']   = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams';
+
+$lang->custom->features['program']          = 'Program';
+$lang->custom->features['productRR']        = 'Product - R&D Requirements';
+$lang->custom->features['productUR']        = 'Product - User Requirements';
+$lang->custom->features['productLine']      = 'Product - Product Line';
+$lang->custom->features['projectScrum']     = 'Project - Scrum Model';
+$lang->custom->features['projectWaterfall'] = 'Project - Waterfall Model';
+$lang->custom->features['projectKanban']    = 'Project - Kanban Model';
+$lang->custom->features['execution']        = 'Execution';
+$lang->custom->features['qa']               = 'QA';
+$lang->custom->features['devops']           = 'DevOps';
+$lang->custom->features['kanban']           = 'Kanban';
+$lang->custom->features['doc']              = 'Doc';
+$lang->custom->features['report']           = 'Statistics';
+$lang->custom->features['system']           = 'System';
+$lang->custom->features['assetlib']         = 'Asset Lib';
+$lang->custom->features['oa']               = 'Attend';
+$lang->custom->features['ops']              = 'Deploy';
+$lang->custom->features['feedback']         = 'Feedback';
+$lang->custom->features['traincourse']      = 'Academy';
+$lang->custom->features['workflow']         = 'Workflow';
+$lang->custom->features['admin']            = 'Admin';
+$lang->custom->features['vision']           = 'Full Feature Interface, Operation Management Interface';
+
+$lang->custom->needClosedFunctions['waterfall'] = 'Waterfall';
+$lang->custom->needClosedFunctions['URStory']   = 'User Story';
+if($config->edition == 'max') $lang->custom->needClosedFunctions['assetLib'] = 'Assetlib';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';
@@ -273,9 +303,9 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['execution']   = $lang->custom->execution;
 
-$lang->custom->conceptQuestions['overview']   = "1. Quelle combinaison de gestion convient le mieux à votre entreprise ?";
-$lang->custom->conceptQuestions['URAndSR']    = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
-$lang->custom->conceptQuestions['storypoint'] = "3. Which of the following units is your company using for scale estimation?";
+$lang->custom->conceptQuestions['overview']   = "Quelle combinaison de gestion convient le mieux à votre entreprise ?";
+$lang->custom->conceptQuestions['URAndSR']    = "Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
+$lang->custom->conceptQuestions['storypoint'] = "Which of the following units is your company using for scale estimation?";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();

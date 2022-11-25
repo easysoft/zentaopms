@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class taskRecordEstimateEntry extends Entry
+class taskRecordEstimateEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($taskID)
     {
@@ -36,10 +36,10 @@ class taskRecordEstimateEntry extends Entry
         if(!$data) return $this->error('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $effort = array();
+        $effort = new stdclass();
         if($issetEffort and $data->data->efforts)    $effort = $data->data->efforts;
         if(!$issetEffort and $data->data->estimates) $effort = $data->data->estimates;
-        $this->send(200, array('effort' => $effort));
+        return $this->send(200, array('effort' => $effort));
 
     }
 
@@ -48,7 +48,7 @@ class taskRecordEstimateEntry extends Entry
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($taskID)
     {
@@ -73,6 +73,6 @@ class taskRecordEstimateEntry extends Entry
 
         $task = $this->loadModel('task')->getById($taskID);
 
-        $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 }

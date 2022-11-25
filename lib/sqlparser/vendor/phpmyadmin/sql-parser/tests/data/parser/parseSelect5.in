@@ -1,0 +1,4 @@
+SELECT c1, c2, c3
+   /* Subquery in FROM list */
+   FROM (SELECT C1, c2, c3 FROM test2) t1
+   WHERE RIGHT(name, 2) = 'AB';

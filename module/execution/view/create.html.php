@@ -10,13 +10,12 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc') and ($config->systemMode == 'new');?>
+<?php $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc');?>
 <?php if(isset($tips)):?>
 <?php $defaultURL = $this->createLink('execution', 'task', "execution=$executionID");?>
 <?php include '../../common/view/header.html.php';?>
 <body>
-  <?php $tipsModal = $this->config->systemMode == 'new' ? 'newTipsModal' : 'classicTipsModal';?>
-  <div class='modal-dialog' id='<?php echo $tipsModal;?>'>
+  <div class='modal-dialog' id='newTipsModal'>
     <div class='modal-header'>
       <a href='<?php echo $defaultURL;?>' class='close'><i class="icon icon-close"></i></a>
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->tips;?></h4>
@@ -40,14 +39,13 @@
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
 <?php js::set('isStage', $isStage);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectCommon', $lang->project->common);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectID', $projectID);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
 <?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
 <?php js::set('copyNoExecution', $lang->execution->copyNoExecution);?>
+<?php js::set('model', isset($project->model) ? $project->model : '');?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -58,13 +56,11 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <?php if($config->systemMode == 'new'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
           <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
           <td colspan='2'></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th class='w-120px'><?php echo $showExecutionExec ? $lang->execution->execName : $lang->execution->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
@@ -91,7 +87,7 @@
           <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? helper::workDays($plan->begin, $plan->end) : ''), "class='form-control'");?>
+              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? (helper::workDays($plan->begin, $plan->end) + 1) : ''), "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->execution->day;?></span>
             </div>
           </td><td></td><td></td>
@@ -117,7 +113,7 @@
         <?php if($isStage):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
-          <td>
+          <td class='required'>
             <div class='input-group'>
               <?php echo html::input('percent', '', "class='form-control'");?>
               <span class='input-group-addon'>%</span>
@@ -132,17 +128,21 @@
           <td></td>
         </tr>
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
-        <tr>
+        <?php $hidden = 'hide'?>
+        <?php if(!empty($project->hasProduct)) $hidden = ''?>
+        <tr class="<?php echo $hidden;?>">
           <th><?php echo $lang->execution->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
             <div class='row'>
               <?php $i = 0;?>
+              <?php $class = $division ? '' : 'disabled';?>
               <?php foreach($products as $product):?>
               <?php $hasBranch = ($product->type != 'normal' and isset($branchGroups[$product->id]));?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <div class='col-sm-4'>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $class onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                  <?php if($class) echo html::hidden("products[$i]", $product->id);?>
                   <span class='input-group-addon fix-border'></span>
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
@@ -150,33 +150,36 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
+              <?php if((isset($project->model) and $project->model == 'scrum') or empty($products)):?>
               <div class='col-sm-4'>
                 <div class="input-group">
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
                 </div>
               </div>
+              <?php endif;?>
             </div>
           </td>
         </tr>
-        <tr>
+        <?php if(isset($project->model) and $project->model == 'scrum') $hidden = '';?>
+        <tr class="<?php echo $hidden?>">
           <th><?php echo $lang->execution->linkPlan;?></th>
           <td colspan="3" id="plansBox">
             <div class='row'>
               <?php if(isset($plan) && !empty($plan->begin)):?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[{$plan->product}][{$plan->branch}]", $productPlan, $plan->id, "class='form-control chosen' multiple");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[{$plan->product}][{$plan->branch}][]", $productPlan, $plan->id, "class='form-control chosen' multiple");?></div>
               <?php js::set('currentPlanID', $plan->id)?>
               <?php elseif($copyExecutionID):?>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][$branchID]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][$branchID][]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][]", $productPlan, '', "class='form-control chosen' multiple");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][][]", $productPlan, '', "class='form-control chosen' multiple");?></div>
               <?php js::set('currentPlanID', '')?>
               <?php endif;?>
             </div>
@@ -259,9 +262,7 @@
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
       <div class='titleBox'><h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->copyTitle;?></h4></div>
-      <?php if($this->config->systemMode == 'new'):?>
       <div class='projectSelect'><?php echo html::select("project", $copyProjects, $projectID, "class='form-control chosen' required onchange='loadProjectExecutions(this.value)'");?></div>
-      <?php endif;?>
     </div>
     <div class='modal-body'>
       <?php if(count($executions) == 1):?>
@@ -271,15 +272,16 @@
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php if($config->systemMode == 'new' and $projectID == 0) $executions = $copyExecutions;?>
-      <?php foreach ($executions as $id => $execution):?>
+      <?php if($projectID == 0) $executions = $copyExecutions;?>
+      <?php foreach($executions as $id => $execution):?>
       <?php if(empty($id)):?>
       <?php if($copyExecutionID != 0):?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->execution->cancelCopy;?></a></div>
       <?php endif;?>
-      <?php else: ?>
+      <?php else:?>
+      <?php if(empty($execution->multiple)) continue;?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyExecutionID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons[$execution->type], 'text-muted') . ' ' . $execution->name;?></a></div>
-      <?php endif; ?>
+      <?php endif;?>
       <?php endforeach;?>
       </div>
       <?php endif;?>

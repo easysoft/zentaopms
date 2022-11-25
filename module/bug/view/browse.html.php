@@ -37,6 +37,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <div class="btn-toolbar pull-left">
     <?php
+    common::sortFeatureMenu();
     $menus = customModel::getFeatureMenu($this->moduleName, $this->methodName);
     foreach($menus as $menuItem)
     {
@@ -70,16 +71,16 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             {
                 $moreLabel       = $lang->more;
                 $moreLabelActive = '';
-                if(isset($lang->bug->moreSelects[$browseType]))
+                if(isset($lang->bug->moreSelects[$this->session->bugBrowseType]))
                 {
-                    $moreLabel       = "<span class='text'>{$lang->bug->moreSelects[$browseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    $moreLabel       = "<span class='text'>{$lang->bug->moreSelects[$this->session->bugBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                     $moreLabelActive = 'btn-active-text';
                 }
                 echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";
                 echo "<ul class='dropdown-menu'>";
                 foreach($lang->bug->moreSelects as $menuBrowseType => $label)
                 {
-                    $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
+                    $active = $menuBrowseType == $this->session->bugBrowseType ? 'btn-active-text' : '';
                     echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'") . '</li>';
                 }
                 echo '</ul></div>';
@@ -402,7 +403,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php endif;?>
           <?php if($canBatchAssignTo):?>
           <div class="btn-group dropup">
-            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo;?> <span class="caret"></span></button>
+            <button data-toggle="dropdown" type="button" class="btn" id="mulAssigned"><?php echo $lang->bug->assignedTo;?> <span class="caret"></span></button>
             <?php $withSearch = count($memberPairs) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">

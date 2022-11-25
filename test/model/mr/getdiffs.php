@@ -8,7 +8,7 @@ title=测试 mrModel::getDiffs();
 cid=1
 pid=1
 
-使用空的MR   >> return null
+使用空的MR >> return null
 使用正确的MR >> return normal
 
 */

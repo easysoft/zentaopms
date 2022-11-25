@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -62,4 +63,4 @@ r($kanban->createCardTest($card2)) && p('name,pri,estimate,desc') && e('测试�
 r($kanban->createCardTest($card3)) && p('estimate')               && e('预计不能为负数!');                           // 测试创建预计小于0的卡片
 r($kanban->createCardTest($card4)) && p('end')                    && e('"截止日期"不能小于"预计开始"!');             // 测试创建结束小于开始日期的卡片
 r($kanban->createCardTest($card5)) && p('name:0')                 && e('『卡片名称』不能为空。');                    // 测试创建没有名字的卡片
-system("./ztest init");
+$db->restoreDB();

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -37,4 +38,4 @@ r($testcase->batchCreateTest(array('pri' => $pri, 'title' => $title3)))         
 r($testcase->batchCreateTest(array('stage' => $stage, 'title' => $title4)))           && p() && e('3'); // 测试批量创建用例4
 r($testcase->batchCreateTest(array('needReview' => $needReview, 'title' => $title5))) && p() && e('3'); // 测试批量创建用例5
 r($testcase->batchCreateTest(array('title' => $title1)))                              && p() && e('0'); // 测试重复批量创建用例1
-system("./ztest init");
+$db->restoreDB();

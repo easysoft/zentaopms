@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php echo html::a(inlink('testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=$type&moduleID=$moduleID&orderBy=$orderBy"), "<span class='text'>{$lang->execution->all}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a(inlink('testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=$type&moduleID=$moduleID&orderBy=$orderBy"), "<span class='text'>{$lang->execution->featureBar['all']['all']}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('execution', $execution)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='{$this->app->tab}'");?>
@@ -49,14 +49,14 @@
         <thead>
           <tr>
             <th class='w-id'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
-            <th class='c-pri' title=<?php echo $lang->execution->pri;?>>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
             <th>                 <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
-            <th class='c-type'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
-            <th class='c-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='c-pri'>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
+            <th class='c-type'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
+            <th class='c-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+            <th class='c-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->testcase->openedByAB);?></th>
             <th class='c-user'>  <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
             <th class='c-date'>  <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
             <th class='c-result'><?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-            <th class='c-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
             <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
@@ -70,15 +70,11 @@
             <td class="c-id">
               <?php echo sprintf('%03d', $case->id); ?>
             </td>
-            <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
             <?php $params = "testcaseID=$caseID&version=$case->version";?>
             <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
             <td class='c-title text-left' title="<?php echo $case->title?>"><?php echo html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'");?></td>
+            <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
             <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
-            <td><?php echo zget($users, $case->openedBy);?></td>
-            <td><?php echo zget($users, $case->lastRunner);?></td>
-            <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo substr($case->lastRunDate, 5, 11);?></td>
-            <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
             <td>
             <?php
             if($case->needconfirm)
@@ -95,6 +91,10 @@
             }
             ?>
             </td>
+            <td><?php echo zget($users, $case->openedBy);?></td>
+            <td><?php echo zget($users, $case->lastRunner);?></td>
+            <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo substr($case->lastRunDate, 5, 11);?></td>
+            <td class='result-testcase <?php echo $case->lastRunResult;?>'><?php echo $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted;?></td>
             <td class='c-actions'>
               <?php
               $case->browseType = $type;

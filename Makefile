@@ -102,6 +102,14 @@ zentaoxx:
 	mkdir zentaoxx/db/
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
+	sed -i "s/\$$accountAdmin = \$$this->dao->select('account, admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();/\$$accountAdmin = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();\n\$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$adminArray = explode(',', \$$admins);\n\$$accountAdmin->admin = in_array(\$$accountAdmin->account, \$$adminArray) ? 'super' : '';\n/" zentaoxx/extension/xuan/im/model/chat.php
+	sed -i "s/\$$sysAdmins = \$$this->dao->select('id')->from(TABLE_USER)->where('admin')->eq('super')->fetchPairs();/\$$account = \$$this->loadModel('user')->getById(\$$userID);\n\$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$adminArray = explode(',', \$$admins);\nreturn in_array(\$$account, \$$adminArray);\n/" zentaoxx/extension/xuan/im/model/chat.php
+	sed -i "/->on('tc.ownedBy=tu.account')/{ N ; s/type/tc.type/}" zentaoxx/extension/xuan/im/model/chat.php
+	sed -i "s/\$$super = \$$this->dao->select('admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('admin');/\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\n\$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$adminArray = explode(',', \$$admins);\n\$$super = in_array(\$$account, \$$adminArray) ? 'super' : '';/g" zentaoxx/extension/xuan/im/control.php
+	sed -i "/foreach(\$$users as \$$user)/i \$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\$$adminArray = explode(',', \$$admins);" zentaoxx/extension/xuan/im/model/user.php
+	sed -i "/if(\!isset(\$$user->signed)) \$$user->signed  = 0;/a \$$user->admin = in_array(\$$user->account, \$$adminArray) ? 'super' : '';" zentaoxx/extension/xuan/im/model/user.php
+	sed -i "s/\$$user = \$$this->user->login(\$$account, \$$user->password);/\$$user = \$$this->user->login(\$$user);\n\$$url .= \$$this->config->requestType == 'GET' ? '\&' : '?';\n\$$url .= \"{\$$this->config->sessionVar}={\$$this->app->sessionID}\";\n/" zentaoxx/extension/xuan/im/control.php
+	sed -i "s/\$$file->fullURL/\$$file->webPath/" zentaoxx/extension/xuan/im/control.php
 	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/_0_xuanxuan.php
 	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/_0_xuanxuan.php
 	sed -i 's/site,//' zentaoxx/extension/xuan/im/model/user.php

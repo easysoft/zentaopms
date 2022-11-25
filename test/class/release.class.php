@@ -95,7 +95,7 @@ class releaseTest
         $files  = array();
         $mailto = array();
 
-        $createFields = array('name' => '','marker' => '1', 'build' => '', 'date' => $date, 'desc' => '', 'mailto' => $mailto , 'labels' => $labels, 'files' => $files);  
+        $createFields = array('name' => '','marker' => '1', 'build' => '', 'date' => $date, 'desc' => '', 'mailto' => $mailto , 'labels' => $labels, 'files' => $files);
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
@@ -149,9 +149,10 @@ class releaseTest
      * @return array
      */
 
-    public function getNotifyPersonsTest($notifyList = '', $productID = 0, $buildID = 0, $releaseID = 0)
+    public function getNotifyPersonsTest($releaseID)
     {
-        $objects = $this->objectModel->getNotifyPersons($notifyList, $productID, $buildID, $releaseID);
+        $release = $this->objectModel->getById($releaseID);
+        $objects = $this->objectModel->getNotifyPersons($release);
 
         if(dao::isError()) return dao::getError();
 
@@ -230,11 +231,12 @@ class releaseTest
      *
      * @param  int    $releaseID
      * @param  string $type
+     * @param  string $bugs
      * @access public
      * @return array
      */
 
-    public function linkBugTest($releaseID, $type = 'bug', $bugs)
+    public function linkBugTest($releaseID, $type = 'bug', $bugs = '')
     {
         $_POST['bugs'] = $bugs;
         $this->objectModel->linkBug($releaseID, $type);
@@ -275,10 +277,11 @@ class releaseTest
      *
      * @param  int    $releaseID
      * @param  string $type
+     * @param  string $bugs
      * @access public
      * @return array
      */
-    public function batchUnlinkBugTest($releaseID, $type = 'bug', $bugs)
+    public function batchUnlinkBugTest($releaseID, $type = 'bug', $bugs = '')
     {
         $_POST['bugs'] = $bugs;
         $this->objectModel->linkBug($releaseID);
@@ -313,16 +316,6 @@ class releaseTest
         return $objects;
     }
 
-    public function sendmailTest($releaseID)
-    {
-        $objects = $this->objectModel->sendmail($releaseID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-
     /**
      * Get toList and ccList.
      *
@@ -335,15 +328,6 @@ class releaseTest
         $release = $this->objectModel->getByID($releaseID);
 
         $objects = $this->objectModel->getToAndCcList($release);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function sendMail2FeedbackTest($release, $subject)
-    {
-        $objects = $this->objectModel->sendMail2Feedback($release, $subject);
 
         if(dao::isError()) return dao::getError();
 

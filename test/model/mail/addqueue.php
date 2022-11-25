@@ -10,6 +10,11 @@ title=测试 mailModel->addQueue();
 cid=1
 pid=1
 
+提交数据为空时 >> 没有数据提交
+获取添加的邮件主题 >> 测试提交队列
+获取收件人列表不包含自己 >> user3
+获取收件人列表包含自己 >> user3,admin
+
 */
 
 $mail = new mailTest();

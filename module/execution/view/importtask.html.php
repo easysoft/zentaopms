@@ -42,7 +42,7 @@
           <?php endif;?>
           <th class='c-user'><?php echo $lang->task->assignedTo;?></th>
           <th class='c-hour'><?php echo $lang->task->leftAB;?></th>
-          <th class='c-date'><?php echo $lang->task->deadlineAB;?></th>
+          <th class='c-date text-center'><?php echo $lang->task->deadlineAB;?></th>
           <th class='c-status'><?php echo $lang->statusAB;?></th>
           <th class='c-story'><?php echo $lang->task->story;?></th>
         </tr>
@@ -63,7 +63,7 @@
           <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name, '', "class='preview iframe' data-width='90%'", true, true)) echo $task->name;?></td>
           <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
           <td title="<?php echo $task->left . ' ' . $lang->execution->workHour;?>"><?php echo $task->left . ' ' . $lang->execution->workHourUnit;?></td>
-          <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
+          <td class="text-center <?php if(isset($task->delay)) echo 'delayed';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo '<span>' . $task->deadline . '</span>';?></td>
           <td><span class='status-task status-<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></span></td>
           <td class='text-left text-ellipsis' title="<?php echo $task->storyTitle;?>">
             <?php
@@ -71,7 +71,7 @@
             {
                 if(common::hasPriv('execution', 'storyView'))
                 {
-                    echo html::a($this->createLink('execution', 'storyView', "storyid=$task->storyID"), $task->storyTitle, '', "class='preview'", true, isonlybody());
+                    echo html::a($this->createLink('execution', 'storyView', "storyid=$task->storyID", '', true), $task->storyTitle, '', "class='preview'");
                 }
                 else
                 {
@@ -95,6 +95,7 @@
         <?php echo html::backButton('','','btn');?>
         <?php endif;?>
       </div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
   </form>

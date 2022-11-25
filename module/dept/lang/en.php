@@ -30,6 +30,7 @@ $lang->dept->noDepartment = "No Department";
 
 $lang->dept->confirmDelete = " Do you want to delete this department?";
 $lang->dept->successSave   = " Saved!";
+$lang->dept->repeatDepart  = " There is a duplicate department name, are you sure to add it?";
 
 $lang->dept->error = new stdclass();
 $lang->dept->error->hasSons  = 'This Department has child departments. You cannot delete it!';

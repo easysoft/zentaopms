@@ -25,4 +25,3 @@ r($entry->getByCodeTest($entryCodeList[0])) && p('name') && e('这是应用名�
 r($entry->getByCodeTest($entryCodeList[0])) && p('account') && e('accountadmin'); // 查询code为code1的entry的account
 r($entry->getByCodeTest($entryCodeList[1])) && p('name') && e('0');               // 查询code为code2的entry的name
 r($entry->getByCodeTest($entryCodeList[1])) && p('account') && e('0');            // 查询code为code2的entry的account
-system("./ztest init");

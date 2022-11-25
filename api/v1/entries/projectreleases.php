@@ -16,15 +16,17 @@ class projectReleasesEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($projectID = 0)
     {
         if(empty($projectID)) $projectID = $this->param('project');
         if(empty($projectID)) return $this->sendError(400, 'Need project id.');
 
+        $page    = intval($this->param('page', 1));
+        $limit   = intval($this->param('limit', 20));
         $control = $this->loadController('projectrelease', 'browse');
-        $control->browse($projectID, $this->param('execution', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'));
+        $control->browse($projectID, $this->param('execution', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'), 0, $limit, $page);
 
         /* Response */
         $data = $this->getData();
@@ -47,7 +49,7 @@ class projectReleasesEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($projectID = 0)
     {
@@ -70,6 +72,6 @@ class projectReleasesEntry extends entry
 
         $release = $this->loadModel('projectrelease')->getByID($data->id);
 
-        $this->send(201, $release);
+        return $this->send(201, $release);
     }
 }

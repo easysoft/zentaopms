@@ -163,6 +163,13 @@ $lang->upgrade->fromVersions['17_1']       = '17.1';
 $lang->upgrade->fromVersions['17_2']       = '17.2';
 $lang->upgrade->fromVersions['17_3']       = '17.3';
 $lang->upgrade->fromVersions['17_4']       = '17.4';
+$lang->upgrade->fromVersions['17_5']       = '17.5';
+$lang->upgrade->fromVersions['17_6']       = '17.6';
+$lang->upgrade->fromVersions['17_6_1']     = '17.6.1';
+$lang->upgrade->fromVersions['17_6_2']     = '17.6.2';
+$lang->upgrade->fromVersions['17_7']       = '17.7';
+$lang->upgrade->fromVersions['17_8']       = '17.8';
+$lang->upgrade->fromVersions['18_0_beta1'] = '18.0.beta1';
 
 global $config;
 /* Lite. */
@@ -330,6 +337,13 @@ $lang->upgrade->fromVersions['biz7_1']       = 'Biz7.1';
 $lang->upgrade->fromVersions['biz7_2']       = 'Biz7.2';
 $lang->upgrade->fromVersions['biz7_3']       = 'Biz7.3';
 $lang->upgrade->fromVersions['biz7_4']       = 'Biz7.4';
+$lang->upgrade->fromVersions['biz7_5']       = 'Biz7.5';
+$lang->upgrade->fromVersions['biz7_6']       = 'Biz7.6';
+$lang->upgrade->fromVersions['biz7_6_1']     = 'Biz7.6.1';
+$lang->upgrade->fromVersions['biz7_6_2']     = 'Biz7.6.2';
+$lang->upgrade->fromVersions['biz7_7']       = 'Biz7.7';
+$lang->upgrade->fromVersions['biz7_8']       = 'Biz7.8';
+$lang->upgrade->fromVersions['biz8_0_beta1'] = 'Biz8.0.beta1';
 
 /* Max. */
 $lang->upgrade->fromVersions['max2_0_beta4'] = 'Max2.0.beta4';
@@ -353,3 +367,10 @@ $lang->upgrade->fromVersions['max3_1']       = 'Max3.1';
 $lang->upgrade->fromVersions['max3_2']       = 'Max3.2';
 $lang->upgrade->fromVersions['max3_3']       = 'Max3.3';
 $lang->upgrade->fromVersions['max3_4']       = 'Max3.4';
+$lang->upgrade->fromVersions['max3_5']       = 'Max3.5';
+$lang->upgrade->fromVersions['max3_6']       = 'Max3.6';
+$lang->upgrade->fromVersions['max3_6_1']     = 'Max3.6.1';
+$lang->upgrade->fromVersions['max3_6_2']     = 'Max3.6.2';
+$lang->upgrade->fromVersions['max3_6_3']     = 'Max3.6.3';
+$lang->upgrade->fromVersions['max3_7']       = 'Max3.7';
+$lang->upgrade->fromVersions['max3_8']       = 'Max3.8';

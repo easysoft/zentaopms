@@ -127,6 +127,13 @@ class file extends control
             return print("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
         }
 
+        if(!$this->file->checkPriv($file))
+        {
+            echo(js::alert($this->lang->file->accessDenied));
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            return print(js::locate(helper::createLink('my', 'index')));
+        }
+
         /* Judge the mode, down or open. */
         $mode      = 'down';
         $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';
@@ -139,7 +146,7 @@ class file extends control
             $file->extension = $extension;
         }
 
-        if(file_exists($file->realPath))
+        if($this->file->fileExists($file))
         {
             /* If the mode is open, locate directly. */
             if($mode == 'open')
@@ -283,7 +290,7 @@ class file extends control
 
             /* Fix Bug #1518. */
             $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-            if(empty($fileRecord)) @unlink($file->realPath);
+            if(empty($fileRecord)) $this->file->unlinkFile($file);
 
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
@@ -299,16 +306,19 @@ class file extends control
      * @param  string $fieldset
      * @param  object $object
      * @param  string $method
+     * @param  bool   $showDelete
      * @access public
      * @return void
      */
-    public function printFiles($files, $fieldset, $object = null, $method = 'view')
+    public function printFiles($files, $fieldset, $object = null, $method = 'view', $showDelete = true)
     {
-        $this->view->files    = $files;
-        $this->view->fieldset = $fieldset;
-        $this->view->object   = $object;
+        $this->view->files      = $files;
+        $this->view->fieldset   = $fieldset;
+        $this->view->object     = $object;
+        $this->view->method     = $method;
+        $this->view->showDelete = $showDelete;
 
-        if($method == 'view') return $this->display('file', 'viewfiles');
+        if(strpos('view,edit', $method) !== false and $this->app->clientDevice != 'mobile') return $this->display('file', 'viewfiles');
         $this->display();
     }
 
@@ -341,12 +351,28 @@ class file extends control
 
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase' and $file->title != $fileName) $this->file->updateTestcaseVersion($file);
+            $newFile = $this->file->getByID($fileID);
 
-            return print(js::reload('parent.parent'));
+            if($this->app->clientDevice == 'mobile') return print(js::reload('parent.parent'));
+            echo json_encode($newFile);
         }
 
-        $this->view->file = $this->file->getById($fileID);
-        $this->display();
+        if($this->app->clientDevice == 'mobile')
+        {
+            $file = $this->file->getById($fileID);
+            if(strrpos($file->title, '.') !== false)
+            {
+                /* Fix the file name exe.exe */
+                $title     = explode('.', $file->title);
+                $extension = end($title);
+                if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
+                array_pop($title);
+                $file->title = join('.', $title);
+            }
+
+            $this->view->file = $file;
+            $this->display();
+         }
     }
 
     /**
@@ -474,7 +500,7 @@ class file extends control
     public function read($fileID)
     {
         $file = $this->file->getById($fileID);
-        if(empty($file) or !file_exists($file->realPath)) return false;
+        if(empty($file) or !$this->file->fileExists($file)) return false;
 
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();

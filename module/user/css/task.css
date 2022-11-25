@@ -1,2 +1,5 @@
-td.delayed {color: #fff; background: #e84e0f !important;}
 .hours {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right;}
+.c-execution {width: 180px;}
+.c-hour, .c-status {width: 70px;}
+.c-deadline {width: 100px;}
+td.hours:last-child {padding-right: 14px;}

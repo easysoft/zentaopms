@@ -20,8 +20,8 @@ a.removeModule:hover {color: red;}
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
 .table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
 .table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
-.table td.has-child > a:not(.story-toggle) {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.table td.has-child > .story-toggle {color: #838a9d; position: relative; top: 1px;}
+.table td.has-child > a:not(.story-toggle) {max-width: 90%; max-width: calc(100% - 50px); display: inline-block; overflow: hidden; text-overflow: clip; white-space: nowrap;}
+.table td.has-child > .story-toggle {color: #838a9d; position: relative; top: 1px; left: 2px;}
 .table td.has-child > .story-toggle:hover {color: #006af1; cursor: pointer;}
 .table td.has-child > .story-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform: rotate(-90deg); -moz-transform: rotate(-90deg); -o-transform: rotate(-90deg); -webkit-transform: rotate(-90deg); transform: rotate(-90deg);}
 .table td.has-child > .story-toggle > .icon:before {text-align: left;}
@@ -39,3 +39,5 @@ a.removeModule:hover {color: red;}
 #batchUnlinkStoryTip .table th:first-child {width: 460px;}
 #mainMenu .dropdown-menu>li>a>.icon {top: 4px;}
 #productStoryForm tbody tr td .label {max-width: 100px; text-overflow: unset;}
+.c-span {margin-left: 19px;}
+.btn-toolbar #query span.text{overflow: hidden; width: 52px; vertical-align: middle; margin-right: 1px;}

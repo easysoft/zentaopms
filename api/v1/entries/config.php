@@ -16,7 +16,7 @@ class configEntry extends baseEntry
      *
      * @param  int    $name language,version,timezone etc.
      * @access public
-     * @return void
+     * @return string
      */
     public function get($name)
     {
@@ -40,10 +40,9 @@ class configEntry extends baseEntry
                 $config['value'] = $this->config->systemMode;
                 break;
             default:
-                $this->sendError(400, 'No configuration.');
-                return;
+                return $this->sendError(400, 'No configuration.');
         }
 
-        $this->send(200, $config);
+        return $this->send(200, $config);
     }
 }

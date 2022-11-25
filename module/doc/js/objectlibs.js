@@ -181,6 +181,12 @@ $(function()
             $('#content [data-ride="tree"]').tree();
             $('#outline li.has-list').addClass('open in');
             $('#outline li.has-list>i+ul').prev('i').remove();
+            if($('#markdownContent').val())
+            {
+                var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
+                simplemde.value(String($('#markdownContent').val()));
+                simplemde.togglePreview();
+            }
         });
     });
 

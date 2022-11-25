@@ -41,6 +41,7 @@ $lang->release->name          = 'Tên';
 $lang->release->marker        = 'Cột mốc';
 $lang->release->date          = 'Ngày';
 $lang->release->desc          = 'Mô tả';
+$lang->release->files         = 'Chung';
 $lang->release->status        = 'Tình trạng';
 $lang->release->subStatus     = 'Tình trạng con';
 $lang->release->last          = 'Phát hành gần nhất';
@@ -84,3 +85,7 @@ $lang->release->notifyList['QD'] = 'QA Manager';
 $lang->release->notifyList['SC'] = 'Story Creator';
 $lang->release->notifyList['ET'] = "{$lang->execution->common} Team Members";
 $lang->release->notifyList['PT'] = "Project Team Members";
+
+$lang->release->featureBar['browse']['all']       = $lang->release->all;
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];

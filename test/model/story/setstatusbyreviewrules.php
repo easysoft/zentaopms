@@ -10,7 +10,10 @@ title=测试 storyModel->setStatusByReviewRules();
 cid=1
 pid=1
 
-
+传入两个通过一个拒绝，查看返回结果 >> 0
+传入全部通过，查看返回结果 >> active
+传入两个拒绝一个通过，查看返回结果 >> 0
+传入三个拒绝，查看返回结果 >> closed
 
 */
 

@@ -33,7 +33,6 @@ $lang->custom->URStory              = "用户需求";
 $lang->custom->SRStory              = "软件需求";
 $lang->custom->epic                 = "史诗";
 $lang->custom->default              = "默认";
-$lang->custom->mode                 = "模式";
 $lang->custom->scrumStory           = "故事";
 $lang->custom->waterfallCommon      = "瀑布";
 $lang->custom->buildin              = "系统内置";
@@ -56,9 +55,10 @@ $lang->custom->role                 = '职位';
 $lang->custom->dept                 = '部门';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = '是否启用代号';
-
-if($config->systemMode == 'new') $lang->custom->execution = '执行';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
+$lang->custom->execution            = '执行';
+$lang->custom->selectDefaultProgram = '请选择一个默认项目集';
+$lang->custom->defaultProgram       = '默认项目集';
+$lang->custom->modeManagement       = '模式管理';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -89,7 +89,7 @@ $lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
-if($config->systemMode == 'new') $lang->custom->object['project']   = '项目';
+$lang->custom->object['project']   = '项目';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['kanban']    = $lang->custom->kanban;
@@ -103,8 +103,9 @@ $lang->custom->object['user']      = '用户';
 $lang->custom->object['block']     = '区块';
 $lang->custom->object['flow']      = '流程';
 $lang->custom->object['score']     = '积分';
+$lang->custom->object['mode']      = '模式';
 
-if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
 $lang->custom->menuOrder[15] = 'execution';
 $lang->custom->menuOrder[20] = 'kanban';
@@ -120,7 +121,7 @@ $lang->custom->menuOrder[65] = 'flow';
 $lang->custom->menuOrder[70] = 'score';
 
 $lang->custom->dividerMenu  = ',story,todo,block,';
-$lang->custom->separatePage = ',execution,product,kanban,flow,score,';
+$lang->custom->separatePage = ',execution,product,kanban,flow,score';
 
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = '关闭的区块';
@@ -237,25 +238,54 @@ $lang->custom->weekendList[2] = '双休';
 $lang->custom->weekendList[1] = '单休';
 
 global $config;
-if($config->systemMode == 'classic')
-{
-    $lang->custom->sprintConceptList[0] = '产品 - 项目';
-    $lang->custom->sprintConceptList[1] = '产品 - 迭代';
-    $lang->custom->sprintConceptList[2] = '产品 - 冲刺';
-}
-else
-{
-    $lang->custom->sprintConceptList[0] = '项目 - 产品 - 迭代';
-    $lang->custom->sprintConceptList[1] = '项目 - 产品 - 冲刺';
-}
+$lang->custom->sprintConceptList[0] = '项目 产品 迭代';
+$lang->custom->sprintConceptList[1] = '项目 产品 冲刺';
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 
-$lang->custom->menuTip          = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
-$lang->custom->saveFail         = '保存失败！';
-$lang->custom->page             = '页面';
-$lang->custom->changeClassicTip = '切换为老版本的习惯后，系统将取消项目集功能。';
-$lang->custom->changeModeTips   = '历史删除数据不参与数据归并流程，切换模式后将不支持还原，请知悉';
+$lang->custom->menuTip           = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
+$lang->custom->saveFail          = '保存失败！';
+$lang->custom->page              = '页面';
+$lang->custom->usage             = '使用场景';
+$lang->custom->selectUsage       = '请选择使用模式';
+$lang->custom->useLight          = '使用轻量管理模式';
+$lang->custom->useALM            = '使用全生命周期管理模式';
+$lang->custom->currentModeTips   = '您当前使用的是%s, 您可以切换到%s';
+$lang->custom->changeModeTips    = '您确定要切换到%s吗？';
+$lang->custom->selectProgramTips = '切换到轻量管理模式后，为确保数据结构一致，需要选择一个项目集作为默认项目集，后续新增的产品和项目数据都关联在这个默认的项目集下。';
+
+$lang->custom->modeList['light'] = '轻量级管理模式';
+$lang->custom->modeList['ALM']   = '全生命周期管理模式';
+
+$lang->custom->modeIntroductionList['light'] = '提供了项目管理的核心功能，适用于小型研发团队';
+$lang->custom->modeIntroductionList['ALM']   = '概念更加完整、严谨，功能更加丰富，适用于中大型研发团队';
+
+$lang->custom->features['program']          = '项目集';
+$lang->custom->features['productRR']        = '产品-研发需求';
+$lang->custom->features['productUR']        = '产品-用户需求';
+$lang->custom->features['productLine']      = '产品-产品线';
+$lang->custom->features['projectScrum']     = '项目-敏捷模型';
+$lang->custom->features['projectWaterfall'] = '项目-瀑布模型';
+$lang->custom->features['projectKanban']    = '项目-看板模型';
+$lang->custom->features['execution']        = '执行';
+$lang->custom->features['qa']               = '测试';
+$lang->custom->features['devops']           = 'DevOps';
+$lang->custom->features['kanban']           = '看板';
+$lang->custom->features['doc']              = '文档';
+$lang->custom->features['report']           = '统计';
+$lang->custom->features['system']           = '组织';
+$lang->custom->features['assetlib']         = '资产库';
+$lang->custom->features['oa']               = '办公';
+$lang->custom->features['ops']              = '运维';
+$lang->custom->features['feedback']         = '反馈';
+$lang->custom->features['traincourse']      = '学堂';
+$lang->custom->features['workflow']         = '工作流';
+$lang->custom->features['admin']            = '后台';
+$lang->custom->features['vision']           = '研发综合界面、运营管理界面';
+
+$lang->custom->needClosedFunctions['waterfall'] = '瀑布项目';
+$lang->custom->needClosedFunctions['URStory']   = '用户需求';
+if($config->edition == 'max') $lang->custom->needClosedFunctions['assetLib'] = '资产库';
 
 $lang->custom->scoreStatus[1] = '开启';
 $lang->custom->scoreStatus[0] = '关闭';
@@ -273,9 +303,9 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
 $lang->custom->moduleName['execution']   = $lang->custom->execution;
 
-$lang->custom->conceptQuestions['overview']   = "1. 下述哪种组合方式更适合您公司的管理现状？";
-$lang->custom->conceptQuestions['URAndSR']    = "2. 是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";
-$lang->custom->conceptQuestions['storypoint'] = "3. 您公司是在使用以下哪种单位来做规模估算？";
+$lang->custom->conceptQuestions['overview']   = "下述哪种组合方式更适合您公司的管理现状？";
+$lang->custom->conceptQuestions['URAndSR']    = "是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";
+$lang->custom->conceptQuestions['storypoint'] = "您公司是在使用以下哪种单位来做规模估算？";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();

@@ -41,39 +41,39 @@
       <?php $vars = "userID={$user->id}&storyType=$storyType&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
-          <th class='c-id'>   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
           <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <?php if($this->config->vision == 'lite'):?>
           <th class='c-product'><?php common::printOrderLink('product', $orderBy, $vars, $lang->story->project);?></th>
           <?php else:?>
           <th class='c-product'><?php common::printOrderLink('product', $orderBy, $vars, $lang->story->product);?></th>
           <?php endif;?>
-          <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
           <?php if($storyType != 'requirement' and $this->config->vision != 'lite'):?>
           <th class='c-plan'><?php common::printOrderLink('plan', $orderBy, $vars, $lang->story->plan);?></th>
           <?php endif;?>
-          <th class='c-openedBy'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-openedBy'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='c-estimate text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
-          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <?php if($this->config->vision != 'lite'):?>
-          <th class='c-stage'> <?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
+          <th class='c-stage'><?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
           <?php endif;?>
         </tr>
       </thead>
       <tbody>
         <?php foreach($stories as $key => $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id", '', true);?>
         <tr class='text-left'>
-          <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
-          <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+          <td><?php echo html::a($storyLink, sprintf('%03d', $story->id), '', "class='iframe'");?></td>
+          <td class='text-left nobr'><?php echo html::a($storyLink, $story->title, '', "class='iframe'");?></td>
+          <td><span class='<?php echo "label-pri label-pri-{$story->pri} pri" . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+          <td class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <td><?php echo $story->productTitle;?></td>
-          <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
           <?php if($storyType != 'requirement' and $this->config->vision != 'lite'):?>
-          <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
+          <td class='nobr' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <?php endif;?>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td class='estimate text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-          <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <?php if($this->config->vision != 'lite'):?>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
           <?php endif;?>

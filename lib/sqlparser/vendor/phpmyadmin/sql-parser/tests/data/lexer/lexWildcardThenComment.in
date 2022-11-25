@@ -1,0 +1,33 @@
+SELECT */* comment */
+
+SELECT /* comment */*
+
+SELECT 2*/* comment */3
+
+SELECT 2/* comment */*3
+
+SELECT */*
+comment
+on
+multiple
+lines
+*/FROM
+
+DELETE foo.*/* foo */ USING
+
+DELETE foo.*/* foo */,bar.*/*bar*/ USING
+
+SELECT `*`/*with comment*/ AS star_field
+
+SELECT `*`,*/*with comment*/
+
+DELETE a.*/*multi
+line /* with C open tag
+comment inside */ USING
+
+SELECT 2*/* operator */3 + 3/* operator */*2,/* start wildcard */*/* end wildcard */
+
+SELECT `*`/*a*/*/*b*/`*`
+
+-- invalid queries
+/* SELECT */*

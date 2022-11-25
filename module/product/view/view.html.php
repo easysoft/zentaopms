@@ -142,14 +142,6 @@
                     <td><strong><?php echo $product->bugs?></strong></td>
                   </tr>
                   <tr>
-                    <th><?php echo $lang->story->statusList['changed']  . $space . $lang->story->common;?></th>
-                    <td><strong><?php echo $product->stories['changed']?></strong></td>
-                    <th><?php echo $lang->product->releases?></th>
-                    <td><strong><?php echo $product->releases?></strong></td>
-                    <th><?php echo $lang->product->cases?></th>
-                    <td><strong><?php echo $product->cases?></strong></td>
-                  </tr>
-                  <tr>
                     <th><?php echo $lang->story->statusList['draft']  . $space . $lang->story->common;?></th>
                     <td><strong><?php echo $product->stories['draft']?></strong></td>
                     <th><?php echo $lang->product->builds?></th>
@@ -158,12 +150,18 @@
                     <td><strong><?php echo $product->docs?></strong></td>
                   </tr>
                   <tr>
-                    <th><?php echo $lang->story->statusList['closed']  . $space . $lang->story->common;?></th>
-                    <td><strong><?php echo $product->stories['closed']?></strong></td>
-                    <?php if($config->systemMode == 'new'):?>
+                    <th><?php echo $lang->story->statusList['changing']  . $space . $lang->story->common;?></th>
+                    <td><strong><?php echo $product->stories['changing']?></strong></td>
+                    <th><?php echo $lang->product->releases?></th>
+                    <td><strong><?php echo $product->releases?></strong></td>
+                    <th><?php echo $lang->product->cases?></th>
+                    <td><strong><?php echo $product->cases?></strong></td>
+                  </tr>
+                  <tr>
+                    <th><?php echo $lang->story->statusList['reviewing']  . $space . $lang->story->common;?></th>
+                    <td><strong><?php echo $product->stories['reviewing']?></strong></td>
                     <th><?php echo $lang->product->projects?></th>
                     <td><strong><?php echo $product->projects?></strong></td>
-                    <?php endif;?>
                     <th><?php echo $lang->product->executions?></th>
                     <td><strong><?php echo $product->executions?></strong></td>
                   </tr>

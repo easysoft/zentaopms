@@ -16,7 +16,7 @@
 .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
 
-.kanban-header-col > .actions {padding-top: 22px}
+.kanban-header-col > .actions {top: auto!important; right: 5px!important;}
 .kanban-header-parent-col .kanban-header-col > .actions {padding-top: 6px; padding-right: 2px;}
 .kanban-header-col > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 .kanban-header-col > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
@@ -29,7 +29,8 @@
 .kanban-affixed .kanban-header-col > .title > .text,
 .kanban-affixed .kanban-header-col > .title > .count {color: #fff!important;}
 .kanban-header-col > .title > .text {max-width: 110px !important;}
-.kanban-header-col > .title > .storyColumn.text {max-width: 100% !important;}
+.kanban-header-col > .title > .storyColumn .text {font-weight: 700; color:rgb(51, 51, 51);}
+.kanban-header-col > .title > .storyColumn + .dropdown-menu {top: 45px; left: auto;}
 
 #kanbanContainer {margin: 0;}
 #kanbanContainer > .panel-body {overflow: auto;}
@@ -45,6 +46,7 @@
 #kanbans .kanban-card[data-scale-size="2"] > .infos > .info-pri {transform: scale(.8); vertical-align: top;}
 #kanbans .kanban-card[data-scale-size="2"] > .infos > .avatar {display: inline-block; transform: scale(.8); position: relative; top: -2px; vertical-align: top; margin-right: -1px;}
 #kanbans .kanban-card[data-scale-size="2"] > .infos > .info-estimate {top: -1px;}
+#kanbans .kanban-col {padding: 0px !important;}
 
 #kanbanScaleControl {width: 100px;}
 #kanbanScaleControl .input-group-addon {background: #fff; padding: 5px;}
@@ -60,7 +62,6 @@
 .c-group {width: 190px !important; overflow: unset;}
 .c-type {margin-left: 0px !important;}
 
-.createButton {margin-right: 5px;}
 .headerTop {top: 0px !important;}
 .kanban-header-col>.actions>a {padding: 0px !important;}
 
@@ -68,3 +69,8 @@
 #teskKanbanSearchInput {width: 150px;}
 #searchBox {display: none; width: 150px;}
 .btn-link.querybox-toggle {background-color: rgba(0,0,0,0);}
+
+#kanbans .kanban-affixed .kanban-header-col .title.action-dbc {pointer-events: none;}
+#kanbans .kanban-affixed .kanban-header-col .title.action-dbc .storyColumn .text {color: #fff;}
+#kanbans .kanban-affixed .kanban-header-col .title.action-dbc .storyColumn .caret {display: none;}
+.kanban-card a[disabled] {color: #313c52;}

@@ -94,7 +94,7 @@
             <?php
             if (common::hasPriv('execution', 'unlinkMember', $member))
             {
-                echo html::a("javascript:deleteMember($execution->id, $member->userID)", '<i class="icon-green-execution-unlinkMember icon-unlink"></i>', '', "class='btni' title='{$lang->execution->unlinkMember}'");
+                echo html::a("javascript:deleteMember($execution->id, $member->userID)", '<i class="icon-green-execution-unlinkMember icon-unlink"></i>', '', "class='btn' title='{$lang->execution->unlinkMember}'");
             }
             ?>
           </td>

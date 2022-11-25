@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -32,4 +33,4 @@ r($result1)                  && p('2:AID,BID,relation') && e('1,6,subdivideinto'
 r(count($result2->children)) && p()                     && e('3');                         // 将软件需求2拆分三个子需求，查看子需求的数量
 r($result2->children)        && p('8:parent,title,id')  && e('2,这里是需求来源备注8,8');   // 将软件需求2拆分三个子需求，查看子需求8的parent、title等字段
 r($result2->children)        && p('12:parent,title,id') && e('2,这里是需求来源备注12,12'); // 将软件需求2拆分三个子需求，查看子需求12的parent、title等字段
-system("./ztest init");
+$db->restoreDB();

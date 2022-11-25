@@ -72,7 +72,7 @@
           <td><?php echo html::select("branch[{$case->id}]", $caseBranches, $caseBranch, "class='form-control' onchange='updateModules($productID, this.value, $case->id)'")?></td>
           <?php endif;?>
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo $case->pri == '0' ? '' : zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
-          <td class='text-left nobr'><?php if(!common::printLink('testcase', 'view', "caseID=$case->id", $case->title)) echo $case->title;?></td>
+          <td class='text-left nobr'><?php if(!common::printLink('testcase', 'view', "caseID=$case->id", $case->title, '', 'class="iframe" data-width="80%"', true, true)) echo $case->title;?></td>
           <?php $libModule = zget($libModules, $case->module, '');?>
           <td class='text-left' title='<?php echo $libModule?>'><?php echo $libModule;?></td>
           <td class='text-left' data-module='<?php echo $case->module?>' style='overflow:visible'>
@@ -102,4 +102,5 @@
 </div>
 <?php js::set('productID', $productID)?>
 <?php js::set('branch', $branch)?>
+<?php js::set('app', $app->tab)?>
 <?php include '../../common/view/footer.html.php';?>

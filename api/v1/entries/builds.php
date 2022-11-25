@@ -16,7 +16,7 @@ class buildsEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($projectID = 0)
     {
@@ -44,7 +44,7 @@ class buildsEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($projectID = 0)
     {
@@ -53,7 +53,7 @@ class buildsEntry extends entry
         $project = $this->loadModel('project')->getByID($projectID);
         if(!$project) return $this->send404();
 
-        $fields = 'execution,product,name,builder,date,scmPath,filePath,desc';
+        $fields = 'execution,product,name,builder,date,scmPath,filePath,desc,branch';
         $this->batchSetPost($fields);
 
         $control = $this->loadController('build', 'create');
@@ -67,6 +67,6 @@ class buildsEntry extends entry
 
         $build = $this->loadModel('build')->getByID($data->id);
 
-        $this->send(201, $build);
+        return $this->send(201, $build);
     }
 }

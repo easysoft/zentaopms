@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/release.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -26,4 +27,4 @@ r($release->unlinkBugTest($releaseID[0], $bugs ,$type[0])) && p('id,bugs,leftBug
 r($release->unlinkBugTest($releaseID[0], $bugs ,$type[1])) && p('id,bugs,leftBugs') && e('1,'); //正常发布批量移除遗留的Bug
 r($release->unlinkBugTest($releaseID[1], $bugs ,$type[0])) && p('id,bugs,leftBugs') && e('6,'); //停止维护发布批量移除解决的Bug
 r($release->unlinkBugTest($releaseID[1], $bugs ,$type[1])) && p('id,bugs,leftBugs') && e('6,'); //停止维护发布批量移除遗留的Bug
-system("./ztest init");
+$db->restoreDB();

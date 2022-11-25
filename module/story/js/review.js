@@ -7,11 +7,6 @@ function switchShow(result)
         $('#rejectedReasonBox').show();
         $('#preVersionBox').hide();
         $('#assignedToBox').hide();
-        if(isMultiple)
-        {
-            $('#assignedToBox').show();
-            loadAssignedTo();
-        }
     }
     else if(result == 'revert')
     {
@@ -19,8 +14,7 @@ function switchShow(result)
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
-        $('#assignedToBox').show();
-        loadAssignedTo();
+        if(isLastOne) $('#assignedToBox').show();
     }
     else if(result == 'clarify')
     {
@@ -29,8 +23,7 @@ function switchShow(result)
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
         $('#rejectedReasonBox').hide();
-        $('#assignedToBox').show();
-        loadAssignedTo();
+        if(isLastOne) $('#assignedToBox').show();
     }
     else
     {
@@ -39,17 +32,13 @@ function switchShow(result)
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
         $('#rejectedReasonBox').hide();
-        $('#assignedToBox').hide();
+        if(isLastOne) $('#assignedToBox').show();
         if(result == 'pass')
         {
             $('#priBox').show();
             $('#estimateBox').show();
-            $('#assignedToBox').show();
-            loadAssignedTo();
         }
     }
-
-    getStatus('review', "storyID=" + storyID + ",result=" + result);
 }
 
 function setStory(reason)

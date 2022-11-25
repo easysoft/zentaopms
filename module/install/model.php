@@ -52,24 +52,6 @@ class installModel extends model
     }
 
     /**
-     * Get latest release.
-     *
-     * @access public
-     * @return string or bool
-     */
-    public function getLatestRelease()
-    {
-        if(!function_exists('json_decode')) return false;
-        $result = file_get_contents('https://www.zentao.net/misc-getlatestrelease.json');
-        if($result)
-        {
-            $result = json_decode($result);
-            if(isset($result->release) and $this->config->version != $result->release->version) return $result->release;
-        }
-        return false;
-    }
-
-    /**
      * Check php version.
      *
      * @access public
@@ -516,14 +498,13 @@ class installModel extends model
             }
         }
 
+        $this->loadModel('user');
+        $this->app->loadConfig('admin');
         /* Check password. */
         if(!validater::checkReg($this->post->password, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
-        if(isset($this->config->safe->mode) and (strlen($this->post->password) < $this->config->safe->mode)) dao::$errors['password'][] = $this->lang->user->weakPassword;
-        if(!empty($this->config->safe->changeWeak))
-        {
-            if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-            if(strpos(",{$this->config->safe->weak},", ",{$this->post->password},") !== false) dao::$errors['password'][] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
-        }
+        if($this->user->computePasswordStrength($this->post->password) < 1) dao::$errors['password'][] = $this->lang->user->placeholder->passwordStrengthCheck[1];
+        if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
+        if(strpos(",{$this->config->safe->weak},", ",{$this->post->password},") !== false) dao::$errors['password'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
         if(dao::isError()) return false;
 
         /* Insert a company. */

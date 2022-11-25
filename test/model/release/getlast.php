@@ -10,7 +10,7 @@ title=测试 releaseModel->getLast();
 cid=1
 pid=1
 
-产品ID正常查询 >> 1,产品正常的正常的发布1
+产品ID正常查询 >> 9,产品1发布9
 产品ID为空查询 >> 0
 产品ID不存在查询 >> 0
 
@@ -20,6 +20,6 @@ $productID = array('1', '10000');
 
 $release = new releaseTest();
 
-r($release->getLastTest($productID[0])) && p('id,name')   && e('1,产品正常的正常的发布1'); //产品ID正常查询
-r($release->getLastTest(''))            && p('')          && e('0');                       //产品ID为空查询
-r($release->getLastTest($productID[1])) && p('')          && e('0');                       //产品ID不存在查询
+r($release->getLastTest($productID[0])) && p('id,name')   && e('9,产品1发布9'); //产品ID正常查询
+r($release->getLastTest(''))            && p('')          && e('0');            //产品ID为空查询
+r($release->getLastTest($productID[1])) && p('')          && e('0');            //产品ID不存在查询

@@ -34,7 +34,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
     <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'>
         <?php if($showProduct):?>
-        <tr>
+        <tr class="<?php if($hiddenProduct) echo 'hidden';?>">
           <th class='thWidth'><?php echo $lang->tree->product;?></th>
           <td>
             <div class='input-group'>
@@ -57,7 +57,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php endif;?>
         <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='thWidth'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
+          <th class='thWidth'><?php echo ($type == 'doc') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
           <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
@@ -65,7 +65,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
           <th class='thWidth'>
             <?php
             $lblTreeName = $lang->tree->name;
-            if($type == 'doc' || $type == 'feedback') $lblTreeName = $lang->tree->cate;
+            if($type == 'doc') $lblTreeName = $lang->tree->cate;
             if($type == 'line') $lblTreeName = $lang->tree->line;
             echo $lblTreeName;
             ?>

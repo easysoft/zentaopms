@@ -9,16 +9,17 @@
  * @version     $Id: en.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->index     = 'Home';
-$lang->report->list      = 'Liste';
-$lang->report->item      = 'Eintrag';
-$lang->report->value     = 'Wert';
-$lang->report->percent   = '%';
-$lang->report->undefined = 'Undefiniert';
-$lang->report->query     = 'Abfrage';
-$lang->report->annual    = 'Annual Summary';
-$lang->report->project   = 'Project';
-$lang->report->PO        = 'PO';
+$lang->report->index              = 'Home';
+$lang->report->list               = 'Liste';
+$lang->report->item               = 'Eintrag';
+$lang->report->value              = 'Wert';
+$lang->report->percent            = '%';
+$lang->report->undefined          = 'Undefiniert';
+$lang->report->query              = 'Abfrage';
+$lang->report->annual             = 'Annual Summary';
+$lang->report->project            = 'Project';
+$lang->report->PO                 = 'PO';
+$lang->report->viewEveryoneAnnual = 'View everyone annual summary';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'AFD8F8';

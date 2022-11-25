@@ -17,7 +17,7 @@
 <?php js::set('consumedEmpty', $lang->task->error->consumedEmptyAB);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <?php if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
+    <?php if(!empty($task->members) and (!isset($task->members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
@@ -47,7 +47,7 @@
         </tr>
         <?php if(!empty($task->team)):?>
         <tr>
-          <th class='thWidth'><?php echo $lang->task->hasConsumed;?></th>
+          <th class='thWidth'><?php echo $lang->task->my . $lang->task->hasConsumed;?></th>
           <td class='w-p25-f'><?php echo (float)$task->myConsumed;?> <?php echo $lang->workingHour;?></td><td></td>
         </tr>
         <?php endif;?>
@@ -56,24 +56,53 @@
           <td>
             <div class='input-group'><?php echo html::input('currentConsumed', 0, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div>
           </td>
-        </tr>
-        <tr>
-          <th><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?></th>
           <td>
-          <?php $consumed = empty($task->team) ? $task->consumed : (float)$task->myConsumed;?>
-          <?php
-          echo "<span id='totalConsumed'>" . (float)$consumed . "</span> " . $lang->workingHour . html::hidden('consumed', $consumed);
-          js::set('consumed', $consumed);
-          ?>
+            <div class='table-row'>
+              <div class='table-col strong w-80px text-right' style='padding-right:10px'><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?> </div>
+              <div class='table-col'>
+                <?php $consumed = empty($task->team) ? $task->consumed : (float)$task->myConsumed;?>
+                <?php
+                echo "<span id='totalConsumed'>" . (float)$consumed . "</span> " . $lang->workingHour . html::hidden('consumed', $consumed);
+                js::set('consumed', $consumed);
+                ?>
+              </div>
+            </div>
           </td>
         </tr>
         <tr>
-          <th><?php echo (!empty($task->team) and $task->mode == 'linear') ? $lang->task->transferTo : $lang->task->assign;?></th>
-          <td><?php echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");?></td><td></td>
+        </tr>
+        <tr class='<?php if($task->mode == 'multi') echo 'hidden'?>'>
+          <th><?php echo $lang->task->assign;?></th>
+          <td>
+            <?php
+            if(!empty($task->team) and $task->mode == 'linear')
+            {
+                echo zget($members, $task->nextBy) . html::hidden('assignedTo', $task->nextBy);
+            }
+            else
+            {
+                echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");
+            }
+            ?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->task->realStarted;?></th>
-          <td><div class='datepicker-wrapper'><?php echo html::input('realStarted', $task->realStarted != '0000-00-00 00:00:00' ? $task->realStarted : '', "class='form-control form-datetime'");?></div></td><td></td>
+          <td>
+            <div class='datepicker-wrapper'>
+            <?php
+            $realStarted = $task->realStarted;
+            $readonly    = 'readonly';
+            if(helper::isZeroDate($realStarted))
+            {
+                $realStarted = '';
+                $readonly    = '';
+            }
+            ?>
+            <?php echo html::input('realStarted', $realStarted, "class='form-control" . ($readonly ? '' : ' form-datetime') . "' $readonly");?>
+            </div>
+          </td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->finishedDate;?></th>

@@ -31,7 +31,7 @@ class testsuite extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        $this->view->products = $this->products = $this->loadModel('product')->getPairs();
+        $this->view->products = $this->products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         if(empty($this->products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
     }
 
@@ -50,6 +50,7 @@ class testsuite extends control
      * Browse test suites.
      *
      * @param  int    $productID
+     * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -57,7 +58,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('testsuiteList', $this->app->getURI(true), 'qa');
@@ -74,12 +75,23 @@ class testsuite extends control
         $sort = common::appendOrder($orderBy);
 
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
-        $suites      = $this->testsuite->getSuites($productID, $sort, $pager);
+        $suites      = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         if(empty($suites) and $pageID > 1)
         {
             $pager  = pager::init(0, $recPerPage, 1);
-            $suites = $this->testsuite->getSuites($productID, $sort, $pager, 'all');
+            $suites = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         }
+        $privateNum = 0;
+        foreach($suites as $suiteItem)
+        {
+            if($suiteItem->type == 'private')
+            {
+                $privateNum++;
+            }
+        }
+        $suitesNum = !empty(count($suites, 0)) ? count($suites, 0) : 0;
+        $publicNum = $suitesNum - $privateNum;
+        $summary   = str_replace(array('%total%', '%public%', '%private%'), array($suitesNum, $publicNum, $privateNum), $this->lang->testsuite->summary);
 
         $this->view->title       = $productName . $this->lang->testsuite->common;
         $this->view->position[]  = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $productName);
@@ -89,9 +101,11 @@ class testsuite extends control
         $this->view->productName = $productName;
         $this->view->orderBy     = $orderBy;
         $this->view->suites      = $suites;
+        $this->view->type        = $type;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
         $this->view->product     = $this->product->getByID($productID);
+        $this->view->summary     = $summary;
 
         $this->display();
     }
@@ -321,7 +335,7 @@ class testsuite extends control
 
         /* Build the search form. */
         $this->loadModel('testcase');
-        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', 0, 'all');
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&param=myQueryID");
         unset($this->config->testcase->search['fields']['product']);

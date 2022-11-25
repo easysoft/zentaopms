@@ -1,0 +1,1 @@
+ALTER DATABASE `abc` CHARACTER SET = 'utf8'

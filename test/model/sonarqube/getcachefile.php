@@ -10,7 +10,7 @@ title=测试 sonarqubeModel::getCacheFile();
 cid=1
 pid=1
 
-使用正确的sonarqubeID,项目key获取缓存文件 >> 1
+
 
 */
 

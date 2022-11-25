@@ -56,6 +56,7 @@ $lang->file->uploadImagesExplain = 'Hinweis: Beim Upload von .jpg, .jpeg, .gif, 
 $lang->file->saveAndNext         = 'Save and Next';
 $lang->file->importPager         = 'Total: <strong>%s</strong>. Page <strong>%s</strong> of <strong>%s</strong>';
 $lang->file->importSummary       = "Import <strong id='allCount'>%s</strong> items  You can <strong>%s</strong> items/page, so you have to import <strong id='times'>%s</strong> times.";
+$lang->file->accessDenied        = 'Access denied to this file!';
 
 $lang->file->errorNotExists   = "<span class='text-red'>'%s' wurde nicht gefunden.</span>";
 $lang->file->errorCanNotWrite = "<span class='text-red'>'%s' ist nicht beschreibbar. Bitte passen Sie die Berechtigungen an. Befehl <span class='code'>sudo chmod -R 777 '%s'</span></span> in Linux.";
@@ -69,3 +70,9 @@ $lang->file->errorSuffix      = 'Format ist falsch. Nur .zip Dateien!';
 $lang->file->errorExtract     = 'Entpacken fehlgeschlagen. Die Datei ist vermutlich defekt.';
 $lang->file->fileNotFound     = 'The file was not found. The physical file might have been deleted!';
 $lang->file->fileContentEmpty = 'The file is empty. Check the file and upload it again.';
+
+$lang->file->uploadError[1] = 'The uploaded filesize exceeds the limit. Please change the upload_max_filesize and post_max_size options in php.ini';
+$lang->file->uploadError[2] = 'The size of the uploaded file exceeds the value specified by the MAX_FILE_SIZE option in the HTML form';
+$lang->file->uploadError[3] = 'Only part of the file has been uploaded, please re-upload';
+$lang->file->uploadError[4] = 'No files have been uploaded';
+$lang->file->uploadError[5] = 'The size of the file is 0. Please upload the file again';

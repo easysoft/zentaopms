@@ -28,20 +28,14 @@ $name = $lang->tree->name;
 if($viewType == 'line') $name = $lang->tree->line;
 if($viewType == 'api')  $name = $lang->tree->dir;
 if($viewType == 'doc')  $name = $lang->doc->catalogName;
-if($viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->cate;
+if($viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->cate;
 
 $childTitle = $lang->tree->child;
-if(strpos($viewType, 'feedback') !== false) $childTitle = $lang->tree->subCategory;
 if(strpos($viewType, 'doc') !== false or $viewType == 'api') $childTitle = $lang->doc->childType;
 if($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') $childTitle = '';
 
 $editTitle   = $lang->tree->edit;
 $deleteTitle = $lang->tree->delete;
-if($viewType == 'feedback')
-{
-    $editTitle   = $lang->tree->editCategory;
-    $deleteTitle = $lang->tree->delCategory;
-}
 if($viewType == 'doc' or $viewType == 'api')
 {
     $editTitle   = $lang->doc->editType;
@@ -64,10 +58,6 @@ if($viewType == 'doc' or $viewType == 'api')
         elseif($viewType == 'api')
         {
             echo $lang->api->manageType . $lang->colon . $root->name;
-        }
-        elseif($viewType == 'feedback')
-        {
-            echo $lang->feedback->manageCate;
         }
         elseif($viewType == 'line')
         {
@@ -95,7 +85,7 @@ if($viewType == 'doc' or $viewType == 'api')
     <div class="panel">
       <div class="panel-heading">
         <div class="panel-title"><?php echo $childTitle;?></div>
-        <?php if($app->tab == 'product'):?>
+        <?php if($app->tab == 'product' and $viewType == 'story'):?>
         <div class="panel-actions btn-toolbar">
           <?php echo html::a($this->createLink('tree', 'viewHistory', "productID=$rootID", '', true), $lang->history,  '', "class='btn btn-sm btn-primary iframe'");?>
         </div>
@@ -115,6 +105,10 @@ if($viewType == 'doc' or $viewType == 'api')
         </div>
         <?php if($viewType == 'story' and $allProduct and $canBeChanged):?>
         <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm btn-primary'")?></div>
+        <?php elseif($viewType == 'feedback' and common::hasPriv('feedback', 'syncProduct') and !isset($syncConfig[$rootID])):?>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', "productID=$rootID", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
+        <?php elseif($viewType == 'ticket' and common::hasPriv('ticket', 'syncProduct') and !isset($syncConfig[$rootID])):?>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('ticket', 'syncProduct', "productID=$rootID", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
         <?php endif;?>
       </div>
       <div class="panel-body">
@@ -237,6 +231,8 @@ $(function()
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
             if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');
+            if(item.type === 'feedback') $toggle.append('&nbsp; <span class="text-muted">[F]</span>');
+            if(item.type === 'ticket') $toggle.append('&nbsp; <span class="text-muted">[T]</span>');
             $li.append($toggle);
             if(item.nodeType || item.type) $li.addClass('tree-item-' + (item.nodeType || item.type));
             $li.toggleClass('active', <?php echo $currentModuleID ?> === item.id);
@@ -334,7 +330,14 @@ $(function()
     $('#subNavbar > ul > li > a[href*=tree][href*=browse]').not('[href*=<?php echo $viewType;?>]').parent().removeClass('active');
     if(window.config.viewType == 'line') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
     if(viewType == 'case' || viewType == 'caselib') $('#subNavbar li[data-id="' + viewType +'"]').addClass('active');
+    if(viewType == 'ticket')
+    {
+        $('#navbar li[data-id="browse"]').removeClass('active');
+        $('#navbar li[data-id="' + viewType +'"]').addClass('active');
+    }
 });
+
+if("<?php $from == 'doc'?>") parent.$('#triggerModal .modal-content .modal-header .close').on('click', function(){parent.location.reload();});
 </script>
 <style>
 .module-name {display: inline-block; max-width: calc(100% - 85px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/stage.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -43,4 +44,4 @@ r($stage->batchCreateTest($param1)) && p() && e('8');  // 测试批量创建阶�
 r($stage->batchCreateTest($param2)) && p() && e('10'); // 测试批量创建阶段 2
 r($stage->batchCreateTest($param3)) && p() && e('12'); // 测试批量创建阶段 3
 r($stage->batchCreateTest($param4)) && p() && e('13'); // 测试批量创建阶段 4
-system("./ztest init");
+$db->restoreDB();

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/setting.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -90,4 +91,4 @@ r($setting->setItemsTest($pathList[7], $items)) && p() && e('1'); // 创建有vi
 r($setting->setItemsTest($pathList[8], $items)) && p() && e('1'); // 创建有vision，只有所有者且值为project和story的数据
 r($setting->setItemsTest($pathList[9], $items)) && p() && e('1'); // 创建有vision，common模块且值为project和story的数据
 
-system("./ztest init");
+$db->restoreDB();

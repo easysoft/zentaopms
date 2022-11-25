@@ -57,6 +57,7 @@ class html extends baseHTML
     {
         $id = "id='$name'";
         if(strpos($attrib, 'id=') !== false) $id = '';
+        if(is_null($value)) $value = '';
         $value = str_replace("'", '&#039;', $value);
         $autocomplete = $autocomplete ? 'autocomplete="on"' : 'autocomplete="off"';
         return "<input type='text' name='$name' {$id} value='$value' $attrib $autocomplete />\n";

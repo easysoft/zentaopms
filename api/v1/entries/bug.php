@@ -16,7 +16,7 @@ class bugEntry extends entry
      *
      * @param  int    $bugID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($bugID)
     {
@@ -78,7 +78,7 @@ class bugEntry extends entry
         $bug->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $bug->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
+        return $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
     /**
@@ -86,7 +86,7 @@ class bugEntry extends entry
      *
      * @param  int    $bugID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($bugID)
     {
@@ -106,7 +106,7 @@ class bugEntry extends entry
         if(!isset($data->status)) return $this->sendError(400, 'error');
 
         $bug = $this->bug->getByID($bugID);
-        $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
+        return $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
     /**
@@ -114,7 +114,7 @@ class bugEntry extends entry
      *
      * @param  int    $bugID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($bugID)
     {
@@ -122,6 +122,6 @@ class bugEntry extends entry
         $control->delete($bugID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

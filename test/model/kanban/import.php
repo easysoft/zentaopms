@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -60,4 +61,4 @@ r($kanban->importTest($kanbanIDList[4], $import[0], $importObjectList1)) && p('o
 r($kanban->importTest($kanbanIDList[4], $import[0], $importObjectList2)) && p('object') && e('plans,cards');                             // 开启看板5的导入功能 可选项plans cards
 r($kanban->importTest($kanbanIDList[4], $import[1], $importObjectList1)) && p('object') && e('0');                                       // 关闭看板5的导入功能 可选项全部
 r($kanban->importTest($kanbanIDList[4], $import[1], $importObjectList2)) && p('object') && e('0');                                       // 关闭看板5的导入功能 可选项plans cards
-system("./ztest init");
+$db->restoreDB();

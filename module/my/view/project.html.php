@@ -36,39 +36,55 @@
         <tr>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
+          <th class='c-user'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
           <?php if($status == 'openedbyme'):?>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
           <?php endif;?>
+          <th class='text-right c-budget'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
           <th class='c-date c-begin'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
           <th class='c-date c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
-          <th class='text-right c-budget'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
-          <th class='c-user'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
           <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody id='projectTableList'>
+        <?php
+        $waitCount      = 0;
+        $doingCount     = 0;
+        $suspendedCount = 0;
+        $closedCount    = 0;
+        ?>
         <?php foreach($projects as $project):?>
+        <?php if($project->status == 'wait')      $waitCount ++;?>
+        <?php if($project->status == 'doing')     $doingCount ++;?>
+        <?php if($project->status == 'suspended') $suspendedCount ++;?>
+        <?php if($project->status == 'closed')    $closedCount ++;?>
         <tr>
           <td class='c-id'><?php printf('%03d', $project->id);?></td>
           <td class='c-name text-left' title='<?php echo $project->name?>'>
             <?php
-            if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$lang->project->waterfall}</span> ";
-            if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$lang->project->scrum}</span> ";
-            if($project->model === 'kanban')    echo "<span class='project-type-label label label-outline label-info'>{$lang->project->kanban}</span> ";
-            echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project'");
+            $suffix      = '';
+            $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;
+            if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$lang->project->statusList['delay']}</span></div>";
+            if(!empty($suffix)) echo '<div class="project-name has-suffix">';
+            echo html::a($this->createLink('project', 'index', "projectID=$project->id"), "<i class='icon icon-{$projectType} text-muted'></i> " . $project->name, '', "data-app='project' title='{$project->name}'");
+            if(!empty($suffix)) echo $suffix;
             ?>
+          </td>
+          <td class='c-manager'>
+            <?php if(!empty($project->PM)):?>
+            <?php $userName = zget($users, $project->PM);?>
+            <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$project->PM], 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-{$project->PM}"); ?>
+            <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : '';?>
+            <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
+            <?php endif;?>
           </td>
           <?php if($status == 'openedbyme'):?>
           <td class='c-status'><span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
           <?php endif;?>
-          <td class='text-left'><?php echo $project->begin;?></td>
-          <td class='text-left'><?php echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;?></td>
           <?php $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
           <td class='text-right c-budget'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->future;?></td>
-          <td>
-            <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
-            <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
-          </td>
+          <td class='text-left'><?php echo $project->begin;?></td>
+          <td class='text-left'><?php echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;?></td>
           <td class='c-actions'>
             <?php if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('project', 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);?>
             <?php if($project->status == 'doing')  common::printIcon('project', 'close',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
@@ -88,7 +104,7 @@
             <?php common::printIcon('project', 'group', "projectID=$project->id", $project, 'list', 'lock', '',  '', false, "data-group='project'", '', $project->id);?>
             <?php if(common::hasPriv('project','manageProducts') || common::hasPriv('project','whitelist') || common::hasPriv('project','delete')):?>
             <div class='btn-group'>
-              <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
+              <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-ellipsis-v'></i></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
                 <?php common::printIcon('project', 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', '', false, "data-group='project'", '', $project->id);?>
                 <?php common::printIcon('project', 'whitelist', "projectID=$project->id&module=project", $project, 'list', 'shield-check', '', '', false, "data-group='project'", '', $project->id);?>
@@ -102,6 +118,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
+      <div class="table-statistic"><?php echo $status == 'openedbyme' ? sprintf($lang->project->allSummary, count($projects), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projects));?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

@@ -35,35 +35,41 @@
 #programTree ul > li.has-list:after {width: 14px;}
 #programTree ul > li.item-meas a.selected {color: #0c64eb;}
 .side-col {padding-right: 20px; width: 18%;}
-#sidebar>.cell {width: 100%;}
+#sidebar > .cell {width: 100%;}
 
 th.c-name {width: 400px;}
-th.c-requirement {width: 290px;}
+th.c-PO {width: 100px;}
 th.c-story {width: 290px;}
-th.c-bug {width: 200px;}
+th.c-bug {width: 150px;}
 th.c-plan {width: 45px;}
 th.c-release {width: 50px;}
 th.c-actions {width: 50px;}
+.c-name {border-left: none !important;}
+.icon-cards-view {color: #888fa1;}
 [lang='en'] .en-wrap-text {white-space: normal; height: 24px; line-height: 1; font-size: 12px;}
 
-
-#productListForm thead>tr>th,
-#productListForm tbody>tr>td {text-align: center; text-overflow: unset!important}
-#productListForm thead>tr>th {padding: 0; line-height: 24px;}
-#productListForm thead>tr:first-child>th {border-left: 1px solid #ddd;}
-#productListForm thead>tr>th.c-checkbox {border-left: none; padding-left: 15px; width: 45px;}
-#productListForm tbody>tr>td {padding: 2px 4px;}
-#productListForm tbody>tr>td:first-child {text-align: left; padding-left: 15px;}
+#productListForm thead > tr > th,
+#productListForm tbody > tr > td {text-align: center; text-overflow: unset!important}
+#productListForm thead > tr > th {padding: 0; line-height: 24px;}
+#productListForm thead > tr:first-child > th {border-left: 1px solid #ddd;}
+#productListForm thead > tr > th.c-checkbox {border-left: none; padding-left: 15px; width: 30px;}
+#productListForm tbody > tr > td {padding: 2px 4px;}
+#productListForm tbody > tr > td:first-child {text-align: left; padding-left: 15px;}
+#productListForm tbody > tr > td.table-nest-title {padding-left: 16px; display: flex; align-items: center;}
 #productListForm th.table-nest-title .nest-has-checkbox {margin-top: 7px; margin-left: 35px;}
 #productListForm th.table-nest-title .nest-none-checkbox {margin-top: 8px; margin-left: 5px;}
 #productListForm th.table-nest-title .header {margin-left: 5px;}
 #productListForm th.table-nest-title .sort-up {padding-left: 5px;}
 #productListForm th.table-nest-title .sort-down {padding-left: 5px;}
-#productListForm th.table-nest-title .table-nest-toggle {top: 12px; opacity: .6;}
+#productListForm th.table-nest-title .table-nest-toggle {top: 14px; left: auto; right: 10px; opacity: .6;}
+#productListForm th.table-nest-title .table-nest-toggle::before {position: absolute; top: 0 !important; right: 0; bottom: 0; left: 0;}
 #productListForm th.table-nest-title .table-nest-toggle:hover {opacity: 1;}
-#productListForm .table.has-sort-head thead>tr>th>a:after,
-#productListForm .table.has-sort-head thead>tr>th>a:before {top: -3px;}
+#productListForm .table.has-sort-head thead > tr > th > a:after,
+#productListForm .table.has-sort-head thead > tr > th > a:before {top: -3px;}
 #productListForm .icon-product:before {content: '\e98f'; width: 22px; height: 22px; background: none; color: rgb(166, 170, 184); top: 0; line-height: 22px; margin-right: 2px; font-size: 14px;}
+#productTableList td.table-nest-title > span.icon.table-nest-toggle {vertical-align: middle;}
+#productTableList > tr[data-nest-parent] {background: #f8f8f8;}
+#productList > thead th.table-nest-title.c-name {position: relative; padding-left: 16px !important;}
 
 @media screen and (max-width: 1460px)
 {
@@ -79,14 +85,20 @@ th.c-actions {width: 50px;}
 
 @media screen and (max-width: 1250px)
 {
-    #productListForm thead>tr>th {font-size: 12px;}
+    #productListForm thead > tr > th {font-size: 12px;}
     th.c-requirement {width: 265px;}
     th.c-story {width: 265px;}
     [lang^='zh-'] th.c-requirement {width: 220px;}
     [lang^='zh-'] th.c-story {width: 220px;}
 }
 
+#productTableList .c-name > span.table-nest-icon {width: 0; visibility: hidden;}
 #productTableList > tr.row-line.is-nest-child > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
 #productTableList > tr.row-line.no-nest > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
 .statistic {margin-left: 10px; color: #838a9d; float: left; position: relative; line-height: 28px;}
 .table-footer.fixed-footer .statistic {color: #fff;}
+#productTableList .c-manager {padding-left: 14px;}
+#productTableList .c-manager a {top: 7px; left: 22px;}
+.checkbox-primary {margin-right: 10px;}
+.table-nest-title > a, .table-nest-title > span {padding-left: 2px;}
+.table-nest-icon {font-size: 14px; top: 50%;}

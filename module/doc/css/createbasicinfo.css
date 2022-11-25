@@ -1,0 +1,3 @@
+#whiteListBox .input-group:last-child {margin-top: 10px;}
+#dataform .radio-inline.hidden + .radio-inline {margin-left: 0px;}
+#module_chosen.chosen-container .chosen-results {max-height: 200px;}

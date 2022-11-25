@@ -10,6 +10,9 @@ title=测试 testtaskModel->getLinkableCasesByBug();
 cid=1
 pid=1
 
+通过测试单1关联的版本下的Bug，获取可关联到测试单1的用例数量 >> 0
+通过测试单2关联的版本下的Bug，获取可关联到测试单2的用例数量 >> 0
+
 */
 
 global $tester;

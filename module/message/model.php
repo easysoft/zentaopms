@@ -66,6 +66,8 @@ class messageModel extends model
      */
     public function send($objectType, $objectID, $actionType, $actionID, $actor = '', $extra = '')
     {
+        if(defined('TUTORIAL')) return;
+
         $objectType     = strtolower($objectType);
         $messageSetting = $this->config->message->setting;
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
@@ -155,10 +157,11 @@ class messageModel extends model
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         $moduleName = $objectType == 'kanbancard' ? 'kanban' : $objectType;
-        $space = common::checkNotCN() ? ' ' : '';
-        $data  = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
-        $dataID = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-        $data  .= ' ' . html::a($sysURL . helper::createLink($moduleName, 'view', "id=$dataID"), "[#{$objectID}::{$object->$field}]");
+        $space      = common::checkNotCN() ? ' ' : '';
+        $data       = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
+        $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
+        $url        = helper::createLink($moduleName, 'view', "id=$dataID");
+        $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
 
         if($isonlybody) $_GET['onlybody'] = 'yes';
 
@@ -200,6 +203,7 @@ class messageModel extends model
         }
 
         if($toList == 'closed') $toList = '';
+        if($objectType == 'feedback' and $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
         return $toList;
     }
 

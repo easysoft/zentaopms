@@ -1,5 +1,4 @@
 <?php
-$lang->gitea = new stdclass;
 $lang->gitea->common        = 'Gitea';
 $lang->gitea->browse        = '浏览Gitea';
 $lang->gitea->search        = '搜索';

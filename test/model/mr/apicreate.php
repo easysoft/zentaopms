@@ -8,10 +8,10 @@ title=测试 mrModel::apiCreate();
 cid=0
 pid=0
 
-使用空的RepoUrl数据创建                    >> fail
+使用空的RepoUrl数据创建 >> fail
 使用正确的RepoUrl,错误的分支数据创建mr请求 >> fail
-使用源分支和目标分支一样的数据创建mr请求   >> success
-使用正确的数据创建mr请求                   >> success
+使用源分支和目标分支一样的数据创建mr请求 >> success
+使用正确的数据创建mr请求 >> success
 
 */
 
@@ -40,6 +40,13 @@ r($result) && p() && e('fail'); //使用正确的RepoUrl,错误的分支数据�
 dao::$errors = array();
 $_POST['data']['RepoSrcBranch']  = 'master';
 $_POST['data']['RepoDistBranch'] = 'master';
+
+/* Get same opened MR and close it.*/
+$gitlabID  = 1;
+$projectID = 42;
+$oldMR     = $mrModel->apiGetSameOpened($gitlabID, $projectID, 'master', $projectID, 'master');
+if($oldMR) $mrModel->apiCloseMR(1, 42, $oldMR->iid);
+
 $result = $mrModel->apiCreate();
 if(!$result and dao::isError())
 {
@@ -51,6 +58,9 @@ r($result) && p() && e('success'); //使用源分支和目标分支一样的数�
 dao::$errors = array();
 $_POST['data']['RepoSrcBranch']  = 'branch-08';
 $_POST['data']['RepoDistBranch'] = 'master';
+$oldMR = $mrModel->apiGetSameOpened($gitlabID, $projectID, 'branch-08', $projectID, 'master');
+if($oldMR) $mrModel->apiCloseMR(1, 42, $oldMR->iid);
+
 $result = $mrModel->apiCreate();
 if(dao::isError())
 {

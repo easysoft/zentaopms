@@ -313,6 +313,11 @@ class user extends control
         {
             $cases = $this->loadModel('testcase')->getByOpenedBy($account, $sort, $pager);
         }
+
+        /* Process case for check story changed. */
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendData($cases);
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
 
         /* Assign. */
@@ -605,6 +610,7 @@ class user extends control
         $this->view->roleGroup  = $roleGroup;
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visionList = $this->user->getVisionList();
+        $this->view->companies  = $this->loadModel('company')->getOutsideCompanies() + array('ditto' => $this->lang->user->ditto);
 
         $this->display();
     }
@@ -629,8 +635,10 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
+        $userVisionList = $this->user->getVisionList();
+
         $user       = $this->user->getById($userID, 'id');
-        $userGroups = $this->loadModel('group')->getByAccount($user->account);
+        $userGroups = $this->loadModel('group')->getByAccount($user->account, count($userVisionList) > 1 ? true : false);
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
         $position[] = $this->lang->user->edit;
@@ -642,7 +650,7 @@ class user extends control
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq(0)->fetchPairs('id', 'name');
         $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visionList = $this->user->getVisionList();
+        $this->view->visionList = $userVisionList;
 
         $this->display();
     }
@@ -964,6 +972,7 @@ class user extends control
                 }
 
                 $response['message'] = $this->lang->user->loginFailed;
+                if(dao::isError()) $response['message'] = dao::getError();
                 return $this->send($response);
             }
         }
@@ -1003,7 +1012,9 @@ class user extends control
         $this->view->method            = $method;
         $this->view->denyPage          = $this->referer;        // The denied page.
         $this->view->refererBeforeDeny = $refererBeforeDeny;    // The referer of the denied page.
-        $this->app->loadLang($module);
+        if($module == 'requirement') $this->app->loadLang('story');
+        if($module != 'requirement') $this->app->loadLang($module);
+
         $this->app->loadLang('my');
 
         /* Check deny type. */
@@ -1040,6 +1051,7 @@ class user extends control
         session_destroy();
         setcookie('za', false);
         setcookie('zp', false);
+        setcookie('tab', false);
 
         if($this->app->getViewType() == 'json') return print(json_encode(array('status' => 'success')));
         $vars = !empty($referer) ? "referer=$referer" : '';
@@ -1067,15 +1079,14 @@ class user extends control
 
         if($_POST)
         {
-            if($needCreateFile) return print(js::reload('parent'));
+            if($needCreateFile) return $this->send(array('result' => 'success', 'locate' => 'reload'));
 
             $result = $this->user->resetPassword();
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(!$result) return print(js::alert($this->lang->user->resetFail));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->resetFail));
 
-            echo js::alert($this->lang->user->resetSuccess);
             $referer = helper::safe64Encode($this->createLink('index', 'index'));
-            return print(js::locate(inlink('logout', 'referer=' . $referer), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => $this->createLink('user', 'logout', 'referer=' . $referer)));
         }
 
         /* Remove the real path for security reason. */
@@ -1173,6 +1184,7 @@ class user extends control
         $this->view->title   = $this->lang->user->resetPWD;
         $this->view->expired = $expired;
         $this->view->user    = empty($user) ? '' : $user;
+        $this->view->rand    = $this->user->updateSessionRandom();
 
         $this->display();
     }

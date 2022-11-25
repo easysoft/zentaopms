@@ -26,7 +26,7 @@
             url:      manualUrl || $helpLink.attr('href'),
             external: true,
             text:     manualText || $helpLink.text(),
-            appUrl:  config.webRoot + '#app=help'
+            appUrl:   config.webRoot + '#app=help'
         };
         var $menuMainNav = $('#menuMainNav').empty();
         window.appsMenuItems.forEach(function(item)
@@ -122,7 +122,7 @@
             }
         }
         if(moduleName === 'story' && vision === 'lite') return 'project'
-        if(moduleName === 'story' && methodLowerCase === 'zerocase')
+        if(moduleName === 'testcase' && methodLowerCase === 'zerocase')
         {
             return link.params.from == 'project' ? 'project' : 'qa';
         }
@@ -464,7 +464,6 @@
 
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
 
-        if(url) $(iframe.contentWindow.document.body).hide(); // Code for task #59703.
         if(!isSameUrl) app.$app.addClass('loading');
         if(app._loadTimer) clearTimeout(app._loadTimer);
         app._loadTimer = setTimeout(function()
@@ -565,7 +564,7 @@
         /* The magic number "111" is the space between dropdown trigger
            btn and the bottom of screen */
         var listStyle = {maxHeight: 'initial', top: moreMenuHeight > 111 ? 111 - moreMenuHeight : ''};
-        if($list[0].getBoundingClientRect)
+        if($list[0] && $list[0].getBoundingClientRect)
         {
             var btnBounding = $list.prev('a')[0].getBoundingClientRect();
             if(btnBounding.height)
@@ -754,8 +753,8 @@ $.extend(
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
                 var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
-                var assetType    = 'story,issue,risk,opportunity,doc';
-                if(assetType.indexOf(searchModule) > -1)
+                var assetType    = ',story,issue,risk,opportunity,doc,';
+                if(assetType.indexOf(',' + searchModule + ',') > -1)
                 {
                     var link = createLink('index', 'ajaxGetViewMethod' , 'objectID=' + objectValue + '&objectType=' + searchModule);
                     $.get(link, function(data)
@@ -804,7 +803,7 @@ $(function()
     {
         var val        = $searchQuery.val();
         var searchType = changeSearchObject();
-        if(val !== null && val !== "")
+        if(val)
         {
             var isQuickGo = !reg.test(val);
             $dropmenu.toggleClass('show-quick-go', isQuickGo);

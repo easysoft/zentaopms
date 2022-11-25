@@ -43,13 +43,6 @@ class gitlab extends control
 
         /* Admin user don't need bind. */
         $gitlabList = $this->gitlab->getList($orderBy, $pager);
-        $myGitLabs  = $this->gitlab->getGitLabListByAccount();
-
-        foreach($gitlabList as $gitlab)
-        {
-            $gitlab->isBindUser = true;
-            if(!$this->app->user->admin and !isset($myGitLabs[$gitlab->id])) $gitlab->isBindUser = false;
-        }
 
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
         $this->view->gitlabList = $gitlabList;
@@ -228,11 +221,10 @@ class gitlab extends control
     {
         if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
-        $oldGitLab = $this->gitlab->getByID($id);
-        $this->loadModel('action');
-        $this->gitlab->delete(TABLE_PIPELINE, $id);
+        $oldGitLab = $this->loadModel('pipeline')->getByID($id);
+        $actionID  = $this->pipeline->delete($id, 'gitlab');
+        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
 
-        $actionID = $this->dao->lastInsertID();
         $gitLab   = $this->gitlab->getByID($id);
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->action->logHistory($actionID, $changes);
@@ -722,7 +714,7 @@ class gitlab extends control
         $gitlab    = $this->gitlab->getByID($gitlabID);
         $repos     = $this->loadModel('repo')->getRepoListByClient($gitlabID);
         $repoPairs = array();
-        foreach($repos as $repo) $repoPairs[$repo->path] = $repo->id;
+        foreach($repos as $repo) $repoPairs[$repo->serviceProject] = $repo->id;
 
         $this->view->gitlab            = $gitlab;
         $this->view->keyword           = urldecode(urldecode($keyword));
@@ -966,17 +958,13 @@ class gitlab extends control
     /**
      * Import gitlab issue to zentaopms.
      *
-     * @param  int    $repoID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function importIssue($repoID)
+    public function importIssue($gitlabID, $projectID)
     {
-        $repo          = $this->loadModel('repo')->getRepoByID($repoID);
-        $productIDList = explode(',', $repo->product);
-        $gitlabID      = $repo->gitService;
-        $projectID     = $repo->project;
-
         $gitlab = $this->gitlab->getByID($gitlabID);
         if($gitlab) $user = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
         if(empty($user->is_admin)) return print(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
@@ -1053,13 +1041,11 @@ class gitlab extends control
             }
         }
 
-        $products = array('' => '');
-        $this->loadModel("product");
-        foreach($productIDList as $productID) $products[$productID] = $this->product->getByID($productID)->name;
+        $products = $this->loadModel("product")->getPairs();
 
         $this->view->title           = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->importIssue;
         $this->view->importable      = empty($gitlabIssues) ? false : true;
-        $this->view->products        = $products;
+        $this->view->products        = array('' => '') + $products;
         $this->view->gitlabID        = $gitlabID;
         $this->view->gitlabProjectID = $projectID;
         $this->view->objectTypes     = $this->config->gitlab->objectTypes;

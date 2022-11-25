@@ -72,9 +72,7 @@
             <thead>
               <tr class='colhead text-center'>
                 <th class="c-user"><?php echo $lang->report->user;?></th>
-                <?php if($this->config->systemMode == 'new'):?>
                 <th class="c-project"><?php echo $lang->report->project ;?>
-                <?php endif;?>
                 <th><?php echo $lang->report->execution;?></th>
                 <th class="c-count"><?php echo $lang->report->task;?></th>
                 <th class="c-hours"><?php echo $lang->report->remain;?></th>
@@ -96,10 +94,14 @@
                 <?php foreach($info['execution'] as $executionName => $executionInfo) $projectCount ++ ;?>
                 <?php foreach($info['execution'] as $executionName => $executionInfo):?>
                 <?php if($projectTimes != 1 || $userTimes != 1) echo "<tr>";?>
-                <?php if($projectTimes == 1 && $this->config->systemMode == 'new'):?>
-		<td class="text-center" rowspan="<?php echo $projectCount;?>" title="<?php echo $projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $projectName);?></td>
+                <?php if($projectTimes == 1):?>
+                <td class="text-center" rowspan="<?php echo $projectCount;?>" title="<?php echo $projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $projectName);?></td>
                 <?php endif;?>
-		<td class="text-center" title="<?php echo $executionName;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID={$executionInfo['executionID']}"), $executionName);?></td>
+                <?php if($executionInfo['multiple']):?>
+                <td class="text-center" title="<?php echo $executionName;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID={$executionInfo['executionID']}"), $executionName);?></td>
+                <?php else:?>
+                <td class='text-center'><?php echo $lang->null;?></td>
+                <?php endif;?>
                 <td class="text-center"><?php echo $executionInfo['count'];?></td>
                 <td class="text-center"><?php echo $executionInfo['manhour'];?></td>
                 <?php if($userTimes == 1):?>

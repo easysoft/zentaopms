@@ -25,7 +25,7 @@
       <table class='table table-form'>
         <tbody>
           <tr>
-            <th><?php echo $lang->release->name;?></th>
+            <th class='w-120px'><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', $release->name, "class='form-control' required");?></td>
             <td>
               <?php $checked = !empty($release->marker) ? "checked='checked'" : '';?>
@@ -36,8 +36,8 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->release->build;?></th>
-            <td><?php echo html::select('build', $builds, $release->build, "class='form-control chosen' required"); ?></td>
+            <th><?php echo $lang->release->includedBuild;?></th>
+            <td><?php echo html::select('build[]', $builds, $release->build, "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>
@@ -62,7 +62,10 @@
           </tr>
           <tr>
             <th><?php echo $lang->files;?></th>
-            <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+            <td colspan='2'>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false', 'object' => $release, 'method' => 'edit'));?>
+              <?php echo $this->fetch('file', 'buildform');?>
+            </td>
           </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>

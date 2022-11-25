@@ -61,9 +61,11 @@ $lang->doc->keywords     = 'Tags';
 $lang->doc->url          = 'URL';
 $lang->doc->files        = 'Fichiers';
 $lang->doc->addedBy      = 'Auteur';
+$lang->doc->addedByAB    = 'Added';
 $lang->doc->addedDate    = 'Ajouté le';
 $lang->doc->editedBy     = 'Màj par';
 $lang->doc->editedDate   = 'Màj le';
+$lang->doc->lastEditedBy = 'Last Editor';
 $lang->doc->version      = 'Version';
 $lang->doc->basicInfo    = 'Infos de Base';
 $lang->doc->deleted      = 'Supprimé';
@@ -94,6 +96,7 @@ $lang->doc->main         = 'Main Document Library';
 $lang->doc->order        = 'Order';
 $lang->doc->doc          = 'Document';
 $lang->doc->updateOrder  = 'Update Order';
+$lang->doc->nextStep     = 'Next';
 
 $lang->doc->moduleDoc     = 'Par Module';
 $lang->doc->searchDoc     = 'Rechercher';
@@ -153,6 +156,7 @@ $lang->doc->allCollections   = 'All Collections';
 $lang->doc->keywordsTips     = 'Please use commas to separate multiple keywords.';
 $lang->doc->sortLibs         = 'Sort Libs';
 $lang->doc->titlePlaceholder = 'Veuillez saisir le titre';
+$lang->doc->confirm          = 'Confirm';
 
 global $config;
 /* Query condition list. */
@@ -161,7 +165,7 @@ $lang->doc->allExecutions = 'Tous les' . $lang->executionCommon . 's';
 $lang->doc->allProjects   = 'All' . $lang->projectCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
-if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = 'Project Library';
+$lang->doc->libTypeList['project']   = 'Project Library';
 $lang->doc->libTypeList['execution'] = 'Bibliothèque ' . $lang->execution->common;
 $lang->doc->libTypeList['api']       = 'API Library';
 $lang->doc->libTypeList['custom']    = 'Bib. Personnalisée';

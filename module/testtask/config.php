@@ -19,7 +19,7 @@ $config->testtask->editor->activate         = array('id' => 'comment', 'tools' =
 $config->testtask->editor->importunitresult = array('id' => 'desc', 'tools' => 'simpleTools');
 
 $config->testtask->datatable = new stdclass();
-$config->testtask->datatable->defaultField = array('id', 'pri', 'title', 'type', 'assignedTo', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'stepNumber','actions');
+$config->testtask->datatable->defaultField = array('id', 'title', 'pri', 'assignedTo', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'actions');
 
 $config->testtask->unitResultRules = new stdclass();
 $config->testtask->unitResultRules->common  = array('path' => array('testsuite/testcase', 'testcase'), 'name' => array('classname', 'name'), 'failure' => 'failure', 'skipped' => 'skipped', 'suite' => 'name', 'aliasSuite' => array('classname'));

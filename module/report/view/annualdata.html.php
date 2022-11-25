@@ -1,10 +1,12 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js'); ?>
+<?php js::import($jsRoot . 'echarts/timeline.min.js'); ?>
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>
 <?php $annualDataLang   = $lang->report->annualData;?>
 <?php $annualDataConfig = $config->report->annualData;?>
 <?php $soFar = sprintf($annualDataLang->soFar, $year);?>
+<?php js::set('contributionGroups', $contributionGroups); ?>
 <div id='container' style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_bg.png'?>)'>
   <main id='main' style='background: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_layout_header.png'?>) top no-repeat'>
     <header id='header'>
@@ -27,7 +29,7 @@
       <div>
         <ul id='infoList'>
           <li>
-            <?php echo $userID ? $annualDataLang->logins : ($dept ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
+            <?php echo $userID ? $annualDataLang->logins : ($dept !== '' ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
             <strong><?php echo $userID ? $data['logins'] : $data['users'];?></strong>
           </li>
           <li>
@@ -48,24 +50,7 @@
               <li><span class='todoStatus'><?php echo $annualDataLang->todoStatus['done'];?></span><span><?php echo (int)$data['todos']->done;?></span></li>
             </ul>
           </li>
-          <?php
-          $contributions = 0;
-          $maxCount      = 0;
-          $radarData     = array('product' => 0, 'execution' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
-          foreach($data['contributions'] as $objectType => $objectContributions)
-          {
-              $sum = array_sum($objectContributions);
-              if($sum > $maxCount) $maxCount = $sum;
-              $contributions += $sum;
-
-              foreach($objectContributions as $actionName => $count)
-              {
-                  $radarTypes = isset($annualDataConfig['radar'][$objectType][$actionName]) ? $annualDataConfig['radar'][$objectType][$actionName] : array('other');
-                  foreach($radarTypes as $radarType) $radarData[$radarType] += $count;
-              }
-          }
-          ?>
-          <?php if(!empty($dept) or !empty($userID)):?>
+          <?php if($dept !== '' or !empty($userID)):?>
           <li>
             <?php echo $annualDataLang->contributions;?>
             <strong><?php echo $contributions;?></strong>
@@ -75,7 +60,7 @@
       </div>
     </section>
     <section id='actionData'>
-      <header><h2 class='text-holder'><?php echo ((empty($dept) and empty($userID)) ? $annualDataLang->actionData :$annualDataLang->contributionData) . $soFar;?></h2></header>
+      <header><h2 class='text-holder'><?php echo (($dept === '' and empty($userID)) ? $annualDataLang->actionData :$annualDataLang->contributionData) . $soFar;?></h2></header>
       <div>
         <ul>
           <?php foreach($annualDataLang->objectTypeList as $objectType => $objectName):?>
@@ -207,7 +192,7 @@
       </div>
       <div class='table-header-fixed'>
     </section>
-    <?php if(empty($dept) and empty($userID)):?>
+    <?php if($dept === '' and empty($userID)):?>
     <section id='allTimeStatusStat'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->statusStat;?></h2></header>
       <div>
@@ -248,38 +233,118 @@
   </main>
   <div id='loadIndicator' class='load-indicator'></div>
 </div>
-<?php echo js::set('exportByZentao', $annualDataLang->exportByZentao);?>
+<?php js::set('exportByZentao', $annualDataLang->exportByZentao);?>
+<?php js::set('radarData1', $radarData); ?>
+<?php js::set('annualDataLang1', $annualDataLang); ?>
 <script>
 $(function()
 {
-    var radarChart  = echarts.init(document.getElementById('radarCanvas'));
-    var radarOption = {
-      tooltip: {},
-      radar: {
-          splitArea:{areaStyle:{color: ['#010419']}},
-          radius:'65%',
-          <?php
-          $max = max($radarData);
-          if($max == 0) $max = 1;
-          $indicator = array();
-          foreach($annualDataLang->radarItems as $radarKey => $radarName)
-          {
-          	$indicator[$radarKey]['name'] = $radarName;
-          	$indicator[$radarKey]['max']  = $max;
-          }
-          ?>
-          indicator: <?php echo json_encode(array_values($indicator));?>
-      },
-      series: [{
-          name:'<?php echo $annualDataLang->radar;?>',
-          areaStyle:{color: 'rgb(45, 40, 33)'},
-          type: 'radar',
-          itemStyle: {color: "#fff", borderColor:"rgb(247, 193, 35)"},
-          lineStyle: {color: "rgb(247, 193, 35)"},
-          data: [{value: <?php echo json_encode(array_values($radarData));?>}]
-      }]
-    };
+    <?php
+    $indicator = array();
+    foreach($annualDataLang->radarItems as $radarKey => $radarName)
+    {
+        $indicator[$radarKey]['name'] = $radarName;
+        $indicator[$radarKey]['max']  = 0;
+    }
+    ?>
+    var indicator        = <?php echo json_encode(array_values($indicator));?>;
+    var contributionData = [];
+    var yearsData        = [];
+    if(contributionGroups) {
+        for(var contributionKey in contributionGroups)
+        {
+            yearsData.push(contributionKey);
+            var itemData     = [];
+            var newIndicator = [];
+            for(var itemKey in contributionGroups[contributionKey])
+            {
+                itemData.push(contributionGroups[contributionKey][itemKey]);
+            }
+            itemMax = Math.max.apply(null,itemData);
+            var resultIndicator = indicator.map(function(item,index)
+            {
+                item.max = itemMax;
+                return {...item};
+            })
+            var contributionItem = {
+                year: contributionKey,
+                data: itemData || [],
+                max: itemMax,
+                indicator: resultIndicator,
+            }
+            contributionData.push(contributionItem);
+        }
+    }
+    var radarChart = echarts.init(document.getElementById('radarCanvas'));
 
+    var radarIndicatorData = [];
+    for(var k = 0; k < contributionData.length; k++)
+    {
+        optionsItem = {
+            'radarIndicator': contributionData[k].indicator,
+            'tradeRange': contributionData[k].data,
+        }
+        radarIndicatorData.push(optionsItem);
+    }
+    var radarOption = {
+        baseOption: {
+            title: {},
+            timeline: {
+                show: yearsData.length && yearsData.length > 1,
+                axisType: 'category',
+                autoPlay: true,
+                loop: false,
+                playInterval: 1000,
+                left: "1%",
+                bottom: "1%",
+                width: '90%',
+                data: yearsData,
+                symbolSize: [8, 4],
+                label: {
+                    normal: {
+                        color: '#fff',
+                        interval: 'auto',
+                        fontSize: 12,
+                        lineHeight: 20
+                    },
+                    interval: 'auto',
+                },
+                lineStyle: {
+                    width: 5,
+                },
+                controlStyle: {
+                    itemSize: 18
+                },
+               
+            },
+            series: [{
+                name:'<?php echo $annualDataLang->radar;?>',
+                areaStyle:{color: 'rgb(45, 40, 33)'},
+                type: 'radar',
+                itemStyle: {color: "#fff", borderColor:"rgb(247, 193, 35)"},
+                lineStyle: {color: "rgb(247, 193, 35)"},
+            }]
+        },
+        options: []
+    };
+    var newOptions = [];
+    for(var k = 0; k < radarIndicatorData.length; k++)
+    {
+        optionsItem = {
+            radar: {
+                splitNumber: 5,
+                radius: 88,
+                indicator:  radarIndicatorData[k].radarIndicator
+            },
+            series: [{
+                data: [{
+                    value: radarIndicatorData[k].tradeRange
+                }]
+            }]
+        }
+        newOptions.push(optionsItem);
+    }
+    radarOption.options = (radarOption.options).concat(newOptions);
     radarChart.setOption(radarOption);
 
     var overviewCSS = {position: 'absolute', left: '172px', top: '160px'};
@@ -287,7 +352,7 @@ $(function()
     <?php unset($lang->story->statusList['']);?>
     <?php unset($lang->bug->statusList['']);?>
     <?php unset($lang->task->statusList['']);?>
-    <?php if(empty($dept) and empty($userID)):?>
+    <?php if($dept === ''  and empty($userID)):?>
     <?php foreach($data['statusStat'] as $objectType => $objectStatusStat):?>
     <?php
     $statusStat = array();

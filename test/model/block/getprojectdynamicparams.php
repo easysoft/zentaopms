@@ -10,10 +10,9 @@ title=测试 blockModel->getProjectDynamicParams();
 cid=1
 pid=1
 
-
-
+获取项目动态区块参数 >> count:{name:数量,default:20,control:input};
 */
 
 $block = new blockTest();
 
-r($block->getProjectDynamicParamsTest()) && p() && e();
+r($block->getProjectDynamicParamsTest()) && p() && e('count:{name:数量,default:20,control:input};'); // 获取项目动态区块参数

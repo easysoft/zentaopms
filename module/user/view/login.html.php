@@ -11,6 +11,7 @@
 include '../../common/view/header.lite.html.php';
 if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
 ?>
+<?php js::set('loginTimeoutTip', $lang->user->error->loginTimeoutTip);?>
 <main id="main" class="fade no-padding">
   <div class="container" id="login">
     <div id="loginPanel">

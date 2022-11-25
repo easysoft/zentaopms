@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -58,4 +59,4 @@ r($kanban->getLanes4GroupTest($executionIDList[4], $browseTypeList[1], $groupByL
 r($kanban->getLanes4GroupTest($executionIDList[4], $browseTypeList[1], $groupByList[2])) && p() && e(',所属模块: 无,模块13,模块37,模块40,模块43');       // 获取执行102 task module的泳道
 r($kanban->getLanes4GroupTest($executionIDList[4], $browseTypeList[1], $groupByList[4])) && p() && e(',指派给: 无');                                     // 获取执行102 task assignedTo的泳道
 r($kanban->getLanes4GroupTest($executionIDList[4], $browseTypeList[1], $groupByList[5])) && p() && e(',相关研发需求: 无,用户需求17');                    // 获取执行102 task story的泳道
-system("./ztest init");
+$db->restoreDB();

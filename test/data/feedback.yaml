@@ -1,0 +1,219 @@
+title: table zt_feedback
+desc: "模块"
+author: zongjun.lan
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-1000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 1-100{4}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: module
+    note: "所属模块"
+    range: 4521-4820{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: title
+    note: "标题"
+    range: 1-10000
+    prefix: "反馈标题"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "反馈类型"
+    range: story,task,bug,todo,advice,issue,risk,opportunity
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: solution
+    note: "处理方案"
+    range: tobug,tostory,touserstory,totask,totodo
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-10000
+    prefix: "这是反馈描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "状态"
+    range: noreview,clarify,wait,commenting,replied,asked,closed
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: subStatus
+    note: "子状态"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: public
+    note: "公开"
+    range: 0,1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: notify
+    note: "通知"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: notifyEmail
+    note: "通知邮箱"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: likes
+    note: "点赞人"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: result
+    note: "转化结果"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: faq
+    note: "FAQ"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: openedBy
+    note: "反馈创建人"
+    range: admin
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: openedDate
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: reviewedBy
+    note: "由谁评审"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: reviewedDate
+    note: "评审时间"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: processedBy
+    note: "由谁处理"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: processedDate
+    note: "处理时间"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: closedBy
+    note: "由谁关闭"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: closedDate
+    note: "关闭时间"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: closedReason
+    note: "关闭原因"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedBy
+    note: "最后处理人"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedDate
+    note: "最后修改时间"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedTo
+    note: "指派给"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedDate
+    note: "指派时间"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: feedbackBy
+    note: "反馈者"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: mailto
+    note: "抄送给"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

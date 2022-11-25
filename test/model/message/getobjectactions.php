@@ -10,6 +10,18 @@ title=测试 messageModel->getObjectActions();
 cid=1
 pid=1
 
+查询objectType为product的action是opened的lab标签 >> 创建
+查询objectType为story的action是frombug的lab标签 >> 转研发需求
+查询objectType为productplan的action是edited的lab标签 >> 编辑
+查询objectType为project的action是delayed的lab标签 >> 延期
+查询objectType为task的action是assigned的lab标签 >> 指派
+查询objectType为bug的action是closed的lab标签 >> 关闭
+查询objectType为case的action是opended的lab标签 >> 创建
+查询objectType为testtask的action是starteded的lab标签 >> 开始
+查询objectType为todo的action是edited的lab标签 >> 编辑
+查询objectType为doc的action是created的lab标签 >> 创建
+查询objectType为mr的action是compilefail的lab标签 >> 构建失败
+
 */
 
 $message = new messageTest();

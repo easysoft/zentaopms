@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/cron.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -22,4 +23,4 @@ $parse = $cron->parseCronTest($crons);
 r($parse) && p('19:command') && e('moduleName=measurement&methodName=execCrontabQueue');//获取id为19的定时任务的定时信息和命令信息
 r($parse) && p('15:command') && e('moduleName=execution&methodName=computeTaskEffort'); //获取id为15的定时任务的定时信息和命令信息
 
-system('./ztest init');
+$db->restoreDB();

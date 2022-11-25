@@ -24,13 +24,21 @@
   <div class="center-block">
     <div class="main-header">
       <h2><?php echo $lang->story->create;?></h2>
+      <?php if(!$this->story->checkForceReview()):?>
+      <div class="needNotReviewBox">
+        <div class='checkbox-primary'>
+          <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
+          <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
+        </div>
+      </div>
+      <?php endif;?>
     </div>
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
           <tr>
             <th><?php echo $lang->story->module;?></th>
-            <td>
+            <td colspan='2'>
               <div class='input-group' id='moduleIdBox'>
                 <?php
                 echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
@@ -39,7 +47,7 @@
                     echo "<div class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='90%'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='refresh' onclick='loadProductModules($productID)'");
                     echo '</div>';
                 }
                 ?>
@@ -48,21 +56,13 @@
           </tr>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
-            <td colspan='<?php echo $type == 'story' ? 4 : 2;?>' id='reviewerBox'>
+            <td colspan='2' id='reviewerBox'>
               <div class="table-row">
+                <?php $required = $this->story->checkForceReview() ? 'required' : '';?>
+                <?php echo $this->story->checkForceReview() ? '' : html::hidden('needNotReview', 1);?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple $required");?>
                 </div>
-                <?php if(!$this->story->checkForceReview()):?>
-                <div class="table-col w-130px">
-                  <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
-                    <div class='checkbox-primary'>
-                      <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
-                      <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
-                    </div>
-                  </span>
-                </div>
-                <?php endif;?>
               </div>
             </td>
           </tr>
@@ -134,10 +134,6 @@
               <?php echo html::textarea('spec', $spec, "rows='9' class='form-control kindeditor disabled-ie-placeholder' hidefocus='true' placeholder='" . htmlSpecialString($lang->noticePasteImg) . "'");?>
             </td>
           </tr>
-          <tr class='hide'>
-            <th><?php echo $lang->story->status;?></th>
-            <td><?php echo html::hidden('status', 'draft');?></td>
-          </tr>
           <?php $this->printExtendFields('', 'table', 'columns=4');?>
           <tr>
             <th><?php echo $lang->story->legendAttatch;?></th>
@@ -147,7 +143,7 @@
             <th><?php echo $lang->story->mailto;?></th>
             <td colspan="4">
               <div class="input-group">
-                <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+                <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "class='form-control picker-select' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
                 <?php echo $this->fetch('my', 'buildContactLists');?>
               </div>
             </td>
@@ -162,10 +158,12 @@
         <tfoot>
           <tr>
             <td colspan="5" class="text-center form-actions">
-              <?php echo html::hidden('type', $type) . html::submitButton();?>
+              <?php echo html::hidden('type', $type);?>
               <?php echo html::hidden('product', $productID);?>
               <?php echo html::hidden('plan', $planID);?>
               <?php echo html::hidden('vision', 'lite');?>
+              <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
               <?php echo html::backButton();?>
             </td>
           </tr>

@@ -15,7 +15,7 @@ class reportsEntry extends entry
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {
@@ -176,7 +176,7 @@ class reportsEntry extends entry
         foreach(array_keys($statusList) as $status)
         {
             $statusName = zget($this->lang->project->statusList, $status);
-            if($status == 'all') $statusName = $this->lang->project->featureBar['all'];
+            if($status == 'all') $statusName = $this->lang->project->featureBar['browse']['all'];
 
             $statusList[$status]['code'] = $status;
             $statusList[$status]['name'] = $statusName;
@@ -193,8 +193,7 @@ class reportsEntry extends entry
      */
     public function executionProgress()
     {
-        $executions = $this->loadModel('project')->getStats(0, 'all', 0, 0, 30, 'id_desc');
-        $this->app->loadLang('execution');
+        $executions = $this->loadModel('execution')->getStatData(0, 'all', 0, 0, false, '', 'id_desc');
 
         $processedExecutions = array();
         $statusList['all']['total']    = 0;
@@ -273,7 +272,7 @@ class reportsEntry extends entry
         }
 
         /* Set story status statistics integrate into product. */
-        $storyStatusList = array('draft' => array(), 'active' => array(), 'changed' => array(), 'closed' => array());
+        $storyStatusList = array('draft' => array(), 'reviewing' => array(), 'active' => array(), 'changing' => array(), 'closed' => array());
         foreach($processedProducts as $productID => $product)
         {
             $product->storyStat = array();

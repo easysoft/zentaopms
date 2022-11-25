@@ -5,7 +5,5 @@
 .tab-pane > table {border: 1px solid #ddd;}
 .tab-pane > table:first-child {border-top: none;}
 .c-name {max-width: 100px;}
-
-#cases .pager {margin: 0px;}
-#cases .pager li .btn.dropdown-toggle {border: 0px; padding-top: 3px;}
 #profile {vertical-align: unset;}
+.c-full-date {width: 190px;}

@@ -28,26 +28,56 @@
     </div>
   </div>
   <?php else:?>
-  <div class='panel' style='padding:50px 300px'>
+  <div class='panel'>
     <form method='post'>
       <h1 class='text-center'><?php echo $title;?></h1>
-      <div class='panel-body'>
-        <?php echo $lang->install->introductionContent;?>
-        <video class='hidden' src="<?php echo $lang->install->guideVideo;?>"  width="100%" controls ="controls"></video>
-        <div class='text-center'>
-          <h2><?php echo $lang->install->howToUse;?></h2>
-          <?php $systemMode = isset($lang->upgrade->to15Mode['classic']) ? 'classic' : 'new';?>
-          <?php if($config->visions == ',lite,'):?>
-          <?php unset($lang->install->modeList['classic']);?>
-          <?php $systemMode = 'new';?>
-          <?php endif;?>
-          <div class='select-mode'><?php echo html::radio('mode', $lang->install->modeList, $systemMode);?></div>
-          <div id='selectedModeTips' class='text-info'><?php echo $lang->upgrade->selectedModeTips[$systemMode];?></div>
+      <div class='main-row' id='mainContent'>
+        <div class='main-col main-table'>
+          <table class='table'>
+            <thead>
+              <tr class='text-center'>
+                <th class='text-left'><?php echo $this->lang->custom->mode;?></th>
+                <th><?php echo $this->lang->custom->modeList['light'];?></th>
+                <th><?php echo $this->lang->custom->modeList['ALM'];?></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class='text-center'>
+                <td class='text-left'><?php echo $lang->custom->usage;?></td>
+                <td><?php echo $lang->custom->modeIntroductionList['light'];?></td>
+                <td><?php echo $lang->custom->modeIntroductionList['ALM'];?></td>
+              </tr>
+              <?php foreach($disabledFeatures as $feature):?>
+              <?php if(is_array($feature) && empty($disabledScrumFeatures)) continue;?>
+              <tr class='text-center'>
+                <td class='text-left'><?php echo (is_array($feature) && !empty($disabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+                <td><i class='icon text-red icon-close'></i></td>
+                <td><i class='icon text-success icon-check'></i></td>
+              </tr>
+              <?php endforeach;?>
+
+              <?php foreach($config->custom->allFeatures as $feature):?>
+              <?php if(in_array($feature, $disabledFeatures)) continue;?>
+              <?php if($feature == 'scrumDetail' && empty($enabledScrumFeatures)) continue;?>
+              <tr class='text-center'>
+                <td class='text-left'><?php echo ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+                <td><i class='icon text-success icon-check'></i></td>
+                <td><i class='icon text-success icon-check'></i></td>
+              </tr>
+              <?php endforeach;?>
+              <tr class='text-center'>
+                <td class='text-left strong text-14px'><?php echo $this->lang->custom->selectUsage;?></td>
+                <td><?php echo html::commonButton($lang->custom->useLight, "id='useLight'", 'btn btn-wide');?></td>
+                <td><?php echo html::commonButton($lang->custom->useALM, "id='useALM'", 'btn btn-wide');?></td>
+              </tr>
+              <tr>
+                <td><?php echo $this->lang->upgrade->remark;?></td>
+                <td colspan='2'><?php echo $this->lang->upgrade->remarkDesc;?></td>
+              </tr>
+            </tbody>
+            <?php echo html::hidden('mode', '');?>
+          </table>
         </div>
-      </div>
-      <hr/>
-      <div class='panel-footer text-center'>
-        <?php echo html::submitButton($lang->install->next);?>
       </div>
     </form>
   </div>

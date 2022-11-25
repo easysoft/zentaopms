@@ -9,6 +9,9 @@ title=测试 projectModel->getTeamMemberPairs();
 cid=1
 pid=1
 
+获取id为11的项目团队成员个数 >> 3
+获取id为11的项目团队成员的详细信息 >> 产品经理92
+
 */
 
 global $tester;

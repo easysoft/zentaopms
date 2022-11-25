@@ -57,20 +57,8 @@ class extensionModel extends model
      */
     public function fetchAPI($url)
     {
-        $this->app->loadConfig('upgrade');
-        $version = $this->config->version;
-        if(strpos($version, 'biz') !== false)
-        {
-            $version = str_replace('.', '_', $version);
-            if(isset($this->config->bizVersion[$version])) $version = $this->config->bizVersion[$version];
-            $version = str_replace('_', '.', $version);
-        }
-        if(strpos($version, 'pro') !== false)
-        {
-            $version = str_replace('.', '_', $version);
-            if(isset($this->config->proVersion[$version])) $version = $this->config->proVersion[$version];
-            $version = str_replace('_', '.', $version);
-        }
+        $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $version = str_replace('_', '.', $version);
 
         $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version;
         $result = json_decode(common::http($url));
@@ -453,10 +441,14 @@ class extensionModel extends model
             else
             {
                 $parentDir = mb_substr($path, 0, strripos($path, '/'));
-                if(!is_writable($parentDir) or !@mkdir($path, 0777, true))
+                if(!is_dir($path) and !mkdir($path, 0777, true))
                 {
                     $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
                     $return->mkdirCommands .= "sudo mkdir -p $path<br />";
+                }
+                if(!is_writable($parentDir))
+                {
+                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
                     $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
                 }
                 $return->dirs2Created[] = $path;
@@ -533,9 +525,11 @@ class extensionModel extends model
         /* Extract files. */
         $packageFile = $this->getPackageFile($extension);
         $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($packageFile);
-        $files = $zip->listContent();
-        $removePath = $files[0]['filename'];
+        $zip        = new pclzip($packageFile);
+        $files      = $zip->listContent();
+        $pathinfo   = pathinfo($files[0]['filename']);
+        $removePath = isset($pathinfo['dirname']) && $pathinfo['dirname'] != '.' ? $pathinfo['dirname'] : $pathinfo['basename'];
+
         if($zip->extract(PCLZIP_OPT_PATH, $extensionPath, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
         {
             $return->result = 'fail';
@@ -556,7 +550,7 @@ class extensionModel extends model
     {
         $appRoot      = $this->app->getAppRoot();
         $extensionDir = "ext/$extension/";
-        $paths       = scandir($extensionDir);
+        $paths        = scandir($extensionDir);
         $copiedFiles  = array();
 
         foreach($paths as $path)

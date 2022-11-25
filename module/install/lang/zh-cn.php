@@ -40,6 +40,7 @@ $lang->install->links = <<<EOT
 您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
+$lang->install->selectMode          = "请选择使用模式";
 $lang->install->introduction        = "禅道15系列功能介绍";
 $lang->install->howToUse            = "请问您计划如何使用禅道的新版本呢";
 $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/program0716.mp4';
@@ -154,7 +155,7 @@ $lang->install->saved2File         = '配置信息已经成功保存到" <strong
 $lang->install->errorNotSaveConfig = '还没有保存配置文件';
 
 global $app;
-$lang->install->CSRFNotice = "系统已开启了CSRF的防御，如需关闭，请联系管理员到{$app->moduleRoot}config/config.php文件中手动关闭。";
+$lang->install->CSRFNotice = "系统已开启了CSRF的防御，如需关闭，请联系管理员到{$app->basePath}config/config.php文件中手动关闭。";
 
 $lang->install->getPriv            = '设置帐号';
 $lang->install->company            = '公司名称';
@@ -162,7 +163,7 @@ $lang->install->account            = '管理员帐号';
 $lang->install->password           = '管理员密码';
 
 $lang->install->placeholder = new stdclass();
-$lang->install->placeholder->password = '六位及以上，包含数字、字母和特殊字符';
+$lang->install->placeholder->password = '6位及以上，包含大小写字母，数字。';
 
 $lang->install->errorEmpty['company']  = "{$lang->install->company}不能为空";
 $lang->install->errorEmpty['account']  = "{$lang->install->account}不能为空";
@@ -259,11 +260,11 @@ $lang->install->groupList['LIMITED']['desc']      = '受限用户分组(只能�
 $lang->install->groupList['PROJECTADMIN']['name'] = '项目管理员';
 $lang->install->groupList['PROJECTADMIN']['desc'] = '项目管理员可以维护项目的权限';
 $lang->install->groupList['LITEADMIN']['name']    = '管理员';
-$lang->install->groupList['LITEADMIN']['desc']    = '迅捷版用户分组';
+$lang->install->groupList['LITEADMIN']['desc']    = '运营管理界面用户分组';
 $lang->install->groupList['LITEPROJECT']['name']  = '项目管理';
-$lang->install->groupList['LITEPROJECT']['desc']  = '迅捷版用户分组';
+$lang->install->groupList['LITEPROJECT']['desc']  = '运营管理界面用户分组';
 $lang->install->groupList['LITETEAM']['name']     = '团队成员';
-$lang->install->groupList['LITETEAM']['desc']     = '迅捷版用户分组';
+$lang->install->groupList['LITETEAM']['desc']     = '运营管理界面用户分组';
 
 $lang->install->cronList[''] = '监控定时任务';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃尽图';
@@ -291,9 +292,6 @@ $lang->install->joinZentao         = <<<EOT
 EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
-
-$lang->install->modeList['classic'] = '经典管理模式';
-$lang->install->modeList['new']     = '全新项目集管理模式';
 
 $lang->install->promotion = "为您推荐易软天创旗下其他产品：";
 

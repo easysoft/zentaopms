@@ -9,20 +9,19 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class executionEntry extends Entry
+class executionEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($executionID)
     {
-        $fields    = $this->param('fields');
-        $productID = $this->param('productID');
-        $status    = $this->param('status', 'all');
+        $fields = $this->param('fields');
+        $status = $this->param('status', 'all');
 
         $control = $this->loadController('execution', 'view');
         $control->view($executionID);
@@ -47,8 +46,8 @@ class executionEntry extends Entry
             foreach($executionProduct->plans as $planID)
             {
                 $plan = new stdclass();
-                $plan->id = $planID;
-                $plan->name = $data->data->planGroups->{$productID}->{$planID};
+                $plan->id   = trim($planID, ',');
+                $plan->name = $data->data->planGroups->{$productID}->{$plan->id};
                 $product->plans[] = $plan;
             }
             $execution->products[] = $product;
@@ -114,7 +113,7 @@ class executionEntry extends Entry
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($executionID)
     {
@@ -137,7 +136,7 @@ class executionEntry extends Entry
         if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $execution = $this->execution->getByID($executionID);
-        $this->send(200, $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool'));
+        return $this->send(200, $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool'));
     }
 
     /**
@@ -145,7 +144,7 @@ class executionEntry extends Entry
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($executionID)
     {
@@ -153,6 +152,6 @@ class executionEntry extends Entry
         $control->delete($executionID, 'true');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

@@ -13,6 +13,5 @@ pid=1
 
 */
 
-
 $bug=new bugTest();
 r($bug->getDataOfClosedBugsPerDayTest()) && p() && e('0');   // 获取关闭bug的数据

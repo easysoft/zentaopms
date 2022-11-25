@@ -9,13 +9,12 @@ title=bugModel->getDataOfBugsPerAssignedTo();
 cid=1
 pid=1
 
-获取用户admin数据  >> admin,85
-获取用户dev1数据   >> 开发1,85
-获取用户test1数据  >> 测试1,85
+获取用户admin数据 >> admin,85
+获取用户dev1数据 >> 开发1,85
+获取用户test1数据 >> 测试1,85
 获取用户closed数据 >> Closed,20
 
 */
-
 
 $bug=new bugTest();
 r($bug->getDataOfBugsPerAssignedToTest()) && p('admin:name,value')  && e('admin,85');  // 获取用户admin数据

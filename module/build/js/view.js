@@ -2,7 +2,7 @@ function showLink(buildID, type, param)
 {
     var method = type == 'story' ? 'linkStory' : 'linkBug';
     if(typeof(param) == 'undefined') param = '&browseType=' + type + '&param=0';
-    loadURL(createLink('build', method, 'buildID=' + buildID + param), type);
+    loadURL(createLink(currentModule, method, 'buildID=' + buildID + param), type);
 
     $('.actions').find("a[href*='" + type + "']").addClass('hidden');
 }

@@ -1,10 +1,11 @@
 <?php js::set('productID', $productID);?>
 <?php
-$iCharges     = 0;
-$others       = 0;
-$closeds      = 0;
-$tab          = 'project';
-$productNames = array();
+$iCharges       = 0;
+$others         = 0;
+$closeds        = 0;
+$tab            = 'project';
+$productNames   = array();
+$currentProduct = '';
 
 foreach($products as $product)
 {
@@ -20,12 +21,13 @@ $closedProductsHtml = '';
 
 foreach($products as $product)
 {
+    if($product->id == $productID) $currentProduct = $product;
     $selected    = $product->id == $productID ? 'selected' : '';
     $productName = $product->name;
     $linkHtml    = sprintf($link, $product->id);
     if($product->status == 'normal' and $product->PO == $this->app->user->account)
     {
-        $myProductsHtml .= html::a($linkHtml, $productName, '', "class='text-important $selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$tab'");
+        $myProductsHtml .= html::a($linkHtml, $productName, '', "class='text-primary $selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$tab'");
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
     {
@@ -41,6 +43,9 @@ foreach($products as $product)
   <div class="table-col col-left">
     <div class='list-group'>
       <?php
+      $selected = $productID ? '' : 'selected';
+      echo html::a($this->createLink('design', 'browse', "projectID=$projectID"), $lang->product->all, '', "class=$selected data-app='$tab'");
+
       if(!empty($myProductsHtml))
       {
           echo "<div class='heading'>{$lang->product->mine}</div>";
@@ -61,4 +66,13 @@ foreach($products as $product)
    <div class='list-group'><?php echo $closedProductsHtml;?></div>
   </div>
 </div>
-<script>scrollToSelected();</script>
+<script>
+$(function()
+{
+    <?php if($currentProduct->status == 'closed'):?>
+    $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
+    <?php else:?>
+    scrollToSelected();
+    <?php endif;?>
+});
+</script>

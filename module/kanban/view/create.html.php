@@ -66,7 +66,20 @@
       <?php endif;?>
       <tr>
         <th class='columnWidth'><?php echo $lang->kanban->columnWidth;?></th>
-        <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0));?></td>
+        <td colspan='2'>
+            <div class="width-radio-row">
+                <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0);?>
+                <?php echo html::input('colWidth', !empty($copyKanban->colWidth) ? $copyKanban->colWidth : $this->config->colWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->colWidth}' autocomplete='off'");?>px
+                <div class='fixedTip'><?php echo $lang->kanbancolumn->fixedTip;?></div>
+            </div>
+            <div class="width-radio-row mt10">
+                <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0);?>
+                <?php echo html::input('minColWidth', !empty($copyKanban->minColWidth) ? $copyKanban->minColWidth: $this->config->minColWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->minColWidth}' autocomplete='off'");?>px
+                <span class="input-divider">~</span>
+                <?php echo html::input('maxColWidth', !empty($copyKanban->maxColWidth) ? $copyKanban->maxColWidth: $this->config->maxColWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->maxColWidth}' autocomplete='off'");?>px
+                <div class='autoTip'><?php echo $lang->kanbancolumn->autoTip;?></div>
+            </div>
+        </td>
       </tr>
       <tr>
         <th rowspan='2'><?php echo $lang->kanban->import?></th>
@@ -78,11 +91,11 @@
       <tr id='emptyTip' class='hidden'><th></th><td colspan='2' style='color: red;'><?php echo $lang->kanban->error->importObjNotEmpty;?></td></tr>
       <tr>
         <th class='w-90px'><?php echo $lang->kanban->archive;?></th>
-        <td><?php echo nl2br(html::radio('archived', $lang->kanban->archiveList, isset($copyKanban->archived) ? $copyKanban->archived : '0'));?></td>
+        <td><?php echo nl2br(html::radio('archived', $lang->kanban->archiveList, isset($copyKanban->archived) ? $copyKanban->archived : '1'));?></td>
       </tr>
       <tr>
         <th id='c-title'><?php echo $lang->kanban->manageProgress;?></th>
-        <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableList, isset($copyKanban->performable) ? $copyKanban->performable : '0'));?></td>
+        <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableList, isset($copyKanban->performable) ? $copyKanban->performable : '1'));?></td>
       </tr>
       <tr>
         <th id='c-title'><?php echo $lang->kanban->alignment;?></th>

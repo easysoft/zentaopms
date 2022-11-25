@@ -16,7 +16,7 @@ class tabsEntry extends baseEntry
      *
      * @param  string    $moduleName    work|
      * @access public
-     * @return void
+     * @return string
      */
     public function get($moduleName)
     {
@@ -29,7 +29,7 @@ class tabsEntry extends baseEntry
             foreach($tabs as $menuKey)
             {
                 if(!isset($this->lang->my->$menuKey)) continue;
-                if(!common::hasPriv('my', $menuKey)) continue;
+                if(!common::hasPriv('my', 'work')) continue;
                 $label = $this->lang->my->$menuKey;
                 if($menuKey == 'calendar') $label = $this->lang->my->calendarAction;
 
@@ -76,6 +76,6 @@ class tabsEntry extends baseEntry
             }
         }
 
-        $this->send(200, array('tabs' => $menus));
+        return $this->send(200, array('tabs' => $menus));
     }
 }

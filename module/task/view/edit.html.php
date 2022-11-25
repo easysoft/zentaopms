@@ -20,13 +20,14 @@
 <?php js::set('oldConsumed', $task->consumed);?>
 <?php js::set('taskStatus', $task->status);?>
 <?php js::set('currentUser', $app->user->account);?>
-<?php js::set('team', $task->team);?>
+<?php js::set('team', $task->members);?>
 <?php js::set('members', $members);?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
-<?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
+
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
-<?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
+<?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
+<?php js::set('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'))?>
 <?php js::set('requiredFields', $config->task->edit->requiredFields);?>
 <?php
 $requiredFields = array();
@@ -65,7 +66,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                   <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
                   <span class='input-group-addon'>
                     <div class='checkbox-primary'>
-                      <input type='checkBox' name='multiple' id='multiple' value='1' <?php echo empty($task->team) ? '' : 'checked';?> />
+                      <input type='checkBox' name='multiple' id='multiple' value='1' disabled <?php echo empty($task->team) ? '' : 'checked';?> />
                       <label for='multiple'><?php echo $lang->task->multipleAB;?></label>
                     </div>
                   </span>
@@ -87,7 +88,10 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
           <?php $this->printExtendFields($task, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->files;?></div>
-            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
+            <div class='detail-content'>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'false', 'object' => $task, 'method' => 'edit'));?>
+              <?php echo $this->fetch('file', 'buildform');?>
+            </div>
           </div>
           <div class='detail text-center form-actions'>
             <?php echo html::hidden('lastEditedDate', $task->lastEditedDate);?>
@@ -103,7 +107,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->task->legendBasic;?></div>
             <table class='table table-form'>
-              <?php if($task->parent <= 0):?>
+              <?php if($task->parent <= 0 and $execution->multiple):?>
               <tr>
                 <th class='thWidth'><?php echo $lang->task->execution;?></th>
                 <td><?php echo html::select('execution', $executions, $task->execution, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
@@ -127,7 +131,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php if($execution->type != 'ops'):?>
               <tr>
                 <th><?php echo $lang->task->story;?></th>
-                <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen' data-drop_direction='down'");?></span></td>
+                <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen' data-drop_direction='down' data-max_drop_width='0'");?></span></td>
               </tr>
               <?php endif;?>
               <?php if($task->parent >= 0 and empty($task->team)):?>
@@ -138,12 +142,12 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
-                <?php $disableAssignedTo = (!empty($task->team) and (($task->assignedTo != $this->app->user->account and $task->mode == 'linear') or !isset($task->team[$app->user->account]))) ? "disabled='disabled'" :'';?>
+                <?php $disableAssignedTo = (!empty($task->team) and $task->mode == 'linear') ? "disabled='disabled'" : '';?>
                 <?php
                 $taskMembers = array();
                 if(!empty($task->team))
                 {
-                    $teamAccounts = array_keys($task->team);
+                    $teamAccounts = $task->members;
                     foreach($teamAccounts as $teamAccount)
                     {
                         if(!isset($members[$teamAccount])) continue;
@@ -159,8 +163,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               </tr>
               <tr class="modeBox <?php echo $task->mode ? '' : 'hidden';?>">
                 <th><?php echo $lang->task->mode;?></th>
-                <?php $disabledMode = isset($task->team[$app->user->account]) ? '' : "disabled='disabled'"?>
-                <td><?php echo html::select('mode', $lang->task->modeList, $task->mode, "class='form-control chosen' $disabledMode onchange='updateAssignedTo()'");?></td>
+                <td><?php echo zget($lang->task->modeList, $task->mode) . html::hidden('mode', $task->mode);?></td>
               </tr>
               <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
                 <th><?php echo $lang->task->team;?></th>
@@ -184,7 +187,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 <th><?php echo $lang->task->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), 'class="form-control picker-select" multiple data-drop-direction="bottom"');?>
+                    <?php echo html::select('mailto[]', $users, $task->mailto, 'class="form-control picker-select" multiple data-drop-direction="bottom"');?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
@@ -205,8 +208,8 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <tr>
                 <th><?php echo $lang->task->estimate;?></th>
                 <td>
-                  <?php $disabled = (!empty($task->team) or $task->parent < 0) ? "disabled='disabled'" : '';?>
-                  <?php echo html::input('estimate', $task->estimate, "class='form-control' {$disabled}");?>
+                  <?php $readonly = (!empty($task->team) or $task->parent < 0) ? "readonly" : '';?>
+                  <?php echo html::input('estimate', $task->estimate, "class='form-control' {$readonly}");?>
                 </td>
               </tr>
               <tr>
@@ -215,10 +218,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               </tr>
               <tr>
                 <th><?php echo $lang->task->left;?></th>
-                <td>
-                  <?php $disabled = (!empty($task->team)  or $task->parent < 0) ? "disabled='disabled'" : '';?>
-                  <?php echo html::input('left', $task->left, "class='form-control' {$disabled}");?>
-                </td>
+                <td><?php echo html::input('left', $task->left, "class='form-control' {$readonly}");?></td>
               </tr>
             </table>
           </div>
@@ -278,44 +278,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
         <div class="modal-content with-padding" id='taskTeamEditor'>
           <table class='table table-form'>
             <tbody class="sortable">
-              <?php foreach($task->team as $member):?>
-              <tr>
-                <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
-                <td>
-                  <div class='input-group'>
-                    <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                  </div>
-                </td>
-                <td class='w-130px sort-handler'>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                </td>
-              </tr>
-              <?php endforeach;?>
-              <tr class='template'>
-                <td class='w-250px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
-                <td>
-                  <div class='input-group'>
-                    <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                  </div>
-                </td>
-                <td class='w-130px sort-handler'>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                </td>
-              </tr>
+              <?php include dirname(__FILE__) . DS . 'taskteam.html.php';?>
             </tbody>
             <tfoot>
               <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary btn-wide'");?></td></tr>

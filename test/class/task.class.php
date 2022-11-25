@@ -16,7 +16,7 @@ class taskTest
      * @access public
      * @return object
      */
-    public function createObject($param = array(), $executionID = '')
+    public function createObject($param = array(), $executionID = '', $bugID = '')
     {
         $assignedTo   = array('');
         $createFields = array('module' => '', 'story' => '', 'name' => '', 'type' => '', 'assignedTo' => $assignedTo,
@@ -26,7 +26,7 @@ class taskTest
 
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $object = $this->objectModel->create($executionID);
+        $object = $this->objectModel->create($executionID, $bugID);
         if (in_array('user92', $_POST['assignedTo'], true))
         {
             $objectID = $object['user92']['id'];
@@ -195,7 +195,7 @@ class taskTest
         return $object[1];
     }
 
-    public function startTest($taskID,$param = array())
+    public function startTest($taskID, $param = array())
     {
         $createFields = array( 'status' => 'doing', 'consumed' => '9', 'assignedTo' => '', 'comment' => '9', 'realStarted' => '', 'left' => '3');
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
@@ -450,12 +450,17 @@ class taskTest
      * Test get tasks of a execution.
      *
      * @param  int    $executionID
+     * @param  int    $productID
+     * @param  string $type
+     * @param  string $modules
+     * @param  string $orderBy
+     * @param  string $count
      * @access public
      * @return array
      */
-    public function getExecutionTasksTest($executionID,$count)
+    public function getExecutionTasksTest($executionID, $productID = 0, $type = 'all', $modules = 0, $orderBy = 'status_asc, id_desc', $count = '0')
     {
-        $object = $this->objectModel->getExecutionTasks($executionID);
+        $object = $this->objectModel->getExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -650,12 +655,14 @@ class taskTest
      * Test get task estimate.
      *
      * @param  int    $taskID
+     * @param  string $account
+     * @param  string $append
      * @access public
      * @return object
      */
-    public function getTaskEstimateTest($taskID)
+    public function getTaskEstimateTest($taskID, $account = '', $append = '')
     {
-        $object = $this->objectModel->getTaskEstimate($taskID);
+        $object = $this->objectModel->getTaskEstimate($taskID, $account, $append);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -1378,25 +1385,47 @@ class taskTest
     }
 
     /**
-     * Test get next user.
+     * Test for get team by account.
+     *
+     * @param  array  $users
+     * @param  string $account
+     * @param  string $filter
+     * @access public
+     * @return string
+     */
+    public function getTeamByAccount($users, $account, $filter = array('filter' => 'done'))
+    {
+        $object = $this->objectModel->getTeamByAccount($users, $account, $filter);
+        if(empty($object)) return '_';
+        return $object->account . '_' . $object->status;
+    }
+
+    /**
+     * Test get assignedTo  for multi task.
      *
      * @param  array  $users
      * @param  string $current
      * @access public
      * @return string
      */
-    public function getNextUserTest($users, $current)
+    public function getAssignedTo4Multi($users, $task, $type = 'current')
     {
-        $object = $this->objectModel->getNextUser($users, $current);
+        $assignedTo = $this->objectModel->getAssignedTo4Multi($users, $task, $type);
+        return empty($assignedTo) ? 'null' : $assignedTo;
+    }
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
+    /**
+     * Test for can operate effort;
+     *
+     * @param  object  $task
+     * @param  object  $effort
+     * @access public
+     * @return bool
+     */
+    public function canOperateEffort($task, $effort = null)
+    {
+        $result = $this->objectModel->canOperateEffort($task, $effort);
+        return $result ? 1 : 0;
     }
 
     /**

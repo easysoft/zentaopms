@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +36,4 @@ r($kanban->removeKanbanCellTest($typeList[2], $cardIDList[4], $kanbanList)) && p
 r($kanban->removeKanbanCellTest($typeList[2], $cardIDList[5], $kanbanList)) && p() && e('412:183,; 413; 414; 415; 416; 417; 418; 419; 420; 439:184,185,186,; 440; 441; 442; 443; 444; 445; 446; 447:');        // 移除bug 看板161的卡片182
 r($kanban->removeKanbanCellTest($typeList[3], $cardIDList[6], $kanbanList)) && p() && e('421; 422; 423; 424; 425; 426; 427; 448:62,; 449; 450; 451; 452; 453; 454:');                                          // 移除task 看板161的卡片61
 r($kanban->removeKanbanCellTest($typeList[3], $cardIDList[7], $kanbanList)) && p() && e('421; 422; 423; 424; 425; 426; 427; 448; 449; 450; 451; 452; 453; 454:');                                              // 移除task 看板161的卡片62
-system("./ztest init");
+$db->restoreDB();

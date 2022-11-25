@@ -9,6 +9,11 @@ title=测试 extensionModel->getLocalExtensions();
 cid=1
 pid=1
 
+获取已经安装的插件数量 >> 5
+获取已经销毁的插件数量 >> 5
+获取代号为code1的插件详细信息 >> 1,这是插件名称1,extension,installed
+获取代号为code2的插件详细信息 >> 2,这是插件名称2,extension,deactivated
+
 */
 
 global $tester;

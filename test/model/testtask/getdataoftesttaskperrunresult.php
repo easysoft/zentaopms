@@ -9,6 +9,12 @@ title=测试 testtaskModel->getDataOfTestTaskPerRunResult();
 cid=1
 pid=1
 
+获取测试单0的执行结果 >> 0
+获取测试单1的成功执行结果 >> 2
+获取测试单1的失败执行结果 >> 2
+获取测试单2的成功执行结果 >> 2
+获取测试单2的失败执行结果 >> 2
+
 */
 
 global $tester;

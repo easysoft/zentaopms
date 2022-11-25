@@ -361,6 +361,7 @@ function hideKanbanAction()
     $('.contextmenu').removeClass('contextmenu-show');
     $('.contextmenu .contextmenu-menu').removeClass('open').removeClass('in');
     $('#moreTasks, #moreColumns').animate({right: -400}, 500);
+    $('.storyColumn').parent().removeClass('open');
 }
 
 /**
@@ -575,7 +576,7 @@ function renderStoryItem(item, $item, col)
     if(scaleSize <= 2)
     {
         var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
-        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml    = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + hourUnit + '</span>') : '';
         var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id, '', col.type);
         var $infos = $item.find('.infos');
@@ -641,7 +642,7 @@ function renderBugItem(item, $item, col)
     {
         var idHtml       = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var severityHtml = scaleSize <= 1 ? ('<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>') : '';
-        var priHtml      = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml      = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var avatarHtml   = renderUserAvatar(item.assignedTo, 'bug', item.id, '', col.type);
 
         var $infos = $item.find('.infos');
@@ -706,7 +707,7 @@ function renderTaskItem(item, $item, col)
 
     if(scaleSize <= 2)
     {
-        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml    = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = scaleSize <= 1 && item.status != 'wait' ? ('<span class="info info-estimate text-muted">' + taskLang.leftAB + ' ' + item.left + 'h</span>') : ('<span class="info info-estimate text-muted">' + taskLang.estimateAB + ' ' + item.estimate + 'h</span>');
         var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id, '', col.type);
 
@@ -760,8 +761,15 @@ function renderCount($count, count, column)
 {
     if(groupBy == 'story' && column.type == 'story')
     {
-        $count.prev().addClass('storyColumn');
-        $count.prev().parent().append('<span class="caret changeOrderBy"></span>');
+        var orderButton = '<a class="btn btn-link action storyColumn ' + (changeOrder ? 'text-primary' : '') + '" type="button" data-toggle="dropdown">'
+            + "<i class='icon icon-swap'></i>"
+            + '</a>'
+            + '<ul class="dropdown-menu">';
+        for(var order in kanbanLang.orderList) orderButton += '<li class="' + (order == orderBy ? 'active' : '') + '"><a href="###" onclick="searchCards(rdSearchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
+        orderButton += '</ul>';
+
+        $count.parent().next().html(orderButton);
+        $count.parent().next().addClass('createButton');
         $count.remove();
         return;
     }
@@ -1122,7 +1130,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                     if(data)
                     {
                         data = $.parseJSON(data);
-                        if(data.status == 'draft' || data.status == 'changed')
+                        if(data.status == 'draft' || data.status == 'changing' || data.status == 'reviewing')
                         {
                             bootbox.alert(executionLang.storyDragError);
                         }
@@ -1316,11 +1324,11 @@ function createStoryMenu(options)
     var showAction = story.$col.type == 'backlog' || story.$col.type == 'ready' || story.$col.type == 'developing' || story.$col.type == 'developed' || story.$col.type == 'testing' || story.$col.type == 'tested' || story.$col.type == 'verified' || story.$col.type == 'released';
 
     if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id + '&kanbanGroup=' + groupBy, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
-    if(priv.canChangeStory && showAction) items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canCreateTask && showAction) items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canBatchCreateTask && showAction) items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canChangeStory && showAction && story.status == 'active') items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canCreateTask && showAction && story.status == 'active') items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canBatchCreateTask && showAction && story.status == 'active') items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateStory && story.$col.type == 'closed') items.push({label: executionLang.activate, icon: 'magic', url: createLink('story', 'activate', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'false'), attrs: {target: 'hiddenwin'}});
+    if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id + '&confirm=no&from=' + '&laneID=' + story.lane + '&columnID=' + story.column, '', 'false'), attrs: {target: 'hiddenwin'}});
     if(priv.canDeleteStory) items.push({label: storyLang.delete, icon: 'trash', onClick: function(){deleteCard('story', story.id, story.$lane.region)}});
     return items;
 }
@@ -1442,8 +1450,8 @@ function initKanban($kanban)
         data:              groupBy == 'default' ? region.groups : kanbanData[groupBy],
         maxColHeight:      'auto',
         calcColHeight:     calcColHeight,
-        minColWidth:       240,
-        maxColWidth:       240,
+        minColWidth:       typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth,
+        maxColWidth:       typeof window.maxColWidth === 'number' ? window.maxColWidth : defaultMaxColWidth,
         cardHeight:        getCardHeight(),
         fluidBoardWidth:   fluidBoard,
         displayCards:      typeof window.displayCards === 'number' ? window.displayCards : 2,
@@ -1466,6 +1474,13 @@ function initKanban($kanban)
     {
         $.zui.ContextMenu.hide();
     });
+    var kanbanMinColWidth = typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth;
+    if(kanbanMinColWidth < 190)
+    {
+        var miniColWidth = kanbanMinColWidth * 0.2;
+        $('.kanban-header-col>.title>span:not(.text)').hide();
+        $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
+    }
 }
 
 /**
@@ -1476,6 +1491,8 @@ $(function()
     changeStatus(execution.status);
 
     if($.cookie('isFullScreen') == 1) $.cookie('isFullScreen', 0);
+
+    changeOrder = false;
 
     window.kanbanScaleSize = +$.zui.store.get('executionKanbanScaleSize', 1);
     $('#kanbanScaleSize').text(window.kanbanScaleSize);
@@ -1590,11 +1607,10 @@ $(function()
         $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
 
-    $(document).on('click', '#kanban span.caret.changeOrderBy', function(event)
+    document.addEventListener('scroll', function()
     {
-        orderBy = orderBy == 'pri_desc' ? 'pri_asc' : 'pri_desc';
-        searchCards(rdSearchValue);
-    })
+        hideKanbanAction();
+    }, true);
 
     /* Init sortable */
     var sortType = '';
@@ -1823,12 +1839,16 @@ function toggleRDSearchBox()
  * Search all cards.
  *
  * @param  string $value
+ * @param  string order
+ *
  * @access public
  * @return void
  */
-function searchCards(value)
+function searchCards(value, order = '')
 {
     rdSearchValue = value;
+    orderBy       = order == '' ? orderBy : order;
+    if(order != '') changeOrder = true;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;
@@ -1848,7 +1868,7 @@ function searchCards(value)
 
         if(hideAll && rdSearchValue != '')
         {
-            if($('.table-empty-tip').length == 0) $('#kanban').append('<div class="table-empty-tip"><p><span class="text-muted">' + kanbanLang.empty + '</span></p></div>');
+            if($('.table-empty-tip').length == 0) $('#kanban').append('<div class="table-empty-tip"><p><span class="text-muted">' + kanbancardLang.empty + '</span></p></div>');
         }
         else
         {

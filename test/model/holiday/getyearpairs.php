@@ -10,6 +10,8 @@ title=测试 holidayModel->getYearPairs();
 cid=1
 pid=1
 
+测试getYearPairsTest方法 >> 1
+
 */
 
 $holiday = new holidayTest();

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/projectrelease.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +30,4 @@ r($projectrelease->linkBugTest($releaseID[0],$type[2])) && p('leftBugs') && e(',
 r($projectrelease->linkBugTest($releaseID[1],$type[0])) && p('bugs')     && e(',1,2');  //测试terminate状态的发布，releaseID正常存在,type为bug
 r($projectrelease->linkBugTest($releaseID[1],$type[1])) && p('leftBugs') && e(',1,2');  //测试terminate状态的发布，releaseID正常存在,type为leftBug
 r($projectrelease->linkBugTest($releaseID[1],$type[2])) && p('leftBugs') && e(',1,2,'); //测试terminate状态的发布，releaseID正常存在,type为空
-system("./ztest init");
+$db->restoreDB();

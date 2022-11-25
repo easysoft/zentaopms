@@ -1,0 +1,1 @@
+(SELECT first_name FROM `actor` LIMIT 1, 2)

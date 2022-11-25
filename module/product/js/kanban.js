@@ -139,9 +139,14 @@ function calcColHeight(col, lane, colCards, colHeight)
     return colCards.length * 62;
 }
 
-$(function()
+/**
+ * Init kanban.
+ *
+ * @access public
+ * @return void
+ */
+function initKanban()
 {
-    /* Init all kanbans */
     $.each(kanbanList, function(key, programsData)
     {
         var $kanban = $('#kanban-' + key);
@@ -150,10 +155,29 @@ $(function()
         $kanban.kanban(
         {
             data:            data,
-            noLaneName:      isClassicMode,
+            noLaneName:      isLightMode,
             virtualize:      true,
             virtualCardList: true,
             calcColHeight:   calcColHeight
         });
     });
+}
+
+$(function()
+{
+    /* Init all kanbans */
+    initKanban();
+
+    $('#showAllProjects').click(function()
+    {
+        var showAllProjects = $(this).prop('checked') ? 1 : 0;
+        $.post(createLink('product', 'ajaxSetShowSetting'), {"showAllProjects": showAllProjects}, function()
+        {
+            $.get(createLink('product', 'kanban'), function(data)
+            {
+                $('#kanbanList').html($(data).find('#kanbanList').html());
+                initKanban();
+            });
+        })
+    })
 });

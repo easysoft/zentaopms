@@ -13,7 +13,7 @@
 #branchList {line-height: 25px;}
 #branchList .hide-in-search, #branchList .tree ul {padding-left: 20px;}
 .tree li.has-list.open:before {border-left: none;}
-.tree li {padding: 0;}
+#branchList .tree li {padding: 0;}
 .branch-or-tag {border-radius: 4px;}
 
 .c-name {min-width: 150px;}
@@ -32,3 +32,7 @@
 .download-popover .table {margin-bottom: 0;}
 .download-popover .table td {padding-right: 0;}
 .download-popover .popover-title {padding: 8px;}
+
+#mainMenu #swapper {padding: 0;}
+#mainMenu #swapper #currentItem {color: #313c52;}
+#mainMenu #swapper #currentItem:hover {color: #0b0f18; background-color: rgba(0, 0, 0, 0.075);}

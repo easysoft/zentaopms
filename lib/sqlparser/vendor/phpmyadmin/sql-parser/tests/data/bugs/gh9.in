@@ -1,0 +1,12 @@
+SELECT * FROM foo WHERE
+SELECT * FROM foo WHERE
+
+START TRANSACTION;
+
+CREATE TABLE `tb` (`uid` INT UNSIGNED NOT NULL
+`position` INT NOT NULL,
+PRIMARY KEY ( `uid` ) ,
+INDEX ( `position` )
+) ENGINE = InnoDB;
+
+COMMIT;

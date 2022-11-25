@@ -1,0 +1,1 @@
+SELECT wins FROM players WHERE auth = '[U1:123456789]' LIMIT 1

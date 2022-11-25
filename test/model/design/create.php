@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/design.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -41,4 +42,4 @@ r($design->createTest($projectIDList[0], $noProductDesign)) && p('product') && e
 r($design->createTest($projectIDList[0], $noStoryDesign))   && p('story')   && e('');                       //不输入需求创建设计
 r($design->createTest($projectIDList[0], $noTypeDesign))    && p('type:0')  && e('『设计类型』不能为空。'); //不输入类型创建设计
 
-system("./ztest init");
+$db->restoreDB();

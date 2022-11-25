@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/build.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +30,4 @@ r($build->linkBugTest($buildIDList[0], $nomalBuglink)) && p('1:bugs,project')   
 r($build->linkBugTest($buildIDList[1], $nomalBuglink)) && p('11:bugs,execution') && e(',311,301,101');//执行版本链接bug
 r($build->linkBugTest($buildIDList[0], $noBuglink))    && p('1:bugs')            && e(',311,301,');   //不传bugID
 //
-system("./ztest init");
+$db->restoreDB();

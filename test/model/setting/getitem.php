@@ -27,7 +27,7 @@ pid=1
 查询所有者是系统并且所属模块是common、值是CRProduct的第一条数据 >> 1
 查询所有者是系统并且所属模块是common、附加条件是global、值是version的第一条数据 >> 1
 查询所有者是admin并且所属模块是common、值是URSR的第一条数据 >> 1
-查询所有者是admin并且所属模块是common、附加条件是block、值是initVersion的第一条数据 >> 1
+查询所有者是admin并且所属模块是my、附加条件是block、值是initVersion的第一条数据 >> 1
 查询不存在的界面配置 >> 0
 查询不存在的所有者配置 >> 0
 查询不存在的模块配置 >> 0

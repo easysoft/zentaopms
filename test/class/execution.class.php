@@ -14,6 +14,18 @@ class executionTest
     }
 
     /**
+     * Check the privilege.
+     *
+     * @param mixed $executionID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivTest($executionID)
+    {
+        return $this->objectModel->checkPriv($executionID);
+    }
+
+    /**
      * get todate
      *
      * @access public
@@ -46,7 +58,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function createObject($param = array(), $project, $dayNum, $days)
+    public function createObject($param = array(), $project = '', $dayNum = '', $days = '')
     {
         $products  = array('');
         $plans     = array('');
@@ -166,10 +178,11 @@ class executionTest
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  bool   $testParent
      * @access public
      * @return array
      */
-    public function startTest($executionID,$param = array())
+    public function startTest($executionID,$param = array(), $testParent = false)
     {
         $data = date('Y-m-d');
 
@@ -196,6 +209,12 @@ class executionTest
         }
         else
         {
+            if($testParent)
+            {
+                $execution       = $this->objectModel->getByID($executionID);
+                $executionParent = $this->objectModel->getByID($execution->parent);
+                return $executionParent;
+            }
             return $obj;
         }
     }
@@ -268,10 +287,11 @@ class executionTest
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  bool   $testParent
      * @access public
      * @return array
      */
-    public function activateTest($executionID, $param = array())
+    public function activateTest($executionID, $param = array(), $testParent = false)
     {
         self::suspendTest($executionID);
 
@@ -294,6 +314,12 @@ class executionTest
         }
         else
         {
+            if($testParent)
+            {
+                $execution       = $this->objectModel->getByID($executionID);
+                $executionParent = $this->objectModel->getByID($execution->parent);
+                return $executionParent;
+            }
             return $obj;
         }
     }
@@ -303,10 +329,11 @@ class executionTest
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  bool   $testParent
      * @access public
      * @return array
      */
-    public function closeTest($executionID, $param = array())
+    public function closeTest($executionID, $param = array(), $testParent = false)
     {
         $todate = date('Y-m-d');
 
@@ -326,6 +353,12 @@ class executionTest
         }
         else
         {
+            if($testParent)
+            {
+                $execution       = $this->objectModel->getByID($executionID);
+                $executionParent = $this->objectModel->getByID($execution->parent);
+                return $executionParent;
+            }
             return $obj;
         }
     }
@@ -502,7 +535,6 @@ class executionTest
     {
         $object = $this->objectModel->getIdList($projectID);
 
-
         if(dao::isError())
         {
             $error = dao::getError();
@@ -516,6 +548,26 @@ class executionTest
         {
             return $object;
         }
+    }
+
+    /**
+     * Get execution stat data.
+     *
+     * @param int    $projectID
+     * @param string $browseType
+     * @param int    $productID
+     * @param int    $branch
+     * @param bool   $withTasks
+     * @param string $param
+     * @param string $orderBy
+     * @param object $pager
+     * @access public
+     * @return int
+     */
+    public function getStatDataTest($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
+    {
+        $objects = $this->objectModel->getStatData($projectID);
+        return count($objects);
     }
 
     /**
@@ -627,6 +679,18 @@ class executionTest
     }
 
     /**
+     * Check the privilege.
+     *
+     * @access public
+     * @return string|bool
+     */
+    public function getLimitedExecutionTest()
+    {
+        $this->objectModel->getProductGroupList();
+        return isset($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : true;
+    }
+
+    /**
      * function getProductGroupList test execution
      *
      * @param  string $count
@@ -688,6 +752,19 @@ class executionTest
         {
             return $object;
         }
+    }
+
+    /**
+     * Get the task data group by execution id list.
+     *
+     * @param  array  $executionIdList
+     * @access public
+     * @return int
+     */
+    public function getTaskGroupByExecutionTest($executionIdList = array())
+    {
+        $objects = $this->objectModel->getTaskGroupByExecution($executionIdList);
+        return count($objects);
     }
 
     /**
@@ -1079,6 +1156,25 @@ class executionTest
     }
 
     /**
+     * Link all stories by execution.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $planID
+     * @access public
+     * @return int
+     */
+    public function linkStoriesTest($executionID, $productID = 0, $planID = 0)
+    {
+        global $tester;
+        if($planID) $tester->dao->update(TABLE_PROJECTPRODUCT)->set('plan')->eq($planID)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->exec();
+
+        $this->objectModel->linkStories($executionID);
+        $objects = $tester->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
+        return count($objects);
+    }
+
+    /**
      * function linkCases test by execution
      *
      * @param  string $executionID
@@ -1252,41 +1348,6 @@ class executionTest
     }
 
     /**
-     * function getTeamSkip test by execution
-     *
-     * @param  string $taskID
-     * @param  string $begin
-     * @param  string $end
-     * @access public
-     * @return array
-     */
-    public function getTeamSkipTest($taskID, $begin, $end)
-    {
-        global $tester;
-
-        $teams = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
-
-        $object = $this->objectModel->getTeamSkip($teams, $begin, $end);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            if(empty($object))
-            {
-                return '无跳转数据';
-            }
-            else
-            {
-                return $object;
-            }
-        }
-    }
-
-    /**
      * function getTeams2Import test by execution
      *
      * @param  string $account
@@ -1364,7 +1425,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function getCanCopyObjectsTest($projectID = 0, $count)
+    public function getCanCopyObjectsTest($projectID = 0, $count = 0)
     {
         $object = $this->objectModel->getCanCopyObjects($projectID);
 
@@ -1454,7 +1515,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function addProjectMembersTest($projectID = 0, $executionID, $count)
+    public function addProjectMembersTest($projectID = 0, $executionID = 0, $count = 0)
     {
         global $tester;
         $tester->dbh->query("delete from zt_team where root = $projectID");
@@ -1583,33 +1644,31 @@ class executionTest
     }
 
     /**
-     * function getBurnDataFlot test by execution
+     * Function getBurnDataFlot test by execution.
      *
-     * @param  int $executionID
-     * @param  string $count
+     * @param  int   $executionID
      * @access public
-     * @return array
+     * @return int
      */
-    public function getBurnDataFlotTest($executionID = 0, $count)
+    public function getBurnDataFlotTest($executionID = 0)
     {
         $date   = date("Y-m-d");
         $object = $this->objectModel->getBurnDataFlot($executionID, $burnBy = 'left');
 
         $todayData = array();
-        foreach ($object[$date] as $key => $value) $todayData[$key] = $value;
+        if(isset($object[$date]))
+        {
+            foreach($object[$date] as $key => $value) $todayData[$key] = $value;
+        }
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
-        {
-            return sizeof($todayData);
-        }
         else
         {
-            return $object;
+            return sizeof($todayData);
         }
     }
 
@@ -2061,5 +2120,282 @@ class executionTest
         {
             return $object;
         }
+    }
+
+    /**
+     * Test get begin and end for CFD.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getBeginEnd4CFDTest($executionID)
+    {
+        global $tester;
+
+        $execution = $this->objectModel->getByID($executionID);
+        $object    = $this->objectModel->getBeginEnd4CFD($execution);
+
+        $object[0] = $object[0] == date('Y-m-d', strtotime('-13 days', time())) ? 1 : 0;
+        $object[1] = $object[1] == helper::today() ? 1 : 0;
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test get taskes by search.
+     *
+     * @param  string $condition
+     * @param  int    $recPerPage
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getSearchTasksTest($condition, $recPerPage, $orderBy)
+    {
+        global $tester;
+
+        /* Load pager. */
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager(0, $recPerPage, 1);
+
+        $objects = $this->objectModel->getSearchTasks($condition, $pager, $orderBy);
+
+        $returns = '';
+        foreach($objects as $object)
+        {
+            $returns .= "$object->id:name:$object->name";
+            if(!empty($object->team))
+            {
+                $returns .= ',team:[';
+                foreach($object->team as $team) $returns .= "$team->id,";
+                $returns = trim($returns, ',');
+                $returns .= ']';
+            }
+            $returns .= ';';
+        }
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $returns;
+        }
+    }
+
+    /**
+     * Test Get bugs by search in execution.
+     *
+     * @param array  $products
+     * @param int    $executionID
+     * @param string $sql
+     * @param object $pager
+     * @param string $orderBy
+     * @access public
+     * @return void
+     */
+    public function getSearchBugsTest($products, $executionID, $sql, $pager = null, $orderBy = 'id_desc')
+    {
+        $object = $this->objectModel->getSearchBugs($products, $executionID, $sql, $pager, $orderBy);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test Get kanban group data.
+     *
+     * @param array $stories
+     * @param array $tasks
+     * @param array $bugs
+     * @param string $type
+     * @access public
+     * @return void
+     */
+    public function getKanbanGroupDataTest($stories, $tasks, $bugs, $type = 'story')
+    {
+        $object = $this->objectModel->getKanbanGroupData($stories, $tasks, $bugs, $type);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            if(count((array)$object['closed']) == 0 and count((array)$object['nokey']) == 0) return 'empty';
+            return $object;
+        }
+    }
+
+    /**
+     * Test Get Prev Kanban.
+     *
+     * @param int $executionID
+     * @access public
+     * @return void
+     */
+    public function getPrevKanbanTest($executionID)
+    {
+        $result = $this->objectModel->getPrevKanban($executionID);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return !$result ? 'empty' : $result;
+        }
+    }
+
+    /**
+     * Test save Kanban Data.
+     *
+     * @param int $executionID
+     * @param array $kanbanDatas
+     * @access public
+     * @return void
+     */
+    public function saveKanbanDataTest($executionID, $kanbanDatas = '')
+    {
+        if($kanbanDatas === '')
+        {
+            global $tester;
+            $contents    = array('story', 'wait', 'doing', 'done', 'cancel');
+            $stories     = $tester->loadModel('story')->getExecutionStories($executionID, 0, 0, 'id_asc');
+            $kanbanTasks = $this->objectModel->getKanbanTasks($executionID, "id");
+            $kanbanBugs  = $tester->loadModel('bug')->getExecutionBugs($executionID);
+            $users       = array();
+            $taskAndBugs = array();
+            foreach($kanbanTasks as $task)
+            {
+                $storyID = $task->storyID;
+                $status  = $task->status;
+                $users[] = $task->assignedTo;
+
+                $taskAndBugs[$status]["task{$task->id}"] = $task;
+            }
+            foreach($kanbanBugs as $bug)
+            {
+                $storyID = $bug->story;
+                $status  = $bug->status;
+                $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
+                $users[] = $bug->assignedTo;
+
+                $taskAndBugs[$status]["bug{$bug->id}"] = $bug;
+            }
+
+            $datas = array();
+            foreach($contents as $content)
+            {
+                if($content != 'story' and !isset($taskAndBugs[$content])) continue;
+                $datas[$content] = $content == 'story' ? $stories : $taskAndBugs[$content];
+            }
+            $kanbanDatas = $datas;
+        }
+
+        $object = $this->objectModel->saveKanbanData($executionID, $kanbanDatas);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            $result = $this->objectModel->getPrevKanban($executionID);
+            return !$result ? 'empty' : $result;
+        }
+    }
+
+    /**
+     * Test Get lifetime by id list.
+     *
+     * @param array $idList
+     * @access public
+     * @return void
+     */
+    public function getLifetimeByIdListTest($idList = '')
+    {
+        $result = $this->objectModel->getLifetimeByIdList($idList);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            if(!$result) return 'empty';
+
+            foreach($result as $id => $lifetime)
+            {
+                if(!$lifetime) $result[$id] = 'emptyLifetime';
+            }
+            return $result;
+        }
+    }
+
+    /**
+     * Test Update user view of execution and it's product.
+     *
+     * @param int    $executionID
+     * @param string $objectType
+     * @param array $users
+     * @access public
+     * @return void
+     */
+    public function updateUserViewTest($executionID, $objectType = 'sprint', $users = array())
+    {
+        $this->objectModel->updateUserView($executionID, $objectType, $users);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            if(count($users) > 0) su($users[0]);
+
+            global $tester;
+            return $tester->app->user->view->sprints;
+        }
+    }
+
+    /**
+     * Create default sprint.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return int
+     */
+    public function createDefaultSprintTest($projectID)
+    {
+        $result = $this->objectModel->createDefaultSprint($projectID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

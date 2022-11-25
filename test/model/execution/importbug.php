@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -31,4 +32,4 @@ $execution = new executionTest();
 r($execution->importBugTest($executionIDList[0], $count[0], $errorimport)) && p('message:0') && e('最初预计"必须为数字');  // 预计输入错误
 r($execution->importBugTest($executionIDList[0], $count[1], $importBugs))  && p()            && e('4');                    // Bug转任务统计
 
-system("./ztest init");
+$db->restoreDB();

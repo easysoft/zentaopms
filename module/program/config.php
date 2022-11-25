@@ -1,5 +1,6 @@
 <?php
 $config->program = new stdclass();
+$config->program->showAllProjects = 0;
 
 $config->program->editor = new stdclass();
 $config->program->editor->create   = array('id' => 'desc',    'tools' => 'simpleTools');

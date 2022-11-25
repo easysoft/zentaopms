@@ -439,28 +439,13 @@ class personnelModel extends model
             $taskIDList = array_merge($taskIDList, $taskID);
         }
 
-        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_TASKESTIMATE)
+        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
-            ->andWhere('task')->in($taskIDList)
+            ->andWhere('objectID')->in($taskIDList)
+            ->andWhere('objectType')->eq('task')
             ->groupBy('account')
             ->fetchAll('account');
         return $userHours;
-    }
-
-    /**
-     * Access to data on stages and sprints.
-     *
-     * @param  object    $projects
-     * @access public
-     * @return array
-     */
-    public function getSprintAndStage($projects)
-    {
-        $teams = $this->dao->select('t1.id,t1.root,t1.type,t1.role,t1.account,t2.realname')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($rootIDList)
-            ->andWhere('t1.type')->in('stage,sprint')
-            ->fetchGroup('root', 'id');
     }
 
     /**
@@ -479,14 +464,11 @@ class personnelModel extends model
         if($objectType == 'sprint')
         {
             $parentID = 0;
-            if($this->config->systemMode == 'new')
-            {
-                $this->loadModel('execution');
-                $execution = $this->execution->getByID($objectID);
-                $parentID  = $execution->project;
-                $project   = $this->execution->getByID($parentID);
-                $objects   = array($project->id => $project->name);
-            }
+            $this->loadModel('execution');
+            $execution = $this->execution->getByID($objectID);
+            $parentID  = $execution->project;
+            $project   = $this->execution->getByID($parentID);
+            $objects   = array($project->id => $project->name);
 
             $objects += $this->dao->select('id,name')->from(TABLE_EXECUTION)
                 ->where('project')->eq($parentID)
@@ -497,7 +479,7 @@ class personnelModel extends model
                 ->fetchPairs();
             foreach($objects as $id => &$object)
             {
-                if($id != $parentID and $this->config->systemMode == 'new') $object = '&nbsp;&nbsp;&nbsp;' . $object;
+                if($id != $parentID) $object = '&nbsp;&nbsp;&nbsp;' . $object;
             }
         }
         elseif($objectType == 'project')
@@ -652,13 +634,10 @@ class personnelModel extends model
             $product = $this->loadModel('product')->getById($objectID);
             if(empty($product)) return false;
 
-            if($this->config->systemMode == 'new')
-            {
-                $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
-                $newWhitelist     = array_merge($programWhitelist, $accounts);
-                $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-                $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source, $updateType);
-            }
+            $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
+            $newWhitelist     = array_merge($programWhitelist, $accounts);
+            $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
+            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source, $updateType);
 
             /* Removal of persons from centralized program whitelisting. */
             if($updateType == 'replace')
@@ -673,13 +652,10 @@ class personnelModel extends model
             $sprint = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
             if(empty($sprint)) return false;
 
-            if($this->config->systemMode == 'new')
-            {
-                $projectWhitelist = $this->getWhitelistAccount($sprint->project, 'project');
-                $newWhitelist     = array_merge($projectWhitelist, $accounts);
-                $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-                $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source, $updateType);
-            }
+            $projectWhitelist = $this->getWhitelistAccount($sprint->project, 'project');
+            $newWhitelist     = array_merge($projectWhitelist, $accounts);
+            $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
+            $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source, $updateType);
 
             /* Removal of whitelisted persons from projects. */
             if($updateType == 'replace')
@@ -687,6 +663,10 @@ class personnelModel extends model
                 foreach($deletedAccounts as $account) $this->deleteProjectWhitelist($objectID, $account);
             }
         }
+
+        /* Update user view. */
+        $this->loadModel('user');
+        foreach($deletedAccounts as $account) $this->user->updateUserView($objectID, $objectType, array($account));
     }
 
     /**

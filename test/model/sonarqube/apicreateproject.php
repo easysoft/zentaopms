@@ -10,10 +10,10 @@ title=测试 sonarqubeModel::apiCreateProject();
 cid=1
 pid=1
 
-使用空的sonarqubeID、项目对象创建sonarqube项目       >> return false
+使用空的sonarqubeID、项目对象创建sonarqube项目 >> return false
 使用空的sonarqubeID、正确的项目对象创建sonarqube项目 >> return false
-使用正确的sonarqubeID,项目对象创建sonarqube项目      >> unit_test
-使用重复的项目对象创建sonarqube项目                  >> Could not create Project, key already exists: unit_test
+使用正确的sonarqubeID,项目对象创建sonarqube项目 >> unit test
+使用重复的项目对象创建sonarqube项目 >> Could not create Project, key already exists: unit_test
 
 */
 

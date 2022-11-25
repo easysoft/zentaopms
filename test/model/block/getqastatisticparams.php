@@ -10,7 +10,8 @@ title=测试 blockModel->getQaStatisticParams();
 cid=1
 pid=1
 
-
+测试name >> 类型
+测试control >> select
 
 */
 

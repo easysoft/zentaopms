@@ -115,10 +115,11 @@ class storyTest
      * @param  int    $bugID
      * @param  string $from
      * @param  string $extra
+     * @param  string $params
      * @access public
      * @return void
      */
-    public function createTest($executionID = 0, $bugID = 0, $from = '', $extra = '', $params)
+    public function createTest($executionID = 0, $bugID = 0, $from = '', $extra = '', $params = '')
     {
         $_POST  = $params;
         $result = $this->objectModel->create($executionID, $bugID, $from, $extra);
@@ -159,7 +160,7 @@ class storyTest
      * @access public
      * @return void
      */
-    public function batchCreateTest($productID = 0, $branch = 0, $type = 'story', $params)
+    public function batchCreateTest($productID = 0, $branch = 0, $type = 'story', $params = '')
     {
         $_POST   = $params;
         $results = $this->objectModel->batchCreate($productID, $branch, $type);
@@ -451,7 +452,7 @@ class storyTest
      * @access public
      * @return void
      */
-    public function batchToTaskTest($executionID, $projectID = 0, $params)
+    public function batchToTaskTest($executionID, $projectID = 0, $params = '')
     {
         $_POST      = $params;
         $taskIdList = $this->objectModel->batchToTask($executionID, $projectID);

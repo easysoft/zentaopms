@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/action.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -24,4 +25,4 @@ r($action->undeleteTest($actionIDList[0])) && p('extra') && e('0'); // 测试还
 r($action->undeleteTest($actionIDList[1])) && p('extra') && e('0'); // 测试还原action 87
 r($action->undeleteTest($actionIDList[2])) && p('extra') && e('0'); // 测试还原action 9
 r($action->undeleteTest($actionIDList[3])) && p('extra') && e('1'); // 测试还原未删除action 1
-system("./ztest init");
+$db->restoreDB();

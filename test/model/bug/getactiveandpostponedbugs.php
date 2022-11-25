@@ -13,17 +13,15 @@ pid=1
 查询产品1 2 3 不存在的产品1000001 execution为101下的bug >> BUG3,BUG2,BUG1
 查询产品1 2 3 不存在的产品1000001 execution为102下的bug >> BUG6,BUG5,BUG4
 查询产品1 2 3 不存在的产品1000001 execution为103下的bug >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-查询产品1 3 execution为101下的bug                       >> BUG3,BUG2,BUG1
-查询产品1 3 execution为102下的bug                       >> 0
-查询产品1 3 execution为103下的bug                       >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-查询产品1 execution为101下的bug                         >> BUG3,BUG2,BUG1
-查询产品1 execution为102下的bug                         >> 0
-查询产品1 execution为103下的bug                         >> 0
-查询不存在的产品1000001 execution为101下的bug           >> 0
-查询不存在的产品1000001 execution为102下的bug           >> 0
-查询不存在的产品1000001 execution为103下的bug           >> 0
-
-
+查询产品1 3 execution为101下的bug >> BUG3,BUG2,BUG1
+查询产品1 3 execution为102下的bug >> 0
+查询产品1 3 execution为103下的bug >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
+查询产品1 execution为101下的bug >> BUG3,BUG2,BUG1
+查询产品1 execution为102下的bug >> 0
+查询产品1 execution为103下的bug >> 0
+查询不存在的产品1000001 execution为101下的bug >> 0
+查询不存在的产品1000001 execution为102下的bug >> 0
+查询不存在的产品1000001 execution为103下的bug >> 0
 
 */
 

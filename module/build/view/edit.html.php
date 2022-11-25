@@ -23,8 +23,8 @@
     </div>
     <form class='load-indicator main-form form-ajax' method='post' id='dataform' enctype='multipart/form-data'>
       <table class='table table-form'>
-        <tr>
-          <th><?php echo $lang->build->product;?></th>
+        <tr class="<?php echo $hidden;?>">
+          <th class='w-120px'><?php echo $lang->build->product;?></th>
           <td>
             <?php
             $disabled = '';
@@ -42,14 +42,26 @@
           </td>
           <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
         </tr>
+        <?php $disabled = $testtaskID ? 'disabled' : '';?>
+        <?php if(!$build->execution):?>
         <tr>
-          <?php $disabled = $testtaskID ? 'disabled' : '';?>
-          <th><?php echo $lang->build->execution;?></th>
-          <td id='executionsBox'><?php echo html::select('execution', $executions, $build->execution, "class='form-control chosen' required $disabled");?></td>
-          <td><?php if($disabled) echo $lang->build->notice->changeExecution;?></td>
+          <th class='w-120px'><?php echo $lang->build->builds;?></th>
+          <td id='buildBox'><?php echo html::select('builds[]', $builds, $build->builds, "class='form-control chosen' multiple $disabled data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
+          <td>
+            <?php if($disabled):?>
+            <?php echo $lang->build->notice->changeBuilds;?>
+            <?php else:?>
+            <?php echo $lang->build->notice->autoRelation;?>
+            <?php endif;?>
+          </td>
         </tr>
+        <?php elseif(!empty($multipleProject)):?>
+        <th class='w-120px'><?php echo $lang->build->execution;?></th>
+        <td id='executionsBox'><?php echo html::select('execution', $executions, $build->execution, "class='form-control chosen' required $disabled");?></td>
+        <td><?php if($disabled) echo $lang->build->notice->changeExecution;?></td>
+        <?php endif;?>
         <tr>
-          <th><?php echo $lang->build->name;?></th>
+          <th class='w-120px'><?php echo $lang->build->name;?></th>
           <td><?php echo html::input('name', $build->name, "class='form-control' required");?></td>
         </tr>
         <tr>
@@ -89,6 +101,8 @@
 </div>
 <?php js::set('productGroups', $productGroups)?>
 <?php js::set('projectID', $build->project)?>
+<?php js::set('builds', $build->builds)?>
 <?php js::set('executionID', $build->execution)?>
 <?php js::set('currentTab', $this->app->tab);?>
+<?php js::set('multipleSelect', $lang->build->placeholder->multipleSelect);?>
 <?php include '../../common/view/footer.html.php';?>

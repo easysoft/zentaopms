@@ -181,6 +181,15 @@ class jobModel extends model
         {
             $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
             $project = zget($repo, 'project');
+            if(!empty($repo))
+            {
+                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, $this->post->reference);
+                if(!is_array($pipeline) or empty($pipeline))
+                {
+                    dao::$errors['repo'] = $this->lang->job->engineTips->error;
+                    return false;
+                }
+            }
 
             $job->server   = (int)zget($repo, 'serviceHost', 0);
             $job->pipeline = json_encode(array('project' => $project, 'reference' => $this->post->reference));
@@ -298,6 +307,15 @@ class jobModel extends model
         {
             $repo    = $this->loadModel('repo')->getRepoByID($job->gitlabRepo);
             $project = zget($repo, 'project');
+            if(!empty($repo))
+            {
+                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, $this->post->reference);
+                if(!is_array($pipeline) or empty($pipeline))
+                {
+                    dao::$errors['repo'] = $this->lang->job->engineTips->error;
+                    return false;
+                }
+            }
 
             $job->repo     = $job->gitlabRepo;
             $job->server   = (int)zget($repo, 'serviceHost', 0);

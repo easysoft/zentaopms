@@ -16,7 +16,7 @@ class productsEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($programID = 0)
     {
@@ -24,7 +24,7 @@ class productsEntry extends entry
         if(strpos(strtolower(",{$fields},"), ',dropmenu,') !== false) return $this->getDropMenu();
 
         if(!$programID) $programID = $this->param('program', 0);
-        $projectID = $this->param('project', 0);
+        $projectID     = $this->param('project', 0);
         $mergeChildren = $this->param('mergeChildren', '');
 
         if($programID)
@@ -55,7 +55,7 @@ class productsEntry extends entry
         else
         {
             $control = $this->loadController('product', 'all');
-            $control->all($this->param('status', 'all'), $this->param('order', 'order_asc'), 0, 0, $this->param('limit', '20'), $this->param('page', '1') );
+            $control->all($this->param('status', 'all'), $this->param('order', 'program_asc'), 0, 0, $this->param('limit', 100), $this->param('page', 1));
 
             /* Response */
             $data = $this->getData();
@@ -108,7 +108,7 @@ class productsEntry extends entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -130,14 +130,14 @@ class productsEntry extends entry
         $product = $this->loadModel('product')->getByID($data->id);
         $product = $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user');
 
-        $this->send(200, $product);
+        return $this->send(200, $product);
     }
 
     /**
      * Get dropmenu.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getDropMenu()
     {
@@ -168,15 +168,15 @@ class productsEntry extends entry
                 }
             }
         }
-        $this->send(200, $dropMenu);
+        return $this->send(200, $dropMenu);
     }
 
     /**
      * Merge children products.
      *
-     * @param  array    $products
+     * @param  array  $products
      * @access public
-     * @return void
+     * @return string
      */
     public function mergeChildren($products)
     {
@@ -192,12 +192,11 @@ class productsEntry extends entry
             }
 
             $unclosedTotal = 0;
-            foreach($program as $field => $value)
+            foreach($program as $lineID => $value)
             {
                 if(!isset($programs[$programID]->children)) $programs[$programID]->children = array();
                 if(isset($value->products))
                 {
-                    $lineID = $field;
                     if(empty($lineID))
                     {
                         foreach($value->products as $product)

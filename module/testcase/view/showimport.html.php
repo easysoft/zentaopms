@@ -26,7 +26,7 @@ $(function()
   <div class="main-header clearfix">
     <h2><?php echo $lang->testcase->import;?></h2>
   </div>
-  <form target='hiddenwin' method='post'>
+  <form class='main-form' target='hiddenwin' method='post'>
     <div class="table-responsive">
       <table class='table table-form' id='showData'>
         <thead>
@@ -163,7 +163,7 @@ $(function()
         </tbody>
         <tfoot>
           <tr>
-            <td colspan='10' class='text-center form-actions'>
+            <td colspan='11' class='text-center form-actions'>
               <?php
               $submitText = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
               if(!$insert and $dataInsert === '')

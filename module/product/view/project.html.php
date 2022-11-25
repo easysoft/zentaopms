@@ -19,7 +19,7 @@
     <div class="tip"><a data-toggle='tooltip' title='<?php echo $lang->product->projectInfo;?>'><i class='icon-help'></i></a></div>
 
   </div>
-  <?php if($config->systemMode == 'new' and $branchStatus != 'closed'):?>
+  <?php if($branchStatus != 'closed'):?>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('project', 'manageProducts')) echo html::a('#link2Project', '<i class="icon-link"></i> ' . $lang->product->link2Project, '', "data-toggle='modal' class='btn btn-secondary'");?>
     <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$product->program&from=project&productID=$productID&branchID=$branchID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
@@ -29,13 +29,7 @@
 <div id="mainContent">
   <?php if(empty($projectStats)):?>
   <div class="table-empty-tip">
-    <p>
-    <?php if($config->systemMode == 'new'):?>
-      <span class="text-muted"><?php echo $lang->project->empty;?></span>
-    <?php else:?>
-      <span class="text-muted"><?php echo $lang->execution->noExecution;?></span>
-    <?php endif;?>
-    </p>
+    <p><span class="text-muted"><?php echo $lang->project->empty;?></span></p>
   </div>
   <?php else:?>
   <form class='main-table table-project'>
@@ -43,56 +37,61 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->idAB;?></th>
-          <?php if($config->systemMode == 'new'):?>
+          <?php if($config->systemMode == 'ALM'):?>
           <th class='c-program'><?php echo $lang->program->common;?></th>
+          <?php endif;?>
           <th><?php echo $lang->project->name;?></th>
-          <?php else:?>
-          <th><?php echo $lang->execution->name;?></th>
+          <?php if(strpos('all,undone', $status) !== false):?>
+          <th class='c-status'><?php echo $lang->project->status;?></th>
           <?php endif;?>
           <th class='c-user text-left'><?php echo $lang->project->PM;?></th>
+          <th class="c-budget text-right"><?php echo $lang->project->budget;?></th>
           <th class='c-date'><?php echo $lang->project->begin;?></th>
           <th class='c-date'><?php echo $lang->project->end;?></th>
-          <th class='c-status'><?php echo $lang->project->status;?></th>
-          <th class="c-budget text-center"><?php echo $lang->project->budget;?></th>
           <th class="c-number text-right"><?php echo $lang->project->estimate;?></th>
           <th class="c-number text-right"><?php echo $lang->project->consume;?></th>
           <th class="c-progress"><?php echo $lang->project->progress;?></th>
         </tr>
       </thead>
       <tbody>
-        <?php $id = 0;?>
+        <?php
+        $id             = 0;
+        $waitCount      = 0;
+        $doingCount     = 0;
+        $suspendedCount = 0;
+        $closedCount    = 0;
+        ?>
         <?php foreach($projectStats as $project):?>
+        <?php if($project->status == 'wait')      $waitCount ++;?>
+        <?php if($project->status == 'doing')     $doingCount ++;?>
+        <?php if($project->status == 'suspended') $suspendedCount ++;?>
+        <?php if($project->status == 'closed')    $closedCount ++;?>
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
-          <?php if($config->systemMode == 'new'):?>
+          <?php if($config->systemMode == 'ALM'):?>
           <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
           <?php endif;?>
           <td class='text-left'>
             <?php
-            if($config->systemMode == 'new')
-            {
-                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name);
-            }
-            else
-            {
-                echo html::a($this->createLink('execution', 'task', 'project=' . $project->id), $project->name);
-            }
+            $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;
+            echo html::a($this->createLink('project', 'index', 'project=' . $project->id), "<i class='text-muted icon icon-{$projectType}'></i> " . $project->name, '', "title='$project->name'");
             ?>
           </td>
+          <?php if(strpos('all,undone', $status) !== false):?>
+          <?php $statusTitle = $this->processStatus('project', $project);?>
+          <td class='c-status' title='<?php echo $statusTitle;?>'>
+            <span class="status-project status-<?php echo $project->status?>"><?php echo $statusTitle;?></span>
+          </td>
+          <?php endif;?>
           <td class='padding-right'>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>
           </td>
-          <td class='padding-right text-left'><?php echo $project->begin;?></td>
-          <td class='padding-right text-left'><?php echo $project->end;?></td>
-          <?php $status = $this->processStatus('project', $project);?>
-          <td class='c-status' title='<?php echo $status;?>'>
-            <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
-          </td>
           <?php $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
           <?php $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;?>
-          <?php $textStyle = $project->budget != 0 ? 'text-right' : 'text-center';?>
-          <td title='<?php echo $budgetTitle;?>' class="text-ellipsis <?php echo $textStyle;?>"><?php echo $budgetTitle;?></td>
+          <td title='<?php echo $budgetTitle;?>' class="text-ellipsis text-right"><?php echo $budgetTitle;?></td>
+          <td class='padding-right text-left'><?php echo $project->begin;?></td>
+          <td class='padding-right text-left'><?php echo $project->end;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
           <td>
@@ -104,6 +103,10 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class='table-footer'>
+      <div class="table-statistic"><?php echo $status == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
+      <?php echo $pager->show('left', 'pagerjs');?>
+    </div>
   </form>
   <?php endif;?>
 </div>

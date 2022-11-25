@@ -36,6 +36,8 @@ $(function()
 
         var $newRow = $(rowTpl.replace(/%s/g, lastIndex + 1));
         $newRow.find('.chosen').chosen();
+        $newRow.find('.picker').remove()
+        $newRow.find('.picker-select').picker();
         $newRow.find('.iframe').modalTrigger({iframe:true});
         $newRow.find('[data-provide="colorpicker-later"]').colorPicker();
         $newRow.datepickerAll();

@@ -8,6 +8,12 @@ title=测试 gitlabModel::apiGetGroupMembers();
 cid=1
 pid=1
 
+使用空的数据查询群组用户 >> return null
+使用空的groupID查询群组用户 >> return null
+使用错误的groupID查询群组用户 >> return null
+通过gitlabID,groupID查询群组用户 >> return true
+通过gitlabID,groupID,userID查询群组用户 >> return true
+
 */
 
 $gitlab = $tester->loadModel('gitlab');

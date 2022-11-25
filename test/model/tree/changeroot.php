@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/tree.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -42,4 +43,4 @@ r($tree->changeRootTest($moduleID[8], $root[4], $root[5], $type[1]))  && p('id,r
 r($tree->changeRootTest($moduleID[9], $root[4], $root[5], $type[1]))  && p('id,root') && e('0'); // 测试修改module 22 的root从 101 修改为 102
 r($tree->changeRootTest($moduleID[10], $root[5], $root[4], $type[1])) && p('id,root') && e('0'); // 测试修改module 24 的root从 102 修改为 101
 r($tree->changeRootTest($moduleID[11], $root[5], $root[4], $type[1])) && p('id,root') && e('0'); // 测试修改module 25 的root从 102 修改为 101
-system("./ztest init");
+$db->restoreDB();

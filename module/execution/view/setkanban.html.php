@@ -22,7 +22,20 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->kanban->columnWidth;?></th>
-          <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $execution->fluidBoard));?></td>
+          <td colspan='2'>
+            <div class="width-radio-row">
+                <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), "class='inline-block'", $execution->fluidBoard);?>
+                <?php echo html::input('colWidth', !empty($execution->colWidth) ? $execution->colWidth : $this->config->colWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->colWidth}' autocomplete='off'");?>px
+                <div class='fixedTip'><?php echo $lang->kanbancolumn->fixedTip;?></div>
+            </div>
+            <div class="width-radio-row mt10">
+                <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), "class='inline-block'", $execution->fluidBoard);?>
+                <?php echo html::input('minColWidth', !empty($execution->minColWidth) ? $execution->minColWidth: $this->config->minColWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->minColWidth}' autocomplete='off'");?>px
+                <span class="input-divider">~</span>
+                <?php echo html::input('maxColWidth', !empty($execution->maxColWidth) ? $execution->maxColWidth: $this->config->maxColWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->maxColWidth}' autocomplete='off'");?>px
+                <div class='autoTip'><?php echo $lang->kanbancolumn->autoTip;?></div>
+            </div>
+        </td>
         </tr>
         <?php if($laneCount > 1):?>
         <tr>
@@ -31,7 +44,7 @@
         </tr>
         <tr class="hidden" id='cardBox'>
           <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
-          <td><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanbanlane->error->mustBeInt}' autocomplete='off'");?></td>
         </tr>
         <?php endif;?>
         <tr><td colspan='3' class='text-center form-actions'><?php echo html::submitButton() . ' ' . html::backButton();?></td></tr>

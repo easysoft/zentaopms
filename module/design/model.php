@@ -240,11 +240,12 @@ class designModel extends model
      */
     public function getByID($designID = 0)
     {
+        $this->app->loadLang('product');
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
         if(!$design) return false;
 
         $design->files       = $this->loadModel('file')->getByObject('design', $designID);
-        $design->productName = $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name');
+        $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
 
 
         $design->commit = '';
@@ -317,7 +318,7 @@ class designModel extends model
                 ->where('deleted')->eq(0)
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
-                ->andWhere('product')->eq($productID)
+                ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -376,11 +377,11 @@ class designModel extends model
 
         $designQuery = $this->session->designQuery;
 
-        $designs =  $this->dao->select('*')->from(TABLE_DESIGN)
+        $designs = $this->dao->select('*')->from(TABLE_DESIGN)
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
             ->andWhere('project')->eq($projectID)
-            ->andWhere('product')->eq($productID)
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -403,10 +404,42 @@ class designModel extends model
      */
     public function setMenu($projectID, $products, $productID = 0)
     {
-        if($this->app->rawMethod != 'browse') unset($this->lang->waterfall->menu->design['subMenu']->bysearch);
+        /* Show custom design types. */
+        $this->lang->waterfall->menu->design['subMenu'] = new stdclass();
+        $this->lang->waterfall->menu->design['subMenu']->all = array('link' => "{$this->lang->all}|design|browse|projectID=%s&productID=0&browseType=all");
+        $count = 1;
+        foreach(array_filter($this->lang->design->typeList) as $key => $value)
+        {
+            $key = strtolower($key);
+
+            if($count <= 4) $this->lang->waterfall->menu->design['subMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
+            if($count == 5)
+            {
+                $this->lang->waterfall->menu->design['subMenu']->more = array('link' => "{$this->lang->design->more}|design|browse|projectID=%s&productID=0&browseType={$key}", 'class' => 'dropdown dropdown-hover');
+                $this->lang->waterfall->menu->design['subMenu']->more['dropMenu'] = new stdclass();
+            }
+            if($count >= 5) $this->lang->waterfall->menu->design['subMenu']->more['dropMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
+
+            $count ++;
+        }
+
+        if($this->app->rawMethod == 'browse') $this->lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $this->lang->searchAB . '</a>');
+
         if(empty($products) || !$productID) return '';
+
+        if($productID)
+        {
+            $currentProduct = $this->loadModel('product')->getById($productID);
+            setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        }
+        else
+        {
+            $currentProduct = new stdclass();
+            $currentProduct->name = $this->lang->product->all;
+        }
+
         $currentProduct = $this->loadModel('product')->getById($productID);
-        setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        if(!empty($currentProduct->shadow)) return '';
 
         $output = '';
         if(!empty($products))
@@ -447,19 +480,21 @@ class designModel extends model
     public function printAssignedHtml($design = '', $users = '')
     {
         $btnTextClass   = '';
+        $btnClass       = '';
         $assignedToText = zget($users, $design->assignedTo);
 
         if(empty($design->assignedTo))
         {
-            $btnTextClass   = 'text-primary';
+            $btnClass       = $btnTextClass = 'assigned-none';
             $assignedToText = $this->lang->design->noAssigned;
         }
-        if($design->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+        if($design->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
+        if(!empty($design->assignedTo) and $design->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
 
-        $btnClass     = $design->assignedTo == 'closed' ? ' disabled' : '';
-        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $btnClass    .= $design->assignedTo == 'closed' ? ' disabled' : '';
+        $btnClass    .= ' iframe btn btn-icon-left btn-sm';
         $assignToLink = helper::createLink('design', 'assignTo', "designID=$design->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $design->assignedTo) . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $design->assignedTo) . "'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('design', 'assignTo', $design) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }

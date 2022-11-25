@@ -1,8 +1,8 @@
 <?php js::set('flow', $config->global->flow);?>
-<?php $isProjectApp  = $this->app->tab == 'project'?>
-<?php $currentModule = $isProjectApp ? 'project'  : 'testcase';?>
-<?php $currentMethod = $isProjectApp ? 'testcase' : 'browse';?>
-<?php $projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';?>
+<?php $isProjectApp       = $this->app->tab == 'project'?>
+<?php $currentModule      = $isProjectApp ? 'project'  : 'testcase';?>
+<?php $currentMethod      = $isProjectApp ? 'testcase' : 'browse';?>
+<?php $projectParam       = $isProjectApp ? "projectID={$this->session->project}&" : '';?>
 <?php if(common::checkNotCN()):?>
 <style> .btn-toolbar>.btn {margin-right: 3px !important;}</style>
 <?php endif;?>
@@ -14,6 +14,7 @@
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 #mainMenu .pull-left .checkbox-primary {margin-top: 5px;}
+#mainMenu .dividing-line {width: 1px; height: 16px; display: inline-block; background: #D8DBDE; margin: 7px 8px 0 0; float: left;}
 </style>
 <div id='mainMenu' class='clearfix'>
   <?php if(!($this->app->rawMethod == 'groupcase')):?>
@@ -41,7 +42,7 @@
     <?php
     $hasBrowsePriv = $isProjectApp ? common::hasPriv('project', 'testcase') : common::hasPriv('testcase', 'browse');
     $hasGroupPriv  = common::hasPriv('testcase', 'groupcase');
-    $hasZeroPriv   = common::hasPriv('story', 'zerocase');
+    $hasZeroPriv   = common::hasPriv('testcase', 'zerocase');
     $hasUnitPriv   = common::hasPriv('testtask', 'browseunits');
     ?>
     <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
@@ -143,7 +144,7 @@
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
         $projectID = $isProjectApp ? $this->session->project : 0;
-        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->testcase->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
     }
     elseif($hasUnitPriv and $menuType == 'browseunits' and !$caseType)
     {
@@ -170,10 +171,10 @@
       $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc . "data-app={$this->app->tab}") . "</li>";
 
-      $class = common::hasPriv('testcase', 'exportTemplet') ? '' : "class=disabled";
-      $misc  = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplet, '', $misc . "data-app={$this->app->tab} data-width='50%'") . "</li>";
+      $class = common::hasPriv('testcase', 'exportTemplate') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'exportTemplate') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'exportTemplate') ?  $this->createLink('testcase', 'exportTemplate', "productID=$productID") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplate, '', $misc . "data-app={$this->app->tab} data-width='65%'") . "</li>";
       ?>
       </ul>
     </div>
@@ -238,3 +239,50 @@ if(!empty($headerHooks))
     foreach($headerHooks as $fileName) include($fileName);
 }
 ?>
+<script>
+$(function()
+{
+    var $allTab           = $('#allTab');
+    var $waitTab          = $('#waitTab');
+    var $needconfirmTab   = $('#needconfirmTab');
+    var $groupTab         = $('#groupTab');
+    var $zerocaseTab      = $('#zerocaseTab');
+    var $bysuiteTab       = $('#bysuiteTab');
+    var $browseunitsTab   = $('#browseunitsTab');
+    var hasAllTab         = $allTab.length > 0;
+    var hasWaitTab        = $waitTab.length > 0;
+    var hasNeedconfirmTab = $needconfirmTab.length > 0;
+    var hasGroupTab       = $groupTab.length > 0;
+    var hasZerocaseTab    = $zerocaseTab.length > 0;
+    var hasbysuiteTab     = $bysuiteTab.length > 0;
+    var hasBrowseunitsTab = $browseunitsTab.length > 0;
+
+    if((hasAllTab || hasWaitTab) && (hasNeedconfirmTab || hasGroupTab || hasbysuiteTab || hasZerocaseTab || hasBrowseunitsTab))
+    {
+        if(hasWaitTab)
+        {
+            $waitTab.after("<div class='dividing-line'></div>");
+        }
+        else
+        {
+            $allTab.after("<div class='dividing-line'></div>");
+        }
+    }
+
+    if((hasNeedconfirmTab || hasGroupTab || hasZerocaseTab) && (hasbysuiteTab || hasBrowseunitsTab))
+    {
+        if(hasZerocaseTab)
+        {
+            $zerocaseTab.after("<div class='dividing-line'></div>");
+        }
+        else if(hasGroupTab)
+        {
+            $groupTab.after("<div class='dividing-line'></div>");
+        }
+        else
+        {
+            $needconfirmTab.after("<div class='dividing-line'></div>");
+        }
+    }
+});
+</script>

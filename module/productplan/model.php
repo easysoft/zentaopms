@@ -105,9 +105,10 @@ class productplanModel extends model
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF(strpos(',all,undone,bySearch,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
+            ->beginIF(strpos(',all,undone,bySearch,review,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'bySearch')->andWhere($productplanQuery)->fi()
+            ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -115,16 +116,21 @@ class productplanModel extends model
 
         if(!empty($plans))
         {
-            $plans      = $this->reorder4Children($plans);
-            $planIdList = array_keys($plans);
+            $plans        = $this->reorder4Children($plans);
+            $planIdList   = array_keys($plans);
+            $planProjects = array();
 
-            $planProjects = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->eq($product)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t1.plan')->in(array_keys($plans))
-                ->andWhere('t2.type')->in('sprint,stage,kanban')
-                ->fetchPairs('plan', 'project');
+            foreach($planIdList as $planID)
+            {
+                $planProjects[$planID] = $this->dao->select('t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.product')->eq($product)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->andWhere('t1.plan')->like(",$planID,")
+                    ->andWhere('t2.type')->in('sprint,stage,kanban')
+                    ->orderBy('project_desc')
+                    ->fetchAll('project');
+            }
 
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
             $product = $this->loadModel('product')->getById($product);
@@ -153,12 +159,11 @@ class productplanModel extends model
                         ->andWhere('deleted')->eq(0)
                         ->fetchPairs('id', 'estimate');
                 }
-                $plan->stories   = count($storyPairs);
-                $plan->bugs      = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
-                $plan->hour      = array_sum($storyPairs);
-                $plan->project   = zget($planProjects, $plan->id, '');
-                $plan->projectID = $plan->project;
-                $plan->expired   = $plan->end < $date ? true : false;
+                $plan->stories  = count($storyPairs);
+                $plan->bugs     = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
+                $plan->hour     = array_sum($storyPairs);
+                $plan->projects = zget($planProjects, $plan->id, '');
+                $plan->expired  = $plan->end < $date ? true : false;
 
                 /* Sync linked stories. */
                 if(!isset($storyCountInTable[$plan->id]) or $storyCountInTable[$plan->id] != $plan->stories)
@@ -216,10 +221,9 @@ class productplanModel extends model
             ->beginIF($branch !== '')->andWhere('branch')->eq($branch)->fi()
             ->andWhere('parent')->le(0)
             ->andWhere('deleted')->eq(0)
+            ->beginIF($exclude)->andWhere('status')->notin($exclude)
             ->orderBy('id_desc')
             ->fetchPairs();
-
-        if($exclude) unset($planPairs[$exclude]);
 
         return $planPairs;
     }
@@ -242,7 +246,7 @@ class productplanModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
             ->where('t1.product')->in($product)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== '' and $branch != 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.begin desc')
@@ -359,9 +363,10 @@ class productplanModel extends model
         {
             if(!isset($planGroup[$plan->product][$plan->branch])) $planGroup[$plan->product][$plan->branch] = array('' => '');
 
+            if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue;
+
             if($field == 'name')
             {
-                if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue;
                 if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
                 $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
                 if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
@@ -443,6 +448,8 @@ class productplanModel extends model
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)
             ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
             ->remove('delta,uid,future')
             ->get();
 
@@ -523,22 +530,21 @@ class productplanModel extends model
             ->get();
 
         $parentPlan = $this->getByID($plan->parent);
-
+        $futureTime = $this->config->productplan->future;
 
         if($plan->parent > 0)
         {
-            if($parentPlan->begin !== $this->config->productplan->future)
+            if($parentPlan->begin !== $futureTime)
             {
                 if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
             }
-            if($parentPlan->end !== $this->config->productplan->future)
+            if($parentPlan->end !== $futureTime)
             {
-                if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+                if($plan->end !== $futureTime and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
-        elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
+        elseif($oldPlan->parent == -1 and ($plan->begin != $futureTime or $plan->end != $futureTime))
         {
-            $plan->parent = -1;
             $childPlans   = $this->getChildren($planID);
             $minBegin     = $plan->begin;
             $maxEnd       = $plan->end;
@@ -548,8 +554,8 @@ class productplanModel extends model
                 if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
                 if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
             }
-            if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $oldPlan->title, $plan->begin, $minBegin);
-            if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $oldPlan->title, $plan->end, $maxEnd);
+            if($minBegin < $plan->begin and $minBegin != $futureTime) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $oldPlan->title, $plan->begin, $minBegin);
+            if($maxEnd > $plan->end and $maxEnd != $futureTime) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $oldPlan->title, $plan->end, $maxEnd);
         }
 
         if(dao::isError()) return false;
@@ -639,7 +645,11 @@ class productplanModel extends model
         $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
 
         /* If the subplan is empty, update the plan. */
-        if(empty($childStatus)) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq(0)->where('id')->eq($parentID)->exec();
+        if(empty($childStatus))
+        {
+            $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq(0)->set('status')->eq('wait')->where('id')->eq($parentID)->exec();
+            return;
+        }
 
         if(count($childStatus) == 1 and isset($childStatus['wait']))
         {
@@ -711,7 +721,7 @@ class productplanModel extends model
             $plan->parent = $oldPlans[$planID]->parent;
             $plan->id     = $planID;
 
-            if(empty($plan->title)) return print(js::alter(sprintf($this->lang->productplan->errorNoTitle, $planID)));
+            if(empty($plan->title)) return print(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
             if($plan->begin > $plan->end and !empty($plan->end)) return print(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
 
             if($plan->begin == '') $plan->begin = $this->config->productplan->future;
@@ -922,7 +932,8 @@ class productplanModel extends model
                     ->fetchPairs();
                 if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
 
-                $plansOfStory = ',' . implode(',', $branchPlanPairs);
+                $plansOfStory = implode(',', $branchPlanPairs);
+                $plansOfStory = trim($plansOfStory, ',');
 
                 $this->dao->update(TABLE_STORY)->set("plan")->eq($plansOfStory)->where('id')->eq((int)$storyID)->exec();
 
@@ -1017,7 +1028,7 @@ class productplanModel extends model
             {
                 foreach($planStory as $id => $story)
                 {
-                    if($story->status == 'draft')
+                    if($story->status == 'draft' or $story->status == 'reviewing')
                     {
                         unset($planStory[$id]);
                         continue;
@@ -1121,6 +1132,16 @@ class productplanModel extends model
     {
         $params = "planID=$plan->id";
 
+        $canStart       = common::hasPriv('productplan', 'start');
+        $canFinish      = common::hasPriv('productplan', 'finish');
+        $canClose       = common::hasPriv('productplan', 'close');
+        $canCreateExec  = common::hasPriv('execution', 'create');
+        $canLinkStory   = common::hasPriv('productplan', 'linkStory', $plan);
+        $canLinkBug     = common::hasPriv('productplan', 'linkBug', $plan);
+        $canEdit        = common::hasPriv('productplan', 'edit');
+        $canCreateChild = common::hasPriv('productplan', 'create');
+        $canDelete      = common::hasPriv('productplan', 'delete');
+
         $menu  = '';
         $menu .= $this->buildMenu('productplan', 'start', $params, $plan, $type, 'play', 'hiddenwin', '', false, '', $this->lang->productplan->startAB);
         $menu .= $this->buildMenu('productplan', 'finish', $params, $plan, $type, 'checked', 'hiddenwin', '', false, '', $this->lang->productplan->finishAB);
@@ -1150,43 +1171,45 @@ class productplanModel extends model
 
             if($canClickExecution)
             {
-                $executionLink = $this->config->systemMode == 'new' ? '#projects' : helper::createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$plan->product");
-                if($this->config->systemMode == 'new')
-                {
-                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
-                }
-                else
-                {
-                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn' title='{$this->lang->productplan->createExecution}'");
-                }
+                $menu .= html::a('#projects', '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
             }
-            else
+            elseif($canCreateExec)
             {
                 $menu .= "<button type='button' class='btn disabled'><i class='icon-plus' title='{$this->lang->productplan->createExecution}'></i></button>";
             }
 
-            if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0)
+            if($type == 'browse' and ($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
             {
-                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
+                $menu .= "<div class='dividing-line'></div>";
             }
-            else
+
+            if($canLinkStory and $plan->parent >= 0)
+            {
+                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
+            }
+            elseif($canLinkStory)
             {
                 $menu .= "<button type='button' class='disabled btn'><i class='icon-link' title='{$this->lang->productplan->linkStory}'></i></button>";
             }
 
-            if(common::hasPriv('productplan', 'linkBug', $plan) and $plan->parent >= 0)
+            if($canLinkBug and $plan->parent >= 0)
             {
-                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
+                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
             }
-            else
+            elseif($canLinkBug)
             {
                 $menu .= "<button type='button' class='disabled btn'><i class='icon-bug' title='{$this->lang->productplan->linkBug}'></i></button>";
             }
 
-            $menu .= $this->buildMenu('productplan', 'edit', $params, $plan, $type);
+            $menu .= $this->buildMenu($this->app->rawModule, 'edit', $params, $plan, $type);
         }
 
-        $menu .= $this->buildMenu('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
+        $menu .= $this->buildMenu($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
+
+        if($type == 'browse' and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
+        {
+            $menu .= "<div class='dividing-line'></div>";
+        }
 
         if($type == 'browse') $menu .= $this->buildMenu('productplan', 'delete', "{$params}&confirm=no", $plan, $type, 'trash', 'hiddenwin', '', '', $this->lang->productplan->delete);
 
@@ -1196,10 +1219,10 @@ class productplanModel extends model
             $menu .= $this->buildFlowMenu('productplan', $plan, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $editClickable   = $this->buildMenu('productplan', 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
+            $editClickable   = $this->buildMenu($this->app->rawModule, 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
             $deleteClickable = $this->buildMenu('productplan', 'delete', $params, $plan, $type, '', '', '', '', '', '', false);
-            if(common::hasPriv('productplan', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-            if(common::hasPriv('productplan', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+            if($canEdit and $editClickable) $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+            if($canDelete and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
         }
 
         return $menu;

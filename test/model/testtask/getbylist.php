@@ -9,6 +9,9 @@ title=测试 testtaskModel->getByList();
 cid=1
 pid=1
 
+查看按照ID列表获取的测试单的数量 >> 5
+查看按照ID列表获取的测试单的详情 >> 测试单1,,wait,2022-04-08,2022-04-15
+
 */
 
 global $tester;

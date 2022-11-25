@@ -102,11 +102,11 @@ $(function()
         e.preventDefault();
     });
 
-    var $projectLi = $('#activeProject');
-    if($projectLi.length)
+    var $projectList = $('#activeProject');
+    if($projectList.length)
     {
-        var projectLi  = $projectLi[0];
-        $(".col ul.nav").animate({scrollTop: projectLi.offsetTop}, "slow");
+        var projectList = $projectList[0];
+        $(".col ul.nav").animate({scrollTop: projectList.offsetTop}, "slow");
     }
 });
 </script>
@@ -123,7 +123,7 @@ $(function()
         <?php $selected = key($projects);?>
         <?php foreach($projects as $project):?>
         <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
-          <a href="###" title="<?php echo $project->name?>" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
+          <a href="###" title="<?php echo $project->name?>" data-target='<?php echo "#tab3{$blockNavId}Content{$project->id}";?>' data-toggle="tab"><?php echo $project->name;?></a>
           <?php echo html::a(helper::createLink('project', 'index', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->index}");?>
         </li>
         <?php endforeach;?>
@@ -132,7 +132,7 @@ $(function()
     </div>
     <div class="col tab-content">
       <?php foreach($projects as $project):?>
-      <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
+      <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id='<?php echo "tab3{$blockNavId}Content{$project->id}";?>'>
         <div class="table-row">
           <?php if($project->model == 'scrum' or $project->model == 'kanban'):?>
           <div class='table-row'>
@@ -197,7 +197,7 @@ $(function()
               </div>
             </div>
           </div>
-          <?php if(!empty($project->executions)):?>
+          <?php if(!empty($project->executions) and $project->multiple):?>
           <div class="table-row project-info">
             <div class="col-2 text-right"><h4><?php echo $lang->block->last;?></h4></div>
             <div class="table-row lastIteration">
@@ -259,7 +259,7 @@ $(function()
               <div class="col-1-5"><?php echo $project->cv;?></div>
             </div>
           </div>
-        <?php endif;?>
+          <?php endif;?>
         </div>
       </div>
       <?php endforeach;?>

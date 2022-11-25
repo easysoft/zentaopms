@@ -54,6 +54,7 @@ $lang->execution->end                 = 'Fin';
 $lang->execution->dateRange           = 'Durée';
 $lang->execution->realBeganAB         = 'Actual Begin';
 $lang->execution->realEndAB           = 'Actual End';
+$lang->execution->teamCount           = 'nombre de personnes';
 $lang->execution->realBegan           = 'Début effectif';
 $lang->execution->realEnd             = 'Clôture effective';
 $lang->execution->to                  = 'à';
@@ -137,6 +138,7 @@ $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = "{$lang->executionCommon} List";
+$lang->execution->allProject          = 'Tous';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
@@ -144,8 +146,9 @@ $lang->execution->estimate = 'estimate';
 $lang->execution->consumed = 'consumed';
 $lang->execution->left     = 'Left';
 
-if($this->config->systemMode == 'new')     $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
+$lang->execution->copyTeamTip        = "copy Project/project team members";
+$lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';
+$lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』';
 
 $lang->execution->start    = 'Démarrer';
 $lang->execution->activate = 'Activer';
@@ -153,6 +156,7 @@ $lang->execution->putoff   = 'Ajourner';
 $lang->execution->suspend  = 'Suspendre';
 $lang->execution->close    = 'Fermer';
 $lang->execution->export   = 'Exporter';
+$lang->execution->next     = "Suivant";
 
 $lang->execution->endList[7]   = '1 Semaine';
 $lang->execution->endList[14]  = '2 Semaines';
@@ -172,6 +176,7 @@ $lang->execution->cfdTypeList['bug']   = "View By bug";
 
 $lang->team->account    = 'Utilisateur';
 $lang->team->role       = 'Rôle';
+$lang->team->roleAB     = 'Mon Rôle';
 $lang->team->join       = 'Ajouté';
 $lang->team->hours      = 'Heure/jour';
 $lang->team->days       = 'Jour';
@@ -191,16 +196,8 @@ $lang->execution->statusList['suspended'] = 'Suspendu';
 $lang->execution->statusList['closed']    = 'Fermé';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
-}
-else
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
-}
+$lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
+$lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 
 $lang->execution->kanbanAclList['private'] = 'Private';
 $lang->execution->kanbanAclList['open']    = 'Inherited Project';
@@ -275,8 +272,8 @@ $lang->execution->importBug           = 'Importer Bug';
 $lang->execution->tree                = 'Arboressence';
 $lang->execution->treeTask            = 'Seulement les Tâches';
 $lang->execution->treeStory           = 'Seulement les Stories';
-$lang->execution->treeOnlyTask        = 'Seulement les Tâches';
-$lang->execution->treeOnlyStory       = 'Seulement les Stories';
+$lang->execution->treeViewTask        = 'Seulement les Tâches';
+$lang->execution->treeViewStory       = 'Seulement les Stories';
 $lang->execution->storyKanban         = 'Story Kanban';
 $lang->execution->storySort           = 'Rang Story';
 $lang->execution->importPlanStory     = $lang->executionCommon . ' est créé!\nVoulez-vous importer des stories qui ont été ajoutées au Plan ?';
@@ -338,6 +335,9 @@ $lang->execution->stats                = 'Disponible: <strong>%s</strong>(h). Es
 $lang->execution->taskSummary          = "Total des tâches de cette page :<strong>%s</strong>. A Faire: <strong>%s</strong>. En cours: <strong>%s</strong>. &nbsp;&nbsp;&nbsp; Estimé: <strong>%s</strong>(h). Coût: <strong>%s</strong>(h). Reste: <strong>%s</strong>(h).";
 $lang->execution->pageSummary          = "Total des tâches de cette page: <strong>%total%</strong>. A Faire: <strong>%wait%</strong>. En cours: <strong>%doing%</strong>. &nbsp;&nbsp;&nbsp; Estimé: <strong>%estimate%</strong>(h). Coût: <strong>%consumed%</strong>(h). Reste: <strong>%left%</strong>(h).";
 $lang->execution->checkedSummary       = "Sélectionné: <strong>%total%</strong>. A Faire: <strong>%wait%</strong>. En cours: <strong>%doing%</strong>. &nbsp;&nbsp;&nbsp; Estimé: <strong>%estimate%</strong>(h). Coût: <strong>%consumed%</strong>(h). Reste: <strong>%left%</strong>(h).";
+$lang->execution->executionSummary     = "Total executions: <strong>%s</strong>.";
+$lang->execution->pageExecSummary      = "Total executions: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.";
+$lang->execution->checkedExecSummary   = "Selected: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.";
 $lang->execution->memberHoursAB        = "%s a <strong>%s</ strong> heures.";
 $lang->execution->memberHours          = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s Heures Disponibles</div><div class="segment-value">%s</div></div></div></div>';
 $lang->execution->countSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Tâches</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">En Cours</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">A Faire</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
@@ -347,6 +347,7 @@ $lang->execution->wbs                  = "Créer Tâche";
 $lang->execution->batchWBS             = "Créer Tâche en lot";
 $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Comment mettre à jour le Graphe d´atterrissage ?' class='btn btn-link'>Mise à jour <i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories         = "Aucune story ne peut être associée. Vérifiez s'il existe des stories dans {$lang->executionCommon} qui sont associées à {$lang->productCommon} et vérifiez qu'elles ont bien été validées.";
+$lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories       = "Les stories associées au {$lang->executionCommon} sont une portion des stories associées au {$lang->productCommon}. Les stories ne peuvent être associées à un {$lang->executionCommon} qu'après avoir été validées. <a href='%s'> Associer Stories</a> maintenant.";
 $lang->execution->haveDraft            = "%s stories sont encore en conception, elles ne peuvent pas être associées au {$lang->executionCommon} actuellement.";
 $lang->execution->doneExecutions       = 'Terminé';
@@ -365,11 +366,10 @@ $lang->execution->noExecution          = "Aucun {$lang->executionCommon}. ";
 $lang->execution->noExecutions         = "Aucun {$lang->execution->common}.";
 $lang->execution->noPrintData          = "No data can be printed.";
 $lang->execution->noMembers            = "Actuellement il n'y a aucun membre dans l'équipe. On ne va pas aller loin... ";
-$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
+$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100%s, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip  = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip      = "({$lang->SRCommon} has never been linked under the project, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "Choisissez une Equipe {$lang->executionCommon} à copier.";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Choisissez une Equipe {$lang->executionCommon} à copier.";
+$lang->execution->copyTeamTitle        = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";
 
 /* Interactive prompts. */
 $lang->execution->confirmDelete               = "Voulez-vous réellement supprimer le {$lang->executionCommon}[%s] ?";
@@ -384,8 +384,8 @@ $lang->execution->errorSameProducts           = "Ce {$lang->executionCommon} ne 
 $lang->execution->errorSameBranches           = "{$lang->executionCommon} cannot be linked to the same branch twice";
 $lang->execution->errorBegin                  = "The start time of {$lang->executionCommon} cannot be less than the start time of the project %s.";
 $lang->execution->errorEnd                    = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
-$lang->execution->errorLetterProject          = "The start time of stage cannot be less than the start time of the project %s.";
-$lang->execution->errorGreaterProject         = "The end time of stage cannot be greater than the end time %s of the project.";
+$lang->execution->errorLetterProject          = "The start time of {$lang->executionCommon} cannot be less than the start time of the project %s.";
+$lang->execution->errorGreaterProject         = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
 $lang->execution->errorCommonBegin            = 'The start date of ' . $lang->executionCommon . ' should be ≥ the start date of project : %s.';
 $lang->execution->errorCommonEnd              = 'The deadline of ' . $lang->executionCommon .  ' should be ≤ the deadline of project : %s.';
 $lang->execution->accessDenied                = "Votre accès au {$lang->executionCommon} est refusé ! Désolé.";
@@ -408,10 +408,11 @@ $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
 $lang->execution->confirmStoryToTask          = $lang->SRCommon . '%s are converted to tasks in the current. Do you want to convert them anyways?';
 $lang->execution->ge                          = "『%s』should be >= actual begin『%s』.";
-$lang->execution->storyDragError              = "The {$lang->SRCommon} is still a draft or has been changed, please drag it after the review";
+$lang->execution->storyDragError              = "The {$lang->SRCommon} is not active. Please activate and drag again.";
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
+$lang->execution->checkedExecutions           = "Pour s électionner l'élément%s.";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -463,7 +464,7 @@ $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Paramétrage";
 $lang->execution->setKanban     = "Paramétrage";
 $lang->execution->resetKanban   = "Réinitialiser";
-$lang->execution->printKanban   = "Impression";
+$lang->execution->printKanban   = "Imprimer Kanban";
 $lang->execution->fullScreen    = "Full Screen";
 $lang->execution->bugList       = "Bugs";
 
@@ -512,6 +513,11 @@ $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList[
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
+$lang->execution->featureBar['bug']['all']        = 'All';
+$lang->execution->featureBar['bug']['unresolved'] = 'Active';
+
+$lang->execution->featureBar['build']['all'] = 'Build List';
+
 $lang->execution->myExecutions = "J'étais impliqué";
 $lang->execution->doingProject = 'Projets en cours';
 
@@ -527,10 +533,19 @@ $lang->execution->treeLevel['task']  = 'Stories&Tâches';
 $lang->execution->treeLevel['story'] = 'Seulement Stories';
 
 $lang->execution->action = new stdclass();
-$lang->execution->action->opened  = '$date, created by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->edited  = '$date, edited by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->extra   = 'Linked products is %s.';
+$lang->execution->action->opened               = '$date, created by <strong>$actor</strong>. $extra' . "\n";
+$lang->execution->action->managed              = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
+$lang->execution->action->edited               = '$date, edited by <strong>$actor</strong>. $extra' . "\n";
+$lang->execution->action->extra                = 'Linked products is %s.';
+$lang->execution->action->startbychildactivate = '$date, activating the sub stage sets the execution status as Ongoing.' . "\n";
+$lang->execution->action->waitbychilddelete    = '$date, deleting the sub stage sets the execution status as waitting.' . "\n";
+$lang->execution->action->closebychilddelete   = '$date, deleting the sub stage sets the execution status as closing.' . "\n";
+$lang->execution->action->closebychildclose    = '$date, closing the sub stage sets the execution status as closing.' . "\n";
+
+$lang->execution->startbychildactivate = 'activated';
+$lang->execution->waitbychilddelete    = 'stop';
+$lang->execution->closebychilddelete   = 'closed';
+$lang->execution->closebychildclose    = 'closed';
 
 $lang->execution->statusColorList = array();
 $lang->execution->statusColorList['wait']      = '#0991FF';
@@ -539,11 +554,37 @@ $lang->execution->statusColorList['suspended'] = '#fdc137';
 $lang->execution->statusColorList['closed']    = '#838A9D';
 
 if(!isset($lang->execution->gantt)) $lang->execution->gantt = new stdclass();
-$lang->execution->gantt->color[0] = 'bbb';
-$lang->execution->gantt->color[1] = 'ff5d5d';
-$lang->execution->gantt->color[2] = 'ff9800';
-$lang->execution->gantt->color[3] = '16a8f8';
-$lang->execution->gantt->color[4] = '00da88';
+$lang->execution->gantt->progressColor[0] = '#B7B7B7';
+$lang->execution->gantt->progressColor[1] = '#FF8287';
+$lang->execution->gantt->progressColor[2] = '#FFC73A';
+$lang->execution->gantt->progressColor[3] = '#6BD5F5';
+$lang->execution->gantt->progressColor[4] = '#9DE88A';
+$lang->execution->gantt->progressColor[5] = '#9BA8FF';
+
+$lang->execution->gantt->color[0] = '#E7E7E7';
+$lang->execution->gantt->color[1] = '#FFDADB';
+$lang->execution->gantt->color[2] = '#FCECC1';
+$lang->execution->gantt->color[3] = '#D3F3FD';
+$lang->execution->gantt->color[4] = '#DFF5D9';
+$lang->execution->gantt->color[5] = '#EBDCF9';
+
+$lang->execution->gantt->textColor[0] = '#2D2D2D';
+$lang->execution->gantt->textColor[1] = '#8D0308';
+$lang->execution->gantt->textColor[2] = '#9D4200';
+$lang->execution->gantt->textColor[3] = '#006D8E';
+$lang->execution->gantt->textColor[4] = '#1A8100';
+$lang->execution->gantt->textColor[5] = '#660ABC';
+
+$lang->execution->gantt->stage = new stdclass();
+$lang->execution->gantt->stage->progressColor = '#70B8FE';
+$lang->execution->gantt->stage->color         = '#D2E7FC';
+$lang->execution->gantt->stage->textColor     = '#0050A7';
+
+$lang->execution->gantt->defaultColor         = '#EBDCF9';
+$lang->execution->gantt->defaultProgressColor = '#9BA8FF';
+$lang->execution->gantt->defaultTextColor     = '#660ABC';
+
+$lang->execution->gantt->bar_height = '24';
 
 $lang->execution->gantt->exportImg  = 'Export as Image';
 $lang->execution->gantt->exportPDF  = 'Export as PDF';

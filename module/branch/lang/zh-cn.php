@@ -57,6 +57,6 @@ $lang->branch->statusList = array();
 $lang->branch->statusList['active'] = '激活';
 $lang->branch->statusList['closed'] = '已关闭';
 
-$lang->branch->featureBar['manage']['all']    = '所有';
+$lang->branch->featureBar['manage']['all']    = '全部';
 $lang->branch->featureBar['manage']['active'] = '激活';
 $lang->branch->featureBar['manage']['closed'] = '已关闭';

@@ -14,7 +14,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $activeClass = $currentObjectType == 'all' ? 'btn-active-text' : '';?>
-    <?php echo html::a($this->createLink('action', 'trash', "objectType=all&type=$type"), "<span class='text'>" . $lang->all . "</span>", '', "class='btn btn-link $activeClass'");?>
+    <?php echo html::a($this->createLink('action', 'trash', "objectType=all&type=$type"), "<span class='text'>" . $lang->action->periods['all'] . "</span>", '', "class='btn btn-link $activeClass'");?>
     <?php
     /* Output the objectType order by preferredTypeConfig. */
     foreach($preferredTypeConfig as $objectType)
@@ -82,6 +82,15 @@
           <th class='c-object-type'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
           <th class='c-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php echo $lang->action->objectName;?></th>
+          <?php if($currentObjectType == 'execution'):?>
+          <th class='w-250px'><?php echo $this->lang->project->project;?></th>
+          <?php endif;?>
+          <?php if(strpos(',story,requirement,', ",$currentObjectType,") !== false):?>
+          <th class='w-250px'><?php echo $this->lang->story->product;?></th>
+          <?php endif;?>
+          <?php if($currentObjectType == 'task'):?>
+          <th class='w-250px'><?php echo $this->lang->task->execution;?></th>
+          <?php endif;?>
           <th class='c-user'><?php common::printOrderLink('actor', $orderBy, $vars, $lang->action->actor);?></th>
           <th class='c-full-date'><?php common::printOrderLink('date', $orderBy, $vars, $lang->action->date);?></th>
           <th class='c-actions'><?php echo $lang->actions;?></th>
@@ -129,12 +138,38 @@
             }
             else
             {
-                $tab = '';
+                $tab     = '';
+                $canView = common::hasPriv($module, $methodName);
                 if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";
-                echo html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab");
+                if($module == 'requirement') $module = 'story';
+                echo $canView ? html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab") : "<span title='$action->objectName'>$action->objectName</span>";
             }
             ?>
           </td>
+          <?php if($currentObjectType == 'execution'):?>
+          <td class="c-name flex" title="<?php echo $projectList[$action->project]->name;?>">
+            <span class="text-ellipsis"><?php echo $projectList[$action->project]->name;?></span>
+            <?php if($projectList[$action->project]->deleted):?>
+            <span class='label label-danger'><?php echo $this->lang->project->deleted;?></span>
+            <?php endif;?>
+          </td>
+          <?php endif;?>
+          <?php if(strpos(',story,requirement,', ",$currentObjectType,") !== false):?>
+          <td class="c-name flex" title="<?php echo $productList[$action->objectID]->productTitle;?>">
+            <span class="text-ellipsis"><?php echo $productList[$action->objectID]->productTitle;?></span>
+            <?php if($productList[$action->objectID]->productDeleted):?>
+            <span class='label label-danger'><?php echo $this->lang->story->deleted;?></span>
+            <?php endif;?>
+          </td>
+          <?php endif;?>
+          <?php if($currentObjectType == 'task'):?>
+          <td class="c-name flex" title="<?php echo $executionList[$action->execution]->name;?>">
+            <span class="text-ellipsis"><?php echo $executionList[$action->execution]->name;?></span>
+            <?php if($executionList[$action->execution]->deleted):?>
+            <span class='label label-danger'><?php echo $this->lang->execution->deleted;?></span>
+            <?php endif;?>
+          </td>
+          <?php endif;?>
           <td><?php echo zget($users, $action->actor);?></td>
           <td><?php echo $action->date;?></td>
           <td>

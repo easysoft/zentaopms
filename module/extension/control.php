@@ -145,7 +145,6 @@ class extension extends control
         $this->view->upgrade     = $upgrade;
         $this->view->title       = $installTitle . $extension;
 
-
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
@@ -186,7 +185,7 @@ class extension extends control
         $incompatible = $condition->zentao['incompatible'];
         if($this->extension->checkVersion($incompatible))
         {
-            $this->view->error = sprintf($this->lang->extension->errorIncompatible);
+            $this->view->error = $this->lang->extension->errorIncompatible;
             return $this->display();
         }
 
@@ -220,7 +219,7 @@ class extension extends control
                 $noDepends = false;
                 if(isset($installedExts[$code]))
                 {
-                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit, 'noBetween'))$noDepends = true;
+                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit, 'noBetween')) $noDepends = true;
                 }
                 else
                 {
@@ -235,7 +234,7 @@ class extension extends control
                     if(!empty($limit['max'])) $extVersion .= ' <=v' . $limit['max'];
                     $extVersion .=')';
                 }
-                if($noDepends)$dependsExt .= $code . $extVersion . ' ' . html::a(inlink('obtain', 'type=bycode&param=' . helper::safe64Encode($code)), $this->lang->extension->installExt, '_blank') . '<br />';
+                if($noDepends) $dependsExt .= $code . $extVersion . ' ' . html::a(inlink('obtain', 'type=bycode&param=' . helper::safe64Encode($code)), $this->lang->extension->installExt, '_blank') . '<br />';
             }
 
             if($noDepends)
@@ -428,7 +427,7 @@ class extension extends control
 
         if($_FILES)
         {
-            if($_FILES['file']['size'] == 0) return print(js::alert(str_replace("'", "\'", sprintf($this->lang->extension->errorFileNotEmpty, $fileName, $return->error))));
+            if($_FILES['file']['error'] == UPLOAD_ERR_NO_FILE) return print(js::alert($this->lang->extension->errorFileNotEmpty));
 
             $tmpName   = $_FILES['file']['tmp_name'];
             $fileName  = $_FILES['file']['name'];

@@ -115,10 +115,12 @@ function renderSpanItem(item, $item)
  */
 function renderProductItem(item, $item)
 {
-    var $title = $item.find('.title');
+    var $title   = $item.find('.title');
+    var isShadow = (typeof(item.shadow) != 'undefined' && item.shadow == '1') ? true : false;
+
     if(!$title.length)
     {
-        if(window.userPrivs.product)
+        if(window.userPrivs.product && !isShadow)
         {
             $title = $('<a class="title" />')
                 .attr('href', $.createLink('product', 'browse', 'productID=' + item._id));

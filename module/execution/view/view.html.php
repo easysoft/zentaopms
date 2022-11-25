@@ -24,10 +24,14 @@
         <div class="col-sm-6">
           <div class="panel block-burn" style="height: 280px">
             <div class="panel-heading">
-              <div class="panel-title"><?php echo $execution->name . $lang->execution->burn;?></div>
+              <div class="panel-title"><?php echo $execution->name . $lang->execution->burn;?>
+                <?php if(isset($execution->delay)):?>
+                <span class="label label-danger label-outline"><?php echo $lang->execution->delayed;?></span>
+                <?php endif;?>
+              </div>
               <?php if(common::hasPriv('execution', 'burn')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -38,9 +42,12 @@
                   <canvas id="burnCanvas"></canvas>
                 </div>
                 <div id="burnYUnit">(<?php echo $lang->execution->workHour;?>)</div>
-                <div id="burnLegend">
-                  <div class="line-ref"><?php echo $lang->execution->charts->burn->graph->reference;?></div>
-                  <div class="line-real"><?php echo $lang->execution->charts->burn->graph->actuality;?></div>
+                <div id="burnLegend" class='table-row'>
+                  <div class="line-ref table-col"><?php echo $lang->execution->charts->burn->graph->reference;?></div>
+                  <div class="line-real table-col"><?php echo $lang->execution->charts->burn->graph->actuality;?></div>
+                  <?php if(isset($execution->delay)):?>
+                  <div class="line-delay table-col"><?php echo $lang->execution->charts->burn->graph->delay;?></div>
+                  <?php endif;?>
                 </div>
               </div>
               <?php endif;?>
@@ -53,7 +60,7 @@
               <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
               <?php if(common::hasPriv('execution', 'dynamic')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -77,7 +84,7 @@
               <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
               <?php if(common::hasPriv('execution', 'team')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -123,7 +130,7 @@
             <div class="panel-title"><?php echo $lang->execution->doclib;?></div>
               <?php if(common::hasPriv('doc', 'objectLibs')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('doc', 'objectLibs', "type=execution&executionID=$execution->id&from=execution", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('doc', 'objectLibs', "type=execution&executionID=$execution->id&from=execution", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -157,7 +164,7 @@
               <div class="panel-title"><?php echo $execution->name . $lang->execution->CFD;?></div>
               <?php if(common::hasPriv('execution', 'cfd')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -182,7 +189,7 @@
               <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
               <?php if(common::hasPriv('execution', 'team')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -281,7 +288,7 @@
                 </p>
               </div>
             </div>
-            <?php if($this->config->systemMode == 'new'):?>
+            <?php if($this->config->systemMode == 'ALM'):?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->parent;?></strong>
@@ -305,7 +312,6 @@
               </div>
             </div>
             <?php endif;?>
-            <?php if($this->config->systemMode == 'new'):?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->project;?></strong>
@@ -319,12 +325,11 @@
                 </div>
               </div>
             </div>
-            <?php endif;?>
-            <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
+            <?php if(!in_array($execution->attribute, array('request', 'design', 'review')) and $execution->projectInfo->hasProduct): ?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->execution->manageProducts;?></strong>
-                <?php if(common::hasPriv('execution', 'manageproducts')) common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
+                <?php if(common::hasPriv('execution', 'manageproducts') and $execution->type != 'stage') common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">
@@ -339,7 +344,8 @@
                 </div>
               </div>
             </div>
-            <?php endif; ?>
+            <?php endif;?>
+            <?php if($execution->projectInfo->hasProduct or $execution->projectInfo->model == 'scrum'):?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">
@@ -360,12 +366,13 @@
                 </div>
               </div>
             </div>
+            <?php endif;?>
             <div class='detail'>
               <div class='detail-title'><strong><?php echo $lang->execution->lblStats;?></strong></div>
               <div class="detail-content">
                 <table class='table table-data data-stats'>
                   <tbody>
-                    <tr class='statsTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
+                    <tr class='statsTr'><td></td><td></td><td></td><td></td></tr>
                     <tr>
                       <td colspan="4">
                         <?php $progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;?>

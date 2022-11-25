@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -10,12 +11,11 @@ title=bugModel->batchCreate();
 cid=1
 pid=1
 
-测试正常批量创建bug1         >> 批量bug一,trunk,3,codeerror,3,3,1,101
-测试正常批量创建bug2         >> 批量bug五,trunk,codeerror,3,3,1,101
-测试正常批量创建bug3         >> 批量bug九,1,config,3,3,1,0
-测试短时间内重复批量创建bug  >> 0
-测试异常创建bug              >> 『影响版本』不能为空。
-
+测试正常批量创建bug1 >> 批量bug一,trunk,3,codeerror,3,3,1,101
+测试正常批量创建bug2 >> 批量bug五,trunk,codeerror,3,3,1,101
+测试正常批量创建bug3 >> 批量bug九,1,config,3,3,1,0
+测试短时间内重复批量创建bug >> 0
+测试异常创建bug >> 『影响版本』不能为空。
 
 */
 
@@ -29,7 +29,6 @@ $normal_create1 = array('title' => $title, 'types' => $type, 'openedBuilds' => $
 
 $title          = array('批量bug四','批量bug五','批量bug六');
 $normal_create2 = array('title' => $title, 'types' => $type, 'openedBuilds' => $openedBuild, 'severity' => $severity);
-
 
 $title          = array('批量bug七','批量bug八','批量bug九');
 $normal_create3 = array('title' => $title, 'types' => $type, 'openedBuilds' => $openedBuild, 'severity' => $severity);
@@ -45,4 +44,4 @@ r($bug->batchCreateObject($productID, $normal_create3))   && p('2:title,openedBu
 r($bug->batchCreateObject($productID, $normal_create1))   && p()                                                             && e('0');                                             // 测试短时间内重复批量创建bug
 r($bug->batchCreateObject($productID, $exception_create)) && p('message:0')                                                  && e("『影响版本』不能为空。"); // 测试异常创建bug
 
-system("./ztest init");
+$db->restoreDB();

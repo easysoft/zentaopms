@@ -54,6 +54,7 @@ $lang->execution->execPM           = "{$lang->execution->common}負責人";
 $lang->execution->QD               = '測試負責人';
 $lang->execution->RD               = '發佈負責人';
 $lang->execution->release          = '發佈';
+$lang->execution->teamCount        = '人數';
 $lang->execution->acl              = '訪問控制';
 $lang->execution->teamname         = '團隊名稱';
 $lang->execution->updateOrder      = '排序';
@@ -111,13 +112,11 @@ $lang->execution->batchCreateStory = "批量新建{$lang->SRCommon}";
 $lang->execution->batchCreateTask  = '批量建任務';
 
 /* Fields of zt_team. */
-$lang->execution->root     = '源ID';
-$lang->execution->estimate = '預計';
-$lang->execution->consumed = '消耗';
-$lang->execution->left     = '剩餘';
-
-if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以選擇複製項目或{$lang->execution->common}團隊的成員";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以選擇複製{$lang->executionCommon}團隊的成員";
+$lang->execution->root        = '源ID';
+$lang->execution->estimate    = '預計';
+$lang->execution->consumed    = '消耗';
+$lang->execution->left        = '剩餘';
+$lang->execution->copyTeamTip = "可以選擇複製項目或{$lang->execution->common}團隊的成員";
 
 $lang->execution->start    = "開始";
 $lang->execution->activate = "激活";
@@ -160,16 +159,8 @@ $lang->execution->statusList['suspended'] = '已掛起';
 $lang->execution->statusList['closed']    = '已關閉';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = "私有（團隊成員和項目負責人、干係人可訪問）";
-    $lang->execution->aclList['open']    = "繼承項目訪問權限（能訪問當前項目，即可訪問）";
-}
-else
-{
-    $lang->execution->aclList['private'] = "私有（團隊成員和{$lang->executionCommon}負責人可訪問）";
-    $lang->execution->aclList['open']    = "公開（有{$lang->executionCommon}視圖權限即可訪問）";
-}
+$lang->execution->aclList['private'] = "私有（團隊成員和項目負責人、干係人可訪問）";
+$lang->execution->aclList['open']    = "繼承項目訪問權限（能訪問當前項目，即可訪問）";
 
 $lang->execution->storyPoint = '故事點';
 
@@ -238,8 +229,8 @@ $lang->execution->importBug         = '導入Bug';
 $lang->execution->tree              = '樹狀圖';
 $lang->execution->treeTask          = '只看任務';
 $lang->execution->treeStory         = "只看{$lang->SRCommon}";
-$lang->execution->treeOnlyTask      = '樹狀圖只看任務';
-$lang->execution->treeOnlyStory     = "樹狀圖只看{$lang->SRCommon}";
+$lang->execution->treeViewTask      = '樹狀圖查看任務';
+$lang->execution->treeViewStory     = "樹狀圖查看{$lang->SRCommon}";
 $lang->execution->storyKanban       = "{$lang->SRCommon}看板";
 $lang->execution->storySort         = "{$lang->SRCommon}排序";
 $lang->execution->importPlanStory   = '創建' . $lang->executionCommon . '成功！\n是否導入計劃關聯的相關' . $lang->SRCommon . '？';
@@ -322,10 +313,8 @@ $lang->execution->noExecutions        = "暫時沒有{$lang->execution->common}�
 $lang->execution->noPrintData         = "暫無數據可打印";
 $lang->execution->noMembers           = '暫時沒有團隊成員。';
 $lang->execution->workloadTotal       = "工作量占比累計不應當超過100, 當前產品下的工作量之和為%s";
-// $lang->execution->linkProjectStoryTip = "(關聯{$lang->SRCommon}來源於項目下所關聯的{$lang->SRCommon})";
 $lang->execution->linkAllStoryTip     = "(項目下還未關聯{$lang->SRCommon}，可直接關聯該{$lang->execution->common}所關聯產品的{$lang->SRCommon})";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "選擇一個{$lang->execution->common}團隊來複制";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "選擇一個{$lang->project->common}或{$lang->execution->common}團隊來複制";
+$lang->execution->copyTeamTitle       = "選擇一個{$lang->project->common}或{$lang->execution->common}團隊來複制";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete               = "您確定刪除{$lang->executionCommon}[%s]嗎？";
@@ -410,7 +399,7 @@ $lang->kanbanSetting->optionList['0'] = '隱藏';
 $lang->kanbanSetting->optionList['1'] = '顯示';
 
 $lang->printKanban = new stdclass();
-$lang->printKanban->common  = '看板打印';
+$lang->printKanban->common  = '打印看板';
 $lang->printKanban->content = '內容';
 $lang->printKanban->print   = '打印';
 

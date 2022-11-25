@@ -1,0 +1,2 @@
+SELECT pid, name2 FROM tablename WHERE pid = 20
+/* LOCK IN SHARE MODE end_option */ LOCK IN SHARE MODE

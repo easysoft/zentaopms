@@ -61,9 +61,11 @@ $lang->doc->keywords     = '关键字';
 $lang->doc->url          = '文档URL';
 $lang->doc->files        = '附件';
 $lang->doc->addedBy      = '由谁添加';
+$lang->doc->addedByAB    = '创建者';
 $lang->doc->addedDate    = '添加时间';
 $lang->doc->editedBy     = '由谁更新';
 $lang->doc->editedDate   = '更新时间';
+$lang->doc->lastEditedBy = '最后更新者';
 $lang->doc->version      = '版本号';
 $lang->doc->basicInfo    = '基本信息';
 $lang->doc->deleted      = '已删除';
@@ -94,6 +96,7 @@ $lang->doc->main         = '文档主库';
 $lang->doc->order        = '排序';
 $lang->doc->doc          = '文档';
 $lang->doc->updateOrder  = '更新排序';
+$lang->doc->nextStep     = '下一步';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
@@ -153,6 +156,7 @@ $lang->doc->allCollections   = '查看全部收藏文档';
 $lang->doc->keywordsTips     = '多个关键字请用逗号分隔。';
 $lang->doc->sortLibs         = '文档库排序';
 $lang->doc->titlePlaceholder = '请输入标题';
+$lang->doc->confirm          = '确认';
 
 global $config;
 /* 查询条件列表 */
@@ -161,7 +165,7 @@ $lang->doc->allExecutions = '所有' . $lang->executionCommon;
 $lang->doc->allProjects   = '所有' . $lang->projectCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
-if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = '项目文档库';
+$lang->doc->libTypeList['project']   = '项目文档库';
 $lang->doc->libTypeList['execution'] = $lang->execution->common . '文档库';
 $lang->doc->libTypeList['api']       = '接口库';
 $lang->doc->libTypeList['custom']    = '自定义文档库';

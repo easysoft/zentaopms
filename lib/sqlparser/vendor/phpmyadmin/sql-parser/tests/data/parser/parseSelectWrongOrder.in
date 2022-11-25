@@ -1,0 +1,1 @@
+SELECT pid, name2 FROM tablename LIMIT 10 WHERE pid = 20

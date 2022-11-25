@@ -1,8 +1,10 @@
 <?php
 $lang->repo->common          = 'Repo';
+$lang->repo->codeRepo        = 'Code Library';
 $lang->repo->browse          = 'View';
 $lang->repo->viewRevision    = 'View Revision';
 $lang->repo->product         = 'Product';
+$lang->repo->projects        = 'Project';
 $lang->repo->execution       = $lang->execution->common;
 $lang->repo->create          = 'Create';
 $lang->repo->maintain        = 'Repo List';
@@ -142,6 +144,7 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['Gogs']       = 'Gogs';
 $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';

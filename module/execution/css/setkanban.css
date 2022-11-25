@@ -6,3 +6,5 @@
 #mainContent .radio-inline+.radio-inline {margin-left: 0px; padding-top: 8px;}
 #mainContent label > .tip {color: #999;}
 #mainContent #cardBox th {vertical-align: middle;}
+#colWidth + .fixedTip, #maxColWidth + .autoTip {margin-left: 35px; color: #2667E3; padding-top: 1px;}
+[lang^=en] #colWidth + .fixedTip, [lang^=en] #maxColWidth + .autoTip, [lang^=de] #colWidth + .fixedTip, [lang^=de] #maxColWidth + .autoTip, [lang^=fr] #colWidth + .fixedTip, [lang^=fr] #maxColWidth + .autoTip {margin-left: 50px;}

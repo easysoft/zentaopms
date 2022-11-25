@@ -10,9 +10,8 @@ title=测试 webhookModel->buildData();
 cid=1
 pid=1
 
-正常传入的情况 >> http.\/builddata.php?m=product&f=view&id=1
+正常传入的情况 >> "msgtype":"markdown","markdown"
 不传objectType >> 0
-不传objectID >> 0
 不传actionType >> 0
 不传actionID >> admin\u521b\u5efa\u4ea7\u54c1
 

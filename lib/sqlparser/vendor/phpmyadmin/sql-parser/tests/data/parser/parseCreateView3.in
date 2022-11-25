@@ -1,0 +1,5 @@
+CREATE VIEW GoodStudent AS
+    SELECT `one space`, `two spaces`
+      FROM `Une table espace`
+        WHERE `one space` > 3.0
+    WITH CHECK OPTION

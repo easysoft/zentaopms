@@ -42,16 +42,18 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
       <table class='table table-form'>
         <tbody>
           <tr>
-            <th><?php echo $lang->testcase->product;?></th>
-            <td>
+            <th><?php echo $hiddenProduct ? $lang->testcase->module : $lang->testcase->product;?></th>
+            <td class='<?php if($hiddenProduct) echo 'hidden';?>'>
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen'");?>
                 <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
               </div>
             </td>
-            <td style='padding-left:15px;'>
+            <td style='<?php if(!$hiddenProduct) echo 'padding-left:15px;';?>'>
               <div class='input-group' id='moduleIdBox'>
+                <?php if(!$hiddenProduct):?>
                 <span class="input-group-addon w-80px"><?php echo $lang->testcase->module?></span>
+                <?php endif;?>
                 <?php
                 echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
                 if(count($moduleOptionMenu) == 1)

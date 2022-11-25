@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  **/
-class bugCloseEntry extends Entry
+class bugCloseEntry extends entry
 {
     /** 
      * POST method.
      *
      * @param  int    $bugID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($bugID)
     {   
@@ -31,7 +31,7 @@ class bugCloseEntry extends Entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         $bug = $this->loadModel('bug')->getByID($bugID);
 
-        $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }   
 }
 

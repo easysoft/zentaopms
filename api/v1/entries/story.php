@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class storyEntry extends Entry
+class storyEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($storyID)
     {
@@ -81,7 +81,7 @@ class storyEntry extends Entry
         $story->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $story->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**
@@ -89,7 +89,7 @@ class storyEntry extends Entry
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($storyID)
     {
@@ -108,7 +108,7 @@ class storyEntry extends Entry
         if(!isset($data->status)) return $this->sendError(400, 'error');
 
         $story = $this->story->getByID($storyID);
-        $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**
@@ -116,7 +116,7 @@ class storyEntry extends Entry
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($storyID)
     {
@@ -124,6 +124,6 @@ class storyEntry extends Entry
         $control->delete($storyID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

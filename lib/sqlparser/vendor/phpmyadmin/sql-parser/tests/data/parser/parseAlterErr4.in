@@ -1,0 +1,1 @@
+ALTER TABLE actor ALTER last_update2 SET DEFAULT value1';

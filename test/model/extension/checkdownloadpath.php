@@ -9,6 +9,9 @@ title=测试 extensionModel->checkDownloadPath();
 cid=1
 pid=1
 
+查看获取到的结果数量 >> 2
+查看获取到的结果 >> ok
+
 */
 
 global $tester;

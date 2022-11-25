@@ -23,6 +23,12 @@ class datatableModel extends model
     public function getFieldList($module)
     {
         if(!isset($this->config->$module)) $this->loadModel($module);
+        if($this->session->hasProduct == 0 and (strpos($this->config->datatable->noProductModule, ",$module,") !== false))
+        {
+            $productIndex = array_search('product', $this->config->$module->datatable->defaultField);
+            if($productIndex) unset($this->config->$module->datatable->defaultField[$productIndex]);
+            if(isset($this->config->$module->datatable->fieldList['product'])) unset($this->config->$module->datatable->fieldList['product']);
+        }
         if($this->session->currentProductType === 'normal') unset($this->config->$module->datatable->fieldList['branch']);
         foreach($this->config->$module->datatable->fieldList as $field => $items)
         {

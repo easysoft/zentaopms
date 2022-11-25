@@ -8,3 +8,6 @@
 #switchButton {background: #fff !important;}
 .panel-actions {position: relative; padding: 0;}
 .panel-actions .btn-icon {padding-left: 7px;}
+[lang^=de] .c-pri {width: 69px;}
+[lang^=fr] .c-pri {width: 82px;}
+[lang^=en] .c-user, [lang^=fr] .c-user {width: 100px !important;}

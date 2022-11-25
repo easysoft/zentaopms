@@ -16,7 +16,7 @@ class executionCasesEntry extends entry
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($executionID = 0)
     {
@@ -24,7 +24,7 @@ class executionCasesEntry extends entry
         if(empty($executionID)) return $this->sendError(400, 'Need execution id.');
 
         $control = $this->loadController('execution', 'testcase');
-        $control->testcase($executionID, $this->param('status', 'all'), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->testcase($executionID, $this->param('product', 0), $this->param('branch', 0), $this->param('status', 'all'), $this->param('module', 0), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 

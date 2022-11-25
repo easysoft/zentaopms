@@ -13,7 +13,7 @@ $(document).ready(function()
         for(var i = 0 ; i < arr.length ; i++)
         {
             line = i + 1;
-            code += "<tr data-line='" + line +"'><th id='L" + line + "'><div class='comment-btn view'><span class='icon-wrapper'><i class='icon-plus'></i></span></div>" + line + "</th><td>" + (arr[i] || '&nbsp;') + rowTip +  "</td></tr>";
+            code += "<tr data-line='" + line +"'><th id='L" + line + "'><span class='comment-btn view'><span class='icon-wrapper'><i class='icon-bug'></i><span class='label label-light label-badge bug-num'>0</span></span></span><span>" + line + "</span></th><td>" + (arr[i] || '&nbsp;') + rowTip +  "</td></tr>";
         }
         $pre.html("<table><tbody>" + code + "</tbody></table>");
     }

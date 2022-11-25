@@ -1,14 +1,11 @@
 .side-col .cell {padding: 0px;}
 .side-col #legendProjectAndTask .list-unstyled {padding: 10px; border: 1px solid #ddd; border-top: 0px; margin: 0px;}
 .tab-pane table {border: 1px solid #ddd; border-top: none;}
-.page-title{max-width: 80%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-.pull-left{max-width: 80%;}
 .MRThWidth {width: 90px !important;}
 .btn-edit-comment {z-index: 100;}
 
 #assignedTo a {border-color: transparent;}
 #assignedTo a:hover {border-color: rgba(0,0,0,.2);}
-#childrenTable tbody > tr:nth-child(odd) {background-color: #f5f5f5;}
 
 .c-id {width: 50px;}
 .c-pri {width: 40px;}
@@ -18,3 +15,10 @@
 .c-consumedAB {width: 60px;}
 .c-leftAB {width: 60px;}
 .c-actions {width: 175px;}
+
+[lang^='de'] #mainContent .main-actions .btn-toolbar .btn {padding-left: 3px; padding-right: 3px;}
+
+#childrenTable .c-id {width: 60px;}
+#childrenTable .c-lblPri {width: 50px;}
+
+#legendTeam .c-hours {width: 72px;}

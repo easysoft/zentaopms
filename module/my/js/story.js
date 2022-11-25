@@ -7,7 +7,7 @@ $(function()
         if($td.find('.label').length > 0) labelWidth = $td.find('.label').width();
         $td.find('a').eq(0).css('max-width', $td.width() - labelWidth - 60);
     });
-
+    toggleFold('#myStoryForm', [], 0, 'story');
     $(document).on('click', '.story-toggle', function(e)
     {
         var $toggle = $(this);

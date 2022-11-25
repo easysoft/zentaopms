@@ -21,4 +21,22 @@ $(function()
             type: 'iframe'
         }).trigger('click');
     }
+
+    $('#todoForm').table(
+    {
+        replaceId: 'todoIDList',
+        statisticCreator: function(table)
+        {
+            var $table            = table.getTable();
+            var $checkedRows      = $table.find('tbody>tr.checked');
+            var checkedTotal      = $checkedRows.length;
+            var checkedWait       = $checkedRows.filter("[data-status=wait]").length;
+            var checkedDoing      = $checkedRows.filter("[data-status=doing]").length;
+            var checkedStatistics = checkedSummary.replace('%total%', checkedTotal)
+                    .replace('%wait%', checkedWait)
+                    .replace('%doing%', checkedDoing);
+
+            return checkedTotal ? checkedStatistics : pageSummary;
+        }
+    });
 });

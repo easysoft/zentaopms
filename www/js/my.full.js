@@ -99,6 +99,12 @@
     }
 
     init();
+
+    /* Hide context menu when window is scroll. */
+    $(window).on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
 }(jQuery));
 
 /**
@@ -505,7 +511,6 @@ function computePasswordStrength(password)
     var strength = 0;
     var length   = password.length;
 
-    var uniqueChars = '';
     var complexity  = new Array();
     for(i = 0; i < length; i++)
     {
@@ -513,7 +518,7 @@ function computePasswordStrength(password)
         var asc = letter.charCodeAt();
         if(asc >= 48 && asc <= 57)
         {
-            complexity[2] = 2;
+            complexity[0] = 1;
         }
         else if((asc >= 65 && asc <= 90))
         {
@@ -521,28 +526,19 @@ function computePasswordStrength(password)
         }
         else if(asc >= 97 && asc <= 122)
         {
-            complexity[0] = 1;
+            complexity[2] = 4;
         }
         else
         {
-            complexity[3] = 3;
+            complexity[3] = 8;
         }
-        if(uniqueChars.indexOf(letter) == -1) uniqueChars += letter;
     }
 
-    if(uniqueChars.length > 4) strength += uniqueChars.length - 4;
     var sumComplexity = 0;
-    var complexitySize = 0;
-    for(i in complexity)
-    {
-        complexitySize += 1;
-        sumComplexity += complexity[i];
-    }
-    strength += sumComplexity + (2 * (complexitySize - 1));
-    if(length < 6 && strength >= 10) strength = 9;
+    for(i in complexity) sumComplexity += complexity[i];
 
-    strength = strength > 29 ? 29 : strength;
-    strength = Math.floor(strength / 10);
+    if((sumComplexity == 7 || sumComplexity == 15) && password.length >= 6) strength = 1;
+    if(sumComplexity == 15 && password.length >= 10) strength = 2;
 
     return strength;
 }
@@ -838,9 +834,9 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
     $parentTd = $form.find('td.has-child');
     if($parentTd.length == 0) return false;
 
-    var toggleClass = objectType == 'product' ? 'story-toggle' : 'task-toggle';
-    var nameClass   = objectType == 'product' ? 'c-title'      : 'c-name';
-    $form.find('th.' + nameClass).append("<button type='button' id='toggleFold' class='btn btn-mini collapsed'>" + unfoldAll + "</button>");
+    var toggleClass = ['product', 'requirement'].includes(objectType) ? 'story-toggle' : 'task-toggle';
+    var nameClass   = ['product', 'productplan'].indexOf(objectType) !== -1 ? 'c-title' : 'c-name';
+    $form.find('th.' + nameClass).addClass('clearfix').append("<span id='toggleFold' class='collapsed'><i  class='icon icon-angle-double-right'></i></span>");
 
     var allUnfold = true;
     $parentTd.each(function()
@@ -853,7 +849,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
         $(this).find('a.' + toggleClass).addClass('collapsed')
     })
 
-    $form.find('th.' + nameClass + ' #toggleFold').html(allUnfold ? foldAll : unfoldAll).toggleClass('collapsed', !allUnfold);
+    $form.find('th.' + nameClass + ' #toggleFold').toggleClass('collapsed', !allUnfold);
 
     $(document).on('click', '#toggleFold', function()
     {
@@ -868,7 +864,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
             newUnfoldID.push(dataID);
         })
 
-        $(this).html(collapsed ? foldAll : unfoldAll).toggleClass('collapsed', !collapsed);
+        $(this).toggleClass('collapsed', !collapsed);
         url = createLink('misc', 'ajaxSetUnfoldID', 'objectID=' + objectID + '&objectType=' + objectType + '&action=' + (collapsed ? 'add' : 'delete'));
         $.post(url, {'newUnfoldID': JSON.stringify(newUnfoldID)});
     });
@@ -888,7 +884,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
         setTimeout(function()
         {
             hasCollapsed = $table.find('td.has-child a.' + toggleClass + '.collapsed').length != 0;
-            $('#toggleFold').html(hasCollapsed ? unfoldAll : foldAll).toggleClass('collapsed', hasCollapsed);
+            $('#toggleFold').toggleClass('collapsed', hasCollapsed);
         }, 100);
 
         $.post(url, {'newUnfoldID': JSON.stringify(newUnfoldID)});
@@ -940,19 +936,21 @@ function adjustMenuWidth()
  * @access public
  * @return void
  */
-function scrollToSelected(id)
+function scrollToSelected()
 {
-    if(typeof(id) == 'undefined') id = '#dropMenu .table-col .list-group'
-
-    $id = $(id);
-    $selected = $id.find('.selected');
-
-    $id.mouseout(function(){$(this).find('a.active:not(.not-list-item)').removeClass('active')});
-    if($selected.length > 0)
+    setTimeout(function()
     {
-        var offsetHeight = 75;
-        $id.scrollTop($selected.position().top - offsetHeight);
-    }
+        $selected = $('#dropMenu .selected');
+        if($selected.length == 0) return;
+
+        $id = $selected.closest('.list-group');
+        $id.mouseout(function(){$(this).find('a.active:not(.not-list-item)').removeClass('active')});
+
+        var fixOffset = 160;
+        offsetTop = $selected.offset().top;
+        if(offsetTop < fixOffset) return;
+        $id.scrollTop(offsetTop - fixOffset);
+    }, 100);
 }
 
 /**
@@ -1316,4 +1314,85 @@ function setCustomFieldsStyle(maxFieldCount, $name, nameMinWidth)
     }
 
     if($name.width() < nameMinWidth) $name.width(200);
+}
+
+/**
+ * Refresh budget units of the project.
+ *
+ * @param  object $data
+ * @access public
+ * @return void
+ */
+function refreshBudgetUnit(data)
+{
+    $('#budgetUnit').val(data.budgetUnit).trigger('chosen:updated');
+    if(typeof(data.availableBudget) == 'undefined')
+    {
+        $('#budget').removeAttr('placeholder').attr('disabled', true);
+        $('#future').prop('checked', true);
+    }
+    else
+    {
+        $('#budget').removeAttr('disabled');
+        $('#future').prop('checked', false);
+    }
+}
+
+/**
+ * Handle radio logic of Kanban column width setting.
+ *
+ * @access public
+ * @return void
+ */
+function handleKanbanWidthAttr ()
+{
+    $('#colWidth, #minColWidth, #maxColWidth').attr('onkeyup', 'value=value.match(/^\\d+$/) ? value : ""');
+    $('#colWidth, #minColWidth, #maxColWidth').attr('maxlength', '3');
+    var fluidBoard = $("#mainContent input[name='fluidBoard'][checked='checked']").val() || 0;
+    var addAttrEle = fluidBoard == 0 ? '#colWidth' : '#minColWidth, #maxColWidth';
+    var $fixedTip  = $('#colWidth + .fixedTip');
+    var $autoTip   = $('#maxColWidth + .autoTip');
+    $(addAttrEle).closest('.width-radio-row').addClass('required');
+    $('#colWidth').attr('disabled',fluidBoard == 1);
+    $('#minColWidth, #maxColWidth').attr('disabled',fluidBoard == 0);
+    $("#minColWidth, #maxColWidth").on('input', function()
+    {
+        $('#minColWidthLabel, #maxColWidthLabel').remove();
+        $('#minColWidth, #maxColWidth').removeClass('has-error');
+    });
+
+    if(fluidBoard == 1)
+    {
+        $fixedTip.addClass('hidden');
+        $autoTip.removeClass('hidden');
+    }
+    else
+    {
+        $fixedTip.removeClass('hidden');
+        $autoTip.addClass('hidden');
+    }
+
+    $(document).on('change', "#mainContent input[name='fluidBoard']", function(e)
+    {
+        $('#colWidth').attr('disabled', e.target.value == 1);
+        $('#minColWidth, #maxColWidth').attr('disabled', e.target.value == 0);
+        if(e.target.value == 0 && $('#minColWidthLabel, #maxColWidthLabel'))
+        {
+            $('#colWidth').closest('.width-radio-row').addClass('required');
+            $('#minColWidth, #maxColWidth').closest('.width-radio-row').removeClass('required');
+            $('#minColWidthLabel, #maxColWidthLabel').remove();
+            $('#minColWidth, #maxColWidth').removeClass('has-error');
+            $fixedTip.removeClass('hidden');
+            $autoTip.addClass('hidden');
+        }
+        else if(e.target.value == 1 && $('#colWidthLabel'))
+        {
+            $('#minColWidth, #maxColWidth').closest('.width-radio-row').addClass('required');
+            $('#colWidth').closest('.width-radio-row').removeClass('required');
+            $('#colWidthLabel').remove();
+            $('#colWidth').removeClass('has-error');
+            $fixedTip.addClass('hidden');
+            $autoTip.removeClass('hidden');
+        }
+    });
 }

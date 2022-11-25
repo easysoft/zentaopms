@@ -35,52 +35,75 @@ class control extends baseControl
 
         $this->app->setOpenApp();
 
-        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE != 'api')) $this->setPreference();
+        if(defined('IN_USE') or (defined('RUN_MODE') and !in_array(RUN_MODE, array('api', 'xuanxuan')))) $this->setPreference();
 
         if(!isset($this->config->bizVersion)) return false;
 
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh and (defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
-            if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
-            {
-                if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
-                {
-                    $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
-
-                    if(isset($this->config->{$this->moduleName}->exportFields))
-                    {
-                        foreach($exportFields  as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
-                    }
-
-                    if(isset($this->config->{$this->moduleName}->list->exportFields))
-                    {
-                        foreach($exportFields  as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
-                    }
-
-                    foreach($exportFields as $flowField => $exportField)
-                    {
-                        if(!isset($this->lang->{$this->moduleName}->$flowField)) $this->lang->{$this->moduleName}->$flowField = $exportField->name;
-                    }
-                }
-            }
-
-            /* Append editor field to this module config from workflow. */
-            $textareaFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchAll('field');
-            if($textareaFields)
-            {
-                $editorIdList = array();
-                foreach($textareaFields as $textareaField) $editorIdList[] = $textareaField->field;
-
-                if(!isset($this->config->{$this->moduleName})) $this->config->{$this->moduleName} = new stdclass();
-                if(!isset($this->config->{$this->moduleName}->editor)) $this->config->{$this->moduleName}->editor = new stdclass();
-                if(!isset($this->config->{$this->moduleName}->editor->{$this->methodName})) $this->config->{$this->moduleName}->editor->{$this->methodName} = array('id' => '', 'tools' => 'simpleTools');
-                $this->config->{$this->moduleName}->editor->{$this->methodName}['id'] .= ',' . join(',', $editorIdList);
-                trim($this->config->{$this->moduleName}->editor->{$this->methodName}['id'], ',');
-            }
+            $this->extendExportFields();
+            $this->extendEditorFields();
 
             /* If workflow is created by a normal user, set priv. */
             if(isset($this->app->user) and !$this->app->user->admin) $this->setDefaultPrivByWorkflow();
+        }
+    }
+
+    /**
+     * Append export fields to the config of this module from workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function extendExportFields()
+    {
+        if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
+        {
+            if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
+            {
+                $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
+
+                if(isset($this->config->{$this->moduleName}->exportFields))
+                {
+                    foreach($exportFields as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
+                }
+
+                if(isset($this->config->{$this->moduleName}->list->exportFields))
+                {
+                    foreach($exportFields as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
+                }
+
+                foreach($exportFields as $flowField => $exportField)
+                {
+                    if(!isset($this->lang->{$this->moduleName}->$flowField)) $this->lang->{$this->moduleName}->$flowField = $exportField->name;
+                }
+            }
+        }
+    }
+
+    /**
+     * Append editor fields to the config of this module from workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function extendEditorFields()
+    {
+        $moduleName = $this->moduleName;
+        $methodName = $this->methodName;
+
+        $textareaFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchAll('field');
+        if($textareaFields)
+        {
+            $editorIdList = array();
+            foreach($textareaFields as $textareaField) $editorIdList[] = $textareaField->field;
+
+            if(!isset($this->config->{$moduleName})) $this->config->{$moduleName} = new stdclass();
+            if(!isset($this->config->{$moduleName}->editor)) $this->config->{$moduleName}->editor = new stdclass();
+            if(!isset($this->config->{$moduleName}->editor->{$methodName})) $this->config->{$moduleName}->editor->{$methodName} = array('id' => '', 'tools' => 'simpleTools');
+            $this->config->{$moduleName}->editor->{$methodName}['id'] .= ',' . join(',', $editorIdList);
+            trim($this->config->{$moduleName}->editor->{$methodName}['id'], ',');
         }
     }
 
@@ -146,19 +169,92 @@ class control extends baseControl
     }
 
     /**
-     * 企业版部分功能是从然之合并过来的。然之代码中调用loadModel方法时传递了一个非空的appName，在禅道中会导致错误。
+     * 企业版部分功能是从然之合并过来的。ZDOO代码中调用loadModel方法时传递了一个非空的appName，在禅道中会导致错误。
      * 调用父类的loadModel方法来避免这个错误。
-     * Some codes merged from ranzhi called the function loadModel with a non-empty appName which causes an error in zentao.
+     * Some codes merged from ZDOO called the function loadModel with a non-empty appName which causes an error in zentao.
      * Call the parent function with empty appName to avoid this error.
      *
-     * @param   string  $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
-     * @param   string  $appName    The app name, if empty, use current app's name.
-     * @access  public
-     * @return  object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
     public function loadModel($moduleName = '', $appName = '')
     {
         return parent::loadModel($moduleName);
+    }
+
+    /**
+     * 企业版部分功能是从然之合并过来的。ZDOO代码中调用loadZen方法时传递了一个非空的appName，在禅道中会导致错误。
+     * 调用父类的loadZen方法来避免这个错误。
+     * Some codes merged from ZDOO called the function loadZen with a non-empty appName which causes an error in zentao.
+     * Call the parent function with empty appName to avoid this error.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
+     */
+    public function loadZen($moduleName = '', $appName = '')
+    {
+        return parent::loadZen($moduleName);
+    }
+
+    /**
+     * 加载model的class扩展，主要是为了开发加密代码使用。
+     * 可以将主要的逻辑存放到$moduleName/ext/model/class/$extensionName.class.php中。
+     * 然后在ext/model/$extension.php的扩展里面使用$this->loadExtension()来调用相应的方法。
+     * ext/model/class/*.class.php代码可以加密。而ext/model/*.php可以不用加密。
+     * 因为框架对model的扩展是采取合并文件的方式，ext/model/*.php文件不能加密。
+     *
+     * Load extension class of a model thus user can encrypt the code.
+     * You can put the main extension logic codes in $moduleName/ext/model/class/$extensionName.class.php.
+     * And call them by the ext/model/$extension.php like this: $this->loadExtension('myextension')->method().
+     * You can encrypt the code in ext/model/class/*.class.php.
+     * Because the framework will merge the extension files in ext/model/*.php to the module/model.php.
+     *
+     * @param  string $extensionName
+     * @param  string $moduleName
+     * @access public
+     * @return void
+     */
+    public function loadExtension($extensionName, $moduleName = '')
+    {
+        if(empty($extensionName)) return false;
+        if(empty($moduleName)) $moduleName = $this->moduleName;
+
+        $moduleName    = strtolower($moduleName);
+        $extensionName = strtolower($extensionName);
+
+        $type      = 'model';
+        $className = strtolower(get_class($this));
+        if($className == $moduleName . 'zen' || $className == 'ext' . $moduleName . 'zen') $type = 'zen';
+
+        /* 设置扩展类的名字。Set the extension class name. */
+        $extensionClass = $extensionName . ucfirst($moduleName);
+        if($type != 'model') $extensionClass .= ucfirst($type);
+        if(isset($this->$extensionClass)) return $this->$extensionClass;
+
+        /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
+        $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $type);
+        if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['custom'] . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['saas']   . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['vision'] . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['xuan']   . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['common'] . 'class/' . $extensionName . '.class.php';
+
+        /* 载入父类。Try to import parent model file auto and then import the extension file. */
+        if(!class_exists($moduleName . ucfirst($type))) helper::import($this->app->getModulePath($this->appName, $moduleName) . $type . '.php');
+        if(!helper::import($extensionFile)) return false;
+        if(!class_exists($extensionClass)) return false;
+
+        /* 实例化扩展类。Create an instance of the extension class and return it. */
+        $extensionObject = new $extensionClass;
+        if($type == 'model') $extensionClass = str_replace(ucfirst($type), '', $extensionClass);
+        $this->$extensionClass = $extensionObject;
+        $this->$extensionClass->view = $this->view;
+        return $extensionObject;
     }
 
     /**
@@ -389,27 +485,21 @@ class control extends baseControl
      *                          inForm=0|1              The fields displayed in a form or not. The default is 1.
      *                          inCell=0|1              The fields displayed in a div with class cell or not. The default is 0.
      * @param  bool   $print
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
-    public function printExtendFields($object, $type, $extras = '', $print = true)
+    public function printExtendFields($object, $type, $extras = '', $print = true, $moduleName = '', $methodName = '')
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        $moduleName = $this->app->getModuleName();
-        $methodName = $this->app->getMethodName();
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $methodName : $this->app->getMethodName();
         $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
         if(!$print) return $fields;
 
-        $picker = '';
-        //$jsRoot = $this->config->webRoot . "js/";
-        //$picker = file_get_contents($this->app->getBasePath() . 'app/sys/common/view/picker.html.php');
-        //$picker = substr($picker, strpos($picker, '<style>'));
-
-        //js::import($jsRoot . 'picker/min.js');
-        //css::import($jsRoot . 'picker/min.css');
-
-        echo $picker . $fields;
+        echo $fields;
     }
 
     /**
@@ -559,4 +649,42 @@ class control extends baseControl
         if($message) $this->send(array('result' => 'fail', 'message' => $message));
     }
 
+    /**
+     * Call the functions declared in the tao files.
+     *
+     * @param  string $method
+     * @param  array  $arguments
+     * @access public
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        $moduleName = $this->app->getModuleName();
+        $zenClass   = $moduleName . 'Zen';
+
+        if(is_callable(array($this->{$zenClass}, $method))) return call_user_func_array(array($this->{$zenClass}, $method), $arguments);
+
+        $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+    }
+
+    /**
+     * Call the static functions declared in the tao files.
+     *
+     * @param  string $method
+     * @param  array  $arguments
+     * @access public
+     * @return mixed
+     */
+    public static function __callStatic($method, $arguments)
+    {
+        global $app;
+        $moduleName = $app->getModuleName();
+        $zenClass   = 'ext' . $moduleName . 'Zen';
+        if(is_callable("{$zenClass}::{$method}")) return call_user_func_array("{$zenClass}::{$method}", $arguments);
+
+        $zenClass = $moduleName . 'Zen';
+        if(is_callable("{$zenClass}::{$method}")) return call_user_func_array("{$zenClass}::{$method}", $arguments);
+
+        $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+    }
 }

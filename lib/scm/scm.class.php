@@ -221,6 +221,19 @@ class scm
     }
 
     /**
+     * Get commits by MR branches.
+     *
+     * @param  string $sourceBranch
+     * @param  string $targetBranch
+     * @access public
+     * @return array
+     */
+    public function getMRCommits($sourceBranch, $targetBranch)
+    {
+        return $this->engine->getMRCommits($sourceBranch, $targetBranch);
+    }
+
+    /**
      * Get clone url.
      *
      * @access public
@@ -249,13 +262,14 @@ class scm
      * Get download url.
      *
      * @param  string $branch
+     * @param  string $savePath
      * @param  string $ext
      * @access public
      * @return string
      */
-    public function getDownloadUrl($branch = '', $ext = 'zip')
+    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip')
     {
-        return $this->engine->getDownloadUrl($branch, $ext);
+        return $this->engine->getDownloadUrl($branch, $savePath, $ext);
     }
 }
 

@@ -9,13 +9,13 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class docsEntry extends Entry
+class docsEntry extends entry
 {
     /**
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get($libID = 0)
     {

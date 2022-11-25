@@ -48,8 +48,8 @@
         <thead>
           <tr>
             <th class='c-id'><?php echo $lang->idAB;?></th>
-            <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
-            <th class='c-project required' style="width:100%"><?php echo $lang->execution->projectName;?></th>
+            <?php if(isset($project) and $project->model == 'scrum'):?>
+            <th class='c-project required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->projectName;?></th>
             <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
             <?php if(!isset($config->setCode) or $config->setCode == 1):?>
@@ -82,10 +82,10 @@
           ?>
           <tr>
             <td><?php echo sprintf('%03d', $executionID) . html::hidden("executionIDList[$executionID]", $executionID);?></td>
-            <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
+            <?php if(isset($project) and $project->model == 'scrum'):?>
             <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$executionID]", $allProjects, $executions[$executionID]->project, "class='form-control picker-select' data-lastselected='{$executions[$executionID]->project}' onchange='changeProject(this, $executionID, {$executions[$executionID]->project})'");?></td>
             <?php endif;?>
-            <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "id='names{$executionID}' class='form-control'");?></td>
+            <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control'");?></td>
             <?php if(!isset($config->setCode) or $config->setCode == 1):?>
             <td><?php echo html::input("codes[$executionID]", $executions[$executionID]->code, "class='form-control'");?></td>
             <?php endif;?>
@@ -106,8 +106,8 @@
               ?>
             </td>
             <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$executionID]", $lang->execution->statusList, $executions[$executionID]->status, 'class=form-control');?></td>
-            <td><?php echo html::input("begins[$executionID]", $executions[$executionID]->begin, "id='begins{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
-            <td><?php echo html::input("ends[$executionID]",   $executions[$executionID]->end,   "id='ends{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
+            <td><?php echo html::input("begins[$executionID]", $executions[$executionID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
+            <td><?php echo html::input("ends[$executionID]",   $executions[$executionID]->end,   "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'>    <?php echo html::textarea("descs[$executionID]",  $executions[$executionID]->desc,  "rows='1' class='form-control autosize'");?></td>
             <td class='<?php echo zget($visibleFields, 'teamname', 'hidden')?>'><?php echo html::input("teams[$executionID]",  $executions[$executionID]->team,  "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'days',     'hidden')?>'>
@@ -154,26 +154,22 @@ $('#executionForm').submit(function()
     /* Clear all error messages. */
     $('input[name^=begins]').each(function()
     {
-        var beginDateID = $(this).attr('id');
-        var endDateID   = beginDateID.replace('begins', 'ends');
-        $('#help' + beginDateID).remove();
-        $('#help' + endDateID).remove();
+        var executionID = $(this).attr('id').replace(/\w*\[|\]/g, '');
+        $('#helpbegins' + executionID).remove();
+        $('#helpends' + executionID).remove();
     });
 
     var submitForm = true;
     $('input[name^=begins]').each(function()
     {
         var beginDate   = $(this).val();
-        var beginDateID = $(this).attr('id');
+        var executionID = $(this).attr('id').replace(/\w*\[|\]/g, '');
 
-        var nameID      = beginDateID.replace('begins', 'names');
-        var endDateID   = beginDateID.replace('begins', 'ends');
-        var executionID = beginDateID.replace('begins', '');
-        $('#help' + beginDateID).remove();
-        $('#help' + endDateID).remove();
+        $('#helpbegins' + executionID).remove();
+        $('#helpends' + executionID).remove();
 
         /* Invalid data is skipped. */
-        var nameVal = $('#' + nameID).val()
+        var nameVal = $("[name='names[" + executionID + "]']").val()
         if(!nameVal) return;
 
         var projectBeginDate = '0000-00-00';
@@ -199,18 +195,18 @@ $('#executionForm').submit(function()
         if(!beginDate)
         {
             submitForm = false;
-            var emptyBeginHtml = '<div id="help' + beginDateID + '" class="text-danger help-text">' + emptyBegin + '</div>';
+            var emptyBeginHtml = '<div id="helpbegins' + executionID + '" class="text-danger help-text">' + emptyBegin + '</div>';
             $(this).after(emptyBeginHtml);
             alert(emptyBegin);
             return false;
         }
 
-        var endDate = $('#' + endDateID).val();
+        var endDate = $("[name='ends[" + executionID + "]']").val();
         if(!endDate)
         {
             submitForm = false;
-            var emptyEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + emptyEnd + '</div>';
-            $('#' + endDateID).after(emptyEndHtml);
+            var emptyEndHtml = '<div id="helpends' + executionID + '" class="text-danger help-text">' + emptyEnd + '</div>';
+            $("[name='ends[" + executionID + "]']").after(emptyEndHtml);
             alert(emptyEnd);
             return false;
         }
@@ -218,8 +214,8 @@ $('#executionForm').submit(function()
         if(endDate < beginDate)
         {
             submitForm = false;
-            var emptyEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + planFinishSmall + '</div>';
-            $('#' + endDateID).after(emptyEndHtml);
+            var emptyEndHtml = '<div id="helpends' + executionID + '" class="text-danger help-text">' + planFinishSmall + '</div>';
+            $("[name='ends[" + executionID + "]']").after(emptyEndHtml);
             alert(planFinishSmall);
             return false;
         }
@@ -228,8 +224,8 @@ $('#executionForm').submit(function()
         {
             submitForm = false;
             var errorBeginTip  = errorBegin.replace('%s', projectBeginDate);
-            var errorBeginHtml = '<div id="help' + beginDateID + '" class="text-danger help-text">' + errorBeginTip + '</div>';
-            $('#' + beginDateID).after(errorBeginHtml);
+            var errorBeginHtml = '<div id="helpbegins' + executionID + '" class="text-danger help-text">' + errorBeginTip + '</div>';
+            $("[name='begins[" + executionID + "]']").after(errorBeginHtml);
             alert(errorBeginTip);
             return false;
         }
@@ -238,8 +234,8 @@ $('#executionForm').submit(function()
         {
             submitForm = false;
             var errorEndTip  = errorEnd.replace('%s', projectEndDate);
-            var errorEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + errorEndTip + '</div>';
-            $('#' + endDateID).after(errorEndHtml);
+            var errorEndHtml = '<div id="helpends' + executionID + '" class="text-danger help-text">' + errorEndTip + '</div>';
+            $("[name='ends[" + executionID + "]']").after(errorEndHtml);
             alert(errorEndTip);
             return false;
         }

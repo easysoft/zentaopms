@@ -48,6 +48,7 @@ $lang->program->openedVersion  = 'OpenedVersion';
 $lang->program->lastEditedBy   = 'LastEditedBy';
 $lang->program->lastEditedDate = 'LastEditedDate';
 $lang->program->childProgram   = 'Child Program';
+$lang->program->ignore         = 'Ignore';
 
 /* Actions. */
 $lang->program->common                  = 'Program';
@@ -81,6 +82,7 @@ $lang->program->manageMembers           = 'Program Team';
 $lang->program->confirmChangePRJUint    = 'Synchronize the budget unit of the subprograms and the projects of the program? If yes, please the current exchange rate.';
 $lang->program->exRateNotNegative       = 'The『exchange rate』should not be negative.';
 $lang->program->changePRJUnit           = 'Update the budget unit of the project';
+$lang->program->showNotCurrentProjects  = 'Display project information of non current program';
 
 $lang->program->progress         = 'Progress';
 $lang->program->children         = 'Child';
@@ -100,10 +102,12 @@ $lang->program->noProgram          = 'No program.';
 $lang->program->showClosed         = 'Closed programs.';
 $lang->program->tips               = 'If a parent program is selected, the products under the parent program can be associated. If no program is selected for the project, a product with the same name as the project is created and associated with the project by default.';
 $lang->program->confirmBatchUnlink = "Do you want to batch unlink these stakeholders?";
-$lang->program->beginLetterParent  = 'The start date of the program should be ≥ the start date of the parent program: %s.';
-$lang->program->endGreaterParent   = 'The finish date of the program should be ≤ the finish date of the parent program: %s.';
-$lang->program->beginGreateChild   = 'The start date of the parent program should be ≤the minimum start time of the %s: %s.';
-$lang->program->endLetterChild     = 'The finish time of the parent program should be ≥ the maximum finish time of the %s: %s.';
+$lang->program->beginLetterParent  = 'The start date of the program is less than the start date of the parent program:';
+$lang->program->endGreaterParent   = 'The finish date of the program is greater than the finish date of the parent program:';
+$lang->program->dateExceedParent   = 'The start and finish date of the program was greater than the start and finish date of the parent program:';
+$lang->program->beginGreateChild   = 'The start date of the program is greater than the minimum start date of the subprogram or project:';
+$lang->program->endLetterChild     = 'The finish date of the program is less than the maximum finish date of the subprogram or project:';
+$lang->program->dateExceedChild    = 'The start and finish date of the program no longer include the date scope of the subprogram or project:';
 $lang->program->closeErrorMessage  = 'There are subprograms or projects that are not closed';
 $lang->program->hasChildren        = 'It has child programs or projects. You cannot delete it.';
 $lang->program->hasProduct         = 'It has products. You cannot delete it.';
@@ -113,6 +117,7 @@ $lang->program->readjustTime       = 'Change the program begin&end date.';
 $lang->program->accessDenied       = 'You have no access to the program.';
 $lang->program->beyondParentBudget = 'The remaining budget of the owned program has been exceeded.';
 $lang->program->checkedProjects    = 'Seleted %s items';
+$lang->program->budgetOverrun      = "The program's budget exceeds the remaining budget of the parent program:";
 
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';
@@ -139,12 +144,12 @@ $lang->program->statusList['doing']     = 'Doing';
 $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
-$lang->program->featureBar['all']       = 'All';
-$lang->program->featureBar['unclosed']  = 'Unclosed';
-$lang->program->featureBar['wait']      = 'Waiting';
-$lang->program->featureBar['doing']     = 'Doing';
-$lang->program->featureBar['suspended'] = 'Suspended';
-$lang->program->featureBar['closed']    = 'Closed';
+$lang->program->featureBar['browse']['all']       = 'All';
+$lang->program->featureBar['browse']['unclosed']  = 'Unclosed';
+$lang->program->featureBar['browse']['wait']      = 'Waiting';
+$lang->program->featureBar['browse']['doing']     = 'Doing';
+$lang->program->featureBar['browse']['suspended'] = 'Suspended';
+$lang->program->featureBar['browse']['closed']    = 'Closed';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';
@@ -159,3 +164,5 @@ $lang->program->kanban->doingExecutions = 'Ongoing Executions';
 $lang->program->kanban->normalReleases  = 'Normal Releases';
 
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
+
+$lang->program->defaultProgram = 'Default program';

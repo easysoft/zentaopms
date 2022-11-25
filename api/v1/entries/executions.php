@@ -16,7 +16,7 @@ class executionsEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($projectID = 0)
     {
@@ -41,7 +41,7 @@ class executionsEntry extends entry
         else
         {
             $control = $this->loadController('execution', 'all');
-            $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
+            $control->all($this->param('status', 'all'), $this->param('order', 'id_desc'), 0, '', 0, $this->param('limit', 20), $this->param('page', 1));
             $data = $this->getData();
 
             if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
@@ -57,7 +57,7 @@ class executionsEntry extends entry
         {
             foreach($execution->hours as $field => $value) $execution->$field = $value;
 
-            $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,delay,progress,' . $appendFields);
+            $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,delay,progress,children,' . $appendFields);
             $result[]  = $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
         }
 
@@ -76,7 +76,7 @@ class executionsEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($projectID = 0)
     {
@@ -102,14 +102,14 @@ class executionsEntry extends entry
 
         $execution = $this->loadModel('execution')->getByID($data->id);
 
-        $this->send(201, $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool'));
+        return $this->send(201, $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool'));
     }
 
     /**
      * Get drop menu.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getDropMenu()
     {
@@ -148,6 +148,6 @@ class executionsEntry extends entry
             }
         }
 
-        $this->send(200, $dropMenu);
+        return $this->send(200, $dropMenu);
     }
 }

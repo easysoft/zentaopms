@@ -31,12 +31,17 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php
-    $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
-    $module    = $type != 'bysearch' ?  "&param=$param" : '';
-    echo html::a($this->inlink('bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy=status,id_desc&build=$buildID&type=all$module"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a($this->inlink('bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy=status,id_desc&build=$buildID&type=unresolved$module"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
-    ?>
+    <?php common::sortFeatureMenu();?>
+    <?php foreach($lang->execution->featureBar['bug'] as $featureType => $label):?>
+    <?php $active = $type == $featureType ? 'btn-active-text' : '';?>
+    <?php $label  = "<span class='text'>$label</span>";?>
+    <?php if($type == $featureType):?>
+    <?php $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php $label .= $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';?>
+    <?php endif;?>
+    <?php $module = $type != 'bysearch' ? "&param=$param" : '';?>
+    <?php echo html::a(inlink('bug', "executionID=$execution->id&productID={$productID}&branch={$branchID}&orderBy=status,id_desc&build=$buildID&type={$featureType}$module"), $label, '', "class='btn btn-link $active' id='{$featureType}Tab'");?>
+    <?php endforeach;?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">
@@ -119,6 +124,8 @@
             <?php
             foreach($setting as $value)
             {
+                if(!$project->hasProduct and $project->model != 'scrum' and $value->id == 'plan') continue;
+                if(!$project->hasProduct and $value->id == 'branch') continue;
                 if($value->show)
                 {
                     if(common::checkNotCN() and $value->id == 'severity')  $value->name = $lang->bug->severity;
@@ -145,7 +152,13 @@
                 }
             }?>
           <?php else:?>
-          <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $projectPairs);?>
+          <?php foreach($setting as $value)
+          {
+              if(!$project->hasProduct and $project->model != 'scrum' and $value->id == 'plan') continue;
+              if(!$project->hasProduct and $value->id == 'branch') continue;
+              $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $projectPairs);
+          }
+          ?>
           <?php endif;?>
         </tr>
         <?php endforeach;?>
@@ -157,7 +170,7 @@
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
           <div class="btn-group dropup">
-            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
+            <button data-toggle="dropdown" type="button" class="btn" id="mulAssigned"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
             <?php
             $withSearch = count($memberPairs) > 10;
             $actionLink = $this->createLink('bug', 'batchAssignTo', "executionID={$execution->id}&type=execution");

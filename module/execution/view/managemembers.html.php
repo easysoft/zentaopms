@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectCommon', $lang->project->common);?>
 <?php js::set('executionID', $execution->id);?>
 <?php js::set('team2Import', $team2Import);?>
@@ -32,7 +31,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <form class='main-form' method='post' id='teamForm' target='hiddenwin'>
+  <form class='main-form form-ajax' method='post' id='teamForm'>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>

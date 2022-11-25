@@ -24,11 +24,12 @@ js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('systemMode'             , $config->systemMode);
 js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
 js::set('tab'                    , $this->app->tab);
+js::set('bugID'                  , $bug->id);
 js::set('bugBranch'              , $bug->branch);
 js::set('isClosedBug'            , $bug->status == 'closed');
+js::set('projectExecutionPairs'  , $projectExecutionPairs);
 if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
 if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
@@ -72,7 +73,10 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
           <?php $this->printExtendFields($bug, 'div', 'position=left');?>
           <div class="detail">
             <div class="detail-title"><?php echo $lang->files;?></div>
-            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
+            <div class='detail-content'>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'false', 'object' => $bug, 'method' => 'edit'));?>
+              <?php echo $this->fetch('file', 'buildform');?>
+            </div>
           </div>
 
           <div class='actions form-actions text-center'>
@@ -92,7 +96,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
               <tbody>
-                <tr>
+                <tr<?php if($product->shadow) echo " class='hide'";?>>
                   <th class='w-80px'><?php echo $lang->bug->product;?></th>
                   <td>
                     <div class='input-group'>
@@ -102,7 +106,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   </td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->bug->module;?></th>
+                  <th class='w-80px'><?php echo $lang->bug->module;?></th>
                   <td>
                     <div class='input-group' id='moduleIdBox'>
                     <?php
@@ -119,7 +123,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                     </div>
                   </td>
                 </tr>
-                <tr>
+                <tr class='<?php if(!($product->shadow and zget($project, 'model') == 'scrum' and $project->multiple)) echo 'hide'?>'>
                   <th><?php echo $lang->bug->productplan;?></th>
                   <td>
                     <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen'");?></span>
@@ -139,7 +143,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td>
+                  <td class='status-<?php echo $bug->status;?>'>
                     <?php
                     echo zget($lang->bug->statusList, $bug->status);
                     echo html::hidden('status', $bug->status);
@@ -148,15 +152,19 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->confirmed;?></th>
-                  <td><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
+                  <td class='confirm<?php echo $bug->confirmed;?>'><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->assignedTo;?></th>
                   <td>
+                    <?php if($bug->status == 'closed'):?>
+                    <?php echo ucfirst($bug->assignedTo);?>
+                    <?php else:?>
                     <div class='input-group'>
                       <?php echo html::select('assignedTo', $assignedToList, $bug->assignedTo, "class='form-control chosen'");?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
                     </div>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <tr>
@@ -173,11 +181,11 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>
-                  <td><?php echo html::select('os', $lang->bug->osList, $bug->os, "class='form-control chosen'");?></td>
+                  <td><?php echo html::select('os[]', $lang->bug->osList, $bug->os, "class='form-control chosen' multiple");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->browser;?></th>
-                  <td><?php echo html::select('browser', $lang->bug->browserList, $bug->browser, "class='form-control chosen'");?></td>
+                  <td><?php echo html::select('browser[]', $lang->bug->browserList, $bug->browser, "class='form-control chosen' multiple");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->keywords;?></th>
@@ -187,7 +195,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->mailto;?></th>
                   <td>
                     <div class='input-group'>
-                      <?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="form-control picker-select" multiple');?>
+                      <?php echo html::select('mailto[]', $users, $bug->mailto, 'class="form-control picker-select" multiple');?>
                       <?php echo $this->fetch('my', 'buildContactLists');?>
                     </div>
                   </td>
@@ -196,16 +204,15 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
             </table>
           </div>
           <div class='detail'>
-            <div class='detail-title'><?php echo $config->systemMode == 'class' ? $lang->bug->legendExecStoryTask : $lang->bug->legendPRJExecStoryTask;?></div>
+            <div class='detail-title'><?php echo !empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask;?></div>
             <table class='table table-form'>
               <tbody>
-                <?php if($config->systemMode == 'new'):?>
                 <tr>
                   <th class='w-85px'><?php echo $lang->bug->project;?></th>
                   <td><span id='projectBox'><?php echo html::select('project', $projects, $bug->project, "class='form-control chosen' onchange='loadProductExecutions($bug->product, this.value)'");?></span></td>
                 </tr>
-                <?php endif;?>
-                <tr>
+                <?php $executionClass = ($execution and !$execution->multiple) ? 'hide' : '';?>
+                <tr class="executionBox <?php echo $executionClass;?>" >
                   <th class='w-85px' id='executionBox'><?php echo $lang->bug->execution;?></th>
                   <td><span id='executionIdBox'><?php echo html::select('execution', $executions, $bug->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></span></td>
                 </tr>
@@ -261,7 +268,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr id='duplicateBugBox' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
                   <th><?php echo $lang->bug->duplicateBug;?></th>
-                  <td><?php echo html::input('duplicateBug', $bug->duplicateBug, 'class=form-control');?></td>
+                  <td class='required'><?php echo html::select('duplicateBug', $productBugs, $bug->duplicateBug, "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->closedBy;?></th>
@@ -280,9 +287,9 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
               <tbody>
                 <tr class='text-top'>
                   <th class='thWidth'><?php echo $lang->bug->linkBug;?></th>
-                  <td><?php if(common::hasPriv('bug', 'linkBugs')) echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id", '', true), $lang->bug->linkBugs, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
+                  <td><?php if(common::hasPriv('bug', 'linkBugs')) echo html::a('#', $lang->bug->linkBugs, '', "class='text-primary' id='linkBugsLink'");?></td>
                 </tr>
-                <tr>
+                <tr <?php if(!isset($bug->linkBugTitles)) echo 'class="hidden"';?>>
                   <th></th>
                   <td>
                     <ul class='list-unstyled'>
@@ -306,12 +313,10 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->testtask;?></th>
                   <td id='testtaskBox'><?php echo html::select('testtask', $testtasks, $bug->testtask, 'class="form-control chosen"');?></td>
                 </tr>
-                <?php if($bug->case):?>
                 <tr>
                   <th><?php echo $lang->bug->fromCase;?></th>
-                  <td><?php echo html::input('case', $bug->case, 'class="form-control"');?></td>
+                  <td><?php echo html::select('case', $cases, $bug->case, 'class="form-control picker-select"');?></td>
                 </tr>
-                <?php endif;?>
               </tbody>
             </table>
           </div>

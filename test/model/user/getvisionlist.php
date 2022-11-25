@@ -10,6 +10,9 @@ title=测试 userModel::getVisionList();
 cid=1
 pid=1
 
+获取系统visions的数量 >> 2
+获取test2用户的真实姓名 >> 研发综合界面
+
 */
 $user = new userTest();
 $visions = $user->getVisionListTest();

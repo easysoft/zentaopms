@@ -14,6 +14,10 @@
 #testStoryBox table tr td input {border: 0px;}
 #testStoryBox table tr td .input-group .input-group-addon {border-left: 1px solid #dcdcdc; border-right: 1px solid #dcdcdc;}
 #testStoryBox table button.btn {border: 0px;}
+#testStoryBox .c-name {width: 120px;}
+#testStoryBox .c-pri, #testStoryBox .c-estimate, #testStoryBox .c-actions {width: 70px;}
+#testStoryBox .c-date {width: 140px;}
+#testStoryBox .c-assignedTo {width: 100px; padding: 7px;}
 
 .chosen-results > li.has-test,
 .chosen-results > li.has-new-test {position: relative; color: #388E3C;}
@@ -24,3 +28,7 @@
 .c-modulel {width: 110px;}
 
 .keep-row-height {height: 32px;}
+#modalTeam .modal-dialog {min-height: 120px; width: 570px; color: #3c4353;}
+#taskTeamEditor .hourBox {padding-bottom: 7px; width: 135px;}
+#taskTeamEditor .estimateBox {width: 120px;}
+#modalTeam .modal-content {padding: 0;}

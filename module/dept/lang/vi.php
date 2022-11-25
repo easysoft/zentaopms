@@ -26,6 +26,7 @@ $lang->dept->dragAndSort = "Drag để sắp xếp";
 
 $lang->dept->confirmDelete = " Bạn có muốn xóa this department?";
 $lang->dept->successSave   = " Saved!";
+$lang->dept->repeatDepart  = " Có một tên bộ phận trùng lặp, bạn có chắc chắn thêm nó không?";
 
 $lang->dept->error = new stdclass();
 $lang->dept->error->hasSons  = 'This Department has child departments. You cannot xóa it!';

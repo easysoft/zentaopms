@@ -1,5 +1,4 @@
 <?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
-<style>.c-date {width: 130px;}</style>
 <table class='table main-table' id='cases'>
   <thead>
     <tr>
@@ -30,7 +29,7 @@
       <td><?php echo zget($users, $case->assignedTo);?></td>
       <td><?php echo zget($users, $case->lastRunner);?></td>
       <td><?php echo substr($case->lastRunDate, 2);?></td>
-      <td><?php echo zget($lang->testcase->resultList, $case->lastRunResult);?></td>
+      <td class='result-testcase <?php echo $case->lastRunResult;?>'><?php echo zget($lang->testcase->resultList, $case->lastRunResult);?></td>
       <?php $status = $this->processStatus('testcase', $case);?>
       <td title='<?php echo $status;?>'>
         <span class="status-case status-<?php echo $case->status?>"><?php echo $status;?></span>
@@ -46,14 +45,17 @@
     </tr>
     <?php endif;?>
   </tbody>
-  <?php if(isset($pager)):?>
-  <tfoot>
-    <tr>
-      <td class='text-right' colspan='9'><?php $pager->show('right', 'pagerjs');?></td>
-    </tr>
-  </tfoot>
-  <?php endif;?>
+</table>
+<?php if(isset($pager)):?>
+<div class='table-footer'>
+  <?php $pager->show('right', 'pagerjs');?>
+</div>
+<?php endif;?>
   <?php else:?>
   <tr><td class='none-data' colspan='9'><?php echo $lang->testreport->none;?></td></tr>
   <?php endif;?>
 </table>
+<style>
+.c-date {width: 130px;}
+#cases + .table-footer {margin-top: -20px;}
+</style>

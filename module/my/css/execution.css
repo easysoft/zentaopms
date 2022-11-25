@@ -1,1 +1,3 @@
-.c-hours, .c-progress {width: 80px !important;} 
+.c-hours, .c-progress {width: 80px !important;}
+.c-status, .c-date {padding-right: 8px !important; text-align: center;}
+.align-right {text-align: right; padding-right: 8px !important;}

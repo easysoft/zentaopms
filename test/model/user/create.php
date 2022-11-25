@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -57,4 +58,4 @@ r($user->createUserTest($differentPassword)) && p('password:0')  && e('两次密
 r($user->createUserTest($existUser))         && p('account:0')   && e('『用户名』已经有『admin』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); //插入重复的用户名，返回报错信息
 r($user->createUserTest($normalUser))        && p('id,realname') && e('1001,新的测试用户');                                                                            //正常插入用户，返回新插入的ID、真实姓名
 r($user->createUserTest($normalUser))        && p('realname')    && e('新的测试用户');                                                                                 //正常插入用户，返回新插入的真实姓名
-system("./ztest init");
+$db->restoreDB();

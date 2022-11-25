@@ -10,6 +10,10 @@ title=测试 tutorialModel->getExecution();
 cid=1
 pid=1
 
+检查获取数据的id >> 3
+检查获取数据的PM >> admin
+检查获取数据的burns >> 35
+
 */
 
 $tutorial = new tutorialTest();

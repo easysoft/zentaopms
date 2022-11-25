@@ -1,3 +1,5 @@
-#fromproject_chosen .chosen-single {width: 220px;}
-.c-name {width: 200px;}
+#fromexecution_chosen .chosen-single {max-width: 220px;}
+#fromexecution_chosen .chosen-drop {white-space: nowrap;}
+.c-name {min-width: 200px;}
+.c-hour {width: 80px;}
 #importTaskForm {min-height: 350px;}

@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class issueEntry extends Entry
+class issueEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int|string $issueID. Issues id for Gitlab has '-', such as task-1, bug-1.
      * @access public
-     * @return void
+     * @return string
      */
     public function get($issueID)
     {
@@ -40,7 +40,7 @@ class issueEntry extends Entry
      *
      * @param  int    $issueID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($issueID)
     {
@@ -58,7 +58,7 @@ class issueEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $issue = $this->issue->getByID($issueID);
-        $this->send(200, $this->format($issue, 'createdDate:time,editedDate:time,assignedDate:time'));
+        return $this->send(200, $this->format($issue, 'createdDate:time,editedDate:time,assignedDate:time'));
     }
 
     /**
@@ -66,7 +66,7 @@ class issueEntry extends Entry
      *
      * @param  int    $issueID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($issueID)
     {
@@ -74,6 +74,6 @@ class issueEntry extends Entry
         $control->delete($issueID, 'true');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

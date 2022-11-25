@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/git.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -10,9 +11,7 @@ title=测试gitModel->getRepoTags();
 cid=1
 pid=1
 
-获取版本库的tags >> 1
-使用空数据       >> 0
-使用错误的版本库 >> 0
+10.0.1.161:51080')->where('id')->eq(1)->exec(); >> id
 
 */
 
@@ -33,4 +32,4 @@ $repo->client = '';
 $repo->path   = '';
 r($git->getRepoTags($repo)) && p() && e(0);    // 使用错误的版本库
 
-system("./ztest init");
+$db->restoreDB();

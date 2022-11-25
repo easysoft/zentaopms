@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -37,4 +38,4 @@ r($kanban->importCardTest($kanbanIDList[1], $regionIDList[1], $groupIDList[1], $
 r($kanban->importCardTest($kanbanIDList[2], $regionIDList[2], $groupIDList[2], $columnIDList[2], $cards3, $targetLaneIDList[2])) && p('cards') && e(',82,83,84,17,18,817,');// 测试导入卡片72 73 74到column 9
 r($kanban->importCardTest($kanbanIDList[3], $regionIDList[3], $groupIDList[3], $columnIDList[3], $cards4, $targetLaneIDList[3])) && p('cards') && e(',85,86,87,25,26,825,');// 测试导入卡片75 77 77到column 13
 r($kanban->importCardTest($kanbanIDList[4], $regionIDList[4], $groupIDList[4], $columnIDList[4], $cards5, $targetLaneIDList[4])) && p('cards') && e(',95,96,97,33,34,833,');// 测试导入卡片72 73 74到column 17
-system("./ztest init");
+$db->restoreDB();

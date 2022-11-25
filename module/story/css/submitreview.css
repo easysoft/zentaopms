@@ -1,0 +1,3 @@
+.needNotReviewBox {width: 130px;}
+.needNotReviewBox span.input-group-addon {border: 1px solid #dcdcdc; border-left-width: 0px;}
+.table > tbody > tr > th {vertical-align: top; padding-top: 13px;}

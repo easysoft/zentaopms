@@ -24,8 +24,8 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $task->id?></span>
       <span class="text" title='<?php echo $task->name;?>' style='color: <?php echo $task->color; ?>'>
-        <?php if($task->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->childrenAB . '</span>';?>
-        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->multipleAB . '</span>';?>
+        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->multipleAB . (common::checkNotCN() ? ' ' : '') . $lang->task->modeList[$task->mode] . '</span>';?>
+        <?php if($task->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->childrenAB . '</span>';?>
         <?php if($task->parent > 0) echo isset($task->parentName) ? html::a(inlink('view', "taskID={$task->parent}"), $task->parentName) . ' / ' : '';?><?php echo $task->name;?>
       </span>
       <?php if($task->deleted):?>
@@ -116,13 +116,7 @@
               <?php foreach($task->children as $child):?>
               <tr class='text-center'>
                 <td><?php echo $child->id;?></td>
-                <td>
-                  <?php
-                  echo "<span class='label-pri label-pri-" . $child->pri . "'>";
-                  echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
-                  echo "</span>";
-                  ?>
-                </td>
+                <td><?php if($child->pri) echo "<span class='label-pri label-pri-" . $child->pri . "'>" . zget($this->lang->task->priList, $child->pri, $child->pri) . "</span>";?></td>
                 <td class='text-left' title='<?php echo $child->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('task', 'view', "taskID=$child->id", '', true); ?>"><?php echo $child->name;?></a></td>
                 <td><?php echo $child->deadline;?></td>
                 <td id='assignedTo'><?php $this->task->printAssignedHtml($child, $users);?></td>
@@ -131,9 +125,9 @@
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'finish',   "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'close', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list');
                   common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
@@ -147,7 +141,7 @@
       </div>
       <?php endif;?>
       <?php
-      echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));
+      echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task, 'method' => 'view', 'showDelete' => false));
 
       $canBeChanged = common::canBeChanged('task', $task);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");
@@ -182,25 +176,24 @@
           <div class='tab-pane active' id='legendBasic'>
             <table class="table table-data">
               <tbody>
+                <?php if($execution->multiple):?>
                 <tr>
-                  <?php
-                  $method = 'view';
-                  if($this->config->vision == 'lite') $method = 'kanban';
-                  ?>
                   <th class='w-90px'><?php echo $lang->task->execution;?></th>
                   <td>
-                  <?php
-                  if($execution->type != 'kanban')
-                  {
-                      common::printLink('execution', $method, "executionID={$task->execution}", $execution->name);
-                  }
-                  else
-                  {
-                      echo $execution->name;
-                  }
-                  ?>
-                </td>
+                    <?php
+                    $method = $this->config->vision == 'lite' ? 'kanban' : 'view';
+                    if($execution->type != 'kanban')
+                    {
+                        common::printLink('execution', $method, "executionID={$task->execution}", $execution->name);
+                    }
+                    else
+                    {
+                        echo $execution->name;
+                    }
+                    ?>
+                  </td>
                 </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->module;?></th>
                   <?php
@@ -262,7 +255,7 @@
                   <th><?php echo $lang->task->assignedTo;?></th>
                   <td>
                     <?php
-                    if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
+                    if(!empty($task->team) and $task->mode == 'multi' and strpos('done,cencel,closed', $task->status) === false)
                     {
                         foreach($task->team as $member) echo ' ' . zget($users, $member->account);
                     }
@@ -299,14 +292,13 @@
                   <th><?php echo $lang->task->mailto;?></th>
                   <td>
                     <?php
-                    $mailto = explode(',', str_replace(' ', '', $task->mailto));
-                    if(empty($mailto))
+                    if(empty($task->mailto))
                     {
                         echo $lang->noData;
                     }
                     else
                     {
-                        foreach($mailto as $account) echo ' ' . zget($users, $account, $account);
+                        foreach(explode(',', str_replace(' ', '', $task->mailto)) as $account) echo ' ' . zget($users, $account, $account);
                     }
                     ?>
                   </td>
@@ -347,17 +339,19 @@
               <thead>
               <tr>
                 <th><?php echo $lang->task->team?></th>
-                <th class='text-center'><?php echo $lang->task->estimate?></th>
-                <th class='text-center'><?php echo $lang->task->consumed?></th>
-                <th class='text-center'><?php echo $lang->task->left?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->estimate?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->consumed?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->left?></th>
+                <th class='text-center'><?php echo $lang->statusAB;?></th>
               </tr>
               </thead>
                 <?php foreach($task->team as $member):?>
                 <tr class='text-center'>
-                  <td class='text-left'><?php echo zget($users, $member->account)?></td>
+                  <td class='text-left'><?php echo zget($users, $member->account);?></td>
                   <td><?php echo (float)$member->estimate?></td>
                   <td><?php echo (float)$member->consumed?></td>
                   <td><?php echo (float)$member->left?></td>
+                  <td class="status-<?php echo $member->status;?>"><?php echo zget($lang->task->statusList, $member->status);?></td>
                 </tr>
                 <?php endforeach;?>
             </table>

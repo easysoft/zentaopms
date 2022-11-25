@@ -10,7 +10,7 @@ title=测试 devModel::getFields();
 cid=1
 pid=1
 
-获取todo表字段名字    >> 开始
+获取todo表字段名字 >> 开始
 获取product表字段类型 >> varchar
 获取acl表字段null属性 >> NO
 

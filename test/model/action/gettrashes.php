@@ -10,10 +10,12 @@ title=测试 actionModel->getTrashes();
 cid=1
 pid=1
 
-查询type all id desc排序的回收站信息 >> testsuite,,这是测试套件名称87;story,,软件需求48
-查询type all id desc排序的回收站信息 >> story,,软件需求48;testsuite,,这是测试套件名称87
-查询type hidden id asc排序的回收站信息 >> testcase,,这个是测试用例9
-查询type hidden id asc排序的回收站信息 >> testcase,,这个是测试用例9
+查询objectType all type all id desc排序的回收站信息 >> testsuite,,这是测试套件名称87;story,,软件需求48
+查询objectType all type all id desc排序的回收站信息 >> story,,软件需求48;testsuite,,这是测试套件名称87
+查询objectType all type hidden id asc排序的回收站信息 >> testcase,,这个是测试用例9
+查询objectType all type hidden id asc排序的回收站信息 >> testcase,,这个是测试用例9
+查询objectType story type all id asc排序的回收站信息 >> story,,软件需求48
+查询objectType testcase hidden id asc排序的回收站信息 >> testcase,,这个是测试用例9
 
 */
 

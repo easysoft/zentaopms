@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/product.class.php';
+$db->switchDB();
 
 /**
 
@@ -28,4 +29,4 @@ r($product->closeTest($productIDList[2])) && p('0:field,old,new') && e('status,n
 r($product->closeTest($productIDList[3])) && p('0:field,old,new') && e('status,normal,closed'); // 测试关闭产品4
 r($product->closeTest($productIDList[4])) && p('0:field,old,new') && e('status,normal,closed'); // 测试关闭产品5
 r($product->closeTest($productIDList[5])) && p()                  && e('0');                    // 测试关闭不存在产品
-system("./ztest init");
+$db->restoreDB();

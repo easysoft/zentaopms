@@ -1,0 +1,9 @@
+DELETE LOW_PRIORITY
+/* */
+FROM
+    `test`.users
+WHERE
+    `id`<3 AND (username="Dan" or username="Paul")
+ORDER BY
+    id
+;

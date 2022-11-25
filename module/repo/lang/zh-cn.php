@@ -1,8 +1,10 @@
 <?php
 $lang->repo->common          = '代码';
+$lang->repo->codeRepo        = '代码库';
 $lang->repo->browse          = '浏览';
 $lang->repo->viewRevision    = '查看修订';
 $lang->repo->product         = '所属产品';
+$lang->repo->projects        = '相关项目';
 $lang->repo->execution       = '所属' . $lang->execution->common;
 $lang->repo->create          = '创建';
 $lang->repo->maintain        = '代码库列表';
@@ -142,6 +144,7 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['Gogs']       = 'Gogs';
 $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';

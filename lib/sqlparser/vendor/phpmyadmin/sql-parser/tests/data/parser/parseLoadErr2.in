@@ -1,0 +1,1 @@
+LOAD DATA CONCURRENT ABC 'employee1.txt' INTO TABLE employee;

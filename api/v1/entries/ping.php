@@ -15,10 +15,10 @@ class pingEntry extends entry
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {
-        $this->send(200, array('token' => session_id(), 'tokenLife' => ini_get('session.gc_maxlifetime')));
+        return $this->send(200, array('token' => session_id(), 'tokenLife' => ini_get('session.gc_maxlifetime')));
     }
 }

@@ -103,7 +103,8 @@ class action extends control
 
         $preferredType       = array();
         $moreType            = array();
-        $preferredTypeConfig = $this->config->systemMode == 'new' ? $this->config->action->preferredType->new : $this->config->action->preferredType->classic;
+        $preferredTypeConfig = $this->config->action->preferredType->ALM;
+        if($this->config->systemMode == 'light') $preferredTypeConfig = $this->config->action->preferredType->light;
         foreach($objectTypeList as $objectType)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
@@ -115,6 +116,33 @@ class action extends control
             $preferredType   = $preferredType + $toPreferredType;
         }
 
+        /* Get the projects name of executions. */
+        if($browseType == 'execution')
+        {
+            $this->loadModel('project');
+            $projectIdList = array();
+            foreach($trashes as $trash) $projectIdList[] = $trash->project;
+            $this->view->projectList = $this->project->getByIdList($projectIdList, 'all');
+        }
+
+        /* Get the products name of story. */
+        if(strpos(',story,requirement,', ",$browseType,") !== false)
+        {
+            $this->loadModel('story');
+            $storyIdList = array();
+            foreach($trashes as $trash) $storyIdList[] = $trash->objectID;
+            $this->view->productList = $this->story->getByList($storyIdList, 'story', 'all');
+        }
+
+        /* Get the executions name of task. */
+        if($browseType == 'task')
+        {
+            $this->app->loadLang('task');
+            $this->loadModel('execution');
+            $executionIdList = array();
+            foreach($trashes as $trash) $executionIdList[] = $trash->execution;
+            $this->view->executionList = $this->execution->getByIdList($executionIdList, 'all');
+        }
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;

@@ -2,7 +2,7 @@ $('#account, #product, #project, #execution, #orderBy').change(function()
 {
     var userID      = $('#account').val();
     var productID   = $('#product').length ? $('#product').val() : 0;
-    var projectID   = systemMode == 'new' ? $('#project').val() : 0;
+    var projectID   = $('#project').val();
     var executionID = $('#execution').val();
     var orderBy     = $('#orderBy').val();
 

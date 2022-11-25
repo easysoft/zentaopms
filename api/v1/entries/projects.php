@@ -16,7 +16,7 @@ class projectsEntry extends entry
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($programID = 0)
     {
@@ -26,7 +26,7 @@ class projectsEntry extends entry
 
         $_COOKIE['involved'] = $this->param('involved', 0);
 
-        $this->config->systemMode = 'new';
+        $this->config->systemMode = 'ALM';
 
         if($programID)
         {
@@ -73,7 +73,7 @@ class projectsEntry extends entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -99,14 +99,14 @@ class projectsEntry extends entry
 
         $project = $this->loadModel('project')->getByID($data->id);
 
-        $this->send(201, $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool'));
+        return $this->send(201, $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool'));
     }
 
     /**
      * Get drop menu.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getDropMenu()
     {
@@ -138,6 +138,6 @@ class projectsEntry extends entry
                 }
             }
         }
-        $this->send(200, $dropMenu);
+        return $this->send(200, $dropMenu);
     }
 }

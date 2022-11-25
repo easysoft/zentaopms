@@ -1,5 +1,26 @@
 $(function()
 {
+    $('[name=hasProduct]').change(function()
+    {
+        const hasProduct = $('[name=hasProduct]:checked').val();
+
+        $('#productTitle, #linkPlan').closest('tr').toggle(hasProduct == 1);
+
+        if(hasProduct == 0) $('.division').addClass('hide');
+
+        if(hasProduct == 1)
+        {
+            var chosenProducts = 0;
+            $("#productsBox select[name^='products']").each(function()
+            {
+                if($(this).val() > 0) chosenProducts ++;
+            });
+            if(chosenProducts > 1) $('.division').removeClass('hide');
+        }
+    });
+
+    $('[name=hasProduct]').change();
+
     $('#copyProjects a').click(function()
     {
         setCopyProject($(this).data('id'));
@@ -30,6 +51,16 @@ $(function()
     {
         var products      = new Array();
         var existedBranch = false;
+
+        /* Remove init tips. */
+        $('#name').removeClass('has-info');
+        $('#nameLabelInfo').remove();
+        $('#code').removeClass('has-info');
+        $('#codeLabelInfo').remove();
+        $('#end').removeClass('has-info');
+        $('#endLabelInfo').remove();
+        $('#days').removeClass('has-info');
+        $('#daysLabelInfo').remove();
 
         /* Determine whether the products of the same branch are linked. */
         $("#productsBox select[name^='products']").each(function()
@@ -82,18 +113,99 @@ $(function()
     });
 
     $(document).on('change', "select[id^='branch']", disableSelectedBranch);
+
+    if(copyProjectID > 0 && copyType != 'previous')
+    {
+        $('#name').addClass('has-info')
+        $('#name').after('<div id="nameLabelInfo" class="text-info">' + nameTips + '</div>')
+        $('#code').addClass('has-info')
+        $('#code').after('<div id="codeLabelInfo" class="text-info">' + codeTips + '</div>')
+        $('#end').addClass('has-info')
+        $('#end').parent().after('<div id="endLabelInfo" class="text-info">' + endTips + '</div>')
+        $('#days').addClass('has-info')
+        $('#days').parent().after('<div id="daysLabelInfo" class="text-info">' + daysTips + '</div>')
+    }
+
+    $("[name='multiple']").change(function()
+    {
+        $('#endList #delta999').closest('.radio-inline').toggle($(this).val() != 0);
+        if($('#endList #delta999').prop('checked') && $(this).val() == 0)
+        {
+            $('#endList #delta999').prop('checked', false);
+            $('#dateBox #end').val('');
+            $('#daysBox').removeClass('hidden');
+        }
+    })
 });
 
 /**
  * Set parent program.
  *
- * @param  $parentProgram
- * @access public
+ * @param  int    $parentProgram ParentProgram is the ID of the currently selected program.
  * @return void
  */
 function setParentProgram(parentProgram)
 {
-    location.href = createLink('project', 'create', 'model=' + model + '&programID=' + parentProgram);
+    var lastSelectedID     = $('#parent').attr('data-lastSelected');
+    var lastSelectedParent = 0;
+    var selectedParent     = 0;
+
+    if(parentProgram == 0) $('#budgetBox').find('input').removeAttr("placeholder");
+
+    $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + lastSelectedID + "&selectedProgramID=" + parentProgram), function(data)
+    {
+        var data = JSON.parse(data);
+        selectedParent     = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
+        lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
+
+        var hasProduct = $('[name=hasProduct]:checked').val();
+
+        if((selectedParent != lastSelectedParent) && hasProduct == 1)
+        {
+            $('#budget').val('');
+
+            var productSelectHtml = data.allProducts;
+            var planSelectHtml    = data.plans;
+
+            $('#productsBox .row .col-sm-4 .input-group').each(function(index)
+            {
+                var selectedProduct = $(this).find('[name^=products]').val();
+                var selectedBranch  = $(this).find('[name^=branch]').val();
+                var selectedPlan    = $('#plan' + index ).find('[name^=plans]').val();
+
+                $(this).html(productSelectHtml);
+                $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch).attr('data-plan', selectedPlan);
+                $(this).find('[name^=products]').val(selectedProduct).chosen().change();
+            });
+            $('#productsBox .row .col-sm-4:last').find('.input-group').append($('#productsBox .addProduct .input-group:first .input-group-addon').prop('outerHTML'));
+        }
+
+        if(parentProgram != 0)
+        {
+            $('.aclBox').html($('#programAcl').html());
+        }
+        else
+        {
+            $('.aclBox').html($('#projectAcl').html());
+        }
+
+        budgetOverrunTips();
+        outOfDateTip();
+        refreshBudgetUnit(data);
+    });
+
+    $('#parent').attr('data-lastSelected', parentProgram);
+
+    if(parentProgram != '0')
+    {
+        $('#productsBox .addProduct .input-group:first').addClass('required');
+        $('#productsBox .row .input-group:first').addClass('required');
+    }
+    else
+    {
+        $('#productsBox .addProduct .input-group').removeClass('required');
+        $('#productsBox .row .input-group').removeClass('required');
+    }
 }
 
 /**
@@ -124,6 +236,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
         $('#plansBox').closest('tr').addClass('hidden');
         $('#plansBox .col-sm-4').find('select').attr('disabled', true).trigger("chosen:updated");
+        $('.division').addClass('hide');
 
         /* Displays the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', true);
@@ -138,6 +251,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
         $('#plansBox').closest('tr').removeClass('hidden');
         $('#plansBox .col-sm-4').find('select').removeAttr('disabled', true).trigger("chosen:updated");
+        if($('#plansBox .col-sm-4').find('select').length > 1) $('.division').removeClass('hide');
 
         /* Hide the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', false);
@@ -146,6 +260,7 @@ function addNewProduct(obj)
 
         $('#productTitle').html(manageProducts);
     }
+    $('#productsBox div + .text-danger.help-text').remove();
 }
 
 /**
@@ -176,9 +291,15 @@ function setAclList(programID)
  */
 function loadBranches(product)
 {
+    /* When selecting a product, delete a plan that is empty by default. */
+    $("#planDefault").remove();
+
+    var chosenProducts = [];
     $("#productsBox select[name^='products']").each(function()
     {
-        var $product = $(product);
+        var $product  = $(product);
+        var productID = $(this).val();
+        if(productID > 0 && chosenProducts.indexOf(productID) == -1) chosenProducts.push(productID);
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
             bootbox.alert(errorSameProducts);
@@ -188,10 +309,12 @@ function loadBranches(product)
         }
     });
 
+    (chosenProducts.length > 1 && model == 'waterfall') ? $('.division').removeClass('hide') : $('.division').addClass('hide');
+
     if($('#productsBox .row .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .row .input-group').size();
-        var $html  = $('#productsBox .row .col-sm-4:last').html();
+        var $html  = $('#productsBox .row .col-sm-4:last').html().replace('required', '');
         $('#productsBox .row .col-sm-4:last').find('.input-group-addon').remove();
         $('#productsBox .row').append('<div class="col-sm-4">' + $html + '</div>');
         if($('#productsBox .row .input-group:last select').size() >= 2) $('#productsBox .row .input-group:last select:last').remove();
@@ -208,8 +331,9 @@ function loadBranches(product)
     if($inputgroup.find('select').size() >= 2) $inputgroup.removeClass('has-branch').find('select:last').remove();
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
-    var index       = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active"), function(data)
+    var index     = $inputgroup.find('select:first').attr('id').replace('products' , '');
+    var oldBranch = $(product).attr('data-branch') !== undefined ? $(product).attr('data-branch') : 0;
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranch + "&param=active"), function(data)
     {
         if(data)
         {
@@ -241,21 +365,19 @@ function loadPlans(product, branchID)
 
     var productID = $(product).val();
     var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
+    var planID    = $(product).attr('data-plan') !== undefined ? $(product).attr('data-plan') : 0;
     var index     = $(product).attr('id').replace('products', '');
 
-    if(productID != 0)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent,multiple'), function(data)
     {
-        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent,multiple'), function(data)
+        if(data)
         {
-            if(data)
-            {
-                if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
-                $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + '][' + branchID + '][]').attr('id', 'plans' + productID).chosen();
+            if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
+            $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + '][' + branchID + '][]').attr('id', 'plans' + productID).chosen();
 
-                adjustPlanBoxMargin();
-            }
-        });
-    }
+            adjustPlanBoxMargin();
+        }
+    });
 }
 
 /**
@@ -307,7 +429,7 @@ $('#projectName').on('keyup', function()
     var name = $(this).val();
     name = name.replace(/\s+/g, '');
     link = createLink('project', 'ajaxGetCopyProjects');
-    $.post(link, {name: name, cpoyProjectID : copyProjectID}, function(data)
+    $.post(link, {name: name, cpoyProjectID: copyProjectID, model: model}, function(data)
     {
         $('#copyProjects').html(data);
         $('#copyProjects a').click(function()
@@ -317,3 +439,32 @@ $('#projectName').on('keyup', function()
         });
     })
 })
+
+/* Click remove tips.  */
+$("#name").click(function()
+{
+    $('#name').removeClass('has-info');
+    $('#nameLabelInfo').remove();
+});
+$("#code").click(function()
+{
+    $('#code').removeClass('has-info');
+    $('#codeLabelInfo').remove();
+});
+$("#end").click(function()
+{
+    $('#end').removeClass('has-info');
+    $('#endLabelInfo').remove();
+});
+$("#days").click(function()
+{
+    $('#days').removeClass('has-info');
+    $('#daysLabelInfo').remove();
+});
+$("#endList input[type=radio]").click(function()
+{
+    $('#end').removeClass('has-info');
+    $('#endLabelInfo').remove();
+    $('#days').removeClass('has-info');
+    $('#daysLabelInfo').remove();
+});

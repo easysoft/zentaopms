@@ -47,7 +47,9 @@ foreach(explode(',', $showFields) as $field)
           <th class='c-branch<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->story->branch;?></th>
           <?php endif;?>
           <th class='c-module'><?php echo $lang->story->module;?></th>
+          <?php if(!$hiddenPlan):?>
           <th class='c-plan<?php echo zget($visibleFields, 'plan', ' hidden')?> col-plan'><?php echo $lang->story->planAB;?></th>
+          <?php endif;?>
           <th class='c-title required'><?php echo $lang->story->title;?></th>
           <th class='c-estimate<?php echo zget($visibleFields, 'estimate', ' hidden')?>'> <?php echo $lang->story->estimateAB;?></th>
           <th class='c-category'><?php echo $lang->story->category;?></th>
@@ -80,9 +82,11 @@ foreach(explode(',', $showFields) as $field)
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
             <?php echo html::select("modules[$storyID]", zget($moduleList, $story->id, array(0 => '/')), $story->module, "class='form-control picker-select' data-drop-width='auto'");?>
           </td>
+          <?php if(!$hiddenPlan):?>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
             <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? array('' => '') + $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control picker-select' data-drop-width='auto'");?>
           </td>
+          <?php endif;?>
           <td title='<?php echo $story->title?>'>
             <div class="input-group">
               <div class="input-control has-icon-right story-input">
@@ -123,13 +127,13 @@ foreach(explode(',', $showFields) as $field)
 
           <?php if($story->status == 'closed'):?>
           <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>>
-            <table class='w-p100'>
+            <table class='w-p100 table-form'>
               <tr>
                 <td class='pd-0'>
                   <?php echo html::select("closedReasons[$storyID]", $reasonList, $story->closedReason, "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 70px'");?>
                 </td>
-                <td class='pd-0' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display: none'";?>>
-                <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}'");?>
+                <td class='pd-0 w-p50' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display: none'";?>>
+                <?php echo html::select("duplicateStoryIDList[$storyID]", $productStoryList[$story->product][$story->branch], $story->duplicateStory, "class='form-control' placeholder='{$lang->idAB}'");?>
                 </td>
                 <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($story->closedReason != 'subdivided') echo "style='display: none'";?>>
                 <?php echo html::input("childStoriesIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}'");?>

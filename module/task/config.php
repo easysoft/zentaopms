@@ -41,14 +41,17 @@ $config->task->exportFields = '
 $config->task->customCreateFields      = 'story,estStarted,deadline,mailto,pri,estimate';
 $config->task->customBatchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
 $config->task->customBatchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,estStarted,deadline,finishedBy,canceledBy,closedBy,closedReason';
+$config->task->defaultLoadCount        = 50;
 
 $config->task->custom = new stdclass();
 $config->task->custom->createFields      = $config->task->customCreateFields;
-$config->task->custom->batchCreateFields = 'module,story,assignedTo,estimate,desc,pri';
+$config->task->custom->batchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
 $config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimate,record,left';
 
+$config->task->excludeCheckFileds = ',pri,estStartedDitto,deadlineDitto,parent,regions,lanes,vision,region,';
+
 $config->task->datatable = new stdclass();
-$config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'assignedTo', 'finishedBy', 'estimate', 'consumed', 'left', 'progress', 'deadline', 'actions');
+$config->task->datatable->defaultField = array('id', 'name', 'pri', 'assignedTo', 'status', 'finishedBy', 'deadline', 'estimate', 'consumed', 'left', 'progress', 'actions');
 
 global $lang;
 $config->task->datatable->fieldList['id']['title']    = 'idAB';
@@ -56,16 +59,28 @@ $config->task->datatable->fieldList['id']['fixed']    = 'left';
 $config->task->datatable->fieldList['id']['width']    = '70';
 $config->task->datatable->fieldList['id']['required'] = 'yes';
 
-$config->task->datatable->fieldList['pri']['title']    = 'priAB';
-$config->task->datatable->fieldList['pri']['fixed']    = 'left';
-$config->task->datatable->fieldList['pri']['width']    = '50';
-$config->task->datatable->fieldList['pri']['required'] = 'no';
-$config->task->datatable->fieldList['pri']['name']     = $lang->task->pri;
-
 $config->task->datatable->fieldList['name']['title']    = 'name';
 $config->task->datatable->fieldList['name']['fixed']    = 'left';
 $config->task->datatable->fieldList['name']['width']    = 'auto';
 $config->task->datatable->fieldList['name']['required'] = 'yes';
+
+$config->task->datatable->fieldList['pri']['title']    = 'priAB';
+$config->task->datatable->fieldList['pri']['fixed']    = 'left';
+$config->task->datatable->fieldList['pri']['width']    = '35';
+$config->task->datatable->fieldList['pri']['required'] = 'no';
+$config->task->datatable->fieldList['pri']['name']     = $lang->task->pri;
+
+$config->task->datatable->fieldList['assignedTo']['title']      = 'assignedTo';
+$config->task->datatable->fieldList['assignedTo']['fixed']      = 'no';
+$config->task->datatable->fieldList['assignedTo']['width']      = '100';
+$config->task->datatable->fieldList['assignedTo']['required']   = 'no';
+$config->task->datatable->fieldList['assignedTo']['control']    = 'select';
+$config->task->datatable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' => 'getTeamMemberPairs', 'params' => '$executionID&execution');
+
+$config->task->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
+$config->task->datatable->fieldList['assignedDate']['fixed']    = 'no';
+$config->task->datatable->fieldList['assignedDate']['width']    = '110';
+$config->task->datatable->fieldList['assignedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['type']['title']    = 'typeAB';
 $config->task->datatable->fieldList['type']['fixed']    = 'no';
@@ -77,32 +92,38 @@ $config->task->datatable->fieldList['status']['fixed']    = 'no';
 $config->task->datatable->fieldList['status']['width']    = '60';
 $config->task->datatable->fieldList['status']['required'] = 'no';
 
-$config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
-$config->task->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->task->datatable->fieldList['estimate']['width']    = '60';
-$config->task->datatable->fieldList['estimate']['required'] = 'no';
-
-$config->task->datatable->fieldList['consumed']['title']    = 'consumedAB';
-$config->task->datatable->fieldList['consumed']['fixed']    = 'no';
-$config->task->datatable->fieldList['consumed']['width']    = '60';
-$config->task->datatable->fieldList['consumed']['required'] = 'no';
-
-$config->task->datatable->fieldList['left']['title']    = 'leftAB';
-$config->task->datatable->fieldList['left']['fixed']    = 'no';
-$config->task->datatable->fieldList['left']['width']    = '60';
-$config->task->datatable->fieldList['left']['required'] = 'no';
-
-$config->task->datatable->fieldList['progress']['title']    = 'progressAB';
-$config->task->datatable->fieldList['progress']['fixed']    = 'no';
-$config->task->datatable->fieldList['progress']['width']    = '80';
-$config->task->datatable->fieldList['progress']['required'] = 'no';
-$config->task->datatable->fieldList['progress']['sort']     = 'no';
-$config->task->datatable->fieldList['progress']['name']     = $lang->task->progress;
+$config->task->datatable->fieldList['finishedBy']['title']    = 'finishedByAB';
+$config->task->datatable->fieldList['finishedBy']['fixed']    = 'no';
+$config->task->datatable->fieldList['finishedBy']['width']    = '80';
+$config->task->datatable->fieldList['finishedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
 $config->task->datatable->fieldList['deadline']['width']    = '70';
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
+$config->task->datatable->fieldList['deadline']['control'] = 'date';
+
+$config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
+$config->task->datatable->fieldList['estimate']['fixed']    = 'no';
+$config->task->datatable->fieldList['estimate']['width']    = '65';
+$config->task->datatable->fieldList['estimate']['required'] = 'no';
+
+$config->task->datatable->fieldList['consumed']['title']    = 'consumedAB';
+$config->task->datatable->fieldList['consumed']['fixed']    = 'no';
+$config->task->datatable->fieldList['consumed']['width']    = '65';
+$config->task->datatable->fieldList['consumed']['required'] = 'no';
+
+$config->task->datatable->fieldList['left']['title']    = 'leftAB';
+$config->task->datatable->fieldList['left']['fixed']    = 'no';
+$config->task->datatable->fieldList['left']['width']    = '65';
+$config->task->datatable->fieldList['left']['required'] = 'no';
+
+$config->task->datatable->fieldList['progress']['title']    = 'progressAB';
+$config->task->datatable->fieldList['progress']['fixed']    = 'no';
+$config->task->datatable->fieldList['progress']['width']    = '75';
+$config->task->datatable->fieldList['progress']['required'] = 'no';
+$config->task->datatable->fieldList['progress']['sort']     = 'no';
+$config->task->datatable->fieldList['progress']['name']     = $lang->task->progress;
 
 $config->task->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->task->datatable->fieldList['openedBy']['fixed']    = 'no';
@@ -118,26 +139,12 @@ $config->task->datatable->fieldList['estStarted']['title']    = 'estStarted';
 $config->task->datatable->fieldList['estStarted']['fixed']    = 'no';
 $config->task->datatable->fieldList['estStarted']['width']    = '90';
 $config->task->datatable->fieldList['estStarted']['required'] = 'no';
+$config->task->datatable->fieldList['estStarted']['control']  = 'date';
 
 $config->task->datatable->fieldList['realStarted']['title']    = 'realStarted';
 $config->task->datatable->fieldList['realStarted']['fixed']    = 'no';
 $config->task->datatable->fieldList['realStarted']['width']    = '95';
 $config->task->datatable->fieldList['realStarted']['required'] = 'no';
-
-$config->task->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
-$config->task->datatable->fieldList['assignedTo']['fixed']    = 'no';
-$config->task->datatable->fieldList['assignedTo']['width']    = '100';
-$config->task->datatable->fieldList['assignedTo']['required'] = 'no';
-
-$config->task->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
-$config->task->datatable->fieldList['assignedDate']['fixed']    = 'no';
-$config->task->datatable->fieldList['assignedDate']['width']    = '110';
-$config->task->datatable->fieldList['assignedDate']['required'] = 'no';
-
-$config->task->datatable->fieldList['finishedBy']['title']    = 'finishedByAB';
-$config->task->datatable->fieldList['finishedBy']['fixed']    = 'no';
-$config->task->datatable->fieldList['finishedBy']['width']    = '80';
-$config->task->datatable->fieldList['finishedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['finishedDate']['title']    = 'finishedDateAB';
 $config->task->datatable->fieldList['finishedDate']['fixed']    = 'no';
@@ -164,21 +171,11 @@ $config->task->datatable->fieldList['closedDate']['fixed']    = 'no';
 $config->task->datatable->fieldList['closedDate']['width']    = '95';
 $config->task->datatable->fieldList['closedDate']['required'] = 'no';
 
-$config->task->datatable->fieldList['closedReason']['title']    = 'closedReason';
-$config->task->datatable->fieldList['closedReason']['fixed']    = 'no';
-$config->task->datatable->fieldList['closedReason']['width']    = '120';
-$config->task->datatable->fieldList['closedReason']['required'] = 'no';
-
-$config->task->datatable->fieldList['story']['title']    = "storyAB";
-$config->task->datatable->fieldList['story']['fixed']    = 'no';
-$config->task->datatable->fieldList['story']['width']    = '70';
-$config->task->datatable->fieldList['story']['required'] = 'no';
-$config->task->datatable->fieldList['story']['name']     = $lang->task->story;
-
-$config->task->datatable->fieldList['mailto']['title']    = 'mailto';
-$config->task->datatable->fieldList['mailto']['fixed']    = 'no';
-$config->task->datatable->fieldList['mailto']['width']    = '100';
-$config->task->datatable->fieldList['mailto']['required'] = 'no';
+$config->task->datatable->fieldList['closedReason']['title']      = 'closedReason';
+$config->task->datatable->fieldList['closedReason']['fixed']      = 'no';
+$config->task->datatable->fieldList['closedReason']['width']      = '120';
+$config->task->datatable->fieldList['closedReason']['required']   = 'no';
+$config->task->datatable->fieldList['closedReason']['dataSource'] = array('lang' => 'reasonList');
 
 $config->task->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
 $config->task->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
@@ -194,6 +191,37 @@ $config->task->datatable->fieldList['activatedDate']['title']    = 'activatedDat
 $config->task->datatable->fieldList['activatedDate']['fixed']    = 'no';
 $config->task->datatable->fieldList['activatedDate']['width']    = '90';
 $config->task->datatable->fieldList['activatedDate']['required'] = 'no';
+
+$config->task->datatable->fieldList['story']['title']      = "storyAB";
+$config->task->datatable->fieldList['story']['fixed']      = 'no';
+$config->task->datatable->fieldList['story']['width']      = '80';
+$config->task->datatable->fieldList['story']['required']   = 'no';
+$config->task->datatable->fieldList['story']['name']       = $lang->task->story;
+$config->task->datatable->fieldList['story']['control']    = 'select';
+$config->task->datatable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStories', 'params' => '$executionID', 'pairs' => array('id', 'title'));
+
+$config->task->datatable->fieldList['mailto']['title']    = 'mailto';
+$config->task->datatable->fieldList['mailto']['fixed']    = 'no';
+$config->task->datatable->fieldList['mailto']['width']    = '100';
+$config->task->datatable->fieldList['mailto']['required'] = 'no';
+
+$config->task->datatable->fieldList['module']['title']      = 'idAB';
+$config->task->datatable->fieldList['module']['control']    = 'select';
+$config->task->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => '$executionID');
+
+$config->task->datatable->fieldList['execution']['title']      = 'idAB';
+$config->task->datatable->fieldList['execution']['control']    = 'hidden';
+$config->task->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs');
+
+$config->task->datatable->fieldList['project']['title']      = 'idAB';
+$config->task->datatable->fieldList['project']['control']    = 'hidden';
+$config->task->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
+
+$config->task->datatable->fieldList['mode']['title']   = 'idAB';
+$config->task->datatable->fieldList['mode']['control'] = 'hidden';
+
+$config->task->datatable->fieldList['desc']['title']   = 'idAB';
+$config->task->datatable->fieldList['desc']['control'] = 'textarea';
 
 $config->task->datatable->fieldList['actions']['title']    = 'actions';
 $config->task->datatable->fieldList['actions']['fixed']    = 'right';

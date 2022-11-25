@@ -9,7 +9,8 @@ title=测试 storyModel->getDataOfStorysPerOpenedBy();
 cid=1
 pid=1
 
-
+按照创建人分组，获取分组后的需求数量 >> 5
+按照创建人分组，获取各个创建人的需求数量，查看用户test3下的数据 >> 开发3,100
 
 */
 

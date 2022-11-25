@@ -12,13 +12,13 @@ pid=1
 
 查询日期为星期日 >> 2022-05-08
 查询日期为其他 >> 2022-05-01
-查询日期为空 >> 2022-05-10
+查询日期为空 >> 2022-03-06
 
 */
-$date = array('2022-05-08', '2022-04-29', '');
+$date = array('2022-05-08', '2022-04-29', '2022-03-01');
 
 $weekly = new weeklyTest();
 
 r($weekly->getThisSundayTest($date[0])) && p() && e('2022-05-08'); //查询日期为星期日
 r($weekly->getThisSundayTest($date[1])) && p() && e('2022-05-01'); //查询日期为其他
-r($weekly->getThisSundayTest($date[2])) && p() && e('2022-05-10'); //查询日期为空
+r($weekly->getThisSundayTest($date[2])) && p() && e('2022-03-06'); //查询日期为空

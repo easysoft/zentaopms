@@ -21,18 +21,35 @@ include dirname(__FILE__) . '/base/model.class.php';
 class model extends baseModel
 {
     /**
-     * 企业版部分功能是从然之合并过来的。然之代码中调用loadModel方法时传递了一个非空的appName，在禅道中会导致错误。
+     * 企业版部分功能是从然之合并过来的。ZDOO代码中调用loadModel方法时传递了一个非空的appName，在禅道中会导致错误。
      * 调用父类的loadModel方法来避免这个错误。
-     * Some codes merged from ranzhi called the function loadModel with a non-empty appName which causes an error in zentao.
+     * Some codes merged from ZDOO called the function loadModel with a non-empty appName which causes an error in zentao.
      * Call the parent function with empty appName to avoid this error.
      *
-     * @param   string  $moduleName
-     * @access  public
-     * @return  object|bool  the model object or false if model file not exists.
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool  the model object or false if model file not exists.
      */
     public function loadModel($moduleName, $appName = '')
     {
         return parent::loadModel($moduleName);
+    }
+
+    /**
+     * 企业版部分功能是从然之合并过来的。ZDOO代码中调用loadTao方法时传递了一个非空的appName，在禅道中会导致错误。
+     * 调用父类的loadTao方法来避免这个错误。
+     * Some codes merged from ZDOO called the function loadTao with a non-empty appName which causes an error in zentao.
+     * Call the parent function with empty appName to avoid this error.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool  the model object or false if model file not exists.
+     */
+    public function loadTao($moduleName, $appName = '')
+    {
+        return parent::loadTao($moduleName);
     }
 
     /**
@@ -157,6 +174,20 @@ class model extends baseModel
         }
         if(empty($relations)) $relations = $this->dao->select('next, actions')->from(TABLE_WORKFLOWRELATION)->where('prev')->eq($moduleName)->fetchPairs();
 
+        $this->loadModel('flow');
+
+        $approvalProgressMenu = '';
+        if($type == 'view' && !empty($this->config->openedApproval) && commonModel::hasPriv('approval', 'progress'))
+        {
+            $flow = $this->loadModel('workflow', 'flow')->getByModule($moduleName);
+            if($flow->approval == 'enabled' && !empty($data->approval))
+            {
+                $extraClass = strpos(',testsuite,build,release,productplan,', ",{$moduleName},") !== false ? 'btn-link' : '';
+                $approvalProgressMenu .= "<div class='divider'></div>";
+                $approvalProgressMenu .= baseHTML::a(helper::createLink('approval', 'progress', "approvalID={$data->approval}", '', true), $this->lang->flow->approvalProgress, "class='btn {$extraClass} iframe'");
+            }
+        }
+
         $menu = '';
         if($show)
         {
@@ -164,8 +195,10 @@ class model extends baseModel
             {
                 if(strpos($action->position, $type) === false || $action->show != $show) continue;
 
-                $menu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
+                $menu .= $this->flow->buildActionMenu($moduleName, $action, $data, $type, $relations);
             }
+
+            if($approvalProgressMenu) $menu .= $approvalProgressMenu;
         }
         else
         {
@@ -174,9 +207,11 @@ class model extends baseModel
             {
                 if(strpos($action->position, $type) === false) continue;
 
-                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
-                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
+                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->flow->buildActionMenu($moduleName, $action, $data, $type, $relations);
+                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->flow->buildActionMenu($moduleName, $action, $data, $type, $relations);
             }
+
+            if($approvalProgressMenu) $menu .= $approvalProgressMenu;
 
             if($type == 'browse' && $dropdownMenu)
             {
@@ -301,5 +336,60 @@ class model extends baseModel
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if($flow && $action) return $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
+    }
+
+    /**
+     * Call the functions declared in the tao files.
+     *
+     * @param  string $method
+     * @param  array  $arguments
+     * @access public
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        $moduleName = $this->getModuleName();
+        $taoClass   = $moduleName . 'Tao';
+
+        if(is_callable(array($this->{$taoClass}, $method))) return call_user_func_array(array($this->{$taoClass}, $method), $arguments);
+
+        $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+    }
+
+    /**
+     * Call the static functions declared in the tao files.
+     *
+     * @param  string $method
+     * @param  array  $arguments
+     * @access public
+     * @return mixed
+     */
+    public static function __callStatic($method, $arguments)
+    {
+        global $app;
+
+        $moduleName = strtolower(get_called_class());
+
+        preg_match_all('/^(ext)?(\w+)model/', $moduleName, $matches);
+        if(isset($matches[2][0]))
+        {
+            $moduleName = $matches[2][0];
+        }
+        else
+        {
+            preg_match_all('/^(ext)?(\w+)tao/', $moduleName, $matches);
+            if(isset($matches[2][0])) $moduleName = $matches[2][0];
+        }
+
+        $modelClass = 'ext' . $moduleName . 'Model';
+        if(method_exists($modelClass, $method)) return call_user_func_array("{$modelClass}::{$method}", $arguments);
+
+        $taoClass = 'ext' . $moduleName . 'Tao';
+        if(method_exists($taoClass, $method)) return call_user_func_array("{$taoClass}::{$method}", $arguments);
+
+        $taoClass = $moduleName . 'Tao';
+        if(method_exists($taoClass, $method)) return call_user_func_array("{$taoClass}::{$method}", $arguments);
+
+        $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
     }
 }

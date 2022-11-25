@@ -20,7 +20,6 @@ pid=1
 
 */
 
-
 $task = new taskTest();
 r($task->getDataOfTasksPerExecutionTest()) && p('101:name,value')       && e('迭代1,14'); //统计executionID为101的执行的任务数量
 r($task->getDataOfTasksPerExecutionTest()) && p('102:name,value')       && e('迭代2,4');  //统计executionID为102的执行的任务数量

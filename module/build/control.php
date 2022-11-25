@@ -12,6 +12,27 @@
 class build extends control
 {
     /**
+     * Common actions.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function commonActions($projectID = 0)
+    {
+        $hidden  = '';
+        if($projectID)
+        {
+            $project = $this->loadModel('project')->getByID($projectID);
+            if(!$project->hasProduct) $hidden = 'hide';
+
+            $this->view->multipleProject = $project->multiple;
+        }
+
+        $this->view->hidden = $hidden;
+    }
+
+    /**
      * Create a build.
      *
      * @param  int    $executionID
@@ -28,13 +49,12 @@ class build extends control
 
         if(!empty($_POST))
         {
-            $executionID = empty($executionID) ? $this->post->execution : $executionID;
-            if(empty($executionID)) dao::$errors['execution'] = $this->lang->build->emptyExecution;
+            if(empty($executionID) && $this->app->tab == 'execution') dao::$errors['execution'] = $this->lang->build->emptyExecution;
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(defined('TUTORIAL')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true)); // Fix bug #21095.
 
-            $buildID = $this->build->create($executionID);
+            $buildID = $this->build->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
 
@@ -46,38 +66,40 @@ class build extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
         }
 
+        $this->loadModel('product');
+        $this->loadModel('project');
         /* Set menu. */
-        $executions = array();
         if($this->app->tab == 'project')
         {
-            $this->loadModel('project')->setMenu($projectID);
-            $executions  = $this->execution->getPairs($projectID, 'all', 'stagefilter');
-            $executionID = empty($executionID) ? key($executions) : $executionID;
+            $this->project->setMenu($projectID);
+            $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter');
+            $executionID   = empty($executionID) ? key($executions) : $executionID;
+            $productGroups = $executionID ? $this->product->getProducts($executionID) : array();
+            $branchGroups  = $executionID ? $this->project->getBranchesByProject($executionID) : array();
             $this->session->set('project', $projectID);
         }
         elseif($this->app->tab == 'execution')
         {
-            $execution  = $this->execution->getByID($executionID);
-            $executions = $this->execution->getPairs($execution->project);
+            $execution     = $this->execution->getByID($executionID);
+            $executions    = $this->execution->getPairs($execution->project);
+            $projectID     = $execution->project;
+            $productGroups = $this->product->getProducts($executionID);
+            $branchGroups  = $this->project->getBranchesByProject($executionID);
             $this->execution->setMenu($executionID);
             $this->session->set('project', $execution->project);
         }
         elseif($this->app->tab == 'qa')
         {
-            $execution  = $this->execution->getByID($executionID);
-            $projectID  = $execution ? $execution->project : 0;
-            $executions = $this->execution->getPairs($projectID);
+            $execution     = $this->execution->getByID($executionID);
+            $projectID     = $execution ? $execution->project : 0;
+            $executions    = $this->execution->getPairs($projectID);
+            $productGroups = $this->product->getProducts($executionID);
+            $branchGroups  = $this->project->getBranchesByProject($executionID);
         }
 
-        $executionList = empty($executions) ? array() : $this->execution->getByIdList(array_keys($executions));
-        foreach($executionList as $execution)
-        {
-            if($execution->lifetime == 'ops') unset($executions[$execution->id]);
-        }
+        $this->commonActions($projectID);
 
-        $productGroups = $this->loadModel('product')->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
-        $branchGroups  = $this->loadModel('project')->getBranchesByProject($executionID);
         $branchPairs   = $this->loadModel('branch')->getPairs($productID, 'active');
         $branches      = array();
         $products      = array();
@@ -102,7 +124,7 @@ class build extends control
         $this->view->products      = $products;
         $this->view->projectID     = $projectID;
         $this->view->executions    = $executions;
-        $this->view->lastBuild     = $this->build->getLast($executionID);
+        $this->view->lastBuild     = $this->build->getLast($executionID, $projectID);
         $this->view->productGroups = $productGroups;
         $this->view->users         = $this->user->getPairs('nodeleted|noclosed');
         $this->display();
@@ -134,7 +156,7 @@ class build extends control
             $message = $this->executeHooks($buildID);
             if($message) $this->lang->saveSuccess = $message;
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "buildID=$buildID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
         }
 
         $this->loadModel('execution');
@@ -142,30 +164,26 @@ class build extends control
         $build = $this->build->getById((int)$buildID);
 
         /* Set menu. */
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($build->project);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->execution->setMenu($build->execution);
-        }
+        if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($build->project);
+        if($this->app->tab == 'execution') $this->execution->setMenu($build->execution);
 
-        /* Get stories and bugs. */
-        $orderBy = 'status_asc, stage_asc, id_desc';
-
-        /* Assign. */
-        $execution = $this->execution->getByID($build->execution);
-        if(empty($execution))
+        $builds = array();
+        if($build->execution)
         {
-            $execution = new stdclass();
-            $execution->name = '';
+            $productGroups = $this->product->getProducts($build->execution);
+            $branches      = $this->loadModel('branch')->getList($build->product, $build->execution, 'all');
+        }
+        else
+        {
+            $productGroups = $this->product->getProducts($build->project);
+            $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
+            $builds        = $this->build->getBuildPairs($build->product, $build->branch, 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
         }
 
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
-        if(!isset($executions[$build->execution])) $executions[$build->execution] = $execution->name;
 
-        $productGroups = $this->product->getProducts($build->execution);
+        /* Get stories and bugs. */
+        $orderBy = 'status_asc, stage_asc, id_desc';
 
         if(!isset($productGroups[$build->product]))
         {
@@ -175,7 +193,6 @@ class build extends control
         }
 
         /* Display status of branch. */
-        $branches = $this->loadModel('branch')->getList($build->product, $build->execution, 'all');
         $branchTagOption = array();
         foreach($branches as $branchInfo)
         {
@@ -185,19 +202,20 @@ class build extends control
 
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
-        $this->view->title           = $execution->name . $this->lang->colon . $this->lang->build->edit;
-        $this->view->position[]      = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $execution->name);
+        $this->commonActions($build->project);
+
+        $this->view->title           = $build->name . $this->lang->colon . $this->lang->build->edit;
         $this->view->position[]      = $this->lang->build->edit;
         $this->view->product         = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
         $this->view->branchTagOption = $branchTagOption;
-        $this->view->executions      = $executions;
         $this->view->orderBy         = $orderBy;
-
-        $this->view->productGroups = $productGroups;
-        $this->view->products      = $products;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter', $build->builder);
-        $this->view->build         = $build;
-        $this->view->testtaskID    = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($build->id)->andWhere('deleted')->eq(0)->fetch('id');
+        $this->view->executions      = $executions;
+        $this->view->productGroups   = $productGroups;
+        $this->view->products        = $products;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter', $build->builder);
+        $this->view->build           = $build;
+        $this->view->builds          = $builds;
+        $this->view->testtaskID      = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($build->id)->andWhere('deleted')->eq(0)->fetch('id');
         $this->display();
     }
 
@@ -233,44 +251,57 @@ class build extends control
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+
         /* Get product and bugs. */
         $product = $this->loadModel('product')->getById($build->product);
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->andWhere('deleted')->eq(0)
-            ->beginIF($type == 'bug')->orderBy($orderBy)->fi()
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)
+            ->where('id')->in($build->allBugs)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'bug')->orderBy($sort)->fi()
             ->page($bugPager)
             ->fetchAll();
 
         /* Get stories and stages. */
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories    = $this->dao->select('t1.*, t2.stage')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_STORYSTAGE)->alias('t2')->on('t1.id = t2.story')
-            ->where('t1.id')->in($build->stories)
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($type == 'story')->orderBy("t1.$orderBy")->fi()
+        $stories    = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+            ->where('id')->in($build->allStories)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'story')->orderBy($sort)->fi()
             ->page($storyPager)
             ->fetchAll('id');
+
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
+        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         /* Set menu. */
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($build->project);
+            $objectType = 'project';
+            $objectID   = $build->project;
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($build->execution);
+            $objectType = 'execution';
+            $objectID   = $build->execution;
         }
 
         $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
+
+        $this->commonActions($build->project);
 
         $this->view->title      = "BUILD #$build->id $build->name" . (isset($executions[$build->execution]) ? " - " . $executions[$build->execution] : '');
         $this->view->stories    = $stories;
         $this->view->storyPager = $storyPager;
 
         $generatedBugPager = new pager($type == 'generatedBug' ? $recTotal : 0, $recPerPage, $type == 'generatedBug' ? $pageID : 1);
-        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, 'all', $build->id, $type, $param, $type == 'generatedBug' ? $orderBy : 'status_desc,id_desc', '', $generatedBugPager);
+        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, $param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
         $this->view->generatedBugPager = $generatedBugPager;
 
         $this->executeHooks($buildID);
@@ -279,7 +310,9 @@ class build extends control
         $this->view->canBeChanged = common::canBeChanged('build', $build); // Determines whether an object is editable.
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->build        = $build;
-        $this->view->buildPairs   = $this->build->getBuildPairs(0, 0, 'noempty,notrunk', $build->execution, 'execution');
+        $this->view->buildPairs   = $this->build->getBuildPairs(0, 'all', 'noempty,notrunk', $objectID, $objectType);
+        $this->view->builds       = $this->build->getByList(array_keys($this->view->buildPairs));
+        $this->view->executions   = $executions;
         $this->view->actions      = $this->loadModel('action')->getList('build', $buildID);
         $this->view->link         = $link;
         $this->view->param        = $param;
@@ -360,21 +393,21 @@ class build extends control
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         {
-            $params = ($type == 'all') ? 'noempty,withbranch' : 'noempty, noterminate, nodone, withbranch';
-            $builds = $this->build->getBuildPairs($productID, $branch, $params);
+            $params = ($type == 'all') ? 'noempty,withbranch' : 'noempty,noterminate,nodone,withbranch';
+            $builds = $this->build->getBuildPairs($productID, $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
             return print(html::select($varName . '[]', $builds, $build, 'size=4 class=form-control multiple'));
         }
         if($varName == 'openedBuilds' )
         {
-            $builds = $this->build->getBuildPairs($productID, $branch, 'noempty');
+            $builds = $this->build->getBuildPairs($productID, $branch, 'noempty', 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
             return print(html::select($varName . "[$index][]", $builds, $build, 'size=4 class=form-control multiple'));
         }
         if($varName == 'resolvedBuild')
         {
-            $params = ($type == 'all') ? 'withbranch' : 'noterminate, nodone, withbranch';
-            $builds = $this->build->getBuildPairs($productID, $branch, $params);
+            $params = ($type == 'all') ? 'withbranch' : 'noterminate,nodone,withbranch';
+            $builds = $this->build->getBuildPairs($productID, $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
             return print(html::select($varName, $builds, $build, "class='form-control'"));
         }
@@ -390,17 +423,18 @@ class build extends control
      * @param  int        $index        the index of batch create bug.
      * @param  bool       $needCreate   if need to append the link of create build
      * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
+     * @param  string     $extra
      * @access public
      * @return string
      */
-    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal')
+    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal', $extra = '')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {
             if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
 
-            $params = ($type == 'all') ? 'noempty, withbranch' : 'noempty, noterminate, nodone, withbranch';
+            $params = ($type == 'all') ? 'noempty,withbranch' : 'noempty,noterminate,nodone,withbranch';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $projectID, 'project', $build);
             if($isJsonView)  return print(json_encode($builds));
             return print(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
@@ -409,11 +443,17 @@ class build extends control
         {
             if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
 
-            $params = ($type == 'all') ? 'withbranch' : 'noterminate, nodone, withbranch';
+            $params = ($type == 'all') ? 'withbranch' : 'noterminate,nodone,withbranch';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $projectID, 'project', $build);
             if($isJsonView)  return print(json_encode($builds));
             return print(html::select($varName, $builds, $build, "class='form-control'"));
         }
+
+        if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+        $builds = $this->build->getBuildPairs($productID, $branch, $type, $projectID, 'project', $build, false);
+        if(strpos($extra, 'multiple') !== false) $varName .= '[]';
+        if($isJsonView) return print(json_encode($builds));
+        return print(html::select($varName, $builds, $build, "class='form-control chosen' $extra"));
     }
 
     /**
@@ -438,7 +478,7 @@ class build extends control
         {
             if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
 
-            $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
+            $params = ($type == 'all') ? 'noempty' : 'noempty,noterminate,nodone';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $executionID, 'execution', $build);
             if($isJsonView) return print(json_encode($builds));
 
@@ -449,7 +489,7 @@ class build extends control
         {
             if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
 
-            $builds = $this->build->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution');
+            $builds = $this->build->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution', $build);
             if($isJsonView) return print(json_encode($builds));
             return print(html::select($varName . "[$index][]", $builds , $build, 'size=4 class=form-control multiple'));
         }
@@ -457,7 +497,7 @@ class build extends control
         {
             if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
 
-            $params = ($type == 'all') ? '' : 'noterminate, nodone';
+            $params = ($type == 'all') ? '' : 'noterminate,nodone';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $executionID, 'execution', $build);
             if($isJsonView) return print(json_encode($builds));
             return print(html::select($varName, $builds, $build, "class='form-control'"));
@@ -492,6 +532,27 @@ class build extends control
     }
 
     /**
+     * Ajax get last build.
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetLastBuild($projectID, $executionID)
+    {
+        $lastBuild = $this->build->getLast($executionID, $projectID);
+        if($lastBuild)
+        { 
+            echo "<div class='help-block'> &nbsp; " . $this->lang->build->last . ": <a class='code label label-badge label-light' id='lastBuildBtn'>" . $lastBuild->name . "</a></div>";
+        }
+        else
+        {
+            echo '';
+        }
+    }
+
+    /**
      * Link stories.
      *
      * @param  int    $buildID
@@ -516,7 +577,7 @@ class build extends control
         $build   = $this->build->getById($buildID);
         $product = $this->loadModel('product')->getById($build->product);
 
-        $this->loadModel('execution')->setMenu($build->execution);
+        if($build->execution) $this->loadModel('execution')->setMenu($build->execution);
         $this->loadModel('story');
         $this->loadModel('tree');
         $this->loadModel('product');
@@ -536,6 +597,19 @@ class build extends control
         $this->config->product->search['params']['module']['values'] = $this->tree->getOptionMenu($build->product, 'story', 0, $build->branch);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
+        if($build->project)
+        {
+            $project = $this->loadModel('project')->getByID($build->project);
+            if(!$project->hasProduct and $project->model != 'scrum')
+            {
+                unset($this->config->product->search['fields']['plan']);
+            }
+            else if(!$project->hasProduct and !$project->multiple)
+            {
+                unset($this->config->product->search['fields']['plan']);
+            }
+        }
+
         if($product->type == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
@@ -552,13 +626,14 @@ class build extends control
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
+        $executionID = $build->execution ? $build->execution : $build->project;
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $build->branch, $queryID, 'id', $build->execution, 'story', $build->stories, $pager);
+            $allStories = $this->story->getBySearch($build->product, $build->branch, $queryID, 'id', $executionID, 'story', $build->allStories, $pager);
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($build->execution, $build->product, 0, 't1.`order`_desc', 'byBranch', $build->branch, 'story', $build->stories, $pager);
+            $allStories = $this->story->getExecutionStories($executionID, $build->product, 0, 't1.`order`_desc', 'byBranch', $build->branch, 'story', $build->allStories, $pager);
         }
 
         $this->view->allStories   = $allStories;
@@ -583,21 +658,6 @@ class build extends control
     {
         $this->build->unlinkStory($buildID, $storyID);
 
-        /* if ajax request, send result. */
-        if($this->server->ajax)
-        {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
-        }
         return print(js::reload('parent'));
     }
 
@@ -638,7 +698,7 @@ class build extends control
         /* Set menu. */
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);
-        $this->loadModel('execution')->setMenu($build->execution);
+        if($build->execution) $this->loadModel('execution')->setMenu($build->execution);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -661,6 +721,20 @@ class build extends control
         unset($this->config->bug->search['params']['product']);
         unset($this->config->bug->search['fields']['project']);
         unset($this->config->bug->search['params']['project']);
+
+        if($build->project)
+        {
+            $project = $this->loadModel('project')->getByID($build->project);
+            if(!$project->hasProduct and $project->model != 'scrum')
+            {
+                unset($this->config->bug->search['fields']['plan']);
+            }
+            else if(!$project->hasProduct and !$project->multiple)
+            {
+                unset($this->config->bug->search['fields']['plan']);
+            }
+        }
+
         if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
@@ -676,13 +750,14 @@ class build extends control
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
+        $executionID = $build->execution ? $build->execution : $build->project;
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($build->product, $build->branch, $queryID, 'id_desc', $build->bugs, $pager, $build->project);
+            $allBugs = $this->bug->getBySearch($build->product, $build->branch, $queryID, 'id_desc', $build->allBugs, $pager, $build->project);
         }
         else
         {
-            $allBugs = $this->bug->getExecutionBugs($build->execution, 0, 'all', $buildID, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
+            $allBugs = $this->bug->getExecutionBugs($executionID, 0, 'all', $buildID, 'noclosed', 0, 'status_desc,id_desc', $build->allBugs, $pager);
         }
 
         $this->view->allBugs    = $allBugs;

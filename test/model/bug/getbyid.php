@@ -10,26 +10,26 @@ title=bugModel->getById();
 cid=1
 pid=1
 
-查询id为1的bug的title                >> BUG1
-查询id为1的bug的status               >> active
-查询id为1的bug的plan                 >> 1
-查询id为1的bug的module               >> 1821
-查询id为1的bug的story                >> 2
-查询id为4的bug的title                >> BUG4
-查询id为4的bug的status               >> active
-查询id为4的bug的plan                 >> 4
-查询id为4的bug的module               >> 1825
-查询id为4的bug的story                >> 14
-查询id为7的bug的title                >> 缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-查询id为7的bug的status               >> active
-查询id为7的bug的plan                 >> 7
-查询id为7的bug的module               >> 1831
-查询id为7的bug的story                >> 26
-查询id为不存在的1000001的bug的title  >> 0
+查询id为1的bug的title >> BUG1
+查询id为1的bug的status >> active
+查询id为1的bug的plan >> 1
+查询id为1的bug的module >> 1821
+查询id为1的bug的story >> 2
+查询id为4的bug的title >> BUG4
+查询id为4的bug的status >> active
+查询id为4的bug的plan >> 4
+查询id为4的bug的module >> 1825
+查询id为4的bug的story >> 14
+查询id为7的bug的title >> 缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
+查询id为7的bug的status >> active
+查询id为7的bug的plan >> 7
+查询id为7的bug的module >> 1831
+查询id为7的bug的story >> 26
+查询id为不存在的1000001的bug的title >> 0
 查询id为不存在的1000001的bug的status >> 0
-查询id为不存在的1000001的bug的plan   >> 0
+查询id为不存在的1000001的bug的plan >> 0
 查询id为不存在的1000001的bug的module >> 0
-查询id为不存在的1000001的bug的story  >> 0
+查询id为不存在的1000001的bug的story >> 0
 
 */
 

@@ -10,6 +10,8 @@ title=测试 apiModel->getLibById();
 cid=1
 pid=1
 
+获取刚创建的api >> 910
+
 */
 
 $api = new apiTest();

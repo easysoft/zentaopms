@@ -17,6 +17,7 @@ $lang->my->doc             = "我的文档";
 $lang->my->createProgram   = '添加项目';
 $lang->my->project         = "我的项目";
 $lang->my->execution       = "我的{$lang->executionCommon}";
+$lang->my->audit           = '审批';
 $lang->my->issue           = '我的问题';
 $lang->my->risk            = '我的风险';
 $lang->my->profile         = '我的档案';
@@ -61,7 +62,7 @@ $lang->my->projects     = '所属项目';
 $lang->my->executions   = "所属{$lang->executionCommon}";
 
 $lang->my->executionMenu = new stdclass();
-$lang->my->executionMenu->undone = '未结束';
+$lang->my->executionMenu->undone = '未完成';
 $lang->my->executionMenu->done   = '已完成';
 
 $lang->my->taskMenu = new stdclass();
@@ -80,6 +81,33 @@ $lang->my->storyMenu->reviewedByMe = '由我评审';
 $lang->my->storyMenu->closedByMe   = '由我关闭';
 $lang->my->storyMenu->assignedByMe = '由我指派';
 
+$lang->my->auditField = new stdclass();
+$lang->my->auditField->title  = '评审标题';
+$lang->my->auditField->time   = '提交时间';
+$lang->my->auditField->type   = '评审对象';
+$lang->my->auditField->result = '评审结果';
+$lang->my->auditField->status = '状态';
+
+$lang->my->auditField->oaTitle['attend']   = '%s的考勤申请：%s';
+$lang->my->auditField->oaTitle['leave']    = '%s的请假申请：%s';
+$lang->my->auditField->oaTitle['makeup']   = '%s的补班申请：%s';
+$lang->my->auditField->oaTitle['overtime'] = '%s的加班申请：%s';
+$lang->my->auditField->oaTitle['lieu']     = '%s的调休申请：%s';
+
+$lang->my->auditMenu = new stdclass();
+$lang->my->auditMenu->audit = new stdclass();
+$lang->my->auditMenu->audit->all      = '所有';
+$lang->my->auditMenu->audit->story    = '需求';
+$lang->my->auditMenu->audit->testcase = '用例';
+if($config->edition == 'max' and helper::hasFeature('waterfall')) $lang->my->auditMenu->audit->project = '项目';
+if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = '反馈';
+if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->auditMenu->audit->oa = '办公';
+
+$lang->my->contributeMenu = new stdclass();
+$lang->my->contributeMenu->audit = new stdclass();
+$lang->my->contributeMenu->audit->reviewedbyme = '由我评审';
+$lang->my->contributeMenu->audit->createdbyme  = '由我发起';
+
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = '进行中';
 $lang->my->projectMenu->wait       = '未开始';
@@ -95,13 +123,12 @@ $lang->my->form->lblAccount = '帐号信息';
 $lang->my->programLink   = '项目集默认着陆页';
 $lang->my->productLink   = '产品默认着陆页';
 $lang->my->projectLink   = '项目默认着陆页';
-if($config->systemMode == 'classic') $lang->my->executionLink = $lang->executionCommon . '默认着陆页';
-if($config->systemMode == 'new') $lang->my->executionLink = '执行默认着陆页';
+$lang->my->executionLink = '执行默认着陆页';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '默认进入项目集列表，可以查看所有的项目集';
 $lang->my->programLinkList['program-project'] = '默认进入最近一个项目集的项目列表，可以查看当前项目集下所有项目';
-if($config->systemMode == 'new') $lang->my->programLinkList['program-kanban'] = '默认进入项目集看板，可以可视化的查看到所有项目集的进展情况';
+$lang->my->programLinkList['program-kanban']  = '默认进入项目集看板，可以可视化的查看到所有项目集的进展情况';
 
 $lang->my->productLinkList = array();
 $lang->my->productLinkList['product-index']     = '默认进入产品主页，可以了解公司整体的产品状况';
@@ -110,22 +137,18 @@ $lang->my->productLinkList['product-dashboard'] = '默认进入最近一个产�
 $lang->my->productLinkList['product-browse']    = '默认进入最近一个产品的需求列表，可以查看当前产品下的需求信息';
 $lang->my->productLinkList['product-kanban']    = '默认进入产品看板，可以可视化的查看到所有产品的进展情况';
 
-global $config;
 $lang->my->projectLinkList = array();
 $lang->my->projectLinkList['project-browse']    = '默认进入项目列表，可以查看所有的项目';
 $lang->my->projectLinkList['project-execution'] = '默认进入项目下所有执行列表，查看所有执行信息';
 $lang->my->projectLinkList['project-index']     = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
-if($config->systemMode == 'new') $lang->my->projectLinkList['project-kanban'] = '默认进入项目看板，可以可视化的查看到所有项目的进展情况';
+$lang->my->projectLinkList['project-kanban']    = '默认进入项目看板，可以可视化的查看到所有项目的进展情况';
 
 $lang->my->executionLinkList = array();
-if($config->systemMode == 'new')
-{
-    $lang->my->executionLinkList['execution-all']             = '默认进入执行列表，可以查看所有的执行';
-    $lang->my->executionLinkList['execution-task']            = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';
-    $lang->my->executionLinkList['execution-executionkanban'] = '默认进入执行看板，可以查看进行中项目的执行情况';
-}
-if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "默认进入最近一个{$lang->executionCommon}的任务列表，可以查看当前{$lang->executionCommon}下的任务信息";
+$lang->my->executionLinkList['execution-all']             = '默认进入执行列表，可以查看所有的执行';
+$lang->my->executionLinkList['execution-task']            = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';
+$lang->my->executionLinkList['execution-executionkanban'] = '默认进入执行看板，可以查看进行中项目的执行情况';
 
+$lang->my->confirmReview['pass'] = '您确定要执行通过操作吗？';
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'>全新<span style='color: #0c60e1'>“青春蓝”</span>主题上线了！</p>
 <div>

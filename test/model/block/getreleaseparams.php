@@ -10,7 +10,7 @@ title=测试 blockModel->getReleaseParams();
 cid=1
 pid=1
 
-
+测试name >> 数量,20,input
 
 */
 

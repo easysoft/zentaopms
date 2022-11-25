@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -23,4 +24,4 @@ r($user->updateContactListTest(2,     '新的列表名称2', $userList)) && p('l
 r($user->updateContactListTest(3,     '新的列表名称3', ''))        && p('userLsit')  && e('');              //更新ID为3的联系人列表，获取更新的联系人列表
 r($user->updateContactListTest(1000,  '新的列表名称4', $userList)) && p('userList')  && e('0');             //更新ID为1000的联系人列表，获取更新的联系人列表
 
-system("./ztest init");
+$db->restoreDB();

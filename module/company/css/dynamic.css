@@ -20,13 +20,16 @@
 
 .c-project, .c-product, .c-execution {width: 110px !important; overflow: unset;}
 .c-user, .c-order {width: 96px !important; overflow: unset;}
-.c-date {width: 200px;}
+#mainMenu .picker .picker-selections{white-space:nowrap;}
+.picker-drop-menu{width:auto !important; max-width:350px !important;}
 
-.timeline>li:before {left: -26px;}
-.timeline>li+li:after {left: -23px;}
+.timeline > li:before {left: -26px;}
+.timeline > li + li:after {left: -23px;}
 .timeline-text {margin-left: -18px;}
 .label-action {padding: 0 4px;}
 .label-id {margin-left: 4px;}
-.timeline>li.active:before {left: -30px;}
-.timeline>li>div:after {left: -27px;}
+.timeline > li.active:before {left: -30px;}
+.timeline > li > div:after {left: -27px;}
 .timeline .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.timeline > li > div > .timeline-tag, .timeline > li > div > .timeline-text > .label-action {color: #838A9D;}
+.timeline > li > div > .timeline-text > a {color: #313C52;}

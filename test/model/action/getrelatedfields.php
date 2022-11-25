@@ -18,7 +18,7 @@ pid=1
 测试获取objectType task objectId 6 actionType edited extra 1 的动态信息 >> ,6,;16;106
 测试获取objectType build objectId 7 actionType assigned extra 1 的动态信息 >> ,7,;17;0
 测试获取objectType bug objectId 8 actionType closed extra 1 的动态信息 >> ,3,;13;103
-测试获取objectType testcase objectId 9 actionType deleted extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType testcase objectId 9 actionType deleted extra 1 的动态信息 >> ,3,;13;103
 测试获取objectType case objectId 10 actionType deletedfile extra 1 的动态信息 >> ,3,;13;103
 测试获取objectType testtask objectId 1 actionType editfile extra 1 的动态信息 >> ,1,;11;101
 测试获取objectType user objectId 12 actionType erased extra 1 的动态信息 >> ,0,;0;0
@@ -26,7 +26,7 @@ pid=1
 测试获取objectType doclib objectId 14 actionType hidden extra 1 的动态信息 >> ,14,;0;0
 测试获取objectType todo objectId 15 actionType commented extra 1 的动态信息 >> ,0,;0;0
 测试获取objectType branch objectId 16 actionType activated extra 1 的动态信息 >> ,0,;0;0
-测试获取objectType module objectId 17 actionType blocked extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType module objectId 17 actionType blocked extra 1 的动态信息 >> ,,0,,;0;0
 测试获取objectType testsuite objectId 18 actionType moved extra 1 的动态信息 >> ,0,;0;0
 测试获取objectType caselib objectId 19 actionType confirmed extra 1 的动态信息 >> ,0,;0;0
 测试获取objectType testreport objectId 20 actionType caseconfirmed extra 1 的动态信息 >> ,,;0;0
@@ -41,7 +41,7 @@ pid=1
 测试获取objectType task objectId 29 actionType deleteestimate extra 1 的动态信息 >> ,29,;39;129
 测试获取objectType build objectId 1 actionType canceled extra 1 的动态信息 >> ,1,;11;0
 测试获取objectType bug objectId 31 actionType svncommited extra 1 的动态信息 >> ,11,;21;111
-测试获取objectType testcase objectId 32 actionType gitcommited extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType testcase objectId 32 actionType gitcommited extra 1 的动态信息 >> ,8,;18;108
 测试获取objectType case objectId 33 actionType finished extra 1 的动态信息 >> ,9,;19;109
 测试获取objectType testtask objectId 1 actionType paused extra 1 的动态信息 >> ,1,;11;101
 测试获取objectType user objectId 35 actionType verified extra 1 的动态信息 >> ,0,;0;0
@@ -66,7 +66,7 @@ r($action->getRelatedFieldsTest($objectType[4],  $objectId[4],  $actionType[4], 
 r($action->getRelatedFieldsTest($objectType[5],  $objectId[5],  $actionType[5],  $extra[5]))  && p('product;project;execution') && e(',6,;16;106');     // 测试获取objectType task objectId 6 actionType edited extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[6],  $objectId[6],  $actionType[6],  $extra[6]))  && p('product;project;execution') && e(',7,;17;0');       // 测试获取objectType build objectId 7 actionType assigned extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[7],  $objectId[7],  $actionType[7],  $extra[7]))  && p('product;project;execution') && e(',3,;13;103');     // 测试获取objectType bug objectId 8 actionType closed extra 1 的动态信息
-r($action->getRelatedFieldsTest($objectType[8],  $objectId[8],  $actionType[8],  $extra[8]))  && p('product;project;execution') && e(',0,;0;0');        // 测试获取objectType testcase objectId 9 actionType deleted extra 1 的动态信息
+r($action->getRelatedFieldsTest($objectType[8],  $objectId[8],  $actionType[8],  $extra[8]))  && p('product;project;execution') && e(',3,;13;103');     // 测试获取objectType testcase objectId 9 actionType deleted extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[9],  $objectId[9],  $actionType[9],  $extra[9]))  && p('product;project;execution') && e(',3,;13;103');     // 测试获取objectType case objectId 10 actionType deletedfile extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[10], $objectId[10], $actionType[10], $extra[10])) && p('product;project;execution') && e(',1,;11;101');     // 测试获取objectType testtask objectId 1 actionType editfile extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[11], $objectId[11], $actionType[11], $extra[11])) && p('product;project;execution') && e(',0,;0;0');        // 测试获取objectType user objectId 12 actionType erased extra 1 的动态信息
@@ -74,7 +74,7 @@ r($action->getRelatedFieldsTest($objectType[12], $objectId[12], $actionType[12],
 r($action->getRelatedFieldsTest($objectType[13], $objectId[13], $actionType[13], $extra[13])) && p('product;project;execution') && e(',14,;0;0');       // 测试获取objectType doclib objectId 14 actionType hidden extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[14], $objectId[14], $actionType[14], $extra[14])) && p('product;project;execution') && e(',0,;0;0');        // 测试获取objectType todo objectId 15 actionType commented extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[15], $objectId[15], $actionType[15], $extra[15])) && p('product;project;execution') && e(',0,;0;0');        // 测试获取objectType branch objectId 16 actionType activated extra 1 的动态信息
-r($action->getRelatedFieldsTest($objectType[16], $objectId[16], $actionType[16], $extra[16])) && p('product;project;execution') && e(',0,;0;0');        // 测试获取objectType module objectId 17 actionType blocked extra 1 的动态信息
+r($action->getRelatedFieldsTest($objectType[16], $objectId[16], $actionType[16], $extra[16])) && p('product;project;execution') && e(',,0,,;0;0');      // 测试获取objectType module objectId 17 actionType blocked extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[17], $objectId[17], $actionType[17], $extra[17])) && p('product;project;execution') && e(',0,;0;0');        // 测试获取objectType testsuite objectId 18 actionType moved extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[18], $objectId[18], $actionType[18], $extra[18])) && p('product;project;execution') && e(',0,;0;0');        // 测试获取objectType caselib objectId 19 actionType confirmed extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[19], $objectId[19], $actionType[19], $extra[19])) && p('product;project;execution') && e(',,;0;0');         // 测试获取objectType testreport objectId 20 actionType caseconfirmed extra 1 的动态信息
@@ -89,7 +89,7 @@ r($action->getRelatedFieldsTest($objectType[4],  $objectId[27], $actionType[27],
 r($action->getRelatedFieldsTest($objectType[5],  $objectId[28], $actionType[28], $extra[28])) && p('product;project;execution') && e(',29,;39;129');    // 测试获取objectType task objectId 29 actionType deleteestimate extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[6],  $objectId[29], $actionType[29], $extra[29])) && p('product;project;execution') && e(',1,;11;0');       // 测试获取objectType build objectId 1 actionType canceled extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[7],  $objectId[30], $actionType[30], $extra[30])) && p('product;project;execution') && e(',11,;21;111');    // 测试获取objectType bug objectId 31 actionType svncommited extra 1 的动态信息
-r($action->getRelatedFieldsTest($objectType[8],  $objectId[31], $actionType[31], $extra[31])) && p('product;project;execution') && e(',0,;0;0');        // 测试获取objectType testcase objectId 32 actionType gitcommited extra 1 的动态信息
+r($action->getRelatedFieldsTest($objectType[8],  $objectId[31], $actionType[31], $extra[31])) && p('product;project;execution') && e(',8,;18;108');     // 测试获取objectType testcase objectId 32 actionType gitcommited extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[9],  $objectId[32], $actionType[32], $extra[32])) && p('product;project;execution') && e(',9,;19;109');     // 测试获取objectType case objectId 33 actionType finished extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[10], $objectId[33], $actionType[33], $extra[33])) && p('product;project;execution') && e(',1,;11;101');     // 测试获取objectType testtask objectId 1 actionType paused extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[11], $objectId[34], $actionType[34], $extra[34])) && p('product;project;execution') && e(',0,;0;0');        // 测试获取objectType user objectId 35 actionType verified extra 1 的动态信息

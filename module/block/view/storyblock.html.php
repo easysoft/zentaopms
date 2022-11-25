@@ -29,11 +29,11 @@
     <thead>
       <tr>
         <th class="c-id"><?php echo $lang->idAB?></th>
+        <th class="c-name"><?php echo $lang->story->title;?></th>
         <th class="c-pri"><?php echo $lang->priAB?></th>
-        <th class="c-name"><?php echo $lang->SRCommon;?></th>
         <?php if($longBlock):?>
-        <th class='c-estimate'><?php echo $lang->story->estimateAB;?></th>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
+        <th class='c-estimate'><?php echo $lang->story->estimateAB;?></th>
         <th class='c-stage'><?php echo $lang->story->stageAB;?></th>
         <?php endif;?>
       </tr>
@@ -46,14 +46,14 @@
       ?>
       <tr <?php echo $appid?>>
         <td class="c-id-xs"><?php echo sprintf('%03d', $story->id);?></td>
-        <td class="c-pri"><span class="label-pri label-pri-<?php echo $story->pri?>" title="<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>"><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo html::a($viewLink, $story->title);?></td>
+        <td class="c-pri"><span class="label-pri label-pri-<?php echo $story->pri?>" title="<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>"><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <?php if($longBlock):?>
-        <td class='c-estimate text-center' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit?></td>
         <?php $status = $this->processStatus('story', $story);?>
         <td class='c-status' title='<?php echo $status;?>'>
           <span class="status-story status-<?php echo $story->status?>"><?php echo $status;?></span>
         </td>
+        <td class='c-estimate text-center' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit?></td>
         <td class='c-stage'>
           <span class='story-stage-<?php echo $story->stage?>'>
             <?php echo zget($lang->story->stageList, $story->stage, $story->stage);?>

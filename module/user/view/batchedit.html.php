@@ -108,7 +108,7 @@
         </tr>
         <?php endforeach;?>
         <tr>
-          <th colspan='2'><?php echo $lang->user->verifyPassword?></th>
+          <th colspan='4'><?php echo $lang->user->verifyPassword?></th>
           <td colspan='2'>
             <div class="required required-wrapper"></div>
             <input type='text'     style="display:none"> <!-- for disable autocomplete all browser -->
@@ -119,7 +119,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="<?php echo count($visibleFields) + 4;?>" class="text-center form-actions">
+            <td colspan="<?php echo count($visibleFields) + 6;?>" class="text-center form-actions">
               <?php echo html::submitButton($lang->save);?>
               <?php echo html::backButton();?>
             </td>

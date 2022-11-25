@@ -10,6 +10,9 @@ title=测试 searchModel->saveDict();
 cid=1
 pid=1
 
+创建我是标题的搜索索引 >> 4
+创建特殊字符的搜索索引 >> 0
+
 */
 
 $search = new searchTest();

@@ -50,7 +50,7 @@ if($config->requestType == 'PATH_INFO')
     {
         $_SERVER['PATH_INFO'] = $path['basename'];
     }
-    else 
+    else
     {
         /* url like http://pms.zentao.net/zentao/my/, PATH_INFO is 'my'. */
         if(is_dir('./module/' . $path['basename']))

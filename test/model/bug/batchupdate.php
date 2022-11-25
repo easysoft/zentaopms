@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -25,4 +26,4 @@ $bug = new bugTest();
 r($bug->batchUpdateObject($bugIDList, $title[$bugIDList[0]], $type[$bugIDList[0]], $bugIDList[0])) && p('0:field,old,new;1:field,old,new') && e('type,codeerror,config;title,BUG1,批量修改bug一'); // 测试批量修改bug1
 r($bug->batchUpdateObject($bugIDList, $title[$bugIDList[1]], $type[$bugIDList[1]], $bugIDList[1])) && p('0:field,old,new;1:field,old,new') && e('type,config,install;title,BUG2,批量修改bug二');   // 测试批量修改bug2
 r($bug->batchUpdateObject($bugIDList, $title[$bugIDList[2]], $type[$bugIDList[2]], $bugIDList[2])) && p('0:field,old,new;1:field,old,new') && e('type,install,security;title,BUG3,批量修改bug三'); // 测试批量修改bug3
-system("./ztest init");
+$db->restoreDB();

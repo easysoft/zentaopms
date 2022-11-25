@@ -39,10 +39,9 @@
 .ke-toolbar {padding-left: 20px; width: 100%; height: 30px;}
 .ke-edit {border-top: 1px solid rgb(220, 220, 220)}
 .ke-edit, .CodeMirror {margin: 8px 200px 0 200px; background: #fff;}
-.kindeditor-ph {padding-left: 20px !important;}
+.kindeditor-ph {padding: 20px 20px 0 20px !important;}
 .editor-toolbar {background: #fff; padding-left: 20px; border-right: unset; border-top: unset; height: 30px;}
-.hide-sidebar .ke-edit {padding-right: 20px;}
-.hide-sidebar .CodeMirror {padding-right: 50px;}
+.CodeMirror {padding: 20px 20px 0 20px;}
 .CodeMirror.CodeMirror-wrap {border-left: 0; border-right: 0; border-bottom: 0;}
 .ke-statusbar {display: none;}
 
@@ -50,36 +49,24 @@
 
 #noticeAcl {margin-left: 10px; vertical-align: middle;}
 
-#moreList {display: inline-block; padding: 7px;}
-#moreList .icon-more-circle {font-size: 20px;}
-#moreList ul.dropdown-menu {left: -77px;}
+#basicInfoLink {border: unset;}
 
-#backBtn {border: unset;}
-#backBtn i {font-size: 20px;}
-
+#modalBasicInfo .modal-content {overflow-x: hidden; overflow-y: scroll;}
+#modalBasicInfo .modal-body {padding-bottom: 10px;}
 .modal-title {font-size: 14px !important; font-weight: 700 !important;}
-#modalBasicInfo .modal-dialog {width: 720px;}
+#basicInfoBox tfoot td {padding-bottom: 0;}
 </style>
-<?php $backLink = $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}");?>
+<?php $backLink = $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}") . "#app={$this->app->tab}";?>
 <div id="mainContent" class="main-content">
   <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
       <tbody>
         <tr id='headerBox'>
-          <?php if($from == 'create'):?>
-          <td width='50px'><?php echo html::linkButton("<i class='icon icon-back-circle'></i>", $backLink, 'self', "id='backBtn'");?></td>
-          <?php else:?>
-          <td width='50px'><?php echo html::backButton("<i class='icon icon-back-circle'></i>", "id='backBtn'", '');?></td>
-          <?php endif;?>
+          <td width='90px'><?php echo html::a($backLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "id='backBtn' class='btn btn-secondary'");?></td>
           <td class="doc-title" colspan='3'><?php echo html::input('title', $doc->title, "placeholder='{$lang->doc->titlePlaceholder}' class='form-control' required");?></td>
           <td class="text-right">
             <?php echo html::submitButton('', "data-placement='bottom'", 'btn btn-primary');?>
-            <div id="moreList" class="dropdown dropdown-hover">
-              <?php echo html::a('#', "<i class='icon icon-more-circle'></i>");?>
-              <ul class="dropdown-menu">
-                <li><?php echo html::a('#modalBasicInfo', $lang->doc->basicInfo, '', "data-toggle='modal' id='basicInfoLink'");?><li>
-              </ul>
-            </div>
+            <?php echo html::a('#modalBasicInfo', "<i class='icon icon-cog-outline'></i> " . $lang->settings, '', "data-toggle='modal' id='basicInfoLink' class='btn'");?>
           </td>
         </tr>
         <tr>
@@ -97,13 +84,10 @@
       </tbody>
     </table>
 
-    <div class='modal fade modal-basic' id='modalBasicInfo' data-scroll-inside='false'>
+    <div class='modal fade modal-basic' id='modalBasicInfo' data-scroll-inside='true'>
       <div class='modal-dialog'>
         <div class='modal-content with-padding'>
           <div class='modal-header'>
-            <button type='button' class='close' data-dismiss='modal'>
-              <i class="icon icon-close"></i>
-            </button>
             <h2 class='modal-title'><?php echo $lang->doc->basicInfo;?></h2>
           </div>
           <div class='modal-body'>
@@ -160,7 +144,7 @@
               </tr>
               <tfoot>
                 <tr>
-                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->save, '', "class='btn btn-primary btn-wide'");?></td>
+                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->doc->confirm, '', "class='btn btn-primary btn-wide'");?></td>
                 </tr>
               </tfoot>
             </table>
@@ -174,21 +158,12 @@
 $(function()
 {
     var contentHeight = $(document).height() - 100;
-    setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height(contentHeight);}, 100);
-    setTimeout(function(){$('.CodeMirror').height(contentHeight);}, 100);
-
-    //basicInfoContent = '';
-    //$('#basicInfoLink').click(function()
-    //{
-    //    basicInfoContent = $('#basicInfoBox').html();
-    //});
-
-    //$('#modalBasicInfo .modal-header .close').click(function()
-    //{
-    //    $('#basicInfoBox').html(basicInfoContent);
-    //});
+    setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea, .CodeMirror').height(contentHeight);}, 100);
+    $('#modalBasicInfo .modal-content').css('max-height', contentHeight);
 
     $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
+
+    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 })
 </script>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>

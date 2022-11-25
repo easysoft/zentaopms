@@ -38,7 +38,7 @@ $useGuest = $this->app->user->account == 'guest';
           <div class='panel-title'><?php echo $block->title;?></div>
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
-            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, '<i class="icon icon-more"></i>', '', "title='{$lang->more}'") . '</li>'; ?>
+            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>'; ?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
@@ -59,7 +59,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php if($hasHeading):?>
         </div>
         <?php endif;?>
-        <?php echo $this->fetch('block', 'printBlock', "id=$block->id&module=$module")?>
+        <div class='panel-body scrollbar-hover'></div>
       </div>
       <?php endforeach;?>
     </div>
@@ -73,7 +73,7 @@ $useGuest = $this->app->user->account == 'guest';
           <div class='panel-title'><?php echo $block->title;?></div>
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
-            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, '<i class="icon icon-more"></i>', '', "title='{$lang->more}'") . '</li>';?>
+            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>';?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
@@ -94,7 +94,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php if($hasHeading):?>
         </div>
         <?php endif;?>
-        <?php echo $this->fetch('block', 'printBlock', "id=$block->id&module=$module")?>
+        <div class='panel-body scrollbar-hover'></div>
       </div>
       <?php endforeach;?>
     </div>
@@ -136,6 +136,11 @@ $(function()
         });
     }
     setTimeout(checkRemind, 1000);
+
+    $('#dashboard .row .panel').each(function()
+    {
+        refreshBlock($(this));
+    })
 });
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>

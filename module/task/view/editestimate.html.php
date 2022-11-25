@@ -19,20 +19,22 @@
     <div class='main-header'>
       <h2><?php echo $lang->task->editEstimate;?></h2>
     </div>
-    <form method='post' target='hiddenwin' <?php if($estimate->isLast) echo "onsubmit='return confirmLeft();'"?>>
+    <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->task->date;?></th>
-          <td class='w-p45'><?php echo html::input('date', $estimate->date, 'class="form-control form-date"');?></td>
+          <td class='w-p45 required'><?php echo html::input('date', $estimate->date, 'class="form-control form-date"');?></td>
           <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->record;?></th>
-          <td><?php echo html::input('consumed', $estimate->consumed, 'class="form-control"');?></td>
+          <td class='required'><?php echo html::input('consumed', $estimate->consumed, 'class="form-control"');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->left;?></th>
-          <td><?php echo html::input('left', $estimate->left, 'class="form-control"');?></td>
+          <?php $readonly = $estimate->isLast ? '' : 'readonly';?>
+          <?php if(!empty($task->team) and $estimate->left == 0) $readonly = 'readonly';?>
+          <td><?php echo html::input('left', $estimate->left, "class='form-control' {$readonly}");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->comment;?></th>
@@ -45,4 +47,27 @@
     </form>
   </div>
 </div>
+<?php if($estimate->isLast):?>
+<script>
+$(function()
+{
+    $("#submit").click(function(e, confirmed)
+    {
+        if(confirmed) return true;
+
+        var $this = $(this);
+        var $left = $('#left');
+        var left  = $.trim($left.val());
+        if(!$left.prop('readonly') && left == 0)
+        {
+            e.preventDefault();
+            bootbox.confirm(confirmRecord, function(result)
+            {
+                if(result) $this.trigger('click', true);
+            });
+        }
+    });
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.lite.html.php';?>

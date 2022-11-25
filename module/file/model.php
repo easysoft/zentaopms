@@ -44,26 +44,23 @@ class fileModel extends model
     {
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq((int)$objectID)
+            ->andWhere('objectID')->in($objectID)
             ->andWhere('extra')->ne('editor')
-            ->andWhere('deleted')->eq('0')
             ->beginIF($extra)->andWhere('extra')->eq($extra)
+            ->andWhere('deleted')->eq('0')
             ->orderBy('id')
             ->fetchAll('id');
 
         foreach($files as $file)
         {
-            if($objectType != 'traincourse' and $objectType != 'traincontents')
-            {
-                $realPathName   = $this->getRealPathName($file->pathname);
-                $file->realPath = $this->savePath . $realPathName;
-                $file->webPath  = $this->webPath . $realPathName;
-            }
-            else
+            if($objectType == 'traincourse' or  $objectType == 'traincontents')
             {
                 $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
                 $file->webPath  = 'data/course/' . $file->pathname;
+                continue;
             }
+
+            $this->setFileWebAndRealPaths($file);
         }
 
         return $files;
@@ -80,31 +77,46 @@ class fileModel extends model
     {
         $file = $this->dao->findById($fileID)->from(TABLE_FILE)->fetch();
         if(empty($file)) return false;
-        if($file->objectType != 'traincourse' and $file->objectType != 'traincontents')
-        {
-            $realPathName   = $this->getRealPathName($file->pathname);
-            $file->realPath = $this->savePath . $realPathName;
-            $file->webPath  = $this->webPath . $realPathName;
-        }
-        else
-        {
-            $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
-            $file->webPath  = $this->app->getWebRoot() . 'data/course/' . $file->pathname;
-        }
 
-        if($file->objectType != 'traincourse' and $file->objectType != 'traincontents')
-        {
-            $realPathName   = $this->getRealPathName($file->pathname);
-            $file->realPath = $this->savePath . $realPathName;
-            $file->webPath  = $this->webPath . $realPathName;
-        }
-        else
+        if($file->objectType == 'traincourse' or $file->objectType == 'traincontents')
         {
             $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
             $file->webPath  = 'data/course/' . $file->pathname;
+
+            return $file;
         }
 
+        $this->setFileWebAndRealPaths($file);
+
         return $file;
+    }
+
+    /**
+     * Get files by ID list.
+     *
+     * @param  int    $fileIdList
+     * @access public
+     * @return array
+     */
+    public function getByIdList($fileIdList)
+    {
+        if(empty($fileIdList)) return array();
+
+        $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($fileIdList)->orderBy('id')->fetchAll('id');
+
+        foreach($files as $file)
+        {
+            if($file->objectType == 'traincourse' or $file->objectType == 'traincontents')
+            {
+                $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
+                $file->webPath  = 'data/course/' . $file->pathname;
+                continue;
+            }
+
+            $this->setFileWebAndRealPaths($file);
+        }
+
+        return $files;
     }
 
     /**
@@ -166,6 +178,8 @@ class fileModel extends model
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
+
+        if(!is_array($_FILES[$htmlTagName]['error']) and $_FILES[$htmlTagName]['error'] != 0) return $_FILES[$htmlTagName];
 
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
@@ -468,6 +482,20 @@ class fileModel extends model
     }
 
     /**
+     * Set paths: realPath and webPath.
+     *
+     * @param  object $file
+     * @access public
+     * @return void
+     */
+    public function setFileWebAndRealPaths(&$file)
+    {
+        $pathName       = $this->getRealPathName($file->pathname);
+        $file->realPath = $this->savePath . $pathName;
+        $file->webPath  = $this->webPath . $pathName;
+    }
+
+    /**
      * Insert the set image size code.
      *
      * @param  string    $content
@@ -490,6 +518,30 @@ class fileModel extends model
         if($isonlybody) $_GET['onlybody'] = 'yes';
 
         return str_replace(' src="data/upload', ' onload="setImageSize(this,' . $maxSize . ')" src="data/upload', $content);
+    }
+
+    /**
+     * Check file exists or not.
+     *
+     * @param  object $file
+     * @access public
+     * @return bool
+     */
+    public function fileExists($file)
+    {
+        return file_exists($file->realPath);
+    }
+
+    /**
+     * Unlink file.
+     *
+     * @param  object $file
+     * @access public
+     * @return bool|null
+     */
+    public function unlinkFile($file)
+    {
+        return @unlink($file->realPath);
     }
 
     /**
@@ -523,6 +575,58 @@ class fileModel extends model
         {
             return false;
         }
+    }
+
+    /**
+     * Check file priv.
+     *
+     * @param  int    $file
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($file)
+    {
+        if($this->app->user->admin) return true;
+
+        $objectType = $file->objectType;
+        $objectID   = $file->objectID;
+
+        $projectObjects   = array('design', 'issue', 'risk');
+        $productObjects   = array('story', 'bug', 'testcase', 'productplan');
+        $executionObjects = array('task', 'build');
+
+        $table = $this->config->objectTables[$objectType];
+        if(!$table) return true;
+
+        if(in_array($objectType, $projectObjects))
+        {
+            $projectID = $this->dao->findByID($objectID)->from($table)->fetch('project');
+        }
+        elseif(in_array($objectType, $productObjects))
+        {
+            $productID = $this->dao->findByID($objectID)->from($table)->fetch('product');
+        }
+        elseif(in_array($objectType, $executionObjects))
+        {
+            $executionID = $this->dao->findByID($objectID)->from($table)->fetch('execution');
+        }
+        elseif($objectType == 'doc')
+        {
+            $doc = $this->dao->findById($objectID)->from(TABLE_DOC)->fetch();
+            return $this->loadModel('doc')->checkPrivDoc($doc);
+        }
+        elseif($objectType == 'feedback')
+        {
+            $productID     = $this->dao->findById($objectID)->from(TABLE_FEEDBACK)->fetch('product');
+            $grantProducts = $this->loadModel('feedback')->getGrantProducts();
+            return in_array($productID, array_keys($grantProducts));
+        }
+
+        if((isset($projectID)   and $projectID   > 0) and strpos(",{$this->app->user->view->projects},", ",$projectID,")  === false) return false;
+        if((isset($productID)   and $productID   > 0) and strpos(",{$this->app->user->view->products},", ",$productID,")  === false) return false;
+        if((isset($executionID) and $executionID > 0) and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false) return false;
+
+        return true;
     }
 
 	/**
@@ -949,7 +1053,7 @@ class fileModel extends model
                 {
                     $file = $this->getById($imageID);
                     $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($imageID)->exec();
-                    @unlink($file->realPath);
+                    $this->unlinkFile($file);
                 }
             }
             unset($_SESSION['album'][$uid]);
@@ -1017,7 +1121,7 @@ class fileModel extends model
     {
         if($this->config->file->storageType == 'fs')
         {
-            return file_exists($file->realPath) ? getimagesize($file->realPath) : 0;
+            return file_exists($file->realPath) ? getimagesize($file->realPath) : array(0, 0, $file->extension);
         }
         else if($this->config->file->storageType == 's3')
         {
@@ -1043,7 +1147,6 @@ class fileModel extends model
     {
         return $this->dao->select("id,$value")->from(TABLE_FILE)
             ->where('id')->in($IDs)
-            ->andWhere('deleted')->eq('0')
             ->fetchPairs();
     }
 
@@ -1064,5 +1167,73 @@ class fileModel extends model
             $fromcaseVersion += 1;
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($file->objectID)->exec();
         }
+    }
+
+    /**
+     * Process file info for object.
+     *
+     * @param  string    $objectType
+     * @param  object    $oldObject
+     * @param  object    $newObject
+     * @access public
+     * @return void
+     */
+    public function processFile4Object($objectType, $oldObject, $newObject)
+    {
+        $oldFiles    = empty($oldObject->files) ? '' : join(',', array_keys($oldObject->files));
+        $deleteFiles = $newObject->deleteFiles;
+        if(!empty($deleteFiles))
+        {
+            $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
+            foreach($deleteFiles as $fileID)
+            {
+                $this->unlinkFile($oldObject->files[$fileID]);
+                $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
+            }
+        }
+
+        $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
+        $addedFiles = $this->saveUpload($objectType, $oldObject->id);
+        $addedFiles = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
+
+        $newObject->files = trim($oldFiles . $addedFiles, ',');
+        $oldObject->files = join(',', array_keys($oldObject->files));
+    }
+
+    /**
+     * Get last modified timestamp of file.
+     *
+     * @param  object $file
+     * @access public
+     * @return int
+     */
+    public function fileMTime($file)
+    {
+        return filemtime($file->realPath);
+    }
+
+    /**
+     * Get file size.
+     *
+     * @param  object $file
+     * @access public
+     * @return int
+     */
+    public function fileSize($file)
+    {
+        return filesize($file->realPath);
+    }
+
+    /**
+     * Save file to local storage temporarily.
+     *
+     * @param  object $file
+     * @access public
+     * @return string
+     */
+    public function saveAsTempFile($file)
+    {
+        /* If the storage type is local, do nothing. */
+        if($this->config->file->storageType == 'fs') return $file->realPath;
     }
 }

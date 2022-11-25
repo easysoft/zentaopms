@@ -63,7 +63,9 @@ function syncProductOrProject(obj, type)
         });
         $('#' + type + 'Module').trigger("chosen:updated");
     })
-    $('#copyModule').attr('onclick', null);
+
+    $('#copyModule').unbind('click');
+    $('#copyModule').removeAttr('onclick');
     $('#copyModule').bind('click', function(){syncModule(obj.value, viewType)});
 }
 
@@ -76,6 +78,4 @@ $(document).ready(function()
 {
     toggleCopy(false);
     $('[data-id="edit"] a').modalTrigger({type: 'iframe', width: 500});
-
-    parent.$('#triggerModal .modal-content .modal-header .close').on('click', function(){parent.location.reload();});
 });

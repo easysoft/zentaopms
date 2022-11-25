@@ -16,12 +16,11 @@
 <?php js::set('oldConsumed', $task->consumed);?>
 <?php js::set('team', $task->team);?>
 <?php js::set('members', $members);?>
-<?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <div id='mainContent' class='main-content'>
   <div class='center-block' id='taskTeamEditor'>
-    <?php if(empty($task->team) and !isset($task->team[$app->user->account])):?>
+    <?php if(empty($task->members) and !isset($task->members[$app->user->account])):?>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
@@ -38,7 +37,7 @@
         <?php endif;?>
       </h2>
     </div>
-    <form method='post' target='hiddenwin'>
+    <form method='post' target='hiddenwin' action='<?php echo inlink('editTeam', "executionID=$task->execution&taskID=$task->id")?>' id='teamForm'>
       <table class='table table-form'>
         <tbody class="sortable">
           <tr class='hidden'>
@@ -48,6 +47,7 @@
               <?php echo html::input('estimate', $task->estimate, "class='form-control' {$disabled}");?>
             </td>
           </tr>
+          <?php echo html::hidden('status', $task->status);?>
           <tr class='hidden'>
             <th><?php echo $lang->task->left;?></th>
             <td>
@@ -55,51 +55,15 @@
               <?php echo html::input('left', $task->left, "class='form-control' {$disabled}");?>
             </td>
           </tr>
-          <?php foreach($task->team as $member):?>
-          <tr>
-            <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
-            <td>
-              <div class='input-group'>
-                <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
-                <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-              </div>
-            </td>
-            <td class='w-130px sort-handler'>
-              <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-              <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-              <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-            </td>
-          </tr>
-          <?php endforeach;?>
-          <tr class='template'>
-            <td class='w-250px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
-            <td>
-              <div class='input-group'>
-                <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-              </div>
-            </td>
-            <td class='w-130px sort-handler'>
-              <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-              <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-              <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-            </td>
-          </tr>
+          <?php include dirname(__FILE__) . DS . 'taskteam.html.php';?>
         </tbody>
         <tfoot>
-        <tr><td colspan='3' class='text-center form-actions'><?php echo html::submitButton();?></td></tr>
+          <tr>
+            <td colspan='3' class='text-center form-actions'><?php echo html::submitButton();?></td>
+          </tr>
         </tfoot>
       </table>
     </form>
-    <hr class='small' />
     <?php endif;?>
   </div>
 </div>

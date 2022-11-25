@@ -20,7 +20,7 @@ if($config->edition != 'open')
     $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
     $lang->navIcons['workflow'] = "<i class='icon icon-flow'></i>";
 
-    $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|';
+    $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|browseType=unclosed';
     $lang->mainNav->oa       = $lang->navIcons['oa'] . '办公|attend|personal|';
     $lang->mainNav->workflow = $lang->navIcons['workflow'] . '工作流|workflow|browseFlow|';
 
@@ -51,6 +51,7 @@ else
 }
 
 $lang->task->common = '任务';
+$lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
 /* My menu. */
 $lang->my->menu           = new stdclass();
@@ -197,7 +198,8 @@ $lang->admin->menu->dev['menuOrder'][15] = 'editor';
 $lang->admin->menu->dev['menuOrder'][20] = 'entry';
 
 $lang->admin->menu->system['subMenu']              = new stdclass();
-$lang->admin->menu->system['subMenu']->data        = array('link' => "{$lang->admin->data}|backup|index", 'subModule' => 'action');
+$lang->admin->menu->system['subMenu']->backup      = array('link' => "{$lang->backup->common}|backup|index");
+$lang->admin->menu->system['subMenu']->trash       = array('link' => "{$lang->action->trash}|action|trash");
 $lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak');
 $lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
 $lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");

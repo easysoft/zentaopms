@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/branch.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -24,4 +25,4 @@ r($branch->unlinkBranch4ProjectTest($productIDList[0])) && p() && e('0'); // 测
 r($branch->unlinkBranch4ProjectTest($productIDList[1])) && p() && e('0'); // 测试产品 42 转为普通产品接触分支关联
 r($branch->unlinkBranch4ProjectTest($productIDList[2])) && p() && e('0'); // 测试产品 43 转为普通产品接触分支关联
 r($branch->unlinkBranch4ProjectTest($productIDList[3])) && p() && e('0'); // 测试产品 44 45 转为普通产品接触分支关联
-system("./ztest init");
+$db->restoreDB();

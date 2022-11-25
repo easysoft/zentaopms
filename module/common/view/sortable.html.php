@@ -18,7 +18,7 @@ $(document).ready(function()
         var $tbody = $(this);
         $tbody.sortable(
         {
-            selector: 'tr',
+            selector: typeof(sortSelector) == 'undefined' ? 'tr' : sortSelector,
             dragCssClass: 'drag-row',
             trigger: $tbody.find('.sort-handler').length ? '.sort-handler' : null,
             finish: function(e)

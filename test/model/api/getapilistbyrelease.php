@@ -10,6 +10,8 @@ title=测试 apiModel->getApiListByRelease();
 cid=1
 pid=1
 
+创建api后创建发布，使用发布查找api >> 910
+
 */
 
 global $tester;

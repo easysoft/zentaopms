@@ -1,0 +1,12 @@
+CREATE VIEW  `employees_view` AS
+SELECT *
+FROM
+    `employees`
+WHERE
+    `employees`.`gender` = 'M'
+UNION
+SELECT *
+FROM
+    `employees`
+WHERE
+    `employees`.`gender` = 'F';

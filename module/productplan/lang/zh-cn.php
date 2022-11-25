@@ -73,6 +73,8 @@ $lang->productplan->cannotDeleteParent = "不能删除父计划";
 $lang->productplan->selectProjects     = "请选择所属项目";
 $lang->productplan->projectNotEmpty    = '所属项目不能为空。';
 $lang->productplan->nextStep           = "下一步";
+$lang->productplan->summary            = "本页共 <strong>%s</strong> 个计划，父计划 <strong>%s</strong>，子计划 <strong>%s</strong>，独立计划 <strong>%s</strong>。";
+$lang->productplan->checkedSummary     = "共选中 <strong>%total%</strong> 个计划，父计划 <strong>%parent%</strong>，子计划 <strong>%child%</strong>，独立计划 <strong>%independent%</strong>。";
 
 $lang->productplan->id         = '编号';
 $lang->productplan->product    = $lang->productCommon;
@@ -135,7 +137,7 @@ $lang->productplan->endLetterChildTip    = "父计划[%s]的完成日期：%s，
 $lang->productplan->beginLetterParentTip = "子计划[%s]的开始日期：%s，不能小于父计划的开始日期: %s";
 $lang->productplan->endGreaterParentTip  = "子计划[%s]的完成日期：%s，不能大于父计划的完成日期: %s";
 
-$lang->productplan->featureBar['browse']['all']    = '所有';
+$lang->productplan->featureBar['browse']['all']    = '全部';
 $lang->productplan->featureBar['browse']['undone'] = '未完成';
 $lang->productplan->featureBar['browse']['wait']   = '未开始';
 $lang->productplan->featureBar['browse']['doing']  = '进行中';

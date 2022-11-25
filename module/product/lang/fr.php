@@ -11,6 +11,7 @@
  */
 $lang->product->index            = 'Accueil ' . $lang->productCommon;
 $lang->product->browse           = 'Liste Stories';
+$lang->product->requirement      = 'Liste Requirements';
 $lang->product->dynamic          = 'Historique';
 $lang->product->view             = "{$lang->productCommon} Détail";
 $lang->product->edit             = "Editer {$lang->productCommon}";
@@ -34,7 +35,10 @@ $lang->product->changeProgram    = "{$lang->productCommon} confirmation of the s
 $lang->product->changeProgramTip = "%s > Change Program";
 $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Remove Whitelist';
+$lang->product->track            = 'Consulter Stories Matrice';
 $lang->product->checkedProducts  = '%s produits s électionnés';
+$lang->product->pageSummary      = 'Total products: %s.';
+$lang->product->lineSummary      = 'Total product lines: %s, Total products: %s.';
 
 $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Fermer {$lang->productCommon}";
@@ -68,6 +72,8 @@ $lang->product->changedStories        = 'Changées [S]';
 $lang->product->changedStoriesTitle   = 'Stories Modifiées';
 $lang->product->draftStories          = 'Brouillon [S]';
 $lang->product->draftStoriesTitle     = 'Stories en Analyse';
+$lang->product->reviewingStories      = "Reviewing [S]";
+$lang->product->reviewingStoriesTitle = "Reviewing Stories";
 $lang->product->closedStories         = 'Fermées [S]';
 $lang->product->closedStoriesTitle    = 'Stories Fermées';
 $lang->product->storyCompleteRate     = "{$lang->SRCommon} Completion rate";
@@ -95,11 +101,13 @@ $lang->product->changeLineError      = "Products already exist under the product
 $lang->product->programEmpty         = 'Program should not be empty!';
 $lang->product->nameIsDuplicate      = "『%s』 product line already exists, please reset!";
 $lang->product->nameIsDuplicated     = "Product Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
+$lang->product->reviewStory          = 'You are not a reviewer for needs "%s" , and cannot review. This operation has been filtered';
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
 $lang->product->name           = "Nom du {$lang->productCommon}";
 $lang->product->code           = 'Code';
+$lang->product->shadow         = "Shadow {$lang->productCommon}";
 $lang->product->line           = "{$lang->productCommon} Line";
 $lang->product->lineName       = "{$lang->productCommon} Line Name";
 $lang->product->order          = 'Rang';
@@ -132,21 +140,22 @@ $lang->product->createdDate    = 'Créé le';
 $lang->product->createdVersion = 'Created Version';
 $lang->product->mailto         = 'Mailto';
 
-$lang->product->searchStory  = 'Recherche';
-$lang->product->assignedToMe = 'Affectées à Moi';
-$lang->product->openedByMe   = 'Créées par Moi';
-$lang->product->reviewedByMe = 'Validées par Moi';
-$lang->product->reviewByMe   = 'ReviewByMe';
-$lang->product->closedByMe   = 'Fermées par Moi';
-$lang->product->draftStory   = 'A étudier';
-$lang->product->activeStory  = 'Actives';
-$lang->product->changedStory = 'Changées';
-$lang->product->willClose    = 'A Fermer';
-$lang->product->closedStory  = 'Fermées';
-$lang->product->unclosed     = 'Ouvertes';
-$lang->product->unplan       = 'Non planifiées';
-$lang->product->viewByUser   = 'Par Utilisateur';
-$lang->product->assignedByMe = 'AssignedByMe';
+$lang->product->searchStory    = 'Recherche';
+$lang->product->assignedToMe   = 'Affectées à Moi';
+$lang->product->openedByMe     = 'Créées par Moi';
+$lang->product->reviewedByMe   = 'Validées par Moi';
+$lang->product->reviewByMe     = 'ReviewByMe';
+$lang->product->closedByMe     = 'Fermées par Moi';
+$lang->product->draftStory     = 'A étudier';
+$lang->product->activeStory    = 'Actives';
+$lang->product->changingStory  = 'Changement en cours';
+$lang->product->reviewingStory = 'Examen en cours';
+$lang->product->willClose      = 'A Fermer';
+$lang->product->closedStory    = 'Fermées';
+$lang->product->unclosed       = 'Ouvertes';
+$lang->product->unplan         = 'Non planifiées';
+$lang->product->viewByUser     = 'Par Utilisateur';
+$lang->product->assignedByMe   = 'AssignedByMe';
 
 /* Product Kanban. */
 $lang->product->myProduct             = 'Products Ownedbyme';
@@ -181,13 +190,13 @@ $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Fermé';
 
 global $config;
-if($config->systemMode == 'new')
+if($config->systemMode == 'ALM')
 {
-    $lang->product->aclList['private'] = "{$lang->productCommon} Privé (seuls les membres de l'équipe {$lang->executionCommon} ont les droits)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
 }
 else
 {
-    $lang->product->aclList['private'] = "{$lang->productCommon} Privé (seuls les membres de l'équipe {$lang->executionCommon} ont les droits)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated project can access)";
 }
 $lang->product->aclList['open']    = "Défaut (Les utilisateurs ayant des droits sur {$lang->productCommon} peuvent accéder à ce {$lang->productCommon}.)";
 //$lang->product->aclList['custom']  = "Personnalisé (les membres de l'équipe et les membres de la Liste blanche peuvent y accéder.)";
@@ -207,8 +216,7 @@ $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
-$lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
-$lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
+
 $lang->product->featureBar['browse']['reviewbyme']   = $lang->product->reviewByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
@@ -217,9 +225,12 @@ $lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
-$lang->product->moreSelects['assignedbyme'] = $lang->product->assignedByMe;
-$lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
-$lang->product->moreSelects['activestory']  = $lang->product->activeStory;
-$lang->product->moreSelects['changedstory'] = $lang->product->changedStory;
-$lang->product->moreSelects['willclose']    = $lang->product->willClose;
-$lang->product->moreSelects['closedstory']  = $lang->product->closedStory;
+$lang->product->moreSelects['openedbyme']     = $lang->product->openedByMe;
+$lang->product->moreSelects['reviewedbyme']   = $lang->product->reviewedByMe;
+$lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
+$lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
+$lang->product->moreSelects['activestory']    = $lang->product->activeStory;
+$lang->product->moreSelects['changingstory']  = $lang->product->changingStory;
+$lang->product->moreSelects['reviewingstory'] = $lang->product->reviewingStory;
+$lang->product->moreSelects['willclose']      = $lang->product->willClose;
+$lang->product->moreSelects['closedstory']    = $lang->product->closedStory;

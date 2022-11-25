@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/personnel.class.php';
+su('admin');
 
 /**
 
@@ -9,48 +10,28 @@ title=测试 personnelModel->getCopiedObjects();
 cid=1
 pid=1
 
-取出匹配的项目数量 >> 20
-取出其中一个匹配的项目 >> 独立项目20
-取出匹配的产品数量 >> 119
-取出其中一个匹配的产品 >> 多平台产品100
-取出匹配的项目集数量 >> 9
-取出其中一个匹配的项目集 >> 项目集10
-取出匹配的执行数量 >> 10
-取出其中一个匹配的执行 >> &nbsp;&nbsp;&nbsp;独立项目20
-传入不存在的objectID匹配的执行数量 >> 0
-传入空值时取出匹配的执行数量 >> 0
+查找与项目1同项目集的其他项目数量 >> 8
+查找与项目1同项目集的其他项目并标明项目人数 >> 项目11（2人）
+查找与迭代1同项目的其他迭代及所属项目 >> 7
+查找与迭代1同项目的其他迭代及所属项目并标明项目人数 >> 项目1（2人）,&nbsp;&nbsp;&nbsp;迭代91（1人）
+查找与正常产品2同项目集的其他产品数量 >> 10
+查找出项目集1外的其他所有项目集 >> 9
 
 */
 
-$personnel = new personnelTest('admin');
+global $tester;
+$personnel = $tester->loadModel('personnel');
 
-$objectID = array();
-$objectID[0] = 1;
-$objectID[1] = 2;
-$objectID[2] = 11111;
-$objectID[3] = '';
+$copyProject1 = $personnel->getCopiedObjects(11, 'project');
+$copyProject2 = $personnel->getCopiedObjects(11, 'project', true);
+$copySprint1  = $personnel->getCopiedObjects(101, 'sprint');
+$copySprint2  = $personnel->getCopiedObjects(101, 'sprint', true);
+$copyProduct  = $personnel->getCopiedObjects(2, 'product');
+$copyProgram  = $personnel->getCopiedObjects(1, 'program');
 
-$objectType = array();
-$objectType[0] = 'project';
-$objectType[1] = 'product';
-$objectType[2] = 'program';
-$objectType[3] = 'sprint';
-
-$result1 = $personnel->getCopiedObjectsTest($objectID[0], $objectType[0]);
-$result2 = $personnel->getCopiedObjectsTest($objectID[0], $objectType[1]);
-$result3 = $personnel->getCopiedObjectsTest($objectID[1], $objectType[2]);
-$result4 = $personnel->getCopiedObjectsTest($objectID[1], $objectType[3]);
-$result5 = $personnel->getCopiedObjectsTest($objectID[2], $objectType[3]);
-$result6 = $personnel->getCopiedObjectsTest($objectID[2], $objectType[3]);
-
-//a($result);die;
-r(count($result1)) && p()      && e('20');                           //取出匹配的项目数量
-r($result1)        && p('750') && e('独立项目20');                   //取出其中一个匹配的项目
-r(count($result2)) && p()      && e('119');                          //取出匹配的产品数量
-r($result2)        && p('100') && e('多平台产品100');                //取出其中一个匹配的产品
-r(count($result3)) && p()      && e('9');                            //取出匹配的项目集数量
-r($result3)        && p('10')  && e('项目集10');                     //取出其中一个匹配的项目集
-r(count($result4)) && p()      && e('10');                           //取出匹配的执行数量
-r($result4)        && p('750') && e('&nbsp;&nbsp;&nbsp;独立项目20'); //取出其中一个匹配的执行
-r(count($result5)) && p()      && e('0');                            //传入不存在的objectID匹配的执行数量
-r(count($result6)) && p()      && e('0');                            //传入空值时取出匹配的执行数量
+r(count($copyProject1)) && p()         && e('8');                                            //查找与项目1同项目集的其他项目数量
+r($copyProject2)        && p('21')     && e('项目11（2人）');                                //查找与项目1同项目集的其他项目并标明项目人数
+r(count($copySprint1))  && p()         && e('7');                                            //查找与迭代1同项目的其他迭代及所属项目
+r($copySprint2)         && p('11,191') && e('项目1（2人）,&nbsp;&nbsp;&nbsp;迭代91（1人）'); //查找与迭代1同项目的其他迭代及所属项目并标明项目人数
+r(count($copyProduct))  && p()         && e('10');                                           //查找与正常产品2同项目集的其他产品数量
+r(count($copyProgram))  && p()         && e('9');                                            //查找出项目集1外的其他所有项目集

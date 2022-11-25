@@ -1,3 +1,8 @@
+$(function()
+{
+    loadDocLibs(defaultType);
+})
+
 /**
  * Redirect the parent window.
  *

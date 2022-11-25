@@ -1,0 +1,4 @@
+CREATE PROCEDURE P_TEST(uid INT)
+BEGIN
+    SELECT username FROM users WHERE ID = uid;
+END

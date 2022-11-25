@@ -10,6 +10,12 @@ title=测试 mailModel->autoDetect();
 cid=1
 pid=1
 
+检测qq邮箱信息 >> smtp.qq.com
+检测163邮箱信息 >> smtp.163.com
+检测搜狐邮箱信息 >> smtp.sohu.com
+检测搜狐vip邮箱信息 >> smtp.vip.sohu.com
+检测不存在的邮箱服务商信息 >> 没有检测到相关信息
+
 */
 
 $mail = new mailTest();

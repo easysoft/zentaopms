@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -37,4 +38,4 @@ $after2 = $tester->story->getById(2);
 r($before)  && p('stage') && e('projected'); //查看设置之后的需求状态
 r($after1)  && p('stage') && e('testing');   //查看设置之后的需求状态
 r($after2)  && p('stage') && e('tested');    //查看设置之后的需求状态
-system("./ztest init");
+$db->restoreDB();

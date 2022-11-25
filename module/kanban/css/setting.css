@@ -1,0 +1,13 @@
+#mainContent {padding-left: 0px;}
+#mainContent .objectBox {padding-top: 2px;}
+#mainContent .objectBox .checkbox-primary {display: inline-block;}
+#mainContent .objectBox .checkbox-primary:not(:first-child) {margin-left: 10px;}
+#mainContent .objectBox .checkbox-primary>label:not(:first-child) {padding-left: 20px;}
+#mainContent .laneHeightBox .tip {color: #999;}
+#mainContent .objectBox .checkbox-primary>label:before {top: 2px; left: 0px;}
+#mainContent .objectBox .checkbox-primary>label:after {width: 14px; height: 14px;}
+#mainContent table > tbody th {width: 110px !important;}
+[lang^=en] .laneHeightBox > label, [lang^=de] .laneHeightBox > label, [lang^=fr] .laneHeightBox > label, [lang^=en] .importBox > label, [lang^=de] .importBox > label, [lang^=fr] .importBox > label {margin-left: 0px;}
+#dataform tr > th {vertical-align: top;}
+#colWidth + .fixedTip, #maxColWidth + .autoTip {margin-left: 35px; color: #2667E3; padding-top: 1px;}
+[lang^=en] #colWidth + .fixedTip, [lang^=en] #maxColWidth + .autoTip, [lang^=de] #colWidth + .fixedTip, [lang^=de] #maxColWidth + .autoTip, [lang^=fr] #colWidth + .fixedTip, [lang^=fr] #maxColWidth + .autoTip {margin-left: 50px;}

@@ -30,6 +30,7 @@ $lang->dept->noDepartment = "No Department";
 
 $lang->dept->confirmDelete = " Confirmez que vous voulez bien supprimer ce Compartiment ?";
 $lang->dept->successSave   = " Sauvé !";
+$lang->dept->repeatDepart  = " Il y a un nom de département en double, êtes-vous sûr de l'ajouter ?";
 
 $lang->dept->error = new stdclass();
 $lang->dept->error->hasSons  = 'Ce Compartiment possède des domaines. Vous ne pouvez pas le supprimer !';

@@ -17,7 +17,7 @@ class productIssuesEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($productID)
     {
@@ -30,7 +30,7 @@ class productIssuesEntry extends entry
 
         $storyFields = 'id,status';
         $storyStatus = array('' => '');
-        $storyStatus['opened'] = 'draft,active,changed';
+        $storyStatus['opened'] = 'draft,reviewing,active,changing';
         $storyStatus['closed'] = 'closed';
 
         $bugFields = 'id,status';
@@ -166,7 +166,7 @@ class productIssuesEntry extends entry
         $issues = $page < 1 ? array() : array_slice($issues, ($page-1) * $limit, $limit);
 
         $result = $this->processIssues($issues);
-        $this->send(200, array('page' => $page, 'total' => $total, 'limit' => $limit, 'issues' => $result));
+        return $this->send(200, array('page' => $page, 'total' => $total, 'limit' => $limit, 'issues' => $result));
     }
 
     /**

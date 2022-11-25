@@ -1,1 +1,27 @@
+#mainContent {min-height: 500px;}
+.table-recorded thead{background: rgb(245 245 245);}
 .form-condensed .table-form {margin-bottom: 20px;}
+.hours {display: flex; float: left; transform: translate(0, 50%); margin: 0;}
+.estimateTotally, .consumedTotally {border-radius: 9px; padding: 3px 7px; margin: 0 5px 0 5px; min-width: 18px;}
+.estimateTotally {background: #FFEFEF; color: #FF6262;}
+.nav > li.divider {margin: 0 10px 0 5px; background-color: #000; opacity: 0.06; width: 1px ; height: 15px; padding: 0 !important;}
+.table-bordered td, .table-bordered th { border: 1px solid #EEEEEE; }
+.table-recorded thead { background: #F5F6F8}
+.table>thead>tr>th{border-bottom: 1px solid #EEEEEE; font-weight: 400;}
+#linearefforts .nav li.active a{color: #0c64eb !important}
+.input-group-addon {background: #fff}
+.icon-calendar {color: rgb(22, 168, 248)}
+#recordForm .table > thead > tr > th {border: none; font-weight: 400;}
+.main-header {border-bottom: none !important}
+.main-header ul.hours:before{content:"（"}
+.main-header ul.hours:after{content:"）"}
+.body-modal .main-header>h2 { max-width: 70% !important; margin-right:0px;}
+.table-record .form-date {border-right: none;}
+
+.table.has-sort-head thead>tr>th>a:after, .table.has-sort-head thead>tr>th>a:before {top: -7px;}
+.table.has-sort-head thead>tr>th>a:hover, .table.has-sort-head thead>tr>th>a:hover:after, .table.has-sort-head thead>tr>th>a:hover:before {color: #000;}
+
+.taskEffort thead > tr > th {padding-right: 10px !important;}
+#toggleFoldIcon:hover {cursor: pointer;}
+#toggleFoldIcon .icon-border {width: 20px; height: 20px; border-radius: 8px;}
+#toggleFoldIcon {margin-bottom: 10px;}

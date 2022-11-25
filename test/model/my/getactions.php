@@ -10,12 +10,12 @@ title=测试 myModel->getActions();
 cid=1
 pid=1
 
-正常查询action >> 32,,32,,这是一个系统日志测试备注32
-正常查询action统计 >> 5
+正常查询action >> 0
+正常查询action统计 >> 0
 
 */
 
 $my = new myTest();
 
-r($my->getActionsTest())        && p('0:id,product,comment') && e('32,,32,,这是一个系统日志测试备注32');// 正常查询action
-r(count($my->getActionsTest())) && p()                       && e('5');                                 // 正常查询action统计
+r($my->getActionsTest())        && p() && e('0'); // 正常查询action
+r(count($my->getActionsTest())) && p() && e('0'); // 正常查询action统计

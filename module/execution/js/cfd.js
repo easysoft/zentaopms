@@ -137,7 +137,7 @@ $(function()
         location.href = createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + type + '&withWeekend=' + withWeekend + '&begin=' + begin + '&end=' + end);
     });
 
-    $("#end, #begin").datetimepicker('setEndDate', today);
-    $("#end, #begin").datetimepicker('setStartDate', executionBegin);
+    $("#end, #begin").datetimepicker('setEndDate', maxDate);
+    $("#end, #begin").datetimepicker('setStartDate', minDate);
     $('.datetimepicker-days table tfoot').append('<tr><th colspan="7">' + dateRangeTip + '</th></tr>');
 });

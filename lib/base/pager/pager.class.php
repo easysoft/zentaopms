@@ -280,16 +280,6 @@ class basePager
             if(strtolower($key) == 'recperpage') $this->params[$key] = $this->recPerPage;
             if(strtolower($key) == 'pageid')     $this->params[$key] = $this->pageID;
         }
-
-        parse_str(strip_tags(urldecode($_SERVER['QUERY_STRING'])), $query);
-        if(!empty($query['m']) && !empty($query['f']) && $query['m'] == $this->moduleName && $query['f'] == $this->methodName)
-        {
-            unset($query['m']);
-            unset($query['f']);
-            unset($query['t']);
-
-            $this->params = array_merge($this->params, $query);
-        }
     }
 
     /**

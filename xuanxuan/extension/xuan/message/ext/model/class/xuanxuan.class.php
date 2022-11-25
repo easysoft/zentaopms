@@ -23,6 +23,10 @@ class xuanxuanMessage extends messageModel
                 {
                     $field = 'obj.*,project.name as projectName,product.name as productName,execu.name as execuName';
                 }
+                else if($objectType == 'feedback')
+                {
+                    $field = 'obj.*,product.name as productName';
+                }
                 else
                 {
                     $field = 'obj.*';
@@ -40,24 +44,47 @@ class xuanxuanMessage extends messageModel
                     ->leftJoin($this->config->objectTables['execution'])->alias('execu')->on('execu.id = obj.execution')
                     ->leftJoin($this->config->objectTables['product'])->alias('product')->on('product.id = obj.product')
                     ->fi()
+                    ->beginIF($objectType == 'feedback')
+                    ->leftJoin($this->config->objectTables['product'])->alias('product')->on('product.id = obj.product')
+                    ->fi()
                     ->where('obj.id')->eq($objectID)
                     ->fetch();
                 $field = $this->config->action->objectNameFields[$objectType];
                 $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyTitle, $this->app->user->realname, $this->lang->action->label->$actionType, 1, $this->lang->action->objectTypes[$objectType]);
-                if ($objectType == 'story' && $actionType == 'reviewed' && !empty($extra))
+                if($objectType == 'story' && $actionType == 'reviewed' && !empty($extra))
                 {
                     $notifyType = strtolower(explode(',', $extra)[0]);
-                    if ($notifyType == 'pass')
+                    if($notifyType == 'pass')
                     {
-                        $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyPassTitle, $this->app->user->realname, 1);
+                        $title = sprintf($this->lang->message->notifyPassTitle, $this->app->user->realname, 1);
                     }
                     else if($notifyType == 'clarify')
                     {
-                        $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyClarifyTitle, $this->app->user->realname, 1);
+                        $title = sprintf($this->lang->message->notifyClarifyTitle, $this->app->user->realname, 1);
                     }
                     else if($notifyType == 'reject')
                     {
-                        $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyRejectTitle, $this->app->user->realname, 1);
+                        $title = sprintf($this->lang->message->notifyRejectTitle, $this->app->user->realname, 1);
+                    }
+                }
+
+                if($objectType == 'feedback' && ($actionType == 'tobug' || $actionType == 'tostory' || $actionType == 'totask' || $actionType == 'todo'))
+                {
+                    if($actionType == 'tobug')
+                    {
+                        $title = sprintf($this->lang->message->feedbackToBugTitle, $this->app->user->realname, 1);
+                    }
+                    else if($actionType == 'tostory')
+                    {
+                        $title = sprintf($this->lang->message->feedbackToStoryTitle, $this->app->user->realname, 1);
+                    }
+                    else if($actionType == 'totask')
+                    {
+                        $title = sprintf($this->lang->message->feedbackToTaskTitle, $this->app->user->realname, 1);
+                    }
+                    else if($actionType == 'todo')
+                    {
+                        $title = sprintf($this->lang->message->feedbackToDoTitle, $this->app->user->realname, 1);
                     }
                 }
 
@@ -68,10 +95,23 @@ class xuanxuanMessage extends messageModel
                 $url    = $server . helper::createLink($objectType == 'kanbancard' ? 'kanban' : $objectType, 'view', "id=$dataID", 'html');
 
                 $target = '';
-                if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? $object->openedBy : $object->assignedTo;
-                if(!empty($object->mailto))     $target .= ",{$object->mailto}";
+                if($objectType == 'feedback')
+                {
+                    $feedback   = $this->loadModel('feedback')->getByID($objectID);
+                    $senderUser = $this->feedback->getToAndCcList($feedback);
+                    foreach($senderUser as $user)
+                    {
+                        $target .= ',' . $user;
+                    }
+                }
+                else
+                {
+                    if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? $object->openedBy : $object->assignedTo;
+                    if(!empty($object->mailto))     $target .= ",{$object->mailto}";
+                }
                 if(($objectType == 'mr' or $objectType == 'kanbancard') and !empty($object->createdBy)) $target .= ",{$object->createdBy}";
                 $target = trim($target, ',');
+                $target = explode(',', $target);
                 $target = $this->dao->select('id')->from(TABLE_USER)
                     ->where('account')->in($target)
                     ->beginIF($objectType != 'mr')->andWhere('account')->ne($this->app->user->account)->fi()
@@ -110,6 +150,15 @@ class xuanxuanMessage extends messageModel
                     $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink($parentType, 'browse', "id=$subcontent->parent", 'html'));
                     $subcontent->cardURL      = $url;
                 }
+                elseif($objectType == 'feedback')
+                {
+                    $subcontent->headTitle  = $object->productName;
+                    $subcontent->headSubTitle = $object->execuName;
+                    $subcontent->parentType = 'product';
+                    $subcontent->parent     = $object->product;
+                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('feedback', 'browse', "id=$object->product", 'html'));
+                    $subcontent->cardURL    = $url;
+                }
                 else
                 {
                     $subcontent->parentType = $objectType;
@@ -146,11 +195,11 @@ class xuanxuanMessage extends messageModel
                     $contentData->actions     = array();
                     $contentData->url         = "xxc:openInApp/zentao-integrated/" . urlencode($url);
                 }
-                $contentData->extra = $extra;
+                $contentData->extra = is_array($extra) ? $extra : '';
 
                 $content = json_encode($contentData);
                 $avatarUrl = $server . $this->app->getWebRoot() . 'favicon.ico';
-                if($target) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
+                if($target && ($objectType == 'bug' || $objectType == 'task' || $objectType == 'story' || $objectType == 'feedback')) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
 
                 if($objectType == 'mr' and is_array($this->lang->message->mr->$actionType) and !empty($object->assignee))
                 {

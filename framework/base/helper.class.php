@@ -77,7 +77,12 @@ class baseHelper
 
         /* 处理$viewType和$vars。Set $viewType and $vars. */
         if(empty($viewType)) $viewType = $app->getViewType();
-        if(!is_array($vars)) parse_str($vars, $vars);
+        if(!is_array($vars))
+        {
+            /* Prevent + from converting to spaces. */
+            $vars = str_replace('+', '%2B', $vars);
+            parse_str($vars, $vars);
+        }
 
         /* 生成url链接的开始部分。Set the begin parts of the link. */
         if($config->requestType == 'PATH_INFO')  $link = $config->webRoot . $appName;
@@ -131,7 +136,7 @@ class baseHelper
          */
         if($viewType == $app->getViewType())
         {
-            $link .= $moduleName . '/';
+            $link .= $moduleName . '.' . $viewType;
             return self::processOnlyBodyParam($link, $onlyBody);
         }
 
@@ -735,6 +740,19 @@ class baseHelper
 
         session_write_close();
         session_id($sessionID);
+        if(ini_get('session.save_handler') == 'user' and isset($_GET['tid']))
+        {
+            $ztSessionHandler = new ztSessionHandler($_GET['tid']);
+            session_set_save_handler(
+                array($ztSessionHandler, "open"),
+                array($ztSessionHandler, "close"),
+                array($ztSessionHandler, "read"),
+                array($ztSessionHandler, "write"),
+                array($ztSessionHandler, "destroy"),
+                array($ztSessionHandler, "gc")
+            );
+            register_shutdown_function('session_write_close');
+        }
         session_start();
     }
 

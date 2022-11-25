@@ -1,0 +1,1 @@
+INSERT INTO `person` (`firstname`, `lastname`, `email`) VALUES (:firstname, :lastname, :email);

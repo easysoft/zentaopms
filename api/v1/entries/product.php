@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class productEntry extends Entry
+class productEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($productID)
     {
@@ -103,7 +103,7 @@ class productEntry extends Entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($productID)
     {
@@ -120,7 +120,7 @@ class productEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $product = $this->product->getByID($productID);
-        $this->send(200, $this->format($product, 'createdDate:time'));
+        return $this->send(200, $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user'));
     }
 
     /**
@@ -128,7 +128,7 @@ class productEntry extends Entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($productID)
     {
@@ -136,6 +136,6 @@ class productEntry extends Entry
         $control->delete($productID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

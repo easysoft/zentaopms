@@ -16,7 +16,7 @@ class productProjectsEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($productID = 0)
     {
@@ -25,7 +25,7 @@ class productProjectsEntry extends entry
         $appendFields = $this->param('fields', '');
 
         $control = $this->loadController('product', 'project');
-        $control->project($this->param('status', 'all'), $productID, $this->param('branch', 0), $this->param('involved', 0), $this->param('order', 'order_desc'));
+        $control->project($this->param('status', 'all'), $productID, $this->param('branch', 0), $this->param('involved', 0), $this->param('order', 'order_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
@@ -59,7 +59,7 @@ class productProjectsEntry extends entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -84,14 +84,14 @@ class productProjectsEntry extends entry
 
         $project = $this->loadModel('project')->getByID($data->id);
 
-        $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
+        return $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
     }
 
     /**
      * Get drop menu.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getDropMenu()
     {
@@ -123,6 +123,6 @@ class productProjectsEntry extends entry
                 }
             }
         }
-        $this->send(200, $dropMenu);
+        return $this->send(200, $dropMenu);
     }
 }

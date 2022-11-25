@@ -58,6 +58,9 @@ switch($argv[1])
     case 'cron':
         ztfRun('model/cron');
         break;
+    case 'custom':
+        ztfRun('model/custom');
+        break;
     case 'datatable':
         ztfRun('model/datatable');
         break;
@@ -114,6 +117,12 @@ switch($argv[1])
         break;
     case 'projectstory':
         ztfRun('model/projectstory');
+        break;
+    case 'projectrelease':
+        ztfRun('model/projectrelease');
+        break;
+    case 'release':
+        ztfRun('model/release');
         break;
     case 'productplan':
         ztfRun('model/productplan');
@@ -177,6 +186,24 @@ switch($argv[1])
         break;
     case 'user':
         ztfRun('model/user');
+        break;
+    case 'weekly':
+        ztfRun('model/weekly');
+        break;
+    case 'gitlab':
+        ztfRun('model/gitlab');
+        break;
+    case 'gitea':
+        ztfRun('model/gitea');
+        break;
+    case 'gogs':
+        ztfRun('model/gogs');
+        break;
+    case 'webhook':
+        ztfRun('model/webhook');
+        break;
+    case 'repo':
+        ztfRun('model/repo');
         break;
 
     default:

@@ -26,9 +26,10 @@
 #swapper .tree li>.list-toggle {top: -1px;}
 
 #subHeader .tree ul {display: block;}
-#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
+div#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
 #gray-line {width: 230px; height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 #swapper li >.selected {color: #0c64eb!important;background: #e9f2fb!important;}
+#dropMenu .col-footer .selected{color: #2e7fff!important;background: #e6f0ff!important; padding: 1px 10px;border-radius: 4px;}
 </style>
 <?php
 $productCounts      = array();
@@ -37,6 +38,7 @@ $tabActive          = '';
 $myProducts         = 0;
 $others             = 0;
 $closeds            = 0;
+$currentProduct     = '';
 
 foreach($products as $programID => $programProducts)
 {
@@ -54,14 +56,14 @@ foreach($products as $programID => $programProducts)
 }
 $productsPinYin = common::convert2Pinyin($productNames);
 
-$myProductsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$normalProductsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$closedProductsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$myProductsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
+$normalProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
+$closedProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
 
 foreach($products as $programID => $programProducts)
 {
     /* Add the program name before project. */
-    if($programID and $config->systemMode == 'new')
+    if($programID and $config->systemMode == 'ALM')
     {
         $programName = zget($programs, $programID);
 
@@ -72,8 +74,9 @@ foreach($products as $programID => $programProducts)
 
     foreach($programProducts as $index => $product)
     {
+        if($product->id == $productID) $currentProduct = $product;
         $selected    = $product->id == $productID ? 'selected' : '';
-        $productName = $product->line ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
+        $productName = ($config->systemMode == 'ALM' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
         $linkHtml    = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
         $locateTab   = ($module == 'testtask' and $method == 'browseUnits' and $app->tab == 'project') ? '' : "data-app='$app->tab'";
 
@@ -136,6 +139,15 @@ $closedProductsHtml .= '</ul>';
       <?php //echo html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->product->all, '', 'class="not-list-item"'); ?>
       <?php //echo html::a(helper::createLink('project', 'browse', 'programID=0&browseType=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
+      <?php if($this->app->tab == 'feedback'):?>
+      <?php $selected = $productID == 'all' ? 'selected' : '';?>
+      <?php if($module == 'feedback'):?>
+      <?php echo html::a(helper::createLink('feedback', 'admin', 'browseType=byProduct&param=all'), $lang->product->all, '', "class='not-list-item pull-left toggle-left-col $selected'"); ?>
+      <?php endif;?>
+      <?php if($module == 'ticket'):?>
+      <?php echo html::a(helper::createLink('ticket', 'browse', 'browseType=byProduct&param=all'), $lang->product->all, '', "class='not-list-item pull-left toggle-left-col $selected'"); ?>
+      <?php endif;?>
+      <?php endif;?>
     </div>
   </div>
   <div id="gray-line" hidden></div>
@@ -144,10 +156,15 @@ $closedProductsHtml .= '</ul>';
    <div class='list-group products'><?php echo $closedProductsHtml;?></div>
   </div>
 </div>
-<script>scrollToSelected();</script>
 <script>
 $(function()
 {
+    <?php if($currentProduct and $currentProduct->status == 'closed'):?>
+    $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
+    <?php else:?>
+    scrollToSelected();
+    <?php endif;?>
+
     $('.nav-tabs li span').hide();
     $('.nav-tabs li.active').find('span').show();
 

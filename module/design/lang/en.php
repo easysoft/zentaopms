@@ -33,10 +33,12 @@ $lang->design->affectedStory = "{$lang->SRCommon}";
 $lang->design->affectedTasks = 'Task';
 $lang->design->reviewObject  = 'Review Object';
 $lang->design->createdBy     = 'CreatedBy';
+$lang->design->createdByAB   = 'CreatedBy';
 $lang->design->createdDate   = 'CreatedDate';
 $lang->design->basicInfo     = 'Basic Information';
 $lang->design->noAssigned    = 'Unassigned';
 $lang->design->comment       = 'Comment';
+$lang->design->more          = 'More';
 
 /* 动作列表. */
 $lang->design->common       = 'Design';

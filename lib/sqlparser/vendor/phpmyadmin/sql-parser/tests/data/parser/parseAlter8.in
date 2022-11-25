@@ -1,0 +1,1 @@
+ALTER TABLE `api_tab_user` CHANGE `rank_id` `rank_id` INT(4) NOT NULL DEFAULT '4';

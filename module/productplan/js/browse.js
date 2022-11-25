@@ -11,13 +11,14 @@ $(document).on('click', '.task-toggle', function(e)
 
 $(function()
 {
+    if(viewType != 'kanban') toggleFold('#productplanForm', unfoldPlans, productID, 'productplan');
     $('#productplanList tbody tr').each(function()
     {
         var $content = $(this).find('td.content');
         var content  = $content.find('div').html();
         if(content.indexOf('<br') >= 0 || content.indexOf('<img') >= 0)
         {
-            $content.append("<a href='###' class='more'><i class='icon icon-chevron-double-down'></i></a>");
+            $content.append("<a href='###' class='more'><i class='icon icon-angle-right rotate-down'></i></a>");
         }
     });
 
@@ -32,7 +33,7 @@ $(function()
         }
         else
         {
-            $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+            $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'execution')
         }
         $('#projects').modal('hide');
     });
@@ -40,14 +41,16 @@ $(function()
     $('.switchButton').click(function()
     {
         var viewType = $(this).attr('data-type');
+        var branchID = $(this).val();
         $.cookie('viewType', viewType, {expires:config.cookieLife, path:config.webRoot});
-        window.location.reload();
+        var link = createLink('productplan', 'browse', "productID=" + productID + '&branch=' + branchID);
+        location.href = link;
     });
 
     $('#branch').change(function()
     {
         var branchID = $(this).val();
-        var link = createLink('productplan', 'browse', "productID=" + productID + '&branch=' + branchID);
+        var link = createLink(rawModule, 'browse', "productID=" + productID + '&branch=' + branchID);
         location.href = link;
     });
 
@@ -57,8 +60,8 @@ $(function()
         $('#kanban').kanban(
         {
             data:         kanbanData,
-            minColWidth:  290,
-            maxColWidth:  290,
+            minColWidth:  typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth,
+            maxColWidth:  typeof window.maxColWidth === 'number' ? window.maxColWidth: defaultMaxColWidth,
             maxColHeight: 460,
             minColHeight: 190,
             cardHeight:   80,
@@ -99,6 +102,27 @@ $(function()
     {
         $.zui.ContextMenu.hide();
     });
+
+    $('.execution-popover').on('click', function(e)
+    {
+        e.stopPropagation();
+        var showPopover = $(this).next().css('display') == 'block';
+        $('.popover.right').hide();
+        if(!showPopover) $(this).next().show();
+    });
+
+    $('.execution-link').on('click', function()
+    {
+        $('.popover.right').hide();
+    });
+
+    /* Hide popover tip. */
+    $(document).on('mousedown', function(e)
+    {
+        var $target = $(e.target);
+        var $toggle = $target.closest('.popover, .execution-popover');
+        if(!$toggle.length) $('.popover.right').hide();
+    });
 });
 
 /* Define menu creators. */
@@ -121,7 +145,6 @@ function createCardMenu(options)
     if(privs.includes('createExecution'))
     {
         var className     = '';
-        var executionLink = systemMode == 'new' ? '#projects' : createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=" + card.id + "&confirm=no&productID=" + productID);
         var today         = new Date();
         var end           = $.zui.createDate(card.end);
         if(end.getTime() < today.getTime())
@@ -138,19 +161,12 @@ function createCardMenu(options)
             if(branchStatus == 'closed') className = 'disabled';
         }
 
-        if(systemMode == 'new')
-        {
-            items.push({label: productplanLang.createExecution, icon: 'plus', url: executionLink, className: className, attrs: {'data-toggle': 'modal', 'onclick': 'getPlanID(this,' + card.branch + ')', 'data-id': card.id}});
-        }
-        else
-        {
-            items.push({label: productplanLang.createExecution, icon: 'plus', url: executionLink, className: className});
-        }
+        items.push({label: productplanLang.createExecution, icon: 'plus', url: '#projects', className: className, attrs: {'data-toggle': 'modal', 'onclick': 'getPlanID(this,' + card.branch + ')', 'data-id': card.id}});
     }
 
-    if(privs.includes('linkStory')) items.push({label: productplanLang.linkStory, icon: 'link', url: createLink('productplan', 'view', "planID=" + card.id + "&type=story&orderBy=id_desc&link=true")});
-    if(privs.includes('linkBug')) items.push({label: productplanLang.linkBug, icon: 'bug', url: createLink('productplan', 'view', "planID=" + card.id + "&type=bug&orderBy=id_desc&link=true")});
-    if(privs.includes('edit')) items.push({label: productplanLang.edit, icon: 'edit', url: createLink('productplan', 'edit', "planID=" + card.id)});
+    if(privs.includes('linkStory')) items.push({label: productplanLang.linkStory, icon: 'link', url: createLink(rawModule, 'view', "planID=" + card.id + "&type=story&orderBy=id_desc&link=true")});
+    if(privs.includes('linkBug')) items.push({label: productplanLang.linkBug, icon: 'bug', url: createLink(rawModule, 'view', "planID=" + card.id + "&type=bug&orderBy=id_desc&link=true")});
+    if(privs.includes('edit')) items.push({label: productplanLang.edit, icon: 'edit', url: createLink(rawModule, 'edit', "planID=" + card.id)});
     if(privs.includes('start')) items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('finish')) items.push({label: productplanLang.finish, icon: 'checked', url: createLink('productplan', 'finish', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('close')) items.push({label: productplanLang.close, icon: 'off', url: createLink('productplan', 'close', "planID=" + card.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
@@ -170,14 +186,14 @@ $(document).on('click', 'td.content .more', function(e)
         $toggle.removeClass('open');
         $toggle.closest('.content').find('div').css('height', '25px');
         $toggle.css('padding-top', 0);
-        $toggle.find('i').removeClass('icon-chevron-double-up').addClass('icon-chevron-double-down');
+        $toggle.find('i').addClass('rotate-down');
     }
     else
     {
         $toggle.addClass('open');
         $toggle.closest('.content').find('div').css('height', 'auto');
         $toggle.css('padding-top', ($toggle.closest('.content').find('div').height() - $toggle.height()) / 2);
-        $toggle.find('i').removeClass('icon-chevron-double-down').addClass('icon-chevron-double-up');
+        $toggle.find('i').removeClass('rotate-down');
     }
 });
 
@@ -346,7 +362,7 @@ function renderKanbanItem(item, $item)
     var $title = $titleBox.children('.title');
     if(!$title.length)
     {
-        if(privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox).attr('href', createLink('productplan', 'view', 'cardID=' + item.id));
+        if(privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox).attr('href', createLink(rawModule, 'view', 'cardID=' + item.id));
         if(!privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox);
     }
     $title.text(item.title).attr('title', item.title);

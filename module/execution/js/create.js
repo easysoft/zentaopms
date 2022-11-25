@@ -37,34 +37,34 @@ $(function()
     /* Assign value to the manage products by the different request type.*/
     var $product = $('#products0');
     if(copyExecutionID) productID = $product.val();
-    $product.val(productID);
-    $product.trigger("chosen:updated");
+    if(productID)
+    {
+        $product.val(productID);
+        $product.trigger("chosen:updated");
+    }
 
     var adjustMainCol = function()
     {
-        if(!isStage) $('.main-form .col-main').css('width', Math.max(250, Math.floor(($('#productsBox').outerWidth() - 50)/3) + 10));
+        $('.main-form .col-main').css('width', Math.max(250, Math.floor(($('#tplBoxWrapper').parent('td').outerWidth() - 50)/3) + 10));
     };
     adjustMainCol();
     $(window).on('resize', adjustMainCol);
 
     $('#teams_chosen').click(function()
     {
-        if(systemMode == 'new')
+        $('#teams_chosen ul li').each(function(index)
         {
-            $('#teams_chosen ul li').each(function(index)
+            if(index == 0)
             {
-                if(index == 0)
-                {
-                    var projectName = subString($(this).text(), 56);
-                    $(this).text(projectName);
-                    $(this).append(' <label class="label">' + projectCommon + '</label>');
-                }
-                else
-                {
-                    $(this).prepend('&nbsp;&nbsp;&nbsp;');
-                }
-            })
-        }
+                var projectName = subString($(this).text(), 56);
+                $(this).text(projectName);
+                $(this).append(' <label class="label">' + projectCommon + '</label>');
+            }
+            else
+            {
+                $(this).prepend('&nbsp;&nbsp;&nbsp;');
+            }
+        })
     })
 
     $('#teams').change(function()
@@ -76,6 +76,24 @@ $(function()
             $('#teamMembers').picker({chosenMode: true});
         });
     })
+
+    if(isStage)
+    {
+        $('#attribute').change(function()
+        {
+            var attribute = $(this).val();
+            if(attribute == 'request' || attribute == 'design' || attribute == 'review')
+            {
+                $('#plansBox').closest('tr').addClass('hide');
+            }
+            else
+            {
+                $('#plansBox').closest('tr').removeClass('hide');
+            }
+        })
+
+        $('#attribute').change();
+    }
 
     if(copyExecutionID != 0 || projectID != 0) $('#teams').change();
 

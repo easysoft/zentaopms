@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +31,4 @@ r($testcase->updateTest($changeTitle))        && p('0:field,old,new') && e('没�
 r($testcase->updateTest($changePrecondition)) && p('0:field,old,new') && e('precondition,这是前置条件1,修改后的前置条件'); // 测试修改前置条件
 r($testcase->updateTest($changeStatus))       && p('0:field,old,new') && e('status,wait,normal');                          // 测试修改状态
 r($testcase->updateTest($changePri))          && p('0:field,old,new') && e('pri,1,3');                                     // 测试修改优先级
-system("./ztest init");
+$db->restoreDB();

@@ -8,14 +8,14 @@ title=测试 gitlabModel::apiGetTags();
 cid=1
 pid=1
 
-通过gitlabID,projectID,获取GitLab标签列表                                  >> 1
-通过gitlabID,projectID,获取GitLab标签数量                                  >> 1
-当前项目没有标签时,获取GitLab标签列表                                      >> 0
-当gitlabID存在,projectID不存在时,获取GitLab标签列表                        >> return empty
-当gitlabID,projectID都为0时,获取GitLab标签列表                             >> return empty
-通过gitlabID,projectID,按标签名升序获取GitLab标签列表                      >> with_cicredentials
+通过gitlabID,projectID,获取GitLab标签列表 >> 1
+通过gitlabID,projectID,获取GitLab标签数量 >> 1
+当前项目没有标签时,获取GitLab标签列表 >> 0
+通过gitlabID,projectID,获取GitLab标签列表 >> return empty
+当gitlabID,projectID都为0时,获取GitLab标签列表 >> return empty
+通过gitlabID,projectID,按标签名升序获取GitLab标签列表 >> with_cicredentials
 通过gitlabID,projectID,搜索字符'zentaopms_15.2_20210720'获取GitLab标签列表 >> zentaopms_15.2_20210720
-通过gitlabID,projectID,每页20条记录，分页获取第二页GitLab标签列表          >> zentaopms_2.0_stable_20110503
+通过gitlabID,projectID,每页20条记录，分页获取第二页GitLab标签列表 >> zentaopms_2.0_stable_20110503
 
 */
 

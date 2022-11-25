@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "手机访问";
 $lang->misc->noGDLib     = "请用手机浏览器访问：<strong>%s</strong>";
-$lang->misc->copyright   = "&copy; 2009 - 2018 <a href='http://www.cnezsoft.com' target='_blank'>青岛易软天创网络科技有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.easycorp.cn' target='_blank'>青岛易软天创网络科技有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
 $lang->misc->checkTable  = "检查修复数据表";
 $lang->misc->needRepair  = "修复表";
 $lang->misc->repairTable = "数据库表可能因为断电原因损坏，需要检查修复！！";
@@ -100,9 +100,16 @@ $lang->misc->feature->close          = '关闭';
 $lang->misc->feature->downloadFile   = '下载新版本功能介绍文档';
 $lang->misc->feature->tutorialDesc   = "<p>禅道15系列新增了多项功能，您可以通过“<strong>新手引导教程</strong>”快速了解禅道的基本使用方法。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-新手引导</span>]，点击新手引导，即可进入新手引导教程。</p>";
 $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
-$lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[迅捷界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
+$lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[运营管理界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
 
+$lang->misc->releaseDate['18.0.beta1']  = '2022-11-16';
+$lang->misc->releaseDate['17.8']        = '2022-11-02';
+$lang->misc->releaseDate['17.7']        = '2022-10-19';
+$lang->misc->releaseDate['17.6.2']      = '2022-09-23';
+$lang->misc->releaseDate['17.6.1']      = '2022-09-08';
+$lang->misc->releaseDate['17.6']        = '2022-08-26';
+$lang->misc->releaseDate['17.5']        = '2022-08-11';
 $lang->misc->releaseDate['17.4']        = '2022-07-27';
 $lang->misc->releaseDate['17.3']        = '2022-07-13';
 $lang->misc->releaseDate['17.2']        = '2022-06-29';
@@ -186,6 +193,13 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['18.0.beta1'][] = array('title' => '主要对禅道多项核心流程进行改进，新增项目型项目、无迭代项目；支持项目跨项目集关联产品；支持轻量管理模式和全生命周期管理模式进行切换。', 'desc' => '');
+$lang->misc->feature->all['17.8'][]       = array('title' => '列表状态颜色、仪表盘颜色的改版和任务日志页面的优化。', 'desc' => '');
+$lang->misc->feature->all['17.7'][]       = array('title' => '过渡版本表格优化完成。新增工单功能，优化了反馈功能。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.6.2'][]     = array('title' => '禅道更新叶兰绿、禅道蓝、青春蓝三大主题。实现附件批量上传功能。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.6.1'][]     = array('title' => '优化了多人任务的处理逻辑，修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.6'][]       = array('title' => '优化了需求的处理逻辑，拆分了用需和软需的权限。甘特图支持手动拖拽维护任务关系。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.5'][]       = array('title' => '提供高效的可视化统计工具。优化禅道性能，数据库引擎从MyISAM调整为InnoDB。甘特图优化升级，旗舰版的复制项目可以复制任务等更多信息。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.4'][]       = array('title' => '详情页面的视觉优化和部分页面跳转逻辑优化。看板功能完善。文档创建和编辑页面优化。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.3'][]       = array('title' => '统计、后台等模块的UI优化，用例库同步用例信息功能优化。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.2'][]       = array('title' => '调整敏捷项目区块的展示，项目集、项目和测试相关UI优化，细节体验优化。修复Bug。', 'desc' => '');

@@ -10,7 +10,7 @@ $(function()
         e.stopPropagation();
         e.preventDefault();
     });
-
+    toggleFold('#myTaskForm', [], 0, 'my');
     $('#taskTable td.has-child .task-toggle').each(function()
     {
         var $td = $(this).closest('td');

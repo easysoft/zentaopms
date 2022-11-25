@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -11,15 +12,15 @@ cid=1
 pid=1
 
 解决原因为设计如此 指派人变化的bug >> resolvedBuild,,trunk;resolution,,bydesign
-不填解决原因的bug                  >> 『解决方案』不能为空。
-解决原因为重复Bug 不填bugID的bug   >> 『重复ID』不能为空。
-解决原因为重复Bug 填bugID的bug     >> duplicateBug,0,1;status,active,resolved
-解决原因为外部原因的bug            >> resolvedBuild,,trunk;resolution,,external
-解决原因为已解决的bug              >> resolvedBuild,,trunk;resolution,,fixed
-解决原因为无法重现的bug            >> resolvedBuild,,trunk;resolution,,notrepro
-解决原因为延期处理的bug            >> resolvedBuild,,trunk;resolution,,postponed
-解决原因为不予解决的bug            >> resolvedBuild,,trunk;resolution,,willnotfix
-解决已解决的bug                    >> resolvedBuild,,trunk;confirmed,0,1
+不填解决原因的bug >> 『解决方案』不能为空。
+解决原因为重复Bug 不填bugID的bug >> 『重复ID』不能为空。
+解决原因为重复Bug 填bugID的bug >> duplicateBug,0,1;status,active,resolved
+解决原因为外部原因的bug >> resolvedBuild,,trunk;resolution,,external
+解决原因为已解决的bug >> resolvedBuild,,trunk;resolution,,fixed
+解决原因为无法重现的bug >> resolvedBuild,,trunk;resolution,,notrepro
+解决原因为延期处理的bug >> resolvedBuild,,trunk;resolution,,postponed
+解决原因为不予解决的bug >> resolvedBuild,,trunk;resolution,,willnotfix
+解决已解决的bug >> resolvedBuild,,trunk;confirmed,0,1
 
 */
 
@@ -46,4 +47,4 @@ r($bug->resolveTest($bugIDList[4],$bug5))    && p('0:field,old,new;3:field,old,n
 r($bug->resolveTest($bugIDList[5],$bug6))    && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;resolution,,postponed');  // 解决原因为延期处理的bug
 r($bug->resolveTest($bugIDList[6],$bug7))    && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;resolution,,willnotfix'); // 解决原因为不予解决的bug
 r($bug->resolveTest($bugIDList[7],$bug51))   && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;confirmed,0,1');          // 解决已解决的bug
-system("./ztest init");
+$db->restoreDB();

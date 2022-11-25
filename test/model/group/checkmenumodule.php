@@ -10,9 +10,7 @@ title=测试 groupModel->checkMenuModule();
 cid=1
 pid=1
 
-测试获取 '','index'   的返回结果  >> 1
-测试获取 'my','tree'  的返回结果  >> 0
-测试获取 'none','tree' 的返回结果 >> 0
+
 
 */
 

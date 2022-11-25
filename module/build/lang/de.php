@@ -33,6 +33,9 @@ $lang->build->project        = 'Project';
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
+$lang->build->integrated     = 'Integrated';
+$lang->build->singled        = 'Singled';
+$lang->build->builds         = 'Included Builds';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Datum';
 $lang->build->builder        = 'Builder';
@@ -55,16 +58,23 @@ $lang->build->emptyExecution =  $lang->executionCommon . 'should be not empty.';
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
 $lang->build->notice->changeExecution = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
+$lang->build->notice->changeBuilds    = "The version of the submitted test order cannot be modified builds";
+$lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the project version";
 
 $lang->build->finishStories = "  %s {$lang->SRCommon} sind abgeschlossen.";
 $lang->build->resolvedBugs  = '  %s Bugs sind gelöst.';
 $lang->build->createdBugs   = '  %s Bugs wurden erstellt.';
 
 $lang->build->placeholder = new stdclass();
-$lang->build->placeholder->scmPath  = ' Source code repository, z.B. Subversion/Git Pfad';
-$lang->build->placeholder->filePath = ' Pfad zum Download für diese Build.';
+$lang->build->placeholder->scmPath        = ' Source code repository, z.B. Subversion/Git Pfad';
+$lang->build->placeholder->filePath       = ' Pfad zum Download für diese Build.';
+$lang->build->placeholder->multipleSelect = "Support select multiple builds";
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, erstellt von <strong>$actor</strong>, Build <strong>$extra</strong>.' . "\n";
 
 $lang->backhome = 'zurück';
+
+$lang->build->isIntegrated = array();
+$lang->build->isIntegrated['no']  = 'No';
+$lang->build->isIntegrated['yes'] = 'Yes';

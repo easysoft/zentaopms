@@ -256,6 +256,11 @@ class misc extends control
             $condition   = "owner={$account}&module={$objectType}&section=task&key=unfoldTasks";
             $settingPath = $account . ".{$objectType}.task.unfoldTasks";
         }
+        elseif($objectType == 'productplan')
+        {
+            $condition   = "owner={$account}&module={$objectType}&section=browse&key=unfoldPlans";
+            $settingPath = $account . ".{$objectType}.browse.unfoldPlans";
+        }
         else
         {
             $condition   = "owner={$account}&module=product&section=browse&key=unfoldStories";

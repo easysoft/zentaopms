@@ -11,19 +11,39 @@
  */
 ?>
 <style>
-#assigntomeBlock .nav>li>a {padding: 8px 12px;}
+#assigntomeBlock .nav > li:not(.active) > a {padding: 8px 12px; color: #838A9D; border-color: #eee;}
+#assigntomeBlock .nav > li:not(.open) > a {color: #838A9D;}
 </style>
 <div id='assigntomeBlock'>
   <ul class="nav nav-secondary">
-    <?php $isFirstTab = true; ?>
+    <?php $isFirstTab = true;?>
+    <?php $printMore  = false;?>
+    <?php $i          = 0;?>
     <?php foreach($hasViewPriv as $type => $bool):?>
+    <?php if(!common::checkNotCN() or $i <= 6):?>
     <li<?php if($isFirstTab) {echo ' class="active"';}?>>
         <a data-tab href='#assigntomeTab-<?php echo $type;?>' onClick="changeLabel('<?php echo $type;?>')">
-        <?php echo $lang->block->availableBlocks->$type;?>
+        <?php echo $type == 'review' ? $lang->my->audit : $lang->block->availableBlocks->$type;?>
         <span class='label label-light label-badge label-assignto <?php echo $type . "-count "; echo $isFirstTab ? '' : 'hidden'; $isFirstTab = false ?>'><?php echo $count[$type];?></span>
       </a>
     </li>
+    <?php else:?>
+    <?php if(!$printMore):?>
+    <?php $printMore = true;?>
+    <li>
+      <a class="dropdown-toggle moreBtn" data-toggle="dropdown" onClick="changeLabel('more')"><?php echo $lang->more;?><span class="caret"></span></a>
+        <ul class="dropdown-menu">
+    <?php endif;?>
+          <li<?php if($isFirstTab) {echo ' class="active"';}?>>
+            <a data-tab href='#assigntomeTab-<?php echo $type;?>' class='<?php echo "$type"?>' onClick="changeMoreBtn('<?php echo $type;?>', this);">
+              <?php echo $lang->block->availableBlocks->$type;?>
+              <span class='label label-light label-badge label-assignto <?php echo $type . "-count "; echo $isFirstTab ? '' : 'hidden'; $isFirstTab = false ?>'><?php echo $count[$type];?></span>
+            </a>
+          </li>
+    <?php endif;?>
+    <?php $i ++;?>
     <?php endforeach;?>
+    <?php if($printMore) echo '</ul></li>';?>
   </ul>
   <div class="tab-content">
     <?php $isFirstTab = true; ?>
@@ -41,10 +61,50 @@
 #assigntomeBlock .block-todoes .todoes-form{top: -50px;}
 </style>
 <script>
+/**
+ * Change label.
+ *
+ * @param  string type
+ * @access public
+ * @return void
+ */
 function changeLabel(type)
 {
-  $('.label-assignto').addClass('hidden');
-  $('.' + type + '-count').removeClass('hidden');
+    var $moreBtn  = $('#assigntomeBlock .moreBtn');
+    if($moreBtn.length > 0 && type != 'more')
+    {
+        $moreBtn.html("<?php echo $lang->more;?>" + "<span class='caret'></span>");
+    }
+
+    if(type != 'more')
+    {
+        $('.label-assignto').addClass('hidden');
+        $('.' + type + '-count').removeClass('hidden');
+    }
 }
+
+/**
+ * Change more button.
+ *
+ * @param string type
+ * @param object label
+ * @access public
+ * @return void
+ */
+function changeMoreBtn(type, label)
+{
+    $('.label-assignto').addClass('hidden');
+    $('.' + type + '-count').removeClass('hidden');
+
+    var $moreBtn = $('#assigntomeBlock .moreBtn');
+    var text     = $(label).html();
+    $moreBtn.html(text);
+
+    setTimeout(function()
+    {
+        $moreBtn.parent().addClass('active');
+    }, 100);
+}
+
 $('#assigntomeBlock').closest('.panel').attr('data-fixed', 'main');
 </script>

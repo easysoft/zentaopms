@@ -1,0 +1,1 @@
+CREATE TABLE new_tbl AS SELECT * FROM orig_tbl

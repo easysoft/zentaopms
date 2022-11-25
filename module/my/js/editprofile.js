@@ -8,11 +8,16 @@ $(document).ready(function()
     $('#password1').change(function(){password1Encrypted = false});
     $('#password2').change(function(){password2Encrypted = false});
 
+    var passwordStrength = 0;
     $('#submit').click(function()
     {
-        var password         = $('input#verifyPassword').val();
-        var password1        = $('input#password1').val();
-        var passwordStrength = computePasswordStrength(password1);
+        var password  = $('input#verifyPassword').val();
+        var password1 = $('input#password1').val();
+        if(!password1Encrypted)
+        {
+            passwordStrength = computePasswordStrength(password1);
+            $("#passwordLength").val(password1.length);
+        }
 
         if($("form input[name=passwordStrength]").length == 0) $('#submit').after("<input type='hidden' name='passwordStrength' value='0' />");
         $("form input[name=passwordStrength]").val(passwordStrength);

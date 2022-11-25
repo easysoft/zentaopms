@@ -164,7 +164,7 @@ $lang->bug->createBuild   = 'Mới';
 $lang->bug->legendBasicInfo             = 'Thông tin cơ bản';
 $lang->bug->legendAttatch               = 'Files';
 $lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
-$lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Câu chuyện/Nhiệm vụ';
+$lang->bug->legendExecStoryTask         = 'Project/Câu chuyện/Nhiệm vụ';
 $lang->bug->lblTypeAndSeverity          = 'Loại/Mức độ';
 $lang->bug->lblSystemBrowserAndHardware = 'Hệ thống/Trình duyệt';
 $lang->bug->legendSteps                 = 'Các bước Repro';
@@ -265,8 +265,8 @@ $lang->bug->statusList['active']   = 'Kích hoạt';
 $lang->bug->statusList['resolved'] = 'Đã giải quyết';
 $lang->bug->statusList['closed']   = 'Đã đóng';
 
-$lang->bug->confirmedList[1] = 'Có';
-$lang->bug->confirmedList[0] = 'Không';
+$lang->bug->confirmedList[1] = 'đã xác nhận';
+$lang->bug->confirmedList[0] = 'chưa được xác nhận';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'Như thiết kế';

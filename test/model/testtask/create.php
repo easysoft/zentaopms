@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testtask.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -9,6 +10,10 @@ su('admin');
 title=测试 testtaskModel->create();
 cid=1
 pid=1
+
+新增一个正常的测试单 >> 11,新增测试报告,200,1,system
+新增一个名称为空的测试单 >> 『名称』不能为空。
+新增一个结束日期小于开始日期的测试单 >> 『结束日期』应当不小于『2022-10-05』。
 
 */
 
@@ -36,4 +41,4 @@ r($testtask->create(11, $normalTask))     && p('id,name,execution,product,type')
 r($testtask->create(12, $emptyNameTask))  && p('name:0')                         && e('『名称』不能为空。');                     // 新增一个名称为空的测试单
 r($testtask->create(13, $beginGtEndTask)) && p('end:0')                          && e('『结束日期』应当不小于『2022-10-05』。'); // 新增一个结束日期小于开始日期的测试单
 
-system('./ztest init');
+$db->restoreDB();

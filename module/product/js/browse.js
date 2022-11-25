@@ -1,25 +1,21 @@
 $(function()
 {
     if(typeof(rawModule) == 'undefined') rawModule = 'product';
-    if(rawModule != 'projectstory')
+
+    $('#navbar .nav li').removeClass('active');
+    $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+
+    if(vision != 'lite' && rawModule == 'projectstory' && !projectHasProduct && URAndSR)
     {
-        $('#navbar .nav li').removeClass('active');
-        $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+        $('#navbar .nav>li[data-id=story]').addClass('active');
+        $('#navbar .nav>li[data-id=story]>a').html($('.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
     }
 
     $(document).ready(function(){
         var $title = $('#storyList thead th.c-title');
         var headerWidth = $('#storyList thead th.c-title a').innerWidth();
         var buttonWidth = $('#storyList thead th.c-title button').innerWidth();
-        if($title.width() < headerWidth + buttonWidth) $title.width(headerWidth + buttonWidth + 10);
-    });
-
-    $('#storyList td.has-child .story-toggle').each(function()
-    {
-        var $td = $(this).closest('td');
-        var labelWidth = 0;
-        if($td.find('.label').length > 0) labelWidth = $td.find('.label').width();
-        $td.find('a').eq(0).css('max-width', $td.width() - labelWidth - 60);
+        if($title.width() < headerWidth + buttonWidth + 16) $title.width(headerWidth + buttonWidth + 30);
     });
 
     $('#toTaskButton').on('click', function()
@@ -76,6 +72,38 @@ $(function()
             storyIdList += $(this).val() + ',';
             $('#storyIdList').val(storyIdList);
         });
+    });
+
+    $('#reviewItem ~ ul > li').on('click', function()
+    {
+        var storyIDList     = new Array();
+        var storyString     = '';
+        var reviewStoryTips = '';
+        $("input[name^='storyIdList']:checked").each(function()
+        {
+            storyIDList.push($(this).val());
+        });
+
+        $.each(storyIDList, function(storyKey, storyValue)
+        {
+            var getStoryReview = createLink('product', 'ajaxGetReviewers', "productID=" + productID + "&storyID=" + storyValue);
+
+            $.ajaxSettings.async = false;
+            $.get(getStoryReview, function(data)
+            {
+                var reviewer = new Array();
+                $(data).find('option:selected').each(function()
+                {
+                    reviewer.push($(this).val());
+                });
+
+                if($.inArray(account, reviewer) == -1) storyString += ' #' + storyValue;
+            });
+            $.ajaxSettings.async = true;
+        });
+
+        reviewStoryTips = reviewStory.replace("%s", storyString);
+        if(storyString !== '') alert(reviewStoryTips);
     });
 
     $('#batchUnlinkStory').click(function()

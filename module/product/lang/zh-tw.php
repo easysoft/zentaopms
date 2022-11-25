@@ -126,20 +126,20 @@ $lang->product->createdDate    = '創建日期';
 $lang->product->createdVersion = '創建版本';
 $lang->product->mailto         = '抄送給';
 
-$lang->product->searchStory  = '搜索';
-$lang->product->assignedToMe = '指給我';
-$lang->product->openedByMe   = '我創建';
-$lang->product->reviewedByMe = '我評審';
-$lang->product->reviewByMe   = '待我評審';
-$lang->product->closedByMe   = '我關閉';
-$lang->product->draftStory   = '草稿';
-$lang->product->activeStory  = '激活';
-$lang->product->changedStory = '已變更';
-$lang->product->willClose    = '待關閉';
-$lang->product->closedStory  = '已關閉';
-$lang->product->unclosed     = '未關閉';
-$lang->product->unplan       = "未計劃";
-$lang->product->viewByUser   = '按用戶查看';
+$lang->product->searchStory   = '搜索';
+$lang->product->assignedToMe  = '指給我';
+$lang->product->openedByMe    = '我創建';
+$lang->product->reviewedByMe  = '我評審';
+$lang->product->reviewByMe    = '待我評審';
+$lang->product->closedByMe    = '我關閉';
+$lang->product->draftStory    = '草稿';
+$lang->product->activeStory   = '激活';
+$lang->product->changingStory = '變更中';
+$lang->product->willClose     = '待關閉';
+$lang->product->closedStory   = '已關閉';
+$lang->product->unclosed      = '未關閉';
+$lang->product->unplan        = "未計劃";
+$lang->product->viewByUser    = '按用戶查看';
 
 /* Product Kanban. */
 $lang->product->myProduct             = '我負責的' . $lang->productCommon;
@@ -174,7 +174,7 @@ $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '結束';
 
 global $config;
-if($config->systemMode == 'new')
+if($config->systemMode == 'ALM')
 {
     $lang->product->aclList['private'] = "私有({$lang->productCommon}相關負責人、所屬項目集的干係人、相關聯項目的團隊成員和干係人可訪問)";
 }
@@ -210,8 +210,8 @@ $lang->product->featureBar['all']['all']      = '所有' . $lang->productCommon;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
-$lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
-$lang->product->moreSelects['activestory']  = $lang->product->activeStory;
-$lang->product->moreSelects['changedstory'] = $lang->product->changedStory;
-$lang->product->moreSelects['willclose']    = $lang->product->willClose;
-$lang->product->moreSelects['closedstory']  = $lang->product->closedStory;
+$lang->product->moreSelects['closedbyme']    = $lang->product->closedByMe;
+$lang->product->moreSelects['activestory']   = $lang->product->activeStory;
+$lang->product->moreSelects['changingstory'] = $lang->product->changingStory;
+$lang->product->moreSelects['willclose']     = $lang->product->willClose;
+$lang->product->moreSelects['closedstory']   = $lang->product->closedStory;

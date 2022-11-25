@@ -20,4 +20,3 @@ $list  = $entry->getListTest();
 
 r(count($list)) && p()         && e('1');               //测试获取列表的个数，目前只有一个
 r($list)        && p('1:name') && e('这是应用名称1');   //测试获取列表某个应用的名称信息
-system("./ztest init");

@@ -9,16 +9,15 @@ title=bugModel->getStoryBugs();
 cid=1
 pid=1
 
-测试获取关联需求ID为2的bug    >> BUG1,BUG101,BUG201
-测试获取关联需求ID为6的bug    >> BUG2,BUG102,BUG202
-测试获取关联需求ID为10的bug   >> BUG3,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;103,BUG203
-测试获取关联需求ID为14的bug   >> BUG4,bug104,BUG204
-测试获取关联需求ID为18的bug   >> BUG5,BUG105,BUG205
-测试获取关联需求ID为22的bug   >> BUG6,BUG106,BUG206
+测试获取关联需求ID为2的bug >> BUG1,BUG101,BUG201
+测试获取关联需求ID为6的bug >> BUG2,BUG102,BUG202
+测试获取关联需求ID为10的bug >> BUG3,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;103,BUG203
+测试获取关联需求ID为14的bug >> BUG4,bug104,BUG204
+测试获取关联需求ID为18的bug >> BUG5,BUG105,BUG205
+测试获取关联需求ID为22的bug >> BUG6,BUG106,BUG206
 测试获取不存在的关联需求的bug >> 0
 
 */
-
 
 $storyIDList = array('2', '6', '10', '14', '18', '22', '1000001');
 

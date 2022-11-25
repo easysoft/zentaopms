@@ -22,12 +22,24 @@ $lang->admin->captcha         = 'Bestätigungscode';
 $lang->admin->getCaptcha      = 'Bestätigungscode anfordern';
 $lang->admin->register        = 'Register';
 $lang->admin->resetPWDSetting = 'Reset password Setting';
+$lang->admin->tableEngine     = 'Table Engine';
+$lang->admin->setModuleIndex  = 'Set Module';
 
 $lang->admin->api            = 'API';
 $lang->admin->log            = 'Log';
 $lang->admin->setting        = 'Einstellungen';
 $lang->admin->days           = 'Gültige Tage';
 $lang->admin->resetPWDByMail = 'Reset the password via the email';
+
+$lang->admin->changeEngine   = "Change to InnoDB";
+$lang->admin->changingTable  = 'Replacing data table %s engine...';
+$lang->admin->changeSuccess  = 'The data table %s engine has been changed to InnoDB.';
+$lang->admin->changeFail     = "Failed to replace table %s engine. Reason: <span class='text-red'>%s</span>。";
+$lang->admin->errorInnodb    = 'Your MySQL does not support InnoDB data table engine.';
+$lang->admin->changeFinished = "Database engine replacement completed.";
+$lang->admin->engineInfo     = "The <strong>%s</strong> table engine is <strong>%s</strong>.";
+$lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not InnoDB engines";
+$lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Aktuelle Version ist %s. ';
@@ -54,6 +66,44 @@ $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Konto verknüpfen';
 $lang->admin->bind->success = "Konto wurde verknüpft!";
 
+$lang->admin->setModule = new stdclass();
+$lang->admin->setModule->module         = 'Module';
+$lang->admin->setModule->optional       = 'Optional';
+$lang->admin->setModule->opened         = 'Opened';
+$lang->admin->setModule->closed         = 'Closed';
+
+$lang->admin->setModule->product        = 'Product';
+$lang->admin->setModule->scrum          = 'Scrum Project';
+$lang->admin->setModule->waterfall      = 'Waterfall Project';
+$lang->admin->setModule->assetlib       = 'Assetlib';
+$lang->admin->setModule->other          = 'Other';
+
+$lang->admin->setModule->repo           = 'Repo';
+$lang->admin->setModule->issue          = 'Issue';
+$lang->admin->setModule->risk           = 'Risk';
+$lang->admin->setModule->opportunity    = 'Opportunity';
+$lang->admin->setModule->process        = 'Process';
+$lang->admin->setModule->measrecord     = 'Measrecord';
+$lang->admin->setModule->auditplan      = 'QA';
+$lang->admin->setModule->meeting        = 'Meeting';
+$lang->admin->setModule->roadmap        = 'Roadmap';
+$lang->admin->setModule->track          = 'Track';
+$lang->admin->setModule->UR             = 'URStroy';
+$lang->admin->setModule->researchplan   = 'Researchplan';
+$lang->admin->setModule->gapanalysis    = 'Gapanalysis';
+$lang->admin->setModule->storylib       = 'Story Lib';
+$lang->admin->setModule->caselib        = 'Case Lib';
+$lang->admin->setModule->issuelib       = 'Issue Lib';
+$lang->admin->setModule->risklib        = 'Risk Lib';
+$lang->admin->setModule->opportunitylib = 'Opportunity Lib';
+$lang->admin->setModule->practicelib    = 'Practice Lib';
+$lang->admin->setModule->componentlib   = 'Component Lib';
+$lang->admin->setModule->devops         = 'DevOps';
+$lang->admin->setModule->kanban         = 'Kanban';
+$lang->admin->setModule->OA             = 'OA';
+$lang->admin->setModule->deploy         = 'Deploy';
+$lang->admin->setModule->traincourse    = 'Traincourse';
+
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common                   = 'Sicherheits-Regeln';
 $lang->admin->safe->set                      = 'PasswortStärke';
@@ -64,12 +114,13 @@ $lang->admin->safe->checkWeak                = 'Schwache Passwörter prüfen';
 $lang->admin->safe->changeWeak               = 'Ihr Passwort ist schwach. Bitte ändern.';
 $lang->admin->safe->loginCaptcha             = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Passwort nach der ersten Anmeldung ändern';
+$lang->admin->safe->passwordStrengthWeak     = 'The password strength is weaker than the system settings.';
 
 $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Stark';
 
-$lang->admin->safe->modeRuleList[1] = 'Beinhaltet Groß und Kleinbuchstaben sowie Ziffern. Länge >= 6';
+$lang->admin->safe->modeRuleList[1] = 'Beinhaltet Groß und Kleinbuchstaben sowie Ziffern. Länge >= 6.';
 $lang->admin->safe->modeRuleList[2] = 'Beinhaltet Groß und Kleinbuchstaben, Ziffern sowie Sonderzeichen.  Länge >= 10.';
 
 $lang->admin->safe->reasonList['weak']     = 'Bekannte Schwache Passwörter';
@@ -87,5 +138,6 @@ $lang->admin->safe->loginCaptchaList[0] = 'Nein';
 $lang->admin->safe->resetPWDList[1] = 'ON';
 $lang->admin->safe->resetPWDList[0] = 'Off';
 
-$lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added or edited.';
-$lang->admin->safe->noticeStrong = '';
+$lang->admin->safe->noticeMode     = 'The password will be checked when creating and modifying user information, and changing passwords.';
+$lang->admin->safe->noticeWeakMode = 'The password will be checked when logging into the system, creating and modifying user information, and changing passwords.';
+$lang->admin->safe->noticeStrong   = 'The longer the password, the more letters, numbers, or special characters it contains, and the less repetitive the password, the more secure it is!';

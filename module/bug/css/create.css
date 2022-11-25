@@ -55,3 +55,6 @@ html[lang='de'] #keywordsAddonLabel, .task {width: 73px;}
 #executionLabel {display: inline; position: relative; width: 50%; left: 37%;}
 #projectLabel {display: inline;}
 #openedBuildLabel {display: inline; position: relative; width: 50%; left: 14%;}
+#bugTypeInputGroup > .table-col {width: 40% !important;}
+
+.pri-text > .label-pri {padding: 1px 5px;}

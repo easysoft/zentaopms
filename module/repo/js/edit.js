@@ -1,11 +1,56 @@
 $(function()
 {
-    scmChanged(scm, true);
+    scmChanged(repoSCM, true);
     $('#submit').mousedown(function()
     {
         $form = $(this).closest('form');
         $form.css('min-height', $form.height());
-    })
+    });
+
+    /**
+     * Handle product changed event.
+     *
+     * @access public
+     * @return void
+     */
+    function productChanged()
+    {
+        var projects = $('#projects').val();
+        var products = $('#product').val();
+        $.post(createLink('repo', 'ajaxProjectsOfProducts'), {products, projects}, function(response)
+        {
+            $('#projectContainer').html('').append(response);
+            $('#projects').change(projectsChanged);
+            $('#projects').chosen().trigger("chosen:updated");
+        });
+    }
+
+    /**
+     * Handle projects changed event.
+     *
+     * @param  object $event
+     * @param  object $data
+     * @access public
+     * @return void
+     */
+    function projectsChanged(event, data)
+    {
+        if(!data.deselected) return;
+
+        var products = $('#product').val();
+        var projects = $('#projects').val();
+
+        $.post(createLink('repo', 'ajaxFilterShadowProducts'), {products, projectID: data.deselected, objectID}, function(response)
+        {
+            $('#productContainer').html('').append(response);
+            $('#product').change(productChanged);
+            $('#product').chosen().trigger("chosen:updated");
+        });
+    }
+
+    $('#product').change(productChanged);
+
+    $('#projects').change(projectsChanged);
 
     $('#serviceHost').change(function()
     {
@@ -38,9 +83,10 @@ $(function()
  */
 function scmChanged(scm, isFirstRequest = false)
 {
-    if(scm == 'Git' || scm == 'Gitea')
+    if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')
     {
         $('.account-fields').addClass('hidden');
+        if(['Git', 'Gitea', 'Gogs'].indexOf(repoSCM) === -1) $('#client').val('');
 
         $('.tips-git').removeClass('hidden');
         $('.tips-svn').addClass('hidden');
@@ -60,11 +106,12 @@ function scmChanged(scm, isFirstRequest = false)
     }
     else
     {
+        $('.tips').addClass('hidden');
         $('tr.service').toggle(true);
-        if(scm == 'Gitea')
+        if(scm == 'Gitea' || scm == 'Gogs')
         {
-            $('tr.hide-service:not(".hide-gitea")').toggle(true);
-            $('tr.hide-gitea').toggle(false);
+            $('tr.hide-service:not(".hide-git")').toggle(true);
+            $('tr.hide-git').toggle(false);
         }
         else
         {

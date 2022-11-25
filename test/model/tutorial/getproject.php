@@ -10,6 +10,8 @@ title=测试 tutorialModel->getProject();
 cid=1
 pid=1
 
+测试是否能拿到数据 >> project
+
 */
 
 $tutorial = new tutorialTest();

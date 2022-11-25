@@ -156,9 +156,13 @@ $(function()
         {
             var url = createLink('repo', 'ajaxGetGitlabProjects', "gitlabID=" + hostID + "&projectIdList=&filter=IS_DEVELOPER");
         }
-        else
+        else if(hosts[hostID].type == 'gitea')
         {
             var url = createLink('repo', 'ajaxGetGiteaProjects', "giteaID=" + hostID);
+        }
+        else if(hosts[hostID].type == 'gogs')
+        {
+            var url = createLink('repo', 'ajaxGetGogsProjects', "gogsID=" + hostID);
         }
         $.get(url, function(response)
         {

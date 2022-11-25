@@ -10,6 +10,11 @@ title=测试 userModel->getProgramAuthedUsers();
 cid=1
 pid=1
 
+获取对ID为1的项目集有权限的用户数量 >> 6
+获取对ID为1的项目集有权限的用户 >> test9
+获取对ID为1的项目集有权限的用户 >> admin
+获取对ID为2的项目集有权限的用户 >> astaw
+
 */
 
 $user = new userTest();

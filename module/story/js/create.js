@@ -2,22 +2,24 @@ $(function()
 {
     $('#needNotReview').on('change', function()
     {
-        $('#reviewer').text('').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
+        $('#reviewer').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
+
         if($(this).is(':checked'))
         {
+            $('#reviewerBox').closest('tr').addClass('hidden');
             $('#reviewerBox').removeClass('required');
+            $('#dataform #needNotReview').val(1);
         }
         else
         {
+            $('#reviewerBox').closest('tr').removeClass('hidden');
             $('#reviewerBox').addClass('required');
+            $('#dataform #needNotReview').val(0);
         }
-        loadAssignedTo();
 
         getStatus('create', "product=" + $('#product').val() + ",execution=" + executionID + ",needNotReview=" + ($(this).prop('checked') ? 1 : 0));
     });
     $('#needNotReview').change();
-
-    if($('#reviewer').val()) loadAssignedTo();
 
     // init pri selector
     $('#pri').on('change', function()
@@ -36,14 +38,12 @@ $(function()
         if($.inArray(source, feedbackSource) != -1)
         {
             $('#feedbackBox').removeClass('hidden');
-            $('#reviewerBox').attr('colspan', $('#assignedToBox').hasClass('hidden') ? 2 : 1);
-            $('#assignedToBox').attr('colspan', 1);
+            $('#source, #sourceNoteBox').closest('td').attr('colspan', 1);
         }
         else
         {
             $('#feedbackBox').addClass('hidden');
-            $('#reviewerBox').attr('colspan', $('#assignedToBox').hasClass('hidden') ? 4 : 2);
-            $('#assignedToBox').attr('colspan', 2);
+            $('#source, #sourceNoteBox').closest('td').attr('colspan', 2);
         }
     });
 
@@ -56,24 +56,10 @@ $(function()
     $('#formSettingForm .btn-primary').click(function()
     {
         saveCustomFields('createFields');
-
-        setTimeout(function()
-        {
-            var showFieldList = showFields + ',';
-            if(showFieldList.indexOf(',source,') >= 0)
-            {
-                $('#source').trigger("change");
-            }
-            else
-            {
-                $('#feedbackBox').addClass('hidden');
-                $('#reviewerBox').attr('colspan', $('#assignedToBox').hasClass('hidden') ? 4 : 2);
-                $('#assignedToBox').attr('colspan', 2);
-            }
-        }, 100);
-
         return false;
     });
+
+    $(document).on('change', '#module', loadURS);
 });
 
 /**
@@ -92,18 +78,6 @@ function loadAssignedTo()
         $('#assignedToBox .picker').remove();
         $('#assignedTo').picker();
     });
-
-    var colspan = $('#assignedToBox').attr('colspan');
-    if($('#needNotReview').is(':checked'))
-    {
-        $('#assignedToBox').removeClass('hidden');
-        $('#reviewerBox').attr('colspan', colspan);
-    }
-    else
-    {
-        $('#assignedToBox').addClass('hidden');
-        $('#reviewerBox').attr('colspan', colspan * 2);
-    }
 }
 
 function refreshPlan()

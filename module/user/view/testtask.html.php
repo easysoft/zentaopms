@@ -37,21 +37,34 @@
         </tr>
       </thead>
       <tbody>
+        <?php
+        $waitCount    = 0;
+        $testingCount = 0;
+        $blockedCount = 0;
+        $doneCount    = 0;
+        ?>
         <?php foreach($tasks as $task):?>
+        <?php if($task->status == 'wait')    $waitCount ++;?>
+        <?php if($task->status == 'doing')   $testingCount ++;?>
+        <?php if($task->status == 'blocked') $blockedCount ++;?>
+        <?php if($task->status == 'done')    $doneCount ++;?>
         <tr>
-          <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
+          <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', true), sprintf('%03d', $task->id), '', "class='iframe'");?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', true), $task->name, '', "class='iframe'");?></td>
           <td class='nobr'><?php echo $task->executionName?></td>
           <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
           <td><?php echo $task->begin?></td>
           <td><?php echo $task->end?></td>
-          <td class='task-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
+          <td class='status-testtask status-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
         </tr>
         <?php endforeach;?>
       </tbody>
     </table>
     <?php if($tasks):?>
-    <div class="table-footer"><?php $pager->show('right', 'pagerjs');?></div>
+    <div class="table-footer">
+      <div class="table-statistic"><?php echo sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);?></div>
+      <?php $pager->show('right', 'pagerjs');?>
+    </div>
     <?php endif;?>
   </div>
 </div>

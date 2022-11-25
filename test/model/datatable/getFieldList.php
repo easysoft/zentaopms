@@ -10,9 +10,9 @@ title=测试 datatableModel::getFieldList();
 cid=1
 pid=1
 
-获取产品模块browse方法自定义列     >> ID
-获取项目模块browse方法自定义列     >> 项目名称
-获取执行模块task方法自定义列       >> 70
+获取产品模块browse方法自定义列 >> ID
+获取项目模块browse方法自定义列 >> 项目名称
+获取执行模块task方法自定义列 >> 70
 获取测试用例模块browse方法自定义列 >> auto
 
 */

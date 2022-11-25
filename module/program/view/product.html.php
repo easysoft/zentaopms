@@ -11,14 +11,18 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<?php js::set('checkedProducts', $lang->product->checkedProducts);?>
+<?php js::set('cilentLang', $this->app->getClientLang());?>
+<?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
 <div id="mainMenu" class="clearfix">
   <?php if(!isonlybody()):?>
-  <div class="btn-toolbar pull-left">
+  <div class="btn-toolBar pull-left">
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
     <?php if($key == $browseType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink("product", "programID=$programID&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
+    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->product->edit), $showBatchEdit);?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('product', 'create', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->product->create, '', 'class="btn btn-primary"');?>
@@ -34,7 +38,6 @@
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo $this->createLink('product', 'batchEdit', "programID=$programID");?>'>
       <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
-      <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
       <table id="productList" class="table has-sort-head table-bordered table-fixed">
         <?php $vars = "programID=$programID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
@@ -48,58 +51,52 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <th rowspan="2"><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
-            <?php if($this->config->URAndSR):?>
-            <th class="w-300px" colspan="4"><?php echo $lang->story->requirement;?></th>
-            <?php endif;?>
-            <th class="w-300px" colspan="4"><?php echo $lang->story->story;?></th>
-            <th class="w-200px" colspan="3"><?php echo $lang->bug->common;?></th>
-            <th class="w-80px"  rowspan="2"><?php echo $lang->product->plan;?></th>
-            <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
-            <th class='c-actions w-70px' rowspan="2"><?php echo $lang->actions;?></th>
+            <th class='c-PO' rowspan="2"><?php common::printOrderLink('PO', $orderBy, $vars, $lang->product->manager);?></th>
+            <th class='c-story' colspan="5"><?php echo $lang->story->story;?></th>
+            <th class='c-bug' colspan="2"><?php echo $lang->bug->common;?></th>
+            <th class='c-plan' rowspan="2"><?php echo $lang->product->plan;?></th>
+            <th class='c-release' rowspan="2"><?php echo $lang->product->release;?></th>
+            <th class='c-actions' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
-            <?php if($this->config->URAndSR):?>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
             <th><?php echo $lang->story->activate;?></th>
             <th><?php echo $lang->story->change;?></th>
-            <th><?php echo $lang->story->completeRate;?></th>
-            <?php endif;?>
-            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
-            <th><?php echo $lang->story->activate;?></th>
-            <th><?php echo $lang->story->change;?></th>
+            <th><?php echo $lang->story->statusList['reviewing'];?></th>
             <th><?php echo $lang->story->completeRate;?></th>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
-            <th><?php echo $lang->close;?></th>
             <th><?php echo $lang->bug->fixedRate;?></th>
           </tr>
         </thead>
         <tbody class="sortable" id="productTableList">
         <?php foreach($products as $product):?>
-          <?php
-          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
-          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
-          ?>
+          <?php $totalStories = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'] + $product->stories['reviewing'];?>
           <tr class="text-center" data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
             <td class='c-id text-left'>
               <?php if($canBatchEdit):?>
-              <?php echo html::checkbox('productIDList', array($product->id => sprintf('%03d', $product->id)));?>
-              <?php else:?>
-              <?php printf('%03d', $product->id);?>
+              <?php echo html::checkbox('productIDList', array($product->id => sprintf('%03d', $product->id)), '', 'class="id-checkbox ' . (!$showBatchEdit ? 'hidden"' : '"'));?>
               <?php endif;?>
+              <span class="product-id <?php if($canBatchEdit && $showBatchEdit) echo 'hidden';?>"><?php printf('%03d', $product->id);?></span>
             </td>
             <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
-            <?php if($this->config->URAndSR):?>
-            <td><?php echo $product->requirements['draft'];?></td>
-            <td><?php echo $product->requirements['active'];?></td>
-            <td><?php echo $product->requirements['changed'];?></td>
-            <td><?php echo $totalRequirements == 0 ? 0 : round($product->requirements['closed'] / $totalRequirements, 3) * 100;?>%</td>
-            <?php endif;?>
+            <td class='c-manager'>
+              <?php
+              if(!empty($product->PO))
+              {
+                  $userName  = zget($users, $product->PO);
+                  echo html::smallAvatar(array('avatar' => $usersAvatar[$product->PO], 'account' => $product->PO, 'name' => $userName), 'avatar-circle avatar-' . zget($userIdPairs, $product->PO));
+
+                  $userID = isset($userIdPairs[$product->PO]) ? $userIdPairs[$product->PO] : '';
+                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
+              }
+              ?>
+            </td>
             <td><?php echo $product->stories['draft'];?></td>
             <td><?php echo $product->stories['active'];?></td>
-            <td><?php echo $product->stories['changed'];?></td>
+            <td><?php echo $product->stories['changing'];?></td>
+            <td><?php echo $product->stories['reviewing'];?></td>
             <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
             <td><?php echo $product->unResolved;?></td>
-            <td><?php echo $product->closedBugs;?></td>
             <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
@@ -118,8 +115,15 @@
         <?php if($canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
-          <?php echo html::submitButton($lang->edit, '', 'btn');?>
+          <?php
+          $actionLink = $this->createLink('product', 'batchEdit');
+          echo html::commonButton($lang->edit, "id='editBtn' data-form-action='$actionLink'");
+          ?>
         </div>
+        <?php
+        $summary = sprintf($lang->product->pageSummary, count($products));
+        echo "<div id='productsCount' class='statistic'>$summary</div>";
+        ?>
         <?php endif;?>
         <?php $pager->show('right', 'pagerjs');?>
       </div>

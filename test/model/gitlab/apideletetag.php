@@ -8,11 +8,11 @@ title=测试 gitlabModel::apiDeleteTag();
 cid=1
 pid=1
 
-使用空的gitlabID、projectID、标签名称删除标签             >> return false
-使用正确的gitlabID、保护分支信息，错误的projectID删除标签 >> 404 Project Not Found
-使用正确的gitlabID,projectID，保护分支删除保护分支        >> 404 Tag Not Found
-使用错误的保护分支信息删除保护分支                        >> Protected tags cannot be deleted
-成功删除标签                                              >> return true
+使用空的gitlabID,projectID,分支名称删除保护分支 >> return false
+使用正确的gitlabID、错误的projectID删除标签 >> 404 Project Not Found
+使用正确的gitlabID、projectID，不存在的标签删除 >> 404 Tag Not Found
+删除受保护的标签 >> Protected tags cannot be deleted
+成功删除标签 >> return true
 
 */
 

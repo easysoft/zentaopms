@@ -30,6 +30,7 @@ $lang->dept->noDepartment = "无部门";
 
 $lang->dept->confirmDelete = " 您确定删除该部门吗？";
 $lang->dept->successSave   = " 修改成功。";
+$lang->dept->repeatDepart  = " 存在部门名称重复，您确认添加吗？";
 
 $lang->dept->error = new stdclass();
 $lang->dept->error->hasSons  = '该部门有子部门，不能删除！';

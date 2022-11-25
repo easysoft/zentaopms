@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('systemMode', $config->systemMode);?>
 <style>.chosen-container .chosen-results{max-height: 170px; overflow-y: initial;}</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -76,7 +75,7 @@
                     $createStoryPriv = common::hasPriv('story', 'create');
                     $createTaskPriv  = common::hasPriv('task', 'create');
                     $createBugPriv   = common::hasPriv('bug', 'create');
-                    $printBtn        = ($config->vision == 'lite' and (($config->systemMode == 'new' and empty($projects) or $config->systemMode == 'classic' and empty($executions)))) ? false : true;
+                    $printBtn        = ($config->vision == 'lite' and empty($projects)) ? false : true;
                     if($printBtn and ($createStoryPriv or $createTaskPriv or $createBugPriv))
                     {
                         $isonlybody = isonlybody();
@@ -210,14 +209,12 @@
       </div>
       <div class="modal-body">
         <table align='center' class='table table-form'>
-          <?php if($config->systemMode == 'new'):?>
           <tr>
             <th><?php echo $lang->todo->project;?></th>
             <td><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getExecutionByProject(this.value);");?></td>
           </tr>
-          <?php endif;?>
           <tr>
-            <th><?php echo $config->systemMode == 'new' ? $lang->todo->execution : $lang->todo->project;?></th>
+            <th><?php echo $lang->todo->execution;?></th>
             <td id='executionIdBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
@@ -263,12 +260,10 @@
       </div>
       <div class="modal-body">
         <table align='center' class='table table-form'>
-          <?php if($config->systemMode == 'new'):?>
           <tr>
             <th><?php echo $lang->todo->project;?></th>
             <td><?php echo html::select('bugProject', $projects, '', "class='form-control chosen' onchange=getProductByProject(this.value);");?></td>
           </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->todo->product;?></th>
             <td id='productIdBox'><?php echo html::select('bugProduct', $projectProducts, '', "class='form-control chosen'");?></td>

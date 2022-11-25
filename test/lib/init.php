@@ -28,7 +28,12 @@ $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'fr
 function c($code)
 {
     global $_result;
-    if($_result and isset($_result->status_code) and $_result->status_code == $code)
+    if(empty($_result) or empty($_result->status_code)) return false;
+
+    $codeStr       = (string)$code;
+    $statusCodeStr = (string)($_result->status_code);
+
+    if($_result->status_code == $code or ($statusCodeStr[0] === '2' and $codeStr[0] === '2'))
     {
         $_result = $_result->body;
         return true;
@@ -55,8 +60,16 @@ $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
 /* init testDB. */
 include $testPath . 'config/config.php';
 include $testPath. 'lib/db.class.php';
-$db = new db();
+include $testPath. 'lib/yaml.class.php';
+include $testPath. 'lib/rest.php';
+$db   = new db();
 
+if(!empty($config->test->account) and !empty($config->test->password) and !empty($config->test->base))
+{
+    $rest  = new rest($config->test->base);
+    $token = $rest->post('/tokens', array('account' => $config->test->account, 'password' => $config->test->password));
+    $token = $token->body;
+}
 /**
  * Save variable to $_result.
  *

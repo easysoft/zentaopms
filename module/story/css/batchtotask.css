@@ -1,0 +1,25 @@
+.chosen-container[id^="story"] {width: 200px; max-width: 150px;}
+select[id^="story"] + .picker-single {width: 130px; max-width: 130px;}
+#mainContent .main-header h2 {max-width: 300px;}
+
+#batchToTaskForm .input-group,
+#batchToTaskForm .input-group .form-control {position: static;}
+#batchToTaskForm .input-group .colorpicker {z-index: 2;}
+#batchToTaskForm .input-group .colorpicker.open {z-index: 5;}
+.main-header .pull-left {max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+.chosen-results > li.has-task,
+.chosen-results > li.has-new-task {position: relative; color: #388E3C;}
+.chosen-results > li.has-task.highlighted,
+.chosen-results > li.has-new-task.highlighted {color: #fff;}
+
+#batchToTaskForm .c-id {width: 30px;}
+#batchToTaskForm .c-name, #batchToTaskForm .c-desc {width: 150px;}
+#batchToTaskForm .c-story {width: 200px;}
+#batchToTaskForm .c-assigned {width: 125px;}
+#batchToTaskForm .c-date {width: 105px;}
+#batchToTaskForm .c-pri {width: 65px;}
+#batchToTaskForm .c-actions, #batchToTaskForm .c-estimate {width: 60px;}
+#batchToTaskForm .input-group-addon {padding: 5px 6px;}
+[lang^=de] #batchToTaskForm .c-date {width: 120px;}
+[lang^=de] #batchToTaskForm .c-estimate {width: 65px;}

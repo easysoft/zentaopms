@@ -1,5 +1,4 @@
 <?php
-$lang->gitlab = new stdclass;
 $lang->gitlab->common            = 'GitLab';
 $lang->gitlab->browse            = 'GitLab Browse';
 $lang->gitlab->search            = 'Search';
@@ -207,8 +206,8 @@ $lang->gitlab->branch->create                      = 'Create';
 $lang->gitlab->branch->lastCommitter               = 'Last Committer';
 $lang->gitlab->branch->lastCommittedDate           = 'Last Committed Date';
 $lang->gitlab->branch->accessLevel                 = "Branch protection list";
-$lang->gitlab->branch->mergeAllowed                = "Merge Allowed";
-$lang->gitlab->branch->pushAllowed                 = "Push Allowed";
+$lang->gitlab->branch->mergeAllowed                = "Allowed to merge";
+$lang->gitlab->branch->pushAllowed                 = "Allowed to push";
 $lang->gitlab->branch->placeholderSearch           = "Branch name";
 $lang->gitlab->branch->placeholderSelect           = "Branch name";
 $lang->gitlab->branch->confirmDelete               = 'Branch will be writable for developers. Are you sure?';

@@ -1,0 +1,266 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SQL parser 5\n"
+"Report-Msgid-Bugs-To: translators@phpmyadmin.net\n"
+"POT-Creation-Date: 2020-03-20 21:01+0100\n"
+"PO-Revision-Date: 2019-07-19 00:04+0000\n"
+"Last-Translator: Kongfa Warorot <gongpha@hotmail.com>\n"
+"Language-Team: Thai <https://hosted.weblate.org/projects/phpmyadmin/sql-"
+"parser/th/>\n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.8-dev\n"
+
+#: src/Component.php:41 src/Component.php:61
+msgid "Not implemented yet."
+msgstr "ยังไม่มีการดำเนินการ"
+
+#: src/Components/AlterOperation.php:278 src/Statement.php:351
+msgid ""
+"A new statement was found, but no delimiter between it and the previous one."
+msgstr "ตรวจพบประพจน์ใหม่ แต่ไม่มีตัวคั่นระหว่างข้อความนี้กับข้อความก่อนหน้า"
+
+#: src/Components/AlterOperation.php:290
+msgid "Missing comma before start of a new alter operation."
+msgstr ""
+
+#: src/Components/AlterOperation.php:302
+msgid "Unrecognized alter operation."
+msgstr "ไม่รู้จักการปฏิบัติการนอกเหนือจากนี้"
+
+#: src/Components/Array2d.php:86
+#, php-format
+msgid "%1$d values were expected, but found %2$d."
+msgstr "ค่าของ %1$d ได้รับการคาดเดา แต่สิ่งที่พบคือ %2$d"
+
+#: src/Components/Array2d.php:110
+msgid "An opening bracket followed by a set of values was expected."
+msgstr "เปิดวงเล็บเหลี่ยมแล้วตามด้วยชุดของค่าที่จะคาดเดา"
+
+#: src/Components/ArrayObj.php:112 src/Components/CreateDefinition.php:230
+msgid "An opening bracket was expected."
+msgstr "วงเล็บเหลี่ยมเปิดได้รับการคาดเดา"
+
+#: src/Components/CaseExpression.php:136 src/Components/CaseExpression.php:164
+#: src/Components/CaseExpression.php:177 src/Components/CaseExpression.php:191
+#: src/Components/IndexHint.php:131 src/Components/IndexHint.php:160
+#: src/Components/LockExpression.php:171 src/Components/LockExpression.php:181
+#: src/Components/LockExpression.php:189 src/Statements/DeleteStatement.php:254
+#: src/Statements/DeleteStatement.php:269
+#: src/Statements/DeleteStatement.php:313
+#: src/Statements/DeleteStatement.php:325
+#: src/Statements/DeleteStatement.php:356
+#: src/Statements/DeleteStatement.php:367
+#: src/Statements/InsertStatement.php:189
+#: src/Statements/InsertStatement.php:217 src/Statements/LoadStatement.php:271
+#: src/Statements/LockStatement.php:86 src/Statements/ReplaceStatement.php:155
+#: src/Statements/ReplaceStatement.php:183
+msgid "Unexpected keyword."
+msgstr "คำสำคัญที่ไม่ได้รับการคาดเดา"
+
+#: src/Components/CaseExpression.php:200
+msgid "Unexpected end of CASE expression"
+msgstr "จุดสิ้นสุดนิพจน์ CASE ไม่ได้รับการคาดเดา"
+
+#: src/Components/CaseExpression.php:225
+#, fuzzy
+#| msgid "Unexpected end of CASE expression"
+msgid "Potential duplicate alias of CASE expression."
+msgstr "จุดสิ้นสุดนิพจน์ CASE ไม่ได้รับการคาดเดา"
+
+#: src/Components/CaseExpression.php:236
+msgid "An alias expected after AS but got "
+msgstr ""
+
+#: src/Components/CaseExpression.php:248 src/Components/Expression.php:353
+#: src/Components/Expression.php:373 src/Components/Expression.php:408
+msgid "An alias was previously found."
+msgstr "ชื่อ alias มีอยู่ก่อนแล้ว"
+
+#: src/Components/CaseExpression.php:262
+#, fuzzy
+#| msgid "An alias was expected."
+msgid "An alias was expected after AS."
+msgstr "ตัวแทนได้รับการคาดเดา"
+
+#: src/Components/CreateDefinition.php:252
+msgid ""
+"A symbol name was expected! A reserved keyword can not be used as a column "
+"name without backquotes."
+msgstr ""
+"ชื่อสัญลักษณ์ได้รับการคาดเดาแล้ว "
+"คำสำคัญที่สงวนไว้ไม่สามารถใช้เป็นชื่อคอลัมน์โดยไม่มีอัญประกาศกลับหลังได้"
+
+#: src/Components/CreateDefinition.php:266
+msgid "A symbol name was expected!"
+msgstr "ชื่อสัญลักษณ์ได้รับการคาดเดา!"
+
+#: src/Components/CreateDefinition.php:301
+msgid "A comma or a closing bracket was expected."
+msgstr "จุลภาค หรือ วงเล็บปิด ได้รับการคาดเดา"
+
+#: src/Components/CreateDefinition.php:317
+msgid "A closing bracket was expected."
+msgstr "วงเล็บปิดได้รับการคาดเดา"
+
+#: src/Components/DataType.php:130
+msgid "Unrecognized data type."
+msgstr "ไม่รู้จักชนิดข้อมูล"
+
+#: src/Components/ExpressionArray.php:101
+msgid "An expression was expected."
+msgstr "หนึ่งนิพจน์ได้รับการคาดเดา"
+
+#: src/Components/Expression.php:258 src/Components/Expression.php:420
+msgid "An alias was expected."
+msgstr "ตัวแทนได้รับการคาดเดา"
+
+#: src/Components/Expression.php:387
+msgid "Unexpected dot."
+msgstr "จุด ไม่ได้รับการคาดเดา"
+
+#: src/Components/IndexHint.php:137 src/Components/IndexHint.php:166
+#: src/Components/LockExpression.php:159 src/Components/SetOperation.php:138
+#: src/Statement.php:247 src/Statements/DeleteStatement.php:278
+#: src/Statements/DeleteStatement.php:329
+#: src/Statements/InsertStatement.php:227
+#: src/Statements/InsertStatement.php:247 src/Statements/LoadStatement.php:274
+#: src/Statements/LoadStatement.php:302 src/Statements/LoadStatement.php:323
+#: src/Statements/LockStatement.php:93 src/Statements/LockStatement.php:99
+#: src/Statements/PurgeStatement.php:109 src/Statements/PurgeStatement.php:119
+#: src/Statements/PurgeStatement.php:139
+#: src/Statements/ReplaceStatement.php:192
+msgid "Unexpected token."
+msgstr "โทเค็นที่ไม่ได้คาดหวังไว้"
+
+#: src/Components/Limit.php:80 src/Components/Limit.php:108
+msgid "An offset was expected."
+msgstr "หนึ่งออฟเซ็ตได้รับการคาดเดา"
+
+#: src/Components/LockExpression.php:91
+#, fuzzy
+#| msgid "Unexpected end of CASE expression"
+msgid "Unexpected end of LOCK expression."
+msgstr "จุดสิ้นสุดนิพจน์ CASE ไม่ได้รับการคาดเดา"
+
+#: src/Components/LockExpression.php:199
+#, fuzzy
+#| msgid "Unexpected end of CASE expression"
+msgid "Unexpected end of Lock expression."
+msgstr "จุดสิ้นสุดนิพจน์ CASE ไม่ได้รับการคาดเดา"
+
+#: src/Components/OptionsArray.php:145
+#, php-format
+msgid "This option conflicts with \"%1$s\"."
+msgstr "ตัวเลือกนี้ขัดแย้งกับ %1$s"
+
+#: src/Components/RenameOperation.php:105
+msgid "The old name of the table was expected."
+msgstr "ชื่อเดิมของตารางได้รับการคาดเดา"
+
+#: src/Components/RenameOperation.php:116
+msgid "Keyword \"TO\" was expected."
+msgstr "คำสำคัญ \"TO\" ได้รับการคาดเดา"
+
+#: src/Components/RenameOperation.php:132
+msgid "The new name of the table was expected."
+msgstr "ชื่อตารางใหม่ได้รับการคาดเดา"
+
+#: src/Components/RenameOperation.php:151
+msgid "A rename operation was expected."
+msgstr "การเปลี่ยนชื่อได้รับการคาดเดา"
+
+#: src/Components/SetOperation.php:121
+msgid "Missing expression."
+msgstr "นิพจน์ขาดหาย"
+
+#: src/Lexer.php:244
+msgid "Unexpected character."
+msgstr "ตัวอักษรที่คาดเดาไม่ได้"
+
+#: src/Lexer.php:285
+msgid "Expected whitespace(s) before delimiter."
+msgstr "วรรค(อาจจะมากกว่าหนึ่ง) ได้รับการคาดเดาก่อนตัวคั่น"
+
+#: src/Lexer.php:303 src/Lexer.php:325
+msgid "Expected delimiter."
+msgstr "ตัวคั่นได้รับการคาดเดา"
+
+#: src/Lexer.php:909
+#, php-format
+msgid "Ending quote %1$s was expected."
+msgstr "อัญประกาศปิด %1$s ได้รับการคาดเดา"
+
+#: src/Lexer.php:955
+msgid "Variable name was expected."
+msgstr "ชื่อตัวแปรได้รับการคาดเดา"
+
+#: src/Parser.php:451
+msgid "Unexpected beginning of statement."
+msgstr "ไม่อาจคาดเดาจุดเริ่มต้นของประพจน์"
+
+#: src/Parser.php:476
+msgid "Unrecognized statement type."
+msgstr "ไม่รู้จักชนิดของประพจน์"
+
+#: src/Parser.php:565
+msgid "No transaction was previously started."
+msgstr "ไม่มีข้อมูลเข้าออกได้เริ่มต้นมาก่อน"
+
+#: src/Statement.php:318
+msgid "This type of clause was previously parsed."
+msgstr "ชนิดของประโยคนี้ถูกวิเคราะห์มาแล้วก่อนหน้านี้"
+
+#: src/Statement.php:396
+msgid "Unrecognized keyword."
+msgstr "ไม่รู้จักชนิดของคีย์เวิร์ด"
+
+#: src/Statement.php:407
+msgid "Keyword at end of statement."
+msgstr "คีย์เวิร์ดในตอนท้ายของคำสั่ง"
+
+#: src/Statement.php:551
+msgid "Unexpected ordering of clauses."
+msgstr "การเรียงของประโยคที่ไม่ได้คาดหวังไว้"
+
+#: src/Statements/CreateStatement.php:492
+msgid "The name of the entity was expected."
+msgstr "ชื่อเอนทิติได้รับการคาดหวัง"
+
+#: src/Statements/CreateStatement.php:542
+msgid "A table name was expected."
+msgstr "ชื่อตารางได้รับการคาดหวัง"
+
+#: src/Statements/CreateStatement.php:550
+msgid "At least one column definition was expected."
+msgstr "การกำหนดคอลัมน์อย่างน้อยหนึ่งคอลัมน์ได้รับการคาดหวัง"
+
+#: src/Statements/CreateStatement.php:665
+msgid "A \"RETURNS\" keyword was expected."
+msgstr "คีย์เวิร์ด \"RETURNS\" ได้รับการคาดหวัง"
+
+#: src/Statements/DeleteStatement.php:337
+msgid "This type of clause is not valid in Multi-table queries."
+msgstr "ประโยคชนิดนี้ไม่ถูกต้องในการเรียกใช้แบบหลายตาราง"
+
+#: src/Statements/LockStatement.php:116
+#, fuzzy
+#| msgid "Unexpected beginning of statement."
+msgid "Unexpected end of LOCK statement."
+msgstr "ไม่อาจคาดเดาจุดเริ่มต้นของประพจน์"
+
+#: src/Statements/PurgeStatement.php:136
+#, fuzzy
+#| msgid "Unexpected keyword."
+msgid "Unexpected keyword"
+msgstr "คำสำคัญที่ไม่ได้รับการคาดเดา"
+
+#~ msgid "error #1"
+#~ msgstr "ผิดพลาด #1"
+
+#~ msgid "strict error"
+#~ msgstr "ข้อผิดพลาดที่ครัดเคร้ง"

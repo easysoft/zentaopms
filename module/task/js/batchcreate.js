@@ -128,7 +128,8 @@ function setStoryRelated(num)
  */
 function setPreview(num)
 {
-    var storyID = $('#story' + num).val();
+    var storyID   = $('#story' + num).val();
+    var storyLink = '#';
     if(storyID != 0  && storyID != 'ditto')
     {
         var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
@@ -148,6 +149,7 @@ function setPreview(num)
             var concat = storyLink.indexOf('?') >= 0 ? '&' : '?';
             storyLink  = storyLink + concat + 'onlybody=yes';
         }
+
         $('#preview' + num).removeAttr('disabled');
         $('#preview' + num).modalTrigger({type:'iframe'});
         $('#preview' + num).css('pointer-events', 'auto');
@@ -155,7 +157,6 @@ function setPreview(num)
     }
     else
     {
-        storyLink  = '#';
         $('#preview' + num).attr('disabled', true);
         $('#preview' + num).css('pointer-events', 'none');
         $('#preview' + num).attr('href', storyLink);

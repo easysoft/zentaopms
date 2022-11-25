@@ -42,7 +42,7 @@
     $active = ($methodName == 'story' and $storyType == 'story')  ? ' btn-active-text' : '';
     common::printLink('user', 'story', "userID={$user->id}&storyType=story", $label, '', "class='btn btn-link $active SRTab'");
 
-    if($this->config->systemMode == 'new')
+    if($this->config->systemMode == 'ALM')
     {
         $label  = "<span class='text'>{$lang->user->execution}</span>";
         $active = $methodName == 'execution' ? ' btn-active-text' : '';

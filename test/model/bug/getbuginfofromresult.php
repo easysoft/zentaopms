@@ -9,22 +9,20 @@ title=bugModel->getBugInfoFromResult();
 cid=1
 pid=1
 
-测试获取runID为0 caseID为2的bug   >> 这个是测试用例2
-测试获取runID为0 caseID为6的bug   >> 这个是测试用例6
-测试获取runID为0 caseID为10的bug  >> 这个是测试用例10
-测试获取runID为2 caseID为2的bug   >> 这个是测试用例2
-测试获取runID为2 caseID为6的bug   >> 这个是测试用例6
-测试获取runID为2 caseID为10的bug  >> 这个是测试用例10
-测试获取runID为6 caseID为2的bug   >> 这个是测试用例2
-测试获取runID为6 caseID为6的bug   >> 这个是测试用例6
-测试获取runID为6 caseID为10的bug  >> 这个是测试用例10
-测试获取runID为10 caseID为2的bug  >> 这个是测试用例2
-测试获取runID为10 caseID为6的bug  >> 这个是测试用例6
+测试获取runID为0 caseID为2的bug >> 这个是测试用例2
+测试获取runID为0 caseID为6的bug >> 这个是测试用例6
+测试获取runID为0 caseID为10的bug >> 这个是测试用例10
+测试获取runID为2 caseID为2的bug >> 这个是测试用例2
+测试获取runID为2 caseID为6的bug >> 这个是测试用例6
+测试获取runID为2 caseID为10的bug >> 这个是测试用例10
+测试获取runID为6 caseID为2的bug >> 这个是测试用例2
+测试获取runID为6 caseID为6的bug >> 这个是测试用例6
+测试获取runID为6 caseID为10的bug >> 这个是测试用例10
+测试获取runID为10 caseID为2的bug >> 这个是测试用例2
+测试获取runID为10 caseID为6的bug >> 这个是测试用例6
 测试获取runID为10 caseID为10的bug >> 这个是测试用例10
 
-
 */
-
 
 $runIDList       = array('0', '2', '6', '10');
 $caseIDList      = array('0', '2', '6', '10');

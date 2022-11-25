@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -31,4 +32,4 @@ r($testcase->batchCaseTypeChangeTest($caseIDList[3], $typeList[3])) && p('7:type
 r($testcase->batchCaseTypeChangeTest($caseIDList[4], $typeList[4])) && p('9:type;10:type')          && e('security;security');        // 测试批量修改case 9 10 type为 security
 r($testcase->batchCaseTypeChangeTest($caseIDList[5], $typeList[5])) && p('11:type;12:type')         && e('interface;interface');      // 测试批量修改case 11 12 type为 interface
 r($testcase->batchCaseTypeChangeTest($caseIDList[6], $typeList[6])) && p('13:type;14:type;15:type') && e('other;other;other');        // 测试批量修改case 13 14 15 type为 other
-system("./ztest init");
+$db->restoreDB();

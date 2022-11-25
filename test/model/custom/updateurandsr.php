@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/custom.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +31,4 @@ r($custom->updateURAndSRTest($key[1], $SRName[0])) && p()        && e('0');     
 r($custom->updateURAndSRTest($key[1], $SRName[1])) && p()        && e('0');                                                                          //测试修改key为0，SRName值更改为软件需求
 r($custom->updateURAndSRTest($key[1], $SRName[2])) && p()        && e('0');                                                                          //测试修改key为0，SRName值更改为软件需求1
 
-system("./ztest init");
+$db->restoreDB();

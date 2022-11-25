@@ -224,8 +224,13 @@ $lang->user->placeholder->loginAccount  = '请输入用户名';
 $lang->user->placeholder->loginUrl      = '请输入禅道系统网址';
 $lang->user->placeholder->email         = '请输入邮箱';
 
-$lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小写字母，数字。';
-$lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小写字母，数字，特殊字符。';
+$lang->user->placeholder->passwordStrength[0] = '密码必须6位及以上。';
+$lang->user->placeholder->passwordStrength[1] = '6位及以上，包含大小写字母，数字。';
+$lang->user->placeholder->passwordStrength[2] = '10位及以上，包含大小写字母，数字，特殊字符。';
+
+$lang->user->placeholder->passwordStrengthCheck[0] = '密码须6位及以上。';
+$lang->user->placeholder->passwordStrengthCheck[1] = '密码必须6位及以上，且包含大小写字母、数字。';
+$lang->user->placeholder->passwordStrengthCheck[2] = '密码必须10位及以上，且包含大小写字母、数字、特殊符号。';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account        = "【ID %s】的用户名应该为：三位以上的英文、数字或下划线的组合";
@@ -251,6 +256,7 @@ $lang->user->error->noEmail          = '该用户未绑定邮箱，请联系管�
 $lang->user->error->errorEmail       = '用户名和邮箱不匹配，请重新输入。';
 $lang->user->error->emailSetting     = '系统未配置发信邮箱，请联系管理员重置。';
 $lang->user->error->sendMailFail     = '邮件发送失败，请重试！';
+$lang->user->error->loginTimeoutTip  = '系统登录失败，请检查代理服务是否正常';
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;

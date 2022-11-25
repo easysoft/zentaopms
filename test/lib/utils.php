@@ -72,14 +72,22 @@ function ztfExtract($dir)
  * @access public
  * @return void
  */
-function zdRun()
+function zdRun($dataVersion = '', $dbFile = '')
 {
-    global $config, $dao;
+    global $config, $dao, $db;
 
     $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
     include LIB_ROOT . 'spyc.php';
 
-    $zdRoot = dirname(dirname(__FILE__)) . '/data/';
+    if($dataVersion && $dbFile)
+    {
+        $db->replaceDBConfig($dbFile);
+        $zdRoot = dirname(dirname(__FILE__)) . "/data/{$dataVersion}/";
+    }
+    else
+    {
+        $zdRoot = dirname(dirname(__FILE__)) . '/data/';
+    }
     $zdPath = RUNTIME_ROOT . 'zd';
 
     set_time_limit(0);
@@ -100,7 +108,7 @@ function zdRun()
         $tmpCommonPath = RUNTIME_ROOT . 'tmp/common';
         if(file_exists($tmpCommonPath)) system("rm -rf $tmpCommonPath");
         system("cp -r {$zdRoot}common $tmpCommonPath");
-        system("rm {$zdRoot}sql/*");
+        if(file_exists("{$zdRoot}sql/")) system("find {$zdRoot}sql/ -type f -delete");
 
         /* Generate SQL files. */
         $tables = array();
@@ -218,12 +226,19 @@ function zdRun()
 function copyDB()
 {
     global $config, $dao;
-
-    $dumpCommand = "mysqldump -u%s -p%s %s > %s";
-    $sqlFile     = TEST_BASEHPATH . DS . 'tmp/raw.sql';
+    $sqlFile = TEST_BASEHPATH . DS . 'tmp/raw.sql';
+    if($config->db->host = 'localhost' and $config->db->port = '3306')
+    {
+        $dumpCommand = "mysqldump -u%s -p%s %s --add-drop-table=false > %s";
+        $dumpCommand  = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
+    }
+    else
+    {
+        $dumpCommand = "mysqldump -h%s -P%s -u%s -p%s %s --add-drop-table=false > %s";
+        $dumpCommand  = sprintf($dumpCommand, $config->db->host, $config->db->port, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
+    }
 
     $currentDBNum = $dao->query("select count(*) as num from information_schema.SCHEMATA where SCHEMA_NAME like '" . $config->test->dbPrefix . "%'")->fetch();
-    $dumpCommand  = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
     shell_exec($dumpCommand);
 
     $dbNum = $config->test->dbNum;
@@ -236,10 +251,17 @@ function copyDB()
 
     foreach($dbUsed as $db)
     {
-        if ($currentDBNum->num > 0) $dao->query('drop database ' . $db);
+        if($currentDBNum->num > 0) $dao->query('DROP DATABASE IF EXISTS ' . $db);
         $dao->query('CREATE DATABASE ' . $db);
-        shell_exec("mysql -u" . $config->db->user . ' -p' . $config->db->password . ' ' .  $db . '  <  ' . $sqlFile);
-        echo '数据库<' . $db . '>复制成功！';
+        if($config->db->host = 'localhost' and $config->db->port = '3306')
+        {
+            shell_exec("mysql -u{$config->db->user} -p{$config->db->password} $db < $sqlFile");
+        }
+        else
+        {
+            shell_exec("mysql -h{$config->db->host} -P {$config->db->port} -u{$config->db->user} -p{$config->db->password} $db < $sqlFile");
+        }
+        echo '数据库<' . $db . '>复制成功！' . PHP_EOL;
     }
 }
 

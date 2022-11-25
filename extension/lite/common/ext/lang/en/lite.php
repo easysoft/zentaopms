@@ -20,7 +20,7 @@ if($config->edition != 'open')
     $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
     $lang->navIcons['workflow'] = "<i class='icon icon-flow'></i>";
 
-    $lang->mainNav->feedback = $lang->navIcons['feedback'] . 'Feedback|feedback|browse|';
+    $lang->mainNav->feedback = $lang->navIcons['feedback'] . 'Feedback|feedback|browse|browseType=unclosed';
     $lang->mainNav->oa       = $lang->navIcons['oa'] . 'OA|attend|personal|';
     $lang->mainNav->workflow = $lang->navIcons['workflow'] . 'Workflow|workflow|browseFlow|';
 
@@ -51,6 +51,7 @@ else
 }
 
 $lang->task->common = 'Task';
+$lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
 /* My menu. */
 $lang->my->menu           = new stdclass();

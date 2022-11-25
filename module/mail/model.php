@@ -754,6 +754,10 @@ class mailModel extends model
         {
             $sendUsers = array($object->auditedBy, '');
         }
+        elseif($objectType == 'ticket')
+        {
+            $sendUsers = $this->{$objectType}->getToAndCcList($object, $action);
+        }
         else
         {
             $sendUsers = $this->{$objectType}->getToAndCcList($object);
@@ -785,7 +789,15 @@ class mailModel extends model
         }
         else
         {
-            $this->send($toList, $subject, $mailContent, $ccList);
+            if($objectType == 'ticket')
+            {
+                $emails = $this->loadModel('ticket')->getContactEmails($objectID, $toList, $ccList, $action->action == 'closed');
+                $this->send($toList, $subject, $mailContent, $ccList, false, $emails);
+            }
+            else
+            {
+                $this->send($toList, $subject, $mailContent, $ccList);
+            }
         }
         if($this->isError()) error_log(join("\n", $this->getError()));
     }

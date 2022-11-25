@@ -10,10 +10,10 @@ title=测试 sonarqubeModel::apiGetProjects();
 cid=1
 pid=1
 
-通过sonarqubeID,获取SonarQube项目列表        >> 1
-通过sonarqubeID,获取SonarQube项目数量        >> 1
+通过sonarqubeID,获取SonarQube项目列表 >> 1
+通过sonarqubeID,获取SonarQube项目数量 >> 1
 通过sonarqubeID,关键字,搜索获取SonarQube项目 >> 1
-当sonarqubeID为0时,获取SonarQube项目列表     >> return empty
+当sonarqubeID为0时,获取SonarQube项目列表 >> return empty
 
 */
 

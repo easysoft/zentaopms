@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/stage.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -64,4 +65,4 @@ r($stage->createTest($stage4)) && p('name,percent,type') && e('新建的测试,4
 r($stage->createTest($stage5)) && p('name,percent,type') && e('新建的发布,5,release');    // 测试新建一个发布阶段
 r($stage->createTest($stage6)) && p('name,percent,type') && e('新建的总结评审,6,review'); // 测试新建一个总结评审阶段
 r($stage->createTest($stage7)) && p('name,percent,type') && e('新建的其他,7,other');      // 测试新建一个其他阶段
-system("./ztest init");
+$db->restoreDB();

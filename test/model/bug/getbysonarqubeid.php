@@ -14,7 +14,6 @@ pid=1
 
 */
 
-
 $sonarqubeIDList = array('0', '2');
 
 $bug=new bugTest();

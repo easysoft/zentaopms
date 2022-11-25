@@ -9,7 +9,10 @@ title=测试 storyModel->getStoryRelation();
 cid=1
 pid=1
 
-
+获取用户需求25关联的软件需求数量 >> 1
+获取软件需求26关联的用户需求数量 >> 1
+获取用户需求25关联的软件需求详情 >> 软件需求26,story,active
+获取软件需求26关联的用户需求详情 >> 用户需求25,requirement,draft
 
 */
 

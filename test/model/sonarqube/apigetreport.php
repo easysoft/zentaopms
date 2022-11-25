@@ -8,6 +8,11 @@ title=测试 sonarqubeModel::apiGetReport();
 cid=1
 pid=1
 
+通过错误的sonarqubeID、projectKey，查询sonarqube报告 >> return empty
+通过正确的sonarqubeID,不存在的projectKey查询sonarqube报告 >> Component key 'wrong_project' not found
+通过正确的sonarqubeID、projectKey，不正确的metricKeys查询sonarqube报告 >> The following metric keys are not found: wrong_params
+通过正确的sonarqubeID、projectKey、metricKeys，查询sonarqube报告 >> success
+
 */
 
 $sonarqube = $tester->loadModel('sonarqube');

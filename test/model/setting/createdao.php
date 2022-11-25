@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/setting.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -86,4 +87,4 @@ r($setting->createDAOTest($paramString[10], $method[1])) && p()       && e('7');
 r($setting->createDAOTest($paramString[11], $method[1])) && p()       && e('13');                                  //测试删除参数包含vision的config数据
 r($setting->createDAOTest($paramString[12], $method[1])) && p()       && e('0');                                   //测试删除参数为空的config数据
 
-system("./ztest init");
+$db->restoreDB();

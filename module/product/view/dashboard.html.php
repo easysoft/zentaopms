@@ -15,7 +15,7 @@
 <div id='mainContent' class="main-row">
   <div class="col-12 main-col">
     <div class="row">
-    <?php $isRoadmap = common::hasPriv('product', 'roadmap');?>
+    <?php $isRoadmap = (common::hasPriv('product', 'roadmap') and helper::hasFeature('product_roadmap'));?>
     <?php if($isRoadmap):?>
       <div class="col-sm-6">
         <div class="panel block-release">
@@ -54,7 +54,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->product->latestDynamic;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><a href="<?php echo $this->createLink('product', 'dynamic', "productID={$product->id}&type=all");?>" title="<?php echo $lang->more;?>"><i class="icon icon-more icon-sm"></i></i></a></li>
+              <li><a href="<?php echo $this->createLink('product', 'dynamic', "productID={$product->id}&type=all");?>" title="<?php echo $lang->more;?>"><?php echo strtoupper($lang->more);?></i></i></a></li>
             </nav>
           </div>
           <div class="panel-body scrollbar-hover">

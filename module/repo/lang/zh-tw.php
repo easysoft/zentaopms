@@ -3,6 +3,7 @@ $lang->repo->common          = '代碼';
 $lang->repo->browse          = '瀏覽';
 $lang->repo->viewRevision    = '查看修訂';
 $lang->repo->product         = '所屬產品';
+$lang->repo->projects        = '所屬項目';
 $lang->repo->execution       = '所屬' . $lang->execution->common;
 $lang->repo->create          = '創建';
 $lang->repo->maintain        = '版本庫列表';
@@ -135,6 +136,7 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['Gogs']       = 'Gogs';
 $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';

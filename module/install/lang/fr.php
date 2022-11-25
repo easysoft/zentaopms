@@ -40,6 +40,7 @@ Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
 EOT;
 
+$lang->install->selectMode          = "Select mode";
 $lang->install->introduction        = "ZenTao 15.0+ Feature Introduction";
 $lang->install->howToUse            = "How do you like to use ZenTao?";
 $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4';
@@ -154,7 +155,7 @@ $lang->install->saved2File         = 'Le fichier de configuration a été enregi
 $lang->install->errorNotSaveConfig = "Le fichier de configuration n'est pas enregistré.";
 
 global $app;
-$lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->moduleRoot}config/config.php file.";
+$lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->basePath}config/config.php file.";
 
 $lang->install->getPriv            = 'Paramétrage Admin';
 $lang->install->company            = 'Nom Entreprise';
@@ -162,7 +163,7 @@ $lang->install->account            = 'Compte Admin';
 $lang->install->password           = 'Mot de Passe Admin';
 
 $lang->install->placeholder = new stdclass();
-$lang->install->placeholder->password = 'Combination of letters, numbers and special symbols, at least 6 characters';
+$lang->install->placeholder->password = 'Le mot de passe doit ≥ 6 caractères, combinaison de lettres majuscules, minuscules et de chiffres.';
 
 $lang->install->errorEmpty['company']  = "{$lang->install->company} should not be blank.";
 $lang->install->errorEmpty['account']  = "{$lang->install->account} should not be blank.";
@@ -259,11 +260,11 @@ $lang->install->groupList['LIMITED']['desc']      = 'Les utilisateurs peuvent se
 $lang->install->groupList['PROJECTADMIN']['name'] = 'Project Admin';
 $lang->install->groupList['PROJECTADMIN']['desc'] = 'Project Admins manage project privileges';
 $lang->install->groupList['LITEADMIN']['name']    = 'LITEADMIN';
-$lang->install->groupList['LITEADMIN']['desc']    = 'Lite Admin';
+$lang->install->groupList['LITEADMIN']['desc']    = 'Operation Management Interface Admin';
 $lang->install->groupList['LITEPROJECT']['name']  = 'LITEPROJECT';
-$lang->install->groupList['LITEPROJECT']['desc']  = 'Lite Rroject';
+$lang->install->groupList['LITEPROJECT']['desc']  = 'Operation Management Interface Project';
 $lang->install->groupList['LITETEAM']['name']     = 'LITETEAM';
-$lang->install->groupList['LITETEAM']['desc']     = 'Lite Team';
+$lang->install->groupList['LITETEAM']['desc']     = 'Operation Management Interface Team';
 
 $lang->install->cronList[''] = 'Moniteur Cron';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Mise à jour Graphe Burndown';
@@ -291,9 +292,6 @@ $lang->install->joinZentao         = <<<EOT
 EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo');
-
-$lang->install->modeList['classic'] = 'Classic mode';
-$lang->install->modeList['new']     = 'Program mode';
 
 $lang->install->promotion = "Autres produits de l'équipe Nature Easy Soft :";
 

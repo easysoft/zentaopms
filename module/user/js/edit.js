@@ -4,13 +4,19 @@ $(function()
     var password2Encrypted = false
     $('#password1').change(function(){password1Encrypted = false});
     $('#password2').change(function(){password2Encrypted = false});
+
+    var passwordStrength = 0;
     $('#submit').click(function()
     {
-        if(!password1Encrypted && !password2Encrypted)
+        if(!password1Encrypted || !password2Encrypted)
         {
             var password1 = $('#password1').val().trim();
             var password2 = $('#password2').val().trim();
-            var passwordStrength = computePasswordStrength(password1);
+            if(!password1Encrypted)
+            {
+                passwordStrength = computePasswordStrength(password1);
+                $("#passwordLength").val(password1.length);
+            }
 
             if($("form input[name=passwordStrength]").length == 0) $('#submit').after("<input type='hidden' name='passwordStrength' value='0' />");
             $("form input[name=passwordStrength]").val(passwordStrength);

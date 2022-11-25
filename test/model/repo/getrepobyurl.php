@@ -8,9 +8,9 @@ title=测试 repoModel::getRepoByUrl();
 cid=1
 pid=1
 
-使用空的url   >> Url is empty.
-使用错误的url >> No matched gitlab.
-使用正确的url >> return normal
+使用空的MR >> Url is empty.
+使用错误的MR >> No matched gitlab.
+使用正确的MR >> return normal
 
 */
 

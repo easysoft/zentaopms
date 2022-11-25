@@ -33,6 +33,11 @@ class weekly extends control
      */
     public function commonAction($projectID = 0)
     {
+        if(common::hasPriv('weekly', 'exportweeklyreport'))
+        {
+            $this->lang->TRActions = "<div class='btn-toolbar pull-right'>" . html::a($this->createLink('weekly', 'exportweeklyreport', 'module=' . $this->app->getModuleName() . '&projectID=' . $projectID), $this->lang->export, '', "class='btn btn-primary' data-width='30%' id='exportreport' data-group='project'") . '</div';
+        }
+
         $this->loadModel('project')->setMenu($projectID);
     }
 
@@ -50,24 +55,14 @@ class weekly extends control
         if(!$date) $date = helper::today();
         $date = date('Y-m-d', strtotime($date));
 
-        $this->view->title = $this->lang->weekly->common;
-
-        $this->view->pv = $this->weekly->getPV($projectID, $date);
-        $this->view->ev = $this->weekly->getEV($projectID, $date);
-        $this->view->ac = $this->weekly->getAC($projectID, $date);
-        $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
-        $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
-
-        $this->view->project   = $this->loadModel('project')->getByID($projectID);
-        $this->view->weekSN    = $this->weekly->getWeekSN($this->view->project->begin, $date);
-        $this->view->monday    = $this->weekly->getThisMonday($date);
-        $this->view->lastDay   = $this->weekly->getLastDay($date);
-        $this->view->staff     = $this->weekly->getStaff($projectID, $date);
-        $this->view->finished  = $this->weekly->getFinished($projectID, $date);
-        $this->view->postponed = $this->weekly->getPostponed($projectID, $date);
-        $this->view->nextWeek  = $this->weekly->getTasksOfNextWeek($projectID, $date);
-        $this->view->workload  = $this->weekly->getWorkloadByType($projectID, $date);
         $this->weekly->save($projectID, $date);
+
+        /* Get report data from module and assign data to view object. */
+        $data = $this->weekly->getReportData($projectID, $date);
+        foreach($data as $key => $val) $this->view->$key = $val;
+
+        $this->view->title = $this->lang->weekly->common;
+        $this->view->date  = $date;
 
         $this->lang->modulePageNav = $this->weekly->getPageNav($this->view->project, $date);
         $this->display();

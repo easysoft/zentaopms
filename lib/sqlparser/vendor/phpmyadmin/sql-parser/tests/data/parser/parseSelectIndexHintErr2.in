@@ -1,0 +1,1 @@
+SELECT * FROM address FORCE abc (idx_fk_city_id);

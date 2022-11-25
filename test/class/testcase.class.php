@@ -309,6 +309,24 @@ class testcaseTest
     }
 
     /**
+     * Test get case pairs by product id and branch.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return array
+     */
+    public function getPairsByProductTest($productID = 0, $branch = 0)
+    {
+        $objects = $this->objectModel->getPairsByProduct($productID, $branch);
+
+        if(dao::isError()) return dao::getError();
+
+        if(empty($objects)) return 'empty';
+        return $objects;
+    }
+
+    /**
      * Test get counts of some stories' cases.
      *
      * @param  array  $stories

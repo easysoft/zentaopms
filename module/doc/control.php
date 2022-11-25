@@ -156,8 +156,15 @@ class doc extends control
         /* Splice project name. */
         foreach($executions as $executionID => $execution)
         {
-            $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
-            $executions[$executionID] = $executionPrefix . $execution->name;
+            if($execution->multiple)
+            {
+                $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
+                $executions[$executionID] = $executionPrefix . $execution->name;
+            }
+            else
+            {
+                unset($executions[$executionID]);
+            }
         }
 
         /* Get the project that has permission to view. */
@@ -319,19 +326,8 @@ class doc extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, 0);
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
-            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params, 'html') . '#app=' . $this->app->tab;
-            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess);
-
-            if(isonlybody() and $docResult['docType'] == 'text')
-            {
-                $link = helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$objectType&objectID=$objectID&libID={$docResult['libID']}");
-
-                $response['callback'] = "redirect2Edit($docID, \"$objectType\", $objectID, {$docResult['libID']})";
-            }
-            else
-            {
-                $response['locate'] = "$link";
-            }
+            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params) . '#app=' . $this->app->tab;
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link);
 
             return $this->send($response);
         }
@@ -359,7 +355,7 @@ class doc extends control
             unset($this->lang->doc->menu->product['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
             unset($this->lang->doc->menu->execution['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->project['subMenu']);
         }
 
         $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
@@ -390,6 +386,45 @@ class doc extends control
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->fromGlobal       = $fromGlobal;
         $this->view->from             = $from;
+
+        $this->display();
+    }
+
+    /**
+     * Create basic info for doc of text type.
+     *
+     * @param  string     $objectType
+     * @param  int        $objectID
+     * @param  int|string $libID
+     * @param  int        $moduleID
+     * @param  string     $docType
+     * @access public
+     * @return void
+     */
+    public function createBasicInfo($objectType, $objectID, $libID, $moduleID = 0, $docType = '')
+    {
+        /* Get libs and the default lib id. */
+        $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
+        if(!$libID and !empty($libs)) $libID = key($libs);
+
+        $lib     = $this->doc->getLibByID($libID);
+        $type    = isset($lib->type) ? $lib->type : 'product';
+        $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
+
+        $this->view->title = $libName . $this->lang->doc->create;
+
+        $this->view->objectType       = $objectType;
+        $this->view->objectID         = zget($lib, $lib->type, 0);
+        $this->view->libID            = $libID;
+        $this->view->lib              = $lib;
+        $this->view->libs             = $libs;
+        $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
+        $this->view->docType          = $docType;
+        $this->view->groups           = $this->loadModel('group')->getPairs();
+        $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
 
         $this->display();
     }
@@ -433,7 +468,7 @@ class doc extends control
 
             if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter' and $doc->type != 'article')
             {
-                $link = $this->createLink('doc', 'objectLibs', "type={$lib->type}&objectID=$objectID&libID={$doc->lib}&docID=$docID");
+                $link = $this->createLink('doc', 'objectLibs', "type={$lib->type}&objectID=$objectID&libID={$doc->lib}&docID=$docID") . "#app={$this->app->tab}";
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -478,8 +513,8 @@ class doc extends control
 
             unset($this->lang->doc->menu->product['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
-            if($this->config->systemMode == 'classic') unset($this->lang->doc->menu->execution['subMenu']);
+            unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->execution['subMenu']);
 
             /* High light menu. */
             if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)
@@ -588,6 +623,7 @@ class doc extends control
      */
     public function delete($docID, $confirm = 'no', $from = 'list')
     {
+        $this->loadModel('file');
         if($confirm == 'no')
         {
             $type = $this->dao->select('type')->from(TABLE_DOC)->where('id')->eq($docID)->fetch('type');
@@ -598,8 +634,19 @@ class doc extends control
         {
             $doc        = $this->doc->getByID($docID);
             $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
-            if($this->config->systemMode == 'classic' and $objectType == 'project') $objectType = 'execution';
             $this->doc->delete(TABLE_DOC, $docID);
+
+            /* Delete doc files. */
+            $this->loadModel('file');
+            foreach($doc->files as $fileID => $file)
+            {
+                $file = $this->file->getById($fileID);
+                $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
+                $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
+
+                $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
+                if(empty($fileRecord)) $this->file->unlinkFile($file);
+            }
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -983,7 +1030,6 @@ class doc extends control
 
         $this->lang->TRActions = $this->doc->buildCollectButton4Doc();
         $this->lang->TRActions .= $this->doc->buildBrowseSwitch($type, $objectID, $viewType, $orderBy, $recTotal, $recPerPage, $pageID, $searchTitle);
-        if($this->app->tab == 'doc') $this->app->rawMethod = $type;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1092,14 +1138,13 @@ class doc extends control
         $lib = $this->doc->getLibById($libID);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $libID;
 
-        if($this->config->systemMode == 'classic' and $type == 'project') $type = 'execution';
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID, $appendLib);
 
         /* Set Custom. */
         foreach(explode(',', $this->config->doc->customObjectLibs) as $libType) $customObjectLibs[$libType] = $this->lang->doc->customObjectLibs[$libType];
 
-        $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
-        $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'objectLibs');
+        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&browseType=bySearch&param=myQueryID");
+        $this->doc->buildSearchForm(0, array(), 0, $actionURL, $type);
 
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 

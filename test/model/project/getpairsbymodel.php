@@ -9,6 +9,10 @@ title=测试 projectModel->getPairsByModel();
 cid=1
 pid=1
 
+获取项目集1下的所有项目数量 >> 9
+获取项目集1下的项目名称 >> 项目集1 / 项目11
+获取项目集1下的所有瀑布项目数量 >> 3
+
 */
 
 global $tester;

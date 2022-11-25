@@ -10,6 +10,8 @@ title=测试 userModel::getUserTemplates();
 cid=1
 pid=1
 
+
+
 */
 $user = new userTest();
 

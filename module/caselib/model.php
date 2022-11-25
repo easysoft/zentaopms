@@ -74,11 +74,13 @@ class caselibModel extends model
      * @param  int   $libID
      * @param  bool  $setImgSize
      * @access public
-     * @return object
+     * @return object|bool
      */
     public function getById($libID, $setImgSize = false)
     {
         $lib = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq((int)$libID)->fetch();
+        if(!$lib) return false;
+
         $lib = $this->loadModel('file')->replaceImgURL($lib, 'desc');
         if($setImgSize) $lib->desc = $this->file->setImgSize($lib->desc);
         return $lib;
@@ -145,24 +147,26 @@ class caselibModel extends model
             ->where('product')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
-            ->orderBy('id_desc')
+            ->orderBy('order_desc, id_desc')
             ->fetchPairs('id', 'name');
     }
 
     /**
      * Get library list.
      *
+     * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList($type = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_TESTSUITE)
             ->where('product')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -179,7 +183,7 @@ class caselibModel extends model
         $lib = fixer::input('post')
             ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
             ->setForce('type', 'library')
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa', 'project', $this->session->project)
+            ->setIF($this->lang->navGroup->caselib != 'qa', 'project', $this->session->project)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid')
@@ -220,13 +224,14 @@ class caselibModel extends model
         $browseType   = ($browseType == 'bymodule' and $this->session->libBrowseType and $this->session->libBrowseType != 'bysearch') ? $this->session->libBrowseType : $browseType;
 
         $cases = array();
-        if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait')
+        if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait' or $browseType == 'review')
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where('lib')->eq((int)$libID)
                 ->andWhere('product')->eq(0)
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()
+                ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($sort)->page($pager)->fetchAll('id');
         }
@@ -260,7 +265,7 @@ class caselibModel extends model
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq((int)$libID)->fi()
-                ->beginIF($this->config->systemMode == 'new' and $this->app->tab != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+                ->beginIF($this->app->tab != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq(0)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)->fetchAll();
@@ -579,7 +584,7 @@ class caselibModel extends model
                 $data[$i]->status       = $forceNotReview ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
                 $data[$i]->project      = 0;
-                if($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa' and $this->session->project) $data[$i]->project = $this->session->project;
+                if($this->lang->navGroup->caselib != 'qa' and $this->session->project) $data[$i]->project = $this->session->project;
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()
@@ -644,7 +649,7 @@ class caselibModel extends model
         $menu   = '';
         $params = "caseID=$case->id";
 
-        if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
+        if($case->status == 'wait' and ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)))
         {
             $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
         }

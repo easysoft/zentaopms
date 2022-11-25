@@ -13,9 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::import($jsRoot . 'md5.js');?>
 <?php js::set('roleGroup', $roleGroup);?>
+<?php js::set('companies', html::select("company", $companies));?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->user->batchCreate;?></h2>
+    <div class="user-type"><?php echo html::radio('type', $lang->user->typeList , 'inside', "onclick='changeType(this.value)'");?></div>
     <div class="pull-right btn-toolbar">
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=user&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
@@ -42,11 +44,13 @@
   $showVisionList = count($visionList) > 1;
   ?>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
+    <?php echo html::hidden('userType', 'inside');?>
     <div class="table-responsive">
       <table class="table table-form">
         <thead>
           <tr class='text-center'>
             <th class='c-id'><?php echo $lang->idAB;?></th>
+            <th class='c-company hide<?php echo zget($requiredFields, 'company', '', ' required');?>'><?php echo $lang->user->company;?></th>
             <th class='c-dept<?php echo zget($visibleFields, 'dept', ' hidden') . zget($requiredFields, 'dept', '', ' required');?>'>              <?php echo $lang->user->dept;?></th>
             <th class='accountThWidth required'><?php echo $lang->user->account;?></th>
             <th class='c-realname required'><?php echo $lang->user->realname;?></th>
@@ -80,6 +84,12 @@
         <?php for($i = 1; $i <= $config->user->batchCreate; $i++):?>
         <tr class='text-center'>
           <td><?php echo $i;?></td>
+          <td class='text-left hide' style='overflow:visible'>
+            <div class='input-group'>
+              <?php echo html::select("company[$i]", $companies, $i > 1 ? 'ditto' : '', "class='form-control chosen'");?>
+              <span class='input-group-addon'><?php echo html::checkBox("new[$i]", $lang->company->create);?></span>
+            </div>
+          </td>
           <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$i]", $depts, $i > 1 ? 'ditto' : $deptID, "class='form-control chosen'");?></td>
           <td><?php echo html::input("account[$i]", '', "class='form-control account_$i' onchange='changeEmail($i)'");?></td>
           <td><?php echo html::input("realname[$i]", '', "class='form-control'");?></td>

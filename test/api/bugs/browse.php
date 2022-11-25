@@ -113,7 +113,7 @@ r($admin->create($wrongProductBug)) && c(400) && p('error') && e('product does n
 /* Test get. */
 $bug = $admin->create($normalBug);
 r($admin->get($bug->id))          && c(200) && p($fields) && e('Bug2');
-r($admin->get(9999999)            && c(400) && p('error') && e('');
+r($admin->get(9999999))           && c(400) && p('error') && e('');
 r($noProduct1User->get($bug->id)) && c(403) && p('error') && e('');
 
 r($admin->getList(1))                   && c(200) && p('0:title') && e('Bug1');

@@ -1,0 +1,1 @@
+ALTER USER 'user' ATTRIBUTE '{"baz": "faz", "foo": "moo"}';

@@ -1,0 +1,7 @@
+-- extraneous comma
+UPDATE
+    users
+SET
+    username = "Dan",
+    id=155,
+WHERE 1 = 1;

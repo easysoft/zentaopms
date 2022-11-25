@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -18,4 +19,4 @@ $repoIDList = array('1', '2');
 
 $job = new jobTest();
 r($job->getSonarqubeByRepoTest($repoIDList)) && p('1:name') && e('这是一个Job1');  // 根据repo查询sonarqube
-system("./ztest init");
+$db->restoreDB();

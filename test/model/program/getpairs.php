@@ -8,9 +8,9 @@ title=测试 programModel::getPairs();
 cid=1
 pid=1
 
+获取项目集个数 >> 6
 获取项目集个数 >> 10
-获取项目集id/name 的关联数组 >> 项目集1
-获取项目集id/name 的关联数组 >> 项目集9
+获取项目集id为9的名称 >> 项目集9
 
 */
 

@@ -16,7 +16,7 @@ class testcasesEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($productID = 0)
     {
@@ -26,7 +26,7 @@ class testcasesEntry extends entry
         $this->app->cookie->caseModule = 0;
         $this->app->cookie->caseSuite  = 0;
 
-        $type     = 'all';
+        $type     = $this->param('status', 'all');
         $param    = 0;
         $moduleID = $this->param('module', 0);
         if($moduleID)
@@ -63,7 +63,7 @@ class testcasesEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($productID = 0)
     {
@@ -106,6 +106,6 @@ class testcasesEntry extends entry
         $case = $this->loadModel('testcase')->getByID($data->id);
         $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values($case->steps) : array();
 
-        $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool'));
+        return $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool'));
     }
 }

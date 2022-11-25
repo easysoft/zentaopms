@@ -41,9 +41,12 @@
           <th class="c-name c-object"><?php echo $lang->doc->object;?></th>
           <th class="c-num"><?php echo $lang->doc->size;?></th>
           <?php if($type != 'openedbyme'):?>
-          <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
+          <th class="c-user"><?php echo $lang->doc->addedByAB;?></th>
           <?php endif;?>
           <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
+          <?php if($type == 'openedbyme'):?>
+          <th class="c-user"><?php echo $lang->doc->lastEditedBy;?></th>
+          <?php endif;?>
           <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
           <th class="c-actions-3 text-center"><?php echo $lang->actions;?></th>
         </tr>
@@ -68,13 +71,16 @@
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
           <?php endif;?>
           <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>
+          <?php if($type == 'openedbyme'):?>
+          <td class="c-user"><?php echo zget($users, $doc->editedBy);?></td>
+          <?php endif;?>
           <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'y-m-d');?></td>
           <td class="c-actions">
             <?php if(common::canBeChanged('doc', $doc)):?>
             <?php if(common::hasPriv('doc', 'collect')):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
             <?php endif;?>
-            <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false&from={$lang->navGroup->doc}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'", true, true)?>
+            <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false&from={$lang->navGroup->doc}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link' data-app='doc'", true, false)?>
             <?php common::printLink('doc', 'delete', "docID=$doc->id&confirm=no&from={$lang->navGroup->doc}", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
             <?php endif;?>
           </td>

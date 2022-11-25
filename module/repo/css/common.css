@@ -64,12 +64,12 @@ h3 {font-size: 16px;}
 
 /* Pre row */
 .repoCode table > tbody > tr.over > td {background: #f8eec7;}
-.repoCode table > tbody > tr.over > th {background: #cdcdcd; color: #333;}
+.repoCode table > tbody > tr.over > th {background: #cdcdcd !important; color: #333 !important;}
 
 /* Comment-btn */
 .comment-btn {position: relative; margin: 0; padding: 0; display: none;}
 .repoCode tr.over .comment-btn {display: block;}
-.comment-btn .icon-wrapper {display: block; position: absolute; background: #4183C4; border-radius: 2px; width: 24px; height: 20px; left: -6px; top: -2; line-height: 20px; text-align: center; color: #fff; cursor: pointer; transition: transform 0.2s;}
+.comment-btn .icon-wrapper {display: block; position: absolute; background: #4183C4; border-radius: 2px; width: 24px; height: 20px; left: -6px; top: -2; line-height: 20px; text-align: center; color: #fff; cursor: pointer;}
 .comment-btn .icon-wrapper:before {display: block; content: ' '; right: -4px; top: 6px; position: absolute; border-left: 4px solid #4183C4; border-right: 0 solid transparent; border-bottom: 4px solid transparent; border-top: 4px solid transparent; width: 0; height: 0;}
 .comment-btn .icon-wrapper:hover {background: #169; transform: scale(1.1);}
 .comment-btn .icon-wrapper:hover:before {border-left-color: #169;}
@@ -79,7 +79,7 @@ h3 {font-size: 16px;}
 .repoCode tr.commented .comment-btn {display: block; float:left;}
 .repoCode tr.commented .comment-btn .icon-wrapper {background: none; border: none; width: 24px; line-height: 18px; height: 18px; left: -6px; color: #4183c4;}
 .repoCode tr.commented .comment-btn .icon-wrapper:hover {border-color: #169; color: #169;}
-.repoCode tr.commented .comment-btn .icon-wrapper > i:before {font-size: 18px; transform: scale(-1, 1); display: inline-block;}
+.repoCode tr.commented .comment-btn .icon-wrapper > i:before {font-size: 18px; display: inline-block;}
 .repoCode tr.commented .comment-btn .icon-wrapper:before {display: none;}
 
 .repoCode tr.over.commented .comment-btn {margin-left: -20px; width: 25px; height:18px;}
@@ -89,7 +89,9 @@ h3 {font-size: 16px;}
 .repoCode tr.over.commented .comment-btn .icon-wrapper:before, .repoCode tr.selected.commented .comment-btn .icon-wrapper:before {display: block;}
 
 /* repo action form */
-.repoCode .comment-list, .repoCode .comment-actions {max-width: 900px;}
+.repoCode .comment-actions {max-width: 900px;}
+.repoCode table {table-layout: fixed;}
+.repoCode table td {white-space: pre-line;}
 .repoCode .bugFormContainer {border: 1px solid #bbb; margin: 0 0 0 15px; padding: 10px 20px 10px 10px; max-width: 880px; background: #fff;}
 .repoCode .bugFormContainer th {width: 70px;}
 
@@ -106,17 +108,17 @@ h3 {font-size: 16px;}
 .repoCode .comment-cell {background: #eee; white-space: normal;}
 .repoCode .comment-cell .panel {margin: 10px; border-color: #bbb;}
 .repoCode .comment-cell .panel-body {padding: 6px 10px;}
-.repoCode .comment-cell .panel-actions.pull-right {margin-right: 0; margin-top: 0;}
+.repoCode .comment-cell .panel-actions.pull-right {margin-right: 0; margin-top: -25px; position: unset;}
 .repoCode .comment-cell .editing .panel-body, .repoCode .comment-cell .commentContainer.show-form .panel-body {display: none;}
 .repoCode .comment-cell .bug-edit-form,  {padding: 10px; display: none;}
 .repoCode .comment-cell .editing .bug-edit-form, .repoCode .comment-cell .commentContainer.show-form .comment-edit-form {display: block;}
 
-.repoCode .comment {border: 1px solid #e5e5e5; background: #fafafa; padding: 5px 10px; margin-bottom: 10px;}
+.repoCode .comment {border: 1px solid #e5e5e5; background: #fafafa; padding: 5px 10px 1px; margin-bottom: 10px;}
 .repoCode .comment .comment-edit-form {margin-top: 10px;}
 .repoCode .panel-bug .steps {background: #f1f1f1; padding: 5px 10px;}
 .repoCode .panel-bug .bug-edit-form {margin-bottom: 10px;}
 .repoCode .panel-bug .panel-body {display: none;}
-.repoCode .panel-bug .panel-heading {cursor: pointer;}
+.repoCode .panel-bug .panel-heading {cursor: pointer; border-bottom: 1px solid #edf3ff;}
 .repoCode .panel-bug.show .panel-body {display: block;}
 .repoCode .panel-bug.show .icon-chevron-sign-down:before {content: '\e711';}
 .repoCode .panel-bug.show-edit-form .bug-edit-form,
@@ -128,7 +130,7 @@ h3 {font-size: 16px;}
 .repoCode .comment .comment-edit-form,
 .repoCode .panel-bug.show-edit-form .panel-body .title,
 .repoCode .panel-bug.show-edit-form .bug-date,
-.repoCode .comment.show-form .comment-content, .repoCode .comment.show-form .comment-date {display: none;}
+.repoCode .comment.show-form .comment-content {display: none;}
 
 .repoCode .text-content {white-space: normal; white-space: pre-line;}
 .repoCode .text-muted {color: #aaa;}
@@ -175,8 +177,8 @@ h3 {font-size: 16px;}
 .transparent {border-color:transparent; background: none repeat scroll 0 0 transparent;}
 .transparent:hover {border-color:transparent; background: none repeat scroll 0 0 transparent;}
 
-.side-col {width: 600px;}
-#sidebar > .side-body {width: 580px;}
+.side-col {width: 550px;}
+#sidebar > .side-body {width: 530px;}
 .hide-sidebar #sidebar > .side-body {display: none;}
 
 #sidebar>.sidebar-toggle {left: 5px; right: auto;}
@@ -192,3 +194,7 @@ h3 {font-size: 16px;}
 .dropdown-menu li > a.selected {color: #3123ae !important; background: #f2eafc !important; line-height: 20px; border-radius: 5px;}
 
 .tips-git a {padding-bottom: 1px;}
+.bug-lines {font-size: revert;}
+
+.comment.show-form .comment-form-div {margin-top: 20px; padding-bottom: 10px;}
+.comment .avatar {margin-right: 10px;}

@@ -9,16 +9,14 @@ title=bugModel->extractAccountsFromList();
 cid=1
 pid=1
 
-测试提取bug1 2 3的用户    >> admin;
-测试提取bug4 5 6的用户    >> admin;
+测试提取bug1 2 3的用户 >> admin;
+测试提取bug4 5 6的用户 >> admin;
 测试提取bug51 52 53的用户 >> admin;dev1
 测试提取bug54 55 56的用户 >> admin;dev1
 测试提取bug81 82 83的用户 >> admin;test1
 测试提取bug84 85 86的用户 >> admin;test1
 
-
 */
-
 
 $bugIDList1 = array('1', '2', '3');
 $bugIDList2 = array('4', '5', '6');

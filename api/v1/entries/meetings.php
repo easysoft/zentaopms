@@ -16,7 +16,7 @@ class meetingsEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($projectID = 0)
     {
@@ -49,7 +49,7 @@ class meetingsEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($projectID = 0)
     {
@@ -75,6 +75,6 @@ class meetingsEntry extends entry
 
         $risk = $this->loadModel('risk')->getByID($data->id);
 
-        $this->send(201, $this->format($risk, 'createdDate:time,editedDate:time'));
+        return $this->send(201, $this->format($risk, 'createdDate:time,editedDate:time'));
     }
 }

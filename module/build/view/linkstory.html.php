@@ -47,14 +47,14 @@
           <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'>
             <?php
-            if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+            if($story->parent > 0) echo "<span class='label label-badge label-light'>{$lang->story->childrenAB}</span>";
             echo html::a($this->createLink('story', 'view', "storyID=$story->id&version=0&param=$objectID", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");
             ?>
           </td>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo zget($users, $story->assignedTo);?></td>
           <td class='w-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-          <td>
+          <td style='padding-right:10px;'>
             <span class='status-story status-<?php echo $story->status?>'>
               <?php echo $this->processStatus('story', $story);?>
             </span>
@@ -72,7 +72,7 @@
         <?php echo html::submitButton($lang->build->linkStory, '', 'btn btn-secondary');?>
       </div>
       <div class="btn-toolbar">
-        <?php echo html::a(inlink('view', "buildID={$build->id}&type=story"), $lang->goback, '', "class='btn'");?>
+        <?php echo html::a(inlink('view', "buildID={$build->id}&type=story") . "#app={$app->tab}", $lang->goback, '', "class='btn'");?>
       </div>
       <div class='table-statistic'></div>
       <?php $pager->show('right', 'pagerjs');?>

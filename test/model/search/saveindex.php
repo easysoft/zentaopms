@@ -10,6 +10,9 @@ title=测试 searchModel->saveIndex();
 cid=1
 pid=1
 
+创建ID为10的bug的索引 >> 1
+创建ID为10的任务的索引 >> 1
+
 */
 
 $search = new searchTest();

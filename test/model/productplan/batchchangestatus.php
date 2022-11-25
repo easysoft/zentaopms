@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
+$db->switchDB();
 
 /**
 
@@ -39,5 +40,5 @@ r($status6) && p('0:old') && e('doing'); //将planiID=4, 5的计划状态修改�
 r($status6) && p('0:new') && e('wait');  //将planiID=4, 5的计划状态修改回wait， 打印4的修改后的状态
 r($status7) && p('0:old') && e('doing'); //将planiID=4, 5的计划状态修改回wait， 打印5的当前状态
 r($status6) && p('0:new') && e('wait');  //将planiID=4, 5的计划状态修改回wait， 打印5的修改后的状态
-system("./ztest init");
 ?>
+$db->restoreDB();

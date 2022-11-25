@@ -9,6 +9,10 @@ title=测试 projectModel->computerProgress();
 cid=1
 pid=1
 
+查看项目11下的所有执行的数量 >> 7
+查看计算后的执行工时汇总信息 >> 10,3,10,23.08,13
+查看计算后的执行工时汇总信息 >> 1,3,1,75,4
+
 */
 
 global $tester;

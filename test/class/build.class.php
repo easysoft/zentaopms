@@ -292,11 +292,11 @@ class buildTest
      *
      * @param  int   $buildID
      * @param  array $stories
-     * @param  innt  $storyID
+     * @param  int  $storyID
      * @access public
      * @return array
      */
-    public function unlinkStoryTest($buildID, $stories = array(), $storyID)
+    public function unlinkStoryTest($buildID, $stories = array(), $storyID = 0)
     {
         global $tester;
 

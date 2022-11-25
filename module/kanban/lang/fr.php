@@ -48,6 +48,7 @@ $lang->kanban->removeCard          = 'Remove Card';
 $lang->kanban->assigntoCard        = 'Assign';
 $lang->kanban->setting             = 'Setting';
 $lang->kanban->settingSpace        = 'Setting Space';
+$lang->kanban->settingKanban       = 'Setting Kanban';
 $lang->kanban->activateSpace       = 'Activate Space';
 $lang->kanban->closeSpace          = 'Close Space';
 $lang->kanban->deleteSpace         = 'Delete Space';
@@ -82,12 +83,16 @@ $lang->kanban->importPlan          = 'Plan';
 $lang->kanban->importRelease       = 'Release';
 $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = 'Build';
+$lang->kanban->importTicket        = 'Ticket';
 $lang->kanban->allKanban           = 'All Kanban';
-$lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
+$lang->kanban->allProjects         = 'All Projects';
 $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
 $lang->kanban->allUsers            = 'Charger Tous';
+$lang->kanban->colWidth            = 'Column Width';
+$lang->kanban->minColWidth         = 'Min Column Width';
+$lang->kanban->maxColWidth         = 'Max Column Width';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -123,7 +128,7 @@ $lang->kanban->cardCountTip        = 'Please enter the number of cards';
 
 $lang->kanban->selectedKanban  = 'Please select Kanban';
 $lang->kanban->selectedProduct = 'Please select Product';
-$lang->kanban->selectedProject = 'Please select ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Project');
+$lang->kanban->selectedProject = 'Please select Project';
 $lang->kanban->selectedLane    = 'Target Lane';
 
 $lang->kanban->aclGroup['open']    = 'Open';
@@ -133,11 +138,11 @@ $lang->kanban->aclGroup['extend']  = 'Extend';
 $lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
-$lang->kanban->archiveList['0'] = 'Disable';
 $lang->kanban->archiveList['1'] = 'Enable';
+$lang->kanban->archiveList['0'] = 'Disable';
 
-$lang->kanban->enableList['0'] = 'Disable';
 $lang->kanban->enableList['1'] = 'Enable';
+$lang->kanban->enableList['0'] = 'Disable';
 
 $lang->kanban->alignmentList['center'] = 'Center';
 $lang->kanban->alignmentList['left']   = 'Left';
@@ -200,7 +205,6 @@ $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
 $lang->kanban->limitExceeded      = 'Limit Exceeded';
 $lang->kanban->fullScreen         = 'Full Screen';
-$lang->kanban->setting            = 'Setting';
 $lang->kanban->my                 = 'My';
 $lang->kanban->other              = 'Other';
 $lang->kanban->showWIP            = 'Show WIP';
@@ -216,18 +220,24 @@ $lang->kanban->error->childLimitNote    = 'The sum of products in the child colu
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
 $lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the sub column before operation.';
 
-$lang->kanban->orderList['pri_asc']  = 'Story Priorité Ascendante';
-$lang->kanban->orderList['pri_desc'] = 'Story Priorité Descendante';
+$lang->kanban->orderList['id_asc']          = 'Story ID Ascendante';
+$lang->kanban->orderList['id_desc']         = 'Story ID Descendante';
+$lang->kanban->orderList['pri_asc']         = 'Story Priorité Ascendante';
+$lang->kanban->orderList['pri_desc']        = 'Story Priorité Descendante';
+$lang->kanban->orderList['stage_asc']       = 'Story Phase Ascendante';
+$lang->kanban->orderList['stage_desc']      = 'Story Phase Descendante';
+$lang->kanban->orderList['assignedTo_desc'] = 'Assigné à';
 
 $lang->kanban->importList = array();
-$lang->kanban->importList['off'] = 'Import is not enabled';
 $lang->kanban->importList['on']  = 'Enable the import function, you can only import content that you have permission to view.';
+$lang->kanban->importList['off'] = 'Import is not enabled';
 
 $lang->kanban->importObjectList = array();
 $lang->kanban->importObjectList['plans']      = 'Product Plan';
 $lang->kanban->importObjectList['releases']   = 'Release';
 $lang->kanban->importObjectList['builds']     = 'Build';
 $lang->kanban->importObjectList['executions'] = 'Execution';
+if($this->config->edition != 'open') $lang->kanban->importObjectList['tickets'] = 'Ticket';
 $lang->kanban->importObjectList['cards']      = 'Other Kanban Cards';
 
 $lang->kanban->showWIPList[1] = 'Show';
@@ -326,6 +336,8 @@ $lang->kanbancolumn->confirmArchive     = 'Are you sure to archive this column? 
 $lang->kanbancolumn->confirmDelete      = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
 $lang->kanbancolumn->confirmDeleteChild = 'Are you sure to delete this column? After deleting a column, all cards in the column will be moved to the parent column.';
 $lang->kanbancolumn->confirmRestore     = 'Are you sure you want to restore this Kanban column? After restoring the Kanban column, the Kanban column and all tasks in the Kanban column will be restored to the previous position at the same time.';
+$lang->kanbancolumn->fixedTip           = 'Fixed column width must >= 200px.';
+$lang->kanbancolumn->autoTip            = 'Minimum column width must >= 200px.';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name         = $lang->kanban->laneName;
@@ -346,16 +358,17 @@ $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 $lang->kanbanlane->heightTypeList['auto']   = "Adaptive <span class='tip'>(Adaptive to card height and lane name height)</span>";
 $lang->kanbanlane->heightTypeList['custom'] = "Custom <span class='tip'>(Customize lane height based on number of cards)</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<span class='tip'>(Largeur standard pour toutes les colonnes)</span>";
-$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<span class='tip'>(Adapter selon la largeur de voie)</span>";
+$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<i class='radio-text-divider'></i>Width";
+$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<i class='radio-text-divider'></i>Range";
 
 $lang->kanbanlane->error = new stdclass();
-$lang->kanbanlane->error->mustBeInt = 'Nb de cartes doit être un entier positif compris entre 3 et 32767.';
+$lang->kanbanlane->error->mustBeInt = 'Nb de cartes doit être un entier positif compris entre 3 et100.';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';
 $lang->kanbanregion->default = 'Default Region';
 $lang->kanbanregion->style   = 'Region Style';
+$lang->kanbanregion->all     = 'All Region';
 
 $lang->kanbanregion->confirmDelete = 'Are you sure to delete this region? After deleting this region, all data in this region will be deleted.';
 

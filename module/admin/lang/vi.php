@@ -79,7 +79,7 @@ $lang->admin->safe->reasonList['birthday'] = 'Giống ngày sinh';
 $lang->admin->safe->modifyPasswordList[1] = 'Có';
 $lang->admin->safe->modifyPasswordList[0] = 'Không';
 
-$lang->admin->safe->loginCaptchaList[1] = 'Yes'
+$lang->admin->safe->loginCaptchaList[1] = 'Yes';
 $lang->admin->safe->loginCaptchaList[0] = 'No';
 
 $lang->admin->safe->noticeMode   = 'Mật khẩu sẽ được kiểm tra khi người dùng đăng nhập hoặc người dùng thêm hoặc sửa.';

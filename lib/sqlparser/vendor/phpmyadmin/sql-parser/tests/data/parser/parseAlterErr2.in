@@ -1,0 +1,2 @@
+-- missing comma between alter operations
+ALTER TABLE tb_foo CHANGE inmsg inmsg date NULL AFTER outmsg2 CHANGE inmsg2 inmsg2 time NULL AFTER inmsg;

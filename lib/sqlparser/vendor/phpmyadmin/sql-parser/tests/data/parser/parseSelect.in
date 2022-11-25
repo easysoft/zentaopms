@@ -1,0 +1,14 @@
+SELECT ALL MAX_STATEMENT_TIME = 10
+    1 + 2 AS result,
+    @idx,
+    id,
+    test.`users`.username AS `name`
+FROM
+    `test`.users, posts
+    PARTITION (p1, p2)
+WHERE
+    id > 0
+ORDER BY
+    username DESC,
+    id
+LIMIT 3 OFFSET 2;

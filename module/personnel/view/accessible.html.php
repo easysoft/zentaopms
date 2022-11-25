@@ -37,10 +37,10 @@ js::set('deptID', $deptID);
         <thead>
           <tr>
             <th class="c-id"><?php echo $lang->idAB;?></th>
-            <th class="c-department"><?php echo $lang->personnel->department;?></th>
             <th class="c-user"><?php echo $lang->personnel->realName;?></th>
-            <th class="c-user"><?php echo $lang->personnel->userName;?></th>
+            <th class="c-department"><?php echo $lang->personnel->department;?></th>
             <th class="c-job"><?php echo $lang->personnel->job;?></th>
+            <th class="c-user"><?php echo $lang->personnel->userName;?></th>
             <th class="c-genders"><?php echo $lang->personnel->genders;?></th>
           </tr>
         </thead>
@@ -48,10 +48,10 @@ js::set('deptID', $deptID);
           <?php foreach($personnelList as $personnel):?>
           <tr>
             <td class="c-id"><?php echo $personnel->id;?></td>
-            <td class="c-name"><?php echo zget($deptList, $personnel->dept);?></td>
             <td class="c-name"><?php echo $personnel->realname;?></td>
-            <td class="c-name"><?php echo $personnel->account;?></td>
+            <td class="c-name"><?php echo zget($deptList, $personnel->dept);?></td>
             <td><?php echo zget($lang->user->roleList, $personnel->role, '');?></td>
+            <td class="c-name"><?php echo $personnel->account;?></td>
             <td><?php echo zget($lang->user->genderList, $personnel->gender, '');?></td>
           </tr>
           <?php endforeach;?>

@@ -30,13 +30,16 @@ $lang->action->editComment = 'Sửa nhận xét';
 $lang->action->create      = 'Thêm nhận xét';
 $lang->action->comment     = 'Nhận xét';
 
-$lang->action->trashTips      = 'Ghi chú: Xóa trong ZenTao là hợp lệ.';
-$lang->action->textDiff       = 'Định dạng văn bản';
-$lang->action->original       = 'Định dạng gốc';
-$lang->action->confirmHideAll = 'Bạn có muốn ẩn tất cả ghi nhận này?';
-$lang->action->needEdit       = '%s mà bạn muốn khôi phục. Vui lòng edit it.';
-$lang->action->historyEdit    = 'Lịch sử người cập nhật không thể trống.';
-$lang->action->noDynamic      = 'Không có lịch sử. ';
+$lang->action->trashTips          = 'Ghi chú: Xóa trong ZenTao là hợp lệ.';
+$lang->action->textDiff           = 'Định dạng văn bản';
+$lang->action->original           = 'Định dạng gốc';
+$lang->action->confirmHideAll     = 'Bạn có muốn ẩn tất cả ghi nhận này?';
+$lang->action->needEdit           = '%s mà bạn muốn khôi phục. Vui lòng edit it.';
+$lang->action->historyEdit        = 'Lịch sử người cập nhật không thể trống.';
+$lang->action->noDynamic          = 'Không có lịch sử. ';
+$lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
+$lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
+$lang->action->repoNoServer       = 'The repo does not belong to a server,please restore the server first';
 
 $lang->action->history = new stdclass();
 $lang->action->history->action = 'Liên kết';
@@ -102,6 +105,7 @@ $lang->action->objectTypes['whitelist']        = 'Whitelist';
 $lang->action->objectTypes['pipeline']         = 'GitLib';
 $lang->action->objectTypes['gitlab']           = 'GitLab Server';
 $lang->action->objectTypes['gitea']            = 'Gitea Server';
+$lang->action->objectTypes['gogs']             = 'Gogs Server';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
 $lang->action->objectTypes['mr']               = 'Merge Request';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab Project';
@@ -112,6 +116,7 @@ $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab Tag';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab Tag Protected';
 $lang->action->objectTypes['giteauser']        = 'Gitea User';
+$lang->action->objectTypes['gogsuser']         = 'Gogs User';
 $lang->action->objectTypes['kanbanspace']      = 'Kanban Space';
 $lang->action->objectTypes['kanban']           = 'Kanban';
 $lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
@@ -178,6 +183,7 @@ $lang->action->desc->syncproject     = '$date, starting the execution sets the p
 $lang->action->desc->syncexecution   = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->reopen          = '$date, reopened by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->merged          = '$date, merged by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->submitreview    = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -223,6 +229,7 @@ $lang->action->label->blocked               = 'blocked ';
 $lang->action->label->resolved              = 'resolved ';
 $lang->action->label->reviewed              = 'reviewed ';
 $lang->action->label->recalled              = 'recalled';
+$lang->action->label->recalledchange        = 'undo changes';
 $lang->action->label->moved                 = 'moved ';
 $lang->action->label->confirmed             = 'confirmed Story ';
 $lang->action->label->bugconfirmed          = 'Đã xác nhận';
@@ -298,6 +305,9 @@ $lang->action->label->syncprogram           = 'start';
 $lang->action->label->syncproject           = 'start';
 $lang->action->label->syncexecution         = 'start';
 $lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
+$lang->action->label->submitreview          = 'submitted';
+$lang->action->label->linkedrepo            = 'Linked Code Repo';
+$lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -493,19 +503,32 @@ $lang->action->dynamicAction->job['executed']  = 'Execute Job';
 $lang->action->dynamicAction->job['deleted']   = 'Delete Job';
 $lang->action->dynamicAction->job['undeleted'] = 'Undelete Job';
 
-$lang->action->dynamicAction->sonarqube['created'] = 'Create SonarQube Server';
-$lang->action->dynamicAction->sonarqube['edited']  = 'Edit SonarQube Server';
-$lang->action->dynamicAction->sonarqube['deleted'] = 'Delete SonarQube Server';
+$lang->action->dynamicAction->sonarqube['created']   = 'Create SonarQube Server';
+$lang->action->dynamicAction->sonarqube['edited']    = 'Edit SonarQube Server';
+$lang->action->dynamicAction->sonarqube['deleted']   = 'Delete SonarQube Server';
+$lang->action->dynamicAction->sonarqube['undeleted'] = 'Undelete SonarQube Server';
 
 $lang->action->dynamicAction->sonarqubeproject['deleted'] = 'Delete SonarQube Project';
 
-$lang->action->dynamicAction->gitlab['created'] = 'Create GitLab Server';
-$lang->action->dynamicAction->gitlab['edited']  = 'Edit GitLab Server';
-$lang->action->dynamicAction->gitlab['deleted'] = 'Delete GitLab Server';
+$lang->action->dynamicAction->gitlab['created']   = 'Create GitLab Server';
+$lang->action->dynamicAction->gitlab['edited']    = 'Edit GitLab Server';
+$lang->action->dynamicAction->gitlab['deleted']   = 'Delete GitLab Server';
+$lang->action->dynamicAction->gitlab['undeleted'] = 'Undelete GitLab Server';
 
-$lang->action->dynamicAction->gitea['created'] = 'Create Gitea Server';
-$lang->action->dynamicAction->gitea['edited']  = 'Edit Gitea Server';
-$lang->action->dynamicAction->gitea['deleted'] = 'Delete Gitea Server';
+$lang->action->dynamicAction->gitea['created']   = 'Create Gitea Server';
+$lang->action->dynamicAction->gitea['edited']    = 'Edit Gitea Server';
+$lang->action->dynamicAction->gitea['deleted']   = 'Delete Gitea Server';
+$lang->action->dynamicAction->gitea['undeleted'] = 'Undelete Gitea Server';
+
+$lang->action->dynamicAction->gogs['created']   = 'Create Gogs Server';
+$lang->action->dynamicAction->gogs['edited']    = 'Edit Gogs Server';
+$lang->action->dynamicAction->gogs['deleted']   = 'Delete Gogs Server';
+$lang->action->dynamicAction->gogs['undeleted'] = 'Undelete Gogs Server';
+
+$lang->action->dynamicAction->repo['created']   = 'Create Repo';
+$lang->action->dynamicAction->repo['edited']    = 'Edit Repo';
+$lang->action->dynamicAction->repo['deleted']   = 'Delete Repo';
+$lang->action->dynamicAction->repo['undeleted'] = 'Undelete Repo';
 
 /* Generate the corresponding object link. */
 global $config;
@@ -515,14 +538,7 @@ $lang->action->label->release     = 'Phát hành|release|view|productID=%s';
 $lang->action->label->story       = 'Câu chuyện|story|view|storyID=%s';
 $lang->action->label->program     = "Program|program|pgmproduct|programID=%s";
 $lang->action->label->project     = "Project|program|index|projectID=%s";
-if($config->systemMode == 'new')
-{
-    $lang->action->label->execution = "Execution|execution|task|executionID=%s";
-}
-else
-{
-    $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
-}
+$lang->action->label->execution   = "Execution|execution|task|executionID=%s";
 $lang->action->label->task        = 'Nhiệm vụ|task|view|taskID=%s';
 $lang->action->label->build       = 'Bản dựng|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';

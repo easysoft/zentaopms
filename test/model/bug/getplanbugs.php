@@ -10,18 +10,18 @@ title=bugModel->getPlanBugs();
 cid=1
 pid=1
 
-查询计划1 状态为all的bug      >> BUG3,BUG2,BUG1
-查询计划1 状态为active的bug   >> BUG3,BUG2,BUG1
+查询计划1 状态为all的bug >> BUG3,BUG2,BUG1
+查询计划1 状态为active的bug >> BUG3,BUG2,BUG1
 查询计划1 状态为resolved的bug >> 0
-查询计划1 状态为closed的bug   >> 0
-查询计划4 状态为all的bug      >> BUG6,BUG5,BUG4
-查询计划4 状态为active的bug   >> BUG6,BUG5,BUG4
+查询计划1 状态为closed的bug >> 0
+查询计划4 状态为all的bug >> BUG6,BUG5,BUG4
+查询计划4 状态为active的bug >> BUG6,BUG5,BUG4
 查询计划4 状态为resolved的bug >> 0
-查询计划4 状态为closed的bug   >> 0
-查询计划7 状态为all的bug      >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-查询计划7 状态为active的bug   >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
+查询计划4 状态为closed的bug >> 0
+查询计划7 状态为all的bug >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
+查询计划7 状态为active的bug >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
 查询计划7 状态为resolved的bug >> 0
-查询计划7 状态为closed的bug   >> 0
+查询计划7 状态为closed的bug >> 0
 
 */
 

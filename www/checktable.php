@@ -127,7 +127,7 @@ else
       <div class='panel-body'>
         <?php
         $checkFileName = $_SESSION['checkFileName'];
-        $checkFileName = str_replace(dirname(dirname(dirname(__FILE__))) . DS, '', $checkFileName);
+        $checkFileName = str_replace(dirname(dirname(__FILE__)) . DS, '', $checkFileName);
         printf($lang->misc->noticeRepair, $checkFileName);
         ?>
         <p><a href='<?php echo $config->webRoot . 'checktable.php';?>' class='btn btn-sm'><i class='icon-refresh'></i> <?php echo $lang->refresh;?></a></p>

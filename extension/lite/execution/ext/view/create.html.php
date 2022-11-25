@@ -26,7 +26,6 @@
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
 <?php js::set('isStage', $isStage);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectCommon', $lang->project->common);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('systemMode', $config->systemMode);?>
@@ -38,7 +37,7 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <?php if($config->systemMode == 'new'):?>
+        <?php if($config->systemMode == 'ALM'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
           <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
@@ -107,6 +106,7 @@
             <?php echo html::hidden("RD", '');?>
             <?php echo html::hidden("type", 'kanban');?>
             <?php echo html::hidden("vision", 'lite');?>
+            <?php echo html::hidden('project', $projectID);?>
           </td>
         </tr>
       </table>

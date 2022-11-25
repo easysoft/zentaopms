@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class userEntry extends Entry
+class userEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int|string $userID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($userID = 0)
     {
@@ -40,7 +40,7 @@ class userEntry extends Entry
         $user = $data->data->user;
         unset($user->password);
 
-        $this->send(200, $user);
+        return $this->send(200, $user);
     }
 
     /**
@@ -49,7 +49,7 @@ class userEntry extends Entry
      * @param string $fields
      *
      * @access private
-     * @return void
+     * @return string
      */
     private function getInfo($fields = '')
     {
@@ -62,6 +62,7 @@ class userEntry extends Entry
         $info->profile->role          = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
         $info->profile->admin         = strpos($this->app->company->admins, ",{$profile->account},") !== false;
         $info->profile->superReviewer = isset($this->config->story) ? strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',') : false;
+        $info->profile->view          = $this->app->user->view;
 
         if(!$fields) return $this->send(200, $info);
 
@@ -140,7 +141,8 @@ class userEntry extends Entry
                     break;
                 case 'execution':
                     $info->execution = array('total' => 0, 'executions' => array());
-                    if(!common::hasPriv('my', 'execution')) break;
+                    if(!common::hasPriv('my', 'work')) break;
+                    $this->config->openMethods[] = 'my.execution';
 
                     $control = $this->loadController('my', 'execution');
                     $control->execution($this->param('type', 'undone'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
@@ -193,7 +195,10 @@ class userEntry extends Entry
                 case 'task':
                     $info->task = array('total' => 0, 'tasks' => array());
                     if(!common::hasPriv('my', 'work')) break;
+                    $this->config->openMethods[] = 'my.task';
 
+                    global $app;
+                    $app->rawMethod = 'work';
                     $control = $this->loadController('my', 'task');
                     $control->task($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
@@ -208,7 +213,10 @@ class userEntry extends Entry
                 case 'bug':
                     $info->bug = array('total' => 0, 'bugs' => array());
                     if(!common::hasPriv('my', 'work')) break;
+                    $this->config->openMethods[] = 'my.bug';
 
+                    global $app;
+                    $app->rawMethod = 'work';
                     $control = $this->loadController('my', 'bug');
                     $control->bug($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
@@ -251,7 +259,7 @@ class userEntry extends Entry
                     if(!common::hasPriv('my', 'todo')) break;
 
                     $control = $this->loadController('my', 'todo');
-                    $control->todo($this->param('date', 'all'), '', 'all', 'date_desc', 0, 0, $this->param('limit', 5), 1);
+                    $control->todo($this->param('date', 'before'), '', 'all', 'date_desc', 0, $this->param('limit', 5), 1);
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -264,7 +272,10 @@ class userEntry extends Entry
                 case 'story':
                     $info->story = array('total' => 0, 'stories' => array());
                     if(!common::hasPriv('my', 'work')) break;
+                    $this->config->openMethods[] = 'my.story';
 
+                    global $app;
+                    $app->rawMethod = 'work';
                     $control = $this->loadController('my', 'story');
                     $control->story($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
@@ -289,6 +300,9 @@ class userEntry extends Entry
 
                     if($this->config->edition == 'max')
                     {
+                        global $app;
+                        $app->rawMethod = 'work';
+                        $this->config->openMethods[] = 'my.issue';
                         $control = $this->loadController('my', 'issue');
                         $control->issue('createdBy', 0, 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
@@ -306,8 +320,11 @@ class userEntry extends Entry
 
                     if($this->config->edition == 'max')
                     {
+                        global $app;
+                        $app->rawMethod = 'work';
+                        $this->config->openMethods[] = 'my.risk';
                         $control = $this->loadController('my', 'risk');
-                        $control->risk('createdBy', 0, 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->risk('assignedTo', 0, 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
@@ -323,8 +340,11 @@ class userEntry extends Entry
 
                     if($this->config->edition == 'max')
                     {
+                        global $app;
+                        $app->rawMethod = 'work';
+                        $this->config->openMethods[] = 'my.myMeeting';
                         $control = $this->loadController('my', 'myMeeting');
-                        $control->myMeeting('all', '', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->myMeeting('futureMeeting', '', 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
@@ -353,7 +373,7 @@ class userEntry extends Entry
             }
         }
 
-        $this->send(200, $info);
+        return $this->send(200, $info);
     }
 
     /**
@@ -361,7 +381,7 @@ class userEntry extends Entry
      *
      * @param  int|string $userID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($userID)
     {
@@ -375,14 +395,25 @@ class userEntry extends Entry
         $oldUser = $this->loadModel('user')->getByID($userID, 'id');
 
         /* Set $_POST variables. */
-        $fields = 'dept,realname,email,commiter,gender,role,mobile,phone,visions,groups';
+        $fields = 'dept,realname,role,join,type,visions,mobile,phone,qq,dingding,weixin,skype,whatsapp,slack,address,address,email,commiter,gender,groups,passwordStrength,locked,fails,birthday';
         $this->batchSetPost($fields, $oldUser);
         $this->setPost('account', $oldUser->account);
 
-        if($this->request('gender') and !in_array($this->request('gender'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
+        $userGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($oldUser->account)->fetchPairs('group', 'group');
+        $this->setPost('groups', $this->request('groups', zget($_POST, 'groups', array_values($userGroups))));
 
-        $this->setPost('password1', $this->request('password', ''));
-        $this->setPost('password2', $this->request('password', ''));
+        $gender = $this->request('gender', zget($_POST, 'gender', 'f'));
+        if(!in_array($gender, array('f', 'm'))) return $this->sendError(400, "The value of gender must be 'f' or 'm'");
+        if($this->request('gender') and !in_array($this->request('gender'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
+        $this->setPost('gender', $gender);
+
+        $password = $this->request('password', zget($_POST, 'password', ''));
+        if($password)
+        {
+            $this->setPost('password1', md5($password));
+            $this->setPost('password2', md5($password));
+            $this->setPost('passwordStrength', 2);
+        }
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
         $control = $this->loadController('user', 'edit');
@@ -393,7 +424,7 @@ class userEntry extends Entry
         $user = $this->user->getByID($userID, 'id');
         unset($user->password);
 
-        $this->send(200, $this->format($user, 'last:time,locked:time'));
+        return $this->send(200, $this->format($user, 'last:time,locked:time'));
     }
 
     /**
@@ -401,7 +432,7 @@ class userEntry extends Entry
      *
      * @param  int|string $userID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($userID)
     {
@@ -418,6 +449,6 @@ class userEntry extends Entry
         $control->delete($userID);
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

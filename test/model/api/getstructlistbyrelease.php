@@ -10,39 +10,13 @@ title=测试 apiModel->getStructListByRelease();
 cid=1
 pid=1
 
+获取没有接口库的接口文档的名称 >> editStruct
+获取所属接口库ID为1的接口文档的名称 >> user
+
 */
 
 global $tester;
 $api = new apiTest();
 
-$data = array(
-    'lib'             => 910,
-    'module'          => 0,
-    'title'           => 'testapi',
-    'protocol'        => 'HTTP',
-    'method'          => 'GET',
-    'path'            => '/api/test/id',
-    'requestType'     => 'application/json',
-    'status'          => 'done',
-    'owner'           => 'admin',
-    'type'            => 'formData',
-    'params'          => '{"header":[],"params":[],"paramsType":"","query":[]}',
-    'desc'            => '',
-    'paramsExample'   => '',
-    'response'        => '[]',
-    'responseExample' => ''
-);
-$normalApi = $data;
-
-$normalRelease = new stdclass();
-$normalRelease->version   = 'Version1';
-$normalRelease->desc      = '';
-$normalRelease->lib       = 910;
-$normalRelease->addedBy   = $tester->app->user->account;
-$normalRelease->addedDate = helper::now();
-
-$apiInfo = $api->createTest($normalApi, false);
-$release = $api->publishLibTest($normalRelease, false);
-
-r($api->getStructListByReleaseTest($release->lib)) && p('') && e('');
-//r($api->getApiListByReleaseTest($release)) && p('0:lib') && e('910'); //创建api后创建发布，使用发布查找api
+r($api->getStructListByReleaseTest('', 'where lib = 0')) && p('2:name') && e('editStruct'); // 获取没有接口库的接口文档的名称
+r($api->getStructListByReleaseTest('', 'where lib = 1')) && p('0:name') && e('user');       // 获取所属接口库ID为1的接口文档的名称

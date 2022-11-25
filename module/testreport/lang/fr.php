@@ -49,7 +49,7 @@ $lang->testreport->legendCase        = 'CasTests associés';
 $lang->testreport->legendLegacyBugs  = 'Bugs Restants';
 $lang->testreport->legendReport      = 'Rapport';
 $lang->testreport->legendComment     = 'Résumé';
-$lang->testreport->legendMore        = 'Plus...';
+$lang->testreport->legendMore        = 'Plus';
 $lang->testreport->date              = 'Date';
 
 $lang->testreport->bugSeverityGroups   = 'Distribution Sévérité de Bug';

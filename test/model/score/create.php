@@ -10,6 +10,14 @@ title=测试 scoreModel->create();
 cid=1
 pid=1
 
+关闭一个不存在创建者的需求 >> 0
+关闭一个存在创建者的需求 >> 2
+ID为601 的任务有子任务，完成不计算积分 >> 0
+ID为2 的任务,优先级为2，消耗4h, 预计1h >> 2
+确认严重程度为1的bug >> 4
+在截止时间内关闭一个项目经理为admin的执行 >> 30
+product模块的edit方法不存在与积分规则中，不计算积分 >> 0
+
 */
 
 $moduleList  = array('user', 'story', 'task', 'bug', 'execution', 'product');

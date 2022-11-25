@@ -1,0 +1,3 @@
+SELECT id,aval1,cval1
+FROM table111
+STRAIGHT_JOIN table113 on table111.a = table113.b

@@ -11,10 +11,23 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('unmodifiableProducts', $unmodifiableProducts);?>
+<?php js::set('unmodifiableBranches', $unmodifiableBranches);?>
+<?php js::set('unmodifiableMainBranches', $unmodifiableMainBranches);?>
+<?php js::set('allProducts', $allProducts);?>
+<?php js::set('branchGroups', $branchGroups);?>
+<?php js::set('BRANCH_MAIN', BRANCH_MAIN);?>
+<?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->manageProducts;?></span></span>
   </div>
+
+  <?php if($this->config->systemMode == 'ALM'):?>
+  <div class='btn-toolbar pull-right'>
+    <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#otherProductsModal'><i class='icon icon-link'></i> <?php echo $lang->project->manageOtherProducts; ?></button>
+  </div>
+  <?php endif;?>
 </div>
 <div id='mainContent'>
   <div class='cell'>
@@ -23,38 +36,61 @@
         <div class='detail-title'><?php echo $lang->project->linkedProducts;?></div>
         <div class='detail-content row'>
           <?php $i = 0;?>
-          <?php foreach($allProducts as $productID => $productName):?>
-          <?php if(isset($linkedProducts[$productID])):?>
+          <?php foreach($linkedProducts as $productID => $linkedProduct):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
-          <?php $isDisabled = '';?>
-          <?php if($branchID == BRANCH_MAIN and isset($unmodifiableMainBranches[$productID])) $isDisabled = "disabled='disabled'";?>
-          <?php if($branchID != BRANCH_MAIN and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) $isDisabled = "disabled='disabled'";?>
-          <?php $title      = (in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) ? $lang->project->notAllowRemoveProducts : $productName;?>
-          <?php $checked    = 'checked';?>
+          <?php $cannotUnlink = (in_array($productID, $unmodifiableProducts) and ($project->model == 'waterfall'));?>
+          <?php $disabled = $cannotUnlink ? "disabled='disabled'" : '';?>
           <div class='col-sm-4'>
-            <div class='product <?php echo $checked . (isset($allBranches[$productID]) ? ' has-branch' : '')?>'>
-              <div class="checkbox-primary" title='<?php echo $title;?>'>
-                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' $checked id='products{$productID}' $isDisabled>";?>
-                <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $productName;?>'><?php echo $productName;?></label>
+            <div class='product checked <?php echo isset($allBranches[$productID]) ? ' has-branch' : ''?>'>
+              <div class="checkbox-primary" title='<?php echo $linkedProduct->name;?>'>
+                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked $disabled id='products{$productID}'>";?>
+                <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $linkedProduct->name;?>'><?php echo $linkedProduct->name;?></label>
               </div>
               <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' data-drop_direction='down' disabled='disabled'");?>
             </div>
           </div>
-          <?php if(!empty($isDisabled)) echo html::hidden("products[$i]", $productID);?>
+          <?php if($cannotUnlink) echo html::hidden("products[$i]", $productID);?>
           <?php echo html::hidden("branch[$i]", $branchID);?>
-          <?php if(!isset($branchGroups[$productID])) unset($allProducts[$productID]);?>
-          <?php if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);?>
-          <?php if(isset($branchGroups[$productID]) and empty($branchGroups[$productID])) unset($allProducts[$productID]);?>
+
+          <?php
+          if(!isset($branchGroups[$productID]))
+          {
+              if($this->config->systemMode == 'ALM')
+              {
+                  unset($currentProducts[$productID]);
+              }
+              else
+              {
+                  unset($allProducts[$productID]);
+              }
+          }
+
+          if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+
+          if(isset($branchGroups[$productID]) and empty($branchGroups[$productID]))
+          {
+              if($this->config->systemMode == 'ALM')
+              {
+                  unset($currentProducts[$productID]);
+              }
+              else
+              {
+                  unset($allProducts[$productID]);
+              }
+          }
+          ?>
           <?php $i++;?>
           <?php endforeach;?>
-          <?php endif;?>
           <?php endforeach;?>
         </div>
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->project->unlinkedProducts;?></div>
         <div class='detail-content row'>
-          <?php foreach($allProducts as $productID => $productName):?>
+          <?php
+          $unlinkedProducts = $this->config->systemMode == 'ALM' ? $currentProducts : $allProducts;
+          foreach($unlinkedProducts as $productID => $productName):
+          ?>
           <div class='col-sm-4'>
             <div class='product<?php echo isset($branchGroups[$productID]) ? ' has-branch' : ''?>'>
               <div class="checkbox-primary" title='<?php echo $productName;?>'>
@@ -72,7 +108,38 @@
         <?php echo html::hidden("post", 'post');?>
         <?php echo html::submitButton();?>
       </div>
+
+      <?php if($this->config->systemMode == 'ALM'):?>
+      <div class='modal fade' id='otherProductsModal'>
+        <div class='modal-content'>
+          <div class='modal-dialog w-600px'>
+            <div class='modal-header'>
+              <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span class='sr-only'><?php echo $this->lang->close;?></span></button>
+              <h4 class='modal-title'><?php echo $lang->project->manageOtherProducts;?></h4>
+            </div>
+            <div class='modal-body'>
+              <table class='table table-form'>
+                <tr>
+                  <th><?php echo $lang->project->selectProduct;?></th>
+                  <td><?php echo html::select('otherProducts[]', $otherProducts, '', "class='form-control chosen' multiple");?></td>
+                </tr>
+                <tr>
+                  <th></th>
+                  <td><?php echo html::commonButton($lang->save, '', 'btn btn-primary btn-wide saveOtherProduct');?></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <?php endif;?>
     </form>
   </div>
 </div>
+
+<?php $noticeSwitch = (!$project->division and count($linkedProducts) == 1 and empty($executions));?>
+<?php js::set('linkedProducts', array_keys($linkedProducts));?>
+<?php js::set('noticeSwitch', $noticeSwitch);?>
+<?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
+<?php js::set('divisionSwitchList', $lang->project->divisionSwitchList);?>
 <?php include '../../common/view/footer.html.php';?>

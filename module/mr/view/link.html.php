@@ -89,7 +89,7 @@
               ?>
               <?php foreach($stories as $story):?>
               <?php
-              $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
+              $viewLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);
               $totalEstimate += $story->estimate;
               ?>
               <tr data-id='<?php echo $story->id;?>'>
@@ -102,7 +102,7 @@
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
-                  echo html::a($viewLink , $story->title);
+                  echo html::a($viewLink , $story->title, '', 'class="iframe"');
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
@@ -168,7 +168,7 @@
                   <?php printf('%03d', $bug->id);?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', 'class="iframe"');?></td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
                 <td>
@@ -230,7 +230,7 @@
                   <?php printf('%03d', $task->id);?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
+                <td class='text-left nobr' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $task->name, '', 'class="iframe"');?></td>
                 <td><?php echo zget($users, $task->finishedBy);?></td>
                 <td><?php echo zget($users, $task->assignedTo);?></td>
                 <td>

@@ -16,7 +16,7 @@
 <div class='clearfix' id='mainMenu'>
   <div class='btn-toolbar pull-left'>
     <?php
-      foreach($lang->project->featureBar as $label => $labelName)
+      foreach($lang->project->featureBar['browse'] as $label => $labelName)
       {
           $active = $browseType == $label ? 'btn-active-text' : '';
           echo html::a($this->createLink('project', 'index', "projectID=$project->id&browseType=" . $label), '<span class="text">' . $labelName . '</span> ' . ($browseType == $label ? "<span class='label label-light label-badge'>" . (int)count($kanbanList) . '</span>' : ''), '', "class='btn btn-link $active'");

@@ -16,7 +16,7 @@ class zfileEntry extends entry
      *
      * @param  string $fileID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($fileID)
     {
@@ -33,6 +33,6 @@ class zfileEntry extends entry
         $info->editedTime   = $now;
         $info->modifiedTime = $now;
 
-        $this->send(200, $info);
+        return $this->send(200, $info);
     }
 }

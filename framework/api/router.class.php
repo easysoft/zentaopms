@@ -190,17 +190,35 @@ class api extends router
      */
     public function loadModule()
     {
-        /* If the version of api don't exists, call parent method. */
-        if(!$this->version) return parent::loadModule();
+        try
+        {
+            /* If the version of api don't exists, call parent method. */
+            if(!$this->version)
+            {
+                global $app;
+                $app->setParams();
+                return parent::loadModule();
+            }
 
-        $entry = strtolower($this->entry);
-        include($this->appRoot . "api/$this->version/entries/$entry.php");
+            $entry    = strtolower($this->entry);
+            $filename = $this->appRoot . "api/$this->version/entries/$entry.php";
 
-        $entryName = $this->entry . 'Entry';
-        $entry = new $entryName();
+            if(file_exists($filename)) include($filename);
 
-        if($this->action == 'options') return $entry->send(204);
-        call_user_func_array(array($entry, $this->action), array_values($this->params));
+            $entryName = $this->entry . 'Entry';
+
+            if($entry == 'error' && !class_exists($entryName)) include($this->appRoot . "api/v1/entries/$entry.php");
+
+            $entry = new $entryName();
+
+            if($this->action == 'options') throw EndResponseException::create($entry->send(204));
+
+            echo call_user_func_array(array($entry, $this->action), array_values($this->params));
+        }
+        catch(EndResponseException $endResponseException)
+        {
+            echo $endResponseException->getContent();
+        }
     }
 
     /**
@@ -208,7 +226,7 @@ class api extends router
      *
      * Load config file of api.
      *
-     * @param configPath
+     * @param  string $configPath
      * @access public
      * @return void
      */
@@ -229,7 +247,8 @@ class api extends router
     public function loadApiLang()
     {
         global $lang;
-        if($this->version) include($this->appRoot . "api/$this->version/lang/$this->clientLang.php");
+        $filename = $this->appRoot . "api/$this->version/lang/$this->clientLang.php";
+        if($this->version && file_exists($filename)) include($filename);
     }
 
     /**

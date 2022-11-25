@@ -20,6 +20,7 @@
 #stories .action {display: none;}
 #bugs .action {display: none;}
 tbody tr td:first-child input {display: none;}
+.page-title .dropdown-menu {top: 40px; left: 70px;}
 </style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
@@ -28,14 +29,15 @@ tbody tr td:first-child input {display: none;}
     <?php common::printBack($browseLink, 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
-      <span class='text' title='<?php echo $build->name;?>'>
-      <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link btn-active-text'");?>
+      <span title='<?php echo $build->name;?>'>
+      <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='text btn btn-link btn-active-text'");?>
       <?php
       echo "<ul class='dropdown-menu'>";
       foreach($buildPairs as $id => $name)
       {
+          $buildInfo = zget($builds, $id);
           echo '<li' . ($id == $build->id ? " class='active'" : '') . '>';
-          echo html::a($this->createLink('build', 'view', "buildID=$id"), $name);
+          echo html::a($this->createLink($buildInfo->execution ? 'build' : 'projectbuild', 'view', "buildID=$id") . "#app={$app->tab}", $name);
           echo '</li>';
       }
       echo '</ul>';
@@ -52,6 +54,7 @@ tbody tr td:first-child input {display: none;}
   </div>
   <?php endif;?>
 </div>
+<?php $module = $build->execution ? 'build' : 'projectbuild';?>
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
   <?php $countStories = count($stories); $countBugs = count($bugs); $countGeneratedBugs = count($generatedBugs);?>
@@ -63,13 +66,13 @@ tbody tr td:first-child input {display: none;}
     </ul>
     <div class='tab-content'>
       <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkStory') and !isonlybody()):?>
+        <?php if($canBeChanged and common::hasPriv($module, 'linkStory') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo inlink('batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
+        <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo $this->createLink($module, 'batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
           <table class='table has-sort-head' id='storyList'>
-            <?php $canBatchUnlink = ($canBeChanged and common::hasPriv('build', 'batchUnlinkStory'));?>
+            <?php $canBatchUnlink = ($canBeChanged and common::hasPriv($module, 'batchUnlinkStory'));?>
             <?php $vars = "buildID={$build->id}&type=story&link=$link&param=$param&orderBy=%s";?>
             <thead>
               <tr class='text-center'>
@@ -92,18 +95,23 @@ tbody tr td:first-child input {display: none;}
             </thead>
             <tbody class='text-center'>
               <?php foreach($stories as $storyID => $story):?>
+              <?php $unlinkClass = strpos(",$build->stories,", ",$story->id,") !== false ? '' : "disabled";?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <?php echo html::checkbox('unlinkStories', array($story->id => sprintf('%03d', $story->id)));?>
+                  <?php echo html::checkbox('unlinkStories', array($story->id => sprintf('%03d', $story->id)), '', $unlinkClass);?>
                   <?php else:?>
                   <?php printf('%03d', $story->id);?>
                   <?php endif;?>
                 </td>
-                <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+                <td>
+                  <?php if($story->pri):?>
+                  <span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span>
+                  <?php endif;?>
+                </td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
-                  if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+                  if($story->parent > 0) echo "<span class='label label-badge label-light'>{$lang->story->childrenAB}</span>";
                   if($this->app->tab == 'execution' and common::hasPriv('execution', 'storyView'))
                   {
                       echo html::a($this->createLink('execution', 'storyView', "storyID=$story->id", '', true), $story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
@@ -128,10 +136,10 @@ tbody tr td:first-child input {display: none;}
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
-                  if($canBeChanged and common::hasPriv('build', 'unlinkStory'))
+                  if($canBeChanged and common::hasPriv($module, 'unlinkStory'))
                   {
-                      $unlinkURL = inlink('unlinkStory', "buildID=$build->id&story=$story->id");
-                      echo html::a("###", '<i class="icon-unlink"></i>', '', "onclick='ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)' class='btn' title='{$lang->build->unlinkStory}'");
+                      $unlinkURL = $this->createLink($module, 'unlinkStory', "buildID=$build->id&story=$story->id");
+                      echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->build->unlinkStory}' $unlinkClass");
                   }
                   ?>
                 </td>
@@ -158,13 +166,13 @@ tbody tr td:first-child input {display: none;}
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkBug') and !isonlybody()):?>
+        <?php if($canBeChanged and common::hasPriv($module, 'linkBug') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
+        <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo $this->createLink($module, 'batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
           <table class='table has-sort-head' id='bugList'>
-            <?php $canBatchUnlink = $canBeChanged and common::hasPriv('build', 'batchUnlinkBug');?>
+            <?php $canBatchUnlink = $canBeChanged and common::hasPriv($module, 'batchUnlinkBug');?>
             <?php $vars = "buildID={$build->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
             <thead>
               <tr class='text-center'>
@@ -187,11 +195,12 @@ tbody tr td:first-child input {display: none;}
             </thead>
             <tbody class='text-center'>
               <?php foreach($bugs as $bug):?>
-              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <?php $bugLink     = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <?php $unlinkClass = strpos(",$build->bugs,", ",$bug->id,") !== false ? '' : "disabled";?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)));?>
+                  <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)), '', $unlinkClass);?>
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
@@ -204,15 +213,15 @@ tbody tr td:first-child input {display: none;}
                   </span>
                 </td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
-                <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+                <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                 <td><?php echo zget($users, $bug->resolvedBy);?></td>
-                <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+                <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
                 <td class='c-actions'>
                   <?php
-                  if($canBeChanged and common::hasPriv('build', 'unlinkBug'))
+                  if($canBeChanged and common::hasPriv($module, 'unlinkBug'))
                   {
-                      $unlinkURL = inlink('unlinkBug', "buildID=$build->id&bug=$bug->id");
-                      echo html::a("###", '<i class="icon-unlink"></i>', '', "onclick='ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)' class='btn' title='{$lang->build->unlinkBug}'");
+                      $unlinkURL = $this->createLink($module, 'unlinkBug', "buildID=$build->id&bug=$bug->id");
+                      echo html::a("###", '<i class="icon-unlink"></i>', '', (!$unlinkClass ? "onclick='ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)'" : '') . "class='btn' title='{$lang->build->unlinkBug}' $unlinkClass");
                   }
                   ?>
                 </td>
@@ -270,7 +279,7 @@ tbody tr td:first-child input {display: none;}
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <tr>
                 <td class='text-left'><?php printf('%03d', $bug->id);?></td>
-                <td>
+                <td class='c-severity'>
                   <?php if($hasCustomSeverity):?>
                   <span class='label-severity-custom' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span>
                   <?php else:?>
@@ -286,9 +295,9 @@ tbody tr td:first-child input {display: none;}
                   </span>
                 </td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
-                <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+                <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                 <td><?php echo zget($users, $bug->resolvedBy);?></td>
-                <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+                <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
               </tr>
               <?php endforeach;?>
             </tbody>
@@ -311,20 +320,37 @@ tbody tr td:first-child input {display: none;}
             <div class='detail-title'><?php echo $lang->build->basicInfo?></div>
             <div class='detail-content'>
               <table class='table table-data table-condensed table-borderless table-fixed'>
-                <tr>
-                  <th><?php echo $lang->build->product;?></th>
+              <tr class="<?php echo $hidden;?>">
+                  <th class='w-100px'><?php echo $lang->build->product;?></th>
                   <td><?php echo $build->productName;?></td>
                 </tr>
                 <?php if($build->productType != 'normal'):?>
                 <tr>
-                  <th><?php echo $lang->product->branch;?></th>
+                  <th class='w-100px'><?php echo $lang->product->branch;?></th>
                   <td><?php echo $branchName;?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th><?php echo $lang->build->name;?></th>
+                  <th class='w-100px'><?php echo $lang->build->name;?></th>
                   <td><?php echo $build->name;?></td>
                 </tr>
+                <?php if($build->execution):?>
+                <tr>
+                  <th><?php echo empty($multipleProject) ? $lang->build->project : $lang->build->execution;?></th>
+                  <td><?php echo zget($executions, $build->execution);?></td>
+                </tr>
+                <?php else:?>
+                <tr>
+                  <th><?php echo $lang->build->builds;?></th>
+                  <td>
+                    <?php $builds = '';?>
+                    <?php foreach(explode(',', $build->builds) as $buildID):?>
+                    <?php if($buildID) $builds .= html::a($this->createLink('build', 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;?>
+                    <?php endforeach;?>
+                    <?php echo rtrim($builds, $lang->comma);?>
+                  </td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->build->builder;?></th>
                   <td><?php echo zget($users, $build->builder);?></td>
@@ -364,6 +390,7 @@ tbody tr td:first-child input {display: none;}
 </div>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>
+<?php js::set('currentModule', $module)?>
 <?php js::set('buildID', $build->id)?>
 <?php js::set('type', $type)?>
 <?php include '../../common/view/footer.html.php';?>

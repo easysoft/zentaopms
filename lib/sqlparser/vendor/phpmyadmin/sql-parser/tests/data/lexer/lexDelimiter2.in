@@ -1,0 +1,3 @@
+DELIMTER //
+SELECT a,b FROM test //
+SELECT * FROM bar //

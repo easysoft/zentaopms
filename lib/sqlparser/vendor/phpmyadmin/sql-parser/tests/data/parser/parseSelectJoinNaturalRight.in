@@ -1,0 +1,1 @@
+SELECT * FROM actor NATURAL RIGHT JOIN film_actor;

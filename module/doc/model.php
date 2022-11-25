@@ -60,18 +60,20 @@ class docModel extends model
      * @param  string $type
      * @param  string $extra
      * @param  string $appendLibs
-     * @param  int    $projectID
+     * @param  int    $objectID
+     * @param  string $excludeType
      *
      * @access public
      * @return array
      */
-    public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0)
+    public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0, $excludeType = '')
     {
         if($type == 'all' or $type == 'includeDeleted')
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('type')->ne('api')
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
+                ->beginIF($excludeType)->andWhere('type')->notin($excludeType)->fi()
                 ->andWhere('vision')->eq($this->config->vision)
                 ->orderBy('`order` asc, id_desc')
                 ->query();
@@ -89,9 +91,9 @@ class docModel extends model
 
         $products   = $this->loadModel('product')->getPairs();
         $projects   = $this->loadModel('project')->getPairsByProgram();
-        $executions = $this->loadModel('execution')->getPairs();
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
         $waterfalls = array();
-        if(empty($objectID) and ($type == 'all' or $type == 'execution'))
+        if(empty($objectID) and $type != 'product' and $type != 'project' and $type != 'custom')
         {
             $waterfalls = $this->dao->select('t1.id,t2.name')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
@@ -641,9 +643,7 @@ class docModel extends model
         {
             foreach($files as $file)
             {
-                $pathName       = $this->file->getRealPathName($file->pathname);
-                $file->webPath  = $this->file->webPath . $pathName;
-                $file->realPath = $this->file->savePath . $pathName;
+                $this->loadModel('file')->setFileWebAndRealPaths($file);
                 if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
             }
         }
@@ -652,7 +652,7 @@ class docModel extends model
         if($version == $doc->version and ((empty($docContent->files) and $docFiles) or ($docContent->files and count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
         {
             unset($docContent->id);
-            $doc->version        += 1;
+            $doc->version       += 1;
             $docContent->version = $doc->version;
             $docContent->files   = join(',', array_keys($docFiles));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
@@ -1559,6 +1559,7 @@ class docModel extends model
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('sprint,stage,kanban')
+                ->andWhere('multiple')->eq('1')
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_asc')
@@ -1567,7 +1568,7 @@ class docModel extends model
             $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
-                $execution->name = $this->config->systemMode == 'new' ? zget($projectPairs, $execution->project) . ' / ' . $execution->name : $execution->name;
+                $execution->name = zget($projectPairs, $execution->project) . ' / ' . $execution->name;
 
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
                 {
@@ -1649,7 +1650,7 @@ class docModel extends model
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
 
-        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
 
         $userView = $this->app->user->view->products;
         if($type == 'project') $userView = $this->app->user->view->projects;
@@ -1685,9 +1686,10 @@ class docModel extends model
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
                 $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+                $reviewIdList  = $this->dao->select('id')->from(TABLE_REVIEW)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             }
 
-            $designIdList  = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+            $designIdList    = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             $executionIdList = $this->loadModel('execution')->getIdList($objectID);
             $taskPairs       = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
@@ -1720,6 +1722,7 @@ class docModel extends model
             ->beginIF($type == 'project')
             ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
             ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
+            ->orWhere("(objectType = 'review' and objectID in ($reviewIdList))")
             ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
             ->orWhere("(objectType = 'design' and objectID in ($designIdList))")
             ->fi()
@@ -1735,9 +1738,7 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
-            $pathName       = $this->file->getRealPathName($file->pathname);
-            $file->realPath = $this->file->savePath . $pathName;
-            $file->webPath  = $this->file->webPath . $pathName;
+            $this->file->setFileWebAndRealPaths($file);
         }
 
         return $files;
@@ -1761,11 +1762,14 @@ class docModel extends model
             $sourceList[$file->objectType][$file->objectID] = $file->objectID;
         }
 
+        $this->app->loadConfig('action');
         foreach($sourceList as $type => $idList)
         {
-            $table              = $this->config->objectTables[$type];
-            $title              = in_array($type, array('story', 'bug', 'issue', 'case', 'testcase', 'testreport', 'doc', 'requirement')) ? 'title' : 'name';
-            $name               = $this->dao->select('id,' . $title)->from($table)->where('id')->in($idList)->fetchPairs('id');
+            $table = zget($this->config->objectTables, $type, '');
+            $field = zget($this->config->action->objectNameFields, $type, '');
+            if(empty($table) or empty($field)) continue;
+
+            $name = $this->dao->select('id,' . $field)->from($table)->where('id')->in($idList)->fetchPairs('id', $field);
             $sourcePairs[$type] = $name;
         }
 
@@ -2126,11 +2130,12 @@ class docModel extends model
             {
                 foreach($this->lang->doc->typeList as $typeKey => $typeName)
                 {
-                    $class = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
-                    $icon  = zget($this->config->doc->iconList, $typeKey);
-                    $html .= "<li>";
-                    $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                    $html .= "</li>";
+                    $class  = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
+                    $icon   = zget($this->config->doc->iconList, $typeKey);
+                    $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
+                    $html  .= "<li>";
+                    $html  .= html::a(helper::createLink('doc', $method, "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
+                    $html  .= "</li>";
                     if($typeKey == 'url') $html .= '<li class="divider"></li>';
                 }
             }
@@ -2320,13 +2325,13 @@ class docModel extends model
 
         if($this->app->tab == 'doc' and $type != 'custom' and $type != 'book')
         {
-            $objectTitle = ($this->config->systemMode == 'new' and $type == 'execution') ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
+            $objectTitle = $type == 'execution' ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
 
             $output = <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objectTitle}'>
-      <span class='text'>{$objectTitle}</span>
+      <div class='nobr'>{$objectTitle}</div>
       <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
@@ -2388,7 +2393,7 @@ EOT;
             $output  .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
-    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libName} <span class='caret'></span>
+    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'><div class='nobr'>{$libName}</div> <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
       <div class="input-control search-box has-icon-left has-icon-right search-example">

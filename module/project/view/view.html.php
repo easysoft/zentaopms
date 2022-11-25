@@ -21,7 +21,7 @@
             <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
             <?php if($project->model != 'kanban' and common::hasPriv('project', 'dynamic')):?>
             <nav class="panel-actions nav nav-default">
-              <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+              <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", strtoupper($lang->more), '', "title=$lang->more");?></li>
             </nav>
             <?php endif;?>
           </div>
@@ -45,7 +45,7 @@
             <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
             <?php if(common::hasPriv('project', 'team')):?>
             <nav class="panel-actions nav nav-default">
-              <li><?php common::printLink('project', 'team', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+              <li><?php common::printLink('project', 'team', "projectID=$project->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
             </nav>
             <?php endif;?>
           </div>
@@ -116,19 +116,20 @@
             <div class="detail-content article-content">
               <div><span class="text-limit hidden" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
               <p>
+                <span class="label label-primary label-outline"><?php echo zget($lang->project->projectTypeList, $project->hasProduct);?></span>
                 <?php if($project->deleted):?>
                 <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                 <?php endif; ?>
-                <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $project->lifetime);?></span>
+                <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $project->lifetime, '');?></span>
                 <?php if(isset($project->delay)):?>
                 <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
                 <?php else:?>
-                <span class="label label-success label-outline"><?php echo $this->processStatus('project', $project);?></span>
+                <span class="label status-<?php echo $project->status;?> label-outline"><?php echo $this->processStatus('project', $project);?></span>
                 <?php endif;?>
               </p>
             </div>
           </div>
-          <?php if($this->config->systemMode == 'new'):?>
+          <?php if(empty($globalDisableProgram)):?>
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->parent;?></strong>
@@ -152,10 +153,11 @@
             </div>
           </div>
           <?php endif;?>
+          <?php if(!empty($project->hasProduct)):?>
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->manageProducts;?></strong>
-              <?php common::printLink('project', 'manageproducts', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
+              <?php common::printLink('project', 'manageproducts', "projectID=$project->id", strtoupper($lang->more), '', "class='btn btn-link pull-right muted'");?>
             </div>
             <div class="detail-content">
               <div class="row row-grid">
@@ -187,6 +189,7 @@
               </div>
             </div>
           </div>
+          <?php endif;?>
           <div class='detail'>
             <div class='detail-title'><strong><?php echo $lang->execution->lblStats;?></strong></div>
             <div class="detail-content">
@@ -210,7 +213,7 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->project->end;?></th>
-                    <td><?php echo $project->end;?></td>
+                    <td><?php echo $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;;?></td>
                     <th><?php echo $lang->project->realEndAB;?></th>
                     <td><?php echo $project->realEnd == '0000-00-00' ? '' : $project->realEnd;?></td>
                   </tr>
@@ -241,11 +244,15 @@
                 <tbody>
                   <tr>
                     <th><?php echo $lang->story->common;?></th>
-                    <td><?php echo $statData->storyCount;?></td>
+                    <td title="<?php echo $statData->storyCount;?>"><?php echo $statData->storyCount;?></td>
                     <th><?php echo $lang->task->common;?></th>
-                    <td><?php echo $statData->taskCount;?></td>
+                    <td title="<?php echo $statData->taskCount;?>"><?php echo $statData->taskCount;?></td>
+                  </tr>
+                  <tr>
                     <th><?php echo $lang->bug->common;?></th>
-                    <td><?php echo $statData->bugCount;?></td>
+                    <td title="<?php echo $statData->bugCount;?>"><?php echo $statData->bugCount;?></td>
+                    <th><?php echo $lang->project->budget;?></th>
+                    <td title="<?php echo $project->budget;?>"><?php echo $project->budget;?></td>
                   </tr>
                 </tbody>
               </table>

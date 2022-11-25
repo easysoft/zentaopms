@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -23,8 +24,7 @@ task状态为pause只有老task计算多人工时 >> 910,po82,doing,3,3,3
 老task不存在的情况有新老task计算多人工时 >> 0
 新task不存在的情况有新老task和团队计算多人工时 >> 10001,po82,doing,3,3,3
 
-
- */
+*/
 $task1 = new stdclass();
 $task1->id         = 1;
 $task1->status     = 'wait';
@@ -85,7 +85,7 @@ $user2->estimate = 2;
 $user2->consumed = 2;
 $user2->left     = 2;
 
-$team = array('po82' => $user1, 'user92' => $user2);
+$team = array($user1, $user2);
 
 $autoStatusList = array(true, false);
 
@@ -102,4 +102,4 @@ r($task->computeHours4MultipleTest($task5, $task6, $team))          && p('id,ass
 r($task->computeHours4MultipleTest($task7))                         && p('id,assignedTo,status,estimate,consumed,left') && e('0'); // 老task不存在的情况有新老task和团队计算多人工时
 r($task->computeHours4MultipleTest($task7, $task8))                 && p('id,assignedTo,status,estimate,consumed,left') && e('0'); // 老task不存在的情况有新老task计算多人工时
 r($task->computeHours4MultipleTest($task1, $task8, $team)) && p('id,assignedTo,status,estimate,consumed,left') && e('10001,po82,doing,3,3,3'); // 新task不存在的情况有新老task和团队计算多人工时
-system("./ztest init");
+$db->restoreDB();

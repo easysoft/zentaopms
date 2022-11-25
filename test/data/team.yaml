@@ -59,14 +59,14 @@ fields:
     format: "YYYY-MM-DD"
   - field: days
     note: "可用工作日"
-    range: 1-50:R
+    range: 1-50
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: hours
     note: "可用工时/天"
-    range: 1-8:R
+    range: 1-8
     prefix: ""
     postfix: ""
     loop: 0

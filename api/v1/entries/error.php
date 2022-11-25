@@ -9,16 +9,16 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class errorEntry extends Entry 
+class errorEntry extends entry
 {
     /**
      * 404 Not Found.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function notFound()
     {
-        $this->send(404, array('error' => 'not found'));
+        return $this->send(404, array('error' => 'not found'));
     }
 }

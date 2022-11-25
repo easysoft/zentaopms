@@ -20,7 +20,6 @@ $(function()
 });
 </script>
 <?php else:?>
-<?php js::set('requiredFields', $requiredFields);?>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">
     <h2><?php echo $lang->caselib->import;?></h2>
@@ -127,14 +126,4 @@ $(function()
 <?php if(isset($hideContentCol) and $hideContentCol):?>
 <style>#mainContent .col-content{display: none;}</style>
 <?php endif;?>
-<script>
-$(function()
-{
-    $.fixedTableHead('#showData');
-    $("#showData th").each(function()
-    {
-        if(requiredFields.indexOf(this.id) !== -1) $("#" + this.id).addClass('required');
-    });
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>

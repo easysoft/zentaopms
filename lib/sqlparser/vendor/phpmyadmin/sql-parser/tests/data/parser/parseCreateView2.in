@@ -1,0 +1,2 @@
+CREATE VIEW myView (vid, vfirstname) AS
+SELECT id, first_name FROM employee WHERE id = 1;

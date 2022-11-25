@@ -9,6 +9,15 @@ title=测试 storyModel->getUserStories();
 cid=1
 pid=1
 
+获取指派给User2的所有需求数量 >> 100
+获取指派给User2的ID为6的需求详情 >> 软件需求6,story,user2,projected
+获取由User2创建的需求数量，每页10条 >> 10
+获取由User2创建的ID为38的需求详情 >> 软件需求38,story,user2,released
+获取由Test3关闭的所有需求数量 >> 14
+获取由Test3关闭的ID为203的需求详情 >> 用户需求203,requirement,test3,
+获取无评审人的需求数量 >> 25
+获取无评审人的ID为402的需求详情 >> 软件子需求2,story,,planned
+
 */
 
 global $tester;

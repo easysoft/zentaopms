@@ -131,20 +131,17 @@ function initGroup(data)
     })
 }
 
-$(document).on('change', "select[id^='visions']", function()
+/**
+ * Get group data by selected vision.
+ *
+ * @param int $i
+ * @access public
+ * @return html
+ */
+function getGroupSelect(i)
 {
-    var i       = parseInt($(this).attr('id').replace(/[^0-9]/ig, ''));
+    if(i < 1) return '';
     var visions = $('select[id="visions' + i + '"]').val();
-
-    var groups  = $('#group' + i).val();
-    if($.inArray('ditto', groups) >= 0) groups = '';
-
-    $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + i + '&selected=' + groups), function(data)
-    {
-        $('#group' + i).replaceWith(data);
-        $('#group' + i + '_chosen').remove();
-        $('#group' + i).chosen();
-    })
 
     visions = visions ? visions.join() : '';
     switch(visions)
@@ -158,14 +155,25 @@ $(document).on('change', "select[id^='visions']", function()
         case 'rnd,lite':
             var data = allGroupSelect;
             break;
+        case 'ditto':
+            var data = getGroupSelect(i - 1);
+            break;
         default:
             var data = emptyGroupSelect;
             break;
     }
-    for(n = i + 1; n <= batchCreateCount; n++)
+
+    return data;
+}
+
+$(document).on('change', "select[id^='visions']", function()
+{
+    var i    = parseInt($(this).attr('id').replace(/[^0-9]/ig, ''));
+    var data = getGroupSelect(i);
+
+    for(n = i; n <= batchCreateCount; n++)
     {
-        if(n == i) continue;
-        if($.inArray('ditto', $('select[id="visions' + n + '"]').val()) < 0) break;
+        if(n != i && $.inArray('ditto', $('select[id="visions' + n + '"]').val()) < 0) break;
 
         ((function(n)
         {
@@ -177,4 +185,56 @@ $(document).on('change', "select[id^='visions']", function()
             $('#group' + n).chosen();
         }(n)));
     }
+});
+
+/**
+ * Show or hide companies based on user type.
+ *
+ * @param  type $type
+ * @access public
+ * @return void
+ */
+function changeType(type)
+{
+    if(type == 'inside')
+    {
+        $('#companyBox').addClass('hide');
+        $('select[id^=dept], input[id^=join]').closest('td').removeClass('hide');
+        $('select[id^=company]').closest('td').addClass('hide');
+        $('th.c-dept, th.c-join').removeClass('hide');
+        $('th.c-company').addClass('hide');
+    }
+    else
+    {
+        $('#companyBox').removeClass('hide');
+        $('select[id^=dept], input[id^=join]').closest('td').addClass('hide');
+        $('select[id^=company]').closest('td').removeClass('hide');
+        $('th.c-dept, th.c-join').addClass('hide');
+        $('th.c-company').removeClass('hide');
+    }
+    $('#userType').val(type);
+}
+
+$(function()
+{
+    $(":checkbox[name^='new']").change(function()
+    {
+        var companyNode     = $(this).prop('checked') ? $(this).closest('span').prevAll('select') : $(this).closest('span').prevAll('input');
+        var companyNodeID   = $(companyNode).attr('id');
+        var companyNodeName = $(companyNode).attr('name');
+
+        if($(this).prop('checked'))
+        {
+            $(companyNode).replaceWith("<input name='" + companyNodeName + "' id='" + companyNodeID + "' class='form-control'/>");
+            $('#' + companyNodeID + '_chosen').remove();
+        }
+        else
+        {
+            var i        = companyNodeID.replace(/[^0-9]/ig, '');
+            var dataHtml = $(companies).attr('id', companyNodeID).attr('name', companyNodeName).prop('outerHTML');
+            $('#' + companyNodeID).replaceWith(dataHtml);
+            if(i == 1) $('#' + companyNodeID).find('option[value="ditto"]').remove();
+            $('#' + companyNodeID).chosen();
+        }
+    })
 });

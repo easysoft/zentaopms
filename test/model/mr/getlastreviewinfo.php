@@ -8,7 +8,7 @@ title=测试 mrModel::getLastReviewInfo();
 cid=1
 pid=1
 
-使用空的repoID   >> return null
+使用空的repoID >> return null
 使用正确的repoID >> return normal
 
 */

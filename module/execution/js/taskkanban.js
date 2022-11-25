@@ -156,7 +156,7 @@ function renderStoryItem(item, $item, col)
     if(scaleSize <= 2)
     {
         var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
-        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml    = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + hourUnit +'</span>') : '';
         var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id, '', col.type);
         var $infos = $item.find('.infos');
@@ -221,7 +221,7 @@ function renderBugItem(item, $item, col)
     {
         var idHtml       = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var severityHtml = scaleSize <= 1 ? ('<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>') : '';
-        var priHtml      = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml      = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var avatarHtml   = renderUserAvatar(item.assignedTo, 'bug', item.id, '', col.type);
 
         var $infos = $item.find('.infos');
@@ -284,7 +284,7 @@ function renderTaskItem(item, $item, col)
 
     if(scaleSize <= 2)
     {
-        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml    = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = scaleSize <= 1 && item.status != 'wait' ? ('<span class="info info-estimate text-muted">' + taskLang.leftAB + ' ' + item.left + 'h</span>') : ('<span class="info info-estimate text-muted">' + taskLang.estimateAB + ' ' + item.estimate + 'h</span>');
         var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id, '', col.type);
 
@@ -341,9 +341,16 @@ function renderColumnCount($count, count, col)
 {
     if(groupBy == 'story' && col.type == 'story')
     {
-        $count.prev().addClass('storyColumn');
-        $count.prev().parent().append('<span class="caret changeOrderBy"></span>');
-        $count.remove();
+        var orderButton = '<a class="btn btn-link action storyColumn ' + (changeOrder ? 'text-primary' : '') + '" type="button" data-toggle="dropdown">'
+            + "<i class='icon icon-swap'></i>"
+            + '</a>'
+            + '<ul class="dropdown-menu">';
+        for(var order in kanbanLang.orderList) orderButton += '<li class="' + (order == orderBy ? 'active' : '') + '"><a href="###" onclick="searchCards(searchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
+        orderButton += '</ul>';
+
+        $count.parent().next().html(orderButton);
+        $count.parent().next().addClass('createButton');
+        $count.hide();
         return;
     }
 
@@ -803,7 +810,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                     if(data)
                     {
                         data = $.parseJSON(data);
-                        if(data.status == 'draft' || data.status == 'changed')
+                        if(data.status == 'draft' || data.status == 'changing' || data.status == 'reviewing')
                         {
                             bootbox.alert(executionLang.storyDragError);
                         }
@@ -1220,12 +1227,13 @@ $(function()
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);
     $('#kanbanScaleControl .btn[data-type="-"]').attr('disabled', window.kanbanScaleSize <= 1 ? 'disabled' : null);
 
+    changeOrder = false;
     /* Common options */　
     var commonOptions =
     {
         maxColHeight:         'auto',
-        minColWidth:          240,
-        maxColWidth:          240,
+        minColWidth:          typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth,
+        maxColWidth:          typeof window.maxColWidth === 'number' ? window.maxColWidth : defaultMaxColWidth,
         cardHeight:           getCardHeight(),
         showCount:            true,
         showZeroCount:        true,
@@ -1273,12 +1281,6 @@ $(function()
         $link.modalTrigger({show: true});
         event.preventDefault();
     });
-
-    $(document).on('click', '#kanbans span.caret.changeOrderBy', function(event)
-    {
-        orderBy = orderBy == 'pri_desc' ? 'pri_asc' : 'pri_desc';
-        searchCards(searchValue);
-    })
 
     /* Init contextmenu */
     $('#kanbans').on('click', '[data-contextmenu]', function(event)
@@ -1332,6 +1334,11 @@ $(function()
         }
     });
 
+    document.addEventListener('scroll', function()
+    {
+        $('.storyColumn').parent().removeClass('open');
+    }, true);
+
     $('#type_chosen .chosen-single span').prepend('<i class="icon-kanban"></i>');
     $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
 
@@ -1339,7 +1346,7 @@ $(function()
     lastUpdateData = '';
     setInterval(function()
     {
-        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue + '&orderBy' + orderBy), function(data)
+        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue + '&orderBy=' + orderBy), function(data)
         {
             if(lastUpdateData == '') lastUpdateData = data;
             if(data && lastUpdateData !== data)
@@ -1366,6 +1373,13 @@ $(function()
         });
     }, 10000);
     resetKanbanHeight();
+    var kanbanMinColWidth = typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth;
+    if(kanbanMinColWidth < 190)
+    {
+        var miniColWidth = kanbanMinColWidth * 0.2;
+        $('.kanban-header-col>.title>span:not(.text)').hide();
+        $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
+    }
 });
 
 $('#type').change(function()
@@ -1469,12 +1483,16 @@ function toggleSearchBox()
  * Search kanban cards.
  *
  * @param  string value
+ * @param  string order
+ *
  * @access public
  * @return void
  */
-function searchCards(value)
+function searchCards(value, order = '')
 {
     searchValue = value;
+    orderBy     = order == '' ? orderBy : order;
+    if(order != '') changeOrder = true;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;

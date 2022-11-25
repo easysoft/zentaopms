@@ -10,13 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php include '../../common/view/header.html.php';?>
 <style>
 #showAverage {margin: 0;}
-.chosen-container-single .chosen-single div b {top: 8px !important;}
 .chosen-container .chosen-drop {bottom: auto !important;}
 .pull-left {margin: 12px 0px;}
+.btn-toolbar #roundBox {width:220px;}
 </style>
-<?php include '../../common/view/header.html.php';?>
 <?php js::set('executionID', $executionID);?>
 <?php js::set('storyID', $storyID);?>
 <div id='mainContent' class='main-content'>
@@ -33,7 +33,7 @@
   <?php else:?>
   <div class='btn-toolbar pull-left'>
     <?php if(!empty($rounds)):?>
-    <div class='input-group space w-200px'>
+    <div id='roundBox' class='input-group space'>
       <span class='input-group-addon'><?php echo $lang->execution->selectRound?></span>
       <?php echo html::select('round', $rounds, $round, "class='form-control chosen' onchange='selectRound(this.value)'");?>
     </div>
@@ -70,18 +70,15 @@
           <?php if(!empty($estimateInfo->estimate)):?>
           <td><?php echo $estimateInfo->average;?></td>
           <td class='new-estimate hide'><p id='showAverage'></p></td>
-          <?php echo html::hidden('average', '', "class='form-control'");?>
           <?php else:?>
           <td><p id='showAverage'></p></td>
-          <?php echo html::hidden('average', '', "class='form-control'");?>
           <?php endif;?>
+          <?php echo html::hidden('average', '', "class='form-control'");?>
         </tr>
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='3' class="text-center form-actions <?php if(!empty($rounds)) echo 'hide';?>">
-            <?php echo html::submitButton(); ?>
-          </td>
+          <td colspan='3' class="text-center form-actions <?php if(!empty($rounds)) echo 'hide';?>"><?php echo html::submitButton();?></td>
         </tr>
       </tfoot>
     </table>

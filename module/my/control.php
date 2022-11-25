@@ -119,20 +119,20 @@ class my extends control
         $taskCount = $pager->recTotal;
 
         /* Get the number of stories assigned to me. */
-        $assignedToStories    = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'story', false);
+        $assignedToStories    = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'story', false, 'all');
         $assignedToStoryCount = $pager->recTotal;
-        $reviewByStories      = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'story', false);
+        $reviewByStories      = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'story', false, 'all');
         $reviewByStoryCount   = $pager->recTotal;
         $storyCount           = $assignedToStoryCount + $reviewByStoryCount;
 
         $requirementCount = 0;
-        $isOpenedURAndSR  = $this->config->URAndSR;
+        $isOpenedURAndSR  = $this->config->URAndSR ? 1 : 0;
         if($isOpenedURAndSR)
         {
             /* Get the number of requirements assigned to me. */
-            $assignedRequirements     = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'requirement');
+            $assignedRequirements     = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'requirement', false, 'all');
             $assignedRequirementCount = $pager->recTotal;
-            $reviewByRequirements     = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'requirement');
+            $reviewByRequirements     = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'requirement', false, 'all');
             $reviewByRequirementCount = $pager->recTotal;
             $requirementCount         = $assignedRequirementCount + $reviewByRequirementCount;
         }
@@ -151,9 +151,10 @@ class my extends control
 
         $issueCount   = 0;
         $riskCount    = 0;
-        $reviewCount  = 0;
         $ncCount      = 0;
+        $qaCount      = 0;
         $meetingCount = 0;
+        $ticketCount  = 0;
         $isMax        = $this->config->edition == 'max' ? 1 : 0;
 
         $feedbackCount = 0;
@@ -163,6 +164,9 @@ class my extends control
         {
             $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
             $feedbackCount = $pager->recTotal;
+
+            $ticketList  = $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
+            $ticketCount = $pager->recTotal;
         }
 
         if($isMax)
@@ -180,14 +184,14 @@ class my extends control
             $risks     = $this->risk->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);
             $riskCount = $pager->recTotal;
 
-            /* Get the number of reviews assigned to me. */
-            $pendingList = $this->loadModel('approval')->getPendingReviews('review');
-            $reviewList  = $this->review->getByList($pendingList, 'id_desc', $pager);
-            $reviewCount = $pager->recTotal;
-
             /* Get the number of nc assigned to me. */
             $ncList  = $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
             $ncCount = $pager->recTotal;
+
+            /* Get the number of nc assigned to me. */
+            $auditplanList  = $this->loadModel('auditplan')->getList(0, 'mychecking', '', 'id_desc', $pager);
+            $auditplanCount = $pager->recTotal;
+            $qaCount        = $ncCount + $auditplanCount;
 
             /* Get the number of meetings assigned to me. */
             $meetings     = $this->meeting->getListByUser('futureMeeting', 'id_desc', 0, $pager);
@@ -208,14 +212,17 @@ if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;
 var isMax = $isMax;
 var isBiz = $isBiz;
 
-if(isBiz !== 0 || isMax !== 0) var feedbackCount = $feedbackCount;
+if(isBiz !== 0 || isMax !== 0)
+{
+    var feedbackCount = $feedbackCount;
+    var ticketCount   = $ticketCount;
+}
 
 if(isMax !== 0)
 {
     var issueCount   = $issueCount;
     var riskCount    = $riskCount;
-    var reviewCount  = $reviewCount;
-    var ncCount      = $ncCount;
+    var qaCount      = $qaCount;
     var meetingCount = $meetingCount;
 }
 </script>
@@ -323,7 +330,7 @@ EOF;
     {
         $this->loadModel('story');
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -332,19 +339,20 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'story');
+            $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'story');
         }
         elseif($type == 'bysearch')
         {
-            $stories = $this->my->getStoriesBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);
+            $stories = $this->my->getStoriesBySearch($queryID, $this->app->rawMethod, $sort, $pager);
         }
         else
         {
-            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false);
+            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false, 'all');
         }
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
@@ -387,7 +395,7 @@ EOF;
     {
         /* Save session. */
         $this->loadModel('story');
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -396,19 +404,20 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'requirement');
+            $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'requirement');
         }
         elseif($type == 'bysearch')
         {
-            $stories = $this->my->getRequirementsBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);
+            $stories = $this->my->getRequirementsBySearch($queryID, $this->app->rawMethod, $sort, $pager);
         }
         else
         {
-            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement', false, 'all');
         }
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
@@ -468,7 +477,7 @@ EOF;
         /* Get tasks. */
         if($type == 'assignedBy')
         {
-            $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 0, 'task');
+            $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 'task');
         }
         elseif($type == 'bySearch')
         {
@@ -479,23 +488,12 @@ EOF;
             $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);
         }
 
-        $parents         = array();
-        $executionIDList = array();
+        $parents = array();
         foreach($tasks as $task)
         {
-            if($this->config->systemMode == 'new') $executionIDList[$task->execution] = $task->execution;
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
-
-        if($this->config->systemMode == 'new')
-        {
-            $projects = $this->dao->select('t1.id,t1.name,t2.id as execution')->from(TABLE_PROJECT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.project')
-                ->where('t2.id')->in($executionIDList)
-                ->andWhere('t1.type')->eq('project')
-                ->fetchAll('execution');
-        }
 
         foreach($tasks as $task)
         {
@@ -535,7 +533,6 @@ EOF;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->mode       = 'task';
-        $this->view->projects   = isset($projects) ? $projects : array();
 
         if($this->app->viewType == 'json') $this->view->tasks = array_values($this->view->tasks);
         $this->display();
@@ -569,9 +566,11 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        if(strpos($sort, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
         if($type == 'assignedBy')
         {
-            $bugs = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'bug');
+            $bugs = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'bug');
         }
         else
         {
@@ -580,7 +579,6 @@ EOF;
 
         $bugs = $this->bug->checkDelayedBugs($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
-
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);
@@ -598,7 +596,7 @@ EOF;
         $this->view->pageID      = $pageID;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
-        $this->view->mode       = 'bug';
+        $this->view->mode        = 'bug';
 
         $this->display();
     }
@@ -630,6 +628,7 @@ EOF;
         }
 
         $this->app->loadLang('testcase');
+        $this->app->loadLang('project');
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
@@ -680,13 +679,14 @@ EOF;
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         $cases = array();
-        if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
+        if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip|run');
         if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
         if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
         if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
 
         /* Build the search form. */
@@ -799,17 +799,18 @@ EOF;
         }
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
-        $this->view->position[] = $this->lang->my->project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects   = $projects;
-        $this->view->PMList     = $PMList;
-        $this->view->pager      = $pager;
-        $this->view->status     = $status;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
+        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
+        $this->view->position[]  = $this->lang->my->project;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projects    = $projects;
+        $this->view->PMList      = $PMList;
+        $this->view->pager       = $pager;
+        $this->view->status      = $status;
+        $this->view->recTotal    = $recTotal;
+        $this->view->recPerPage  = $recPerPage;
+        $this->view->pageID      = $pageID;
+        $this->view->orderBy     = $orderBy;
+        $this->view->usersAvatar = $this->user->getAvatarPairs('');
         $this->display();
     }
 
@@ -877,7 +878,7 @@ EOF;
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->param      = $param;
-        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, '', 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
+        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
 
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
 
@@ -911,7 +912,7 @@ EOF;
         /* Get risks by type*/
         if($type == 'assignedBy')
         {
-            $risks = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
+            $risks = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'risk');
         }
         else
         {
@@ -941,6 +942,7 @@ EOF;
      * My audits.
      *
      * @param  string $browseType
+     * @param  string $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -948,30 +950,23 @@ EOF;
      * @access public
      * @return void
      */
-    public function audit($browseType = 'needreview', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function audit($browseType = 'all', $param = 0, $orderBy = 'time_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->loadModel('datatable');
-        $this->loadModel('baseline');
-        $this->session->set('reviewList', $this->app->getURI(true));
-        $this->app->loadLang('review');
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $pendingList = $this->loadModel('approval')->getPendingReviews('review');
-        if($browseType == 'needreview')
+        if($this->app->rawMethod == 'contribute')
         {
-            $reviewList  = $this->loadModel('review')->getByList($pendingList, $orderBy, $pager);
+            $reviewList = $this->my->getReviewedList($browseType, $orderBy, $pager);
         }
         else
         {
-            $reviewList = $this->loadModel('review')->getUserReviews($browseType, $orderBy, $pager);
+            $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
         }
 
-        $this->view->title       = $this->lang->my->myReview;
+        $this->view->title       = $this->lang->review->common;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->reviewList  = $reviewList;
-        $this->view->pendingList = $pendingList;
-        $this->view->products    = $this->my->getProductPairs();
         $this->view->recTotal    = $recTotal;
         $this->view->recPerPage  = $recPerPage;
         $this->view->pageID      = $pageID;
@@ -979,6 +974,49 @@ EOF;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->mode        = 'audit';
+        $this->display();
+    }
+
+    /**
+     * My auditplans.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function auditplan($browseType = 'myChecking', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('auditplan');
+        $this->loadModel('process');
+        $this->loadModel('pssp');
+        $this->session->set('auditplanList', $this->app->getURI(true));
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager  = pager::init($recTotal, $recPerPage, $pageID);
+
+        $auditplans = $this->auditplan->getList(0, $browseType, $param, $orderBy, $pager);
+
+        $this->view->executions      = $this->loadModel('execution')->getPairs();
+        $this->view->processTypeList = $this->lang->process->classify;
+        $this->view->processes       = $this->pssp->getProcesses();
+        $this->view->activities      = $this->pssp->getActivityPairs();
+        $this->view->outputs         = $this->pssp->getOutputPairs();
+
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->auditplan;
+        $this->view->browseType = $browseType;
+        $this->view->auditplans = $auditplans;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
+        $this->view->param      = $param;
+        $this->view->mode       = 'auditplan';
         $this->display();
     }
 
@@ -1002,7 +1040,8 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager  = pager::init($recTotal, $recPerPage, $pageID);
-        $ncList = $browseType == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, 'active');
+        $status = $this->app->rawMethod == 'contribute' ? '' : 'active';
+        $ncList = $browseType == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, $status);
 
         foreach($ncList as $nc) $ncIdList[] = $nc->id;
         $this->session->set('ncIdList', isset($ncIdList) ? $ncIdList : '');
@@ -1058,6 +1097,9 @@ EOF;
         $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->queryID    = $queryID;
         $this->view->mode       = 'myMeeting';
+        $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram('', 'all', true);
+        $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+        $this->view->rooms      = array('' => '') + $this->loadModel('meetingroom')->getPairs();
 
         $this->display();
     }
@@ -1155,6 +1197,50 @@ EOF;
     }
 
     /**
+     * My ticket.
+     *
+     * @param  string $browseType
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function ticket($browseType = 'assignedtome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('ticket');
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
+
+        $this->session->set('ticketList', $this->app->getURI(true), 'feedback');
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        if($browseType != 'bysearch')
+        {
+            $tickets = $this->ticket->getList($browseType, $orderBy, $pager);
+        }
+        else
+        {
+            $tickets = $this->ticket->getBySearch($queryID, $orderBy, $pager);
+        }
+
+        $actionURL = $this->createLink('my', 'work', "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->my->buildTicketSearchForm($queryID, $actionURL);
+
+        $this->view->title      = $this->lang->ticket->browse;
+        $this->view->products   = $this->loadModel('feedback')->getGrantProducts();
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
+        $this->view->tickets    = $tickets;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->browseType = $browseType;
+        $this->display();
+    }
+
+    /**
      * My team.
      *
      * @param  string $orderBy
@@ -1208,9 +1294,8 @@ EOF;
             $_POST['account'] = $this->app->user->account;
             $_POST['groups']  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
             $this->user->update($this->app->user->id);
-            if(dao::isError()) helper::end(js::error(dao::getError()));
-            echo js::locate($this->createLink('my', 'profile'), 'parent');
-            return;
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'profile'), 'closeModal' => true));
         }
 
         $this->app->loadConfig('user');
@@ -1240,9 +1325,9 @@ EOF;
         if(!empty($_POST))
         {
             $this->user->updatePassword($this->app->user->id);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('my', 'index'), 'parent.parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'index')));
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
@@ -1463,7 +1548,6 @@ EOF;
         $this->session->set('designList',         $uri, 'project');
         $this->session->set('productPlanList',    $uri, 'product');
         $this->session->set('releaseList',        $uri, 'product');
-        $this->session->set('programList',        $uri, 'program');
         $this->session->set('projectList',        $uri, 'project');
         $this->session->set('executionList',      $uri, 'execution');
         $this->session->set('taskList',           $uri, 'execution');

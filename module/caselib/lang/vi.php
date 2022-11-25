@@ -21,7 +21,7 @@ $lang->caselib->createCase      = 'Tạo tình huống';
 $lang->caselib->delete          = "Xóa Suite";
 $lang->caselib->linkVersion     = "Phiên bản";
 $lang->caselib->deleted         = 'Đã xóa';
-$lang->caselib->exportTemplet   = 'Xuất mẫu';
+$lang->caselib->exportTemplate  = 'Xuất mẫu';
 $lang->caselib->batchCreateCase = 'Tạo hàng loạt';
 $lang->caselib->import          = 'Nhập';
 $lang->caselib->importAction    = 'Nhập tình huống';
@@ -39,3 +39,6 @@ $lang->caselib->legendDesc = 'Mô tả';
 
 $lang->caselib->libraryDelete = 'Bạn có muốn xóa thư viện này?';
 $lang->caselib->noModule      = '<div>Chưa có Module.</div><div>Quản lý ngay.</div>';
+
+$lang->caselib->featureBar['browse']['all']  = 'All';
+$lang->caselib->featureBar['browse']['wait'] = 'Waiting';

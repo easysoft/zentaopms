@@ -1,0 +1,3 @@
+SELECT C.First_Name, C.Last_Name, O.title
+FROM Employee as C
+NATURAL LEFT JOIN JOb as O;

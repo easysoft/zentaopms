@@ -27,13 +27,13 @@
     <thead>
       <tr>
         <th class='c-id'><?php echo $lang->idAB;?></th>
-        <th class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><?php echo $lang->priAB?></th>
         <th class='c-name'> <?php echo $lang->task->name;?></th>
+        <th class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><?php echo $lang->priAB?></th>
+        <th class='c-status'><?php echo $lang->statusAB;?></th>
         <?php if($longBlock):?>
+        <th class='c-deadline'><?php echo $lang->task->deadlineAB;?></th>
         <th class='c-estimate'><?php echo $lang->task->estimateAB;?></th>
-        <th class='c-deadline'><?php echo $lang->task->deadline;?></th>
         <?php endif;?>
-        <th class='c-status text-center'><?php echo $lang->statusAB;?></th>
       </tr>
     </thead>
     <tbody>
@@ -43,16 +43,20 @@
       ?>
       <tr>
         <td class='c-id-xs'><?php echo sprintf('%03d', $task->id);?></td>
-        <td class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
-        <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name)?></td>
-        <?php if($longBlock):?>
-        <td class='c-estimate text-center' title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . $lang->execution->workHourUnit;?></td>
-        <td class='c-deadline'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
-        <?php endif;?>
+        <?php
+        $onlybody = $task->executionType == 'kanban' ? true : '';
+        $class    = $task->executionType == 'kanban' ? "class='iframe' data-toggle='modal'" : '';
+        ?>
+        <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "$class data-width='80%'")?></td>
+        <td class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri)?></span></td>
         <?php $status = $this->processStatus('task', $task);?>
         <td class='c-status' title='<?php echo $status;?>'>
           <span class="status-task status-<?php echo $task->status?>"><?php echo $status;?></span>
         </td>
+        <?php if($longBlock):?>
+        <td class='c-deadline'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
+        <td class='c-estimate text-center' title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . $lang->execution->workHourUnit;?></td>
+        <?php endif;?>
       </tr>
       <?php endforeach;?>
     </tbody>

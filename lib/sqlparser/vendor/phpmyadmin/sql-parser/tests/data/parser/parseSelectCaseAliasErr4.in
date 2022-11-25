@@ -1,0 +1,1 @@
+SELECT CASE WHEN 2 IS NULL THEN "this is true" ELSE "this is false" END AS ;

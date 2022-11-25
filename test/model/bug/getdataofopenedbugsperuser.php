@@ -13,6 +13,5 @@ pid=1
 
 */
 
-
 $bug=new bugTest();
 r($bug->getDataOfOpenedBugsPerUserTest()) && p('admin:name,value') && e('admin,315');   // 获取admin创建的数据

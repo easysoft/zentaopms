@@ -840,11 +840,12 @@ class gitlab
      * Get download url.
      *
      * @param  string $branch
+     * @param  string $savePath
      * @param  string $ext
      * @access public
      * @return string
      */
-    public function getDownloadUrl($branch = 'master', $ext = 'zip')
+    public function getDownloadUrl($branch = 'master', $savePath = '', $ext = 'zip')
     {
         $params = (array) $params;
         $params['private_token'] = $this->token;

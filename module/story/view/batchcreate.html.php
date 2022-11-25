@@ -14,6 +14,7 @@
 <?php if($forceReview) $config->story->create->requiredFields .= ',review';?>
 <?php js::set('showFields', $showFields);?>
 <?php js::set('requiredFields', $config->story->create->requiredFields);?>
+<?php js::set('storyType', $type);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $storyID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate;?></h2>
@@ -52,7 +53,9 @@
           <tr>
             <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo $lang->product->branch;?></th>
             <th class='c-module<?php echo zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->story->module;?></th>
+            <?php if(!$hiddenPlan):?>
             <th class='c-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?> planBox'><?php echo $lang->story->plan;?></th>
+            <?php endif;?>
             <?php if(isset($execution) and $execution->type == 'kanban'):?>
             <th class='c-branch'><?php echo $lang->kanbancard->region;?></th>
             <th class='c-branch'><?php echo $lang->kanbancard->lane;?></th>
@@ -82,7 +85,9 @@
           <tr class="template">
             <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select('branch[$id]', $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, \$id)'");?></td>
             <td class='text-left' style='overflow:visible'><?php echo html::select('module[$id]', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+            <?php if(!$hiddenPlan):?>
             <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?> planBox' style='overflow:visible'><?php echo html::select('plan[$id]', $plans, $planID, "class='form-control chosen'");?></td>
+            <?php endif;?>
             <?php if(isset($execution) and $execution->type == 'kanban'):?>
             <td class='text-left'><?php echo html::select('regions[$id]', $regionPairs, $regionID, "class='form-control chosen' onchange='setLane(this.value, \$id)'");?>
             <td class='text-left'><?php echo html::select('lanes[$id]', $lanePairs, $laneID, "class='form-control chosen'");?>
@@ -131,7 +136,8 @@
         <tfoot>
           <tr>
             <td colspan="<?php echo count($visibleFields) + 3?>" class="text-center form-actions">
-              <?php echo html::submitButton($lang->save);?>
+              <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
               <?php echo html::backButton();?>
             </td>
           </tr>

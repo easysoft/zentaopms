@@ -10,6 +10,16 @@ title=测试 testtaskModel->getDataOfTestTaskPerType();
 cid=1
 pid=1
 
+获取测试单0的类型分组 >> 0
+获取测试单1的config类型数量 >> 1
+获取测试单1的feature类型数量 >> 1
+获取测试单1的install类型数量 >> 1
+获取测试单1的performance类型数量 >> 1
+获取测试单2的other类型数量 >> 1
+获取测试单2的security类型数量 >> 1
+获取测试单2的feature类型数量 >> 1
+获取测试单2的interface类型数量 >> 1
+
 */
 
 global $tester;

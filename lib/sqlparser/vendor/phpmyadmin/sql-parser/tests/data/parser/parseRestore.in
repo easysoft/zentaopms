@@ -1,0 +1,1 @@
+RESTORE TABLE my_table FROM "/path/to/backup/directory"

@@ -1,2 +1,5 @@
 .future {display: inline-block;}
 .c-number {overflow: hidden; text-align: right !important; text-overflow: ellipsis; white-space: nowrap;}
+.text-remind {color: #ffa34d;}
+.text-remind p{float: left; margin-right: 5px;}
+#ignore {text-decoration: underline; cursor: pointer; color: #ef7b0f;}

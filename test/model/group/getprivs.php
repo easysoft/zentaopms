@@ -10,11 +10,9 @@ title=测试 groupModel->getPrivs();
 cid=1
 pid=1
 
-测试查询不存在的分组是否具有 action    模块 editComment 的权限 >> 0
 测试查询分组 10     是否具有 action    模块 editComment 的权限 >> editComment
 测试查询分组 10     是否具有 user      模块 bug         的权限 >> bug
 测试查询分组 10     是否具有 trainplan 模块 view        的权限 >> view
-测试查询分组 10     是否具有 trainplan 模块 create      的权限 >>
 测试查询分组 2      是否具有 trainplan 模块 create      的权限 >> create
 测试查询分组 2      是否具有 todo      模块 activate    的权限 >> activate
 

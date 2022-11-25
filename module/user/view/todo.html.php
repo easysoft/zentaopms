@@ -36,35 +36,44 @@
       <thead>
       <tr class='colhead'>
         <th class='c-id'>    <?php common::printOrderLink('id',     $orderBy, $vars, $lang->idAB);?></th>
-        <th class='c-date'>  <?php common::printOrderLink('date',   $orderBy, $vars, $lang->todo->date);?></th>
-        <th class='c-type'>  <?php common::printOrderLink('type',   $orderBy, $vars, $lang->todo->type);?></th>
-        <th class='c-pri' title='<?php echo $lang->pri;?>'>   <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
         <th>                 <?php common::printOrderLink('name',   $orderBy, $vars, $lang->todo->name);?></th>
+        <th class='c-pri'>   <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
+        <th class='c-date'>  <?php common::printOrderLink('date',   $orderBy, $vars, $lang->todo->date);?></th>
+        <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->todo->status);?></th>
+        <th class='c-type'>  <?php common::printOrderLink('type',   $orderBy, $vars, $lang->todo->type);?></th>
         <th class='c-date'>  <?php common::printOrderLink('begin',  $orderBy, $vars, $lang->todo->beginAB);?></th>
         <th class='c-date'>  <?php common::printOrderLink('end',    $orderBy, $vars, $lang->todo->endAB);?></th>
-        <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->todo->status);?></th>
       </tr>
       </thead>
       <tbody>
+      <?php
+      $waitCount  = 0;
+      $doingCount = 0;
+      ?>
       <?php foreach($todos as $todo):?>
       <tr class='text-left'>
+        <?php if($todo->status == 'wait')  $waitCount ++;?>
+        <?php if($todo->status == 'doing') $doingCount ++;?>
         <td><?php echo $todo->id;?></td>
-        <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
-        <td><?php echo $lang->todo->typeList[$todo->type];?></td>
-        <td><span class='<?php echo 'pri' . zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?></span></td>
         <td class='text-left'>
           <?php echo ($todo->private and $this->app->user->account != $todo->account) ? $todo->name : html::a($this->createLink('todo', 'view', "id=$todo->id&from=company", '', true), $todo->name, '', "class='iframe'");?>
         </td>
+        <td><span class='<?php echo 'label-pri label-pri-' . zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?></span></td>
+        <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
+        <td class='status-todo status-<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
+        <td><?php echo $lang->todo->typeList[$todo->type];?></td>
         <td><?php echo $todo->begin;?></td>
         <td><?php echo $todo->end;?></td>
-        <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
       </tr>
       <?php endforeach;?>
       </tbody>
     </table>
 
     <?php if($todos):?>
-    <div class="table-footer"><?php $pager->show('right', 'pagerjs');?></div>
+    <div class="table-footer">
+      <div class="table-statistic"><?php echo sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);?></div>
+      <?php $pager->show('right', 'pagerjs');?>
+    </div>
     <?php endif;?>
 
   </form>

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -53,4 +54,4 @@ r($kanban->addKanbanCellTest($kanbanIDList[1], $laneIDList[3], $columnIDList[3],
 r($kanban->addKanbanCellTest($kanbanIDList[1], $laneIDList[3], $columnIDList[3], $typeList[3], $cardID)) && p('type,cards') && e('task,,3,0,');       // 更新类型为task的kanbancell 有cardID
 r($kanban->addKanbanCellTest($kanbanIDList[1], $laneIDList[3], $columnIDList[0], $typeList[3]))          && p('type,cards') && e('task,');            // 插入类型为task的kanbancell
 r($kanban->addKanbanCellTest($kanbanIDList[1], $laneIDList[3], $columnIDList[0], $typeList[3], $cardID)) && p('type,cards') && e('task,,3,');         // 插入类型为task的kanbancell 有cardID
-system("./ztest init");
+$db->restoreDB();

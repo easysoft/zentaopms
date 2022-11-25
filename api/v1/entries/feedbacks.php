@@ -15,14 +15,14 @@ class feedbacksEntry extends entry
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {
         if(strpos(strtolower($this->param('fields')), 'moduleandproduct') !== false) return $this->getModuleAndProduct();
 
         $control = $this->loadController('feedback', 'admin');
-        $control->admin($this->param('solution', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->admin($this->param('status', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
@@ -50,7 +50,7 @@ class feedbacksEntry extends entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -68,14 +68,14 @@ class feedbacksEntry extends entry
 
         $feedback = $this->loadModel('feedback')->getById($data->id);
 
-        $this->send(201, $this->format($feedback, 'openedBy:user,openedDate:time,reviewedBy:user,reviewedDate:time,processedBy:user,processedDate:time,closedBy:user,closedDate:time,editedBy:user,editedDate:time,assignedTo:user,assignedDate:time,feedbackBy:user,mailto:userList,deleted:bool'));
+        return $this->send(201, $this->format($feedback, 'openedBy:user,openedDate:time,reviewedBy:user,reviewedDate:time,processedBy:user,processedDate:time,closedBy:user,closedDate:time,editedBy:user,editedDate:time,assignedTo:user,assignedDate:time,feedbackBy:user,mailto:userList,deleted:bool'));
     }
 
     /**
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getModuleAndProduct()
     {

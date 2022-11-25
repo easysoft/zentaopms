@@ -23,12 +23,13 @@
 #swapper .tree li>.list-toggle {top: -1px;}
 </style>
 <?php
-$kanbanCounts = array();
-$kanbanNames  = array();
-$tabActive    = '';
-$myKanbans    = 0;
-$others       = 0;
-$dones        = 0;
+$kanbanCounts  = array();
+$kanbanNames   = array();
+$tabActive     = '';
+$myKanbans     = 0;
+$others        = 0;
+$dones         = 0;
+$currentKanban = '';
 
 foreach($kanbanList as $spaceID => $spaceKanbans)
 {
@@ -64,6 +65,7 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
 
     foreach($spaceKanbans as $index => $kanban)
     {
+        if($kanban->id == $kanbanID) $currentKanban = $kanban;
         $selected   = $kanban->id == $kanbanID ? 'selected' : '';
         $link       = helper::createLink('kanban', 'view', "kanbanID=%s", '', '', $kanban->id);
         $kanbanName = '<i class="icon icon-kanban"></i> ' . $kanban->name;
@@ -132,14 +134,19 @@ $closedKanbansHtml .= '</ul>';
    <div class='list-group kanbans'><?php echo $closedKanbansHtml;?></div>
   </div>
 </div>
-<script>scrollToSelected();</script>
 <script>
 $(function()
 {
-    $('.nav-tabs li span').hide();
-    $('.nav-tabs li.active').find('span').show();
+    <?php if($currentKanban->status == 'closed'):?>
+    $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
+    <?php else:?>
+    scrollToSelected();
+    <?php endif;?>
 
-    $('.nav-tabs>li a').click(function()
+    $('#dropMenu .nav-tabs li span').hide();
+    $('#dropMenu .nav-tabs li.active').find('span').show();
+
+    $('#dropMenu .nav-tabs>li a').click(function()
     {
         if($('#swapper input[type="search"]').val() == '')
         {
@@ -154,14 +161,14 @@ $(function()
     {
         if(value != '')
         {
-            $('div.hide-in-search').siblings('i').addClass('hide-in-search');
-            $('.nav-tabs li span').hide();
+            $('#dropMenu div.hide-in-search').siblings('i').addClass('hide-in-search');
+            $('#dropMenu .nav-tabs li span').hide();
         }
         else
         {
-            $('div.hide-in-search').siblings('i').removeClass('hide-in-search');
-            $('li.has-list div.hide-in-search').removeClass('hidden');
-            $('.nav-tabs li.active').find('span').show();
+            $('#dropMenu div.hide-in-search').siblings('i').removeClass('hide-in-search');
+            $('#dropMenu li.has-list div.hide-in-search').removeClass('hidden');
+            $('#dropMenu .nav-tabs li.active').find('span').show();
         }
     })
 })

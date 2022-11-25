@@ -75,6 +75,13 @@ $config->search->fields->story->content    = 'keywords,spec,verify';
 $config->search->fields->story->addedDate  = 'openedDate';
 $config->search->fields->story->editedDate = 'lastEditedDate';
 
+$config->search->fields->requirement = new stdclass();
+$config->search->fields->requirement->id         = 'id';
+$config->search->fields->requirement->title      = 'title';
+$config->search->fields->requirement->content    = 'keywords,spec,verify';
+$config->search->fields->requirement->addedDate  = 'openedDate';
+$config->search->fields->requirement->editedDate = 'lastEditedDate';
+
 $config->search->fields->task = new stdclass();
 $config->search->fields->task->id         = 'id';
 $config->search->fields->task->title      = 'name';

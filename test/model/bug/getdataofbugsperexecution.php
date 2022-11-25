@@ -21,7 +21,6 @@ pid=1
 
 */
 
-
 $bug=new bugTest();
 r($bug->getDataOfBugsPerExecutionTest()) && p('101:name,value,title') && e('迭代1,4,迭代1');   // 获取执行101数据
 r($bug->getDataOfBugsPerExecutionTest()) && p('102:name,value,title') && e('迭代2,4,迭代2');   // 获取执行102数据

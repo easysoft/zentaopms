@@ -17,7 +17,7 @@
   <div class='main-header'>
     <h2><i class='icon-pencil'></i> <?php echo $lang->my->editProfile;?></h2>
   </div>
-  <form method='post' target='hiddenwin' id='dataform'>
+  <form method='post' class='form-ajax' id='dataform'>
     <table class='table table-form'>
       <caption><?php echo $lang->my->form->lblBasic;?></caption>
       <tr>
@@ -46,7 +46,7 @@
       <td>
         <input type='password' style="display:none"> <!-- Disable input password by browser automatically. -->
         <span class='input-group'>
-          <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
+          <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
           <span class='input-group-addon' id='passwordStrength'></span>
         </span>
       </td>
@@ -84,7 +84,7 @@
       </tr>
     </table>
     <?php echo html::select('visions[]', $this->user->getVisionList(), $user->visions, "class='form-control chosen' multiple");?>
-    <div class='text-center form-actions'><?php echo html::submitButton() . html::backButton();?></div>
+    <div class='text-center form-actions'><?php echo html::hidden('passwordLength', 0) . html::submitButton() . html::backButton();?></div>
   </form>
   <?php echo html::hidden('verifyRand', $rand);?>
 </div>

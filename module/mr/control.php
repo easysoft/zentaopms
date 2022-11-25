@@ -34,7 +34,7 @@ class mr extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $repos = $this->loadModel('repo')->getListBySCM(array('Gitlab', 'Gitea'));
+        $repos = $this->loadModel('repo')->getListBySCM(array('Gitlab', 'Gitea', 'Gogs'));
         if(empty($repos)) $this->locate($this->repo->createLink('create'));
 
         $repoID = $this->repo->saveState($repoID, $objectID);
@@ -69,9 +69,13 @@ class mr extends control
             {
                 $openIDList = $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
             }
-            else
+            elseif($repo->SCM == 'Gitea')
             {
                 $openIDList = $this->loadModel('gitea')->getGiteaListByAccount($this->app->user->account);
+            }
+            elseif($repo->SCM == 'Gogs')
+            {
+                $openIDList = $this->loadModel('gogs')->getGogsListByAccount($this->app->user->account);
             }
         }
 
@@ -108,22 +112,26 @@ class mr extends control
         $repoID = $this->loadModel('repo')->saveState(0);
         $repo   = $this->repo->getRepoByID($repoID);
 
+        $this->loadModel('gitlab');
         $this->loadModel('gitea');
+        $this->loadModel('gogs');
         if($repo->SCM == 'Gitea')
         {
             $project = $this->gitea->apiGetSingleProject($repo->gitService, $repo->project);
             if(empty($project) or !$project->allow_merge_commits) $repo = array();
         }
 
-        $hosts  = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
+        $hosts = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab', 'gogs'));
         if(!$this->app->user->admin)
         {
-            $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
+            $gitlabUsers = $this->gitlab->getGitLabListByAccount();
             $giteaUsers  = $this->gitea->getGiteaListByAccount();
+            $gogsUsers   = $this->gogs->getGogsListByAccount();
             foreach($hosts as $hostID => $host)
             {
-                if($host->type == 'gitLab' and isset($gitlabUsers[$hostID])) continue;
-                if($host->type == 'gitea' and isset($giteaUsers[$hostID])) continue;
+                if($host->type == 'gitlab' and isset($gitlabUsers[$hostID])) continue;
+                if($host->type == 'gitea'  and isset($giteaUsers[$hostID]))  continue;
+                if($host->type == 'gogs'   and isset($gogsUsers[$hostID]))   continue;
 
                 unset($hosts[$hostID]);
             }
@@ -186,10 +194,10 @@ class mr extends control
         if(!$this->app->user->admin and $scm == 'gitlab')
         {
             $groupIDList = array(0 => 0);
-            $groups      = $this->scm->apiGetGroups($MR->hostID, 'name_asc', 'developer');
+            $groups      = $this->$scm->apiGetGroups($MR->hostID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
-            $sourceProject = $this->scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);
-            $isDeveloper   = $this->scm->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
+            $sourceProject = $this->$scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+            $isDeveloper   = $this->$scm->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
 
             if(!isset($gitUsers[$this->app->user->account]) or !$isDeveloper) return print(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
         }
@@ -243,6 +251,7 @@ class mr extends control
            if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
         }
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
+        $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
 
         echo js::locate(inlink('browse'), 'parent');
     }
@@ -359,7 +368,7 @@ class mr extends control
             }
         }
 
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiAcceptMR($MR->hostID, $MR->targetProject, $MR->mriid, $MR);
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiAcceptMR($MR);
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
             $this->mr->logMergedAction($MR);
@@ -621,7 +630,7 @@ class mr extends control
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $MR             = $this->mr->getByID($MRID);
-        $relatedStories = $this->mr->getCommitedLink($MR->hostID, $MR->targetProject, $MR->mriid, 'story');
+        $relatedStories = $this->mr->getCommitedLink($MR, 'story');
 
         $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
@@ -630,7 +639,7 @@ class mr extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,active,changed', 'story', 'id_desc', false, array_keys($linkedStories), $pager);
+            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,reviewing,active,changing', 'story', 'id_desc', false, array_keys($linkedStories), $pager);
         }
 
         $this->view->modules        = $modules;
@@ -706,7 +715,7 @@ class mr extends control
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         $MR          = $this->mr->getByID($MRID);
-        $relatedBugs = $this->mr->getCommitedLink($MR->hostID, $MR->targetProject, $MR->mriid, 'bug');
+        $relatedBugs = $this->mr->getCommitedLink($MR, 'bug');
 
         $linkedBugs = $this->mr->getLinkList($MRID, $product->id, 'bug');
         if($browseType == 'bySearch')
@@ -778,7 +787,7 @@ class mr extends control
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
 
         $MR           = $this->mr->getByID($MRID);
-        $relatedTasks = $this->mr->getCommitedLink($MR->hostID, $MR->targetProject, $MR->mriid, 'task');
+        $relatedTasks = $this->mr->getCommitedLink($MR, 'task');
         $linkedTasks  = $this->mr->getLinkList($MRID, $product->id, 'task');
 
         /* Get executions by product. */
@@ -1036,7 +1045,7 @@ class mr extends control
        $targetBranch  = $this->post->targetBranch;
 
        $result = $this->mr->checkSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-       echo json_encode($result);
+       return print(json_encode($result));
    }
 
    /**
@@ -1051,11 +1060,11 @@ class mr extends control
    {
         $host = $this->loadModel('pipeline')->getByID($hostID);
         $scm  = $host->type;
-        if($scm == 'gitea') $project = urldecode(base64_decode($project));
+        if(in_array($scm, array('gitea', 'gogs'))) $project = urldecode(base64_decode($project));
 
-        $branches    = $this->loadModel($scm)->apiGetBranchPrivs($hostID, $project);
         $branchPrivs = array();
+        $branches    = $this->loadModel($scm)->apiGetBranchPrivs($hostID, $project);
         foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
-        echo json_encode($branchPrivs);
+        return print(json_encode($branchPrivs));
    }
 }

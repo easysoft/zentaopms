@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php'; su('admin');
 include dirname(dirname(dirname(__FILE__))) . '/class/product.class.php';
+$db->switchDB();
 
 /**
 
@@ -14,8 +15,8 @@ pid=1
 测试更新产品名称和代号 >> name,john,jack;code,newcode1,newcode2
 测试不更改产品名称 >> 没有数据更新
 测试不更改产品代号 >> 没有数据更新
-测试同一项目集下产品名称不能重复 >> 『产品名称』已经有『jack』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
-测试同一项目集下产品代号不能重复 >> 『产品代号』已经有『newcode2』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
+测试同一项目集下产品名称不能重复 >> 『产品名称』已经有『jack』这条记录了。
+测试同一项目集下产品代号不能重复 >> 『产品代号』已经有『newcode2』这条记录了。
 
 */
 
@@ -34,6 +35,6 @@ r($product->updateObject('product', 2, $t_upid))        && p('0:field,old,new') 
 r($product->updateObject('product', 2, $t_idname))      && p('0:field,old,new;1:field,old,new') && e('name,john,jack;code,newcode1,newcode2'); // 测试更新产品名称和代号
 r($product->updateObject('product', 2, $t_unname))      && p()          && e('没有数据更新');                 // 测试不更改产品名称
 r($product->updateObject('product', 2, $t_unid))        && p()          && e('没有数据更新');                 // 测试不更改产品代号
-r($product->updateObject('product', 13, $t_repeaproduct)) && p('name:0')  && e('『产品名称』已经有『jack』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');     // 测试同一项目集下产品名称不能重复
-r($product->updateObject('product', 13, $t_repeatid))   && p('code:0')  && e('『产品代号』已经有『newcode2』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 测试同一项目集下产品代号不能重复
-system("./ztest init");
+r($product->updateObject('product', 13, $t_repeaproduct)) && p('name:0')  && e('『产品名称』已经有『jack』这条记录了。');     // 测试同一项目集下产品名称不能重复
+r($product->updateObject('product', 13, $t_repeatid))   && p('code:0')  && e('『产品代号』已经有『newcode2』这条记录了。'); // 测试同一项目集下产品代号不能重复
+$db->restoreDB();

@@ -290,37 +290,20 @@ class weeklyTest
     }
 
     /**
-     * Test getPV
+     * Test getPVEV
      *
      * @param  int    $project
      * @param  string $date
      * @access public
      * @return int
      */
-    public function getPVTest($projectID, $date = '')
+    public function getPVEVTest($projectID, $date = '')
     {
-        $objects = $this->objectModel->getPV($projectID, $date);
+        $objects = $this->objectModel->getPVEV($projectID, $date);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    /**
-     * Test get EV data.
-     *
-     * @param  int    $projectID
-     * @param  string $date
-     * @access public
-     * @return int
-     */
-    public function getEVTest($projectID, $date = '')
-    {
-        $objects = $this->objectModel->getEV($projectID, $date);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $objects['PV'] . ',' . $objects['EV'];
     }
 
     /**

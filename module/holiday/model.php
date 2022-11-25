@@ -198,28 +198,27 @@ class holidayModel extends model
     {
         if(empty($begin) or empty($end) or $begin == '0000-00-00' or $end == '0000-00-00') return array();
 
+        $this->app->loadConfig('execution');
         $actualDays = array();
         $currentDay = $begin;
 
         $holidays    = $this->getHolidays($begin, $end);
         $workingDays = $this->getWorkingDays($begin, $end);
-        $weekend     = isset($this->config->project->weekend) ? $this->config->project->weekend : 2;
+        $weekend     = isset($this->config->execution->weekend) ? $this->config->execution->weekend : 2;
+
+        $holidaysFlip    = array_flip($holidays);
+        $workingDaysFlip = array_flip($workingDays);
 
         /* When the start date and end date are the same. */
+        $beginTimestamp = strtotime($begin);
         if($begin == $end)
         {
-            if(in_array($begin, $workingDays)) return $actualDays[] = $begin;
-            if(in_array($begin, $holidays))    return $actualDays;
+            if(isset($workingDaysFlip[$begin])) return $actualDays[] = $begin;
+            if(isset($holidaysFlip[$begin]))    return $actualDays;
 
-            $w = date('w', strtotime($begin));
-            if($weekend == 2)
-            {
-                if($w == 0 or $w == 6) return $actualDays;
-            }
-            else
-            {
-                if($w == 0) return $actualDays;
-            }
+            $w = date('w', $beginTimestamp);
+            if($weekend == 2 and ($w == 0 or $w == 6)) return $actualDays;
+            if($weekend != 2 and $w == 0) return $actualDays;
 
             $actualDays[] = $begin;
             return $actualDays;
@@ -227,24 +226,21 @@ class holidayModel extends model
 
         for($i = 0; $currentDay < $end; $i ++)
         {
-            $currentDay = date('Y-m-d', strtotime("$begin + $i days"));
-            $w          = date('w', strtotime($currentDay));
+            $currentTimestamp = $beginTimestamp + ($i * 24 * 3600);
+            $currentDay = date('Y-m-d', $currentTimestamp);
 
-            if(in_array($currentDay, $workingDays))
+            if(isset($workingDaysFlip[$currentDay]))
             {
                 $actualDays[] = $currentDay;
                 continue;
             }
 
-            if(in_array($currentDay, $holidays)) continue;
-            if($weekend == 2)
-            {
-                if($w == 0 or $w == 6) continue;
-            }
-            else
-            {
-                if($w == 0) continue;
-            }
+            if(isset($holidaysFlip[$currentDay])) continue;
+
+            $w = date('w', $currentTimestamp);
+            if($weekend == 2 and ($w == 0 or $w == 6)) continue;
+            if($weekend != 2 and $w == 0) continue;
+
             $actualDays[] = $currentDay;
         }
 
@@ -266,7 +262,7 @@ class holidayModel extends model
         $days      = ($endTime - $beginTime) / 86400;
 
         $dateList  = array();
-        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', strtotime("+$i days", $beginTime));
+        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', $beginTime + ($i *24 *3600));
 
         return $dateList;
     }

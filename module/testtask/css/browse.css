@@ -1,3 +1,6 @@
 #taskList tbody>tr>td, #taskList thead>tr>th {white-space: nowrap;}
-td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#taskList td {overflow: hidden; text-overflow: unset;}
 .c-name {width: 200px;}
+.c-id {width: 60px;}
+.c-user, .c-status {width: 80px;}
+.status-blocked {left: -5px;}

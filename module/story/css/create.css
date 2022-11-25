@@ -9,7 +9,7 @@
 #product + .picker{min-width: 400px}
 #dataform .priBox, #dataform .estimateBox {width: 120px;}
 #dataform .categoryBox {width: 150px;}
-#dataform .needNotReviewBox {width: 130px;}
+.needNotReviewBox {width: 130px; display: inline-block; padding: 7px;}
 .input-group-addon.assignedTo {min-width: 77px;}
 .input-group .source {display: flex; width: 50%;}
 .input-group .sourceNote {display: flex; width: 50%;}

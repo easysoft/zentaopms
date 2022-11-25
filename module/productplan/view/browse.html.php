@@ -19,8 +19,9 @@
 <?php js::set('projectNotEmpty', $lang->productplan->projectNotEmpty)?>
 <?php js::set('viewType', $viewType);?>
 <?php js::set('product', $product);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('branchStatusList', $branchStatusList);?>
+<?php js::set('defaultMinColWidth', $this->config->minColWidth);?>
+<?php js::set('defaultMaxColWidth', $this->config->maxColWidth);?>
 <?php
 if($viewType == 'kanban')
 {

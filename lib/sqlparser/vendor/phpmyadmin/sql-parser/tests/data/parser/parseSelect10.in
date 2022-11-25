@@ -1,0 +1,1 @@
+SELECT my_column FROM my_table WHERE BINARY(my_column) != BINARY(UPPER(my_column))

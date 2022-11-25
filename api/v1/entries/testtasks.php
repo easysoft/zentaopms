@@ -16,7 +16,7 @@ class testtasksEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($projectID = 0)
     {
@@ -46,7 +46,7 @@ class testtasksEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     private function getProjectTesttasks($projectID)
     {
@@ -65,5 +65,44 @@ class testtasksEntry extends entry
         }
 
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'testtasks' => $result));
+    }
+
+    /**
+     * POST method.
+     *
+     * @access public
+     * @param  int    $projectID
+     * @return string
+     */
+    public function post($projectID = 0)
+    {
+        if(!$projectID) $projectID = $this->param('project', 0);
+        $productID   = $this->request('product', 0);
+        $executionID = $this->request('execution', 0);
+        $buildID     = $this->request('build', 0);
+        if(empty($projectID))   return $this->sendError(400, 'need project id!');
+        if(empty($productID))   return $this->sendError(400, 'need product id!');
+        if(empty($executionID)) return $this->sendError(400, 'need execution id!');
+        if(empty($buildID))     return $this->sendError(400, 'need build id!');
+
+        /* Check whether executionID and buildID is valid. */
+        $executions = $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
+        $builds     = $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
+        if(!isset($executions[$executionID])) return $this->sendError(400, 'error execution id!');
+        if(!isset($builds[$buildID]))         return $this->sendError(400, 'error build id!');
+
+        $fields = 'product,execution,build,name,begin,end,owner,type,pri,status,desc';
+        $this->batchSetPost($fields);
+
+        $control = $this->loadController('testtask', 'create');
+        $this->requireFields('name,begin,end');
+        $control->create($productID, $executionID, $build, $projectID);
+
+        $data = $this->getData();
+        if(!isset($data->id)) return $this->sendError(400, $data->message);
+
+        $testtask = $this->loadModel('testtask')->getByID($data->id);
+
+        return $this->send(201, $testtask);
     }
 }

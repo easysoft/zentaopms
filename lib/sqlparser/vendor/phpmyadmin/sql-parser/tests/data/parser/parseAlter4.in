@@ -1,0 +1,1 @@
+ALTER TABLE my_table COMMENT='Comment of table';

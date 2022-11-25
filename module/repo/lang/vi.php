@@ -3,6 +3,7 @@ $lang->repo->common          = 'Repo';
 $lang->repo->browse          = 'Xem';
 $lang->repo->viewRevision    = 'Xem Revision';
 $lang->repo->product         = 'Product';
+$lang->repo->projects        = 'Project';
 $lang->repo->execution       = $lang->execution->common;
 $lang->repo->create          = 'Tạo';
 $lang->repo->maintain        = 'Repo danh sách';
@@ -142,6 +143,7 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['Gogs']       = 'Gogs';
 $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';

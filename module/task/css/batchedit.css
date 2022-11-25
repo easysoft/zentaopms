@@ -1,5 +1,4 @@
 .c-id {width: 50px;}
-.c-name {width: 150px;}
 .c-pri, .c-record, .c-left {width: 70px;}
 .c-reason {width: 100px;}
-.c-module, .c-assigned {width: 150px;}
+.c-module, .c-assigned, .c-name {width: 150px;}

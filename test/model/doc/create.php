@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/doc.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -52,4 +53,4 @@ r($doc->createTest($customDoc))          && p('0:acl,groups')      && e('custom,
 r($doc->createTest($noLib))              && p('lib')               && e('『所属文档库』不能为空。');//不输入文档库
 r($doc->createTest($noTitle))            && p('title:0')           && e('『文档标题』不能为空。');  //不输入标题
 
-system("./ztest init");
+$db->restoreDB();

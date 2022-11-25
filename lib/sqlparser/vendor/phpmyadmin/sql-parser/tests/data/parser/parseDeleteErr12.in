@@ -1,0 +1,1 @@
+DELETE QUICK FROM table1, table2 USING t1 as t,t2 as tt as ttt WHEE a =1;

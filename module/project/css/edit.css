@@ -2,5 +2,8 @@
 #budgetUnit {border-left: 0px;}
 #plansBox .row {display: inline-table; width: 102%;}
 #plansBox .col-sm-4 {float: none; display: inline-block;}
-#dateRange {vertical-align: top; padding-top: 13px;}
+#dateRange, .futureBox {vertical-align: top !important;  padding-top: 13px !important;}
 #endList {vertical-align: top; padding-top: 13px;}
+#linkPlan {padding-top: 25px !important;}
+#productsBox .row .col-sm-4.required::after {right: -5px;}
+#projectType {padding-top: 7px !important;}

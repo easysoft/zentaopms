@@ -10,6 +10,8 @@ title=测试 searchModel->decode();
 cid=1
 pid=1
 
+测试将搜索字转化为正确的汉字 >> 产
+
 */
 
 $search = new searchTest();

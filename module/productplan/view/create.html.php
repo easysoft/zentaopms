@@ -30,7 +30,7 @@
             <td class='muted'><?php echo $parentPlan->title;?>
             </td><td></td><td></td>
           </tr>
-          <?php else:?>
+          <?php elseif(!$product->shadow):?>
           <tr>
             <th><?php echo $lang->productplan->product;?></th>
             <td class='muted'><?php echo $product->name;?></td><td></td><td></td>

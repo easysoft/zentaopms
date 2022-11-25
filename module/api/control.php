@@ -35,6 +35,10 @@ class api extends control
      */
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
+        /* Get all api doc libraries. */
+        $libs = $this->doc->getApiLibs($appendLib);
+        if($libID == 0 and !empty($libs)) $libID = key($libs);
+
         /* Get an api doc. */
         if($apiID > 0)
         {
@@ -60,11 +64,6 @@ class api extends control
             $this->view->apiList  = $apiList;
             $this->view->typeList = $this->api->getTypeList($libID);
         }
-
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($appendLib);
-        if($libID == 0 and $apiID > 0) $libID = $api->lib;
-        if($libID == 0 and !empty($libs)) $libID = key($libs);
 
         $lib       = $this->doc->getLibById($libID);
         $appendLib = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
@@ -675,7 +674,7 @@ class api extends control
         $output  = <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
-    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libName} <span class='caret'></span>
+    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'><div class='nobr'>{$libName}</div> <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
       <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -706,7 +705,7 @@ EOT;
             $output     .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
-    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$versionName} <span class='caret'></span>
+    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'><div class='nobr'>{$versionName}</div> <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
       <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -788,7 +787,9 @@ EOT;
      */
     public function debug($filePath, $action)
     {
-        $filePath = helper::safe64Decode($filePath);
+        $filePath    = helper::safe64Decode($filePath);
+        $fileDirPath = realpath(dirname($filePath));
+        if(strpos($fileDirPath, $this->app->getModuleRoot()) !== 0 and strpos($fileDirPath, $this->app->getExtensionRoot()) !== 0) return;
         if($action == 'extendModel')
         {
             $method = $this->api->getMethod($filePath, 'Model');

@@ -10,6 +10,8 @@ title=测试 pipelineModel->getByID();
 cid=1
 pid=1
 
+获取id为1的name字段值 >> gitlab服务器
+
 */
 
 $IDList = array('1','0');

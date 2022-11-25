@@ -1,7 +1,8 @@
 <?php
-$lang->compile->common = 'Build';
-$lang->compile->browse = 'Historique Builds';
-$lang->compile->logs   = 'Logs des Builds';
+$lang->compile->common      = 'Build';
+$lang->compile->browse      = 'Historique Builds';
+$lang->compile->logs        = 'Logs des Builds';
+$lang->compile->syncCompile = 'Interface: Sync Compiles.';
 
 $lang->compile->id          = 'ID';
 $lang->compile->name        = 'Nom';

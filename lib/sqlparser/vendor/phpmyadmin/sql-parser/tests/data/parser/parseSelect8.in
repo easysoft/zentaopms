@@ -1,0 +1,1 @@
+select * FROM (select Pop FROM MyTable) p join tadaa t where p.x=t.y

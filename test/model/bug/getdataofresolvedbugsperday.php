@@ -20,9 +20,7 @@ pid=1
 获取解决的bug8 >> 14
 获取解决的bug9 >> 14
 
-
 */
-
 
 $bug=new bugTest();
 r($bug->getDataOfResolvedBugsPerDayTest()) && p('0:value') && e('14'); // 获取解决的bug0

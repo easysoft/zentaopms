@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -47,4 +48,4 @@ r($kanban->updateSpaceTest($spaceIDList[3], $typeList[0], $param4)) && p()      
 r($kanban->updateSpaceTest($spaceIDList[4], $typeList[1], $param5)) && p('name:0')                          && e('『空间名称』不能为空。');                                                 // 测试修改空间5 不填写名称
 r($kanban->updateSpaceTest($spaceIDList[4], $typeList[1], $param6)) && p('name:0')                          && e('『空间名称』不能为空。');                                                 // 测试修改空间5 名称为空格
 r($kanban->updateSpaceTest($spaceIDList[4], $typeList[1], $param7)) && p('owner:0')                         && e('『负责人』不能为空。');                                                   // 测试修改空间5 不填写负责人
-system("./ztest init");
+$db->restoreDB();

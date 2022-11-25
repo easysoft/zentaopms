@@ -3,3 +3,5 @@
 .w-enVerifyPassword {width: 150px !important;}
 .c-id {width: 70px;}
 .c-hours {width: 110px;}
+
+#mainContent table > tbody > tr > td > div.text-danger.help-text {word-break: break-all;}

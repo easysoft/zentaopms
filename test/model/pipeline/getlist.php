@@ -10,6 +10,10 @@ title=测试 pipelineModel->getList();
 cid=1
 pid=1
 
+获取第一页第一条数据的name >> gitlab服务器
+统计所有type为gitlab的数量 >> 1
+统计所有type为sonarqube的数据量 >> 1
+
 */
 
 global $tester;

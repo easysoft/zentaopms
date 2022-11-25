@@ -149,7 +149,7 @@ $lang->personnel->methodOrder[15] = 'whitelist';
 $lang->personnel->methodOrder[20] = 'addWhitelist';
 $lang->personnel->methodOrder[25] = 'unbindWhitelist';
 
-if($config->systemMode == 'new')
+if($config->systemMode == 'ALM')
 {
     $lang->resource->my->project = 'project';
 
@@ -158,7 +158,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->index               = 'index';
     $lang->resource->project->browse              = 'browse';
     $lang->resource->project->kanban              = 'kanban';
-//    $lang->resource->project->programTitle        = 'moduleOpen';
+  //$lang->resource->project->programTitle        = 'moduleOpen';
     $lang->resource->project->create              = 'create';
     $lang->resource->project->edit                = 'edit';
     $lang->resource->project->batchEdit           = 'batchEdit';
@@ -261,6 +261,7 @@ $lang->resource->story->delete             = 'deleteAction';
 $lang->resource->story->view               = 'view';
 $lang->resource->story->change             = 'changeAction';
 $lang->resource->story->review             = 'reviewAction';
+$lang->resource->story->submitReview       = 'submitReview';
 $lang->resource->story->batchReview        = 'batchReview';
 $lang->resource->story->recall             = 'recall';
 $lang->resource->story->assignTo           = 'assignAction';
@@ -289,6 +290,7 @@ $lang->story->methodOrder[25]  = 'delete';
 $lang->story->methodOrder[30]  = 'view';
 $lang->story->methodOrder[35]  = 'change';
 $lang->story->methodOrder[40]  = 'review';
+$lang->story->methodOrder[44]  = 'submitReview';
 $lang->story->methodOrder[45]  = 'batchReview';
 $lang->story->methodOrder[50]  = 'recall';
 $lang->story->methodOrder[55]  = 'close';
@@ -454,8 +456,8 @@ $lang->resource->execution->updateOrder       = 'updateOrder';
 $lang->resource->execution->taskKanban        = 'taskKanban';
 //$lang->resource->execution->printKanban       = 'printKanbanAction';
 $lang->resource->execution->tree              = 'treeAction';
-$lang->resource->execution->treeTask          = 'treeOnlyTask';
-$lang->resource->execution->treeStory         = 'treeOnlyStory';
+$lang->resource->execution->treeTask          = 'treeViewTask';
+$lang->resource->execution->treeStory         = 'treeViewStory';
 $lang->resource->execution->all               = 'allExecutionAB';
 $lang->resource->execution->export            = 'exportAction';
 $lang->resource->execution->storyKanban       = 'storyKanban';
@@ -551,7 +553,7 @@ $lang->resource->task->recordEstimate     = 'recordEstimateAction';
 $lang->resource->task->editEstimate       = 'editEstimate';
 $lang->resource->task->deleteEstimate     = 'deleteEstimate';
 $lang->resource->task->report             = 'reportChart';
-if($config->edition != 'open') $lang->resource->task->exportTemplet = 'exportTemplet';
+if($config->edition != 'open') $lang->resource->task->exportTemplate = 'exportTemplate';
 if($config->edition != 'open') $lang->resource->task->import        = 'import';
 
 $lang->task->methodOrder[5]   = 'create';
@@ -577,7 +579,7 @@ $lang->task->methodOrder[100] = 'editEstimate';
 $lang->task->methodOrder[105] = 'deleteEstimate';
 $lang->task->methodOrder[110] = 'report';
 $lang->task->methodOrder[115] = 'batchChangeModule';
-$lang->task->methodOrder[120] = 'exportTemplet';
+$lang->task->methodOrder[120] = 'exportTemplate';
 $lang->task->methodOrder[125] = 'import';
 
 /* Doc. */
@@ -974,6 +976,7 @@ if($config->edition == 'biz' or $config->edition == 'max')
     $lang->resource->feedback->delete     = 'delete';
     $lang->resource->feedback->close      = 'closeAction';
     $lang->resource->feedback->export     = 'exportAction';
+    $lang->resource->feedback->assignTo   = 'assignAction';
 
     if($config->visions == ',lite,') unset($lang->resource->feedback);
 

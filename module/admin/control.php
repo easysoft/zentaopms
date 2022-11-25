@@ -234,6 +234,36 @@ class admin extends control
     }
 
     /**
+     * Set closed features config.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setModule()
+    {
+        if($_POST)
+        {
+            $closedFeatures = '';
+            if(isset($_POST['module']))
+            {
+                foreach($this->post->module as $module => $options)
+                {
+                    $checked = reset($options);
+                    if(!$checked) $closedFeatures .= "$module,";
+                }
+            }
+            $closedFeatures = rtrim($closedFeatures, ',');
+            $this->loadModel('setting')->setItem('system.common.closedFeatures', $closedFeatures);
+            $this->loadModel('custom')->processMeasrecordCron();
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
+        }
+        $this->view->title            = $this->lang->admin->setModuleIndex;
+        $this->view->closedFeatures   = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=closedFeatures');
+        $this->view->disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
+        $this->display();
+    }
+
+    /**
      * Certify ztEmail.
      *
      * @param  string $email
@@ -372,5 +402,95 @@ class admin extends control
 
         $this->view->title = $this->lang->admin->resetPWDSetting;
         $this->display();
+    }
+
+    /**
+     * Show table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function tableEngine()
+    {
+        $this->view->title = $this->lang->admin->tableEngine;
+        $this->view->tableEngines = $this->loadModel('misc')->getTableEngines();
+        $this->display();
+    }
+
+    /**
+     * Ajax change table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxChangeTableEngine()
+    {
+        $response = array();
+        $response['result']    = 'success';
+        $response['message']   = '';
+        $response['thisTable'] = '';
+        $response['nextTable'] = '';
+
+        $tableEngines = $this->loadModel('misc')->getTableEngines();
+
+        $thisTable = '';
+        $nextTable = '';
+        foreach($tableEngines as $table => $engine)
+        {
+            if($engine == 'InnoDB') continue;
+            if(strpos(",{$this->session->errorTables},", ",{$table},") !== false) continue;
+
+            if(stripos($table, 'searchindex') !== false)
+            {
+                $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+                if($mysqlVersion < 5.6) continue;
+            }
+
+            if($thisTable and empty($nextTable)) $nextTable = $table;
+            if(empty($thisTable)) $thisTable = $table;
+            if($thisTable and $nextTable) break;
+        }
+
+        if(empty($thisTable))
+        {
+            unset($_SESSION['errorTables']);
+            $response['result'] = 'finished';
+            return print(json_encode($response));
+        }
+
+        try
+        {
+            /* Check process this table or not. */
+            $dbProcesses = $this->dbh->query("SHOW PROCESSLIST")->fetchAll();
+            foreach($dbProcesses as $dbProcess)
+            {
+                if($dbProcess->db != $this->config->db->name) continue;
+                if(!empty($dbProcess->Info) and strpos($dbProcess->Info, " {$thisTable} ") !== false)
+                {
+                    $response['message'] = sprintf($this->lang->upgrade->changingTable, $thisTable);
+                    return print(json_encode($response));
+                }
+            }
+        }
+        catch(PDOException $e){}
+
+        $response['thisTable'] = $thisTable;
+        $response['nextTable'] = $nextTable;
+
+        try
+        {
+            $sql = "ALTER TABLE `$thisTable` ENGINE='InnoDB'";
+            $this->dbh->exec($sql);
+            $response['message'] = sprintf($this->lang->admin->changeSuccess, $thisTable);
+        }
+        catch(PDOException $e)
+        {
+            $this->session->set('errorTables', $this->session->errorTables . ',' . $thisTable);
+
+            $response['result']  = 'fail';
+            $response['message'] = sprintf($this->lang->admin->changeFail, $thisTable, htmlspecialchars($e->getMessage()));
+        }
+
+        return print(json_encode($response));
     }
 }

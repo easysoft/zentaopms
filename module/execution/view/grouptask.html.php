@@ -33,7 +33,7 @@
     <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy&filter=$filterKey"), $name, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php else:?>
-    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy"), "<span class='text'>{$lang->execution->allTasks}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy"), "<span class='text'>{$lang->execution->featureBar['task']['all']}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
     <?php endif;?>
   </div>
   <div class="btn-toolbar pull-right">
@@ -122,7 +122,7 @@
         <th class="c-hours"><?php echo $lang->task->leftAB;?></th>
         <th class="c-progress" title='<?php echo $lang->task->progress;?>'><?php echo $lang->task->progressAB;?></th>
         <th class="c-type"><?php echo $lang->typeAB;?></th>
-        <th class="c-date"><?php echo $lang->task->deadlineAB;?></th>
+        <th class="c-date text-center"><?php echo $lang->task->deadlineAB;?></th>
         <th class="c-actions-3"><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -207,7 +207,7 @@
         <td class="c-hours em" title="<?php echo $task->left     . ' ' . $lang->execution->workHour;?>"><?php echo $task->left     . $lang->execution->workHourUnit;?></td>
         <td class="c-num em"><?php echo $task->progress . '%';?></td>
         <td class="c-type"><?php echo zget($lang->task->typeList, $task->type);?></td>
-        <td class='c-date <?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
+        <td class='c-date text-center <?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';?></td>
         <td class="c-actions">
           <?php if(common::canModify('execution', $execution)):?>
           <?php common::printIcon('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'list', '', '', 'iframe', true);?>
@@ -226,6 +226,7 @@
         <td colspan='13'>
           <div class="table-row segments-list">
           <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->execution->memberHours, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
+          <?php if($groupBy == 'assignedTo' and $task->assignedTo and !isset($members[$task->assignedTo])) printf($lang->execution->memberHours, zget($users, $task->assignedTo), '0.0');?>
           <?php if($groupBy == 'assignedTo' and empty($task->assignedTo)):?>
             <div class="table-col">
               <div class="clearfix segments">

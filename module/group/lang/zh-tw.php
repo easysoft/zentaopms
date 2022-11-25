@@ -38,10 +38,7 @@ $lang->group->noneProduct        = "暫時沒有{$lang->productCommon}";
 $lang->group->noneExecution      = "暫時沒有{$lang->execution->common}";
 $lang->group->project            = '項目';
 $lang->group->group              = '分組';
-
-global $config;
-if($config->systemMode == 'new') $lang->group->noneProject = '暫時沒有項目';
-if($config->systemMode == 'classic') $lang->group->noneProject = "暫時沒有{$lang->executionCommon}";
+$lang->group->noneProject        = '暫時沒有項目';
 
 $lang->group->id       = '編號';
 $lang->group->name     = '分組名稱';

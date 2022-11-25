@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  **/
-class taskActiveEntry extends Entry
+class taskActiveEntry extends entry
 {
     /** 
      * POST method.
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($taskID)
     {   
@@ -32,7 +32,7 @@ class taskActiveEntry extends Entry
 
         $task = $this->loadModel('task')->getByID($taskID);
 
-        $this->send(200, $this->format($task, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($task, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }   
 }
 

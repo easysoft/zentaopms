@@ -10,6 +10,8 @@ title=测试 mailModel->setCC();
 cid=1
 pid=1
 
+测试设置内容 >> test body
+
 */
 
 $mail = new mailTest();

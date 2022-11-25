@@ -41,7 +41,7 @@
         </td>
         <td class="c-pri"><span class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span></td>
         <td class="c-name" title='<?php echo $todo->name;?>'><?php echo html::a($viewLink, $todo->name);?></td>
-        <td class='c-status'><?php echo zget($lang->todo->statusList, $todo->status);?></td>
+        <td class='c-status status-<?php echo $todo->status;?>'><?php echo zget($lang->todo->statusList, $todo->status);?></td>
       </tr>
       <?php endforeach;?>
     </tbody>

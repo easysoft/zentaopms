@@ -24,18 +24,18 @@
     </div>
     <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
-        <tr>
+        <tr class="<?php if(isset($project) and !$project->multiple) echo 'hide';?>">
           <th class='w-100px'><?php echo $lang->testtask->execution;?></th>
           <td class='w-p35-f'>
-          <?php
-          echo html::select('execution', $executions, $task->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");
-          echo html::hidden('product', $task->product);
-          ?>
+            <?php
+            echo html::select('execution', $executions, $task->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");
+            echo html::hidden('product', $task->product);
+            ?>
           </td>
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->testtask->build;?></th>
+          <th class='w-100px'><?php echo $lang->testtask->build;?></th>
           <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>
           <td></td>
         </tr>
@@ -77,7 +77,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows=10 class='form-control'");?></td>
+          <td colspan='2'>
+            <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=testtask&link=desc');?>
+            <?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows=10 class='form-control'");?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->comment;?></th>
@@ -85,7 +88,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->files;?></th>
-          <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+          <td colspan='3'>
+            <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'false', 'object' => $task, 'method' => 'edit'));?>
+            <?php echo $this->fetch('file', 'buildform');?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->mailto;?></th>

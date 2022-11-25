@@ -1,12 +1,5 @@
 $(function()
 {
-    $('input[name^="showClosed"]').click(function()
-    {
-        var showClosed = $(this).is(':checked') ? 1 : 0;
-        $.cookie('showClosed', showClosed, {expires:config.cookieLife, path:config.webRoot});
-        window.location.reload();
-    });
-
     $('input#editProject1').click(function()
     {
         var editProject = $(this).is(':checked') ? 1 : 0;
@@ -113,6 +106,9 @@ function showEditCheckbox(show)
     }
     else
     {
+        $('#programForm').removeClass('has-row-checked');
+        $('#projectsSummary').addClass('hidden');
+        $('#programSummary').removeClass('hidden');
         $('#programForm').find('.editCheckbox').remove();
         if($('#programForm .pager').length == 0) $('.table-footer').hide();
         $('#programForm').removeAttr('action');

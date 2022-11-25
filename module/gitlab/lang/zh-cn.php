@@ -1,5 +1,4 @@
 <?php
-$lang->gitlab = new stdclass;
 $lang->gitlab->common            = 'GitLab';
 $lang->gitlab->browse            = '浏览GitLab';
 $lang->gitlab->search            = '搜索';
@@ -207,8 +206,8 @@ $lang->gitlab->branch->create                      = '创建';
 $lang->gitlab->branch->lastCommitter               = '最后提交';
 $lang->gitlab->branch->lastCommittedDate           = '最后修改时间';
 $lang->gitlab->branch->accessLevel                 = "分支保护列表";
-$lang->gitlab->branch->mergeAllowed                = "允许合并到";
-$lang->gitlab->branch->pushAllowed                 = "允许推送到";
+$lang->gitlab->branch->mergeAllowed                = "允许合并";
+$lang->gitlab->branch->pushAllowed                 = "允许推送";
 $lang->gitlab->branch->placeholderSearch           = "请输入分支名称";
 $lang->gitlab->branch->placeholderSelect           = "请选择分支";
 $lang->gitlab->branch->confirmDelete               = '确定删除分支保护？';

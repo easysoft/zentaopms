@@ -1,0 +1,1 @@
+LOAD DATA CONCURRENT INFILE 'employee1.txt' INTO TABLE employee;

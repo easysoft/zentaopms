@@ -16,7 +16,7 @@ class releasesEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($productID = 0)
     {
@@ -24,7 +24,7 @@ class releasesEntry extends entry
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
         $control = $this->loadController('release', 'browse');
-        $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'));
+        $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         /* Response */
         $data = $this->getData();

@@ -13,6 +13,5 @@ pid=1
 
 */
 
-
 $bug=new bugTest();
 r($bug->getDataOfOpenedBugsPerDayTest()) && p('0:value') && e('23');   // 获取创建的数据

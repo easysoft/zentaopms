@@ -1,4 +1,13 @@
-sonarqube:
+stages:
+  - sonarqube
+  - unit-test
+  - ui-test
+  - package
+  - cleanup-packages
+  - notify
+ 
+program-static-analysis:
+  stage: sonarqube
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
@@ -11,19 +20,46 @@ sonarqube:
   allow_failure: true
   only:
     - master # or the name of your main branch
-packages:
+
+unit-test:
+  stage: unit-test
+  script:
+  - "/home/gitlab-runner/bin/zentao-unittest.sh ${CI_PROJECT_DIR}"
+  allow_failure: true
+  only:
+  - master
+  - merge_requests
+
+ui-test:
+  stage: ui-test
+  script:
+  - "/home/gitlab-runner/bin/zentao-uitest.sh ${CI_PROJECT_DIR}"
+  allow_failure: true
+  only:
+  - master
+  - merge_requests
+
+package:
+  stage: package
   script:
     - make cizip
   allow_failure: true
   only:
     - master
-#notify:
-#  script:
-#    - 'curl --location --request POST ''http://api.lf.oop.cc/api/v1/xuan/chatMessage'' --header ''Content-Type: application/json'' --data-raw ''{"gid": "84be4c6e-02e3-4fdc-b081-318c0c1eca02", "title": "开源包下载地址", "content": "点击查看详情链接", "url": "http://10.0.7.242:8080/allpacks/"}'''
-#  when: on_success
-#  only:
-#   - master
-cleanup_packages:
+
+cleanup-packages:
+  stage: cleanup-packages
   script:
     - make clean
   when: on_failure
+  only:
+  - master
+
+notify:
+  stage: notify
+  script:
+  - "/home/gitlab-runner/bin/ci-notify.php"
+  when: on_success
+  only:
+  - master
+  - merge_requests

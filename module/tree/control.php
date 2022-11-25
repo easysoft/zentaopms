@@ -45,6 +45,13 @@ class tree extends control
             $products = $this->product->getProducts($this->session->project, 'all', '', false);
             if($viewType == 'case') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'case', $branch);
         }
+        else if($this->app->tab == 'feedback')
+        {
+            $branch   = 'all';
+            $products = $this->loadModel('feedback')->getGrantProducts();
+            if(!$rootID) $rootID = key($products);
+            $this->loadModel('feedback')->setMenu($rootID, $viewType, $viewType);
+        }
 
         /* According to the type, set the module root and modules. */
         if(strpos('story|bug|case', $viewType) !== false)
@@ -102,7 +109,7 @@ class tree extends control
         if($viewType == 'story')
         {
             /* Set menu.*/
-            $products = $this->product->getPairs();
+            $products = $this->product->getPairs($mode = '', $programID = 0, $append = '', 'all');
             $this->product->saveState($rootID, $products);
 
             unset($products[$rootID]);
@@ -127,15 +134,18 @@ class tree extends control
             $position[] = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageBug;
         }
-        elseif($viewType == 'feedback')
+        elseif($viewType == 'feedback' or $viewType == 'ticket')
         {
             $this->app->loadLang('feedback');
             $this->lang->tree->menu = $this->lang->feedback->menu;
+            $productItem = $this->product->getById($rootID);
             $root                   = new stdclass();
-            $root->name             = $this->lang->feedback->common;
+            $root->name             = !empty($rootID) ? $productItem->name : $this->lang->feedback->common;
             $this->view->root       = $root;
+            $syncConfig             = json_decode($this->config->global->syncProduct, true);
+            $this->view->syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
 
-            $title      = $this->lang->tree->manageFeedback;
+            $title      = $this->lang->tree->{$viewType == 'feedback' ? 'manageFeedback' : 'manageTicket'};
             $position[] = html::a($this->createLink('feedback', 'admin'), $this->lang->tree->manageFeedback);
         }
         elseif($viewType == 'case')
@@ -207,6 +217,17 @@ class tree extends control
             $title      = $this->lang->tree->manageLine;
             $position[] = $this->lang->tree->manageLine;
         }
+        elseif($viewType == 'dashboard')
+        {
+            $root       = new stdclass();
+            $root->name = $this->lang->dashboard->common;
+
+            $this->view->root       = $root;
+            $this->lang->tree->menu = $this->lang->report->menu;
+
+            $title      = $this->lang->tree->manageDashboard;
+            $position[] = $this->lang->tree->manageDashboard;
+        }
         elseif($viewType == 'trainskill')
         {
             $this->lang->tree->menu = $this->lang->trainskill->menu;
@@ -271,6 +292,12 @@ class tree extends control
                 $root->name = $title;
                 $this->view->root = $root;
             }
+        }
+
+        if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
+        {
+            $project = $this->loadModel('project')->getByID($this->session->project);
+            if(empty($project->hasProduct)) $this->view->root->name = $project->name;
         }
 
         $parentModules               = $this->tree->getParents($currentModuleID);
@@ -365,26 +392,35 @@ class tree extends control
         {
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch);
         }
-        if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject');
+
+        if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject', '', 0, 'book');
 
         $this->view->module = $module;
         $this->view->type   = $type;
         $this->view->branch = $branch;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 
-        $showProduct             = strpos('story|bug|case', $type) !== false ? true : false;
-        $this->view->showProduct = $showProduct;
+        $showProduct = strpos('story|bug|case', $type) !== false ? true : false;
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
             if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'withClosed');
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
+            if($product->shadow) $showProduct = false;
         }
+        $this->view->showProduct = $showProduct;
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $childs = $this->tree->getAllChildId($moduleID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
+
+        $this->view->hiddenProduct = false;
+        if($this->app->tab == 'project')
+        {
+            $project = $this->loadModel('project')->getByID($this->session->project);
+            $this->view->hiddenProduct = empty($project->hasProduct);
+        }
 
         $this->display();
     }
@@ -464,7 +500,6 @@ class tree extends control
             if($module->type == 'doc') $confirmLang = $this->lang->tree->confirmDeleteMenu;
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
             if($module->type == 'host') $confirmLang = $this->lang->tree->confirmDeleteHost;
-            if($module->type == 'feedback') $confirmLang = $this->lang->tree->confirmDelCategory;
             die(js::confirm($confirmLang, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
         }
         else

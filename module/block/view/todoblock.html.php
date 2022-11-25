@@ -37,12 +37,18 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todo-flexbetween {display: flex; justify-content: space-between;}
 .block-todoes #todoList {display: flex; overflow: hidden;}
 .block-todoes .label-todo {width: 50px; min-width: 50px!important; border: none; color: #43A047;}
+.block-todoes .todo-title.text-ellipsis {text-overflow: unset;}
 [lang^='en'] .block-todoes .todo-pri {width: 60px; min-width: 60px;}
+.block-todoes .todoes-input .todo-form-trigger > .btn-info {width: 98%; opacity: 0.8; margin-left: 10px;}
+.block-todoes .todoes > li:hover {width: 98%; margin-left: 10px; padding-left: 25px;}
+.block-todoes .todoes > li:hover > span {left: 0;}
 </style>
 <div class='block-todoes'>
   <div class='panel-body'>
     <div class="todoes-input">
-      <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" autocomplete="off" class="form-control"></div>
+      <div class="todo-form-trigger">
+        <button class='btn btn-info'><i class='icon icon-plus'></i> <?php echo $lang->todo->create;?></button>
+      </div>
       <form class="form-horizontal todoes-form layer not-watch" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&userID=&from=block');?>'>
         <h3><?php echo $lang->todo->create;?></h3>
         <?php $leftWidth  = common::checkNotCN() ? 'col-sm-3' : 'col-sm-2';?>
@@ -93,29 +99,31 @@ if(!$selfCall) die(include('./todolist.html.php'));
         </div>
       </form>
     </div>
-    <ul class="todoes">
-      <?php foreach($todos as $id => $todo):?>
-      <?php
-      $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-      $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}&from=my", 'html', true);
-      ?>
-      <li data-id='<?php echo $todo->id?>' class='titleBox'>
-        <span class="todo-check icon icon-check-circle"></span>
-        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe todo-flexbetween' data-width='1000px' data-toggle='modal' <?php echo $appid?>>
-          <div id='todoList'>
-            <?php if ($todo->date == '2030-01-01') :?>
-            <div class="todo-time"><?php echo $lang->todo->periods['future'] ?></div>
-            <?php else:?>
-            <div class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></div>
-            <?php endif;?>
-            <div class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo zget($lang->todo->priList, $todo->pri);?></div>
-            <div class="todo-title text-ellipsis" title='<?php echo $todo->name;?>'><?php echo $todo->name;?></div>
-          </div>
-          <span class="label label-id label-todo hidden"><?php echo $lang->block->done;?></span>
-        </a>
-      </li>
-      <?php endforeach;?>
-    </ul>
+    <div class='table-row'>
+      <ul class="todoes">
+        <?php foreach($todos as $id => $todo):?>
+        <?php
+        $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+        $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}&from=my", 'html', true);
+        ?>
+        <li data-id='<?php echo $todo->id?>' class='titleBox'>
+          <span class="todo-check icon icon-check-circle"></span>
+          <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe todo-flexbetween' data-width='1000px' data-toggle='modal' <?php echo $appid?>>
+            <div id='todoList'>
+              <?php if ($todo->date == '2030-01-01') :?>
+              <div class="todo-time"><?php echo $lang->todo->periods['future'] ?></div>
+              <?php else:?>
+              <div class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></div>
+              <?php endif;?>
+              <div class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo zget($lang->todo->priList, $todo->pri);?></div>
+              <div class="todo-title text-ellipsis" title='<?php echo $todo->name;?>'><?php echo $todo->name;?></div>
+            </div>
+            <span class="label label-id label-todo hidden"><?php echo $lang->block->done;?></span>
+          </a>
+        </li>
+        <?php endforeach;?>
+      </ul>
+    </div>
   </div>
   <script>
   $(function()
@@ -150,6 +158,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
                   $block.on('click', '.todo-form-trigger', function()
                   {
                       toggleForm($(this).data('trigger'));
+                      $('.block-todoes .commitButton').removeClass('disabled');
                   });
                   $form.timeSpanControl(
                   {

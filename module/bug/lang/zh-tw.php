@@ -283,8 +283,8 @@ $lang->bug->statusList['resolved'] = '已解決';
 $lang->bug->statusList['closed']   = '已關閉';
 
 $lang->bug->confirmedList[''] = '';
-$lang->bug->confirmedList[1]  = '是';
-$lang->bug->confirmedList[0]  = '否';
+$lang->bug->confirmedList[1]  = '已確認';
+$lang->bug->confirmedList[0]  = '未確認';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '設計如此';

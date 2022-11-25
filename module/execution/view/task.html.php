@@ -59,6 +59,7 @@ body {margin-bottom: 25px;}
   </div>
   <div class="btn-toolbar pull-left">
     <?php
+    common::sortFeatureMenu();
     foreach(customModel::getFeatureMenu('execution', 'task') as $menuItem)
     {
         if($execution->type == 'ops' && $menuItem->name == 'needconfirm') continue;
@@ -129,10 +130,13 @@ body {margin-bottom: 25px;}
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu pull-right" id='importActionMenu'>
         <?php
-        $class = common::hasPriv('execution', 'importTask') ? '' : "class=disabled";
-        $misc  = common::hasPriv('execution', 'importTask') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('execution', 'importTask') ? $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
-        echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
+        if($execution->multiple)
+        {
+            $class = common::hasPriv('execution', 'importTask') ? '' : "class=disabled";
+            $misc  = common::hasPriv('execution', 'importTask') ? "class='import'" : "class=disabled";
+            $link  = common::hasPriv('execution', 'importTask') ? $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
+            echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
+        }
 
         if($execution->lifetime != 'ops')
         {
@@ -402,7 +406,7 @@ body {margin-bottom: 25px;}
 <script>
 $(function()
 {
-    // Update table summary text
+    /* Update table summary text. */
     var checkedSummary = '<?php echo $lang->execution->checkedSummary?>';
     var pageSummary    = '<?php echo $lang->execution->pageSummary?>';
     $('#executionTaskForm').table(
@@ -424,7 +428,7 @@ $(function()
             $rows.each(function()
             {
                 var $row = $(this);
-                if ($originTable)
+                if($originTable)
                 {
                     $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
                 }

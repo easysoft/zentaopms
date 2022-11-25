@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -19,4 +20,4 @@ $assignedTo = 'user92';
 
 $task = new taskTest();
 r($task->getUserTasksTest($taskID,$assignedTo)) && p('2:name') && e('开发任务12'); // 根据指派人员查看任务
-system("./ztest init");
+$db->restoreDB();

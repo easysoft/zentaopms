@@ -15,7 +15,7 @@ class todosEntry extends entry
      * GET method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get()
     {
@@ -39,7 +39,7 @@ class todosEntry extends entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -64,6 +64,6 @@ class todosEntry extends entry
 
         $todo = $this->loadModel('todo')->getByID($data->id);
 
-        $this->send(201, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
+        return $this->send(201, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
     }
 }
