@@ -23,7 +23,15 @@ function loadProductExecutions(productID, projectID)
 
     $('#executionBox').load(link, function()
     {
-        $(this).find('select').chosen();
+        $select = $(this).find('select');
+        $tr     = $(this).closest('tr');
+        $tr.removeClass('hidden');
+        if($select.data('multiple') == 0)
+        {
+            $tr.addClass('hidden');
+            $select.find('option:last').prop('selected', true);
+        }
+        $select.chosen();
     });
 }
 
@@ -37,7 +45,7 @@ $('#toTaskButton').on('click', function()
     {
         $('#cancelButton').click();
         link = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=' + projectID + '&bugID=' + bugID);
-        window.parent.$.apps.open(link, 'execution');
+        window.parent.$.apps.open(link, $('#execution').data('multiple') == 0 ? 'project' : 'execution');
     }
     else if(projectID == 0)
     {

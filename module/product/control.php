@@ -963,13 +963,14 @@ class product extends control
 
         $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
+        $project    = $this->loadModel('project')->getById($projectID);
         $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')
         {
             $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $event"));
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' data-multiple={$project->multiple} $event"));
         }
         else
         {
