@@ -1627,7 +1627,7 @@ class executionModel extends model
             }
 
             /* In the case of the waterfall model, calculate the sub-stage. */
-            if($param == 'skipParent')
+            if($param === 'skipParent')
             {
                 if($execution->parent < 0 and $execution->type == 'stage') unset($executions[$key]);
                 if($execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
