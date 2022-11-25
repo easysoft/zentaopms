@@ -640,8 +640,6 @@ $lang->action->dynamicAction->caselib['hidden']    = '隐藏用例库';
 
 $lang->action->dynamicAction->zahost['created'] = '创建宿主机';
 
-$lang->action->dynamicAction->vmtemplate['created'] = '创建虚拟机模板';
-
 $lang->action->dynamicAction->zanode['created'] = '创建执行节点';
 $lang->action->dynamicAction->zanode['suspend'] = '暂停执行节点';
 $lang->action->dynamicAction->zanode['resume']  = '恢复执行节点';

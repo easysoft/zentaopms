@@ -64,7 +64,7 @@
           <td><?php echo $host->extranet;?></td>
           <td><?php echo $host->cpuCores;?></td>
           <td><?php echo $host->memory . $lang->zahost->unitList['GB'];?></td>
-          <td><?php echo $host->diskSize . zget($lang->zahost->unitList, $host->unit);?></td>
+          <td><?php echo $host->diskSize . $lang->zahost->unitList['GB'];?></td>
           <td><?php echo $host->vsoft;?></td>
           <td><?php echo zget($lang->host->statusList, $host->status);?></td>
           <td><?php echo helper::isZeroDate($host->heartbeat) ? '' : $host->heartbeat;?></td>

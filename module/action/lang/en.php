@@ -641,8 +641,6 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Hide Case Lib';
 
 $lang->action->dynamicAction->zahost['created'] = 'Create Host';
 
-$lang->action->dynamicAction->vmtemplate['created'] = 'Create Virtual Host Template';
-
 $lang->action->dynamicAction->zanode['created'] = 'Create Zagent Node';
 $lang->action->dynamicAction->zanode['suspend'] = 'Suspend Zagent Node';
 $lang->action->dynamicAction->zanode['resume']  = 'Resume Zagent Node';

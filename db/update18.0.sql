@@ -64,7 +64,7 @@ h.`deleted` = a.`deleted`
 WHERE
 	h.`assetID` = a.`id`;
 
-ALTER TABLE `zt_host` DROP COLUMN `assetID`,
+ALTER TABLE `zt_host` DROP COLUMN `assetID`;
 
 DROP TABLE IF EXISTS `zt_asset`;
 DROP TABLE IF EXISTS `zt_baseimagebrowser`;
