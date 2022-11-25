@@ -187,12 +187,12 @@ class upgrade extends control
 
                 $selectMode = false;
             }
-            if(version_compare($openVersion, '15_0', '>=') and $systemMode == 'new')
+            if(version_compare($openVersion, '15_0_rc1', '>=') and $systemMode == 'new')
             {
                 $this->loadModel('setting')->setItem('system.common.global.mode', 'ALM');
                 $selectMode = false;
             }
-            if(version_compare($openVersion, '18_0', '>=')) $selectMode = false;
+            if(version_compare($openVersion, '18_0_beta1', '>=')) $selectMode = false;
 
             if($selectMode) $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
 
@@ -241,16 +241,9 @@ class upgrade extends control
                 /* Set default program for product and project with no program. */
                 $this->upgrade->relateDefaultProgram($programID);
 
-                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=light"));
-
-                $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
             }
-            if($mode == 'ALM')
-            {
-                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=ALM"));
 
-                $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
-            }
+            $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=$mode"));
         }
 
         list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->loadModel('custom')->computeFeatures();
