@@ -2241,8 +2241,7 @@ class project extends control
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed');
         if($this->config->systemMode == 'ALM')
         {
-            $paths = explode(',', trim($project->path, ','));
-            $topProgramID           = count($paths) > 1 ? $this->program->getTopByPath($project->path) : 0;
+            $topProgramID           = $project->parent ? $this->program->getTopByPath($project->path) : 0;
             $productsGroupByProgram = $this->product->getProductsGroupByProgram();
 
             $currentProducts = array();
