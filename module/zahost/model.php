@@ -135,7 +135,7 @@ class zahostModel extends model
             if(empty($downloadedImage))
             {
                 $image->id     = 0;
-                $image->status = '';
+                $image->status = 'notDownloaded';
             }
             else
             {

@@ -256,7 +256,7 @@ class zahost extends control
             $image = $this->zahost->queryDownloadImageStatus($image);
             $statusName = zget($this->lang->zahost->image->statusList, $image->status,'');
 
-            $statusList[$image->id] = array('statusCode' => $image->status, 'status' => $statusName . '(' . $image->rate * 100 . '%)', 'rate' => $image->rate);
+            $statusList[$image->id] = array('statusCode' => $image->status, 'status' => $statusName, 'progress' => $image->status == 'inprogress' ? $image->rate * 100 . '%' : '');
         }
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $statusList));

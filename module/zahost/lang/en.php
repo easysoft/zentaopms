@@ -75,12 +75,14 @@ $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->diskSize;
 $lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
+$lang->zahost->image->progress   = 'Progress';
 
-$lang->zahost->image->statusList['created']    = 'Created';
-$lang->zahost->image->statusList['canceled']   = 'Canceled';
-$lang->zahost->image->statusList['inprogress'] = 'Inprogress';
-$lang->zahost->image->statusList['completed']  = 'Completed';
-$lang->zahost->image->statusList['failed']     = 'Failed';
+$lang->zahost->image->statusList['notDownloaded'] = 'Not Downloaded';
+$lang->zahost->image->statusList['created']       = 'Inprogress';
+$lang->zahost->image->statusList['canceled']      = 'Canceled';
+$lang->zahost->image->statusList['inprogress']    = 'Inprogress';
+$lang->zahost->image->statusList['completed']     = 'Completed';
+$lang->zahost->image->statusList['failed']        = 'Failed';
 
 $lang->zahost->langList = array();
 $lang->zahost->langList['zh_cn'] = 'Simplified Chinese';

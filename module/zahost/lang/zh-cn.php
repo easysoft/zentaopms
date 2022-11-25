@@ -69,17 +69,19 @@ $lang->zahost->image->startDowload  = '开始下载';
 
 $lang->zahost->image->common     = '镜像';
 $lang->zahost->image->name       = '名称';
-$lang->zahost->image->desc       = '说明';
+$lang->zahost->image->desc       = '描述';
 $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->diskSize;
 $lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
+$lang->zahost->image->progress   = '进度';
 
-$lang->zahost->image->statusList['created']    = '已创建';
-$lang->zahost->image->statusList['canceled']   = '已取消';
-$lang->zahost->image->statusList['inprogress'] = '下载中';
-$lang->zahost->image->statusList['completed']  = '已下载';
-$lang->zahost->image->statusList['failed']     = '下载失败';
+$lang->zahost->image->statusList['notDownloaded'] = '未下载';
+$lang->zahost->image->statusList['created']       = '下载中';
+$lang->zahost->image->statusList['canceled']      = '已取消';
+$lang->zahost->image->statusList['inprogress']    = '下载中';
+$lang->zahost->image->statusList['completed']     = '已下载';
+$lang->zahost->image->statusList['failed']        = '下载失败';
 
 $lang->zahost->image->imageEmpty           = '无镜像';
 $lang->zahost->image->downloadImageFail    = '创建下载镜像任务失败';
