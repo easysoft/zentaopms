@@ -114,14 +114,12 @@ class executionModel extends model
         }
 
         $stageFilter = array('request', 'design', 'review');
-        if(isset($execution->attribute))
+        if(isset($execution->attribute) and in_array($execution->attribute, $stageFilter))
         {
-            if($this->config->edition == 'open' and in_array($execution->attribute, $stageFilter))
-            {
-                unset($this->lang->execution->menu->story);
-                unset($this->lang->execution->menu->qa);
-                unset($this->lang->execution->menu->build);
-            }
+            unset($this->lang->execution->menu->repo);
+            unset($this->lang->execution->menu->story);
+            unset($this->lang->execution->menu->qa);
+            unset($this->lang->execution->menu->build);
         }
 
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
@@ -3178,12 +3176,12 @@ class executionModel extends model
             {
                 dao::$errors['message'][] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
                 return false;
-            }    
+            }
             if((float)$hours[$key] > 24)
             {
                 dao::$errors['message'][] = $this->lang->execution->errorHours;
                 return false;
-            }    
+            }
         }
 
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->exec();
