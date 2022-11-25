@@ -169,6 +169,7 @@ class upgrade extends control
                 /* Set default program for product and project with no program. */
                 $this->upgrade->relateDefaultProgram($programID);
 
+                $_POST['projectType'] = 'execution';
                 $this->upgrade->upgradeInProjectMode($programID, $systemMode);
 
                 $this->upgrade->computeObjectMembers();
