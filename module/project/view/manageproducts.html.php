@@ -38,7 +38,7 @@
           <?php $i = 0;?>
           <?php foreach($linkedProducts as $productID => $linkedProduct):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
-          <?php $cannotUnlink = in_array($productID, $unmodifiableProducts) and $project->model == 'waterfall';?>
+          <?php $cannotUnlink = (in_array($productID, $unmodifiableProducts) and ($project->model == 'waterfall'));?>
           <?php $disabled = $cannotUnlink ? "disabled='disabled'" : '';?>
           <div class='col-sm-4'>
             <div class='product checked <?php echo isset($allBranches[$productID]) ? ' has-branch' : ''?>'>
