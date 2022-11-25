@@ -214,7 +214,6 @@ class branch extends control
         $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,groupCase,zeroCase,', ",$method,") !== false and !empty($productID)) ? true : false;
         $param      = $isQaModule ? $extra : 0;
         $param      = isset($output['projectID']) ? $output['projectID'] : $param;
-
         $branches   = $this->branch->getPairs($productID, 'all', $param);
         $statusList = $this->dao->select('id,status')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchPairs();
 
