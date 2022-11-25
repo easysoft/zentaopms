@@ -321,7 +321,7 @@ class buildModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_BUILD)
             ->where('deleted')->eq(0)
-            ->beginIF($executionID)->andWhere('execution')->eq((int)$executionID)->fi()
+            ->andWhere('execution')->eq((int)$executionID)
             ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
             ->orderBy('date DESC,id DESC')
             ->limit(1)

@@ -9,7 +9,7 @@ $().ready(function()
     {
         var productID = $('#product').val();
         var branch    = $('#branch').length > 0 ? $('#branch').val() : '';
-        $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
+        $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + window.projectID + '&productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
         {
             if(data) $('#buildBox').html(data);
             $('#builds').attr('data-placeholder', multipleSelect).chosen();
@@ -78,10 +78,11 @@ function loadProducts(executionID)
 function loadLastBuild()
 {
     var isIntegrated = $('input[name=isIntegrated]:checked').val();
+    var projectID    = $('#project').val();
     var executionID  = $('#execution').val();
     if(isIntegrated == 'yes') executionID = 0; 
     $.get(createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
     {
-        if(data) $('#lastBuildBox').html(data);
+        $('#lastBuildBox').html(data);
     });
 }
