@@ -19,9 +19,12 @@ function updateProgress(){
                 {
                     if(statusList[imageID].statusCode == 'inprogress'){
                         hasInprogress = true;
+                        $('.image-download-' + imageID).addClass('disabled');
+                    }else if (statusList[imageID].statusCode == 'completed'){
+                        $('.image-download-' + imageID).addClass('disabled');
                     }
-                  $('.image-status-' + imageID).text(statusList[imageID].status);
-                  $('.image-progress-' + imageID).text(statusList[imageID].progress);
+                    $('.image-status-' + imageID).text(statusList[imageID].status);
+                    $('.image-progress-' + imageID).text(statusList[imageID].progress);
                 }
             }
             if(!hasInprogress){

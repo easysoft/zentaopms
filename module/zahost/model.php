@@ -166,7 +166,8 @@ class zahostModel extends model
 
         $imageData->host = $hostID;
         $imageData->status = 'created';
-        $imageData->os = $imageData->os;
+        $imageData->osName = $imageData->os;
+        unset($imageData->os);
 
         $this->dao->insert(TABLE_IMAGE)->data($imageData, 'desc')->autoCheck()->exec();
         if(dao::isError()) return false;
