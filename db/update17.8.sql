@@ -39,3 +39,6 @@ REPLACE INTO `zt_report` (`code`, `name`, `module`, `sql`, `vars`, `langs`, `par
 ALTER TABLE `zt_project` ADD `division` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '1' AFTER `vision`;
 
 ALTER TABLE `zt_build` ADD `builds` varchar(255) NOT NULL AFTER `execution`;
+
+UPDATE `zt_block` SET block = 'scrumrisk'  WHERE module = 'project' AND type = 'scrum' AND block = 'waterfallrisk';
+UPDATE `zt_block` SET block = 'scrumissue' WHERE module = 'project' AND type = 'scrum' AND block = 'waterfallissue';
