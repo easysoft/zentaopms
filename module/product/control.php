@@ -961,16 +961,17 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
+        if($projectID) $project = $this->loadModel('project')->getById($projectID);
         $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
-        $project    = $this->loadModel('project')->getById($projectID);
         $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')
         {
             $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' data-multiple={$project->multiple} $event"));
+            $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple $event"));
         }
         else
         {
