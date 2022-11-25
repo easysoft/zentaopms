@@ -77,7 +77,9 @@ function loadProducts(executionID)
  */
 function loadLastBuild()
 {
-    var executionID = $('#execution').val();
+    var isIntegrated = $('input[name=isIntegrated]:checked').val();
+    var executionID  = $('#execution').val();
+    if(isIntegrated == 'yes') executionID = 0; 
     $.get(createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
     {
         if(data) $('#lastBuildBox').html(data);
