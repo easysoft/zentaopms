@@ -402,7 +402,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $lang->execution->linkStoryByPlanTips . ')';?>
+        <?php $linkStoryByPlanTips = $execution->multiple ? $lang->execution->linkStoryByPlanTips : str_replace($lang->executionCommon, $lang->projectCommon, $lang->execution->linkStoryByPlanTips);?>
+        <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $linkStoryByPlanTips . ')';?>
       </div>
       <div class="modal-body">
         <div class='input-group'>
