@@ -39,6 +39,7 @@ class zahostModel extends model
         $hostInfo->type        = 'zahost';
         $hostInfo->createdBy   = $this->app->user->account;
         $hostInfo->createdDate = helper::now();
+        $hostInfo->secret      = md5($hostInfo->name + time());
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')

@@ -54,10 +54,7 @@ $lang->zahost->initHost->serviceStatus = [
 ];
 $lang->zahost->initHost->title = "初始化宿主机";
 $lang->zahost->initHost->descTitle = "请按照以下步骤在宿主机上完成初始化：";
-$lang->zahost->initHost->descLi = [
-    "下载初始化脚本至宿主机：wget https://pkg.qucheng.com/zenagent/zagentenv",
-    "在宿主机上执行初始化脚本，Ubuntu下执行命令示例：./zagentenv"
-];
+$lang->zahost->initHost->initDesc = "在宿主机上执行：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
 
 $lang->zahost->image = new stdclass;
 $lang->zahost->image->list          = '镜像列表';

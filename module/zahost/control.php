@@ -290,6 +290,7 @@ class zahost extends control
         $this->view->title        = $this->lang->zahost->init;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->hostID       = $hostID;
+        $this->view->host         = $this->zahost->getById($hostID);
 
         $this->display();
     }

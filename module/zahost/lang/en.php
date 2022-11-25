@@ -54,10 +54,7 @@ $lang->zahost->initHost->serviceStatus = [
 ];
 $lang->zahost->initHost->title = "Initialize Host";
 $lang->zahost->initHost->descTitle = "Follow these steps to complete the initialization on the host:";
-$lang->zahost->initHost->descLi = [
-    "Download the init script to the host：wget https://pkg.qucheng.com/zenagent/zagentenv",
-    "Execute the init script on the host and execute the command example under Ubuntu：./zagentenv"
-];
+$lang->zahost->initHost->initDesc = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
 $lang->zahost->initHost->statusTitle = "Service Status";
 
 $lang->zahost->image = new stdclass;

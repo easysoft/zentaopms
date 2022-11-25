@@ -31,5 +31,5 @@ function updateProgress(){
                 clearInterval(interval)
             }
         });
-    }, 5000);
+    }, 3000);
 }

@@ -22,9 +22,7 @@
       </div>
       <div class="host-desc-container">
         <h4><?php echo $lang->zahost->initHost->descTitle;?></h4>
-        <?php foreach($lang->zahost->initHost->descLi as $key => $li): ?>
-        <div><span class='dot-symbol'><?php echo $key+1;?>.</span><span><?php echo $li;?></span></div>
-        <?php endforeach; ?>
+        <div><span class='dot-symbol'></span><span><?php echo $lang->zahost->initHost->initDesc . ' ' . $host->secret;?></span></div>
 
         <div id="statusContainer">
         </div>
