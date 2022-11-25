@@ -4165,7 +4165,9 @@ class execution extends control
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, $fromMethod, $param));
+        $haveDraft = sprintf($this->lang->execution->haveDraft, $count);
+        if(!$execution->multiple) $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
+        if($count != 0) echo js::alert($haveDraft) . js::locate($this->createLink($moduleName, $fromMethod, $param));
         return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }
 
