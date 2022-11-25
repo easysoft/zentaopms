@@ -68,6 +68,7 @@ class project extends control
                 $fields[$fieldName] = zget($projectLang, $fieldName);
                 unset($fields[$key]);
             }
+            if(isset($this->config->setCode) and empty($this->config->setCode)) unset($fields['code']);
 
             if(isset($fields['hasProduct'])) $fields['hasProduct'] = $projectLang->type;
 
