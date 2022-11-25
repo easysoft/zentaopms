@@ -116,8 +116,8 @@ class executionModel extends model
         $stageFilter = array('request', 'design', 'review');
         if(isset($execution->attribute) and in_array($execution->attribute, $stageFilter))
         {
-            unset($this->lang->execution->menu->repo);
             unset($this->lang->execution->menu->story);
+            unset($this->lang->execution->menu->devops);
             unset($this->lang->execution->menu->qa);
             unset($this->lang->execution->menu->build);
         }
