@@ -7,9 +7,10 @@ $().ready(function()
 
     $(document).on('change', '#product, #branch', function()
     {
+        var projectID = $('#project').val();
         var productID = $('#product').val();
         var branch    = $('#branch').length > 0 ? $('#branch').val() : '';
-        $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + window.projectID + '&productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
+        $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
         {
             if(data) $('#buildBox').html(data);
             $('#builds').attr('data-placeholder', multipleSelect).chosen();
@@ -18,17 +19,19 @@ $().ready(function()
 
     $('input[name=isIntegrated]').change(function()
     {
+        var projectID   = $('#project').val();
+        var executionID = $('#execution').val();
         if($(this).val() == 'no')
         {
             $('#execution').closest('tr').show();
             $('#buildBox').closest('tr').hide();
-            loadProducts($('#execution').val());
+            loadProducts(executionID);
         }
         else
         {
             $('#execution').closest('tr').hide();
             $('#buildBox').closest('tr').show();
-            loadProducts($('#project').val());
+            loadProducts(projectID);
         }
     });
     $('#product').change();
@@ -48,6 +51,7 @@ function loadProducts(executionID)
     $('#branch').remove();
     $('#branch_chosen').remove();
     $('#noProduct').remove();
+    executionID = executionID ? executionID : 0;
     $.get(createLink('product', 'ajaxGetProducts', 'executionID=' + executionID), function(data)
     {
         if(data)

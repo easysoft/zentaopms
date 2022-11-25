@@ -29,7 +29,7 @@
         </tr>
         <tr class="<?php echo $hidden;?>">
           <th class='w-120px'><?php echo $lang->build->product;?></th>
-          <?php if(!empty($products)):?>
+          <?php if(!empty($products) || !$executionID):?>
           <td>
             <div class='input-group' id='productBox'>
               <?php echo html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>

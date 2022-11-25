@@ -894,6 +894,7 @@ class product extends control
     public function ajaxGetProducts($executionID)
     {
         $this->loadModel('build');
+        if(!$executionID) return print(html::select('product', array(), '', "class='form-control chosen' required"));
         $products = $this->product->getProductPairsByProject($executionID);
         if(empty($products))
         {
