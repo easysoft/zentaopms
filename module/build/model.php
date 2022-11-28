@@ -621,8 +621,6 @@ class buildModel extends model
     {
         $action = strtolower($action);
 
-        if($module == 'testtask' && $action == 'create') return !!$object->execution;
-
         return true;
     }
 
