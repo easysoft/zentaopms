@@ -31,14 +31,9 @@ UPDATE `zt_group` SET `vision`='lite', `project`='0' WHERE `role` = 'feedback';
 
 DELETE FROM `zt_group` WHERE `vision` = 'lite' AND `role` IN ('liteAdmin','liteProject','liteTeam');
 
-INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
-('lite', '管理员', 'liteAdmin', '迅捷版用户分组');
-
-INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
-('lite', '项目管理', 'liteProject', '迅捷版用户分组');
-
-INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
-('lite', '团队成员', 'liteTeam', '迅捷版用户分组');
+INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES('lite', '管理员', 'liteAdmin', '运营管理界面用户分组');
+INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES('lite', '项目管理', 'liteProject', '运营管理界面用户分组');
+INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES('lite', '团队成员', 'liteTeam', '运营管理界面用户分组');
 
 ALTER TABLE `zt_productplan` ADD `closedReason` varchar(20) NOT NULL AFTER `order`;
 

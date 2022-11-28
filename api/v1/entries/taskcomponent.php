@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class taskComponentEntry extends Entry
+class taskComponentEntry extends entry
 {
     /**
      * POST method.
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($taskID)
     {
@@ -35,7 +35,7 @@ class taskComponentEntry extends Entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $task = $this->task->getById($data->idList[0]);
-        $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 
     public function setArrayPost($field)

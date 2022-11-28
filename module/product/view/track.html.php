@@ -28,7 +28,7 @@
           <tr class='text-left'>
             <?php if($config->URAndSR):?>
             <th <?php echo $style;?>>
-              <?php if($this->app->rawModule == 'projectstory'): ?>
+              <?php if($this->app->rawModule == 'projectstory' and $this->session->hasProduct): ?>
               <div class="dropdown">
                 <?php echo html::a('javascript:;', "<i class='icon icon-product'></i><div class='product-name'>{$projectProducts[$productID]->name}</div><span class='caret'></span>", '', 'class="dropdown-toggle" data-toggle="dropdown"');?>
                 <ul class="dropdown-menu">
@@ -48,7 +48,7 @@
             <th><?php echo $lang->story->design;?></th>
             <?php endif;?>
             <th><?php echo $lang->story->case;?></th>
-            <?php if($config->edition == 'max'):?>
+            <?php if($config->edition == 'max' and helper::hasFeature('devops')):?>
             <th><?php echo $lang->story->repoCommit;?></th>
             <?php endif;?>
             <th><?php echo $lang->story->bug;?></th>
@@ -94,7 +94,7 @@
                 <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title, '', "title='$case->title'") . '<br/>';?>
                 <?php endforeach;?>
               </td>
-              <?php if($config->edition == 'max'):?>
+              <?php if($config->edition == 'max' and helper::hasFeature('devops')):?>
               <td>
                 <?php foreach($story->revisions as $revision => $repoComment):?>
                 <?php

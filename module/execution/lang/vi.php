@@ -102,9 +102,7 @@ $lang->execution->copyNoExecution = 'There are no ' . $lang->executionCommon . '
 $lang->execution->noTeam          = 'No team members at the moment';
 $lang->execution->or              = ' or ';
 $lang->execution->selectProject   = 'Please select project';
-
-if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "select Project/{$lang->executionCommon} to copy its members";
+$lang->execution->copyTeamTip     = "select Project/{$lang->execution->common} to copy its members";
 
 $lang->execution->start    = 'Bắt đầu';
 $lang->execution->activate = 'Kích hoạt';
@@ -148,16 +146,8 @@ $lang->execution->statusList['suspended'] = 'Đã đình chỉ';
 $lang->execution->statusList['closed']    = 'Đã đóng';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
-}
-else
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = "Public (Users who can visit {$lang->executionCommon} can access it.)";
-}
+$lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
+$lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
 
 $lang->execution->storyPoint = 'Story Point';
 
@@ -227,8 +217,8 @@ $lang->execution->importBug         = 'Nhập Bug';
 $lang->execution->tree              = 'Cây';
 $lang->execution->treeTask          = 'Chỉ hiện nhiệm vụ';
 $lang->execution->treeStory         = 'Chỉ hiện câu chuyện';
-$lang->execution->treeOnlyTask      = 'Chỉ hiện nhiệm vụ';
-$lang->execution->treeOnlyStory     = 'Chỉ hiện câu chuyện';
+$lang->execution->treeViewTask      = 'Chỉ hiện nhiệm vụ';
+$lang->execution->treeViewStory     = 'Chỉ hiện câu chuyện';
 $lang->execution->storyKanban       = 'Kanban câu chuyện';
 $lang->execution->storySort         = 'Đánh giá câu chuyện';
 $lang->execution->importPlanStory   = $lang->executionCommon . ' được tạo!\nBạn có muốn nhập các câu chuyện mà đã liên kết đến kế hoạch này?';
@@ -291,6 +281,7 @@ $lang->execution->wbs                 = "Tạo nhiệm vụ";
 $lang->execution->batchWBS            = "Tạo nhiệm vụ hàng loạt";
 $lang->execution->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Làm thế nào để cập nhật biểu đồ Burndown?' class='btn btn-link'>Giúp<i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories        = "Không có câu chuyện có thể liên kết. Vui lòng kiểm tra có câu chuyện trong {$lang->executionCommon} cái liên kết tới {$lang->productCommon} và chắc chắn nó đã được duyệt.";
+$lang->execution->projectNoStories    = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories      = "Câu chuyện liên kết tới {$lang->executionCommon} là tập hợp con của câu chuyện liên kết tới {$lang->productCommon}. Các câu chuyện chỉ có thể liên kết sau khi chúng đã được duyệt. <a href='%s'> Liên kết câu chuyện</a> now.";
 $lang->execution->haveDraft           = "%s câu chuyện đang nháp, bởi vậy chúng không thể liên kết.";
 $lang->execution->doneExecutions      = 'Kết thúc';

@@ -337,8 +337,9 @@ class myModel extends model
         if($objectType == 'task')
         {
             $orderBy    = strpos($orderBy, 'pri_') !== false ? str_replace('pri_', 'priOrder_', $orderBy) : 't1.' . $orderBy;
-            $objectList = $this->dao->select("t1.*, t2.name as executionName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from($this->config->objectTables[$module])->alias('t1')
+            $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as executionName, t2.multiple as executionMultiple, t3.name as projectName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t1.id')->in(array_keys($objectIDList))
@@ -348,8 +349,9 @@ class myModel extends model
         }
         elseif($objectType == 'requirement' or $objectType == 'story' or $objectType == 'bug')
         {
-            $orderBy = (strpos($orderBy, 'priOrder') !== false or strpos($orderBy, 'severityOrder') !== false) ? $orderBy : "t1.$orderBy";
-            $select  = strpos($orderBy, 'severity') !== false ? "t1.*,IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder" : "t1.*,IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
+            $orderBy    = (strpos($orderBy, 'priOrder') !== false or strpos($orderBy, 'severityOrder') !== false) ? $orderBy : "t1.$orderBy";
+            $nameField  = $objectType == 'bug' ? 'productName' : 'productTitle';
+            $select     = "t1.*, t2.name AS {$nameField}, t2.shadow AS shadow, " . (strpos($orderBy, 'severity') !== false ? "IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder" : "IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder");
             $objectList = $this->dao->select($select)->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
                 ->where('t1.deleted')->eq(0)
@@ -387,21 +389,8 @@ class myModel extends model
             return $objectList;
         }
 
-        if($objectType == 'bug')
-        {
-            $productList = array();
-            foreach($objectList as $bug) $productList[$bug->product] = $bug->product;
-            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
-            foreach($objectList as $bug) $bug->productName = zget($productPairs, $bug->product, '');
-        }
-
         if($objectType == 'requirement' or $objectType == 'story')
         {
-            $productList = array();
-            foreach($objectList as $story) $productList[$story->product] = $story->product;
-            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
-            foreach($objectList as $story) $story->productTitle = zget($productPairs, $story->product, '');
-
             $planList = array();
             foreach($objectList as $story) $planList[$story->plan] = $story->plan;
             $planPairs = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in($planList)->fetchPairs('id');
@@ -524,7 +513,7 @@ class myModel extends model
         $projects = $this->loadModel('project')->getPairsByProgram();
         $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
 
-        $executions = $this->execution->getPairs();
+        $executions = $this->execution->getPairs(0, 'all', 'multiple');
         $this->config->execution->search['params']['execution']['values'] = $executions + array('all' => $this->lang->execution->allExecutions);
 
         $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs();
@@ -583,11 +572,11 @@ class myModel extends model
         $query = str_replace('t1.`project`', 't2.`project`', $query);
 
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $tasks   = $this->dao->select("t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
+        $tasks   = $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t2.multiple as executionMultiple, t4.name as projectName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t1.project = t4.id")
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t2.project = t4.id")
             ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t1.id = t5.task")
             ->where($query)
             ->andWhere('t1.deleted')->eq(0)
@@ -614,10 +603,7 @@ class myModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
-        if(!empty($taskTeam))
-        {
-            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
-        }
+        foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
 
         if($tasks) return $this->loadModel('task')->processTasks($tasks);
         return array();
@@ -637,7 +623,7 @@ class myModel extends model
         $this->loadModel('bug');
         $this->app->loadConfig('bug');
 
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->config->bug->search['module']    = $rawMethod . 'Bug';
         $this->config->bug->search['actionURL'] = $actionURL;
@@ -648,8 +634,8 @@ class myModel extends model
             unset($this->config->bug->search['fields']['closedBy']);
         }
 
-        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject) + array('' => '');
-        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('execution')->getPairs();
+        $this->config->bug->search['params']['project']['values']       = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject) + array('' => '');
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
         $this->config->bug->search['params']['product']['values']       = $products + array('' => '');
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs();
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getAllModulePairs();
@@ -682,13 +668,12 @@ class myModel extends model
         $queryName = $type == 'contribute' ? 'contributeRisk' : 'workRisk';
 
         $this->app->loadConfig('risk');
-        $this->config->risk->search['module']            = $queryName;
-        $this->config->risk->search['actionURL']         = $actionURL;
-        $this->config->risk->search['queryID']           = $queryID;
+        $this->config->risk->search['module']    = $queryName;
+        $this->config->risk->search['actionURL'] = $actionURL;
+        $this->config->risk->search['queryID']   = $queryID;
 
         $this->config->risk->search['params']['project']['values'] = array('') + $projects;
 
-        if($this->config->systemMode == 'classic') unset($this->config->risk->search['fields']['project']);
         unset($this->config->risk->search['fields']['module']);
 
         $this->loadModel('search')->setSearchParams($this->config->risk->search);
@@ -831,7 +816,7 @@ class myModel extends model
                 $storyIDList[$storyID] = $storyID;
             }
 
-            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
+            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
@@ -850,7 +835,7 @@ class myModel extends model
         }
         else
         {
-            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
+            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
@@ -1008,4 +993,336 @@ class myModel extends model
         return $requirements;
     }
 
+    /**
+     * Get reviewing list for me.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewingList($browseType, $orderBy = 'time_desc', $pager = null)
+    {
+        $reviewList = array();
+        if($browseType == 'all' or $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
+        if($browseType == 'all' or $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
+        if($browseType == 'all' or $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
+        if($browseType == 'all' or $browseType == 'feedback') $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
+        if($browseType == 'all' or $browseType == 'oa')       $reviewList = array_merge($reviewList, $this->getReviewingOA());
+
+        if(empty($reviewList)) return array();
+
+        $field     = $orderBy;
+        $direction = 'asc';
+        if(strpos($orderBy, '_') !== false) list($field, $direction) = explode('_', $orderBy);
+
+        /* Sort review. */
+        $reviewGroup = array();
+        foreach($reviewList as $review)
+        {
+            if(!isset($review->$field)) $field = 'time';
+            $reviewGroup[$review->$field][] = $review;
+        }
+        if($direction == 'asc')  ksort($reviewGroup);
+        if($direction == 'desc') krsort($reviewGroup);
+
+        $reviewList = array();
+        foreach($reviewGroup as $reviews) $reviewList = array_merge($reviewList, $reviews);
+
+        /* Pager. */
+        $pager->setRecTotal(count($reviewList));
+        $pager->setPageTotal();
+        $pager->setPageID($pager->pageID);
+        $reviewList = array_chunk($reviewList, $pager->recPerPage);
+        $reviewList = $reviewList[$pager->pageID - 1];
+
+        return $reviewList;
+    }
+
+    /**
+     * Get reviewing stories.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingStories($orderBy = 'id_desc')
+    {
+        if(!common::hasPriv('story', 'review')) return array();
+
+        $this->app->loadLang('story');
+        $stmt = $this->dao->select("t1.*")->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
+            ->andWhere('t2.reviewer')->eq($this->app->user->account)
+            ->andWhere('t2.result')->eq('')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.status')->eq('reviewing')
+            ->orderBy($orderBy)
+            ->query();
+
+        $stories = array();
+        while($data = $stmt->fetch())
+        {
+            $story = new stdclass();
+            $story->id      = $data->id;
+            $story->title   = $data->title;
+            $story->type    = 'story';
+            $story->time    = $data->openedDate;
+            $story->status  = $data->status;
+            $stories[$story->id] = $story;
+        }
+
+        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($stories))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+        foreach($actions as $storyID => $date) $stories[$storyID]->time = $date;
+        return array_values($stories);
+    }
+
+    /**
+     * Get reviewing cases.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingCases($orderBy = 'id_desc')
+    {
+        if(!common::hasPriv('testcase', 'review')) return array();
+
+        $this->app->loadLang('testcase');
+        $stmt = $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq('0')
+            ->andWhere('status')->eq('wait')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
+            ->orderBy($orderBy)
+            ->query();
+
+        $cases = array();
+        while($data = $stmt->fetch())
+        {
+            $case = new stdclass();
+            $case->id     = $data->id;
+            $case->title  = $data->title;
+            $case->type   = 'testcase';
+            $case->time   = $data->openedDate;
+            $case->status = $data->status;
+            $cases[$case->id] = $case;
+        }
+
+        return array_values($cases);
+    }
+
+    /**
+     * Get reviewing approvals.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingApprovals($orderBy = 'id_desc')
+    {
+        if(!common::hasPriv('review', 'assess')) return array();
+        if($this->config->edition != 'max') return array();
+
+        $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
+        $projectReviews = $this->loadModel('review')->getByList($pendingList, $orderBy);
+
+        $this->app->loadLang('project');
+        $this->session->set('reviewList', $this->app->getURI(true));
+
+        $reviewList = array();
+        foreach($projectReviews as $review)
+        {
+            if(!isset($pendingList[$review->id])) continue;
+
+            $data = new stdclass();
+            $data->id     = $review->id;
+            $data->title  = $review->title;
+            $data->type   = 'project';
+            $data->time   = $review->createdDate;
+            $data->status = $review->status;
+            $reviewList[] = $data;
+        }
+        return $reviewList;
+    }
+
+    /**
+     * Get reviewing feedbacks.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingFeedbacks($orderBy = 'id_desc')
+    {
+        if(!common::hasPriv('feedback', 'review')) return array();
+        if($this->config->edition == 'open') return array();
+
+        $feedbacks  = $this->loadModel('feedback')->getList('review', $orderBy);
+        $reviewList = array();
+        foreach($feedbacks as $feedback)
+        {
+            $data = new stdclass();
+            $data->id     = $feedback->id;
+            $data->title  = $feedback->title;
+            $data->type   = 'feedback';
+            $data->time   = $feedback->openedDate;
+            $data->status = $feedback->status;
+            $reviewList[] = $data;
+        }
+        return $reviewList;
+    }
+
+    /**
+     * Get reviewing OA.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingOA($orderBy = 'status')
+    {
+        if($this->config->edition == 'open') return array();
+
+        $users   = $this->loadModel('user')->getPairs('noletter');
+        $account = $this->app->user->account;
+
+        /* Get dept info. */
+        $allDeptList = $this->loadModel('dept')->getPairs('', 'dept');
+        $allDeptList['0'] = '/';
+        $managedDeptList = array();
+        $tmpDept = $this->dept->getDeptManagedByMe($account);
+        foreach($tmpDept as $d) $managedDeptList[$d->id] = $d->name;
+
+        $oa = array();
+        if(common::hasPriv('attend',   'review'))                                         $oa['attend']   = $this->getReviewingAttends($allDeptList, $managedDeptList);
+        if(common::hasPriv('leave',    'review') and common::hasPriv('leave',    'view')) $oa['leave']    = $this->getReviewingLeaves($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('overtime', 'review') and common::hasPriv('overtime', 'view')) $oa['overtime'] = $this->getReviewingOvertimes($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('makeup',   'review') and common::hasPriv('makeup',   'view')) $oa['makeup']   = $this->getReviewingMakeups($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('lieu',     'review') and common::hasPriv('lieu',     'view')) $oa['lieu']     = $this->getReviewingLieus($allDeptList, $managedDeptList, $orderBy);
+
+        $reviewList = array();
+        foreach($oa as $type => $reviewings)
+        {
+            foreach($reviewings as $object)
+            {
+                $review = new stdclass();
+                $review->id     = $object->id;
+                $review->type   = $type;
+                $review->time   = $type == 'attend' ? $object->date : $object->createdDate;
+                $review->status = $type == 'attend' ? $object->reviewStatus : $object->status;
+                $review->title  = '';
+                if($type == 'attend')
+                {
+                    $review->title = sprintf($this->lang->my->auditField->oaTitle[$type], zget($users, $object->account), $object->date);
+                }
+                elseif(isset($this->lang->my->auditField->oaTitle[$type]))
+                {
+                    $review->title = sprintf($this->lang->my->auditField->oaTitle[$type], zget($users, $object->createdBy), $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5));
+                }
+                $reviewList[] = $review;
+            }
+        }
+
+        return $reviewList;
+    }
+
+    /**
+     * Get reviewed list.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewedList($browseType, $orderBy = 'time_desc', $pager = null)
+    {
+        $field = $orderBy;
+        $direction = 'asc';
+        if(strpos($orderBy, '_') !== false) list($field, $direction) = explode('_', $orderBy);
+
+        $actionField = '';
+        if($field == 'time')    $actionField = 'date';
+        if($field == 'type')    $actionField = 'objectType';
+        if($field == 'id')      $actionField = 'objectID';
+        if(empty($actionField)) $actionField = 'date';
+        $orderBy = $actionField . '_' . $direction;
+
+        $condition = "action = 'reviewed'";
+        if($browseType == 'createdbyme')
+        {
+            $condition  = "(objectType in('story','case','feedback') and action = 'submitreview') OR ";
+            $condition .= "(objectType = 'review' and action = 'opened') OR ";
+            $condition .= "(objectType = 'attend' and action = 'commited') OR ";
+            $condition .= "(objectType in('leave','makeup','overtime','lieu') and action = 'created')";
+            $condition  = "($condition)";
+        }
+
+        $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`,extra')->from(TABLE_ACTION)
+            ->where('actor')->eq($this->app->user->account)
+            ->andWhere('objectType')->in($this->config->my->reviewObjectType)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere($condition)
+            ->groupBy('objectType,objectID')
+            ->orderBy($orderBy)
+            ->page($pager, 'objectType,objectID')
+            ->fetchAll();
+        $objectTypeList = array();
+        foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;
+
+        $objectGroup = array();
+        foreach($objectTypeList as $objectType => $idList)
+        {
+            $table = zget($this->config->objectTables, $objectType, '');
+            if(empty($table)) continue;
+
+            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+        }
+
+        foreach($objectGroup as $objectType => $idList)
+        {
+            $moduleName = $objectType;
+            if($objectType == 'case') $moduleName = 'testcase';
+            $this->app->loadLang($moduleName);
+        }
+        $users = $this->loadModel('user')->getPairs('noletter');
+
+        $reviewList = array();
+        foreach($actions as $action)
+        {
+            $objectType = $action->objectType;
+            if(!isset($objectGroup[$objectType])) continue;
+
+            $object = $objectGroup[$objectType][$action->objectID];
+            $review = new stdclass();
+            $review->id     = $object->id;
+            $review->type   = $objectType;
+            $review->time   = $action->date;
+            $review->result = strtolower($action->extra);
+            $review->status = $objectType == 'attend' ? $object->reviewStatus : $object->status;
+            if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
+
+            if($review->type == 'review') $review->type = 'project';
+            if($review->type == 'case')   $review->type = 'testcase';
+            $review->title = '';
+            if(isset($object->title))
+            {
+                $review->title = $object->title;
+            }
+            elseif($objectType == 'attend')
+            {
+                $review->title = sprintf($this->lang->my->auditField->oaTitle[$objectType], zget($users, $object->account), $object->date);
+            }
+            elseif(isset($this->lang->my->auditField->oaTitle[$objectType]))
+            {
+                $review->title = sprintf($this->lang->my->auditField->oaTitle[$objectType], zget($users, $object->createdBy), $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5));
+            }
+
+            $reviewList[] = $review;
+        }
+        return $reviewList;
+    }
 }

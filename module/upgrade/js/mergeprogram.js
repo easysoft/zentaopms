@@ -535,6 +535,7 @@ $(function()
     /* Toggles data migration mode events. */
     $('input[name="projectType"]').change(function()
     {
+        $('.programForm').show();
         $('.createProjectTip').toggleClass('hidden');
         $('.createExecutionTip').toggleClass('hidden');
         $('.projectName').toggleClass('hidden');
@@ -544,6 +545,7 @@ $(function()
 
         if($(this).val() == 'project')
         {
+            if(mode == 'light') $('.programForm').hide();
             $('[name=projectAcl]').attr('disabled', 'disabled');
             $('[name=programAcl]').removeAttr('disabled');
         }
@@ -811,8 +813,10 @@ function toggleProject(obj)
  */
 function hiddenProject()
 {
+    $('#programBox').show();
     if($('[name^=sprints]:checked').length == 0)
     {
+        if(mode == 'light') $('#programBox').hide();
         $(".programParams input").attr('disabled' ,'disabled');
         $(".programParams select").attr('disabled' ,'disabled').trigger('chosen:updated');
         $('.programParams').hide();
@@ -833,6 +837,7 @@ function hiddenProject()
 
         if($('#newProject0').is(':checked')) $('#projects').attr('disabled', 'disabled');
 
+        $('.programForm').show();
         var projectType = $('input[name="projectType"]:checked').val();
         if(projectType == 'project')
         {
@@ -842,6 +847,7 @@ function hiddenProject()
             $('.projectStatus').addClass('hidden');
             $('[name=projectAcl]').attr('disabled', 'disabled');
             $('[name=programAcl]').removeAttr('disabled');
+            if(mode == 'light') $('.programForm').hide();
         }
 
         if(projectType == 'execution')
@@ -852,6 +858,12 @@ function hiddenProject()
             $('.projectStatus').removeClass('hidden');
             $('[name=programAcl]').attr('disabled', 'disabled');
             $('[name=projectAcl]').removeAttr('disabled');
+        }
+
+        if(mode == 'light')
+        {
+            $('form #newProgram0').prop('checked', false);
+            toggleProgram($('form #newProgram0'));
         }
     }
 }

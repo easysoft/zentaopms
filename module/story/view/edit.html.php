@@ -57,7 +57,7 @@
               <div class="table-row">
                 <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?>
+                  <?php echo html::select('reviewer[]', $hiddenProduct ? $teamUsers : $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?>
                 </div>
                 <div class="table-col needNotReviewBox">
                   <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
@@ -69,7 +69,7 @@
                 </div>
                 <?php else:?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple required')?>
+                  <?php echo html::select('reviewer[]', $hiddenProduct ? $teamUsers : $productReviewers, $reviewers, 'class="form-control picker-select" multiple required')?>
                 </div>
                 <?php endif;?>
               </div>
@@ -147,7 +147,7 @@
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
               <?php if($story->parent <= 0):?>
-              <tr>
+              <tr class="<?php if($hiddenProduct) echo 'hidden';?>">
                 <th class='thWidth'><?php echo $lang->story->product;?></th>
                 <td>
                   <div class='input-group'>
@@ -184,11 +184,11 @@
                 </td>
               </tr>
               <?php if($story->parent >= 0 and $story->type == 'story'):?>
-              <tr>
+              <tr class="<?php if($hiddenParent) echo 'hidden';?>">
                 <th><?php echo $lang->story->parent;?></th>
                 <td><?php echo html::select('parent', $stories, $story->parent, "class='form-control chosen'");?></td>
               </tr>
-              <tr>
+              <tr class="<?php if($hiddenPlan) echo 'hidden';?>">
                 <th><?php echo $lang->story->plan;?></th>
                 <td>
                   <div class='input-group' id='planIdBox'>
@@ -222,7 +222,7 @@
                   <?php echo html::hidden('status', $story->status);?>
                 </td>
               </tr>
-              <?php if(strpos('draft,changing', $story->status) !== false and $story->type == 'story'):?>
+              <?php if($story->type == 'story'):?>
               <tr>
                 <th><?php echo $lang->story->stage;?></th>
                 <td>
@@ -287,12 +287,12 @@
               <tr>
                 <th><?php echo $lang->story->assignedTo;?></th>
                 <?php $assignedToList = $story->status == 'closed' ? $users + array('closed' => 'Closed') : $users;?>
-                <td><?php echo html::select('assignedTo', $assignedToList, $story->assignedTo, 'class="form-control chosen"');?></td>
+                <td><?php echo html::select('assignedTo', $hiddenProduct ? $teamUsers : $assignedToList, $story->assignedTo, 'class="form-control chosen"');?></td>
               </tr>
               <?php if($story->status == 'reviewing'):?>
               <tr>
                 <th><?php echo $lang->story->reviewers;?></th>
-                <td><?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?></td>
+                <td><?php echo html::select('reviewer[]', $hiddenProduct ? $teamUsers : $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?></td>
               </tr>
               <?php endif;?>
               <?php if($story->status == 'closed'):?>

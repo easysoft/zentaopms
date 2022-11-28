@@ -16,7 +16,7 @@ class gitlabWebhookEntry extends baseEntry
      * Repo webhook.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {

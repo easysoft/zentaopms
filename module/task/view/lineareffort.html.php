@@ -3,10 +3,13 @@
 #mainContent {min-height: 500px;}
 #mainContent .main-header {padding-bottom: 5px;}
 #linearefforts {margin-top: -18px;}
-#linearefforts .nav-tabs{margin-bottom: 10px;}
+#linearefforts .nav-tabs {margin-bottom: 10px;}
+#linearefforts .nav-tabs > li.active > a {color: #313c52 !important;}
 #linearefforts div.caption {height:25px; margin: 10px 0px;}
 #linearefforts div.caption .account{font-weight: bolder;}
-#linearefforts .tabs ul > li > a { padding-top: 6px; padding-bottom: 4px;}
+#linearefforts .tabs ul > li > a {padding-top: 6px; padding-bottom: 4px;}
+#linearefforts .table thead > tr > th {padding-right: 10px;}
+#toggleFoldIcon {margin-bottom: 10px;}
 </style>
 <?php
 $this->app->loadLang('execution');
@@ -67,7 +70,7 @@ ksort($myOrders);
               <th class="w-60px"><?php common::printOrderLink('order', $orderBy, $vars, $lang->task->teamOrder);?></th>
               <th class="w-120px"><?php common::printOrderLink('date', $orderBy, $vars, $lang->task->date);?></th>
               <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
-              <th><?php echo $lang->task->work;?></th>
+              <th class='text-left'><?php echo $lang->task->work;?></th>
               <th class="thWidth"><?php echo $lang->task->consumedAB;?></th>
               <th class="thWidth"><?php echo $lang->task->left;?></th>
               <th class='c-actions-2'><?php echo $lang->actions;?></th>
@@ -86,10 +89,10 @@ ksort($myOrders);
               <?php $showOrder = true;?>
               <?php endif;?>
               <td><?php echo $effort->date;?></td>
-              <td><?php echo zget($users, $effort->account);?></td>
+              <td class='text-center'><?php echo zget($users, $effort->account);?></td>
               <td class="text-left" title="<?php echo $effort->work;?>"><?php echo $effort->work;?></td>
-              <td title="<?php echo $effort->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $effort->consumed . ' ' . $lang->execution->workHourUnit;?></td>
-              <td title="<?php echo $effort->left     . ' ' . $lang->execution->workHour;?>"><?php echo $effort->left     . ' ' . $lang->execution->workHourUnit;?></td>
+              <td class='text-center' title="<?php echo $effort->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $effort->consumed . ' ' . $lang->execution->workHourUnit;?></td>
+              <td class='text-center' title="<?php echo $effort->left     . ' ' . $lang->execution->workHour;?>"><?php echo $effort->left     . ' ' . $lang->execution->workHourUnit;?></td>
               <td align='center' class='c-actions'>
                 <?php
                 $canOperateEffort = $this->task->canOperateEffort($task, $effort);
@@ -123,7 +126,7 @@ ksort($myOrders);
               <th class="w-60px  order-btn"><?php common::printOrderLink('order', $orderBy, $vars, $lang->task->teamOrder);?></th>
               <th class="w-120px order-btn"><?php common::printOrderLink('date', $orderBy, $vars, $lang->task->date);?></th>
               <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
-              <th><?php echo $lang->task->work;?></th>
+              <th class='text-left'><?php echo $lang->task->work;?></th>
               <th class="thWidth"><?php echo $lang->task->consumedAB;?></th>
               <th class="thWidth"><?php echo $lang->task->left;?></th>
             </tr>
@@ -139,10 +142,10 @@ ksort($myOrders);
               <?php $showOrder = true;?>
               <?php endif;?>
               <td><?php echo $effort->date;?></td>
-              <td><?php echo zget($users, $effort->account);?></td>
+              <td class='text-center'><?php echo zget($users, $effort->account);?></td>
               <td class="text-left" title="<?php echo $effort->work;?>"><?php echo $effort->work;?></td>
-              <td title="<?php echo $effort->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $effort->consumed . ' ' . $lang->execution->workHourUnit;?></td>
-              <td title="<?php echo $effort->left     . ' ' . $lang->execution->workHour;?>"><?php echo $effort->left     . ' ' . $lang->execution->workHourUnit;?></td>
+              <td class='text-center' title="<?php echo $effort->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $effort->consumed . ' ' . $lang->execution->workHourUnit;?></td>
+              <td class='text-center' title="<?php echo $effort->left     . ' ' . $lang->execution->workHour;?>"><?php echo $effort->left     . ' ' . $lang->execution->workHourUnit;?></td>
             </tr>
             <?php endforeach;?>
             <?php endforeach;?>
@@ -154,4 +157,7 @@ ksort($myOrders);
     <?php endif;?>
   </div>
 </div>
+<?php endif;?>
+<?php if($i > 4):?>
+<style>#legendMyEffort > .table {margin-bottom: 5px;}</style>
 <?php endif;?>

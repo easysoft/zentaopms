@@ -16,7 +16,7 @@ class testcaseEntry extends entry
      *
      * @param  int    $testcaseID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($testcaseID)
     {
@@ -31,7 +31,7 @@ class testcaseEntry extends entry
         $case = $data->case;
         $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values(get_object_vars($case->steps)) : array();
 
-        $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,steps:array,deleted:bool'));
+        return $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,steps:array,deleted:bool'));
     }
 
     /**
@@ -39,7 +39,7 @@ class testcaseEntry extends entry
      *
      * @param  int    $caseID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($caseID)
     {
@@ -71,7 +71,7 @@ class testcaseEntry extends entry
 
         $this->getData();
         $case = $this->testcase->getByID($caseID);
-        $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,steps:array,deleted:bool'));
+        return $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,steps:array,deleted:bool'));
     }
 
     /**
@@ -79,7 +79,7 @@ class testcaseEntry extends entry
      *
      * @param  int    $testcaseID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($testcaseID)
     {
@@ -88,6 +88,6 @@ class testcaseEntry extends entry
 
         $this->getData();
 
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

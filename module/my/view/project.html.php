@@ -61,7 +61,14 @@
         <tr>
           <td class='c-id'><?php printf('%03d', $project->id);?></td>
           <td class='c-name text-left' title='<?php echo $project->name?>'>
-            <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project' title='{$project->name} ({$this->lang->project->{$project->model}})'");?>
+            <?php
+            $suffix      = '';
+            $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;
+            if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$lang->project->statusList['delay']}</span></div>";
+            if(!empty($suffix)) echo '<div class="project-name has-suffix">';
+            echo html::a($this->createLink('project', 'index', "projectID=$project->id"), "<i class='icon icon-{$projectType} text-muted'></i> " . $project->name, '', "data-app='project' title='{$project->name}'");
+            if(!empty($suffix)) echo $suffix;
+            ?>
           </td>
           <td class='c-manager'>
             <?php if(!empty($project->PM)):?>

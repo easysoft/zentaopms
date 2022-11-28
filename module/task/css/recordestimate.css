@@ -3,7 +3,6 @@
 .form-condensed .table-form {margin-bottom: 20px;}
 .hours {display: flex; float: left; transform: translate(0, 50%); margin: 0;}
 .estimateTotally, .consumedTotally {border-radius: 9px; padding: 3px 7px; margin: 0 5px 0 5px; min-width: 18px;}
-.consumedTotally {background: #EAF3FF; color: #2B80FF;}
 .estimateTotally {background: #FFEFEF; color: #FF6262;}
 .nav > li.divider {margin: 0 10px 0 5px; background-color: #000; opacity: 0.06; width: 1px ; height: 15px; padding: 0 !important;}
 .table-bordered td, .table-bordered th { border: 1px solid #EEEEEE; }
@@ -22,7 +21,7 @@
 .table.has-sort-head thead>tr>th>a:after, .table.has-sort-head thead>tr>th>a:before {top: -7px;}
 .table.has-sort-head thead>tr>th>a:hover, .table.has-sort-head thead>tr>th>a:hover:after, .table.has-sort-head thead>tr>th>a:hover:before {color: #000;}
 
+.taskEffort thead > tr > th {padding-right: 10px !important;}
 #toggleFoldIcon:hover {cursor: pointer;}
-#toggleFoldIcon .icon-border {width: 20px; height: 20px; border-radius: 8px; border: 1px solid #D5E5FF;}
-#toggleFoldIcon .icon-border > .icon {color: #3785FF;}
-#toggleFoldIcon .text {color: #3785FF;}
+#toggleFoldIcon .icon-border {width: 20px; height: 20px; border-radius: 8px;}
+#toggleFoldIcon {margin-bottom: 10px;}

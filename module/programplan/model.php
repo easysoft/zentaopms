@@ -187,6 +187,7 @@ class programplanModel extends model
             $data->id            = $plan->id;
             $data->type          = 'plan';
             $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
+            $data->name          = $plan->name;
             $data->percent       = $plan->percent;
             $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
             $data->milestone     = zget($this->lang->programplan->milestoneList, $plan->milestone);
@@ -702,7 +703,8 @@ class programplanModel extends model
             return false;
         }
 
-        $setCode = (!isset($this->config->setCode) or $this->config->setCode == 1) ? true : false;
+        $project   = $this->loadModel('project')->getByID($projectID);
+        $setCode   = (!isset($this->config->setCode) or $this->config->setCode == 1) ? true : false;
         $checkCode = $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '');
         if($setCode and $checkCode !== true)
         {
@@ -717,27 +719,29 @@ class programplanModel extends model
             if(empty($name)) continue;
 
             $plan = new stdclass();
-            $plan->id        = isset($planIDList[$key]) ? $planIDList[$key] : '';
-            $plan->type      = 'stage';
-            $plan->project   = $projectID;
-            $plan->parent    = $parentID ? $parentID : $projectID;
-            $plan->name      = $names[$key];
+            $plan->id         = isset($planIDList[$key]) ? $planIDList[$key] : '';
+            $plan->type       = 'stage';
+            $plan->project    = $projectID;
+            $plan->parent     = $parentID ? $parentID : $projectID;
+            $plan->name       = $names[$key];
             if($setCode) $plan->code = $codes[$key];
-            $plan->percent   = $percents[$key];
-            $plan->attribute = empty($parentID) ? $attributes[$key] : $parentAttribute;
-            $plan->milestone = $milestone[$key];
-            $plan->begin     = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
-            $plan->end       = empty($end[$key]) ? '0000-00-00' : $end[$key];
-            $plan->realBegan = empty($realBegan[$key]) ? '0000-00-00' : $realBegan[$key];
-            $plan->realEnd   = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
-            $plan->output    = empty($output[$key]) ? '' : implode(',', $output[$key]);
-            $plan->acl       = empty($parentID) ? $acl[$key] : $parentACL;
-            $plan->PM        = empty($PM[$key]) ? '' : $PM[$key];
+            $plan->percent    = $percents[$key];
+            $plan->attribute  = empty($parentID) ? $attributes[$key] : $parentAttribute;
+            $plan->milestone  = $milestone[$key];
+            $plan->begin      = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
+            $plan->end        = empty($end[$key]) ? '0000-00-00' : $end[$key];
+            $plan->realBegan  = empty($realBegan[$key]) ? '0000-00-00' : $realBegan[$key];
+            $plan->realEnd    = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
+            $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
+            $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
+            $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
+            $plan->hasProduct = $project->hasProduct;
 
             $datas[] = $plan;
         }
 
-        $project = $this->loadModel('project')->getByID($projectID);
+        $project     = $this->loadModel('project')->getByID($projectID);
+        $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         $totalPercent = 0;
         $totalDevType = 0;
@@ -890,6 +894,7 @@ class programplanModel extends model
             {
                 unset($data->id);
                 $data->status        = 'wait';
+                $data->division      = $project->division;
                 $data->version       = 1;
                 $data->parentVersion = $data->parent == 0 ? 0 : $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('version');
                 $data->team          = substr($data->name,0, 30);
@@ -944,7 +949,8 @@ class programplanModel extends model
                     $this->setTreePath($stageID);
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
-                    $this->post->set('products', array(0 => $productID));
+                    $linkProducts = $project->division ? array(0 => $productID) : array_keys($productList);
+                    $this->post->set('products', $linkProducts);
                     $this->execution->updateProducts($stageID);
 
                     /* Record version change information. */
@@ -957,7 +963,14 @@ class programplanModel extends model
                     $spec->end       = $data->end;
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
 
-                    $this->action->create('execution', $stageID, 'opened', '', join(',', $_POST['products']));
+                    if($project->hasProduct)
+                    {
+                        $this->action->create('execution', $stageID, 'opened', '', join(',', $_POST['products']));
+                    }
+                    else
+                    {
+                        $this->action->create('execution', $stageID, 'opened');
+                    }
                 }
             }
 
@@ -1073,13 +1086,16 @@ class programplanModel extends model
         $this->lang->project->name = $this->lang->programplan->name;
         $this->lang->project->code = $this->lang->execution->code;
 
+        $relatedExecutionsID = $this->loadModel('execution')->getRelatedExecutions($planID);
+        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '';
+
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
             ->checkIF($plan->percent != false, 'percent', 'float')
-            ->checkIF((!empty($plan->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != {$planID} and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
-            ->checkIF(!empty($plan->code), 'code', 'unique', "id != $planID and type in ('sprint','stage','kanban') and `deleted` = '0'")
+            ->checkIF(!empty($plan->name), 'name', 'unique', "id in ('{$relatedExecutionsID}') and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
+            ->checkIF(!empty($plan->code) and $setCode, 'code', 'unique', "id != $planID and type in ('sprint','stage','kanban') and `deleted` = '0'")
             ->where('id')->eq($planID)
             ->exec();
 
@@ -1277,8 +1293,7 @@ class programplanModel extends model
             ->andWhere('code')->in($codes)
             ->beginIF($planIDList)->andWhere('id')->notin($planIDList)->fi()
             ->fetch('code');
-        if($code) return $code;
-        return true;
+        return $code ? $code : true;
     }
 
     /**

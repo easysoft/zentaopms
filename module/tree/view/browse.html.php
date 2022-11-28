@@ -85,7 +85,7 @@ if($viewType == 'doc' or $viewType == 'api')
     <div class="panel">
       <div class="panel-heading">
         <div class="panel-title"><?php echo $childTitle;?></div>
-        <?php if($app->tab == 'product'):?>
+        <?php if($app->tab == 'product' and $viewType == 'story'):?>
         <div class="panel-actions btn-toolbar">
           <?php echo html::a($this->createLink('tree', 'viewHistory', "productID=$rootID", '', true), $lang->history,  '', "class='btn btn-sm btn-primary iframe'");?>
         </div>

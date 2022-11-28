@@ -16,7 +16,7 @@ class testresultsEntry extends entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($caseID = 0)
     {
@@ -50,7 +50,7 @@ class testresultsEntry extends entry
      *
      * @param  int    $caseID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($caseID = 0)
     {
@@ -60,18 +60,24 @@ class testresultsEntry extends entry
         $case    = $this->loadModel('testcase')->getByID($caseID);
         $runID   = $this->param('runID', 0);
         $version = $this->param('version', $case->version);
+        $steps   = $this->getStepIDList($runID, $caseID, $version);
 
         $this->setPost('case',  $caseID);
+        $this->setPost('version', $version);
 
         /* Set steps and expects. */
         if(isset($this->requestBody->steps))
         {
             $results = array();
             $reals   = array();
-            foreach($this->requestBody->steps as $step)
+            foreach($this->requestBody->steps as $index => $step)
             {
-                $results[] = $step->result;
-                $reals[]   = $step->real;
+                /* When post data more than case steps, break after take useful data. */
+                if($index + 1 > count($steps)) break;
+
+                $stepID           = $steps[$index];
+                $results[$stepID] = $step->result;
+                $reals[$stepID]   = $step->real;
             }
             $this->setPost('steps',  $results);
             $this->setPost('reals',  $reals);
@@ -83,6 +89,37 @@ class testresultsEntry extends entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
-        $this->send(200, array());
+        return $this->send(200, array());
+    }
+
+    /**
+     * Get steps key.
+     *
+     * @param  int    $runID
+     * @access public
+     * @return array
+     */
+    public function getStepIDList($runID, $caseID, $version)
+    {
+        if($runID)
+        {
+            $run = $this->testtask->getRunById($runID);
+        }
+        else
+        {
+            $run = new stdclass();
+            $run->case = $this->loadModel('testcase')->getById($caseID, $version);
+        }
+
+        foreach($run->case->steps as $key => $step)
+        {
+            /* Unset step if step is a group. */
+            if($step->type == 'group')
+            {
+                unset($run->case->steps[$key]);
+            }
+        }
+
+        return array_keys($run->case->steps);
     }
 }

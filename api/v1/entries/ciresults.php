@@ -15,7 +15,7 @@ class ciresultsEntry extends entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -25,6 +25,6 @@ class ciresultsEntry extends entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
-        $this->send(201, array());
+        return $this->send(201, array());
     }
 }

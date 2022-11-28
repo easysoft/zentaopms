@@ -29,7 +29,9 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->idAB;?></th>
+          <?php if(empty($globalDisableProgram)):?>
           <th class='c-parent'><?php echo $lang->project->parent;?></th>
+          <?php endif;?>
           <th class='c-name required'><?php echo $lang->project->name;?></th>
           <?php if(!isset($config->setCode) or $config->setCode == 1):?>
           <th class='c-name required'><?php echo $lang->project->code;?></th>
@@ -46,9 +48,10 @@
       </thead>
       <tbody>
         <?php foreach($projects as $projectID => $project):?>
-        <?php $aclList = $project->parent ? $lang->program->subAcls : $lang->project->acls;?>
+        <?php $aclList = (empty($globalDisableProgram) and $project->parent) ? $lang->program->subAcls : $lang->project->acls;?>
         <tr id="projects[<?php echo $projectID;?>]">
           <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIdList[$projectID]", $projectID);?></td>
+          <?php if(empty($globalDisableProgram)):?>
           <?php if(isset($unauthorizedPrograms[$project->parent])):?>
           <td>
             <?php echo html::select("parents[$projectID]", $unauthorizedPrograms, $project->parent, "class='form-control chosen' onchange='outOfDateTip($projectID)' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}' disabled");?>
@@ -56,6 +59,7 @@
           </td>
           <?php else:?>
           <td><?php echo html::select("parents[$projectID]", $programs, $project->parent, "class='form-control chosen' onchange='outOfDateTip($projectID)' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}'");?></td>
+          <?php endif;?>
           <?php endif;?>
           <td title='<?php echo $project->name;?>'><?php echo html::input("names[$projectID]", $project->name, "class='form-control'");?></td>
           <?php if(!isset($config->setCode) or $config->setCode == 1):?>

@@ -23,7 +23,7 @@
 </style>
 <?php $canBatchEdit = common::hasPriv('project', 'batchEdit');?>
 <div id="mainMenu" class="clearfix">
-  <?php if($this->config->systemMode == 'new'):?>
+  <?php if(empty($globalDisableProgram)):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php echo $programID ? $program->name : $lang->project->parent;?>
@@ -63,7 +63,7 @@ $suspendedCount = 0;
 $closedCount    = 0;
 ?>
 <div id='mainContent' class="main-row fade">
-  <?php if($this->config->systemMode == 'new'):?>
+  <?php if(empty($globalDisableProgram)):?>
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
@@ -105,6 +105,7 @@ $closedCount    = 0;
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head <?php if($useDatatable) echo 'datatable';?>' data-fixed-left-width='<?php echo $fixedFieldsWidth['leftWidth']?>' data-fixed-right-width='<?php echo $fixedFieldsWidth['rightWidth']?>'>
+        <?php $canBatchEdit = common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
             <?php
@@ -140,7 +141,7 @@ $closedCount    = 0;
         <?php
         if($canBatchEdit)
         {
-            $actionLink = $this->config->systemMode == 'new' ? $this->createLink('project', 'batchEdit', 'from=prjbrowse') : $this->createLink('project', 'batchEdit');
+            $actionLink = $this->createLink('project', 'batchEdit');
             $misc       = "data-form-action='$actionLink'";
             echo html::commonButton($lang->edit, $misc);
         }

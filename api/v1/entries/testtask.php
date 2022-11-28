@@ -16,7 +16,7 @@ class testtaskEntry extends entry
      *
      * @param  int    $testtaskID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($testtaskID)
     {
@@ -34,7 +34,7 @@ class testtaskEntry extends entry
             $testtask->testcases[] = $this->format($run, 'openedBy:user,openedDate:time,reviewedBy:user,reviewedDate:date,lastEditedBy:user,lastEditedDate:time');
         }
 
-        $this->send(200, $this->format($testtask, 'begin:date,end:date,mailto:userList,owner:user,realFinishedDate:time'));
+        return $this->send(200, $this->format($testtask, 'begin:date,end:date,mailto:userList,owner:user,realFinishedDate:time'));
     }
 
     /**
@@ -42,7 +42,7 @@ class testtaskEntry extends entry
      *
      * @param  int    $testtaskID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($testtaskID)
     {
@@ -51,6 +51,6 @@ class testtaskEntry extends entry
 
         $this->getData();
 
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

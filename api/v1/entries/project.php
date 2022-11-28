@@ -16,7 +16,7 @@ class projectEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($projectID)
     {
@@ -94,7 +94,7 @@ class projectEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($projectID)
     {
@@ -123,7 +123,7 @@ class projectEntry extends entry
         if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $project = $this->project->getByID($projectID);
-        $this->send(200, $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool'));
+        return $this->send(200, $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool'));
     }
 
     /**
@@ -131,7 +131,7 @@ class projectEntry extends entry
      *
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($projectID)
     {
@@ -139,6 +139,6 @@ class projectEntry extends entry
         $control->delete($projectID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

@@ -106,7 +106,7 @@ class repo extends control
         $this->view->objectID      = $objectID;
         $this->view->pager         = $pager;
         $this->view->repoList      = $repoList;
-        $this->view->products      = $this->loadModel('product')->getPairs();
+        $this->view->products      = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->sonarRepoList = $sonarRepoList;
         $this->view->successJobs   = $successJobs;
 
@@ -139,17 +139,24 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        $products  = $this->loadModel('product')->getProductPairsByProject($objectID);
-        $productID = count($products) > 0 ? key($products) : '';
+        if($this->app->tab == 'project')
+        {
+            $products = $this->loadModel('product')->getProductPairsByProject($objectID);
+        }
+        else
+        {
+            $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        }
 
-        $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
-        $this->view->position[]   = $this->lang->repo->create;
-        $this->view->groups       = $this->loadModel('group')->getPairs();
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products     = $products;
-        $this->view->productID    = $productID;
-        $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
-        $this->view->objectID     = $objectID;
+        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->position[]      = $this->lang->repo->create;
+        $this->view->groups          = $this->loadModel('group')->getPairs();
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products        = $products;
+        $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->relatedProjects = $this->app->tab == 'project' ? array($objectID) : array();
+        $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
+        $this->view->objectID        = $objectID;
 
         $this->display();
     }
@@ -202,14 +209,20 @@ class repo extends control
             $this->view->projects = $options;
         }
 
-        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
-        $this->view->repo          = $repo;
-        $this->view->repoID        = $repoID;
-        $this->view->objectID      = $objectID;
-        $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products      = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-        $this->view->serviceHosts  = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
+        $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $linkedProducts     = $this->loadModel('product')->getByIdList($repo->product);
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column($linkedProducts, 'name'));
+        $products           = $products + $linkedProductPairs;
+
+        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->repo            = $repo;
+        $this->view->repoID          = $repoID;
+        $this->view->objectID        = $objectID;
+        $this->view->groups          = $this->loadModel('group')->getPairs();
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products        = $products;
+        $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
+        $this->view->serviceHosts    = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
 
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;
@@ -500,6 +513,7 @@ class repo extends control
         $this->view->branchesAndTags = $branchesAndTags;
         $this->view->branchID        = $branchID;
         $this->view->objectID        = $objectID;
+        $this->view->currentProject  = $this->app->tab == 'project' ? $this->loadModel('project')->getByID($objectID) : null;
         $this->view->pager           = $pager;
         $this->view->path            = urldecode($path);
         $this->view->logType         = $logType;
@@ -1171,7 +1185,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($repoID, $module = 'repo', $method = 'browse')
+    public function ajaxGetDropMenu($repoID, $module = 'repo', $method = 'browse', $projectID = 0)
     {
         if($module == 'repo' and !in_array($method, array('review', 'diff'))) $method = 'browse';
         if($module == 'mr')  $method = 'browse';
@@ -1184,7 +1198,7 @@ class repo extends control
         }
 
         /* Get repo group by type. */
-        $repoGroup = $this->repo->getRepoGroup($this->app->tab);
+        $repoGroup = $this->repo->getRepoGroup($this->app->tab, $projectID);
         if($module == 'mr')
         {
             foreach($repoGroup as $type => $group)
@@ -1198,6 +1212,52 @@ class repo extends control
         $this->view->link      = $this->createLink($module, $method, "repoID=%s");
 
         $this->display();
+    }
+
+    /**
+     * Create new product select options by remove shadow products if remove project.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxFilterShadowProducts()
+    {
+        $postData = fixer::input('post')
+            ->setDefault('products', array())
+            ->setDefault('projectID', 0)
+            ->setDefault('objectID', 0)
+            ->get();
+
+        $shadowProduct    = $this->loadModel('product')->getShadowProductByProject($postData->projectID);
+        $selectedProducts = array_diff($postData->products, array($shadowProduct->id)); // Remove shadow product.
+
+        $products           = $postData->objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $linkedProducts     = $this->loadModel('product')->getByIdList($postData->products);
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column($linkedProducts, 'name'));
+        $products           = $products + $linkedProductPairs;
+
+        return print (html::select('product[]', $products, $selectedProducts, "class='form-control chosen' multiple"));
+    }
+
+    /**
+     * Get projects list by product id list by ajax.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxProjectsOfProducts()
+    {
+        $postData = fixer::input('post')
+            ->setDefault('products', array())
+            ->setDefault('projects', array())
+            ->get();
+
+        /* Get all projects that can be accessed. */
+        $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($postData->products);
+
+        $selectedProjects = array_intersect(array_keys($accessProjects), $postData->projects);
+
+        return print (html::select('projects[]', $accessProjects, $selectedProjects, "class='form-control chosen' multiple"));
     }
 
     /**

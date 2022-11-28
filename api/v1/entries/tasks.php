@@ -16,7 +16,7 @@ class tasksEntry extends entry
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($executionID = 0)
     {
@@ -57,7 +57,7 @@ class tasksEntry extends entry
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($executionID)
     {
@@ -78,6 +78,6 @@ class tasksEntry extends entry
 
         $task = $this->loadModel('task')->getByID($data->id);
 
-        $this->send(201, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(201, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 }

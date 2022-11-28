@@ -33,12 +33,12 @@
         <?php foreach($executions as $execution):?>
         <?php $executionLink = $this->createLink('execution', 'view', "executionID=$execution->id");?>
         <tr>
-          <td><?php echo html::a($executionLink, $execution->id);?></td>
+          <td><?php echo html::a($executionLink, $execution->id, '', "data-app='execution'");?></td>
           <td>
             <?php if($this->config->edition == 'max'):?>
             <span class='project-type-label label label-info label-outline'><?php echo zget($lang->user->executionTypeList, $execution->type);?></span>
             <?php endif;?>
-            <?php echo html::a($executionLink, $execution->name);?>
+            <?php echo html::a($executionLink, $execution->name, '', "data-app='execution'");?>
           </td>
           <?php if(isset($execution->delay)):?>
           <td class='project-delay'><?php echo $lang->execution->delayed;?></td>

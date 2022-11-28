@@ -132,15 +132,13 @@ class blockModel extends model
      */
     public function getBlockList($module = 'my', $type = '')
     {
-        $blocks = $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
+        return $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
             ->andWhere('module')->eq($module)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('hidden')->eq(0)
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->orderBy('`order`')
             ->fetchAll('id');
-
-        return $blocks;
     }
 
     /**
@@ -753,6 +751,51 @@ class blockModel extends model
     }
 
     /**
+     * Get scrum issue params.
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getScrumIssueParams($module = '')
+    {
+        $this->app->loadLang('issue');
+
+        $params = $this->appendCountParams();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum risk params.
+     *
+     * @param  string $module▫
+     * @access public
+     * @return void
+     */
+    public function getScrumRiskParams($module = '')
+    {
+        $this->app->loadLang('risk');
+        $params = $this->appendCountParams();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->risk->featureBar['browse'];
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /**
      * Get execution params.
      *
      * @access public
@@ -791,17 +834,26 @@ class blockModel extends model
 
         if($this->config->edition == 'max')
         {
-            $params->riskCount['name']    = $this->lang->block->riskCount;
-            $params->riskCount['default'] = 20;
-            $params->riskCount['control'] = 'input';
+            if(helper::hasFeature('risk'))
+            {
+                $params->riskCount['name']    = $this->lang->block->riskCount;
+                $params->riskCount['default'] = 20;
+                $params->riskCount['control'] = 'input';
+            }
 
-            $params->issueCount['name']    = $this->lang->block->issueCount;
-            $params->issueCount['default'] = 20;
-            $params->issueCount['control'] = 'input';
+            if(helper::hasFeature('issue'))
+            {
+                $params->issueCount['name']    = $this->lang->block->issueCount;
+                $params->issueCount['default'] = 20;
+                $params->issueCount['control'] = 'input';
+            }
 
-            $params->meetingCount['name']    = $this->lang->block->meetingCount;
-            $params->meetingCount['default'] = 20;
-            $params->meetingCount['control'] = 'input';
+            if(helper::hasFeature('meeting'))
+            {
+                $params->meetingCount['name']    = $this->lang->block->meetingCount;
+                $params->meetingCount['default'] = 20;
+                $params->meetingCount['control'] = 'input';
+            }
 
             $params->feedbackCount['name']    = $this->lang->block->feedbackCount;
             $params->feedbackCount['default'] = 20;
@@ -811,6 +863,10 @@ class blockModel extends model
         $params->storyCount['name']    = $this->lang->block->storyCount;
         $params->storyCount['default'] = 20;
         $params->storyCount['control'] = 'input';
+
+        $params->reviewCount['name']    = $this->lang->block->reviewCount;
+        $params->reviewCount['default'] = 20;
+        $params->reviewCount['control'] = 'input';
 
         return json_encode($params);
     }

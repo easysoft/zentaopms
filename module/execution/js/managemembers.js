@@ -22,22 +22,19 @@ $(function()
 {
     $('#execution_chosen, #execution + .picker').click(function()
     {
-        if(systemMode == 'new')
+        $('#execution_chosen ul li, #pickerDropMenu-pk_execution div a').each(function(index)
         {
-            $('#execution_chosen ul li, #pickerDropMenu-pk_execution div a').each(function(index)
+            if(index == 0)
             {
-                if(index == 0)
-                {
-                    var projectName = subString($(this).text(), 56);
-                    $(this).text(projectName);
-                    $(this).append(' <label class="label">' + projectCommon + '</label>');
-                }
-                else
-                {
-                    $(this).prepend('&nbsp;&nbsp;&nbsp;');
-                }
-            })
-        }
+                var projectName = subString($(this).text(), 56);
+                $(this).text(projectName);
+                $(this).append(' <label class="label">' + projectCommon + '</label>');
+            }
+            else
+            {
+                $(this).prepend('&nbsp;&nbsp;&nbsp;');
+            }
+        })
     });
 })
 

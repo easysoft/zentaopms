@@ -23,6 +23,7 @@ $lang->admin->getCaptcha      = '获取验证码';
 $lang->admin->register        = '登记';
 $lang->admin->resetPWDSetting = '重置密码设置';
 $lang->admin->tableEngine     = '表引擎';
+$lang->admin->setModuleIndex  = '系统功能配置';
 
 $lang->admin->api            = '接口';
 $lang->admin->log            = '日志';
@@ -64,6 +65,44 @@ $lang->admin->registerNotice->success    = "登记账户成功";
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = '关联社区帐号';
 $lang->admin->bind->success = "关联账户成功";
+
+$lang->admin->setModule = new stdclass();
+$lang->admin->setModule->module         = '功能点';
+$lang->admin->setModule->optional       = '可选功能';
+$lang->admin->setModule->opened         = '已开启';
+$lang->admin->setModule->closed         = '已关闭';
+
+$lang->admin->setModule->product        = '产品';
+$lang->admin->setModule->scrum          = '敏捷项目';
+$lang->admin->setModule->waterfall      = '瀑布项目';
+$lang->admin->setModule->assetlib       = '资产库';
+$lang->admin->setModule->other          = '通用功能';
+
+$lang->admin->setModule->repo           = '代码';
+$lang->admin->setModule->issue          = '问题';
+$lang->admin->setModule->risk           = '风险';
+$lang->admin->setModule->opportunity    = '机会';
+$lang->admin->setModule->process        = '过程';
+$lang->admin->setModule->measrecord     = '度量';
+$lang->admin->setModule->auditplan      = 'QA';
+$lang->admin->setModule->meeting        = '会议';
+$lang->admin->setModule->roadmap        = '路线图';
+$lang->admin->setModule->track          = '矩阵';
+$lang->admin->setModule->UR             = '用户需求';
+$lang->admin->setModule->researchplan   = '调研';
+$lang->admin->setModule->gapanalysis    = '培训';
+$lang->admin->setModule->storylib       = '需求库';
+$lang->admin->setModule->caselib        = '用例库';
+$lang->admin->setModule->issuelib       = '问题库';
+$lang->admin->setModule->risklib        = '风险库';
+$lang->admin->setModule->opportunitylib = '机会库';
+$lang->admin->setModule->practicelib    = '最佳实践库';
+$lang->admin->setModule->componentlib   = '组件库';
+$lang->admin->setModule->devops         = 'DevOps';
+$lang->admin->setModule->kanban         = '通用看板';
+$lang->admin->setModule->OA             = '办公';
+$lang->admin->setModule->deploy         = '运维';
+$lang->admin->setModule->traincourse    = '学堂';
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common                   = '安全策略';

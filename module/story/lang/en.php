@@ -188,7 +188,6 @@ $lang->story->design           = 'Design';
 $lang->story->case             = 'Cases';
 $lang->story->bug              = 'Bugs';
 $lang->story->repoCommit       = 'Commits';
-$lang->story->noRequirement    = 'No Requirements';
 $lang->story->one              = 'One';
 $lang->story->field            = 'Sync Field';
 $lang->story->completeRate     = 'Completion Rate';
@@ -294,7 +293,7 @@ $lang->story->lblClose    = 'Close';
 $lang->story->lblTBC      = 'Task/Bug/Case';
 
 $lang->story->checkAffection       = 'Influence';
-$lang->story->affectedProjects     = $config->systemMode == 'new' ? "{$lang->project->common}s/{$lang->execution->common}s" : "{$lang->project->common}s";
+$lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'Cases';
 
@@ -310,7 +309,7 @@ $lang->story->mustChooseResult     = 'Select Result';
 $lang->story->mustChoosePreVersion = 'Select a version to revert to.';
 $lang->story->noStory              = 'No stories yet. ';
 $lang->story->noRequirement        = 'No requirements yet. ';
-$lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
+$lang->story->ignoreChangeStage    = 'The status of %s is Draft or Closed. This operation has been filtered.';
 $lang->story->cannotDeleteParent   = "Can not delete parent {$lang->SRCommon}";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
@@ -332,11 +331,12 @@ $lang->story->form->file     = 'If any file that is linked to a story, please cl
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed              = array('main' => '$date, recorded by <strong>$actor</strong>. The result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->story->action->rejectreviewed        = array('main' => '$date, recorded by <strong>$actor</strong>. The result is <strong>$extra</strong>. The reasion is <strong>$reason</strong>.', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
+$lang->story->action->rejectreviewed        = array('main' => '$date, recorded by <strong>$actor</strong>. The result is <strong>$extra</strong>. The reason is <strong>$reason</strong>.', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->recalled              = array('main' => '$date, recalled by <strong>$actor</strong>.');
-$lang->story->action->closed                = array('main' => '$date, closed by <strong>$actor</strong>. The reasion is <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->closed                = array('main' => '$date, closed by <strong>$actor</strong>. The reason is <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->closedbysystem        = array('main' => '$date, The system determines that the parent story is automatically closed because all child stories are closed.');
 $lang->story->action->reviewpassed          = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Pass</strong>.');
-$lang->story->action->reviewrejected        = array('main' => '$date, closed by <strong>System</strong>. The reasion is <strong>Rejection</strong>.');
+$lang->story->action->reviewrejected        = array('main' => '$date, closed by <strong>System</strong>. The reason is <strong>Rejection</strong>.');
 $lang->story->action->reviewclarified       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>To Be Clarified</strong>. Please re-initiate the review after edit.');
 $lang->story->action->reviewreverted        = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Undo Change</strong>.');
 $lang->story->action->linked2plan           = array('main' => '$date, linked by <strong>$actor</strong> to Plan <strong>$extra</strong>');

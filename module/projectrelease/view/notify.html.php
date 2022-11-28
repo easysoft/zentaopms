@@ -24,7 +24,7 @@
       <table class='table table-form'>
         <tr> 
           <th><?php echo $lang->release->notifyUsers;?></th>
-          <td><?php echo html::checkbox('notify', $lang->release->notifyList, 'FB');?></td>
+          <td><?php echo html::checkbox('notify', $notifyList, 'FB');?></td>
         </tr> 
         <?php echo html::hidden('releaseID', $release->id);?>
         <tr> 

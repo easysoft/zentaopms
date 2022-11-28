@@ -62,10 +62,10 @@ CREATE TABLE `zt_ticketrelation` (
 
 ALTER TABLE `zt_product` ADD `ticket` varchar(30) NOT NULL AFTER `feedback`;
 ALTER TABLE `zt_kanban` ADD `colWidth` smallint(4) NOT NULL DEFAULT '264' AFTER `fluidBoard`;
-ALTER TABLE `zt_kanban` ADD `minColWidth` smallint(4) NOT NULL DEFAULT '180' AFTER `colWidth`;
+ALTER TABLE `zt_kanban` ADD `minColWidth` smallint(4) NOT NULL DEFAULT '200' AFTER `colWidth`;
 ALTER TABLE `zt_kanban` ADD `maxColWidth` smallint(4) NOT NULL DEFAULT '384' AFTER `minColWidth`;
 ALTER TABLE `zt_project` ADD `colWidth` smallint(4) NOT NULL DEFAULT '264' AFTER `fluidBoard`;
-ALTER TABLE `zt_project` ADD `minColWidth` smallint(4) NOT NULL DEFAULT '180' AFTER `colWidth`;
+ALTER TABLE `zt_project` ADD `minColWidth` smallint(4) NOT NULL DEFAULT '200' AFTER `colWidth`;
 ALTER TABLE `zt_project` ADD `maxColWidth` smallint(4) NOT NULL DEFAULT '384' AFTER `minColWidth`;
 
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'syncProduct', '{"feedback":{},"ticket":{}}');

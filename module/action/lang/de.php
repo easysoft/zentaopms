@@ -205,6 +205,7 @@ $lang->action->desc->estimated            = '$date, by <strong>$actor</strong> e
 $lang->action->desc->run                  = '$date, by <strong>$actor</strong> executed.' . "\n";
 $lang->action->desc->syncprogram          = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
 $lang->action->desc->syncproject          = '$date, starting the execution sets the project status as Ongoing.' . "\n";
+$lang->action->desc->syncmultipleproject  = '$date, starting the task sets the project status as Ongoing.' . "\n";
 $lang->action->desc->syncexecution        = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->syncexecutionbychild = '$date, starting the sub stage sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->importfromgitlab     = '$date, Issue associate created from gitlab by <strong>$actor</strong>.' . "\n";
@@ -225,6 +226,8 @@ $lang->action->desc->merged               = '$date, merged by <strong>$actor</st
 $lang->action->desc->submitreview         = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->ganttmove            = '$date, sort by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->relieved             = '$date, relieved by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the sprints of the project from the $extra.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -395,6 +398,10 @@ $lang->action->label->ganttmove             = 'sorted';
 $lang->action->label->submitreview          = 'submitted';
 $lang->action->label->syncsiblings          = 'synchronized changes';
 $lang->action->label->relieved              = 'relieved';
+$lang->action->label->switchtolight         = 'switch from ALM mode to light mode';
+$lang->action->label->linkedrepo            = 'Linked Code Repo';
+$lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
+$lang->action->label->unlinkproduct         = 'Unlinked Product';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -414,12 +421,13 @@ $lang->action->dynamicAction->program['activated'] = 'Activate Program';
 $lang->action->dynamicAction->program['deleted']   = 'Delete Program';
 $lang->action->dynamicAction->program['closed']    = 'Close Program';
 
-$lang->action->dynamicAction->project['opened']    = 'Create Project';
-$lang->action->dynamicAction->project['edited']    = 'Edit Project';
-$lang->action->dynamicAction->project['started']   = 'Start Project';
-$lang->action->dynamicAction->project['suspended'] = 'Suspend Project';
-$lang->action->dynamicAction->project['activated'] = 'Activate Project';
-$lang->action->dynamicAction->project['closed']    = 'Close Project';
+$lang->action->dynamicAction->project['opened']        = 'Create Project';
+$lang->action->dynamicAction->project['edited']        = 'Edit Project';
+$lang->action->dynamicAction->project['started']       = 'Start Project';
+$lang->action->dynamicAction->project['suspended']     = 'Suspend Project';
+$lang->action->dynamicAction->project['activated']     = 'Activate Project';
+$lang->action->dynamicAction->project['closed']        = 'Close Project';
+$lang->action->dynamicAction->project['switchtolight'] = 'Switch Mode';
 
 $lang->action->dynamicAction->product['opened']    = 'Create ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = 'Edit ' . $lang->productCommon;
@@ -683,14 +691,7 @@ $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
 $lang->action->label->program     = "Program|program|pgmproduct|programID=%s";
 $lang->action->label->project     = "Project|project|index|projectID=%s";
-if($config->systemMode == 'new')
-{
-    $lang->action->label->execution = "Execution|execution|task|executionID=%s";
-}
-else
-{
-    $lang->action->label->execution = "Execution|execution|task|executionID=%s";
-}
+$lang->action->label->execution   = "Execution|execution|task|executionID=%s";
 
 $lang->action->label->task         = 'Aufgaben|task|view|taskID=%s';
 $lang->action->label->build        = 'Builds|build|view|buildID=%s';
@@ -905,3 +906,5 @@ $lang->action->desc->deletemr                     = '$date, <strong>$actor</stro
 $lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged <a href="$extra">code</a>.';
 $lang->action->desc->approve                      = '$date, <strong>$actor</strong> approved.';
 $lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
+$lang->action->desc->linkedrepo                   = '$date, <strong>$actor</strong> linked repo $extra';
+$lang->action->desc->unlinkedrepo                 = '$date, <strong>$actor</strong> unlinked repo $extra';

@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class taskStartEntry extends Entry
+class taskStartEntry extends entry
 {
     /**
      * POST method.
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($taskID)
     {
@@ -32,9 +32,10 @@ class taskStartEntry extends Entry
         $data = $this->getData();
         if(!$data) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $task = $this->loadModel('task')->getByID($taskID);
 
-        $this->send(200, $task);
+        return $this->send(200, $task);
     }
 }

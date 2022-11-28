@@ -23,7 +23,7 @@
     <?php if(!common::checkNotCN() or $i <= 6):?>
     <li<?php if($isFirstTab) {echo ' class="active"';}?>>
         <a data-tab href='#assigntomeTab-<?php echo $type;?>' onClick="changeLabel('<?php echo $type;?>')">
-        <?php echo $lang->block->availableBlocks->$type;?>
+        <?php echo $type == 'review' ? $lang->my->audit : $lang->block->availableBlocks->$type;?>
         <span class='label label-light label-badge label-assignto <?php echo $type . "-count "; echo $isFirstTab ? '' : 'hidden'; $isFirstTab = false ?>'><?php echo $count[$type];?></span>
       </a>
     </li>

@@ -2,6 +2,8 @@ $(function()
 {
     $('#lineName').css('border-left-color', '');
     $('[name=newLine]').change();
+
+    if(programID == 0) $("#line").closest('tr').addClass('hidden');
 })
 /**
   * Load product Lines.
@@ -34,6 +36,7 @@ function setParentProgram(parentProgram)
 $('#program').change(function()
 {
     var programID = $(this).val();
+    if(programID > 0) $("#line").closest('tr').removeClass('hidden');
 
     $.get(createLink('product', 'ajaxGetLine', 'programID=' + programID), function(data)
     {

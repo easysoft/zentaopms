@@ -19,7 +19,7 @@
     <div class="tip"><a data-toggle='tooltip' title='<?php echo $lang->product->projectInfo;?>'><i class='icon-help'></i></a></div>
 
   </div>
-  <?php if($config->systemMode == 'new' and $branchStatus != 'closed'):?>
+  <?php if($branchStatus != 'closed'):?>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('project', 'manageProducts')) echo html::a('#link2Project', '<i class="icon-link"></i> ' . $lang->product->link2Project, '', "data-toggle='modal' class='btn btn-secondary'");?>
     <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$product->program&from=project&productID=$productID&branchID=$branchID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
@@ -29,13 +29,7 @@
 <div id="mainContent">
   <?php if(empty($projectStats)):?>
   <div class="table-empty-tip">
-    <p>
-    <?php if($config->systemMode == 'new'):?>
-      <span class="text-muted"><?php echo $lang->project->empty;?></span>
-    <?php else:?>
-      <span class="text-muted"><?php echo $lang->execution->noExecution;?></span>
-    <?php endif;?>
-    </p>
+    <p><span class="text-muted"><?php echo $lang->project->empty;?></span></p>
   </div>
   <?php else:?>
   <form class='main-table table-project'>
@@ -43,12 +37,10 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->idAB;?></th>
-          <?php if($config->systemMode == 'new'):?>
+          <?php if($config->systemMode == 'ALM'):?>
           <th class='c-program'><?php echo $lang->program->common;?></th>
-          <th><?php echo $lang->project->name;?></th>
-          <?php else:?>
-          <th><?php echo $lang->execution->name;?></th>
           <?php endif;?>
+          <th><?php echo $lang->project->name;?></th>
           <?php if(strpos('all,undone', $status) !== false):?>
           <th class='c-status'><?php echo $lang->project->status;?></th>
           <?php endif;?>
@@ -76,19 +68,13 @@
         <?php if($project->status == 'closed')    $closedCount ++;?>
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
-          <?php if($config->systemMode == 'new'):?>
+          <?php if($config->systemMode == 'ALM'):?>
           <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
           <?php endif;?>
           <td class='text-left'>
             <?php
-            if($config->systemMode == 'new')
-            {
-                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name, '', "title='{$project->name} ({$lang->project->{$project->model}})'");
-            }
-            else
-            {
-                echo html::a($this->createLink('execution', 'task', 'project=' . $project->id), $project->name, '', "title='{$project->name}'");
-            }
+            $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;
+            echo html::a($this->createLink('project', 'index', 'project=' . $project->id), "<i class='text-muted icon icon-{$projectType}'></i> " . $project->name, '', "title='$project->name'");
             ?>
           </td>
           <?php if(strpos('all,undone', $status) !== false):?>

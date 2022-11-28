@@ -53,49 +53,24 @@ $lang->tutorial->tasks['createStory']['nav']  = array('app' => 'product', 'modul
 $lang->tutorial->tasks['createStory']['desc'] = "<p>在系統創建一個新的{$lang->SRCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 提{$lang->SRCommon}</span> 頁面；</li><li data-target='form'>在{$lang->productCommon}表單中填寫要創建的{$lang->SRCommon}信息；</li><li data-target='submit'>保存{$lang->SRCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['createProject']         = array('title' => '創建項目');
-$lang->tutorial->tasks['createProject']['mode'] = 'new';
 $lang->tutorial->tasks['createProject']['nav']  = array('app' => 'project', 'module' => 'project', 'method' => 'create', 'menuModule' => 'browse', 'menu' => '', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-project-btn', 'targetPageName' => '添加項目');
 $lang->tutorial->tasks['createProject']['desc'] = "<p>在系統創建一個新的項目：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 項目 <i class='icon icon-angle-right'></i> 項目列表 <i class='icon icon-angle-right'></i> 創建項目</span> 頁面；</li><li data-target='form'>在項目表單中填寫要創建的項目信息；</li><li data-target='submit'>保存項目信息。</li></ul>";
 
 $lang->tutorial->tasks['manageTeam']         = array('title' => "管理項目團隊");
-$lang->tutorial->tasks['manageTeam']['mode'] = 'new';
 $lang->tutorial->tasks['manageTeam']['nav']  = array('app' => 'project', 'module' => 'project', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#projectTableList>tr:first>.c-name a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="members"],.manage-team-btn', 'target' => '.manage-team-btn', 'vars' => 'projectID=0', 'form' => '#teamForm', 'requiredFields' => 'accounts1', 'submit' => '#submit', 'targetPageName' => '團隊管理');
 $lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理項目團隊成員：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 項目 <i class='icon icon-angle-right'></i> 設置 <i class='icon icon-angle-right'></i> 團隊 <i class='icon icon-angle-right'></i> 團隊管理</span> 頁面；</li><li data-target='form'>選擇要加入項目團隊的成員；</li><li data-target='submit'>保存團隊成員信息。</li></ul>";
 
 $lang->tutorial->tasks['createProjectExecution']         = array('title' => '添加' . $lang->executionCommon);
-$lang->tutorial->tasks['createProjectExecution']['mode'] = 'new';
 $lang->tutorial->tasks['createProjectExecution']['nav']  = array('app' => 'project', 'module' => 'execution', 'method' => 'create', 'menuModule' => 'browse', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#projectTableList>tr:first>.c-name a,#navbar>.nav>li[data-id="execution"],.create-execution-btn', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-execution-btn', 'targetPageName' => '添加' . $lang->executionCommon);
 $lang->tutorial->tasks['createProjectExecution']['desc'] = "<p>在系統創建一個新的{$lang->executionCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 項目 <i class='icon icon-angle-right'></i> {$lang->executionCommon} <i class='icon icon-angle-right'></i> 添加{$lang->executionCommon}</span> 頁面；</li><li data-target='form'>在{$lang->executionCommon}表單中填寫要創建的{$lang->executionCommon}信息；</li><li data-target='submit'>保存{$lang->executionCommon}信息。</li></ul>";
 
-$lang->tutorial->tasks['createExecution']         = array('title' => '創建' . $lang->executionCommon);
-$lang->tutorial->tasks['createExecution']['mode'] = 'classic';
-$lang->tutorial->tasks['createExecution']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'create', 'menuModule' => 'browse', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="all"],.create-execution-btn', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-execution-btn', 'targetPageName' => '添加' . $lang->executionCommon);
-$lang->tutorial->tasks['createExecution']['desc'] = "<p>在系統創建一個新的{$lang->executionCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 項目 <i class='icon icon-angle-right'></i> {$lang->executionCommon}列表 <i class='icon icon-angle-right'></i> 添加{$lang->executionCommon}</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的{$lang->executionCommon}信息；</li><li data-target='submit'>保存{$lang->executionCommon}信息。</li></ul>";
-
-$lang->tutorial->tasks['manageExecutionTeam']         = array('title' => "管理團隊");
-$lang->tutorial->tasks['manageExecutionTeam']['mode'] = 'classic';
-$lang->tutorial->tasks['manageExecutionTeam']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#executionTableList>tr:first>.c-name>a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="team"],.manage-team-btn', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1,accounts', 'submit' => '#submit', 'targetPageName' => '團隊管理');
-$lang->tutorial->tasks['manageExecutionTeam']['desc'] = "<p>管理{$lang->executionCommon}團隊成員：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> 設置 <i class='icon icon-angle-right'></i> 團隊 <i class='icon icon-angle-right'></i> 團隊管理</span> 頁面；</li><li data-target='form'>選擇要加入團隊的成員；</li><li data-target='submit'>保存團隊成員信息。</li></ul>";
-
 $lang->tutorial->tasks['linkStory']         = array('title' => "關聯{$lang->SRCommon}");
-$lang->tutorial->tasks['linkStory']['mode'] = 'new';
 $lang->tutorial->tasks['linkStory']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'linkStory', 'menuModule' => 'story', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="all"],#navbar>.nav>li[data-id="story"],#executionTableList>tr:first>.c-name>a,.link-story-btn', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => "關聯{$lang->SRCommon}");
 $lang->tutorial->tasks['linkStory']['desc'] = "<p>將{$lang->SRCommon}關聯到執行：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 執行 <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 關聯{$lang->SRCommon}</span> 頁面；</li><li data-target='form'>在{$lang->SRCommon}列表中勾選要關聯的{$lang->SRCommon}；</li><li data-target='submit'>保存關聯的{$lang->SRCommon}信息。</li></ul>";
 
-$lang->tutorial->tasks['linkExecutionStory']         = array('title' => "關聯{$lang->SRCommon}");
-$lang->tutorial->tasks['linkExecutionStory']['mode'] = 'classic';
-$lang->tutorial->tasks['linkExecutionStory']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'linkStory', 'menuModule' => 'story', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="all"],#navbar>.nav>li[data-id="story"],#executionTableList>tr:first>.c-name>a,.link-story-btn', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => "關聯{$lang->SRCommon}");
-$lang->tutorial->tasks['linkExecutionStory']['desc'] = "<p>將{$lang->SRCommon}關聯到{$lang->executionCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 關聯{$lang->SRCommon}</span> 頁面；</li><li data-target='form'>在{$lang->SRCommon}列表中勾選要關聯的{$lang->SRCommon}；</li><li data-target='submit'>保存關聯的{$lang->SRCommon}信息。</li></ul>";
-
 $lang->tutorial->tasks['createTask']         = array('title' => '分解任務');
-$lang->tutorial->tasks['createTask']['mode'] = 'new';
 $lang->tutorial->tasks['createTask']['nav']  = array('app' => 'execution', 'module' => 'task', 'method' => 'create', 'menuModule' => 'story', 'menu' => '', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '建任務');
 $lang->tutorial->tasks['createTask']['desc'] = "<p>將執行{$lang->SRCommon}分解為任務：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 執行 <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 分解任務</span> 頁面；</li><li data-target='form'>在表單中填寫任務信息；</li><li data-target='submit'>保存任務信息。</li></ul>";
-
-$lang->tutorial->tasks['createExecutionTask']         = array('title' => '分解任務');
-$lang->tutorial->tasks['createExecutionTask']['mode'] = 'classic';
-$lang->tutorial->tasks['createExecutionTask']['nav']  = array('app' => 'execution', 'module' => 'task', 'method' => 'create', 'menuModule' => 'story', 'menu' => '', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '建任務');
-$lang->tutorial->tasks['createExecutionTask']['desc'] = "<p>將{$lang->executionCommon}{$lang->SRCommon}分解為任務：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 分解任務</span> 頁面；</li><li data-target='form'>在表單中填寫任務信息；</li><li data-target='submit'>保存任務信息。</li></ul>";
 
 $lang->tutorial->tasks['createBug']         = array('title' => '提Bug');
 $lang->tutorial->tasks['createBug']['nav']  = array('app' => 'qa', 'module' => 'bug', 'method' => 'create', 'menuModule' => 'bug', 'menu' => 'bug', 'target' => '.create-bug-btn', 'vars' => 'productID=0', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '提Bug');

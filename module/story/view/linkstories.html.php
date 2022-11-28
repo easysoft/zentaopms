@@ -16,7 +16,7 @@
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $story->id;?></span>
-      <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '_blank', "title='$story->title'");?>
+      <?php echo $story->title;?>
       <?php $title = $story->type == 'story' ? $lang->story->linkStoriesAB : $lang->story->linkRequirementsAB?>
       <small class='text-muted'> <?php echo $lang->arrow . $title;?></small>
     </h2>
@@ -34,7 +34,9 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-pri' title=<?php echo $lang->pri;?>><?php echo $lang->priAB;?></th>
+          <?php if(!empty($product->shadow)):?>
           <th class='c-product'><?php echo $lang->story->product;?></th>
+          <?php endif;?>
           <th class='c-title'><?php echo $lang->story->title;?></th>
           <th class='c-status'><?php echo $lang->story->statusAB;?></th>
           <th class='c-user'><?php echo $lang->story->openedByAB;?></th>
@@ -54,7 +56,9 @@
             <?php printf('%03d', $story2Link->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $story2Link->pri?>' title='<?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?>'><?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?></span></td>
+          <?php if(!empty($product->shadow)):?>
           <td class='nobr' title="<?php echo $products[$story2Link->product]?>"><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
+          <?php endif;?>
           <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title);?></td>
           <td><?php echo $this->processStatus('story', $story2Link);?></td>
           <td><?php echo zget($users, $story2Link->openedBy);?></td>
@@ -86,9 +90,9 @@ $(function()
         var output = '';
         $('#linkStoriesForm').find('tr.checked').each(function(){
             var storyID        = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
-            var storyTitle     = "#" + storyID + ' ' + $(this).find('td').eq(3).attr('title');
+            var storyTitle     = "#" + storyID + ' ' + $(this).find('td').eq(2).attr('title');
             var linkStoryField = storyType == 'story' ? 'linkStories' : 'linkRequirements';
-            var checkbox       = "<li><div class='checkbox-primary' title='" + $(this).find('td').eq(3).attr('title') + "'><input type='checkbox' checked='checked' name='" + linkStoryField + "[]' " + "value=" + storyID + " /><label class='linkStoryTitle'>" + storyTitle + "</label></div></li>";
+            var checkbox       = "<li><div class='checkbox-primary' title='" + $(this).find('td').eq(2).attr('title') + "'><input type='checkbox' checked='checked' name='" + linkStoryField + "[]' " + "value=" + storyID + " /><label class='linkStoryTitle'>" + storyTitle + "</label></div></li>";
 
             output += checkbox;
         });

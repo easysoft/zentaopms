@@ -19,8 +19,6 @@
       }
       if($object == 'user') common::printLink('custom', 'required', "", "<span class='text'>{$lang->custom->required}</span>", '', "class='btn btn-link' id='requiredTab'");
   }
-
-  if($config->systemMode == 'classic') common::printLink('custom', 'mode', "", "<span class='text'>{$lang->custom->mode}</span>", '', "class='btn btn-link' id='modeTab'");
   ?>
   </div>
 </div>

@@ -177,7 +177,6 @@ $lang->story->design         = 'Designs';
 $lang->story->case           = 'Cases';
 $lang->story->bug            = 'Bugs';
 $lang->story->repoCommit     = 'Commits';
-$lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
@@ -281,7 +280,7 @@ $lang->story->lblClose    = 'Đóng';
 $lang->story->lblTBC      = 'Nhiệm vụ/Bug/Tình huống';
 
 $lang->story->checkAffection   = 'Ảnh hưởng';
-$lang->story->affectedProjects = $config->systemMode == 'new' ? "{$lang->project->common}s/{$lang->execution->common}s" : "{$lang->project->common}s";
+$lang->story->affectedProjects = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs     = 'Bugs';
 $lang->story->affectedCases    = 'Tình huống';
 
@@ -297,7 +296,7 @@ $lang->story->mustChooseResult     = 'Chọn kết quả';
 $lang->story->mustChoosePreVersion = 'Chọn một phiên bản để chuyển thành.';
 $lang->story->noStory              = 'Không có câu chuyện nào';
 $lang->story->noRequirement        = 'Không có câu chuyện nào';
-$lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
+$lang->story->ignoreChangeStage    = 'The status of %s is Draft or Closed. This operation has been filtered.';
 $lang->story->cannotDeleteParent   = "Không thể xóa {$lang->SRCommon} mẹ";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';

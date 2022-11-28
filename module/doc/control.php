@@ -156,8 +156,15 @@ class doc extends control
         /* Splice project name. */
         foreach($executions as $executionID => $execution)
         {
-            $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
-            $executions[$executionID] = $executionPrefix . $execution->name;
+            if($execution->multiple)
+            {
+                $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
+                $executions[$executionID] = $executionPrefix . $execution->name;
+            }
+            else
+            {
+                unset($executions[$executionID]);
+            }
         }
 
         /* Get the project that has permission to view. */
@@ -348,7 +355,7 @@ class doc extends control
             unset($this->lang->doc->menu->product['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
             unset($this->lang->doc->menu->execution['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->project['subMenu']);
         }
 
         $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
@@ -506,8 +513,8 @@ class doc extends control
 
             unset($this->lang->doc->menu->product['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
-            if($this->config->systemMode == 'classic') unset($this->lang->doc->menu->execution['subMenu']);
+            unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->execution['subMenu']);
 
             /* High light menu. */
             if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)
@@ -616,6 +623,7 @@ class doc extends control
      */
     public function delete($docID, $confirm = 'no', $from = 'list')
     {
+        $this->loadModel('file');
         if($confirm == 'no')
         {
             $type = $this->dao->select('type')->from(TABLE_DOC)->where('id')->eq($docID)->fetch('type');
@@ -626,7 +634,6 @@ class doc extends control
         {
             $doc        = $this->doc->getByID($docID);
             $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
-            if($this->config->systemMode == 'classic' and $objectType == 'project') $objectType = 'execution';
             $this->doc->delete(TABLE_DOC, $docID);
 
             /* Delete doc files. */
@@ -638,7 +645,7 @@ class doc extends control
                 $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
 
                 $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-                if(empty($fileRecord)) @unlink($file->realPath);
+                if(empty($fileRecord)) $this->file->unlinkFile($file);
             }
 
             /* if ajax request, send result. */
@@ -1131,7 +1138,6 @@ class doc extends control
         $lib = $this->doc->getLibById($libID);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $libID;
 
-        if($this->config->systemMode == 'classic' and $type == 'project') $type = 'execution';
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID, $appendLib);
 
         /* Set Custom. */

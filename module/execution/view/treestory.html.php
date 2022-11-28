@@ -42,7 +42,7 @@
   <div class="detail-content">
     <table class="table table-data">
       <tbody>
-      <?php if($this->config->vision != 'lite'):?>
+      <?php if($this->config->vision != 'lite' and empty($product->shadow)):?>
       <tr>
         <th class='w-100px'><?php echo $lang->story->product;?></th>
         <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name, '', "data-app='product'");?></td>
@@ -56,7 +56,7 @@
       <?php endif;?>
       <?php if($this->config->vision != 'lite'):?>
       <tr>
-        <th><?php echo $lang->story->module;?></th>
+        <th class='w-100px'><?php echo $lang->story->module;?></th>
           <?php
           $moduleTitle = '';
           ob_start();

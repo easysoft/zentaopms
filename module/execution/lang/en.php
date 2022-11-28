@@ -146,8 +146,9 @@ $lang->execution->estimate = 'Estimate';
 $lang->execution->consumed = 'Consumed';
 $lang->execution->left     = 'Left';
 
-if($this->config->systemMode == 'new')     $lang->execution->copyTeamTip = "copy Project/{$lang->execution->common} team members";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "copy Project/{$lang->executionCommon} team members";
+$lang->execution->copyTeamTip        = "copy Project/project team members";
+$lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';
+$lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』';
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Activate';
@@ -195,16 +196,8 @@ $lang->execution->statusList['suspended'] = 'Suspended';
 $lang->execution->statusList['closed']    = 'Closed';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and execution stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
-}
-else
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and execution stakeholders)';
-    $lang->execution->aclList['open']    = "Public (Users who can visit {$lang->executionCommon} can access it.)";
-}
+$lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
+$lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 
 $lang->execution->kanbanAclList['private'] = 'Private';
 $lang->execution->kanbanAclList['open']    = 'Inherited Project';
@@ -279,8 +272,8 @@ $lang->execution->importBug           = 'Import Bug';
 $lang->execution->tree                = 'Tree';
 $lang->execution->treeTask            = 'Show Task Only';
 $lang->execution->treeStory           = 'Show Story Only';
-$lang->execution->treeOnlyTask        = 'Show Task Only';
-$lang->execution->treeOnlyStory       = 'Show Story Only';
+$lang->execution->treeViewTask        = 'Tree View Task';
+$lang->execution->treeViewStory       = 'Tree View Story';
 $lang->execution->storyKanban         = 'Story Kanban';
 $lang->execution->storySort           = 'Rank Story';
 $lang->execution->importPlanStory     = $lang->executionCommon . ' is created!\nDo you want to import stories that have been linked to the plan? The stories in the draft will be automatically filtered out when imported.';
@@ -354,6 +347,7 @@ $lang->execution->wbs                  = "Create Task";
 $lang->execution->batchWBS             = "Batch Create Tasks";
 $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='How to update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories         = "No story can be linked. Please check whether there is any story in {$lang->executionCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
+$lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories       = "Stories linked to {$lang->executionCommon} are the subeset of stories linked to {$lang->productCommon}. Stories can only be linked after they pass the review. <a href='%s'> Link Stories</a> now.";
 $lang->execution->haveDraft            = "%s stories in draft, so they can't be linked.";
 $lang->execution->doneExecutions       = 'Finished';
@@ -372,11 +366,10 @@ $lang->execution->noExecution          = "No {$lang->executionCommon}. ";
 $lang->execution->noExecutions         = "No {$lang->execution->common}.";
 $lang->execution->noPrintData          = "No data can be printed.";
 $lang->execution->noMembers            = 'No team members yet. ';
-$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
+$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100%s, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip  = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip      = "({$lang->SRCommon} has never been linked under the execution, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "Choose a {$lang->execution->common} Team to copy.";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";
+$lang->execution->copyTeamTitle        = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";
 
 /* Interactive prompts. */
 $lang->execution->confirmDelete               = "Do you want to delete the {$lang->executionCommon}[%s]?";

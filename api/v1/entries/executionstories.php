@@ -16,7 +16,7 @@ class executionStoriesEntry extends entry
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($executionID)
     {

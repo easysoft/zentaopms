@@ -156,17 +156,19 @@ $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
 
 $lang->common->common     = 'Common Module';
+$lang->common->story      = 'Story';
 $lang->my->common         = 'My';
 $lang->program->common    = 'Program';
 $lang->product->common    = 'Product';
 $lang->project->common    = 'Project';
-$lang->execution->common  = $config->systemMode == 'new' ? 'Execution' : $lang->executionCommon;
+$lang->execution->common  = 'Execution';
 $lang->kanban->common     = 'Kanban';
 $lang->qa->common         = 'QA';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = 'Doc';
 $lang->repo->common       = 'Code';
-$lang->report->common     = 'Statistic';
+$lang->repo->codeRepo     = 'Code Repo';
+$lang->report->common     = 'Statistics';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
 $lang->story->common      = 'Story';
@@ -181,6 +183,7 @@ $lang->automation->common = 'Automation';
 $lang->team->common       = 'Team';
 $lang->user->common       = 'User';
 $lang->custom->common     = 'Custom';
+$lang->custom->mode       = 'Mode';
 $lang->extension->common  = 'Extension';
 $lang->company->common    = 'Company';
 $lang->dept->common       = 'Dept';
@@ -200,6 +203,7 @@ $lang->backup->common     = 'Backup';
 $lang->action->trash      = 'Recycle';
 $lang->app->common        = 'APP';
 $lang->app->serverLink    = 'Server Link';
+$lang->review->common     = 'Review';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -272,9 +276,10 @@ $lang->product->kanban = $lang->productCommon . ' Kanban';
 
 $lang->project->report = 'Report';
 
-$lang->report->weekly = 'Weekly';
-$lang->report->annual = 'Annual Summary';
-$lang->report->notice = new stdclass();
+$lang->report->weekly       = 'Weekly';
+$lang->report->annual       = 'Annual Summary';
+$lang->report->pivotTable   = 'Pivot Table';
+$lang->report->notice       = new stdclass();
 $lang->report->notice->help = 'Note: The report is generated on the results of browsing the list. Click, e.g. AssignedToMe, then click Create Report to generate a report based on AssignedToMe list.';
 
 $lang->testcase->case      = 'Test Case';
@@ -288,6 +293,7 @@ $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
 $lang->devops->set      = 'Set';
 
+$lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';
 $lang->admin->entry       = 'Application';
 $lang->admin->data        = 'Data';
@@ -336,8 +342,8 @@ $lang->exportTypeList['all']      = 'All Data';
 $lang->exportTypeList['selected'] = 'Selected Data';
 
 $lang->visionList = array();
-$lang->visionList['rnd']  = 'R&D';
-$lang->visionList['lite'] = 'Lite';
+$lang->visionList['rnd']  = 'Full Feature Interface';
+$lang->visionList['lite'] = 'Operation Management Interface';
 
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';
@@ -467,7 +473,7 @@ if(!defined('DT_TIME2'))          define('DT_TIME2',     'H:i');
 if(!defined('LONG_TIME'))         define('LONG_TIME',    '2059-12-31');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
-if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '100');
 
 /* Datepicker. */
 $lang->datepicker = new stdclass();

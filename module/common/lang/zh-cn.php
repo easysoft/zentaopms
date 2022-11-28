@@ -156,16 +156,18 @@ $lang->pri     = '优先级';
 $lang->delayed = '已延期';
 
 $lang->common->common     = '公有模块';
+$lang->common->story      = '需求';
 $lang->my->common         = '地盘';
 $lang->program->common    = '项目集';
 $lang->product->common    = '产品';
 $lang->project->common    = '项目';
-$lang->execution->common  = $config->systemMode == 'new' ? '执行' : $lang->executionCommon;
+$lang->execution->common  = '执行';
 $lang->kanban->common     = '看板';
 $lang->qa->common         = '测试';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文档';
 $lang->repo->common       = '代码';
+$lang->repo->codeRepo     = '代码库';
 $lang->report->common     = '统计';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
@@ -181,6 +183,7 @@ $lang->automation->common = '自动化';
 $lang->team->common       = '团队';
 $lang->user->common       = '用户';
 $lang->custom->common     = '自定义';
+$lang->custom->mode       = '模式';
 $lang->extension->common  = '插件';
 $lang->company->common    = '公司';
 $lang->dept->common       = '部门';
@@ -200,6 +203,7 @@ $lang->backup->common     = '备份';
 $lang->action->trash      = '回收站';
 $lang->app->common        = '应用';
 $lang->app->serverLink    = '服务器链接';
+$lang->review->common     = '审批';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
@@ -274,6 +278,7 @@ $lang->project->report = '报告';
 
 $lang->report->weekly       = '周报';
 $lang->report->annual       = '年度总结';
+$lang->report->pivotTable   = '透视表';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。比如列表页面我们检索的是%tab%，那么报表就是基于之前检索的%tab%的结果集进行统计。';
 
@@ -288,6 +293,7 @@ $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
 $lang->devops->set      = '设置';
 
+$lang->admin->module      = '功能设置';
 $lang->admin->system      = '系统';
 $lang->admin->entry       = '应用';
 $lang->admin->data        = '数据';
@@ -337,7 +343,7 @@ $lang->exportTypeList['selected'] = '选中记录';
 
 $lang->visionList = array();
 $lang->visionList['rnd']  = '研发综合界面';
-$lang->visionList['lite'] = '迅捷界面';
+$lang->visionList['lite'] = '运营管理界面';
 
 $lang->createObjects['todo']        = '待办';
 $lang->createObjects['effort']      = '日志';
@@ -345,7 +351,7 @@ $lang->createObjects['bug']         = 'Bug';
 $lang->createObjects['story']       = '需求';
 $lang->createObjects['task']        = '任务';
 $lang->createObjects['testcase']    = '用例';
-$lang->createObjects['execution']   = $lang->execution->common;
+$lang->createObjects['execution']   = '执行';
 $lang->createObjects['project']     = '项目';
 $lang->createObjects['product']     = '产品';
 $lang->createObjects['program']     = '项目集';
@@ -467,7 +473,7 @@ if(!defined('DT_TIME2'))          define('DT_TIME2', 'H:i');
 if(!defined('LONG_TIME'))         define('LONG_TIME', '2059-12-31');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
-if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '100');
 
 /* datepicker 时间*/
 $lang->datepicker = new stdclass();

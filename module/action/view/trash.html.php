@@ -82,7 +82,7 @@
           <th class='c-object-type'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
           <th class='c-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php echo $lang->action->objectName;?></th>
-          <?php if($config->systemMode == 'new' and $currentObjectType == 'execution'):?>
+          <?php if($currentObjectType == 'execution'):?>
           <th class='w-250px'><?php echo $this->lang->project->project;?></th>
           <?php endif;?>
           <?php if(strpos(',story,requirement,', ",$currentObjectType,") !== false):?>
@@ -146,7 +146,7 @@
             }
             ?>
           </td>
-          <?php if($config->systemMode == 'new' and $currentObjectType == 'execution'):?>
+          <?php if($currentObjectType == 'execution'):?>
           <td class="c-name flex" title="<?php echo $projectList[$action->project]->name;?>">
             <span class="text-ellipsis"><?php echo $projectList[$action->project]->name;?></span>
             <?php if($projectList[$action->project]->deleted):?>

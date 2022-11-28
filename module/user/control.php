@@ -610,6 +610,7 @@ class user extends control
         $this->view->roleGroup  = $roleGroup;
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visionList = $this->user->getVisionList();
+        $this->view->companies  = $this->loadModel('company')->getOutsideCompanies() + array('ditto' => $this->lang->user->ditto);
 
         $this->display();
     }
@@ -634,8 +635,10 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
+        $userVisionList = $this->user->getVisionList();
+
         $user       = $this->user->getById($userID, 'id');
-        $userGroups = $this->loadModel('group')->getByAccount($user->account);
+        $userGroups = $this->loadModel('group')->getByAccount($user->account, count($userVisionList) > 1 ? true : false);
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
         $position[] = $this->lang->user->edit;
@@ -647,7 +650,7 @@ class user extends control
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq(0)->fetchPairs('id', 'name');
         $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visionList = $this->user->getVisionList();
+        $this->view->visionList = $userVisionList;
 
         $this->display();
     }
@@ -1048,6 +1051,7 @@ class user extends control
         session_destroy();
         setcookie('za', false);
         setcookie('zp', false);
+        setcookie('tab', false);
 
         if($this->app->getViewType() == 'json') return print(json_encode(array('status' => 'success')));
         $vars = !empty($referer) ? "referer=$referer" : '';

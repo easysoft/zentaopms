@@ -1,3 +1,7 @@
+<style>
+.ke-dialog-content .ke-dialog-body [name='widthType'], .ke-dialog-content .ke-dialog-body [name='heightType'] {width: 55px !important;}
+.ke-dialog-content .ke-dialog-body #keWidth + .fix-border.fix-padding {width: 0;}
+</style>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php
 $module = $this->moduleName;

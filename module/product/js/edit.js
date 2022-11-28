@@ -1,49 +1,17 @@
 $(function()
 {
-    $('#program').change(function()
-    {
-        var programID = $(this).val();
-        var canChange = true;
-        for(var i = 0; i < linkStoriesProjectIDList.length; i ++)
-        {
-            var projectID = linkStoriesProjectIDList[i];
-            var path      = projectPathList[projectID];
-            if(path.indexOf(',' + programID + ',') < 0) canChange = false;
-        }
-
-        if(!canChange && (!canChangeProgram || singleLinkProjects.length !== 0 || multipleLinkProjects.length !== 0))
-        {
-            $('#changeProgram').modal({show: true});
-            if(!canChangeProgram)
-            {
-                $('#program').val(oldProgramID);
-                $('#program').trigger("chosen:updated");
-            }
-        }
-
-        $.get(createLink('product', 'ajaxGetLine', 'programID=' + programID), function(data)
-        {
-            $('#line_chosen').remove();
-            $('#line').replaceWith(data);
-            $('#line').chosen();
-        })
-    })
+    if(programID == 0) $("#line").closest('tr').addClass('hidden');
 });
 
-/**
- * Set projects of change program.
- *
- * @access public
- * @return void
- */
-function setChangeProjects()
+$('#program').change(function()
 {
-    var projects = ',';
-    $("input[name^='projects']:checked").each(function()
-    {
-        projects += $(this).val() + ',';
-        $('#changeProjects').val(projects);
-    });
+    var programID = $(this).val();
+    programID > 0 ? $("#line").closest('tr').removeClass('hidden') : $("#line").closest('tr').addClass('hidden');
 
-    $('#changeProgram').modal('hide');
-}
+    $.get(createLink('product', 'ajaxGetLine', 'programID=' + programID), function(data)
+    {
+        $('#line_chosen').remove();
+        $('#line').replaceWith(data);
+        $('#line').chosen();
+    })
+});

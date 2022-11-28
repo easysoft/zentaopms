@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class departmentEntry extends Entry
+class departmentEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $departmentID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($departmentID)
     {
@@ -31,7 +31,7 @@ class departmentEntry extends Entry
      *
      * @param  int    $departmentID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($departmentID)
     {
@@ -47,7 +47,7 @@ class departmentEntry extends Entry
 
         $this->getData();
         $department = $this->dept->getByID($departmentID);
-        $this->send(200, $department);
+        return $this->send(200, $department);
     }
 
     /**
@@ -55,7 +55,7 @@ class departmentEntry extends Entry
      *
      * @param  int    $departmentID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($departmentID)
     {
@@ -65,6 +65,6 @@ class departmentEntry extends Entry
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

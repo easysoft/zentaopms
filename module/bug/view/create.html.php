@@ -29,7 +29,8 @@ js::set('moduleID', $moduleID);
 js::set('tab', $this->app->tab);
 js::set('requiredFields', $config->bug->create->requiredFields);
 js::set('showFields', $showFields);
-if($this->app->tab == 'execution') js::set('objectID', $executionID);
+js::set('projectExecutionPairs', $projectExecutionPairs);
+if($this->app->tab == 'execution') js::set('objectID', zget($execution, 'id', ''));
 if($this->app->tab == 'project')   js::set('objectID', $projectID);
 ?>
 <div id="mainContent" class="main-content fade">
@@ -51,18 +52,20 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-110px'><?php echo $lang->bug->product;?></th>
-            <td>
+            <th class='w-110px'><?php echo $product->shadow ? $lang->bug->module : $lang->bug->product;?></th>
+            <td class="<?php if($product->shadow) echo 'hidden';?>">
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
-                <?php if($productInfo->type != 'normal' and isset($products[$productID])):?>
+                <?php if($product->type != 'normal' and isset($products[$productID])):?>
                 <?php  echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
                 <?php endif;?>
               </div>
             </td>
             <td>
               <div class='input-group' id='moduleIdBox'>
+              <?php if(!$product->shadow):?>
               <span class="input-group-addon"><?php echo $lang->bug->module?></span>
+              <?php endif;?>
                 <?php
                 echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
                 if(count($moduleOptionMenu) == 1)
@@ -79,10 +82,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           </tr>
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
           <tr>
-            <th>
-              <?php if($config->systemMode == 'classic') $lang->bug->project = $lang->bug->execution;?>
-              <?php echo ($showExecution) ? $lang->bug->project : $lang->bug->type;?>
-            </th>
+            <th><?php echo $showExecution ? $lang->bug->project : $lang->bug->type;?></th>
 
             <?php if(!$showExecution):?>
             <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
@@ -111,23 +111,18 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <?php endif;?>
             <?php if($showExecution):?>
             <td>
-              <?php if($config->systemMode == 'new'):?>
               <div class='table-row'>
                 <div class='table-col' id='projectBox'>
                   <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>
                 </div>
-                <div class='table-col'>
+                <?php $executionClass = ($execution and !$execution->multiple) ? 'hidden' : '';?>
+                <div class="table-col executionBox <?php echo $executionClass;?>">
                   <div class='input-group' id='executionIdBox'>
-                    <span class='input-group-addon fix-border' id='executionBox'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></span>
-                    <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
+                    <span class='input-group-addon fix-border' id='executionBox'><?php echo $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution;?></span>
+                    <?php echo html::select('execution', $executions, zget($execution, 'id', ''), "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
                   </div>
                 </div>
               </div>
-              <?php else:?>
-              <div class='input-group' id='executionIdBox'>
-                <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
-              </div>
-              <?php endif;?>
             </td>
             <?php endif;?>
             <td>
@@ -389,9 +384,16 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
-<?php js::set('bugExecution', (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution);?>
-<?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('bugExecution', $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>
+<?php if(isonlybody()):?>
+<script>
+$('#osBox').next('.table-col').find('span').removeClass('fix-border');
+var browser = $('#osBox').next('.table-col').html();
+$('#osBox').next('.table-col').remove();
+$('#typeBox').closest('tr').append('<td>' + browser + '</td>');
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

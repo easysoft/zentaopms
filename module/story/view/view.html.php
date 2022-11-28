@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink = $app->session->storyList ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product");?>
 <?php js::set('sysurl', common::getSysUrl());?>
+<?php js::set('storyType', $story->type);?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -52,13 +53,17 @@
     <?php
     $otherParam = 'storyID=&projectID=';
     $tab        = 'product';
-    if($this->app->rawModule == 'projectstory')
+    if($this->app->rawModule == 'projectstory' or $this->app->tab == 'project')
     {
         $otherParam = "storyID=&projectID={$this->session->project}";
-        $openGroup  = 'project';
+        $tab        = 'project';
+    }
+    else if($this->app->rawModule == 'execution')
+    {
+        $tab = 'execution';
     }
     ?>
-    <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&type=$story->type", "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-primary' data-app='$tab'"); ?>
+    <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-primary' data-app='$tab'"); ?>
     <?php endif;?>
   </div>
   <?php endif;?>
@@ -194,7 +199,7 @@
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
-        <?php if(!$story->deleted) echo $this->story->buildOperateMenu($story, 'view');?>
+        <?php if(!$story->deleted) echo $this->story->buildOperateMenu($story, 'view', $project);?>
       </div>
     </div>
   </div>
@@ -209,13 +214,15 @@
           <div class='tab-pane active' id='legendBasicInfo'>
             <table class="table table-data">
               <tbody>
+                <?php if(!$product->shadow):?>
                 <tr>
                   <th class='w-90px'><?php echo $lang->story->product;?></th>
                   <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name);?></td>
                 </tr>
+                <?php endif;?>
                 <?php if($product->type != 'normal'):?>
                 <tr>
-                  <th><?php echo $lang->product->branch;?></th>
+                  <th class='w-90px'><?php echo $lang->product->branch;?></th>
                   <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch]);?></td>
                 </tr>
                 <?php endif;?>
@@ -240,7 +247,14 @@
                       foreach($modulePath as $key => $module)
                       {
                           $moduleTitle .= $module->name;
-                          if(!common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name, '', "data-app='product'")) echo $module->name;
+                          if($product->shadow)
+                          {
+                              echo $module->name;
+                          }
+                          else
+                          {
+                              common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name, '', "data-app='product'");
+                          }
                           if(isset($modulePath[$key + 1]))
                           {
                               $moduleTitle .= '/';
@@ -253,7 +267,7 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
-                <?php if($story->type != 'requirement' and $story->parent != -1):?>
+                <?php if($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan):?>
                 <tr class='plan-line'>
                   <th><?php echo $lang->story->plan;?></th>
                   <td>
@@ -305,7 +319,11 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
-                  <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
+                  <td>
+                    <?php if($story->pri):?>
+                    <span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->estimate;?></th>
@@ -404,11 +422,11 @@
           <?php if(!empty($siblings)):?>
           <li class='active'><a href='#legendSiblings' data-toggle='tab'><?php echo $lang->story->siblings;?></a></li>
           <?php endif;?>
-          <?php if($this->config->URAndSR):?>
+          <?php if($this->config->URAndSR and !$hiddenURS):?>
           <li class='<?php if(empty($siblings)) echo 'active';?>'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
           <?php if($story->type == 'story'):?>
-          <li class="<?php if(!$this->config->URAndSR and empty($siblings)) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
+          <li class="<?php if((!$this->config->URAndSR || $hiddenURS) and empty($siblings)) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <?php endif;?>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
@@ -420,7 +438,7 @@
             </ul>
           </div>
           <?php endif;?>
-          <?php if($this->config->URAndSR):?>
+          <?php if($this->config->URAndSR and !$hiddenURS):?>
           <div class='tab-pane <?php if(empty($siblings)) echo 'active';?>' id='legendStories'>
             <ul class="list-unstyled">
               <?php
@@ -442,7 +460,7 @@
           <?php endif;?>
 
           <?php if($story->type == 'story'):?>
-          <div class="tab-pane <?php if(!$this->config->URAndSR and empty($siblings)) echo 'active';?>" id='legendProjectAndTask'>
+          <div class="tab-pane <?php if((!$this->config->URAndSR || $hiddenURS) and empty($siblings)) echo 'active';?>" id='legendProjectAndTask'>
             <ul class="list-unstyled">
               <?php
               foreach($story->tasks as $executionTasks)
@@ -450,18 +468,19 @@
                   foreach($executionTasks as $task)
                   {
                       if(!isset($executions[$task->execution])) continue;
+                      $execution     = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
+                      $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "executionID=$task->project");
                       $executionName = $executions[$task->execution];
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
-                      $execution = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
-                      $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($this->createLink('execution', 'view', "executionID=$task->execution"), $executionName, '', "class='text-muted'");
+                      $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($executionLink, $executionName, '', "class='text-muted'");
                       echo "<li title='$task->name'>" . $execName . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'") . '</li>';
                   }
               }
               foreach($story->executions as $executionID => $execution)
               {
                   if(isset($story->tasks[$executionID])) continue;
-                  $execName = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
+                  $execName = ($execution->type == 'kanban' and isonlybody()) ? $executions[$executionID] : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $executions[$executionID], '', "class='text-muted'");
                   echo "<li title='$execution->name'>" . $execName . '</li>';
               }
               ?>
@@ -471,6 +490,7 @@
           <div class="tab-pane" id='legendRelated'>
             <table class="table table-data">
               <tbody>
+                <?php if($story->type == 'story'):?>
                 <?php if(!empty($fromBug)):?>
                 <tr>
                   <th><?php echo $lang->story->legendFromBug;?></th>
@@ -541,6 +561,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
                 <tr class='text-top linkStoryTr'>
                   <th><?php echo $lang->story->linkStories;?></th>
                   <td>
@@ -565,6 +586,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php if($story->type == 'story' and helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>
                   <td class='pd-0'>
@@ -586,6 +608,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
               </tbody>
             </table>
           </div>

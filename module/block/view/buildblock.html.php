@@ -21,6 +21,7 @@
         <th><?php echo $lang->build->name;?></th>
         <?php if($longBlock):?>
         <th><?php echo $lang->build->product;?></th>
+        <th><?php echo $lang->build->project;?></th>
         <?php endif;?>
         <th class='c-date'><?php echo $lang->build->date;?></th>
       </tr>
@@ -31,12 +32,14 @@
       $appid           = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
       $buildViewLink   = $this->createLink('build', 'view', "buildID={$build->id}");
       $productViewLink = $this->createLink('product', 'browse', "productID={$build->product}");
+      $projectViewLink = $this->createLink('project', 'build', "projectID={$build->project}");
       ?>
       <tr <?php echo $appid?>>
         <td class='text-center'><?php echo sprintf('%03d', $build->id);?></td>
         <td title='<?php echo $build->name?>'><?php echo html::a($buildViewLink, $build->name);?></td>
         <?php if($longBlock):?>
-        <td title='<?php echo $build->productName?>'><?php echo html::a($productViewLink, $build->productName);?></td>
+        <td title='<?php echo $build->productName?>'><?php echo html::a($build->shadow ? $projectViewLink : $productViewLink, $build->productName);?></td>
+        <td title='<?php echo $build->projectName?>'><?php echo html::a($projectViewLink, $build->projectName);?></td>
         <?php endif;?>
         <td><?php echo $build->date?></td>
       </tr>

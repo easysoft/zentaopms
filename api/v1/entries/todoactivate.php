@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class todoActivateEntry extends Entry
+class todoActivateEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($todoID)
     {
@@ -28,6 +28,6 @@ class todoActivateEntry extends Entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $todo = $this->loadModel('todo')->getByID($todoID);
-        $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
+        return $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
     }
 }

@@ -16,6 +16,9 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('columnID', $columnID);?>
 <?php js::set('methodName', $this->app->rawMethod);?>
+<?php if(count($executions2Imported) <= 3):?>
+<style>#importExecutionForm, .table-empty-tip {margin-bottom: 120px}</style>
+<?php endif;?>
 <div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
@@ -23,10 +26,8 @@
     </div>
   </div>
   <div class='input-group space'>
-    <?php if($config->systemMode == 'new'):?>
     <span class='input-group-addon'><?php echo $lang->kanban->selectedProject;?></span>
     <?php echo html::select('project', $projects, $selectedProjectID, "onchange='reloadObjectList(this.value)' class='form-control chosen' data-drop_direction='down'");?>
-    <?php endif;?>
     <span class='input-group-addon'><?php echo $lang->kanban->selectedLane;?></span>
     <?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down'");?>
   </div>
@@ -88,7 +89,7 @@
   <div class='table-empty-tip'><?php echo $lang->noData;?></div>
   <?php endif;?>
 </div>
-<?php if($config->systemMode == 'classic'):?>
+<?php if($config->systemMode == 'light'):?>
 <style>.input-group {width: 45% !important}</style>
 <?php else:?>
 <style>#project_chosen {width: 45% !important}</style>

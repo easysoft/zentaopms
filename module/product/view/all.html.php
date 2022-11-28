@@ -25,7 +25,9 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('product', 'export', "status=$browseType&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'", true, true)?>
+    <?php if($config->systemMode == 'ALM'):?>
     <?php common::printLink('product', 'manageLine', '', "<i class='icon-edit'></i> &nbsp;" . $lang->product->line, '', 'class="btn btn-link iframe"', '', true);?>
+    <?php endif;?>
     <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary create-product-btn"');?>
   </div>
 </div>
@@ -49,7 +51,9 @@
             </th>
             <?php endif;?>
             <th class='table-nest-title text-left c-name' rowspan="2">
+              <?php if($config->systemMode == 'ALM'):?>
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
+              <?php endif;?>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
             <th class='c-PO' rowspan="2">
@@ -96,8 +100,8 @@
                   }
               }
           }
-          ;?>
-          <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
+          ?>
+          <?php if(isset($program['programName']) and $config->systemMode == 'ALM'):?>
           <tr class="row-program" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
             <td class='c-checkbox'><div class='checkbox-primary program-checkbox'><label></label></div></td>
@@ -116,7 +120,7 @@
                   echo html::smallAvatar(array('avatar' => $usersAvatar[$programPM], 'account' => $programPM, 'name' => $userName), 'avatar-circle avatar-top avatar-' . zget($userIdPairs, $programPM));
 
                   $userID = isset($userIdPairs[$programPM]) ? $userIdPairs[$programPM] : '';
-                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
+                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' class='iframe' data-width='600'");
               }
               ?>
             </td>
@@ -136,10 +140,10 @@
           <?php endif;?>
 
           <?php foreach($program as $lineID => $line):?>
-          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products'])):?>
+          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and $config->systemMode == 'ALM'):?>
           <?php $lineNames[] = $line['lineName'];?>
           <?php
-          if($this->config->systemMode == 'new' and $programID)
+          if($this->config->systemMode == 'ALM' and $programID)
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
               $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,line.$lineID'" . "class='text-center'";
@@ -181,15 +185,15 @@
           $totalStories = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'] + $product->stories['reviewing'];
 
           $trClass = '';
-          if($product->line)
+          if($product->line and $this->config->systemMode == 'ALM')
           {
               $path = "line.$product->line,$product->id";
-              if($this->config->systemMode == 'new' and $product->program) $path = "program.$product->program,$path";
+              if($this->config->systemMode == 'ALM' and $product->program) $path = "program.$product->program,$path";
               $trAttrs  = "data-id='$product->id' data-parent='line.$product->line'";
               $trClass .= ' is-nest-child  table-nest';
               $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='$path'";
           }
-          elseif($product->program and $this->config->systemMode == 'new')
+          elseif($product->program and $this->config->systemMode == 'ALM')
           {
               $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
               $trClass .= ' is-nest-child  table-nest';
@@ -219,7 +223,7 @@
                   echo html::smallAvatar(array('avatar' => $usersAvatar[$product->PO], 'account' => $product->PO, 'name' => $userName), 'avatar-circle avatar-' . zget($userIdPairs, $product->PO));
 
                   $userID = isset($userIdPairs[$product->PO]) ? $userIdPairs[$product->PO] : '';
-                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
+                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' class='iframe' data-width='600'");
               }
               ?>
             </td>
@@ -246,7 +250,7 @@
         <?php if(!empty($product) and $canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <?php
-        $summary = empty($productLines) ? sprintf($lang->product->pageSummary, count($productStats)) : sprintf($lang->product->lineSummary, count($lineNames), count($productStats));
+        $summary = (empty($productLines) or $this->config->systemMode == 'light') ? sprintf($lang->product->pageSummary, count($productStats)) : sprintf($lang->product->lineSummary, count($lineNames), count($productStats));
         echo "<div id='productsCount' class='statistic'>$summary</div>";
         ?>
         <div class="table-actions btn-toolbar">

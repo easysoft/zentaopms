@@ -1,0 +1,16 @@
+.modal-dialog {width: 1200px;}
+.panel {padding: 0px 40px 40px 40px;}
+.panel h1 {margin-top: 20px; margin-bottom: 20px;}
+.panel .icon {font-size: 20px;}
+
+#mainContent tr td .icon-close {font-weight: bold; color: #ea644a;}
+#mainContent tr td .icon-check {font-weight: bold; color: #329d38;}
+
+#mainContent tr th {background-color: rgb(241, 241, 241);}
+#mainContent tr td {background-color: rgb(255, 255, 255); border-bottom: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238);}
+
+.btn-wide {padding: 6px 85px;}
+#useLight:hover, #useALM:hover{color: #fff; background-color: #2e7fff; border-color: transparent;}
+
+#mainContent .datatable {cursor: default;}
+.container {padding-top: 20px;}

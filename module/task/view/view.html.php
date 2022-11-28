@@ -116,13 +116,7 @@
               <?php foreach($task->children as $child):?>
               <tr class='text-center'>
                 <td><?php echo $child->id;?></td>
-                <td>
-                  <?php
-                  echo "<span class='label-pri label-pri-" . $child->pri . "'>";
-                  echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
-                  echo "</span>";
-                  ?>
-                </td>
+                <td><?php if($child->pri) echo "<span class='label-pri label-pri-" . $child->pri . "'>" . zget($this->lang->task->priList, $child->pri, $child->pri) . "</span>";?></td>
                 <td class='text-left' title='<?php echo $child->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('task', 'view', "taskID=$child->id", '', true); ?>"><?php echo $child->name;?></a></td>
                 <td><?php echo $child->deadline;?></td>
                 <td id='assignedTo'><?php $this->task->printAssignedHtml($child, $users);?></td>
@@ -182,25 +176,24 @@
           <div class='tab-pane active' id='legendBasic'>
             <table class="table table-data">
               <tbody>
+                <?php if($execution->multiple):?>
                 <tr>
-                  <?php
-                  $method = 'view';
-                  if($this->config->vision == 'lite') $method = 'kanban';
-                  ?>
                   <th class='w-90px'><?php echo $lang->task->execution;?></th>
                   <td>
-                  <?php
-                  if($execution->type != 'kanban')
-                  {
-                      common::printLink('execution', $method, "executionID={$task->execution}", $execution->name);
-                  }
-                  else
-                  {
-                      echo $execution->name;
-                  }
-                  ?>
-                </td>
+                    <?php
+                    $method = $this->config->vision == 'lite' ? 'kanban' : 'view';
+                    if($execution->type != 'kanban')
+                    {
+                        common::printLink('execution', $method, "executionID={$task->execution}", $execution->name);
+                    }
+                    else
+                    {
+                        echo $execution->name;
+                    }
+                    ?>
+                  </td>
                 </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->module;?></th>
                   <?php
@@ -346,9 +339,9 @@
               <thead>
               <tr>
                 <th><?php echo $lang->task->team?></th>
-                <th class='text-center'><?php echo $lang->task->estimate?></th>
-                <th class='text-center'><?php echo $lang->task->consumed?></th>
-                <th class='text-center'><?php echo $lang->task->left?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->estimate?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->consumed?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->left?></th>
                 <th class='text-center'><?php echo $lang->statusAB;?></th>
               </tr>
               </thead>

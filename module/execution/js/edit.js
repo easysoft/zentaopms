@@ -37,33 +37,56 @@ $().ready(function()
 
 $(function()
 {
-    /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
-    $("#productsBox select[name^='products']").each(function()
+    $(document).on('change', '[name*=products]', function()
     {
-        var isExistedProduct = $.inArray($(this).attr('data-last'), unmodifiableProducts);
-        var productType      = $(this).attr('data-type');
-        if(isExistedProduct != -1 && productType == 'normal')
-        {
-            $(this).prop('disabled', true).trigger("chosen:updated");
+        var current    = $(this).val();
+        var last       = $(this).attr('data-last');
+        var lastBranch = $(this).attr('data-lastBranch') !== undefined ? $(this).attr('data-lastBranch') : 0;
 
-            var productTip = tip.replace('%s', linkedStoryIDList[$(this).attr('data-last')][0]);
-            $(this).siblings('div').find('span').attr('title', productTip);
+        $(this).attr('data-last', current);
+
+        var $branch = $(this).closest('.has-branch').find("[name^='branch']");
+        if($branch.length)
+        {
+            var branchID = $branch.val();
+            $(this).attr('data-lastBranch', branchID);
+        }
+        else
+        {
+            $(this).removeAttr('data-lastBranch');
+        }
+
+        if(current != last && $.inArray(last, unmodifiableProducts) != -1)
+        {
+            if(lastBranch != 0)
+            {
+                if($.inArray(lastBranch, unmodifiableBranches) != -1)
+                {
+                    if(linkedStoryIDList[last][lastBranch]) bootbox.alert(unLinkProductTip.replace("%s", allProducts[last] + branchGroups[last][lastBranch]));
+                }
+            }
+            else
+            {
+                bootbox.alert(unLinkProductTip.replace("%s", allProducts[last]));
+            }
         }
     });
 
-    $("#productsBox select[name^='branch']").each(function()
+    $(document).on('change', '[name*=branch]', function()
     {
-        var isExistedBranch = $.inArray($(this).attr('data-last'), unmodifiableBranches);
-        if(isExistedBranch != -1)
-        {
-            var $product = $(this).closest('.has-branch').find("[name^='products']");
-            if($.inArray($product.val(), unmodifiableProducts) != -1 && linkedStoryIDList[$product.val()][$(this).attr('data-last')])
-            {
-                $(this).prop('disabled', true).trigger("chosen:updated");
-                $product.prop('disabled', true).trigger("chosen:updated");
+        var current = $(this).val();
+        var last    = $(this).attr('data-last');
+        $(this).attr('data-last', current);
 
-                var productTip = tip.replace('%s', linkedStoryIDList[$product.val()][$(this).attr('data-last')]);
-                $product.siblings('div').find('span').attr('title', productTip);
+        var $product = $(this).closest('.has-branch').find("[name^='products']");
+        $product.attr('data-lastBranch', current);
+
+        if($.inArray(last, unmodifiableBranches) != -1)
+        {
+            var productID = $product.val();
+            if($.inArray(productID, unmodifiableProducts) != -1 && linkedStoryIDList[productID][last])
+            {
+                bootbox.alert(tip.replace('%s', linkedStoryIDList[productID][last]));
             }
         }
     });

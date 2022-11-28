@@ -109,7 +109,7 @@ class tree extends control
         if($viewType == 'story')
         {
             /* Set menu.*/
-            $products = $this->product->getPairs();
+            $products = $this->product->getPairs($mode = '', $programID = 0, $append = '', 'all');
             $this->product->saveState($rootID, $products);
 
             unset($products[$rootID]);
@@ -294,6 +294,12 @@ class tree extends control
             }
         }
 
+        if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
+        {
+            $project = $this->loadModel('project')->getByID($this->session->project);
+            if(empty($project->hasProduct)) $this->view->root->name = $project->name;
+        }
+
         $parentModules               = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
         $this->view->position        = $position;
@@ -394,19 +400,27 @@ class tree extends control
         $this->view->branch = $branch;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 
-        $showProduct             = strpos('story|bug|case', $type) !== false ? true : false;
-        $this->view->showProduct = $showProduct;
+        $showProduct = strpos('story|bug|case', $type) !== false ? true : false;
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
             if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'withClosed');
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
+            if($product->shadow) $showProduct = false;
         }
+        $this->view->showProduct = $showProduct;
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $childs = $this->tree->getAllChildId($moduleID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
+
+        $this->view->hiddenProduct = false;
+        if($this->app->tab == 'project')
+        {
+            $project = $this->loadModel('project')->getByID($this->session->project);
+            $this->view->hiddenProduct = empty($project->hasProduct);
+        }
 
         $this->display();
     }

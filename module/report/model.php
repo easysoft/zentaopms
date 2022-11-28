@@ -99,7 +99,7 @@ class reportModel extends model
     public function getExecutions($begin = 0, $end = 0)
     {
         $permission = common::hasPriv('report', 'showProject') or $this->app->user->admin;
-        $tasks      = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectName')->from(TABLE_TASK)->alias('t1')
+        $tasks      = $this->dao->select('t1.*, IF(t3.multiple = "1", t2.name, "") as executionName, t3.name as projectName, t2.multiple')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
@@ -124,7 +124,9 @@ class reportModel extends model
                 $executions[$executionID]->consumed = 0;
             }
 
+            $executions[$executionID]->projectID   = $task->project;
             $executions[$executionID]->projectName = $task->projectName;
+            $executions[$executionID]->multiple    = $task->multiple;
             $executions[$executionID]->name        = $task->executionName;
             $executions[$executionID]->estimate   += $task->estimate;
             $executions[$executionID]->consumed   += $task->consumed;
@@ -145,6 +147,7 @@ class reportModel extends model
         $products   = $this->dao->select('t1.id as id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.shadow')->eq(0)
             ->beginIF(strpos($conditions, 'closedProduct') === false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!$permission)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
@@ -290,7 +293,7 @@ class reportModel extends model
 
         if($assign == 'noassign')
         {
-            $members = $this->dao->select('t1.account,t2.name,t1.root,t3.id as project,t3.name as projectname')->from(TABLE_TEAM)->alias('t1')
+            $members = $this->dao->select('t1.account,t2.name,t2.multiple,t1.root,t3.id as project,t3.name as projectname')->from(TABLE_TEAM)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t2.id = t1.root')
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
                 ->where('t2.status')->notin('cancel, closed, done, suspended')
@@ -312,6 +315,7 @@ class reportModel extends model
                         {
                             $project[$execution->projectname]['projectID'] = $execution->project;
                             $project[$execution->projectname]['execution'][$name]['executionID'] = $execution->root;
+                            $project[$execution->projectname]['execution'][$name]['multiple']    = $execution->multiple;
                             $project[$execution->projectname]['execution'][$name]['count']       = 0;
                             $project[$execution->projectname]['execution'][$name]['manhour']     = 0;
 
@@ -325,7 +329,7 @@ class reportModel extends model
             return $workload;
         }
 
-        $stmt = $this->dao->select('t1.*, t2.name as executionName,t3.name as projectname')->from(TABLE_TASK)->alias('t1')
+        $stmt = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectname, t2.multiple')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
             ->where('t1.deleted')->eq(0)
@@ -401,8 +405,9 @@ class reportModel extends model
                     if(isset($parents[$task->id])) continue;
 
                     $project[$task->projectname]['projectID'] = isset($project[$task->projectname]['projectID']) ? $project[$task->projectname]['projectID'] : $task->project;
-                    $project[$task->projectname]['execution'][$task->executionName]['executionID'] = isset($project[$task->projectname]['execution'][$task->executionName]['executionID']) ? $project[$task->projectname]['execution'][$task->executionName]['executionID'] : $task->execution;
-                    $project[$task->projectname]['execution'][$task->executionName]['count']       = isset($project[$task->projectname]['execution'][$task->executionName]['count'])       ? $project[$task->projectname]['execution'][$task->executionName]['count'] + 1 : 1;
+                    $project[$task->projectname]['execution'][$task->executionName]['executionID'] = isset($project[$task->projectname]['execution'][$task->executionName]['executionID']) ? $project[$task->projectname]['execution'][$task->executionName]['executionID']           : $task->execution;
+                    $project[$task->projectname]['execution'][$task->executionName]['multiple']    = isset($project[$task->projectname]['execution'][$task->executionName]['multiple'])    ? $project[$task->projectname]['execution'][$task->executionName]['multiple']              : $task->multiple;
+                    $project[$task->projectname]['execution'][$task->executionName]['count']       = isset($project[$task->projectname]['execution'][$task->executionName]['count'])       ? $project[$task->projectname]['execution'][$task->executionName]['count'] + 1             : 1;
                     $project[$task->projectname]['execution'][$task->executionName]['manhour']     = isset($project[$task->projectname]['execution'][$task->executionName]['manhour'])     ? $project[$task->projectname]['execution'][$task->executionName]['manhour'] + $task->left : $task->left;
 
                     $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
@@ -425,12 +430,17 @@ class reportModel extends model
      */
     public function getBugAssign()
     {
-        $bugs = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_BUG)->alias('t1')
+        $bugs = $this->dao->select('t1.*, t2.name AS productName')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->eq('active')
             ->andWhere('t2.deleted')->eq(0)
             ->fetchGroup('assignedTo');
+        $productProjects = $this->dao->select('t2.product, t2.project')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('t1.type')->eq('project')
+            ->andWhere('t1.hasProduct')->eq(0)
+            ->fetchPairs();
         $assign = array();
         foreach($bugs as $user => $userBugs)
         {
@@ -440,6 +450,7 @@ class reportModel extends model
                 {
                     $assign[$user]['bug'][$bug->productName]['count']     = isset($assign[$user]['bug'][$bug->productName]['count']) ? $assign[$user]['bug'][$bug->productName]['count'] + 1 : 1;
                     $assign[$user]['bug'][$bug->productName]['productID'] = $bug->product;
+                    $assign[$user]['bug'][$bug->productName]['projectID'] = zget($productProjects, $bug->product, 0);
                     $assign[$user]['total']['count']   = isset($assign[$user]['total']['count']) ? $assign[$user]['total']['count'] + 1 : 1;
                 }
             }
@@ -715,6 +726,7 @@ class reportModel extends model
             ->orWhere('RD')->in($accounts)
             ->markRight(1)
             ->fi()
+            ->andWhere('shadow')->eq(0)
             ->fetchAll('id');
 
         /* Get created plans in this year. */
@@ -722,6 +734,7 @@ class reportModel extends model
             ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='productplan'")
             ->where('LEFT(t2.date, 4)')->eq($year)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.product')->in(array_keys($products))
             ->beginIF($accounts)
             ->andWhere('t2.actor')->in($accounts)
             ->fi()
@@ -739,11 +752,13 @@ class reportModel extends model
         $createStoryProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
             ->where('LEFT(openedDate, 4)')->eq($year)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
             ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
             ->fetchPairs('product', 'product');
         $closeStoryProducts  = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
             ->where('LEFT(closedDate, 4)')->eq($year)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
             ->beginIF($accounts)->andWhere('closedBy')->in($accounts)->fi()
             ->fetchPairs('product', 'product');
         if($createStoryProducts or $closeStoryProducts)
@@ -808,6 +823,7 @@ class reportModel extends model
         /* Get changed executions in this year. */
         $executions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq(0)
             ->andwhere('type')->eq('sprint')
+            ->andwhere('multiple')->eq('1')
             ->andWhere('LEFT(begin, 4)', true)->eq($year)
             ->orWhere('LEFT(end, 4)')->eq($year)
             ->markRight(1)
@@ -822,16 +838,22 @@ class reportModel extends model
             ->orderBy('`order` desc')
             ->fetchAll('id');
 
-        $teamExecutions = $this->dao->select('*')->from(TABLE_TEAM)
-            ->where('type')->eq('execution')
+        $teamExecutions = $this->dao->select('t1.root')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.type')->eq('execution')
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
+            ->andWhere('t2.multiple')->eq('1')
             ->andWhere('LEFT(`join`, 4)')->eq($year)
             ->fetchPairs('root', 'root');
-        $taskExecutions = $this->dao->select('execution')->from(TABLE_TASK)
-            ->where('LEFT(finishedDate, 4)')->eq($year)
-            ->andWhere('deleted')->eq(0)
+
+        $taskExecutions = $this->dao->select('t1.execution')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+            ->where('LEFT(t1.finishedDate, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
+            ->andWhere('t2.multiple')->eq('1')
+            ->andWhere('t1.deleted')->eq(0)
             ->fetchPairs('execution', 'execution');
+
         if($teamExecutions or $taskExecutions)
         {
             $executions += $this->dao->select('id,name')->from(TABLE_EXECUTION)
@@ -1081,9 +1103,8 @@ class reportModel extends model
     {
         $projectStatus = $this->dao->select('t1.id,t1.status')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.id=t2.root")
-            ->where('t1.type')->in($this->config->systemMode == 'classic' ? 'sprint,stage,kanban' : 'project')
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('execution')->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
+            ->where('t1.type')->in('project')
+            ->andWhere('t2.type')->eq('project')
             ->beginIF(!empty($accounts))->andWhere('t2.account')->in($accounts)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->fetchPairs('id', 'status');
@@ -1195,7 +1216,7 @@ class reportModel extends model
      */
     public function getProjectExecutions()
     {
-        $executions = $this->dao->select('t1.id, t1.name, t2.name as projectname, t1.status')
+        $executions = $this->dao->select('t1.id, t1.name, t2.name as projectname, t1.status, t1.multiple')
             ->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
@@ -1205,7 +1226,8 @@ class reportModel extends model
         $pairs = array();
         foreach($executions as $execution)
         {
-            $pairs[$execution->id] = $this->config->systemMode == 'new' ? $execution->projectname . '/' .$execution->name : $execution->name;
+            if($execution->multiple)  $pairs[$execution->id] = $execution->projectname . '/' . $execution->name;
+            if(!$execution->multiple) $pairs[$execution->id] = $execution->projectname;
         }
 
         return $pairs;

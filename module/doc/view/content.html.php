@@ -46,8 +46,8 @@
 
             <?php if($this->config->edition == 'max' and $this->app->tab == 'project'):?>
             <?php
-            $canImportToPracticeLib  = common::hasPriv('doc', 'importToPracticeLib');
-            $canImportToComponentLib = common::hasPriv('doc', 'importToComponentLib');
+            $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
+            $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
 
             if($canImportToPracticeLib or $canImportToComponentLib)
             {
@@ -103,7 +103,7 @@
             }
             elseif($doc->contentType == 'markdown')
             {
-                echo "<textarea id='markdownContent'></textarea>";
+                echo "<textarea id='markdownContent'>{$doc->content}</textarea>";
             }
             else
             {
@@ -291,7 +291,7 @@
 <?php if($doc->contentType == 'markdown'):?>
 <?php css::import($jsRoot . "markdown/simplemde.min.css");?>
 <?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
-<?php js::set('markdownText', $doc->content);?>
+<?php js::set('markdownText', htmlspecialchars($doc->content));?>
 <script>
 $(function()
 {

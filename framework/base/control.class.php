@@ -212,7 +212,7 @@ class baseControl
          * 检查用户是否登录，如果没有登录，跳转到登录页面。
          * Check the user has logon or not, if not, goto the login page.
          */
-        if(empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
+        if($this->config->installed && !in_array($this->moduleName, $this->config->openModules) && empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
         {
             $uri = $this->app->getURI(true);
             if($this->moduleName == 'message' and $this->methodName == 'ajaxgetmessage')
@@ -230,7 +230,7 @@ class baseControl
 
         /**
          * 如果客户端是手机的话，视图文件增加m.前缀。
-         * If the clent is mobile, add m. as prefix for view file.
+         * If the client is mobile, add m. as prefix for view file.
          */
         $this->setClientDevice();
         $this->setDevicePrefix();
@@ -251,6 +251,15 @@ class baseControl
          * Set super vars.
          */
         $this->setSuperVars();
+
+        /**
+         * 读取当前模块的zen类。
+         * Load the zen file auto.
+         */
+        $zenClass      = $this->moduleName . 'Zen';
+        $selfClass     = get_class($this);
+        $parentClasses = class_parents($this);
+        if($selfClass != $zenClass && !isset($parentClasses[$zenClass])) $this->loadZen($this->moduleName, $appName);
     }
 
     //-------------------- Model相关方法(Model related methods) --------------------//
@@ -282,34 +291,25 @@ class baseControl
     }
 
     /**
-     * 加载指定模块的model文件。
-     * Load the model file of one module.
+     * 加载一个模块的model对象。加载完成后，使用$this->$moduleName来访问这个model对象。
+     * 比如：loadModel('user')引入user模块的model实例对象，可以通过$this->user来访问它。
+     *
+     * Load the model object of one module. After loaded, can use $this->$moduleName to visit the model object.
      *
      * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
-     * @param  string $appName    The app name, if empty, use current app's name.
-     * @access  public
-     * @return  object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
     public function loadModel($moduleName = '', $appName = '')
     {
-        if(empty($moduleName)) $moduleName = $this->moduleName;
-        if(empty($appName)) $appName = $this->appName;
-
-        global $loadedModels;
-        if(isset($loadedModels[$appName][$moduleName]))
-        {
-            $this->$moduleName = $loadedModels[$appName][$moduleName];
-            $this->dao         = $this->$moduleName->dao;
-            return $this->$moduleName;
-        }
-
-        $modelFile = $this->app->setModelFile($moduleName, $appName);
+        $model = $this->app->loadTarget($moduleName, $appName);
 
         /**
-         * 如果没有model文件，尝试加载config配置信息。
-         * If no model file, try load config.
+         * 如果加载model失败，尝试加载config, lang配置信息。
+         * If model is not loaded, try load config and lang.
          */
-        if(!helper::import($modelFile))
+        if(!$model)
         {
             $this->app->loadModuleConfig($moduleName, $appName);
             $this->app->loadLang($moduleName, $appName);
@@ -317,25 +317,32 @@ class baseControl
             return false;
         }
 
-        /**
-         * 如果没有扩展文件，model类名是$moduleName + 'model'，如果有扩展，还需要增加ext前缀。
-         * If no extension file, model class name is $moduleName + 'model', else with 'ext' as the prefix.
-         */
-        $modelClass = class_exists('ext' . $appName . $moduleName . 'model') ? 'ext' . $appName . $moduleName . 'model' : $appName . $moduleName . 'model';
-        if(!class_exists($modelClass))
-        {
-            $modelClass = class_exists('ext' . $moduleName . 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
-            if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
-        }
+        $this->{$moduleName} = $model;
+        $this->dao           = $model->dao;
+        return $model;
+    }
 
-        /**
-         * 初始化model对象，在control对象中可以通过$this->$moduleName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
-         * Init the model object thus you can try $this->$moduleName to access it. Also assign the $dao object as a member of control object.
-         */
-        $loadedModels[$appName][$moduleName] = new $modelClass($appName);
-        $this->$moduleName                   = $loadedModels[$appName][$moduleName];
-        $this->dao                           = $this->$moduleName->dao;
-        return $this->$moduleName;
+    /**
+     * 加载一个模块的zen对象。加载完成后，使用$this->{$moduleName}Zen来访问这个zen对象。
+     * 比如：loadZen('user')引入user模块的zen实例对象，可以通过$this->userZen来访问它。
+     *
+     * Load the zen object of one module. After loaded, can use $this->{$moduleName}Zen to visit the zen object.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool 如果没有zen文件，返回false，否则返回zen对象。If no zen file, return false, else return the zen object.
+     */
+    public function loadZen($moduleName = '', $appName = '')
+    {
+        $zen = $this->app->loadTarget($moduleName, $appName, 'zen');
+        if(!$zen) return false;
+
+        $zen->view = $this->view;
+
+        $zenObjectName = $moduleName . 'Zen';
+        $this->{$zenObjectName} = $zen;
+        return $zen;
     }
 
     /**
@@ -770,7 +777,6 @@ class baseControl
 
         $currentModuleName = $this->moduleName;
         $currentMethodName = $this->methodName;
-        $currentAppName    = $this->appName;
         $currentParams     = $this->app->getParams();
 
         /**
@@ -927,6 +933,12 @@ class baseControl
         if($type != 'json') die();
 
         $data = (array)$data;
+
+        /* Make sure locate in this tab. */
+        global $lang;
+        $moduleName = $this->app->rawModule;
+        if(isset($lang->navGroup->{$moduleName}) and $lang->navGroup->{$moduleName} != $this->app->tab and isset($data['locate']) and $data['locate'][0] == '/' and !helper::inOnlyBodyMode()) $data['locate'] .= "#app={$this->app->tab}";
+
         if(helper::isAjaxRequest() or $this->viewType == 'json')
         {
             /* Process for zh-cn in json. */
@@ -938,7 +950,7 @@ class baseControl
                 $data[$key] = str_replace('%22', '"', urlencode($value));
             }
 
-            if(defined('RUN_MODE') and RUN_MODE == 'api')
+            if(defined('RUN_MODE') and in_array(RUN_MODE, array('api', 'xuanxuan')))
             {
                 print(urldecode(json_encode($data)));
                 $response = helper::removeUTF8Bom(ob_get_clean());

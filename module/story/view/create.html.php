@@ -51,8 +51,8 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
       <table class="table table-form">
         <tbody>
           <tr>
-            <th><?php echo $lang->story->product;?></th>
-            <td colspan="2">
+            <th><?php echo $hiddenProduct ? $lang->story->module : $lang->story->product;?></th>
+            <td colspan="2" class="<?php if($hiddenProduct) echo 'hidden';?>">
               <div class='input-group'>
               <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen control-product' required");?>
               <span class='input-group-addon fix-border fix-padding'></span>
@@ -141,8 +141,10 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
               <div class='input-group'>
+                <?php if(!$hiddenPlan):?>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
-                <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
+                <?php endif;?>
+                <?php echo html::select('assignedTo', $hiddenProduct ? $teamUsers : $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
           </tr>
@@ -172,7 +174,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <tr>
             <th class='planTh'><?php echo $lang->story->assignedTo;?></th>
             <td colspan='2' id='assignedToBox'>
-              <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
+              <?php echo html::select('assignedTo', $hiddenProduct ? $teamUsers : $users, '', "class='form-control picker-select'");?>
             </td>
             <td colspan="2" class="sourceTd <?php echo $hiddenSource?> sourceBox">
               <div class="input-group">
@@ -193,7 +195,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 <?php $required = $this->story->checkForceReview() ? 'required' : '';?>
                 <?php echo $this->story->checkForceReview() ? '' : html::hidden('needNotReview', 1);?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple $required");?>
+                  <?php echo html::select('reviewer[]', $hiddenProduct ? $teamUsers : $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple $required");?>
                 </div>
               </div>
             </td>
@@ -201,17 +203,19 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <?php if($type == 'story'):?>
           <?php if($this->config->URAndSR):?>
           <tr>
-            <th><?php echo $lang->story->requirement;?></th>
-            <td colspan="2"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
-            <td colspan="2">
+            <th><?php echo $hiddenURS ? $lang->story->parent : $lang->story->requirement;?></th>
+            <td colspan="2" class="<?php if($hiddenURS) echo 'hidden';?>"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+            <td colspan="2" <?php if($hiddenParent) echo 'hidden';?>>
               <div class='input-group' id='moduleIdBox'>
+                <?php if(!$hiddenURS):?>
                 <div class="input-group-addon"><?php echo $lang->story->parent;?></div>
+                <?php endif;?>
                 <?php echo html::select('parent', $stories, '', "class='form-control chosen'");?>
               </div>
             </td>
           </tr>
           <?php else:?>
-          <tr>
+          <tr <?php if($hiddenParent) echo 'hidden';?>>
             <th><?php echo $lang->story->parent;?></th>
             <td colspan="4"><?php echo html::select('parent', $stories, '', "class='form-control chosen'");?></td>
           </tr>
@@ -337,8 +341,12 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <tr>
             <td colspan="5" class="text-center form-actions">
               <?php echo html::hidden('type', $type);?>
+              <?php if(defined('TUTORIAL')):?>
+              <?php echo html::submitButton();?>
+              <?php else:?>
               <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
               <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
+              <?php endif;?>
               <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton('', $source == 'bug' ? 'data-app=qa' : '');?>
             </td>
           </tr>

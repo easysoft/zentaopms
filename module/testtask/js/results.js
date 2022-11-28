@@ -23,5 +23,16 @@ $(function()
     $('#casesResults table caption .result-tip').html($('#resultTip').html());
 
     $('tr:first').click();
-});
 
+    $('#casesResults').click(function(event)
+    {
+        if(event.target.id.indexOf('checkAll') !== -1)
+        {
+            var checkAll  = document.getElementById(event.target.id);
+            var checkAll  = $(checkAll);
+            var isChecked = checkAll.prop('checked');
+
+            checkAll.closest('tbody').children('tr').find('input[type=checkbox]').prop('checked', isChecked);
+        }
+    });
+});

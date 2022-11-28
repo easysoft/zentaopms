@@ -15,7 +15,7 @@
 <?php $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browse', "productID=$task->product");?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, "data-app='{$app->tab}'", 'btn btn-secondary');?>
+    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $task->id;?></span>
@@ -62,12 +62,14 @@
         <div class="detail-content">
           <table class="table table-data table-fixed">
             <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
+            <?php if(!empty($execution->multiple)):?>
             <tr>
               <th class='w-90px'><?php echo $lang->testtask->execution;?></th>
               <td><?php echo $isOnlybody ? $task->executionName : html::a($this->createLink('execution', 'story', "executionID=$task->execution"), $task->executionName, '', "title='{$task->executionName}'");?></td>
             </tr>
+            <?php endif;?>
             <tr>
-              <th><?php echo $lang->testtask->build;?></th>
+              <th class='w-90px'><?php echo $lang->testtask->build;?></th>
               <td>
                 <?php
                 if($task->build == 'trunk')

@@ -16,7 +16,7 @@ class optionsEntry extends entry
      *
      * @param  string $type
      * @access public
-     * @return void
+     * @return string
      */
     public function get($type = '')
     {

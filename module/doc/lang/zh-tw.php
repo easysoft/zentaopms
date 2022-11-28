@@ -154,7 +154,7 @@ $lang->doc->allProduct    = '所有' . $lang->productCommon;
 $lang->doc->allExecutions = '所有' . $lang->executionCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文檔庫';
-if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = '項目文檔庫';
+$lang->doc->libTypeList['project']   = '項目文檔庫';
 $lang->doc->libTypeList['execution'] = $lang->execution->common . '文檔庫';
 $lang->doc->libTypeList['custom']    = '自定義文檔庫';
 

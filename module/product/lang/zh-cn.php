@@ -101,11 +101,13 @@ $lang->product->changeLineError      = "产品线下已有产品，不可修改�
 $lang->product->programEmpty         = '项目集不能为空';
 $lang->product->nameIsDuplicate      = "『%s』产品线已经存在，请重新设置！";
 $lang->product->nameIsDuplicated     = "产品线已经有『%s』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。";
+$lang->product->reviewStory          = '您不是研发需求 "%s" 的评审人，无法评审，本次操作已被过滤。';
 
 $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";
 $lang->product->name           = "{$lang->productCommon}名称";
 $lang->product->code           = "{$lang->productCommon}代号";
+$lang->product->shadow         = "是否影子{$lang->productCommon}";
 $lang->product->line           = "{$lang->productCommon}线";
 $lang->product->lineName       = "{$lang->productCommon}线名称";
 $lang->product->order          = '排序';
@@ -188,13 +190,13 @@ $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '结束';
 
 global $config;
-if($config->systemMode == 'new')
+if($config->systemMode == 'ALM')
 {
     $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、所属项目集的负责人及干系人、相关联项目的团队成员和干系人可访问)";
 }
 else
 {
-    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、相关联{$lang->executionCommon}的团队成员可访问)";
+    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、相关联项目的团队成员和关系人可访问)";
 }
 $lang->product->aclList['open']    = "公开(有{$lang->productCommon}视图权限，即可访问)";
 //$lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
@@ -207,7 +209,7 @@ $lang->product->aclTips['private'] = "{$lang->productCommon}相关负责人、�
 
 $lang->product->storySummary   = "本页共 <strong>%s</strong> 个%s，预计 <strong>%s</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%s</strong>。";
 $lang->product->checkedSummary = "选中 <strong>%total%</strong> 个%storyCommon%，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%rate%</strong>。";
-$lang->product->noModule       = "<div>您现在还没有模块信息</div><div>请维护{$lang->productCommon}模块</div>";
+$lang->product->noModule       = "<div>您现在还没有模块信息</div><div>请维护模块</div>";
 $lang->product->noProduct      = "暂时没有{$lang->productCommon}。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
 

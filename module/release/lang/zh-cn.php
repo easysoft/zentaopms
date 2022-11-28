@@ -34,10 +34,12 @@ $lang->release->errorDate          = '发布日期不能大于今天。';
 $lang->release->basicInfo = '基本信息';
 
 $lang->release->id             = 'ID';
-$lang->release->product        = $lang->productCommon;
+$lang->release->product        = '所属产品';
 $lang->release->branch         = '平台/分支';
 $lang->release->project        = '所属项目';
 $lang->release->build          = '版本';
+$lang->release->includedBuild  = '包含版本';
+$lang->release->relatedProject = '对应项目';
 $lang->release->name           = '发布名称';
 $lang->release->marker         = '里程碑';
 $lang->release->date           = '发布日期';

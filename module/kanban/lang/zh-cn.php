@@ -85,7 +85,7 @@ $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = '版本';
 $lang->kanban->importTicket        = '工单';
 $lang->kanban->allKanban           = '所有看板';
-$lang->kanban->allProjects         = '所有' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : '项目');
+$lang->kanban->allProjects         = '所有项目';
 $lang->kanban->allProducts         = '所有产品';
 $lang->kanban->mine                = '我负责';
 $lang->kanban->alignment           = '列标题对齐方式';
@@ -128,7 +128,7 @@ $lang->kanban->cardCountTip        = '请输入卡片数量';
 
 $lang->kanban->selectedKanban  = '请选择看板';
 $lang->kanban->selectedProduct = '请选择产品';
-$lang->kanban->selectedProject = '请选择' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : '项目');
+$lang->kanban->selectedProject = '请选择项目';
 $lang->kanban->selectedLane    = '目标泳道';
 
 $lang->kanban->aclGroup['open']    = '公开';
@@ -336,6 +336,8 @@ $lang->kanbancolumn->confirmArchive     = '您确认归档该列吗？归档列�
 $lang->kanbancolumn->confirmDelete      = '您确认删除该列吗？删除列后不可恢复，列上的卡片也会消失。';
 $lang->kanbancolumn->confirmDeleteChild = '您确认删除该列吗？删除列后，该列中所有卡片会被移动到兄弟列或父列。';
 $lang->kanbancolumn->confirmRestore     = '您确定要还原该看板列吗？还原后，该看板列将回到之前的位置。';
+$lang->kanbancolumn->fixedTip           = '固定列宽不能小于200px。';
+$lang->kanbancolumn->autoTip            = '最小列宽不能小于200px。';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name         = $lang->kanban->laneName;
@@ -360,7 +362,7 @@ $lang->kanbancolumn->fluidBoardList['0'] = "固定列宽<i class='radio-text-div
 $lang->kanbancolumn->fluidBoardList['1'] = "自适应列宽<i class='radio-text-divider'></i>列宽范围";
 
 $lang->kanbanlane->error = new stdclass();
-$lang->kanbanlane->error->mustBeInt = '卡片数量必须是 3~32767 的正整数。';
+$lang->kanbanlane->error->mustBeInt = '卡片数量必须是 3~100 的正整数。';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '区域名称';

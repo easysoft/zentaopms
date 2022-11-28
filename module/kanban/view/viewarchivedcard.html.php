@@ -33,14 +33,16 @@
 #archivedCards .info > .users > span:after {right: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
 #archivedCards .info > .users .avatar {display: inline-block; position: relative; border-radius: 50%; top: -5px; margin:  5px; right: -7px; margin-left: -4px;}
 #archivedCards .cardName {word-wrap: break-word; word-break: break-all;}
+#archivedCards .cardName .label-finish {margin-right: 7px;}
 #archivedCards .executionName {display: flex; width: 100%;}
 #archivedCards .executionName a, #archivedCards .executionName div {overflow: hidden; margin-right: 5px; overflow: hidden; white-space: nowrap;}
 #archivedCards .executionName .delayed {flex: none;}
+#archivedCards .card-item .col-xs-10 {margin-bottom:10px;}
 #archivedCards .card-item .icon {margin-right:2px;}
 #archivedCards .card-item .red {background-color: #b10b0b;}
 #archivedCards .card-item .yellow {background-color: #cfa227;}
 #archivedCards .card-item .green {background-color: #2a5f29;}
-#archivedCards .card-item .green-name .cardName {color: #2a5f29 !important;}
+#archivedCards .card-item .green-name .cardName > a {color: #2a5f29 !important;}
 #archivedCards .card-item .has-color .cardName,
 #archivedCards .card-item .has-color .actions .icon-more-v,
 #archivedCards .card-item .has-color .info > .label-pri,
@@ -93,7 +95,7 @@ js::set('systemMode', $this->config->systemMode);
         <?php
         $labelColor = 'background-color: #2a5f29';
         if($card->color == '#2a5f29') $labelColor = 'background-color: #FFFFFF; color: #2a5f29';
-        $finishLabel = $card->status == 'done' ? "<div class='label' style='$labelColor'>{$lang->kanban->finished}</div>" : '';
+        $finishLabel = $card->status == 'done' ? "<div class='label label-finish' style='$labelColor'>{$lang->kanban->finished}</div>" : '';
         ?>
         <div class="kanban-item <?php echo $nameColor;?> <?php echo $color;?>" data-id="<?php echo $card->id;?>">
         <?php if(empty($card->fromType)):?>
@@ -231,8 +233,7 @@ $(function()
         if($item.children('.release').length)     icon = '<i class="icon icon-publish">';
         if($item.children('.ticket').length)      icon = '<i class="icon icon-file-text">';
 
-        if($item.children('.execution').length && systemMode == 'new')     icon = '<i class="icon icon-run">';
-        if($item.children('.execution').length && systemMode == 'classic') icon = '<i class="icon icon-project">';
+        if($item.children('.execution').length) icon = '<i class="icon icon-run">';
 
         $item.children('.cardName').prepend(icon);
     });

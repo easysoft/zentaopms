@@ -146,8 +146,9 @@ $lang->execution->estimate = '预计';
 $lang->execution->consumed = '消耗';
 $lang->execution->left     = '剩余';
 
-if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以选择复制项目或{$lang->execution->common}团队的成员";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以选择复制{$lang->executionCommon}团队的成员";
+$lang->execution->copyTeamTip         = "可以选择复制项目或{$lang->execution->common}团队的成员";
+$lang->execution->daysGreaterProject  = '可用工日不能大于执行的可用工日『%s』';
+$lang->execution->errorHours          = '可用工时/天不能大于『24』';
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";
@@ -195,16 +196,8 @@ $lang->execution->statusList['suspended'] = '已挂起';
 $lang->execution->statusList['closed']    = '已关闭';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = "私有（团队成员和项目负责人、干系人可访问）";
-    $lang->execution->aclList['open']    = "继承项目访问权限（能访问当前项目，即可访问）";
-}
-else
-{
-    $lang->execution->aclList['private'] = "私有（团队成员和{$lang->executionCommon}负责人可访问）";
-    $lang->execution->aclList['open']    = "公开（有{$lang->executionCommon}视图权限即可访问）";
-}
+$lang->execution->aclList['private'] = "私有（团队成员和项目负责人、干系人可访问）";
+$lang->execution->aclList['open']    = "继承项目访问权限（能访问当前项目，即可访问）";
 
 $lang->execution->kanbanAclList['private'] = '私有';
 $lang->execution->kanbanAclList['open']    = '继承项目';
@@ -279,8 +272,8 @@ $lang->execution->importBug           = '导入Bug';
 $lang->execution->tree                = '树状图';
 $lang->execution->treeTask            = '只看任务';
 $lang->execution->treeStory           = "只看{$lang->SRCommon}";
-$lang->execution->treeOnlyTask        = '树状图只看任务';
-$lang->execution->treeOnlyStory       = "树状图只看{$lang->SRCommon}";
+$lang->execution->treeViewTask        = '树状图查看任务';
+$lang->execution->treeViewStory       = "树状图查看{$lang->SRCommon}";
 $lang->execution->storyKanban         = "{$lang->SRCommon}看板";
 $lang->execution->storySort           = "{$lang->SRCommon}排序";
 $lang->execution->importPlanStory     = '创建' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？导入时将自动过滤掉草稿状态的' . $lang->SRCommon . '。';
@@ -354,8 +347,9 @@ $lang->execution->wbs                  = "分解任务";
 $lang->execution->batchWBS             = "批量分解";
 $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-link'>帮助 <i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories         = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
+$lang->execution->projectNoStories     = "看起来没有{$lang->SRCommon}可以关联。请检查下项目中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->productStories       = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}{$lang->SRCommon}的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";
-$lang->execution->haveDraft            = "有%s条草稿状态的{$lang->SRCommon}无法关联到该执行";
+$lang->execution->haveDraft            = "有%s条草稿状态的{$lang->SRCommon}无法关联到该{$lang->executionCommon}";
 $lang->execution->doneExecutions       = '已结束';
 $lang->execution->selectDept           = '选择部门';
 $lang->execution->selectDeptTitle      = '选择一个部门的成员';
@@ -372,11 +366,10 @@ $lang->execution->noExecution          = "暂时没有{$lang->executionCommon}�
 $lang->execution->noExecutions         = "暂时没有{$lang->execution->common}。";
 $lang->execution->noPrintData          = "暂无数据可打印";
 $lang->execution->noMembers            = '暂时没有团队成员。';
-$lang->execution->workloadTotal        = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
+$lang->execution->workloadTotal        = "工作量占比累计不应当超过100%s, 当前产品下的工作量之和为%s";
 // $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
 $lang->execution->linkAllStoryTip      = "(项目下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联产品的{$lang->SRCommon})";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "选择一个{$lang->execution->common}团队";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->project->common}或{$lang->execution->common}团队";
+$lang->execution->copyTeamTitle        = "选择一个{$lang->project->common}或{$lang->execution->common}团队";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete               = "您确定删除{$lang->executionCommon}[%s]吗？";

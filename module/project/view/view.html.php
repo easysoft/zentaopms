@@ -116,10 +116,11 @@
             <div class="detail-content article-content">
               <div><span class="text-limit hidden" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
               <p>
+                <span class="label label-primary label-outline"><?php echo zget($lang->project->projectTypeList, $project->hasProduct);?></span>
                 <?php if($project->deleted):?>
                 <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                 <?php endif; ?>
-                <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $project->lifetime);?></span>
+                <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $project->lifetime, '');?></span>
                 <?php if(isset($project->delay)):?>
                 <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
                 <?php else:?>
@@ -128,7 +129,7 @@
               </p>
             </div>
           </div>
-          <?php if($this->config->systemMode == 'new'):?>
+          <?php if(empty($globalDisableProgram)):?>
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->parent;?></strong>
@@ -152,6 +153,7 @@
             </div>
           </div>
           <?php endif;?>
+          <?php if(!empty($project->hasProduct)):?>
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->manageProducts;?></strong>
@@ -187,6 +189,7 @@
               </div>
             </div>
           </div>
+          <?php endif;?>
           <div class='detail'>
             <div class='detail-title'><strong><?php echo $lang->execution->lblStats;?></strong></div>
             <div class="detail-content">

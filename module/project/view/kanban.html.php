@@ -11,6 +11,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
+<?php if($this->config->systemMode == 'light'):?>
+<style>
+.kanban-lane-name{display:none;}
+.kanban-header-cols{left:0px !important;}
+ </style>
+<?php endif;?>
 <?php js::set('kanbanGroup', $kanbanGroup);?>
 <?php if(empty($kanbanGroup)):?>
 <div class="table-empty-tip cell">

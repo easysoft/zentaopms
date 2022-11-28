@@ -18,7 +18,7 @@
     <thead>
       <tr class='text-center'>
         <th class='text-left'><?php echo $lang->testtask->name;?></th>
-        <?php if($longBlock):?>
+        <?php if($longBlock and $project->hasProduct):?>
         <th class='text-left'><?php echo $lang->testtask->product;?></th>
         <?php endif;?>
         <?php if($longBlock):?>
@@ -39,7 +39,7 @@
       ?>
       <tr class='text-center' <?php echo $appid?>>
         <td class='text-left text-ellipsis' title='<?php echo $testtask->name?>'><?php echo html::a($testtaskViewLink, $testtask->name);?></td>
-        <?php if($longBlock):?>
+        <?php if($longBlock and $project->hasProduct):?>
         <td class='text-left text-ellipsis' title='<?php echo $testtask->productName?>'><?php echo html::a($productViewLink, $testtask->productName);?></td>
         <?php endif;?>
         <?php if($longBlock):?>

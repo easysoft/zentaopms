@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  **/
-class bugActiveEntry extends Entry
+class bugActiveEntry extends entry
 {
     /** 
      * POST method.
      *
      * @param  int    $bugID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($bugID)
     {   
@@ -32,7 +32,7 @@ class bugActiveEntry extends Entry
 
         $bug = $this->loadModel('bug')->getByID($bugID);
 
-        $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }   
 }
 

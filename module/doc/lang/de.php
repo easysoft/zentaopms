@@ -165,7 +165,7 @@ $lang->doc->allExecutions = 'Alle' . $lang->executionCommon;
 $lang->doc->allProjects   = 'All' . $lang->projectCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Bibliothek';
-if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = 'Project Library';
+$lang->doc->libTypeList['project']   = 'Project Library';
 $lang->doc->libTypeList['execution'] = $lang->execution->common . ' Bibliothek';
 $lang->doc->libTypeList['api']       = 'API Library';
 $lang->doc->libTypeList['custom']    = 'Eigene Bibliothek';

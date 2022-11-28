@@ -49,9 +49,7 @@
             <thead>
               <tr class='colhead'>
                 <th class='c-id'><?php echo $lang->report->id;?></th>
-                <?php if($this->config->systemMode == 'new'):?>
                 <th><?php echo $lang->report->project;?></th>
-                <?php endif;?>
                 <th><?php echo $lang->report->execution;?></th>
                 <th class="c-hours"><?php echo $lang->report->estimate;?></th>
                 <th class="c-hours"><?php echo $lang->report->consumed;?></th>
@@ -60,13 +58,19 @@
               </tr>
             </thead>
             <tbody>
-              <?php foreach($executions as $id  =>$execution):?>
+              <?php foreach($executions as $id => $execution):?>
               <tr class="text-center">
                 <td><?php echo $id;?></td>
-                <?php if($this->config->systemMode == 'new'):?>
-                <td class="text-left" title="<?php echo $execution->projectName;?>"><?php echo $execution->projectName;?></td>
-                <?php endif;?>
-                <td class="text-left" title="<?php echo $execution->name;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID=$id"), $execution->name);?></td>
+                <td class="text-left" title="<?php echo $execution->projectName;?>">
+                  <?php echo $execution->name ? $execution->projectName : html::a($this->createLink('project', 'index', "projectID=$execution->projectID"), $execution->projectName);?>
+                </td>
+                <td class="text-left" title="<?php echo $execution->name;?>">
+                  <?php if($execution->multiple):?>
+                  <?php echo $execution->name ? html::a($this->createLink('execution', 'view', "executionID=$id"), $execution->name) : '';?>
+                  <?php else:?>
+                  <?php echo $lang->null;?>
+                  <?php endif;?>
+                </td>
                 <td><?php echo round($execution->estimate, 2);?></td>
                 <td><?php echo round($execution->consumed, 2);?></td>
                 <?php $deviation = round($execution->consumed - $execution->estimate, 2);?>

@@ -37,6 +37,9 @@
 <?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
 <?php js::set('ignore', $lang->project->ignore);?>
+<?php js::set('allProducts', $allProducts);?>
+<?php js::set('branchGroups', $branchGroups);?>
+<?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -50,6 +53,7 @@
           <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
         </tr>
         <?php endif;?>
+        <?php if(empty($globalDisableProgram)):?>
         <tr>
           <th class='w-120px'><?php echo $lang->project->parent;?></th>
           <?php
@@ -61,12 +65,14 @@
               $programList = array($project->parent => $program->name);
           }
           ?>
-          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' $attr");?></td>
+          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' data-lastSelected='{$project->parent}' $attr");?></td>
           <td colspan='2'></td>
         </tr>
+        <?php endif;?>
         <tr>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='w-120px'><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td>
+          <td colspan='2'></td>
         </tr>
         <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
@@ -74,6 +80,16 @@
           <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
+        <?php if($model != 'waterfall'):?>
+        <tr>
+          <th><?php echo $lang->project->multiple;?></th>
+          <td colspan='3'><?php echo nl2br(html::radio('multiple', $lang->project->multipleList, $project->multiple, 'disabled'));?></td>
+        </tr>
+        <?php endif;?>
+        <tr>
+          <th id='projectType'><?php echo $lang->project->type;?></th>
+          <td colspan='3'><?php echo nl2br(html::radio('hasProduct', $lang->project->projectTypeList, $project->hasProduct, 'disabled'));?></td>
+        </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $PMUsers, $project->PM, "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
@@ -88,7 +104,7 @@
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $project->budgetUnit);?></span>
               <?php else:?>
               <span class='input-group-addon'></span>
-              <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control'");?>
+              <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control w-80px'");?>
               <?php endif;?>
             </div>
           </td>
@@ -111,8 +127,12 @@
               ?>
             </div>
           </td>
-          <?php $deltaValue = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;?>
-          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
+          <?php
+          /* Remove LONG_TIME item when no multiple project. */
+          if(empty($project->multiple)) unset($lang->project->endList[999]);
+          $deltaValue = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;
+          ?>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList, $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr id='daysBox' <?php if($project->end == LONG_TIME) echo "class='hidden'";?>>
           <th><?php echo $lang->project->days;?></th>
@@ -125,6 +145,7 @@
           <td></td>
           <td></td>
         </tr>
+        <?php if($project->hasProduct and $this->config->vision != 'lite'):?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
@@ -135,19 +156,12 @@
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <div class='col-sm-4' style="padding-right: 6px;">
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "' data-lastBranch='" . $branchID . "'");?>
                   <span class='input-group-addon fix-border'></span>
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\" data-last='" . $branchID . "'");?>
                 </div>
               </div>
-              <?php
-              if(in_array($product->id, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches))
-              {
-                  echo html::hidden("products[$i]", $product->id);
-                  echo html::hidden("branch[$i]", $branchID);
-              }
-              $i++;
-              ?>
+              <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4 <?php if($projectID) echo 'required';?>' style="padding-right: 6px;">
@@ -175,6 +189,18 @@
             </div>
           </td>
         </tr>
+        <?php endif;?>
+        <?php if($project->model == 'waterfall'):?>
+        <?php $class    = (!$project->division and count($linkedProducts) < 2) ? 'hide' : '';?>
+        <?php $disabled = !empty($executions) ? "disabled='disabled'" : '';?>
+        <tr class='<?php echo $class;?> division'>
+          <th><?php echo $lang->project->division;?></th>
+          <td colspan='3'>
+            <?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->divisionTips;?>"></icon>
+          </td>
+        </tr>
+        <?php endif;?>
         <?php if($project->model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
@@ -223,25 +249,5 @@
 </div>
 <div id='programAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
-</div>
-<div class="modal fade" id="promptBox">
-  <div class="modal-dialog mw-600px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php printf($lang->project->changeProgram, $project->name);?></h4>
-      </div>
-      <div class="modal-body">
-        <table class='table table-form' id='promptTable'>
-          <thead>
-            <tr>
-              <th class='text-left'><?php echo $lang->project->multiLinkedProductsTip;?></th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

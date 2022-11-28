@@ -1004,12 +1004,8 @@ class baseRouter
                     array($ztSessionHandler, "destroy"),
                     array($ztSessionHandler, "gc")
                 );
-                register_shutdown_function('session_write_close');
             }
         }
-
-        /* If request header has token, use it as session for authentication. */
-        if(isset($_SERVER['HTTP_TOKEN'])) session_id($_SERVER['HTTP_TOKEN']);
 
         $sessionName = $this->config->sessionVar;
         session_name($sessionName);
@@ -1022,6 +1018,10 @@ class baseRouter
         if(isset($_GET[$this->config->sessionVar]))
         {
             helper::restartSession($_GET[$this->config->sessionVar]);
+        }
+        else if(isset($_SERVER['HTTP_TOKEN'])) // If request header has token, use it as session for authentication.
+        {
+            helper::restartSession($_SERVER['HTTP_TOKEN']);
             $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
         }
 
@@ -1623,7 +1623,7 @@ class baseRouter
      *
      * @param   string $appName        the app name
      * @param   string $moduleName     the module name
-     * @param   string $ext            the extension type, can be control|model|view|lang|config
+     * @param   string $ext            the extension type, can be control|model|view|lang|config|zen|tao
      * @access  public
      * @return  string the extension path.
      */
@@ -1709,7 +1709,7 @@ class baseRouter
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
 
-        if(!empty( $moduleExtPaths['saas']))
+        if(!empty($moduleExtPaths['saas']))
         {
             $this->extActionFile = $moduleExtPaths['saas'] . $this->methodName . '.php';
             if(file_exists($this->extActionFile)) return true;
@@ -1775,19 +1775,33 @@ class baseRouter
      * 设置一个模块的model文件，如果存在model扩展，一起合并。
      * Set the model file of one module. If there's an extension file, merge it with the main model file.
      *
-     * @param   string $moduleName the module name
-     * @param   string $appName the app name
-     * @static
-     * @access  public
-     * @return  string the model file
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return string the model file
      */
     public function setModelFile($moduleName, $appName = '')
     {
+        return $this->setTargetFile($moduleName, $appName);
+    }
+
+    /**
+     * 设置一个模块的target文件，如果存在target扩展，一起合并。
+     * Set the target file of one module. If there's an extension file, merge it with the main target file.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @param  string $class       对象的类型，可选值 target、zen、tao，默认为 target。The type of the object, optional values target, zen, tao, the default is target.
+     * @access public
+     * @return string the target file
+     */
+    public function setTargetFile($moduleName, $appName = '', $class = 'model')
+    {
         if($appName == '') $appName = $this->getAppName();
 
-        /* 设置主model文件。 Set the main model file. */
-        $mainModelFile = $this->getModulePath($appName, $moduleName) . 'model.php';
-        if($this->config->framework->extensionLevel == 0) return $mainModelFile;
+        /* 设置主target文件。 Set the main target file. */
+        $mainTargetFile = $this->getModulePath($appName, $moduleName) . "{$class}.php";
+        if($this->config->framework->extensionLevel == 0) return $mainTargetFile;
 
         /* 计算扩展的文件和hook文件。Compute the extension files and hook files. */
         $hookFiles     = array();
@@ -1795,14 +1809,14 @@ class baseRouter
         $apiFiles      = array();
         $siteExtended  = false;
 
-        $modelExtPaths = $this->getModuleExtPath($appName, $moduleName, 'model');
-        foreach($modelExtPaths as $extType => $modelExtPath)
+        $targetExtPaths = $this->getModuleExtPath($appName, $moduleName, $class);
+        foreach($targetExtPaths as $extType => $targetExtPath)
         {
-            if(empty($modelExtPath)) continue;
+            if(empty($targetExtPath)) continue;
 
-            $tmpHookFiles = helper::ls($modelExtPath . 'hook/', '.php');
-            $tmpExtFiles  = helper::ls($modelExtPath, '.php');
-            $tmpAPIFiles  = helper::ls($modelExtPath, '.api');
+            $tmpHookFiles = helper::ls($targetExtPath . 'hook/', '.php');
+            $tmpExtFiles  = helper::ls($targetExtPath, '.php');
+            $tmpAPIFiles  = helper::ls($targetExtPath, '.api');
             $hookFiles    = array_merge($hookFiles, $tmpHookFiles);
             $extFiles     = array_merge($extFiles,  $tmpExtFiles);
             $apiFiles     = array_merge($apiFiles,  $tmpAPIFiles);
@@ -1811,119 +1825,127 @@ class baseRouter
         }
 
         /* 如果没有扩展文件，返回主文件。 If no extension or hook files, return the main file directly. */
-        if(empty($extFiles) and empty($hookFiles) and empty($apiFiles)) return $mainModelFile;
+        if(empty($extFiles) and empty($hookFiles) and empty($apiFiles)) return $mainTargetFile;
 
-        /* 计算合并之后的modelFile路径。Compute the merged model file path. */
-        $extModelPrefix = $this->config->edition . DS . $this->config->vision . DS;
-        if($siteExtended and !empty($this->siteCode)) $extModelPrefix .= $this->siteCode[0] . DS . $this->siteCode;
+        /* 计算合并之后的targetFile路径。Compute the merged target file path. */
+        $extTargetPrefix = $this->config->edition . DS . $this->config->vision . DS;
+        if($siteExtended and !empty($this->siteCode)) $extTargetPrefix .= $this->siteCode[0] . DS . $this->siteCode;
 
-        $mergedModelDir  = $this->getTmpRoot() . 'model' . DS . $extModelPrefix;
-        $mergedModelFile = $mergedModelDir . $moduleName . '.php';
-        if(!is_dir($mergedModelDir)) mkdir($mergedModelDir, 0755, true);
+        $mergedTargetDir  = $this->getTmpRoot() . $class . DS . $extTargetPrefix;
+        $mergedTargetFile = $mergedTargetDir . $moduleName . '.php';
+        if(!is_dir($mergedTargetDir)) mkdir($mergedTargetDir, 0755, true);
 
-        /* 判断生成的缓存文件是否需要更新。 Judge whether the merged model file needed update or not. */
-        if(!$this->needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $apiFiles, $modelExtPaths, $mainModelFile)) return $mergedModelFile;
+        /* 判断生成的缓存文件是否需要更新。 Judge whether the merged target file needed update or not. */
+        if(!$this->needTargetFileUpdate($mergedTargetFile, $extFiles, $hookFiles, $apiFiles, $targetExtPaths, $mainTargetFile)) return $mergedTargetFile;
 
         /* 合并扩展和hook文件。Merge the extension and hook files. */
-        $modelLines = $this->mergeModelExtFiles($moduleName, $mainModelFile, $extFiles, $mergedModelDir);
-        $this->mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles);
+        $targetLines = $this->mergeTargetExtFiles($moduleName, $extFiles, $mergedTargetDir, $class);
+        $this->mergeTargetHookFiles($moduleName, $mainTargetFile, $targetLines, $hookFiles, $mergedTargetDir, $mergedTargetFile, $apiFiles, $class);
 
-        return $mergedModelFile;
+        return $mergedTargetFile;
     }
 
     /**
-     * 检查合并之后的model文件是否需要更新。Check whether the merged model file need update or not.
+     * 检查合并之后的target文件是否需要更新。Check whether the merged target file need update or not.
      *
-     * @param  string    $mergedModelFile
+     * @param  string    $mergedTargetFile
      * @param  array     $extFiles
      * @param  array     $hookFiles
      * @param  array     $apiFiles
-     * @param  string    $modelExtPaths
-     * @param  string    $mainModelFile
+     * @param  string    $targetExtPaths
+     * @param  string    $mainTargetFile
      * @access public
      * @return bool
      */
-    public function needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $apiFiles, $modelExtPaths, $mainModelFile)
+    public function needTargetFileUpdate($mergedTargetFile, $extFiles, $hookFiles, $apiFiles, $targetExtPaths, $mainTargetFile)
     {
-        $lastTime = file_exists($mergedModelFile) ? filemtime($mergedModelFile) : 0;
+        $lastTime = file_exists($mergedTargetFile) ? filemtime($mergedTargetFile) : 0;
 
         foreach($extFiles  as $extFile)  if(filemtime($extFile)  > $lastTime) return true;
         foreach($hookFiles as $hookFile) if(filemtime($hookFile) > $lastTime) return true;
         foreach($apiFiles  as $apiFile)  if(filemtime($apiFile)  > $lastTime) return true;
 
-        $modelExtPath  = $modelExtPaths['common'];
-        $modelHookPath = $modelExtPaths['common'] . 'hook/';
-        if(is_dir($modelExtPath ) and filemtime($modelExtPath)  > $lastTime) return true;
-        if(is_dir($modelHookPath) and filemtime($modelHookPath) > $lastTime) return true;
+        $targetExtPath  = $targetExtPaths['common'];
+        $targetHookPath = $targetExtPaths['common'] . 'hook/';
+        if(is_dir($targetExtPath ) and filemtime($targetExtPath)  > $lastTime) return true;
+        if(is_dir($targetHookPath) and filemtime($targetHookPath) > $lastTime) return true;
 
-        if(!empty($modelExtPaths['site']))
+        if(!empty($targetExtPaths['site']))
         {
-            $modelExtPath  = $modelExtPaths['site'];
-            $modelHookPath = $modelExtPaths['site'] . 'hook/';
-            if(is_dir($modelExtPath ) and filemtime($modelExtPath)  > $lastTime) return true;
-            if(is_dir($modelHookPath) and filemtime($modelHookPath) > $lastTime) return true;
+            $targetExtPath  = $targetExtPaths['site'];
+            $targetHookPath = $targetExtPaths['site'] . 'hook/';
+            if(is_dir($targetExtPath ) and filemtime($targetExtPath)  > $lastTime) return true;
+            if(is_dir($targetHookPath) and filemtime($targetHookPath) > $lastTime) return true;
         }
 
-        if(filemtime($mainModelFile) > $lastTime) return true;
+        if(filemtime($mainTargetFile) > $lastTime) return true;
 
         return false;
     }
 
     /**
-     * 将model的扩展文件合并在一起。Merge model ext files.
+     * 将target的扩展文件合并在一起。Merge target ext files.
      *
      * @param  string    $moduleName
-     * @param  string    $mainModelFile
      * @param  array     $extFiles
-     * @param  string    $mergedModelDir
+     * @param  string    $mergedTargetDir
+     * @param  string    $class             model | zen | tao
      * @access public
      * @return void
      */
-    public function mergeModelExtFiles($moduleName, $mainModelFile, $extFiles, $mergedModelDir)
+    public function mergeTargetExtFiles($moduleName, $extFiles, $mergedTargetDir, $class = 'model')
     {
         /* 设置类名。Set the class names. */
-        $modelClass    = "{$moduleName}Model";
-        $tmpModelClass = "tmpExt$modelClass";
+        $targetClass    = $moduleName . ucfirst($class);
+        $tmpTargetClass = "tmpExt$targetClass";
 
         /* 开始拼装代码。Prepare the codes. */
-        $modelLines  = "<?php\n";
-        $modelLines .= "global \$app;\n";
-        $modelLines .= "helper::import(\$app->getModulePath('', '$moduleName') . " . "'model.php');\n";
-        $modelLines .= "class $tmpModelClass extends $modelClass \n{\n";
+        $targetLines  = "<?php\n";
+        $targetLines .= "global \$app;\n";
+        $targetLines .= "helper::import(\$app->getModulePath('', '$moduleName') . " . "'$class.php');\n";
+        $targetLines .= "class $tmpTargetClass extends $targetClass \n{\n";
 
-        /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into model lines. */
-        $extModels = array();
-        foreach($extFiles  as $extFile)  $extModels[basename($extFile)] = $extFile;
-        foreach($extModels as $extModel) $modelLines .= self::removePHPTAG($extModel);
+        /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into target lines. */
+        $extTargets = array();
+        foreach($extFiles  as $extFile)  $extTargets[basename($extFile)] = $extFile;
+        foreach($extTargets as $extTarget) $targetLines .= self::removePHPTAG($extTarget);
 
         /* 做个标记，方便后面替换代码使用。Make a mark for replacing codes. */
         $replaceMark = '//**//';
-        $modelLines .= "\n$replaceMark\n}";
+        $targetLines .= "\n$replaceMark\n}";
 
-        /* 生成一个临时的model扩展文件，并加载，用于后续的hook文件加载使用。Create a tmp merged model file and import it for merge hook codes using. */
-        $tmpModelFile = $mergedModelDir . "tmp$moduleName.php";
-        if(@file_put_contents($tmpModelFile, $modelLines))
+        /* 生成一个临时的target扩展文件，并加载，用于后续的hook文件加载使用。Create a tmp merged target file and import it for merge hook codes using. */
+        $tmpTargetFile = $mergedTargetDir . "tmp$moduleName.php";
+        if(@file_put_contents($tmpTargetFile, $targetLines))
         {
-            if(!class_exists($tmpModelClass)) include $tmpModelFile;
-            return $modelLines;
+            if(!class_exists($tmpTargetClass)) include $tmpTargetFile;
+            return $targetLines;
         }
 
-        $this->triggerError("ERROR: $tmpModelFile not writable.", __FILE__, __LINE__, true);
+        $this->triggerError("ERROR: $tmpTargetFile not writable.", __FILE__, __LINE__, true);
     }
 
     /**
-     * 合并model的hook脚本。Merge hook files for a model.
+     * 合并target的hook脚本。Merge hook files for a target.
      *
+     * @param  string $moduleName
+     * @param  string $mainTargetFile
+     * @param  string $targetLines
+     * @param  array  $hookFiles
+     * @param  string $mergedTargetDir
+     * @param  string $mergedTargetFile
+     * @param  array  $apiFiles
+     * @param  string $class            model | zen | tao
      * @access public
      * @return void
      */
-    public function mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles)
+    public function mergeTargetHookFiles($moduleName, $mainTargetFile, $targetLines, $hookFiles, $mergedTargetDir, $mergedTargetFile, $apiFiles, $class = 'model')
     {
         /* 定义相关变量。Init vars. */
-        $modelClass    = $moduleName . 'Model';
-        $extModelClass = 'ext' . $modelClass;
-        $tmpModelClass = 'tmpExt' . $modelClass;
-        $tmpModelFile  = $mergedModelDir . "tmp$moduleName.php";
+        $targetClass    = $moduleName . ucfirst($class);
+        $extTargetClass = 'ext' . $targetClass;
+        $tmpTargetClass = 'tmpExt' . $targetClass;
+        $tmpTargetFile  = $mergedTargetDir . "tmp$moduleName.php";
         $replaceMark   = '//**//';
 
         /* 读取hook文件。Get hook codes need to merge. */
@@ -1947,31 +1969,31 @@ class baseRouter
 
         /* 合并Hook文件。Cycle the hook methods and merge hook codes. */
         $hookedMethods    = array_keys($hookCodes);
-        $mainModelCodes   = file($mainModelFile);
-        $mergedModelCodes = file($tmpModelFile);
+        $mainTargetCodes   = file($mainTargetFile);
+        $mergedTargetCodes = file($tmpTargetFile);
         foreach($hookedMethods as $method)
         {
             /* 通过反射获得hook脚本对应的方法所在的文件和起止行数。Reflection the hooked method to get it's defined position. */
-            if(!method_exists($tmpModelClass, $method)) continue;
-            $methodRelfection = new reflectionMethod($tmpModelClass, $method);
+            if(!method_exists($tmpTargetClass, $method)) continue;
+            $methodRelfection = new reflectionMethod($tmpTargetClass, $method);
             $definedFile = $methodRelfection->getFileName();
             $startLine   = $methodRelfection->getStartLine();
             $endLine     = $methodRelfection->getEndLine();
 
             /* 将Hook脚本和老的代码合并在一起，并替换原来的定义。Merge hook codes with old codes and replace back. */
-            $oldCodes  = $definedFile == $tmpModelFile ? $mergedModelCodes : $mainModelCodes;
+            $oldCodes  = $definedFile == $tmpTargetFile ? $mergedTargetCodes : $mainTargetCodes;
             $oldCodes  = join("", array_slice($oldCodes, $startLine - 1, $endLine - $startLine + 1));
             $openBrace = strpos($oldCodes, '{');
             $newCodes  = substr($oldCodes, 0, $openBrace + 1) . "\n" . join("\n", $hookCodes[$method]) . substr($oldCodes, $openBrace + 1);
 
-            if($definedFile == $tmpModelFile) $modelLines = str_replace($oldCodes, $newCodes, $modelLines);
-            if($definedFile != $tmpModelFile) $modelLines = str_replace($replaceMark, $newCodes . "\n$replaceMark", $modelLines);
+            if($definedFile == $tmpTargetFile) $targetLines = str_replace($oldCodes, $newCodes, $targetLines);
+            if($definedFile != $tmpTargetFile) $targetLines = str_replace($replaceMark, $newCodes . "\n$replaceMark", $targetLines);
         }
 
-        /* 保存最终的Model文件。Save the last merged model file. */
-        $modelLines = str_replace($tmpModelClass, $extModelClass, $modelLines);
-        file_put_contents($mergedModelFile, $modelLines);
-        unlink($tmpModelFile);
+        /* 保存最终的Target文件。Save the last merged target file. */
+        $targetLines = str_replace($tmpTargetClass, $extTargetClass, $targetLines);
+        file_put_contents($mergedTargetFile, $targetLines);
+        unlink($tmpTargetFile);
     }
 
     /**
@@ -2179,6 +2201,57 @@ class baseRouter
         }
 
         return isset($module) ? $module : false;
+    }
+
+    /**
+     * 加载指定模块下的某种对象。
+     * Load the target object of one module.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @param  string $class      对象的类型，可选值 model、zen、tao，默认为 model。The type of the object, optional values model, zen, tao, the default is model.
+     * @access public
+     * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
+     */
+    public function loadTarget($moduleName = '', $appName = '', $class = 'model')
+    {
+        if(empty($moduleName)) $moduleName = $this->moduleName;
+        if(empty($appName)) $appName = $this->appName;
+
+        global $loadedTargets;
+        if(isset($loadedTargets[$class][$appName][$moduleName])) return $loadedTargets[$class][$appName][$moduleName];
+
+        $targetFile = $this->setTargetFile($moduleName, $appName, $class);
+
+        /**
+         * 如果没有target文件，返回false。
+         * If no target file, return false.
+         */
+        if(!helper::import($targetFile)) return false;
+
+        /**
+         * 如果没有扩展文件，target类名是$moduleName + $class，如果有扩展，还需要增加ext前缀。
+         * If no extension file, target class name is $moduleName + $class, else with 'ext' as the prefix.
+         */
+        $targetClass = class_exists('ext' . $appName . $moduleName. $class) ? 'ext' . $appName . $moduleName . $class : $appName . $moduleName . $class;
+        if(!class_exists($targetClass))
+        {
+            $targetClass = class_exists('ext' . $moduleName. $class) ? 'ext' . $moduleName . $class : $moduleName . $class;
+            if(!class_exists($targetClass)) $this->triggerError(" The $class $targetClass not found", __FILE__, __LINE__, $exit = true);
+        }
+
+        /**
+         * 因为zen继承自control，tao继承自model，构造函数里会调用loadTarget方法，赋默认值值防止递归调用。
+         */
+        if($class == 'zen' || $class == 'tao') $loadedTargets[$class][$appName][$moduleName] = false;
+
+        /**
+         * 初始化target 对象并返回。
+         * Init the target object and return it.
+         */
+        $target = new $targetClass($appName);
+        $loadedTargets[$class][$appName][$moduleName] = $target;
+        return $target;
     }
 
     /**
@@ -3168,6 +3241,7 @@ class ztSessionHandler
     {
         $this->tagID = $tagID;
         ini_set('session.save_handler', 'files');
+        register_shutdown_function('session_write_close');
     }
 
     /**
@@ -3262,15 +3336,16 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
+        touch($sessFile);
+        touch($this->rawFile);
         if(md5_file($sessFile) == md5($sessData)) return true;
 
-        if(file_put_contents($sessFile, $sessData))
+        if(file_put_contents($sessFile, $sessData, LOCK_EX))
         {
-            if(!file_exists($this->rawFile)) touch($this->rawFile);
             if(strpos($sessData, 'user|') !== false)
             {
-                $rawSessContent = (string) file_get_contents($this->rawFile);
-                if(empty($rawSessContent)) file_put_contents($this->rawFile, $sessData);
+                $rawSessContent = (string) file_get_contents($this->rawFile, false, null, 0, 1024 * 2);
+                if(strpos($rawSessContent, 'user|') === false) file_put_contents($this->rawFile, $sessData, LOCK_EX);
             }
 
             return true;
@@ -3289,9 +3364,10 @@ class ztSessionHandler
     public function destroy($id)
     {
         $sessFile = $this->getSessionFile($id);
-        unlink($sessFile);
-        unlink($this->rawFile);
+        if(file_exists($sessFile)) unlink($sessFile);
+        if(file_exists($this->rawFile)) unlink($this->rawFile);
         touch($sessFile);
+        touch($this->rawFile);
         return true;
     }
 

@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../testcase/view/caseheader.html.php';?>
 <?php js::set('resetActive', false);?>
+<?php js::set('tab', $app->tab);?>
 <div id='mainContent' class='main-control'>
   <?php if(empty($stories)):?>
   <div class="table-empty-tip">
@@ -139,7 +140,8 @@
 
         if(common::hasPriv('story', 'batchChangeStage'))
         {
-            echo "<div class='btn-group dropup'>";
+            $class = count($stories) <= 3 ? 'dropdown' : 'dropup';
+            echo "<div class='btn-group $class'>";
             echo html::commonButton($lang->story->stageAB . "<span class='caret'></span>", "data-toggle='dropdown'");
             echo "<ul class='dropdown-menu'>";
             $lang->story->stageList[''] = $lang->null;

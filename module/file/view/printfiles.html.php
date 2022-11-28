@@ -54,12 +54,9 @@
               $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);
               $fileTitle  = "<i class='icon icon-file-text'></i> &nbsp;" . $file->title;
               if(strpos($file->title, ".{$file->extension}") === false && $file->extension != 'txt') $fileTitle .= ".{$file->extension}";
-              $imageWidth = 0;
-              if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
-              {
-                  $imageSize  = $this->file->getImageSize($file);
-                  $imageWidth = $imageSize ? $imageSize[0] : 0;
-              }
+
+              $imageSize  = $this->file->getImageSize($file);
+              $imageWidth = $imageSize[0];
 
               $fileSize = 0;
               /* Show size info. */

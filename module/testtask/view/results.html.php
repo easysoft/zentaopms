@@ -36,7 +36,7 @@
         </caption>
         <?php endif;?>
         <?php $failCount = 0; $trCount=1?>
-        <?php foreach($results as $result):?>
+        <?php foreach($results as $i => $result):?>
         <?php
         $class = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
         if($class != 'success') $failCount++;
@@ -122,7 +122,13 @@
                   <?php endforeach;?>
                   <?php if($result->caseResult == 'fail' and common::hasPriv('testcase', 'createBug')):?>
                   <tr>
-                    <td></td><td></td><td></td><td></td><td></td><td></td>
+                    <td>
+                      <div class="checkbox-primary">
+                      <input type='checkbox' id='<?php echo "checkAll[$i]";?>' name='checkAll' />
+                        <label><?php echo $lang->selectAll?></label>
+                      </div>
+                    </td>
+                    <td></td><td></td><td></td><td></td><td></td>
                     <td><?php echo html::commonButton($lang->testcase->createBug, "onclick='createBug(this)'", "btn btn-primary createBtn");?></td>
                   </tr>
                   <?php endif;?>

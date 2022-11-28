@@ -146,8 +146,9 @@ $lang->execution->estimate = 'estimate';
 $lang->execution->consumed = 'consumed';
 $lang->execution->left     = 'Left';
 
-if($this->config->systemMode == 'new')     $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
+$lang->execution->copyTeamTip        = "copy Project/project team members";
+$lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';
+$lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』';
 
 $lang->execution->start    = 'Démarrer';
 $lang->execution->activate = 'Activer';
@@ -195,16 +196,8 @@ $lang->execution->statusList['suspended'] = 'Suspendu';
 $lang->execution->statusList['closed']    = 'Fermé';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
-}
-else
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
-}
+$lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
+$lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 
 $lang->execution->kanbanAclList['private'] = 'Private';
 $lang->execution->kanbanAclList['open']    = 'Inherited Project';
@@ -279,8 +272,8 @@ $lang->execution->importBug           = 'Importer Bug';
 $lang->execution->tree                = 'Arboressence';
 $lang->execution->treeTask            = 'Seulement les Tâches';
 $lang->execution->treeStory           = 'Seulement les Stories';
-$lang->execution->treeOnlyTask        = 'Seulement les Tâches';
-$lang->execution->treeOnlyStory       = 'Seulement les Stories';
+$lang->execution->treeViewTask        = 'Seulement les Tâches';
+$lang->execution->treeViewStory       = 'Seulement les Stories';
 $lang->execution->storyKanban         = 'Story Kanban';
 $lang->execution->storySort           = 'Rang Story';
 $lang->execution->importPlanStory     = $lang->executionCommon . ' est créé!\nVoulez-vous importer des stories qui ont été ajoutées au Plan ?';
@@ -354,6 +347,7 @@ $lang->execution->wbs                  = "Créer Tâche";
 $lang->execution->batchWBS             = "Créer Tâche en lot";
 $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Comment mettre à jour le Graphe d´atterrissage ?' class='btn btn-link'>Mise à jour <i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories         = "Aucune story ne peut être associée. Vérifiez s'il existe des stories dans {$lang->executionCommon} qui sont associées à {$lang->productCommon} et vérifiez qu'elles ont bien été validées.";
+$lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories       = "Les stories associées au {$lang->executionCommon} sont une portion des stories associées au {$lang->productCommon}. Les stories ne peuvent être associées à un {$lang->executionCommon} qu'après avoir été validées. <a href='%s'> Associer Stories</a> maintenant.";
 $lang->execution->haveDraft            = "%s stories sont encore en conception, elles ne peuvent pas être associées au {$lang->executionCommon} actuellement.";
 $lang->execution->doneExecutions       = 'Terminé';
@@ -372,11 +366,10 @@ $lang->execution->noExecution          = "Aucun {$lang->executionCommon}. ";
 $lang->execution->noExecutions         = "Aucun {$lang->execution->common}.";
 $lang->execution->noPrintData          = "No data can be printed.";
 $lang->execution->noMembers            = "Actuellement il n'y a aucun membre dans l'équipe. On ne va pas aller loin... ";
-$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
+$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100%s, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip  = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip      = "({$lang->SRCommon} has never been linked under the project, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "Choisissez une Equipe {$lang->executionCommon} à copier.";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Choisissez une Equipe {$lang->executionCommon} à copier.";
+$lang->execution->copyTeamTitle        = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";
 
 /* Interactive prompts. */
 $lang->execution->confirmDelete               = "Voulez-vous réellement supprimer le {$lang->executionCommon}[%s] ?";

@@ -15,6 +15,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
+<?php js::set('executionID', $execution->id);?>
 <?php js::set('ditto', $lang->task->ditto);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('vision', $config->vision);?>
@@ -22,6 +23,7 @@
 <?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
 <?php js::set('lifetime', $execution->lifetime);?>
 <?php js::set('lifetimeList', $lifetimeList);?>
+<?php js::set('hasProduct', $execution->hasProduct);?>
 <?php
 $requiredFields = array();
 foreach(explode(',', $config->task->create->requiredFields) as $field)
@@ -43,7 +45,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <?php if($execution->type != 'kanban' or $this->config->vision == 'lite'):?>
-        <tr>
+        <tr class="<?php echo !$execution->multiple ? 'hidden' : '';?>">
           <th><?php echo $lang->task->execution;?></th>
           <td><?php echo html::select('execution', $executions, $execution->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
         </tr>
@@ -85,7 +87,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
         </tr>
         <tr class='hidden modeBox'>
           <th><?php echo $lang->task->mode;?></th>
-          <td><?php echo html::select('mode', $lang->task->modeList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('mode', $lang->task->modeList, $task->mode, "class='form-control chosen'");?></td>
         </tr>
         <?php if($execution->type == 'kanban'):?>
         <tr>

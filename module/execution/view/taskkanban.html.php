@@ -71,7 +71,7 @@
     </div>
 
     <?php
-    $width = common::checkNotCN() ? '600px' : '560px';
+    $width = common::checkNotCN() ? '850px' : '700px';
     echo "<div class='btn-group menu-actions'>";
     echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
     echo "<ul class='dropdown-menu pull-right'>";
@@ -90,8 +90,8 @@
     $canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
     $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
     $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
-    $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
-    $canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories'));
+    $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory') and !empty($execution->hasProduct));
+    $canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories') and !$hiddenPlan and !empty($execution->hasProduct));
     $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
     $hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
     $hasBugButton        = ($canCreateBug or $canBatchCreateBug);

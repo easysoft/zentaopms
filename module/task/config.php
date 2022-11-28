@@ -213,6 +213,10 @@ $config->task->datatable->fieldList['execution']['title']      = 'idAB';
 $config->task->datatable->fieldList['execution']['control']    = 'hidden';
 $config->task->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs');
 
+$config->task->datatable->fieldList['project']['title']      = 'idAB';
+$config->task->datatable->fieldList['project']['control']    = 'hidden';
+$config->task->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
+
 $config->task->datatable->fieldList['mode']['title']   = 'idAB';
 $config->task->datatable->fieldList['mode']['control'] = 'hidden';
 

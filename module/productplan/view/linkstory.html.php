@@ -45,7 +45,7 @@
           <td class='c-id text-left'>
             <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)));?>
           </td>
-          <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
+          <td><span class='<?php echo $story->pri ?  "label-pri label-pri-{$story->pri}" : "";?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
           <td class='c-name' title="<?php echo $story->planTitle;?>"><?php echo $story->planTitle;?></td>
           <td title='<?php echo $modules[$story->module]?>' class='text-left c-name'><?php echo $modules[$story->module];?></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'>

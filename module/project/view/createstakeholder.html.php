@@ -22,7 +22,7 @@
       <span class='input-group-addon'><?php echo $lang->execution->selectDept?></span>
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
     </div>
-    <?php if($project->parent):?>
+    <?php if(empty($globalDisableProgram) and $project->parent):?>
     <?php echo html::a($this->createLink('project', 'createStakeholder', "projectID=$projectID&dept=&parent=$path"), $lang->project->importStakeholder, '', 'class="btn btn-primary"');?>
     <?php endif;?>
   </div>

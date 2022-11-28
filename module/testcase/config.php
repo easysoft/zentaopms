@@ -32,7 +32,7 @@ $config->testcase->custom->createFields      = $config->testcase->customCreateFi
 $config->testcase->custom->batchCreateFields = 'module,story,%s';
 $config->testcase->custom->batchEditFields   = 'branch,module,stage,status,pri,story';
 
-$config->testcase->excludeCheckFileds = ',pri,type,stage,needReview,story,';
+$config->testcase->excludeCheckFileds = ',pri,type,stage,needReview,story,branch,';
 
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
@@ -88,11 +88,11 @@ $config->testcase->datatable->fieldList['id']['required'] = 'yes';
 
 $config->testcase->datatable->fieldList['product']['title']      = 'priAB';
 $config->testcase->datatable->fieldList['product']['control']    = 'hidden';
-$config->testcase->datatable->fieldList['product']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&product&id,name');
+$config->testcase->datatable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => '&0&&all');
 
 $config->testcase->datatable->fieldList['module']['title']      = 'module';
 $config->testcase->datatable->fieldList['module']['control']    = 'select';
-$config->testcase->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&case');
+$config->testcase->datatable->fieldList['module']['dataSource'] = array('module' => 'testcase', 'method' => 'getDatatableModules', 'params' => '$productID');
 
 $config->testcase->datatable->fieldList['title']['title']    = 'title';
 $config->testcase->datatable->fieldList['title']['fixed']    = 'left';
@@ -103,7 +103,7 @@ $config->testcase->datatable->fieldList['branch']['title']      = 'branch';
 $config->testcase->datatable->fieldList['branch']['fixed']      = 'left';
 $config->testcase->datatable->fieldList['branch']['width']      = '100';
 $config->testcase->datatable->fieldList['branch']['required']   = 'no';
-$config->testcase->datatable->fieldList['branch']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&branch&id,name');
+$config->testcase->datatable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID');
 
 $config->testcase->datatable->fieldList['pri']['title']    = 'priAB';
 $config->testcase->datatable->fieldList['pri']['fixed']    = 'left';

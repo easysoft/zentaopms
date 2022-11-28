@@ -425,9 +425,19 @@ class userModel extends model
                 }
 
                 $data[$i] = new stdclass();
-                $data[$i]->dept     = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
+                if($users->userType == 'outside')
+                {
+                    $data[$i]->company    = $users->company[$i] == 'ditto' ? (isset($prev['company']) ? $prev['company'] : 0) : $users->company[$i];
+                    $data[$i]->newCompany = isset($users->new[$i]) ? true : false;
+                    $data[$i]->type       = 'outside';
+                }
+                else
+                {
+                    $data[$i]->dept = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
+                    $data[$i]->join = empty($users->join[$i]) ? '0000-00-00' : ($users->join[$i]);
+                    $data[$i]->type = 'inside';
+                }
                 $data[$i]->account  = $users->account[$i];
-                $data[$i]->type     = 'inside';
                 $data[$i]->realname = $users->realname[$i];
                 $data[$i]->role     = $role;
                 $data[$i]->group    = in_array('ditto', isset($users->group[$i]) ? $users->group[$i] : array()) ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
@@ -435,7 +445,6 @@ class userModel extends model
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5(trim($users->password[$i]));
                 $data[$i]->commiter = $users->commiter[$i];
-                $data[$i]->join     = empty($users->join[$i]) ? '0000-00-00' : ($users->join[$i]);
                 $data[$i]->skype    = $users->skype[$i];
                 $data[$i]->qq       = $users->qq[$i];
                 $data[$i]->dingding = $users->dingding[$i];
@@ -474,6 +483,7 @@ class userModel extends model
                 }
 
                 $accounts[$i]     = $data[$i]->account;
+                $prev['company']  = $data[$i]->company;
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
                 $prev['group']    = $data[$i]->group;
@@ -486,6 +496,16 @@ class userModel extends model
         $userIDList = array();
         foreach($data as $user)
         {
+            if($user->type == 'outside' and $user->newCompany)
+            {
+                $company = new stdClass();
+                $company->name = $user->company;
+                $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+
+                $user->company = $this->dao->lastInsertID();
+            }
+            unset($user->newCompany);
+
             if(is_array($user->group))
             {
                 foreach($user->group as $group)
@@ -547,8 +567,6 @@ class userModel extends model
             ->remove('new, password1, password2, groups,verifyPassword, passwordStrength,passwordLength')
             ->get();
 
-        /* Fix bug for api requests using json. */
-        if($this->app->getViewType() == 'json') $this->post->verifyPassword = md5(md5($this->post->verifyPassword) . $this->session->rand);
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
         {
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
@@ -1235,6 +1253,7 @@ class userModel extends model
             ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
             ->beginIF($status == 'openedbyme')->andWhere('openedBy')->eq($account)->fi()
+            ->beginIF($type == 'execution')->andWhere('t2.multiple')->eq('1')->fi()
             ->beginIF($type == 'execution' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($type == 'project' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.account')->eq($account)
@@ -1758,7 +1777,7 @@ class userModel extends model
             if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
             if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
             if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
-            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage,kanban')->fi()->fetchAll('id');
+            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
 
             /* Get admins. */
             $manageObjects = array();
@@ -1940,8 +1959,7 @@ class userModel extends model
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('1=1')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('type')->eq('execution')->fi()
+            ->andWhere('type')->eq('project')
             ->andWhere('root')->in(array_keys($projectProducts))
             ->andWhere('root')->ne(0)
             ->query();
@@ -2070,8 +2088,8 @@ class userModel extends model
         /* Set opened sprints and stages into userview. */
         $openedSprints = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('acl')->eq('open')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage,kanban')->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('project')->in($userView->projects)->fi()
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->andWhere('project')->in($userView->projects)
             ->fetchAll('id');
 
         $openedSprints     = join(',', array_keys($openedSprints));
@@ -2529,7 +2547,7 @@ class userModel extends model
         }
 
         /* Judge sprint auth. */
-        if(($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') and $project->acl == 'private' and $this->config->systemMode == 'new')
+        if(($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') and $project->acl == 'private')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if(empty($parent)) return false;
@@ -2624,7 +2642,7 @@ class userModel extends model
         }
 
         /* Judge sprint auth. */
-        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private' && $this->config->systemMode == 'new')
+        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             $users[$parent->openedBy] = $parent->openedBy;
@@ -2861,7 +2879,7 @@ class userModel extends model
         $personalData['createdDocs']   = $this->dao->select($count)->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('lib')->in(array_keys($allLibs))->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['finishedTasks'] = $this->dao->select($t1Count)->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
-            ->leftjoin(TABLE_TASKTEAM)->alias('t3')->on('t1.id = t3.task')
+            ->leftjoin(TABLE_TASKTEAM)->alias('t3')->on("t1.id = t3.task and t3.account = '{$account}'")
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.finishedBy', true)->eq($account)
@@ -2989,7 +3007,7 @@ class userModel extends model
      */
     public function processAccountSort($users = array())
     {
-        if(isset($users[$this->app->user->account]))
+        if(isset($this->app->user->account) and isset($users[$this->app->user->account]))
         {
             $currentUser = array();
             $currentUser[$this->app->user->account] = $users[$this->app->user->account];

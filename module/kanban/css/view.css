@@ -41,6 +41,7 @@
 .region .kanban-header-col > .title > .text-grey {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .count {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .error {color: #333333; padding-left: 2px; font-size: 10px; padding-top: 1px; padding-right: 2px;}
+.region .kanban-header-col > .actions {z-index: 999; top: inherit;}
 .kanban-affixed .kanban-header-col > .title > .text {color: #fff!important}
 .region .kanban-header-parent-col > .actions {position: absolute; right: 0px; top: 0px !important;}
 .region .kanban-header-sub-cols .actions {position: absolute; right: 0px; top: 0px !important;}
@@ -96,7 +97,7 @@
 .kanban-card > .actions {position: absolute; top: 4px; right: 4px; opacity: 0;}
 .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
-.kanban-card .productplanDesc, .kanban-card .buildDesc {color: #838a9d; overflow: hidden; white-space:nowrap; text-overflow:ellipsis;}
+.kanban-card .productplanDesc, .kanban-card .buildDesc {color: #838a9d; overflow: hidden; white-space:nowrap; text-overflow: clip;}
 
 .cardcolor {width:40px; height: 14px; float: left; margin-left: 5px; margin-right: 5px; margin-top: 2px; border-radius: 2px;}
 #cardcolormenu {padding:2px 2px; width: 100px;}
@@ -132,7 +133,7 @@
 .kanban-card .releaseTitle .icon, .kanban-card .title .icon, .kanban-card .productplanTitle .icon, .kanban-card .title .icon, .kanban-card .buildTitle .icon{padding-right: 5px;}
 .kanban-card .label-finish {margin-right: 7px; margin-top: -1px; padding: 3px 5px; float: left; background-color:#2a5f29;}
 .kanban-card .releaseTitle, .kanban-card .productplanTitle {width: 100%; float: left;}
-.kanban-card .productplanDesc {min-width: 200px;}
+.kanban-card .productplanDesc {min-width: 100%;}
 
 .progress-box {width:100%; display: flex; flex-direction: row; margin-top: 10px;}
 .progress {flex: auto; margin: 5px auto 5px;}

@@ -16,7 +16,7 @@ class todoEntry extends entry
      *
      * @param  int    $todoID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($todoID)
     {
@@ -29,7 +29,7 @@ class todoEntry extends entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $todo = $data->data->todo;
-        $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
+        return $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
     }
 
     /**
@@ -37,7 +37,7 @@ class todoEntry extends entry
      *
      * @param  int    $todoID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($todoID)
     {
@@ -61,7 +61,7 @@ class todoEntry extends entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $todo = $this->todo->getByID($todoID);
-        $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
+        return $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
     }
 
     /**
@@ -69,7 +69,7 @@ class todoEntry extends entry
      *
      * @param  int    $todoID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($todoID)
     {
@@ -77,6 +77,6 @@ class todoEntry extends entry
         $control->delete($todoID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

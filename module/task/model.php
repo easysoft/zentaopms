@@ -91,7 +91,7 @@ class taskModel extends model
             ->setDefault('execution', $executionID)
             ->setDefault('estimate,left,story', 0)
             ->setDefault('status', 'wait')
-            ->setIF($this->config->systemMode == 'new', 'project', $this->getProjectID($executionID))
+            ->setDefault('project', $this->getProjectID($executionID))
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
@@ -109,7 +109,7 @@ class taskModel extends model
             ->cleanINT('execution,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamConsumed,teamLeft,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
             ->add('version', 1)
             ->get();
 
@@ -369,7 +369,7 @@ class taskModel extends model
             $data[$i]->pri        = $tasks->pri[$i];
             $data[$i]->estimate   = $tasks->estimate[$i];
             $data[$i]->left       = $tasks->estimate[$i];
-            $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
+            $data[$i]->project    = $projectID;
             $data[$i]->execution  = $executionID;
             $data[$i]->estStarted = $estStarted;
             $data[$i]->deadline   = $deadline;
@@ -1136,7 +1136,7 @@ class taskModel extends model
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
-        if(count(array_filter($this->post->team)) > 1)
+        if($this->post->team and count(array_filter($this->post->team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
             if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
@@ -1466,11 +1466,9 @@ class taskModel extends model
                 return false;
             }
 
-            if($this->config->systemMode == 'new')
-            {
-                $project = $this->loadModel('project')->getByID($oldTask->project);
-                if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
-            }
+            $project = $this->loadModel('project')->getByID($oldTask->project);
+            if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
+
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -2600,11 +2598,11 @@ class taskModel extends model
     {
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $tasks   = $this->dao->select("t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
+        $tasks   = $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t4.name as projectName, t2.multiple as executionMultiple, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t1.project = t4.id")
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t2.project = t4.id")
             ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t5.task = t1.id and t5.account = '{$account}'")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
@@ -2630,15 +2628,7 @@ class taskModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
-        if(!empty($taskTeam))
-        {
-            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
-        }
-
-        $projectList = array();
-        foreach($tasks as $task) $projectList[$task->project] = $task->project;
-        $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectList)->fetchPairs('id');
-        foreach($tasks as $task) $task->projectName = zget($projectPairs, $task->project);
+        foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
 
         if($tasks) return $this->processTasks($tasks);
         return array();
@@ -2699,7 +2689,7 @@ class taskModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t3.deleted')->eq(0)->fi()
+            ->andWhere('t3.deleted')->eq(0)
             ->fetchAll('id');
         return $tasks;
     }
@@ -3014,8 +3004,16 @@ class taskModel extends model
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
         if($estimate->isLast and $consumed == 0 and $task->status != 'wait')
         {
-            $data->status = 'wait';
-            $data->left   = $task->estimate;
+            $data->status       = 'wait';
+            $data->left         = $task->estimate;
+            $data->finishedBy   = '';
+            $data->canceledBy   = '';
+            $data->closedBy     = '';
+            $data->closedReason = '';
+            $data->finishedDate = '0000-00-00 00:00:00';
+            $data->canceledDate = '0000-00-00 00:00:00';
+            $data->closedDate   = '0000-00-00 00:00:00';
+            if($task->assignedTo == 'closed') $data->assignedTo = $this->app->user->account;
         }
         elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
         {
@@ -3748,7 +3746,8 @@ class taskModel extends model
                 }
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $task->pri . "' title='" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
+                $priClass = $task->pri ? "label-pri label-pri-{$task->pri}" : '';
+                echo "<span class='$priClass' title='" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
                 echo zget($this->lang->task->priList, $task->pri, $task->pri);
                 echo "</span>";
                 break;
@@ -4059,6 +4058,7 @@ class taskModel extends model
             }
         }
         $list .= '</td>';
+        if(!empty($execution->division)) $list .= '<td></td>';
         $list .= "<td class='status-{$task->status} text-center'>" . $this->processStatus('task', $task) . '</td>';
         $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= helper::isZeroDate($task->estStarted) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->estStarted . '</td>';
@@ -4132,7 +4132,7 @@ class taskModel extends model
         $menu .= "<div class='divider'></div>";
 
         $menu .= $this->buildMenu('task', 'edit', $params, $task, 'view', '', '', 'showinonlybody');
-        if(empty($task->team)) $menu .= $this->buildMenu('task', 'create', "projctID={$task->execution}&storyID=0&moduleID=0&taskID=$task->id", $task, 'view', 'copy');
+        $menu .= $this->buildMenu('task', 'create', "projctID={$task->execution}&storyID=0&moduleID=0&taskID=$task->id", $task, 'view', 'copy');
         $menu .= $this->buildMenu('task', 'delete', "executionID=$task->execution&taskID=$task->id", $task, 'view', 'trash', 'hiddenwin', 'showinonlybody', true);
         if($task->parent > 0) $menu .= $this->buildMenu('task', 'view', "taskID=$task->parent", $task, 'view', 'chevron-double-up', '', '', '', '', $this->lang->task->parent);
 

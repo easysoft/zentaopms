@@ -58,7 +58,7 @@ class testcaseModel extends model
             ->add('fromBug', $bugID)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->config->systemMode == 'new' and $this->app->tab == 'project', 'project', $this->session->project)
+            ->setIF($this->app->tab == 'project', 'project', $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
@@ -163,7 +163,7 @@ class testcaseModel extends model
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
-            if($this->config->systemMode == 'new' && $this->app->tab == 'project') $data[$i]->project = $this->session->project;
+            if($this->app->tab == 'project') $data[$i]->project = $this->session->project;
             $data[$i]->branch       = $cases->branch[$i];
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
@@ -346,7 +346,7 @@ class testcaseModel extends model
                 ->where('t1.project')->eq((int)$executionID)
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF(!empty($moduleID))->andWhere('t4.path')->like("%,$moduleID,%")->fi()
-                ->beginIF(!empty($productID))->andWhere('t2.branch')->eq($branchID)->fi()
+                ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t3.version > t2.storyVersion')
                 ->andWhere("t3.status")->eq('active')
@@ -362,7 +362,7 @@ class testcaseModel extends model
             ->beginIF($browseType != 'all' and $browseType != 'byModule')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF(!empty($moduleID))->andWhere('t3.path')->like("%,$moduleID,%")->fi()
-            ->beginIF(!empty($productID))->andWhere('t2.branch')->eq($branchID)->fi()
+            ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -1326,10 +1326,12 @@ class testcaseModel extends model
      */
     public static function isClickable($case, $action, $module = 'testcase')
     {
+        global $config;
+
         $action = strtolower($action);
 
-        if($module == 'testcase' && $action == 'createbug') return $case->caseFails > 0;
-        if($module == 'testcase' && $action == 'review') return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
+        if($module == 'testcase' && $action == 'createbug')   return $case->caseFails > 0;
+        if($module == 'testcase' && $action == 'review')      return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
 
         return true;
     }
@@ -1436,7 +1438,15 @@ class testcaseModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(!empty($fieldNames)) dao::$errors = sprintf($this->lang->testcase->noRequireTip, implode(',', $fieldNames));
+        if(!empty($fieldNames))
+        {
+            $tipContent = '';
+            foreach($requiredFields as $field)
+            {
+                if(isset($fieldNames[$field])) $tipContent .= ",{$fieldNames[$field]}";
+            }
+            dao::$errors = sprintf($this->lang->testcase->noRequireTip, trim($tipContent, ','));
+        }
 
         if(dao::isError()) return false;
 
@@ -1541,7 +1551,7 @@ class testcaseModel extends model
             }
             else
             {
-                if($this->config->systemMode == 'new' && $this->app->tab == 'project') $caseData->project = $this->session->project;
+                if($this->app->tab == 'project') $caseData->project = $this->session->project;
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
@@ -1912,14 +1922,23 @@ class testcaseModel extends model
      */
     public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID = 0)
     {
-        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]) + array('all' => $this->lang->testcase->allProduct);
-        $this->config->testcase->search['params']['product']['values'] = $product;
+        $productList = array();
+        if($this->app->tab == 'project' and empty($productID))
+        {
+            $productList = $products;
+        }
+        else
+        {
+            $productList = array('all' => $this->lang->all);
+            if(isset($products[$productID])) $productList = array($productID => $products[$productID]) + $productList;
+        }
+        $this->config->testcase->search['params']['product']['values'] = array('') + $productList;
 
         $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
         if(!$productID)
         {
             $module = array();
-            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
+            foreach($products as $id => $name) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
         }
         $this->config->testcase->search['params']['module']['values'] = $module;
 
@@ -1933,8 +1952,8 @@ class testcaseModel extends model
         else
         {
             $this->app->loadLang('branch');
-            $productInfo = $this->loadModel('product')->getByID($productID);
-            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
+            $product = $this->loadModel('product')->getByID($productID);
+            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID) + array('all' => $this->lang->branch->all);
         }
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
@@ -2250,9 +2269,10 @@ class testcaseModel extends model
             $data->order   = ++ $lastOrder;
             $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
 
-            $objectType = $objectInfo[$projectID]->type;
+            $object     = $objectInfo[$projectID];
+            $objectType = $object->type;
             if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
-            if(in_array($objectType, array('sprint', 'stage'))) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
+            if(in_array($objectType, array('sprint', 'stage')) and $object->multiple) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
         }
     }
 
@@ -2432,13 +2452,13 @@ class testcaseModel extends model
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody', false, "data-width='95%'");
-                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
+                    if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'importToLib', $params,                $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 else
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody iframe', false, "data-width='95%'");
-                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
+                    if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'importToLib', $params,                $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 if($case->caseFails > 0)
                 {
@@ -2447,7 +2467,7 @@ class testcaseModel extends model
             }
             if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
             {
-                $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'view', '', '', 'iframe', '', '', $this->lang->testcase->reviewAB);
+                $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'view', '', '', 'showinonlybody iframe', '', '', $this->lang->testcase->reviewAB);
             }
         }
         else
@@ -2513,7 +2533,7 @@ class testcaseModel extends model
 
         if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
         {
-            common::printIcon('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
+            common::printIcon('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'showinonlybody iframe');
         }
         $menu .= $this->buildMenu('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'browse', 'bug', '', 'iframe', '', "data-width='90%'");
         $menu .= $this->buildMenu('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'browse', 'copy');
@@ -2612,5 +2632,22 @@ class testcaseModel extends model
             }
         }
         return $stepData;
+    }
+
+    /**
+     * Get modules for datatable.
+     *
+     * @param int $productID
+     * @access public
+     * @return void
+     */
+    public function getDatatableModules($productID)
+    {
+        $branches = $this->loadModel('branch')->getPairs($productID);
+        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'case', '');
+        if(count($branches) <= 1) return $modules;
+
+        foreach($branches as $branchID => $branchName) $modules += $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
+        return $modules;
     }
 }

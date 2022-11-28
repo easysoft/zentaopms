@@ -1,12 +1,12 @@
 <table class='table table-form programParams'>
   <caption class='strong'><?php echo $lang->upgrade->dataMethod;?></caption>
   <tr><td><?php echo html::radio('projectType', $this->lang->upgrade->projectType, $projectType);?></td></tr>
-  <tr><td class='createProjectTip'><?php echo $lang->upgrade->createProjectTip?></td></tr>
-  <tr><td class='createExecutionTip hidden'><?php echo $lang->upgrade->createExecutionTip?></td></tr>
+  <tr><td class='createProjectTip text-gray <?php echo $projectType == 'project' ? '' : 'hidden';?>'><?php echo $lang->upgrade->createProjectTip?></td></tr>
+  <tr><td class='createExecutionTip text-gray <?php echo $projectType == 'execution' ? '' : 'hidden';?>'><?php echo $lang->upgrade->createExecutionTip?></td></tr>
 </table>
-<table class='table table-form'>
-  <caption class='strong'><?php echo $lang->upgrade->setProgram;?></caption>
-  <tr>
+<table class='table table-form programForm'>
+  <caption class='strong'><?php echo $systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram;?></caption>
+  <tr class="<?php echo $systemMode == 'light' ? 'hide' : '';?>">
     <th>
       <span class="pgm-exist hidden"><?php echo $lang->upgrade->existProgram;?></span>
       <span class="pgm-no-exist"><?php echo $lang->upgrade->programName;?></span>
@@ -25,7 +25,7 @@
       <?php echo html::hidden('programID', '');?>
     </td>
   </tr>
-  <tr>
+  <tr class="<?php echo $systemMode == 'light' ? 'hide' : '';?>">
     <th><?php echo $lang->program->common . $lang->program->status;?></th>
     <td><?php echo html::select('programStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
   </tr>
@@ -53,7 +53,7 @@
     <th><?php echo $lang->project->status;?></th>
     <td><?php echo html::select('projectStatus', $lang->project->statusList, '', "class='form-control chosen'");?></td>
   </tr>
-  <tr class='LineName'>
+  <tr class='LineName <?php echo $systemMode == 'light' ? 'hide' : '';?>'>
     <th>
       <span class="line-exist hidden"><?php echo $lang->upgrade->existLine;?></span>
       <span class="line-no-exist"><?php echo $lang->upgrade->line;?></span>
@@ -94,6 +94,7 @@
     </td>
   </tr>
   <tr class='programParams'>
+    <?php if($systemMode == 'light') unset($lang->project->subAclList['program']);?>
     <th><?php echo $lang->project->acl;?></th>
     <td class='programAcl'><?php echo nl2br(html::radio('programAcl', $lang->program->aclList, 'open', '', 'block'));?></td>
     <td class='projectAcl hidden'><?php echo nl2br(html::radio('projectAcl', $lang->project->subAclList, 'open', '', 'block'));?></td>

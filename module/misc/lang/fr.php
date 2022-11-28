@@ -47,8 +47,8 @@ $lang->misc->zentao->cowin['feedback']     = "Feedback";
 $lang->misc->zentao->cowin['recommend']    = "Plus...";
 
 $lang->misc->zentao->service['zentaotrain'] = 'ZenTao Training';
-$lang->misc->zentao->service['idc']         = 'Zentao Cloud';
-$lang->misc->zentao->service['custom']      = 'Zentao Custom';
+$lang->misc->zentao->service['idc']         = 'ZenTao Cloud';
+$lang->misc->zentao->service['custom']      = 'ZenTao Custom';
 
 global $config;
 $lang->misc->zentao->others['chanzhi']  = "<img src='{$config->webRoot}theme/default/images/main/chanzhi.ico' /> Zsite";
@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "Accès Mobile";
 $lang->misc->noGDLib     = "SVP visitez <strong>%s</strong> via le navigateur de votre smartphone.";
-$lang->misc->copyright   = "&copy; 2009 - 2019 <a href='http://easysoft.ltd' target='_blank'>Nature Easy Soft</a> Email <a href='mailto:Renee@easysoft.ltd'>Renee@easysoft.ltd</a>";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easysoft.ltd' target='_blank'>Nature Easy Soft</a> Email <a href='mailto:Renee@easysoft.ltd'>Renee@easysoft.ltd</a>";
 $lang->misc->checkTable  = "Vérifiez les Données de la Table";
 $lang->misc->needRepair  = "Réparer la Table";
 $lang->misc->repairTable = "La Base de Données est peut-être endommagée. Elle a besoin d'être vérifiée et éventuellement réparée !";
@@ -100,9 +100,11 @@ $lang->misc->feature->close          = 'Close';
 $lang->misc->feature->downloadFile   = 'Download introduction';
 $lang->misc->feature->tutorialDesc   = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 $lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
-$lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R & D affairs in <span style='color: #0c60e1'>[R&D]</span> and daily office affairs in <span style='color: #0c60e1'>[Lite]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
+$lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
 
+$lang->misc->releaseDate['18.0.beta1']  = '2022-11-16';
+$lang->misc->releaseDate['17.8']        = '2022-11-02';
 $lang->misc->releaseDate['17.7']        = '2022-10-19';
 $lang->misc->releaseDate['17.6.2']      = '2022-09-23';
 $lang->misc->releaseDate['17.6.1']      = '2022-09-08';
@@ -191,6 +193,8 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['18.0.beta1'][] = array('title' => "Multiple core processes in ZenTao are improved: A project without any product linked in is able to be created, as well as creating projects without sprints/iterations linked in; projects are able to link products beyond the father program; switch easily between ZenTao Lite mode and Full Lifecycle Management mode.", 'desc' => '');
+$lang->misc->feature->all['17.8'][]       = array('title' => "We have optimized the color of status in lists, as well as the dashboard color. At the same time, the page of the task effort has been improved.", 'desc' => '');
 $lang->misc->feature->all['17.7'][]       = array('title' => "The table is optimized in the transition version. At the same time, we have added the new feature of Work Order and get the Feedback features improved as well. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.6.2'][]     = array('title' => "3 themes in ZenTao including Green, ZenTao Blue, and Young Blue are updated. At the same time, the attachments could be uploaded in bulk in ZenTao. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.6.1'][]     = array('title' => "Optimized the processing logic of multi-member tasks. Fix bugs.", 'desc' => '');

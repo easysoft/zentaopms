@@ -1073,6 +1073,7 @@ class kanban extends control
         $kanban = $this->kanban->getByID($card->kanban);
         $space  = $this->kanban->getSpaceById($kanban->space);
 
+        $this->view->title       = 'CARD #' . $card->id . ' ' . $card->name;
         $this->view->card        = $card;
         $this->view->actions     = $this->action->getList('kanbancard', $cardID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
@@ -1195,8 +1196,21 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $productPairs      = $this->product->getPairs();
+        $productPairs      = $this->product->getPairs('', 0, '', 'all');
         $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
+
+        /* Waterfall project has no plan. */
+        $excludeProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.type')->eq('project')
+            ->andWhere('t2.model')->ne('scrum')
+            ->andWhere('t2.hasProduct')->eq('0')
+            ->fetchPairs();
+
+        foreach($productPairs as $id => $name)
+        {
+            if(isset($excludeProducts[$id])) unset($productPairs[$id]);
+        }
 
         $this->view->products          = $productPairs;
         $this->view->selectedProductID = $selectedProductID;
@@ -1247,7 +1261,21 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->products          = array($this->lang->kanban->allProducts) + $this->product->getPairs();
+        /* Kanban products has no releases. */
+        $productPairs   = $this->product->getPairs('', 0, '', 'all');
+        $kanbanProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.type')->eq('project')
+            ->andWhere('t2.model')->eq('kanban')
+            ->andWhere('t2.hasProduct')->eq('0')
+            ->fetchPairs();
+
+        foreach($productPairs as $id => $name)
+        {
+            if(isset($kanbanProducts[$id])) unset($productPairs[$id]);
+        }
+
+        $this->view->products          = array($this->lang->kanban->allProducts) + $productPairs;
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->releases2Imported = $this->release->getList($selectedProductID, 'all', 'all', 't1.date_desc', $pager);
@@ -1297,16 +1325,8 @@ class kanban extends control
 
         $builds2Imported = array();
         $projects        = array($this->lang->kanban->allProjects);
-        if($this->config->systemMode == 'classic')
-        {
-            $projects        += $this->loadModel('execution')->getPairs();
-            $builds2Imported  = $this->build->getExecutionBuilds($selectedProjectID, '', '', 't1.date_desc,t1.id_desc', $pager);
-        }
-        else
-        {
-            $projects        += $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
-            $builds2Imported  = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);
-        }
+        $projects       += $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+        $builds2Imported = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);
 
         $this->view->projects          = $projects;
         $this->view->selectedProjectID = $selectedProjectID;
@@ -1358,7 +1378,7 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram();
+        $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram('', 'all', false, '', '', '', 'multiple');
         $this->view->selectedProjectID   = $selectedProjectID;
         $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->executions2Imported = $this->execution->getStatData($selectedProjectID, 'undone', 0, 0, false, '', 'id_asc', $pager);
@@ -1412,6 +1432,7 @@ class kanban extends control
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->tickets2Imported  = $this->ticket->getTicketByProduct($selectedProductID, 'noclosed|nodone', 'id_desc', $pager);
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager             = $pager;
         $this->view->kanbanID          = $kanbanID;
         $this->view->regionID          = $regionID;

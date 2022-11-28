@@ -9,21 +9,21 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class programEntry extends Entry
+class programEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($programID)
     {
         $program = $this->loadModel('program')->getByID($programID);
         if(!$program) return $this->send404();
 
-        $this->send(200, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
+        return $this->send(200, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
     }
 
     /**
@@ -31,7 +31,7 @@ class programEntry extends Entry
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($programID)
     {
@@ -47,7 +47,7 @@ class programEntry extends Entry
 
         $this->getData();
         $program = $this->program->getByID($programID);
-        $this->send(200, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
+        return $this->send(200, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
     }
 
     /**
@@ -55,7 +55,7 @@ class programEntry extends Entry
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($programID)
     {
@@ -65,6 +65,6 @@ class programEntry extends Entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

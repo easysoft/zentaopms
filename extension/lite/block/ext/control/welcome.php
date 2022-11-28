@@ -21,7 +21,7 @@ class myBlock extends block
             ->orWhere('t3.status')->ne('suspended')
             ->markRight(1)
             ->andWhere('t1.deleted')->eq('0')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.deleted')->eq('0')->fi()
+            ->beginIF($this->config->systemMode == 'ALM')->andWhere('t2.deleted')->eq('0')->fi()
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetchAll('id');

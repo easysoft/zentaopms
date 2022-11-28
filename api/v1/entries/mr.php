@@ -15,7 +15,7 @@ class mrEntry extends baseEntry
      * Create mr.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -28,6 +28,6 @@ class mrEntry extends baseEntry
         if(dao::isError()) $this->sendError(400, dao::getError());
 
         $MR = $this->mr->getByID($MRID);
-        $this->send(201, $MR);
+        return $this->send(201, $MR);
     }
 }

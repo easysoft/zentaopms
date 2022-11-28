@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class productplanEntry extends Entry
+class productplanEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $planID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($planID)
     {
@@ -43,7 +43,7 @@ class productplanEntry extends Entry
      *
      * @param  int    $planID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($planID)
     {
@@ -71,7 +71,7 @@ class productplanEntry extends Entry
         $plan->stories = $data->data->planStories;
         $plan->bugs    = $data->data->planBugs;
 
-        $this->send(200, $this->format($plan, 'begin:date,end:date,deleted:bool,stories:array,bugs:array'));
+        return $this->send(200, $this->format($plan, 'begin:date,end:date,deleted:bool,stories:array,bugs:array'));
     }
 
     /**
@@ -79,7 +79,7 @@ class productplanEntry extends Entry
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($planID)
     {
@@ -87,6 +87,6 @@ class productplanEntry extends Entry
         $control->delete($planID, 'yes');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

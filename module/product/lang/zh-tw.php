@@ -174,7 +174,7 @@ $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '結束';
 
 global $config;
-if($config->systemMode == 'new')
+if($config->systemMode == 'ALM')
 {
     $lang->product->aclList['private'] = "私有({$lang->productCommon}相關負責人、所屬項目集的干係人、相關聯項目的團隊成員和干係人可訪問)";
 }

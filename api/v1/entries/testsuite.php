@@ -16,7 +16,7 @@ class testsuiteEntry extends entry
      *
      * @param  int    $testsuiteID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($testsuiteID)
     {
@@ -36,7 +36,7 @@ class testsuiteEntry extends entry
             $suite->testcases[] = $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool');
         }
 
-        $this->send(200, $suite);
+        return $this->send(200, $suite);
     }
 
     /**
@@ -44,7 +44,7 @@ class testsuiteEntry extends entry
      *
      * @param  int    $testsuiteID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($testsuiteID)
     {
@@ -53,6 +53,6 @@ class testsuiteEntry extends entry
 
         $this->getData();
 
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

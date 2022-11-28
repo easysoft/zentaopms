@@ -1328,7 +1328,7 @@ function createStoryMenu(options)
     if(priv.canCreateTask && showAction && story.status == 'active') items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canBatchCreateTask && showAction && story.status == 'active') items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateStory && story.$col.type == 'closed') items.push({label: executionLang.activate, icon: 'magic', url: createLink('story', 'activate', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'false'), attrs: {target: 'hiddenwin'}});
+    if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id + '&confirm=no&from=' + '&laneID=' + story.lane + '&columnID=' + story.column, '', 'false'), attrs: {target: 'hiddenwin'}});
     if(priv.canDeleteStory) items.push({label: storyLang.delete, icon: 'trash', onClick: function(){deleteCard('story', story.id, story.$lane.region)}});
     return items;
 }

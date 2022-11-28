@@ -49,40 +49,32 @@ class commonModel extends model
         global $app;
         $rawModule = $app->rawModule;
 
-        if($this->config->systemMode == 'classic')
+        if($rawModule == 'task' or $rawModule == 'effort')
         {
-            if($rawModule == 'task') $this->syncExecutionStatus($objectID);
+            $taskID    = $objectID;
+            $execution = $this->syncExecutionStatus($taskID);
+            $project   = $this->syncProjectStatus($execution);
+            $this->syncProgramStatus($project);
         }
-
-        if($this->config->systemMode == 'new')
+        if($rawModule == 'execution')
         {
-            if($rawModule == 'task' or $rawModule == 'effort')
-            {
-                $taskID    = $objectID;
-                $execution = $this->syncExecutionStatus($taskID);
-                $project   = $this->syncProjectStatus($execution);
-                $this->syncProgramStatus($project);
-            }
-            if($rawModule == 'execution')
-            {
-                $executionID = $objectID;
-                $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
-                $this->syncExecutionByChild($execution);
-                $project     = $this->syncProjectStatus($execution);
-                $this->syncProgramStatus($project);
-            }
-            if($rawModule == 'project')
-            {
-                $projectID = $objectID;
-                $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-                $this->syncProgramStatus($project);
-            }
-            if($rawModule == 'program')
-            {
-                $programID = $objectID;
-                $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-                $this->syncProgramStatus($program);
-            }
+            $executionID = $objectID;
+            $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+            $this->syncExecutionByChild($execution);
+            $project     = $this->syncProjectStatus($execution);
+            $this->syncProgramStatus($project);
+        }
+        if($rawModule == 'project')
+        {
+            $projectID = $objectID;
+            $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+            $this->syncProgramStatus($project);
+        }
+        if($rawModule == 'program' and $this->config->systemMode == 'ALM')
+        {
+            $programID = $objectID;
+            $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+            $this->syncProgramStatus($program);
         }
     }
 
@@ -133,7 +125,8 @@ class commonModel extends model
                  ->where('id')->eq($projectID)
                  ->exec();
 
-            $this->loadModel('action')->create('project', $projectID, 'syncproject');
+            $actionType = $project->multiple ? 'syncproject' : 'syncmultipleproject';
+            $this->loadModel('action')->create('project', $projectID, $actionType);
         }
         return $project;
     }
@@ -343,8 +336,10 @@ class commonModel extends model
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
         /* Overide the items defined in config/config.php and config/my.php. */
-        if(isset($this->config->system->common)) $this->app->mergeConfig($this->config->system->common, 'common');
+        if(isset($this->config->system->common))   $this->app->mergeConfig($this->config->system->common, 'common');
         if(isset($this->config->personal->common)) $this->app->mergeConfig($this->config->personal->common, 'common');
+
+        $this->config->disabledFeatures = $this->config->disabledFeatures . ',' . $this->config->closedFeatures;
     }
 
     /**
@@ -619,15 +614,13 @@ class commonModel extends model
             if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
         }
 
-        if($config->edition == 'open') unset($lang->createIcons['effort']);
-        if($config->systemMode == 'classic') unset($lang->createIcons['project'], $lang->createIcons['program']);
+        if($config->edition == 'open')     unset($lang->createIcons['effort']);
+        if($config->systemMode == 'light') unset($lang->createIcons['program']);
 
         /* Check whether the creation permission is available, and print create buttons. */
+
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
-            /* Change icon when object type is execution and mode is classic. */
-            if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
-
             $createMethod = 'create';
             $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
             if($objectType == 'effort') $createMethod = 'batchCreate';
@@ -939,7 +932,6 @@ class commonModel extends model
             if($tab == 'product') $currentMethod = 'all';
         }
 
-        if($config->systemMode == 'classic' and $tab == 'execution') $icon = zget($lang->navIcons, 'project', '');
         $link = helper::createLink($currentModule, $currentMethod);
         $className = $tab == 'devops' ? 'btn num' : 'btn';
         $html = $link ? html::a($link, "$icon {$lang->$tab->common}", '', "class='$className' style='padding-top: 2px'") : "$icon {$lang->$tab->common}";
@@ -1174,11 +1166,11 @@ class commonModel extends model
                     {
                         foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
                         {
+                            if(empty($dropMenuItem)) continue;
                             if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
                             /* Parse drop menu link. */
-                            $dropMenuLink = $dropMenuItem;
-                            if(is_array($dropMenuItem) and isset($dropMenuItem['link'])) $dropMenuLink = $dropMenuLink['link'];
+                            $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
 
                             list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
                             if(!common::hasPriv($subModule, $subMethod)) continue;
@@ -1204,7 +1196,7 @@ class commonModel extends model
                                 $subActive  = 'active';
                                 $label      = $subLabel;
                             }
-                            $dropMenu .= "<li class='$subActive' data-id='$subLabel'>" . html::a($subLink, $subLabel, '', "data-app='$tab'") . '</li>';
+                            $dropMenu .= "<li class='$subActive' data-id='$dropMenuName'>" . html::a($subLink, $subLabel, '', "data-app='$tab'") . '</li>';
                         }
 
                         if(empty($dropMenu)) continue;
@@ -1249,9 +1241,9 @@ class commonModel extends model
         echo "<ul id='searchTypeMenu' class='dropdown-menu'>";
 
         $searchObjects = $lang->searchObjects;
-        if($config->systemMode != 'new') unset($searchObjects['program'], $searchObjects['project']);
+        if($config->systemMode == 'light') unset($searchObjects['program']);
 
-        foreach ($searchObjects as $key => $value)
+        foreach($searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
             if($key == 'program')    $key = 'program-product';
@@ -1583,7 +1575,7 @@ class commonModel extends model
         $currentMethod = strtolower($method);
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
-        if(!commonModel::hasPriv($module, $method, $object) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
+        if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
@@ -1688,7 +1680,7 @@ EOD;
         {
             if($app->getModuleName() != $module) $app->control->loadModel($module);
             $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
-            if(class_exists($modelClass) and is_callable(array($modelClass, 'isClickable')))
+            if(class_exists($modelClass) and method_exists($modelClass, 'isClickable'))
             {
                 //$clickable = call_user_func_array(array($modelClass, 'isClickable'), array('object' => $object, 'method' => $method));
                 // fix bug on php  8.0 link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953
@@ -1700,7 +1692,6 @@ EOD;
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if($config->systemMode == 'classic' and strtolower($module) == 'project') $module = 'execution';
         if(!commonModel::hasPriv($module, $method, $object, $vars)) return false;
 
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
@@ -2430,14 +2421,12 @@ EOD;
                 'message' => array('ajaxgetmessage'),
             );
             if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword')));
-            if($this->isOpenMethod($module, $method)) return true;
             if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
             if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
+            if($this->isOpenMethod($module, $method)) return true;
 
             if(isset($this->app->user))
             {
-                if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project' and $method != 'browse') return true;
-
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
                 {
@@ -2627,21 +2616,24 @@ EOD;
         foreach($programRights as $programRight) $programRightGroup[strtolower($programRight->module)][strtolower($programRight->method)] = 1;
 
         /* Reset priv by program privway. */
-        $rights = $this->app->user->rights['rights'];
         $this->app->user = clone $_SESSION['user'];
+        $rights = $this->app->user->rights['rights'];
 
         if($this->app->user->account == $program->openedBy or $this->app->user->account == $program->PM) $program->auth = 'extend';
 
         if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
         {
-            $recomputedRights = $this->loadModel('user')->authorize($this->app->user->account);
-            $recomputedRights = $recomputedRights['rights'];
-
             /* If priv way is reset, unset common program priv, and cover by program priv. */
-            foreach($rights as $moduleKey => $methods)
+            $projectPrivs = $this->loadModel('project')->processProjectPrivs($program->multiple ? $program->model : 'noSprint');
+            foreach($projectPrivs as $module => $methods)
             {
-                if(in_array($moduleKey, $this->config->programPriv->waterfall)) unset($rights[$moduleKey]);
+                foreach($methods as $method => $label)
+                {
+                    $module = strtolower($module);
+                    $method = strtolower($method);
+                    if(isset($rights[$module][$method])) unset($rights[$module][$method]);
+                }
             }
 
             $recomputedRights = array_merge($rights, $programRightGroup);
@@ -2653,6 +2645,7 @@ EOD;
             if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
 
             $this->app->user->rights['rights'] = $recomputedRights;
+            $this->session->set('user', $this->app->user);
         }
     }
 
@@ -3422,7 +3415,7 @@ EOD;
      * @param  int     $objectID
      * @param  array   $params
      */
-    static private function setMenuVarsEx($menu, $objectID, $params = array())
+    static public function setMenuVarsEx($menu, $objectID, $params = array())
     {
         if(is_array($menu))
         {

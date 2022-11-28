@@ -197,7 +197,7 @@ $(function()
               </div>
             </div>
           </div>
-          <?php if(!empty($project->executions)):?>
+          <?php if(!empty($project->executions) and $project->multiple):?>
           <div class="table-row project-info">
             <div class="col-2 text-right"><h4><?php echo $lang->block->last;?></h4></div>
             <div class="table-row lastIteration">
@@ -259,7 +259,7 @@ $(function()
               <div class="col-1-5"><?php echo $project->cv;?></div>
             </div>
           </div>
-        <?php endif;?>
+          <?php endif;?>
         </div>
       </div>
       <?php endforeach;?>

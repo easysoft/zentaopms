@@ -21,11 +21,7 @@ class custom extends control
     {
         if($this->config->vision == 'lite') return print(js::locate(inlink('execution')));
 
-        if(($this->config->systemMode == 'new') and common::hasPriv('custom', 'set'))
-        {
-            return print(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
-        }
-
+        if(common::hasPriv('custom', 'set'))       return print(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
         if(common::hasPriv('custom', 'product'))   return print(js::locate(inlink('product')));
         if(common::hasPriv('custom', 'execution')) return print(js::locate(inlink('execution')));
 
@@ -609,7 +605,7 @@ class custom extends control
             if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
-            $locate = $this->config->systemMode == 'new' ? inlink('flow') : 'top';
+            $locate = inlink('flow');
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
@@ -627,42 +623,36 @@ class custom extends control
      */
     public function mode()
     {
-        $mode = zget($this->config->global, 'mode', 'classic');
+        $mode = zget($this->config->global, 'mode', 'light');
         if($this->post->mode and $this->post->mode != $mode) // If mode value change.
         {
-            $mode = fixer::input('post')->get('mode');
+            $mode    = fixer::input('post')->get('mode');
+            $program = isset($_POST['program']) ? $_POST['program'] : 0;
+
+            if($mode == 'light' and empty($program)) $program = $this->loadModel('program')->createDefaultProgram();
+
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
-            $this->setting->setItem('system.common.global.changedMode', 'yes');
+            $this->setting->setItem('system.common.global.defaultProgram', $program);
 
-            $sprintConcept = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
-            if($mode == 'new')
-            {
-                if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
-                if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 0);
-                return print(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
-            }
-            else
-            {
-                if($sprintConcept == 0) $this->setting->setItem('system.custom.sprintConcept', 1);
-                if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 2);
-                return print(js::reload('top'));
-            }
+            $this->custom->disableFeaturesByMode($mode);
+
+            if($mode == 'light') $this->custom->processProjectAcl();
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
 
-        if($mode == 'new')
-        {
-            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') return print(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
+        list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->custom->computeFeatures();
 
-            unset($_SESSION['upgrading']);
-        }
-
-        $this->app->loadLang('upgrade');
-
-        $this->view->title       = $this->lang->custom->mode;
-        $this->view->position[]  = $this->lang->custom->common;
-        $this->view->position[]  = $this->view->title;
-        $this->view->mode        = $mode;
-        $this->view->changedMode = zget($this->config->global, 'changedMode', 'no');
+        $this->view->title                 = $this->lang->custom->mode;
+        $this->view->position[]            = $this->lang->custom->common;
+        $this->view->position[]            = $this->view->title;
+        $this->view->mode                  = $mode;
+        $this->view->programs              = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programID             = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
+        $this->view->disabledFeatures      = $disabledFeatures;
+        $this->view->enabledScrumFeatures  = $enabledScrumFeatures;
+        $this->view->disabledScrumFeatures = $disabledScrumFeatures;
+        $this->view->currentModeTips       = sprintf($this->lang->custom->currentModeTips, $this->lang->custom->modeList[$mode], $this->lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);
 
         $this->display();
     }

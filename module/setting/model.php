@@ -49,36 +49,10 @@ class settingModel extends model
      */
     public function setItem($path, $value = '')
     {
-        /* Determine vision of config item. */
-        $pathVision = explode('@', $path);
-        $vision     = isset($pathVision[1]) ? $pathVision[1] : '';
-        $path       = $pathVision[0];
+        $item = $this->parseItemPath($path);
+        if(empty($item)) return false;
 
-        /* fix bug when account has dot. */
-        $account = isset($this->app->user->account) ? $this->app->user->account : '';
-        $replace = false;
-        if($account and strpos($path, $account) === 0)
-        {
-            $replace = true;
-            $path    = preg_replace("/^{$account}/", 'account', $path);
-        }
-
-        $level   = substr_count($path, '.');
-        $section = '';
-
-        if($level <= 1) return false;
-        if($level == 2) list($owner, $module, $key) = explode('.', $path);
-        if($level == 3) list($owner, $module, $section, $key) = explode('.', $path);
-        if($replace) $owner = $account;
-
-        $item = new stdclass();
-        $item->owner   = $owner;
-        $item->module  = $module;
-        $item->section = $section;
-        $item->key     = $key;
-        $item->value   = $value;
-        if(!empty($vision)) $item->vision = $vision;
-
+        $item->value = $value;
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }
 
@@ -122,6 +96,37 @@ class settingModel extends model
     }
 
     /**
+     * When exists this item then update it. No exists then insert this item.
+     *
+     * @param  string $path
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function updateItem($path, $value = '')
+    {
+        $item = $this->parseItemPath($path);
+        if(empty($item)) return false;
+        if(!isset($item->vision)) $item->vision = '';
+
+        $updateID = $this->dao->select('id')->from(TABLE_CONFIG)
+            ->where('owner')->eq($item->owner)
+            ->andWhere('vision')->eq($item->vision)
+            ->andWhere('module')->eq($item->module)
+            ->andWhere('section')->eq($item->section)
+            ->andWhere('`key`')->eq($item->key)
+            ->fetch('id');
+        if($updateID)
+        {
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq($value)->where('id')->eq($updateID)->exec();
+            return true;
+        }
+
+        $item->value = $value;
+        $this->dao->insert(TABLE_CONFIG)->data($item)->exec();
+    }
+
+    /**
      * Delete items.
      *
      * @param  string   $paramString    see parseItemParam();
@@ -131,6 +136,47 @@ class settingModel extends model
     public function deleteItems($paramString)
     {
         $this->createDAO($this->parseItemParam($paramString), 'delete')->exec();
+    }
+
+    /**
+     * Parse item path
+     *
+     * @param  string      $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
+     * @access public
+     * @return object
+     */
+    public function parseItemPath($path)
+    {
+        /* Determine vision of config item. */
+        $pathVision = explode('@', $path);
+        $vision     = isset($pathVision[1]) ? $pathVision[1] : '';
+        $path       = $pathVision[0];
+
+        /* fix bug when account has dot. */
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
+        $replace = false;
+        if($account and strpos($path, $account) === 0)
+        {
+            $replace = true;
+            $path    = preg_replace("/^{$account}/", 'account', $path);
+        }
+
+        $level   = substr_count($path, '.');
+        $section = '';
+
+        if($level <= 1) return false;
+        if($level == 2) list($owner, $module, $key) = explode('.', $path);
+        if($level == 3) list($owner, $module, $section, $key) = explode('.', $path);
+        if($replace) $owner = $account;
+
+        $item = new stdclass();
+        $item->owner   = $owner;
+        $item->module  = $module;
+        $item->section = $section;
+        $item->key     = $key;
+        if(!empty($vision)) $item->vision = $vision;
+
+        return $item;
     }
 
     /**

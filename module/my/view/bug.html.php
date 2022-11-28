@@ -121,12 +121,19 @@
             <?php endif;?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
-          <?php $param = $config->productLink == 'product-all' ? '' : "productID=$bug->product";?>
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <td class='text-left nobr'>
             <?php
-            $productLink = explode('-', $config->productLink);
-            echo html::a($this->createLink('product', $productLink[1], $param), $bug->productName, null, "title={$bug->productName}");
+            if(isset($bug->shadow) and !empty($bug->shadow))
+            {
+                echo html::a($this->createLink('project', 'browse'), $bug->productName, null, "title={$bug->productName}");
+            }
+            else
+            {
+                $productLink = explode('-', $config->productLink);
+                $param       = $config->productLink == 'product-all' ? '' : "productID=$bug->product";
+                echo html::a($this->createLink('product', $productLink[1], $param), $bug->productName, null, "title={$bug->productName}");
+            }
             ?>
           </td>
           <?php if($type != 'openedBy'): ?>

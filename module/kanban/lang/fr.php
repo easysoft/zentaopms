@@ -85,7 +85,7 @@ $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = 'Build';
 $lang->kanban->importTicket        = 'Ticket';
 $lang->kanban->allKanban           = 'All Kanban';
-$lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
+$lang->kanban->allProjects         = 'All Projects';
 $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
@@ -128,7 +128,7 @@ $lang->kanban->cardCountTip        = 'Please enter the number of cards';
 
 $lang->kanban->selectedKanban  = 'Please select Kanban';
 $lang->kanban->selectedProduct = 'Please select Product';
-$lang->kanban->selectedProject = 'Please select ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Project');
+$lang->kanban->selectedProject = 'Please select Project';
 $lang->kanban->selectedLane    = 'Target Lane';
 
 $lang->kanban->aclGroup['open']    = 'Open';
@@ -336,6 +336,8 @@ $lang->kanbancolumn->confirmArchive     = 'Are you sure to archive this column? 
 $lang->kanbancolumn->confirmDelete      = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
 $lang->kanbancolumn->confirmDeleteChild = 'Are you sure to delete this column? After deleting a column, all cards in the column will be moved to the parent column.';
 $lang->kanbancolumn->confirmRestore     = 'Are you sure you want to restore this Kanban column? After restoring the Kanban column, the Kanban column and all tasks in the Kanban column will be restored to the previous position at the same time.';
+$lang->kanbancolumn->fixedTip           = 'Fixed column width must >= 200px.';
+$lang->kanbancolumn->autoTip            = 'Minimum column width must >= 200px.';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name         = $lang->kanban->laneName;
@@ -357,10 +359,10 @@ $lang->kanbanlane->heightTypeList['auto']   = "Adaptive <span class='tip'>(Adapt
 $lang->kanbanlane->heightTypeList['custom'] = "Custom <span class='tip'>(Customize lane height based on number of cards)</span>";
 
 $lang->kanbancolumn->fluidBoardList['0'] = "Fixed<i class='radio-text-divider'></i>Width";
-$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<i class='radio-text-divider'></i>Column width range";
+$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<i class='radio-text-divider'></i>Range";
 
 $lang->kanbanlane->error = new stdclass();
-$lang->kanbanlane->error->mustBeInt = 'Nb de cartes doit être un entier positif compris entre 3 et 32767.';
+$lang->kanbanlane->error->mustBeInt = 'Nb de cartes doit être un entier positif compris entre 3 et100.';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';

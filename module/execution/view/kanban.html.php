@@ -61,21 +61,21 @@ js::set('rdSearchValue', '');
 js::set('defaultMinColWidth', $this->config->minColWidth);
 js::set('defaultMaxColWidth', $this->config->maxColWidth);
 
-$canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
+$canSortRegion       = (commonModel::hasPriv('kanban', 'sortRegion') and count($regions) > 1);
 $canCreateRegion     = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
 $canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
 $canDeleteRegion     = commonModel::hasPriv('kanban', 'deleteRegion');
 $canCreateLane       = commonModel::hasPriv('kanban', 'createLane');
 $canCreateTask       = common::hasPriv('task', 'create');
 $canBatchCreateTask  = common::hasPriv('task', 'batchCreate');
-$canImportTask       = common::hasPriv('execution', 'importTask');
+$canImportTask       = (common::hasPriv('execution', 'importTask') and $execution->multiple);
 $canCreateBug        = ($productID and common::hasPriv('bug', 'create'));
-$canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate'));
+$canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate') and $execution->multiple);
 $canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
 $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
 $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
-$canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
-$canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories'));
+$canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory') and !empty($execution->hasProduct));
+$canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories') and !empty($project->hasProduct));
 $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
 $hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
 $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
@@ -118,7 +118,7 @@ js::set('priv',
         'canDeleteStory'        => common::hasPriv('story', 'delete'),
         'canChangeStory'        => common::hasPriv('story', 'change'),
         'canCloseStory'         => common::hasPriv('story', 'close'),
-        'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory'),
+        'canUnlinkStory'        => (common::hasPriv('execution', 'unlinkStory') and !empty($execution->hasProduct)),
         'canViewStory'          => common::hasPriv('execution', 'storyView'),
     )
 );
@@ -157,15 +157,17 @@ js::set('priv',
       </div>
     </div>
     <?php
-    $width = common::checkNotCN() ? '600px' : '520px';
+    $width = common::checkNotCN() ? '850px' : '700px';
     echo html::a('javascript:toggleRDSearchBox()', "<i class='icon-search muted'></i> " . $lang->searchAB, '', "class='btn btn-link querybox-toggle'");
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
     if(common::hasPriv('execution', 'setKanban')) echo html::a(helper::createLink('execution', 'setKanban', "executionID=$execution->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $lang->settings, '', "class='iframe btn btn-link text-left' data-width='$width'");
-    if(common::hasPriv('execution', 'edit')) echo html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i> ' . $lang->edit, '', "class='iframe btn btn-link text-left' data-width='80%'");
+    if(!$execution->multiple and common::hasPriv('project', 'edit'))  $editURL = helper::createLink('project',   'edit', "projectID=$execution->project", '', true);
+    if($execution->multiple and common::hasPriv('execution', 'edit')) $editURL = helper::createLink('execution', 'edit', "executionID=$execution->id", '', true);
+    if(!empty($editURL)) echo html::a($editURL, '<i class="icon icon-edit"></i> ' . $lang->edit, '', "class='iframe btn btn-link text-left' data-width='80%'");
     $actions           = '';
     $printSettingBtn   = (common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
 
-    if($printSettingBtn)
+    if($printSettingBtn and $execution->multiple)
     {
         $actions .= "<div class='btn-group menu-actions'>";
         $actions .= html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");

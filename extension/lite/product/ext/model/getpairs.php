@@ -5,9 +5,10 @@
  * @param  string       $mode
  * @param  string       $programID
  * @param  string|array $append
+ * @param  string|int   $shadow         all | 0 | 1
  * @return array
  */
-public function getPairs($mode = '', $programID = 0, $append = '')
+public function getPairs($mode = '', $programID = 0, $append = '', $shadow = 0)
 {
     if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
@@ -31,6 +32,7 @@ public function getPairs($mode = '', $programID = 0, $append = '')
         ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
         ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
         ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('id')->in($this->app->user->view->products)->fi()
+        ->beginIF($shadow !== 'all')->andWhere('shadow')->eq((int)$shadow)->fi()
         ->andWhere('vision')->eq($this->config->vision)
         ->andWhere('id')->in($projectProducts)
         ->fetchPairs('id', 'name');

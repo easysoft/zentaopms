@@ -52,7 +52,7 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <tr>
+        <tr class='<?php echo !empty($globalDisableProgram) ? 'hidden' : '';?>'>
           <th class='w-130px'><?php echo $lang->project->parent;?></th>
           <?php $disabled = ($this->app->tab == 'product' and $productID) ? 'disabled' : '';?>
           <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' data-lastSelected=$programID onchange='setParentProgram(this.value)' $disabled");?></td>
@@ -63,8 +63,9 @@
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='w-130px'><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
+          <td></td>
         </tr>
         <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
@@ -72,6 +73,26 @@
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
+        <?php if($model != 'waterfall'):?>
+        <tr>
+          <th><?php echo $lang->project->multiple;?></th>
+          <td colspan='3'>
+            <?php
+            echo nl2br(html::radio('multiple', $lang->project->multipleList, $multiple, $copyProjectID ? 'disabled' : ''));
+            if($copyProjectID) echo html::hidden('multiple', $multiple);
+            ?>
+          </td>
+        </tr>
+        <?php endif;?>
+        <tr>
+          <th id='projectType'><?php echo $lang->project->type;?></th>
+          <td>
+            <?php
+            echo html::radio('hasProduct', $lang->project->projectTypeList, $hasProduct, $copyProjectID ? 'disabled' : '');
+            if($copyProjectID) echo html::hidden('hasProduct', $hasProduct);
+            ?>
+          </td>
+        </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
@@ -106,7 +127,7 @@
               <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->end . "' required");?>
             </div>
           </td>
-          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList, '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr id='daysBox'>
           <th><?php echo $lang->execution->days;?></th>
@@ -175,6 +196,15 @@
             </div>
           </td>
         </tr>
+        <?php if($model == 'waterfall'):?>
+        <tr class='hide division'>
+          <th><?php echo $lang->project->division;?></th>
+          <td>
+            <?php echo html::radio('division', $lang->project->divisionList, '0');?>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->divisionTips;?>"></icon>
+          </td>
+        </tr>
+        <?php endif;?>
         <?php if($model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
@@ -187,7 +217,7 @@
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
         </tr>
-        <?php $this->printExtendFields('', 'table', 'columns=3');?>
+        <?php $this->printExtendFields(isset($project) ? $project : '', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
@@ -208,6 +238,7 @@
         <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php
+              if($copyProjectID) echo html::hidden('hasProduct', $hasProduct);
               echo html::hidden('model', $model);
               echo html::submitButton();
               echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();
@@ -235,7 +266,7 @@
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php foreach ($copyProjects as $id => $name):?>
+      <?php foreach($copyProjects as $id => $name):?>
         <?php $active = ($copyProjectID == $id) ? ' active' : '';?>
         <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
       <?php endforeach;?>

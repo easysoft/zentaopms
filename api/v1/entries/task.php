@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class taskEntry extends Entry
+class taskEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($taskID)
     {
@@ -90,7 +90,7 @@ class taskEntry extends Entry
         $execution             = $this->loadModel('project')->getByID($task->execution, 'execution');
         $task->executionStatus = $execution->status;
 
-        $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**
@@ -98,7 +98,7 @@ class taskEntry extends Entry
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($taskID)
     {
@@ -114,7 +114,7 @@ class taskEntry extends Entry
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         $task = $this->task->getByID($taskID);
-        $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**
@@ -122,7 +122,7 @@ class taskEntry extends Entry
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($taskID)
     {
@@ -130,6 +130,6 @@ class taskEntry extends Entry
         $control->delete(0, $taskID, 'true');
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }

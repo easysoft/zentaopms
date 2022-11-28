@@ -60,14 +60,14 @@ class bug extends control
             else
             {
                 $mode     = ($this->app->methodName == 'create' and empty($this->config->CRProduct)) ? 'noclosed' : '';
-                $products = $this->product->getPairs($mode, 0, 'program_asc');
+                $products = $this->product->getPairs($mode, 0, 'program_asc', 'all');
             }
             if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID")));
         }
         else
         {
             $mode     = (empty($this->config->CRProduct)) ? 'noclosed' : '';
-            $products = $this->product->getPairs($mode, 0, 'program_asc');
+            $products = $this->product->getPairs($mode, 0, 'program_asc', 'all');
         }
         $this->view->products = $this->products = $products;
     }
@@ -165,7 +165,7 @@ class bug extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get executios. */
-        $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete');
+        $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
 
         /* Get product id list. */
         $productIDList = $productID ? $productID : array_keys($this->products);
@@ -196,7 +196,8 @@ class bug extends control
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->bug->search['onMenuBar'] = 'yes';
-        $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL, $branch);
+        $searchProducts = $this->product->getPairs('', 0, '', 'all');
+        $this->bug->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $branch);
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
@@ -226,7 +227,7 @@ class bug extends control
         $this->view->product         = $product;
         $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch);
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch, 'withreleased');
         $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
@@ -285,6 +286,9 @@ class bug extends control
             }
         }
 
+        $project = $this->loadModel('project')->getByShadowProduct($productID);
+        if(!$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
+
         $this->qa->setMenu($this->products, $productID, $branchID);
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -319,8 +323,6 @@ class bug extends control
         parse_str($extras, $output);
         $from = isset($output['from']) ? $output['from'] : '';
 
-        $project = new stdclass();
-
         if($this->app->tab == 'execution')
         {
             if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
@@ -342,17 +344,7 @@ class bug extends control
         }
         else if($this->app->tab == 'project')
         {
-            if(isset($output['projectID']))
-            {
-                $this->loadModel('project')->setMenu($output['projectID']);
-
-                /* Replace language. */
-                $project = $this->project->getByID($output['projectID']);
-                if(!empty($project->model) and $project->model == 'waterfall')
-                {
-                    $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
-                }
-            }
+            if(isset($output['projectID'])) $this->loadModel('project')->setMenu($output['projectID']);
         }
         else
         {
@@ -475,8 +467,8 @@ class bug extends control
         }
 
         /* Get product, then set menu. */
-        $productID   = $this->product->saveState($productID, $this->products);
-        $productInfo = $this->product->getById($productID);
+        $productID      = $this->product->saveState($productID, $this->products);
+        $currentProduct = $this->product->getById($productID);
 
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
@@ -518,6 +510,7 @@ class bug extends control
         if(isset($bugID))
         {
             $bug = $this->bug->getById($bugID);
+
             extract((array)$bug);
             $executionID = $bug->execution;
             $moduleID    = $bug->module;
@@ -553,13 +546,13 @@ class bug extends control
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
             $objectID        = $this->app->tab == 'project' ? $projectID : $executionID;
-            $productBranches = $productInfo->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
+            $productBranches = $currentProduct->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }
         else
         {
-            $branches = $productInfo->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+            $branches = $currentProduct->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
         /* If executionID is setted, get builds and stories of this execution. */
@@ -593,12 +586,6 @@ class bug extends control
             $products       = array();
             $linkedProducts = $this->loadModel('product')->getProducts($executionID);
             foreach($linkedProducts as $product) $products[$product->id] = $product->name;
-
-            if($projectID)
-            {
-                $project = $this->loadModel('project')->getByID($projectID);
-                if(empty($bugID) or $this->app->tab != 'qa') $projects += array($projectID => $project->name);
-            }
         }
         elseif($projectID)
         {
@@ -606,15 +593,28 @@ class bug extends control
             $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
             foreach($productList as $product) $products[$product->id] = $product->name;
 
-            $project = $this->loadModel('project')->getByID($projectID);
-            if(empty($bugID) or $this->app->tab != 'qa') $projects += array($projectID => $project->name);
-
             /* Set project menu. */
             if($this->app->tab == 'project') $this->project->setMenu($projectID);
         }
         else
         {
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        }
+
+        $projectModel = '';
+        if($projectID)
+        {
+            $project = $this->loadModel('project')->getByID($projectID);
+            if($project)
+            {
+                if(empty($bugID) or $this->app->tab != 'qa') $projects += array($projectID => $project->name);
+
+                /* Replace language. */
+                if(!empty($project->model) and $project->model == 'waterfall') $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
+                $projectModel = $project->model;
+
+                if(!$project->multiple) $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
+            }
         }
 
         /* Link all projects to product when copying bug under qa.*/
@@ -634,66 +634,60 @@ class bug extends control
 
         /* Get executions. */
         $executions = array(0 => '');
-        if(isset($projects[$projectID]) or $this->config->systemMode == 'classic') $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, !$projectID ? 'multiple' : '');
         $execution  = $executionID ? $this->loadModel('execution')->getByID($executionID) : '';
         $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
 
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
 
-        /* In repair classic mode, when the project is required, the asterisk is not displayed. */
-        if($this->config->systemMode == 'classic' and strpos(",{$this->config->bug->create->requiredFields},", ',project,') !== false)
-        {
-            $this->config->bug->create->requiredFields = str_replace(',project,', ',execution,', ",{$this->config->bug->create->requiredFields},");
-            $this->config->bug->create->requiredFields = trim($this->config->bug->create->requiredFields, ',');
-        }
-
         $this->view->title        = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
-        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$productID") : '';
-        $this->view->products         = $products;
-        $this->view->productID        = $productID;
-        $this->view->productName      = isset($this->products[$productID]) ? $this->products[$productID] : '';
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->stories          = $stories;
-        $this->view->projects         = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs() : $projects;
-        $this->view->project          = $project;
-        $this->view->executions       = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $executions;
-        $this->view->builds           = $builds;
-        $this->view->moduleID         = (int)$moduleID;
-        $this->view->projectID        = $projectID;
-        $this->view->executionID      = $executionID;
-        $this->view->taskID           = $taskID;
-        $this->view->storyID          = $storyID;
-        $this->view->buildID          = $buildID;
-        $this->view->caseID           = $caseID;
-        $this->view->runID            = $runID;
-        $this->view->version          = $version;
-        $this->view->testtask         = $testtask;
-        $this->view->bugTitle         = $title;
-        $this->view->pri              = $pri;
-        $this->view->steps            = htmlSpecialString($steps);
-        $this->view->os               = $os;
-        $this->view->browser          = $browser;
-        $this->view->productMembers   = $productMembers;
-        $this->view->assignedTo       = $assignedTo;
-        $this->view->deadline         = $deadline;
-        $this->view->mailto           = $mailto;
-        $this->view->keywords         = $keywords;
-        $this->view->severity         = $severity;
-        $this->view->type             = $type;
-        $this->view->productInfo      = $productInfo;
-        $this->view->branch           = $branch;
-        $this->view->branches         = $branches;
-        $this->view->blockID          = $blockID;
-        $this->view->color            = $color;
-        $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
-        $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
-        $this->view->issueKey         = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
-        $this->view->feedbackBy       = $feedbackBy;
-        $this->view->notifyEmail      = $notifyEmail;
+        $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$productID") : '';
+        $this->view->products              = $products;
+        $this->view->productID             = $productID;
+        $this->view->productName           = isset($this->products[$productID]) ? $this->products[$productID] : '';
+        $this->view->moduleOptionMenu      = $moduleOptionMenu;
+        $this->view->stories               = $stories;
+        $this->view->projects              = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs() : $projects;
+        $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
+        $this->view->executions            = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $executions;
+        $this->view->builds                = $builds;
+        $this->view->moduleID              = (int)$moduleID;
+        $this->view->projectID             = $projectID;
+        $this->view->projectModel          = $projectModel;
+        $this->view->execution             = $execution;
+        $this->view->taskID                = $taskID;
+        $this->view->storyID               = $storyID;
+        $this->view->buildID               = $buildID;
+        $this->view->caseID                = $caseID;
+        $this->view->runID                 = $runID;
+        $this->view->version               = $version;
+        $this->view->testtask              = $testtask;
+        $this->view->bugTitle              = $title;
+        $this->view->pri                   = $pri;
+        $this->view->steps                 = htmlSpecialString($steps);
+        $this->view->os                    = $os;
+        $this->view->browser               = $browser;
+        $this->view->productMembers        = $productMembers;
+        $this->view->assignedTo            = $assignedTo;
+        $this->view->deadline              = $deadline;
+        $this->view->mailto                = $mailto;
+        $this->view->keywords              = $keywords;
+        $this->view->severity              = $severity;
+        $this->view->type                  = $type;
+        $this->view->product               = $currentProduct;
+        $this->view->branch                = $branch;
+        $this->view->branches              = $branches;
+        $this->view->blockID               = $blockID;
+        $this->view->color                 = $color;
+        $this->view->stepsRequired         = strpos($this->config->bug->create->requiredFields, 'steps');
+        $this->view->isStepsTemplate       = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
+        $this->view->issueKey              = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
+        $this->view->feedbackBy            = $feedbackBy;
+        $this->view->notifyEmail           = $notifyEmail;
 
         $this->display();
     }
@@ -831,6 +825,8 @@ class bug extends control
         }
 
         $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : (isset($execution) ? $execution->project : 0);
+        $project   = $this->loadModel('project')->getByID($projectID);
+        if(isset($project->model) && $project->model == 'kanban') $customFields['execution'] = $this->lang->bug->kanban;
 
         /* Get branches. */
         if($executionID)
@@ -851,7 +847,7 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;
 
-        $this->view->project          = $this->loadModel('project')->getByID($projectID);
+        $this->view->project          = $project;
         $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
@@ -859,7 +855,7 @@ class bug extends control
         $this->view->users            = $this->user->getPairs('devfirst|noclosed');
         $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->projectID        = $projectID;
-        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, 'multiple');
         $this->view->executionID      = $executionID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
         $this->view->moduleID         = $moduleID;
@@ -937,7 +933,7 @@ class bug extends control
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all', '');
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withreleased');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
 
@@ -1035,6 +1031,7 @@ class bug extends control
         $projectID       = $bug->project;
         $currentModuleID = $bug->module;
         $product         = $this->loadModel('product')->getByID($productID);
+        $execution       = $this->loadModel('execution')->getByID($executionID);
         $this->bug->checkBugExecutionPriv($bug);
 
         if(!isset($this->products[$bug->product]))
@@ -1044,14 +1041,16 @@ class bug extends control
         }
 
         /* Set the menu. */
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($bug->project);
+        if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->project);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
-        if($this->app->tab == 'qa') $this->qa->setMenu($this->products, $productID, $bug->branch);
+        if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $productID, $bug->branch);
         if($this->app->tab == 'devops')
         {
             session_write_close();
+
             $repos = $this->loadModel('repo')->getRepoPairs('project', $bug->project);
             $this->repo->setMenu($repos);
+
             $this->lang->navGroup->bug = 'devops';
         }
 
@@ -1067,9 +1066,10 @@ class bug extends control
         }
         if($this->app->tab == 'project')
         {
-            $products = array();
+            $products    = array();
             $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $bug->project) : $this->product->getOrderedProducts('normal', 40, $bug->project);
             foreach($productList as $productInfo) $products[$productInfo->id] = $productInfo->name;
+
             $this->view->products = $products;
         }
 
@@ -1079,7 +1079,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->edit;
 
         /* Assign. */
-        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty');
+        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,withreleased');
         if($executionID)
         {
             $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch', $executionID, 'execution');
@@ -1148,7 +1148,7 @@ class bug extends control
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
-        if($bug->assignedTo and !isset($assignedToList[$bug->assignedTo]))
+        if($bug->assignedTo and !isset($assignedToList[$bug->assignedTo]) and $bug->assignedTo != 'closed')
         {
             /* Fix bug #28378. */
             $assignedTo = $this->user->getById($bug->assignedTo);
@@ -1160,27 +1160,31 @@ class bug extends control
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
         unset($productBugs[$bugID]);
 
-        $this->view->bug              = $bug;
-        $this->view->productID        = $productID;
-        $this->view->product          = $product;
-        $this->view->productBugs      = $productBugs;
-        $this->view->productName      = $this->products[$productID];
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
-        $this->view->projects         = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch, $bug->project);
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->currentModuleID  = $currentModuleID;
-        $this->view->executions       = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
-        $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
-        $this->view->branchOption     = $branchOption;
-        $this->view->branchTagOption  = $branchTagOption;
-        $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
-        $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
-        $this->view->assignedToList   = $assignedToList;
-        $this->view->cases            = array('' => '') + $cases;
-        $this->view->openedBuilds     = $openedBuilds;
-        $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
-        $this->view->actions          = $this->action->getList('bug', $bugID);
+        if($product->shadow) $this->view->project = $this->loadModel('project')->getByShadowProduct($bug->product);
+
+        $this->view->bug                   = $bug;
+        $this->view->productID             = $productID;
+        $this->view->product               = $product;
+        $this->view->execution             = $execution;
+        $this->view->productBugs           = $productBugs;
+        $this->view->productName           = $this->products[$productID];
+        $this->view->plans                 = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
+        $this->view->projects              = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch, $bug->project);
+        $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
+        $this->view->moduleOptionMenu      = $moduleOptionMenu;
+        $this->view->currentModuleID       = $currentModuleID;
+        $this->view->executions            = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
+        $this->view->stories               = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
+        $this->view->branchOption          = $branchOption;
+        $this->view->branchTagOption       = $branchTagOption;
+        $this->view->tasks                 = $this->task->getExecutionTaskPairs($bug->execution);
+        $this->view->testtasks             = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
+        $this->view->users                 = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->assignedToList        = $assignedToList;
+        $this->view->cases                 = array('' => '') + $cases;
+        $this->view->openedBuilds          = $openedBuilds;
+        $this->view->resolvedBuilds        = array('' => '') + $openedBuilds + $oldResolvedBuild;
+        $this->view->actions               = $this->action->getList('bug', $bugID);
 
         $this->display();
     }
@@ -1239,8 +1243,12 @@ class bug extends control
             $branchProduct = $product->type == 'normal' ? false : true;
 
             /* Set plans. */
-            $plans = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
-            $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
+            foreach($bugs as $bug)
+            {
+                $plans      = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
+                $plans      = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
+                $bug->plans = $plans;
+            }
 
             /* Set branches and modules. */
             $branches        = 0;
@@ -1925,7 +1933,7 @@ class bug extends control
 
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty', 0, 'execution', $bug->openedBuild);
         $this->view->actions = $this->action->getList('bug', $bugID);
 
         $this->display();
@@ -2032,6 +2040,21 @@ class bug extends control
 
         /* Set the menu. */
         $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+
+        /* Hide plan and product in no product project. */
+        if($bug->project and $this->app->tab != 'qa')
+        {
+            $project = $this->loadModel('project')->getByID($bug->project);
+            if(!$project->hasProduct)
+            {
+                unset($this->config->bug->search['fields']['product']);
+                if(!$project->multiple)
+                {
+                    unset($this->config->bug->search['fields']['execution']);
+                    unset($this->config->bug->search['fields']['plan']);
+                }
+            }
+        }
 
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&browseType=bySearch&excludeBugs=$excludeBugs&queryID=myQueryID", '', true);
@@ -2319,8 +2342,8 @@ class bug extends control
     {
         if($_POST)
         {
-            $this->loadModel('port');
-            $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
+            $this->loadModel('transfer');
+            $this->session->set('bugTransferParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
             if(!$productID)
             {
                 $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
@@ -2330,8 +2353,17 @@ class bug extends control
                 $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
             }
 
-            $this->port->export('bug');
+            $this->transfer->export('bug');
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
+        }
+        $product = $this->loadModel('product')->getByID($productID);
+        if($product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
+
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
+            if($product->shadow) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
         }
 
         $fileName = $this->lang->bug->common;
@@ -2342,7 +2374,7 @@ class bug extends control
         }
         else
         {
-            $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+            $productName = !empty($product->name) ? $product->name : '';
             $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
 
             $fileName = $productName . $this->lang->dash . $browseType . $fileName;
@@ -2403,6 +2435,12 @@ class bug extends control
         $products = array();
         if(!empty($extra)) $products = $this->product->getProducts($extra, 'all', 'program desc, line desc, ');
 
+        if($this->config->systemMode == 'ALM')
+        {
+            $this->view->programs = $this->loadModel('program')->getPairs(true);
+            $this->view->lines    = $this->product->getLinePairs();
+        }
+
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
         $this->view->module    = $module;
@@ -2410,8 +2448,6 @@ class bug extends control
         $this->view->extra     = $extra;
         $this->view->products  = $products;
         $this->view->projectID = $this->session->project;
-        $this->view->programs  = $this->loadModel('program')->getPairs(true);
-        $this->view->lines     = $this->product->getLinePairs();
         $this->display();
     }
 

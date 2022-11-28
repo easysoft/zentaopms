@@ -124,4 +124,13 @@ if(empty($type)) $type = 'product';
     </div>
   </div>
 </div>
+<script>
+$('#pageNav .btn-group.angle-btn').click(function()
+{
+    if($(this).hasClass('opened')) return;
+    $(this).addClass('opened');
+
+    scrollToSelected();
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -75,6 +75,7 @@ $lang->cron           = new stdclass();
 $lang->dev            = new stdclass();
 
 $moduleRoot = '../module/';
+include '../framework/helper.class.php';
 include $moduleRoot . '/group/lang/resource.php';
 foreach(glob($moduleRoot . '/group/ext/lang/zh-cn/*.php') as $resourceFile) include $resourceFile;
 foreach(glob('../xuanxuan/module/group/ext/lang/zh-cn/*.php') as $resourceFile) include $resourceFile;

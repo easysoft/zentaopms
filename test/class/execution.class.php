@@ -2382,4 +2382,20 @@ class executionTest
             return $tester->app->user->view->sprints;
         }
     }
+
+    /**
+     * Create default sprint.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return int
+     */
+    public function createDefaultSprintTest($projectID)
+    {
+        $result = $this->objectModel->createDefaultSprint($projectID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

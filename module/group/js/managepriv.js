@@ -20,7 +20,8 @@ function setModuleActions(module)
 function setNoChecked()
 {
     var noCheckValue = '';
-    $(':checkbox').each(function(){
+    $(':checkbox').each(function()
+    {
         if(!$(this).prop('checked') && $(this).next('span').attr('id') != undefined) noCheckValue = noCheckValue + ',' + $(this).next('span').attr('id');
     })
     $('#noChecked').val(noCheckValue);

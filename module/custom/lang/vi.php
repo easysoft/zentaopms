@@ -48,8 +48,8 @@ $lang->custom->switch               = "Switch";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please firstly set the conversion factor from {$lang->hourCommon} to %s";
 
-if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
+$lang->custom->execution      = 'Execution';
+$lang->custom->defaultProgram = 'Default program';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -79,7 +79,7 @@ $lang->custom->numberError = 'The interval must be greater than zero!';
 $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
-if($config->systemMode == 'new') $lang->custom->object['project']   = 'Project';
+$lang->custom->object['project']   = 'Project';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['story']     = 'Câu chuyện';
@@ -199,17 +199,9 @@ $lang->custom->weekendList[2] = '2 ngày nghỉ';
 $lang->custom->weekendList[1] = '1 ngày nghỉ';
 
 global $config;
-if($config->systemMode == 'classic')
-{
-    $lang->custom->sprintConceptList[0] = 'Product - Project';
-    $lang->custom->sprintConceptList[1] = 'Product - Iteration';
-    $lang->custom->sprintConceptList[2] = 'Product - Sprint';
-}
-else
-{
-    $lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
-    $lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
-}
+$lang->custom->sprintConceptList[0] = 'Product - Project';
+$lang->custom->sprintConceptList[1] = 'Product - Iteration';
+$lang->custom->sprintConceptList[2] = 'Product - Sprint';
 
 $lang->custom->workingList['full']      = 'Quản lý vòng đời ứng dụng';
 

@@ -373,12 +373,18 @@ class actionModel extends model
             }
             elseif($actionName == 'linked2execution' or $actionName == 'linked2kanban')
             {
-                $execution = $this->dao->select('name,type')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
+                $execution = $this->dao->select('name,type,multiple')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
                 if(!empty($execution))
                 {
-                    $name      = $execution->name;
-                    $method    = $execution->type == 'kanban' ? 'kanban' : 'view';
-                    $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name);
+                    if($execution->type != 'project' and empty($execution->multiple))
+                    {
+                        unset($actions[$actionID]);
+                        continue;
+                    }
+
+                    $name   = $execution->name;
+                    $method = $execution->type == 'kanban' ? 'kanban' : 'view';
+                    $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name, '', "data-app='execution'");
                 }
             }
             elseif($actionName == 'linked2project')
@@ -575,7 +581,7 @@ class actionModel extends model
                     if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
                 }
             }
-            elseif(strpos('linkstory,unlinkstory,createchildrenstory', $actionName) !== false)
+            elseif(strpos(',linkstory,unlinkstory,createchildrenstory,', ",$actionName,") !== false)
             {
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id ") . ', ' : "#$id, ";
@@ -1074,6 +1080,8 @@ class actionModel extends model
         $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
         $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
 
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
@@ -1093,10 +1101,12 @@ class actionModel extends model
             ->markRight(1)
             /* Types excluded from Lite. */
             ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
+            ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->beginIF($productID == 'all' or $projectID == 'all' or $executionID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
+            ->beginIF($noMultipleExecutions)->andWhere("IF(`objectType` = 'execution', `objectID` NOT " . helper::dbIN($noMultipleExecutions) . ", '1=1')")->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
@@ -1252,8 +1262,20 @@ class actionModel extends model
         $relatedProjects = $relatedData['relatedProjects'];
         $requirements    = $relatedData['requirements'];
 
+        $projectIdList = array();
+        foreach($relatedProjects as $objectType => $idList) $projectIdList += $idList;
+
+        $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
+        $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+
         foreach($actions as $i => $action)
         {
+            if($action->objectType == 'product' AND isset($shadowProducts[$action->objectID]))
+            {
+                unset($actions[$i]);
+                continue;
+            }
+
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
@@ -1306,7 +1328,7 @@ class actionModel extends model
             if(empty($action->objectName) and (substr($objectType, 0, 6) == 'gitlab' or substr($objectType, 0, 5) == 'gitea' or substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
-            $this->setObjectLink($action, $deptUsers);
+            $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
 
             /* Set merge request link. */
             if((empty($action->objectName) or $action->action == 'deleted') and $action->objectType == 'mr') $action->objectLink = '';
@@ -1376,10 +1398,7 @@ class actionModel extends model
                 elseif($objectType == 'reviewcl')
                 {
                     $objectInfo = $this->dao->select('id,title')->from($table)->where('id')->in($objectIdList)->fetchAll();
-                    foreach($objectInfo as $object)
-                    {
-                        $objectName[$object->id] = $object->title;
-                    }
+                    foreach($objectInfo as $object) $objectName[$object->id] = $object->title;
                 }
                 elseif($objectType == 'team')
                 {
@@ -1470,10 +1489,12 @@ class actionModel extends model
      *
      * @param  object   $action
      * @param  array    $deptUsers
+     * @param  array    $shadowProducts
+     * @param  object   $project
      * @access public
      * @return object|bool
      */
-    public function setObjectLink($action, $deptUsers)
+    public function setObjectLink($action, $deptUsers, $shadowProducts, $project = null)
     {
         $action->objectLink  = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
@@ -1569,7 +1590,7 @@ class actionModel extends model
                     if(!empty($story))
                     {
                         $moduleName = $story->type;
-                        $action->objectLink = helper::createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=$story->type");
+                        $action->objectLink = isset($shadowProducts[$story->product]) ? helper::createLink('projectstory', 'view', "storyID=$story->id") : helper::createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=$story->type");
                     }
                 }
 
@@ -1602,15 +1623,8 @@ class actionModel extends model
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
 
-        if($action->objectType == 'story' and $action->action == 'import2storylib')
-        {
-            $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
-        }
-
-        if($action->objectType == 'story' and $this->config->vision == 'lite')
-        {
-            $action->objectLink = helper::createLink('projectstory', 'view', "storyID=$action->objectID");
-        }
+        if($action->objectType == 'story' and $action->action == 'import2storylib') $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
+        if($action->objectType == 'story' and $this->config->vision == 'lite') $action->objectLink = helper::createLink('projectstory', 'view', "storyID=$action->objectID");
 
         if(strpos(',kanbanregion,kanbancard,', ",{$action->objectType},") !== false)
         {
@@ -1631,11 +1645,7 @@ class actionModel extends model
             $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
         }
 
-        if($action->objectType == 'branch' and $action->action == 'mergedbranch')
-        {
-            $action->objectLink = 'javascript:void(0)';
-        }
-
+        if($action->objectType == 'branch' and $action->action == 'mergedbranch') $action->objectLink = 'javascript:void(0)';
         if($action->objectType == 'module')
         {
             $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch('type');
@@ -1646,10 +1656,11 @@ class actionModel extends model
             }
         }
 
-        if($action->objectType == 'review')
-        {
-            $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");
-        }
+        if($action->objectType == 'review') $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");
+
+        /* Set app for no multiple project. */
+        if(!empty($action->objectLink) and !empty($project) and empty($project->multiple)) $action->objectLink .= '#app=project';
+        if($this->config->vision == 'lite' and $action->objectType == 'module') $action->objectLink .= '#app=project';
 
         return $action;
     }
@@ -1762,7 +1773,7 @@ class actionModel extends model
         $action = $this->getById($actionID);
         if($action->action != 'deleted') return;
 
-        if($this->config->systemMode == 'new' and $action->objectType == 'execution')
+        if($action->objectType == 'execution')
         {
             $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
             if($execution->deleted and empty($execution->project)) return print(js::error($this->lang->action->undeletedTips));
@@ -1788,9 +1799,20 @@ class actionModel extends model
         }
         elseif(in_array($action->objectType, array('program', 'project', 'execution')))
         {
-            $project    = $this->dao->select('id,acl')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
+            $project    = $this->dao->select('id,acl,name,hasProduct')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
             $objecttype = $action->objectType == 'execution' ? 'sprint' : $action->objectType;
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($project->id, $objecttype);
+
+            /* Reduction shadow product. */
+            if(!$project->hasProduct and $action->objectType == 'project')
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($project->id);;
+                $this->dao->update(TABLE_PRODUCT)
+                    ->set('name')->eq($project->name)
+                    ->set('deleted')->eq(0)
+                    ->where('id')->eq($productID)
+                    ->exec();
+            }
         }
         elseif($action->objectType == 'module')
         {

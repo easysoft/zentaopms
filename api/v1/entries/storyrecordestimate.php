@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class storyRecordEstimateEntry extends Entry
+class storyRecordEstimateEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($storyID)
     {
@@ -31,7 +31,7 @@ class storyRecordEstimateEntry extends Entry
 
         $effort = $data->data->efforts;
 
-        $this->send(200, array('effort' => $effort));
+        return $this->send(200, array('effort' => $effort));
     }
 
     /**
@@ -39,7 +39,7 @@ class storyRecordEstimateEntry extends Entry
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return string
      */
     public function post($storyID)
     {
@@ -56,6 +56,6 @@ class storyRecordEstimateEntry extends Entry
 
         $story = $this->loadModel('story')->getById($storyID);
 
-        $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 }

@@ -14,11 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noProject', false);?>
 <?php js::set('oldProgramID', $product->program);?>
-<?php js::set('canChangeProgram', $canChangeProgram);?>
-<?php js::set('singleLinkProjects', $singleLinkProjects);?>
-<?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
-<?php js::set('linkStoriesProjectIDList', array_keys($linkStoriesProjects));?>
-<?php js::set('projectPathList', $projectPathList);?>
+<?php js::set('programID', $product->program);?>
 <style>
 #changeProgram .icon-project {padding-right: 5px;}
 #changeProgram .modal-body {padding-top: 10px;}
@@ -35,18 +31,18 @@
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
-          <?php if($this->config->systemMode == 'new'):?>
+          <?php if($this->config->systemMode == 'ALM'):?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
             <?php $attr = ($product->program and strpos(",{$this->app->user->view->programs},", ",{$product->program},") === false) ? 'disabled' : '';?>
             <?php if($attr == 'disabled') echo html::hidden('program', $product->program);?>
             <td><?php echo html::select('program', $programs, $product->program, "class='form-control chosen' $attr");?></td>
           </tr>
-          <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
             <td><?php echo html::select('line', $lines, $product->line, "class='form-control chosen'");?></td><td></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
@@ -109,59 +105,6 @@
         </tbody>
       </table>
     </form>
-  </div>
-</div>
-<div class="modal fade" id="changeProgram">
-  <div class="modal-dialog mw-600px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <?php if($canChangeProgram):?>
-        <h4 class="modal-title"><?php echo $lang->product->changeProgram;?></h4>
-        <?php else:?>
-        <h4 class="modal-title"><?php echo sprintf($lang->product->changeProgramTip, $product->name);?></h4>
-        <?php endif;?>
-      </div>
-      <div class="modal-body">
-        <table class='table table-form'>
-          <?php if(!$canChangeProgram):?>
-          <tr>
-            <th class='text-left'><?php echo $lang->product->notChangeProgramTip;?></th>
-          </tr>
-          <?php foreach($linkStoriesProjects as $projectID => $projectName):?>
-          <tr>
-            <td>
-              <?php echo html::a($this->createLink('projectstory', 'story', 'projectID=' . $projectID), "<i class='icon icon-project'></i>" . $projectName, '', "title='$projectName'");?>
-            </td>
-          </tr>
-          <?php endforeach;?>
-          <?php endif;?>
-          <?php if($singleLinkProjects):?>
-          <tr>
-            <th class='text-left'><?php echo $lang->product->programChangeTip;?></th>
-          </tr>
-          <?php foreach($singleLinkProjects as $project):?>
-          <tr>
-            <td><i class="icon icon-project"></i><?php echo $project;?></td>
-          </tr>
-          <?php endforeach;?>
-          <?php endif;?>
-          <?php if($multipleLinkProjects):?>
-          <tr>
-            <th class='text-left'><?php echo $lang->product->confirmChangeProgram;?></th>
-          </tr>
-          <tr>
-            <td><?php echo html::checkbox('projects', $multipleLinkProjects);?></td>
-          </tr>
-          <tr>
-            <td class='text-center'>
-              <?php echo html::commonButton($lang->save, 'onclick = "setChangeProjects();"', 'btn btn-primary btn-wide');?>
-            </td>
-          </tr>
-          <?php endif;?>
-        </table>
-      </div>
-    </div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

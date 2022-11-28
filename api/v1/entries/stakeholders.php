@@ -16,7 +16,7 @@ class stakeholdersEntry extends entry
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($programID = 0)
     {
@@ -63,7 +63,7 @@ class stakeholdersEntry extends entry
      * POST method.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function post()
     {
@@ -88,14 +88,14 @@ class stakeholdersEntry extends entry
 
         $project = $this->loadModel('project')->getByID($data->id);
 
-        $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
+        return $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
     }
 
     /**
      * Get drop menu.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getDropMenu()
     {
@@ -127,6 +127,6 @@ class stakeholdersEntry extends entry
                 }
             }
         }
-        $this->send(200, $dropMenu);
+        return $this->send(200, $dropMenu);
     }
 }

@@ -13,22 +13,25 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('type', $type);?>
+<?php js::set('mode', $systemMode);?>
 <?php js::set('errorNoProduct', $lang->upgrade->errorNoProduct);?>
 <?php js::set('errorNoExecution', $lang->upgrade->errorNoExecution);?>
 <div class='container'>
   <form method='post' target='hiddenwin'>
     <div class='modal-dialog'>
-      <div class='modal-header'>
-        <strong><?php echo $lang->upgrade->mergeProgram;?></strong>
-      </div>
-      <div class='modal-body'>
-        <?php if($type == 'productline'):?>
-        <?php include './mergebyline.html.php';?>
-        <?php elseif($type == 'product'):?>
-        <?php include './mergebyproduct.html.php';?>
-        <?php elseif($type == 'sprint' or $type == 'moreLink'):?>
-        <?php include './mergebysprint.html.php';?>
-        <?php endif;?>
+      <div class='panel'>
+        <div class='panel-heading text-center'>
+          <h2><?php echo $lang->upgrade->mergeModes['manually'];?></h2>
+        </div>
+        <div class='panel-body'>
+          <?php if($type == 'productline'):?>
+          <?php include './mergebyline.html.php';?>
+          <?php elseif($type == 'product'):?>
+          <?php include './mergebyproduct.html.php';?>
+          <?php elseif($type == 'sprint' or $type == 'moreLink'):?>
+          <?php include './mergebysprint.html.php';?>
+          <?php endif;?>
+        </div>
       </div>
     </div>
   </form>

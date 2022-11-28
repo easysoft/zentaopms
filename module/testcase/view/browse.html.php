@@ -182,7 +182,7 @@ js::set('suiteID',        $suiteID);
               ?>
             </ul>
           </div>
-          <?php if(common::hasPriv('testcase', 'batchChangeBranch') and $this->session->currentProductType != 'normal'):?>
+          <?php if(common::hasPriv('testcase', 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
             <?php $withSearch = count($branchTagOption) > 6;?>

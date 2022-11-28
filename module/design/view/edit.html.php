@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('type', $design->type);?>
+<?php js::set('projectID', $design->project);?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -27,7 +28,7 @@
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
-          <tr>
+          <tr <?php if(empty($project->hasProduct)) echo "class='hide'";?>>
             <th class='w-120px'><?php echo $lang->design->product;?></th>
             <td><?php echo html::select('product', $products, $design->product, "class='form-control chosen'");?></td>
             <td></td>

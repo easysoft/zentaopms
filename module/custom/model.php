@@ -355,7 +355,7 @@ class customModel extends model
         $group   = 0;
         foreach($menu as $item)
         {
-            if(isset($dividerOrders[$item->name]) and $dividerOrders[$item->name] > $group)
+            if($menuModuleName == 'main' and isset($dividerOrders[$item->name]) and $dividerOrders[$item->name] > $group)
             {
                 $menu[$item->order]->divider = $isFirst ? false : true;
                 $group = $dividerOrders[$item->name];
@@ -692,11 +692,12 @@ class customModel extends model
                     continue;
                 }
 
-                $fields = join(',', $data->requiredFields[$method]);
-                foreach(explode(',', $systemField) as $field)
+                $fields       = join(',', $data->requiredFields[$method]);
+                $systemFields = array_reverse(explode(',', $systemField));
+                foreach($systemFields as $field)
                 {
                     $field = trim($field);
-                    if(strpos(",$fields,", ",$field,") === false) $fields .= ",$field";
+                    if(strpos(",$fields,", ",$field,") === false) $fields = "$field,$fields";
                 }
 
                 $requiredFields[$method]['requiredFields'] = $fields;
@@ -815,5 +816,321 @@ class customModel extends model
         {
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
         }
+    }
+
+    /**
+     * Compute features.
+     *
+     * @access public
+     * @return array
+     */
+    public function computeFeatures()
+    {
+        $disabledFeatures = array('program', 'productLine');
+        foreach($this->config->custom->dataFeatures as $feature)
+        {
+            $function = 'has' . ucfirst($feature) . 'Data';
+            if(!$this->$function())
+            {
+                if(strpos($feature, 'scrum') !== false)
+                {
+                    if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
+                    $disabledFeatures['scrum'][] = $feature;
+                }
+                elseif($feature == 'waterfall')
+                {
+                    $disabledFeatures[] = 'project' . ucfirst($feature);
+                }
+                else
+                {
+                    $disabledFeatures[] = $feature;
+                }
+            }
+        }
+        if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
+        $disabledFeatures['scrum'][] = 'scrumMeasrecord';
+
+        $enabledScrumFeatures  = array();
+        $disabledScrumFeatures = array();
+        if($this->config->edition == 'max')
+        {
+            foreach($this->config->custom->scrumFeatures as $scrumFeature)
+            {
+                if(in_array('scrum' . ucfirst($scrumFeature), $disabledFeatures['scrum']))
+                {
+                    $disabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+                }
+                else
+                {
+                    $enabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+                }
+            }
+        }
+
+        return array($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures);
+    }
+
+    /**
+     * process project priv within a program set.
+     *
+     * @access public
+     * @return void
+     */
+    public function processProjectAcl()
+    {
+        $projectGroup = $this->dao->select('id,parent,whitelist,acl')->from(TABLE_PROJECT)
+            ->where('parent')->ne('0')
+            ->andwhere('type')->eq('project')
+            ->andWhere('acl')->eq('program')
+            ->fetchGroup('parent', 'id');
+
+        $programPM = $this->dao->select("id,PM")->from(TABLE_PROGRAM)
+            ->where('id')->in(array_keys($projectGroup))
+            ->andWhere('type')->eq('program')
+            ->fetchPairs();
+
+        $stakeholders = $this->dao->select('*')->from(TABLE_STAKEHOLDER)
+            ->where('objectType')->eq('program')
+            ->andWhere('objectID')->in(array_keys($projectGroup))
+            ->fetchGroup('objectID', 'user');
+
+        $projectIDList = array();
+        foreach($projectGroup as $projects) $projectIDList = array_merge($projectIDList, array_keys($projects));
+        $executionGroup = $this->dao->select('project,id')->from(TABLE_EXECUTION)->where('project')->in($projectIDList)->fetchGroup('project', 'id');
+
+        $this->loadModel('user');
+        $this->loadModel('action');
+        $this->loadModel('personnel');
+        foreach($projectGroup as $projects)
+        {
+            foreach($projects as $project)
+            {
+                $PM          = zget($programPM, $project->parent, '');
+                $stakeholder = zget($stakeholders, $project->parent, '');
+                if($stakeholder) $stakeholder = join(',', array_keys($stakeholder));
+
+                $whitelist = rtrim($project->whitelist . ',' . $PM . ',' . $stakeholder);
+                $whitelist = explode(',', $whitelist);
+                $whitelist = array_filter(array_unique($whitelist));
+                $whitelist = join(',', $whitelist);
+
+                $data = new stdclass();
+                $data->acl       = 'private';
+                $data->whitelist = $whitelist;
+                $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($project->id)->exec();
+
+                $whitelist = explode(',', $whitelist);
+                $this->personnel->updateWhitelist($whitelist, 'project', $project->id);
+
+                $this->user->updateUserView($project->id, 'project');
+                if(zget($executionGroup, $project->id, ''))
+                {
+                    $executions = zget($executionGroup, $project->id);
+                    $executionPairs = array();
+                    foreach($executions as $executionID => $execution) $executionPairs[$executionID] = $executionID;
+                    $this->user->updateUserView($executionPairs, 'sprint');
+                }
+                $changes = common::createChanges($project, $data);
+                $actionID = $this->action->create('project', $project->id, 'SwitchToLight');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+    }
+
+    /**
+     * Set features to disable.
+     *
+     * @param  int    $mode
+     * @access public
+     * @return void
+     */
+    public function disableFeaturesByMode($mode)
+    {
+        $disabledFeatures = '';
+        if($mode == 'light')
+        {
+            foreach($this->config->custom->dataFeatures as $feature)
+            {
+                $function = 'has' . ucfirst($feature) . 'Data';
+                if(!$this->$function()) $disabledFeatures .= "$feature,";
+            }
+            $disabledFeatures .= 'scrumMeasrecord,productTrack,productRoadmap';
+        }
+
+        $disabledFeatures = rtrim($disabledFeatures, ',');
+        $this->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
+
+        $this->processMeasrecordCron();
+    }
+
+    /**
+     * Check for URStory data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasProductURData()
+    {
+        return $this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->count();
+    }
+
+    /**
+     * Check for waterfall project data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasWaterfallData()
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->count();
+    }
+
+    /**
+     * Check for assetlib data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasAssetlibData()
+    {
+        if($this->config->edition == 'max') return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
+        return false;
+    }
+
+    /**
+     * Check for issue data.
+     *
+     * @access public
+     * @return bool|int
+     */
+    public function hasScrumIssueData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('t1.*')->from(TABLE_ISSUE)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.model')->eq('scrum')
+                ->count();
+        }
+        return false;
+    }
+
+    /**
+     * Check for risk data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumRiskData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('t1.*')->from(TABLE_RISK)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.model')->eq('scrum')
+                ->count();
+        }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum opportunity data
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumOpportunityData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_OPPORTUNITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
+        }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum meeting data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumMeetingData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_MEETING)->alias('t2')->on('t1.id = t2.project')
+                ->where('t1.model')->eq('scrum')
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->count();
+        }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum auditplan data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumAuditplanData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_AUDITPLAN)->alias('t2')->on('t1.id = t2.project')
+                ->where('t1.model')->eq('scrum')
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->count();
+        }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum process data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumProcessData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
+        }
+        return false;
+    }
+
+    /**
+     * Process measrecord cron.
+     *
+     * @access public
+     * @return void
+     */
+    public function processMeasrecordCron()
+    {
+        $this->loadModel('setting');
+        $closedFeatures   = $this->setting->getItem('owner=system&module=common&section=&key=closedFeatures');
+        $disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
+        $disabledFeatures = $disabledFeatures . ',' . $closedFeatures;
+
+        $hasWaterfall           = strpos(",{$disabledFeatures},",  ',waterfall,')           === false;
+        $hasScrumMeasrecord     = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
+        $hasWaterfallMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+
+        $cronStatus = 'normal';
+        if(!$hasScrumMeasrecord and !$hasWaterfallMeasrecord) $cronStatus = 'stop';
+
+        $this->loadModel('cron');
+        $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch();
+        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
+        $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch();
+        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
     }
 }

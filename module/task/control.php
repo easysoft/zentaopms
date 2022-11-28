@@ -48,6 +48,7 @@ class task extends control
         $executions  = $this->execution->getPairs(0, 'all', isset($execution) ? (!common::canModify('execution', $execution) ? 'noclosed' : '') : 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $execution   = $this->execution->getById($executionID);
+
         $this->execution->setMenu($executionID);
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
@@ -61,6 +62,7 @@ class task extends control
 
         $task = new stdClass();
         $task->module     = $moduleID;
+        $task->mode       = '';
         $task->assignedTo = '';
         $task->name       = '';
         $task->story      = $storyID;
@@ -76,6 +78,12 @@ class task extends control
         {
             $task        = $this->task->getByID($taskID);
             $executionID = $task->execution;
+
+            /* Emptying consumed hours when copy task. */
+            if($task->mode == 'multi')
+            {
+                foreach($task->team as $teamMember) $teamMember->consumed = 0;
+            }
         }
 
         if($todoID > 0)
@@ -110,9 +118,6 @@ class task extends control
             $this->view->regionPairs = $regionPairs;
             $this->view->lanePairs   = $lanePairs;
         }
-
-        /* Set menu. */
-        $this->execution->setMenu($execution->id);
 
         if(!empty($_POST))
         {
@@ -291,26 +296,35 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
-        $executionAll = array();
+        $executions = array();
         if(!empty($projectID))
         {
             $executionList = $this->execution->getByProject($projectID, 'all', 0, true);
             $project       = $this->loadModel('project')->getByID($projectID);
             $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
+
+            $executionKey = 0;
+            $executionModifyList = $this->execution->getByIdList(array_keys($executionList));
+            foreach($executionModifyList as $modifykey)
+            {
+                if(!common::canModify('execution', $modifykey)) $executionKey = $modifykey->id;
+                if($executionKey) unset($executionList[$executionKey]);
+            }
+            $executionAll = $executionList;
+
             if(isset($project->model) and $project->model == 'waterfall')
             {
                 foreach($executionList as $key => $val)
                 {
                     $values = str_replace($replace, $project->name, $val);
-                    $executionAll[$key] = $values;
+                    $executions[$key] = $values;
                 }
             }
             else
             {
-                $executionAll = $executionList;
+                $executions = $executionList;
             }
         }
-        $executions = $this->config->systemMode == 'classic' ? $executions : $executionAll;
 
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         /* Stories that can be used to create test tasks. */
@@ -373,7 +387,7 @@ class task extends control
         {
             $taskLink = $this->createLink('my', 'work', 'mode=task');
         }
-        elseif($this->app->tab == 'project')
+        elseif($this->app->tab == 'project' and $execution->multiple)
         {
             $taskLink = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
         }
@@ -455,11 +469,8 @@ class task extends control
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Set Custom*/
-        if($this->config->systemMode == 'new')
-        {
-            $project = $this->project->getByID($execution->project);
-            if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
-        }
+        $project = $this->project->getByID($execution->project);
+        if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
 
         foreach(explode(',', $this->config->task->customBatchCreateFields) as $field)
         {
@@ -541,13 +552,13 @@ class task extends control
      * Edit a task.
      *
      * @param  int    $taskID
-     * @param  bool   $comment
+     * @param  string $comment
      * @param  string $kanbanGroup
      * @param  string $from
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = false, $kanbanGroup = 'default', $from = '')
+    public function edit($taskID, $comment = 'false', $kanbanGroup = 'default', $from = '')
     {
         $this->commonAction($taskID);
         $task = $this->task->getById($taskID);
@@ -556,7 +567,7 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = array();
-            if($comment == false)
+            if(!$comment or $comment == 'false')
             {
                 $changes = $this->task->update($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
@@ -622,8 +633,6 @@ class task extends control
             }
         }
 
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
-
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
@@ -658,7 +667,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $executions;
+        $this->view->executions    = $executions;
         $this->display();
     }
 
@@ -769,11 +778,8 @@ class task extends control
         /* Set Custom*/
         if(isset($execution))
         {
-            if($this->config->systemMode == 'new')
-            {
-                $project = $this->project->getByID($execution->project);
-                if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
-            }
+            $project = $this->project->getByID($execution->project);
+            if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
 
             foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
             {
@@ -966,11 +972,6 @@ class task extends control
      */
     public function view($taskID)
     {
-        $this->session->set('executionList', $this->app->getURI(true), 'execution');
-
-        $this->commonAction($taskID);
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
-
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);
         if(!$task)
@@ -978,6 +979,11 @@ class task extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
+
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
+        $this->commonAction($taskID);
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $execution = $this->execution->getById($task->execution);
         if(!isonlybody() and $execution->type == 'kanban')
@@ -1011,9 +1017,6 @@ class task extends control
 
         /* Update action. */
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
-
-        /* Set menu. */
-        if($this->app->tab == 'execution') $this->execution->setMenu($execution->id);
 
         $this->executeHooks($taskID);
 
@@ -1652,7 +1655,6 @@ class task extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
-
     }
 
     /**
@@ -2082,6 +2084,9 @@ class task extends control
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
         }
+
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if(!$execution->multiple) unset($this->lang->task->report->charts['tasksPerExecution']);
 
         $executions = $this->execution->getPairs();
 

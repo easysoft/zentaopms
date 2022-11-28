@@ -82,16 +82,16 @@
           <div class="btn-group">
             <div class='drop-down dropdown-hover'>
               <?php
-              $createLink = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=0&bugID=0&planID=$plan->id") : '#';
+              $createLink = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : '#';
               $createMisc = common::hasPriv('story', 'create') ? 'btn btn-secondary' : " btn btn-secondary disabled";
-              echo html::a($createLink, "<i class='icon icon-plus'></i><span class='text'>" . $lang->story->create . "</span><span class='caret'>", '', "class='$createMisc'");
+              echo html::a($createLink, "<i class='icon icon-plus'></i><span class='text'>" . $lang->story->create . "</span><span class='caret'>", '', "class='$createMisc' data-app={$app->tab}");
               ?>
               <ul class='dropdown-menu pull-right'>
                 <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
                 <li <?php echo $disabled?>>
                   <?php
-                  $batchLink = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=0&plan={$plan->id}") : '#';
-                  echo html::a($batchLink, "<span class='text'>" . $lang->story->batchCreate . '</span>', '', "class='btn btn-link'");
+                  $batchLink = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : '#';
+                  echo html::a($batchLink, "<span class='text'>" . $lang->story->batchCreate . '</span>', '', "class='btn btn-link' data-app={$app->tab}");
                   ?>
                 </li>
               </ul>
@@ -166,7 +166,7 @@
                 <td class='c-id text-left'>
                 <?php printf('%03d', $story->id);?>
                 </td>
-                <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+                <td><span class="<?php echo $story->pri ? 'label-pri label-pri-' . $story->pri : "";?>" title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
@@ -187,12 +187,12 @@
                   <?php endif;?>
                 </td>
                 <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
-                <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+                <td><span class="<?php echo $story->pri ? 'label-pri label-pri-' . $story->pri : "";?>" title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo zget($modulePairs, $story->module, '');?>'><?php echo zget($modulePairs, $story->module, '');?></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
-                  echo html::a($viewLink , $story->title, '', "style='color: $story->color'");
+                  echo html::a($viewLink , $story->title, '', "style='color: $story->color' data-app={$this->app->tab}");
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
@@ -235,7 +235,7 @@
                   $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', '', this)\"" : $class;
                   echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
-                  $actionLink = $this->createLink('story', 'batchEdit', "productID=$plan->product&projectID=0&branch=$branch");
+                  $actionLink = $this->createLink('story', 'batchEdit', "productID=$plan->product&projectID=$projectID&branch=$branch");
                   $misc = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', this)\"" : $class;
                   echo "<li>" . html::a('#', $lang->edit, '', $misc) . "</li>";
 
@@ -448,7 +448,7 @@
                 <td class='c-id text-left'>
                   <?php printf('%03d', $bug->id);?>
                 </td>
-                <td><span class='label-pri label-pri-<?php echo $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
+                <td><span class='<?php echo $bug->pri ? "label-pri label-pri-{$bug->pri}" : "";?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
@@ -463,8 +463,8 @@
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
                 </td>
-                <td><span class='label-pri label-pri-<?php echo $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', 'data-app="product"');?></td>
+                <td><span class='<?php echo $bug->pri ? "label-pri label-pri-{$bug->pri}" : "";?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri);?></span></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', "data-app={$this->app->tab}");?></td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
                 <td>
@@ -553,7 +553,7 @@
                 <?php if($plan->parent > 0):?>
                 <tr>
                   <th><?php echo $lang->productplan->parent;?></th>
-                  <td><?php echo html::a(inlink('view', "planID={$parentPlan->id}"), "#{$parentPlan->id} " . $parentPlan->title);?></td>
+                  <td><?php echo html::a(inlink('view', "planID={$parentPlan->id}"), "#{$parentPlan->id} " . $parentPlan->title, '', "data-app={$app->tab}");?></td>
                 </tr>
                 <?php endif;?>
                 <?php if($product->type != 'normal'):?>
@@ -575,7 +575,7 @@
                   <th><?php echo $lang->productplan->children;?></th>
                   <td>
                     <?php foreach($childrenPlans as $childrenPlan):?>
-                    <?php echo html::a(inlink('view', "planID={$childrenPlan->id}"), "#{$childrenPlan->id} " . $childrenPlan->title) . '<br />';?>
+                    <?php echo html::a(inlink('view', "planID={$childrenPlan->id}"), "#{$childrenPlan->id} " . $childrenPlan->title, '', "data-app={$app->tab}") . '<br />';?>
                     <?php endforeach;?>
                   </td>
                 </tr>

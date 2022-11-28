@@ -135,7 +135,7 @@ class testreport extends control
             $executions[$report->execution] = $report->execution;
             foreach(explode(',', $report->tasks) as $taskID) $tasks[$taskID] = $taskID;
         }
-        if($executions) $executions = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchPairs('id', 'name');
+        if($executions) $executions = $this->dao->select('id,name,multiple')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchAll('id');
         if($tasks)      $tasks      = $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($tasks)->fetchPairs('id', 'name');
 
         $this->view->title      = $title . $this->lang->colon . $this->lang->testreport->common;
@@ -146,6 +146,7 @@ class testreport extends control
         $this->view->orderBy      = $orderBy;
         $this->view->objectID     = $objectID;
         $this->view->objectType   = $objectType;
+        $this->view->object       = $object;
         $this->view->extra        = $extra;
         $this->view->pager        = $pager;
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
@@ -243,13 +244,13 @@ class testreport extends control
             $this->view->position[]  = $this->lang->testreport->create;
             $this->view->reportTitle = date('Y-m-d') . " TESTTASK#{$task->id} {$task->name} {$this->lang->testreport->common}";
         }
-        elseif($objectType == 'execution')
+        elseif($objectType == 'execution' or $objectType == 'project')
         {
             $executionID = $this->commonAction($objectID, $objectType);
             if($executionID != $objectID) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $execution     = $this->execution->getById($executionID);
-            $tasks         = $this->testtask->getExecutionTasks($executionID);
+            $tasks         = $this->testtask->getExecutionTasks($executionID, $objectType);
             $task          = $objectID ? $this->testtask->getById($objectID) : key($tasks);
             $owners        = array();
             $buildIdList   = array();
@@ -281,7 +282,7 @@ class testreport extends control
             elseif($this->app->tab == 'project')
             {
                 $projects  = $this->project->getPairsByProgram();
-                $projectID = $this->project->saveState($execution->project, $projects);
+                $projectID = $this->project->saveState($execution->id, $projects);
                 $this->project->setMenu($projectID);
             }
 
@@ -294,9 +295,7 @@ class testreport extends control
             $bugs  = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'execution');
 
             $this->view->title       = $execution->name . $this->lang->testreport->create;
-            $this->view->position[]  = html::a(inlink('browse', "objectID=$executionID&objectType=execution"), $execution->name);
-            $this->view->position[]  = $this->lang->testreport->create;
-            $this->view->reportTitle = date('Y-m-d') . " EXECUTION#{$execution->id} {$execution->name} {$this->lang->testreport->common}";
+            $this->view->reportTitle = date('Y-m-d') . ' ' . strtoupper($objectType) . "#{$execution->id} {$execution->name} {$this->lang->testreport->common}";
         }
 
         $cases = $this->testreport->getTaskCases($tasks, $begin, $end);
@@ -422,7 +421,7 @@ class testreport extends control
 
             $this->setChartDatas($report->objectID);
         }
-        elseif($report->objectType == 'execution')
+        elseif($report->objectType == 'execution' or $report->objectType == 'project')
         {
             $tasks = $this->testtask->getByList($report->tasks);
             $productIdList[$report->product] = $report->product;
@@ -493,9 +492,6 @@ class testreport extends control
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
             if($productID != $report->product) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
-
-            $browseLink = inlink('browse', "objectID=$productID&objectType=product");
-            $this->view->position[] = html::a($browseLink, $product->name);
         }
         elseif($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
@@ -509,9 +505,6 @@ class testreport extends control
                 $objectID = $this->commonAction($report->project, 'project');
                 if($objectID != $report->project) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
             }
-
-            $browseLink = inlink('browse', "objectID=$objectID&objectType=execution");
-            $this->view->position[] = html::a($browseLink, $execution->name);
         }
 
         $stories = $report->stories ? $this->story->getByList($report->stories) : array();

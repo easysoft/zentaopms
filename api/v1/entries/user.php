@@ -9,14 +9,14 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class userEntry extends Entry
+class userEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int|string $userID
      * @access public
-     * @return void
+     * @return string
      */
     public function get($userID = 0)
     {
@@ -40,7 +40,7 @@ class userEntry extends Entry
         $user = $data->data->user;
         unset($user->password);
 
-        $this->send(200, $user);
+        return $this->send(200, $user);
     }
 
     /**
@@ -49,7 +49,7 @@ class userEntry extends Entry
      * @param string $fields
      *
      * @access private
-     * @return void
+     * @return string
      */
     private function getInfo($fields = '')
     {
@@ -373,7 +373,7 @@ class userEntry extends Entry
             }
         }
 
-        $this->send(200, $info);
+        return $this->send(200, $info);
     }
 
     /**
@@ -381,7 +381,7 @@ class userEntry extends Entry
      *
      * @param  int|string $userID
      * @access public
-     * @return void
+     * @return string
      */
     public function put($userID)
     {
@@ -408,8 +408,12 @@ class userEntry extends Entry
         $this->setPost('gender', $gender);
 
         $password = $this->request('password', zget($_POST, 'password', ''));
-        $this->setPost('password1', md5($password));
-        $this->setPost('password2', md5($password));
+        if($password)
+        {
+            $this->setPost('password1', md5($password));
+            $this->setPost('password2', md5($password));
+            $this->setPost('passwordStrength', 2);
+        }
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
         $control = $this->loadController('user', 'edit');
@@ -420,7 +424,7 @@ class userEntry extends Entry
         $user = $this->user->getByID($userID, 'id');
         unset($user->password);
 
-        $this->send(200, $this->format($user, 'last:time,locked:time'));
+        return $this->send(200, $this->format($user, 'last:time,locked:time'));
     }
 
     /**
@@ -428,7 +432,7 @@ class userEntry extends Entry
      *
      * @param  int|string $userID
      * @access public
-     * @return void
+     * @return string
      */
     public function delete($userID)
     {
@@ -445,6 +449,6 @@ class userEntry extends Entry
         $control->delete($userID);
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        return $this->sendSuccess(200, 'success');
     }
 }
