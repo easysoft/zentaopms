@@ -2,8 +2,8 @@
 $config->testtask = new stdclass();
 $config->testtask->create = new stdclass();
 $config->testtask->edit   = new stdclass();
-$config->testtask->create->requiredFields = 'execution,build,begin,end,name';
-$config->testtask->edit->requiredFields   = 'execution,build,begin,end,name';
+$config->testtask->create->requiredFields = 'build,begin,end,name';
+$config->testtask->edit->requiredFields   = 'build,begin,end,name';
 
 $config->testtask->importUnit = new stdclass();
 $config->testtask->importUnit->requiredFields = 'execution,build,begin,end,name,resultFile';

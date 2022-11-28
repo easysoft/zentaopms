@@ -517,7 +517,7 @@ class testtask extends control
 
         /* Get execution type and set assignedToList. */
         $execution = $this->execution->getById($task->execution);
-        if($execution->acl == 'private')
+        if($execution and $execution->acl == 'private')
         {
             $assignedToList = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
         }
