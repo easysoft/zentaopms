@@ -294,7 +294,7 @@ function loadProductStories(productID)
 function loadProductProjects(productID)
 {
     required = $('#project_chosen').hasClass('required');
-    branch = $('#branch').val();
+    branch   = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + oldProjectID);
     $('#projectBox').load(link, function()
@@ -466,7 +466,9 @@ function loadProductBuilds(productID)
  */
 function loadExecutionRelated(executionID)
 {
-    executionID = parseInt(executionID);
+    executionID      = parseInt(executionID);
+    currentProjectID = $('#project').val() == 'undefined' ? 0 : $('#project').val();
+
     if(executionID)
     {
         loadExecutionTasks(executionID);
@@ -474,10 +476,10 @@ function loadExecutionRelated(executionID)
         loadExecutionBuilds(executionID);
         loadAssignedTo(executionID, $('#assignedTo').val());
         loadTestTasks($('#product').val(), executionID);
+        if(currentProjectID ==0) loadProjectByExecutionID(executionID);
     }
     else
     {
-        var currentProjectID = $('#project').val() == 'undefined' ? 0 : $('#project').val();
         var currentProductID = $('#product').val();
 
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
@@ -494,6 +496,30 @@ function loadExecutionRelated(executionID)
 
         currentProjectID != 0 ? loadProjectBuilds(currentProjectID) : loadProductBuilds(currentProductID);
     }
+}
+
+/**
+ * Load a project by execution id.
+ *
+ * @param  executionID $executionID
+ * @access public
+ * @return void
+ */
+function loadProjectByExecutionID(executionID)
+{
+    link     = createLink('bug', 'ajaxGetProjectByExecutionID', 'executionID=' + executionID);
+    required = $('#project_chosen').hasClass('required');
+
+    $.post(link, function(data)
+    {
+        if(!data) data = '<select id="project" name="project" class="form-control"></select>';
+        $('#project').replaceWith(data);
+        $('#project_chosen').remove();
+        $('#project').next('.picker').remove();
+        $("#project").chosen();
+
+        if(required) $('#project_chosen').addClass('required');
+    })
 }
 
 /**

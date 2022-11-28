@@ -81,8 +81,6 @@ class bugModel extends model
             ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket')
             ->get();
 
-        if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
-
         /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
         if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
@@ -218,8 +216,6 @@ class bugModel extends model
             $bug->keywords    = $data->keywords[$i];
 
             if(isset($data->lanes[$i])) $bug->laneID = $data->lanes[$i];
-
-            if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
 
             /* Assign the bug to the person in charge of the module. */
             if(!empty($moduleOwners[$bug->module]))
