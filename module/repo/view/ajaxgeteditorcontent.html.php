@@ -243,7 +243,6 @@ function showBlameAndRelation(line)
     $('.history').html(content);
     $('#log').data('line', p_line);
     $('#log').css('display', 'flex');
-    $('#log').css('justify-content', 'space-between');
     getRelation(blame.revision);
 }
 

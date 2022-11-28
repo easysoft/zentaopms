@@ -1,6 +1,6 @@
 .m-repo-ajaxgeteditorcontent {overflow: hidden;}
 #monacoEditor .tip-circular {background: #2e7fff; border-radius: 10px; padding: 0px 7px;}
-#log {margin-top: 2px; display: none; padding: 5px; justify-content: space-between;}
+#log {margin-top: 2px; display: none; padding: 5px; justify-content: space-between; height: 25px; line-height: 20px;}
 #log .history {margin-left: 5px;}
 #log .action-btn .btn {border: none; background: none;}
 #related {display: none; margin-top: 2px; background: #fff;}
