@@ -5151,10 +5151,12 @@ class storyModel extends model
                     }
 
                     $stories[$id] = new stdclass();
-                    $stories[$id]->title = $title;
-                    $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
-                    $stories[$id]->bugs  = $this->loadModel('bug')->getStoryBugs($id);
-                    $stories[$id]->tasks = $this->loadModel('task')->getStoryTasks($id);
+                    $stories[$id]->title  = $title;
+                    $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
+                    $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
+                    $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
+                    $storyParent          = $this->dao->select('parent')->from(TABLE_STORY)->where('id')->eq($id)->fetch();
+                    $stories[$id]->parent = $storyParent->parent;
                     if($this->config->edition == 'max')
                     {
                         $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
