@@ -2,6 +2,11 @@
 .repoCode .nav > li > a {padding: 8px 10px;}
 .repoCode .nav-tabs > li > a > span {margin-right: 5px;}
 .repoCode {min-height: 500px;}
+#sidebar.side-col {padding-right: 0;}
+#sidebar .sidebar-toggle {left: auto; right: -3px; z-index: 10; height: 98%;}
+#sidebar .file-tree {padding: 0;}
+#sidebar > .sidebar-toggle > .icon-angle-left {right: auto; left: -1px;}
+.hide-sidebar #sidebar {width: 0 !important;}
 
 #fileTabs .tab-pane {display: none;}
 #fileTabs .tab-pane.active {display: block;}
