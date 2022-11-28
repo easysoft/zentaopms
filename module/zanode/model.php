@@ -454,8 +454,6 @@ class zanodemodel extends model
         $params = "id=$node->id";
 
         $menu .= $this->buildMenu('zanode', 'edit',   $params, $node, 'view');
-
-        $params = "id=$node->id";
         $menu .= $this->buildMenu('zanode', 'delete', $params, $node, 'view', 'trash', 'hiddenwin');
 
         return $menu;

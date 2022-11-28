@@ -118,7 +118,7 @@ class zanode extends control
     public function view($id)
     {
         $this->view->title   = $this->lang->zanode->view;
-        $this->view->zanode    = $this->zanode->getNodeByID($id);
+        $this->view->zanode  = $this->zanode->getNodeByID($id);
         $this->view->actions = $this->loadModel('action')->getList('zanode', $id);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The view file of zahost module of ZenTaoPMS.
  *
@@ -10,28 +11,28 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<?php js::set('hostID', $hostID)?>
-<?php js::set('zahostLang', $lang->zahost);?>
+<?php include '../../common/view/header.html.php'; ?>
+<?php js::set('hostID', $hostID) ?>
+<?php js::set('zahostLang', $lang->zahost); ?>
 
 <div id='mainContent' class='main-content'>
   <div class='main-col main-content'>
     <div class='center-block'>
       <div class='main-header'>
-        <h2><?php echo $lang->zahost->initHost->title;?></h2>
+        <h2><?php echo $lang->zahost->initHost->title; ?></h2>
       </div>
       <div class="host-desc-container">
-        <h4><?php echo $lang->zahost->initHost->descTitle;?></h4>
-        <div><span class='dot-symbol'></span><span><?php echo $lang->zahost->initHost->initDesc . ' ' . $host->secret;?></span></div>
+        <h4><?php echo $lang->zahost->initHost->descTitle; ?></h4>
+        <div><span class='dot-symbol'></span><span><?php echo $lang->zahost->initHost->initDesc . ' ' . $host->secret; ?></span></div>
 
         <div id="statusContainer">
         </div>
       </div>
 
-        <div class="text-center host-action">
-          <button type='button' id='checkServiceStatus' class='btn btn-info margin-top-18'><?php echo $lang->zahost->initHost->checkStatus; ?></button>
-          <?php echo html::a($this->createLink('zahost', 'browseImage', "hostID={$hostID}"), $lang->zahost->initHost->next, '', "title='{$lang->zahost->initHost->next}' class='btn btn-primary margin-top-18' disabled='disabled' id='jumpToImageList'");?>
-        </div>
+      <div class="text-center host-action">
+        <button type='button' id='checkServiceStatus' class='btn btn-info margin-top-18'><?php echo $lang->zahost->initHost->checkStatus; ?></button>
+        <?php echo html::a($this->createLink('zahost', 'browseImage', "hostID={$hostID}"), $lang->zahost->initHost->next, '', "title='{$lang->zahost->initHost->next}' class='btn btn-primary margin-top-18' disabled='disabled' id='jumpToImageList'"); ?>
+      </div>
+    </div>
   </div>
-</div>
-<?php include '../../common/view/footer.html.php';?>
+  <?php include '../../common/view/footer.html.php'; ?>

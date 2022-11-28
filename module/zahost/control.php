@@ -110,10 +110,10 @@ class zahost extends control
             $changes = $this->zahost->update($hostID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($changes)
+            if(!empty($changes))
             {
                 $actionID = $this->loadModel('action')->create('zahost', $hostID, 'Edited');
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+                $this->action->logHistory($actionID, $changes);
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));

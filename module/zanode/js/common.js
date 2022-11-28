@@ -19,7 +19,7 @@ $(function()
     $(document).on("change", '#image', function()
     {
         var image = $('#image').val();
-        var link    = createLink('zanode', 'ajaxGetImage', 'image=' + image);
+        var link  = createLink('zanode', 'ajaxGetImage', 'image=' + image);
         $.get(link, function(data)
         {
             data = JSON.parse(data);

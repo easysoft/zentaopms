@@ -378,10 +378,8 @@ class zahostModel extends model
         $menu   = '';
         $params = "hostID=$host->id";
 
-        $menu .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
-
-        $params = "hostID=$host->id";
-        $menu .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin');
+        $menu  .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
+        $menu  .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin');
 
         return $menu;
     }
