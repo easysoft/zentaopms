@@ -28,7 +28,9 @@ class GitRepo
         if($branch)
         {
             $branches = $this->branch();
-            if(isset($branches[$branch])) $branch = "origin/$branch";
+            $cmd  = escapeCmd("$this->client branch -r");
+            execCmd($cmd . ' 2>&1', 'string', $result);
+            if(isset($branches[$branch]) and !empty($result)) $branch = "origin/$branch";
         }
         $this->branch = $branch;
         $this->repo   = $repo;
