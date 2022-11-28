@@ -187,7 +187,7 @@ $closedExecutionsHtml .= '</ul>';
 <script>
 $(function()
 {
-    <?php if($currentExecution->status == 'done' or $currentExecution->status == 'closed'):?>
+    <?php if($currentExecution and ($currentExecution->status == 'done' or $currentExecution->status == 'closed')):?>
     $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
     <?php else:?>
     scrollToSelected();

@@ -20,8 +20,6 @@ body {margin-bottom: 25px;}
 .assignedTo{border-radius: 4px !important;}
 </style>
 <?php
-$storyString     = '';
-$reviewStoryTips = '';
 $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
 $unfoldStories     = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories     = zget($unfoldStories, $productID, array());
@@ -29,6 +27,8 @@ $isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 js::set('browseType', $browseType);
+js::set('account', $this->app->user->account);
+js::set('reviewStory', $lang->product->reviewStory);
 js::set('productID', $productID);
 js::set('projectID', $projectID);
 js::set('branch', $branch);
@@ -76,13 +76,14 @@ js::set('vision',        $this->config->vision);
     <?php if($isProjectStory): ?>
     <?php if(!empty($project->hasProduct)):?>
     <div class='btn-group'>
-      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $productName;?>'><?php echo $productName;?></span> <span class='caret'></span></a>
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><div class='text' style="overflow: hidden;" title='<?php echo $productName;?>'><?php echo $productName;?></div> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
-        echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
+        echo '<li ' . (empty($productID) ? "class='active'" : '') . '>' . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
         foreach($projectProducts as $projectProduct)
         {
-            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$projectProduct->id&branch=all"), $projectProduct->name, '', "title='{$projectProduct->name}' class='text-ellipsis'") . "</li>";
+            $active = $projectProduct->id == $productID ? "class='active'" : '';
+            echo "<li $active>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$projectProduct->id&branch=all"), $projectProduct->name, '', "title='{$projectProduct->name}' class='text-ellipsis'") . "</li>";
         }
         ?>
       </ul>
@@ -403,12 +404,7 @@ js::set('vision',        $this->config->vision);
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
-            foreach($stories as $story)
-            {
-                $storyProductIds[$story->product] = $story->product;
-                if(!in_array($this->app->user->account, $story->reviewer)) $storyString .= $story->title . ',';
-            }
-            $reviewStoryTips = sprintf($lang->product->reviewStory, '', $storyString);
+            foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
             $storyProductID  = count($storyProductIds) > 1 ? 0 : $productID;
             $disabled        = $canBatchEdit ? '' : "disabled='disabled'";
             $actionLink      = $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType");
@@ -701,10 +697,6 @@ js::set('vision',        $this->config->vision);
     </div>
   </div>
 </div>
-<?php
-js::set('storyString', $storyString);
-js::set('reviewStory', $reviewStoryTips);
-?>
 <script>
 var moduleID = <?php echo $moduleID?>;
 var branchID = $.cookie('storyBranch');

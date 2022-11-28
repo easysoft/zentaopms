@@ -894,6 +894,7 @@ class product extends control
     public function ajaxGetProducts($executionID)
     {
         $this->loadModel('build');
+        if(!$executionID) return print(html::select('product', array(), '', "class='form-control chosen' required"));
         $products = $this->product->getProductPairsByProject($executionID);
         if(empty($products))
         {
@@ -961,6 +962,7 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
+        if($projectID) $project = $this->loadModel('project')->getById($projectID);
         $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
         $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $mode);
@@ -969,7 +971,8 @@ class product extends control
         if($number === '')
         {
             $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $event"));
+            $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple $event"));
         }
         else
         {

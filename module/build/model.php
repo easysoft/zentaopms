@@ -321,7 +321,7 @@ class buildModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_BUILD)
             ->where('deleted')->eq(0)
-            ->beginIF($executionID)->andWhere('execution')->eq((int)$executionID)->fi()
+            ->andWhere('execution')->eq((int)$executionID)
             ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
             ->orderBy('date DESC,id DESC')
             ->limit(1)
@@ -606,6 +606,24 @@ class buildModel extends model
         $build->allStories = join(',', array_unique(array_filter($build->allStories)));
 
         return $build;
+    }
+
+    /**
+     * Adjust the action is clickable.
+     *
+     * @param  string $bug
+     * @param  string $action
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public static function isClickable($object, $action, $module = 'bug')
+    {
+        $action = strtolower($action);
+
+        if($module == 'testtask' && $action == 'create') return !!$object->execution;
+
+        return true;
     }
 
     /**

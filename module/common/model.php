@@ -1680,7 +1680,7 @@ EOD;
         {
             if($app->getModuleName() != $module) $app->control->loadModel($module);
             $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
-            if(class_exists($modelClass) and is_callable(array($modelClass, 'isClickable')))
+            if(class_exists($modelClass) and method_exists($modelClass, 'isClickable'))
             {
                 //$clickable = call_user_func_array(array($modelClass, 'isClickable'), array('object' => $object, 'method' => $method));
                 // fix bug on php  8.0 link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953

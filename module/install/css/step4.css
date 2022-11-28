@@ -9,6 +9,7 @@
 #mainContent tr td {background-color: rgb(255, 255, 255); border-bottom: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238);}
 
 .btn-wide {padding: 6px 85px;}
+#useLight:hover, #useALM:hover{color: #fff; background-color: #2e7fff; border-color: transparent;}
 
 #mainContent .datatable {cursor: default;}
 .container {padding-top: 20px;}

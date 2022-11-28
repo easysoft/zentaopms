@@ -145,7 +145,7 @@
           <td></td>
           <td></td>
         </tr>
-        <?php if($project->hasProduct):?>
+        <?php if($project->hasProduct and $this->config->vision != 'lite'):?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">

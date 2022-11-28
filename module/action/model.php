@@ -1661,6 +1661,7 @@ class actionModel extends model
 
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) and !empty($project) and empty($project->multiple)) $action->objectLink .= '#app=project';
+        if($this->config->vision == 'lite' and $action->objectType == 'module') $action->objectLink .= '#app=project';
 
         return $action;
     }

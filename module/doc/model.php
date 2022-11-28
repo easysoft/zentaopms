@@ -93,7 +93,7 @@ class docModel extends model
         $projects   = $this->loadModel('project')->getPairsByProgram();
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
         $waterfalls = array();
-        if(empty($objectID) and ($type == 'all' or $type == 'execution'))
+        if(empty($objectID) and $type != 'product' and $type != 'project' and $type != 'custom')
         {
             $waterfalls = $this->dao->select('t1.id,t2.name')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
@@ -643,9 +643,7 @@ class docModel extends model
         {
             foreach($files as $file)
             {
-                $pathName       = $this->file->getRealPathName($file->pathname);
-                $file->webPath  = $this->file->webPath . $pathName;
-                $file->realPath = $this->file->savePath . $pathName;
+                $this->loadModel('file')->setFileWebAndRealPaths($file);
                 if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
             }
         }
@@ -1740,9 +1738,7 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
-            $pathName       = $this->file->getRealPathName($file->pathname);
-            $file->realPath = $this->file->savePath . $pathName;
-            $file->webPath  = $this->file->webPath . $pathName;
+            $this->file->setFileWebAndRealPaths($file);
         }
 
         return $files;

@@ -114,14 +114,12 @@ class executionModel extends model
         }
 
         $stageFilter = array('request', 'design', 'review');
-        if(isset($execution->attribute))
+        if(isset($execution->attribute) and in_array($execution->attribute, $stageFilter))
         {
-            if($this->config->edition == 'open' and in_array($execution->attribute, $stageFilter))
-            {
-                unset($this->lang->execution->menu->story);
-                unset($this->lang->execution->menu->qa);
-                unset($this->lang->execution->menu->build);
-            }
+            unset($this->lang->execution->menu->story);
+            unset($this->lang->execution->menu->devops);
+            unset($this->lang->execution->menu->qa);
+            unset($this->lang->execution->menu->build);
         }
 
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
@@ -1578,6 +1576,8 @@ class executionModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchPairs();
+
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
 
@@ -1625,7 +1625,7 @@ class executionModel extends model
             }
 
             /* In the case of the waterfall model, calculate the sub-stage. */
-            if($param == 'skipParent')
+            if($param === 'skipParent')
             {
                 if($execution->parent < 0 and $execution->type == 'stage') unset($executions[$key]);
                 if($execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
@@ -1637,6 +1637,12 @@ class executionModel extends model
                     $executions[$execution->parent]->children[$key] = $execution;
                     unset($executions[$key]);
                 }
+            }
+
+            /* Bind execution product */
+            if(!empty($projectProductIdList) and !empty($projectProductIdList[$execution->id]))
+            {
+                $execution->product = $projectProductIdList[$execution->id];
             }
         }
         return array_values($executions);
@@ -3170,12 +3176,12 @@ class executionModel extends model
             {
                 dao::$errors['message'][] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
                 return false;
-            }    
+            }
             if((float)$hours[$key] > 24)
             {
                 dao::$errors['message'][] = $this->lang->execution->errorHours;
                 return false;
-            }    
+            }
         }
 
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->exec();
@@ -5183,7 +5189,6 @@ class executionModel extends model
         $_POST = array();
         $_POST['project']   = $projectID;
         $_POST['name']      = $project->name;
-        $_POST['code']      = $project->code;
         $_POST['begin']     = $project->begin;
         $_POST['end']       = $project->end;
         $_POST['realBegan'] = $project->realBegan;
@@ -5196,6 +5201,8 @@ class executionModel extends model
         $_POST['RD']        = $project->RD;
         $_POST['status']    = $project->status;
         $_POST['acl']       = 'open';
+
+        if(!empty($_POST['code'])) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)

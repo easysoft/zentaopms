@@ -29,7 +29,7 @@
         </tr>
         <tr class="<?php echo $hidden;?>">
           <th class='w-120px'><?php echo $lang->build->product;?></th>
-          <?php if(!empty($products)):?>
+          <?php if(!empty($products) || !$executionID):?>
           <td>
             <div class='input-group' id='productBox'>
               <?php echo html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
@@ -58,7 +58,7 @@
         <tr>
           <th class='w-120px'><?php echo $lang->build->name;?></th>
           <td><?php echo html::input('name', '', "class='form-control' required");?></td>
-          <td class='text-muted'>
+          <td class='text-muted' id='lastBuildBox'>
             <?php if($lastBuild):?>
             <div class='help-block'> &nbsp; <?php echo $lang->build->last . ': <a class="code label label-badge label-light" id="lastBuildBtn">' . $lastBuild->name . '</a>';?></div>
             <?php endif;?>
