@@ -28,7 +28,7 @@ $lang->repo->branch          = 'Branch';
 $lang->repo->tag             = 'Tag';
 $lang->repo->addWebHook      = 'Add Webhook';
 $lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
-$lang->repo->blamTmpl        = '%time %name commited %version %comment';
+$lang->repo->blameTmpl       = 'Code for line <strong>%line</strong>, <span class="tip-circular"></span> %name commited at %time, %version %comment';
 $lang->repo->notRelated      = 'There is currently no related ZenTao object';
 
 $lang->repo->browseAction    = 'Browse Repo';
@@ -50,6 +50,7 @@ $lang->repo->unlinkedTasks   = 'Unlinked Tasks';
 $lang->repo->submit     = 'Soumettre';
 $lang->repo->cancel     = 'Annuler';
 $lang->repo->addComment = 'Ajout Comment.';
+$lang->repo->addIssue   = 'Add Issue';
 
 $lang->repo->copy     = 'Click to copy';
 $lang->repo->copied   = 'Copy successful';

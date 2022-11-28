@@ -19,7 +19,7 @@ js::set('jsRoot', $jsRoot);
 js::set('clientLang', $app->clientLang);
 js::set('fileExt', $this->config->repo->fileExt);
 js::set('file', $pathInfo);
-js::set('blameTmpl', $lang->repo->blamTmpl);
+js::set('blameTmpl', $lang->repo->blameTmpl);
 js::set('repoID', $repoID);
 js::set('showEditor', $showEditor);
 js::set('canLinkStory', $canLinkStory);
@@ -44,28 +44,29 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
   <div id="codeContainer"></div>
   <?php endif;?>
   <div id="log">
-    <div class="tip"></div>
     <div class="history"></div>
+    <div class="action-btn pull-right">
+     <div class="btn btn-close pull-right"><i class="icon icon-close"></i></div>
+     <?php if($canLinkStory or $canLinkBug or $canLinkTask or $canUnlinkObject):?>
+     <div class="dropdown pull-right">
+       <button class="btn" type="button" data-toggle="context-dropdown"><i class="icon icon-ellipsis-v icon-rotate-90"></i></button>
+       <ul class="dropdown-menu">
+         <?php
+         if($canLinkStory) echo '<li id="linkStory">' . html::a('javascript:;', '<i class="icon icon-lightbulb"></i> ' . $lang->repo->linkStory) . '</li>';
+         if($canLinkBug) echo '<li id="linkBug">' . html::a('javascript:;', '<i class="icon icon-bug"></i> ' . $lang->repo->linkBug) . '</li>';
+         if($canLinkTask) echo '<li id="linkTask">' . html::a('javascript:;', '<i class="icon icon-todo"></i> ' . $lang->repo->linkTask) . '</li>';
+         if($canUnlinkObject) echo '<li id="unlink">' . html::a('javascript:;', '<i class="icon icon-unlink"></i> ' . $lang->repo->unlink) . '</li>';
+         ?>
+       </ul>
+     </div>
+     <?php endif;?>
+    </div>
   </div>
   <div id="related">
     <div class="main-col main">
       <div class="content panel">
         <div class='btn-toolbar'>
           <div class="btn btn-left pull-left"><i class="icon icon-chevron-left"></i></div>
-          <div class="btn btn-close pull-right"><i class="icon icon-close"></i></div>
-          <?php if($canLinkStory or $canLinkBug or $canLinkTask or $canUnlinkObject):?>
-          <div class="dropdown pull-right">
-            <button class="btn" type="button" data-toggle="context-dropdown"><i class="icon icon-ellipsis-v icon-rotate-90"></i></button>
-            <ul class="dropdown-menu">
-              <?php
-              if($canLinkStory) echo '<li id="linkStory">' . html::a('javascript:;', '<i class="icon icon-lightbulb"></i> ' . $lang->repo->linkStory) . '</li>';
-              if($canLinkBug) echo '<li id="linkBug">' . html::a('javascript:;', '<i class="icon icon-bug"></i> ' . $lang->repo->linkBug) . '</li>';
-              if($canLinkTask) echo '<li id="linkTask">' . html::a('javascript:;', '<i class="icon icon-todo"></i> ' . $lang->repo->linkTask) . '</li>';
-              if($canUnlinkObject) echo '<li id="unlink">' . html::a('javascript:;', '<i class="icon icon-unlink"></i> ' . $lang->repo->unlink) . '</li>';
-              ?>
-            </ul>
-          </div>
-          <?php endif;?>
           <div class="btn btn-right pull-right"><i class="icon icon-chevron-right"></i></div>
           <div class='panel-title'>
             <div class="tabs w-10" id="relationTabs"></div>
@@ -166,11 +167,12 @@ function getRelation(commit)
 function setTab(titleObj)
 {
     return {
-        id:    titleObj.type + '-' + titleObj.id,
-        title: titleObj.title,
-        icon:  titleObj.type == 'story' ? 'icon-lightbulb text-primary' : (titleObj.type == 'task' ? 'icon-check-sign text-info' : 'icon-bug text-red'),
-        type:  'iframe',
-        url:   createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type)
+        id:          titleObj.type + '-' + titleObj.id,
+        title:       titleObj.title,
+        icon:        titleObj.type == 'story' ? 'icon-lightbulb' : (titleObj.type == 'task' ? 'icon-check-sign' : 'icon-bug'),
+        type:        'iframe',
+        url:         createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type),
+        forbidClose: true
     };
 }
 
@@ -237,10 +239,11 @@ function showBlameAndRelation(line)
     var time    = blame.time != 'unknown' ? blame.time : '';
     var user    = blame.committer != 'unknown' ? blame.committer : '';
     var version = blame.revision.toString().substring(0, 10);
-    var content = blameTmpl.replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
-    $('.history').text(content);
+    var content = blameTmpl.replace('%line', line).replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
+    $('.history').html(content);
     $('#log').data('line', p_line);
     $('#log').css('display', 'flex');
+    $('#log').css('justify-content', 'space-between');
     getRelation(blame.revision);
 }
 

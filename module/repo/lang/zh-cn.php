@@ -28,7 +28,7 @@ $lang->repo->branch          = '分支';
 $lang->repo->tag             = '标签';
 $lang->repo->addWebHook      = '添加Webhook';
 $lang->repo->apiGetRepoByUrl = '接口：通过URL获取代码库';
-$lang->repo->blamTmpl        = '%time 由 %name 提交 %version %comment';
+$lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息，<span class="tip-circular"></span> %name 于 %time 提交 %version %comment';
 $lang->repo->notRelated      = '暂时没有关联禅道对象';
 
 $lang->repo->browseAction    = '浏览代码库';
@@ -50,6 +50,7 @@ $lang->repo->unlinkedTasks   = '未关联任务';
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
 $lang->repo->addComment = '添加评论';
+$lang->repo->addIssue   = '提问题';
 
 $lang->repo->copy     = '点击复制';
 $lang->repo->copied   = '复制成功';
