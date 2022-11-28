@@ -14,7 +14,7 @@ fields:
     range: GB
   - field: privateIP
     range: 192.168.1.215
-  - field: publicIP
+  - field: address
     range: 192.168.1.215
   - field: osName
     range: linux

@@ -450,9 +450,9 @@ $lang->qa->menu->testsuite     = array('link' => "{$lang->testcase->testsuite}|t
 $lang->qa->menu->testtask      = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
 $lang->qa->menu->report        = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
 $lang->qa->menu->caselib       = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
-$lang->qa->menu->automation    = array('link' => "{$lang->automation->common}|automation|browse|productID=%s", 'subModule' => 'automation', 'alias' => '');
+$lang->qa->menu->automation    = array('link' => "{$lang->automation->common}|project|other|productID=%s", 'subModule' => 'automation', 'alias' => '', 'class' => "qa-automation-menu");
 $lang->qa->menu->zahost        = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
-$lang->qa->menu->executionnode = array('link' => "{$lang->executionnode->common}|executionnode|browse", 'subModule' => 'executionnode');
+$lang->qa->menu->zanode        = array('link' => "{$lang->zanode->common}|zanode|browse", 'subModule' => 'zanode');
 
 /* QA menu order. */
 $lang->qa->menuOrder[5]  = 'product';
@@ -724,7 +724,7 @@ $lang->navGroup->bug           = 'qa';
 $lang->navGroup->testcase      = 'qa';
 $lang->navGroup->testtask      = 'qa';
 $lang->navGroup->zahost        = 'qa';
-$lang->navGroup->executionnode = 'qa';
+$lang->navGroup->zanode        = 'qa';
 $lang->navGroup->testreport    = 'qa';
 $lang->navGroup->testcase      = 'qa';
 $lang->navGroup->testtask      = 'qa';

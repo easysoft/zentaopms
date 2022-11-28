@@ -7,6 +7,94 @@ ALTER TABLE `zt_release` CHANGE `branch` `branch` varchar(255) NOT NULL;
 ALTER TABLE `zt_release` CHANGE `build` `build` varchar(255) NOT NULL;
 ALTER TABLE `zt_release` ADD `shadow` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `branch`;
 
+ALTER TABLE `zt_host` 
+DROP COLUMN `cabinet`,
+DROP COLUMN `cpuRate`,
+DROP COLUMN `diskType`,
+DROP COLUMN `unit`,
+DROP COLUMN `nic`,
+DROP COLUMN `webserver`,
+DROP COLUMN `database`,
+DROP COLUMN `language`,
+DROP COLUMN `instanceNum`,
+DROP COLUMN `pri`,
+DROP COLUMN `tags`,
+DROP COLUMN `bridgeID`,
+DROP COLUMN `cloudKey`,
+DROP COLUMN `cloudSecret`,
+DROP COLUMN `cloudRegion`,
+DROP COLUMN `cloudNamespace`,
+DROP COLUMN `cloudUser`,
+DROP COLUMN `cloudAccount`,
+DROP COLUMN `cloudPassword`,
+DROP COLUMN `couldVPC`,
+ADD COLUMN `name` varchar(255) NOT NULL DEFAULT '' AFTER `id`,
+MODIFY COLUMN `type` varchar(30) NOT NULL DEFAULT 'normal' AFTER `name`,
+MODIFY COLUMN `hostType` varchar(30) NOT NULL DEFAULT '' AFTER `type`,
+MODIFY COLUMN `mac` varchar(128) NOT NULL AFTER `hostType`,
+MODIFY COLUMN `memory` varchar(30) NOT NULL AFTER `mac`,
+MODIFY COLUMN `diskSize` varchar(30) NOT NULL AFTER `memory`,
+MODIFY COLUMN `status` varchar(50) NOT NULL AFTER `diskSize`,
+MODIFY COLUMN `secret` varchar(50) NOT NULL DEFAULT '' AFTER `status`,
+ADD COLUMN `desc` text NOT NULL AFTER `secret`,
+CHANGE COLUMN `token` `tokenSN` varchar(50) NOT NULL DEFAULT '' AFTER `desc`,
+CHANGE COLUMN `expiredDate` `tokenTime` datetime NOT NULL AFTER `tokenSN`,
+CHANGE COLUMN `virtualSoftware` `vsoft` varchar(30) NOT NULL DEFAULT '' AFTER `tokenTime`,
+CHANGE COLUMN `heartbeatTime` `heartbeat` datetime NOT NULL AFTER `vsoft`,
+CHANGE COLUMN `agentPort` `zap` varchar(10) NOT NULL AFTER `heartbeat`,
+MODIFY COLUMN `provider` varchar(255) NOT NULL DEFAULT '' AFTER `zap`,
+ADD COLUMN `vnc` int(11) NOT NULL AFTER `provider`,
+ADD COLUMN `parent` int(11) unsigned NOT NULL DEFAULT '0' AFTER `vnc`,
+ADD COLUMN `image` int(11) unsigned NOT NULL DEFAULT '0' AFTER `parent`,
+ADD COLUMN `group` varchar(128) NOT NULL DEFAULT '' AFTER `osVersion`,
+ADD COLUMN `createdBy` varchar(30) NOT NULL,
+ADD COLUMN  `createdDate` datetime NOT NULL,
+ADD COLUMN  `editedBy` varchar(30) NOT NULL,
+ADD COLUMN  `editedDate` datetime NOT NULL,
+ADD COLUMN  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE COLUMN `privateIP` `intranet` varchar(128) NOT NULL AFTER `cpuCores`,
+CHANGE COLUMN `publicIP` `extranet` varchar(128) NOT NULL AFTER `intranet`;
+
+UPDATE zt_host h,
+zt_asset a 
+SET h.`name` = a.`name`,
+h.`createdBy` = a.`createdBy`,
+h.`createdDate` = a.`createdDate`,
+h.`editedBy` = a.`editedBy`,
+h.`editedDate` = a.`editedDate`,
+h.`group` = a.`group`,
+h.`type` = a.`type`,
+h.`deleted` = a.`deleted`
+WHERE
+	h.`assetID` = a.`id`;
+
+ALTER TABLE `zt_host` DROP COLUMN `assetID`;
+
+DROP TABLE IF EXISTS `zt_asset`;
+DROP TABLE IF EXISTS `zt_baseimagebrowser`;
+DROP TABLE IF EXISTS `zt_browser`;
+DROP TABLE IF EXISTS `zt_baseimage`;
+DROP TABLE IF EXISTS `zt_vmtemplate`;
+DROP TABLE IF EXISTS `zt_vm`;
+
+CREATE TABLE `zt_image` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `host` int(11) unsigned NOT NULL DEFAULT 0,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `address` varchar(64) NOT NULL DEFAULT '',
+  `path` varchar(64) NOT NULL DEFAULT '',
+  `status` varchar(20) NOT NULL DEFAULT '',
+  `osName` varchar(32) NOT NULL DEFAULT '',
+  `memory` float unsigned NOT NULL,
+  `disk` float unsigned NOT NULL,
+  `fileSize` float unsigned NOT NULL,
+  `md5` varchar(64) NOT NULL,
+  `desc` text NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE OR REPLACE VIEW `ztv_normalproduct` AS SELECT * FROM `zt_product` WHERE `shadow` = 0;
 
 REPLACE INTO `zt_report` (`code`, `name`, `module`, `sql`, `vars`, `langs`, `params`, `step`, `desc`, `addedBy`, `addedDate`) VALUES

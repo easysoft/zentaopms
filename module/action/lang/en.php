@@ -112,8 +112,7 @@ $lang->action->objectTypes['testsuite']        = 'Suite';
 $lang->action->objectTypes['testtask']         = 'Test Build';
 $lang->action->objectTypes['testreport']       = 'Report';
 $lang->action->objectTypes['zahost']           = 'Host';
-$lang->action->objectTypes['vmtemplate']       = 'Virtual Host Template';
-$lang->action->objectTypes['executionnode']    = 'Execution Node';
+$lang->action->objectTypes['zanode']           = 'ZA Node';
 $lang->action->objectTypes['doc']              = 'Document';
 $lang->action->objectTypes['api']              = 'Interface';
 $lang->action->objectTypes['doclib']           = 'Document Library';
@@ -643,13 +642,11 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Hide Case Lib';
 
 $lang->action->dynamicAction->zahost['created'] = 'Create Host';
 
-$lang->action->dynamicAction->vmtemplate['created'] = 'Create Virtual Host Template';
-
-$lang->action->dynamicAction->executionnode['created'] = 'Create Execution Node';
-$lang->action->dynamicAction->executionnode['suspend'] = 'Suspend Execution Node';
-$lang->action->dynamicAction->executionnode['resume']  = 'Resume Execution Node';
-$lang->action->dynamicAction->executionnode['reboot']  = 'Reboot Execution Node';
-$lang->action->dynamicAction->executionnode['destroy'] = 'Destory Execution Node';
+$lang->action->dynamicAction->zanode['created'] = 'Create Zagent Node';
+$lang->action->dynamicAction->zanode['suspend'] = 'Suspend Zagent Node';
+$lang->action->dynamicAction->zanode['resume']  = 'Resume Zagent Node';
+$lang->action->dynamicAction->zanode['reboot']  = 'Reboot Zagent Node';
+$lang->action->dynamicAction->zanode['destroy'] = 'Destory Zagent Node';
 
 $lang->action->dynamicAction->doclib['created'] = 'Create Doc Library';
 $lang->action->dynamicAction->doclib['edited']  = 'Edit Doc Library';

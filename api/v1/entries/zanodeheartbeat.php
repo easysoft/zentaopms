@@ -1,6 +1,6 @@
 <?php
 /**
- * The executionnode entry point of ZenTaoPMS.
+ * The zanode entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class executionnodeHeartbeatEntry extends baseEntry
+class zanodeHeartbeatEntry extends baseEntry
 {
     /**
      * Listen vm heartbeat.
@@ -32,34 +32,35 @@ class executionnodeHeartbeatEntry extends baseEntry
         if(!$status) return $this->sendError(400, 'Params error.');
 
         $this->dao = $this->loadModel('common')->dao;
-        $assetID = $this->dao->select('assetID')->from(TABLE_HOST)
+        $id = $this->dao->select('id')->from(TABLE_ZAHOST)
             ->beginIF($secret)->where('secret')->eq($secret)->fi()
-            ->beginIF(!$secret)->where('token')->eq($token)
-            ->andWhere('expiredDate')->gt($now)->fi()
-            ->fetch('assetID');
-        if(!$assetID) return $this->sendError(400, 'Secret error.');
+            ->beginIF(!$secret)->where('tokenSN')->eq($token)
+            ->andWhere('tokenTime')->gt($now)->fi()
+            ->fetch('id');
+        if(!$id) return $this->sendError(400, 'Secret error.');
 
-        $conditionField = $secret ? 'secret' : 'token';
+        $conditionField = $secret ? 'secret' : 'tokenSN';
         $conditionValue = $secret ? $secret  : $token;
         if($secret)
         {
             $host = new stdclass();
-            $host->token       = md5($secret . $now);
-            $host->expiredDate = date('Y-m-d H:i:s', time() + 7200);
-            $this->dao->update(TABLE_HOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
+            $host->tokenSN     = md5($secret . $now);
+            $host->tokenTime   = date('Y-m-d H:i:s', time() + 7200);
+            $this->dao->update(TABLE_ZAHOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
         }
 
         $node = new stdclass();
-        $node->vmIP      = $this->requestBody->ip;
-        $node->agentPort = $this->requestBody->agentPortOnHost;
+        $node->zap       = $this->requestBody->agentPortOnHost;
         $node->status    = $this->requestBody->status;
-        $this->dao->update(TABLE_VM)->data($node)->where('macAddress')->eq($this->requestBody->macAddress)->exec();
+        $this->dao->update(TABLE_ZAHOST)->data($node)->where('mac')->eq($this->requestBody->macAddress)->exec();
 
         if(!$secret) return $this->sendSuccess(200, 'success');
 
         $host->expiredTimeUnix = strtotime($host->expiredDate);
+        $host->token           = $host->tokenSN;
+
         unset($host->status);
-        unset($host->expiredDate);
+        unset($host->tokenSN);
         return $this->send(200, $host);
     }
 }

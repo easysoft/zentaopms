@@ -12,7 +12,7 @@
 class zahost extends control
 {
     /**
-     * View host.
+     * View host list.
      *
      * @param  string $browseType
      * @param  string $param
@@ -23,7 +23,7 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $browseType = strtolower($browseType);
         $param      = (int)$param;
@@ -53,6 +53,27 @@ class zahost extends control
     }
 
     /**
+     * View host.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function view($id, $orderBy = 'id_desc')
+    {
+        $this->view->title      = $this->lang->zahost->view;
+        $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->zahost->common);
+        $this->view->position[] = $this->lang->zahost->view;
+
+        $this->view->zahost     = $this->zahost->getById($id);
+        $this->view->orderBy    = $orderBy;
+        $this->view->nodeList   = $this->loadModel("zanode")->getListByHost($this->view->zahost->parent, $orderBy);
+        $this->view->actions    = $this->loadModel('action')->getList('zahost', $id);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->display();
+    }
+
+    /**
      * Create host.
      *
      * @access public
@@ -62,13 +83,13 @@ class zahost extends control
     {
         if($_POST)
         {
-            $this->zahost->create();
+            $hostID = $this->zahost->create();
             if(dao::isError())
             {
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('inithost', "hostID=$hostID")));
         }
 
         $this->view->title = $this->lang->zahost->create;
@@ -89,10 +110,10 @@ class zahost extends control
             $changes = $this->zahost->update($hostID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($changes)
+            if(!empty($changes))
             {
                 $actionID = $this->loadModel('action')->create('zahost', $hostID, 'Edited');
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+                $this->action->logHistory($actionID, $changes);
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -120,7 +141,7 @@ class zahost extends control
             return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "assetID=$assetID&confirm=yes")));
         }
 
-        $this->dao->update(TABLE_ASSET)->set('deleted')->eq(1)->where('id')->eq($assetID)->exec();
+        $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($assetID)->exec();
         $this->loadModel('action')->create('zahost', $assetID, 'deleted');
 
         /* if ajax request, send result. */
@@ -144,17 +165,49 @@ class zahost extends control
     }
 
     /**
+     * Show image list page.
+     *
+     * @param  int    $hostID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseImage($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->session->set('imageList', $this->app->getURI(true));
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $imageList = $this->zahost->getImageList($hostID, $browseType, $param, $orderBy, $pager);
+
+        $this->view->title      = $this->lang->zahost->image->list;
+        $this->view->hostID     = $hostID;
+        $this->view->imageList  = $imageList;
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->browseType = $browseType;
+
+        $this->display();
+    }
+
+    /**
      * Create template.
      *
      * @access public
      * @return void
      */
-    public function createTemplate($hostID)
+    public function createImage($hostID)
     {
         $host = $this->zahost->getById($hostID);
         if($_POST)
         {
-            $this->zahost->createTemplate($host);
+            $this->zahost->createImage();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browseTemplate', "id={$hostID}")));
@@ -166,132 +219,48 @@ class zahost extends control
     }
 
     /**
-     * Edit template
+     * Sent download image request to Host.
      *
-     * @param  int    $templateID
+     * @param  int    $hostID
+     * @param  string $imageName
      * @access public
-     * @return void
+     * @return object
      */
-    public function editTemplate($templateID)
+    public function ajaxDownloadImage($hostID, $imageName)
     {
-        $template = $this->zahost->getTemplateById($templateID);
-        if($_POST)
+        $image = $this->zahost->getImageByNameAndHostID($imageName, $hostID);
+        if(empty($image))
         {
-            $changes = $this->zahost->updateTemplate($templateID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('vmtemplate', $templateID, 'Edited');
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            }
-
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browsetemplate', "hostID={$template->hostID}")));
+            $image = $this->zahost->createImage($hostID, $imageName);
         }
 
-        $this->view->title        = $this->lang->zahost->edit;
-        $this->view->template     = $template;
-        $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
-        $this->display();
+        $this->zahost->downloadImage($image);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->downloadImageSuccess));
     }
 
     /**
-     * Delete host.
+     * Query downloading progress of images of host.
      *
-     * @param  int    $templateID
-     * @param  string $confirm
+     * @param  int    $hostID
      * @access public
      * @return void
      */
-    public function deleteTemplate($templateID, $confirm = 'no')
+    public function ajaxImageDownloadProgress($hostID)
     {
-        if($confirm == 'no')
+        $statusList = array();
+
+        $imageList = $this->zahost->getImageList($hostID);
+        foreach($imageList as $image)
         {
-            return print(js::confirm($this->lang->zahost->confirmDeleteVMTemplate, inlink('deleteTemplate', "templateID=$templateID&confirm=yes")));
+            $image = $this->zahost->queryDownloadImageStatus($image);
+            $statusName = zget($this->lang->zahost->image->statusList, $image->status,'');
+
+            $statusList[$image->id] = array('statusCode' => $image->status, 'status' => $statusName, 'progress' => $image->status == 'inprogress' ? $image->rate * 100 . '%' : '');
         }
 
-        $template = $this->zahost->getTemplateById($templateID);
-        $this->dao->delete()->from(TABLE_VMTEMPLATE)->where('id')->eq($templateID)->exec();
-        $this->loadModel('action')->create('vmtemplate', $templateID, 'deleted');
-
-        /* if ajax request, send result. */
-        if($this->server->ajax)
-        {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            $this->send($response);
-        }
-
-        if(isonlybody()) return print(js::reload('parent.parent'));
-        return print(js::locate($this->createLink('zahost', 'browsetemplate', "hostID={$template->hostID}"), 'parent'));
-    }
-
-    /*
-     * Browse VM template.
-     *
-     * @param  int      $hostID
-     * @param  string   $browseType
-     * @param  string   $param
-     * @param  string   $orderBy
-     * @param  int      $recTotal
-     * @param  int      $recPerPage
-     * @param  int      $pageID
-     * @access public
-     * @return void
-     */
-    public function browseTemplate($hostID, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {
-        $browseType = strtolower($browseType);
-        $this->app->loadClass('pager', true);
-
-        $queryID      = ($browseType == 'bysearch')  ? (int)$param : 0;
-        $pager        = pager::init($recTotal, $recPerPage, $pageID);
-        $templateList = $this->zahost->getVMTemplateList($hostID, $browseType, $queryID, $orderBy, $pager);
-
-        /* Build the search form. */
-        $actionURL = $this->createLink('zahost', 'browseTemplate', "hostID=$hostID&browseType=bySearch&queryID=myQueryID");
-        $this->config->vmTemplate->search['actionURL'] = $actionURL;
-        $this->config->vmTemplate->search['queryID']   = $queryID;
-        $this->config->vmTemplate->search['onMenuBar'] = 'no';
-        $this->loadModel('search')->setSearchParams($this->config->vmTemplate->search);
-
-        $this->view->title        = $this->lang->zahost->vmTemplate->common;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->templateList = $templateList;
-        $this->view->hostID       = $hostID;
-        $this->view->pager        = $pager;
-        $this->view->param        = $param;
-        $this->view->orderBy      = $orderBy;
-        $this->view->browseType   = $browseType;
-
-        $this->display();
-    }
-
-    /**
-     * Check IP format and generate secret.
-     *
-     * @param  string $IP
-     * @access public
-     * @return void
-     */
-    public function ajaxCheckPublicIP($IP)
-    {
-        if(!validater::checkIP($IP)) return $this->send(array('result' => 'fail', 'message' => array('publicIP' => array(sprintf($this->lang->zahost->notice->ip, $this->lang->zahost->publicIP)))));
-
-        $secret = md5(time());
-        $registerCommand = sprintf($this->lang->zahost->notice->registerCommand, $this->server->server_addr, $this->server->server_port, $IP, $secret);
-
-        return $this->send(array('result' => 'success', 'message' => '', 'data' => array('registerCommand' => $registerCommand, 'secret' => $secret)));
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $statusList));
     }
 
     /**
@@ -302,13 +271,43 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function ajaxImageList($hostID, $templateID = 0)
+    public function ajaxImageList()
     {
-        $host      = $this->zahost->getById($hostID);
-        $imageList = $this->zahost->getImageList($host, $templateID);
-
+        $imageList = array('1' => 'Ubuntu20');
         if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => $imageList));
 
         return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage))));
+    }
+
+    /*
+     * Init host.
+     *
+     * @param  int      $hostID
+     * @return void
+     */
+    public function initHost($hostID)
+    {
+        $this->view->title        = $this->lang->zahost->init;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->hostID       = $hostID;
+        $this->view->host         = $this->zahost->getById($hostID);
+
+        $this->display();
+    }
+
+    /**
+     * Check service status by ajax.
+     *
+     * @param  int    $hostID
+     * @param  int    $templateID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetServiceStatus($hostID)
+    {
+        $host          = $this->zahost->getById($hostID);
+        $serviceStatus = $this->zahost->getServiceStatus($host);
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
     }
 }

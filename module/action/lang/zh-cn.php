@@ -112,8 +112,7 @@ $lang->action->objectTypes['testsuite']        = '套件';
 $lang->action->objectTypes['testtask']         = '测试单';
 $lang->action->objectTypes['testreport']       = '报告';
 $lang->action->objectTypes['zahost']           = '宿主机';
-$lang->action->objectTypes['vmtemplate']       = '虚拟机模板';
-$lang->action->objectTypes['executionnode']    = '执行节点';
+$lang->action->objectTypes['zanode']           = '执行节点';
 $lang->action->objectTypes['doc']              = '文档';
 $lang->action->objectTypes['api']              = '接口';
 $lang->action->objectTypes['doclib']           = '文档库';
@@ -642,13 +641,11 @@ $lang->action->dynamicAction->caselib['hidden']    = '隐藏用例库';
 
 $lang->action->dynamicAction->zahost['created'] = '创建宿主机';
 
-$lang->action->dynamicAction->vmtemplate['created'] = '创建虚拟机模板';
-
-$lang->action->dynamicAction->executionnode['created'] = '创建执行节点';
-$lang->action->dynamicAction->executionnode['suspend'] = '暂停执行节点';
-$lang->action->dynamicAction->executionnode['resume']  = '恢复执行节点';
-$lang->action->dynamicAction->executionnode['reboot']  = '重启执行节点';
-$lang->action->dynamicAction->executionnode['destroy'] = '销毁执行节点';
+$lang->action->dynamicAction->zanode['created'] = '创建执行节点';
+$lang->action->dynamicAction->zanode['suspend'] = '暂停执行节点';
+$lang->action->dynamicAction->zanode['resume']  = '恢复执行节点';
+$lang->action->dynamicAction->zanode['reboot']  = '重启执行节点';
+$lang->action->dynamicAction->zanode['destroy'] = '销毁执行节点';
 
 $lang->action->dynamicAction->doclib['created'] = '创建文档库';
 $lang->action->dynamicAction->doclib['edited']  = '编辑文档库';
