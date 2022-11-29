@@ -365,19 +365,22 @@ class productplanModel extends model
         $planGroup   = array();
         foreach($plans as $plan)
         {
-            if(!isset($planGroup[$plan->product][$plan->branch])) $planGroup[$plan->product][$plan->branch] = array('' => '');
-
-            if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue;
-
-            if($field == 'name')
+            foreach(explode(',', $plan->branch) as $branch)
             {
-                if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
-                $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
-                if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
-            }
-            else
-            {
-                $planGroup[$plan->product][$plan->branch][$plan->id] = $plan;
+                if(!isset($planGroup[$plan->product][$branch])) $planGroup[$plan->product][$branch] = array('' => '');
+
+                if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue 2;
+
+                if($field == 'name')
+                {
+                    if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
+                    $planGroup[$plan->product][$branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+                    if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+                }
+                else
+                {
+                    $planGroup[$plan->product][$branch][$plan->id] = $plan;
+                }
             }
         }
         return $planGroup;
