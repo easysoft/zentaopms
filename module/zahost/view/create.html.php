@@ -82,7 +82,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
       </div>
       <div class="modal-body">
         <p><i class="icon-check-circle icon"></i><?php echo $lang->zahost->createSuccessNotice;?></p>
