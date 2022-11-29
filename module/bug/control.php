@@ -2316,21 +2316,6 @@ class bug extends control
     }
 
     /**
-     * AJAX: get a project by execution id.
-     *
-     * @param  string $executionID
-     * @access public
-     * @return string
-     */
-    public function ajaxGetProjectByExecutionID($executionID)
-    {
-        $execution    = $this->loadModel('execution')->getByID($executionID);
-        $projectPairs = $this->loadModel('project')->getPairsByIdList($execution->project);
-
-        return print(html::select('project', $projectPairs, array_keys($projectPairs), 'class="form-control"'));
-    }
-
-    /**
      * AJAX: get actions of a bug. for web app.
      *
      * @param  int    $bugID

@@ -471,12 +471,12 @@ function loadExecutionRelated(executionID)
 
     if(executionID)
     {
+        if(currentProjectID == 0) loadProjectByExecutionID(executionID);
         loadExecutionTasks(executionID);
         loadExecutionStories(executionID);
         loadExecutionBuilds(executionID);
         loadAssignedTo(executionID, $('#assignedTo').val());
         loadTestTasks($('#product').val(), executionID);
-        if(currentProjectID ==0) loadProjectByExecutionID(executionID);
     }
     else
     {
@@ -507,19 +507,32 @@ function loadExecutionRelated(executionID)
  */
 function loadProjectByExecutionID(executionID)
 {
-    link     = createLink('bug', 'ajaxGetProjectByExecutionID', 'executionID=' + executionID);
-    required = $('#project_chosen').hasClass('required');
+    link      = createLink('project', 'ajaxGetPairsByExecution', 'executionID=' + executionID, 'json');
+    required  = $('#project_chosen').hasClass('required');
+    productID = $('#product').val();
 
     $.post(link, function(data)
     {
-        if(!data) data = '<select id="project" name="project" class="form-control"></select>';
-        $('#project').replaceWith(data);
+        var originProject = $('#project').html();
+
+        if($('#project').find('option[value="' + data.id + '"]').length > 0)
+        {
+            $('#project').find('option[value="' + data.id + '"]').attr('selected', 'selected');
+            originProject = $('#project').html();
+            $('#project').replaceWith('<select id="project" name="project" class="form-control" onchange="loadProductExecutions(' + productID + ', this.value)">' + originProject + '</select>');
+        }
+        else
+        {
+            var newProject = '<option value="' + data.id + '" data-keys="' + data.namePinyin + '" selected="selected">' + data.name + '</option>';
+            $('#project').replaceWith('<select id="project" name="project" class="form-control" onchange="loadProductExecutions(' + productID + ', this.value)">' + originProject + newProject+ '</select>');
+        }
+
         $('#project_chosen').remove();
         $('#project').next('.picker').remove();
-        $("#project").chosen();
+        $('#project').chosen();
 
         if(required) $('#project_chosen').addClass('required');
-    })
+    }, 'json')
 }
 
 /**
