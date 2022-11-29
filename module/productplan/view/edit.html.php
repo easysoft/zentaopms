@@ -33,7 +33,7 @@
           <?php if($product->type != 'normal' and $plan->parent != '-1'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch', $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control'");?></td><td></td><td></td>
+            <td><?php echo html::select('branch[]', $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control chosen' multiple");?></td><td></td><td></td>
           </tr>
           <?php endif;?>
           <?php endif;?>

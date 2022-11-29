@@ -38,7 +38,7 @@
           <?php if($product->type != 'normal'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch', $branches, $branch, "class='form-control chosen'");?></td><td></td><td></td>
+            <td><?php echo html::select('branch[]', $branches, '', "class='form-control chosen' multiple required");?></td><td></td><td></td>
           </tr>
           <?php endif;?>
           <?php endif;?>
@@ -50,7 +50,7 @@
           <?php if(!$parent):?>
           <tr>
             <th><?php echo $lang->productplan->parent;?></th>
-            <td><?php echo html::select('parent', array('0' => '') + $parentPlanPairs, '', "class='form-control chosen'");?>
+            <td><?php echo html::select('parent', array(0 => '') + $parentPlanPairs, 0, "class='form-control chosen'");?>
           </tr>
           <?php endif;?>
           <tr>

@@ -84,7 +84,7 @@ class productplan extends control
         }
 
         $this->commonAction($productID, $branchID);
-        $lastPlan = $this->productplan->getLast($productID, $branchID, $parent);
+        $lastPlan = $this->productplan->getLast($productID, '', $parent);
         $product  = $this->loadModel('product')->getById($productID);
 
         if($lastPlan)
@@ -117,7 +117,7 @@ class productplan extends control
         $this->view->branches        = $branchPairs;
         $this->view->defaultBranch   = $defaultBranch;
         $this->view->parent          = $parent;
-        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branchID, 'done,closed');
+        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($productID, '', 'done,closed');
         $this->display();
     }
 
@@ -973,6 +973,6 @@ class productplan extends control
     public function ajaxGetTopPlan($productID, $branch = 0)
     {
         $parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branch);
-        return print(html::select('parent', array('0' => '') + $parentPlanPairs, '', 'class="form-control"'));
+        return print(html::select('parent', array(0 => '') + $parentPlanPairs, 0, 'class="form-control"'));
     }
 }

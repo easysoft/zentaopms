@@ -52,15 +52,28 @@ class productplanModel extends model
      * @access public
      * @return object
      */
-    public function getLast($productID, $branch = 0, $parent = 0)
+    public function getLast($productID, $branch = '', $parent = 0)
     {
+        $branchQuery = '';
+        if($branch !== '')
+        {
+            $branchQuery .= '(';
+            $branchCount = count(explode(',', $branch));
+            foreach(explode(',', $branch) as $index => $branchID)
+            {
+                $branchQuery .= "CONCAT(',', branch, ',') LIKE '%,$branchID,%'";
+                if($index < $branchCount - 1) $branchQuery .= ' AND ';
+            }
+            $branchQuery .= ')';
+        }
+
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->beginIF($parent <= 0)->andWhere('parent')->le((int)$parent)->fi()
             ->beginIF($parent > 0)->andWhere('parent')->eq((int)$parent)->fi()
             ->andWhere('product')->eq((int)$productID)
             ->andWhere('end')->ne($this->config->productplan->future)
-            ->andWhere('branch')->eq($branch)
+            ->beginIF($branch !== '' and !empty($branchQuery))->andWhere($branchQuery)->fi()
             ->orderBy('end desc')
             ->limit(1)
             ->fetch();
@@ -216,9 +229,22 @@ class productplanModel extends model
      */
     public function getTopPlanPairs($productID, $branch = '', $exclude = '')
     {
+        $branchQuery = '';
+        if($branch !== '')
+        {
+            $branchQuery .= '(';
+            $branchCount = count(explode(',', $branch));
+            foreach(explode(',', $branch) as $index => $branchID)
+            {
+                $branchQuery .= "CONCAT(',', branch, ',') LIKE '%,$branchID,%'";
+                if($index < $branchCount - 1) $branchQuery .= ' AND ';
+            }
+            $branchQuery .= ')';
+        }
+
         $planPairs = $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
-            ->beginIF($branch !== '')->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($branch !== '' and !empty($branchQuery))->andWhere($branchQuery)->fi()
             ->andWhere('parent')->le(0)
             ->andWhere('deleted')->eq(0)
             ->beginIF($exclude)->andWhere('status')->notin($exclude)
@@ -450,6 +476,8 @@ class productplanModel extends model
             ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
+            ->setDefault('branch', 0)
+            ->join('branch', ',')
             ->remove('delta,uid,future')
             ->get();
 
@@ -466,6 +494,12 @@ class productplanModel extends model
             }
         }
 
+        $product = $this->loadModel('product')->getByID($plan->product);
+        if($product->type != 'normal' and empty($plan->branch))
+        {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+        }
         if(!$this->post->future and strpos($this->config->productplan->create->requiredFields, 'begin') !== false and empty($_POST['begin']))
         {
             dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
@@ -477,8 +511,7 @@ class productplanModel extends model
         if(dao::isError()) return false;
 
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], $this->post->uid);
-        $this->dao->insert(TABLE_PRODUCTPLAN)
-            ->data($plan)
+        $this->dao->insert(TABLE_PRODUCTPLAN)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
             ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
