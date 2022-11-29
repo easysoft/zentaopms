@@ -133,14 +133,14 @@ class projectrelease extends control
         $builds         = $this->build->getBuildPairs($this->view->product->id, $this->view->branch, 'notrunk,withbranch|hasproject', $projectID, 'project');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
-        unset($builds['trunk']);
 
-        $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
-        $this->view->projectID   = $projectID;
-        $this->view->builds      = $builds;
-        $this->view->lastRelease = $this->projectrelease->getLast($projectID);
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->confirmLink = $this->lang->release->confirmLink;
+        $this->view->title          = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->projectID      = $projectID;
+        $this->view->builds         = $builds;
+        $this->view->lastRelease    = $this->projectrelease->getLast($projectID);
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->confirmLink    = $this->lang->release->confirmLink;
+        $this->view->notEmptyBuilds = $this->build->getNotEmptyBuilds(array_keys($builds));
         $this->display();
     }
 
@@ -811,8 +811,10 @@ class projectrelease extends control
         $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk,withbranch,hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
-        unset($builds['trunk']);
 
-        return print(html::select('build[]', $builds, '', "class='form-control chosen' multiple"));
+        /* Get the builds of the linked stories or bugs. */
+        $notEmptyBuilds = $this->build->getNotEmptyBuilds(array_keys($builds));
+
+        return print(html::select('build[]', $builds, '', "class='form-control chosen' multiple data-notemptybuilds='" . join(',', $notEmptyBuilds) . "'"));
     }
 }

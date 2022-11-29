@@ -150,6 +150,20 @@ class buildTest
     }
 
     /**
+     * Test for getNotEmptyBuilds method
+     *
+     * @param  array    $buildIdList
+     * @access public
+     * @return string
+     */
+    public function getNotEmptyBuildsTest($buildIdList)
+    {
+        $notEmptyBuilds = $this->objectModel->getNotEmptyBuilds($buildIdList);
+        sort($notEmptyBuilds);
+        return empty($notEmptyBuilds) ? 'null' : join(',', $notEmptyBuilds);
+    }
+
+    /**
      * Function getLast test by build
      *
      * @param  string $executionID

@@ -86,27 +86,6 @@ class release extends control
         $releasedBuilds = $this->release->getReleasedBuilds($productID, $branch);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
-        /* Get the builds of the linked stories or bugs. */
-        $notEmptyBuilds = array();
-        $buildList      = $this->build->getByList(array_keys($builds));
-        foreach($buildList as $build)
-        {
-            if(!$build->execution && !empty($build->builds))
-            {
-                $childBuilds = $this->build->getByList($build->builds);
-                foreach($childBuilds as $childBuild)
-                {
-                    $childBuild->stories = trim($childBuild->stories, ',');
-                    $childBuild->bugs    = trim($childBuild->bugs, ',');
-
-                    if($childBuild->stories) $build->stories .= ',' . $childBuild->stories;
-                    if($childBuild->bugs)    $build->bugs    .= ',' . $childBuild->bugs;
-                }
-            }
-
-            if(!empty($build->stories) or !empty($build->bugs)) $notEmptyBuilds[$build->id] = $build->id;
-        }
-
         $this->commonAction($productID, $branch);
         $this->view->title          = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]     = $this->lang->release->create;
@@ -114,7 +93,7 @@ class release extends control
         $this->view->builds         = $builds;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease    = $this->release->getLast($productID, $branch);
-        $this->view->notEmptyBuilds = $notEmptyBuilds;
+        $this->view->notEmptyBuilds = $this->build->getNotEmptyBuilds(array_keys($builds));
 
         $this->display();
     }
