@@ -4121,9 +4121,18 @@ class execution extends control
         $count = 0;
         if(!empty($planStory))
         {
+            $projectProducts = $this->loadModel('project')->getBranchesByProject($executionID);
+            $projectProducts = zget($projectProducts, $productID, array());
+
             foreach($planStory as $id => $story)
             {
                 if($story->status == 'draft' or $story->status == 'reviewing')
+                {
+                    $count++;
+                    unset($planStory[$id]);
+                    continue;
+                }
+                if(!empty($projectProducts) and !isset($projectProducts[$story->branch]))
                 {
                     $count++;
                     unset($planStory[$id]);

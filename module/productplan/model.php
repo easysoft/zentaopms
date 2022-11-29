@@ -240,17 +240,19 @@ class productplanModel extends model
      */
     public function getPairs($product = 0, $branch = '', $param = '', $skipParent = false)
     {
-        $date = date('Y-m-d');
-        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName,t3.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $date  = date('Y-m-d');
+        $query = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName,t3.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t2.id=t1.branch')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
             ->where('t1.product')->in($product)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($branch !== '' and $branch != 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
+            ->beginIF($branch !== '' and $branch != 'all')->andWhere("FIND_IN_SET('0', t1.branch)", true);
+            foreach(explode(',', $branch) as $branchIten) $query->orWhere("FIND_IN_SET('$branchIten', t1.branch)");
+        $query->markRight(1)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
-            ->orderBy('t1.begin desc')
-            ->fetchAll('id');
+            ->orderBy('t1.begin desc');
+        $plans = $query->fetchAll('id');
 
         $plans     = $this->reorder4Children($plans);
         $planPairs = array();
@@ -280,14 +282,16 @@ class productplanModel extends model
         $date   = date('Y-m-d');
         $param  = strtolower($param);
         $branch = strpos($param, 'withmainplan') !== false ? "0,$branch" : $branch;
-        $plans  = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
+        $query  = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF($branch !== 'all' and $branch !== '')->andWhere("branch")->in($branch)->fi()
-            ->orderBy('begin desc')
-            ->fetchAll('id');
+            ->beginIF($branch !== 'all' and $branch !== '')->andWhere("FIND_IN_SET('0', branch)", true);
+            foreach(explode(',', $branch) as $branchIten) $query->orWhere("FIND_IN_SET('$branchIten', branch)");
+        $query->markRight(1)->fi()
+            ->orderBy('begin desc');
+        $plans  = $query->fetchAll('id');
 
         $plans       = $this->reorder4Children($plans);
         $planPairs   = array();

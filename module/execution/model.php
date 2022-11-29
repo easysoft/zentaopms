@@ -4625,13 +4625,15 @@ class executionModel extends model
         {
             foreach($branches as $branchID => $branchName) $branchIdList[$branchID] = $branchID;
         }
-
-        $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
+        $query = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in(array_keys($products))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('branch')->in($branchIdList)->fi()
-            ->orderBy('begin desc')
-            ->fetchAll('id');
+            ->andWhere('deleted')->eq(0)->andWhere("FIND_IN_SET('', branch)", true);
+            foreach($branchIdList as $branchID)
+            {
+                $query->orWhere("FIND_IN_SET('$branchID', branch)");
+            }
+        $query->markRight(1)->orderBy('begin desc');
+        $plans = $query->fetchAll('id');
 
         $plans        = $this->productplan->reorder4Children($plans);
         $productPlans = array();

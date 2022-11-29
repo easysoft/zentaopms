@@ -1973,6 +1973,22 @@ class baseSQL
     }
 
     /**
+     * 创建FIND_IN_SET部分。
+     * Create the find_in_set by part.
+     *
+     * @param  string $string
+     * @param  string $field
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function findInSet($string, $field)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= "FIND_IN_SET(" . $this->quote($string) . ", $field)";
+        return $this;
+    }
+
+    /**
      * 创建ORDER BY部分。
      * Create the order by part.
      *
