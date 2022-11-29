@@ -96,10 +96,15 @@
         <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary'); ?>
         <div class='divider'></div>
         <?php
-        if (empty($zanode->deleted)) {
-          if(in_array($zanode->status, array("suspend", "")))
-          common::printLink('zanode', 'suspend', "id={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->suspend, '', "title='{$lang->zanode->suspend}' class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'");
-          common::printLink('zanode', 'resume', "id={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->resume, '', "title='{$lang->zanode->resume}' class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'");
+        if (empty($zanode->deleted))
+        {
+          if($zanode->status == "running"){
+            common::printLink('zanode', 'suspend', "id={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->suspend, '', "title='{$lang->zanode->suspend}' class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'");
+          }
+          elseif($zanode->status == "suspend")
+          {
+            common::printLink('zanode', 'resume', "id={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->resume, '', "title='{$lang->zanode->resume}' class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'");
+          }
           common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '', "title='{$lang->zanode->getVNC}' class='btn iframe'", '', true);
         }
         ?>
