@@ -4126,13 +4126,7 @@ class execution extends control
 
             foreach($planStory as $id => $story)
             {
-                if($story->status == 'draft' or $story->status == 'reviewing')
-                {
-                    $count++;
-                    unset($planStory[$id]);
-                    continue;
-                }
-                if(!empty($projectProducts) and !isset($projectProducts[$story->branch]))
+                if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($projectProducts) and !isset($projectProducts[$story->branch])))
                 {
                     $count++;
                     unset($planStory[$id]);
