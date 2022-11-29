@@ -256,6 +256,8 @@ define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 define('TABLE_ZAHOST',        '`' . $config->db->prefix . 'host`');
 define('TABLE_IMAGE',         '`' . $config->db->prefix . 'image`');
 
+if(!defined('TABLE_ASSET'))  define('TABLE_ASSET', '`' . $config->db->prefix . 'asset`');
+
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
 define('TABLE_EXPECT',        '`' . $config->db->prefix . 'expect`');

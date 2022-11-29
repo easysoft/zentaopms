@@ -48,3 +48,4 @@ $config->zahost->search['params']['editedDate']      = array('operator' => '=', 
 $config->zahost->editor = new stdclass();
 $config->zahost->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->zahost->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+
