@@ -46,7 +46,10 @@ class release extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->commonAction($productID, $branch);
-        $this->session->set('releaseList', $this->app->getURI(true), 'product');
+
+        $uri = $this->app->getURI(true);
+        $this->session->set('releaseList', $uri, 'product');
+        $this->session->set('buildList', $uri);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
@@ -167,8 +170,10 @@ class release extends control
         $release   = $this->release->getByID($releaseID, true);
         if(!$release) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
-        if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
-        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $uri = $this->app->getURI(true);
+        if(!empty($release->build)) $this->session->set('buildList', $uri);
+        if($type == 'story') $this->session->set('storyList', $uri, 'product');
+        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $uri, 'qa');
 
         $this->loadModel('story');
         $this->loadModel('bug');
