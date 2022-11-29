@@ -233,6 +233,7 @@ $lang->action->desc->reboot               = '$date, the execution node is reboot
 $lang->action->desc->destroy              = '$date, the execution node is destroyed by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
 $lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the sprints of the project from the $extra.' . "\n";
+$lang->action->desc->getvnc               = '$date, Remote control <strong>$extra</strong> by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
