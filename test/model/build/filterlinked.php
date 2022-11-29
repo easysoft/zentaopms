@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 buildModel->getNotEmptyBuilds();
+title=测试 buildModel->filterLinked();
 cid=1
 pid=1
 
@@ -61,10 +61,10 @@ $build->objectModel->dao->replace(TABLE_BUILD)->data($buildData)->exec();
 $buildId4 = $buildData->id;
 
 
-r($build->getNotEmptyBuildsTest(array()))                     && p() && e('null');    //不传任何数据
-r($build->getNotEmptyBuildsTest(array($buildId1)))            && p() && e('null');    //迭代版本未关联需求和Bug
-r($build->getNotEmptyBuildsTest(array($buildId2)))            && p() && e('101');     //迭代版本关联需求和Bug
-r($build->getNotEmptyBuildsTest(array($buildId3)))            && p() && e('102');     //项目版本关联版本关联需求和Bug
-r($build->getNotEmptyBuildsTest(array($buildId4)))            && p() && e('null');    //项目版本关联版本未关联需求和Bug
-r($build->getNotEmptyBuildsTest(array($buildId1, $buildId2))) && p() && e('101');     //版本列表中关联需求和Bug
-r($build->getNotEmptyBuildsTest(array($buildId3, $buildId2))) && p() && e('101,102'); //版本列表中混合项目版本和迭代版本
+r($build->filterLinkedTest(array()))                     && p() && e('null');    //不传任何数据
+r($build->filterLinkedTest(array($buildId1)))            && p() && e('null');    //迭代版本未关联需求和Bug
+r($build->filterLinkedTest(array($buildId2)))            && p() && e('101');     //迭代版本关联需求和Bug
+r($build->filterLinkedTest(array($buildId3)))            && p() && e('102');     //项目版本关联版本关联需求和Bug
+r($build->filterLinkedTest(array($buildId4)))            && p() && e('null');    //项目版本关联版本未关联需求和Bug
+r($build->filterLinkedTest(array($buildId1, $buildId2))) && p() && e('101');     //版本列表中关联需求和Bug
+r($build->filterLinkedTest(array($buildId3, $buildId2))) && p() && e('101,102'); //版本列表中混合项目版本和迭代版本

@@ -143,7 +143,7 @@ class projectrelease extends control
         $this->view->lastRelease    = $this->projectrelease->getLast($projectID);
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
         $this->view->confirmLink    = $this->lang->release->confirmLink;
-        $this->view->notEmptyBuilds = $this->build->getNotEmptyBuilds(array_keys($builds));
+        $this->view->notEmptyBuilds = $this->build->filterLinked(array_keys($builds));
         $this->display();
     }
 
@@ -818,7 +818,7 @@ class projectrelease extends control
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
         /* Get the builds of the linked stories or bugs. */
-        $notEmptyBuilds = $this->build->getNotEmptyBuilds(array_keys($builds));
+        $notEmptyBuilds = $this->build->filterLinked(array_keys($builds));
 
         return print(html::select('build[]', $builds, '', "class='form-control chosen' multiple data-notemptybuilds='" . join(',', $notEmptyBuilds) . "'"));
     }

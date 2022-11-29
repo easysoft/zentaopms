@@ -150,15 +150,15 @@ class buildTest
     }
 
     /**
-     * Test for getNotEmptyBuilds method
+     * Test for filterLinked method
      *
      * @param  array    $buildIdList
      * @access public
      * @return string
      */
-    public function getNotEmptyBuildsTest($buildIdList)
+    public function filterLinkedTest($buildIdList)
     {
-        $notEmptyBuilds = $this->objectModel->getNotEmptyBuilds($buildIdList);
+        $notEmptyBuilds = $this->objectModel->filterLinked($buildIdList);
         sort($notEmptyBuilds);
         return empty($notEmptyBuilds) ? 'null' : join(',', $notEmptyBuilds);
     }

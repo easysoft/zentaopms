@@ -96,7 +96,7 @@ class release extends control
         $this->view->builds         = $builds;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease    = $this->release->getLast($productID, $branch);
-        $this->view->notEmptyBuilds = $this->build->getNotEmptyBuilds(array_keys($builds));
+        $this->view->notEmptyBuilds = $this->build->filterLinked(array_keys($builds));
 
         $this->display();
     }

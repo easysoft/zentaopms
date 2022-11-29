@@ -182,16 +182,16 @@ class buildModel extends model
     }
 
     /**
-     * Get link stories or bugs builds.
+     * Filter linked stories or bugs builds.
      *
      * @param  array $buildIdList
      * @access public
      * @return array
      */
-    public function getNotEmptyBuilds($buildIdList)
+    public function filterLinked($buildIdList)
     {
-        $notEmptyBuilds = array();
-        $buildList      = $this->getByList($buildIdList);
+        $linkeds   = array();
+        $buildList = $this->getByList($buildIdList);
         foreach($buildList as $build)
         {
             if(!$build->execution && !empty($build->builds))
@@ -207,10 +207,10 @@ class buildModel extends model
                 }
             }
 
-            if(!empty($build->stories) or !empty($build->bugs)) $notEmptyBuilds[$build->id] = $build->id;
+            if(!empty($build->stories) or !empty($build->bugs)) $linkeds[$build->id] = $build->id;
         }
 
-        return $notEmptyBuilds;
+        return $linkeds;
     }
 
     /**
