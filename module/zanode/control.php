@@ -210,6 +210,25 @@ class zanode extends control
     }
 
     /**
+     * Bring up novmc management view.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function getVNC($nodeID)
+    {
+        $vnc = $this->zanode->getVncUrl($nodeID);
+
+        /* Add action log. */
+        if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $nodeID, 'getVNC');
+
+        $this->view->host  = $vnc->hostIP;
+        $this->view->token = $vnc->token;
+        $this->display();
+    }
+
+    /**
      * Ajax get template pairs by api.
      *
      * @param  int    $hostID
