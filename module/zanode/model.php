@@ -24,7 +24,7 @@ class zanodemodel extends model
     const STATUS_DESTROY_FAIL = 'vim_destroy_fail';
 
     const KVM_CREATE_PATH = '/api/v1/kvm/create';
-    const KVM_TOKEN_PATH  = '/api/v1/vnc/getToken';
+    const KVM_TOKEN_PATH  = '/api/v1/virtual/getVncToken';
 
 
     /**
@@ -425,15 +425,15 @@ class zanodemodel extends model
         $host = $this->getHostByID($vm->parent);
         if(empty($host)) return false;
 
-        $agnetUrl = 'http://' . $host->extranet . ':' . $host->agentPort . static::KVM_TOKEN_PATH;
-        $result   = json_decode(commonModel::http("$agnetUrl?port={$vm->vnc}"));
+        $agnetUrl = 'http://' . $host->extranet . ':8086' . static::KVM_TOKEN_PATH;
+        $result   = json_decode(commonModel::http("$agnetUrl?port={$vm->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array(), 'json'));
 
         if(empty($result) or $result->code != 'success') return false;
 
         $returnData = new stdClass();
         $returnData->hostIP    = $host->extranet;
         $returnData->agentPort = $host->agentPort;
-        $returnData->vnc   = $vm->vnc;
+        $returnData->vnc       = $vm->vnc;
         $returnData->token     = $result->data->token;
         return $returnData;
     }
