@@ -69,7 +69,10 @@ class projectrelease extends control
      */
     public function browse($projectID = 0, $executionID = 0, $type = 'all', $orderBy = 't1.date_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->session->set('releaseList', $this->app->getURI(true), 'project');
+        $uri = $this->app->getURI(true);
+        $this->session->set('releaseList', $uri, 'project');
+        $this->session->set('buildList', $uri);
+
         $project   = $this->project->getById($projectID);
         $execution = $this->loadModel('execution')->getById($executionID);
 
@@ -226,9 +229,6 @@ class projectrelease extends control
      */
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $this->session->set('buildList', $this->app->getURI(true), 'execution');
-        $this->session->set('storyList', $this->app->getURI(true), $this->app->tab);
-
         $this->loadModel('story');
         $this->loadModel('bug');
 
@@ -242,6 +242,11 @@ class projectrelease extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate('back'));
         }
+
+        $uri = $this->app->getURI(true);
+        if($release->build)  $this->session->set('buildList', $uri);
+        if($type == 'story') $this->session->set('storyList', $uri, $this->app->tab);
+        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $uri, $this->app->tab);
 
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
