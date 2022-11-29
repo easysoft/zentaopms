@@ -667,7 +667,6 @@ class fileModel extends model
     public function pasteImage($data, $uid = '', $safe = false)
     {
         if(empty($data)) return '';
-        $data = str_replace('\"', '"', $data);
 
         $dataLength = strlen($data);
         if(ini_get('pcre.backtrack_limit') < $dataLength) ini_set('pcre.backtrack_limit', $dataLength);
@@ -676,7 +675,8 @@ class fileModel extends model
         {
             foreach($out[3] as $key => $base64Image)
             {
-                $extension = strtolower($out[2][$key]);
+                $base64Image = str_replace('\"', '"', $base64Image);
+                $extension   = strtolower($out[2][$key]);
                 if(!in_array($extension, $this->config->file->imageExtensions)) helper::end();
                 $imageData = base64_decode($base64Image);
 
