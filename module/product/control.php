@@ -271,13 +271,30 @@ class product extends control
         /* Display status of branch. */
         $branchOption    = array();
         $branchTagOption = array();
-        if($product and $product->type != 'normal')
+        if(!$product and $isProjectStory)
         {
-            $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
-            foreach($branches as $branchInfo)
+            /* Get branch display under multiple products. */
+            foreach($projectProducts as $projectProduct)
             {
-                $branchOption[$branchInfo->id]    = $branchInfo->name;
-                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                if($projectProduct and $projectProduct->type != 'normal')
+                {
+                    $branches = $this->loadModel('branch')->getList($projectProduct->id, $projectID, 'all');
+                    foreach($branches as $branchInfo) $branchOptions[$projectProduct->id][$branchInfo->id] = $branchInfo->name;
+                }
+            }
+
+            $this->view->branchOptions = $branchOptions;
+        }
+        else
+        {
+            if($product and $product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+                foreach($branches as $branchInfo)
+                {
+                    $branchOption[$branchInfo->id]    = $branchInfo->name;
+                    $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                }
             }
         }
 
