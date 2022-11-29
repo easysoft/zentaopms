@@ -182,6 +182,38 @@ class buildModel extends model
     }
 
     /**
+     * Get link stories or bugs builds.
+     *
+     * @param  array $buildIdList
+     * @access public
+     * @return array
+     */
+    public function getNotEmptyBuilds($buildIdList)
+    {
+        $notEmptyBuilds = array();
+        $buildList      = $this->getByList($buildIdList);
+        foreach($buildList as $build)
+        {
+            if(!$build->execution && !empty($build->builds))
+            {
+                $childBuilds = $this->getByList($build->builds);
+                foreach($childBuilds as $childBuild)
+                {
+                    $childBuild->stories = trim($childBuild->stories, ',');
+                    $childBuild->bugs    = trim($childBuild->bugs, ',');
+
+                    if($childBuild->stories) $build->stories .= ',' . $childBuild->stories;
+                    if($childBuild->bugs)    $build->bugs    .= ',' . $childBuild->bugs;
+                }
+            }
+
+            if(!empty($build->stories) or !empty($build->bugs)) $notEmptyBuilds[$build->id] = $build->id;
+        }
+
+        return $notEmptyBuilds;
+    }
+
+    /**
      * Get story builds.
      *
      * @param  int    $storyID
