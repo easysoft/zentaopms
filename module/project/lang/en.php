@@ -134,6 +134,7 @@ $lang->project->realBeganAB        = 'Actual Begin';
 $lang->project->realEndAB          = 'Actual End';
 $lang->project->realBegan          = 'Actual Begin';
 $lang->project->realEnd            = 'Actual End';
+$lang->project->division           = 'Stage Type';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';
@@ -181,13 +182,19 @@ $lang->project->kanban             = 'Kanban';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
-$lang->project->projectTypeList[1] = 'Has Product';
-$lang->project->projectTypeList[0] = 'No Product';
+$lang->project->projectTypeList[1] = 'Product-based';
+$lang->project->projectTypeList[0] = 'Non-product-based';
 
 /* Project Kanban. */
 $lang->project->typeList = array();
 $lang->project->typeList['my']    = 'Projects Ownedbyme';
 $lang->project->typeList['other'] = 'Other Projects';
+
+$lang->project->divisionList['0'] = 'Create by project';
+$lang->project->divisionList['1'] = 'Create by product';
+
+$lang->project->divisionSwitchList['0'] = 'Close';
+$lang->project->divisionSwitchList['1'] = "Open";
 
 $lang->project->waitProjects    = 'Waiting Projects';
 $lang->project->doingProjects   = 'Ongoing Projects';
@@ -204,6 +211,7 @@ $lang->project->changeProgram          = '%s > Change project';
 $lang->project->changeProgramTip       = 'Once the program is edited, the product that is linked to this program will be changed. Do you want to edit it?';
 $lang->project->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->project->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
+$lang->project->noticeDivsion          = "The current project is a single stage, click [Open] to change to multiple stages, each stage is only associated with one product.";
 $lang->project->linkStoryByPlanTips    = "This action will associate all {$lang->SRCommon} under the selected plan to this project";
 $lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
 $lang->project->unlinkExecutionMember  = "The user participated in %s executions such as %s%s. Do you want to remove the user from those executions as well? (The data related to this user will not be deleted.)";
@@ -360,6 +368,7 @@ $lang->project->begigLetterExecution = 'The start date of project should be ≤ 
 $lang->project->endGreateExecution   = 'The finish date of the project should be ≥ the maximum finish date of the execution: %s.';
 $lang->project->childLongTime        = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
 $lang->project->confirmUnlinkMember  = "Do you want to remove this user from project?";
+$lang->project->divisionTips         = "Created by project as a single set of stages, and the stage is associated with all products; created by product as multiple sets of stages, each set of stages is associated with a product";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";

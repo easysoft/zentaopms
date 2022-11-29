@@ -34,6 +34,7 @@ class backupModel extends model
     public function backFile($backupFile)
     {
         $zfile  = $this->app->loadClass('zfile');
+
         $return = new stdclass();
         $return->result = true;
         $return->error  = '';
@@ -42,10 +43,10 @@ class backupModel extends model
 
         $tmpLogFile = $this->getTmpLogFile($backupFile);
         $dataDir    = $this->app->getAppRoot() . 'www/data/';
-        $count      = $zfile->getCount($dataDir);
+        $count      = $zfile->getCount($dataDir, array('course'));
         file_put_contents($tmpLogFile, json_encode(array('allCount' => $count)));
 
-        $result = $zfile->copyDir($dataDir, $backupFile, $logLevel = false, $tmpLogFile);
+        $result = $zfile->copyDir($dataDir, $backupFile, $logLevel = false, $tmpLogFile, array('course'));
         $this->processSummary($backupFile, $result['count'], $result['size'], $result['errorFiles'], $count);
         unlink($tmpLogFile);
 

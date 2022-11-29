@@ -245,6 +245,7 @@ class testcase extends control
     {
         $groupBy   = empty($groupBy) ? 'story' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
+        $product   = $this->product->getByID($productID);
         if($branch === '') $branch = $this->cookie->preBranch;
 
         $this->app->loadLang('testtask');
@@ -253,7 +254,7 @@ class testcase extends control
         if($this->app->tab == 'project')
         {
             $products = array('0' => $this->lang->product->all) + $this->product->getProducts($this->session->project, 'all', '', false);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', "projectID=$projectID", $branch);
+            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', $projectID, $branch);
         }
 
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
@@ -294,7 +295,7 @@ class testcase extends control
         $this->view->suiteID     = 0;
         $this->view->moduleID    = 0;
         $this->view->branch      = $branch;
-        $this->view->product     = $this->product->getByID($productID);
+        $this->view->product     = $product;
         $this->display();
     }
 
@@ -321,16 +322,16 @@ class testcase extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->app->rawModule = 'qa';
-            $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', "projectID=$projectID", $branchID);
+            $product   = $this->product->getByID($productID);
+            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', $projectID, $branchID);
         }
         else
         {
             $products  = $this->product->getPairs();
             $productID = $this->product->saveState($productID, $products);
+            $product   = $this->product->getByID($productID);
             $this->loadModel('qa');
             $this->app->rawModule = 'testcase';
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
@@ -348,8 +349,6 @@ class testcase extends control
         $stories  = array_chunk($stories, $pager->recPerPage);
 
         $this->view->title      = $this->lang->story->zeroCase;
-        $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
-        $this->view->position[] = $this->lang->story->zeroCase;
 
         $this->view->stories    = empty($stories) ? $stories : $stories[$pageID - 1];
         $this->view->users      = $this->user->getPairs('noletter');
@@ -359,7 +358,7 @@ class testcase extends control
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';
-        $this->view->product    = $this->product->getByID($productID);
+        $this->view->product    = $product;
         $this->view->pager      = $pager;
         $this->display();
     }
@@ -840,7 +839,7 @@ class testcase extends control
         $this->view->caseModule = empty($case->module) ? '' : $this->tree->getById($case->module);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        $this->view->preAndNext = !isOnlybody() ? $this->loadModel('common')->getPreAndNextObject('testcase', $caseID) : '';
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
         $this->view->isLibCase  = $isLibCase;
         $this->view->caseFails  = $caseFails;

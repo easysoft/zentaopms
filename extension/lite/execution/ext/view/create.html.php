@@ -106,6 +106,7 @@
             <?php echo html::hidden("RD", '');?>
             <?php echo html::hidden("type", 'kanban');?>
             <?php echo html::hidden("vision", 'lite');?>
+            <?php echo html::hidden('project', $projectID);?>
           </td>
         </tr>
       </table>

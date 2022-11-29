@@ -346,7 +346,7 @@ class testcaseModel extends model
                 ->where('t1.project')->eq((int)$executionID)
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF(!empty($moduleID))->andWhere('t4.path')->like("%,$moduleID,%")->fi()
-                ->beginIF(!empty($productID))->andWhere('t2.branch')->eq($branchID)->fi()
+                ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t3.version > t2.storyVersion')
                 ->andWhere("t3.status")->eq('active')
@@ -362,7 +362,7 @@ class testcaseModel extends model
             ->beginIF($browseType != 'all' and $browseType != 'byModule')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF(!empty($moduleID))->andWhere('t3.path')->like("%,$moduleID,%")->fi()
-            ->beginIF(!empty($productID))->andWhere('t2.branch')->eq($branchID)->fi()
+            ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -2452,13 +2452,13 @@ class testcaseModel extends model
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody', false, "data-width='95%'");
-                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
+                    if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'importToLib', $params,                $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 else
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody iframe', false, "data-width='95%'");
-                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
+                    if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'importToLib', $params,                $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 if($case->caseFails > 0)
                 {
@@ -2632,5 +2632,22 @@ class testcaseModel extends model
             }
         }
         return $stepData;
+    }
+
+    /**
+     * Get modules for datatable.
+     *
+     * @param int $productID
+     * @access public
+     * @return void
+     */
+    public function getDatatableModules($productID)
+    {
+        $branches = $this->loadModel('branch')->getPairs($productID);
+        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'case', '');
+        if(count($branches) <= 1) return $modules;
+
+        foreach($branches as $branchID => $branchName) $modules += $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
+        return $modules;
     }
 }

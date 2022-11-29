@@ -2,6 +2,7 @@
 $lang->zanode->common          = 'Execution Node';
 $lang->zanode->browse          = 'Execution Node List';
 $lang->zanode->create          = 'Create Execution Node';
+$lang->zanode->editAction      = 'Edit Execution Node';
 $lang->zanode->view            = 'View Execution Node';
 $lang->zanode->suspend         = 'Suspend Execution Node';
 $lang->zanode->destroy         = 'Destroy Execution Node';
@@ -21,7 +22,7 @@ $lang->zanode->hostName        = 'Host Name';
 $lang->zanode->host            = $lang->zanode->hostName;
 $lang->zanode->extranet        = 'IP/Domain';
 $lang->zanode->osArch          = 'Arch';
-$lang->zanode->cpuCores         = 'CPU Cores';
+$lang->zanode->cpuCores        = 'CPU Cores';
 $lang->zanode->memory          = 'Memory Size';
 $lang->zanode->desc            = 'Description';
 $lang->zanode->diskSize        = 'Disk Size';
@@ -38,6 +39,7 @@ $lang->zanode->confirmShutdown = "Are you sure to shutdown the execution node？
 $lang->zanode->confirmSuspend  = "Are you sure to suspend the execution node？";
 $lang->zanode->confirmResume   = "Are you sure to resume the execution node？";
 $lang->zanode->actionSuccess   = 'Success';
+$lang->zanode->deleted         = "Deleted";
 
 $lang->zanode->notFoundAgent = 'No Agent service is found';
 $lang->zanode->createVmFail  = 'Failed to create a execution node';

@@ -62,6 +62,8 @@ $lang->programplan->hideCriticalPath = 'Hide Critical Path';
 $lang->programplan->showCriticalPath = 'Show Critical Path';
 $lang->programplan->delay            = 'Delay';
 $lang->programplan->delayDays        = 'Delay days';
+$lang->programplan->settingGantt     = 'Gantt Setting';
+$lang->programplan->viewSetting      = 'Setting';
 
 $lang->programplan->errorBegin       = "Project begin date: %s, begin date should be >= project begin date.";
 $lang->programplan->errorEnd         = "Project end date: %s, end date should be <= project end date.";

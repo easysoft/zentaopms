@@ -25,9 +25,10 @@ $encodePath = $this->repo->encodePath($entry);
 ?>
 <?php if(!isonlybody()):?>
 <div id="mainContent" class="main-row fade">
-  <?php $sideWidth = common::checkNotCN() ? '270' : '240';?>
-  <div class="side-col" style="width: <?php echo $sideWidth;?>px; padding-top: <?php echo isonlybody() ? 22 : 0;?>px;">
-    <div class="side-col file-tree" style="width: <?php echo $sideWidth;?>px;" data-min-width="<?php echo $sideWidth;?>">
+  <?php $sideWidth = common::checkNotCN() ? '260' : '230';?>
+  <div class="side-col" id="sidebar" style="width: <?php echo $sideWidth + 10;?>px;padding-top: <?php echo isonlybody() ? 22 : 0;?>px;">
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
+    <div class="cell file-tree" style="width: <?php echo $sideWidth;?>px;" data-min-width="<?php echo $sideWidth;?>">
       <div id="filesTree" class="cell load-indicator <?php if(isonlybody()) echo 'pull-left';?>">
         <div class='btn-group' id='sourceSwapper'>
           <button data-toggle='dropdown' type='button' class='btn btn-link repo-select text-ellipsis' title='<?php echo $branchID;?>'>

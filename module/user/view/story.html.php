@@ -62,10 +62,10 @@
       </thead>
       <tbody>
         <?php foreach($stories as $key => $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id", '', true);?>
         <tr class='text-left'>
-          <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
-          <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
+          <td><?php echo html::a($storyLink, sprintf('%03d', $story->id), '', "class='iframe'");?></td>
+          <td class='text-left nobr'><?php echo html::a($storyLink, $story->title, '', "class='iframe'");?></td>
           <td><span class='<?php echo "label-pri label-pri-{$story->pri} pri" . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <td><?php echo $story->productTitle;?></td>

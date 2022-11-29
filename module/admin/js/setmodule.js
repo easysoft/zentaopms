@@ -11,5 +11,13 @@ $(function()
         {
             $("input[name='" + name + "'][type=hidden]").val('0').attr('disabled', false);
         }
-    })
+    });
+    $('input[name=allChecker]').change(function()
+    {
+        $(this).closest('tr').find("input[name^='module']").prop('checked', $(this).prop('checked')).change();
+    });
+    $('#allChecker').change(function()
+    {
+        $('input[name=allChecker]').prop('checked', $(this).prop('checked')).change();
+    });
 })

@@ -13,7 +13,7 @@
             <td class='w-150px'><?php echo html::submitButton('', '', 'btn btn-primary');?></td>
           </tr>
           <tr>
-            <td class='text-left' colspan='2'><span class='label label-info'><?php echo $lang->port->importNotice;?></span></td>
+            <td class='text-left' colspan='2'><span class='label label-info'><?php echo $lang->transfer->importNotice;?></span></td>
           </tr>
         </table>
       </form>

@@ -144,7 +144,7 @@
         <tr class="<?php echo $hidden;?>">
           <th><?php echo $lang->execution->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="2">
-          <?php $class = $execution->grade == 2 ? "readonly='readonly'" : '';?>
+          <?php $class = ($execution->grade == 2 or $execution->type == 'stage') ? "disabled" : '';?>
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
@@ -160,12 +160,14 @@
               <?php $i++; ?>
               <?php endforeach;?>
               <?php endforeach;?>
+              <?php if($execution->type != 'stage'):?>
               <div class='col-sm-4'>
                 <div class="input-group">
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
                 </div>
               </div>
+              <?php endif;?>
             </div>
           </td>
         </tr>

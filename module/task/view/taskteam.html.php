@@ -48,6 +48,12 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     <?php if($memberDisabled) echo html::hidden("team[]", $member->account);?>
   </td>
   <td class='hourBox'>
+    <?php if($app->rawMethod == 'create'):?>
+    <div class='input-group estimateBox'>
+      <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
+      <span class='input-group-addon'><?php echo 'h';?></span>
+    </div>
+    <?php else:?>
     <div class='input-group'>
       <div class="input-control has-icon-right">
         <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->estimate}'" . ($hourDisabled ? ' readonly' : ''))?>
@@ -62,11 +68,12 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
         <label class="input-control-icon-right">h</label>
       </div>
     </div>
+    <?php endif;?>
   </td>
   <td class='w-100px sort-handler'>
     <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
     <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
-    <?php if(isset($task->mode) and $task->mode == 'linear'):?>
+    <?php if(!empty($task->mode) and $task->mode == 'linear'):?>
     <button type="button" <?php echo $sortDisabled   ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
     <?php endif;?>
   </td>
@@ -84,7 +91,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     <?php echo html::hidden("teamSource[]", '');?>
   </td>
   <td class='hourBox'>
-    <?php if(empty($task->team)):?>
+    <?php if(empty($task->team) or $app->rawMethod == 'create'):?>
     <div class='input-group estimateBox'>
       <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
       <span class='input-group-addon'><?php echo 'h';?></span>
@@ -117,7 +124,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <?php $newRowCount = (!empty($task->team) and count($task->team) < 6) ? 6 - count($task->team) : 1;?>
 <?php if(isset($task->status) and $task->status != 'wait' and $task->status != 'doing') $newRowCount = 0;?>
 <?php js::set('newRowCount', $newRowCount);?>
-<?php if(isset($task->mode) and $task->mode == 'linear') js::set('sortSelector', 'tr.member-wait');?>
+<?php if(!empty($task->mode) and $task->mode == 'linear') js::set('sortSelector', 'tr.member-wait');?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php if(isset($task->status)):?>
 <?php js::set('taskStatus', $task->status);?>
@@ -133,10 +140,14 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <script>
 $(document).ready(function()
 {
+    <?php if(!empty($task->mode) and $app->rawMethod == 'create'):?>
+    $('#multipleBox').attr('checked', 'checked');
+    showTeamMenu();
+    <?php endif;?>
 
     $('tr.teamTemplate').closest('tbody.sortable').sortable('destroy');
 
-    <?php if(!isset($task->mode) or $task->mode != 'multi'):?>
+    <?php if(empty($task->mode) or $task->mode != 'multi'):?>
     var canSort = false;
     var options = {
         trigger: '.icon-move',
@@ -176,7 +187,7 @@ $(document).ready(function()
 
     var disableMembers = function()
     {
-        var mode = $('#mode').length > 0 ? $('#mode').val() : '<?php echo (isset($task->mode) ? $task->mode : '')?>';
+        var mode = $('#mode').length > 0 ? $('#mode').val() : '<?php echo (!empty($task->mode) ? $task->mode : '')?>';
         if(mode == 'multi')
         {
             var members = [];

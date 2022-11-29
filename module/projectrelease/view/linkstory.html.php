@@ -51,7 +51,7 @@
           <td class='text-left nobr c-name' title='<?php echo $story->title?>'>
             <?php
             if($story->parent > 0) echo "<span class='label label-badge label-light'>{$lang->story->childrenAB}</span>";
-            echo html::a($this->createLink('story', 'view', "storyID={$story->id}&version=0&param=$projectID", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");
+            echo html::a($this->createLink('story', 'view', "storyID={$story->id}&version=0&param={$this->session->project}", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");
             ?>
           </td>
           <td><?php echo zget($users, $story->openedBy);?></td>

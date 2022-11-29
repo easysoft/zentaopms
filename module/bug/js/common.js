@@ -293,14 +293,15 @@ function loadProductStories(productID)
  */
 function loadProductProjects(productID)
 {
+    required = $('#project_chosen').hasClass('required');
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + oldProjectID);
     $('#projectBox').load(link, function()
     {
         $(this).find('select').chosen();
         var projectID = $('#project').find("option:selected").val();
+        if(required) $(this).find('#project_chosen').addClass('required');
         loadProductExecutions(productID, projectID);
     });
 }
@@ -587,12 +588,12 @@ function loadProjectBuilds(projectID)
 function loadExecutionBuilds(executionID, num)
 {
     if(typeof(num) == 'undefined') num = '';
-    var branch = $('#branch' + num).val();
-
-    if(typeof(branch) == 'undefined') var branch = 0;
-
+    var branch         = $('#branch' + num).val();
     var oldOpenedBuild = $('#openedBuild' + num).val() ? $('#openedBuild' + num).val() : 0;
     var productID      = $('#product' + num).val();
+
+    if(typeof(branch) == 'undefined') var branch = 0;
+    if(typeof(productID) == 'undefined') var productID = 0;
 
     if(page == 'create')
     {
@@ -882,9 +883,20 @@ function setBranchRelated(branchID, productID, num)
     {
         planID   = $('#plans' + num).val();
         planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID=' + num + '&needCreate=false&expired=&param=skipParent');
+        $.ajaxSettings.async = false;
         $('#plans' + num).parent('td').load(planLink, function()
         {
             $('#plans' + num).chosen();
+            var firstBugID = $('.table-form tbody').first('tr').find('input[id^=bugIDList]').val();
+            if(num == firstBugID)
+            {
+                $('#plans' + firstBugID).find('option').each(function()
+                {
+                    if($(this).val() == 'ditto') $(this).remove();
+                    $('#plans' + firstBugID).trigger('chosen:updated');
+                });
+            }
         });
+        $.ajaxSettings.async = true;
     }
 }

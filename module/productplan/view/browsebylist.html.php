@@ -44,8 +44,9 @@
 </div>
 <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='productplan'></div>
 <div id="mainContent">
-  <?php $totalParent = 0;?>
-  <?php $totalChild  = 0;?>
+  <?php $totalParent      = 0;?>
+  <?php $totalChild       = 0;?>
+  <?php $totalIndependent = 0;?>
   <?php if(empty($plans)):?>
   <div class="table-empty-tip">
     <p>
@@ -118,6 +119,7 @@
       if(!empty($parent) and $plan->parent > 0 and $plan->parent != $parent) $parent = 0;
       if($plan->parent <= 0) $i = 0;
       if($plan->parent > 0) $totalChild ++;
+      if($plan->parent == 0) $totalIndependent ++;
 
       $class = '';
       if(!empty($parent) and $plan->parent == $parent)
@@ -229,7 +231,7 @@
         </div>
       <?php endif;?>
       </div>
-      <div class="table-statistic"><?php echo sprintf($lang->productplan->summary, count($plans), $totalParent, $totalChild);?></div>
+      <div class="table-statistic"><?php echo sprintf($lang->productplan->summary, count($plans), $totalParent, $totalChild, $totalIndependent);?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
@@ -238,7 +240,7 @@
 <script>
 $(function()
 {
-    var pageSummary    = '<?php echo sprintf($lang->productplan->summary, count($plans), $totalParent, $totalChild);?>';
+    var pageSummary    = '<?php echo sprintf($lang->productplan->summary, count($plans), $totalParent, $totalChild, $totalIndependent);?>';
     var checkedSummary = '<?php echo $lang->productplan->checkedSummary?>';
     $('#productplanForm').table(
     {
@@ -253,7 +255,8 @@ $(function()
             var checkedChild  = checkedTotal - checkedParent - checkedNormal;
             var summary       = checkedSummary.replace('%total%', checkedTotal)
                 .replace('%parent%', checkedParent)
-                .replace('%child%', checkedChild);
+                .replace('%child%', checkedChild)
+                .replace('%independent%', checkedNormal);
 
             return checkedTotal ? summary : pageSummary;
         }

@@ -46,16 +46,13 @@
     </p>
   </div>
   <?php else:?>
-  <table class="table" id='releaseList'>
+  <table class="table table-bordered" id='releaseList'>
     <thead>
       <tr>
         <th class='c-id'><?php echo $lang->release->id;?></th>
         <th class="c-name"><?php echo $lang->release->name;?></th>
-        <th class="c-build"><?php echo $lang->release->build;?></th>
-        <?php if($product->type != 'normal'):?>
-        <th class='text-center c-branch'><?php echo $lang->product->branch;?></th>
-        <?php endif;?>
-        <th class="c-project"><?php echo $lang->release->project;?></th>
+        <th class='c-build'><?php echo $lang->release->includedBuild;?></th>
+        <th class='c-project'><?php echo $lang->release->relatedProject;?></th>
         <th class='text-center c-status'><?php echo $lang->release->status;?></th>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <?php
@@ -66,31 +63,54 @@
       </tr>
     </thead>
     <tbody>
+      <?php
+      $this->loadModel('project');
+      $this->loadModel('execution');
+      ?>
       <?php foreach($releases as $release):?>
       <?php $canBeChanged = common::canBeChanged('release', $release);?>
+      <?php $buildCount   = count($release->builds);?>
+      <?php $rowspan      = $buildCount > 1 ? "rowspan='{$buildCount}'" : '';?>
+      <?php $i = 1;?>
+      <?php if($buildCount == 0) $release->builds = array('');?>
+      <?php foreach($release->builds as $build):?>
       <tr data-type='<?php echo $release->status;?>'>
-        <td><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
-        <td>
+        <?php if($i == 1):?>
+        <td class='c-id' <?php echo $rowspan?>><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
+        <td <?php echo $rowspan?>>
           <?php
           $flagIcon = $release->marker ? "<icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';
           echo html::a(inlink('view', "release=$release->id"), $release->name, '', "title='$release->name'") . $flagIcon;
           ?>
         </td>
-        <td title='<?php echo $release->buildName?>'><?php echo empty($release->execution) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
-        <?php if($product->type != 'normal'):?>
-        <td class='text-center' title='<?php echo zget($branches, $release->branch, '');?>'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>
-        <td title='<?php echo $release->projectName?>'><?php echo $release->projectName;?></td>
+        <td>
+          <?php if($buildCount):?>
+          <?php if($product->type != 'normal'):?>
+          <span class='label label-outline label-badge'><?php echo $build->branchName;?></span>
+          <?php endif;?>
+          <?php
+          $moduleName   = $build->execution ? 'build' : 'projectbuild';
+          $canClickable = false;
+          if($moduleName == 'projectbuild' and $this->project->checkPriv($build->project)) $canClickable = true;
+          if($moduleName == 'build' and $this->execution->checkPriv($build->execution))    $canClickable = true;
+          echo $canClickable ? html::a($this->createLink($moduleName, 'view', "buildID=$build->id"), $build->name, '', "data-app='project'") : $build->name;
+          ?>
+        <?php endif;?>
+        </td>
+        <td><?php if($buildCount) echo $build->projectName;?></td>
+        <?php if($i == 1):?>
         <?php $status = $this->processStatus('release', $release);?>
-        <td class='c-status text-center' title='<?php echo $status;?>'>
+        <td class='c-status text-center' title='<?php echo $status;?>' <?php echo $rowspan?>>
           <span class="status-release status-<?php echo $release->status?>"><?php echo $status;?></span>
         </td>
-        <td class='text-center'><?php echo $release->date;?></td>
-        <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
-        <td class='c-actions'>
-          <?php echo $this->release->buildOperateMenu($release, 'browse');?>
-        </td>
+        <td class='text-center' <?php echo $rowspan?>><?php echo $release->date;?></td>
+        <?php foreach($extendFields as $extendField) echo "<td $rowspan>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
+        <td class='c-actions' <?php echo $rowspan?>><?php echo $this->release->buildOperateMenu($release, 'browse');?></td>
+        <?php endif;?>
       </tr>
+      <?php $i++;?>
+      <?php endforeach;?>
       <?php endforeach;?>
     </tbody>
   </table>

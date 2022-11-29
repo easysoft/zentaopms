@@ -152,6 +152,7 @@ $(function()
         $('td .checkbox-primary').addClass('hidden');
     }
 
+    $('[data-toggle="popover"]').popover();
 });
 
 /**

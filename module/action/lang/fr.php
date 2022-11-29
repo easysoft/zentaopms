@@ -207,6 +207,7 @@ $lang->action->desc->estimated            = '$date, by <strong>$actor</strong> e
 $lang->action->desc->run                  = '$date, by <strong>$actor</strong> executed.' . "\n";
 $lang->action->desc->syncprogram          = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
 $lang->action->desc->syncproject          = '$date, starting the execution sets the project status as Ongoing.' . "\n";
+$lang->action->desc->syncmultipleproject  = '$date, starting the task sets the project status as Ongoing.' . "\n";
 $lang->action->desc->syncexecution        = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->syncexecutionbychild = '$date, starting the sub stage sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->importfromgitlab     = '$date, Issue associate created from gitlab by <strong>$actor</strong>.' . "\n";
@@ -641,8 +642,6 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Masqué CasTest Lib';
 
 $lang->action->dynamicAction->zahost['created'] = 'Create Host';
 
-$lang->action->dynamicAction->vmtemplate['created'] = 'Create Virtual Host Template';
-
 $lang->action->dynamicAction->zanode['created'] = 'Create Zagent Node';
 $lang->action->dynamicAction->zanode['suspend'] = 'Suspend Zagent Node';
 $lang->action->dynamicAction->zanode['resume']  = 'Resume Zagent Node';
@@ -933,3 +932,5 @@ $lang->action->desc->deletemr                     = '$date, <strong>$actor</stro
 $lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged <a href="$extra">code</a>.';
 $lang->action->desc->approve                      = '$date, <strong>$actor</strong> approved.';
 $lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
+$lang->action->desc->linkedrepo                   = '$date, <strong>$actor</strong> linked repo $extra';
+$lang->action->desc->unlinkedrepo                 = '$date, <strong>$actor</strong> unlinked repo $extra';

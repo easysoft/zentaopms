@@ -2,6 +2,22 @@
 class projectModel extends model
 {
     /**
+     * Check the privilege.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($projectID)
+    {
+        if(empty($projectID)) return false;
+
+        /* If is admin, return true. */
+        if($this->app->user->admin) return true;
+        return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
+    }
+
+    /**
      * Get Multiple linked products for project.
      *
      * @param  int    $projectID
@@ -792,11 +808,11 @@ class projectModel extends model
      * @param  string $orderBy
      * @param  string $excludedModel
      * @param  string $model
-     * @param  bool   $multiple
+     * @param  string $param multiple|product
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '', $multiple = false)
+    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '', $param = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -807,7 +823,8 @@ class projectModel extends model
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
-            ->beginIF($multiple)->andWhere('multiple')->eq(1)->fi()
+            ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq(1)->fi()
+            ->beginIF(strpos($param, 'product') !== false)->andWhere('hasProduct')->eq(1)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
@@ -1699,10 +1716,13 @@ class projectModel extends model
             {
                 if(!$oldProject->hasProduct && $oldProject->name != $project->name) $this->updateProductName($project->name, $projectID);
 
-                $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-                $this->updateProductProgram($oldProject->parent, $project->parent, $linkedProducts);
+                if(isset($project->parent))
+                {
+                    $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+                    $this->updateProductProgram($oldProject->parent, $project->parent, $linkedProducts);
+                    if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
+                }
 
-                if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
                 /* When acl is open, white list set empty. When acl is private,update user view. */
                 if($project->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'project', $projectID);
                 if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
@@ -2349,6 +2369,11 @@ class projectModel extends model
             }
 
             $this->user->updateUserView($products, 'product', $members);
+            if((int)$projectID > 0 and !empty($_POST['division']))
+            {
+                $this->dao->update(TABLE_PROJECT)->set('division')->eq('1')->where('id')->eq((int)$projectID)->exec();
+                $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
+            }
 
             return !dao::isError();
         }
@@ -2399,8 +2424,17 @@ class projectModel extends model
         }
 
         /* Delete the execution linked products that is not linked with the execution. */
-        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq((int)$projectID)->fetchPairs('id');
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
+        if((int)$projectID > 0)
+        {
+            $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq((int)$projectID)->fetchPairs('id');
+            $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
+
+            if(!empty($_POST['division']))
+            {
+                $this->dao->update(TABLE_PROJECT)->set('division')->eq('1')->where('id')->eq((int)$projectID)->exec();
+                $this->dao->update(TABLE_EXECUTION)->set('division')->eq('1')->where('project')->eq((int)$projectID)->exec();
+            }
+        }
 
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
@@ -2839,6 +2873,17 @@ class projectModel extends model
         $this->lang->project->menuOrder   = $this->lang->$navGroup->menuOrder;
         $this->lang->project->dividerMenu = $this->lang->$navGroup->dividerMenu;
 
+        if(empty($project->hasProduct))
+        {
+            unset($this->lang->project->menu->settings['subMenu']->products);
+        }
+        else
+        {
+            unset($this->lang->project->menu->settings['subMenu']->module);
+            unset($this->lang->project->menu->settings['subMenu']->managerepo);
+            unset($this->lang->project->menu->projectplan);
+        }
+
         $this->loadModel('common')->resetProjectPriv($projectID);
     }
 
@@ -2979,7 +3024,7 @@ class projectModel extends model
                 $menu .= "<div class='btn-group'>";
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu($moduleName, 'manageProducts', $params . "&from={$this->app->tab}", $project, 'browse', 'link', '', 'btn-action', '', '', $this->lang->project->manageProducts);
+                $menu .= $this->buildMenu($moduleName, 'manageProducts', $params . "&from={$this->app->tab}", $project, 'browse', 'link', '', 'btn-action', '', $project->hasProduct ? '' : "disabled='disabled'", $this->lang->project->manageProducts);
                 $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);
                 $menu .= $this->buildMenu($moduleName, "delete", $params, $project, 'browse', 'trash', 'hiddenwin', 'btn-action');
                 $menu .= "</ul>";
@@ -3065,7 +3110,7 @@ class projectModel extends model
                 ->set('projects')->eq(implode(',', $newProjects))
                 ->where('id')->eq($repo->id)->exec();
 
-            $this->action->create('project', $projectID, 'linkedRepo', $repo->name);
+            $this->action->create('project', $projectID, 'linkedRepo', '', $repo->name);
         }
     }
 

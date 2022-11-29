@@ -134,6 +134,7 @@ $lang->project->realBeganAB        = '实际开始';
 $lang->project->realEndAB          = '实际完成';
 $lang->project->realBegan          = '实际开始日期';
 $lang->project->realEnd            = '实际完成日期';
+$lang->project->division           = '阶段类型';
 $lang->project->bygrid             = '看板';
 $lang->project->bylist             = '列表';
 $lang->project->bycard             = '卡片';
@@ -182,12 +183,18 @@ $lang->project->kanban             = '看板';
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
 $lang->project->projectTypeList[1] = '产品型项目';
-$lang->project->projectTypeList[0] = '无产品项目';
+$lang->project->projectTypeList[0] = '项目型项目';
 
 /* Project Kanban. */
 $lang->project->typeList = array();
 $lang->project->typeList['my']    = '我负责的项目';
 $lang->project->typeList['other'] = '其他项目';
+
+$lang->project->divisionList['0'] = '按项目创建';
+$lang->project->divisionList['1'] = "按{$lang->productCommon}创建";
+
+$lang->project->divisionSwitchList['0'] = '关闭';
+$lang->project->divisionSwitchList['1'] = "开启";
 
 $lang->project->waitProjects    = '未开始的项目';
 $lang->project->doingProjects   = '进行中的项目';
@@ -204,6 +211,7 @@ $lang->project->changeProgram          = '%s > 修改项目集';
 $lang->project->changeProgramTip       = '修改项目集后，该项目关联产品的项目集也会被修改，请确认是否修改。';
 $lang->project->linkedProjectsTip      = '关联的项目如下';
 $lang->project->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
+$lang->project->noticeDivsion          = "当前项目为单套阶段，点击[开启]可以变为多套阶段，每套阶段只关联一个{$lang->productCommon}。";
 $lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此项目中";
 $lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
 $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";
@@ -360,6 +368,7 @@ $lang->project->begigLetterExecution = '项目的开始日期应小于等于执�
 $lang->project->endGreateExecution   = '项目的完成日期应大于等于执行的最大完成日期：%s';
 $lang->project->childLongTime        = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->project->confirmUnlinkMember  = "您确定从该项目中移除该用户吗？";
+$lang->project->divisionTips         = "按项目创建为单套阶段，阶段关联所有{$lang->productCommon}；按{$lang->productCommon}创建为多套阶段，每套阶段关联一个{$lang->productCommon}。";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";

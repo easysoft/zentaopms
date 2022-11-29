@@ -92,7 +92,7 @@ $config->testcase->datatable->fieldList['product']['dataSource'] = array('module
 
 $config->testcase->datatable->fieldList['module']['title']      = 'module';
 $config->testcase->datatable->fieldList['module']['control']    = 'select';
-$config->testcase->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&case');
+$config->testcase->datatable->fieldList['module']['dataSource'] = array('module' => 'testcase', 'method' => 'getDatatableModules', 'params' => '$productID');
 
 $config->testcase->datatable->fieldList['title']['title']    = 'title';
 $config->testcase->datatable->fieldList['title']['fixed']    = 'left';
@@ -103,7 +103,7 @@ $config->testcase->datatable->fieldList['branch']['title']      = 'branch';
 $config->testcase->datatable->fieldList['branch']['fixed']      = 'left';
 $config->testcase->datatable->fieldList['branch']['width']      = '100';
 $config->testcase->datatable->fieldList['branch']['required']   = 'no';
-$config->testcase->datatable->fieldList['branch']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&branch&id,name');
+$config->testcase->datatable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID');
 
 $config->testcase->datatable->fieldList['pri']['title']    = 'priAB';
 $config->testcase->datatable->fieldList['pri']['fixed']    = 'left';

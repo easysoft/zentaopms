@@ -106,7 +106,7 @@ class repo extends control
         $this->view->objectID      = $objectID;
         $this->view->pager         = $pager;
         $this->view->repoList      = $repoList;
-        $this->view->products      = $this->loadModel('product')->getPairs();
+        $this->view->products      = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->sonarRepoList = $sonarRepoList;
         $this->view->successJobs   = $successJobs;
 
@@ -139,21 +139,24 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        $products  = $this->loadModel('product')->getProductPairsByProject($objectID);
-        $products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->andWhere('shadow')->eq(0)->fetchPairs('id', 'name'); /* Remove shadow products. */
-
-        $shadowProduct = null;
-        if($this->app->tab == 'project' && $objectID) $shadowProduct = $this->loadModel('product')->getShadowProductByProject($objectID);
+        if($this->app->tab == 'project')
+        {
+            $products = $this->loadModel('product')->getProductPairsByProject($objectID);
+        }
+        else
+        {
+            $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        }
 
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[]      = $this->lang->repo->create;
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
-        $this->view->relatedProjects = array();
+        $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->relatedProjects = $this->app->tab == 'project' ? array($objectID) : array();
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID        = $objectID;
-        $this->view->shadowProduct   = $shadowProduct;
 
         $this->display();
     }
@@ -206,7 +209,7 @@ class repo extends control
             $this->view->projects = $options;
         }
 
-        $products           = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $linkedProducts     = $this->loadModel('product')->getByIdList($repo->product);
         $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column($linkedProducts, 'name'));
         $products           = $products + $linkedProductPairs;
@@ -1655,12 +1658,7 @@ class repo extends control
             ->get();
 
         /* Get all projects that can be accessed. */
-        $accessProjects = array();
-        foreach($postData->products as $productID)
-        {
-            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            $accessProjects = $accessProjects + $projects;
-        }
+        $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($postData->products);
 
         $selectedProjects = array_intersect(array_keys($accessProjects), $postData->projects);
 

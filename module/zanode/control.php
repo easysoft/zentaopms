@@ -78,6 +78,37 @@ class zanode extends control
     }
 
     /**
+     * Edit node.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return void
+     */
+    public function edit($id)
+    {
+        if($_POST)
+        {
+            $changes = $this->zanode->update($id);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('zanode', $id, 'Edited');
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            }
+
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
+
+        $this->view->title     = $this->lang->zanode->editAction;
+        $this->view->zanode    = $this->zanode->getNodeByID($id);
+        $this->view->host      = $this->zanode->getHostByID($this->view->zanode->parent);
+        $this->view->image     = $this->zanode->getImageByID($this->view->zanode->image);
+        $this->display();
+    }
+
+    /**
      * View Node.
      *
      * @param  int    $id
@@ -87,10 +118,9 @@ class zanode extends control
     public function view($id)
     {
         $this->view->title   = $this->lang->zanode->view;
-        $this->view->zanode    = $this->zanode->getNodeByID($id);
+        $this->view->zanode  = $this->zanode->getNodeByID($id);
         $this->view->actions = $this->loadModel('action')->getList('zanode', $id);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-
         $this->display();
     }
 
@@ -157,19 +187,26 @@ class zanode extends control
      * @param  int  $nodeID
      * @return void
      */
-    public function destroy($nodeID)
+    public function delete($nodeID, $confirm = 'no')
     {
-        $error = $this->zanode->destroy($nodeID);
-
-        if($error)
+        if($confirm == 'no')
         {
-            return print(js::alert($error));
+            return print(js::confirm($this->lang->zanode->confirmDelete, inlink('delete', "nodeID=$nodeID&confirm=yes")));
         }
         else
         {
-            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
-            return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
-        }
+            $error = $this->zanode->destroy($nodeID);
+
+            if($error)
+            {
+                return print(js::alert($error));
+            }
+            else
+            {
+                if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
+                return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
+            }
+    }
     }
 
     /**

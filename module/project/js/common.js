@@ -150,9 +150,12 @@ function loadBranches(product)
     /* When selecting a product, delete a plan that is empty by default. */
     $("#planDefault").remove();
 
+    var chosenProducts = [];
     $("#productsBox select[name^='products']").each(function()
     {
         var $product = $(product);
+        var productID = $(this).val();
+        if(productID > 0 && chosenProducts.indexOf(productID) == -1) chosenProducts.push(productID);
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
             bootbox.alert(errorSameProducts);
@@ -162,7 +165,9 @@ function loadBranches(product)
         }
     });
 
-    if($('#productsBox .row .input-group:last select:first').val() != 0)
+    chosenProducts.length > 1 ? $('.division').removeClass('hide') : $('.division').addClass('hide');
+
+    if($('#productsBox .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .row .input-group').size();
         $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html() + '</div>');

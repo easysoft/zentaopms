@@ -22,7 +22,7 @@ class testreportModel extends model
         $execution = $this->loadModel('execution')->getByID($this->post->execution);
         $data = fixer::input('post')
             ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
-            ->setDefault('project', $execution->project)
+            ->setDefault('project', $execution->type == 'project' ? $execution->id : $execution->project)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('stories', ',')

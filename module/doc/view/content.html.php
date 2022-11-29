@@ -103,7 +103,7 @@
             }
             elseif($doc->contentType == 'markdown')
             {
-                echo "<textarea id='markdownContent'></textarea>";
+                echo "<textarea id='markdownContent'>{$doc->content}</textarea>";
             }
             else
             {
@@ -291,7 +291,7 @@
 <?php if($doc->contentType == 'markdown'):?>
 <?php css::import($jsRoot . "markdown/simplemde.min.css");?>
 <?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
-<?php js::set('markdownText', $doc->content);?>
+<?php js::set('markdownText', htmlspecialchars($doc->content));?>
 <script>
 $(function()
 {

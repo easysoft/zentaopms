@@ -51,6 +51,50 @@ class helper extends baseHelper
     }
 
     /**
+     * Verify that the system has opened on the feature.
+     *
+     * @param  string    $feature    scrum_risk | risk | scrum
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function hasFeature($feature)
+    {
+        global $config;
+
+        if(strpos($feature, '_') !== false)
+        {
+            $code = explode('_', $feature);
+            $code = $code[0] . ucfirst($code[1]);
+            return strpos(",$config->disabledFeatures,", ",{$code},") === false;
+        }
+        else
+        {
+            if($feature == 'product' or $feature == 'scrum' or $feature == 'waterfall') return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+
+            $hasFeature = false;
+            foreach($config->featureGroup as $group => $modules)
+            {
+                if($feature == $group)
+                {
+                    foreach($modules as $module)
+                    {
+                        if(helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                    }
+                }
+                else
+                {
+                    foreach($modules as $module)
+                    {
+                        if($feature == $module and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                    }
+                }
+            }
+            return $hasFeature && strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+        }
+    }
+
+    /**
      * Encode json for $.parseJSON
      *
      * @param  array  $data

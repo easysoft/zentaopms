@@ -125,7 +125,8 @@ class commonModel extends model
                  ->where('id')->eq($projectID)
                  ->exec();
 
-            $this->loadModel('action')->create('project', $projectID, 'syncproject');
+            $actionType = $project->multiple ? 'syncproject' : 'syncmultipleproject';
+            $this->loadModel('action')->create('project', $projectID, $actionType);
         }
         return $project;
     }
@@ -1679,7 +1680,7 @@ EOD;
         {
             if($app->getModuleName() != $module) $app->control->loadModel($module);
             $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
-            if(class_exists($modelClass) and is_callable(array($modelClass, 'isClickable')))
+            if(class_exists($modelClass) and method_exists($modelClass, 'isClickable'))
             {
                 //$clickable = call_user_func_array(array($modelClass, 'isClickable'), array('object' => $object, 'method' => $method));
                 // fix bug on php  8.0 link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953
@@ -2420,9 +2421,9 @@ EOD;
                 'message' => array('ajaxgetmessage'),
             );
             if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword')));
-            if($this->isOpenMethod($module, $method)) return true;
             if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
             if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
+            if($this->isOpenMethod($module, $method)) return true;
 
             if(isset($this->app->user))
             {

@@ -1,11 +1,42 @@
 $().ready(function()
 {
-    $('#lastBuildBtn').click(function()
+    $(document).on('click', '#lastBuildBtn', function()
     {
         $('#name').val($(this).text()).focus();
     });
 
+    $(document).on('change', '#product, #branch', function()
+    {
+        var projectID = $('#project').val();
+        var productID = $('#product').val();
+        var branch    = $('#branch').length > 0 ? $('#branch').val() : '';
+        $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
+        {
+            if(data) $('#buildBox').html(data);
+            $('#builds').attr('data-placeholder', multipleSelect).chosen();
+        });
+    });
+
+    $('input[name=isIntegrated]').change(function()
+    {
+        var projectID   = $('#project').val();
+        var executionID = $('#execution').val();
+        if($(this).val() == 'no')
+        {
+            $('#execution').closest('tr').show();
+            $('#buildBox').closest('tr').hide();
+            loadProducts(executionID);
+        }
+        else
+        {
+            $('#execution').closest('tr').hide();
+            $('#buildBox').closest('tr').show();
+            loadProducts(projectID);
+        }
+    });
+    $('#product').change();
 });
+
 /**
  * Load products.
  *
@@ -20,6 +51,7 @@ function loadProducts(executionID)
     $('#branch').remove();
     $('#branch_chosen').remove();
     $('#noProduct').remove();
+    executionID = executionID ? executionID : 0;
     $.get(createLink('product', 'ajaxGetProducts', 'executionID=' + executionID), function(data)
     {
         if(data)
@@ -37,5 +69,24 @@ function loadProducts(executionID)
             $('#product').chosen();
             loadBranches($("#product").val());
         }
+    });
+    loadLastBuild();
+}
+
+/**
+ * Load last build
+ *
+ * @access public
+ * @return void
+ */
+function loadLastBuild()
+{
+    var isIntegrated = $('input[name=isIntegrated]:checked').val();
+    var projectID    = $('#project').val();
+    var executionID  = $('#execution').val();
+    if(isIntegrated == 'yes') executionID = 0; 
+    $.get(createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
+    {
+        $('#lastBuildBox').html(data);
     });
 }

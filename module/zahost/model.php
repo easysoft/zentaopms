@@ -39,6 +39,7 @@ class zahostModel extends model
         $hostInfo->type        = 'zahost';
         $hostInfo->createdBy   = $this->app->user->account;
         $hostInfo->createdDate = helper::now();
+        $hostInfo->secret      = md5($hostInfo->name + time());
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
@@ -135,7 +136,7 @@ class zahostModel extends model
             if(empty($downloadedImage))
             {
                 $image->id     = 0;
-                $image->status = '';
+                $image->status = 'notDownloaded';
             }
             else
             {
@@ -166,7 +167,8 @@ class zahostModel extends model
 
         $imageData->host = $hostID;
         $imageData->status = 'created';
-        $imageData->os = $imageData->os;
+        $imageData->osName = $imageData->os;
+        unset($imageData->os);
 
         $this->dao->insert(TABLE_IMAGE)->data($imageData, 'desc')->autoCheck()->exec();
         if(dao::isError()) return false;
@@ -376,10 +378,8 @@ class zahostModel extends model
         $menu   = '';
         $params = "hostID=$host->id";
 
-        $menu .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
-
-        $params = "hostID=$host->id";
-        $menu .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin');
+        $menu  .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
+        $menu  .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin');
 
         return $menu;
     }
