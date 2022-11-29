@@ -100,10 +100,6 @@ class productplan extends control
         if($parent) $this->view->parentPlan = $this->productplan->getById($parent);
         $branchPairs = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
 
-        /* Get parent plan pairs. */
-        $parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branchID);
-        $this->view->parentPlanPairs = $parentPlanPairs;
-
         /*Get default branch.*/
         $branchList = $this->loadModel('branch')->getList($productID);
         foreach($branchList as $branch)
@@ -115,12 +111,13 @@ class productplan extends control
         $this->view->position[] = $this->lang->productplan->common;
         $this->view->position[] = $this->lang->productplan->create;
 
-        $this->view->productID     = $productID;
-        $this->view->lastPlan      = $lastPlan;
-        $this->view->branch        = $branchID;
-        $this->view->branches      = $branchPairs;
-        $this->view->defaultBranch = $defaultBranch;
-        $this->view->parent        = $parent;
+        $this->view->productID       = $productID;
+        $this->view->lastPlan        = $lastPlan;
+        $this->view->branch          = $branchID;
+        $this->view->branches        = $branchPairs;
+        $this->view->defaultBranch   = $defaultBranch;
+        $this->view->parent          = $parent;
+        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branchID, 'done,closed');
         $this->display();
     }
 
@@ -153,13 +150,17 @@ class productplan extends control
         $plan = $this->productplan->getByID($planID);
         $oldBranch = array($planID => $plan->branch);
 
+        /* Get the parent plan pair exclusion itself. */
+        $parentPlanPairs = $this->productplan->getTopPlanPairs($plan->product, $plan->branch);
+        unset($parentPlanPairs[$planID]);
+        $this->view->parentPlanPairs = $parentPlanPairs;
+
         $this->commonAction($plan->product, $plan->branch);
         $this->view->title           = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
         $this->view->position[]      = $this->lang->productplan->edit;
         $this->view->productID       = $plan->product;
         $this->view->oldBranch       = $oldBranch;
         $this->view->plan            = $plan;
-        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($plan->product, $plan->branch, $planID);
         $this->display();
     }
 
@@ -370,7 +371,7 @@ class productplan extends control
         $this->view->orderBy          = $orderBy;
         $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
         $this->view->pager            = $pager;
-        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch, '', $status = 'closed');
+        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch, '', $status = 'closed', 'multiple');
         $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
         $this->view->queryID          = $queryID;
         $this->display();
@@ -627,7 +628,7 @@ class productplan extends control
      */
     public function ajaxGetProjects($productID, $branch = 0)
     {
-        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch, '', $status = 'closed');
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch, '', $status = 'closed', 'multiple');
         echo html::select('project', $projects, key($projects), "class='form-control chosen'");
     }
 

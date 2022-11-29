@@ -22,7 +22,7 @@ $(function()
 
     $('#saveButton').on('click', function()
     {
-        $('#saveButton').attr('disabled', true);
+        $('#saveButton').attr('type', 'submit').attr('disabled', true);
         $('#saveDraftButton').attr('disabled', true);
 
         var storyStatus = !$('#reviewer').val() || $('#needNotReview').is(':checked') ? 'active' : 'reviewing';
@@ -31,7 +31,7 @@ $(function()
 
         setTimeout(function()
         {
-            $('#saveButton').removeAttr('disabled');
+            $('#saveButton').attr('type', 'button').removeAttr('disabled');
             $('#saveDraftButton').removeAttr('disabled');
         }, 1000);
     });
@@ -39,7 +39,7 @@ $(function()
     $('#saveDraftButton').on('click', function()
     {
         $('#saveButton').attr('disabled', true);
-        $('#saveDraftButton').attr('disabled', true);
+        $('#saveDraftButton').attr('type', 'submit').attr('disabled', true);
 
         storyStatus = 'draft';
         if(typeof(page) != 'undefined' && page == 'change') storyStatus = 'changing';
@@ -50,7 +50,7 @@ $(function()
         setTimeout(function()
         {
             $('#saveButton').removeAttr('disabled');
-            $('#saveDraftButton').removeAttr('disabled');
+            $('#saveDraftButton').attr('type', 'button').removeAttr('disabled');
         }, 1000);
     });
 })

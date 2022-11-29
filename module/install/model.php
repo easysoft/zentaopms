@@ -52,24 +52,6 @@ class installModel extends model
     }
 
     /**
-     * Get latest release.
-     *
-     * @access public
-     * @return string or bool
-     */
-    public function getLatestRelease()
-    {
-        if(!function_exists('json_decode')) return false;
-        $result = file_get_contents('https://www.zentao.net/misc-getlatestrelease.json');
-        if($result)
-        {
-            $result = json_decode($result);
-            if(isset($result->release) and $this->config->version != $result->release->version) return $result->release;
-        }
-        return false;
-    }
-
-    /**
      * Check php version.
      *
      * @access public

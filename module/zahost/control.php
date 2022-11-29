@@ -69,6 +69,7 @@ class zahost extends control
         $this->view->orderBy    = $orderBy;
         $this->view->nodeList   = $this->loadModel("zanode")->getListByHost($this->view->zahost->parent, $orderBy);
         $this->view->actions    = $this->loadModel('action')->getList('zahost', $id);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->display();
     }
 
@@ -88,7 +89,7 @@ class zahost extends control
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('inithost', "hostID=$hostID")));
+            return print("<script>showModal($hostID)</script>");
         }
 
         $this->view->title = $this->lang->zahost->create;
@@ -109,10 +110,10 @@ class zahost extends control
             $changes = $this->zahost->update($hostID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($changes)
+            if(!empty($changes))
             {
                 $actionID = $this->loadModel('action')->create('zahost', $hostID, 'Edited');
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+                $this->action->logHistory($actionID, $changes);
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -256,7 +257,7 @@ class zahost extends control
             $image = $this->zahost->queryDownloadImageStatus($image);
             $statusName = zget($this->lang->zahost->image->statusList, $image->status,'');
 
-            $statusList[$image->id] = array('statusCode' => $image->status, 'status' => $statusName . '(' . $image->rate * 100 . '%)', 'rate' => $image->rate);
+            $statusList[$image->id] = array('statusCode' => $image->status, 'status' => $statusName, 'progress' => $image->status == 'inprogress' ? $image->rate * 100 . '%' : '');
         }
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $statusList));
@@ -286,9 +287,10 @@ class zahost extends control
      */
     public function initHost($hostID)
     {
-        $this->view->title        = $this->lang->zahost->vmTemplate->common;
+        $this->view->title        = $this->lang->zahost->init;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->hostID       = $hostID;
+        $this->view->host         = $this->zahost->getById($hostID);
 
         $this->display();
     }

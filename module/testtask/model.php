@@ -194,14 +194,15 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionTasks($executionID, $orderBy = 'id_desc', $pager = null)
+    public function getExecutionTasks($executionID, $objectType = 'execution', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name AS buildName')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
-            ->where('t1.execution')->eq((int)$executionID)
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($objectType == 'execution')->andWhere('t1.execution')->eq((int)$executionID)->fi()
+            ->beginIF($objectType == 'project')->andWhere('t1.project')->eq((int)$executionID)->fi()
             ->andWhere('t1.auto')->ne('unit')
-            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -1397,9 +1398,7 @@ class testtaskModel extends model
         $stepFiles   = array();
         foreach($files as $file)
         {
-            $pathName = $this->file->getRealPathName($file->pathname);
-            $file->webPath  = $this->file->webPath . $pathName;
-            $file->realPath = $this->file->savePath . $pathName;
+            $this->file->setFileWebAndRealPaths($file);
             if($file->objectType == 'caseResult')
             {
                 $resultFiles[$file->objectID][$file->id] = $file;
@@ -2303,7 +2302,7 @@ class testtaskModel extends model
         $menu .= '<div id="action-divider">';
         $menu .= $this->buildMenu('testtask',   'cases',    $params, $task, 'browse', 'sitemap');
         $menu .= $this->buildMenu('testtask',   'linkCase', "$params&type=all&param=myQueryID", $task, 'browse', 'link');
-        $menu .= $this->buildMenu('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'browse', 'summary');
+        $menu .= $this->buildMenu('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'browse', 'summary', '', '', false, '', $this->lang->testreport->common);
         $menu .= '</div>';
         $menu .= $this->buildMenu('testtask',   'view',     $params, $task, 'browse', 'list-alt', '', 'iframe', true, "data-width='90%'");
         $menu .= $this->buildMenu('testtask',   'edit',     $params, $task, 'browse');

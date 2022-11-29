@@ -23,9 +23,11 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->manageProducts;?></span></span>
   </div>
 
+  <?php if($this->config->systemMode == 'ALM'):?>
   <div class='btn-toolbar pull-right'>
     <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#otherProductsModal'><i class='icon icon-link'></i> <?php echo $lang->project->manageOtherProducts; ?></button>
   </div>
+  <?php endif;?>
 </div>
 <div id='mainContent'>
   <div class='cell'>
@@ -36,19 +38,47 @@
           <?php $i = 0;?>
           <?php foreach($linkedProducts as $productID => $linkedProduct):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
+          <?php $cannotUnlink = (in_array($productID, $unmodifiableProducts) and ($project->model == 'waterfall'));?>
+          <?php $disabled = $cannotUnlink ? "disabled='disabled'" : '';?>
           <div class='col-sm-4'>
             <div class='product checked <?php echo isset($allBranches[$productID]) ? ' has-branch' : ''?>'>
               <div class="checkbox-primary" title='<?php echo $linkedProduct->name;?>'>
-                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked id='products{$productID}'>";?>
+                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked $disabled id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $linkedProduct->name;?>'><?php echo $linkedProduct->name;?></label>
               </div>
               <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' data-drop_direction='down' disabled='disabled'");?>
             </div>
           </div>
+          <?php if($cannotUnlink) echo html::hidden("products[$i]", $productID);?>
           <?php echo html::hidden("branch[$i]", $branchID);?>
-          <?php if(!isset($branchGroups[$productID])) unset($currentProducts[$productID]);?>
-          <?php if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);?>
-          <?php if(isset($branchGroups[$productID]) and empty($branchGroups[$productID])) unset($currentProducts[$productID]);?>
+
+          <?php
+          if(!isset($branchGroups[$productID]))
+          {
+              if($this->config->systemMode == 'ALM')
+              {
+                  unset($currentProducts[$productID]);
+              }
+              else
+              {
+                  unset($allProducts[$productID]);
+              }
+          }
+
+          if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+
+          if(isset($branchGroups[$productID]) and empty($branchGroups[$productID]))
+          {
+              if($this->config->systemMode == 'ALM')
+              {
+                  unset($currentProducts[$productID]);
+              }
+              else
+              {
+                  unset($allProducts[$productID]);
+              }
+          }
+          ?>
           <?php $i++;?>
           <?php endforeach;?>
           <?php endforeach;?>
@@ -57,7 +87,10 @@
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->project->unlinkedProducts;?></div>
         <div class='detail-content row'>
-          <?php foreach($currentProducts as $productID => $productName):?>
+          <?php
+          $unlinkedProducts = $this->config->systemMode == 'ALM' ? $currentProducts : $allProducts;
+          foreach($unlinkedProducts as $productID => $productName):
+          ?>
           <div class='col-sm-4'>
             <div class='product<?php echo isset($branchGroups[$productID]) ? ' has-branch' : ''?>'>
               <div class="checkbox-primary" title='<?php echo $productName;?>'>
@@ -75,6 +108,8 @@
         <?php echo html::hidden("post", 'post');?>
         <?php echo html::submitButton();?>
       </div>
+
+      <?php if($this->config->systemMode == 'ALM'):?>
       <div class='modal fade' id='otherProductsModal'>
         <div class='modal-content'>
           <div class='modal-dialog w-600px'>
@@ -97,7 +132,14 @@
           </div>
         </div>
       </div>
+      <?php endif;?>
     </form>
   </div>
 </div>
+
+<?php $noticeSwitch = (!$project->division and count($linkedProducts) == 1 and empty($executions));?>
+<?php js::set('linkedProducts', array_keys($linkedProducts));?>
+<?php js::set('noticeSwitch', $noticeSwitch);?>
+<?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
+<?php js::set('divisionSwitchList', $lang->project->divisionSwitchList);?>
 <?php include '../../common/view/footer.html.php';?>

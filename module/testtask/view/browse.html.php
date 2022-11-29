@@ -72,7 +72,9 @@ $status = strtolower($status);
         <th class='c-id text-left'>    <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
         <th class='c-name text-left'>  <?php common::printOrderLink('name',      $orderBy, $vars, $lang->testtask->name);?></th>
         <th class='text-left'>         <?php common::printOrderLink('build',     $orderBy, $vars, $lang->testtask->build);?></th>
+        <?php if(!$product->shadow):?>
         <th class='text-left'>         <?php common::printOrderLink('product',   $orderBy, $vars, $lang->testtask->product);?></th>
+        <?php endif;?>
         <th class='text-left'>         <?php common::printOrderLink('execution', $orderBy, $vars, $lang->testtask->execution);?></th>
         <th class='c-status text-left'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
         <th class='c-user text-left'>  <?php common::printOrderLink('owner',     $orderBy, $vars, $lang->testtask->owner);?></th>
@@ -101,7 +103,9 @@ $status = strtolower($status);
       <td><?php echo html::a(inlink('cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
       <td class='c-name' title="<?php echo $task->buildName?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "data-group=execution");?></td>
+      <?php if(!$product->shadow):?>
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
+      <?php endif;?>
       <td class='c-name' title="<?php echo $task->executionName?>"><?php echo $task->executionName?></td>
       <?php $statusName = $this->processStatus('testtask', $task);?>
       <td title='<?php echo $statusName;?>'>

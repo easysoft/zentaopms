@@ -80,7 +80,7 @@
                 </thead>
                 <tbody>
                   <?php foreach($stories as $storyID => $story):?>
-                  <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$projectID", '', true);?>
+                  <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->project}", '', true);?>
                   <tr>
                     <td class='c-id text-left'>
                       <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
@@ -350,9 +350,16 @@
                       <td><?php echo $release->name;?></td>
                     </tr>
                     <tr>
-                      <th><?php echo $lang->release->build;?></th>
-                      <td title='<?php echo $release->buildName?>'>
-                          <?php echo ($release->execution) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
+                      <th><?php echo $lang->release->includedBuild;?></th>
+                      <td>
+                        <?php
+                        $buildHtml = array();
+                        foreach($release->buildInfos as $buildID => $buildInfo)
+                        {
+                            $buildHtml[] = html::a($this->createLink($buildInfo->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $buildInfo->name, '', "data-app='project'");
+                        }
+                        echo join($lang->comma, $buildHtml);
+                        ?>
                       </td>
                     </tr>
                     <tr>
@@ -375,17 +382,11 @@
                 <div class='detail-title'><?php echo $lang->files?></div>
                 <div class='detail-content article-content'>
                   <?php
-                  if($release->files)
+                  if($release->files) echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
+                  foreach($release->buildInfos as $buildID => $buildInfo)
                   {
-                      echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
-                  }
-                  elseif($release->filePath)
-                  {
-                      echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
-                  }
-                  elseif($release->scmPath)
-                  {
-                      echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+                      if($buildInfo->filePath) echo $lang->release->filePath . html::a($buildInfo->filePath, $buildInfo->filePath, '_blank');
+                      if($buildInfo->scmPath)  echo $lang->release->scmPath . html::a($buildInfo->scmPath, $buildInfo->scmPath, '_blank');
                   }
                   ?>
                 </div>

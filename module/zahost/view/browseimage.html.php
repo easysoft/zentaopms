@@ -35,6 +35,7 @@
         <th class='c-number'><?php common::printOrderLink('memory', $orderBy, $vars, $lang->zahost->image->memory);?></th>
         <th class='c-number'><?php common::printOrderLink('disk', $orderBy, $vars, $lang->zahost->image->disk);?></th>
         <th><?php echo $lang->zahost->status;?></th>
+        <th><?php echo $lang->zahost->image->progress;?></th>
         <th class='c-actions-3'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -46,8 +47,9 @@
         <td><?php echo $image->memory . zget($this->lang->zahost->unitList, 'GB');?></td>
         <td><?php echo $image->disk . zget($this->lang->zahost->unitList, 'GB');?></td>
         <td class='image-status-<?php echo zget($image, 'id', 0);?>'><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>
+        <td class="image-progress-<?php echo zget($image, 'id', 0);?>"><?php echo $image->status == 'completed' ? '100%' : '';?></td>
         <td class='c-actions'>
-          <?php common::printIcon('zahost', 'ajaxdownloadImage', "hostID={$hostID}&imageName={$image->name}&imageID={$image->id}", $image, 'list', 'download');?>
+          <?php common::printIcon('zahost', 'ajaxdownloadImage', "hostID={$hostID}&imageName={$image->name}&imageID={$image->id}", $image, 'list', 'download', '', in_array($image->status, array("completed", "inprogress", "created")) ? "disabled image-download-" . zget($image, 'id', 0) : "image-download-" . zget($image, 'id', 0));?>
           <?php //if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "id={$image->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->image->downloadImage}' class='btn'");?>
           <?php //common::printIcon('zahost', 'editImage', "id={$image->id}", $image, 'list', 'edit');?>
           <?php //if(common::hasPriv('zahost', 'deleteImage')) echo html::a($this->createLink('zahost', 'deleteImage', "id={$image->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");?>

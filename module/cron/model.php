@@ -98,21 +98,16 @@ class cronModel extends model
      * Change cron status to running
      *
      * @param int    $cronID
-     * @param string $lastTime
      * @access public
-     * @return bool|int
+     * @return bool
      */
-    public function changeStatusRunning($cronID, $lastTime)
+    public function changeStatusRunning($cronID)
     {
         $data = new stdclass();
-        $data->status = 'running';
+        $data->status   = 'running';
         $data->lastTime = date(DT_DATETIME1);
-        $rows = $this->dao->update(TABLE_CRON)->data($data)
-                                              ->where('id')->eq($cronID)
-                                              ->andWhere('status')->ne('running')
-                                              ->andWhere('lastTime')->eq($lastTime)
-                                              ->exec();
-        return dao::isError() ? false : $rows;
+        $this->dao->update(TABLE_CRON)->data($data)->where('id')->eq($cronID)->exec();
+        return !dao::isError();
     }
 
     /**

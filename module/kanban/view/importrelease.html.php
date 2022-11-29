@@ -33,7 +33,7 @@
   </div>
   <?php if($releases2Imported):?>
   <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='importReleaseForm'>
-    <table class='table table-fixed' id='releaseList'>
+    <table class='table table-bordered table-fixed' id='releaseList'>
       <thead>
         <tr>
           <th class="c-id">
@@ -43,32 +43,41 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-name'><?php echo $lang->release->name;?></th>
-          <th class='c-name'><?php echo $lang->release->project;?></th>
-          <th class='c-name'><?php echo $lang->release->build;?></th>
+          <th class='c-name'><?php echo $lang->release->includedBuild;?></th>
+          <th class='c-name'><?php echo $lang->release->relatedProject;?></th>
           <th class='c-date'><?php echo $lang->release->date;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($releases2Imported as $release):?>
+        <?php $i = 1;?>
+        <?php $buildCount = count($release->builds);?>
+        <?php foreach($release->builds as $build):?>
         <tr>
-          <td class='c-id'>
+          <?php if($i == 1):?>
+          <td rowspan="<?php echo $buildCount;?>" class='c-id'>
             <div class="checkbox-primary">
               <input type='checkbox' name='releases[]' value='<?php echo $release->id;?>'/>
               <label></label>
             </div>
             <?php printf('%03d', $release->id);?>
           </td>
-          <?php if(common::hasPriv('release', 'view')):?>
-          <td title='<?php echo $release->name;?>'>
+          <td rowspan="<?php echo $buildCount;?>" title='<?php echo $release->name;?>'>
+            <?php if(common::hasPriv('release', 'view')):?>
             <a href='javascript:void(0);' onclick="locateView('release', <?php echo $release->id;?>)"><?php echo $release->name;?></a>
+            <?php else:?>
+            <?php echo $release->name;?>
+            <?php endif;?>
           </td>
-          <?php else:?>
-          <td title='<?php echo $release->name;?>'><?php echo $release->name;?></td>
           <?php endif;?>
-          <td title='<?php echo $release->projectName;?>'><?php echo $release->projectName;?></td>
-          <td title='<?php echo $release->buildName;?>'><?php echo $release->buildName;?></td>
-          <td title='<?php echo $release->date;?>'><?php echo $release->date;?></td>
+          <td title='<?php echo $build->name;?>'><?php echo $build->name;?></td>
+          <td title='<?php echo $build->projectName;?>'><?php echo $build->projectName;?></td>
+          <?php if($i == 1):?>
+          <td rowspan="<?php echo $buildCount;?>" title='<?php echo $release->date;?>'><?php echo $release->date;?></td>
+          <?php endif;?>
         </tr>
+        <?php $i++;?>
+        <?php endforeach;?>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>
       </tbody>
@@ -83,5 +92,4 @@
   <div class='table-empty-tip'><?php echo $lang->noData;?></div>
   <?php endif;?>
 </div>
-<style>#product_chosen {width: 45% !important}</style>
 <?php include '../../common/view/footer.lite.html.php';?>

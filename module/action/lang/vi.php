@@ -89,7 +89,6 @@ $lang->action->objectTypes['testsuite']        = 'Suite';
 $lang->action->objectTypes['testtask']         = 'Test bản dựng';
 $lang->action->objectTypes['testreport']       = 'Báo cáo';
 $lang->action->objectTypes['zahost']           = 'Host';
-$lang->action->objectTypes['vmtemplate']       = 'Virtual Host Template';
 $lang->action->objectTypes['zanode']           = 'ZA Node';
 $lang->action->objectTypes['doc']              = 'Tài liệu';
 $lang->action->objectTypes['doclib']           = 'Thư viện tài liệu';
@@ -495,8 +494,6 @@ $lang->action->dynamicAction->caselib['undeleted'] = 'Khôi phục Case Lib';
 $lang->action->dynamicAction->caselib['hidden']    = 'Ẩn Case Lib';
 
 $lang->action->dynamicAction->zahost['created'] = 'Create Host';
-
-$lang->action->dynamicAction->vmtemplate['created'] = 'Create Virtual Host Template';
 
 $lang->action->dynamicAction->zanode['created'] = 'Create Zagent Node';
 $lang->action->dynamicAction->zanode['suspend'] = 'Suspend Zagent Node';

@@ -567,6 +567,16 @@ class upgradeModel extends model
                     $this->execSQL($xuanxuanSql);
                 }
                 break;
+            case '17_8':
+                if(!$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.5.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+                $this->xuanSetMuteForHiddenGroups();
+                $this->xuanNotifyGroupHiddenUsers();
+                $this->initShadowBuilds();
+                break;
         }
 
         $this->deletePatch();
@@ -1042,6 +1052,10 @@ class upgradeModel extends model
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.4.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
             case '17_7': $confirmContent .= file_get_contents($this->getUpgradeFile('17.7'));
+            case '17_8':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.8'));
+                $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.5.sql';
+                $confirmContent .= file_get_contents($xuanxuanSql);
         }
 
         return $confirmContent;
@@ -7471,6 +7485,9 @@ class upgradeModel extends model
      */
     public function fixWeeklyReport()
     {
+        if(!isset($this->app->user)) $this->app->user = new stdclass();
+        $this->app->user->admin = true;
+
         $this->loadModel('weekly');
         $projects = $this->dao->select('id,begin,end')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('model')->eq('waterfall')->fetchAll('id');
 
@@ -7522,8 +7539,8 @@ class upgradeModel extends model
             $project->status         = $sprint->status;
             $project->begin          = $sprint->begin;
             $project->end            = isset($sprint->end) ? $sprint->end : LONG_TIME;
-            $project->realBegan      = $sprint->realBegan;
-            $project->realEnd        = $sprint->realEnd;
+            $project->realBegan      = zget($sprint, 'realBegan', '');
+            $project->realEnd        = zget($sprint, 'realEnd', '');
             $project->days           = $this->computeDaysDelta($project->begin, $project->end);
             $project->PM             = $sprint->PM;
             $project->auth           = 'extend';
@@ -7541,7 +7558,6 @@ class upgradeModel extends model
 
             $projectID = $this->dao->lastInsertId();
 
-            $this->action->create('project', $projectID, 'openedbysystem');
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             $project->id = $projectID;
@@ -7588,7 +7604,7 @@ class upgradeModel extends model
         foreach($projects as $year => $sprints)
         {
             $project = new stdclass();
-            $project->name           = $year;
+            $project->name           = $year > 0 ? $year : $this->lang->upgrade->unknownDate;
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;
@@ -7895,5 +7911,62 @@ class upgradeModel extends model
 
         /* Delete history module */
         $this->dao->delete()->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->exec();
+    }
+
+    /**
+     * Xuan: Set mute and freeze for hidden groups.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanSetMuteForHiddenGroups()
+    {
+        $this->dao->update(TABLE_IM_CHATUSER)->set('hide')->eq('0')->set('mute')->eq('1')->set('freeze')->eq('1')->where('hide')->eq('1')->andWhere('quit')->eq('0000-00-00 00:00:00')->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Notify users who have hide the group.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanNotifyGroupHiddenUsers()
+    {
+        $noticeUsers = $this->dao->select('user')->from(TABLE_IM_CHATUSER)->where('hide')->eq('1')->andWhere('quit')->eq('0000-00-00 00:00:00')->groupBy('user')->fetchAll();
+
+        $sender = new stdClass();
+        $sender->avatar   = commonModel::getSysURL() . '/www/favicon.ico';
+        $sender->id       = 'upgradeArchive';
+        $sender->realname = $this->lang->upgrade->archiveChangeNoticeTitle;
+        $this->loadModel('im')->messageCreateNotify(array_keys($noticeUsers), '', '', $this->lang->upgrade->archiveChangeNoticeContent, 'text', '', array(), $sender);
+        return !dao::isError();
+    }
+
+    /**
+     * Init shadow builds.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initShadowBuilds()
+    {
+        $releases = $this->dao->select('id,product,shadow,build,name,date,createdBy,createdDate,deleted')->from(TABLE_RELEASE)->where('shadow')->eq(0)->fetchAll();
+        foreach($releases as $release)
+        {
+            $shadowBuild = new stdclass();
+            $shadowBuild->product     = $release->product;
+            $shadowBuild->builds      = $release->build;
+            $shadowBuild->name        = $release->name;
+            $shadowBuild->date        = $release->date;
+            $shadowBuild->createdBy   = $release->createdBy;
+            $shadowBuild->createdDate = $release->createdDate;
+            $shadowBuild->deleted     = $release->deleted;
+            $this->dao->insert(TABLE_BUILD)->data($shadowBuild)->exec();
+
+            $shadowBuildID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_RELEASE)->set('shadow')->eq($shadowBuildID)->where('id')->eq($release->id)->exec();
+        }
+        return true;
     }
 }

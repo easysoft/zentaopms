@@ -819,6 +819,58 @@ class customModel extends model
     }
 
     /**
+     * Compute features.
+     *
+     * @access public
+     * @return array
+     */
+    public function computeFeatures()
+    {
+        $disabledFeatures = array('program', 'productLine');
+        foreach($this->config->custom->dataFeatures as $feature)
+        {
+            $function = 'has' . ucfirst($feature) . 'Data';
+            if(!$this->$function())
+            {
+                if(strpos($feature, 'scrum') !== false)
+                {
+                    if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
+                    $disabledFeatures['scrum'][] = $feature;
+                }
+                elseif($feature == 'waterfall')
+                {
+                    $disabledFeatures[] = 'project' . ucfirst($feature);
+                }
+                else
+                {
+                    $disabledFeatures[] = $feature;
+                }
+            }
+        }
+        if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
+        $disabledFeatures['scrum'][] = 'scrumMeasrecord';
+
+        $enabledScrumFeatures  = array();
+        $disabledScrumFeatures = array();
+        if($this->config->edition == 'max')
+        {
+            foreach($this->config->custom->scrumFeatures as $scrumFeature)
+            {
+                if(in_array('scrum' . ucfirst($scrumFeature), $disabledFeatures['scrum']))
+                {
+                    $disabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+                }
+                else
+                {
+                    $enabledScrumFeatures[] = $this->lang->custom->scrum->features[$scrumFeature];
+                }
+            }
+        }
+
+        return array($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures);
+    }
+
+    /**
      * process project priv within a program set.
      *
      * @access public
@@ -897,7 +949,7 @@ class customModel extends model
         $disabledFeatures = '';
         if($mode == 'light')
         {
-            foreach($this->config->custom->features as $feature)
+            foreach($this->config->custom->dataFeatures as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
                 if(!$this->$function()) $disabledFeatures .= "$feature,";

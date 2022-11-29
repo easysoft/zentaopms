@@ -36,6 +36,7 @@ js::set('kanbanID', $kanban->id);
 js::set('laneCount', $laneCount);
 js::set('userList', $userList);
 js::set('noAssigned', $lang->kanbancard->noAssigned);
+js::set('mode', $config->systemMode);
 js::set('users', $users);
 js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);

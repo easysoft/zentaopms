@@ -9,5 +9,16 @@
  * @version     $Id: zh-cn.php 4129 2020-11-27 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->projectbuild->common   = 'Project Build';
-$lang->projectbuild->browse   = 'Build List';
+$lang->projectbuild->common           = 'Project Build';
+$lang->projectbuild->browse           = 'Build List';
+$lang->projectbuild->create           = "Create Build";
+$lang->projectbuild->edit             = "Edit Build";
+$lang->projectbuild->delete           = "Delete Build";
+$lang->projectbuild->view             = "Build Detail";
+$lang->projectbuild->linkStory        = "Link {$lang->SRCommon}";
+$lang->projectbuild->linkBug          = "Link Bug";
+$lang->projectbuild->unlinkStory      = "Unlink {$lang->SRCommon}";
+$lang->projectbuild->unlinkBug        = "Unlink Bug";
+$lang->projectbuild->batchUnlink      = 'Batch Unlink';
+$lang->projectbuild->batchUnlinkStory = "Batch Unlink {$lang->SRCommon}";
+$lang->projectbuild->batchUnlinkBug   = 'Batch Unlink Bug';

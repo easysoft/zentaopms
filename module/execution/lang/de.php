@@ -146,7 +146,9 @@ $lang->execution->estimate = 'estimate';
 $lang->execution->consumed = 'consumed';
 $lang->execution->left     = 'Left';
 
-$lang->execution->copyTeamTip = "copy Project/project team members";
+$lang->execution->copyTeamTip        = "copy Project/project team members";
+$lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';
+$lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』';
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Aktivieren';
@@ -345,6 +347,7 @@ $lang->execution->wbs                  = "Aufgaben aufteilen";
 $lang->execution->batchWBS             = "Mehrere aufteilen";
 $lang->execution->howToUpdateBurn      = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='Wie wird der Burndown Chart aktualisiert?' class='btn btn-link'>Hilfe <i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories         = "Keine Story kann verknüpft werden. Bitte prüfen Sie ob ein Story mit {$lang->executionCommon} verknüpft ist {$lang->productCommon} und stellen Sie sicher das diese geprüft ist.";
+$lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories       = "{$lang->executionCommon} verknüpfte Story ist ein Subset von {$lang->productCommon}, welche nur nach überprüfung verknüpft werden kann. Bitte <a href='%s'> Story verknüpfen</a>。";
 $lang->execution->haveDraft            = "There are %s draft stories can't be linked.";
 $lang->execution->doneExecutions       = 'Erledigt';
@@ -363,7 +366,7 @@ $lang->execution->noExecution          = 'Keine Projekte. ';
 $lang->execution->noExecutions         = "No {$lang->execution->common}.";
 $lang->execution->noPrintData          = "No data can be printed.";
 $lang->execution->noMembers            = 'Keine Mitglieder. ';
-$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
+$lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100%s, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip  = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip      = "({$lang->SRCommon} has never been linked under the project, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
 $lang->execution->copyTeamTitle        = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";

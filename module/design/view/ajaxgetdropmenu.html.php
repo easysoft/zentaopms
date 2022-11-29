@@ -43,6 +43,9 @@ foreach($products as $product)
   <div class="table-col col-left">
     <div class='list-group'>
       <?php
+      $selected = $productID ? '' : 'selected';
+      echo html::a($this->createLink('design', 'browse', "projectID=$projectID"), $lang->product->all, '', "class=$selected data-app='$tab'");
+
       if(!empty($myProductsHtml))
       {
           echo "<div class='heading'>{$lang->product->mine}</div>";

@@ -408,8 +408,12 @@ class userEntry extends entry
         $this->setPost('gender', $gender);
 
         $password = $this->request('password', zget($_POST, 'password', ''));
-        $this->setPost('password1', md5($password));
-        $this->setPost('password2', md5($password));
+        if($password)
+        {
+            $this->setPost('password1', md5($password));
+            $this->setPost('password2', md5($password));
+            $this->setPost('passwordStrength', 2);
+        }
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
         $control = $this->loadController('user', 'edit');

@@ -281,6 +281,7 @@ $lang->execution->wbs                 = "Tạo nhiệm vụ";
 $lang->execution->batchWBS            = "Tạo nhiệm vụ hàng loạt";
 $lang->execution->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Làm thế nào để cập nhật biểu đồ Burndown?' class='btn btn-link'>Giúp<i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories        = "Không có câu chuyện có thể liên kết. Vui lòng kiểm tra có câu chuyện trong {$lang->executionCommon} cái liên kết tới {$lang->productCommon} và chắc chắn nó đã được duyệt.";
+$lang->execution->projectNoStories    = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories      = "Câu chuyện liên kết tới {$lang->executionCommon} là tập hợp con của câu chuyện liên kết tới {$lang->productCommon}. Các câu chuyện chỉ có thể liên kết sau khi chúng đã được duyệt. <a href='%s'> Liên kết câu chuyện</a> now.";
 $lang->execution->haveDraft           = "%s câu chuyện đang nháp, bởi vậy chúng không thể liên kết.";
 $lang->execution->doneExecutions      = 'Kết thúc';

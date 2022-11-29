@@ -63,7 +63,9 @@ function syncProductOrProject(obj, type)
         });
         $('#' + type + 'Module').trigger("chosen:updated");
     })
+
     $('#copyModule').unbind('click');
+    $('#copyModule').removeAttr('onclick');
     $('#copyModule').bind('click', function(){syncModule(obj.value, viewType)});
 }
 

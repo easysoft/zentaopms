@@ -45,6 +45,7 @@
 <?php js::set('copyExecutionID', $copyExecutionID);?>
 <?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
 <?php js::set('copyNoExecution', $lang->execution->copyNoExecution);?>
+<?php js::set('model', isset($project->model) ? $project->model : '');?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -112,7 +113,7 @@
         <?php if($isStage):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
-          <td>
+          <td class='required'>
             <div class='input-group'>
               <?php echo html::input('percent', '', "class='form-control'");?>
               <span class='input-group-addon'>%</span>
@@ -134,12 +135,14 @@
           <td class='text-left' id='productsBox' colspan="3">
             <div class='row'>
               <?php $i = 0;?>
+              <?php $class = $division ? '' : 'disabled';?>
               <?php foreach($products as $product):?>
               <?php $hasBranch = ($product->type != 'normal' and isset($branchGroups[$product->id]));?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <div class='col-sm-4'>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $class onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                  <?php if($class) echo html::hidden("products[$i]", $product->id);?>
                   <span class='input-group-addon fix-border'></span>
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
@@ -147,12 +150,14 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
+              <?php if((isset($project->model) and $project->model == 'scrum') or empty($products)):?>
               <div class='col-sm-4'>
                 <div class="input-group">
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
                 </div>
               </div>
+              <?php endif;?>
             </div>
           </td>
         </tr>
@@ -268,14 +273,15 @@
       <?php else:?>
       <div id='copyProjects' class='row'>
       <?php if($projectID == 0) $executions = $copyExecutions;?>
-      <?php foreach ($executions as $id => $execution):?>
+      <?php foreach($executions as $id => $execution):?>
       <?php if(empty($id)):?>
       <?php if($copyExecutionID != 0):?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->execution->cancelCopy;?></a></div>
       <?php endif;?>
-      <?php else: ?>
+      <?php else:?>
+      <?php if(empty($execution->multiple)) continue;?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyExecutionID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons[$execution->type], 'text-muted') . ' ' . $execution->name;?></a></div>
-      <?php endif; ?>
+      <?php endif;?>
       <?php endforeach;?>
       </div>
       <?php endif;?>

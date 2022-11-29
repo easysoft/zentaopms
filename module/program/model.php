@@ -67,10 +67,11 @@ class programModel extends model
      * @param  string       $status     all|noclosed
      * @param  string|array $append
      * @param  string|int   $shadow     all | 0 | 1
+     * @param  bool         $withProgram
      * @access public
      * @return array
      */
-    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all', $append = '', $shadow = 0)
+    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all', $append = '', $shadow = 0, $withProgram = false)
     {
         /* Get the top programID. */
         if($programID)
@@ -84,71 +85,39 @@ class programModel extends model
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
         $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
 
-        return $this->dao->select('*')->from(TABLE_PRODUCT)
+        $dao = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($shadow !== 'all')->andWhere('shadow')->eq((int)$shadow)->fi()
             ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($views)->fi()
-            ->fetchPairs('id', 'name');
-    }
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($views)->fi();
 
-    /**
-     * Get product pairs which name with program.
-     *
-     * @param  int    $programID
-     * @param  string $mode
-     * @param  string $status
-     * @param  string $append
-     * @param  int    $shadow
-     * @access public
-     * @return array
-     */
-    public function getProductPairsWithProgram($programID = 0, $mode = 'assign', $status = 'all', $append = '', $shadow = 0)
-    {
-        /* Get the top programID. */
-        if($programID)
-        {
-            $program   = $this->getByID($programID);
-            $path      = array_filter(explode(',', $program->path));
-            $programID = current($path);
-        }
+        if(!$withProgram) return $dao->fetchPairs('id', 'name');
 
-        /* When mode equals assign and programID equals 0, you can query the standalone product. */
-        if(!empty($append) and is_array($append)) $append = implode(',', $append);
-        $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-
-        $products = $this->dao->select("t1.id, t1.program, CONCAT(IF(t2.name IS NOT NULL, t2.name, ''), '/', t1.name) AS name")->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.program = t2.id')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->beginIF($mode == 'assign')->andWhere('t1.program')->eq($programID)->fi()
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($views)->fi()
-            ->orderBy('t1.program, t1.order_asc')
-            ->fetchGroup('program');
+        $products = $dao->orderBy('program,order')->fetchGroup('program');
+        $productPrograms = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
 
         /* Put products of current program first.*/
-        if($mode != 'assign' && $programID)
+        if(!empty($products) and isset($products[$programID]) and $mode != 'assign' and $programID)
         {
             $currentProgramProducts = $products[$programID];
-
             unset($products[$programID]);
-
             array_unshift($products, $currentProgramProducts);
         }
 
         $productPairs = array();
         foreach($products as $programProducts)
         {
-            foreach($programProducts as $product) $productPairs[$product->id] = $product->name;
+            foreach($programProducts as $product)
+            {
+                $programName = zget($productPrograms, $product->program, '') . '/';
+                $productPairs[$product->id] = $programName . $product->name;
+            }
         }
 
         return $productPairs;
     }
-
 
     /**
      * Get program by id.
@@ -305,7 +274,7 @@ class programModel extends model
         $involvedPrograms = $this->getInvolvedPrograms($this->app->user->account);
 
         /* Get all products under programs. */
-        $productGroup = $this->dao->select('id, program, name')->from(TABLE_PRODUCT)
+        $productGroup = $this->dao->select('id, program, name, shadow')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('program')->in(array_keys($programs))
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
@@ -316,7 +285,12 @@ class programModel extends model
         $productPairs = array();
         foreach($productGroup as $programID => $products)
         {
-            foreach($products as $product) $productPairs[$product->id] = $product->id;
+            foreach($products as $product)
+            {
+                $productPairs[$product->id] = $product->id;
+
+                if($product->shadow) $product->name = $product->name . ' (' . $this->lang->project->common . ')';
+            }
         }
 
         /* Get all plans under products. */
@@ -663,7 +637,7 @@ class programModel extends model
 
                 $programName = isset($programList[$programID]) ? $programList[$programID] : '';
 
-                $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
+                if($programName) $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
             }
         }
         return $projectList;
@@ -1635,7 +1609,7 @@ class programModel extends model
                 $menu .= "<div class='btn-group'>";
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', 'btn-action', '', "data-app='project'");
+                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', 'btn-action', '', "data-app='project'" . ($program->hasProduct ? '' : " disabled='disabled'"));
 
                 $disabledWhitelist = $program->acl == 'open' ? " disabled='disabled' style='pointer-events: none;'" : '';
                 $menu             .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=browse", $program, $type, 'shield-check', '', 'btn-action', '', "data-app='project'" . $disabledWhitelist);

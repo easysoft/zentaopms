@@ -109,7 +109,13 @@ $(function()
     {
         $('#sidebar .side-body').load($(this).attr('data-href'));
         return false;
-    })
+    }).on('click', '#related .btn-close', function()
+    {
+        $('#codeContainer').css('height', codeHeight);
+        $('#related').css('height', 0);
+        $tabs = $('#relationTabs').data('zui.tabs');
+        if($tabs) $tabs.closeAll();
+    });
 
     if($("main").is(".hide-sidebar"))
     {

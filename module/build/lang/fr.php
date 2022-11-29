@@ -33,6 +33,9 @@ $lang->build->project        = 'Project';
 $lang->build->branch         = 'Plateforme/Branche';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
+$lang->build->integrated     = 'Integrated';
+$lang->build->singled        = 'Singled';
+$lang->build->builds         = 'Included Builds';
 $lang->build->name           = 'Nom';
 $lang->build->date           = 'Date';
 $lang->build->builder        = 'Builder';
@@ -55,18 +58,23 @@ $lang->build->emptyExecution =  $lang->executionCommon . 'should be not empty.';
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
 $lang->build->notice->changeExecution = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
+$lang->build->notice->changeBuilds    = "The version of the submitted test order cannot be modified builds";
+$lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the project version";
 
 $lang->build->finishStories = "  {$lang->SRCommon} Terminées %s";
 $lang->build->resolvedBugs  = '  Bugs Résolus %s';
 $lang->build->createdBugs   = '  Bugs Signalés %s';
 
 $lang->build->placeholder = new stdclass();
-$lang->build->placeholder->scmPath  = ' Répertoire des codes sources, ex: chemin de la bibliothèque Subversion / GitSource';
-$lang->build->placeholder->filePath = ' Chemin de téléchargement pour ce Build.';
+$lang->build->placeholder->scmPath        = ' Répertoire des codes sources, ex: chemin de la bibliothèque Subversion / GitSource';
+$lang->build->placeholder->filePath       = ' Chemin de téléchargement pour ce Build.';
+$lang->build->placeholder->multipleSelect = "Support select multiple builds";
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, Build <strong>$extra</strong> créé par <strong>$actor</strong>.' . "\n";
 
 $lang->backhome = 'Retour';
 
-$lang->build->featureBar['browse']['all'] = 'Build List';
+$lang->build->isIntegrated = array();
+$lang->build->isIntegrated['no']  = 'No';
+$lang->build->isIntegrated['yes'] = 'Yes';

@@ -28,6 +28,32 @@ $(function()
 })
 
 /**
+ * Show team menu.
+ *
+ * @access public
+ * @return void
+ */
+function showTeamMenu()
+{
+    if($('[name^=multiple]').prop('checked'))
+    {
+        $('#assignedTo, #assignedTo_chosen').addClass('hidden');
+        $('#assignedTo').next('.picker').addClass('hidden');
+        $('.team-group').removeClass('hidden');
+        $('.modeBox').removeClass('hidden');
+        $('#estimate').attr('readonly', true);
+    }
+    else
+    {
+        $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
+        $('#assignedTo').next('.picker').removeClass('hidden');
+        $('.team-group').addClass('hidden');
+        $('.modeBox').addClass('hidden');
+        $('#estimate').attr('readonly', false);
+    }
+    $('#dataPlanGroup').fixInputGroup();
+}
+/**
  * Load module, stories and members.
  *
  * @param  int    $executionID
@@ -317,7 +343,7 @@ function setStories(moduleID, executionID)
         $("#story").addClass('filled').chosen();
 
         /* If there is no story option, select will be hidden and text will be displayed; otherwise, the opposite is true */
-        if($('#story option').length > 1)
+        if($('#story option').length > 1 || parseInt(hasProduct) == 0)
         {
             $('#story').parent().removeClass('hidden');
             $('#storyBox').addClass('hidden');
@@ -356,7 +382,7 @@ function toggleSelectTestStory()
     {
         $('#module').closest('tr').removeClass('hidden');
         $('#multipleBox').closest('td').removeClass('hidden');
-        $('#story').closest('tr').removeClass('hidden');
+        if(showFields.indexOf('story') != -1) $('#story').closest('tr').removeClass('hidden');
         $('#estStarted').closest('tr').removeClass('hidden');
         $('#estimate').closest('.table-col').removeClass('hidden');
         $('#testStoryBox').addClass('hidden');
@@ -518,23 +544,7 @@ $(document).ready(function()
     /* Show team menu. */
     $('[name^=multiple]').change(function()
     {
-        if($(this).prop('checked'))
-        {
-            $('#assignedTo, #assignedTo_chosen').addClass('hidden');
-            $('#assignedTo').next('.picker').addClass('hidden');
-            $('.team-group').removeClass('hidden');
-            $('.modeBox').removeClass('hidden');
-            $('#estimate').attr('readonly', true);
-        }
-        else
-        {
-            $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
-            $('#assignedTo').next('.picker').removeClass('hidden');
-            $('.team-group').addClass('hidden');
-            $('.modeBox').addClass('hidden');
-            $('#estimate').attr('readonly', false);
-        }
-        $('#dataPlanGroup').fixInputGroup();
+        showTeamMenu();
     });
 
     $('#showAllModule').change(function()

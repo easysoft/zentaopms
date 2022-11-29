@@ -4,6 +4,7 @@ $lang->zahost->common         = 'ZAhost';
 $lang->zahost->browse         = 'Hôte Liste';
 $lang->zahost->create         = 'Ajouter Hôte';
 $lang->zahost->view           = 'Hôte Détail';
+$lang->zahost->init           = 'Init Host';
 $lang->zahost->edit           = 'Éditer';
 $lang->zahost->editAction     = 'Éditer Hôte';
 $lang->zahost->delete         = 'Supprimer';
@@ -11,6 +12,7 @@ $lang->zahost->deleteAction   = 'Supprimer Hôte';
 $lang->zahost->byQuery        = 'Recherche';
 $lang->zahost->all            = 'Tous les hôtes';
 $lang->zahost->browseNode     = 'ZAnode Browse';
+$lang->zahost->deleted        = "Deleted";
 
 $lang->zahost->name        = 'Nom';
 $lang->zahost->IP          = 'IP/Domain';
@@ -33,27 +35,28 @@ $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
 $lang->zahost->os         = 'System';
 $lang->zahost->imageName  = 'Image File';
 
+$lang->zahost->goback              = 'Go back';
+$lang->zahost->createSuccessNotice = 'Save successfully, initialize the ZAhost to start the automation service';
+
 $lang->zahost->initHost = new stdclass;
-$lang->zahost->initHost->checkStatus = "Check Service Status";
-$lang->zahost->initHost->not_install = "Not installed";
+$lang->zahost->initHost->checkStatus   = "Check Service Status";
+$lang->zahost->initHost->not_install   = "Not installed";
 $lang->zahost->initHost->not_available = "Installed, Not Started";
-$lang->zahost->initHost->ready = "Ready";
-$lang->zahost->initHost->next = "Next";
-$lang->zahost->initHost->initSuccessNotice = "The initialization was successful, click Next to complete the next steps.";
+$lang->zahost->initHost->ready         = "Ready";
+$lang->zahost->initHost->next          = "Next";
+
+$lang->zahost->initHost->initSuccessNotice   = "The initialization was successful, click Next to complete the next steps.";
 $lang->zahost->initHost->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
-$lang->zahost->initHost->initFailNoticeDesc = "1. Re-execute the script <br/>2. Review the initialization FAQ";
+$lang->zahost->initHost->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
+
 $lang->zahost->initHost->serviceStatus = [
     "kvm" => 'not_install',
     "novnc" => 'not_install',
     "websockify" => 'not_install',
 ];
-$lang->zahost->initHost->title = "Initialize Host";
-$lang->zahost->initHost->descTitle = "Follow these steps to complete the initialization on the host:";
-$lang->zahost->initHost->descLi = [
-    "Download the init script to the host：wget https://pkg.qucheng.com/zenagent/zagentenv",
-    "Execute the init script on the host and execute the command example under Ubuntu：./zagentenv"
-];
-$lang->zahost->initHost->statusTitle = "Service Status";
+$lang->zahost->initHost->title       = "Initialize Host";
+$lang->zahost->initHost->descTitle   = "Follow these steps to complete the initialization on the host:";
+$lang->zahost->initHost->initDesc    = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
 
 $lang->zahost->image = new stdclass;
 $lang->zahost->image->list          = 'Image List';
@@ -69,15 +72,20 @@ $lang->zahost->image->desc       = 'Description';
 $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->diskSize;
 $lang->zahost->image->os         = $lang->zahost->os;
-$lang->zahost->image->osVersion  = $lang->zahost->osVersion;
-$lang->zahost->image->osLang     = $lang->zahost->osLang;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
+$lang->zahost->image->progress   = 'Progress';
 
-$lang->zahost->image->statusList['created']    = 'Created';
-$lang->zahost->image->statusList['canceled']   = 'Canceled';
-$lang->zahost->image->statusList['inprogress'] = 'Inprogress';
-$lang->zahost->image->statusList['completed']  = 'Completed';
-$lang->zahost->image->statusList['failed']     = 'Failed';
+$lang->zahost->image->statusList['notDownloaded'] = 'Not Downloaded';
+$lang->zahost->image->statusList['created']       = 'Inprogress';
+$lang->zahost->image->statusList['canceled']      = 'Canceled';
+$lang->zahost->image->statusList['inprogress']    = 'Inprogress';
+$lang->zahost->image->statusList['completed']     = 'Completed';
+$lang->zahost->image->statusList['failed']        = 'Failed';
+
+$lang->zahost->langList = array();
+$lang->zahost->langList['zh_cn'] = 'Simplified Chinese';
+$lang->zahost->langList['zh_tw'] = 'Traditional Chinese';
+$lang->zahost->langList['en_us'] = 'American English';
 
 $lang->zahost->empty         = 'No Host';
 

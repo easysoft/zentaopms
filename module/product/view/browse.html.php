@@ -27,6 +27,8 @@ $isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 js::set('browseType', $browseType);
+js::set('account', $this->app->user->account);
+js::set('reviewStory', $lang->product->reviewStory);
 js::set('productID', $productID);
 js::set('projectID', $projectID);
 js::set('branch', $branch);
@@ -38,6 +40,7 @@ js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->execution->treeLevel['all']);
 js::set('foldAll',       $lang->execution->treeLevel['root']);
 js::set('storyType',     $storyType);
+js::set('vision',        $this->config->vision);
 ?>
 <style>
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
@@ -73,13 +76,14 @@ js::set('storyType',     $storyType);
     <?php if($isProjectStory): ?>
     <?php if(!empty($project->hasProduct)):?>
     <div class='btn-group'>
-      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $productName;?>'><?php echo $productName;?></span> <span class='caret'></span></a>
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><div class='text' style="overflow: hidden;" title='<?php echo $productName;?>'><?php echo $productName;?></div> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
-        echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
+        echo '<li ' . (empty($productID) ? "class='active'" : '') . '>' . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
         foreach($projectProducts as $projectProduct)
         {
-            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$projectProduct->id&branch=all"), $projectProduct->name, '', "title='{$projectProduct->name}' class='text-ellipsis'") . "</li>";
+            $active = $projectProduct->id == $productID ? "class='active'" : '';
+            echo "<li $active>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$projectProduct->id&branch=all"), $projectProduct->name, '', "title='{$projectProduct->name}' class='text-ellipsis'") . "</li>";
         }
         ?>
       </ul>
@@ -401,9 +405,9 @@ js::set('storyType',     $storyType);
           <div class='btn-group dropup'>
             <?php
             foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
-            $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
-            $disabled       = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink     = $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType");
+            $storyProductID  = count($storyProductIds) > 1 ? 0 : $productID;
+            $disabled        = $canBatchEdit ? '' : "disabled='disabled'";
+            $actionLink      = $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType");
             ?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch) echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch):?>
@@ -507,9 +511,9 @@ js::set('storyType',     $storyType);
             </ul>
           </div>
 
+          <?php if($productID and (($product->type != 'normal' and $branchID != 'all') or $product->type == 'normal')):?>
           <?php $isShowModuleBTN = ($isProjectStory and $browseType != 'bybranch') ? false : true;?>
-          <?php if($canBatchChangeModule and $productID and $isShowModuleBTN):?>
-          <?php if(($product->type != 'normal' and $branchID != 'all') or $product->type == 'normal')?>
+          <?php if($canBatchChangeModule and $isShowModuleBTN):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 8;?>
@@ -537,7 +541,7 @@ js::set('storyType',     $storyType);
           </div>
           <?php endif;?>
           <?php if($canBatchChangePlan and $storyType == 'story'):?>
-          <div class="btn-group dropup <?php echo $productID == 0 ? 'hidden' : '';?>">
+          <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->planAB;?> <span class="caret"></span></button>
             <?php
             unset($plans['']);
@@ -566,6 +570,7 @@ js::set('storyType',     $storyType);
               </div>
             </div>
           </div>
+          <?php endif;?>
           <?php endif;?>
 
           <?php if($canBatchAssignTo):?>

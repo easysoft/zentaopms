@@ -1,5 +1,5 @@
 <?php
-class port extends control
+class transfer extends control
 {
     /**
      * Export datas.
@@ -12,7 +12,7 @@ class port extends control
     {
         if($_POST)
         {
-            $this->port->export($model);
+            $this->transfer->export($model);
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
     }
@@ -49,7 +49,7 @@ class port extends control
 
             if($params)
             {
-                /* Split parameters into variables (executionID=1,status=open).*/
+                /* Split parameters into variables (executionID=1,status=open). */
                 $params = explode(',', $params);
                 foreach($params as $key => $param)
                 {
@@ -60,21 +60,21 @@ class port extends control
                 extract($params);
 
                 /* save params to session. */
-                $this->session->set(($model.'PortParams'), $params);
+                $this->session->set(($model.'TransferParams'), $params);
             }
 
             $this->loadModel($model);
-            $this->config->port->sysDataList = $this->port->initSysDataFields();
+            $this->config->transfer->sysDataList = $this->transfer->initSysDataFields();
 
             $fields = $this->config->$model->templateFields;
 
-            /* Init config fieldList */
-            $fieldList = $this->port->initFieldList($model, $fields);
+            /* Init config fieldList. */
+            $fieldList = $this->transfer->initFieldList($model, $fields);
 
-            $list = $this->port->setListValue($model, $fieldList);
+            $list = $this->transfer->setListValue($model, $fieldList);
             if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
 
-            $fields = $this->port->getExportDatas($fieldList);
+            $fields = $this->transfer->getExportDatas($fieldList);
 
             $this->post->set('fields', $fields['fields']);
             $this->post->set('kind', isset($_POST['kind']) ? $_POST['kind'] : $model);
@@ -115,7 +115,7 @@ class port extends control
 
             move_uploaded_file($file['tmpname'], $fileName);
 
-            if($extension == 'xlsx' or $extension == 'xls') $this->port->cutFile($fileName);
+            if($extension == 'xlsx' or $extension == 'xls') $this->transfer->cutFile($fileName);
 
             $phpExcel  = $this->app->loadClass('phpexcel');
             $phpReader = new PHPExcel_Reader_Excel2007();
@@ -130,12 +130,12 @@ class port extends control
             die(js::locate($locate, 'parent.parent'));
         }
 
-        $this->view->title = $this->lang->port->importCase;
+        $this->view->title = $this->lang->transfer->importCase;
         $this->display();
     }
 
     /**
-     * Ajax get Tbody .
+     * Ajax get Tbody.
      *
      * @param  string $model
      * @param  int    $lastID
@@ -151,25 +151,27 @@ class port extends control
 
         $this->loadModel($model);
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
-        $fields       = $this->port->initFieldList($model, $importFields, false);
-        $formatDatas  = $this->port->format($model, $filter);
-        $datas        = $this->port->getPageDatas($formatDatas, $pagerID);
+
+        if($model == 'testcase' and !empty($_SESSION[$model . 'TemplateFields'])) $this->config->$model->templateFields = implode(',', $importFields);
+        $fields       = $this->transfer->initFieldList($model, $importFields, false);
+        $formatDatas  = $this->transfer->format($model, $filter);
+        $datas        = $this->transfer->getPageDatas($formatDatas, $pagerID);
 
         if($model == 'story')
         {
-            $product = $this->loadModel('product')->getByID($this->session->storyPortParams['productID']);
+            $product = $this->loadModel('product')->getByID($this->session->storyTransferParams['productID']);
             if($product->type == 'normal') unset($fields['branch']);
             if($this->session->storyType == 'requirement') unset($fields['plan']);
         }
 
         if($model == 'bug')
         {
-            $product = $this->loadModel('product')->getByID($this->session->bugPortParams['productID']);
+            $product = $this->loadModel('product')->getByID($this->session->bugTransferParams['productID']);
             if($product->type == 'normal') unset($fields['branch']);
             if($product->shadow and ($this->app->tab == 'execution' or $this->app->tab == 'project')) unset($fields['product']);
         }
         if($model == 'task') $datas = $this->task->processDatas4Task($datas);
-        $html = $this->port->buildNextList($datas->datas, $lastID, $fields, $pagerID, $model);
+        $html = $this->transfer->buildNextList($datas->datas, $lastID, $fields, $pagerID, $model);
         die($html);
     }
 
@@ -195,7 +197,7 @@ class port extends control
             foreach($appendFields as $appendField) $fields .= ',' . $appendField->field;
         }
 
-        $fieldList = $this->port->initFieldList($model, $fields, false);
+        $fieldList = $this->transfer->initFieldList($model, $fields, false);
 
         if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array();
 
