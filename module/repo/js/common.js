@@ -109,12 +109,16 @@ $(function()
     {
         $('#sidebar .side-body').load($(this).attr('data-href'));
         return false;
-    }).on('click', '#related .btn-close', function()
+    }).on('click', '#log .btn-close', function()
     {
-        $('#codeContainer').css('height', codeHeight);
-        $('#related').css('height', 0);
         $tabs = $('#relationTabs').data('zui.tabs');
         if($tabs) $tabs.closeAll();
+        $('.history').html('');
+        $('#log').data('line', 0);
+        $('#log').hide();
+
+        $('#codeContainer').css('height', codeHeight);
+        $('#related').css('height', 0);
     });
 
     if($("main").is(".hide-sidebar"))

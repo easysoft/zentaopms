@@ -235,6 +235,7 @@ h3 {font-size: 16px;}
 #relationTabs .nav-tabs >li > a .tab-nav-close {display: none;}
 #relationTabs .nav-tabs > li > a > i, #relationTabs .nav-tabs > li > a > span {background: #EDEEF2; font-weight: normal; padding: 1px 5px;}
 #relationTabs .nav-tabs > li.active > a > i, #relationTabs .nav-tabs > li.active > a > span {background: #E6F0FF; color: #2e7fff;}
+.linkContent strong.text-primary {cursor: pointer;}
 
 #modules li {padding: 5px 0 0 15px;}
 .file-tree #modules .icon {color: #9EA3B0;}
