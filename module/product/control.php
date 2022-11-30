@@ -1048,7 +1048,7 @@ class product extends control
         $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';
         $output   = html::select($field, $plans, $planID, "class='form-control chosen' $multiple");
 
-        if($branch == 0 and strpos($param, 'edit')) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
+        if($branch == 0 and strpos($param, 'edit') and !strpos($param, 'forstory')) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
 
         if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
         {
