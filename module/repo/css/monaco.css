@@ -13,7 +13,7 @@
 #fileTabs .tab-nav-item {max-width: none !important;}
 #fileTabs > .tabs-navbar {overflow: hidden; padding-bottom: 10px; position: relative; height: 35px;}
 #fileTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex;}
-.repoCode .content {padding: 5px;}
+.repoCode .content {margin-left: 5px;}
 .repoCode .nav > li > a {display: flex; white-space: pre;}
 #sourceSwapper {border: 1px solid #D8DBDE; border-radius: 2px; width: 100%;}
 #sourceSwapper .repo-select {width: 100%;}
