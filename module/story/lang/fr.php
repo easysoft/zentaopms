@@ -444,6 +444,7 @@ $lang->story->chosen->reviewedBy = 'Choisir valideur';
 $lang->story->notice = new stdClass();
 $lang->story->notice->closed           = 'La Story que vous avez sélectionnée est malheureusement fermée !';
 $lang->story->notice->reviewerNotEmpty = 'This requirement needs to be reviewed, and the reviewedby is required.';
+$lang->story->notice->changePlan       = 'The plan can be changed to only one item.';
 
 $lang->story->convertToTask = new stdClass();
 $lang->story->convertToTask->fieldList = array();

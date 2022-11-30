@@ -889,6 +889,17 @@ class storyModel extends model
             return false;
         }
 
+        $storyPlan = !empty($_POST['plan']) ? $_POST['plan'] : array();
+        if(count($storyPlan) > 1)
+        {
+            $oldStoryPlan = !empty($oldStory->planTitle) ? array_keys($oldStory->planTitle) : array();
+            if(!empty(array_diff($storyPlan,$oldStoryPlan)) or !empty(array_diff($oldStoryPlan,$storyPlan)))
+            {
+                dao::$errors[] = $this->lang->story->notice->changePlan;
+                return false;
+            }
+        }
+
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,duplicateStory')
             ->cleanFloat('estimate')
