@@ -4626,10 +4626,28 @@ class executionModel extends model
             foreach($branches as $branchID => $branchName) $branchIdList[$branchID] = $branchID;
         }
 
+        $branchQuery = '';
+        if(!empty($branchIdList))
+        {
+            $branchQuery .= '(';
+            $branchCount  = count($branchIdList);
+            foreach($branchIdList as $index => $branchID)
+            {
+                $branchQuery .= "FIND_IN_SET('$branchID', branch)";
+                if($index < $branchCount - 1) $branchQuery .= ' OR ';
+            }
+        }
+        else
+        {
+            $branchQuery .= "FIND_IN_SET('', branch)";
+        }
+
+        $branchQuery .= ')';
+
         $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
-            ->andWhere('branch')->in($branchIdList)->fi()
+            ->andWhere($branchQuery)
             ->orderBy('begin desc')
             ->fetchAll('id');
 

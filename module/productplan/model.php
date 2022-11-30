@@ -240,13 +240,27 @@ class productplanModel extends model
      */
     public function getPairs($product = 0, $branch = '', $param = '', $skipParent = false)
     {
-        $date = date('Y-m-d');
+        $date  = date('Y-m-d');
+
+        $branchQuery = '';
+        if($branch !== '' and $branch != 'all')
+        {
+            $branchQuery .= '(';
+            $branchCount = count(explode(',', $branch));
+            foreach(explode(',', $branch) as $index => $branchID)
+            {
+                $branchQuery .= "FIND_IN_SET('$branchID', t1.branch)";
+                if($index < $branchCount - 1) $branchQuery .= ' OR ';
+            }
+            $branchQuery .= ')';
+        }
+
         $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName,t3.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t2.id=t1.branch')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
             ->where('t1.product')->in($product)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($branch !== '' and $branch != 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
+            ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.begin desc')
@@ -280,12 +294,26 @@ class productplanModel extends model
         $date   = date('Y-m-d');
         $param  = strtolower($param);
         $branch = strpos($param, 'withmainplan') !== false ? "0,$branch" : $branch;
+
+        $branchQuery = '';
+        if($branch !== '' and $branch != 'all')
+        {
+            $branchQuery .= '(';
+            $branchCount = count(explode(',', $branch));
+            foreach(explode(',', $branch) as $index => $branchID)
+            {
+                $branchQuery .= "FIND_IN_SET('$branchID', branch)";
+                if($index < $branchCount - 1) $branchQuery .= ' OR ';
+            }
+            $branchQuery .= ')';
+        }
+
         $plans  = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF($branch !== 'all' and $branch !== '')->andWhere("branch")->in($branch)->fi()
+            ->beginIF($branch !== 'all' and $branch !== '')->andWhere($branchQuery)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
@@ -361,19 +389,22 @@ class productplanModel extends model
         $planGroup   = array();
         foreach($plans as $plan)
         {
-            if(!isset($planGroup[$plan->product][$plan->branch])) $planGroup[$plan->product][$plan->branch] = array('' => '');
-
-            if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue;
-
-            if($field == 'name')
+            foreach(explode(',', $plan->branch) as $branch)
             {
-                if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
-                $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
-                if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
-            }
-            else
-            {
-                $planGroup[$plan->product][$plan->branch][$plan->id] = $plan;
+                if(!isset($planGroup[$plan->product][$branch])) $planGroup[$plan->product][$branch] = array('' => '');
+
+                if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue 2;
+
+                if($field == 'name')
+                {
+                    if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
+                    $planGroup[$plan->product][$branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+                    if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+                }
+                else
+                {
+                    $planGroup[$plan->product][$branch][$plan->id] = $plan;
+                }
             }
         }
         return $planGroup;

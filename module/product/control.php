@@ -257,7 +257,7 @@ class product extends control
 
             $this->products  = $this->product->getProducts($projectID, 'all', '', false);
             $projectProducts = $this->product->getProducts($projectID);
-            $productPlans    = $this->execution->getPlans($projectProducts, 'skipParent');
+            $productPlans    = $this->execution->getPlans($projectProducts, 'skipParent', $projectID);
 
             if($browseType == 'bybranch') $param = $branchID;
             $stories = $this->story->getExecutionStories($projectID, $productID, $branchID, $sort, $browseType, $param, $storyType, '', $pager);
@@ -1042,7 +1042,7 @@ class product extends control
         }
         else
         {
-            $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch == 0 ? 'all' : $branch, $param);
+            $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch == '0' ? 'all' : $branch, $param);
         }
         $field    = $fieldID !== '' ? "plans[$fieldID]" : 'plan';
         $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';
