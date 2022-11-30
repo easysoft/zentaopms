@@ -3921,8 +3921,15 @@ class taskModel extends model
     public function getToAndCcList($task)
     {
         /* Set toList and ccList. */
-        $toList = $task->assignedTo;
-        $ccList = trim($task->mailto, ',');
+        $toList         = $task->assignedTo;
+        $ccList         = trim($task->mailto, ',');
+        $toTeamTaskList = '';
+        if($task->mode == 'multi')
+        {
+            $toTeamTaskList = $this->getTeamTaskAssignedTo($task->id);
+            $toTeamTaskList = implode(',', $toTeamTaskList);
+            $toList         = $toTeamTaskList;
+        }
 
         if(empty($toList))
         {
@@ -4338,5 +4345,20 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
             $order ++;
         }
+    }
+
+    /**
+     * Get teamTask assignedTo.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function getTeamTaskAssignedTo($taskID)
+    {
+        $taskType = $this->dao->select('mode')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('mode');
+        if($taskType != 'multi') return array();
+        $assignedToList = $this->dao->select('account')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchPairs();
+        return empty($assignedToList) ? array() : array_keys($assignedToList);
     }
 }
