@@ -227,7 +227,8 @@ class bug extends control
         $this->view->product         = $product;
         $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch, 'withreleased');
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch);
+        $this->view->releasedBuilds  = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
         $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
@@ -558,13 +559,13 @@ class bug extends control
         /* If executionID is setted, get builds and stories of this execution. */
         if($executionID)
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone', $executionID, 'execution');
+            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,deletereleased', $executionID, 'execution');
             $stories = $this->story->getExecutionStoryPairs($executionID);
             if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         }
         else
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch');
+            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,deletereleased');
             $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'all','id_desc', 0, 'full', 'story', false);
         }
 
@@ -655,6 +656,7 @@ class bug extends control
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
         $this->view->executions            = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $executions;
         $this->view->builds                = $builds;
+        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
         $this->view->moduleID              = (int)$moduleID;
         $this->view->projectID             = $projectID;
         $this->view->projectModel          = $projectModel;
@@ -765,7 +767,7 @@ class bug extends control
         /* If executionID is setted, get builds and stories of this execution. */
         if($executionID)
         {
-            $builds    = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution');
+            $builds    = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,deletereleased', $executionID, 'execution');
             $stories   = $this->story->getExecutionStoryPairs($executionID);
             $execution = $this->loadModel('execution')->getById($executionID);
             if($execution->type == 'kanban')
@@ -785,7 +787,7 @@ class bug extends control
         }
         else
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty');
+            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,deletereleased');
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
 
@@ -852,6 +854,7 @@ class bug extends control
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
+        $this->view->releasedBuilds   = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
         $this->view->users            = $this->user->getPairs('devfirst|noclosed');
         $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->projectID        = $projectID;
@@ -933,7 +936,7 @@ class bug extends control
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withreleased');
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
 
@@ -1079,18 +1082,18 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->edit;
 
         /* Assign. */
-        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,withreleased');
+        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty');
         if($executionID)
         {
-            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch', $executionID, 'execution');
+            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,deletereleased', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch', $projectID, 'project');
+            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,deletereleased', $projectID, 'project');
         }
         else
         {
-            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch');
+            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,deletereleased');
         }
 
         /* Set the openedBuilds list. */
@@ -1184,6 +1187,7 @@ class bug extends control
         $this->view->cases                 = array('' => '') + $cases;
         $this->view->openedBuilds          = $openedBuilds;
         $this->view->resolvedBuilds        = array('' => '') + $openedBuilds + $oldResolvedBuild;
+        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
         $this->view->actions               = $this->action->getList('bug', $bugID);
 
         $this->display();
@@ -1828,15 +1832,16 @@ class bug extends control
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
-        $this->view->bug         = $bug;
-        $this->view->users       = $users;
-        $this->view->assignedTo  = $assignedTo;
-        $this->view->productBugs = $productBugs;
-        $this->view->executions  = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID, 'stagefilter');
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch');
-        $this->view->actions     = $this->action->getList('bug', $bugID);
-        $this->view->execution   = isset($execution) ? $execution : '';
+        $this->view->title          = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->bug            = $bug;
+        $this->view->users          = $users;
+        $this->view->assignedTo     = $assignedTo;
+        $this->view->productBugs    = $productBugs;
+        $this->view->executions     = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID, 'stagefilter');
+        $this->view->builds         = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch,deletereleased');
+        $this->view->releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
+        $this->view->actions        = $this->action->getList('bug', $bugID);
+        $this->view->execution      = isset($execution) ? $execution : '';
         $this->display();
     }
 
@@ -1933,7 +1938,7 @@ class bug extends control
 
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty', 0, 'execution', $bug->openedBuild);
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty,deletereleased', 0, 'execution', $bug->openedBuild);
         $this->view->actions = $this->action->getList('bug', $bugID);
 
         $this->display();
@@ -2150,7 +2155,7 @@ class bug extends control
 
         $this->view->bugs    = $bugs;
         $this->view->users   = $this->user->getPairs();
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,deletereleased');
 
         $this->display();
     }
@@ -2412,7 +2417,7 @@ class bug extends control
     public function ajaxGetBugFieldOptions($productID, $executionID = 0)
     {
         $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
-        $builds   = $this->loadModel('build')->getBuildPairs($productID, 'all', '', $executionID, 'execution');
+        $builds   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'deletereleased', $executionID, 'execution');
         $type     = $this->lang->bug->typeList;
         $pri      = $this->lang->bug->priList;
         $severity = $this->lang->bug->severityList;

@@ -36,6 +36,7 @@ $lang->build->execution      = $lang->executionCommon;
 $lang->build->integrated     = 'Integrated';
 $lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Included Builds';
+$lang->build->releasedBuild  = 'Released Build';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Date';
 $lang->build->builder        = 'Builder';

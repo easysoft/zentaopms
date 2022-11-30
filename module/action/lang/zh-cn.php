@@ -226,7 +226,7 @@ $lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->submitreview         = '$date, 由 <strong>$actor</strong> 提交评审。' . "\n";
 $lang->action->desc->ganttmove            = '$date, 由 <strong>$actor</strong> 排序。' . "\n";
 $lang->action->desc->switchtolight        = '$date, 由于 <strong>'. $lang->admin->system .'</strong> 从全生命周期管理模式切换为轻量管理模式，项目访问控制由项目集内公开调整为私有。' . "\n";
-$lang->action->desc->unlinkproduct        = '$date, 系统判断由于迭代所属项目与$extra取消关联，同步将迭代与$extra取消关联。' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, 系统判断由于' . $lang->executionCommon . '所属项目与$extra取消关联，同步将' . $lang->executionCommon . '与$extra取消关联。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";

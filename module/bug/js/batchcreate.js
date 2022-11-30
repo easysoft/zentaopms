@@ -20,6 +20,8 @@ $(function()
     $('#dropMenu').css('z-index', 9999);
 })
 
+$('[name^=openedBuilds]').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'});
+
 /**
  * Set opened builds.
  *
@@ -38,13 +40,13 @@ function setOpenedBuilds(link, index)
             var selected = $('#buildBox' + index).find('select').val();
             $('#buildBox' + index).html(builds);
             $('#buildBox' + index).find('select').val(selected);
-            $('#openedBuilds' + index + '_chosen').remove();
+            $('#pickerDropMenu-pk_openedBuild' + index).remove();
             $('#openedBuilds' + index).next('.picker').remove();
             $('#buildBox' + index + ' select').removeClass('select-3');
             $('#buildBox' + index + ' select').addClass('select-1');
             $('#buildBox' + index + ' select').attr('name','openedBuilds[' + index + '][]');
             $('#buildBox' + index + ' select').attr('id','openedBuilds' + index);
-            $('#buildBox' + index + ' select').chosen();
+            $('#buildBox' + index + ' select').picker({optionRender: markReleasedBuilds});
 
             index++;
             if($('#executions' + index).val() != 'ditto') break;
