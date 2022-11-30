@@ -75,6 +75,9 @@ $lang->productplan->projectNotEmpty    = '所属项目不能为空。';
 $lang->productplan->nextStep           = "下一步";
 $lang->productplan->summary            = "本页共 <strong>%s</strong> 个计划，父计划 <strong>%s</strong>，子计划 <strong>%s</strong>，独立计划 <strong>%s</strong>。";
 $lang->productplan->checkedSummary     = "共选中 <strong>%total%</strong> 个计划，父计划 <strong>%parent%</strong>，子计划 <strong>%child%</strong>，独立计划 <strong>%independent%</strong>。";
+$lang->productplan->confirmChangePlan  = "分支解除关联后，分支下的%s个{$lang->SRCommon}和%s个Bug将同步从计划中移除，是否解除？";
+$lang->productplan->confirmRemoveStory = "分支解除关联后，分支下的%s个{$lang->SRCommon}将同步从计划中移除，是否解除？";
+$lang->productplan->confirmRemoveBug   = "分支解除关联后，分支下的%s个Bug将同步从计划中移除，是否解除？";
 
 $lang->productplan->id         = '编号';
 $lang->productplan->product    = $lang->productCommon;
