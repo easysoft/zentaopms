@@ -19,6 +19,21 @@ $(function()
     }
 });
 
+$('#openedBuild, #resolvedBuild').picker({optionRender: markReleasedBuilds});
+
+function markReleasedBuilds($option)
+{
+    var build = $option.attr('data-value');
+    if($.inArray(build, releasedBuilds) != -1)
+    {
+        if(!$option.find('.label-released').length)
+        {
+            var optionText = $option.find('.picker-option-text').html();
+            $option.find('.picker-option-text').replaceWith("<p class='picker-option-text no-margin'><span class='label label-released label-primary label-outline'>" + releasedBuild + "</span> " + optionText + "</p>");
+        }
+    }
+}
+
 /**
  * Load all fields.
  *
@@ -186,9 +201,9 @@ function loadAllExecutionBuilds(executionID, productID, buildBox)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
-            $('#openedBuild_chosen').remove();
+            $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").chosen();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
         })
     }
@@ -197,12 +212,12 @@ function loadAllExecutionBuilds(executionID, productID, buildBox)
         if(buildBox == 'openedBuildBox')
         {
             link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=true&type=all');
-            $('#openedBuildBox').load(link, function(){$(this).find('select').chosen()});
+            $('#openedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
         }
         if(buildBox == 'resolvedBuildBox')
         {
             link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&index=0&type=all');
-            $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen()});
+            $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
         }
     }
 }
@@ -226,9 +241,9 @@ function loadAllProductBuilds(productID, buildBox)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
-            $('#openedBuild_chosen').remove();
+            $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").chosen();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
         })
     }
@@ -237,12 +252,12 @@ function loadAllProductBuilds(productID, buildBox)
         if(buildBox == 'openedBuildBox')
         {
             link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&type=all');
-            $('#openedBuildBox').load(link, function(){$(this).find('select').chosen()});
+            $('#openedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
         }
         if(buildBox == 'resolvedBuildBox')
         {
             link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&index=0&type=all');
-            $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen()});
+            $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
         }
     }
 }
@@ -443,17 +458,17 @@ function loadProductBuilds(productID)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
-            $('#openedBuild_chosen').remove();
+            $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").chosen();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
         })
     }
     else
     {
-        $('#openedBuildBox').load(link, function(){$(this).find('select').chosen()});
+        $('#openedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen()});
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
     }
 }
 
@@ -557,23 +572,23 @@ function loadProjectBuilds(projectID)
         var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=&branch=' + branch);
         $.get(link, function(data)
         {
-            if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
+            if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control picker-select" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
             $('#openedBuild').val(oldOpenedBuild);
-            $('#openedBuild_chosen').remove();
+            $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").chosen();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
         })
     }
     else
     {
         var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
-        $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).chosen()});
+        $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleasedBuilds})});
 
         var oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         var link             = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).picker({optionRender: markReleasedBuilds})});
     }
 }
 
@@ -600,23 +615,23 @@ function loadExecutionBuilds(executionID, num)
         link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&index=0&needCreate=true");
         $.get(link, function(data)
         {
-            if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
+            if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control picker-select" multiple=multiple></select>';
             $('#openedBuild').replaceWith(data);
             $('#openedBuild').val(oldOpenedBuild);
-            $('#openedBuild_chosen').remove();
+            $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").chosen();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
         })
     }
     else
     {
         link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=false&type=normal&number=' + num);
-        $('#openedBuildBox' + num).load(link, function(){$(this).find('select').val(oldOpenedBuild).chosen()});
+        $('#openedBuildBox' + num).load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleaseBuilds})});
 
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).picker({optionRender: markReleasedBuilds})});
     }
 }
 

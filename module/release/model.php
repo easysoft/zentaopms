@@ -128,7 +128,8 @@ class releaseModel extends model
                 $inBranch = false;
                 foreach(explode(',', trim($release->branch, ',')) as $branchID)
                 {
-                    if(empty($branchID)) continue;
+                    if($branchID === '') continue;
+
                     if(strpos(",{$branch},", ",{$branchID},") !== false) $inBranch = true;
                 }
                 if(!$inBranch) continue;
