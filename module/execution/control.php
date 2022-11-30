@@ -898,7 +898,7 @@ class execution extends control
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan');
+        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan', $executionID);
         $allPlans = array('' => '');
         if(!empty($plans))
         {
@@ -1645,7 +1645,20 @@ class execution extends control
                 }
                 else
                 {
-                    return print(js::confirm($this->lang->execution->importPlanStory, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
+                    $executionProductList  = $this->loadModel('product')->getProducts($executionID);
+                    $hasMultiBranchProduct = false;
+                    foreach($executionProductList as $executionProduct)
+                    {
+                        if($executionProduct->type != 'normal')
+                        {
+                            $hasMultiBranchProduct = true;
+                            break;
+                        }
+                    }
+                    $replaceString = $hasMultiBranchProduct ? $this->lang->execution->importPlanStoryEx : '';
+                    $importPlanStoryTips = sprintf($this->lang->execution->importPlanStory, $replaceString);
+
+                    return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
             }
 
@@ -4122,10 +4135,10 @@ class execution extends control
         if(!empty($planStory))
         {
             $projectProducts = $this->loadModel('project')->getBranchesByProject($executionID);
-            $projectProducts = zget($projectProducts, $productID, array());
 
             foreach($planStory as $id => $story)
             {
+                $projectProducts = zget($projectProducts, $story->product, array());
                 if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($projectProducts) and !isset($projectProducts[$story->branch])))
                 {
                     $count++;

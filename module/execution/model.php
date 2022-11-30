@@ -2882,19 +2882,21 @@ class executionModel extends model
      */
     public function linkStories($executionID)
     {
-        $plans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
+        $plans = $this->dao->select('product, plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
-            ->fetchPairs('plan');
+            ->fetchPairs('product', 'plan');
 
         $planStories  = array();
         $planProducts = array();
         $this->loadModel('story');
         if(!empty($plans))
         {
-            foreach($plans as $planIdList)
+            $executionProducts = $this->loadModel('project')->getBranchesByProject($executionID);
+            foreach($plans as $productID => $planIdList)
             {
                 if(empty($planIdList)) continue;
                 $planIdList = explode(',', $planIdList);
+                $executionProducts = zget($executionProducts, $productID, array());
                 foreach($planIdList as $planID)
                 {
                     $planStory = $this->story->getPlanStories($planID);
@@ -2902,7 +2904,7 @@ class executionModel extends model
                     {
                         foreach($planStory as $id => $story)
                         {
-                            if($story->status == 'draft' or $story->status == 'reviewing')
+                            if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($executionProducts) and !isset($executionProducts[$story->branch])))
                             {
                                 unset($planStory[$id]);
                                 continue;
@@ -4623,14 +4625,13 @@ class executionModel extends model
         $branchGroups = $this->getBranchByProduct(array_keys($products), $executionID, 'noclosed');
         foreach($branchGroups as $branches)
         {
-            foreach($branches as $branchID => $branchName) $branchIdList[$branchID] = $branchID;
+            foreach($branches as $branchID => $branchName) $branchIdList[] = $branchID;
         }
 
-        $branchQuery = '';
+        $branchQuery = '(';
         if(!empty($branchIdList))
         {
-            $branchQuery .= '(';
-            $branchCount  = count($branchIdList);
+            $branchCount = count($branchIdList);
             foreach($branchIdList as $index => $branchID)
             {
                 $branchQuery .= "FIND_IN_SET('$branchID', branch)";
