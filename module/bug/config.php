@@ -328,11 +328,13 @@ $config->bug->datatable->fieldList['os']['title']    = 'os';
 $config->bug->datatable->fieldList['os']['fixed']    = 'no';
 $config->bug->datatable->fieldList['os']['width']    = '80';
 $config->bug->datatable->fieldList['os']['required'] = 'no';
+$config->bug->datatable->fieldList['os']['control']  = 'multiple';
 
 $config->bug->datatable->fieldList['browser']['title']    = 'browser';
 $config->bug->datatable->fieldList['browser']['fixed']    = 'no';
 $config->bug->datatable->fieldList['browser']['width']    = '80';
 $config->bug->datatable->fieldList['browser']['required'] = 'no';
+$config->bug->datatable->fieldList['browser']['control']  = 'multiple';
 
 $config->bug->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->bug->datatable->fieldList['mailto']['fixed']    = 'no';
