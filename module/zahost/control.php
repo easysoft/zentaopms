@@ -89,10 +89,13 @@ class zahost extends control
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('inithost', "hostID=$hostID")));
+            $initLink = $this->createLink('zahost', 'inithost', "hostID=$hostID");
+            return print("<script>showModal('$initLink')</script>");
         }
 
-        $this->view->title = $this->lang->zahost->create;
+        $this->view->title      = $this->lang->zahost->create;
+        $this->view->notice     = $this->lang->zahost->initHostNotice;
+        $this->view->buttonName = $this->lang->zahost->init;
         $this->display();
     }
 
@@ -287,10 +290,15 @@ class zahost extends control
      */
     public function initHost($hostID)
     {
-        $this->view->title        = $this->lang->zahost->init;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->hostID       = $hostID;
-        $this->view->host         = $this->zahost->getById($hostID);
+        $imageList = $this->zahost->getImagePairs($hostID);
+
+        $this->view->title      = $this->lang->zahost->init;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->hostID     = $hostID;
+        $this->view->host       = $this->zahost->getById($hostID);
+        $this->view->notice     = $imageList ? $this->lang->zahost->createZanodeNotice : $this->lang->zahost->downloadImageNotice;
+        $this->view->buttonName = $imageList ? $this->lang->zahost->createZanode : $this->lang->zahost->image->downloadImage;
+        $this->view->modalLink  = $imageList ? $this->createLink('zanode', 'create', "hostID=$hostID") : $this->createLink('zahost', 'browseImage', "hostID=$hostID");
 
         $this->display();
     }

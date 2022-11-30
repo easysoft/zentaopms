@@ -1,7 +1,6 @@
 <?php
 $lang->zahost->id             = 'ID';
 $lang->zahost->common         = '宿主机';
-$lang->zahost->common         = '宿主机';
 $lang->zahost->browse         = '宿主机列表';
 $lang->zahost->create         = '添加宿主机';
 $lang->zahost->view           = '宿主机详情';
@@ -35,6 +34,11 @@ $lang->zahost->memorySize = $lang->zahost->memory;
 $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
 $lang->zahost->os         = '操作系统平台';
 $lang->zahost->imageName  = '镜像文件';
+
+$lang->zahost->createZanode        = '创建执行节点';
+$lang->zahost->initHostNotice      = '保存成功，请您初始化宿主机或返回列表。';
+$lang->zahost->createZanodeNotice  = '初始化成功，您现在可以创建执行节点了。';
+$lang->zahost->downloadImageNotice = '初始化成功，请下载镜像用于创建执行节点。';
 
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->statusTitle = "服务状态";
@@ -83,7 +87,6 @@ $lang->zahost->image->statusList['failed']        = '下载失败';
 $lang->zahost->image->imageEmpty           = '无镜像';
 $lang->zahost->image->downloadImageFail    = '创建下载镜像任务失败';
 $lang->zahost->image->downloadImageSuccess = '创建下载镜像任务成功';
-
 
 $lang->zahost->empty         = '暂时没有宿主机';
 

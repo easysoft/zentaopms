@@ -12,6 +12,7 @@ $lang->zahost->deleteAction   = 'Supprimer Hôte';
 $lang->zahost->byQuery        = 'Recherche';
 $lang->zahost->all            = 'Tous les hôtes';
 $lang->zahost->browseNode     = 'ZAnode Browse';
+$lang->zahost->deleted        = "Deleted";
 
 $lang->zahost->name        = 'Nom';
 $lang->zahost->IP          = 'IP/Domain';
@@ -34,6 +35,11 @@ $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
 $lang->zahost->os         = 'System';
 $lang->zahost->imageName  = 'Image File';
 
+$lang->zahost->createZanode        = 'Create Zanode';
+$lang->zahost->initHostNotice      = 'Save successfully, initialize the ZAhost or return list';
+$lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
+$lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
+
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->checkStatus   = "Check Service Status";
 $lang->zahost->initHost->not_install   = "Not installed";
@@ -46,7 +52,6 @@ $lang->zahost->initHost->initFailNoticeTitle = "Initialization failed, check the
 $lang->zahost->initHost->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
 $lang->zahost->initHost->serviceStatus = [
-    "nginx" => 'not_install',
     "kvm" => 'not_install',
     "novnc" => 'not_install',
     "websockify" => 'not_install',
@@ -54,7 +59,6 @@ $lang->zahost->initHost->serviceStatus = [
 $lang->zahost->initHost->title       = "Initialize Host";
 $lang->zahost->initHost->descTitle   = "Follow these steps to complete the initialization on the host:";
 $lang->zahost->initHost->initDesc    = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
-$lang->zahost->initHost->statusTitle = "Service Status";
 
 $lang->zahost->image = new stdclass;
 $lang->zahost->image->list          = 'Image List';
@@ -70,8 +74,6 @@ $lang->zahost->image->desc       = 'Description';
 $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->diskSize;
 $lang->zahost->image->os         = $lang->zahost->os;
-$lang->zahost->image->osVersion  = $lang->zahost->osVersion;
-$lang->zahost->image->osLang     = $lang->zahost->osLang;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
 $lang->zahost->image->progress   = 'Progress';
 
@@ -81,6 +83,10 @@ $lang->zahost->image->statusList['canceled']      = 'Canceled';
 $lang->zahost->image->statusList['inprogress']    = 'Inprogress';
 $lang->zahost->image->statusList['completed']     = 'Completed';
 $lang->zahost->image->statusList['failed']        = 'Failed';
+
+$lang->zahost->image->imageEmpty           = 'No Image';
+$lang->zahost->image->downloadImageFail    = 'Failed to create image task';
+$lang->zahost->image->downloadImageSuccess = 'Successed to create image task';
 
 $lang->zahost->empty         = 'No Host';
 
