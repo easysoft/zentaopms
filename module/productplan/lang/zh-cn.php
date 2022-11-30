@@ -136,6 +136,7 @@ $lang->productplan->beginGreaterChildTip = "父计划[%s]的开始日期：%s，
 $lang->productplan->endLetterChildTip    = "父计划[%s]的完成日期：%s，不能小于子计划的完成日期: %s";
 $lang->productplan->beginLetterParentTip = "子计划[%s]的开始日期：%s，不能小于父计划的开始日期: %s";
 $lang->productplan->endGreaterParentTip  = "子计划[%s]的完成日期：%s，不能大于父计划的完成日期: %s";
+$lang->productplan->diffBranchesTip      = "父计划的@branch@ %s 未被子计划关联，对应@branch@的需求和bug将自动从计划中移除，是否保存？";
 
 $lang->productplan->featureBar['browse']['all']    = '全部';
 $lang->productplan->featureBar['browse']['undone'] = '未完成';
