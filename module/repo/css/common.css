@@ -230,7 +230,7 @@ h3 {font-size: 16px;}
 #fileTree ul > li.tree-single-item:before {height: 23px;}
 #fileTree ul > li.has-list:after {width: 14px;}
 #filesTree .tree li.has-list.open:before {border: none;}
-#fileTabs .nav-tabs > li.tab-nav-item > a {background: linear-gradient( 109deg, transparent 10%, #9b9494 10%) 0 0, linear-gradient(-109deg, transparent 10%, #9b9494 10%) 100% 0; background-size: 90% 100%; background-repeat: no-repeat;}
+#fileTabs .nav-tabs > li.tab-nav-item > a {background: linear-gradient( 109deg, transparent 10%, #e7e9ec 10%) 0 0, linear-gradient(-109deg, transparent 10%, #e7e9ec 10%) 100% 0; background-size: 90% 100%; background-repeat: no-repeat;}
 #fileTabs .nav-tabs > li.active > a {color: #2e7fff !important; background: linear-gradient( 109deg, transparent 10%, #ffffff 10%) 0 0, linear-gradient(-109deg, transparent 10%, #ffffff 10%) 100% 0; background-size: 90% 100%; background-repeat: no-repeat;}
 #relationTabs .nav-tabs >li > a .tab-nav-close {display: none;}
 #relationTabs .nav-tabs > li > a > i, #relationTabs .nav-tabs > li > a > span {background: #EDEEF2; font-weight: normal; padding: 1px 5px;}
