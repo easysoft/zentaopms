@@ -238,6 +238,7 @@ h3 {font-size: 16px;}
 .repoCode .content, .repoCode .btn {background-color: #efefef; border: none;}
 .repoCode .btn.btn-right, .repoCode .btn.btn-left {margin-right: 0; padding: 6px 6px;}
 #related .btn-right, #related .btn-left {padding-top: 9px;}
+#log .action-btn {margin-top: -7px;}
 
 #relationTabs .nav-tabs >li > a .tab-nav-close {display: none;}
 #relationTabs .nav-tabs > li > a > i, #relationTabs .nav-tabs > li > a > span {background: #EDEEF2; font-weight: normal; padding: 1px 5px;}
