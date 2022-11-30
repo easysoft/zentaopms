@@ -76,14 +76,22 @@ function arrowTabs(domID, shift, hideRightBtn)
 {
     if($('#' + domID).html() == '') return;
 
-    $('.btn-right, .btn-left').show();
-    if(hideRightBtn) $('.btn-right').hide();
+    var hasParent = $('#' + domID + ' .btn-left').length;
+    var $leftBtn  = hasParent ? $('#' + domID + ' .btn-left')  : $('.btn-left');
+    var $rightBtn = hasParent ? $('#' + domID + ' .btn-right') : $('.btn-right');
+
+    $leftBtn.show();
+    $rightBtn.show();
+    if(hideRightBtn) $rightBtn.hide();
 
     var tabItemWidth = $('#' + domID + ' > .tabs-navbar > .nav-tabs')[0].clientWidth;
-    var tabsWidth    = $('#' + domID + '')[0].clientWidth;
+    var tabsWidth    = $('#' + domID)[0].clientWidth;
+    if($('#' + domID + ' .close').length) tabsWidth = tabsWidth * 0.6;
+
     if(tabItemWidth < tabsWidth)
     {
-        $('.btn-right, .btn-left').hide();
+        $leftBtn.hide();
+        $rightBtn.hide();
         return;
     }
 
@@ -91,16 +99,16 @@ function arrowTabs(domID, shift, hideRightBtn)
     if(distance > 0) distance = 0;
     if(distance == 0)
     {
-        $('.btn-left').hide();
+        $leftBtn.hide();
     }
 
     if((tabItemWidth + distance) < tabsWidth * 0.75)
     {
-        $('.btn-right').hide();
+        $rightBtn.hide();
         return arrowTabs(domID, 1, true);
     }
 
-    $('#' + domID + ' > .tabs-navbar > .tabs-nav')[0].style.transform = 'translateX('+ distance +'px)';
+    $('#' + domID + ' > .tabs-navbar > .nav-tabs')[0].style.transform = 'translateX('+ distance +'px)';
 }
 
 $(function()
