@@ -35,8 +35,10 @@ $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
 $lang->zahost->os         = 'System';
 $lang->zahost->imageName  = 'Image File';
 
-$lang->zahost->goback              = 'Go back';
-$lang->zahost->createSuccessNotice = 'Save successfully, initialize the ZAhost or return list';
+$lang->zahost->createZanode        = 'Create Zanode';
+$lang->zahost->initHostNotice      = 'Save successfully, initialize the ZAhost or return list';
+$lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
+$lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
 
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->checkStatus   = "Check Service Status";
@@ -82,10 +84,9 @@ $lang->zahost->image->statusList['inprogress']    = 'Inprogress';
 $lang->zahost->image->statusList['completed']     = 'Completed';
 $lang->zahost->image->statusList['failed']        = 'Failed';
 
-$lang->zahost->langList = array();
-$lang->zahost->langList['zh_cn'] = 'Simplified Chinese';
-$lang->zahost->langList['zh_tw'] = 'Traditional Chinese';
-$lang->zahost->langList['en_us'] = 'American English';
+$lang->zahost->image->imageEmpty           = 'No Image';
+$lang->zahost->image->downloadImageFail    = 'Failed to create image task';
+$lang->zahost->image->downloadImageSuccess = 'Successed to create image task';
 
 $lang->zahost->empty         = 'No Host';
 

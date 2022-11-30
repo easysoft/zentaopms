@@ -16,14 +16,12 @@ $('#checkServiceStatus').click(function(){
 
         if(isSuccess){
             html += '<h4>' + zahostLang.initHost.initSuccessNotice + '</h4>'
-            $('#jumpToImageList').removeAttr('disabled');
-            $('#jumpToImageList').attr('href', createLink('zahost', 'browseImage', 'hostID=' + hostID));
         }else{
             html += '<h4 style="margin-top:20px;">' + zahostLang.initHost.initFailNoticeTitle + '</h4>';
             html += '<div><span class="dot-symbol">' + zahostLang.initHost.initFailNoticeDesc + '<a href="https://github.com/easysoft/zenagent/" target="_blank">https://github.com/easysoft/zenagent/</a></span></div>'
-            $('#jumpToImageList').attr('disabled', 'disabled')
         }
         $('#statusContainer').html(html)
+        if(isSuccess) showModal();
     });
     return
 })
