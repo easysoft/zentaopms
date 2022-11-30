@@ -1655,8 +1655,8 @@ class execution extends control
                             break;
                         }
                     }
-                    $replaceString = $hasMultiBranchProduct ? $this->lang->execution->importPlanStoryEx : '';
-                    $importPlanStoryTips = sprintf($this->lang->execution->importPlanStory, $replaceString);
+
+                    $importPlanStoryTips = $hasMultiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
 
                     return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
@@ -1917,7 +1917,20 @@ class execution extends control
         }
         elseif(!empty($newPlans))
         {
-            return print(js::confirm($this->lang->execution->importEditPlanStory, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
+            $executionProductList  = $this->loadModel('product')->getProducts($executionID);
+            $hasMultiBranchProduct = false;
+            foreach($executionProductList as $executionProduct)
+            {
+                if($executionProduct->type != 'normal')
+                {
+                    $hasMultiBranchProduct = true;
+                    break;
+                }
+            }
+
+            $importEditPlanStoryTips = $hasMultiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory;
+
+            return print(js::confirm($importEditPlanStoryTips, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
         }
 
         /* Set menu. */

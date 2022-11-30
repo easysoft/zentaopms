@@ -1099,9 +1099,12 @@ class productplanModel extends model
             $planStory   = $this->loadModel('story')->getPlanStories($planID);
             if(!empty($planStory))
             {
+                $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
+
                 foreach($planStory as $id => $story)
                 {
-                    if($story->status == 'draft' or $story->status == 'reviewing')
+                    $projectProducts = zget($projectProducts, $story->product, array());
+                    if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($projectProducts) and !isset($projectProducts[$story->branch])))
                     {
                         unset($planStory[$id]);
                         continue;
