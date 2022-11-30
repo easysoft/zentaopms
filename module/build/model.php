@@ -234,7 +234,7 @@ class buildModel extends model
      *
      * @param int|array  $products
      * @param string|int $branch
-     * @param string     $params   noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|withreleased, can be a set of them
+     * @param string     $params   noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|deletereleased, can be a set of them
      * @param string|int $objectID
      * @param string     $objectType
      * @param int|array  $buildIdList
@@ -329,7 +329,7 @@ class buildModel extends model
                 {
                     if(!isset($allBuilds[$buildID])) continue;
                     $build = $allBuilds[$buildID];
-                    if(strpos($params, 'withreleased') === false) unset($builds[$build->date][$buildID]);
+                    if(strpos($params, 'deletereleased') !== false) unset($builds[$build->date][$buildID]);
                 }
             }
         }

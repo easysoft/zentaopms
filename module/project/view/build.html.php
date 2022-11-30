@@ -81,7 +81,16 @@
           <td class="c-name text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
           <?php endif;?>
           <?php if($project->multiple):?>
+          <?php if($build->execution):?>
           <td class="c-name text-left" title='<?php echo $build->executionName;?>'><?php echo $build->executionName;?></td>
+          <?php else:?>
+          <td class="c-name text-left">
+            <?php foreach(explode(',', $build->builds) as $childBuild):?>
+            <?php $buildName = zget($buildPairs, $childBuild);?>
+            <span title="<?php echo $buildName;?>"><?php echo $buildName;?></span></br>
+            <?php endforeach;?>
+          </td>
+          <?php endif;?>
           <?php endif;?>
           <td class="c-url" title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
           <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>

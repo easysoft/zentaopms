@@ -28,7 +28,7 @@ $lang->build->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->build->basicInfo = '基本信息';
 
 $lang->build->id             = 'ID';
-$lang->build->product        = $lang->productCommon;
+$lang->build->product        = '所属' . $lang->productCommon;
 $lang->build->project        = '所属项目';
 $lang->build->branch         = '平台/分支';
 $lang->build->branchName     = '所属%s';
@@ -36,6 +36,7 @@ $lang->build->execution      = '所属' . $lang->executionCommon;
 $lang->build->integrated     = '集成版本';
 $lang->build->singled        = '单一版本';
 $lang->build->builds         = '包含版本';
+$lang->build->releasedBuild  = '发布版本';
 $lang->build->name           = '名称编号';
 $lang->build->date           = '打包日期';
 $lang->build->builder        = '构建者';

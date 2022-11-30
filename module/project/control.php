@@ -1489,6 +1489,7 @@ class project extends control
         $this->view->products      = $products;
         $this->view->allExecutions = $allExecutions;
         $this->view->executions    = $executions;
+        $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
         $this->view->type          = $type;
 
         $this->display();
@@ -2311,6 +2312,32 @@ class project extends control
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
         return print(html::select('execution', $executions, $executionID, "class='form-control'"));
+    }
+
+    /**
+     * AJAX: get a project by execution id.
+     *
+     * @param  string $executionID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetPairsByExecution($executionID)
+    {
+        $execution    = $this->loadModel('execution')->getByID($executionID);
+        $projectPairs = $this->loadModel('project')->getPairsByIdList($execution->project);
+
+        if($this->app->getViewType() == 'json')
+        {
+            $project = array('id' => key($projectPairs), 'name' => reset($projectPairs));
+            $pinyin  = common::convert2Pinyin(array(reset($projectPairs)));
+            $project['namePinyin'] = zget($pinyin, $project['name']);
+
+            return print(json_encode($project));
+        }
+        else
+        {
+            return print(html::select('project', $projectPairs, $execution->project, "class='form-control' onchange='loadProductExecutions({$execution->project}, this.value)'"));
+        }
     }
 
     /**
