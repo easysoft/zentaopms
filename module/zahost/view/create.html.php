@@ -85,8 +85,10 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
       </div>
       <div class="modal-body">
-        <p><i class="icon-check-circle icon"></i><?php echo $lang->zahost->createSuccessNotice;?></p>
-        <p><?php echo html::a('', $lang->zahost->init, '', 'id="initHostLink"'); echo html::a(inLink('browse'), $lang->zahost->goback);?></p>
+        <p>
+          <i class="icon-check-circle icon"></i><?php echo $lang->zahost->createSuccessNotice;?>
+          <?php echo html::a('', $lang->zahost->init, '', 'id="initHostLink"');?>
+        </p>
       </div>
     </div>
   </div>

@@ -36,7 +36,7 @@ $lang->zahost->os         = 'System';
 $lang->zahost->imageName  = 'Image File';
 
 $lang->zahost->goback              = 'Go back';
-$lang->zahost->createSuccessNotice = 'Save successfully, initialize the ZAhost to start the automation service';
+$lang->zahost->createSuccessNotice = 'Save successfully, initialize the ZAhost or return list';
 
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->checkStatus   = "Check Service Status";

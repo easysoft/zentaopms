@@ -13,7 +13,7 @@ $('#checkServiceStatus').click(function(){
                 html += "<div class='text-danger'><span class='dot-symbol'>●</span><span>" + key + ' ' + zahostLang.initHost[resultData.data[key]] + "</span></div>"
             }
         };
-        
+
         if(isSuccess){
             html += '<h4>' + zahostLang.initHost.initSuccessNotice + '</h4>'
             $('#jumpToImageList').removeAttr('disabled');

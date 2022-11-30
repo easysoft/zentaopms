@@ -36,7 +36,7 @@ $lang->zahost->os         = '操作系统平台';
 $lang->zahost->imageName  = '镜像文件';
 
 $lang->zahost->goback              = '返回列表';
-$lang->zahost->createSuccessNotice = '保存成功，请初始化宿主机以启动自动化服务';
+$lang->zahost->createSuccessNotice = '保存成功，请您初始化宿主机或返回列表';
 
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->statusTitle = "服务状态";
