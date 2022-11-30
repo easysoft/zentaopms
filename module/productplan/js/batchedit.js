@@ -24,13 +24,13 @@ function changeDate(planID)
  * Get conflict stories.
  *
  * @param  int    $planID
- * @param  int    $branch
  * @access public
  * @return void
  */
-function getConflictStories(planID, branch)
+function getConflictStories(planID)
 {
-    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + branch), function(conflictStories)
+    var newBranch = $('#branch' + planID).val() ? $('#branch' + planID).val().toString() : '';
+    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
     {
         if(conflictStories != '' && !confirm(conflictStories))
         {

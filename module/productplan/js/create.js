@@ -65,9 +65,12 @@ $('#future').on('change', function()
 
 $('#branch').change(function()
 {
-    var branchID     = $(this).val();
-    var lastPlanLink = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchID);
-    var topPlanLink  = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branchID);
+    var branchIdList = $(this).val();
+    if(!branchIdList) return;
+
+    var branchIdList = branchIdList.toString();
+    var lastPlanLink = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchIdList);
+    var topPlanLink  = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branchIdList);
 
     $.post(lastPlanLink, function(data)
     {
