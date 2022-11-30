@@ -84,7 +84,7 @@ class productplan extends control
         }
 
         $this->commonAction($productID, $branchID);
-        $lastPlan = $this->productplan->getLast($productID, $branchID, $parent);
+        $lastPlan = $this->productplan->getLast($productID, '', $parent);
         $product  = $this->loadModel('product')->getById($productID);
 
         if($lastPlan)
@@ -117,7 +117,7 @@ class productplan extends control
         $this->view->branches        = $branchPairs;
         $this->view->defaultBranch   = $defaultBranch;
         $this->view->parent          = $parent;
-        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branchID, 'done,closed');
+        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($productID, '', 'done,closed');
         $this->display();
     }
 
@@ -446,8 +446,6 @@ class productplan extends control
 
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
-
-        if($plan->branch > 0) $this->view->branchStatus = $this->loadModel('branch')->getById($plan->branch, $plan->product, 'status');
 
         $storyIdList = array();
         $modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
@@ -917,7 +915,7 @@ class productplan extends control
             {
                 foreach($planStories as $storyID => $story)
                 {
-                    if($story->branch and $story->branch != $newBranch) $this->productplan->unlinkStory($storyID, $planID);
+                    if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $this->productplan->unlinkStory($storyID, $planID);
                 }
             }
         }
@@ -933,15 +931,17 @@ class productplan extends control
      */
     public function ajaxGetConflictStory($planID, $newBranch)
     {
-        $plan                = $this->productplan->getByID($planID);
-        $oldBranch           = $plan->branch;
-        $planStories         = $this->loadModel('story')->getPlanStories($planID, 'all');
         $conflictStoryIdList = '';
+        if(empty($newBranch)) return $conflictStoryIdList;
+
+        $plan        = $this->productplan->getByID($planID);
+        $oldBranch   = $plan->branch;
+        $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
         if($oldBranch)
         {
             foreach($planStories as $storyID => $story)
             {
-                if($story->branch and $story->branch != $newBranch) $conflictStoryIdList .= '[' . $storyID . ']';
+                if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $conflictStoryIdList .= '[' . $storyID . ']';
             }
         }
         if($conflictStoryIdList != '') printf($this->lang->story->confirmChangePlan, $conflictStoryIdList);
@@ -967,12 +967,14 @@ class productplan extends control
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  int    $planID
      * @access public
      * @return object
      */
-    public function ajaxGetTopPlan($productID, $branch = 0)
+    public function ajaxGetTopPlan($productID, $branch = 0, $planID = 0)
     {
         $parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branch);
-        return print(html::select('parent', array('0' => '') + $parentPlanPairs, '', 'class="form-control"'));
+        if(isset($parentPlanPairs[$planID])) unset($parentPlanPairs[$planID]);
+        return print(html::select('parent', array(0 => '') + $parentPlanPairs, 0, 'class="form-control"'));
     }
 }

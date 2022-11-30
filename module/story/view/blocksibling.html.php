@@ -12,12 +12,16 @@ $class = isonlybody() ? 'showinonlybody' : 'iframe';
 
 foreach($siblings as $sibling)
 {
-    $id = $sibling->id;
-    $title = $id . ' '. $sibling->title;
-    $branch = $story->branch == $sibling->branch ? $lang->story->currentBranch : $branches[$sibling->branch];
+    $id         = $sibling->id;
+    $title      = '#' . $id . ' '. $sibling->title;
+    $branch     = $branches[$sibling->branch];
+    $stage      = $lang->story->stageList[$sibling->stage];
+    $labelClass = $story->branch == $sibling->branch ? 'label-primary' : '';
+
     echo "<li title='$title' class='sibling'>";
-    echo "<span class='label label-outline label-badge' title='$branch'>{$branch}</span> ";
-    echo ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id", '', true), "$title", '', "class='$class viewlink' data-width='80%'") : "$id $title");
+    echo "<span class='label {$labelClass} label-outline label-badge' title='$branch'>{$branch}</span> ";
+    echo "<span class='label label-outline' title='{$stage}'>{$stage}</span> ";
+    echo ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id", '', true), "$title", '', "class='$class viewlink' data-width='80%'") : "$title");
     if($canRelieved) echo "<a class='unlink hide' data-id='$id' data-toggle='popover'><i class='icon icon-unlink btn-info'></i></a>";
     echo "</li>";
 }
