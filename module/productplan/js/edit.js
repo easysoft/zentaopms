@@ -31,7 +31,7 @@ function getConflictStories(planID)
             if(!result)
             {
                 newBranch = oldBranch[planID];
-                $('#branch').val(oldBranch[planID]);
+                $('#branch').val(oldBranch[planID].split(','));
                 $('#branch').trigger("chosen:updated");
             }
         }
