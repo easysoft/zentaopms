@@ -78,27 +78,5 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="successModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
-      </div>
-      <div class="modal-body">
-        <p>
-          <i class="icon-check-circle icon"></i><?php echo $lang->zahost->createSuccessNotice;?>
-          <?php echo html::a('', $lang->zahost->init, '', 'id="initHostLink"');?>
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-function showModal(hostID)
-{
-    var url = createLink('zahost', 'inithost', "hostID=" + hostID);
-    $("#initHostLink").attr('href', url);
-    $('#successModal').modal('show', 'center');
-}
-</script>
+<?php include 'successmodal.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>

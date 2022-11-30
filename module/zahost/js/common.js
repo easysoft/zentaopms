@@ -32,3 +32,9 @@ $(function()
 
     $('#osCategory').change();
 })
+
+function showModal(url = '')
+{
+    if(url) $("#modalLink").attr('href', url);
+    $('#successModal').modal('show', 'center');
+}

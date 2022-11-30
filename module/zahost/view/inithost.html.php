@@ -14,7 +14,6 @@
 <?php include '../../common/view/header.html.php'; ?>
 <?php js::set('hostID', $hostID) ?>
 <?php js::set('zahostLang', $lang->zahost); ?>
-
 <div id='mainContent' class='main-content'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -31,8 +30,9 @@
 
       <div class="text-center host-action">
         <button type='button' id='checkServiceStatus' class='btn btn-info margin-top-18'><?php echo $lang->zahost->initHost->checkStatus; ?></button>
-        <?php echo html::a($this->createLink('zahost', 'browseImage', "hostID={$hostID}"), $lang->zahost->initHost->next, '', "title='{$lang->zahost->initHost->next}' class='btn btn-primary margin-top-18' disabled='disabled' id='jumpToImageList'"); ?>
       </div>
     </div>
   </div>
-  <?php include '../../common/view/footer.html.php'; ?>
+</div>
+<?php include 'successmodal.html.php';?>
+<?php include '../../common/view/footer.html.php'; ?>
