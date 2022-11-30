@@ -559,13 +559,13 @@ class bug extends control
         /* If executionID is setted, get builds and stories of this execution. */
         if($executionID)
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,deletereleased', $executionID, 'execution');
+            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
             $stories = $this->story->getExecutionStoryPairs($executionID);
             if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         }
         else
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,deletereleased');
+            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
             $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'all','id_desc', 0, 'full', 'story', false);
         }
 
@@ -767,7 +767,7 @@ class bug extends control
         /* If executionID is setted, get builds and stories of this execution. */
         if($executionID)
         {
-            $builds    = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,deletereleased', $executionID, 'execution');
+            $builds    = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noreleased', $executionID, 'execution');
             $stories   = $this->story->getExecutionStoryPairs($executionID);
             $execution = $this->loadModel('execution')->getById($executionID);
             if($execution->type == 'kanban')
@@ -787,7 +787,7 @@ class bug extends control
         }
         else
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,deletereleased');
+            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noreleased');
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
 
@@ -1085,15 +1085,15 @@ class bug extends control
         $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty');
         if($executionID)
         {
-            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,deletereleased', $executionID, 'execution');
+            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,deletereleased', $projectID, 'project');
+            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $projectID, 'project');
         }
         else
         {
-            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,deletereleased');
+            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased');
         }
 
         /* Set the openedBuilds list. */
@@ -1838,7 +1838,7 @@ class bug extends control
         $this->view->assignedTo     = $assignedTo;
         $this->view->productBugs    = $productBugs;
         $this->view->executions     = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID, 'stagefilter');
-        $this->view->builds         = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch,deletereleased');
+        $this->view->builds         = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch,noreleased');
         $this->view->releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
         $this->view->actions        = $this->action->getList('bug', $bugID);
         $this->view->execution      = isset($execution) ? $execution : '';
@@ -1938,7 +1938,7 @@ class bug extends control
 
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty,deletereleased', 0, 'execution', $bug->openedBuild);
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty,noreleased', 0, 'execution', $bug->openedBuild);
         $this->view->actions = $this->action->getList('bug', $bugID);
 
         $this->display();
@@ -2155,7 +2155,7 @@ class bug extends control
 
         $this->view->bugs    = $bugs;
         $this->view->users   = $this->user->getPairs();
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,deletereleased');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noreleased');
 
         $this->display();
     }
@@ -2417,7 +2417,7 @@ class bug extends control
     public function ajaxGetBugFieldOptions($productID, $executionID = 0)
     {
         $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
-        $builds   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'deletereleased', $executionID, 'execution');
+        $builds   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noreleased', $executionID, 'execution');
         $type     = $this->lang->bug->typeList;
         $pri      = $this->lang->bug->priList;
         $severity = $this->lang->bug->severityList;
