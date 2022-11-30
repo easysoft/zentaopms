@@ -3206,6 +3206,16 @@ class taskModel extends model
             $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
         }
 
+        if($task->mode == 'multi')
+        {
+            $assignedMembers = $this->dao->select('t1.realname')->from(TABLE_USER)->alias('t1')
+                ->leftJoin(TABLE_TASKTEAM)->alias('t2')
+                ->on('t1.account = t2.account')
+                ->where('t2.task')->eq($task->id)
+                ->fetchPairs();
+            $task->assignedMembers= join(',', array_keys($assignedMembers));
+        }
+
         return $task;
     }
 

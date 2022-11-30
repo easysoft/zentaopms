@@ -478,6 +478,8 @@ $lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}";
 $lang->execution->kanbanViewList['bug']   = 'Bug';
 $lang->execution->kanbanViewList['task']  = 'Task';
 
+$lang->execution->iconTeam  = 'Team';
+
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = 'Möchten Sie die Einstellungen des Kanbans zurücksetzen?';
 $lang->kanbanSetting->optionList['0'] = 'Verstecken';
