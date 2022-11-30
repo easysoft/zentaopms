@@ -309,7 +309,7 @@ function loadProductStories(productID)
 function loadProductProjects(productID)
 {
     required = $('#project_chosen').hasClass('required');
-    branch = $('#branch').val();
+    branch   = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + oldProjectID);
     $('#projectBox').load(link, function()
@@ -481,9 +481,12 @@ function loadProductBuilds(productID)
  */
 function loadExecutionRelated(executionID)
 {
-    executionID = parseInt(executionID);
+    executionID      = parseInt(executionID);
+    currentProjectID = $('#project').val() == 'undefined' ? 0 : $('#project').val();
+
     if(executionID)
     {
+        if(currentProjectID == 0) loadProjectByExecutionID(executionID);
         loadExecutionTasks(executionID);
         loadExecutionStories(executionID);
         loadExecutionBuilds(executionID);
@@ -492,7 +495,6 @@ function loadExecutionRelated(executionID)
     }
     else
     {
-        var currentProjectID = $('#project').val() == 'undefined' ? 0 : $('#project').val();
         var currentProductID = $('#product').val();
 
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
@@ -509,6 +511,43 @@ function loadExecutionRelated(executionID)
 
         currentProjectID != 0 ? loadProjectBuilds(currentProjectID) : loadProductBuilds(currentProductID);
     }
+}
+
+/**
+ * Load a project by execution id.
+ *
+ * @param  executionID $executionID
+ * @access public
+ * @return void
+ */
+function loadProjectByExecutionID(executionID)
+{
+    link      = createLink('project', 'ajaxGetPairsByExecution', 'executionID=' + executionID, 'json');
+    required  = $('#project_chosen').hasClass('required');
+    productID = $('#product').val();
+
+    $.post(link, function(data)
+    {
+        var originProject = $('#project').html();
+
+        if($('#project').find('option[value="' + data.id + '"]').length > 0)
+        {
+            $('#project').find('option[value="' + data.id + '"]').attr('selected', 'selected');
+            originProject = $('#project').html();
+            $('#project').replaceWith('<select id="project" name="project" class="form-control" onchange="loadProductExecutions(' + productID + ', this.value)">' + originProject + '</select>');
+        }
+        else
+        {
+            var newProject = '<option value="' + data.id + '" data-keys="' + data.namePinyin + '" selected="selected">' + data.name + '</option>';
+            $('#project').replaceWith('<select id="project" name="project" class="form-control" onchange="loadProductExecutions(' + productID + ', this.value)">' + originProject + newProject+ '</select>');
+        }
+
+        $('#project_chosen').remove();
+        $('#project').next('.picker').remove();
+        $('#project').chosen();
+
+        if(required) $('#project_chosen').addClass('required');
+    }, 'json')
 }
 
 /**
