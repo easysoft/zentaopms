@@ -259,7 +259,7 @@ class buildModel extends model
         }
 
         $branchs = strpos($params, 'separate') === false ? "0,$branch" : $branch;
-        $allBuilds = $this->dao->select('t1.id, t1.name, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
+        $allBuilds = $this->dao->select('t1.id, t1.name, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
             ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on("FIND_IN_SET(t1.id,t3.build)")
@@ -275,6 +275,8 @@ class buildModel extends model
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("$branchs")->fi()
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
+        $executions = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->andWhere('deleted')->eq('1')->fetchPairs();
+
         /* Set builds and filter done executions and terminate releases. */
         $builds      = array();
         $buildIdList = array();
@@ -283,6 +285,7 @@ class buildModel extends model
         {
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
+            if((strpos($params, 'withexecution') !== false) and $build->execution and !empty($executions[$build->execution])) continue;
 
             if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
             $branchName = $build->branchName ? $build->branchName : $this->lang->branch->main;
@@ -685,7 +688,14 @@ class buildModel extends model
 
             if(common::hasPriv($module, 'linkstory') and common::canBeChanged('build', $build)) $menu .= $this->buildMenu($module, 'view', "{$params}&type=story&link=true", $build, $type, 'link', '', '', '', "data-app={$tab}", $this->lang->build->linkStory);
 
-            $menu .= $this->buildMenu('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id&projectID=$build->project", $build, $type, 'bullhorn', '', '', '', $testtaskApp);
+            if($execution and $execution->deleted === '1')
+            {
+                if(common::hasPriv('testtask', 'create')) $menu .= html::a(helper::createLink('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id&projectID=$build->project"), "<i class='icon-testtask-create icon-bullhorn'></i>", '', "class='btn' title='{$this->lang->build->notice->createTest}' disabled");
+            }
+            else
+            {
+                $menu .= $this->buildMenu('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id&projectID=$build->project", $build, $type, 'bullhorn', '', '', '', $testtaskApp);
+            }
 
             if($tab == 'execution' and !empty($execution->type) and $execution->type != 'kanban') $menu .= $this->buildMenu('execution', 'bug', "execution={$extraParams['executionID']}&productID={$extraParams['productID']}&branchID=all&orderBy=status&build=$build->id", $build, $type, '', '', '', '', $this->lang->execution->viewBug);
             if($tab == 'project' or empty($execution->type) or $execution->type == 'kanban')      $menu .= $this->buildMenu($module, 'view', "{$params}&type=generatedBug", $build, $type, 'bug', '', '', '', "data-app='$tab'", $this->lang->project->bug);

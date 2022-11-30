@@ -8,7 +8,7 @@ function loadProductRelated()
 {
     loadExecutions($('#product').val());
     loadTestReports($('#product').val());
-    loadExecutionRelated($('#execution').val())
+    loadExecutionBuilds($('#execution').val())
 }
 
 /**
