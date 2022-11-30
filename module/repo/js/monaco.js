@@ -48,7 +48,7 @@ $(function()
 
         $tabs.open(createTab(name, path));
         setHeight();
-        arrowTabs('fileTabs', -2);
+        arrowTabs('fileTabs', -1);
     });
 
     /* Remove file path for opened files. */

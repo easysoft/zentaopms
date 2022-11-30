@@ -25,13 +25,10 @@ table.diff {margin-bottom: 0px;}
 .body-modal #mainMenu {padding-bottom: 40px;}
 
 .repoCode td.code {white-space: inherit;}
-.repoCode .content, .repoCode .btn {background-color: #F4F5F7; border: none;}
 .repoCode .nav-tabs > li.active > a:before {background: none; height: 0;}
 
 #fileTabs .tab-pane {display: none;}
 #fileTabs .tab-pane.active {display: block;}
 #fileTabs .tab-nav-item {max-width: none !important;}
-#fileTabs > .tabs-navbar {overflow: hidden; padding-bottom: 10px; position: relative; height: 35px;}
-#fileTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex;}
 #filesTree #modules {margin-top: 5px;}
 #filesTree {overflow-y: auto;}
