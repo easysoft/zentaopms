@@ -28,7 +28,7 @@ $lang->build->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->build->basicInfo = '基本信息';
 
 $lang->build->id             = 'ID';
-$lang->build->product        = $lang->productCommon;
+$lang->build->product        = '所属' . $lang->productCommon;
 $lang->build->project        = '所属项目';
 $lang->build->branch         = '平台/分支';
 $lang->build->branchName     = '所属%s';

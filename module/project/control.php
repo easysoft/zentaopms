@@ -1489,6 +1489,7 @@ class project extends control
         $this->view->products      = $products;
         $this->view->allExecutions = $allExecutions;
         $this->view->executions    = $executions;
+        $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
         $this->view->type          = $type;
 
         $this->display();
