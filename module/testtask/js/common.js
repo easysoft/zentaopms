@@ -94,7 +94,7 @@ function loadExecutionRelated(executionID)
  * @access public
  * @return void
  */
-function loadExecutionBuilds(executionID, selected)
+function loadExecutionBuilds(executionID)
 {
     var selectedBuild = $('#build').val();
 
@@ -103,7 +103,6 @@ function loadExecutionBuilds(executionID, selected)
     if(executionID == 0) link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=build&build=' + selectedBuild + '&branch=&index=&needCreate=&type=noempty,notrunk,withexecution');
     $('#buildBox').load(link, function()
     {
-        if(selected) $('#build').val(selected);
         $('#build').chosen();
     });
 }

@@ -38,12 +38,11 @@
         <?php if(isset($noMultipleExecutionID)):?>
         <?php echo html::hidden('execution', $noMultipleExecutionID);?>
         <?php else:?>
-        <tr>
+        <tr class='<?php echo ($app->tab == 'execution' and $executionID) ? 'hide' : '';?>'>
           <th class='w-100px'><?php echo $lang->testtask->execution;?></th>
           <td class='w-p35-f'><?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></td><td></td>
         </tr>
         <?php endif;?>
-
         <tr>
           <th><?php echo $lang->testtask->build;?></th>
           <td>
@@ -58,7 +57,6 @@
           </td>
           <td></td>
         </tr>
-
         <tr>
           <th><?php echo $lang->testtask->type;?></th>
           <td><?php echo html::select('type[]', $lang->testtask->typeList, '', "class='form-control picker-select' multiple");?></td>
