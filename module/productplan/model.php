@@ -991,27 +991,9 @@ class productplanModel extends model
             if(strpos(",$story->plan,", ",{$planID},") !== false) continue;
 
             /* Update the plan linked with the story and the order of the story in the plan. */
-            if($this->session->currentProductType == 'normal' or $story->branch != 0 or empty($story->plan))
-            {
-                $this->dao->update(TABLE_STORY)->set("plan")->eq($planID)->where('id')->eq((int)$storyID)->exec();
+            $this->dao->update(TABLE_STORY)->set("plan")->eq($planID)->where('id')->eq((int)$storyID)->exec();
 
-                $this->story->updateStoryOrderOfPlan($storyID, $planID, $story->plan);
-            }
-            else
-            {
-                $branchPlanPairs = $this->dao->select('branch, id as plan')->from(TABLE_PRODUCTPLAN)
-                    ->where('product')->eq($story->product)
-                    ->andWhere('id')->in($story->plan)
-                    ->fetchPairs();
-                if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
-
-                $plansOfStory = implode(',', $branchPlanPairs);
-                $plansOfStory = trim($plansOfStory, ',');
-
-                $this->dao->update(TABLE_STORY)->set("plan")->eq($plansOfStory)->where('id')->eq((int)$storyID)->exec();
-
-                $this->story->updateStoryOrderOfPlan($storyID, $planID);
-            }
+            $this->story->updateStoryOrderOfPlan($storyID, $planID, $story->plan);
 
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);

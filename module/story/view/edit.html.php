@@ -192,7 +192,7 @@
                 <th><?php echo $lang->story->plan;?></th>
                 <td>
                   <div class='input-group' id='planIdBox'>
-                  <?php $multiple = ($this->session->currentProductType != 'normal' and empty($story->branch)) ? true : false;?>
+                  <?php $multiple = ($this->session->currentProductType != 'normal' and empty($story->branch) and count($story->planTitle) > 1) ? true : false;?>
                   <?php echo html::select($multiple ? 'plan[]' : 'plan', $plans, $story->plan, "class='form-control chosen'" . ($multiple ? ' multiple' : ''));
                   if(count($plans) == 1)
                   {
