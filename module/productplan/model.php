@@ -755,7 +755,7 @@ class productplanModel extends model
             if(isset($data->status[$planID]) and $data->status[$planID] != 'wait') $isFuture = false;
 
             $plan = new stdclass();
-            $plan->branch = isset($data->branch[$planID]) ? $data->branch[$planID] : $oldPlans[$planID]->branch;
+            $plan->branch = isset($data->branch[$planID]) ? join(',', $data->branch[$planID]) : $oldPlans[$planID]->branch;
             $plan->title  = $data->title[$planID];
             $plan->begin  = isset($data->begin[$planID]) ? $data->begin[$planID] : '';
             $plan->end    = isset($data->end[$planID]) ? $data->end[$planID] : '';
@@ -788,7 +788,7 @@ class productplanModel extends model
             /* Determine whether the begin and end dates of the parent plan and the child plan are correct. */
             if($parentID > 0)
             {
-                $parent   = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
+                $parent = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
                 if($parent->begin != $this->config->productplan->future and $plan->begin != $this->config->productplan->future and $plan->begin < $parent->begin)
                 {
                     return print(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
