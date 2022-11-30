@@ -481,6 +481,13 @@ class productplanModel extends model
             ->remove('delta,uid,future')
             ->get();
 
+        $product = $this->loadModel('product')->getByID($plan->product);
+        if($product->type != 'normal' and !isset($_POST['branch']))
+        {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+        }
+
         if($plan->parent > 0)
         {
             $parentPlan = $this->getByID($plan->parent);
@@ -494,12 +501,6 @@ class productplanModel extends model
             }
         }
 
-        $product = $this->loadModel('product')->getByID($plan->product);
-        if($product->type != 'normal' and empty($plan->branch))
-        {
-            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
-        }
         if(!$this->post->future and strpos($this->config->productplan->create->requiredFields, 'begin') !== false and empty($_POST['begin']))
         {
             dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
@@ -558,9 +559,18 @@ class productplanModel extends model
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
             ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->setDefault('branch', 0)
+            ->join('branch', ',')
             ->add('id', $planID)
             ->remove('delta,uid,future')
             ->get();
+
+        $product = $this->loadModel('product')->getByID($oldPlan->product);
+        if($product->type != 'normal' and !isset($_POST['branch']))
+        {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+        }
 
         $parentPlan = $this->getByID($plan->parent);
         $futureTime = $this->config->productplan->future;
@@ -578,9 +588,9 @@ class productplanModel extends model
         }
         elseif($oldPlan->parent == -1 and ($plan->begin != $futureTime or $plan->end != $futureTime))
         {
-            $childPlans   = $this->getChildren($planID);
-            $minBegin     = $plan->begin;
-            $maxEnd       = $plan->end;
+            $childPlans = $this->getChildren($planID);
+            $minBegin   = $plan->begin;
+            $maxEnd     = $plan->end;
             foreach($childPlans as $childID => $childPlan)
             {
                 $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
@@ -593,8 +603,7 @@ class productplanModel extends model
 
         if(dao::isError()) return false;
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_PRODUCTPLAN)
-            ->data($plan)
+        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
             ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)

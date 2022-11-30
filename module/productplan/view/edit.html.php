@@ -33,7 +33,7 @@
           <?php if($product->type != 'normal' and $plan->parent != '-1'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch[]', $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control chosen' multiple");?></td><td></td><td></td>
+            <td><?php echo html::select('branch[]', $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id);' class='form-control chosen' multiple");?></td><td></td><td></td>
           </tr>
           <?php endif;?>
           <?php endif;?>
@@ -46,7 +46,7 @@
           <?php else:?>
           <tr>
             <th><?php echo $lang->productplan->parent;?></th>
-            <td><?php echo html::select('parent', array('0' => '') + $parentPlanPairs, $plan->parent, "class='form-control chosen'");?>
+            <td><?php echo html::select('parent', array(0 => '') + $parentPlanPairs, $plan->parent, "class='form-control chosen'");?>
           </tr>
           <?php endif;?>
           <tr>

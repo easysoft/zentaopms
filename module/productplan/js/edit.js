@@ -17,34 +17,32 @@ function convertStringToDate(dateString)
  * Get conflict stories.
  *
  * @param  int    $planID
- * @param  int    $branch
  * @access public
  * @return void
  */
-function getConflictStories(planID, branch)
+function getConflictStories(planID)
 {
-    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + branch), function(conflictStories)
+    var newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
+    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
     {
         if(conflictStories != '')
         {
             var result = confirm(conflictStories) ? true : false;
             if(!result)
             {
+                newBranch = oldBranch[planID];
                 $('#branch').val(oldBranch[planID]);
                 $('#branch').trigger("chosen:updated");
             }
         }
 
-        if(conflictStories == '' || result)
+        var link = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + newBranch + "&planID=" + planID);
+        $.post(link, function(data)
         {
-            var link = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branch);
-            $.post(link, function(data)
-            {
-                $('#parent').replaceWith(data);
-                $('#parent_chosen').remove();
-                $('#parent').chosen();
-            })
-        }
+            $('#parent').replaceWith(data);
+            $('#parent_chosen').remove();
+            $('#parent').chosen();
+        })
     });
 }
 
