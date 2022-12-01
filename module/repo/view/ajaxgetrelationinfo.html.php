@@ -17,25 +17,23 @@ js::set('objectID', $object->id);
   <div class="content pane">
     <div class="fade main-row split-row in col-md-12">
       <div class="left-content col-md-8">
-        <table class="menu-title">
+        <table class="table table-borderless">
           <?php if($objectType == 'story'):?>
           <tr>
             <td class="text">
-              <!-- <span class="detail-title"><?php echo $lang->story->title;?></span> -->
               <strong class='text-primary'><?php echo $object->title;?></strong>
             </td>
-            <td></td>
           </tr>
           <tr>
             <td class="text">
               <div class="spec-content detail-content article-content">
-                <!-- <span class="strong detail-title"><?php echo $lang->story->spec;?></span> -->
                 <?php echo $object->spec; ?>
               </div>
             </td>
-            <td class="text right-content">
+          </tr>
+          <tr>
+            <td class="text">
               <div class="detail-content article-content">
-                <!-- <span class="strong detail-title"><?php echo $lang->story->verify;?></span> -->
                 <?php echo $object->verify; ?>
               </div>
             </td>
@@ -43,21 +41,19 @@ js::set('objectID', $object->id);
           <?php elseif($objectType == 'task'):?>
           <tr>
             <td class="text">
-              <!-- <span class="detail-title"><?php echo $lang->task->name;?></span> -->
               <strong class='text-primary'><?php echo $object->name;?></strong>
             </td>
-            <td></td>
           </tr>
           <tr>
             <td class="text">
               <div class="spec-content detail-content article-content">
-                <!-- <div class="strong detail-title"><?php echo $lang->task->desc;?></div> -->
                 <?php echo $object->desc; ?>
               </div>
             </td>
-            <td class="text right-content">
+          </tr>
+          <tr>
+            <td class="text">
               <div class="detail-content article-content">
-                <!-- <div class="strong detail-title"><?php echo $lang->task->story;?></div> -->
                 <?php echo $object->storyTitle; ?>
               </div>
             </td>
@@ -65,7 +61,6 @@ js::set('objectID', $object->id);
           <?php elseif($objectType == 'bug'):?>
           <tr>
             <td class="text">
-              <!-- <span class="detail-title"><?php echo $lang->bug->title;?></span> -->
               <strong class='text-primary' data-id='<?php echo $object->id;?>'><?php echo $object->title;?></strong>
             </td>
           </tr>
@@ -73,7 +68,6 @@ js::set('objectID', $object->id);
           <tr>
             <td class="text">
               <div class="spec-content detail-content article-content">
-                <!-- <span class="strong detail-title"><?php echo $lang->bug->steps;?></span> -->
                 <?php echo $object->steps; ?>
               </div>
             </td>
