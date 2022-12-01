@@ -130,7 +130,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group' id='buildBox'>
                 <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
-                <?php echo html::select('openedBuild[]', $builds, empty($buildID) ? '' : $buildID, "multiple=multiple class='picker-select form-control'");?>
+                <?php echo html::select('openedBuild[]', $builds, empty($buildID) ? '' : $buildID, "multiple=multiple class='picker-select form-control' data-items='" . count($builds) . "'");?>
                 <span class='input-group-addon fix-border' id='buildBoxActions'></span>
                 <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' id='all' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
               </div>

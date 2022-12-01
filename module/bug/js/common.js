@@ -203,8 +203,8 @@ function loadAllExecutionBuilds(executionID, productID, buildBox)
             $('#openedBuild').replaceWith(data);
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
         })
     }
     if(page == 'edit')
@@ -243,8 +243,8 @@ function loadAllProductBuilds(productID, buildBox)
             $('#openedBuild').replaceWith(data);
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
         })
     }
     if(page == 'edit')
@@ -460,8 +460,8 @@ function loadProductBuilds(productID)
             $('#openedBuild').replaceWith(data);
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
         })
     }
     else
@@ -616,8 +616,8 @@ function loadProjectBuilds(projectID)
             $('#openedBuild').val(oldOpenedBuild);
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
         })
     }
     else
@@ -659,8 +659,8 @@ function loadExecutionBuilds(executionID, num)
             $('#openedBuild').val(oldOpenedBuild);
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
             notice();
+            $("#openedBuild").picker({optionRender: markReleasedBuilds});
         })
     }
     else
@@ -830,7 +830,9 @@ function notice()
     if(page == 'edit') return;
 
     $('#buildBoxActions').empty().hide();
-    if($('#openedBuild').find('option').length <= 1)
+    var itemCount = $('#openedBuild').find('option').length;
+    if($('#openedBuild').attr('data-items') != undefined) var itemCount = $('#openedBuild').attr('data-items');
+    if(itemCount <= 1)
     {
         var html = '';
         if($('#execution').length == 0 || $('#execution').val() == 0)
