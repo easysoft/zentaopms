@@ -1514,7 +1514,7 @@ class kanbanModel extends model
                         $cardData['mode']       = $object->mode;
                         if($object->mode == 'multi')
                         {
-                            $cardData['assignedMembers'] = $object->assignedMembers;
+                            $cardData['teamMembers'] = $object->teamMembers;
                         }
                     }
                     else

@@ -478,7 +478,7 @@ $lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}看板";
 $lang->execution->kanbanViewList['bug']   = 'Bug看板';
 $lang->execution->kanbanViewList['task']  = '任务看板';
 
-$lang->execution->iconTeam  = '团队';
+$lang->execution->teamWords  = '团队';
 
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = '是否恢复看板默认设置？';
