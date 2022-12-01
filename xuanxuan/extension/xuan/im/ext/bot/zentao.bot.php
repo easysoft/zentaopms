@@ -1,12 +1,6 @@
 <?php
 class zentaoBot extends xuanBot
 {
-    public $lang;
-
-    public $userArr = array();
-
-    public $statusArr = array();
-
     /**
      * Construct function, load lang of zentao and setup commands.
      *
@@ -35,8 +29,9 @@ class zentaoBot extends xuanBot
         $this->im->loadModel('task');
         $this->im->loadModel('user');
         $this->im->app->loadClass('pager', $static = true);
-        $this->userArr   = array_filter($this->im->user->getPairs('noclosed|noletter'));
-        $this->statusArr = array_filter($this->im->lang->task->statusList);
+
+        $this->users          = array_filter($this->im->user->getPairs('noclosed|noletter'));
+        $this->taskStatusList = array_filter($this->im->lang->task->statusList);
     }
 
     /**
@@ -176,12 +171,12 @@ class zentaoBot extends xuanBot
                 if(in_array(strtolower($arg), $this->lang->condKeywords['status']))
                 {
                     $statuses = array_shift($args);
-                    $statusList = $this->buildCondParam($statuses, $statusList, $this->statusArr);
+                    $statusList = $this->buildCondParam($statuses, $statusList, $this->taskStatusList);
                     continue;
                 }
-                if($this->checkCondType($arg, $this->statusArr))
+                if($this->checkCondType($arg, $this->taskStatusList))
                 {
-                    $statusList = $this->buildCondParam($arg, $statusList, $this->statusArr);
+                    $statusList = $this->buildCondParam($arg, $statusList, $this->taskStatusList);
                     continue;
                 }
             }
@@ -190,12 +185,12 @@ class zentaoBot extends xuanBot
                 if(in_array(strtolower($arg), $this->lang->condKeywords['assignTo']))
                 {
                     $usernames = array_shift($args);
-                    $assignedToList = $this->buildCondParam($usernames, $assignedToList, $this->userArr);
+                    $assignedToList = $this->buildCondParam($usernames, $assignedToList, $this->users);
                     continue;
                 }
-                if($this->checkCondType($arg, $this->userArr))
+                if($this->checkCondType($arg, $this->users))
                 {
-                    $assignedToList = $this->buildCondParam($arg, $assignedToList, $this->userArr);
+                    $assignedToList = $this->buildCondParam($arg, $assignedToList, $this->users);
                     continue;
                 }
             }
@@ -362,7 +357,7 @@ class zentaoBot extends xuanBot
         $task = $this->loadEntry('task', 'get', array('taskID'=> $taskID));
         if(empty($task)) return $this->lang->errors->emptyResult;
 
-        if($task->status != 'done' && $task->status != 'cancel') return sprintf($this->lang->errors->invalidStatus, $this->statusArr[$task->status]);
+        if($task->status != 'done' && $task->status != 'cancel') return sprintf($this->lang->errors->invalidStatus, $this->taskStatusList[$task->status]);
 
         $task = $this->loadEntry('taskclose', 'post', array('taskID' => $taskID, 'comment' => $comment));
         if($task->result == 'fail') return $task->message;
@@ -410,7 +405,7 @@ class zentaoBot extends xuanBot
         if(!common::hasPriv('task', 'finish')) return $this->lang->errors->unauthorized;
 
         if(empty($task) || isset($task->error)) return $this->lang->errors->emptyResult;
-        if($task->status != 'wait' && $task->status != 'doing') return sprintf($this->lang->errors->invalidStatus, $this->statusArr[$task->status]);
+        if($task->status != 'wait' && $task->status != 'doing') return sprintf($this->lang->errors->invalidStatus, $this->taskStatusList[$task->status]);
 
         $reply = new stdClass();
         $reply->messages  = array();
@@ -626,7 +621,7 @@ class zentaoBot extends xuanBot
                         $tr .= "<td><a href='xxc:openInApp/zentao-integrated/{$href}'>{$task->$key}</a></td>";
                         break;
                     case 'status':
-                        $tr .= "<td class='text-nowrap'>{$this->statusArr[$task->$key]}</td>";
+                        $tr .= "<td class='text-nowrap'>{$this->taskStatusList[$task->$key]}</td>";
                         break;
                     case 'assignedTo':
                         if($task->mode == 'multi')
@@ -639,7 +634,7 @@ class zentaoBot extends xuanBot
                         }
                         else
                         {
-                            $tr .= "<td class='text-nowrap'>{$this->userArr[$task->$key]}</td>";
+                            $tr .= "<td class='text-nowrap'>{$this->users[$task->$key]}</td>";
                         }
                     break;
                     case 'actions':
@@ -741,7 +736,7 @@ class zentaoBot extends xuanBot
 
         $task = $this->loadEntry('task', 'get', array('taskID' => $taskID));
         if(!$task) return $this->lang->errors->taskNotFound;
-        if($task->status != 'wait') return sprintf($this->lang->errors->invalidStatus, $this->statusArr[$task->status]);
+        if($task->status != 'wait') return sprintf($this->lang->errors->invalidStatus, $this->taskStatusList[$task->status]);
 
         $reply = new stdClass();
         $reply->messages  = array();
