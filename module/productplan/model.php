@@ -554,24 +554,10 @@ class productplanModel extends model
             $planID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
             $this->loadModel('score')->create('productplan', 'create', $planID);
-            if(!empty($plan->parent))
+            if(!empty($plan->parent) and $parentPlan->parent == '0')
             {
-                if($parentPlan->parent == '0')
-                {
-                    $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
-
-                    /* Transfer stories and bugs linked with the parent plan to the child plan. */
-                    $this->dao->update(TABLE_PLANSTORY)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
-                    $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
-                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id');
-                    foreach($stories as $storyID => $story)
-                    {
-                        $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$story->plan,");
-                        $storyPlan = trim($storyPlan, ',');
-
-                        $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
-                    }
-                }
+                $plan->id = $planID;
+                $this->transferStoriesAndBugs($plan);
             }
             return $planID;
         }
@@ -597,7 +583,7 @@ class productplanModel extends model
             ->get();
 
         $product = $this->loadModel('product')->getByID($oldPlan->product);
-        if($product->type != 'normal' and !isset($_POST['branch']))
+        if($product->type != 'normal' and $oldPlan->parent != -1 and !isset($_POST['branch']))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
@@ -649,25 +635,7 @@ class productplanModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
-            if(!empty($plan->parent))
-            {
-                if($parentPlan->parent == '0')
-                {
-                    $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
-
-                    /* Transfer stories and bugs linked with the parent plan to the child plan. */
-                    $this->dao->update(TABLE_PLANSTORY)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
-                    $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
-                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id');
-                    foreach($stories as $storyID => $story)
-                    {
-                        $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$story->plan,");
-                        $storyPlan = trim($storyPlan, ',');
-
-                        $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
-                    }
-                }
-            }
+            if(!empty($plan->parent) and $parentPlan->parent == '0') $this->transferStoriesAndBugs($plan);
             return common::createChanges($oldPlan, $plan);
         }
     }
@@ -1303,5 +1271,48 @@ class productplanModel extends model
         if($product->type != 'normal') $this->config->productplan->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($product->id, 'noempty');
         if($product->type == 'normal') unset($this->config->productplan->search['fields']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->productplan->search);
+    }
+
+    /**
+     * Transfer stories and bugs to new plan.
+     *
+     * @param  object $plan
+     * @access public
+     * @return void
+     */
+    public function transferStoriesAndBugs($plan)
+    {
+        $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
+
+        /* Transfer stories linked with the parent plan to the child plan. */
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id');
+        $unlinkStories = array();
+        foreach($stories as $storyID => $story)
+        {
+            if(!empty($story->branch) and strpos(",$plan->branch,", ",$story->branch,") === false)
+            {
+                $unlinkStories[$storyID] = $storyID;
+                $storyPlan = str_replace(",{$plan->parent},", ',', ",$story->plan,");
+            }
+            else
+            {
+                $storyPlan = str_replace(",{$plan->parent},", ",$plan->id,", ",$story->plan,");
+            }
+            $storyPlan = trim($storyPlan, ',');
+
+            $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
+        }
+        if(!empty($unlinkStories)) $this->dao->delete()->from(TABLE_PLANSTORY)->where('plan')->eq($plan->parent)->andWhere('story')->in($unlinkStories)->exec();
+        $this->dao->update(TABLE_PLANSTORY)->set('plan')->eq($plan->id)->where('plan')->eq($plan->parent)->exec();
+
+        /* Transfer bugs linked with the parent plan to the child plan. */
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($plan->parent)->fetchAll('id');
+        $unlinkBugs = array();
+        foreach($bugs as $bugID => $bug)
+        {
+            if(!empty($bug->branch) and strpos(",$plan->branch,", ",$bug->branch,") === false) $unlinkBugs[$bugID] = $bugID;
+        }
+        if(!empty($unlinkBugs)) $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('plan')->eq($plan->parent)->andWhere('id')->in($unlinkBugs)->exec();
+        $this->dao->update(TABLE_BUG)->set('plan')->eq($plan->id)->where('plan')->eq($plan->parent)->exec();
     }
 }

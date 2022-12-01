@@ -818,8 +818,11 @@ class kanbanModel extends model
         }
         elseif($branchID)
         {
-            $branchName = $this->branch->getById($branchID);
-            $branches   = array($branchID => $branchName);
+            foreach(explode(',', $branchID) as $id)
+            {
+                $branchName = $this->branch->getById($id);
+                $branches[$id] = $branchName;
+            }
         }
 
         foreach($branches as $id => $name)

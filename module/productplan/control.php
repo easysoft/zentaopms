@@ -977,4 +977,46 @@ class productplan extends control
         if(isset($parentPlanPairs[$planID])) unset($parentPlanPairs[$planID]);
         return print(html::select('parent', array(0 => '') + $parentPlanPairs, 0, 'class="form-control"'));
     }
+
+    /**
+     * AJAX: Get diff branches tips.
+     *
+     * @param  int    $productID
+     * @param  int    $parentID
+     * @param  string $branches
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDiffBranchesTip($productID = 0, $parentID = 0, $branches = '')
+    {
+        if(empty($parentID) or empty($productID)) return;
+
+        /* If it has children, return. */
+        $parentBranch = $this->productplan->getByID($parentID);
+        if($parentBranch->parent == '-1') return;
+
+        /* Find diff branches between parent plan and child plan. */
+        $diffBranches    = array();
+        $diffBranchesTip = '';
+        $product         = $this->loadModel('product')->getByID($productID);
+        $branchPairs     = $this->loadModel('branch')->getPairs($productID);
+        foreach(explode(',', $parentBranch->branch) as $parentBranchID)
+        {
+            if(empty($parentBranchID)) continue;
+            if(strpos(",$branches,", ",$parentBranchID,") === false)
+            {
+                $diffBranches[$parentBranchID] = $parentBranchID;
+                $diffBranchesTip .= "{$branchPairs[$parentBranchID]},";
+            }
+        }
+        if(empty($diffBranchesTip)) return;
+
+        /* Find stories and bugs in diff branches. */
+        $unlinkStories = $this->dao->select('*')->from(TABLE_STORY)->where('branch')->in($diffBranches)->andWhere("CONCAT(',', plan, ',')")->like("%,{$parentID},%")->fetchAll('id');
+        $unlinkBugs    = $this->dao->select('*')->from(TABLE_BUG)->where('branch')->in($diffBranches)->andWhere('plan')->eq($parentID)->fetchAll('id');
+        if(empty($unlinkStories) and empty($unlinkBugs)) return;
+
+        $this->lang->productplan->diffBranchesTip = str_replace('@branch@', $this->lang->product->branchName[$product->type], $this->lang->productplan->diffBranchesTip);
+        printf($this->lang->productplan->diffBranchesTip, trim($diffBranchesTip, ','));
+    }
 }
