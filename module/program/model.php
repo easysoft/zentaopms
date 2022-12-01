@@ -1031,15 +1031,31 @@ class programModel extends model
      */
     public function getTopPairs($model = '', $mode = '', $isQueryAll = false)
     {
-        return $this->dao->select('id,name')->from(TABLE_PROGRAM)
+        $topPairs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('grade')->eq(1)
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->andWhere('deleted')->eq(0)
+            ->beginIF(strpos($mode, 'withDeleted') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('`order` asc')
             ->fetchPairs();
+
+        if(strpos($mode, 'withDeleted') !== false)
+        {
+            $deletedTopPairs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
+                ->where('type')->eq('program')
+                ->andWhere('grade')->eq(1)
+                ->andWhere('deleted')->eq(1)
+                ->fetchPairs();
+
+            foreach($topPairs as $id => $name)
+            {
+                if(isset($deletedTopPairs[$id])) $topPairs[$id] .= ' (' . $this->lang->program->deleted . ')';
+            }
+        }
+
+        return $topPairs;
     }
 
     /**
