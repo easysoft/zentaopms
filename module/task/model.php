@@ -3936,7 +3936,7 @@ class taskModel extends model
         $toTeamTaskList = '';
         if($task->mode == 'multi')
         {
-            $toTeamTaskList = $this->getTeamTaskAssignedTo($task->id);
+            $toTeamTaskList = $this->getTeamMembers($task->id);
             $toTeamTaskList = implode(',', $toTeamTaskList);
             $toList         = $toTeamTaskList;
         }
@@ -4358,17 +4358,17 @@ class taskModel extends model
     }
 
     /**
-     * Get teamTask assignedTo.
+     * Get teamTask members.
      *
      * @param  int    $taskID
      * @access public
      * @return array
      */
-    public function getTeamTaskAssignedTo($taskID)
+    public function getTeamMembers($taskID)
     {
         $taskType = $this->dao->select('mode')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('mode');
         if($taskType != 'multi') return array();
-        $assignedToList = $this->dao->select('account')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchPairs();
-        return empty($assignedToList) ? array() : array_keys($assignedToList);
+        $teamMembers = $this->dao->select('account')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchPairs();
+        return empty($teamMembers) ? $teamMembers : array_keys($teamMembers);
     }
 }
