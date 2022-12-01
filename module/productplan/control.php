@@ -673,7 +673,7 @@ class productplan extends control
         $this->config->product->search['style']     = 'simple';
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->productplan->getPairsForStory($plan->product, $plan->branch, 'skipParent|withMainPlan');
-        $this->config->product->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, $plan->branch);
+        $this->config->product->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
         $storyStatusList = $this->lang->story->statusList;
         unset($storyStatusList['closed']);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
@@ -685,8 +685,12 @@ class productplan extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $branchName = $this->loadModel('branch')->getById($plan->branch);
-            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branchName);
+            $branchPairs = $this->loadModel('branch')->getPairs($plan->product);
+            foreach($branchPairs as $branchID => $branchName)
+            {
+                if(strpos(",$plan->branch,", ",$branchID,") === false) unset($branchPairs[$branchID]);
+            }
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branchPairs;
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
@@ -809,7 +813,7 @@ class productplan extends control
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($plan->product, $plan->branch);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getBuildPairs($productID, $branch = 'all', $params = '');
-        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($plan->product, 'bug', 0, $plan->branch);
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($plan->product, 'bug', 0, 'all');
         $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairsByProduct($productID, $plan->branch);
 
         unset($this->config->bug->search['fields']['product']);
@@ -922,29 +926,49 @@ class productplan extends control
     }
 
     /**
-     * AJAX: Get conflict story.
+     * AJAX: Get conflict story and bug.
      *
      * @param  int    $planID
      * @param  int    $branch
      * @access public
      * @return void
      */
-    public function ajaxGetConflictStory($planID, $newBranch)
+    public function ajaxGetConflict($planID, $newBranch)
     {
-        $conflictStoryIdList = '';
-        if(empty($newBranch)) return $conflictStoryIdList;
+        if(empty($newBranch)) return;
 
         $plan        = $this->productplan->getByID($planID);
         $oldBranch   = $plan->branch;
         $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
+        $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
+
+        $conflictStoryCounts = 0;
+        $conflictBugCounts   = 0;
         if($oldBranch)
         {
             foreach($planStories as $storyID => $story)
             {
-                if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $conflictStoryIdList .= '[' . $storyID . ']';
+                if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $conflictStoryCounts ++;
+            }
+
+            foreach($planBugs as $bugID => $bug)
+            {
+                if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $conflictBugCounts ++;
             }
         }
-        if($conflictStoryIdList != '') printf($this->lang->story->confirmChangePlan, $conflictStoryIdList);
+
+        if($conflictStoryCounts and $conflictBugCounts)
+        {
+            printf($this->lang->productplan->confirmChangePlan, $conflictStoryCounts, $conflictBugCounts);
+        }
+        elseif($conflictStoryCounts)
+        {
+            printf($this->lang->productplan->confirmRemoveStory, $conflictStoryCounts);
+        }
+        elseif($conflictBugCounts)
+        {
+            printf($this->lang->productplan->confirmRemoveBug, $conflictBugCounts);
+        }
     }
 
     /**

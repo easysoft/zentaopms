@@ -23,7 +23,7 @@ function convertStringToDate(dateString)
 function getConflictStories(planID)
 {
     var newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
-    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
+    $.get(createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
     {
         if(conflictStories != '')
         {
