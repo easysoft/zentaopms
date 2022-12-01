@@ -132,20 +132,20 @@ class zahost extends control
     /**
      * Delete host.
      *
-     * @param  int    $assetID
+     * @param  int    $hostID
      * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($assetID, $confirm = 'no')
+    public function delete($hostID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "assetID=$assetID&confirm=yes")));
+            return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "hostID=$hostID&confirm=yes")));
         }
 
-        $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($assetID)->exec();
-        $this->loadModel('action')->create('zahost', $assetID, 'deleted');
+        $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($hostID)->exec();
+        $this->loadModel('action')->create('zahost', $hostID, 'deleted');
 
         /* if ajax request, send result. */
         if($this->server->ajax)
@@ -229,7 +229,7 @@ class zahost extends control
      * @access public
      * @return object
      */
-    public function ajaxDownloadImage($hostID, $imageName)
+    public function downloadImage($hostID, $imageName)
     {
         $image = $this->zahost->getImageByNameAndHostID($imageName, $hostID);
         if(empty($image))
@@ -240,7 +240,8 @@ class zahost extends control
         $this->zahost->downloadImage($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->downloadImageSuccess));
+        if(isonlybody()) return print(js::reload('parent.parent'));
+        return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $hostID)), 'parent'));
     }
 
     /**
@@ -274,14 +275,19 @@ class zahost extends control
      * @access public
      * @return object
      */
-    public function ajaxCancelDownload($imageID)
+    public function cancelDownload($imageID, $confirm = 'no')
     {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->zahost->confirmDelete, inlink('ajaxCancelDownload', "id=$imageID&confirm=yes")));
+        }
         $image = $this->zahost->getImageByID($imageID);
 
         $this->zahost->cancelDownload($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->cancelDownloadSuccess));
+        if(isonlybody()) return print(js::reload('parent.parent'));
+        return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $image->host)), 'parent'));
     }
 
     /**

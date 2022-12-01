@@ -79,9 +79,9 @@ $lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
 $lang->zahost->image->progress   = '下载进度';
 
-$lang->zahost->image->statusList['notDownloaded'] = '未下载';
+$lang->zahost->image->statusList['notDownloaded'] = '待下载';
 $lang->zahost->image->statusList['created']       = '下载中';
-$lang->zahost->image->statusList['canceled']      = '已取消';
+$lang->zahost->image->statusList['canceled']      = '待下载';
 $lang->zahost->image->statusList['inprogress']    = '下载中';
 $lang->zahost->image->statusList['completed']     = '已下载';
 $lang->zahost->image->statusList['failed']        = '下载失败';

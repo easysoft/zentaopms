@@ -31,15 +31,17 @@ function updateProgress() {
                  {
                     $('.image-download-' + imageID).addClass('disabled');
                     $('.image-cancel-' + imageID).addClass('disabled');
+                    $('.image-cancel-' + imageID).attr('href', '#');
                 } 
                 else 
                 {
                     $('.image-download-' + imageID).removeClass('disabled');
                     $('.image-cancel-' + imageID).addClass('disabled');
+                    $('.image-cancel-' + imageID).attr('href', '#');
                 }
+                $('.image-status-' + imageID).text(statusList[imageID].status);
                 if(statusList[imageID].progress != '')
                 {
-                    $('.image-status-' + imageID).text(statusList[imageID].status);
                     $('.image-progress-' + imageID).text(statusList[imageID].progress);
                 }
             }
