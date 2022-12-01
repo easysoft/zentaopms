@@ -35,6 +35,11 @@
 <?php js::set('ignore', $lang->project->ignore);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
+<?php js::set('copyType', '');?>
+<?php js::set('nameTips', $lang->project->copyproject->nameTips);?>
+<?php js::set('codeTips', $lang->project->copyproject->codeTips);?>
+<?php js::set('endTips', $lang->project->copyproject->endTips);?>
+<?php js::set('daysTips', $lang->project->copyproject->daysTips);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
