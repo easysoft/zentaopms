@@ -90,7 +90,6 @@ function loadExecutionRelated(executionID)
  * Load execution builds.
  *
  * @param  int $executionID
- * @param  int $selected
  * @access public
  * @return void
  */

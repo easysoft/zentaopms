@@ -275,7 +275,7 @@ class buildModel extends model
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("$branchs")->fi()
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
-        $executions = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->andWhere('deleted')->eq('1')->fetchPairs();
+        $deletedExecutions = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->andWhere('deleted')->eq('1')->fetchPairs();
 
         /* Set builds and filter done executions and terminate releases. */
         $builds      = array();
@@ -285,7 +285,7 @@ class buildModel extends model
         {
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
-            if((strpos($params, 'withexecution') !== false) and $build->execution and !empty($executions[$build->execution])) continue;
+            if((strpos($params, 'withexecution') !== false) and $build->execution and isset($executions[$build->execution])) continue;
 
             if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
             $branchName = $build->branchName ? $build->branchName : $this->lang->branch->main;
@@ -657,6 +657,8 @@ class buildModel extends model
     {
         $action = strtolower($action);
 
+        if($module == 'testtask' and $action == 'create') return !$object->executionDeleted;
+
         return true;
     }
 
@@ -685,18 +687,14 @@ class buildModel extends model
         {
             $executionID = $tab == 'execution' ? $extraParams['executionID'] : $build->execution;
             $execution   = $this->loadModel('execution')->getByID($executionID);
+            $build->executionDeleted = $execution ? $execution->deleted : 0; 
+
             $testtaskApp = (!empty($execution->type) and $execution->type == 'kanban') ? 'data-app="qa"' : "data-app='{$tab}'";
 
             if(common::hasPriv($module, 'linkstory') and common::canBeChanged('build', $build)) $menu .= $this->buildMenu($module, 'view', "{$params}&type=story&link=true", $build, $type, 'link', '', '', '', "data-app={$tab}", $this->lang->build->linkStory);
 
-            if($execution and $execution->deleted === '1')
-            {
-                if(common::hasPriv('testtask', 'create')) $menu .= html::a(helper::createLink('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id&projectID=$build->project"), "<i class='icon-testtask-create icon-bullhorn'></i>", '', "class='btn' title='{$this->lang->build->notice->createTest}' disabled");
-            }
-            else
-            {
-                $menu .= $this->buildMenu('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id&projectID=$build->project", $build, $type, 'bullhorn', '', '', '', $testtaskApp);
-            }
+            $title = ($execution and $execution->deleted === '1') ? $this->lang->build->notice->createTest : '';
+            $menu .= $this->buildMenu('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id&projectID=$build->project", $build, $type, 'bullhorn', '', '', '', $testtaskApp, $title);
 
             if($tab == 'execution' and !empty($execution->type) and $execution->type != 'kanban') $menu .= $this->buildMenu('execution', 'bug', "execution={$extraParams['executionID']}&productID={$extraParams['productID']}&branchID=all&orderBy=status&build=$build->id", $build, $type, '', '', '', '', $this->lang->execution->viewBug);
             if($tab == 'project' or empty($execution->type) or $execution->type == 'kanban')      $menu .= $this->buildMenu($module, 'view', "{$params}&type=generatedBug", $build, $type, 'bug', '', '', '', "data-app='$tab'", $this->lang->project->bug);
