@@ -123,7 +123,7 @@ class releaseModel extends model
         $buildIdList = array();
         foreach($releases as $release)
         {
-            if($branch != 'all')
+            if($branch != 'all' and $branch !== '')
             {
                 $inBranch = false;
                 foreach(explode(',', trim($release->branch, ',')) as $branchID)

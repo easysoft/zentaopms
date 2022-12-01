@@ -37,7 +37,7 @@
         <?php $this->printExtendFields($bug, 'table');?>
         <tr>
           <th><?php echo $lang->bug->openedBuild;?></th>
-          <td colspan='2'><?php echo html::select('openedBuild[]', $builds, $bug->openedBuild, 'size=4 multiple=multiple class="form-control chosen"');?></td>
+          <td colspan='2'><?php echo html::select('openedBuild[]', $builds, $bug->openedBuild, 'size=4 multiple=multiple class="form-control picker-select"');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->comment;?></th>
@@ -56,4 +56,8 @@
     <div class='main'><?php include '../../common/view/action.html.php';?></div>
   </div>
 </div>
+<?php
+js::set('releasedBuilds', $releasedBuilds);
+js::set('releasedBuild', $lang->build->releasedBuild);
+?>
 <?php include '../../common/view/footer.html.php';?>
