@@ -110,6 +110,14 @@ function loadProductBranches(productID)
 
             if(data)
             {
+                $.ajaxSettings.async = false;
+                $.get(createLink('product', 'ajaxGetProductById', "productID=" + productID), function(data)
+                {
+                    $.cookie('branchSourceName', data.branchSourceName)
+                    $.cookie('branchName', data.branchName)
+                }, 'json')
+                $.ajaxSettings.async = true;
+
                 gap = $('#product').closest('td').next().width();
                 $('#planIdBox').css('flex', '0 0 ' + gap + 'px')
 
