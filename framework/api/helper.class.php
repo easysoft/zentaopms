@@ -214,6 +214,7 @@ class helper extends baseHelper
         }
         return common::getSysURL() . $link;
     }
+}
 
 /**
  * 检查是否是onlybody模式。
