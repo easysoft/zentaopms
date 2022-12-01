@@ -32,3 +32,8 @@ table.diff {margin-bottom: 0px;}
 #fileTabs .tab-nav-item {max-width: none !important;}
 #filesTree #modules {margin-top: 5px;}
 #filesTree {overflow-y: auto;}
+
+.file-tree {padding: 0;}
+#sidebar > .sidebar-toggle {left: auto; right: 3px;}
+#sidebar > .sidebar-toggle > .icon {left : -1px;}
+.hide-sidebar #sidebar {width: 0 !important;}
