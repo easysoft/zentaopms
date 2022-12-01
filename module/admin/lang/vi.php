@@ -84,3 +84,4 @@ $lang->admin->safe->loginCaptchaList[0] = 'No';
 
 $lang->admin->safe->noticeMode   = 'Mật khẩu sẽ được kiểm tra khi người dùng đăng nhập hoặc người dùng thêm hoặc sửa.';
 $lang->admin->safe->noticeStrong = '';
+$lang->admin->safe->noticeGd     = 'Your server does not have GD module installed, you cannot use the Captcha function, Please use it after installation.';
