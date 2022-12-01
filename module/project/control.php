@@ -1427,7 +1427,6 @@ class project extends control
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
 
-        $allExecutions = $this->loadModel('execution')->getByProject($projectID, 'all', '', true);
         $devel         = $project->model == 'waterfall' ? true : false;
         $executions    = $this->loadModel('execution')->getByProject($projectID, 'all', '', true, $devel);
         $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
@@ -1488,8 +1487,7 @@ class project extends control
         $this->view->projectID     = $projectID;
         $this->view->project       = $project;
         $this->view->products      = $products;
-        $this->view->allExecutions = $allExecutions;
-        $this->view->executions    = $executions;
+        $this->view->executions    = $this->execution->getPairs();
         $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
         $this->view->type          = $type;
 
