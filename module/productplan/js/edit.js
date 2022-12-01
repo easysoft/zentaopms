@@ -23,7 +23,7 @@ function convertStringToDate(dateString)
 function getConflictStories(planID)
 {
     var newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
-    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
+    $.get(createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
     {
         if(conflictStories != '')
         {
@@ -86,5 +86,19 @@ $('#future').on('change', function()
     }
 });
 
-
 $('#future').change();
+
+$('#submit').click(function()
+{
+    var parentPlan = $('#parent').val();
+    var branches   = $('#branch').val();
+    if(parentPlan != 0 && branches)
+    {
+        link = createLink('productplan', 'ajaxGetDiffBranchesTip', "produtID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
+        $.post(link, function(diffBranchesTip)
+        {
+            if((diffBranchesTip != '' && confirm(diffBranchesTip)) || !diffBranchesTip) $('form#dataform').submit();
+        });
+        return false;
+    }
+});

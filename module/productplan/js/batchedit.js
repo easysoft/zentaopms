@@ -30,11 +30,11 @@ function changeDate(planID)
 function getConflictStories(planID)
 {
     var newBranch = $('#branch' + planID).val() ? $('#branch' + planID).val().toString() : '';
-    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
+    $.get(createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
     {
         if(conflictStories != '' && !confirm(conflictStories))
         {
-            $('#branch' + planID).val(oldBranch[planID]);
+            $('#branch' + planID).val(oldBranch[planID].split(','));
             $('#branch' + planID).trigger("chosen:updated");
         }
     });

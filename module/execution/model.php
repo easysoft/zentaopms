@@ -2896,7 +2896,7 @@ class executionModel extends model
             {
                 if(empty($planIdList)) continue;
                 $planIdList = explode(',', $planIdList);
-                $executionProducts = zget($executionProducts, $productID, array());
+                $executionBranches = zget($executionProducts, $productID, array());
                 foreach($planIdList as $planID)
                 {
                     $planStory = $this->story->getPlanStories($planID);
@@ -2904,7 +2904,7 @@ class executionModel extends model
                     {
                         foreach($planStory as $id => $story)
                         {
-                            if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($executionProducts) and !isset($executionProducts[$story->branch])))
+                            if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($executionBranches) and !isset($executionBranches[$story->branch])))
                             {
                                 unset($planStory[$id]);
                                 continue;
