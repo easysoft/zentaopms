@@ -23,7 +23,7 @@
         <tr class='text-center'>
           <th class='c-id'><?php echo $lang->productplan->id?></th>
           <?php if($product->type != 'normal'):?>
-          <th class='c-branch'><?php echo $lang->productplan->branch;?></th>
+          <th class='c-branch'><?php echo $lang->product->branch;?></th>
           <?php endif;?>
           <th class='required'><?php echo $lang->productplan->title?></th>
           <th class='c-status'><?php echo $lang->productplan->status?></th>
