@@ -293,12 +293,6 @@ class productplanModel extends model
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
-        $branchMap = $this->dao->select('id, name')->from(TABLE_BRANCH)
-            ->where('status')->eq('active')
-            ->andWhere('deleted')->eq('0')
-            ->fetchPairs('id', 'name');
-        $branchMap[BRANCH_MAIN] = $this->lang->branch->main;
-
         $plans     = $this->reorder4Children($plans);
         $plans     = $this->relationBranch($plans);
         $planPairs = array();
