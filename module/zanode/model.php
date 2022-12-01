@@ -72,7 +72,7 @@ class zanodemodel extends model
             'memory'       => (int)$data->memory,
         );
 
-        $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null));
+        $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null, array("Authorization:$host->tokenSN")));
 
         if(empty($result))
         {
@@ -122,7 +122,7 @@ class zanodemodel extends model
         $path     = '/api/v1/kvm/' . $node->name . '/' . $type;
         $param    = array('vmUniqueName' => $node->name);
 
-        $result = commonModel::http($agnetUrl . $path, $param);
+        $result = commonModel::http($agnetUrl . $path, $param, array(), array("Authorization:$host->tokenSN"));
         $data   = json_decode($result, true);
         if(empty($data)) return $this->lang->zanode->notFoundAgent;
 
@@ -156,7 +156,7 @@ class zanodemodel extends model
         if($host)
         {
             $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->zanode->defaultPort;
-            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req));
+            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req), array(), array("Authorization:$host->tokenSN"));
 
             $data = json_decode($result, true);
             if(empty($data)) return $this->lang->zanode->notFoundAgent;
@@ -434,7 +434,7 @@ class zanodemodel extends model
         if(empty($host)) return false;
 
         $agnetUrl = 'http://' . $host->extranet . ':' . $host->agentPort . static::KVM_TOKEN_PATH;
-        $result   = json_decode(commonModel::http("$agnetUrl?port={$vm->vnc}"));
+        $result   = json_decode(commonModel::http("$agnetUrl?port={$vm->vnc}", null, array(), array("Authorization:$host->tokenSN")));
 
         if(empty($result) or $result->code != 'success') return false;
 

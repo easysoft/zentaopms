@@ -56,7 +56,7 @@ class hostHeartbeatEntry extends baseEntry
 
         $host->tokenTimeUnix = strtotime($host->tokenTime);
         unset($host->status);
-        unset($host->expiredDate);
+        unset($host->tokenTime);
         return $this->send(200, $host);
     }
 }

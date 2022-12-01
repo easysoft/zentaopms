@@ -56,11 +56,10 @@ class zanodeHeartbeatEntry extends baseEntry
 
         if(!$secret) return $this->sendSuccess(200, 'success');
 
-        $host->expiredTimeUnix = strtotime($host->expiredDate);
-        $host->token           = $host->tokenSN;
+        $host->tokenTimeUnix = strtotime($host->expiredDate);
 
         unset($host->status);
-        unset($host->tokenSN);
+        unset($host->tokenTime);
         return $this->send(200, $host);
     }
 }
