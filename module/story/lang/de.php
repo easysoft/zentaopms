@@ -12,7 +12,7 @@
 global $config;
 $lang->story->create            = "Story hinzufügen";
 
-$lang->story->requirement       = zget($lang, 'URCommon', "Requirement");
+$lang->story->requirement       = 'UR';
 $lang->story->story             = zget($lang, 'SRCommon', "Story");
 $lang->story->createStory       = 'Create ' . $lang->story->story;
 $lang->story->createRequirement = 'Create ' . $lang->story->requirement;

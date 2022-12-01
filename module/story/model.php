@@ -889,7 +889,7 @@ class storyModel extends model
             return false;
         }
 
-        $storyPlan = !empty($_POST['plan']) ? $_POST['plan'] : array();
+        $storyPlan = !empty($_POST['plan']) ? array_filter($_POST['plan']) : array();
         if(count($storyPlan) > 1)
         {
             $oldStoryPlan = !empty($oldStory->planTitle) ? array_keys($oldStory->planTitle) : array();
