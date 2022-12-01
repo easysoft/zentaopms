@@ -20,8 +20,6 @@ $(function()
     $('#dropMenu').css('z-index', 9999);
 })
 
-$('[name^=openedBuilds]').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'});
-
 /**
  * Set opened builds.
  *
@@ -46,7 +44,7 @@ function setOpenedBuilds(link, index)
             $('#buildBox' + index + ' select').addClass('select-1');
             $('#buildBox' + index + ' select').attr('name','openedBuilds[' + index + '][]');
             $('#buildBox' + index + ' select').attr('id','openedBuilds' + index);
-            $('#buildBox' + index + ' select').picker({optionRender: markReleasedBuilds});
+            $('#buildBox' + index + ' select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'});
 
             index++;
             if($('#executions' + index).val() != 'ditto') break;

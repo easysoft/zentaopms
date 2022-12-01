@@ -854,7 +854,6 @@ class bug extends control
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
-        $this->view->releasedBuilds   = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
         $this->view->users            = $this->user->getPairs('devfirst|noclosed');
         $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->projectID        = $projectID;
@@ -1166,7 +1165,6 @@ class bug extends control
         if($product->shadow) $this->view->project = $this->loadModel('project')->getByShadowProduct($bug->product);
 
         $this->view->bug                   = $bug;
-        $this->view->productID             = $productID;
         $this->view->product               = $product;
         $this->view->execution             = $execution;
         $this->view->productBugs           = $productBugs;
@@ -1187,7 +1185,6 @@ class bug extends control
         $this->view->cases                 = array('' => '') + $cases;
         $this->view->openedBuilds          = $openedBuilds;
         $this->view->resolvedBuilds        = array('' => '') + $openedBuilds + $oldResolvedBuild;
-        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
         $this->view->actions               = $this->action->getList('bug', $bugID);
 
         $this->display();
@@ -1839,7 +1836,6 @@ class bug extends control
         $this->view->productBugs    = $productBugs;
         $this->view->executions     = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID, 'stagefilter');
         $this->view->builds         = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch,noreleased');
-        $this->view->releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
         $this->view->actions        = $this->action->getList('bug', $bugID);
         $this->view->execution      = isset($execution) ? $execution : '';
         $this->display();
@@ -1936,11 +1932,10 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->activate;
 
-        $this->view->bug            = $bug;
-        $this->view->users          = $this->user->getPairs('noclosed', $bug->resolvedBy);
-        $this->view->builds         = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty,noreleased', 0, 'execution', $bug->openedBuild);
-        $this->view->actions        = $this->action->getList('bug', $bugID);
-        $this->view->releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID);
+        $this->view->bug     = $bug;
+        $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty,noreleased', 0, 'execution', $bug->openedBuild);
+        $this->view->actions = $this->action->getList('bug', $bugID);
 
         $this->display();
     }
@@ -2505,5 +2500,20 @@ class bug extends control
         $project = $this->loadModel('project')->getByID($projectID);
         if($project->model == 'kanban') return print($this->lang->bug->kanban);
         return print($this->lang->bug->execution);
+    }
+
+    /**
+     * Ajax get released builds.
+     * 
+     * @param  int        $productID 
+     * @param  int|string $branch 
+     * @access public
+     * @return string
+     */
+    public function ajaxGetReleasedBuilds($productID, $branch = 'all')
+    {
+        $releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
+
+        return print(helper::jsonEncode($releasedBuilds));
     }
 }

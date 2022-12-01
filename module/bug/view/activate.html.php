@@ -57,7 +57,7 @@
   </div>
 </div>
 <?php
-js::set('releasedBuilds', $releasedBuilds);
+js::set('productID', $bug->product);
 js::set('releasedBuild', $lang->build->releasedBuild);
 ?>
 <?php include '../../common/view/footer.html.php';?>

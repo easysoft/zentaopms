@@ -30,7 +30,7 @@ js::set('bugID'                  , $bug->id);
 js::set('bugBranch'              , $bug->branch);
 js::set('isClosedBug'            , $bug->status == 'closed');
 js::set('projectExecutionPairs'  , $projectExecutionPairs);
-js::set('releasedBuilds'         , $releasedBuilds);
+js::set('productID'              , $product->id);
 js::set('releasedBuild'          , $lang->build->releasedBuild);
 if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
 if($this->app->tab == 'project')   js::set('objectID', $bug->project);
@@ -102,7 +102,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th class='w-80px'><?php echo $lang->bug->product;?></th>
                   <td>
                     <div class='input-group'>
-                      <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
+                      <?php echo html::select('product', $products, $product->id, "onchange='loadAll(this.value)' class='form-control chosen'");?>
                       <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $bug->branch, "onchange='loadBranch();' class='form-control'");?>
                     </div>
                   </td>
@@ -116,9 +116,9 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                     if(count($moduleOptionMenu) == 1)
                     {
                         echo "<span class='input-group-addon'>";
-                        echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$bug->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
+                        echo html::a($this->createLink('tree', 'browse', "rootID={$product->id}&view=bug&currentModuleID=0&branch=$bug->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                         echo '&nbsp; ';
-                        echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadProductModules($productID)'");
+                        echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadProductModules($product->id)'");
                         echo '</span>';
                     }
                     ?>
