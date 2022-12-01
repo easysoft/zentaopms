@@ -2404,24 +2404,29 @@ class projectModel extends model
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
 
-            if(isset($existedProducts[$productID][$branch])) continue;
+            if(!is_array($branch)) $branch = array($branch => $branch);
 
-            if(isset($oldProjectProducts[$productID][$branch]))
+            foreach($branch as $branchID)
             {
-                $oldProjectProduct = $oldProjectProducts[$productID][$branch];
-                if($this->app->rawMethod != 'edit') $oldPlan = $oldProjectProduct->plan;
+                if(isset($existedProducts[$productID][$branchID])) continue;
+
+                if(isset($oldProjectProducts[$productID][$branchID]))
+                {
+                    $oldProjectProduct = $oldProjectProducts[$productID][$branchID];
+                    if($this->app->rawMethod != 'edit') $oldPlan = $oldProjectProduct->plan;
+                }
+
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->product = $productID;
+                $data->branch  = $branchID;
+                $data->plan    = isset($plans[$productID][$branchID]) ? implode(',', $plans[$productID][$branchID]) : $oldPlan;
+                $data->plan    = trim($data->plan, ',');
+                $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
+
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                $existedProducts[$productID][$branchID] = true;
             }
-
-            $data = new stdclass();
-            $data->project = $projectID;
-            $data->product = $productID;
-            $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
-            $data->plan    = trim($data->plan, ',');
-            $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
-
-            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            $existedProducts[$productID][$branch] = true;
         }
 
         /* Delete the execution linked products that is not linked with the execution. */
