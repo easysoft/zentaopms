@@ -29,7 +29,7 @@ $(function()
 
     setAclList($("#parent").val());
 
-    if(typeof(currentPlanID) == 'undefined')
+    if(typeof(currentPlanID) == 'undefined' && copyProjectID == 0)
     {
         $('.productsBox select[id^="products"]').each(function()
         {
@@ -305,24 +305,6 @@ function loadBranches(product)
     });
 
     (chosenProducts.length > 1 && model == 'waterfall') ? $('.division').removeClass('hide') : $('.division').addClass('hide');
-
-    /*
-    if($('.productsBox .row .input-group:last select:first').val() != 0)
-    {
-        var length = $('.productsBox .row .input-group').size();
-        var $html  = $('.productsBox .row .col-sm-4:last').html().replace('required', '');
-        $('.productsBox .row .col-sm-4:last').find('.input-group-addon').remove();
-        $('.productsBox .row').append('<div class="col-sm-4">' + $html + '</div>');
-        if($('.productsBox .row .input-group:last select').size() >= 2) $('.productsBox .row .input-group:last select:last').remove();
-        $('.productsBox .row .input-group:last .chosen-container').remove();
-        $('.productsBox .row .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
-        $('.productsBox .row .input-group:last .chosen').chosen();
-
-        $('[data-toggle="popover"]').popover();
-
-        adjustProductBoxMargin();
-    }
-    */
 
     var $tableRow = $(product).closest('.table-row');
     var index     = $tableRow.find('select:first').attr('id').replace('products' , '');

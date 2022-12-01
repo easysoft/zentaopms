@@ -138,6 +138,47 @@
             </div>
           </td><td></td><td></td>
         </tr>
+        <?php if($products):?>
+        <?php $i = 0;?>
+        <?php foreach($products as $product):?>
+        <tr>
+          <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
+          <td class='text-left productsBox' colspan="3">
+            <div class='row'>
+              <div class="col-sm-6">
+                <div class='table-row'>
+                  <div class='table-col'>
+                    <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+                    <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
+                      <span class='input-group-addon'><?php echo $lang->product->common;?></span> 
+                      <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
+                    </div>
+                  </div>
+                  <div class='table-col <?php if(!$hasBranch) echo 'hidden';?>'>
+                    <div class='input-group required'>
+                      <span class='input-group-addon fix-border'><?php echo $lang->product->branchName['branch'];?></span>
+                      <?php $branchIdList = join(',', $product->branches);?>
+                      <?php echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class='input-group' <?php echo "id='plan$i'";?>>
+                  <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
+                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), $product->plans, "class='form-control chosen' multiple");?>
+                  <div class='input-group-btn'>
+                    <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>
+                    <a href='javascript:;' onclick='removeLine(this)' class='btn btn-link removeLine' <?php if($i == 0) echo "style='visibility: hidden'";?>><i class='icon-close'></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <?php $i ++;?>
+        <?php endforeach;?>
+        <?php else:?>
         <tr>
           <th id='productTitle'><?php echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan='3'>
@@ -181,6 +222,7 @@
             </div>
           </td>
         </tr>
+        <?php endif;?>
         <!--tr>
           <th id='productTitle'><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">

@@ -1243,6 +1243,20 @@ class projectModel extends model
             }
         }
 
+        if($_POST['products'])
+        {
+            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
+            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
+            foreach($_POST['products'] as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                {
+                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    return false;
+                }
+            }
+        }
+
         $program = new stdClass();
         if($project->parent)
         {
@@ -1509,12 +1523,27 @@ class projectModel extends model
             if(dao::isError()) return false;
         }
 
+        if($_POST['products'])
+        {
+            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
+            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
+            foreach($_POST['products'] as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                {
+                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    return false;
+                }
+            }
+        }
+
         /* Judge products not empty. */
         $linkedProductsCount = 0;
         foreach($_POST['products'] as $product)
         {
             if(!empty($product)) $linkedProductsCount++;
         }
+
         if(empty($linkedProductsCount))
         {
             dao::$errors[] = $this->lang->project->errorNoProducts;

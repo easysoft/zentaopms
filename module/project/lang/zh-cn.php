@@ -339,6 +339,7 @@ $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = '瀑布';
 $lang->project->cannotCreateChild      = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
 $lang->project->emptyPM                = '暂无';
+$lang->project->emptyBranch            = '分支不能为空！';
 $lang->project->cannotChangeToCat      = "该项目已经有实际的内容，无法修改为父项目";
 $lang->project->cannotCancelCat        = "该项目下已经有子项目，无法取消父项目标记";
 $lang->project->parentBeginEnd         = "父项目起止时间：%s ~ %s";

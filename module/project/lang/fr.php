@@ -339,6 +339,7 @@ $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = 'CMMI';
 $lang->project->cannotCreateChild      = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
 $lang->project->emptyPM                = 'No manager';
+$lang->project->emptyBranch            = 'Branch can not be empty!';
 $lang->project->cannotChangeToCat      = "It is not empty, so you cannot change it to a parent.";
 $lang->project->cannotCancelCat        = "It has child projects, so you cannot unmark the parent.";
 $lang->project->parentBeginEnd         = "Parent begin&end date: %s ~ %s";
