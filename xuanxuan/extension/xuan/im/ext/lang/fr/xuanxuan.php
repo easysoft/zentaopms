@@ -86,12 +86,14 @@ $lang->im->bot->zentaoBot->errors->unauthorized    = 'You are not authorized to 
 $lang->im->bot->zentaoBot->errors->taskIDRequired  = 'Task ID is required.';
 $lang->im->bot->zentaoBot->errors->taskNotFound    = 'Task not found.';
 
+$lang->im->bot->zentaoBot->finish = new stdclass();
 $lang->im->bot->zentaoBot->finish->tip             = 'Click the link below to finish the task. Time consumed and starting time of this task are required.';
 $lang->im->bot->zentaoBot->finish->tipLinkTitle    = 'Finish Task';
 $lang->im->bot->zentaoBot->finish->done            = 'Task #%d is finished, ended at:%s, time consumed: %f hours.';
 $lang->im->bot->zentaoBot->finish->bugTip          = 'Task #%d is associated with a bug, you may mark the bug as resolved by clicking the link below.';
 $lang->im->bot->zentaoBot->finish->bugTipLinkTitle = 'Resolve Bug';
 
+$lang->im->bot->zentaoBot->start = new stdclass();
 $lang->im->bot->zentaoBot->start->tip                = 'Click the link below to start task #%d.';
 $lang->im->bot->zentaoBot->start->tipLinkTitle       = 'Start Task';
 $lang->im->bot->zentaoBot->start->finishWithZeroLeft = 'Hours left is 0 thus the task is finished.';

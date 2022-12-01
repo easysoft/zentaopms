@@ -94,12 +94,14 @@ $lang->im->bot->zentaoBot->errors->unauthorized    = '您无权操作此任务';
 $lang->im->bot->zentaoBot->errors->taskIDRequired  = '请输入任务编号';
 $lang->im->bot->zentaoBot->errors->taskNotFound    = '任务不存在';
 
+$lang->im->bot->zentaoBot->finish = new stdclass();
 $lang->im->bot->zentaoBot->finish->tip             = '完成任务指令需要填入工时与记录起始时间，请点击下方入口';
 $lang->im->bot->zentaoBot->finish->tipLinkTitle    = '工时记录';
 $lang->im->bot->zentaoBot->finish->done            = '任务 #%d 已完成，完成时间：%s，消耗：%f 小时';
 $lang->im->bot->zentaoBot->finish->bugTip          = '检测到任务 #%d 关联相关 Bug，您可以点击以下链接进行处理';
 $lang->im->bot->zentaoBot->finish->bugTipLinkTitle = '关联 Bug 处理';
 
+$lang->im->bot->zentaoBot->start = new stdclass();
 $lang->im->bot->zentaoBot->start->tip                = '点击链接开始任务 #%d';
 $lang->im->bot->zentaoBot->start->tipLinkTitle       = '开始任务';
 $lang->im->bot->zentaoBot->start->finishWithZeroLeft = '剩余工时为 0，任务将被标记为"已完成"';
