@@ -973,10 +973,11 @@ class searchModel extends model
         if($this->app->user->admin) return $results;
 
         $this->loadModel('doc');
-        $products   = $this->app->user->view->products;
-        $programs   = $this->app->user->view->programs;
-        $projects   = $this->app->user->view->projects;
-        $executions = $this->app->user->view->sprints;
+        $products       = $this->app->user->view->products;
+        $shadowProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs('id');
+        $programs       = $this->app->user->view->programs;
+        $projects       = $this->app->user->view->projects;
+        $executions     = $this->app->user->view->sprints;
 
         $objectPairs = array();
         $total       = count($results);
@@ -1014,6 +1015,7 @@ class searchModel extends model
                 foreach($objectIdList as $productID => $recordID)
                 {
                     if(strpos(",$products,", ",$productID,") === false) unset($results[$recordID]);
+                    if(in_array($productID, $shadowProducts)) unset($results[$recordID]);
                 }
             }
             elseif($objectType == 'program')

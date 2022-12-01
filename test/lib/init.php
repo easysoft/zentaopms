@@ -63,7 +63,6 @@ include $testPath. 'lib/db.class.php';
 include $testPath. 'lib/yaml.class.php';
 include $testPath. 'lib/rest.php';
 $db   = new db();
-$yaml = new yaml();
 
 if(!empty($config->test->account) and !empty($config->test->password) and !empty($config->test->base))
 {

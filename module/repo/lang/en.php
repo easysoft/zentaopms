@@ -1,5 +1,6 @@
 <?php
 $lang->repo->common          = 'Repo';
+$lang->repo->codeRepo        = 'Code Library';
 $lang->repo->browse          = 'View';
 $lang->repo->viewRevision    = 'View Revision';
 $lang->repo->product         = 'Product';

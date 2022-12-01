@@ -88,10 +88,7 @@
         <?php endif;?>
         <tr>
           <th id='projectType'><?php echo $lang->project->type;?></th>
-          <td>
-            <?php echo zget($lang->project->projectTypeList, $project->hasProduct);?>
-            <?php echo html::hidden('hasProduct', $project->hasProduct);?>
-          </td>
+          <td colspan='3'><?php echo nl2br(html::radio('hasProduct', $lang->project->projectTypeList, $project->hasProduct, 'disabled'));?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
@@ -107,7 +104,7 @@
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $project->budgetUnit);?></span>
               <?php else:?>
               <span class='input-group-addon'></span>
-              <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control'");?>
+              <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control w-80px'");?>
               <?php endif;?>
             </div>
           </td>
@@ -148,7 +145,7 @@
           <td></td>
           <td></td>
         </tr>
-        <?php if($project->hasProduct):?>
+        <?php if($project->hasProduct and $this->config->vision != 'lite'):?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
@@ -198,7 +195,10 @@
         <?php $disabled = !empty($executions) ? "disabled='disabled'" : '';?>
         <tr class='<?php echo $class;?> division'>
           <th><?php echo $lang->project->division;?></th>
-          <td colspan='3'><?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?></td>
+          <td colspan='3'>
+            <?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->divisionTips;?>"></icon>
+          </td>
         </tr>
         <?php endif;?>
         <?php if($project->model == 'kanban'):?>

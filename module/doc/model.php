@@ -91,9 +91,9 @@ class docModel extends model
 
         $products   = $this->loadModel('product')->getPairs();
         $projects   = $this->loadModel('project')->getPairsByProgram();
-        $executions = $this->loadModel('execution')->getPairs();
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
         $waterfalls = array();
-        if(empty($objectID) and ($type == 'all' or $type == 'execution'))
+        if(empty($objectID) and $type != 'product' and $type != 'project' and $type != 'custom')
         {
             $waterfalls = $this->dao->select('t1.id,t2.name')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
@@ -643,9 +643,7 @@ class docModel extends model
         {
             foreach($files as $file)
             {
-                $pathName       = $this->file->getRealPathName($file->pathname);
-                $file->webPath  = $this->file->webPath . $pathName;
-                $file->realPath = $this->file->savePath . $pathName;
+                $this->loadModel('file')->setFileWebAndRealPaths($file);
                 if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
             }
         }
@@ -930,13 +928,6 @@ class docModel extends model
     {
         $this->loadModel('product');
 
-        /* Fixed search modal for doc view. */
-        if($this->app->getMethodName() == 'objectlibs')
-        {
-            $queryName = $type . 'Doc';
-            $type      = 'objectLibs';
-        }
-
         if($this->app->rawMethod == 'contribute')
         {
             $this->config->doc->search['module'] = 'contributeDoc';
@@ -960,7 +951,6 @@ class docModel extends model
         }
         else
         {
-            if(isset($queryName)) $this->config->doc->search['module'] = $queryName;
             $products = $this->product->getPairs('nocode', $this->session->project);
             $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
@@ -1748,9 +1738,7 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
-            $pathName       = $this->file->getRealPathName($file->pathname);
-            $file->realPath = $this->file->savePath . $pathName;
-            $file->webPath  = $this->file->webPath . $pathName;
+            $this->file->setFileWebAndRealPaths($file);
         }
 
         return $files;

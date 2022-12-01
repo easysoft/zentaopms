@@ -36,6 +36,13 @@ class projectStory extends control
      */
     public function story($projectID = 0, $productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Get productID for none-product project. */
+        if($projectID)
+        {
+            $project = $this->loadModel('project')->getByID($projectID);
+            if(!$project->hasProduct) $productID = $this->loadModel('product')->getShadowProductByProject($projectID)->id;
+        }
+
         $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         /* Set product list for export. */

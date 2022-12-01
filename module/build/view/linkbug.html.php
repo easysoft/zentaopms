@@ -62,7 +62,7 @@
         <?php echo html::submitButton($lang->build->linkBug, '', 'btn btn-secondary');?>
       </div>
       <div class="btn-toolbar">
-        <?php echo html::a(inlink('view', "buildID={$build->id}&type=bug"), $lang->goback, '', "class='btn'");?>
+        <?php echo html::a(inlink('view', "buildID={$build->id}&type=bug") . "#app={$app->tab}", $lang->goback, '', "class='btn'");?>
       </div>
       <div class='table-statistic'></div>
       <?php $pager->show('right', 'pagerjs');?>

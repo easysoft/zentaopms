@@ -51,8 +51,8 @@
       <tbody>
         <?php foreach($bugs as $bug):?>
         <tr class='text-center'>
-          <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id, '_blank');?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+          <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->id, '', "class='iframe'");?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "class='iframe'");?></td>
           <td class='c-severity'><span class='label-severity <?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>' data-severity='<?php echo $bug->severity;?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></span></td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
           <td><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>

@@ -69,6 +69,68 @@ $(function()
             }
         });
 
-        $('form#productsBox').submit();
+        var checkedProducts = [];
+        var otherProducts = $('#otherProducts').val();
+        for(key in otherProducts)
+        {
+            var productBranch = otherProducts[key].split('_');
+            var selectProduct = productBranch[0];
+            if(checkedProducts.indexOf(selectProduct) == -1) checkedProducts.push(selectProduct);
+        }
+
+        $('input[name^="products"]:checked').each(function()
+        {
+            var value = $(this).val();
+            if(checkedProducts.indexOf(value) == -1) checkedProducts.push(value);
+        })
+
+        if(noticeSwitch && checkedProducts.length > 1)
+        {
+            notice();
+        }
+        else
+        {
+            $('form#productsBox').submit();
+        }
     });
+
+    $('#submit').click(function()
+    {
+        var checkedProducts = [];
+        $('input[name^="products"]:checked').each(function()
+        {
+            var value = $(this).val();
+            if(checkedProducts.indexOf(value) == -1) checkedProducts.push(value);
+        })
+
+        if(noticeSwitch && checkedProducts.length > 1)
+        {
+            notice();
+            return false;
+        }
+    })
 });
+
+function notice()
+{
+    bootbox.confirm(
+        {
+            'message' : noticeDivsion,
+            'buttons':{
+                confirm:{
+                    label: divisionSwitchList['1'],
+                    className: 'btn'
+                },
+                cancel:{
+                    label: divisionSwitchList['0'],
+                    className: 'btn-primary'
+                },
+            },
+            callback: function(result)
+            {
+                if(result) $('#submit').after("<input type='hidden' value='1' name='division'>");
+                $('form#productsBox').submit();
+            }
+        }
+    );
+}

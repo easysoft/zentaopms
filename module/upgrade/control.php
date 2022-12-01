@@ -169,14 +169,30 @@ class upgrade extends control
                 /* Set default program for product and project with no program. */
                 $this->upgrade->relateDefaultProgram($programID);
 
+                $_POST['projectType'] = 'execution';
                 $this->upgrade->upgradeInProjectMode($programID, $systemMode);
+
+                $this->upgrade->computeObjectMembers();
+                $this->upgrade->initUserView();
+                $this->upgrade->setDefaultPriv();
+                $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
+
+                $hourPoint = $this->loadModel('setting')->getItem('owner=system&module=custom&key=hourPoint');
+                if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
+
+                $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
+                $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
 
                 $this->loadModel('custom')->disableFeaturesByMode('light');
 
                 $selectMode = false;
             }
-            if(version_compare($openVersion, '18_0', '>=')) $selectMode = false;
-            if(version_compare($openVersion, '15_0', '>=') and $systemMode == 'ALM') $selectMode = false;
+            if(version_compare($openVersion, '15_0_rc1', '>=') and $systemMode == 'new')
+            {
+                $this->loadModel('setting')->setItem('system.common.global.mode', 'ALM');
+                $selectMode = false;
+            }
+            if(version_compare($openVersion, '18_0_beta1', '>=')) $selectMode = false;
 
             if($selectMode) $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
 
@@ -225,26 +241,18 @@ class upgrade extends control
                 /* Set default program for product and project with no program. */
                 $this->upgrade->relateDefaultProgram($programID);
 
-                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=light"));
-
-                $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
             }
-            if($mode == 'ALM')
-            {
-                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=ALM"));
 
-                $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
-            }
+            $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=$mode"));
         }
 
-        $checkHistoryResult = $this->upgrade->checkHistoryDataForLightMode();
+        list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->loadModel('custom')->computeFeatures();
 
-        $this->view->ur        = $checkHistoryResult['ur'];
-        $this->view->cmmi      = $checkHistoryResult['cmmi'];
-        $this->view->waterfall = $checkHistoryResult['waterfall'];
-        $this->view->assetlib  = $checkHistoryResult['assetlib'];
-        $this->view->title     = $this->lang->upgrade->selectMode;
-        $this->view->edition   = $this->config->edition;
+        $this->view->title                 = $this->lang->custom->selectUsage;
+        $this->view->edition               = $this->config->edition;
+        $this->view->disabledFeatures      = $disabledFeatures;
+        $this->view->enabledScrumFeatures  = $enabledScrumFeatures;
+        $this->view->disabledScrumFeatures = $disabledScrumFeatures;
         $this->display();
     }
 

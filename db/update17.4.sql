@@ -21,8 +21,8 @@ UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` 
 UPDATE `zt_project` SET `closedDate`='' AND `closedBy`='' WHERE `status` != 'closed';
 UPDATE `zt_grouppriv` SET `method`='exportTemplate' WHERE `method` = 'exportTemplet';
 
-INSERT INTO `zt_grouppriv` (SELECT `group`,`module`,'reply' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');
-INSERT INTO `zt_grouppriv` (SELECT `group`,`module`,'ask' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');
+REPLACE INTO `zt_grouppriv` (SELECT `group`,`module`,'reply' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');
+REPLACE INTO `zt_grouppriv` (SELECT `group`,`module`,'ask' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');
 
 CREATE TABLE `zt_chart` (
   `id` mediumint NOT NULL AUTO_INCREMENT,

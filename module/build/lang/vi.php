@@ -31,7 +31,7 @@ $lang->build->id            = 'ID';
 $lang->build->product       = $lang->productCommon;
 $lang->build->branch        = 'Platform/Branch';
 $lang->build->execution     = $lang->executionCommon;
-$lang->build->builds        = 'Linked Builds';
+$lang->build->builds        = 'Builds';
 $lang->build->name          = 'Tên';
 $lang->build->date          = 'Ngày';
 $lang->build->builder       = 'Builder';
@@ -53,6 +53,7 @@ $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
 $lang->build->notice->changeExecution = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
 $lang->build->notice->changeBuilds    = "The version of the submitted test order cannot be modified builds";
+$lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the project version";
 
 $lang->build->finishStories = "  {$lang->SRCommon} đã kết thúc %s";
 $lang->build->resolvedBugs  = '  Bug đã giải quyết %s';

@@ -47,13 +47,13 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
-        $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq($storyID)
             ->andWhere('t2.type')->in('sprint,stage,kanban')
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
-        $story->tasks  = $this->dao->select('id, name, assignedTo, execution, status, consumed, `left`,type')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->orderBy('id DESC')->fetchGroup('execution');
+        $story->tasks  = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->orderBy('id DESC')->fetchGroup('execution');
         $story->stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
         //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
         //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
@@ -521,6 +521,7 @@ class storyModel extends model
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
+            $story->spec       = $stories->spec[$i];
             $story->status     = $saveDraft ? 'draft' : ((empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'reviewing');
             $story->stage      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
@@ -558,7 +559,7 @@ class storyModel extends model
         $link2Plans = array();
         foreach($data as $i => $story)
         {
-            $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->exec();
+            $this->dao->insert(TABLE_STORY)->data($story, 'spec')->autoCheck()->checkFlow()->exec();
             if(dao::isError())
             {
                 echo js::error(dao::getError());
@@ -2723,6 +2724,7 @@ class storyModel extends model
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq($type)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
@@ -2935,6 +2937,7 @@ class storyModel extends model
 
         $stories = $sql->where('t1.product')->in($productID)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq($type)
             ->beginIF($branch != 'all')->andWhere("t1.branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("t1.module")->in($modules)->fi()
@@ -2972,6 +2975,7 @@ class storyModel extends model
             ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->andWhere('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('stage')->in('developed,released')
             ->andWhere('status')->ne('closed')
             ->orderBy($orderBy)
@@ -3081,7 +3085,7 @@ class storyModel extends model
         }
         elseif($branch !== 'all' and $branch !== '' and strpos($storyQuery, '`branch` =') === false and $queryProductID != 'all')
         {
-            $storyQuery .= " AND `branch` in($branch)";
+            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` " . helper::dbIN($branch);
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
@@ -3149,6 +3153,7 @@ class storyModel extends model
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq($type)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
@@ -3516,7 +3521,7 @@ class storyModel extends model
      */
     public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story', $includeLibStories = true, $shadow = 0)
     {
-        $sql = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
+        $sql = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
         if($type == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version');
 
@@ -4217,7 +4222,8 @@ class storyModel extends model
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
-        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product]) && $story->stage != 'projected') or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
+        /* Adjust code, hide split entry. */
+        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
 
         return true;
     }
@@ -4486,7 +4492,9 @@ class storyModel extends model
                 if(($canEstimate or $canCreateCase) and $canUnlinkStory) $menu .= "<div class='dividing-line'></div>";
 
                 $executionID = empty($execution) ? 0 : $execution->id;
-                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
+
+                /* Adjust code, hide split entry. */
+                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct and false)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $this->lang->story->subdivide;
@@ -4939,6 +4947,9 @@ class storyModel extends model
                 break;
             case 'assignedDate':
                 echo helper::isZeroDate($story->assignedDate) ? '' : substr($story->assignedDate, 5, 11);
+                break;
+            case 'activatedDate':
+                echo helper::isZeroDate($story->activatedDate) ? '' : substr($story->activatedDate, 5, 11);
                 break;
             case 'reviewedBy':
                 echo $story->reviewedBy;
@@ -5874,13 +5885,16 @@ class storyModel extends model
      *
      * @param  int    $executionID
      * @param  string $orderBy
+     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function getExportStorys($executionID, $orderBy = 'id_desc')
+    public function getExportStories($executionID, $orderBy = 'id_desc', $storyType = 'story')
     {
         $this->loadModel('file');
         $this->loadModel('branch');
+
+        $this->replaceURLang($storyType);
         $storyLang   = $this->lang->story;
         $storyConfig = $this->config->story;
 

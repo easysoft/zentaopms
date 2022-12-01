@@ -1,5 +1,6 @@
 #releaseList {font-size: 13px;}
 td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#releaseList tbody>tr:hover{background-color: unset!important;}
 .main-table tbody>tr>td:first-child{padding: 2px 8px!important;}
 
 .c-id {width: 60px}

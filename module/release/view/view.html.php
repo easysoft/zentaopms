@@ -350,16 +350,20 @@
                       <td><?php echo $release->name;?></td>
                     </tr>
                     <tr>
-                      <th><?php echo $lang->release->build;?></th>
+                      <th><?php echo $lang->release->includedBuild;?></th>
                       <td>
                         <?php
-                        $i = 1;
+                        $buildHtml = array();
                         foreach($release->builds as $build)
                         {
-                            $buildDivision = $i == count($release->builds) ? '' : $lang->comma;
-                            echo (($build->project) ? html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name, '_blank') : $build->name) . $buildDivision;
-                            $i++;
+                            $moduleName   = $build->execution ? 'build' : 'projectbuild';
+                            $canClickable = false;
+                            if($moduleName == 'projectbuild' and $this->loadModel('project')->checkPriv($build->project)) $canClickable = true;
+                            if($moduleName == 'build' and $this->loadModel('execution')->checkPriv($build->execution))    $canClickable = true;
+
+                            $buildHtml[] = $canClickable ? html::a($this->createLink($moduleName, 'view', "buildID=$build->id"), $build->name, '', "data-app='project'") : $build->name;
                         }
+                        echo join($lang->comma, $buildHtml);
                         ?>
                       </td>
                     </tr>

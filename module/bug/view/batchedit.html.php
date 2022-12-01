@@ -103,7 +103,7 @@
             </td>
             <?php endif;?>
             <td><?php echo html::select("modules[$bugID]", isset($modules[$bug->product][$bug->branch]) ? $modules[$bug->product][$bug->branch] : array(0 => '/'), $bug->module, "class='form-control picker-select' data-drop-width='auto'");?></td>
-            <td class='<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bug->plan, "class='form-control picker-select' data-drop-width='auto'");?></td>
+            <td class='<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $bug->plans, $bug->plan, "class='form-control picker-select' data-drop-width='auto'");?></td>
             <?php
             $assignedToList = array();
             if($app->tab == 'project' or $app->tab == 'execution')

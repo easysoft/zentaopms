@@ -49,8 +49,8 @@
         <?php if($task->status == 'blocked') $blockedCount ++;?>
         <?php if($task->status == 'done')    $doneCount ++;?>
         <tr>
-          <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
+          <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', true), sprintf('%03d', $task->id), '', "class='iframe'");?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', true), $task->name, '', "class='iframe'");?></td>
           <td class='nobr'><?php echo $task->executionName?></td>
           <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
           <td><?php echo $task->begin?></td>

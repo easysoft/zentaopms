@@ -1,5 +1,6 @@
 <?php
 $lang->repo->common          = 'Référentiel';
+$lang->repo->codeRepo        = 'Code Library';
 $lang->repo->browse          = 'Aff';
 $lang->repo->viewRevision    = 'Aff Modifs';
 $lang->repo->product         = 'Product';

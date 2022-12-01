@@ -76,6 +76,11 @@ class design extends control
         $this->session->set('reviewList', $this->app->getURI(true), 'project');
 
         /* Build the search form. */
+        $products      = $this->product->getProductPairsByProject($projectID);
+        $productIdList = $productID ? $productID : array_keys($products);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
+        $this->config->design->search['params']['story']['values'] = $stories;
+
         $queryID   = ($type == 'bySearch') ? (int)$param : 0;
         $actionURL = $this->createLink('design', 'browse', "projectID=$projectID&productID=$productID&type=bySearch&queryID=myQueryID");
         $this->design->buildSearchForm($queryID, $actionURL);
@@ -114,6 +119,9 @@ class design extends control
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init(0, $recPerPage, $pageID);
         $designs = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
+
+        $project = $this->loadModel('project')->getByID($projectID);
+        $this->view->hiddenProduct = $project->hasProduct ? false : true;
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
         $this->view->position[] = $this->lang->design->browse;

@@ -726,6 +726,7 @@ class reportModel extends model
             ->orWhere('RD')->in($accounts)
             ->markRight(1)
             ->fi()
+            ->andWhere('shadow')->eq(0)
             ->fetchAll('id');
 
         /* Get created plans in this year. */
@@ -733,6 +734,7 @@ class reportModel extends model
             ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='productplan'")
             ->where('LEFT(t2.date, 4)')->eq($year)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.product')->in(array_keys($products))
             ->beginIF($accounts)
             ->andWhere('t2.actor')->in($accounts)
             ->fi()
@@ -750,11 +752,13 @@ class reportModel extends model
         $createStoryProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
             ->where('LEFT(openedDate, 4)')->eq($year)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
             ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
             ->fetchPairs('product', 'product');
         $closeStoryProducts  = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
             ->where('LEFT(closedDate, 4)')->eq($year)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
             ->beginIF($accounts)->andWhere('closedBy')->in($accounts)->fi()
             ->fetchPairs('product', 'product');
         if($createStoryProducts or $closeStoryProducts)
@@ -819,6 +823,7 @@ class reportModel extends model
         /* Get changed executions in this year. */
         $executions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq(0)
             ->andwhere('type')->eq('sprint')
+            ->andwhere('multiple')->eq('1')
             ->andWhere('LEFT(begin, 4)', true)->eq($year)
             ->orWhere('LEFT(end, 4)')->eq($year)
             ->markRight(1)
@@ -833,16 +838,22 @@ class reportModel extends model
             ->orderBy('`order` desc')
             ->fetchAll('id');
 
-        $teamExecutions = $this->dao->select('*')->from(TABLE_TEAM)
-            ->where('type')->eq('execution')
+        $teamExecutions = $this->dao->select('t1.root')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.type')->eq('execution')
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
+            ->andWhere('t2.multiple')->eq('1')
             ->andWhere('LEFT(`join`, 4)')->eq($year)
             ->fetchPairs('root', 'root');
-        $taskExecutions = $this->dao->select('execution')->from(TABLE_TASK)
-            ->where('LEFT(finishedDate, 4)')->eq($year)
-            ->andWhere('deleted')->eq(0)
+
+        $taskExecutions = $this->dao->select('t1.execution')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+            ->where('LEFT(t1.finishedDate, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
+            ->andWhere('t2.multiple')->eq('1')
+            ->andWhere('t1.deleted')->eq(0)
             ->fetchPairs('execution', 'execution');
+
         if($teamExecutions or $taskExecutions)
         {
             $executions += $this->dao->select('id,name')->from(TABLE_EXECUTION)

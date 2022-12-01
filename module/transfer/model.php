@@ -56,16 +56,16 @@ class transferModel extends model
     }
 
     /**
-     * Check tmpFile.
+     * Check tmp file.
      *
      * @access public
      * @return void
      */
     public function checkTmpFile()
     {
-        $file      = $this->session->fileImportFileName;
-        $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile   = $tmpPath . DS . md5(basename($file));
+        $file    = $this->session->fileImportFileName;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
 
         if($this->maxImport and file_exists($tmpFile)) return $tmpFile;
         return false;
@@ -196,7 +196,7 @@ class transferModel extends model
         $rows = $this->getRows($model, $fieldList);
         if($model == 'story')
         {
-            $product = $this->loadModel('product')->getByID((int)$this->session->storyPortParams['productID']);
+            $product = $this->loadModel('product')->getByID((int)$this->session->storyTransferParams['productID']);
             if($product and $product->shadow)
             {
                 foreach($rows as $id => $row)
@@ -507,7 +507,6 @@ class transferModel extends model
             $modelData = $this->getDatasByFile($tmpFile);
         }
         if(isset($fields['id'])) unset($fields['id']);
-        $this->session->set($model . 'TemplateFields', array_keys($fields));
         return $modelData;
     }
 
@@ -812,7 +811,7 @@ class transferModel extends model
         if($modelDatas) $modelDatas = $this->updateChildDatas($modelDatas);
 
         /* Deal linkStories datas. */
-        if($modelDatas) $modelDatas = $this->updateLinkStories($modelDatas);
+        if($modelDatas and isset($fieldList['linkStories'])) $modelDatas = $this->updateLinkStories($modelDatas);
 
         return $modelDatas;
     }

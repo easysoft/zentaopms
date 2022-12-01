@@ -126,7 +126,7 @@ class branchModel extends model
 
         if($executionID)
         {
-            if(isset($executionBranches['0'])) $branches = array('0' => $this->lang->branch->main) + $branches;
+            $branches = array('all' => $this->lang->branch->all, '0' => $this->lang->branch->main) + $branches;
             return $branches;
         }
 
@@ -781,5 +781,19 @@ class branchModel extends model
         }
 
         return $targetBranch;
+    }
+
+    /**
+     * Judge an action is clickable or not..
+     *
+     * @param object $branch
+     * @param string $action
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($branch, $action)
+    {
+        return true;
     }
 }

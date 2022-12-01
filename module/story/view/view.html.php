@@ -53,7 +53,7 @@
     <?php
     $otherParam = 'storyID=&projectID=';
     $tab        = 'product';
-    if($this->app->rawModule == 'projectstory')
+    if($this->app->rawModule == 'projectstory' or $this->app->tab == 'project')
     {
         $otherParam = "storyID=&projectID={$this->session->project}";
         $tab        = 'project';
@@ -319,7 +319,11 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
-                  <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
+                  <td>
+                    <?php if($story->pri):?>
+                    <span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->estimate;?></th>
@@ -415,7 +419,7 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <?php if($this->config->URAndSR && !$hiddenURS):?>
+          <?php if($this->config->URAndSR and !$hiddenURS):?>
           <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
           <?php if($story->type == 'story'):?>
@@ -424,7 +428,7 @@
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
-          <?php if($this->config->URAndSR && !$hiddenURS):?>
+          <?php if($this->config->URAndSR and !$hiddenURS):?>
           <div class='tab-pane active' id='legendStories'>
             <ul class="list-unstyled">
               <?php
@@ -454,18 +458,19 @@
                   foreach($executionTasks as $task)
                   {
                       if(!isset($executions[$task->execution])) continue;
+                      $execution     = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
+                      $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "executionID=$task->project");
                       $executionName = $executions[$task->execution];
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
-                      $execution = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
-                      $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($this->createLink('execution', 'view', "executionID=$task->execution"), $executionName, '', "class='text-muted'");
+                      $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($executionLink, $executionName, '', "class='text-muted'");
                       echo "<li title='$task->name'>" . $execName . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'") . '</li>';
                   }
               }
               foreach($story->executions as $executionID => $execution)
               {
                   if(isset($story->tasks[$executionID])) continue;
-                  $execName = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
+                  $execName = ($execution->type == 'kanban' and isonlybody()) ? $executions[$executionID] : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $executions[$executionID], '', "class='text-muted'");
                   echo "<li title='$execution->name'>" . $execName . '</li>';
               }
               ?>
@@ -571,7 +576,7 @@
                     </ul>
                   </td>
                 </tr>
-                <?php if($story->type == 'story'):?>
+                <?php if($story->type == 'story' and helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>
                   <td class='pd-0'>

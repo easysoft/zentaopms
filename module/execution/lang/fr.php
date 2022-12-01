@@ -146,7 +146,9 @@ $lang->execution->estimate = 'estimate';
 $lang->execution->consumed = 'consumed';
 $lang->execution->left     = 'Left';
 
-$lang->execution->copyTeamTip = "copy Project/project team members";
+$lang->execution->copyTeamTip        = "copy Project/project team members";
+$lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';
+$lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』';
 
 $lang->execution->start    = 'Démarrer';
 $lang->execution->activate = 'Activer';
@@ -345,6 +347,7 @@ $lang->execution->wbs                  = "Créer Tâche";
 $lang->execution->batchWBS             = "Créer Tâche en lot";
 $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='Comment mettre à jour le Graphe d´atterrissage ?' class='btn btn-link'>Mise à jour <i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories         = "Aucune story ne peut être associée. Vérifiez s'il existe des stories dans {$lang->executionCommon} qui sont associées à {$lang->productCommon} et vérifiez qu'elles ont bien été validées.";
+$lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories       = "Les stories associées au {$lang->executionCommon} sont une portion des stories associées au {$lang->productCommon}. Les stories ne peuvent être associées à un {$lang->executionCommon} qu'après avoir été validées. <a href='%s'> Associer Stories</a> maintenant.";
 $lang->execution->haveDraft            = "%s stories sont encore en conception, elles ne peuvent pas être associées au {$lang->executionCommon} actuellement.";
 $lang->execution->doneExecutions       = 'Terminé';

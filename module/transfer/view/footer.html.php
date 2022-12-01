@@ -8,6 +8,8 @@ $.get(createLink('transfer', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0
     $('.form-date').datetimepicker({minView: 2, format: "yyyy-mm-dd"});
     $('.form-datetime').datetimepicker('update');
     $('#showData > tbody').removeClass('load-indicator loading');
+
+    if(typeof(getTbodyLoaded) == 'function') getTbodyLoaded();
 })
 
 window.addEventListener('scroll', this.handleScroll);

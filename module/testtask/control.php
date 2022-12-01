@@ -127,7 +127,7 @@ class testtask extends control
         $this->view->branch      = $branch;
         $this->view->beginTime   = $beginTime;
         $this->view->endTime     = $endTime;
-        $this->view->product     = $this->product->getByID($productID);
+        $this->view->product     = $product;
 
         $this->display();
     }
@@ -155,6 +155,7 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->loadModel('product')->saveState($productID, $this->products);
+        $product   = $this->product->getByID($productID);
         if($this->app->tab == 'project')
         {
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
@@ -167,7 +168,7 @@ class testtask extends control
             }
 
             $this->loadModel('project')->setMenu($projectID);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', 0, '', false);
+            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', 0, '', false);
         }
         else
         {
@@ -194,7 +195,7 @@ class testtask extends control
         $this->view->tasks       = $this->testtask->getProductUnitTasks($productID, $browseType, $sort, $pager);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
-        $this->view->product     = $this->product->getByID($productID);
+        $this->view->product     = $product;
         $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
 
         $this->display();

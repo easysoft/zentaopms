@@ -521,8 +521,8 @@ class baseHTML
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
         if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", strtolower($refererLink)))
         {
-            $gobackList[$tab] = $referer . "#app=$tab";
-            $gobackLink       = $referer . "#app=$tab";
+            $gobackList[$tab] = $referer;
+            $gobackLink       = $referer;
             setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
         }
 

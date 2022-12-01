@@ -96,22 +96,29 @@ class helper extends baseHelper
         }
         else
         {
-            if($feature == 'product' or $feature == 'scrum' or $feature == 'waterfall') return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+            if($feature == 'scrum' or $feature == 'waterfall') return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
 
-            $hasFeature = false;
-            $isFeature  = false;
+            $hasFeature       = false;
+            $canConfigFeature = false;
             foreach($config->featureGroup as $group => $modules)
             {
                 foreach($modules as $module)
                 {
                     if($feature == $group or $feature == $module)
                     {
-                        $isFeature = true;
-                        if(helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                        $canConfigFeature = true;
+                        if($group == 'scrum' or $group == 'waterfall')
+                        {
+                            if(helper::hasFeature("{$group}") and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                        }
+                        else
+                        {
+                            if(helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                        }
                     }
                 }
             }
-            return !$isFeature or ($hasFeature && strpos(",$config->disabledFeatures,", ",{$feature},") === false);
+            return !$canConfigFeature or ($hasFeature && strpos(",$config->disabledFeatures,", ",{$feature},") === false);
         }
     }
 

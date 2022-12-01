@@ -12,22 +12,16 @@ function setDuplicateAndChild(resolution, storyID)
     {
         $('#childStoryBox' + storyID).hide();
         $('#duplicateStoryBox' + storyID).show();
-        $('#duplicateStoryTitle').show();
-        $('.form-actions').attr('colspan', 6);
     }
     else if(resolution == 'subdivided')
     {
         $('#duplicateStoryBox' + storyID).hide();
         $('#childStoryBox' + storyID).show();
-        $('#duplicateStoryTitle').hide();
-        $('.form-actions').attr('colspan', 5);
     }
     else
     {
         $('#duplicateStoryBox' + storyID).hide();
         $('#childStoryBox' + storyID).hide();
-        $('#duplicateStoryTitle').hide();
-        $('.form-actions').attr('colspan', 5);
     }
 }
 

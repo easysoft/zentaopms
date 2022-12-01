@@ -90,8 +90,8 @@
     $canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
     $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
     $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
-    $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
-    $canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories') and !$hiddenPlan);
+    $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory') and !empty($execution->hasProduct));
+    $canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories') and !$hiddenPlan and !empty($execution->hasProduct));
     $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
     $hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
     $hasBugButton        = ($canCreateBug or $canBatchCreateBug);

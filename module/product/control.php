@@ -32,7 +32,7 @@ class product extends control
         $this->loadModel('user');
 
         /* Get all products, if no, goto the create page. */
-        $this->products = $this->product->getPairs('nocode');
+        $this->products = $this->product->getPairs('nocode', 0, '', 'all');
         $isAPI = ($this->app->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api'));
         if(empty($this->products) and strpos($this->config->product->skipRedirectMethod, ",$this->methodName,") === false and $this->app->getViewType() != 'mhtml' and !$isAPI) $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
@@ -100,7 +100,7 @@ class product extends control
         $accounts     = array();
         $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy, $pager);
         $product      = $this->product->getByID($productID);
-        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc');
+        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
 
         foreach($projectStats as $project)
         {
@@ -110,8 +110,6 @@ class product extends control
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
-        $this->view->position[]   = $this->products[$productID];
-        $this->view->position[]   = $this->lang->product->project;
         $this->view->projectStats = $projectStats;
         $this->view->PMList       = $PMList;
         $this->view->productID    = $productID;
@@ -433,9 +431,13 @@ class product extends control
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
 
+        $gobackLink = '';
+        if(isset($output['from']) and $output['from'] == 'qa') $gobackLink = $this->createLink('qa', 'index');
+        if(isset($output['from']) and $output['from'] == 'global') $gobackLink = $this->createLink('product', 'all');
+
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
-        $this->view->gobackLink = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('product', 'all') : '';
+        $this->view->gobackLink = $gobackLink;
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->programID  = $programID;
         $this->view->poUsers    = $poUsers;
@@ -883,6 +885,28 @@ class product extends control
     }
 
     /**
+     * Ajax get products.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProducts($executionID)
+    {
+        $this->loadModel('build');
+        if(!$executionID) return print(html::select('product', array(), '', "class='form-control chosen' required"));
+        $products = $this->product->getProductPairsByProject($executionID);
+        if(empty($products))
+        {
+            return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
+        }
+        else
+        {
+            return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+        }
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
@@ -926,10 +950,11 @@ class product extends control
      * @param  string $number
      * @param  int    $executionID
      * @param  string $from showImport
+     * @param  string mode
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0, $from = '')
+    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0, $from = '', $mode = '')
     {
         if($this->app->tab == 'execution' and $this->session->execution)
         {
@@ -937,7 +962,8 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
-        $mode  = ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
+        if($projectID) $project = $this->loadModel('project')->getById($projectID);
+        $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
         $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
@@ -945,7 +971,8 @@ class product extends control
         if($number === '')
         {
             $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $event"));
+            $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple $event"));
         }
         else
         {
@@ -1170,7 +1197,8 @@ class product extends control
         elseif($moduleName == 'qa')
         {
             $this->loadModel('qa')->setMenu(array(), 0);
-            $this->app->rawModule = $activeMenu;
+            $this->app->rawModule   = $activeMenu;
+            $this->view->moduleName = $moduleName;
 
             if($activeMenu == 'testcase')   unset($this->lang->qa->menu->testcase['subMenu']);
             if($activeMenu == 'testsuite')  unset($this->lang->qa->menu->testcase['subMenu']);

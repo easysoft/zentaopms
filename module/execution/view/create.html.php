@@ -113,7 +113,7 @@
         <?php if($isStage):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
-          <td>
+          <td class='required'>
             <div class='input-group'>
               <?php echo html::input('percent', '', "class='form-control'");?>
               <span class='input-group-addon'>%</span>
@@ -150,7 +150,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
-              <?php if($division):?>
+              <?php if((isset($project->model) and $project->model == 'scrum') or empty($products)):?>
               <div class='col-sm-4'>
                 <div class="input-group">
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
@@ -273,14 +273,15 @@
       <?php else:?>
       <div id='copyProjects' class='row'>
       <?php if($projectID == 0) $executions = $copyExecutions;?>
-      <?php foreach ($executions as $id => $execution):?>
+      <?php foreach($executions as $id => $execution):?>
       <?php if(empty($id)):?>
       <?php if($copyExecutionID != 0):?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->execution->cancelCopy;?></a></div>
       <?php endif;?>
-      <?php else: ?>
+      <?php else:?>
+      <?php if(empty($execution->multiple)) continue;?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyExecutionID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons[$execution->type], 'text-muted') . ' ' . $execution->name;?></a></div>
-      <?php endif; ?>
+      <?php endif;?>
       <?php endforeach;?>
       </div>
       <?php endif;?>

@@ -95,10 +95,11 @@ tbody tr td:first-child input {display: none;}
             </thead>
             <tbody class='text-center'>
               <?php foreach($stories as $storyID => $story):?>
+              <?php $unlinkClass = strpos(",$build->stories,", ",$story->id,") !== false ? '' : "disabled";?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <?php echo html::checkbox('unlinkStories', array($story->id => sprintf('%03d', $story->id)));?>
+                  <?php echo html::checkbox('unlinkStories', array($story->id => sprintf('%03d', $story->id)), '', $unlinkClass);?>
                   <?php else:?>
                   <?php printf('%03d', $story->id);?>
                   <?php endif;?>
@@ -138,7 +139,7 @@ tbody tr td:first-child input {display: none;}
                   if($canBeChanged and common::hasPriv($module, 'unlinkStory'))
                   {
                       $unlinkURL = $this->createLink($module, 'unlinkStory', "buildID=$build->id&story=$story->id");
-                      echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->build->unlinkStory}'");
+                      echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->build->unlinkStory}' $unlinkClass");
                   }
                   ?>
                 </td>
@@ -194,11 +195,12 @@ tbody tr td:first-child input {display: none;}
             </thead>
             <tbody class='text-center'>
               <?php foreach($bugs as $bug):?>
-              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <?php $bugLink     = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <?php $unlinkClass = strpos(",$build->bugs,", ",$bug->id,") !== false ? '' : "disabled";?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)));?>
+                  <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)), '', $unlinkClass);?>
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
@@ -219,7 +221,7 @@ tbody tr td:first-child input {display: none;}
                   if($canBeChanged and common::hasPriv($module, 'unlinkBug'))
                   {
                       $unlinkURL = $this->createLink($module, 'unlinkBug', "buildID=$build->id&bug=$bug->id");
-                      echo html::a("###", '<i class="icon-unlink"></i>', '', "onclick='ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)' class='btn' title='{$lang->build->unlinkBug}'");
+                      echo html::a("###", '<i class="icon-unlink"></i>', '', (!$unlinkClass ? "onclick='ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)'" : '') . "class='btn' title='{$lang->build->unlinkBug}' $unlinkClass");
                   }
                   ?>
                 </td>
@@ -319,18 +321,22 @@ tbody tr td:first-child input {display: none;}
             <div class='detail-content'>
               <table class='table table-data table-condensed table-borderless table-fixed'>
               <tr class="<?php echo $hidden;?>">
-                  <th><?php echo $lang->build->product;?></th>
+                  <th class='w-100px'><?php echo $lang->build->product;?></th>
                   <td><?php echo $build->productName;?></td>
                 </tr>
                 <?php if($build->productType != 'normal'):?>
                 <tr>
-                  <th><?php echo $lang->product->branch;?></th>
+                  <th class='w-100px'><?php echo $lang->product->branch;?></th>
                   <td><?php echo $branchName;?></td>
                 </tr>
                 <?php endif;?>
+                <tr>
+                  <th class='w-100px'><?php echo $lang->build->name;?></th>
+                  <td><?php echo $build->name;?></td>
+                </tr>
                 <?php if($build->execution):?>
                 <tr>
-                  <th><?php echo $lang->build->execution;?></th>
+                  <th><?php echo empty($multipleProject) ? $lang->build->project : $lang->build->execution;?></th>
                   <td><?php echo zget($executions, $build->execution);?></td>
                 </tr>
                 <?php else:?>
@@ -339,16 +345,12 @@ tbody tr td:first-child input {display: none;}
                   <td>
                     <?php $builds = '';?>
                     <?php foreach(explode(',', $build->builds) as $buildID):?>
-                    <?php $builds .= html::a($this->createLink('build', 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;?>
+                    <?php if($buildID) $builds .= html::a($this->createLink('build', 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;?>
                     <?php endforeach;?>
                     <?php echo rtrim($builds, $lang->comma);?>
                   </td>
                 </tr>
                 <?php endif;?>
-                <tr>
-                  <th><?php echo $lang->build->name;?></th>
-                  <td><?php echo $build->name;?></td>
-                </tr>
                 <tr>
                   <th><?php echo $lang->build->builder;?></th>
                   <td><?php echo zget($users, $build->builder);?></td>

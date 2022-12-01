@@ -396,6 +396,7 @@ class story extends control
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
+        $this->view->hiddenParent  = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
         $this->view->teamUsers     = array();
@@ -409,6 +410,7 @@ class story extends control
             {
                 $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
                 $this->view->hiddenProduct = true;
+                $this->view->hiddenParent  = true;
 
                 if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
                 if(!$project->multiple)          $this->view->hiddenPlan = true;
@@ -883,6 +885,7 @@ class story extends control
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
+        $this->view->hiddenParent  = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
         $this->view->teamUsers     = array();
@@ -892,6 +895,7 @@ class story extends control
             $project = $this->project->getByShadowProduct($product->id);
             $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
             $this->view->hiddenProduct = true;
+            $this->view->hiddenParent  = true;
 
             if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
             if(!$project->multiple)          $this->view->hiddenPlan = true;
@@ -968,6 +972,7 @@ class story extends control
             $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
             {
+                if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
                 $this->project->setMenu($executionID);
             }
             else
@@ -1048,19 +1053,10 @@ class story extends control
             $branchTagOption = array();
             $products        = array();
 
-            if($executionID)
-            {
-                /* The stories of project or execution. */
-                $execution = $this->execution->getByID($executionID);
-                $products  = $this->loadModel('product')->getProducts($executionID);
-            }
-            else
-            {
-                /* The stories of my. */
-                $productIdList = array();
-                foreach($stories as $story) $productIdList[$story->product] = $story->product;
-                $products = $this->product->getByIdList($productIdList);
-            }
+            /* Get product id list by the stories. */
+            $productIdList = array();
+            foreach($stories as $story) $productIdList[$story->product] = $story->product;
+            $products = $this->product->getByIdList($productIdList);
 
             foreach($products as $storyProduct)
             {
@@ -1085,7 +1081,7 @@ class story extends control
         }
 
         /* Set ditto option for users. */
-        $users = $this->loadModel('user')->getPairs('nodeleted');
+        $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
@@ -1128,8 +1124,6 @@ class story extends control
             }
         }
 
-        $this->view->position[]        = $this->lang->story->common;
-        $this->view->position[]        = $this->lang->story->batchEdit;
         $this->view->title             = $this->lang->story->batchEdit;
         $this->view->users             = $users;
         $this->view->priList           = array('0' => '', 'ditto' => $this->lang->story->ditto) + $this->lang->story->priList;
@@ -1355,7 +1349,7 @@ class story extends control
         $product       = $this->product->getByID($story->product);
         $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch();
         $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
         $modulePath    = $this->tree->getParents($story->module);
@@ -2021,6 +2015,8 @@ class story extends control
      */
     public function batchToTask($executionID = 0, $projectID = 0)
     {
+        if($this->app->tab == 'execution' and $executionID) $this->loadModel('execution')->setMenu($executionID);
+
         if(!empty($_POST['name']))
         {
             $response['result']  = 'success';
@@ -2244,7 +2240,8 @@ class story extends control
         $this->view->story      = $story;
         $this->view->storyType  = $storyType;
         $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = ($this->config->vision == 'lite' || !empty($product->shadow)) ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
+        $this->view->users      = $this->config->vision == 'lite' ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
+
         $this->display();
     }
 
@@ -2362,7 +2359,6 @@ class story extends control
             $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
-            unset($this->config->product->search['fields']['plan']);
             unset($this->config->product->search['fields']['stage']);
         }
         else
@@ -2370,7 +2366,11 @@ class story extends control
             $this->lang->story->title = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
         }
 
-        if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
+        if(!empty($product->shadow))
+        {
+            unset($this->config->product->search['fields']['plan']);
+            unset($this->config->product->search['fields']['product']);
+        }
 
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType", '', true);
@@ -2417,7 +2417,11 @@ class story extends control
         $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
         $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
 
-        if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
+        if(!empty($product->shadow))
+        {
+            unset($this->config->product->search['fields']['product']);
+            unset($this->config->product->search['fields']['plan']);
+        }
 
         /* Build search form. */
         $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
@@ -2705,7 +2709,8 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
 
-        if($this->app->tab == 'project')
+        $this->products = $this->product->getPairs('', 0, '', 'all');
+        if(strpos('project,execution', $this->app->tab) !== false)
         {
             $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
@@ -2718,17 +2723,19 @@ class story extends control
                 $this->loadModel('execution')->setMenu($projectID);
             }
 
-            if(!$project->hasProduct and !$project->multiple)
+            if(!$project->hasProduct)
             {
                 unset($this->lang->story->report->charts['storysPerProduct']);
-                unset($this->lang->story->report->charts['storysPerPlan']);
+
+                if(!$project->multiple) unset($this->lang->story->report->charts['storysPerPlan']);
             }
+        }
+        else
+        {
+            $this->product->setMenu($productID, $branchID);
         }
 
         if($storyType != 'story') unset($this->lang->story->report->charts['storysPerStage']);
-
-        $this->products = $this->product->getPairs('', 0, '', 'all');
-        $this->product->setMenu($productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
         $this->view->position[]    = $this->products[$productID];
@@ -2776,7 +2783,7 @@ class story extends control
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
-            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
+            $this->post->set('rows', $this->story->getExportStories($executionID, $orderBy, $storyType));
             $this->fetch('transfer', 'export', 'model=story');
         }
 
@@ -2814,9 +2821,9 @@ class story extends control
         /* Unset product field when in single project.  */
         if(isset($project->hasProduct) && !$project->hasProduct)
         {
-            $filterFields = array('product,', 'branch,');
-            if($project->model != 'scrum') $filterFields[] = 'plan';
-            $this->config->story->exportFields = str_replace($filterFields, '', $this->config->story->exportFields);
+            $filterFields = array(', product,', ', branch,');
+            if($project->model != 'scrum') $filterFields[] = ', plan,';
+            $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
         }
 
         $this->view->fileName        = $fileName;

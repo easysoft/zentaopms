@@ -525,9 +525,11 @@ class extensionModel extends model
         /* Extract files. */
         $packageFile = $this->getPackageFile($extension);
         $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($packageFile);
-        $files = $zip->listContent();
-        $removePath = $files[0]['filename'];
+        $zip        = new pclzip($packageFile);
+        $files      = $zip->listContent();
+        $pathinfo   = pathinfo($files[0]['filename']);
+        $removePath = isset($pathinfo['dirname']) && $pathinfo['dirname'] != '.' ? $pathinfo['dirname'] : $pathinfo['basename'];
+
         if($zip->extract(PCLZIP_OPT_PATH, $extensionPath, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
         {
             $return->result = 'fail';
@@ -548,7 +550,7 @@ class extensionModel extends model
     {
         $appRoot      = $this->app->getAppRoot();
         $extensionDir = "ext/$extension/";
-        $paths       = scandir($extensionDir);
+        $paths        = scandir($extensionDir);
         $copiedFiles  = array();
 
         foreach($paths as $path)

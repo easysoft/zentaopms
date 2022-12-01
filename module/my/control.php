@@ -108,7 +108,6 @@ class my extends control
         $this->loadModel('bug');
         $this->loadModel('testcase');
         $this->loadModel('testtask');
-        $this->loadModel('ticket');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -127,7 +126,7 @@ class my extends control
         $storyCount           = $assignedToStoryCount + $reviewByStoryCount;
 
         $requirementCount = 0;
-        $isOpenedURAndSR  = $this->config->URAndSR;
+        $isOpenedURAndSR  = $this->config->URAndSR ? 1 : 0;
         if($isOpenedURAndSR)
         {
             /* Get the number of requirements assigned to me. */
@@ -166,7 +165,7 @@ class my extends control
             $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
             $feedbackCount = $pager->recTotal;
 
-            $ticketList  = $this->ticket->getList('assignedtome', 'id_desc', $pager);
+            $ticketList  = $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
             $ticketCount = $pager->recTotal;
         }
 

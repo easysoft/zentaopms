@@ -187,6 +187,7 @@ class programplanModel extends model
             $data->id            = $plan->id;
             $data->type          = 'plan';
             $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
+            $data->name          = $plan->name;
             $data->percent       = $plan->percent;
             $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
             $data->milestone     = zget($this->lang->programplan->milestoneList, $plan->milestone);
@@ -1085,12 +1086,15 @@ class programplanModel extends model
         $this->lang->project->name = $this->lang->programplan->name;
         $this->lang->project->code = $this->lang->execution->code;
 
+        $relatedExecutionsID = $this->loadModel('execution')->getRelatedExecutions($planID);
+        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '';
+
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
             ->checkIF($plan->percent != false, 'percent', 'float')
-            ->checkIF(!empty($plan->name), 'name', 'unique', "id != {$planID} and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
+            ->checkIF(!empty($plan->name), 'name', 'unique', "id in ('{$relatedExecutionsID}') and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
             ->checkIF(!empty($plan->code) and $setCode, 'code', 'unique', "id != $planID and type in ('sprint','stage','kanban') and `deleted` = '0'")
             ->where('id')->eq($planID)
             ->exec();

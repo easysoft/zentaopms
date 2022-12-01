@@ -50,7 +50,7 @@
         <?php if(!$design->deleted):?>
         <?php
         common::printIcon('design', 'assignTo',   "designID=$design->id", $design, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('design', 'linkCommit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true, "id='linkCommit'");
+        if(helper::hasFeature('devops')) common::printIcon('design', 'linkCommit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true, "id='linkCommit'");
         common::printIcon('design', 'edit',       "designID=$design->id", $design, 'button', 'alter');
         common::printIcon('design', 'delete',     "designID=$design->id", $design, 'button', 'trash', 'hiddenwin');
         ?>

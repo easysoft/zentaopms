@@ -35,7 +35,7 @@
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('project', $project)) common::printLink('projectbuild', 'create', "projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary' id='createBuild'");?>
+    <?php if(common::canModify('project', $project)) common::printLink('build', 'create', "executionID=&productID=&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary' id='createBuild'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -71,6 +71,9 @@
         <tr data-id="<?php echo $productID;?>">
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink($module, 'view', "buildID=$build->id"), sprintf('%03d', $build->id), '', "data-app='project'");?></td>
           <td class="c-name" title='<?php echo $build->name;?>'>
+            <?php if(!$build->execution):?>
+            <span class='icon icon-code-fork text-muted'></span>
+            <?php endif;?>
             <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink($module, 'view', "buildID=$build->id"), $build->name, '', "data-app='project'");?>
           </td>

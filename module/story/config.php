@@ -145,8 +145,8 @@ $config->story->datatable->fieldList['branch']['title']      = 'branch';
 $config->story->datatable->fieldList['branch']['fixed']      = 'no';
 $config->story->datatable->fieldList['branch']['width']      = '100';
 $config->story->datatable->fieldList['branch']['required']   = 'no';
-$config->story->datatable->fieldList['branch']['control']    = 'multiple';
-$config->story->datatable->fieldList['branch']['dataSource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
+$config->story->datatable->fieldList['branch']['control']    = 'select';
+$config->story->datatable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID&active');
 
 $config->story->datatable->fieldList['module']['title']      = 'module';
 $config->story->datatable->fieldList['module']['control']    = 'select';

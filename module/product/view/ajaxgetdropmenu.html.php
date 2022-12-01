@@ -56,9 +56,9 @@ foreach($products as $programID => $programProducts)
 }
 $productsPinYin = common::convert2Pinyin($productNames);
 
-$myProductsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$normalProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
-$closedProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$myProductsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
+$normalProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
+$closedProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
 
 foreach($products as $programID => $programProducts)
 {

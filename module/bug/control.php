@@ -227,7 +227,7 @@ class bug extends control
         $this->view->product         = $product;
         $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch);
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch, 'withreleased');
         $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
@@ -285,6 +285,9 @@ class bug extends control
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
         }
+
+        $project = $this->loadModel('project')->getByShadowProduct($productID);
+        if(!$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
 
         $this->qa->setMenu($this->products, $productID, $branchID);
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
@@ -930,7 +933,7 @@ class bug extends control
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all', '');
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withreleased');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
 
@@ -1076,7 +1079,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->edit;
 
         /* Assign. */
-        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty');
+        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,withreleased');
         if($executionID)
         {
             $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch', $executionID, 'execution');
@@ -1240,8 +1243,12 @@ class bug extends control
             $branchProduct = $product->type == 'normal' ? false : true;
 
             /* Set plans. */
-            $plans = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
-            $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
+            foreach($bugs as $bug)
+            {
+                $plans      = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
+                $plans      = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
+                $bug->plans = $plans;
+            }
 
             /* Set branches and modules. */
             $branches        = 0;
@@ -1926,7 +1933,7 @@ class bug extends control
 
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty', 0, 'execution', $bug->openedBuild);
         $this->view->actions = $this->action->getList('bug', $bugID);
 
         $this->display();
@@ -2041,7 +2048,11 @@ class bug extends control
             if(!$project->hasProduct)
             {
                 unset($this->config->bug->search['fields']['product']);
-                if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
+                if(!$project->multiple)
+                {
+                    unset($this->config->bug->search['fields']['execution']);
+                    unset($this->config->bug->search['fields']['plan']);
+                }
             }
         }
 
@@ -2350,6 +2361,8 @@ class bug extends control
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
             if($product->shadow) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
         }
 
@@ -2422,6 +2435,12 @@ class bug extends control
         $products = array();
         if(!empty($extra)) $products = $this->product->getProducts($extra, 'all', 'program desc, line desc, ');
 
+        if($this->config->systemMode == 'ALM')
+        {
+            $this->view->programs = $this->loadModel('program')->getPairs(true);
+            $this->view->lines    = $this->product->getLinePairs();
+        }
+
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
         $this->view->module    = $module;
@@ -2429,8 +2448,6 @@ class bug extends control
         $this->view->extra     = $extra;
         $this->view->products  = $products;
         $this->view->projectID = $this->session->project;
-        $this->view->programs  = $this->loadModel('program')->getPairs(true);
-        $this->view->lines     = $this->product->getLinePairs();
         $this->display();
     }
 

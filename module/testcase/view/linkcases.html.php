@@ -81,7 +81,7 @@ $(function()
         var output = '';
         $('#linkCasesForm').find('tr.checked').each(function(){
             var caseID    = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
-            var caseTitle = "#" + caseID + ' ' + $(this).find('td').eq(3).attr('title');
+            var caseTitle = "#" + caseID + ' ' + $(this).find('td').eq(2).attr('title');
             var checkbox  = "<li title='" + caseTitle + "'><div class='checkbox-primary'><input type='checkbox' checked='checked' name='linkCase[]' " + "value=" + caseID + " /><label class='linkCaseTitle'>" + caseTitle + "</label></div></li>";
 
             output += checkbox;

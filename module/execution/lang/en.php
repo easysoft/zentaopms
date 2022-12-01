@@ -146,7 +146,9 @@ $lang->execution->estimate = 'Estimate';
 $lang->execution->consumed = 'Consumed';
 $lang->execution->left     = 'Left';
 
-$lang->execution->copyTeamTip = "copy Project/project team members";
+$lang->execution->copyTeamTip        = "copy Project/project team members";
+$lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';
+$lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』';
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Activate';
@@ -345,6 +347,7 @@ $lang->execution->wbs                  = "Create Task";
 $lang->execution->batchWBS             = "Batch Create Tasks";
 $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='How to update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories         = "No story can be linked. Please check whether there is any story in {$lang->executionCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
+$lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories       = "Stories linked to {$lang->executionCommon} are the subeset of stories linked to {$lang->productCommon}. Stories can only be linked after they pass the review. <a href='%s'> Link Stories</a> now.";
 $lang->execution->haveDraft            = "%s stories in draft, so they can't be linked.";
 $lang->execution->doneExecutions       = 'Finished';

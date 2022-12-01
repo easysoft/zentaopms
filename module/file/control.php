@@ -146,7 +146,7 @@ class file extends control
             $file->extension = $extension;
         }
 
-        if(file_exists($file->realPath))
+        if($this->file->fileExists($file))
         {
             /* If the mode is open, locate directly. */
             if($mode == 'open')
@@ -290,7 +290,7 @@ class file extends control
 
             /* Fix Bug #1518. */
             $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-            if(empty($fileRecord)) @unlink($file->realPath);
+            if(empty($fileRecord)) $this->file->unlinkFile($file);
 
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
@@ -500,7 +500,7 @@ class file extends control
     public function read($fileID)
     {
         $file = $this->file->getById($fileID);
-        if(empty($file) or !file_exists($file->realPath)) return false;
+        if(empty($file) or !$this->file->fileExists($file)) return false;
 
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
