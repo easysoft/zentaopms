@@ -1,53 +1,35 @@
 <?php
-
 class zentaoBot extends xuanBot
 {
-    /* 机器人的显示名称 */
-    public $name = '禅道';
-
-    /* 机器人的代号 */
-    public $code = 'zentao';
-
-    /* 机器人的头像 URL，可以为空 */
-    public $avatar = '';
-
-    /* 机器人的命令列表，需要与实际命令函数名称一一对应 */
-    public $commands = array();
+    public $lang;
 
     public $userArr = array();
 
     public $statusArr = array();
 
-    public $condKeywords = array();
-
-    /* 翻页参数匹配正则表达式 */
-    public $pageSearchReg = '/(pageID|recPerPage|页码|每页数量|頁碼|每頁數量)=(\d+)/';
-
-    /* 构造函数，会随 im 模块初始化 */
+    /**
+     * Construct function, load lang of zentao and setup commands.
+     *
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
-        $this->commands[] = array('command' => 'view', 'alias' => array('查看', '搜索', '查询', '筛选'), 'description' => '查看任务', 'internal' => true);
-        $this->commands[] = array('command' => 'start', 'alias' => array('开始', '开始任务'),'description' => '开始任务', 'internal' => true);
-        $this->commands[] = array('command' => 'close', 'alias' => array('关闭', '关闭任务'), 'description' => '关闭任务', 'internal' => true);
-        $this->commands[] = array('command' => 'finish', 'alias' => array('完成', '完成任务'), 'description' => '完成任务', 'internal' => true);
+        $this->lang = $this->im->lang->im->bot->zentaoBot;
+        $this->name = $this->lang->name;
 
-        $this->condKeywords['task']             = array('任务', 'task');
-        $this->condKeywords['pri']              = array('优先级', 'pri');
-        $this->condKeywords['status']           = array('状态', 'status');
-        $this->condKeywords['assignTo']         = array('指派人', '指派给', 'assignto', 'user');
-        $this->condKeywords['id']               = array('编号', 'id');
-        $this->condKeywords['taskName']         = array('任务名', '任务名称', 'taskname');
-        $this->condKeywords['comment']          = array('备注', 'comment');
-        $this->condKeywords['left']             = array('预计剩余', 'left');
-        $this->condKeywords['consumed']         = array('总计消耗', 'consumed');
-        $this->condKeywords['realStarted']      = array('实际开始', 'realStarted');
-        $this->condKeywords['pageID']           = array('pageID', '页码', '頁碼');
-        $this->condKeywords['recPerPage']       = array('recPerPage', '每页数量', '每頁數量');
-        $this->condKeywords['finishedDate']     = array('实际完成', 'finishedDate');
-        $this->condKeywords['currentConsumed']  = array('本次消耗', 'currentConsumed');
+        foreach(array('view', 'start', 'close', 'finish') as $command)
+        {
+            $this->commands[] = array('command' => $command, 'alias' => $this->lang->commands->$command->alias, 'description' => $this->lang->commands->$command->description, 'internal' => true);
+        }
     }
 
-    /* 机器人初始化方法，可以在这里进行一些初始化，会在机器人被调用时执行 */
+    /**
+     * Init bot, load model.
+     *
+     * @access public
+     * @return void
+     */
     public function init()
     {
         $this->im->loadModel('task');
@@ -57,15 +39,19 @@ class zentaoBot extends xuanBot
         $this->statusArr = array_filter($this->im->lang->task->statusList);
     }
 
+    /**
+     * Close command.
+     *
+     * @param  array         $args  bot command arguments
+     * @access public
+     * @return object|string
+     */
     public function close($args = array())
     {
         $args = $this->removeEqualSign($args);
         foreach($args as $key => $value)
         {
-            if(in_array(strtolower($value), $this->condKeywords['task']))
-            {
-                unset($args[$key]);
-            }
+            if(in_array(strtolower($value), $this->lang->condKeywords['task'])) unset($args[$key]);
         }
         $task = $this->closeTask($args);
         return $task;
@@ -74,8 +60,9 @@ class zentaoBot extends xuanBot
     /**
      * Finish command.
      *
-     * @param  array $args
-     * @return object|string|void
+     * @param  array         $args  bot command arguments
+     * @access public
+     * @return object|string
      */
     public function finish($args = array())
     {
@@ -83,24 +70,34 @@ class zentaoBot extends xuanBot
         $args = array_filter(explode('=', implode('=', $args)));
         foreach($args as $key => $value)
         {
-            if(in_array(strtolower($value), $this->condKeywords['task']))
-            {
-                unset($args[$key]);
-            }
+            if(in_array(strtolower($value), $this->lang->condKeywords['task'])) unset($args[$key]);
         }
         return $this->finishTask($args, $originArgs);
     }
 
+    /**
+     * View command.
+     *
+     * @param  array         $args   bot command arguments
+     * @param  int           $userID
+     * @param  object        $user
+     * @access public
+     * @return object|string
+     */
     public function view($args = array(), $userID = 0, $user = null)
     {
         $pager = pager::init(0, 10, 1);
 
-        $args = array_filter($args, function ($arg) use ($pager) {
+        $pageSearchRegex = $this->lang->pageSearchRegex;
+        $pageIDKeywords  = $this->lang->condKeywords['pageID'];
+
+        $args = array_filter($args, function($arg) use ($pager, $pageSearchRegex, $pageIDKeywords)
+        {
             $matches = array();
-            preg_match($this->pageSearchReg, $arg, $matches);
+            preg_match($pageSearchRegex, $arg, $matches);
             if(count($matches) > 2)
             {
-                if(in_array(strtolower($matches[1]), $this->condKeywords['pageID']))
+                if(in_array(strtolower($matches[1]), $pageIDKeywords))
                 {
                     $pager->pageID = $matches[2];
                 }
@@ -118,7 +115,7 @@ class zentaoBot extends xuanBot
 
         foreach($args as $key => $value)
         {
-            if(in_array(strtolower($value), $this->condKeywords['task']))
+            if(in_array(strtolower($value), $this->lang->condKeywords['task']))
             {
                 unset($args[$key]);
                 $tasks = $this->viewTask($args, $user, $pager);
@@ -127,6 +124,14 @@ class zentaoBot extends xuanBot
         }
     }
 
+    /**
+     * Parse bot command arguments.
+     *
+     * @param  array         $args   bot command arguments
+     * @param  array         $keys
+     * @access public
+     * @return object
+     */
     public function parseArguments($args = array(), $keys = array())
     {
         $assignedToList = '';
@@ -140,7 +145,7 @@ class zentaoBot extends xuanBot
             $arg = array_shift($args);
             if($keys['pri'])
             {
-                if(in_array(strtolower($arg), $this->condKeywords['pri']))
+                if(in_array(strtolower($arg), $this->lang->condKeywords['pri']))
                 {
                     $pris = array_shift($args);
                     $priList = $this->buildCondParamByModifier($pris, $priList, 'p');
@@ -154,7 +159,7 @@ class zentaoBot extends xuanBot
             }
             if($keys['id'])
             {
-                if(in_array(strtolower($arg), $this->condKeywords['id']))
+                if(in_array(strtolower($arg), $this->lang->condKeywords['id']))
                 {
                     $ids = array_shift($args);
                     $idList .= $this->buildCondParamByModifier($ids, $idList, '#');
@@ -168,7 +173,7 @@ class zentaoBot extends xuanBot
             }
             if($keys['status'])
             {
-                if(in_array(strtolower($arg), $this->condKeywords['status']))
+                if(in_array(strtolower($arg), $this->lang->condKeywords['status']))
                 {
                     $statuses = array_shift($args);
                     $statusList = $this->buildCondParam($statuses, $statusList, $this->statusArr);
@@ -182,7 +187,7 @@ class zentaoBot extends xuanBot
             }
             if($keys['assignTo'])
             {
-                if(in_array(strtolower($arg), $this->condKeywords['assignTo']))
+                if(in_array(strtolower($arg), $this->lang->condKeywords['assignTo']))
                 {
                     $usernames = array_shift($args);
                     $assignedToList = $this->buildCondParam($usernames, $assignedToList, $this->userArr);
@@ -196,7 +201,7 @@ class zentaoBot extends xuanBot
             }
             if($keys['comment'])
             {
-                if(in_array(strtolower($arg), $this->condKeywords['comment']))
+                if(in_array(strtolower($arg), $this->lang->condKeywords['comment']))
                 {
                     $comment = array_shift($args);
                 }
@@ -207,7 +212,7 @@ class zentaoBot extends xuanBot
             }
             if($keys['taskName'])
             {
-                if(in_array(strtolower($arg), $this->condKeywords['taskName']))
+                if(in_array(strtolower($arg), $this->lang->condKeywords['taskName']))
                 {
                     $taskName = array_shift($args);
                 }
@@ -228,6 +233,14 @@ class zentaoBot extends xuanBot
         return $conds;
     }
 
+    /**
+     * Check condition type.
+     *
+     * @param  string        $arg
+     * @param  array         $list
+     * @access public
+     * @return bool
+     */
     public function checkCondType($arg, $list)
     {
         $args = explode(',', $arg);
@@ -241,6 +254,15 @@ class zentaoBot extends xuanBot
         return false;
     }
 
+    /**
+     * Build condition param.
+     *
+     * @param  string        $arg    bot command arguments
+     * @param  string        $condParam
+     * @param  array         $condArr
+     * @access public
+     * @return string
+     */
     public function buildCondParam($arg, $condParam, $condArr)
     {
         $arr = explode(',', $arg);
@@ -259,11 +281,27 @@ class zentaoBot extends xuanBot
         return $condParam;
     }
 
+    /**
+     * Remove equal sign from bot command arguments.
+     *
+     * @param  array         $args   bot command arguments
+     * @access public
+     * @return array
+     */
     public function removeEqualSign($args)
     {
         return array_filter(explode('=', implode('=', $args)));
     }
 
+    /**
+     * Build condition param by modifier.
+     *
+     * @param  array         $args      bot command arguments
+     * @param  string        $condParam
+     * @param  string        $modifier
+     * @access public
+     * @return string
+     */
     public function buildCondParamByModifier($arg, $condParam, $modifier)
     {
         $arg = strtolower($arg);
@@ -272,6 +310,15 @@ class zentaoBot extends xuanBot
         return $condParam;
     }
 
+    /**
+     * View task command.
+     *
+     * @param  array         $args   bot command arguments
+     * @param  object        $user
+     * @param  object        $pager
+     * @access public
+     * @return object|string
+     */
     public function viewTask($args = array(), $user = null, $pager = null)
     {
         if(empty($args))
@@ -293,6 +340,13 @@ class zentaoBot extends xuanBot
         return $this->im->task->getListByConds($conds, 'status_asc', 0, $pager);
     }
 
+    /**
+     * Close task command.
+     *
+     * @param  array         $args   bot command arguments
+     * @access public
+     * @return object|string
+     */
     public function closeTask($args)
     {
         $keys            = array();
@@ -303,10 +357,13 @@ class zentaoBot extends xuanBot
         $taskID  = array_pop(array_filter(explode(',', $conds->idList)));
         $comment = $conds->comment;
 
-        if(!is_numeric($taskID)) return "无法识别该指令";
+        if(!is_numeric($taskID)) return $this->lang->errors->invalidCommand;
+
         $task = $this->loadEntry('task', 'get', array('taskID'=> $taskID));
-        if(empty($task)) return "未查询到相关匹配信息";
-        if($task->status != 'done' && $task->status != 'cancel') return "检测到该任务为{$this->statusArr[$task->status]}状态，无法实现指令操作";
+        if(empty($task)) return $this->lang->errors->emptyResult;
+
+        if($task->status != 'done' && $task->status != 'cancel') return sprintf($this->lang->errors->invalidStatus, $this->statusArr[$task->status]);
+
         $task = $this->loadEntry('taskclose', 'post', array('taskID' => $taskID, 'comment' => $comment));
         if($task->result == 'fail') return $task->message;
 
@@ -314,15 +371,16 @@ class zentaoBot extends xuanBot
         $messages = new stdClass();
         $messages->type = 'url';
         $messages->url  = common::getSysURL() . $link;
-        return array('指令执行完成', $messages);
+        return array($this->lang->success, $messages);
     }
 
     /**
-     * Finish Task.
+     * Finish task.
      *
-     * @param  array $args
-     * @param  array $originArgs
-     * @return stdClass|string
+     * @param  array         $args
+     * @param  array         $originArgs
+     * @access public
+     * @return object|string
      */
     private function finishTask($args, $originArgs)
     {
@@ -331,7 +389,7 @@ class zentaoBot extends xuanBot
         while(!empty($args))
         {
             $arg = array_shift($args);
-            if(in_array(strtolower($arg), $this->condKeywords['id']))
+            if(in_array(strtolower($arg), $this->lang->condKeywords['id']))
             {
                 $taskID = array_shift($args);
                 $taskID = str_replace('#', '', $taskID);
@@ -346,11 +404,13 @@ class zentaoBot extends xuanBot
             }
         }
 
-        if(!is_numeric($taskID)) return "无法识别该指令";
+        if(!is_numeric($taskID)) return $this->lang->errors->invalidCommand;
+
         $task = $this->loadEntry('task', 'get', array('taskID'=> $taskID));
-        if(!common::hasPriv('task', 'finish')) return '您无权操作此任务';
-        if(empty($task) || isset($task->error)) return "未查询到相关匹配信息";
-        if($task->status != 'wait' && $task->status != 'doing') return "检测到该任务为{$this->statusArr[$task->status]}状态，无法实现指令操作";
+        if(!common::hasPriv('task', 'finish')) return $this->lang->errors->unauthorized;
+
+        if(empty($task) || isset($task->error)) return $this->lang->errors->emptyResult;
+        if($task->status != 'wait' && $task->status != 'doing') return sprintf($this->lang->errors->invalidStatus, $this->statusArr[$task->status]);
 
         $reply = new stdClass();
         $reply->messages  = array();
@@ -361,7 +421,7 @@ class zentaoBot extends xuanBot
 
         if(empty($params))
         {
-            $originCommand = rawurlencode('完成 ' . implode(' ', $originArgs));
+            $originCommand = rawurlencode($this->lang->finishTask . ' ' . implode(' ', $originArgs));
 
             $json = (object)array
             (
@@ -404,8 +464,8 @@ class zentaoBot extends xuanBot
             );
             $json = rawurlencode(json_encode($json));
 
-            $reply->messages[] = '完成任务指令需要填入工时与记录起始时间，请点击下方入口';
-            $reply->messages[] = "[工时记录](xxc://openFormAndSendToServerBySendbox/$json/$originCommand)";
+            $reply->messages[] = $this->lang->finish->tip;
+            $reply->messages[] = "[{$this->lang->finish->tipLinkTitle}](xxc://openFormAndSendToServerBySendbox/$json/$originCommand)";
         }
         else
         {
@@ -416,18 +476,9 @@ class zentaoBot extends xuanBot
 
             foreach($params as $key => $value)
             {
-                if(in_array(strtolower($key), $this->condKeywords['realStarted']))
-                {
-                    $realStarted = $value;
-                }
-                if(in_array(strtolower($key), $this->condKeywords['finishedDate']))
-                {
-                    $finishedDate = $value;
-                }
-                if(in_array(strtolower($key), $this->condKeywords['currentConsumed']))
-                {
-                    $currentConsumed = $value;
-                }
+                if(in_array(strtolower($key), $this->lang->condKeywords['realStarted']))     $realStarted = $value;
+                if(in_array(strtolower($key), $this->lang->condKeywords['finishedDate']))    $finishedDate = $value;
+                if(in_array(strtolower($key), $this->lang->condKeywords['currentConsumed'])) $currentConsumed = $value;
             };
 
             if(empty($realStarted) || empty($finishedDate)) return '';
@@ -448,17 +499,17 @@ class zentaoBot extends xuanBot
 
             $finishedDate = $this->formatDate($task, 'finishedDate', '', 'Y-m-d H:i:s');
 
-            $reply->messages[] = "任务 #{$taskID} 已完成，完成时间：{$finishedDate}，消耗：{$task->consumed} 小时";
+            $reply->messages[] = sprintf($this->lang->finish->done, $taskID, $finishedDate, $task->consumed);
             $reply->messages[] = $this->renderTaskTable(array($task));
 
             $reply->responses[] = $this->disableMarkdownLinkInMessage($messageID);
 
             if(!empty($task->fromBug))
             {
-                $reply->messages[] = "检测到任务 #{$taskID} 关联相关Bug，您可以点击以下链接进行处理";
+                $reply->messages[] = sprintf($this->lang->finish->bugTip, $taskID);
                 $link = commonModel::getSysURL() . str_replace('x.php', 'index.php', helper::createLink('bug', 'view', "bugID={$task->fromBug}", 'html'));
                 $href = urlencode($link);
-                $reply->messages[] = "[关联Bug处理](xxc:openInApp/zentao-integrated/{$href})";
+                $reply->messages[] = "[{$this->lang->finish->bugTipLinkTitle}](xxc:openInApp/zentao-integrated/{$href})";
             }
         }
 
@@ -511,31 +562,31 @@ class zentaoBot extends xuanBot
             $messages = new stdclass();
             $messages->type = 'url';
             $messages->url  = $sysURL . $link;
-            return array("为您匹配到 $pager->recTotal 项任务。", $messages);
+            return array(sprintf($this->tasksFound, $pager->recTotal), $messages);
         }
 
         $messages = array();
         if($pager->pageID == 1)
         {
-            $messages[] = "为您匹配到 $pager->recTotal 项任务。";
+            $messages[] = sprintf($this->tasksFound, $pager->recTotal);
         }
 
         $taskTable = $this->renderTaskTable($tasks);
 
-        $originCommand = '查看 ' . implode(' ', $originArgs);
+        $originCommand = $this->lang->viewTask . ' ' . implode(' ', $originArgs);
         $paging        = "$pager->pageID / $pager->pageTotal";
         if($pager->pageID != 1)
         {
-            $previousPageCommand = $originCommand . " {$this->condKeywords['pageID'][1]}=" . ($pager->pageID - 1) . " {$this->condKeywords['recPerPage'][1]}=" . $pager->recPerPage;
+            $previousPageCommand = $originCommand . " {$this->lang->condKeywords['pageID'][1]}=" . ($pager->pageID - 1) . " {$this->lang->condKeywords['recPerPage'][1]}=" . $pager->recPerPage;
             $previousPageCommand = rawurlencode($previousPageCommand);
-            $paging .= " [上一页](xxc://sendContentToServerBySendbox/{$previousPageCommand})";
+            $paging .= " [{$this->lang->prevPage}](xxc://sendContentToServerBySendbox/{$previousPageCommand})";
         }
 
         if($pager->pageID != $pager->pageTotal)
         {
-            $nextPageCommand = $originCommand . " {$this->condKeywords['pageID'][1]}=" . ($pager->pageID + 1) . " {$this->condKeywords['recPerPage'][1]}=" . $pager->recPerPage;
+            $nextPageCommand = $originCommand . " {$this->lang->condKeywords['pageID'][1]}=" . ($pager->pageID + 1) . " {$this->lang->condKeywords['recPerPage'][1]}=" . $pager->recPerPage;
             $nextPageCommand = rawurlencode($nextPageCommand);
-            $paging .= " [下一页](xxc://sendContentToServerBySendbox/{$nextPageCommand})";
+            $paging .= " [{$this->lang->nextPage}](xxc://sendContentToServerBySendbox/{$nextPageCommand})";
         }
         $paging = "<div class=\"text-right\">$paging</div>";
 
@@ -545,8 +596,10 @@ class zentaoBot extends xuanBot
     }
 
     /**
-     * render tasks as markdown table.
-     * @param array $tasks
+     * Render tasks as markdown table.
+     *
+     * @param  array  $tasks
+     * @access public
      * @return void
      */
     public function renderTaskTable($tasks)
@@ -555,26 +608,26 @@ class zentaoBot extends xuanBot
         $sysURL  = common::getSysURL();
         $headMap = array('id'=>'ID', 'pri' => $lang->task->pri, 'name' => $lang->task->name, 'assignedTo' => $lang->task->assignedTo,  'status' => $lang->task->status, 'estimate' => $lang->task->estimateAB, 'consumed' => $lang->task->consumedAB, 'left' => $lang->task->leftAB, 'actions' => $lang->actions);
         $thead   = '';
-        foreach ($headMap as $value)
-        {
-            $thead .= "<th>{$value}</th>";
-        }
+
+        foreach($headMap as $value) $thead .= "<th>{$value}</th>";
+
         $thead = "<thead class='text-nowrap'><tr>{$thead}</tr></thead>";
         $tbody = '';
-        foreach ($tasks as $task)
+        foreach($tasks as $task)
         {
             $tr   = '';
             $link = str_replace('x.php', 'index.php', helper::createLink('task', 'view', "taskID=$task->id", 'html'));
             $href = urlencode($sysURL . $link);
-            foreach ($headMap as $key => $value) {
+            foreach($headMap as $key => $value)
+            {
                 switch($key)
                 {
                     case 'name':
                         $tr .= "<td><a href='xxc:openInApp/zentao-integrated/{$href}'>{$task->$key}</a></td>";
-                    break;
+                        break;
                     case 'status':
                         $tr .= "<td class='text-nowrap'>{$this->statusArr[$task->$key]}</td>";
-                    break;
+                        break;
                     case 'assignedTo':
                         if($task->mode == 'multi')
                         {
@@ -590,9 +643,9 @@ class zentaoBot extends xuanBot
                         }
                     break;
                     case 'actions':
-                        $startUrl  = 'xxc://sendContentToServerBySendbox/' . "开始 任务 #$task->id";
-                        $finishUrl = 'xxc://sendContentToServerBySendbox/' . "完成 任务 #$task->id";
-                        $closeUrl  = 'xxc://sendContentToServerBySendbox/' . "关闭 任务 #$task->id";
+                        $startUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->startTask} #$task->id";
+                        $finishUrl = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->finishTask} #$task->id";
+                        $closeUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->startTask} #$task->id";
                         switch($task->status)
                         {
                             case 'wait':
@@ -602,14 +655,14 @@ class zentaoBot extends xuanBot
                                 $tr .= "<a href='$finishUrl'><i class='icon-zt-checked'></i></a>";
                                 $tr .= "<div><i class='icon-zt-off disabled'></i></div>";
                                 $tr .= '</div></td>';
-                            break;
+                                break;
                             case 'doing':
                                 $tr .= '<td><div class="flex gap-xs">';
                                 $tr .= "<div><i class='icon-zt-play disabled'></i></div>";
                                 $tr .= "<a href='$finishUrl'><i class='icon-zt-checked'></i></a>";
                                 $tr .= "<div><i class='icon-zt-off disabled'></i></div>";
                                 $tr .= '</div></td>';
-                            break;
+                                break;
                             case 'done':
                             case 'cancel':
                                 $tr .= '<td><div class="flex gap-xs">';
@@ -617,16 +670,16 @@ class zentaoBot extends xuanBot
                                 $tr .= "<div><i class='icon-zt-checked disabled'></i></div>";
                                 $tr .= "<a href='$closeUrl'><i class='icon-zt-off'></i></a>";
                                 $tr .= '</div></td>';
-                            break;
+                                break;
                             case 'closed':
                                 $tr .= '<td><div class="flex gap-xs">';
                                 $tr .= "<div><i class='icon-zt-play disabled'></i></div>";
                                 $tr .= "<div><i class='icon-zt-checked disabled'></i></div>";
                                 $tr .= "<div><i class='icon-zt-off disabled'></i></div>";
                                 $tr .= '</div></td>';
-                            break;
+                                break;
                         }
-                    break;
+                        break;
                     case 'estimate':
                     case 'consumed':
                     case 'left':
@@ -634,7 +687,6 @@ class zentaoBot extends xuanBot
                         break;
                     default:
                         $tr .= "<td class='text-nowrap'>{$task->$key}</td>";
-                    break;
                 }
             }
             $tbody .= "<tr>{$tr}</tr>";
@@ -642,18 +694,26 @@ class zentaoBot extends xuanBot
         return "<table>{$thead}{$tbody}</table>";
     }
 
+    /**
+     * Start task command.
+     *
+     * @param  array         $args   bot command arguments
+     * @param  int           $userID
+     * @access public
+     * @return object|string
+     */
     public function start($args = array(), $userID = 0)
     {
         $originArgs = $args;
         foreach($args as $key => $value)
         {
-            if(in_array(strtolower($value), $this->condKeywords['task']))
+            if(in_array(strtolower($value), $this->lang->condKeywords['task']))
             {
                 unset($args[$key]);
             }
         }
 
-        if(count($args) == 0) return '请输入任务编号';
+        if(count($args) == 0) return $this->lang->errors->taskIDRequired;
 
         $taskID = 0;
         foreach($args as $key => $value)
@@ -677,11 +737,11 @@ class zentaoBot extends xuanBot
                 }
             }
         }
-        if(!$taskID) return '请输入任务编号';
+        if(!$taskID) return $this->lang->errors->taskIDRequired;
 
         $task = $this->loadEntry('task', 'get', array('taskID' => $taskID));
-        if(!$task) return '任务不存在';
-        if($task->status != 'wait') return "检测到该任务为{$this->statusArr[$task->status]}状态，无法实现指令操作";
+        if(!$task) return $this->lang->errors->taskNotFound;
+        if($task->status != 'wait') return sprintf($this->lang->errors->invalidStatus, $this->statusArr[$task->status]);
 
         $reply = new stdClass();
         $reply->messages  = array();
@@ -689,9 +749,7 @@ class zentaoBot extends xuanBot
 
         if(count($args) == 0)
         {
-            $startByDefault = true;
-
-            $originCommand = rawurlencode('开始 ' . implode(' ', $originArgs));
+            $originCommand = rawurlencode($this->lang->startTask . ' ' . implode(' ', $originArgs));
 
             $realStarted = $this->formatDate($task, 'realStarted');
 
@@ -701,36 +759,36 @@ class zentaoBot extends xuanBot
                 'submitLabel' => $this->im->lang->task->start,
                 'inputs' => array
                 (
-                            (object)array
-                            (
-                                'name'  => $this->im->lang->task->realStarted,
-                                'type'  => 'datetime-local',
-                                'label' => $this->im->lang->task->realStarted,
-                                'value' => $realStarted,
-                            ),
-                            (object)array
-                            (
-                                'name'     => $this->im->lang->task->consumed,
-                                'type'     => 'number',
-                                'label'    => $this->im->lang->task->consumed,
-                                'value'    => $task->consumed,
-                                'addon'    => $this->im->lang->task->hour,
-                            ),
-                            (object)array
-                            (
-                                'name'     => $this->im->lang->task->left,
-                                'type'     => 'number',
-                                'label'    => $this->im->lang->task->left,
-                                'value'    => $task->left,
-                                'addon'    => $this->im->lang->task->hour,
-                                'helpText' => '"剩余"为0，任务将标记为"已完成"',
-                            )
+                    (object)array
+                    (
+                        'name'  => $this->im->lang->task->realStarted,
+                        'type'  => 'datetime-local',
+                        'label' => $this->im->lang->task->realStarted,
+                        'value' => $realStarted,
+                    ),
+                    (object)array
+                    (
+                        'name'     => $this->im->lang->task->consumed,
+                        'type'     => 'number',
+                        'label'    => $this->im->lang->task->consumed,
+                        'value'    => $task->consumed,
+                        'addon'    => $this->im->lang->task->hour,
+                    ),
+                    (object)array
+                    (
+                        'name'     => $this->im->lang->task->left,
+                        'type'     => 'number',
+                        'label'    => $this->im->lang->task->left,
+                        'value'    => $task->left,
+                        'addon'    => $this->im->lang->task->hour,
+                        'helpText' => $this->lang->start->finishWithZeroLeft,
+                    )
                 ),
             );
             $json = rawurlencode(json_encode($json));
 
-            $reply->messages[] = '点击链接开始任务 #'.$taskID;
-            $reply->messages[] = "[开始任务](xxc://openFormAndSendToServerBySendbox/$json/$originCommand)";
+            $reply->messages[] = sprintf($this->lang->start->tip, $taskID);
+            $reply->messages[] = "[{$this->lang->start->tipLinkTitle}](xxc://openFormAndSendToServerBySendbox/$json/$originCommand)";
         }
         else
         {
@@ -757,18 +815,9 @@ class zentaoBot extends xuanBot
                     }
                     foreach($replyArgs as $key => $value)
                     {
-                        if(in_array(strtolower($key), $this->condKeywords['consumed']))
-                        {
-                            $consumed = $value;
-                        }
-                        if(in_array(strtolower($key), $this->condKeywords['realStarted']))
-                        {
-                            $realStarted = $value;
-                        }
-                        if(in_array(strtolower($key), $this->condKeywords['left']))
-                        {
-                            $left = $value;
-                        }
+                        if(in_array(strtolower($key), $this->lang->condKeywords['consumed']))    $consumed    = $value;
+                        if(in_array(strtolower($key), $this->lang->condKeywords['realStarted'])) $realStarted = $value;
+                        if(in_array(strtolower($key), $this->lang->condKeywords['left']))        $left        = $value;
                     }
                     if($consumed == 0 && $left == 0) return $this->im->lang->task->noticeTaskStart;
 
@@ -789,7 +838,7 @@ class zentaoBot extends xuanBot
                     }
                     else
                     {
-                        $reply->messages[] = '任务 #'.$taskID.' 已完成工时信息填写';
+                        $reply->messages[] = sprintf($this->lang->effortRecorded, $taskID);
                         $reply->messages[] = $this->renderTaskTable(array($task));
 
                         $reply->responses[] = $this->disableMarkdownLinkInMessage($replyArgs['messageId']);
@@ -799,19 +848,18 @@ class zentaoBot extends xuanBot
 
             if(!$hasFormArgs)
             {
-
                 while(!empty($args))
                 {
                     $arg = array_shift($args);
-                    if(in_array(strtolower($arg), $this->condKeywords['left']))
+                    if(in_array(strtolower($arg), $this->lang->condKeywords['left']))
                     {
                         $left = array_shift($args);
                     }
-                    elseif(in_array(strtolower($arg), $this->condKeywords['consumed']))
+                    elseif(in_array(strtolower($arg), $this->lang->condKeywords['consumed']))
                     {
                         $consumed = array_shift($args);
                     }
-                    elseif(in_array(strtolower($arg), $this->condKeywords['realStarted']))
+                    elseif(in_array(strtolower($arg), $this->lang->condKeywords['realStarted']))
                     {
                         $realStarted = array_shift($args);
                     }
@@ -834,7 +882,7 @@ class zentaoBot extends xuanBot
                 }
                 else
                 {
-                    $reply->messages[] = '任务 #'.$taskID.' 已完成工时信息填写';
+                    $reply->messages[] = sprintf($this->lang->effortRecorded, $taskID);
                     $reply->messages[] = $this->renderTaskTable(array($task));
                 }
             }
@@ -844,9 +892,11 @@ class zentaoBot extends xuanBot
     }
 
     /**
-     * remove a Markdown link in the message and generate a response.
-     * @param $messageID
-     * @return stdclass
+     * Remove a Markdown link in the message and generate a response.
+     *
+     * @param  $messageID
+     * @access public
+     * @return object
      */
     private function disableMarkdownLinkInMessage($messageID)
     {
@@ -871,5 +921,3 @@ class zentaoBot extends xuanBot
         return $response;
     }
 }
-
-
