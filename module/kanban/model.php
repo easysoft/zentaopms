@@ -1512,10 +1512,7 @@ class kanbanModel extends model
                         $cardData['left']       = $object->left;
                         $cardData['estStarted'] = $object->estStarted;
                         $cardData['mode']       = $object->mode;
-                        if($object->mode == 'multi')
-                        {
-                            $cardData['teamMembers'] = $object->teamMembers;
-                        }
+                        if($object->mode == 'multi') $cardData['teamMembers'] = $object->teamMembers;
                     }
                     else
                     {
