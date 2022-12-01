@@ -202,8 +202,8 @@ class messageModel extends model
         }
         if(empty($toList) and $objectType == 'task' and $object->mode == 'multi')
         {
-            $assignedTo = $this->loadModel('task')->getTeamTaskAssignedTo($object->id);
-            $toList     = array_filter($assignedTo, function($account){
+            $teamMembers = $this->loadModel('task')->getTeamMembers($object->id);
+            $toList      = array_filter($teamMembers, function($account){
                 return $account != $this->app->user->account;
             });
             $toList     = implode(',', $toList);
