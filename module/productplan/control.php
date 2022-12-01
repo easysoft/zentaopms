@@ -136,7 +136,7 @@ class productplan extends control
             $changes = $this->productplan->update($planID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $change[$planID] = $changes;
-            $this->syncStory($change);
+            $this->unlinkOldBranch($change);
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
@@ -178,7 +178,7 @@ class productplan extends control
         if(!empty($_POST['title']))
         {
             $changes = $this->productplan->batchUpdate($productID);
-            $this->syncStory($changes);
+            $this->unlinkOldBranch($changes);
             $this->loadModel('action');
             foreach($changes as $planID => $change)
             {
@@ -893,13 +893,13 @@ class productplan extends control
     }
 
     /**
-     * Synchronize story when edit plan.
+     * Unlink story and bug when edit branch of plan.
      * @param  int    $planID
      * @param  int    $oldBranch
      * @access protected
      * @return void
      */
-    protected function syncStory($changes)
+    protected function unlinkOldBranch($changes)
     {
         foreach($changes as $planID => $changes)
         {
@@ -915,11 +915,17 @@ class productplan extends control
                 }
             }
             $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
+            $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
             if($oldBranch)
             {
                 foreach($planStories as $storyID => $story)
                 {
                     if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $this->productplan->unlinkStory($storyID, $planID);
+                }
+
+                foreach($planBugs as $bugID => $bug)
+                {
+                    if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $this->productplan->unlinkBug($bugID, $planID);
                 }
             }
         }
