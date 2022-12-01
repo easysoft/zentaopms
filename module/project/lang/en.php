@@ -42,6 +42,7 @@ $lang->project->addWhitelist        = 'Project Add Whitelist';
 $lang->project->unbindWhitelist     = 'Project Remove Whitelist';
 $lang->project->manageProducts      = 'Manage Products';
 $lang->project->manageOtherProducts = 'Manage Other Products';
+$lang->project->manageProductPlan   = 'Manage Products And Plans';
 $lang->project->copyTitle           = 'Please select an project to copy';
 $lang->project->errorSameProducts   = 'Project cannot be associated with multiple identical products.';
 $lang->project->errorSameBranches   = 'Project cannot be associated with multiple identical branches.';

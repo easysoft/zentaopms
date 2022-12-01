@@ -139,7 +139,7 @@
           </td><td></td><td></td>
         </tr>
         <tr>
-          <th id='productTitle'>关联产品和计划</th>
+          <th id='productTitle'><?php echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan='3'>
             <div class='row'>
               <div class="col-sm-6">
@@ -154,8 +154,8 @@
                         <div><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='left' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->productTip;?>"></icon></div>
                       </span>
                       <?php endif;?>
-                      </div>
                     </div>
+                  </div>
                   <div class='table-col hidden'>
                     <div class='input-group required'>
                       <span class='input-group-addon fix-border'><?php echo $lang->product->branchName['branch'];?></span>
@@ -167,7 +167,7 @@
               <div class="col-sm-6">
                 <div class='input-group' id='plan0'>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
-                  <?php echo html::select("plans[][][]", '', '', "class='form-control chosen' multiple");?>
+                  <?php echo html::select("plans[][]", '', '', "class='form-control chosen' multiple");?>
                   <div class='input-group-btn'>
                     <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>
                     <a href='javascript:;' onclick='removeLine(this)' class='btn btn-link removeLine' style='visibility: hidden'><i class='icon-close'></i></a>

@@ -42,6 +42,7 @@ $lang->project->addWhitelist        = '项目添加白名单';
 $lang->project->unbindWhitelist     = '项目删除白名单';
 $lang->project->manageProducts      = '关联产品';
 $lang->project->manageOtherProducts = '关联其他产品';
+$lang->project->manageProductPlan   = '关联产品和计划';
 $lang->project->copyTitle           = '请选择要复制的项目';
 $lang->project->errorSameProducts   = '项目不能关联多个相同的产品。';
 $lang->project->errorSameBranches   = '项目不能关联多个相同的分支。';

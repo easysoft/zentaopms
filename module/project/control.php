@@ -722,9 +722,8 @@ class project extends control
 
         $withProgram = $this->config->systemMode == 'ALM' ? true : false;
 
-        $linkedBranches      = array();
         $linkedBranchList    = array();
-        $productPlans        = array(0 => '');
+        $productPlans        = array();
         $branches            = $this->project->getBranchesByProject($projectID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
         $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
@@ -743,11 +742,10 @@ class project extends control
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
             foreach($branches[$productID] as $branchID => $branch)
             {
-                $linkedBranchList[$branchID]           = $branchID;
-                $linkedBranches[$productID][$branchID] = $branchID;
+                $linkedBranchList[$branchID] = $branchID;
 
-                if($branch != BRANCH_MAIN) $productPlans[$productID][$branchID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
-                $productPlans[$productID][$branchID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                if($branch != BRANCH_MAIN) $productPlans[$productID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
+                $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
 
                 if(!empty($projectStories[$productID][$branchID]) or !empty($projectBranches[$productID][$branchID]))
                 {
@@ -773,7 +771,6 @@ class project extends control
         $this->view->multiBranchProducts      = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->productPlans             = array_filter($productPlans);
         $this->view->linkedProducts           = $linkedProducts;
-        $this->view->linkedBranches           = $linkedBranches;
         $this->view->branches                 = $branches;
         $this->view->executions               = $this->execution->getPairs($projectID);
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
@@ -1286,7 +1283,6 @@ class project extends control
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->executions      = $executions;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
         $this->view->projectPairs    = $this->project->getPairsByProgram();

@@ -370,7 +370,7 @@ function loadBranches(product)
 function loadPlans(product, branch)
 {
     var productID = $(product).val();
-    var branchID  = $(branch).val() == null ? 0 : $(branch).val();
+    var branchID  = $(branch).val() == null ? 0 : '0,' + $(branch).val();
     var planID    = $(product).attr('data-plan') !== undefined ? $(product).attr('data-plan') : 0;
     var index     = $(product).attr('id').replace('products', '');
 
@@ -380,7 +380,7 @@ function loadPlans(product, branch)
         {
             $("div#plan" + index).find("select[name^='plans']").replaceWith(data);
             $("div#plan" + index).find('.chosen-container').remove();
-            $("div#plan" + index).find('select').attr('name', 'plans[' + productID + '][' + branchID + '][]').attr('id', 'plans' + productID).chosen();
+            $("div#plan" + index).find('select').attr('name', 'plans[' + productID + ']' + '[]').attr('id', 'plans' + productID).chosen();
         }
     });
 }
