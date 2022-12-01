@@ -266,6 +266,8 @@ class productplanModel extends model
      */
     public function getPairs($product = 0, $branch = '', $param = '', $skipParent = false)
     {
+        $this->app->loadLang('branch');
+
         $date  = date('Y-m-d');
 
         $branchQuery = '';
@@ -281,8 +283,7 @@ class productplanModel extends model
             $branchQuery .= ')';
         }
 
-        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName,t3.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
-            ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t2.id=t1.branch')
+        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t3.type as productType,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
             ->where('t1.product')->in($product)
             ->andWhere('t1.deleted')->eq(0)
@@ -292,16 +293,22 @@ class productplanModel extends model
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
+        $branchMap = $this->dao->select('id, name')->from(TABLE_BRANCH)
+            ->where('status')->eq('active')
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs('id', 'name');
+        $branchMap[BRANCH_MAIN] = $this->lang->branch->main;
+
         $plans     = $this->reorder4Children($plans);
+        $plans     = $this->relationBranch($plans);
         $planPairs = array();
-        $this->app->loadLang('branch');
         foreach($plans as $plan)
         {
             if($skipParent and $plan->parent == '-1') continue;
             if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
-            if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
+            if($plan->productType != 'normal') $planPairs[$plan->id] = $planPairs[$plan->id] . ' / ' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main);
         }
         return array('' => '') + $planPairs;
     }
@@ -1101,6 +1108,45 @@ class productplanModel extends model
                 }
             }
             $plans = $reorderedPlans;
+        }
+
+        return $plans;
+    }
+
+    /**
+     * Get relation branch for plans.
+     *
+     * @param  array    $plans
+     * @access public
+     * @return array
+     */
+    public function relationBranch($plans)
+    {
+        if(empty($plans)) return $plans;
+
+        $branchMap = $this->dao->select('id, name')->from(TABLE_BRANCH)
+            ->where('status')->eq('active')
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs('id', 'name');
+        $branchMap[BRANCH_MAIN] = $this->lang->branch->main;
+
+        foreach($plans as &$plan)
+        {
+            if($plan->branch)
+            {
+                $branchName = '';
+                foreach(explode(',', $plan->branch) as $planBranch)
+                {
+                    $branchName .= isset($branchMap[$planBranch]) ? $branchMap[$planBranch] : '';
+                    $branchName .= ',';
+                }
+
+                $plan->branchName = trim($branchName, ',');
+            }
+            else
+            {
+                $plan->branchName = $this->lang->branch->main;
+            }
         }
 
         return $plans;
