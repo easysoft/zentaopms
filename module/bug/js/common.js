@@ -19,7 +19,13 @@ $(function()
     }
 });
 
-$('#openedBuild, #resolvedBuild').picker({optionRender: markReleasedBuilds});
+
+if($('#openedBuild').length || $('#resolvedBuild').length || $('[name^=openedBuilds]').length)
+{
+    $.get(createLink('bug', 'ajaxGetReleasedBuilds', 'productID=' + productID), function(data){releasedBuilds = data;}, 'json');
+
+    $('#openedBuild, #resolvedBuild, [name^=openedBuilds]').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'});
+}
 
 function markReleasedBuilds($option)
 {
@@ -193,6 +199,8 @@ function loadAllExecutionBuilds(executionID, productID, buildBox)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
+    $.get(createLink('bug', 'ajaxGetReleasedBuilds', 'productID=' + productID), function(data){releasedBuilds = data;}, 'json');
+
     if(page == 'create')
     {
         oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
@@ -204,7 +212,7 @@ function loadAllExecutionBuilds(executionID, productID, buildBox)
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
             notice();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
+            $("#openedBuild").picker({optionRender: markReleasedBuilds, dropWidth: 'auto'});
         })
     }
     if(page == 'edit')
@@ -212,12 +220,12 @@ function loadAllExecutionBuilds(executionID, productID, buildBox)
         if(buildBox == 'openedBuildBox')
         {
             link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=true&type=all');
-            $('#openedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
+            $('#openedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
         }
         if(buildBox == 'resolvedBuildBox')
         {
             link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&index=0&type=all');
-            $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
+            $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
         }
     }
 }
@@ -234,6 +242,9 @@ function loadAllProductBuilds(productID, buildBox)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
+
+    $.get(createLink('bug', 'ajaxGetReleasedBuilds', 'productID=' + productID), function(data){releasedBuilds = data;}, 'json');
+
     if(page == 'create')
     {
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&type=all');
@@ -244,7 +255,7 @@ function loadAllProductBuilds(productID, buildBox)
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
             notice();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
+            $("#openedBuild").picker({optionRender: markReleasedBuilds, dropWidth: 'auto'});
         })
     }
     if(page == 'edit')
@@ -252,12 +263,12 @@ function loadAllProductBuilds(productID, buildBox)
         if(buildBox == 'openedBuildBox')
         {
             link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&type=all');
-            $('#openedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
+            $('#openedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
         }
         if(buildBox == 'resolvedBuildBox')
         {
             link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&index=0&type=all');
-            $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
+            $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
         }
     }
 }
@@ -452,6 +463,8 @@ function loadProductBuilds(productID)
     if(typeof(oldOpenedBuild) == 'undefined') oldOpenedBuild = 0;
     link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
 
+    $.get(createLink('bug', 'ajaxGetReleasedBuilds', 'productID=' + productID), function(data){releasedBuilds = data;}, 'json');
+
     if(page == 'create')
     {
         $.get(link, function(data)
@@ -461,14 +474,14 @@ function loadProductBuilds(productID)
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
             notice();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
+            $("#openedBuild").picker({optionRender: markReleasedBuilds, dropWidth: 'auto'});
         })
     }
     else
     {
-        $('#openedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
+        $('#openedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds})});
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
     }
 }
 
@@ -606,6 +619,8 @@ function loadProjectBuilds(projectID)
     var productID      = $('#product').val();
     var oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
 
+    $.get(createLink('bug', 'ajaxGetReleasedBuilds', 'productID=' + productID), function(data){releasedBuilds = data;}, 'json');
+
     if(page == 'create')
     {
         var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=&branch=' + branch);
@@ -617,17 +632,17 @@ function loadProjectBuilds(projectID)
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
             notice();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
+            $("#openedBuild").picker({optionRender: markReleasedBuilds, dropWidth: 'auto'});
         })
     }
     else
     {
         var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
-        $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleasedBuilds})});
+        $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
 
         var oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         var link             = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).picker({optionRender: markReleasedBuilds})});
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
     }
 }
 
@@ -649,6 +664,8 @@ function loadExecutionBuilds(executionID, num)
     if(typeof(branch) == 'undefined') var branch = 0;
     if(typeof(productID) == 'undefined') var productID = 0;
 
+    $.get(createLink('bug', 'ajaxGetReleasedBuilds', 'productID=' + productID), function(data){releasedBuilds = data;}, 'json');
+
     if(page == 'create')
     {
         link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&index=0&needCreate=true");
@@ -660,17 +677,17 @@ function loadExecutionBuilds(executionID, num)
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
             notice();
-            $("#openedBuild").picker({optionRender: markReleasedBuilds});
+            $("#openedBuild").picker({optionRender: markReleasedBuilds, dropWidth: 'auto'});
         })
     }
     else
     {
         link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=false&type=normal&number=' + num);
-        $('#openedBuildBox' + num).load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleaseBuilds})});
+        $('#openedBuildBox' + num).load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleaseBuilds, dropWidth: 'auto'})});
 
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).picker({optionRender: markReleasedBuilds})});
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
     }
 }
 

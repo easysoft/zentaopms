@@ -13,7 +13,7 @@
 <?php
 include '../../common/view/header.html.php';
 js::set('requiredFields', $config->bug->create->requiredFields);
-js::set('releasedBuilds', $releasedBuilds);
+js::set('productID', $productID);
 js::set('releasedBuild', $lang->build->releasedBuild);
 ?>
 <?php
