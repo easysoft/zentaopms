@@ -264,6 +264,24 @@ class zahost extends control
     }
 
     /**
+     * Sent cancel download image request to Host.
+     *
+     * @param  int    $hostID
+     * @param  string $imageName
+     * @access public
+     * @return object
+     */
+    public function ajaxCancelDownload($imageID)
+    {
+        $image = $this->zahost->getImageByID($imageID);
+
+        $this->zahost->cancelDownload($image);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->cancelDownloadSuccess));
+    }
+
+    /**
      * Get image list by ajax.
      *
      * @param  int    $hostID

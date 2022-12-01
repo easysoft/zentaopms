@@ -43,7 +43,7 @@ class zanodemodel extends model
         $data->type = 'node';
         $this->dao->update(TABLE_ZAHOST)->data($data)
             ->batchCheck($this->config->zanode->create->requiredFields, 'notempty')
-            ->check('name', 'unique');
+            ->check('name', 'unique', "type='node'");
         if(dao::isError()) return false;
 
         if(!preg_match("/^(?!_)(?!-)(?!\.)[a-zA-Z0-9\_\.\-]+$/", $data->name))
@@ -64,11 +64,11 @@ class zanodemodel extends model
         /* Prepare create params. */
         $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->zanode->defaultPort;
         $param    = array(
-            'os'           => $image->os,
+            'os'           => $image->osName,
             'path'         => $image->path,
             'name'         => $data->name,
-            'cpu'          => (int)$data->cpu,
-            'disk'         => (int)$data->disk,
+            'cpu'          => (int)$data->cpuCores,
+            'disk'         => (int)$data->diskSize,
             'memory'       => (int)$data->memory,
         );
 

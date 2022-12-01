@@ -9,6 +9,7 @@ $lang->zahost->init           = '初始化宿主机';
 $lang->zahost->edit           = '编辑';
 $lang->zahost->editAction     = '编辑宿主机';
 $lang->zahost->delete         = '删除';
+$lang->zahost->cancel         = "取消下载";
 $lang->zahost->deleteAction   = '删除宿主机';
 $lang->zahost->byQuery        = '搜索';
 $lang->zahost->all            = '全部主机';
@@ -33,7 +34,7 @@ $lang->zahost->registerDate = '最后注册时间';
 
 $lang->zahost->memorySize = $lang->zahost->memory;
 $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
-$lang->zahost->os         = '操作系统平台';
+$lang->zahost->os         = '操作系统';
 $lang->zahost->imageName  = '镜像文件';
 
 $lang->zahost->initHost = new stdclass;
@@ -57,7 +58,7 @@ $lang->zahost->initHost->descTitle = "请按照以下步骤在宿主机上完成
 $lang->zahost->initHost->initDesc = "在宿主机上执行：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
 
 $lang->zahost->image = new stdclass;
-$lang->zahost->image->list          = '镜像列表';
+$lang->zahost->image->list          = '镜像仓库';
 $lang->zahost->image->browseImage   = '镜像列表';
 $lang->zahost->image->createImage   = '创建镜像';
 $lang->zahost->image->choseImage    = '选择镜像';
@@ -67,11 +68,12 @@ $lang->zahost->image->startDowload  = '开始下载';
 $lang->zahost->image->common     = '镜像';
 $lang->zahost->image->name       = '名称';
 $lang->zahost->image->desc       = '描述';
+$lang->zahost->image->path       = '文件路径';
 $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->diskSize;
 $lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
-$lang->zahost->image->progress   = '进度';
+$lang->zahost->image->progress   = '下载进度';
 
 $lang->zahost->image->statusList['notDownloaded'] = '未下载';
 $lang->zahost->image->statusList['created']       = '下载中';
@@ -83,6 +85,8 @@ $lang->zahost->image->statusList['failed']        = '下载失败';
 $lang->zahost->image->imageEmpty           = '无镜像';
 $lang->zahost->image->downloadImageFail    = '创建下载镜像任务失败';
 $lang->zahost->image->downloadImageSuccess = '创建下载镜像任务成功';
+$lang->zahost->image->cancelDownloadFail    = '取消下载镜像任务失败';
+$lang->zahost->image->cancelDownloadSuccess = '取消下载镜像任务成功';
 
 
 $lang->zahost->empty         = '暂时没有宿主机';

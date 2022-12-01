@@ -8,6 +8,7 @@ $lang->zahost->init           = 'Init Host';
 $lang->zahost->edit           = 'Edit';
 $lang->zahost->editAction     = 'Edit Host';
 $lang->zahost->delete         = 'Delete';
+$lang->zahost->cancel         = "Cancel";
 $lang->zahost->deleteAction   = 'Delete Host';
 $lang->zahost->byQuery        = 'Search';
 $lang->zahost->all            = 'All';
@@ -71,11 +72,12 @@ $lang->zahost->image->startDowload  = 'Start Download';
 $lang->zahost->image->common     = 'Image';
 $lang->zahost->image->name       = 'Name';
 $lang->zahost->image->desc       = 'Description';
+$lang->zahost->image->path       = 'Image Path';
 $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->diskSize;
 $lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
-$lang->zahost->image->progress   = 'Progress';
+$lang->zahost->image->progress   = 'Download Progress';
 
 $lang->zahost->image->statusList['notDownloaded'] = 'Not Downloaded';
 $lang->zahost->image->statusList['created']       = 'Inprogress';
@@ -83,6 +85,12 @@ $lang->zahost->image->statusList['canceled']      = 'Canceled';
 $lang->zahost->image->statusList['inprogress']    = 'Inprogress';
 $lang->zahost->image->statusList['completed']     = 'Completed';
 $lang->zahost->image->statusList['failed']        = 'Failed';
+
+$lang->zahost->image->imageEmpty           = 'No Image';
+$lang->zahost->image->downloadImageFail    = 'Create Download Task Success';
+$lang->zahost->image->downloadImageSuccess = 'Create Download Task Fail';
+$lang->zahost->image->cancelDownloadFail    = 'Cancel Download Task Success';
+$lang->zahost->image->cancelDownloadSuccess = 'Cancel Download Task Fail';
 
 $lang->zahost->empty         = 'No Host';
 

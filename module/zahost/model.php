@@ -45,7 +45,7 @@ class zahostModel extends model
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
-            ->check('name', 'unique')
+            ->check('name', 'unique', "type='zahost'")
             ->autoCheck();
         if(dao::isError()) return false;
 
@@ -137,16 +137,30 @@ class zahostModel extends model
             {
                 $image->id     = 0;
                 $image->status = 'notDownloaded';
+                $image->from   = 'zentao';
+                $image->osName = $image->os;
+                $image->cancelMisc   = sprintf("title='%s' class='btn image-cancel image-cancel-%d %s'", $this->lang->zahost->cancel, $image->id, "disabled");
+                $image->downloadMisc = sprintf("title='%s' class='btn image-download image-download-%d %s'", $this->lang->zahost->image->downloadImage, $image->id, "");
             }
             else
             {
                 $image->id     = $downloadedImage->id;
                 $image->status = $downloadedImage->status;
+                $image->from   = $downloadedImage->from;
+                $image->osName = $image->os;
+
+                $image->cancelMisc   = sprintf("title='%s' data-id='%s' class='btn image-cancel image-cancel-%d %s'", $this->lang->zahost->cancel, $image->id, $image->id, in_array($image->status, array("inprogress", "created")) ? "" : "disabled");
+                $image->downloadMisc = sprintf("title='%s' data-id='%s' class='btn image-download image-download-%d %s'", $this->lang->zahost->image->downloadImage, $image->id, $image->id, in_array($image->status, array("completed", "inprogress", "created"))  || $image->from == 'user' ? "disabled" : "");
             }
 
             $image->host = $hostID;
         }
 
+        $orderBy = explode('_', $orderBy);
+        if(count($orderBy) == 2)
+        {
+            array_multisort(array_column($imageList, $orderBy[0]), $orderBy[1] == 'asc' ? SORT_ASC : SORT_DESC, $imageList);
+        }
         return $imageList;
     }
 
@@ -214,7 +228,7 @@ class zahostModel extends model
      *
      * @param  object $image
      * @access public
-     * @return string Return Status code.
+     * @return object Return Status code.
      */
     public function queryDownloadImageStatus($image)
     {
@@ -243,10 +257,13 @@ class zahostModel extends model
 
                 $this->dao->update(TABLE_IMAGE)
                     ->set('status')->eq($status)
-                    ->set('path')->eq($currentTask->path)
+                    ->set('path')->eq(!empty($currentTask->path) ? $currentTask->path : '')
                     ->where('id')->eq($image->id)->exec();
 
+                $image->taskID = $currentTask->id;
                 break;
+            }else{
+                $image->taskID = 0;
             }
         }
 
@@ -273,6 +290,35 @@ class zahostModel extends model
         dao::$errors[] = $response->msg;
         return false;
 
+    }
+
+    /**
+     * Send cancel download image command to HOST.
+     *
+     * @param  object    $image
+     * @access public
+     * @return bool
+     */
+    public function cancelDownload($image)
+    {
+        $zaInfo = $this->queryDownloadImageStatus($image);
+        $host   = $this->getById($image->host);
+        $apiUrl = 'http://' . $host->extranet . ':' . $this->config->zahost->defaultPort . '/api/v1/download/cancel';
+
+        $apiParams['id']  = intval($zaInfo->taskID);
+
+        $response = json_decode(commonModel::http($apiUrl, $apiParams, array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+
+        if($response and $response->code == 'success')
+        {
+            $this->dao->update(TABLE_IMAGE)
+                ->set('status')->eq('canceled')
+                ->where('id')->eq($image->id)->exec();
+            return true;
+        }
+
+        dao::$errors[] = $this->lang->zahost->image->cancelDownloadFail;
+        return false;
     }
 
     /**
