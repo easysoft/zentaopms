@@ -2169,6 +2169,11 @@ class project extends control
             }
 
             $oldProducts = $this->product->getProducts($projectID);
+            if($project->multiple and $project->model != 'waterfall')
+            {
+                $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id');
+                $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->fetchGroup('project', 'product');
+            }
 
             $this->project->updateProducts($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -2185,7 +2190,7 @@ class project extends control
             $diffProducts  = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            if($project->multiple)
+            if($project->multiple and $project->model != 'waterfall')
             {
                 $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
                 if(!empty($unlinkedProducts))
@@ -2193,8 +2198,14 @@ class project extends control
                     $unlinkedProductPairs = array();
                     foreach($unlinkedProducts as $unlinkedProduct) $unlinkedProductPairs[$unlinkedProduct] = $oldProducts[$unlinkedProduct]->name;
 
-                    $executionIDList = $this->execution->getIdList($projectID);
-                    foreach($executionIDList as $executionID) $this->action->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkedProductPairs));
+                    $unlinkExecutions = array();
+                    foreach($oldExecutionProducts as $executionID => $executionProducts)
+                    {
+                        $unlinkExecutionProducts = array_intersect_key($unlinkedProductPairs, $executionProducts);
+                        if($unlinkExecutionProducts) $unlinkExecutions[$executionID] = $unlinkExecutionProducts;
+                    }
+
+                    foreach($unlinkExecutions as $executionID => $unlinkExecutionProducts) $this->action->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkExecutionProducts));
                 }
             }
 
