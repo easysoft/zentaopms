@@ -194,15 +194,21 @@ class productplan extends control
 
         $this->commonAction($productID, $branch);
 
-        $plans     = $this->productplan->getByIDList($this->post->planIDList);
-        $oldBranch = array();
+        $plans        = $this->productplan->getByIDList($this->post->planIDList);
+        $oldBranch    = array();
+        $parentIdList = array();
 
-        foreach($plans as $plan) $oldBranch[$plan->id] = $plan->branch;
+        foreach($plans as $plan)
+        {
+            $oldBranch[$plan->id]        = $plan->branch;
+            $parentIdList[$plan->parent] = $plan->parent;
+        }
 
-        $this->view->title     = $this->lang->productplan->batchEdit;
-        $this->view->plans     = $plans;
-        $this->view->oldBranch = $oldBranch;
-        $this->view->product   = $this->loadModel('product')->getById($productID);;
+        $this->view->title      = $this->lang->productplan->batchEdit;
+        $this->view->plans      = $plans;
+        $this->view->oldBranch  = $oldBranch;
+        $this->view->product    = $this->loadModel('product')->getById($productID);;
+        $this->view->parentList = $this->productplan->getByIDList($parentIdList);
 
         $this->display();
     }

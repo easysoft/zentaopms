@@ -748,8 +748,15 @@ class productplanModel extends model
 
         $plans = array();
         $extendFields = $this->getFlowExtendFields();
+        $product      = $this->loadModel('product')->getByID($productID);
         foreach($data->id as $planID)
         {
+            if($product->type != 'normal' and $oldPlans[$planID]->parent != '-1' and !isset($data->branch[$planID]))
+            {
+                $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+                return helper::end(js::error(sprintf($this->lang->error->notempty, $this->lang->product->branch)));
+            }
+
             $isFuture = isset($data->future[$planID]) ? true : false;
             if(isset($data->status[$planID]) and $data->status[$planID] != 'wait') $isFuture = false;
 
@@ -762,8 +769,8 @@ class productplanModel extends model
             $plan->parent = $oldPlans[$planID]->parent;
             $plan->id     = $planID;
 
-            if(empty($plan->title)) return print(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
-            if($plan->begin > $plan->end and !empty($plan->end)) return print(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
+            if(empty($plan->title)) return helper::end(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
+            if($plan->begin > $plan->end and !empty($plan->end)) return helper::end(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
 
             if($plan->begin == '') $plan->begin = $this->config->productplan->future;
             if($plan->end   == '') $plan->end   = $this->config->productplan->future;
@@ -790,11 +797,11 @@ class productplanModel extends model
                 $parent = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
                 if($parent->begin != $this->config->productplan->future and $plan->begin != $this->config->productplan->future and $plan->begin < $parent->begin)
                 {
-                    return print(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
+                    return helper::end(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
                 }
                 elseif($parent->end != $this->config->productplan->future and $plan->end != $this->config->productplan->future and $plan->end > $parent->end)
                 {
-                    return print(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end)));
+                    return helper::end(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end)));
                 }
             }
             elseif($parentID == -1 and $plan->begin != $this->config->productplan->future)
@@ -808,8 +815,8 @@ class productplanModel extends model
                     if($childPlan->begin < $minBegin and $minBegin != $this->config->productplan->future) $minBegin = $childPlan->begin;
                     if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future) $maxEnd = $childPlan->end;
                 }
-                if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) return print(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
-                if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) return print(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
+                if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) return helper::end(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
+                if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) return helper::end(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
             }
 
             $change = common::createChanges($oldPlans[$planID], $plan);
@@ -817,7 +824,7 @@ class productplanModel extends model
             {
                 if($parentID > 0 and !isset($parents[$parentID])) $parents[$parentID] = $parentID;
                 $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->checkFlow()->where('id')->eq($planID)->exec();
-                if(dao::isError()) return print(js::error(dao::getError()));
+                if(dao::isError()) return helper::end(js::error(dao::getError()));
                 $changes[$planID] = $change;
             }
         }
