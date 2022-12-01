@@ -1462,6 +1462,7 @@ class project extends control
         {
             foreach($builds as $build)
             {
+                $build->builds = $this->build->getByList($build->builds);
                 /* If product is normal, unset branch name. */
                 if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
                 {

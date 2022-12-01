@@ -85,9 +85,16 @@
           <td class="c-name text-left" title='<?php echo $build->executionName;?>'><?php echo $build->executionName;?></td>
           <?php else:?>
           <td class="c-name text-left">
-            <?php foreach(explode(',', $build->builds) as $childBuild):?>
-            <?php $buildName = zget($buildPairs, $childBuild);?>
-            <span title="<?php echo $buildName;?>"><?php echo $buildName;?></span></br>
+            <?php $childExecutions = array();?>
+            <?php foreach($build->builds as $childBuild):?>
+            <?php $childExecutions[$childBuild->execution] = $childBuild->execution;?>
+            <?php endforeach;?>
+
+            <?php foreach($childExecutions as $execution):?>
+            <?php $executionName = zget($allExecutions, $execution, '');?>
+            <?php if($executionName):?>
+            <span title="<?php echo $executionName;?>"><?php echo $executionName;?></span></br>
+            <?php endif;?>
             <?php endforeach;?>
           </td>
           <?php endif;?>

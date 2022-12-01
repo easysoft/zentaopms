@@ -63,7 +63,6 @@ $lang->build->notice->changeBuilds    = "提交测试单的版本，不能修改
 $lang->build->notice->autoRelation    = "相关版本下完成的需求、解决的Bug、产生的Bug将会自动关联到项目版本中";
 $lang->build->notice->createTest      = "该版本所属执行已删除，不能提交测试";
 
-
 $lang->build->finishStories = " 本次共完成 %s 个{$lang->SRCommon}";
 $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';
 $lang->build->createdBugs   = ' 本次共产生 %s 个Bug';
