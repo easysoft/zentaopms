@@ -39,6 +39,7 @@ $lang->im->aesOptions['off'] = '关闭';
 
 $lang->im->bot->commonName = '阿道';
 
-$lang->im->bot->welcome->title   = '哈喽~我是你的助手阿道';
-$lang->im->bot->upgradeWelcome->title   = '哈喽~我是你的助手阿道';
+$lang->im->bot->welcome->title = '哈喽~我是你的助手阿道';
+
+$lang->im->bot->upgradeWelcome->title = '哈喽~我是你的助手阿道';
 
