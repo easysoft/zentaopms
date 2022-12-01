@@ -1,12 +1,12 @@
 <?php
-class portModel extends model
+class transferModel extends model
 {
-    /*  Port Module configs . */
-    public $portConfig;
+    /* transfer Module configs. */
+    public $transferConfig;
 
-    public $portLang;
+    public $transferLang;
 
-    /* From model configs .*/
+    /* From model configs. */
     public $modelConfig;
 
     public $modelLang;
@@ -32,12 +32,12 @@ class portModel extends model
         parent::__construct();
 
         $this->maxImport  = isset($_COOKIE['maxImport']) ? $_COOKIE['maxImport'] : 0;
-        $this->portConfig = $this->config->port;
-        $this->portLang   = $this->lang->port;
+        $this->transferConfig = $this->config->transfer;
+        $this->transferLang   = $this->lang->transfer;
     }
 
     /**
-     * Commom Actions
+     * Commom Actions.
      *
      * @param  int    $model
      * @access public
@@ -56,16 +56,16 @@ class portModel extends model
     }
 
     /**
-     * Check tmpFile.
+     * Check tmp file.
      *
      * @access public
      * @return void
      */
     public function checkTmpFile()
     {
-        $file      = $this->session->fileImportFileName;
-        $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile   = $tmpPath . DS . md5(basename($file));
+        $file    = $this->session->fileImportFileName;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
 
         if($this->maxImport and file_exists($tmpFile)) return $tmpFile;
         return false;
@@ -109,7 +109,7 @@ class portModel extends model
     }
 
     /**
-     * Check Required fields .
+     * Check Required fields.
      *
      * @param  int    $model
      * @param  int    $line
@@ -125,7 +125,7 @@ class portModel extends model
             foreach($requiredFields as $requiredField)
             {
                 $requiredField = trim($requiredField);
-                if(empty($data[$requiredField])) dao::$errors[] = sprintf($this->lang->port->noRequire, $line, $this->lang->$model->$requiredField);
+                if(empty($data[$requiredField])) dao::$errors[] = sprintf($this->lang->transfer->noRequire, $line, $this->lang->$model->$requiredField);
             }
         }
     }
@@ -177,7 +177,7 @@ class portModel extends model
     }
 
     /**
-     * export
+     * Export module data.
      *
      * @param  string $model
      * @access public
@@ -190,13 +190,13 @@ class portModel extends model
 
         $fields = $this->post->exportFields;
 
-        /* Init config fieldList */
+        /* Init config fieldList. */
         $fieldList = $this->initFieldList($model, $fields);
 
         $rows = $this->getRows($model, $fieldList);
         if($model == 'story')
         {
-            $product = $this->loadModel('product')->getByID((int)$this->session->storyPortParams['productID']);
+            $product = $this->loadModel('product')->getByID((int)$this->session->storyTransferParams['productID']);
             if($product and $product->shadow)
             {
                 foreach($rows as $id => $row)
@@ -209,11 +209,12 @@ class portModel extends model
         $list = $this->setListValue($model, $fieldList);
         if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
 
-        /* Get export rows and fields datas */
+        /* Get export rows and fields datas. */
         $exportDatas = $this->getExportDatas($fieldList, $rows);
 
         $fields = $exportDatas['fields'];
-        $rows   = $exportDatas['rows'];
+        $rows   = !empty($exportDatas['rows']) ? $exportDatas['rows'] : array();
+
         if($this->config->edition != 'open') list($fields, $rows) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $rows, $model);
 
         $this->post->set('rows',   $rows);
@@ -248,7 +249,7 @@ class portModel extends model
     }
 
     /**
-     * Init FieldList .
+     * Init FieldList.
      *
      * @param  int    $model
      * @param  string $fields
@@ -261,8 +262,8 @@ class portModel extends model
         $this->commonActions($model);
         $this->mergeConfig($model);
 
-        $this->portConfig->sysDataList = $this->initSysDataFields();
-        $portFieldList = $this->portConfig->fieldList;
+        $this->transferConfig->sysDataList = $this->initSysDataFields();
+        $transferFieldList = $this->transferConfig->fieldList;
 
         if(empty($fields)) return false;
 
@@ -277,13 +278,13 @@ class portModel extends model
 
             $modelFieldList = isset($this->modelFieldList[$field]) ? $this->modelFieldList[$field] : array();
 
-            foreach($portFieldList as $portField => $value)
+            foreach($transferFieldList as $transferField => $value)
             {
-                $funcName = 'init' . ucfirst($portField);
-                if((!isset($modelFieldList[$portField])) or $portField == 'title')
+                $funcName = 'init' . ucfirst($transferField);
+                if((!isset($modelFieldList[$transferField])) or $transferField == 'title')
                 {
-                    $modelFieldList[$portField] = $this->portConfig->fieldList[$portField];
-                    if(strpos($this->portConfig->initFunction, $portField) !== false) $modelFieldList[$portField] = $this->$funcName($model, $field);
+                    $modelFieldList[$transferField] = $this->transferConfig->fieldList[$transferField];
+                    if(strpos($this->transferConfig->initFunction, $transferField) !== false) $modelFieldList[$transferField] = $this->$funcName($model, $field);
                 }
             }
 
@@ -294,12 +295,12 @@ class portModel extends model
         if(!empty($fieldList['mailto']))
         {
             $fieldList['mailto']['control'] = 'multiple';
-            $fieldList['mailto']['values']  = $this->portConfig->sysDataList['user'];
+            $fieldList['mailto']['values']  = $this->transferConfig->sysDataList['user'];
         }
 
         if($this->config->edition != 'open')
         {
-            /* Set workflow fields .*/
+            /* Set workflow fields. */
             $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
                 ->where('module')->eq($model)
                 ->andWhere('buildin')->eq(0)
@@ -351,16 +352,16 @@ class portModel extends model
         {
             $title = $this->lang->$model->{$field . 'AB'};
         }
-        elseif(isset($this->lang->port->reservedWord[$field]))
+        elseif(isset($this->lang->transfer->reservedWord[$field]))
         {
-            $title = $this->lang->port->reservedWord[$field];
+            $title = $this->lang->transfer->reservedWord[$field];
         }
 
         return $title;
     }
 
     /**
-     * Init Control .
+     * Init Control.
      *
      * @param  int    $model
      * @param  int    $field
@@ -373,12 +374,12 @@ class portModel extends model
         if(isset($this->modelLang->{$field.'List'}))           return 'select';
         if(isset($this->modelFieldList[$field]['dataSource'])) return 'select';
 
-        if(strpos($this->portConfig->sysDataFields, $field) !== false) return 'select';
-        return $this->portConfig->fieldList['control'];
+        if(strpos($this->transferConfig->sysDataFields, $field) !== false) return 'select';
+        return $this->transferConfig->fieldList['control'];
     }
 
     /**
-     * Init Values .
+     * Init Values.
      *
      * @param  int    $model
      * @param  int    $field
@@ -391,7 +392,7 @@ class portModel extends model
     {
         $values = $fieldValue['values'];
 
-        if($values and (strpos($this->portConfig->sysDataFields, $values) !== false)) return $this->portConfig->sysDataList[$values];
+        if($values and (strpos($this->transferConfig->sysDataFields, $values) !== false)) return $this->transferConfig->sysDataList[$values];
 
         if(!$fieldValue['dataSource']) return $values;
 
@@ -408,11 +409,11 @@ class portModel extends model
             $values = $this->getSourceByLang($lang);
         }
 
-        /* If empty values put system datas .*/
+        /* If empty values put system datas. */
         if(empty($values))
         {
             if(strpos($this->modelConfig->sysLangFields, $field) !== false and !empty($this->modelLang->{$field.'List'})) return $this->modelLang->{$field.'List'};
-            if(strpos($this->modelConfig->sysDataFields, $field) !== false and !empty($this->portConfig->sysDataList[$field])) return $this->portConfig->sysDataList[$field];
+            if(strpos($this->modelConfig->sysDataFields, $field) !== false and !empty($this->transferConfig->sysDataList[$field])) return $this->transferConfig->sysDataList[$field];
         }
 
         if(is_array($values) and $withKey)
@@ -457,7 +458,7 @@ class portModel extends model
         $this->commonActions();
         $dataList = array();
 
-        $sysDataFields = explode(',', $this->portConfig->sysDataFields);
+        $sysDataFields = explode(',', $this->transferConfig->sysDataFields);
 
         foreach($sysDataFields as $field)
         {
@@ -486,13 +487,13 @@ class portModel extends model
      */
     public function format($model = '', $filter = '')
     {
-        /* Bulid import paris (field => name) .*/
+        /* Bulid import paris (field => name). */
         $fields  = $this->getImportFields($model);
 
         /* Check tmpfile. */
         $tmpFile = $this->checkTmpFile();
 
-        /* If tmpfile not isset create tmpfile .*/
+        /* If tmpfile not isset create tmpfile. */
         if(!$tmpFile)
         {
             $rows      = $this->getRowsFromExcel();
@@ -506,7 +507,6 @@ class portModel extends model
             $modelData = $this->getDatasByFile($tmpFile);
         }
         if(isset($fields['id'])) unset($fields['id']);
-        $this->session->set($model . 'TemplateFields', array_keys($fields));
         return $modelData;
     }
 
@@ -514,7 +514,7 @@ class portModel extends model
      * Get rows from excel.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getRowsFromExcel()
     {
@@ -532,7 +532,7 @@ class portModel extends model
     }
 
     /**
-     * Get field values by method .
+     * Get field values by method.
      *
      * @param  int    $model
      * @param  int    $module
@@ -544,7 +544,7 @@ class portModel extends model
      */
     public function getSourceByModuleMethod($model, $module, $method, $params = '', $pairs = '')
     {
-        $getParams = $this->session->{$model . 'PortParams'};
+        $getParams = $this->session->{$model . 'TransferParams'};
 
         if($params)
         {
@@ -555,7 +555,7 @@ class portModel extends model
             }
         }
 
-        /* If this method has multiple parameters use call_user_func_array */
+        /* If this method has multiple parameters use call_user_func_array. */
         if(is_array($params))
         {
             $values = call_user_func_array(array($this->loadModel($module), $method), $params);
@@ -586,10 +586,10 @@ class portModel extends model
     }
 
     /**
-     * Get field values by lang .
+     * Get field values by lang.
      *
      * @access public
-     * @return void
+     * @return void|array
      */
     public function getSourceByLang($lang)
     {
@@ -627,6 +627,7 @@ class portModel extends model
         {
             foreach($values as $field => $value)
             {
+                if($fieldList[$field]['from'] == 'workflow') continue;
                 if(in_array($field, $dataSourceList))
                 {
                     if($fieldList[$field]['control'] == 'multiple')
@@ -644,13 +645,13 @@ class portModel extends model
                         $rows[$id]->$field = zget($exportDatas[$field], $value, '');
                     }
                 }
-                elseif(strpos($this->config->port->userFields, $field) !== false)
+                elseif(strpos($this->config->transfer->userFields, $field) !== false)
                 {
                     /* if user deleted when export set userFields is itself. */
                     $rows[$id]->$field = zget($exportDatas['user'], $value, $value);
                 }
 
-                /* if value = 0 or value = 0000:00:00 set value = ''*/
+                /* if value = 0 or value = 0000:00:00 set value = ''. */
                 if(helper::isZeroDate($rows[$id]->$field))
                 {
                     $rows[$id]->$field = '';
@@ -663,7 +664,7 @@ class portModel extends model
     }
 
     /**
-     * Get files by model;
+     * Get files by model.
      *
      * @param  int    $model
      * @param  int    $datas
@@ -806,17 +807,17 @@ class portModel extends model
             }
         }
 
-        /* Deal children datas and multiple tasks .*/
+        /* Deal children datas and multiple tasks. */
         if($modelDatas) $modelDatas = $this->updateChildDatas($modelDatas);
 
-        /* Deal linkStories datas*/
-        if($modelDatas) $modelDatas = $this->updateLinkStories($modelDatas);
+        /* Deal linkStories datas. */
+        if($modelDatas and isset($fieldList['linkStories'])) $modelDatas = $this->updateLinkStories($modelDatas);
 
         return $modelDatas;
     }
 
     /**
-     * Update LinkStories datas
+     * Update LinkStories datas.
      *
      * @param  array $stories
      * @access public
@@ -843,14 +844,29 @@ class portModel extends model
      */
     public function getQueryDatas($model = '')
     {
-        $queryCondition = $this->session->{$model . 'QueryCondition'};
-        $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
+        $queryCondition    = $this->session->{$model . 'QueryCondition'};
+        $onlyCondition     = $this->session->{$model . 'OnlyCondition'};
+        $transferCondition = $this->session->{$model . 'TransferCondition'};
 
         $modelDatas = array();
+
+        if($transferCondition)
+        {
+            $selectKey = 'id';
+            $stmt = $this->dbh->query($transferCondition);
+            while($row = $stmt->fetch())
+            {
+                if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;
+                $modelDatas[$row->id] = $row;
+            }
+
+            return $modelDatas;
+        }
+
         if($onlyCondition and $queryCondition)
         {
             $table = zget($this->config->objectTables, $model);
-            if(isset($this->config->$model->port->table)) $table = $this->config->$model->port->table;
+            if(isset($this->config->$model->transfer->table)) $table = $this->config->$model->transfer->table;
             $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
                 ->where($queryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
@@ -924,8 +940,7 @@ class portModel extends model
             foreach($data as $field => $cellValue)
             {
                 if(empty($cellValue)) continue;
-                if(strpos($this->portConfig->dateFeilds, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
-                //if(strpos($filter, $field) !== false) continue;
+                if(strpos($this->transferConfig->dateFeilds, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
                 if(is_array($cellValue)) continue;
 
                 if(!empty($fieldList[$field]['from']) and in_array($fieldList[$field]['control'], array('select', 'multiple')))
@@ -1067,7 +1082,7 @@ class portModel extends model
     }
 
     /**
-     * Get WorkFlow fields .
+     * Get WorkFlow fields.
      *
      * @param  int    $model
      * @access public
@@ -1111,7 +1126,7 @@ class portModel extends model
             }
         }
 
-        /* Move child data after parent data .*/
+        /* Move child data after parent data. */
         if(!empty($children))
         {
             $position = 0;
@@ -1247,10 +1262,10 @@ class portModel extends model
 
             if($this->post->insert) unset($data['id']);
 
-            /* Check required field*/
+            /* Check required field. */
             $this->checkRequired($model, $key, $data);
 
-            if(!empty($objectID) and in_array($model, $this->config->port->hasChildDataFields))
+            if(!empty($objectID) and in_array($model, $this->config->transfer->hasChildDataFields))
             {
                 $data = $this->processChildData($objectID, $data);
             }
@@ -1262,7 +1277,8 @@ class portModel extends model
             if(dao::isError()) die(js::error(dao::getError()));
 
             if(!empty($subDatas)) $this->saveSubTable($objectID, $subDatas);
-            /* Create action*/
+
+            /* Create action. */
             if($this->post->insert) $this->loadModel('action')->create($model, $objectID, 'Opened', '');
         }
 
@@ -1304,20 +1320,20 @@ class portModel extends model
     public function mergeConfig($model)
     {
         $this->commonActions($model);
-        $portConfig  = $this->portConfig;
+        $transferConfig  = $this->transferConfig;
         $modelConfig = $this->modelConfig;
         if(!isset($modelConfig->export)) $modelConfig->export = new stdClass();
         if(!isset($modelConfig->import)) $modelConfig->export = new stdClass();
 
-        $modelConfig->dateFeilds     = isset($modelConfig->dateFeilds)     ? $modelConfig->dateFeilds     : $portConfig->dateFeilds;
-        $modelConfig->datetimeFeilds = isset($modelConfig->datetimeFeilds) ? $modelConfig->datetimeFeilds : $portConfig->datetimeFeilds;
-        $modelConfig->sysLangFields  = isset($modelConfig->sysLangFields)  ? $modelConfig->sysLangFields  : $portConfig->sysLangFields;
-        $modelConfig->sysDataFields  = isset($modelConfig->sysDataFields)  ? $modelConfig->sysDataFields  : $portConfig->sysDataFields;
-        $modelConfig->listFields     = isset($modelConfig->listFields)     ? $modelConfig->listFields     : $portConfig->listFields;
+        $modelConfig->dateFeilds     = isset($modelConfig->dateFeilds)     ? $modelConfig->dateFeilds     : $transferConfig->dateFeilds;
+        $modelConfig->datetimeFeilds = isset($modelConfig->datetimeFeilds) ? $modelConfig->datetimeFeilds : $transferConfig->datetimeFeilds;
+        $modelConfig->sysLangFields  = isset($modelConfig->sysLangFields)  ? $modelConfig->sysLangFields  : $transferConfig->sysLangFields;
+        $modelConfig->sysDataFields  = isset($modelConfig->sysDataFields)  ? $modelConfig->sysDataFields  : $transferConfig->sysDataFields;
+        $modelConfig->listFields     = isset($modelConfig->listFields)     ? $modelConfig->listFields     : $transferConfig->listFields;
     }
 
     /**
-     * Read excel and format data .
+     * Read excel and format data.
      *
      * @param  string $model
      * @param  int    $pagerID
@@ -1331,9 +1347,10 @@ class portModel extends model
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time','100');
 
-        /* Formatting excel data .*/
+        /* Formatting excel data. */
         $formatDatas  = $this->format($model, $filter);
-        /* Get page by datas.*/
+
+        /* Get page by datas. */
         $datas        = $this->getPageDatas($formatDatas, $pagerID);
 
         $suhosinInfo  = $this->checkSuhosinInfo($datas->datas);
@@ -1369,9 +1386,9 @@ class portModel extends model
         $html  = '';
         $key   = key($list);
         $addID = 1;
-        if($model == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskPortParams['executionID'], 'execution');
+        if($model == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskTransferParams['executionID'], 'execution');
 
-        $showImportCount = $this->config->port->lazyLoading ? $this->config->port->showImportCount : $this->maxImport;
+        $showImportCount = $this->config->transfer->lazyLoading ? $this->config->transfer->showImportCount : $this->maxImport;
         $lastRow         = $lastID + $key + $showImportCount;
 
         foreach($list as $row => $object)
@@ -1391,7 +1408,7 @@ class portModel extends model
             }
             else
             {
-                $sub = " <sub style='vertical-align:sub;color:gray'>{$this->lang->port->new}</sub>";
+                $sub = " <sub style='vertical-align:sub;color:gray'>{$this->lang->transfer->new}</sub>";
                 if($model == 'task') $sub = (strpos($object->name, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$this->lang->task->children}</sub>" : $sub;
                 $html .= $addID++ . $sub;
             }
@@ -1405,7 +1422,7 @@ class portModel extends model
                 $selected = isset($object->$field) ? $object->$field : '';
                 if($model)
                 {
-                    if($control == 'hidden' and isset($this->session->{$model.'PortParams'}[$field. 'ID'])) $selected = $this->session->{$model . 'PortParams'}[$field. 'ID'];
+                    if($control == 'hidden' and isset($this->session->{$model.'TransferParams'}[$field. 'ID'])) $selected = $this->session->{$model . 'TransferParams'}[$field. 'ID'];
                 }
 
                 $options = array();
@@ -1467,7 +1484,7 @@ class portModel extends model
     }
 
     /**
-     * Process stepExpect and stepDesc for testcase .
+     * Process stepExpect and stepDesc for testcase.
      *
      * @param  int    $field
      * @param  int    $datas

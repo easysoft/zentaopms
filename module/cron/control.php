@@ -186,7 +186,7 @@ class cron extends control
                 /* Skip cron that status is running and run time is less than max. */
                 if($cronInfo->status == 'running' and (time() - strtotime($cronInfo->lastTime)) < $this->config->cron->maxRunTime) continue;
                 /* Skip cron that last time is more than this cron time. */
-                if ('cli' === PHP_SAPI)
+                if('cli' === PHP_SAPI)
                 {
                     if($cronInfo->lastTime >= $cron['time']->format(DT_DATETIME1)) continue;
                 }
@@ -197,10 +197,7 @@ class cron extends control
 
                 if($now > $cron['time'])
                 {
-                    if (!$this->cron->changeStatusRunning($id, $cronInfo->lastTime))
-                    {
-                        continue;
-                    }
+                    if(!$this->cron->changeStatusRunning($id, $cronInfo->lastTime)) continue;
                     $parsedCrons[$id]['time'] = $cron['cron']->getNextRunDate();
 
                     /* Execution command. */
@@ -259,5 +256,4 @@ class cron extends control
         /* Revert cron status to stop. */
         $this->cron->markCronStatus('stop', $configID);
     }
-
 }

@@ -207,6 +207,7 @@ $lang->action->desc->estimated            = '$date, by <strong>$actor</strong> e
 $lang->action->desc->run                  = '$date, by <strong>$actor</strong> executed.' . "\n";
 $lang->action->desc->syncprogram          = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
 $lang->action->desc->syncproject          = '$date, starting the execution sets the project status as Ongoing.' . "\n";
+$lang->action->desc->syncmultipleproject  = '$date, starting the task sets the project status as Ongoing.' . "\n";
 $lang->action->desc->syncexecution        = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->syncexecutionbychild = '$date, starting the sub stage sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->importfromgitlab     = '$date, Issue associate created from gitlab by <strong>$actor</strong>.' . "\n";
@@ -232,6 +233,7 @@ $lang->action->desc->reboot               = '$date, the execution node is reboot
 $lang->action->desc->destroy              = '$date, the execution node is destroyed by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
 $lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the sprints of the project from the $extra.' . "\n";
+$lang->action->desc->getvnc               = '$date, Remote control <strong>$extra</strong> by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -930,3 +932,5 @@ $lang->action->desc->deletemr                     = '$date, <strong>$actor</stro
 $lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged <a href="$extra">code</a>.';
 $lang->action->desc->approve                      = '$date, <strong>$actor</strong> approved.';
 $lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
+$lang->action->desc->linkedrepo                   = '$date, <strong>$actor</strong> linked repo $extra';
+$lang->action->desc->unlinkedrepo                 = '$date, <strong>$actor</strong> unlinked repo $extra';

@@ -751,6 +751,51 @@ class blockModel extends model
     }
 
     /**
+     * Get scrum issue params.
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getScrumIssueParams($module = '')
+    {
+        $this->app->loadLang('issue');
+
+        $params = $this->appendCountParams();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum risk params.
+     *
+     * @param  string $module▫
+     * @access public
+     * @return void
+     */
+    public function getScrumRiskParams($module = '')
+    {
+        $this->app->loadLang('risk');
+        $params = $this->appendCountParams();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->risk->featureBar['browse'];
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /**
      * Get execution params.
      *
      * @access public

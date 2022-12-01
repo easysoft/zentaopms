@@ -62,6 +62,7 @@ class task extends control
 
         $task = new stdClass();
         $task->module     = $moduleID;
+        $task->mode       = '';
         $task->assignedTo = '';
         $task->name       = '';
         $task->story      = $storyID;

@@ -5,6 +5,18 @@ $(function()
         const hasProduct = $('[name=hasProduct]:checked').val();
 
         $('#productTitle, #linkPlan').closest('tr').toggle(hasProduct == 1);
+
+        if(hasProduct == 0) $('.division').addClass('hide');
+
+        if(hasProduct == 1)
+        {
+            var chosenProducts = 0;
+            $("#productsBox select[name^='products']").each(function()
+            {
+                if($(this).val() > 0) chosenProducts ++;
+            });
+            if(chosenProducts > 1) $('.division').removeClass('hide');
+        }
     });
 
     $('[name=hasProduct]').change();
@@ -146,7 +158,9 @@ function setParentProgram(parentProgram)
         selectedParent     = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
         lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
 
-        if(selectedParent != lastSelectedParent)
+        var hasProduct = $('[name=hasProduct]:checked').val();
+
+        if((selectedParent != lastSelectedParent) && hasProduct == 1)
         {
             $('#budget').val('');
 
@@ -163,6 +177,7 @@ function setParentProgram(parentProgram)
                 $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch).attr('data-plan', selectedPlan);
                 $(this).find('[name^=products]').val(selectedProduct).chosen().change();
             });
+            $('#productsBox .row .col-sm-4:last').find('.input-group').append($('#productsBox .addProduct .input-group:first .input-group-addon').prop('outerHTML'));
         }
 
         if(parentProgram != 0)
@@ -221,6 +236,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
         $('#plansBox').closest('tr').addClass('hidden');
         $('#plansBox .col-sm-4').find('select').attr('disabled', true).trigger("chosen:updated");
+        $('.division').addClass('hide');
 
         /* Displays the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', true);
@@ -235,6 +251,7 @@ function addNewProduct(obj)
         $('#productsBox .row .col-sm-4 .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
         $('#plansBox').closest('tr').removeClass('hidden');
         $('#plansBox .col-sm-4').find('select').removeAttr('disabled', true).trigger("chosen:updated");
+        if($('#plansBox .col-sm-4').find('select').length > 1) $('.division').removeClass('hide');
 
         /* Hide the input box for creating a product. */
         $("[name^='newProduct']").prop('checked', false);
@@ -277,9 +294,12 @@ function loadBranches(product)
     /* When selecting a product, delete a plan that is empty by default. */
     $("#planDefault").remove();
 
+    var chosenProducts = [];
     $("#productsBox select[name^='products']").each(function()
     {
-        var $product = $(product);
+        var $product  = $(product);
+        var productID = $(this).val();
+        if(productID > 0 && chosenProducts.indexOf(productID) == -1) chosenProducts.push(productID);
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
             bootbox.alert(errorSameProducts);
@@ -288,6 +308,8 @@ function loadBranches(product)
             return false;
         }
     });
+
+    (chosenProducts.length > 1 && model == 'waterfall') ? $('.division').removeClass('hide') : $('.division').addClass('hide');
 
     if($('#productsBox .row .input-group:last select:first').val() != 0)
     {

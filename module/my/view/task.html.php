@@ -104,15 +104,16 @@
             <td class='c-name <?php if(!empty($task->children)) echo 'has-child';?>' title='<?php echo $task->name?>'>
               <?php if(!empty($task->team)) echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
               <?php
+              $tab = empty($task->executionMultiple) ? 'project' : 'execution';
               if($task->parent > 0)
               {
-                  echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ' . html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->parentName . ' / '. $task->name, '', "title='{$task->parentName} / {$task->name}'");
+                  echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ' . html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->parentName . ' / '. $task->name, '', "title='{$task->parentName} / {$task->name}' data-app='$tab'");
               }
               else
               {
                   $onlybody = $task->executionType == 'kanban' ?  true : '';
                   $class    = $task->executionType == 'kanban' ? 'iframe' : '';
-                  echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "class='$class' data-width='80%' style='color: $task->color'");
+                  echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "class='$class' data-width='80%' style='color: $task->color' data-app='$tab'");
               }
               ?>
               <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-right"></i></a>';?>
@@ -189,8 +190,9 @@
                 <?php printf('%03d', $child->id);?>
               </td>
               <td class='c-name' title='<?php echo $child->name?>'>
+                <?php $tab = empty($child->executionMultiple) ? 'project' : 'execution';?>
                 <?php if($child->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
-                <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color'");?>
+                <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color' data-app='$tab'");?>
               </td>
               <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->task->priList, $child->pri);?>'><?php echo zget($lang->task->priList, $child->pri);?></span></td>
               <td class='c-status'>

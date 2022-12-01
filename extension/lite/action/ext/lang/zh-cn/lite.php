@@ -1,6 +1,7 @@
 <?php
 $lang->action->label->execution = "看板|execution|task|executionID=%s";
 $lang->action->label->task      = '任务|task|view|taskID=%s';
+$lang->action->label->module    = '目录|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 
 /* Object type. */
 $lang->action->objectTypes['execution'] = '项目' . $lang->executionCommon;

@@ -10,6 +10,8 @@
 ?>
 <?php
 include '../../common/view/header.lite.html.php';
+js::set('objectType', $objectType);
+js::set('objectID', $object->id);
 ?>
 <div class="main-col linkContent main">
   <div class="content pane">
@@ -17,22 +19,68 @@ include '../../common/view/header.lite.html.php';
       <div class="left-content col-md-8">
         <table class="menu-title">
           <?php if($objectType == 'story'):?>
-          <tr><th class='text-left'><?php echo $lang->release->storyTitle;?>: </th><td class="text"><?php echo $object->title; ?></td></tr>
-          <tr><th class='text-left'><?php echo $lang->story->legendSpec;?>: </th><td class="text"><div class="detail-content article-content"><?php echo $object->spec; ?></div></td></tr>
-          <tr><th class='text-left'><?php echo $lang->story->verify;?>: </th><td class="text"><div class="detail-content article-content"><?php echo $object->verify; ?></div></td></tr>
+          <tr>
+            <td class="text">
+              <!-- <span class="detail-title"><?php echo $lang->story->title;?></span> -->
+              <strong class='text-primary'><?php echo $object->title;?></strong>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="text">
+              <div class="spec-content detail-content article-content">
+                <!-- <span class="strong detail-title"><?php echo $lang->story->spec;?></span> -->
+                <?php echo $object->spec; ?>
+              </div>
+            </td>
+            <td class="text right-content">
+              <div class="detail-content article-content">
+                <!-- <span class="strong detail-title"><?php echo $lang->story->verify;?></span> -->
+                <?php echo $object->verify; ?>
+              </div>
+            </td>
+          </tr>
           <?php elseif($objectType == 'task'):?>
-          <tr><th class='text-left'><?php echo $lang->task->name;?>: </th><td class="text"><?php echo $object->name; ?></td></tr>
-          <tr><th class='text-left'><?php echo $lang->task->desc;?>: </th><td class="text"><div class="detail-content article-content"><?php echo $object->desc; ?></div></td></tr>
-          <tr><th class='text-left'><?php echo $lang->task->story;?>: </th><td class="text"><div class="detail-content article-content"><?php echo $object->storyTitle; ?></div></td></tr>
+          <tr>
+            <td class="text">
+              <!-- <span class="detail-title"><?php echo $lang->task->name;?></span> -->
+              <strong class='text-primary'><?php echo $object->name;?></strong>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="text">
+              <div class="spec-content detail-content article-content">
+                <!-- <div class="strong detail-title"><?php echo $lang->task->desc;?></div> -->
+                <?php echo $object->desc; ?>
+              </div>
+            </td>
+            <td class="text right-content">
+              <div class="detail-content article-content">
+                <!-- <div class="strong detail-title"><?php echo $lang->task->story;?></div> -->
+                <?php echo $object->storyTitle; ?>
+              </div>
+            </td>
+          </tr>
           <?php elseif($objectType == 'bug'):?>
-          <tr><th class='text-left'><?php echo $lang->bug->title;?>: </th><td class="text"><?php echo $object->title; ?></td></tr>
-          <tr><th class='text-left'><?php echo $lang->bug->type;?>: </th><td class="text"><?php echo zget($lang->bug->typeList, $object->type); ?></td></tr>
-          <tr><th class='text-left'><?php echo $lang->bug->steps;?>: </th><td class="text"><div class="detail-content article-content"><?php echo $object->steps; ?></div></td></tr>
+          <tr>
+            <td class="text">
+              <!-- <span class="detail-title"><?php echo $lang->bug->title;?></span> -->
+              <strong class='text-primary' data-id='<?php echo $object->id;?>'><?php echo $object->title;?></strong>
+            </td>
+          </tr>
+          <?php if($object->steps):?>
+          <tr>
+            <td class="text">
+              <div class="spec-content detail-content article-content">
+                <!-- <span class="strong detail-title"><?php echo $lang->bug->steps;?></span> -->
+                <?php echo $object->steps; ?>
+              </div>
+            </td>
+          </tr>
+          <?php endif;?>
           <?php endif;?>
         </table>
-      </div>
-      <div class="main-col right-content col-md-4">
-        <?php include '../../common/view/action.html.php';?>
       </div>
     </div>
   </div>
@@ -47,5 +95,12 @@ $(function()
         $(this).replaceWith(content);
     })
     $('blockquote a').empty();
+
+    $('.linkContent strong.text-primary').on('click',function()
+    {
+        var link = createLink(objectType, 'view', objectType + 'ID=' + objectID);
+        var app = objectType == 'bug' ? 'qa' : (objectType == 'task' ? 'execution' : 'product');
+        parent.parent.$.apps.open(link, app);
+    });
 });
 </script>

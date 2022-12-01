@@ -82,6 +82,7 @@ foreach($executions as $projectID => $projectExecutions)
         $isKanbanMethod = ((in_array($method, $config->execution->kanbanMethod) and $module == 'execution') or (strpos(',create,edit,', ",$method,") !== false and $module == 'build'));
         if(isset($execution->type) and $execution->type == 'kanban' and !$isKanbanMethod) $executionLink = $kanbanLink;
         if(isset($execution->type) and $execution->type != 'kanban' and strpos(',kanban,cfd,', ",$method,") !== false) $executionLink = $taskLink;
+        if(isset($execution->type) and $execution->type == 'stage' and in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'meeting'))) $executionLink = $taskLink;
 
         if($execution->id == $executionID) $currentExecution = $execution;
         $selected = $execution->id == $executionID ? 'selected' : '';
@@ -186,7 +187,7 @@ $closedExecutionsHtml .= '</ul>';
 <script>
 $(function()
 {
-    <?php if($currentExecution->status == 'done' or $currentExecution->status == 'closed'):?>
+    <?php if($currentExecution and ($currentExecution->status == 'done' or $currentExecution->status == 'closed')):?>
     $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
     <?php else:?>
     scrollToSelected();

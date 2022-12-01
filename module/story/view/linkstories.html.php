@@ -16,7 +16,7 @@
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $story->id;?></span>
-      <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '_blank', "title='$story->title'");?>
+      <?php echo $story->title;?>
       <?php $title = $story->type == 'story' ? $lang->story->linkStoriesAB : $lang->story->linkRequirementsAB?>
       <small class='text-muted'> <?php echo $lang->arrow . $title;?></small>
     </h2>
@@ -90,9 +90,9 @@ $(function()
         var output = '';
         $('#linkStoriesForm').find('tr.checked').each(function(){
             var storyID        = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
-            var storyTitle     = "#" + storyID + ' ' + $(this).find('td').eq(3).attr('title');
+            var storyTitle     = "#" + storyID + ' ' + $(this).find('td').eq(2).attr('title');
             var linkStoryField = storyType == 'story' ? 'linkStories' : 'linkRequirements';
-            var checkbox       = "<li><div class='checkbox-primary' title='" + $(this).find('td').eq(3).attr('title') + "'><input type='checkbox' checked='checked' name='" + linkStoryField + "[]' " + "value=" + storyID + " /><label class='linkStoryTitle'>" + storyTitle + "</label></div></li>";
+            var checkbox       = "<li><div class='checkbox-primary' title='" + $(this).find('td').eq(2).attr('title') + "'><input type='checkbox' checked='checked' name='" + linkStoryField + "[]' " + "value=" + storyID + " /><label class='linkStoryTitle'>" + storyTitle + "</label></div></li>";
 
             output += checkbox;
         });

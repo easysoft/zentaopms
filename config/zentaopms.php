@@ -256,6 +256,8 @@ define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 define('TABLE_ZAHOST',        '`' . $config->db->prefix . 'host`');
 define('TABLE_IMAGE',         '`' . $config->db->prefix . 'image`');
 
+if(!defined('TABLE_ASSET'))  define('TABLE_ASSET', '`' . $config->db->prefix . 'asset`');
+
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
 define('TABLE_EXPECT',        '`' . $config->db->prefix . 'expect`');
@@ -406,7 +408,7 @@ $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqu
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint  = array('task', 'story', 'tree', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder');
+$config->programPriv->noSprint  = array('task', 'story', 'tree', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'requirement');
 $config->programPriv->scrum     = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
 $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('task', 'workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 
@@ -418,8 +420,8 @@ $config->maxPriValue  = '256';
 $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
 
 $config->featureGroup = new stdclass();
-$config->featureGroup->product   = array('roadmap', 'track', 'URStory');
+$config->featureGroup->product   = array('roadmap', 'track', 'UR');
 $config->featureGroup->scrum     = array();
-$config->featureGroup->waterfall = array('track');
+$config->featureGroup->waterfall = array();
 $config->featureGroup->assetlib  = array();
 $config->featureGroup->other     = array('devops', 'kanban');

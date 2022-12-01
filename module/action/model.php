@@ -325,29 +325,30 @@ class actionModel extends model
      */
     public function getList($objectType, $objectID)
     {
-        $modules   = $objectType == 'module' ? $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($objectID)->fetchPairs('id') : array();
+        $objectID  = is_array($objectID) ? $objectID : (int)$objectID;
+        $modules   = $objectType == 'module' ? $this->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
             ->where("objectType IN('project', 'testtask', 'build')")
-            ->andWhere('project')->eq((int)$objectID)
+            ->andWhere('project')->in($objectID)
             ->fi()
             ->beginIF($objectType == 'story')
             ->where('objectType')->in('story,requirement')
-            ->andWhere('objectID')->eq((int)$objectID)
+            ->andWhere('objectID')->in($objectID)
             ->fi()
             ->beginIF($objectType == 'case')
             ->where('objectType')->in('case,testcase')
-            ->andWhere('objectID')->eq((int)$objectID)
+            ->andWhere('objectID')->in($objectID)
             ->fi()
             ->beginIF($objectType == 'module')
             ->where('objectType')->eq($objectType)
-            ->andWhere('((action')->ne('deleted')->andWhere('objectID')->eq((int)$objectID)->markRight(1)
+            ->andWhere('((action')->ne('deleted')->andWhere('objectID')->in($objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
             ->beginIF(strpos('project,case,story,module', $objectType) === false)
             ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq((int)$objectID)
+            ->andWhere('objectID')->in($objectID)
             ->fi()
             ->orderBy('date, id')
             ->fetchAll('id');
@@ -386,7 +387,7 @@ class actionModel extends model
 
                     $name   = $execution->name;
                     $method = $execution->type == 'kanban' ? 'kanban' : 'view';
-                    $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name);
+                    $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name, '', "data-app='execution'");
                 }
             }
             elseif($actionName == 'linked2project')
@@ -1660,6 +1661,7 @@ class actionModel extends model
 
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) and !empty($project) and empty($project->multiple)) $action->objectLink .= '#app=project';
+        if($this->config->vision == 'lite' and $action->objectType == 'module') $action->objectLink .= '#app=project';
 
         return $action;
     }

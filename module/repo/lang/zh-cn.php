@@ -28,7 +28,7 @@ $lang->repo->branch          = '分支';
 $lang->repo->tag             = '标签';
 $lang->repo->addWebHook      = '添加Webhook';
 $lang->repo->apiGetRepoByUrl = '接口：通过URL获取代码库';
-$lang->repo->blamTmpl        = '%time 由 %name 提交 %version %comment';
+$lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息，<span class="tip-circular"></span> %name 于 %time 提交 %version %comment';
 $lang->repo->notRelated      = '暂时没有关联禅道对象';
 
 $lang->repo->browseAction    = '浏览代码库';
@@ -50,6 +50,7 @@ $lang->repo->unlinkedTasks   = '未关联任务';
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
 $lang->repo->addComment = '添加评论';
+$lang->repo->addIssue   = '提问题';
 
 $lang->repo->copy     = '点击复制';
 $lang->repo->copied   = '复制成功';
@@ -113,6 +114,7 @@ $lang->repo->linkStory          = '关联' . $lang->SRCommon;
 $lang->repo->linkBug            = '关联Bug';
 $lang->repo->linkTask           = '关联任务';
 $lang->repo->unlink             = '取消关联';
+$lang->repo->viewBugs           = '查看Bug';
 
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';
@@ -173,7 +175,7 @@ $lang->repo->notice->syncComplete   = '同步完成，正在跳转...';
 $lang->repo->notice->syncedCount    = '已经同步记录条数';
 $lang->repo->notice->delete         = '是否要删除该代码库？';
 $lang->repo->notice->successDelete  = '已经成功删除代码库。';
-$lang->repo->notice->commentContent = '输入回复内容';
+$lang->repo->notice->commentContent = '输入评论内容';
 $lang->repo->notice->deleteReview   = '确认删除该评审？';
 $lang->repo->notice->deleteBug      = '确认删除该Bug？';
 $lang->repo->notice->deleteComment  = '确认删除该回复？';

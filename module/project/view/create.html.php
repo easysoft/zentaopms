@@ -196,6 +196,15 @@
             </div>
           </td>
         </tr>
+        <?php if($model == 'waterfall'):?>
+        <tr class='hide division'>
+          <th><?php echo $lang->project->division;?></th>
+          <td>
+            <?php echo html::radio('division', $lang->project->divisionList, '0');?>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->divisionTips;?>"></icon>
+          </td>
+        </tr>
+        <?php endif;?>
         <?php if($model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>

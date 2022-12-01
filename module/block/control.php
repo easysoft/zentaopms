@@ -253,6 +253,10 @@ class block extends control
         $shortBlocks = $longBlocks = array();
         foreach($blocks as $key => $block)
         {
+            if($block->block == 'waterfallrisk'  and !helper::hasFeature('waterfall_risk'))  continue;
+            if($block->block == 'waterfallissue' and !helper::hasFeature('waterfall_issue')) continue;
+            if($block->block == 'scrumrisk'      and !helper::hasFeature('scrum_risk'))      continue;
+            if($block->block == 'scrumissue'     and !helper::hasFeature('scrum_issue'))     continue;
             if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
             {
                 unset($blocks[$key]);
@@ -1428,6 +1432,35 @@ class block extends control
         $this->view->stories  = $stories;
         $this->view->bugs     = $bugs;
         $this->view->releases = $releases;
+    }
+
+    /**
+     * Print scrum issue block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumIssueBlock()
+    {
+        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
+        $this->session->set('issueList', $uri, 'project');
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+    }
+
+    /**
+     * Print scrum risk block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumRiskBlock()
+    {
+        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
+        $this->session->set('riskList', $uri, 'project');
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
 
     /**

@@ -4,9 +4,10 @@ body {background-color: #fff; padding-bottom: 20px;}
 .left-content {padding-left: 0px;}
 .left-content tr {line-height: 30px;}
 .left-content th {padding-top: 4px;}
-.right-content .detail-title {padding-bottom: 15px;}
-.right-content {border-left: 1px solid #EDEEF2; padding-top: 15px;}
-.text {width: 90%; white-space: normal; word-wrap: break-word; word-break: break-all; font-weight: normal; padding-left: 10px;}
+.right-content {border-left: 1px solid #EDEEF2;}
+.right-content .detail-content {margin-left: 15px;}
+.text {width: 55%; white-space: normal; word-wrap: break-word; word-break: break-all; padding-left: 10px; vertical-align: top;}
 .cell {min-height: 300px;}
 .menu-title {width: 100%;}
-.detail-content {margin-top: 0;}
+.article-content {margin-top: 0;}
+.spec-content {padding-right: 20px;}

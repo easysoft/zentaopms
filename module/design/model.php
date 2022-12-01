@@ -240,11 +240,12 @@ class designModel extends model
      */
     public function getByID($designID = 0)
     {
+        $this->app->loadLang('product');
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
         if(!$design) return false;
 
         $design->files       = $this->loadModel('file')->getByObject('design', $designID);
-        $design->productName = $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name');
+        $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
 
 
         $design->commit = '';
@@ -317,7 +318,7 @@ class designModel extends model
                 ->where('deleted')->eq(0)
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
-                ->andWhere('product')->eq($productID)
+                ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -376,11 +377,11 @@ class designModel extends model
 
         $designQuery = $this->session->designQuery;
 
-        $designs =  $this->dao->select('*')->from(TABLE_DESIGN)
+        $designs = $this->dao->select('*')->from(TABLE_DESIGN)
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
             ->andWhere('project')->eq($projectID)
-            ->andWhere('product')->eq($productID)
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -426,7 +427,16 @@ class designModel extends model
 
         if(empty($products) || !$productID) return '';
 
-        setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        if($productID)
+        {
+            $currentProduct = $this->loadModel('product')->getById($productID);
+            setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        }
+        else
+        {
+            $currentProduct = new stdclass();
+            $currentProduct->name = $this->lang->product->all;
+        }
 
         $currentProduct = $this->loadModel('product')->getById($productID);
         if(!empty($currentProduct->shadow)) return '';

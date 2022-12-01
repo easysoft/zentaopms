@@ -145,7 +145,6 @@ class extension extends control
         $this->view->upgrade     = $upgrade;
         $this->view->title       = $installTitle . $extension;
 
-
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
@@ -186,7 +185,7 @@ class extension extends control
         $incompatible = $condition->zentao['incompatible'];
         if($this->extension->checkVersion($incompatible))
         {
-            $this->view->error = sprintf($this->lang->extension->errorIncompatible);
+            $this->view->error = $this->lang->extension->errorIncompatible;
             return $this->display();
         }
 
@@ -220,7 +219,7 @@ class extension extends control
                 $noDepends = false;
                 if(isset($installedExts[$code]))
                 {
-                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit, 'noBetween'))$noDepends = true;
+                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit, 'noBetween')) $noDepends = true;
                 }
                 else
                 {
@@ -235,7 +234,7 @@ class extension extends control
                     if(!empty($limit['max'])) $extVersion .= ' <=v' . $limit['max'];
                     $extVersion .=')';
                 }
-                if($noDepends)$dependsExt .= $code . $extVersion . ' ' . html::a(inlink('obtain', 'type=bycode&param=' . helper::safe64Encode($code)), $this->lang->extension->installExt, '_blank') . '<br />';
+                if($noDepends) $dependsExt .= $code . $extVersion . ' ' . html::a(inlink('obtain', 'type=bycode&param=' . helper::safe64Encode($code)), $this->lang->extension->installExt, '_blank') . '<br />';
             }
 
             if($noDepends)

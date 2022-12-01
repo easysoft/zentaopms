@@ -154,7 +154,7 @@ class devModel extends model
         foreach($methods as $method)
         {
             if($method->class == 'baseControl' or $method->class == 'control' or $method->name == '__construct') continue;
-            $api = array('name' => $method->name, 'post' => false, 'param' => array());
+            $api = array('name' => $method->name, 'post' => false, 'param' => array(), 'desc' => '');
             $methodReflect = new ReflectionMethod($module, $method->name);
             foreach($methodReflect->getParameters() as $key => $param)
             {

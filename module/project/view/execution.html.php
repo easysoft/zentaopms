@@ -1,5 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('projectID', $projectID);?>
+<?php js::set('project', $project);?>
 <?php js::set('edit', $lang->edit);?>
 <?php js::set('selectAll', $lang->selectAll);?>
 <?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
@@ -14,7 +15,7 @@
 <?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php if($project->hasProduct):?>
+    <?php if($project->division and $project->hasProduct):?>
     <div class='btn-group'>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
@@ -42,6 +43,12 @@
     <?php if(common::hasPriv('execution', 'task')) echo html::checkbox('showTask', array('1' => $lang->programplan->stageCustom->task), '', $this->cookie->showTask ? 'checked=checked' : '');?>
   </div>
   <div class='btn-toolbar pull-right'>
+    <?php if($project->model == 'waterfall' and $this->config->edition == 'max'):?>
+    <div class="btn-group">
+      <?php echo html::a('', "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->project->bylist}'");?>
+      <?php echo html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"), "<i class='icon-gantt-alt'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->programplan->gantt}'");?>
+    </div>
+    <?php endif;?>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
      <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
      <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
@@ -81,21 +88,24 @@
               <?php endif;?>
             </div>
           </th>
+          <?php if($project->division and $project->hasProduct) echo "<th class='text-left w-100px'>{$lang->project->product}</th>";?>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
-          <th class='c-user'><?php echo $lang->execution->owner;?></th>
+          <th class='w-50px'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
           <th class='c-date'><?php echo $lang->programplan->end;?></th>
-          <th class='c-hours text-right'><?php echo $lang->task->estimateAB;?></th>
-          <th class='c-hours text-right'><?php echo $lang->task->consumedAB;?></th>
-          <th class='c-hours text-right'><?php echo $lang->task->leftAB;?> </th>
-          <th class='c-hours'><?php echo $lang->project->progress;?></th>
+          <th class='w-50px text-right'><?php echo $lang->task->estimateAB;?></th>
+          <th class='w-50px text-right'><?php echo $lang->task->consumedAB;?></th>
+          <th class='w-50px text-right'><?php echo $lang->task->leftAB;?> </th>
+          <th class='w-50px'><?php echo $lang->project->progress;?></th>
           <th class='c-progress'><?php echo $lang->execution->burn;?> </th>
           <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody id="executionTableList">
         <?php foreach($executionStats as $execution):?>
-        <?php $this->execution->printNestedList($execution, false, $users, $productID);?>
+        <?php $execution->division = $project->division;?>
+        <?php $executionProductID = (empty($productID) and !empty($execution->product)) ? $execution->product : $productID;?>
+        <?php $this->execution->printNestedList($execution, false, $users, $executionProductID);?>
         <?php endforeach;?>
       </tbody>
     </table>

@@ -400,15 +400,16 @@ class tree extends control
         $this->view->branch = $branch;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 
-        $showProduct             = strpos('story|bug|case', $type) !== false ? true : false;
-        $this->view->showProduct = $showProduct;
+        $showProduct = strpos('story|bug|case', $type) !== false ? true : false;
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
             if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'withClosed');
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
+            if($product->shadow) $showProduct = false;
         }
+        $this->view->showProduct = $showProduct;
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $childs = $this->tree->getAllChildId($moduleID);

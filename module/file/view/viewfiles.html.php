@@ -157,7 +157,7 @@ function setFileName(fileID)
           if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
           {
               $imageSize  = $this->file->getImageSize($file);
-              $imageWidth = $imageSize ? $imageSize[0] : 0;
+              $imageWidth = $imageSize[0];
           }
 
           $fileSize = 0;

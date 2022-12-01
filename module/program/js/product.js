@@ -29,11 +29,6 @@ $(function()
     {
         if($.cookie('showProductBatchEdit') == 1) updateStatistic();
     });
-
-    $('#productListForm .table').on('click', '.sortable tr', function(e)
-    {
-        if($.cookie('showProductBatchEdit') != 1) e.stopPropagation();
-    });
 });
 
 
@@ -58,6 +53,7 @@ function setCheckbox()
         $('.table-actions').hide();
         $('#productListForm .product-id').removeClass('hidden');
     }
+    updateStatistic();
 }
 
 /**

@@ -54,6 +54,14 @@ class db
     public $dao;
 
     /**
+     * DB Config root.
+     *
+     * @var string
+     * @access public
+     */
+    public $dbConfigRoot;
+
+    /**
      * __construct function load app config dao.
      *
      * @access public
@@ -67,6 +75,8 @@ class db
         $this->dao       = $dao;
         $this->dbLogFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test/tmp/dblog.php';
         $this->sqlFile   = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test/tmp/raw.sql';
+
+        $this->dbConfigRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test/config/database/';
     }
 
     /**
@@ -145,7 +155,7 @@ class db
         {
             $this->dao->query('DROP DATABASE IF EXISTS ' . $this->config->test->dbPrefix . $i);
             $this->dao->query('CREATE DATABASE ' . $this->config->test->dbPrefix . $i);
-            if($this->config->db->host = 'localhost' and $this->config->db->port = '3306')
+            if($this->config->db->host == 'localhost' and $this->config->db->port == '3306')
             {
                 shell_exec("mysql -u {$this->config->db->user} -p{$this->config->db->password} {$this->config->test->dbPrefix}{$i} < {$this->sqlFile}");
             }
@@ -155,4 +165,23 @@ class db
             }
         }
     }
-}
+
+    /**
+     * replace DB Config file.
+     *
+     * @param  string    $newDBfile(禅道项目config目录下的安装配置文件)
+     * @access public
+     * @return mixed
+     */
+    function replaceDBConfig($newDBfile)
+    {
+        $replacedDBFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'config/my.php';
+        shell_exec("sed -i '/db->name/d ; /db->host/d ; /db->port/d ; /db->user/d ; /db->password/d' {$replacedDBFile}");
+
+        $newDBCF = file($this->dbConfigRoot . $newDBfile);
+        foreach($newDBCF as $newDB)
+        {
+            file_put_contents($replacedDBFile, $newDB, FILE_APPEND);
+        }
+    }
+ }

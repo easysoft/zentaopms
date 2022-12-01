@@ -1,12 +1,12 @@
 $(document).on('click', '.ajaxPager', function()
-{   
+{
     $('#logBox').load($(this).attr('href'));
     return false;
 })
 $('#product').change(function()
 {
     productID = $(this).val();
-    var link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=all&moduleID=0&storyID=0&onlyOption=false&status=active');
+    var link = createLink('design', 'ajaxGetProductStories', 'productID=' + productID + '&projectID=' + projectID + '&status=active&hasParent=false');
     $.post(link, function(data)
     {
         $('#story').replaceWith(data);

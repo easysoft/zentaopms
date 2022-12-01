@@ -75,6 +75,7 @@ $lang->upgrade->selectMergeMode = 'Please select the data merging method';
 $lang->upgrade->mergeMode       = 'Data consolidation method : ';
 $lang->upgrade->begin           = 'Begin Date';
 $lang->upgrade->end             = 'End Date';
+$lang->upgrade->unknownDate     = 'Unknown Date Project';
 $lang->upgrade->selectProject   = 'The target project';
 $lang->upgrade->programName     = 'Program Name';
 $lang->upgrade->projectName     = 'Project Name';

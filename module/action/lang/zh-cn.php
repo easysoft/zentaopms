@@ -207,6 +207,7 @@ $lang->action->desc->estimated            = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->run                  = '$date, 由 <strong>$actor</strong> 执行。' . "\n";
 $lang->action->desc->syncprogram          = '$date, 由 <strong>$actor</strong> 启动(因项目开始而启动项目集)。' . "\n";
 $lang->action->desc->syncproject          = '$date, 系统判断由于' . $lang->executionCommon .'开始，将项目状态置为进行中。' . "\n";
+$lang->action->desc->syncmultipleproject  = '$date, 系统判断由于任务开始，将项目状态置为进行中。' . "\n";
 $lang->action->desc->syncexecution        = '$date, 系统判断由于任务开始，将' . $lang->executionCommon . '状态置为进行中。' . "\n";
 $lang->action->desc->syncexecutionbychild = '$date, 系统判断由于子阶段开始，将' . $lang->executionCommon . '状态置为进行中。' . "\n";
 $lang->action->desc->importfromgitlab     = '$date, 由 <strong>$actor</strong> 从Gitlab的Issue关联创建。' . "\n";
@@ -230,8 +231,9 @@ $lang->action->desc->suspend              = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->resume               = '$date, 由 <strong>$actor</strong> 恢复。' . "\n";
 $lang->action->desc->reboot               = '$date, 由 <strong>$actor</strong> 重启。' . "\n";
 $lang->action->desc->destroy              = '$date, 由 <strong>$actor</strong> 销毁。' . "\n";
-$lang->action->desc->switchtolight        = '$date, 由 <strong>'. $lang->admin->system .'</strong> 从全生命周期管理模式切换为轻量管理模式。' . "\n";
+$lang->action->desc->switchtolight        = '$date, 由于 <strong>'. $lang->admin->system .'</strong> 从全生命周期管理模式切换为轻量管理模式，项目访问控制由项目集内公开调整为私有。' . "\n";
 $lang->action->desc->unlinkproduct        = '$date, 系统判断由于迭代所属项目与$extra取消关联，同步将迭代与$extra取消关联。' . "\n";
+$lang->action->desc->getvnc               = '$date, <strong>$actor</strong>对执行节点 <strong>$extra</strong> 进行了远程操控。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -406,6 +408,7 @@ $lang->action->label->suspend               = '暂停了';
 $lang->action->label->resume                = '恢复了';
 $lang->action->label->reboot                = '重启了';
 $lang->action->label->destroy               = '销毁了';
+$lang->action->label->getvnc                = '远程操控';
 $lang->action->label->switchtolight         = '从全生命周期管理模式切换为轻量管理模式';
 $lang->action->label->linkedrepo            = '关联代码库到';
 $lang->action->label->unlinkedrepo          = '取消了项目与代码库的关联';
@@ -930,3 +933,5 @@ $lang->action->desc->deletemr                     = '$date, 由 <strong>$actor</
 $lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合并了 <a href="$extra">代码</a>。';
 $lang->action->desc->approve                      = '$date, 由 <strong>$actor</strong> 审核通过。';
 $lang->action->desc->reject                       = '$date, 由 <strong>$actor</strong> 拒绝。';
+$lang->action->desc->linkedrepo                   = '$date, 由 <strong>$actor</strong> 关联代码库 $extra';
+$lang->action->desc->unlinkedrepo                 = '$date, 由 <strong>$actor</strong> 取消了项目与代码库 $extra 的关联';

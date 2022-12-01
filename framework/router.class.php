@@ -181,7 +181,7 @@ class router extends baseRouter
 
         $hourKey = $planKey = $URSR = $URAndSR = 0;
 
-        $mode             = 'new';
+        $mode             = 'ALM';
         $score            = '0';
         $projectKey       = ITERATION_KEY;
         $disabledFeatures = '';
@@ -200,7 +200,7 @@ class router extends baseRouter
         }
 
         /* Lite Version is compatible with classic modes */
-        if($config->vision == 'lite') $mode = 'new';
+        if($config->vision == 'lite') $mode = 'ALM';
 
         /* Record system mode. */
         $config->systemMode = $mode;

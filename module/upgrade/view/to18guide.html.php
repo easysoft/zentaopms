@@ -18,101 +18,49 @@
         <h1 class='text-center'><?php echo $title;?></h1>
         <div class='main-row' id='mainContent'>
           <div class='main-col main-table'>
-            <table class="table datatable">
+            <table class='table'>
               <thead>
-                <tr>
-                  <th colspan='2'><?php echo $this->lang->upgrade->mode;?></th>
-                  <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['light'];?></th>
-                  <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['ALM'];?></th>
+                <tr class='text-center'>
+                  <th class='text-left'><?php echo $this->lang->custom->mode;?></th>
+                  <th><?php echo $this->lang->custom->modeList['light'];?></th>
+                  <th><?php echo $this->lang->custom->modeList['ALM'];?></th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->usage;?></td>
-                  <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->lightUsage;?></td>
-                  <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->ALMUsage;?></td>
+                <tr class='text-center'>
+                  <td class='text-left'><?php echo $lang->custom->usage;?></td>
+                  <td><?php echo $lang->custom->modeIntroductionList['light'];?></td>
+                  <td><?php echo $lang->custom->modeIntroductionList['ALM'];?></td>
+                </tr>
+                <?php foreach($disabledFeatures as $feature):?>
+                <?php if(is_array($feature) && empty($disabledScrumFeatures)) continue;?>
+                <tr class='text-center'>
+                  <td class='text-left'><?php echo (is_array($feature) && !empty($disabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+                  <td><i class='icon text-red icon-close'></i></td>
+                  <td><i class='icon text-success icon-check'></i></td>
+                </tr>
+                <?php endforeach;?>
+
+                <?php foreach($config->custom->allFeatures as $feature):?>
+                <?php if(in_array($feature, $disabledFeatures)) continue;?>
+                <?php if($feature == 'scrumDetail' && empty($enabledScrumFeatures)) continue;?>
+                <tr class='text-center'>
+                  <td class='text-left'><?php echo ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
+                  <td><i class='icon text-success icon-check'></i></td>
+                  <td><i class='icon text-success icon-check'></i></td>
+                </tr>
+                <?php endforeach;?>
+                <tr class='text-center'>
+                  <td class='text-left strong text-14px'><?php echo $this->lang->custom->selectUsage;?></td>
+                  <td><?php echo html::commonButton($lang->custom->useLight, "id='useLight'", 'btn btn-wide');?></td>
+                  <td><?php echo html::commonButton($lang->custom->useALM, "id='useALM'", 'btn btn-wide');?></td>
                 </tr>
                 <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->program;?></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->productRR;?></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <?php $icon = $ur ? 'icon-check' : 'icon-close'?>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->productUR;?></td>
-                  <td colspan='2' class="text-center"><i class="icon <?php echo $icon?>"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->productLine;?></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->projectScrum;?></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <?php if($edition == 'max'):?>
-                <?php $icon = $cmmi ? 'icon-check' : 'icon-close'?>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->scrumDetail;?></td>
-                  <td colspan='2' class="text-center"><i class="icon <?php echo $icon?>"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <?php endif;?>
-                <?php $icon = $waterfall ? 'icon-check' : 'icon-close'?>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->projectWaterfall;?></td>
-                  <td colspan='2' class="text-center"><i class="icon <?php echo $icon?>"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->projectKanban;?></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->execution;?></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <?php if($edition == 'max'):?>
-                <?php $icon = $assetlib ? 'icon-check' : 'icon-close'?>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->assetlib;?></td>
-                  <td colspan='2' class="text-center"><i class="icon <?php echo $icon?>"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <?php endif;?>
-                <?php if($edition == 'biz' or $edition == 'max'):?>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->oa;?></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <?php endif;?>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->vision;?></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                  <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-                </tr>
-                <tr>
-                  <td colspan='2' style="font-weight:bold;font-size:14px;"><?php echo $this->lang->upgrade->selectUsage;?></td>
-                  <td colspan='2' class="text-center"><button class="btn" type="button" id='useLight'><?php echo $this->lang->upgrade->useLight;?></button></td>
-                  <td colspan='2' class="text-center"><button class="btn" type="button" id='useALM'><?php echo $this->lang->upgrade->useALM;?></button></td>
-                </tr>
-                <tr>
-                  <td colspan='2'><?php echo $this->lang->upgrade->remark;?></td>
-                  <td colspan='4'><?php echo $this->lang->upgrade->remarkDesc;?></td>
+                  <td><?php echo $this->lang->upgrade->remark;?></td>
+                  <td colspan='2'><?php echo $this->lang->upgrade->remarkDesc;?></td>
                 </tr>
               </tbody>
-              <?php echo html::hidden('mode','')?>
+              <?php echo html::hidden('mode', '');?>
             </table>
           </div>
         </div>

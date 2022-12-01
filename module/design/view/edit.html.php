@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('type', $design->type);?>
+<?php js::set('projectID', $design->project);?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">

@@ -37,8 +37,11 @@ $(function()
     /* Assign value to the manage products by the different request type.*/
     var $product = $('#products0');
     if(copyExecutionID) productID = $product.val();
-    $product.val(productID);
-    $product.trigger("chosen:updated");
+    if(productID)
+    {
+        $product.val(productID);
+        $product.trigger("chosen:updated");
+    }
 
     var adjustMainCol = function()
     {
@@ -73,6 +76,24 @@ $(function()
             $('#teamMembers').picker({chosenMode: true});
         });
     })
+
+    if(isStage)
+    {
+        $('#attribute').change(function()
+        {
+            var attribute = $(this).val();
+            if(attribute == 'request' || attribute == 'design' || attribute == 'review')
+            {
+                $('#plansBox').closest('tr').addClass('hide');
+            }
+            else
+            {
+                $('#plansBox').closest('tr').removeClass('hide');
+            }
+        })
+
+        $('#attribute').change();
+    }
 
     if(copyExecutionID != 0 || projectID != 0) $('#teams').change();
 

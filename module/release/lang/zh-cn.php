@@ -30,15 +30,16 @@ $lang->release->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->release->existBuild         = '『版本』已经有『%s』这条记录了。您可以更改『发布名称』或者选择一个『版本』。';
 $lang->release->noRelease          = '暂时没有发布。';
 $lang->release->errorDate          = '发布日期不能大于今天。';
-$lang->release->tips               = '如果发布未选择任何版本，系统会默认创建一个和该发布同名的版本。';
 
 $lang->release->basicInfo = '基本信息';
 
 $lang->release->id             = 'ID';
-$lang->release->product        = $lang->productCommon;
+$lang->release->product        = '所属产品';
 $lang->release->branch         = '平台/分支';
 $lang->release->project        = '所属项目';
 $lang->release->build          = '版本';
+$lang->release->includedBuild  = '包含版本';
+$lang->release->relatedProject = '对应项目';
 $lang->release->name           = '发布名称';
 $lang->release->marker         = '里程碑';
 $lang->release->date           = '发布日期';

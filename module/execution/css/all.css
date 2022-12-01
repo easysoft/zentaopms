@@ -42,3 +42,5 @@ canvas {height: 28px;}
 .table thead .c-estimate.text-right,
 .table thead .c-consumed.text-right,
 .table thead .c-left.text-right {padding-right: 8px;}
+#executionsForm td.c-name {padding-right: 5px;}
+#executionsForm td.c-name.delay {padding-right: 55px;}

@@ -85,6 +85,8 @@ class productModel extends model
 
         if(empty($products)) return;
 
+        if($this->app->tab == 'project' and strpos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
+
         $this->app->loadLang('product');
         if(!$isQaModule and !$productID and !$isFeedbackModel)
         {
@@ -99,7 +101,7 @@ class productModel extends model
 
         if($isQaModule and $this->app->tab == 'project')
         {
-            if($this->app->tab == 'project')   $extra = $currentMethod == 'testcase' ? $extra : $this->session->project;
+            if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : $this->session->project;
             if($this->app->tab == 'execution') $extra = $this->session->execution;
         }
 
@@ -124,7 +126,7 @@ class productModel extends model
             if($isQaModule) $moduleName = 'bug';
             if($isFeedbackModel) $moduleName = 'feedback';
             $dropMenuLink = helper::createLink($moduleName, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
-            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}' style='width: 90%'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
             if($isMobile) $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$currentProduct->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
@@ -140,7 +142,7 @@ class productModel extends model
                 if(!$isMobile)
                 {
                     $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
-                    $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                    $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit' title='{$branchName}' style='width: 90%'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
                     $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
                     $output .= "</div></div>";
                 }
@@ -440,7 +442,7 @@ class productModel extends model
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t2.deleted')->eq(0)
-            ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
+            ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
@@ -553,7 +555,7 @@ class productModel extends model
             {
                 if($product->line == $id)
                 {
-                    $product->name = $name . '/' . $product->name;
+                    if($this->config->systemMode == 'ALM') $product->name = $name . '/' . $product->name;
                     $productList[] = $product;
                     unset($products[$key]);
                 }
@@ -1137,7 +1139,7 @@ class productModel extends model
 
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) or $branchParam == 'all') ? '' : $branchParam);
 
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
 
@@ -1231,14 +1233,37 @@ class productModel extends model
     /**
      * Get project pairs by product.
      *
-     * @param  int    $productID
+     * @param  array  $productIDList
      * @param  int    $branch
      * @param  int    $appendProject
      * @param  string $status all|closed|unclosed
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status = '')
+    public function getProjectPairsByProductIDList($productIDList, $branch = 0, $appendProject = 0, $status = '')
+    {
+        $projectParis = array();
+        foreach($productIDList as $productID)
+        {
+            $projects     = $this->getProjectPairsByProduct($productID, $branch, $appendProject, $status);
+            $projectParis = $projectParis + $projects;
+        }
+
+        return $projectParis;
+    }
+
+    /**
+     * Get project pairs by product.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $appendProject
+     * @param  string $status all|closed|unclosed
+     * @param  string $param  multiple|
+     * @access public
+     * @return array
+     */
+    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status = '', $param = '')
     {
         $product = $this->getById($productID);
 
@@ -1246,6 +1271,7 @@ class productModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->beginIF($status == 'closed')->andWhere('t2.status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'multiple') !== false)->andWhere('t2.multiple')->ne('0')->fi()
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($product->type != 'normal' and $branch !== '')->andWhere('t1.branch')->in($branch)->fi()
@@ -1398,15 +1424,20 @@ class productModel extends model
     {
         if(empty($productID)) return array();
 
-        $project = $this->loadModel('project')->getByID($projectID);
-        $orderBy = $project && $project->model == 'waterfall' ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
+        $projects     = $this->loadModel('project')->getByIdList($projectID);
+        $hasWaterfall = false;
+        foreach($projects as $project)
+        {
+            if($project->model == 'waterfall') $hasWaterfall = true;
+        }
+        $orderBy = $hasWaterfall ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
         $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->in('sprint,kanban,stage')
-            ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
+            ->beginIF($projectID)->andWhere('t2.project')->in($projectID)->fi()
             ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
@@ -1417,7 +1448,7 @@ class productModel extends model
 
         /* The waterfall project needs to show the hierarchy and remove the parent stage. */
         $executionPairs = array('0' => '');
-        if($project && $project->model == 'waterfall')
+        if($hasWaterfall)
         {
             foreach($executions as $id => $execution)
             {
@@ -1922,7 +1953,7 @@ class productModel extends model
             $allTotal          = array_sum($product->stories) + array_sum($product->requirements);
             $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
 
-            $stats[] = $product;
+            $stats[$key] = $product;
         }
 
         return $stats;
@@ -2315,9 +2346,13 @@ class productModel extends model
             }
             elseif($module == 'testcase' and in_array($method, array('groupCase', 'zeroCase')) and $this->app->tab == 'project')
             {
-                parse_str($extra, $output);
-                $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
-                $link      = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : '') . "&groupBy=&projectID=$projectID") . "#app=project";
+                $projectID = $extra;
+                if(strpos($extra, 'projecID') !== false)
+                {
+                    parse_str($extra, $output);
+                    $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
+                }
+                $link = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : 'all') . "&groupBy=&projectID=$projectID") . "#app=project";
             }
             elseif($module == 'testcase' and $method == 'browse')
             {
@@ -2378,7 +2413,7 @@ class productModel extends model
         }
         elseif($module == 'feedback')
         {
-            return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
+            return helper::createLink('feedback', $method, "browseType=byProduct&productID=%s");
         }
         elseif($module == 'ticket')
         {

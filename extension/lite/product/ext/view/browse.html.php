@@ -20,22 +20,26 @@ body {margin-bottom: 25px;}
 .assignedTo{border-radius: 4px !important;}
 #productStoryForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
 </style>
-<?php js::set('browseType', $browseType);?>
-<?php js::set('productID', $productID);?>
-<?php js::set('projectID', $projectID);?>
-<?php js::set('branch', $branch);?>
-<?php js::set('rawModule', $this->app->rawModule);?>
-<?php js::set('productType', $this->app->tab == 'product' ? $product->type : '');?>
 <?php
-$unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
-$unfoldStories = zget($unfoldStories, $productID, array());
+$lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
+$unfoldStories     = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
+$unfoldStories     = zget($unfoldStories, $productID, array());
+$isProjectStory    = $this->app->rawModule == 'projectstory';
+$projectHasProduct = $isProjectStory && !empty($project->hasProduct);
+$projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->execution->treeLevel['all']);
 js::set('foldAll',       $lang->execution->treeLevel['root']);
 js::set('storyType',     $storyType);
-$lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
-$isProjectStory = $this->app->rawModule == 'projectstory';
-$projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
+js::set('browseType', $browseType);
+js::set('productID', $productID);
+js::set('projectID', $projectID);
+js::set('branch', $branch);
+js::set('rawModule', $this->app->rawModule);
+js::set('productType', $this->app->tab == 'product' ? $product->type : '');
+js::set('projectHasProduct', $projectHasProduct);
+js::set('URAndSR', $this->config->URAndSR);
+js::set('vision',  $this->config->vision);
 ?>
 <style>
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
@@ -200,7 +204,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <p>
         <span class="text-muted"><?php echo $storyType == 'story' ? $lang->story->noStory : $lang->story->noRequirement;?></span>
         <?php if(common::canModify('product', $product) and common::hasPriv('story', 'create')):?>
-        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->createCommon, '', "class='btn btn-info' data-app='$from'");?>
+        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info' data-app='$from'");?>
         <?php endif;?>
       </p>
     </div>
