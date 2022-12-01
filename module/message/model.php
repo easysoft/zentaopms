@@ -114,7 +114,6 @@ class messageModel extends model
                 $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
             }
         }
-
         if(isset($messageSetting['message']))
         {
             $actions = $messageSetting['message']['setting'];
@@ -200,6 +199,14 @@ class messageModel extends model
             if(!empty($object->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object);
 
             if(!empty($notifyPersons)) $toList = implode(',', $notifyPersons);
+        }
+        if(empty($toList) and $objectType == 'task' and $object->mode == 'multi')
+        {
+            $assignedTo = $this->loadModel('task')->getTeamTaskAssignedTo($object->id);
+            $toList     = array_filter($assignedTo, function($account){
+                return $account != $this->app->user->account;
+            });
+            $toList     = implode(',', $toList);
         }
 
         if($toList == 'closed') $toList = '';

@@ -231,4 +231,5 @@ js::set('priv',
 <?php js::set('orderBy', $storyOrder);?>
 <?php js::set('defaultMinColWidth', $this->config->minColWidth);?>
 <?php js::set('defaultMaxColWidth', $this->config->maxColWidth);?>
+<?php js::set('teamWords', $lang->execution->teamWords);?>
 <?php include '../../common/view/footer.html.php';?>
