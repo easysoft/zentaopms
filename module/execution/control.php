@@ -1646,17 +1646,17 @@ class execution extends control
                 else
                 {
                     $executionProductList  = $this->loadModel('product')->getProducts($executionID);
-                    $hasMultiBranchProduct = false;
+                    $multiBranchProduct = false;
                     foreach($executionProductList as $executionProduct)
                     {
                         if($executionProduct->type != 'normal')
                         {
-                            $hasMultiBranchProduct = true;
+                            $multiBranchProduct = true;
                             break;
                         }
                     }
 
-                    $importPlanStoryTips = $hasMultiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
+                    $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
 
                     return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
@@ -1918,17 +1918,17 @@ class execution extends control
         elseif(!empty($newPlans))
         {
             $executionProductList  = $this->loadModel('product')->getProducts($executionID);
-            $hasMultiBranchProduct = false;
+            $multiBranchProduct = false;
             foreach($executionProductList as $executionProduct)
             {
                 if($executionProduct->type != 'normal')
                 {
-                    $hasMultiBranchProduct = true;
+                    $multiBranchProduct = true;
                     break;
                 }
             }
 
-            $importEditPlanStoryTips = $hasMultiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory;
+            $importEditPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory;
 
             return print(js::confirm($importEditPlanStoryTips, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
         }
@@ -4151,8 +4151,8 @@ class execution extends control
 
             foreach($planStory as $id => $story)
             {
-                $projectProducts = zget($projectProducts, $story->product, array());
-                if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($projectProducts) and !isset($projectProducts[$story->branch])))
+                $projectBranches = zget($projectProducts, $story->product, array());
+                if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($projectBranches) and !isset($projectBranches[$story->branch])))
                 {
                     $count++;
                     unset($planStory[$id]);
