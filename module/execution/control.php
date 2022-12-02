@@ -1702,10 +1702,11 @@ class execution extends control
             $linkedBranches = array();
             foreach($products as $productIndex => $product)
             {
+                $productPlans[$productIndex] = array();
                 foreach($branches[$productIndex] as $branchID => $branch)
                 {
                     $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex]              = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
@@ -1737,10 +1738,11 @@ class execution extends control
             $linkedBranches = array();
             foreach($products as $productIndex => $product)
             {
+                $productPlans[$productIndex] = array();
                 foreach($branches[$productIndex] as $branchID => $branch)
                 {
                     $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex]              = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
@@ -2029,11 +2031,14 @@ class execution extends control
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
+            $productPlans[$productID] = array();
+
             foreach($branches[$productID] as $branchID => $branch)
             {
+                $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+
                 $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
-                $productPlans[$productID]              = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
                 if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID] += $plans[$productID][BRANCH_MAIN];
                 if(!empty($executionStories[$productID][$branchID]))
                 {
