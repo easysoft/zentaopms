@@ -4156,7 +4156,7 @@ class execution extends control
             foreach($planStory as $id => $story)
             {
                 $projectBranches = zget($projectProducts, $story->product, array());
-                if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($projectBranches) and !isset($projectBranches[$story->branch]) and !empty($story->branch)))
+                if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($story->branch) and !empty($projectBranches) and !isset($projectBranches[$story->branch])))
                 {
                     $count++;
                     unset($planStory[$id]);
@@ -4189,7 +4189,7 @@ class execution extends control
         }
 
         $haveDraft = sprintf($this->lang->execution->haveDraft, $count);
-        if(!$execution->multiple) $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
+        if(!$execution->multiple or $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
         if($count != 0) echo js::alert($haveDraft) . js::locate($this->createLink($moduleName, $fromMethod, $param));
         return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }
