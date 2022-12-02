@@ -2365,6 +2365,8 @@ EOD;
      */
     public function checkSafeFile()
     {
+        if($this->app->isContainer()) return false;
+
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
 
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ok.txt';

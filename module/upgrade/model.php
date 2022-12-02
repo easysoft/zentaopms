@@ -452,7 +452,7 @@ class upgradeModel extends model
                 $this->updateProjectLinkedBranch();
                 break;
             case '16_0_beta1':
-                $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
+                $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, commonModel::getSysURL() . $this->app->config->webRoot . 'api.php/v1', '16.0');
                 break;
             case '16_1':
                 $this->moveKanbanData();
@@ -4287,7 +4287,7 @@ class upgradeModel extends model
         $moduleRoot = $this->app->getModuleRoot();
 
         $editorDir = $moduleRoot . 'editor';
-        if(is_dir($editor)) $zfile->removeDir($editorDir);
+        if(is_dir($editorDir)) $zfile->removeDir($editorDir);
 
         $translateDir = $moduleRoot . 'translate';
         if(is_dir($translateDir)) $zfile->removeDir($translateDir);

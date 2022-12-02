@@ -357,6 +357,7 @@ js::set('vision',        $this->config->vision);
           <?php foreach($stories as $story):?>
           <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' <?php if(!empty($story->children)) echo "data-children=" . count($story->children);?> data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
             <?php $story->from = $from;?>
+            <?php if(!empty($branchOptions) and isset($branchOptions[$story->product])) $branchOption = $branchOptions[$story->product];?>
             <?php if($this->app->getViewType() == 'xhtml'):?>
             <?php
             foreach($setting as $key => $value)

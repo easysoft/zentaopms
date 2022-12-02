@@ -734,10 +734,13 @@ class baseRouter
             $account = $sql->quote($account);
             $vision  = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
             if($vision) $vision = $vision->value;
-            if(empty($vision))
+
+            $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
+            if(!empty($user->visions))
             {
-                $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
-                if(!empty($user->visions)) list($vision) = explode(',', $user->visions);
+                $userVisions = explode(',', $user->visions);
+                if(!in_array($vision, $userVisions)) $vision = '';
+                if(empty($vision)) list($vision) = $userVisions;
             }
         }
 

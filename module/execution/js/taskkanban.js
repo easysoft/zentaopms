@@ -67,7 +67,8 @@ function renderUserAvatar(user, objectType, objectID, size, objectStatus)
     if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
     var realname = user.realname ? user.realname : user.account;
-    return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + realname + '" href="' + link + '"/>').avatar({user: user});
+    var title = user.title ? user.title : realname;
+    return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + title + '" href="' + link + '"/>').avatar({user: user});
 }
 
 /**
@@ -286,8 +287,9 @@ function renderTaskItem(item, $item, col)
     {
         var priHtml    = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = scaleSize <= 1 && item.status != 'wait' ? ('<span class="info info-estimate text-muted">' + taskLang.leftAB + ' ' + item.left + 'h</span>') : ('<span class="info info-estimate text-muted">' + taskLang.estimateAB + ' ' + item.estimate + 'h</span>');
-        var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id, '', col.type);
-
+        var avatarHtml = '';
+        if(item.assignedTo == '' && item.mode == 'multi') avatarHtml = renderUserAvatar({title: item.teamMembers, realname: teamWords}, 'task', item.id, '', col.type);
+        else avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id, '', col.type);
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
         $infos.html([priHtml, hoursHtml].join(''));

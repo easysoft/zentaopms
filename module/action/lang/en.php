@@ -227,7 +227,7 @@ $lang->action->desc->submitreview         = '$date, submitted for review by <str
 $lang->action->desc->ganttmove            = '$date, sort by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->relieved             = '$date, relieved by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
-$lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the sprints of the project from the $extra.' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the ' . $lang->executionCommon . 's of the project from the $extra.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
