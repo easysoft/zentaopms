@@ -403,7 +403,7 @@ class productplanModel extends model
     {
         $date  = date('Y-m-d');
         $param = strtolower($param);
-        $plans = $this->dao->select('*,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $plans = $this->dao->select('t1.*,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
             ->where('t1.deleted')->eq(0)
             ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
