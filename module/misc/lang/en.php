@@ -42,7 +42,7 @@ $lang->misc->zentao->support['ask']        = "Official Answer";
 $lang->misc->zentao->support['video']      = "Use Video";
 $lang->misc->zentao->support['qqgroup']    = "Official QQ Group";
 
-$lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
+$lang->misc->zentao->cowin['reportbug']    = "Report Bug";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
 $lang->misc->zentao->cowin['recommend']    = "More";
 
