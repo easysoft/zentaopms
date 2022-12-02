@@ -2370,23 +2370,28 @@ class executionModel extends model
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
 
-            if(isset($existedProducts[$productID][$branch])) continue;
+            if(!is_array($branch)) $branch = array($branch);
 
-            if(isset($oldProducts[$productID][$branch]))
+            foreach($branch as $branchID)
             {
-                $oldProduct = $oldProducts[$productID][$branch];
-                if($this->app->rawMethod != 'edit') $oldPlan = $oldProduct->plan;
-            }
+                if(isset($existedProducts[$productID][$branchID])) continue;
 
-            $data = new stdclass();
-            $data->project = $executionID;
-            $data->product = $productID;
-            $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
-            $data->plan    = trim($data->plan, ',');
-            $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
-            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            $existedProducts[$productID][$branch] = true;
+                if(isset($oldProducts[$productID][$branchID]))
+                {
+                    $oldProduct = $oldProducts[$productID][$branchID];
+                    if($this->app->rawMethod != 'edit') $oldPlan = $oldProduct->plan;
+                }
+
+                $data = new stdclass();
+                $data->project = $executionID;
+                $data->product = $productID;
+                $data->branch  = $branchID;
+                $data->plan    = isset($plans[$productID]) ? implode(',', $plans[$productID]) : $oldPlan;
+                $data->plan    = trim($data->plan, ',');
+                $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                $existedProducts[$productID][$branchID] = true;
+            }
         }
 
         $oldProductKeys = array_keys($oldProducts);
