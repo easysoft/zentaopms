@@ -4339,29 +4339,4 @@ class taskModel extends model
             $order ++;
         }
     }
-
-    /**
-     * Get task list by conditions.
-     *
-     * @param  object           $conds
-     * @param  string           $orderBy
-     * @param  int              $limit
-     * @param  object           $pager
-     * @access public
-     * @return array
-     */
-    public function getListByConds($conds, $orderBy = 'id_desc', $limit = 0, $pager = null)
-    {
-        return $this->dao->select('*')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->beginIF($conds->priList)->andWhere('pri')->in($conds->priList)->fi()
-            ->beginIF($conds->assignedToList)->andWhere('assignedTo')->in($conds->assignedToList)->fi()
-            ->beginIF($conds->statusList)->andWhere('status')->in($conds->statusList)->fi()
-            ->beginIF($conds->idList)->andWhere('id')->in($conds->idList)->fi()
-            ->beginIF($conds->taskName)->andWhere('name')->like("%{$conds->taskName}%")
-            ->orderBy($orderBy)
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager)
-            ->fetchAll('id');
-    }
 }
