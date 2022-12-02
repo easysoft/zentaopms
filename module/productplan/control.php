@@ -691,11 +691,8 @@ class productplan extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $branchPairs = $this->loadModel('branch')->getPairs($plan->product);
-            foreach($branchPairs as $branchID => $branchName)
-            {
-                if(strpos(",$plan->branch,", ",$branchID,") === false) unset($branchPairs[$branchID]);
-            }
+
+            $branchPairs = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($plan->branch)->fetchPairs();
             $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branchPairs;
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
@@ -831,8 +828,9 @@ class productplan extends control
         else
         {
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $branchName = $this->loadModel('branch')->getById($plan->branch);
-            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branchName);
+
+            $branchPairs = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($plan->branch)->fetchPairs();
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branchPairs;
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
