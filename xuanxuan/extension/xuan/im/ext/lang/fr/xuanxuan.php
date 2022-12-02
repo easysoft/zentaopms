@@ -97,3 +97,28 @@ $lang->im->bot->zentaoBot->start = new stdclass();
 $lang->im->bot->zentaoBot->start->tip                = 'Click the link below to start task #%d.';
 $lang->im->bot->zentaoBot->start->tipLinkTitle       = 'Start Task';
 $lang->im->bot->zentaoBot->start->finishWithZeroLeft = 'Hours left is 0 thus the task is finished.';
+
+$lang->im->bot->zentaoBot->help = <<<EOT
+### 1. Task command
+
+Command：`view task condition...`
+Example：`view task dev1 P1 doing` Displays tasks assigned to dev1, with priority P1 and status in progress
+
+| Command | Description |
+| ---- | ---- |
+| view task | Show all open tasks under the current username |
+| view task Name Keyword | Show tasks that match the name keyword |
+| view task Assignor | Show tasks whose assignor is the entered value |
+| view task Priority | Show tasks with priority as entered |
+| view task Status | Show tasks with status as input |
+| view task ID | Show tasks with ID as input |
+
+### 2. Task Edit command 
+The Task Edit command supports making status changes to tasks.
+
+| Command | Description |
+| ---- | ---- |
+| start task #ID | Start the task and record its consumption/remaining hours |
+| complete task #ID | Complete the task and record its consumption/remaining hours |
+| close task #ID | Close the task and record its consumption/remaining work hours |
+EOT;

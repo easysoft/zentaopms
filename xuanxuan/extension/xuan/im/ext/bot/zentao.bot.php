@@ -46,6 +46,7 @@ class zentaoBot extends xuanBot
 
         $this->users          = array_filter($this->im->user->getPairs('noclosed|noletter'));
         $this->taskStatusList = array_filter($this->im->lang->task->statusList);
+        $this->help           = $this->lang->help;
 
         $this->inited = true;
     }
