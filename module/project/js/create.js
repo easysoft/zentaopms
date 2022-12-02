@@ -255,7 +255,9 @@ function addNewProduct(obj)
 
         $('#productTitle').html(manageProducts);
     }
+
     $('.productsBox div + .text-danger.help-text').remove();
+    disableSelectedProduct();
 }
 
 /**
@@ -409,6 +411,7 @@ function addNewLine(obj)
 function removeLine(obj)
 {
     $(obj).closest('tr').remove();
+    disableSelectedProduct();
 }
 
 /**
