@@ -365,7 +365,7 @@ class productplanModel extends model
     /**
      * Get plans for products
      *
-     * @param  int    $products
+     * @param  array  $products
      * @access public
      * @return void
      */
@@ -487,10 +487,13 @@ class productplanModel extends model
         $planPairs = array();
         foreach($plans as $planID => $plan)
         {
-            if($skipParent and $plan->parent == '-1') continue;
+            foreach(explode(',', $plan->branch) as $branch)
+            {
+                if($skipParent and $plan->parent == '-1') continue 2;
 
-            if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
-            $planPairs[$plan->branch][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
+                if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
+                $planPairs[$branch][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
+            }
         }
         return $planPairs;
     }
