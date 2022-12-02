@@ -657,7 +657,7 @@ class zentaoBot extends xuanBot
                     case 'actions':
                         $startUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->startTask} #$task->id";
                         $finishUrl = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->finishTask} #$task->id";
-                        $closeUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->startTask} #$task->id";
+                        $closeUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->closeTask} #$task->id";
                         switch($task->status)
                         {
                             case 'wait':
