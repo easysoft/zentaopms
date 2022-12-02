@@ -2459,9 +2459,10 @@ class projectModel extends model
         }
 
         /* Delete the execution linked products that is not linked with the execution. */
-        if((int)$projectID > 0)
+        $projectID = (int)$projectID;
+        if($projectID > 0)
         {
-            $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq((int)$projectID)->fetchPairs('id');
+            $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id');
             $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
 
             if(!empty($_POST['division']))

@@ -33,7 +33,7 @@
           <?php $code = $group . ucfirst($feature);?>
           <?php if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;?>
           <?php $hasData = true;?>
-          <?php endForeach;?>
+          <?php endforeach;?>
 
           <?php if($hasData):?>
           <tr>
@@ -52,11 +52,11 @@
               <?php echo html::checkbox("module[{$code}]", array('1' => $lang->admin->setModule->{$feature}), $value, "data-code='{$code}'", 'inline');?>
               <?php echo html::hidden("module[{$code}][]", $value, $value ? 'disabled' : '');?>
               </div>
-              <?php endForeach;?>
+              <?php endforeach;?>
             </td>
           </tr>
           <?php endif;?>
-          <?php endForeach;?>
+          <?php endforeach;?>
           <tr>
             <td class='text-middle text-right thWidth'>
               <div class="checkbox-primary checkbox-inline checkbox-right check-all">
@@ -68,7 +68,7 @@
           </tr>
         </tbody>
       </table>
-    </form>`
+    </form>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

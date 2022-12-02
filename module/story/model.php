@@ -5425,9 +5425,9 @@ class storyModel extends model
 
             foreach($requirements as $requirement)
             {
-                $stories = $this->getRelation($requirement->id, 'requirement');
+                $stories = $this->getRelation($requirement->id, 'requirement', array('id', 'title', 'parent'));
                 $stories = empty($stories) ? array() : $stories;
-                foreach($stories as $id => $title)
+                foreach($stories as $id => $story)
                 {
                     if($projectStories and !isset($projectStories[$id]))
                     {
@@ -5436,10 +5436,11 @@ class storyModel extends model
                     }
 
                     $stories[$id] = new stdclass();
-                    $stories[$id]->title = $title;
-                    $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
-                    $stories[$id]->bugs  = $this->loadModel('bug')->getStoryBugs($id);
-                    $stories[$id]->tasks = $this->loadModel('task')->getStoryTasks($id);
+                    $stories[$id]->parent = $story->parent;
+                    $stories[$id]->title  = $story->title;
+                    $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
+                    $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
+                    $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
                     if($this->config->edition == 'max')
                     {
                         $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)

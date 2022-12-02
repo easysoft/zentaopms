@@ -14,8 +14,9 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php
-js::set('page'      , 'resolve');
-js::set('productID' , $bug->product);
+js::set('page', 'resolve');
+js::set('productID', $bug->product);
+js::set('releasedBuild', $lang->build->releasedBuild);
 ?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -49,7 +50,7 @@ js::set('productID' , $bug->product);
             </div>
           </td>
           <td>
-            <div id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></div>
+            <div id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control picker-select'");?></div>
             <div id='newBuildBox' class='hidden required'><?php echo html::input('buildName', '', "class='form-control' placeholder='{$lang->bug->placeholder->newBuildName}'");?></div>
           </td>
           <td>

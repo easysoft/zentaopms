@@ -18,10 +18,12 @@ class zfile
      * @param  string    $to 
      * @param  bool      $logLevel
      * @param  string    $logFile 
+     * @param  array     $excludeFiles
+     * @param  bool      $toIsLink
      * @access public
      * @return array     copied files, count, size or message.
      */
-    public function copyDir($from, $to, $logLevel = false, $logFile = '')
+    public function copyDir($from, $to, $logLevel = false, $logFile = '', $excludeFiles = array(), $toIsLink = false)
     {
         static $copiedFiles = array();
         static $errorFiles  = array();
@@ -41,12 +43,21 @@ class zfile
         if(!empty($log['message'])) return $log;
 
         $from = realpath($from) . '/';
-        $to   = realpath($to) . '/';
+        if(is_link($to) || $toIsLink)
+        {
+            $to = $to . '/';
+
+            $toIsLink = true;
+        }
+        else
+        {
+            $to = realpath($to) . '/';
+        }
 
         $entries = scandir($from);
         foreach($entries as $entry)
         {
-            if($entry == '.' or $entry == '..' or $entry == '.svn' or $entry == '.git') continue;
+            if($entry == '.' or $entry == '..' or $entry == '.svn' or $entry == '.git' or in_array($entry, $excludeFiles)) continue;
 
             $fullEntry = $from . $entry;
             if(is_file($fullEntry))
@@ -82,7 +93,7 @@ class zfile
             {
                 $nextFrom = $fullEntry;
                 $nextTo   = $to . $entry;
-                $result   = $this->copyDir($nextFrom, $nextTo, $logLevel, $logFile);
+                $result   = $this->copyDir($nextFrom, $nextTo, $logLevel, $logFile, array(), $toIsLink);
                 $count   += $result['count'];
                 $size    += $result['size'];
             }
@@ -101,10 +112,11 @@ class zfile
      * Get count.
      * 
      * @param  string $dir 
+     * @param  array  $excludeFiles 
      * @access public
      * @return int
      */
-    public function getCount($dir)
+    public function getCount($dir, $excludeFiles = array())
     {
         if(!file_exists($dir)) return 0;
         if(is_file($dir)) return 1;
@@ -113,7 +125,7 @@ class zfile
         $entries = scandir($dir);
         foreach($entries as $entry)
         {
-            if($entry == '.' or $entry == '..' or $entry == '.svn' or $entry == '.git') continue;
+            if($entry == '.' or $entry == '..' or $entry == '.svn' or $entry == '.git' or in_array($entry, $excludeFiles)) continue;
 
             $fullEntry = $dir . '/' . $entry;
             $count += $this->getCount($fullEntry);

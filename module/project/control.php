@@ -1456,6 +1456,7 @@ class project extends control
         {
             foreach($builds as $build)
             {
+                $build->builds = $this->build->getByList($build->builds);
                 /* If product is normal, unset branch name. */
                 if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
                 {
@@ -1483,6 +1484,7 @@ class project extends control
         $this->view->products      = $products;
         $this->view->allExecutions = $allExecutions;
         $this->view->executions    = $executions;
+        $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
         $this->view->type          = $type;
 
         $this->display();
@@ -2161,6 +2163,11 @@ class project extends control
             }
 
             $oldProducts = $this->product->getProducts($projectID);
+            if($project->multiple and $project->model != 'waterfall')
+            {
+                $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id');
+                $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->fetchGroup('project', 'product');
+            }
 
             $this->project->updateProducts($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -2177,7 +2184,7 @@ class project extends control
             $diffProducts  = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            if($project->multiple)
+            if($project->multiple and $project->model != 'waterfall')
             {
                 $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
                 if(!empty($unlinkedProducts))
@@ -2185,8 +2192,14 @@ class project extends control
                     $unlinkedProductPairs = array();
                     foreach($unlinkedProducts as $unlinkedProduct) $unlinkedProductPairs[$unlinkedProduct] = $oldProducts[$unlinkedProduct]->name;
 
-                    $executionIDList = $this->execution->getIdList($projectID);
-                    foreach($executionIDList as $executionID) $this->action->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkedProductPairs));
+                    $unlinkExecutions = array();
+                    foreach($oldExecutionProducts as $executionID => $executionProducts)
+                    {
+                        $unlinkExecutionProducts = array_intersect_key($unlinkedProductPairs, $executionProducts);
+                        if($unlinkExecutionProducts) $unlinkExecutions[$executionID] = $unlinkExecutionProducts;
+                    }
+
+                    foreach($unlinkExecutions as $executionID => $unlinkExecutionProducts) $this->action->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkExecutionProducts));
                 }
             }
 
@@ -2305,6 +2318,32 @@ class project extends control
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
         return print(html::select('execution', $executions, $executionID, "class='form-control'"));
+    }
+
+    /**
+     * AJAX: get a project by execution id.
+     *
+     * @param  string $executionID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetPairsByExecution($executionID)
+    {
+        $execution    = $this->loadModel('execution')->getByID($executionID);
+        $projectPairs = $this->loadModel('project')->getPairsByIdList($execution->project);
+
+        if($this->app->getViewType() == 'json')
+        {
+            $project = array('id' => key($projectPairs), 'name' => reset($projectPairs));
+            $pinyin  = common::convert2Pinyin(array(reset($projectPairs)));
+            $project['namePinyin'] = zget($pinyin, $project['name']);
+
+            return print(json_encode($project));
+        }
+        else
+        {
+            return print(html::select('project', $projectPairs, $execution->project, "class='form-control' onchange='loadProductExecutions({$execution->project}, this.value)'"));
+        }
     }
 
     /**

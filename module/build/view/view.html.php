@@ -26,7 +26,11 @@ tbody tr td:first-child input {display: none;}
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('execution', 'build', "executionID=$build->execution");?>
-    <?php common::printBack($browseLink, 'btn btn-secondary');?>
+    <?php
+    $dataApp = strpos($browseLink, 'release') !== false ? 'data-app=product' : '';
+    if(strpos($browseLink, 'projectrelease') !== false) $dataApp = 'data-app=project';
+    ?>
+    <?php common::printBack($browseLink, 'btn btn-secondary', $dataApp);?>
     <div class='divider'></div>
     <div class='page-title'>
       <span title='<?php echo $build->name;?>'>
