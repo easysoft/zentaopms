@@ -26,7 +26,7 @@
 <?php js::set('selectedProductID', $productID);?>
 <?php js::set('selectedBranchID', $branchID);?>
 <?php js::set('productName', $lang->product->name);?>
-<?php js::set('manageProducts', $lang->project->manageProducts);?>
+<?php js::set('manageProductPlan', $lang->project->manageProductPlan);?>
 <?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol)?>
 <?php js::set('parentBudget', $lang->project->parentBudget);?>
