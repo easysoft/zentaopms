@@ -4650,14 +4650,16 @@ class executionModel extends model
 
         $branchQuery .= ')';
 
-        $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->in(array_keys($products))
-            ->andWhere('deleted')->eq(0)
+        $plans = $this->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
+            ->where('t1.product')->in(array_keys($products))
+            ->andWhere('t1.deleted')->eq(0)
             ->andWhere($branchQuery)
-            ->orderBy('begin desc')
+            ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
         $plans        = $this->productplan->reorder4Children($plans);
+        $plans        = $this->productplan->relationBranch($plans);
         $productPlans = array();
         foreach($plans as $plan)
         {
@@ -4665,6 +4667,7 @@ class executionModel extends model
             if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
             $productPlans[$plan->product][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $productPlans[$plan->product][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+            if($plan->productType != 'normal') $productPlans[$plan->product][$plan->id] = $productPlans[$plan->product][$plan->id] . ' / ' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main);
         }
 
         return $productPlans;
