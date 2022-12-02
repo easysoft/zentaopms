@@ -86,7 +86,7 @@ function arrowTabs(domID, shift, hideRightBtn)
 
     var tabItemWidth = $('#' + domID + ' > .tabs-navbar > .nav-tabs')[0].clientWidth;
     var tabsWidth    = $('#' + domID)[0].clientWidth;
-    if($('#' + domID + ' .close').length) tabsWidth = tabsWidth * 0.6;
+    if($('#' + domID + ' .close-bugs').length) tabsWidth = tabsWidth * 0.7;
 
     if(tabItemWidth < tabsWidth)
     {

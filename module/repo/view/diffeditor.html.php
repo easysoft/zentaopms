@@ -13,16 +13,17 @@ js::set('openedFiles', array($entry));
 js::set('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
 ?>
 <?php if(!isonlybody()):?>
-<div id="mainContent" class="main-row fade">
+<div id="mainContent" class="main-row fade diff-page">
   <?php $sideWidth = common::checkNotCN() ? '270' : '240';?>
-  <div class="side-col" style="width: <?php echo $sideWidth;?>px; padding-top: <?php echo isonlybody() ? 22 : 0;?>px;">
-    <div class="side-col file-tree" style="width: <?php echo $sideWidth;?>px;" data-min-width="<?php echo $sideWidth;?>">
+  <div class="side-col" id='sidebar' style="width: <?php echo $sideWidth + 15;?>px; padding-top: <?php echo isonlybody() ? 22 : 0;?>px;">
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
+    <div class="cell file-tree" style="width: <?php echo $sideWidth;?>px;" data-min-width="<?php echo $sideWidth;?>">
       <div id="filesTree" class="cell load-indicator <?php if(isonlybody()) echo 'pull-left';?>">
         <?php echo $this->repo->getFileTree($repo, '', $diffs);?>
       </div>
     </div>
   </div>
-<?php endif;?>
+  <?php endif;?>
   <div class="main-col repoCode main">
     <div class="content panel">
       <div class='btn-toolbar'>
