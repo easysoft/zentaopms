@@ -397,7 +397,7 @@ function addNewLine(obj)
     newLine.find('.removeLine').css('visibility', 'visible');
     newLine.find('.chosen-container').remove();
     newLine.find('.productsBox .table-col:last').addClass('hidden');
-    newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).chosen();
+    newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('').chosen();
     newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]').chosen();
     newLine.find("div[id^='plan']").attr('id', 'plan' + index);
 
