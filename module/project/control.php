@@ -492,12 +492,9 @@ class project extends control
                 $planIdList = array();
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planList)
+                    foreach($plans as $planID)
                     {
-                        foreach($planList as $planID)
-                        {
-                            $planIdList[$planID] = $planID;
-                        }
+                        $planIdList[$planID] = $planID;
                     }
                 }
 
