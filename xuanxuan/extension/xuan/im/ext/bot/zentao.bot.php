@@ -1,6 +1,12 @@
 <?php
 class zentaoBot extends xuanBot
 {
+    public $name = 'ZenTao';
+
+    public $code = 'zentao';
+
+    private $inited = false;
+
     /**
      * Construct function, load lang of zentao and setup commands.
      *
@@ -9,12 +15,10 @@ class zentaoBot extends xuanBot
      */
     public function __construct()
     {
-        $this->lang = $this->im->lang->im->bot->zentaoBot;
-        $this->name = $this->lang->name;
-
-        foreach(array('view', 'start', 'close', 'finish') as $command)
+        if(isset($_SESSION['clientLang']))
         {
-            $this->commands[] = array('command' => $command, 'alias' => $this->lang->commands->$command->alias, 'description' => $this->lang->commands->$command->description, 'internal' => true);
+            if($_SESSION['clientLang'] == 'zh-cn') $this->name = '禅道';
+            if($_SESSION['clientLang'] == 'zh-tw') $this->name = '禪道';
         }
     }
 
@@ -26,12 +30,24 @@ class zentaoBot extends xuanBot
      */
     public function init()
     {
+        if($this->inited) return;
+
+        $this->lang = $this->im->lang->im->bot->zentaoBot;
+        $this->name = $this->lang->name;
+
+        foreach(array('view', 'start', 'close', 'finish') as $command)
+        {
+            $this->commands[] = array('command' => $command, 'alias' => $this->lang->commands->$command->alias, 'description' => $this->lang->commands->$command->description, 'internal' => true);
+        }
+
         $this->im->loadModel('task');
         $this->im->loadModel('user');
         $this->im->app->loadClass('pager', $static = true);
 
         $this->users          = array_filter($this->im->user->getPairs('noclosed|noletter'));
         $this->taskStatusList = array_filter($this->im->lang->task->statusList);
+
+        $this->inited = true;
     }
 
     /**
@@ -138,7 +154,7 @@ class zentaoBot extends xuanBot
         while(!empty($args))
         {
             $arg = array_shift($args);
-            if($keys['pri'])
+            if(isset($keys['pri']))
             {
                 if(in_array(strtolower($arg), $this->lang->condKeywords['pri']))
                 {
@@ -152,7 +168,7 @@ class zentaoBot extends xuanBot
                     continue;
                 }
             }
-            if($keys['id'])
+            if(isset($keys['id']))
             {
                 if(in_array(strtolower($arg), $this->lang->condKeywords['id']))
                 {
@@ -166,7 +182,7 @@ class zentaoBot extends xuanBot
                     continue;
                 }
             }
-            if($keys['status'])
+            if(isset($keys['status']))
             {
                 if(in_array(strtolower($arg), $this->lang->condKeywords['status']))
                 {
@@ -180,7 +196,7 @@ class zentaoBot extends xuanBot
                     continue;
                 }
             }
-            if($keys['assignTo'])
+            if(isset($keys['assignTo']))
             {
                 if(in_array(strtolower($arg), $this->lang->condKeywords['assignTo']))
                 {
@@ -194,7 +210,7 @@ class zentaoBot extends xuanBot
                     continue;
                 }
             }
-            if($keys['comment'])
+            if(isset($keys['comment']))
             {
                 if(in_array(strtolower($arg), $this->lang->condKeywords['comment']))
                 {
@@ -205,7 +221,7 @@ class zentaoBot extends xuanBot
                 }
                 continue;
             }
-            if($keys['taskName'])
+            if(isset($keys['taskName']))
             {
                 if(in_array(strtolower($arg), $this->lang->condKeywords['taskName']))
                 {
@@ -219,12 +235,12 @@ class zentaoBot extends xuanBot
         }
 
         $conds = new stdClass();
-        if($keys['pri'])      $conds->priList        = trim($priList, ',');
-        if($keys['assignTo']) $conds->assignedToList = trim($assignedToList, ',');
-        if($keys['status'])   $conds->statusList     = trim($statusList, ',');
-        if($keys['id'])       $conds->idList         = trim($idList, ',');
-        if($keys['taskName']) $conds->taskName       = $taskName;
-        if($keys['comment'])  $conds->comment        = $comment;
+        if(isset($keys['pri']))      $conds->priList        = trim($priList, ',');
+        if(isset($keys['assignTo'])) $conds->assignedToList = trim($assignedToList, ',');
+        if(isset($keys['status']))   $conds->statusList     = trim($statusList, ',');
+        if(isset($keys['id']))       $conds->idList         = trim($idList, ',');
+        if(isset($keys['taskName'])) $conds->taskName       = $taskName;
+        if(isset($keys['comment']))  $conds->comment        = $comment;
         return $conds;
     }
 
@@ -349,7 +365,8 @@ class zentaoBot extends xuanBot
         $keys['comment'] = true;
 
         $conds   = $this->parseArguments($args, $keys);
-        $taskID  = array_pop(array_filter(explode(',', $conds->idList)));
+        $tasks   = array_filter(explode(',', $conds->idList));
+        $taskID  = array_pop($tasks);
         $comment = $conds->comment;
 
         if(!is_numeric($taskID)) return $this->lang->errors->invalidCommand;
@@ -557,13 +574,13 @@ class zentaoBot extends xuanBot
             $messages = new stdclass();
             $messages->type = 'url';
             $messages->url  = $sysURL . $link;
-            return array(sprintf($this->tasksFound, $pager->recTotal), $messages);
+            return array(sprintf($this->lang->tasksFound, $pager->recTotal), $messages);
         }
 
         $messages = array();
         if($pager->pageID == 1)
         {
-            $messages[] = sprintf($this->tasksFound, $pager->recTotal);
+            $messages[] = sprintf($this->lang->tasksFound, $pager->recTotal);
         }
 
         $taskTable = $this->renderTaskTable($tasks);
