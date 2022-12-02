@@ -932,4 +932,51 @@ class zentaoBot extends xuanBot
 
         return $response;
     }
+
+    /**
+     * Used to call zentao's API.
+     *
+     * @param  string $entry
+     * @param  string $action
+     * @param  array  $params
+     * @param  string $version
+     * @access public
+     * @return object
+     */
+    public function loadEntry($entry, $action, $params = array(), $version = 'v1')
+    {
+        try
+        {
+            $this->im->loadModel('user');
+
+            $user = $this->im->user->getByID($this->im->app->input['userID'], 'id');
+            /* Authorize him and save to session. */
+            $user->rights = $this->im->user->authorize($user->account);
+            $user->groups = $this->im->user->getGroups($user->account);
+            $user->view   = $this->im->user->grantUserView($user->account, $user->rights['acls'], $user->rights['projects']);
+            $user->admin  = strpos($this->im->app->company->admins, ",{$user->account},") !== false;
+
+            global $app;
+            $app->action = $action;
+            $app->user   = $user;
+
+            include_once($this->im->app->appRoot . "framework/api/entry.class.php");
+            include_once($this->im->app->appRoot . "api/{$version}/entries/" . strtolower($entry) . ".php");
+
+            $entryName = $entry . 'Entry';
+            $entry     = new $entryName();
+
+            if($action == 'post' || $action == 'put')
+            {
+                $entry->requestBody = (object)$params;
+            }
+
+            $content = call_user_func_array(array($entry, $action), $params);
+            return json_decode($content);
+        }
+        catch(EndResponseException $endResponseException)
+        {
+            return $endResponseException->getContent();
+        }
+    }
 }
