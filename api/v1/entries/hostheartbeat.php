@@ -31,7 +31,7 @@ class hostHeartbeatEntry extends baseEntry
         $now    = helper::now();
         if(!$status) return $this->sendError(400, 'Params error.');
 
-        $conditionField = $secret ? 'secret' : 'token';
+        $conditionField = $secret ? 'secret' : 'tokenSN';
         $conditionValue = $secret ? $secret  : $token;
         $host = new stdclass();
         $host->status = $status;
