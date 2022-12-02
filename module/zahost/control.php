@@ -88,6 +88,10 @@ class zahost extends control
             {
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
+            elseif($hostID === false)
+            {
+                return $this->send(array('result' => 'fail', 'message' => array("extranet" => array($this->lang->zahost->netError))));
+            }
 
             $initLink = $this->createLink('zahost', 'inithost', "hostID=$hostID");
             return print("<script>showModal('$initLink')</script>");
@@ -111,7 +115,14 @@ class zahost extends control
         if($_POST)
         {
             $changes = $this->zahost->update($hostID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) 
+            {
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+            elseif($hostID === false)
+            {
+                return $this->send(array('result' => 'fail', 'message' => array("extranet" => array($this->lang->zahost->netError))));
+            }
 
             if(!empty($changes))
             {

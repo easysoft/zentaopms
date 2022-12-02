@@ -40,6 +40,7 @@ $lang->zahost->createZanode        = 'Create Zanode';
 $lang->zahost->initHostNotice      = 'Save successfully, initialize the ZAhost or return list';
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
+$lang->zahost->netError            = 'Unable to connect to the host, please check the network and try again.';
 
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->checkStatus   = "Check Service Status";

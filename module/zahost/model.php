@@ -49,6 +49,12 @@ class zahostModel extends model
             ->autoCheck();
         if(dao::isError()) return false;
 
+        $ping = $this->checkAddress($hostInfo->extranet);
+        if(!$ping)
+        {
+            return false;
+        }
+
         $this->dao->insert(TABLE_ZAHOST)->data($hostInfo)->autoCheck()->exec();
         $hostID = $this->dao->lastInsertID();
         if(!dao::isError())
@@ -79,11 +85,69 @@ class zahostModel extends model
             ->batchCheck('diskSize,memory', 'float');
         if(dao::isError()) return false;
 
+        $ping = $this->checkAddress($hostInfo->extranet);
+        if(!$ping)
+        {
+            return false;
+        }
+        
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo, 'name')->autoCheck()
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
             ->where('id')->eq($hostID)->exec();
         return common::createChanges($oldHost, $hostInfo);
+    }
+
+    /**
+     * Ping ip/domain.
+     *
+     * @param  string    $address
+     * @access public
+     * @return bool
+     */
+    public function ping($address)
+    {
+        if (strcasecmp(PHP_OS, 'WINNT') === 0) 
+        {
+            exec("ping -n 1 {$address}", $outcome, $status);
+        } 
+        elseif (strcasecmp(PHP_OS, 'Linux') === 0) 
+        {
+            exec("ping -c 1 {$address}", $outcome, $status);
+        }
+
+        if (0 == $status) 
+        {
+            $status = true;
+        } 
+        else 
+        {
+            $status = false;
+        }
+
+        return $status;
+    }
+
+    /**
+     * Telnet ip/domain.
+     *
+     * @param  string $address
+     * @access public
+     * @return bool
+     */
+    public function checkAddress($address) 
+    {
+        $address = str_replace(array('https://', 'http://'), '', $address);
+
+        if ($this->ping($address)) return true;
+
+        foreach(array(80, 443, 8086) as $port)
+        {
+            $fp = fsockopen($address, $port, $errno, $errstr, 3);
+            if ($fp) return true;
+        }
+
+        return false;
     }
 
     /**
