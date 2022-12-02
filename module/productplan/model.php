@@ -403,14 +403,17 @@ class productplanModel extends model
     {
         $date  = date('Y-m-d');
         $param = strtolower($param);
-        $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq(0)
-            ->beginIF($products)->andWhere('product')->in($products)->fi()
-            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
-            ->orderBy($orderBy)
+        $plans = $this->dao->select('*,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
+            ->orderBy('t1.' . $orderBy)
             ->fetchAll('id');
 
         if(!empty($plans) and $field == 'name') $plans = $this->reorder4Children($plans);
+
+        $plans = $this->relationBranch($plans);
 
         $parentTitle = array();
         $planGroup   = array();
@@ -427,6 +430,7 @@ class productplanModel extends model
                     if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
                     $planGroup[$plan->product][$branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
                     if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+                    if($plan->productType != 'normal') $planGroup[$plan->product][$branch][$plan->id] = $planGroup[$plan->product][$branch][$plan->id] . ' / ' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main);
                 }
                 else
                 {
@@ -1128,6 +1132,7 @@ class productplanModel extends model
     {
         if(empty($plans)) return $plans;
 
+        $this->app->loadLang('branch');
         $branchMap = $this->dao->select('id, name')->from(TABLE_BRANCH)
             ->where('status')->eq('active')
             ->andWhere('deleted')->eq('0')
