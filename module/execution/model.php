@@ -332,6 +332,20 @@ class executionModel extends model
         $this->checkBeginAndEndDate($_POST['project'], $_POST['begin'], $_POST['end']);
         if(dao::isError()) return false;
 
+        if($_POST['products'])
+        {
+            $this->app->loadLang('project');
+            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
+            foreach($_POST['products'] as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                {
+                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    return false;
+                }
+            }
+        }
+
         /* Determine whether to add a sprint or a stage according to the model of the execution. */
         $project = $this->loadModel('project')->getByID($_POST['project']);
         $type    = 'sprint';
@@ -512,6 +526,20 @@ class executionModel extends model
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
+        }
+
+        if($_POST['products'])
+        {
+            $this->app->loadLang('project');
+            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
+            foreach($_POST['products'] as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                {
+                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    return false;
+                }
+            }
         }
 
         /* Get the data from the post. */
