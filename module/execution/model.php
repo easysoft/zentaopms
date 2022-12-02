@@ -2937,7 +2937,7 @@ class executionModel extends model
                     {
                         foreach($planStory as $id => $story)
                         {
-                            if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($executionBranches) and !isset($executionBranches[$story->branch])))
+                            if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($executionBranches) and !isset($executionBranches[$story->branch]) and !empty($story->branch)))
                             {
                                 unset($planStory[$id]);
                                 continue;
