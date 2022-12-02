@@ -253,7 +253,7 @@ function addNewProduct(obj)
         $('#productName').attr('disabled', true);
         $('.productsBox .addProduct').addClass('hidden');
 
-        $('#productTitle').html(manageProducts);
+        $('#productTitle').html(manageProductPlan);
     }
 
     $('.productsBox div + .text-danger.help-text').remove();
