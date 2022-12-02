@@ -273,7 +273,7 @@ class zahostModel extends model
         $apiParams['url']  = $image->address;
         $apiParams['task'] = intval($image->id);
 
-        $response = json_decode(commonModel::http($apiUrl, array($apiParams), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+        $response = json_decode(commonModel::http($apiUrl, array($apiParams), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
 
         if($response and $response->code == 'success')
         {
@@ -299,7 +299,7 @@ class zahostModel extends model
         $host   = $this->getById($image->host);
         $apiUrl = 'http://' . $host->extranet . ':' . $this->config->zahost->defaultPort . '/api/v1/task/getStatus';
 
-        $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+        $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
         if(!$result or $result->code != 'success') return $image->status;
 
         foreach($result->data as $status => $group)
@@ -346,7 +346,7 @@ class zahostModel extends model
         $host      = $this->getById($image->host);
         $statusApi = 'http://' . $host->extranet . '/api/v1/task/status';
 
-        $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array(), 'json'));
+        $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$host->tokenSN"), 'json'));
 
         a($response);
         if($response->code == 200) return true;
@@ -371,7 +371,7 @@ class zahostModel extends model
 
         $apiParams['id']  = intval($zaInfo->taskID);
 
-        $response = json_decode(commonModel::http($apiUrl, $apiParams, array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+        $response = json_decode(commonModel::http($apiUrl, $apiParams, array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
 
         if($response and $response->code == 'success')
         {
@@ -515,7 +515,7 @@ class zahostModel extends model
      */
     public function getServiceStatus($host)
     {
-        $result = json_decode(commonModel::http("http://{$host->extranet}:8086/api/v1/service/check", json_encode(array("services" => "all"))));
+        $result = json_decode(commonModel::http("http://{$host->extranet}:8086/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$host->tokenSN")));
         if(empty($result) || $result->code != 'success')
         {
             $result = new stdclass;

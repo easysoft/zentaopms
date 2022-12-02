@@ -251,7 +251,7 @@ class zahost extends control
         $this->zahost->downloadImage($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        if(isonlybody()) return print(js::reload('parent.parent'));
+        if(isonlybody()) return print(js::reload('parent'));
         return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $hostID)), 'parent'));
     }
 
@@ -297,7 +297,7 @@ class zahost extends control
         $this->zahost->cancelDownload($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        if(isonlybody()) return print(js::reload('parent.parent'));
+        if(isonlybody()) return print(js::reload('parent'));
         return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $image->host)), 'parent'));
     }
 

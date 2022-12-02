@@ -12,7 +12,7 @@
 class hostSubmitEntry extends baseEntry
 {
     /**
-     * Listen host heartbeat.
+     * Listen host task finish submit.
      *
      * @param  int|string $userID
      * @access public
@@ -31,14 +31,13 @@ class hostSubmitEntry extends baseEntry
         $image = new stdclass();
         $task   = $this->requestBody->task;
         $image->status = $this->requestBody->status;
-        $image->speed  = $this->requestBody->speed;
-        $image->rate   = $this->requestBody->rate;
 
         $this->dao = $this->loadModel('common')->dao;
         $id = $this->dao->select('id')->from(TABLE_ZAHOST)
             ->where('tokenSN')->eq($token)
             ->andWhere('tokenTime')->gt($now)->fi()
             ->fetch('id');
+            
         if(!$id) return $this->sendError(400, 'Secret error.');
 
         $this->dao->update(TABLE_IMAGE)->data($image)->where("id")->eq($task)->exec();
