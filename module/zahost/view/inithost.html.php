@@ -20,9 +20,13 @@
       <div class='main-header'>
         <h2><?php echo $lang->zahost->initHost->title; ?></h2>
       </div>
+
       <div class="host-desc-container">
         <h4><?php echo $lang->zahost->initHost->descTitle; ?></h4>
-        <div><span class='dot-symbol'></span><span><?php echo $lang->zahost->initHost->initDesc . ' ' . $host->secret; ?></span></div>
+        <div>
+          <p><?php echo $lang->zahost->initHost->initDescFirst . ' ' . $host->secret; ?></p>
+          <p><?php echo $lang->zahost->initHost->initDescSecond;?></p>
+        </div>
 
         <div id="statusContainer">
         </div>

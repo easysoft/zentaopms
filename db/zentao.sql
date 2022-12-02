@@ -7301,6 +7301,7 @@ CREATE TABLE `zt_image` (
   `address` varchar(64) NOT NULL DEFAULT '',
   `path` varchar(64) NOT NULL DEFAULT '',
   `status` varchar(20) NOT NULL DEFAULT '',
+  `from` smallint(8) unsigned NOT NULL DEFAULT '0',
   `osName` varchar(32) NOT NULL DEFAULT '',
   `memory` float unsigned NOT NULL,
   `disk` float unsigned NOT NULL,

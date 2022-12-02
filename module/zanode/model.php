@@ -25,6 +25,8 @@ class zanodemodel extends model
 
     const KVM_CREATE_PATH = '/api/v1/kvm/create';
     const KVM_TOKEN_PATH  = '/api/v1/virtual/getVncToken';
+    const KVM_EXPORT_PATH = '/api/v1/kvm/exportVm';
+    const KVM_STATUS_PATH = '/api/v1/task/getStatus';
 
 
     /**
@@ -103,6 +105,55 @@ class zanodemodel extends model
         /* update action log. */
         $this->loadModel('action')->create('zanode', $nodeID, 'Created');
         return true;
+    }
+
+    /**
+     * Create Image by zanode.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return void
+     */
+    public function createImage($zanodeID = 0)
+    {
+        $data = fixer::input('post')->get();
+
+        if(empty($data->name)) dao::$errors['message'][] = '名称不能为空';
+        if(dao::isError()) return false;
+
+        $node  = $this->getNodeByID($zanodeID);
+        $image = $this->getImageByID($node->image);
+
+        $newImage = new stdClass();
+        $newImage->name   = $data->name;
+        $newImage->status = 'created';
+        $newImage->osName = $node->osName;
+        $newImage->from   = $node->id;
+        $newImage->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_IMAGE)
+            ->data($newImage)
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        $newID = $this->dao->lastInsertID();
+
+        /* Prepare create params. */
+        $agnetUrl = 'http://' . $node->ip . ':' . $this->config->zanode->defaultPort;
+        $param    = array(
+            'backing' => "'{$data->name}'",
+            'task'    => $newID,
+            'vm'      => $node->name
+        );
+
+        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null));
+
+        if(!empty($result) and $result->code == 'success') return $newID;
+
+        $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($newID)->exec();
+        return false;
     }
 
     /**
@@ -288,6 +339,22 @@ class zanodemodel extends model
     }
 
     /**
+     * Get node list.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function getList($orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_ZAHOST)
+            ->where('deleted')->eq(0)
+            ->andWhere("type")->eq('node')
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get node list by hostID.
      *
      * @param  string $browseType
@@ -358,7 +425,29 @@ class zanodemodel extends model
      */
     public function getimageList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_IMAGE)->orderBy($orderBy)->page($pager)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('from')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Get custom image.
+     *
+     * @param  int          $nodeID
+     * @param  string|array $status
+     * @param  string       $orderBy
+     * @access public
+     * @return void
+     */
+    public function getCustomImage($nodeID = 0, $status = '', $orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('`from`')->eq($nodeID)
+            ->beginIF($status)->andWhere('status')->in($status)->fi()
+            ->orderBy($orderBy)
+            ->fetch();
     }
 
     /**
@@ -444,6 +533,42 @@ class zanodemodel extends model
         $returnData->vnc       = $vm->vnc;
         $returnData->token     = $result->data->token;
         return $returnData;
+    }
+
+    /**
+     * Get task status by zagent api.
+     *
+     * @param  int    $extranet
+     * @param  int    $taskID
+     * @param  string $type
+     * @param  string $status
+     * @access public
+     * @return void
+     */
+    public function getTaskStatus($extranet = '', $taskID = 0, $type = '', $status = '')
+    {
+        $agnetUrl = 'http://' . $extranet . ':8086' . static::KVM_STATUS_PATH;
+        $result   = json_decode(commonModel::http("$agnetUrl", array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+
+        if(empty($result) or $result->code != 'success') return false;
+        $data = $result->data;
+        if(empty($data)) return array();
+
+        if($status and !$taskID and isset($data->$status)) return $data->$status;
+
+        if(!$taskID) return $data;
+
+        foreach($data as $status => $tasks)
+        {
+            if(empty($tasks)) continue;
+
+            foreach($tasks as $task)
+            {
+                if($type == $task->type and $taskID == $task->task) return $task;
+                if($taskID == $task->task) return $task;
+            }
+        }
+
     }
 
     public function buildOperateMenu($node)

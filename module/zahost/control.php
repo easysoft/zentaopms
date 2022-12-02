@@ -33,6 +33,7 @@ class zahost extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $hostList = $this->zahost->getList($browseType, $param, $orderBy, $pager);
+        $nodeList = $this->zahost->getHostNodeGroup();
 
         /* Build the search form. */
         $actionURL = $this->createLink('zahost', 'browse', "browseType=bySearch&param=myQueryID");
@@ -43,6 +44,7 @@ class zahost extends control
 
         $this->view->title      = $this->lang->zahost->common;
         $this->view->hostList   = $hostList;
+        $this->view->nodeList   = $nodeList;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
         $this->view->pager      = $pager;
         $this->view->param      = $param;

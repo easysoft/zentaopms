@@ -39,6 +39,7 @@ $lang->zahost->createZanode        = 'Create Zanode';
 $lang->zahost->initHostNotice      = 'Save successfully, initialize the ZAhost or return list';
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
+$lang->zahost->undeletedNotice     = "The host has nodes that cannot be deleted.";
 
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->checkStatus   = "Check Service Status";
@@ -47,7 +48,6 @@ $lang->zahost->initHost->not_available = "Installed, Not Started";
 $lang->zahost->initHost->ready         = "Ready";
 $lang->zahost->initHost->next          = "Next";
 
-$lang->zahost->initHost->initSuccessNotice   = "The initialization was successful, click Next to complete the next steps.";
 $lang->zahost->initHost->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
 $lang->zahost->initHost->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
@@ -56,9 +56,10 @@ $lang->zahost->initHost->serviceStatus = [
     "novnc" => 'not_install',
     "websockify" => 'not_install',
 ];
-$lang->zahost->initHost->title       = "Initialize Host";
-$lang->zahost->initHost->descTitle   = "Follow these steps to complete the initialization on the host:";
-$lang->zahost->initHost->initDesc    = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
+$lang->zahost->initHost->title          = "Initialize Host";
+$lang->zahost->initHost->descTitle      = "Follow these steps to complete the initialization on the host:";
+$lang->zahost->initHost->initDesc       = "1. Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
+$lang->zahost->initHost->initDescSecond = "2. Checking Service Status";
 
 $lang->zahost->image = new stdclass;
 $lang->zahost->image->list          = 'Image List';

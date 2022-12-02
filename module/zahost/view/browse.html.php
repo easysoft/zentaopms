@@ -70,7 +70,9 @@
           <td><?php echo helper::isZeroDate($host->heartbeat) ? '' : $host->heartbeat;?></td>
           <td class='c-actions'>
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
-            <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");;?>
+            <?php $disabled = !empty($nodeList[$host->hostID]) ? '' : 'disabled';?>
+            <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->delete : $lang->zahost->undeletedNotice;?>
+            <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
           </td>
         </tr>
         <?php endforeach;?>

@@ -14,9 +14,7 @@ $('#checkServiceStatus').click(function(){
             }
         };
 
-        if(isSuccess){
-            html += '<h4>' + zahostLang.initHost.initSuccessNotice + '</h4>'
-        }else{
+        if(!isSuccess){
             html += '<h4 style="margin-top:20px;">' + zahostLang.initHost.initFailNoticeTitle + '</h4>';
             html += '<div><span class="dot-symbol">' + zahostLang.initHost.initFailNoticeDesc + '<a href="https://github.com/easysoft/zenagent/" target="_blank">https://github.com/easysoft/zenagent/</a></span></div>'
         }

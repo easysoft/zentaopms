@@ -1,34 +1,34 @@
 <?php
 $lang->zahost->id             = 'ID';
 $lang->zahost->common         = 'ZAhost';
-$lang->zahost->browse         = 'Hôte Liste';
-$lang->zahost->create         = 'Ajouter Hôte';
-$lang->zahost->view           = 'Hôte Détail';
+$lang->zahost->browse         = 'Host List';
+$lang->zahost->create         = 'Add Host';
+$lang->zahost->view           = 'Host View';
 $lang->zahost->init           = 'Init Host';
-$lang->zahost->edit           = 'Éditer';
-$lang->zahost->editAction     = 'Éditer Hôte';
-$lang->zahost->delete         = 'Supprimer';
-$lang->zahost->deleteAction   = 'Supprimer Hôte';
-$lang->zahost->byQuery        = 'Recherche';
-$lang->zahost->all            = 'Tous les hôtes';
+$lang->zahost->edit           = 'Edit';
+$lang->zahost->editAction     = 'Edit Host';
+$lang->zahost->delete         = 'Delete';
+$lang->zahost->deleteAction   = 'Delete Host';
+$lang->zahost->byQuery        = 'Search';
+$lang->zahost->all            = 'All';
 $lang->zahost->browseNode     = 'ZAnode Browse';
 $lang->zahost->deleted        = "Deleted";
 
-$lang->zahost->name        = 'Nom';
-$lang->zahost->IP          = 'IP/Domain';
-$lang->zahost->extranet    = 'IP';
-$lang->zahost->cpuCore     = 'CPU Cores';
-$lang->zahost->memory      = 'Mémoire Espace';
-$lang->zahost->diskSize    = 'Disque Espace';
+$lang->zahost->name        = 'Name';
+$lang->zahost->IP          = 'Extranet Address';
+$lang->zahost->extranet    = 'Extranet Address';
+$lang->zahost->cpuCores    = 'CPU Cores';
+$lang->zahost->memory      = 'Memory Size';
+$lang->zahost->diskSize    = 'diskSize Size';
 $lang->zahost->desc        = 'Description';
 $lang->zahost->type        = 'Type';
 $lang->zahost->status      = 'Status';
 
-$lang->zahost->createdBy    = 'Créé par';
-$lang->zahost->createdDate  = 'Date de création';
-$lang->zahost->editedBy     = 'Édité par';
-$lang->zahost->editedDate   = "Date d'édition";
-$lang->zahost->registerDate = "RegisterDate";
+$lang->zahost->createdBy    = 'CreatedBy';
+$lang->zahost->createdDate  = 'CreatedDate';
+$lang->zahost->editedBy     = 'EditedBy';
+$lang->zahost->editedDate   = 'EditedDate';
+$lang->zahost->registerDate = 'RegisterDate';
 
 $lang->zahost->memorySize = $lang->zahost->memory;
 $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
@@ -39,6 +39,7 @@ $lang->zahost->createZanode        = 'Create Zanode';
 $lang->zahost->initHostNotice      = 'Save successfully, initialize the ZAhost or return list';
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
+$lang->zahost->undeletedNotice     = "The host has nodes that cannot be deleted.";
 
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->checkStatus   = "Check Service Status";
@@ -47,7 +48,6 @@ $lang->zahost->initHost->not_available = "Installed, Not Started";
 $lang->zahost->initHost->ready         = "Ready";
 $lang->zahost->initHost->next          = "Next";
 
-$lang->zahost->initHost->initSuccessNotice   = "The initialization was successful, click Next to complete the next steps.";
 $lang->zahost->initHost->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
 $lang->zahost->initHost->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
@@ -56,9 +56,10 @@ $lang->zahost->initHost->serviceStatus = [
     "novnc" => 'not_install',
     "websockify" => 'not_install',
 ];
-$lang->zahost->initHost->title       = "Initialize Host";
-$lang->zahost->initHost->descTitle   = "Follow these steps to complete the initialization on the host:";
-$lang->zahost->initHost->initDesc    = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
+$lang->zahost->initHost->title          = "Initialize Host";
+$lang->zahost->initHost->descTitle      = "Follow these steps to complete the initialization on the host:";
+$lang->zahost->initHost->initDesc       = "1. Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
+$lang->zahost->initHost->initDescSecond = "2. Checking Service Status";
 
 $lang->zahost->image = new stdclass;
 $lang->zahost->image->list          = 'Image List';
@@ -99,13 +100,13 @@ $lang->zahost->softwareList['kvm'] = 'KVM';
 $lang->zahost->unitList['GB'] = 'GB';
 $lang->zahost->unitList['TB'] = 'TB';
 
-$lang->zahost->zaHostType                 = 'Type Hôte';
-$lang->zahost->zaHostTypeList['physical'] = 'Physique';
+$lang->zahost->zaHostType                 = 'Type';
+$lang->zahost->zaHostTypeList['physical'] = 'Physical';
 
-$lang->zahost->confirmDelete           = 'Voulez-vous supprimer cet hôte?';
+$lang->zahost->confirmDelete           = 'Do you want to delete this host?';
 
 $lang->zahost->notice = new stdclass();
-$lang->zahost->notice->ip              = '『%s』format incorrect!';
+$lang->zahost->notice->ip              = '『%s』incorrect format!';
 $lang->zahost->notice->registerCommand = 'Register command: ./zagent-host -t host -s http://%s:%s -i %s -p 8086 -secret %s';
 $lang->zahost->notice->loading         = 'loading...';
 $lang->zahost->notice->noImage         = 'No available image';

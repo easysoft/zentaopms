@@ -30,7 +30,6 @@ class zanode extends control
 
         $this->app->loadClass('pager', $static = true);
 
-
         $queryID  = ($browseType == 'bysearch')  ? (int)$param : 0;
         $pager    = pager::init($recTotal, $recPerPage, $pageID);
         $nodeList = $this->zanode->getListByQuery($browseType, $queryID, $orderBy, $pager);
@@ -182,6 +181,39 @@ class zanode extends control
     }
 
     /**
+     * Create custom image.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return void
+     */
+    public function createImage($zanodeID = 0)
+    {
+        $task        = '';
+        $node        = $this->zanode->getNodeByID($zanodeID);
+        $customImage = $this->zanode->getCustomImage($zanodeID, 'created,inprogress');
+        if($customImage) $task = $this->zanode->getTaskStatus($node->ip, $customImage->id, 'exportVm');
+
+        if($_POST)
+        {
+            $this->zanode->createImage($zanodeID);
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+       // $task        = '';
+        $this->view->task = $task;
+        $this->view->rate = !empty($task->rate) ? $task->rate : 0;
+        $this->display();
+    }
+
+    /**
      * Desctroy node.
      *
      * @param  int  $nodeID
@@ -253,5 +285,21 @@ class zanode extends control
     {
         $template = $this->loadModel('zahost')->getImageByID($imageID);
         return print(json_encode($template));
+    }
+
+    /**
+     * Ajax get task status.
+     *
+     * @param  int    $extranet
+     * @param  int    $taskID
+     * @param  string $type
+     * @param  string $status
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTaskStatus($extranet, $taskID = 0, $type = '', $status = '')
+    {
+        $result = $this->zanode->getTaskStatus($extranet, $taskID, $type, $status);
+        return print(json_encode($result));
     }
 }
