@@ -279,7 +279,7 @@ class zahost extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->zahost->confirmDelete, inlink('ajaxCancelDownload', "id=$imageID&confirm=yes")));
+            return print(js::confirm($this->lang->zahost->cancelDelete, inlink('cancelDownload', "id=$imageID&confirm=yes")));
         }
         $image = $this->zahost->getImageByID($imageID);
 

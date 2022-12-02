@@ -107,6 +107,7 @@ $lang->zahost->zaHostType                 = 'Type';
 $lang->zahost->zaHostTypeList['physical'] = 'Physical';
 
 $lang->zahost->confirmDelete           = 'Do you want to delete this host?';
+$lang->zahost->cancelDelete            = 'Do you want to cancel this download task?';
 
 $lang->zahost->notice = new stdclass();
 $lang->zahost->notice->ip              = '『%s』incorrect format!';
