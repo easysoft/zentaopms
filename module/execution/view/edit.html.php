@@ -141,6 +141,7 @@
         <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
         <?php $hidden = 'hide'?>
         <?php if(!empty($project->hasProduct)) $hidden = ''?>
+        <?php if($linkedProducts):?>
         <?php $i = 0;?>
         <?php foreach($linkedProducts as $product):?>
         <tr class="<?php echo $hidden;?>">
@@ -180,6 +181,41 @@
         </tr>
         <?php $i ++;?>
         <?php endforeach;?>
+        <?php else:?>
+        <tr class='<?php echo $hidden;?>'>
+          <th id='productTitle'><?php echo $lang->project->manageProductPlan;?></th>
+          <td class='text-left productsBox' colspan='3'>
+            <div class='row'>
+              <div class="col-sm-6">
+                <div class='table-row'>
+                  <div class='table-col'>
+                    <div class='input-group'>
+                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <?php echo html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
+                    </div>
+                  </div>
+                  <div class='table-col hidden'>
+                    <div class='input-group required'>
+                      <span class='input-group-addon fix-border'><?php echo $lang->product->branchName['branch'];?></span>
+                      <?php echo html::select("branch", '', '', "class='form-control chosen' multiple");?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class='input-group' id='plan0'>
+                  <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
+                  <?php echo html::select("plans[][]", '', '', "class='form-control chosen' multiple");?>
+                  <div class='input-group-btn'>
+                    <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>
+                    <a href='javascript:;' onclick='removeLine(this)' class='btn btn-link removeLine' style='visibility: hidden'><i class='icon-close'></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <?php endif; ?>
         <?php else: ?>
         <?php echo html::hidden("products[]", key($linkedProducts));?>
         <?php endif; ?>
