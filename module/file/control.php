@@ -221,34 +221,20 @@ class file extends control
         $this->view->fields = $this->post->fields;
         $this->view->rows   = $this->post->rows;
         $this->host         = common::getSysURL();
+        $kind               = $this->post->kind;
 
-        switch($this->post->kind)
+        foreach($this->view->rows as $row)
         {
-            case 'task':
-            foreach($this->view->rows as $row)
+            foreach($row as &$field)
             {
-                $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
+                if(empty($field)) continue;
+                $field = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $this->host . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $field);
             }
-            break;
-            case 'story':
-            foreach($this->view->rows as $row)
-            {
-                $row->title= html::a($this->host . $this->createLink('story', 'view', "storyID=$row->id"), $row->title);
-            }
-            break;
-            case 'bug':
-            foreach($this->view->rows as $row)
-            {
-                $row->title= html::a($this->host . $this->createLink('bug', 'view', "bugID=$row->id"), $row->title);
-            }
-            break;
-            case 'testcase':
-            foreach($this->view->rows as $row)
-            {
-                $row->title= html::a($this->host . $this->createLink('testcase', 'view', "caseID=$row->id"), $row->title);
-            }
-            break;
+
+            if(in_array($kind, array('story', 'bug', 'testcase'))) $row->title = html::a($this->host . $this->createLink($kind, 'view', "{$kind}ID=$row->id"), $row->title);
+            if($kind == 'task') $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
         }
+
         $this->view->fileName = $this->post->fileName;
         $output = $this->parse('file', 'export2Html');
 

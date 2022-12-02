@@ -478,6 +478,8 @@ $lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}";
 $lang->execution->kanbanViewList['bug']   = 'Bug';
 $lang->execution->kanbanViewList['task']  = 'Task';
 
+$lang->execution->teamWords  = 'Team';
+
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = 'Voulez-vous réinitialiser le tableau Kanban ?';
 $lang->kanbanSetting->optionList['0'] = 'Masquer';

@@ -108,7 +108,13 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
         <tr class="<?php echo $hiddenStory?> storyBox">
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
-            <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
+            <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> ">
+              <?php
+              $noticeLinkStory = sprintf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));
+              if(empty($execution->hasProduct)) $noticeLinkStory = $lang->task->noticeLinkStoryNoProduct;
+              echo $noticeLinkStory;
+              ?>
+            </span>
             <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
               <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <?php if(common::hasPriv('execution', 'storyView')):?>

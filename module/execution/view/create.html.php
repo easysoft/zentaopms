@@ -161,7 +161,8 @@
             </div>
           </td>
         </tr>
-        <?php if(isset($project->model) and $project->model == 'scrum') $hidden = '';?>
+        <?php $hidden = 'hide'?>
+        <?php if(isset($project->model) and !empty($project->hasProduct) and $project->model == 'scrum') $hidden = '';?>
         <tr class="<?php echo $hidden?>">
           <th><?php echo $lang->execution->linkPlan;?></th>
           <td colspan="3" id="plansBox">

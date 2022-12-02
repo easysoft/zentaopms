@@ -246,6 +246,7 @@ $lang->task->confirmRecord             = '"Heures Restantes" à 0. Voulez-vous p
 $lang->task->confirmTransfer           = '"Left Hour" is 0，Do you want to assign to <strong>%s</strong> task?';
 $lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory           = "Aucune Story n'est associée. Vous pouvez %s pour ce projet, alors %s.";
+$lang->task->noticeLinkStoryNoProduct  = "No story has been linked.";
 $lang->task->noticeSaveRecord          = "Votre temps n'a pas été sauvé. Enregistrez-le d'abord.";
 $lang->task->noticeManageTeam          = 'Task status is %s, can not manage team.';
 $lang->task->commentActions            = '%s. %s, commenté par <strong>%s</strong>.';
