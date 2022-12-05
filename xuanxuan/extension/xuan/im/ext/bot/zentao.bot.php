@@ -674,39 +674,24 @@ class zentaoBot extends xuanBot
                         $startUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->startTask} #$task->id";
                         $finishUrl = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->finishTask} #$task->id";
                         $closeUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->closeTask} #$task->id";
-                        switch($task->status)
+
+                        $canStart  = in_array($task->status, array('wait', 'pause'));
+                        $canFinish = in_array($task->status, array('wait', 'pause', 'doing'));
+                        $canClose  = in_array($task->status, array('done', 'cancel'));
+
+                        /* Disable all if task has children. */
+                        if($task->parent == -1)
                         {
-                            case 'wait':
-                            case 'pause':
-                                $tr .= '<td><div class="flex gap-xs">';
-                                $tr .= "<a href='$startUrl'><i class='icon-zt-play'></i></a>";
-                                $tr .= "<a href='$finishUrl'><i class='icon-zt-checked'></i></a>";
-                                $tr .= "<div><i class='icon-zt-off disabled'></i></div>";
-                                $tr .= '</div></td>';
-                                break;
-                            case 'doing':
-                                $tr .= '<td><div class="flex gap-xs">';
-                                $tr .= "<div><i class='icon-zt-play disabled'></i></div>";
-                                $tr .= "<a href='$finishUrl'><i class='icon-zt-checked'></i></a>";
-                                $tr .= "<div><i class='icon-zt-off disabled'></i></div>";
-                                $tr .= '</div></td>';
-                                break;
-                            case 'done':
-                            case 'cancel':
-                                $tr .= '<td><div class="flex gap-xs">';
-                                $tr .= "<div><i class='icon-zt-play disabled'></i></div>";
-                                $tr .= "<div><i class='icon-zt-checked disabled'></i></div>";
-                                $tr .= "<a href='$closeUrl'><i class='icon-zt-off'></i></a>";
-                                $tr .= '</div></td>';
-                                break;
-                            case 'closed':
-                                $tr .= '<td><div class="flex gap-xs">';
-                                $tr .= "<div><i class='icon-zt-play disabled'></i></div>";
-                                $tr .= "<div><i class='icon-zt-checked disabled'></i></div>";
-                                $tr .= "<div><i class='icon-zt-off disabled'></i></div>";
-                                $tr .= '</div></td>';
-                                break;
+                            $canStart  = false;
+                            $canFinish = false;
+                            $canClose  = false;
                         }
+
+                        $tr .= '<td><div class="flex gap-xs">';
+                        $tr .= $canStart  ? "<a href='$startUrl'><i class='icon-zt-play'></i></a>"     : "<div><i class='icon-zt-play disabled'></i></div>";
+                        $tr .= $canFinish ? "<a href='$finishUrl'><i class='icon-zt-checked'></i></a>" : "<div><i class='icon-zt-checked disabled'></i></div>";
+                        $tr .= $canClose  ? "<a href='$closeUrl'><i class='icon-zt-off'></i></a>"      : "<div><i class='icon-zt-off disabled'></i></div>";
+                        $tr .= '</div></td>';
                         break;
                     case 'estimate':
                     case 'consumed':
