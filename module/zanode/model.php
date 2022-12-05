@@ -143,7 +143,7 @@ class zanodemodel extends model
         /* Prepare create params. */
         $agnetUrl = 'http://' . $node->ip . ':' . $this->config->zanode->defaultPort;
         $param    = array(
-            'backing' => "'{$data->name}'",
+            'backing' => $data->name,
             'task'    => $newID,
             'vm'      => $node->name
         );
@@ -565,10 +565,10 @@ class zanodemodel extends model
             foreach($tasks as $task)
             {
                 if($type == $task->type and $taskID == $task->task) return $task;
-                if($taskID == $task->task) return $task;
             }
         }
 
+        return $result;
     }
 
     public function buildOperateMenu($node)

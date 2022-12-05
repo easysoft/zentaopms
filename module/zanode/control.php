@@ -207,8 +207,8 @@ class zanode extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-       // $task        = '';
         $this->view->task = $task;
+        $this->view->node = $node;
         $this->view->rate = !empty($task->rate) ? $task->rate : 0;
         $this->display();
     }
@@ -301,5 +301,29 @@ class zanode extends control
     {
         $result = $this->zanode->getTaskStatus($extranet, $taskID, $type, $status);
         return print(json_encode($result));
+    }
+
+    /**
+     * Update image.
+     *
+     * @param  int    $imageID
+     * @access public
+     * @return void
+     */
+    public function ajaxUpdateImage($imageID = 0)
+    {
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+            $this->dao->update(TABLE_IMAGE)->data($data)->where('id')->eq($imageID)->autoCheck()->exec();
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+        }
     }
 }

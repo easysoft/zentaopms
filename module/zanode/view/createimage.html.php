@@ -12,6 +12,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php if($task):?>
+<?php js::set('taskID', $task->task);?>
+<?php js::set('extranet', $node->ip);?>
+<style>.body-modal #mainContent{width:90%;}
+</style>
+<?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -26,7 +32,8 @@
       </div>
     </div>
     <?php $link = helper::createLink('zanode', 'create');?>
-    <h6 class='hide text-center success'><?php echo sprintf($lang->zanode->createImageSuccess, $link)?></h6>
+    <h6 class='hide text-center success'><?php echo sprintf($lang->zanode->createImageSuccess, $link);?></h6>
+    <h6 class='hide text-center fail'><?php echo $lang->zanode->createImageFail;?></h6>
     <?php else:?>
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
@@ -48,30 +55,40 @@
     <?php endif;?>
   </div>
 </div>
-
+<?php if($task):?>
 <script>
-var i = 1;
-var int = self.setInterval("refreshProgress()",100);
-function refreshProgress()
-{
-    $('.rate').css('width', i + '%');
-    if(i == 100)
-    {
-        console.log($('.rate').css);
-        debugger;
-        $('.success').removeClass('hide');
-        clearInterval(int);
-    }
-    i ++  ;
-}
+var setProgress = self.setInterval("getTaskProgress()",500);
 
 function getTaskProgress()
 {
     var url = createLink('zanode', 'ajaxGetTaskStatus', 'extranet=' + extranet + '&taskID=' + taskID + '&type=exportVm');
     $.get(url, function(data)
     {
+        var rate   = data.rate;
+        var status = data.status;
 
-    });
+        if(rate == 1 || status == 'completed') rate = 100;
+
+        $('.rate').css('width', rate + '%');
+        if(rate == 100 || (status != 'inprogress' && status != 'created'))
+        {
+            updateStatus(data);
+            clearInterval(setProgress);
+        }
+    }, 'json');
+}
+
+function updateStatus(data)
+{
+    var url      = createLink('zanode', 'ajaxUpdateImage', 'taskID=' + taskID)
+    var postData = {"status":data.status, "path":data.path}
+
+    $.post(url, postData, function(result)
+    {
+        if(data.status == 'completed') $('.success').removeClass('hide');
+        else $('.fail').removeClass('hide');
+    }, 'json');
 }
 </script>
+<?php endif;;?>
 <?php include '../../common/view/footer.html.php';?>
