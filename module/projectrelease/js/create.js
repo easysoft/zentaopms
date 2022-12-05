@@ -1,27 +1,3 @@
-$('#submit').click(function()
-{
-    var dateFormat    = new RegExp(/^\d{4}\-\d{2}\-\d{2}$/);
-    var name          = $('#name').val();
-    var date          = $('#date').val();
-    var build         = $('#build').val();
-    var notEmptyBuild = false;
-
-    $.each(build, function(index, value)
-    {
-        if(typeof(notEmptyBuilds[value]) != 'undefined')
-        {
-            notEmptyBuild = true;
-            return false;
-        }
-    })
-
-    if(name && build && notEmptyBuild && dateFormat.test(date))
-    {
-        var result = confirm(confirmLink) ? true : false;
-        $('#sync').val(result);
-    }
-});
-
 /**
  * Ajax load unlinked builds with project and product.
  *
@@ -35,10 +11,6 @@ function loadBuilds()
     $('#buildBox').load(createLink('projectrelease', 'ajaxLoadBuilds', "projectID=" + projectID + "&productID=" + productID + "&branch=" + branch), function()
     {
         $('#build').attr('data-placeholder', multipleSelect).chosen();
-        $.each($('#build').attr('data-notemptybuilds').split(','), function(index, value)
-        {
-            notEmptyBuilds[value] = value;
-        });
     });
 }
 

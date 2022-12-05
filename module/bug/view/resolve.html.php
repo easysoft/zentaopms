@@ -16,7 +16,7 @@
 <?php
 js::set('page', 'resolve');
 js::set('productID', $bug->product);
-js::set('releasedBuild', $lang->build->releasedBuild);
+js::set('released', $lang->build->released);
 ?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>

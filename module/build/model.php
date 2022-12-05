@@ -327,7 +327,7 @@ class buildModel extends model
                 $releaseName = $release->name;
                 $branchName  = $release->branchName ? $release->branchName : $this->lang->branch->main;
                 if($release->productType != 'normal') $releaseName = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
-                if(strpos($params, 'releasetag') !== false) $releaseName = "[{$this->lang->build->releasedBuild}] " . $releaseName;
+                if(strpos($params, 'releasetag') !== false) $releaseName = $releaseName . " [{$this->lang->build->released}]";
                 $builds[$release->date][$release->shadow] = $releaseName;
                 foreach(explode(',', trim($release->build, ',')) as $buildID)
                 {

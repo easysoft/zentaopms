@@ -31,7 +31,7 @@ js::set('bugBranch'              , $bug->branch);
 js::set('isClosedBug'            , $bug->status == 'closed');
 js::set('projectExecutionPairs'  , $projectExecutionPairs);
 js::set('productID'              , $product->id);
-js::set('releasedBuild'          , $lang->build->releasedBuild);
+js::set('released'               , $lang->build->released);
 if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
 if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>

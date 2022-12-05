@@ -225,7 +225,7 @@ class releaseModel extends model
                 $branches[$build->branch]  = $build->branch;
                 $projects[$build->project] = $build->project;
 
-                if($this->post->sync == 'true')
+                if($this->post->sync)
                 {
                     $build->stories = trim($build->stories, ',');
                     $build->bugs    = trim($build->bugs, ',');
@@ -233,7 +233,7 @@ class releaseModel extends model
                     if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
                 }
             }
-            if($this->post->sync == 'true' and $release->bugs)
+            if($this->post->sync and $release->bugs)
             {
                 $releaseBugs   = $this->loadModel('bug')->getReleaseBugs(array_keys($builds), $release->product, $release->branch);
                 $release->bugs = join(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));

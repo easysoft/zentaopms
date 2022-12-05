@@ -51,8 +51,7 @@
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
           <th class="c-name w-200px text-left <?php echo $hidden;?>"><?php echo $lang->build->product;?></th>
           <th class="c-name text-left"><?php echo $lang->build->name;?></th>
-          <th class="c-url"><?php echo $lang->build->scmPath;?></th>
-          <th class="c-url"><?php echo $lang->build->filePath;?></th>
+          <th class="c-url w-300px text-left"><?php echo $lang->build->url;?></th>
           <th class="c-date"><?php echo $lang->build->date;?></th>
           <th class="c-user"><?php echo $lang->build->builder;?></th>
           <th class="c-actions-5"><?php echo $lang->actions;?></th>
@@ -68,8 +67,12 @@
             <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?>
           </td>
-          <td class="c-url" title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
-          <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
+          <td class="c-url text-left">
+            <?php
+            if($build->scmPath)  echo "<div><i class='icon icon-code' title='{$lang->build->scmPath}'></i> <span title='{$build->scmPath}'>" . (strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath) . '</span></div>';
+            if($build->filePath) echo "<div><i class='icon icon-file-archive' title='{$lang->build->filePath}'></i> <span title='{$build->filePath}'>" . (strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath) . '</span></div>';
+            ?>
+          </td>
           <td class="c-date"><?php echo $build->date?></td>
           <td class="c-user em"><?php echo zget($users, $build->builder);?></td>
           <td class="c-actions"><?php echo $this->build->buildOperateMenu($build, 'browse', "executionID={$execution->id}&productID={$productID}");?></td>
