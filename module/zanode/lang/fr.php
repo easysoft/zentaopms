@@ -51,8 +51,9 @@ $lang->zanode->empty         = 'No zanode is found';
 $lang->zanode->empty              = 'No Execution Node';
 $lang->zanode->createImaging      = 'Creating';
 $lang->zanode->createImageNotice  = 'The system will be created based on the current node，This process requires the execution node to be shut down. Do you want to continue?';
-$lang->zanode->createImageSuccess = 'Successed, You can use this image to create node. <a href="%s">Created</a>';
+$lang->zanode->createImageSuccess = 'Successed, You can use this image to create node.';
 $lang->zanode->createImageFail    = 'Failed to create';
+$lang->zanode->createImageButton  = 'Create image';
 
 $lang->zanode->imageNameEmpty = 'Name can not be empty.';
 
