@@ -351,7 +351,8 @@ $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.ph
 $lang->execution->whyNoStories         = "Aucune story ne peut être associée. Vérifiez s'il existe des stories dans {$lang->executionCommon} qui sont associées à {$lang->productCommon} et vérifiez qu'elles ont bien été validées.";
 $lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories       = "Les stories associées au {$lang->executionCommon} sont une portion des stories associées au {$lang->productCommon}. Les stories ne peuvent être associées à un {$lang->executionCommon} qu'après avoir été validées. <a href='%s'> Associer Stories</a> maintenant.";
-$lang->execution->haveDraft            = "There are %s draft stories or not associated with this {$lang->executionCommon} can't be linked.";
+$lang->execution->haveBranchDraft      = "There are %s draft stories or not associated with this {$lang->executionCommon} can't be linked.";
+$lang->execution->haveDraft            = "There are %s draft stories with this {$lang->executionCommon} can't be linked.";
 $lang->execution->doneExecutions       = 'Terminé';
 $lang->execution->selectDept           = 'Sélection Compartiment';
 $lang->execution->selectDeptTitle      = 'Sélection Utilisateur';
