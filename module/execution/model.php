@@ -4673,7 +4673,7 @@ class executionModel extends model
         }
         else
         {
-            $branchQuery .= "FIND_IN_SET('', branch)";
+            $branchQuery .= "FIND_IN_SET('0', branch)";
         }
 
         $branchQuery .= ')';
