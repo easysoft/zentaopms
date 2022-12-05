@@ -89,7 +89,7 @@ $lang->im->bot->zentaoBot->errors->taskNotFound    = 'Task not found.';
 $lang->im->bot->zentaoBot->finish = new stdclass();
 $lang->im->bot->zentaoBot->finish->tip             = 'Click the link below to finish the task. Time consumed and starting time of this task are required.';
 $lang->im->bot->zentaoBot->finish->tipLinkTitle    = 'Finish Task';
-$lang->im->bot->zentaoBot->finish->done            = 'Task #%d is finished, ended at:%s, time consumed: %f hours.';
+$lang->im->bot->zentaoBot->finish->done            = 'Task #%d is finished, ended at:%s, time consumed: %.1f hours.';
 $lang->im->bot->zentaoBot->finish->bugTip          = 'Task #%d is associated with a bug, you may mark the bug as resolved by clicking the link below.';
 $lang->im->bot->zentaoBot->finish->bugTipLinkTitle = 'Resolve Bug';
 
