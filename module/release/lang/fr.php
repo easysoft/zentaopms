@@ -24,7 +24,7 @@ $lang->release->batchUnlinkStory = "Retirer Stories par Lot";
 $lang->release->batchUnlinkBug   = "Retirer Bugs par Lot";
 
 $lang->release->confirmDelete      = "Voulez-vous réellement supprimer cette release ?";
-$lang->release->confirmLink        = "Whether to link the stories completed in the version and the bugs solved to the release?";
+$lang->release->syncFromBuilds     = "Link the stories completed in the version and the bugs solved to the release";
 $lang->release->confirmUnlinkStory = "Voulez-vous retirer cette story de la release ?";
 $lang->release->confirmUnlinkBug   = "Voulez-vous retirer ce bug de la release ?";
 $lang->release->existBuild         = '『Build』『%s』existant. Vous pouvez changer『name』ou choisir un『build』.';

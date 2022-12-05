@@ -150,20 +150,6 @@ class buildTest
     }
 
     /**
-     * Test for filterLinked method
-     *
-     * @param  array    $buildIdList
-     * @access public
-     * @return string
-     */
-    public function filterLinkedTest($buildIdList)
-    {
-        $notEmptyBuilds = $this->objectModel->filterLinked($buildIdList);
-        sort($notEmptyBuilds);
-        return empty($notEmptyBuilds) ? 'null' : join(',', $notEmptyBuilds);
-    }
-
-    /**
      * Function getLast test by build
      *
      * @param  string $executionID

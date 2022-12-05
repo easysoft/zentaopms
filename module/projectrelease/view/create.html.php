@@ -12,8 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('confirmLink', $confirmLink);?>
-<?php js::set('notEmptyBuilds', $notEmptyBuilds);?>
 <?php js::set('projectID', $projectID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -53,7 +51,12 @@
           <tr>
             <th><?php echo $lang->release->includedBuild;?></th>
             <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
-            <td></td>
+            <td>
+              <div class="checkbox-primary">
+                <input type="checkbox" name="sync" value="1" id="sync" checked>
+                <label for="sync"><?php echo $lang->release->syncFromBuilds?></label>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>
@@ -84,7 +87,6 @@
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo html::hidden('sync', 'false');?>
               <?php echo html::backButton();?>
             </td>
           </tr>
