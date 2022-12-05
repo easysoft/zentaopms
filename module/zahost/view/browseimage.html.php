@@ -12,9 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('hostID', $hostID);?>
+<?php js::set('downloadLink', $hostID);?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
-    <?php echo html::a($this->createLink('zahost', 'browseimage', "hostID=$hostID"), "<span class='text'>{$lang->zahost->image->browseImage}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo isonlybody() ? ('<span title="' . $lang->zahost->image->browseImage . '">' . $lang->zahost->image->browseImage . '</span>') : html::a($this->createLink('zahost', 'browseimage', "hostID=$hostID"), "<span class='text'>{$lang->zahost->image->browseImage}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
 </div>
 <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>' data-module='vmTemplate'></div>
@@ -31,10 +32,9 @@
     <thead>
       <tr>
         <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->zahost->image->name);?></th>
-        <th class=''><?php echo $lang->zahost->image->desc;?></th>
-        <th class='c-number'><?php common::printOrderLink('memory', $orderBy, $vars, $lang->zahost->image->memory);?></th>
-        <th class='c-number'><?php common::printOrderLink('disk', $orderBy, $vars, $lang->zahost->image->disk);?></th>
+        <th class='c-name'><?php common::printOrderLink('osName', $orderBy, $vars, $lang->zahost->image->os);?></th>
         <th><?php echo $lang->zahost->status;?></th>
+        <th><?php echo $lang->zahost->image->path;?></th>
         <th><?php echo $lang->zahost->image->progress;?></th>
         <th class='c-actions-3'><?php echo $lang->actions;?></th>
       </tr>
@@ -43,16 +43,13 @@
       <?php foreach($imageList as $image):?>
       <tr>
         <td title="<?php echo $image->name;?>"><?php echo $image->name;?></td>
-        <td><?php echo $image->desc;?></td>
-        <td><?php echo $image->memory . zget($this->lang->zahost->unitList, 'GB');?></td>
-        <td><?php echo $image->disk . zget($this->lang->zahost->unitList, 'GB');?></td>
+        <td><?php echo $image->osName;?></td>
         <td class='image-status-<?php echo zget($image, 'id', 0);?>'><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>
+        <td><?php echo $image->status == 'completed' ? zget($image, 'path', '') : '';?></td>
         <td class="image-progress-<?php echo zget($image, 'id', 0);?>"><?php echo $image->status == 'completed' ? '100%' : '';?></td>
         <td class='c-actions'>
-          <?php common::printIcon('zahost', 'ajaxdownloadImage', "hostID={$hostID}&imageName={$image->name}&imageID={$image->id}", $image, 'list', 'download', '', in_array($image->status, array("completed", "inprogress", "created")) ? "disabled image-download-" . zget($image, 'id', 0) : "image-download-" . zget($image, 'id', 0));?>
-          <?php //if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "id={$image->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->image->downloadImage}' class='btn'");?>
-          <?php //common::printIcon('zahost', 'editImage', "id={$image->id}", $image, 'list', 'edit');?>
-          <?php //if(common::hasPriv('zahost', 'deleteImage')) echo html::a($this->createLink('zahost', 'deleteImage', "id={$image->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");?>
+          <?php if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "hostID={$hostID}&imageName={$image->name}&imageID={$image->id}"), '<i class="icon-download"></i>', 'hiddenwin', zget($image, 'downloadMisc', ''));?>
+          <?php if(common::hasPriv('zahost', 'cancelDownload')) echo html::a($this->createLink('zahost', 'cancelDownload', "id={$image->id}"), '<i class="icon-undo"></i>', 'hiddenwin', zget($image, 'cancelMisc', ''));?>
         </td>
       </tr>
       <?php endforeach;?>

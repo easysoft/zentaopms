@@ -52,7 +52,7 @@
           <th class='c-software'>   <?php common::printOrderLink('vsoft', $orderBy, $vars, $lang->zahost->vsoft);?></th>
           <th class='c-status'>     <?php common::printOrderLink('t2.status',       $orderBy, $vars, $lang->zahost->status);?></th>
           <th class='c-datetime'>   <?php common::printOrderLink('registerDate',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
-          <th class='c-actions-2'><?php echo $lang->actions;?></th>
+          <th class='c-actions-4'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -72,7 +72,10 @@
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
             <?php $disabled = !empty($nodeList[$host->hostID]) ? '' : 'disabled';?>
             <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->delete : $lang->zahost->undeletedNotice;?>
+            <?php if(common::hasPriv('zahost', 'edit')) common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
             <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
+            <?php if(common::hasPriv('zahost', 'browseImage')) common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'file', '', 'iframe', true, "data-width='60%'", $lang->zahost->image->list);?>
+            <?php if(common::hasPriv('zahost', 'initHost')) common::printIcon('zahost', 'initHost', "hostID={$host->hostID}", $host, 'list', 'info', '', '', false, '', $lang->zahost->initHost->title);?>
           </td>
         </tr>
         <?php endforeach;?>

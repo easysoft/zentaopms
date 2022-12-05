@@ -8,6 +8,7 @@ $lang->zahost->init           = '初始化宿主机';
 $lang->zahost->edit           = '编辑';
 $lang->zahost->editAction     = '编辑宿主机';
 $lang->zahost->delete         = '删除';
+$lang->zahost->cancel         = "取消下载";
 $lang->zahost->deleteAction   = '删除宿主机';
 $lang->zahost->byQuery        = '搜索';
 $lang->zahost->all            = '全部主机';
@@ -32,7 +33,7 @@ $lang->zahost->registerDate = '最后注册时间';
 
 $lang->zahost->memorySize = $lang->zahost->memory;
 $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
-$lang->zahost->os         = '操作系统平台';
+$lang->zahost->os         = '操作系统';
 $lang->zahost->imageName  = '镜像文件';
 
 $lang->zahost->createZanode        = '创建执行节点';
@@ -40,6 +41,7 @@ $lang->zahost->initHostNotice      = '保存成功，请您初始化宿主机或
 $lang->zahost->createZanodeNotice  = '初始化成功，您现在可以创建执行节点了。';
 $lang->zahost->downloadImageNotice = '初始化成功，请下载镜像用于创建执行节点。';
 $lang->zahost->undeletedNotice     = "宿主机下存在执行节点无法删除。";
+$lang->zahost->netError            = '无法连接到宿主机，请检查网络后重试。';
 
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->statusTitle = "服务状态";
@@ -62,7 +64,7 @@ $lang->zahost->initHost->initDescFirst  = "1. 在宿主机上执行：bash <(cur
 $lang->zahost->initHost->initDescSecond = "2. 检测服务状态";
 
 $lang->zahost->image = new stdclass;
-$lang->zahost->image->list          = '镜像列表';
+$lang->zahost->image->list          = '镜像仓库';
 $lang->zahost->image->browseImage   = '镜像列表';
 $lang->zahost->image->createImage   = '创建镜像';
 $lang->zahost->image->choseImage    = '选择镜像';
@@ -72,15 +74,16 @@ $lang->zahost->image->startDowload  = '开始下载';
 $lang->zahost->image->common     = '镜像';
 $lang->zahost->image->name       = '名称';
 $lang->zahost->image->desc       = '描述';
+$lang->zahost->image->path       = '文件路径';
 $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->diskSize;
 $lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
-$lang->zahost->image->progress   = '进度';
+$lang->zahost->image->progress   = '下载进度';
 
-$lang->zahost->image->statusList['notDownloaded'] = '未下载';
+$lang->zahost->image->statusList['notDownloaded'] = '待下载';
 $lang->zahost->image->statusList['created']       = '下载中';
-$lang->zahost->image->statusList['canceled']      = '已取消';
+$lang->zahost->image->statusList['canceled']      = '待下载';
 $lang->zahost->image->statusList['inprogress']    = '下载中';
 $lang->zahost->image->statusList['completed']     = '已下载';
 $lang->zahost->image->statusList['failed']        = '下载失败';
@@ -88,6 +91,8 @@ $lang->zahost->image->statusList['failed']        = '下载失败';
 $lang->zahost->image->imageEmpty           = '无镜像';
 $lang->zahost->image->downloadImageFail    = '创建下载镜像任务失败';
 $lang->zahost->image->downloadImageSuccess = '创建下载镜像任务成功';
+$lang->zahost->image->cancelDownloadFail    = '取消下载镜像任务失败';
+$lang->zahost->image->cancelDownloadSuccess = '取消下载镜像任务成功';
 
 $lang->zahost->empty         = '暂时没有宿主机';
 
@@ -103,7 +108,8 @@ $lang->zahost->unitList['TB'] = 'TB';
 $lang->zahost->zaHostType                 = '主机类型';
 $lang->zahost->zaHostTypeList['physical'] = '实体主机';
 
-$lang->zahost->confirmDelete           = '是否删除该主机记录？';
+$lang->zahost->confirmDelete           = '是否删除该宿主机记录？';
+$lang->zahost->cancelDelete            = '是否取消该下载任务？';
 
 $lang->zahost->notice = new stdclass();
 $lang->zahost->notice->ip              = '『%s』格式不正确！';

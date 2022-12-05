@@ -8,6 +8,7 @@ $lang->zahost->init           = 'Init Host';
 $lang->zahost->edit           = 'Edit';
 $lang->zahost->editAction     = 'Edit Host';
 $lang->zahost->delete         = 'Delete';
+$lang->zahost->cancel         = "Cancel";
 $lang->zahost->deleteAction   = 'Delete Host';
 $lang->zahost->byQuery        = 'Search';
 $lang->zahost->all            = 'All';
@@ -19,7 +20,7 @@ $lang->zahost->IP          = 'Extranet Address';
 $lang->zahost->extranet    = 'Extranet Address';
 $lang->zahost->cpuCores    = 'CPU Cores';
 $lang->zahost->memory      = 'Memory Size';
-$lang->zahost->diskSize    = 'diskSize Size';
+$lang->zahost->diskSize    = 'Disk Size';
 $lang->zahost->desc        = 'Description';
 $lang->zahost->type        = 'Type';
 $lang->zahost->status      = 'Status';
@@ -40,6 +41,7 @@ $lang->zahost->initHostNotice      = 'Save successfully, initialize the ZAhost o
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
 $lang->zahost->undeletedNotice     = "The host has nodes that cannot be deleted.";
+$lang->zahost->netError            = 'Unable to connect to the host, please check the network and try again.';
 
 $lang->zahost->initHost = new stdclass;
 $lang->zahost->initHost->checkStatus   = "Check Service Status";
@@ -72,22 +74,25 @@ $lang->zahost->image->startDowload  = 'Start Download';
 $lang->zahost->image->common     = 'Image';
 $lang->zahost->image->name       = 'Name';
 $lang->zahost->image->desc       = 'Description';
+$lang->zahost->image->path       = 'Image Path';
 $lang->zahost->image->memory     = $lang->zahost->memory;
 $lang->zahost->image->disk       = $lang->zahost->diskSize;
 $lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
-$lang->zahost->image->progress   = 'Progress';
+$lang->zahost->image->progress   = 'Download Progress';
 
 $lang->zahost->image->statusList['notDownloaded'] = 'Not Downloaded';
 $lang->zahost->image->statusList['created']       = 'Inprogress';
-$lang->zahost->image->statusList['canceled']      = 'Canceled';
+$lang->zahost->image->statusList['canceled']      = 'Not Downloaded';
 $lang->zahost->image->statusList['inprogress']    = 'Inprogress';
 $lang->zahost->image->statusList['completed']     = 'Completed';
 $lang->zahost->image->statusList['failed']        = 'Failed';
 
-$lang->zahost->image->imageEmpty           = 'No Image';
-$lang->zahost->image->downloadImageFail    = 'Failed to create image task';
-$lang->zahost->image->downloadImageSuccess = 'Successed to create image task';
+$lang->zahost->image->imageEmpty            = 'No Image';
+$lang->zahost->image->downloadImageFail     = 'Failed to create image task';
+$lang->zahost->image->downloadImageSuccess  = 'Successed to create image task';
+$lang->zahost->image->cancelDownloadFail    = 'Failed to cancel image task';
+$lang->zahost->image->cancelDownloadSuccess = 'Successed to cancel image task';
 
 $lang->zahost->empty         = 'No Host';
 
@@ -104,6 +109,7 @@ $lang->zahost->zaHostType                 = 'Type';
 $lang->zahost->zaHostTypeList['physical'] = 'Physical';
 
 $lang->zahost->confirmDelete           = 'Do you want to delete this host?';
+$lang->zahost->cancelDelete            = 'Do you want to cancel this download task?';
 
 $lang->zahost->notice = new stdclass();
 $lang->zahost->notice->ip              = '『%s』incorrect format!';

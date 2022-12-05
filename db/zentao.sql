@@ -7303,6 +7303,7 @@ CREATE TABLE `zt_image` (
   `status` varchar(20) NOT NULL DEFAULT '',
   `from` smallint(8) unsigned NOT NULL DEFAULT '0',
   `osName` varchar(32) NOT NULL DEFAULT '',
+  `from` varchar(10) NOT NULL DEFAULT 'zentao',
   `memory` float unsigned NOT NULL,
   `disk` float unsigned NOT NULL,
   `fileSize` float unsigned NOT NULL,
