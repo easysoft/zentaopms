@@ -54,6 +54,8 @@ $lang->zanode->createImageNotice  = 'The system will be created based on the cur
 $lang->zanode->createImageSuccess = 'Successed, You can use this image to create node. <a href="%s">Created</a>';
 $lang->zanode->createImageFail    = 'Failed to create';
 
+$lang->zanode->imageNameEmpty = 'Name can not be empty.';
+
 $lang->zanode->apiError['-10100'] = 'Execution node not found.';
 
 $lang->zanode->publicList[0] = 'Private';

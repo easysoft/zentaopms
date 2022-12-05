@@ -54,6 +54,8 @@ $lang->zanode->createImageNotice  = '系统将基于当前执行节点创建镜�
 $lang->zanode->createImageSuccess = '镜像创建成功，您可以使用此镜像创建执行节点。<a href="%s">去创建</a>';
 $lang->zanode->createImageFail    = '镜像创建失败';
 
+$lang->zanode->imageNameEmpty = '名称不能为空';
+
 $lang->zanode->apiError['-10100'] = '执行节点不存在';
 
 $lang->zanode->publicList[0] = '不共享';

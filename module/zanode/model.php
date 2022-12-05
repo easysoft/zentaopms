@@ -118,13 +118,14 @@ class zanodemodel extends model
     {
         $data = fixer::input('post')->get();
 
-        if(empty($data->name)) dao::$errors['message'][] = '名称不能为空';
+        if(empty($data->name)) dao::$errors['message'][] = $this->lang->zanode->imageNameEmpty;
         if(dao::isError()) return false;
 
         $node  = $this->getNodeByID($zanodeID);
         $image = $this->getImageByID($node->image);
 
         $newImage = new stdClass();
+        $newImage->host   = $node->host;
         $newImage->name   = $data->name;
         $newImage->status = 'created';
         $newImage->osName = $node->osName;
@@ -148,7 +149,7 @@ class zanodemodel extends model
             'vm'      => $node->name
         );
 
-        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null));
+        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
 
         if(!empty($result) and $result->code == 'success') return $newID;
 
@@ -458,7 +459,7 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip, t2.tokenSN as tokenSN, t3.osName')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
@@ -538,17 +539,18 @@ class zanodemodel extends model
     /**
      * Get task status by zagent api.
      *
-     * @param  int    $extranet
+     * @param  string $extranet
      * @param  int    $taskID
      * @param  string $type
      * @param  string $status
+     * @param  string $token
      * @access public
-     * @return void
+     * @return array
      */
-    public function getTaskStatus($extranet = '', $taskID = 0, $type = '', $status = '')
+    public function getTaskStatus($extranet = '', $taskID = 0, $type = '', $status = '', $token = '')
     {
         $agnetUrl = 'http://' . $extranet . ':8086' . static::KVM_STATUS_PATH;
-        $result   = json_decode(commonModel::http("$agnetUrl", array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+        $result   = json_decode(commonModel::http("$agnetUrl", array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$token"), 'json'));
 
         if(empty($result) or $result->code != 'success') return false;
         $data = $result->data;

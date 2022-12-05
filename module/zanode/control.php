@@ -192,7 +192,7 @@ class zanode extends control
         $task        = '';
         $node        = $this->zanode->getNodeByID($zanodeID);
         $customImage = $this->zanode->getCustomImage($zanodeID, 'created,inprogress');
-        if($customImage) $task = $this->zanode->getTaskStatus($node->ip, $customImage->id, 'exportVm');
+        if($customImage) $task = $this->zanode->getTaskStatus($node->ip, $customImage->id, 'exportVm', '', $node->tokenSN);
 
         if($_POST)
         {
@@ -299,7 +299,9 @@ class zanode extends control
      */
     public function ajaxGetTaskStatus($extranet, $taskID = 0, $type = '', $status = '')
     {
-        $result = $this->zanode->getTaskStatus($extranet, $taskID, $type, $status);
+        $task   = $this->zanode->getImageByID($taskID);
+        $node   = $this->zanode->getNodeByID($task->from);
+        $result = $this->zanode->getTaskStatus($extranet, $taskID, $type, $status, $node->tokenSN);
         return print(json_encode($result));
     }
 
