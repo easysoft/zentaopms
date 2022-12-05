@@ -40,6 +40,7 @@ $lang->build->releasedBuild  = '发布版本';
 $lang->build->name           = '名称编号';
 $lang->build->date           = '打包日期';
 $lang->build->builder        = '构建者';
+$lang->build->url            = '地址';
 $lang->build->scmPath        = '源代码地址';
 $lang->build->filePath       = '下载地址';
 $lang->build->desc           = '描述';

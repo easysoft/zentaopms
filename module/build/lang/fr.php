@@ -40,6 +40,7 @@ $lang->build->releasedBuild  = 'Released Build';
 $lang->build->name           = 'Nom';
 $lang->build->date           = 'Date';
 $lang->build->builder        = 'Builder';
+$lang->build->url            = 'URL';
 $lang->build->scmPath        = 'Chemin SCM';
 $lang->build->filePath       = 'Chemin Fichier';
 $lang->build->desc           = 'Description';

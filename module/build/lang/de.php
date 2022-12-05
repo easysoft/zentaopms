@@ -40,6 +40,7 @@ $lang->build->releasedBuild  = 'Released Build';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Datum';
 $lang->build->builder        = 'Builder';
+$lang->build->url            = 'URL';
 $lang->build->scmPath        = 'SCM Pfad';
 $lang->build->filePath       = 'Dateipfad';
 $lang->build->desc           = 'Beschreibung';

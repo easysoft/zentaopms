@@ -181,6 +181,7 @@ class build extends control
         }
 
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
+        if($build->execution and !isset($executions[$build->execution])) $executions[$build->execution] = $this->loadModel('execution')->getById($build->execution)->name;
 
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
