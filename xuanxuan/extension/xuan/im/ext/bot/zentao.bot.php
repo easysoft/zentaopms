@@ -26,14 +26,6 @@ class zentaoBot extends xuanBot
     public $commands = array();
 
     /**
-     * Init status.
-     *
-     * @var    boolean
-     * @access private
-     */
-    private $inited = false;
-
-    /**
      * Construct function, load lang of zentao and setup commands.
      *
      * @access public
@@ -56,8 +48,6 @@ class zentaoBot extends xuanBot
      */
     public function init()
     {
-        if($this->inited) return;
-
         $this->lang = $this->im->lang->im->bot->zentaoBot;
 
         foreach(array('view', 'start', 'close', 'finish') as $command)
