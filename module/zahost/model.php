@@ -90,7 +90,7 @@ class zahostModel extends model
         {
             return false;
         }
-        
+
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo, 'name')->autoCheck()
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
@@ -107,20 +107,20 @@ class zahostModel extends model
      */
     public function ping($address)
     {
-        if (strcasecmp(PHP_OS, 'WINNT') === 0) 
+        if (strcasecmp(PHP_OS, 'WINNT') === 0)
         {
             exec("ping -n 1 {$address}", $outcome, $status);
-        } 
-        elseif (strcasecmp(PHP_OS, 'Linux') === 0) 
+        }
+        elseif (strcasecmp(PHP_OS, 'Linux') === 0)
         {
             exec("ping -c 1 {$address}", $outcome, $status);
         }
 
-        if (0 == $status) 
+        if (0 == $status)
         {
             $status = true;
-        } 
-        else 
+        }
+        else
         {
             $status = false;
         }
@@ -135,7 +135,7 @@ class zahostModel extends model
      * @access public
      * @return bool
      */
-    public function checkAddress($address) 
+    public function checkAddress($address)
     {
         $address = str_replace(array('https://', 'http://'), '', $address);
 

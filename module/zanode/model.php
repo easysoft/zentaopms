@@ -125,7 +125,7 @@ class zanodemodel extends model
         $image = $this->getImageByID($node->image);
 
         $newImage = new stdClass();
-        $newImage->host   = $node->id;
+        $newImage->host   = $node->parent;
         $newImage->name   = $data->name;
         $newImage->status = 'created';
         $newImage->osName = $node->osName;
