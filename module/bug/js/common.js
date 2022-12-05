@@ -35,7 +35,7 @@ function markReleasedBuilds($option)
         if(!$option.find('.label-released').length)
         {
             var optionText = $option.find('.picker-option-text').html();
-            $option.find('.picker-option-text').replaceWith("<p class='picker-option-text no-margin'><span class='label label-released label-primary label-outline'>" + releasedBuild + "</span> " + optionText + "</p>");
+            $option.find('.picker-option-text').replaceWith("<p class='picker-option-text no-margin'>" + optionText + " <span class='label label-released label-primary label-outline'>" + released + "</span></p>");
         }
     }
 }
