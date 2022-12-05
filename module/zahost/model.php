@@ -461,6 +461,21 @@ class zahostModel extends model
     }
 
     /**
+     * Get zanode group by zahost.
+     *
+     * @access public
+     * @return void
+     */
+    public function getHostNodeGroup()
+    {
+        return $this->dao->select('t1.id as hostID, t2.*')->from(TABLE_ZAHOST)->alias('t1')
+            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t2.parent = t1.id')
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchGroup('hostID', 'id');
+    }
+
+    /**
      * Build test task menu.
      *
      * @param  object $host

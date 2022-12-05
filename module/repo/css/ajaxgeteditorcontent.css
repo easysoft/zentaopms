@@ -1,14 +1,14 @@
 .m-repo-ajaxgeteditorcontent {overflow: hidden;}
 #monacoEditor .tip-circular {background: #2e7fff; border-radius: 10px; padding: 0px 7px;}
-#log {margin-top: 2px; display: none; padding: 5px; justify-content: space-between; height: 25px; line-height: 20px;}
+#log {margin-top: 8px; display: none; padding: 5px; justify-content: space-between; height: 25px; line-height: 20px; background: #efefef;}
 #log .history {margin-left: 5px;}
 #log .action-btn .btn {border: none; background: none;}
-#related {display: none; margin-top: 2px; background: #fff;}
+#related {display: none; margin-top: 2px; background: #fff; height: 0px;}
 
 #relationTabs .nav > li > a {padding: 8px 10px; display: flex; white-space: pre;}
 #relationTabs .nav-tabs > li > a > span {margin-right: 5px;}
 #relationTabs .tab-pane {display: none;}
-#relationTabs .tabs-navbar {background: #F4F5F7;}
+#relationTabs .tabs-navbar {background: #FFFFFF;}
 #relationTabs .tab-pane.active {display: block;}
 #relationTabs .tab-nav-item {max-width: none !important;}
 #relationTabs .tab-nav-item .icon {line-height: inherit;}

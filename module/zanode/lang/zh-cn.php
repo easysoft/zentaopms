@@ -16,6 +16,7 @@ $lang->zanode->all             = '全部';
 $lang->zanode->byQuery         = '搜索';
 $lang->zanode->osName          = '操作系统';
 $lang->zanode->image           = '镜像';
+$lang->zanode->imageName       = '镜像名称';
 $lang->zanode->name            = '执行节点名称';
 $lang->zanode->start           = '创建后自动开启';
 $lang->zanode->hostName        = '所属宿主机';
@@ -45,8 +46,13 @@ $lang->zanode->notFoundAgent = '没有发现Agent服务';
 $lang->zanode->createVmFail  = '创建执行节点失败';
 $lang->zanode->noVncPort     = '无法获取执行节点端口';
 $lang->zanode->nameValid     = "名称只能是字母、数字，'-'，'_'，'.'，且不能以符号开头";
-
 $lang->zanode->empty         = '暂时没有执行节点';
+
+$lang->zanode->createImage        = '创建镜像';
+$lang->zanode->createImaging      = '正在创建镜像';
+$lang->zanode->createImageNotice  = '系统将基于当前执行节点创建镜像，该过程需要关闭该执行节点，确定要继续么？';
+$lang->zanode->createImageSuccess = '镜像创建成功，您可以使用此镜像创建执行节点。<a href="%s">去创建</a>';
+$lang->zanode->createImageFail    = '镜像创建失败';
 
 $lang->zanode->apiError['-10100'] = '执行节点不存在';
 
@@ -61,4 +67,3 @@ $lang->zanode->statusList['suspend']      = '暂停';
 $lang->zanode->statusList['offline']      = '下线';
 $lang->zanode->statusList['destroy']      = '已销毁';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
-

@@ -16,6 +16,7 @@ $lang->zanode->all             = 'All';
 $lang->zanode->byQuery         = 'Search';
 $lang->zanode->osName          = 'System';
 $lang->zanode->image           = 'VM Image';
+$lang->zanode->imageName       = 'Image Name';
 $lang->zanode->name            = 'Name';
 $lang->zanode->start           = 'Start After Created';
 $lang->zanode->hostName        = 'Host Name';
@@ -45,8 +46,13 @@ $lang->zanode->notFoundAgent = 'No Agent service is found';
 $lang->zanode->createVmFail  = 'Failed to create a execution node';
 $lang->zanode->noVncPort     = 'Failed to get vnc port';
 $lang->zanode->nameValid     = "The name can only be letters, numbers, '-', '_', '.', and cannot start with a symbol";
+$lang->zanode->empty         = 'No zanode is found';
 
-$lang->zanode->empty         = 'No Execution Node';
+$lang->zanode->empty              = 'No Execution Node';
+$lang->zanode->createImaging      = 'Creating';
+$lang->zanode->createImageNotice  = 'The system will be created based on the current node，This process requires the execution node to be shut down. Do you want to continue?';
+$lang->zanode->createImageSuccess = 'Successed, You can use this image to create node. <a href="%s">Created</a>';
+$lang->zanode->createImageFail    = 'Failed to create';
 
 $lang->zanode->apiError['-10100'] = 'Execution node not found.';
 
@@ -58,5 +64,6 @@ $lang->zanode->statusList['launch']       = 'Launch';
 $lang->zanode->statusList['ready']        = 'Ready';
 $lang->zanode->statusList['running']      = 'Running';
 $lang->zanode->statusList['suspend']      = 'Suspend';
+$lang->zanode->statusList['offline']      = 'Offline';
 $lang->zanode->statusList['destroy']      = 'Destroyed';
 $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
