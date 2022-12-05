@@ -33,7 +33,6 @@ class zentaoBot extends xuanBot
         if($this->inited) return;
 
         $this->lang = $this->im->lang->im->bot->zentaoBot;
-        $this->name = $this->lang->name;
 
         foreach(array('view', 'start', 'close', 'finish') as $command)
         {

@@ -42,7 +42,7 @@ $lang->im->bot->welcome->title = '哈喽~我是你的助手阿道';
 $lang->im->bot->upgradeWelcome->title = '哈喽~我是你的助手阿道';
 
 $lang->im->bot->zentaoBot = new stdclass();
-$lang->im->bot->zentaoBot->name = '阿道';
+$lang->im->bot->zentaoBot->name = '禅道';
 $lang->im->bot->zentaoBot->pageSearchRegex = '/(pageID|recPerPage|页码|每页数量|頁碼|每頁數量)=(\d+)/';
 
 $lang->im->bot->zentaoBot->commands = new stdclass();
@@ -121,7 +121,7 @@ $lang->im->bot->zentaoBot->help = <<<EOT
 | 查看 任务 状态 		| 显示状态为输入值的任务 |
 | 查看 任务 ID		| 显示ID为输入值的任务 |
 
-### 2. 任务编辑指令 
+### 2. 任务编辑指令
 
 任务编辑指令支持对任务进行状态变更。
 

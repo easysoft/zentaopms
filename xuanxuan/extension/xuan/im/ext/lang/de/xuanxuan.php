@@ -38,7 +38,7 @@ $lang->im->aesOptions['on']  = 'Enabled';
 $lang->im->aesOptions['off'] = 'Disabled';
 
 $lang->im->bot->zentaoBot = new stdclass();
-$lang->im->bot->zentaoBot->name = 'Z-bot';
+$lang->im->bot->zentaoBot->name = 'ZenTao';
 $lang->im->bot->zentaoBot->pageSearchRegex = '/(pageID|recPerPage)=(\d+)/';
 
 $lang->im->bot->zentaoBot->commands = new stdclass();
@@ -113,7 +113,7 @@ Example：`view task dev1 P1 doing` Displays tasks assigned to dev1, with priori
 | view task Status | Show tasks with status as input |
 | view task ID | Show tasks with ID as input |
 
-### 2. Task Edit command 
+### 2. Task Edit command
 The Task Edit command supports making status changes to tasks.
 
 | Command | Description |
