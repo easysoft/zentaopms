@@ -257,20 +257,21 @@ class branch extends control
      *
      * @param  int    $productID
      * @param  int    $oldBranch
-     * @param  string $param
+     * @param  string $browseType
      * @param  int    $projectID
      * @param  bool   $withMainBranch
      * @param  string $isSiblings
      * @param  string $fieldID
+     * @param  string $multiple
      * @access public
      * @return void
      */
-    public function ajaxGetBranches($productID, $oldBranch = 0, $param = 'all', $projectID = 0, $withMainBranch = true, $isSiblings = 'no', $fieldID = '0')
+    public function ajaxGetBranches($productID, $oldBranch = 0, $browseType = 'all', $projectID = 0, $withMainBranch = true, $isSiblings = 'no', $fieldID = '0', $multiple = '')
     {
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product) or $product->type == 'normal') return;
 
-        $branches = $this->loadModel('branch')->getList($productID, $projectID, $param, 'order', null, $withMainBranch);
+        $branches = $this->loadModel('branch')->getList($productID, $projectID, $browseType, 'order', null, $withMainBranch);
         $branchTagOption = array();
         foreach($branches as $branchInfo)
         {
@@ -282,8 +283,10 @@ class branch extends control
             $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
         }
 
+        $name = $multiple == 'multiple' ? 'branch[]' : 'branch';
+
         if($isSiblings == 'yes') return print(html::select("branches[$fieldID]", $branchTagOption, $oldBranch, "onchange='loadBranchRelation(this.value, $fieldID);' class='form-control chosen control-branch'"));
-        return print(html::select('branch', $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)' data-last='{$oldBranch}'"));
+        return print(html::select($name, $branchTagOption, $oldBranch, "class='form-control' $multiple onchange='loadBranch(this)' data-last='{$oldBranch}'"));
     }
 
     /**

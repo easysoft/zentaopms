@@ -382,21 +382,31 @@ class buildModel extends model
             ->setDefault('product', 0)
             ->setDefault('branch', 0)
             ->setDefault('builds', '')
-            ->cleanInt('product,branch')
+            ->cleanInt('product')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
-            ->join('builds', ',')
+            ->join('builds,', ',')
+            ->join('branch', ',')
             ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid')
             ->get();
 
         if($this->post->isIntegrated == 'yes') $build->execution = 0;
 
+        $product = $this->loadModel('product')->getByID($build->product);
+        if($product->type != 'normal' and !isset($_POST['branch']))
+        {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+        }
+
+        if(dao::isError()) return false;
+
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($this->config->build->create->requiredFields, 'notempty')
-            ->check('name', 'unique', "product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
+            ->check('name', 'unique', "product = {$build->product} AND branch = '{$build->branch}' AND deleted = '0'")
             ->checkFlow()
             ->exec();
 

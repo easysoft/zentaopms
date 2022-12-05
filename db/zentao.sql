@@ -321,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
-  `branch` mediumint(8) unsigned NOT NULL default '0',
+  `branch` varchar(255) NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL default '0',
   `builds` varchar(255) NOT NULL,
   `name` char(150) NOT NULL,
