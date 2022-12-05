@@ -4176,7 +4176,19 @@ class execution extends control
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        $haveDraft = sprintf($this->lang->execution->haveDraft, $count);
+        $executionProductList  = $this->loadModel('product')->getProducts($executionID);
+        $multiBranchProduct = false;
+        foreach($executionProductList as $executionProduct)
+        {
+            if($executionProduct->type != 'normal')
+            {
+                $multiBranchProduct = true;
+                break;
+            }
+        }
+        $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->haveBranchDraft : $this->lang->execution->haveDraft;
+
+        $haveDraft = sprintf($importPlanStoryTips, $count);
         if(!$execution->multiple or $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
         if($count != 0) echo js::alert($haveDraft) . js::locate($this->createLink($moduleName, $fromMethod, $param));
         return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));

@@ -351,7 +351,8 @@ $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.ph
 $lang->execution->whyNoStories         = "No story can be linked. Please check whether there is any story in {$lang->executionCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
 $lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories       = "Stories linked to {$lang->executionCommon} are the subeset of stories linked to {$lang->productCommon}. Stories can only be linked after they pass the review. <a href='%s'> Link Stories</a> now.";
-$lang->execution->haveDraft            = "There are %s draft stories or not associated with this {$lang->executionCommon} can't be linked.";
+$lang->execution->haveBranchDraft      = "There are %s draft stories or not associated with this {$lang->executionCommon} can't be linked.";
+$lang->execution->haveDraft            = "There are %s draft stories with this {$lang->executionCommon} can't be linked.";
 $lang->execution->doneExecutions       = 'Finished';
 $lang->execution->selectDept           = 'Select Department';
 $lang->execution->selectDeptTitle      = 'Select User';

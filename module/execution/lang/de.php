@@ -351,7 +351,8 @@ $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.pm/goto.ph
 $lang->execution->whyNoStories         = "Keine Story kann verknüpft werden. Bitte prüfen Sie ob ein Story mit {$lang->executionCommon} verknüpft ist {$lang->productCommon} und stellen Sie sicher das diese geprüft ist.";
 $lang->execution->projectNoStories     = "No story can be linked. Please check whether there is any story in project and make sure it has been reviewed.";
 $lang->execution->productStories       = "{$lang->executionCommon} verknüpfte Story ist ein Subset von {$lang->productCommon}, welche nur nach überprüfung verknüpft werden kann. Bitte <a href='%s'> Story verknüpfen</a>。";
-$lang->execution->haveDraft            = "There are %s draft stories or not associated with this {$lang->executionCommon} can't be linked.";
+$lang->execution->haveBranchDraft      = "There are %s draft stories or not associated with this {$lang->executionCommon} can't be linked.";
+$lang->execution->haveDraft            = "There are %s draft stories with this {$lang->executionCommon} can't be linked.";
 $lang->execution->doneExecutions       = 'Erledigt';
 $lang->execution->selectDept           = 'Abteilung wählen';
 $lang->execution->selectDeptTitle      = 'Abteilung wählen';
