@@ -1,10 +1,36 @@
 <?php
 class zentaoBot extends xuanBot
 {
+    /**
+     * Bot name.
+     *
+     * @var    string
+     * @access public
+     */
     public $name = 'ZenTao';
 
+    /**
+     * Bot codename.
+     *
+     * @var    string
+     * @access public
+     */
     public $code = 'zentao';
 
+    /**
+     * Command list, inits in init() since all commands are internal commands.
+     *
+     * @var    array
+     * @access public
+     */
+    public $commands = array();
+
+    /**
+     * Init status.
+     *
+     * @var    boolean
+     * @access private
+     */
     private $inited = false;
 
     /**
