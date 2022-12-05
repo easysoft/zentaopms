@@ -332,6 +332,20 @@ class executionModel extends model
         $this->checkBeginAndEndDate($_POST['project'], $_POST['begin'], $_POST['end']);
         if(dao::isError()) return false;
 
+        if($_POST['products'])
+        {
+            $this->app->loadLang('project');
+            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
+            foreach($_POST['products'] as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                {
+                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    return false;
+                }
+            }
+        }
+
         /* Determine whether to add a sprint or a stage according to the model of the execution. */
         $project = $this->loadModel('project')->getByID($_POST['project']);
         $type    = 'sprint';
@@ -512,6 +526,20 @@ class executionModel extends model
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
+        }
+
+        if($_POST['products'])
+        {
+            $this->app->loadLang('project');
+            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
+            foreach($_POST['products'] as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                {
+                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    return false;
+                }
+            }
         }
 
         /* Get the data from the post. */
@@ -2370,23 +2398,28 @@ class executionModel extends model
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
 
-            if(isset($existedProducts[$productID][$branch])) continue;
+            if(!is_array($branch)) $branch = array($branch);
 
-            if(isset($oldProducts[$productID][$branch]))
+            foreach($branch as $branchID)
             {
-                $oldProduct = $oldProducts[$productID][$branch];
-                if($this->app->rawMethod != 'edit') $oldPlan = $oldProduct->plan;
-            }
+                if(isset($existedProducts[$productID][$branchID])) continue;
 
-            $data = new stdclass();
-            $data->project = $executionID;
-            $data->product = $productID;
-            $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
-            $data->plan    = trim($data->plan, ',');
-            $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
-            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            $existedProducts[$productID][$branch] = true;
+                if(isset($oldProducts[$productID][$branchID]))
+                {
+                    $oldProduct = $oldProducts[$productID][$branchID];
+                    if($this->app->rawMethod != 'edit') $oldPlan = $oldProduct->plan;
+                }
+
+                $data = new stdclass();
+                $data->project = $executionID;
+                $data->product = $productID;
+                $data->branch  = $branchID;
+                $data->plan    = isset($plans[$productID]) ? implode(',', $plans[$productID]) : $oldPlan;
+                $data->plan    = trim($data->plan, ',');
+                $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                $existedProducts[$productID][$branchID] = true;
+            }
         }
 
         $oldProductKeys = array_keys($oldProducts);
@@ -2882,19 +2915,21 @@ class executionModel extends model
      */
     public function linkStories($executionID)
     {
-        $plans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
+        $plans = $this->dao->select('product, plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
-            ->fetchPairs('plan');
+            ->fetchPairs('product', 'plan');
 
         $planStories  = array();
         $planProducts = array();
         $this->loadModel('story');
         if(!empty($plans))
         {
-            foreach($plans as $planIdList)
+            $executionProducts = $this->loadModel('project')->getBranchesByProject($executionID);
+            foreach($plans as $productID => $planIdList)
             {
                 if(empty($planIdList)) continue;
                 $planIdList = explode(',', $planIdList);
+                $executionBranches = zget($executionProducts, $productID, array());
                 foreach($planIdList as $planID)
                 {
                     $planStory = $this->story->getPlanStories($planID);
@@ -2902,7 +2937,7 @@ class executionModel extends model
                     {
                         foreach($planStory as $id => $story)
                         {
-                            if($story->status == 'draft' or $story->status == 'reviewing')
+                            if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($story->branch) and !empty($executionBranches) and !isset($executionBranches[$story->branch])))
                             {
                                 unset($planStory[$id]);
                                 continue;
@@ -4623,17 +4658,36 @@ class executionModel extends model
         $branchGroups = $this->getBranchByProduct(array_keys($products), $executionID, 'noclosed');
         foreach($branchGroups as $branches)
         {
-            foreach($branches as $branchID => $branchName) $branchIdList[$branchID] = $branchID;
+            foreach($branches as $branchID => $branchName) $branchIdList[] = $branchID;
         }
 
-        $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->in(array_keys($products))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('branch')->in($branchIdList)->fi()
-            ->orderBy('begin desc')
+        $branchQuery = '(';
+        if(!empty($branchIdList))
+        {
+            $branchCount = count($branchIdList);
+            foreach($branchIdList as $index => $branchID)
+            {
+                $branchQuery .= "FIND_IN_SET('$branchID', branch)";
+                if($index < $branchCount - 1) $branchQuery .= ' OR ';
+            }
+        }
+        else
+        {
+            $branchQuery .= "FIND_IN_SET('0', branch)";
+        }
+
+        $branchQuery .= ')';
+
+        $plans = $this->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
+            ->where('t1.product')->in(array_keys($products))
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere($branchQuery)
+            ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
         $plans        = $this->productplan->reorder4Children($plans);
+        $plans        = $this->productplan->relationBranch($plans);
         $productPlans = array();
         foreach($plans as $plan)
         {
@@ -4641,6 +4695,7 @@ class executionModel extends model
             if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
             $productPlans[$plan->product][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $productPlans[$plan->product][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+            if($plan->productType != 'normal') $productPlans[$plan->product][$plan->id] = $productPlans[$plan->product][$plan->id] . ' / ' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main);
         }
 
         return $productPlans;

@@ -75,6 +75,9 @@ $lang->productplan->projectNotEmpty    = 'Project cannot be empty.';
 $lang->productplan->nextStep           = "Next step";
 $lang->productplan->summary            = "Total: <strong>%s</strong>, Parents: <strong>%s</strong>, Children: <strong>%s</strong>，Independent: <strong>%s</strong>.";
 $lang->productplan->checkedSummary     = "Seleted: <strong>%total%</strong>, Parents: <strong>%parent%</strong>, Children: <strong>%child%</strong>, Independent: <strong>%independent%</strong>.";
+$lang->productplan->confirmChangePlan  = "After the branch is unlinked, %s {$lang->SRCommon} and %s bugs under the branch will be removed from the plan at the same time, so still want to unassociate?";
+$lang->productplan->confirmRemoveStory = "After the branch is unlinked, %s {$lang->SRCommon} under the branch will be removed from the plan at the same time, so still want to unassociate?";
+$lang->productplan->confirmRemoveBug   = "After the branch is unlinked, %s bugs under the branch will be removed from the plan at the same time, so still want to unassociate?";
 
 $lang->productplan->id         = 'ID';
 $lang->productplan->product    = $lang->productCommon;
@@ -136,6 +139,7 @@ $lang->productplan->beginGreaterChildTip = "The start date of the parent plan[%s
 $lang->productplan->endLetterChildTip    = "The completion date of the parent plan[%s]: %s, cannot be less than the completion date of the child plan: %s.";
 $lang->productplan->beginLetterParentTip = "The start date of the child plan[%s]: %s, cannot be less than the start date of the parent plan: %s.";
 $lang->productplan->endGreaterParentTip  = "The completion date of the child plan[%s]: %s, cannot be greater than the completion date of the parent plan: %s.";
+$lang->productplan->diffBranchesTip      = "The @branch@ %s of parent plan is not linked with the child plan. @branch@'s stories and bugs whill be removed from the plan. Do you want to save?";
 
 $lang->productplan->featureBar['browse']['all']    = 'Alle';
 $lang->productplan->featureBar['browse']['undone'] = 'Undone';

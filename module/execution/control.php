@@ -898,7 +898,7 @@ class execution extends control
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan');
+        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan', $executionID);
         $allPlans = array('' => '');
         if(!empty($plans))
         {
@@ -1645,7 +1645,20 @@ class execution extends control
                 }
                 else
                 {
-                    return print(js::confirm($this->lang->execution->importPlanStory, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
+                    $executionProductList  = $this->loadModel('product')->getProducts($executionID);
+                    $multiBranchProduct = false;
+                    foreach($executionProductList as $executionProduct)
+                    {
+                        if($executionProduct->type != 'normal')
+                        {
+                            $multiBranchProduct = true;
+                            break;
+                        }
+                    }
+
+                    $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
+
+                    return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
             }
 
@@ -1689,10 +1702,11 @@ class execution extends control
             $linkedBranches = array();
             foreach($products as $productIndex => $product)
             {
+                $productPlans[$productIndex] = array();
                 foreach($branches[$productIndex] as $branchID => $branch)
                 {
                     $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex][$branchID]   = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
@@ -1724,10 +1738,11 @@ class execution extends control
             $linkedBranches = array();
             foreach($products as $productIndex => $product)
             {
+                $productPlans[$productIndex] = array();
                 foreach($branches[$productIndex] as $branchID => $branch)
                 {
                     $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex][$branchID]   = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
@@ -1776,27 +1791,15 @@ class execution extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));
             }
 
-            $planID = '';
-            if(isset($_POST['plans']))
-            {
-                foreach($_POST['plans'] as $plans)
-                {
-                    foreach($plans as $planID)
-                    {
-                        if(!empty($planID)) break;
-                    }
-                }
-            }
-
             if(!empty($projectID) and $project->model == 'kanban')
             {
                 $execution = $this->execution->getById($executionID);
                 $this->loadModel('kanban')->createRDKanban($execution);
             }
 
-            if(!empty($planID))
+            if(!empty($_POST['plans']))
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=1&confirm=no")));
             }
             else
             {
@@ -1904,7 +1907,20 @@ class execution extends control
         }
         elseif(!empty($newPlans))
         {
-            return print(js::confirm($this->lang->execution->importEditPlanStory, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
+            $executionProductList  = $this->loadModel('product')->getProducts($executionID);
+            $multiBranchProduct = false;
+            foreach($executionProductList as $executionProduct)
+            {
+                if($executionProduct->type != 'normal')
+                {
+                    $multiBranchProduct = true;
+                    break;
+                }
+            }
+
+            $importEditPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory;
+
+            return print(js::confirm($importEditPlanStoryTips, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
         }
 
         /* Set menu. */
@@ -2003,12 +2019,15 @@ class execution extends control
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
+            $productPlans[$productID] = array();
+
             foreach($branches[$productID] as $branchID => $branch)
             {
+                $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+
                 $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
-                $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
-                if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID][$branchID] += $plans[$productID][BRANCH_MAIN];
+                if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID] += $plans[$productID][BRANCH_MAIN];
                 if(!empty($executionStories[$productID][$branchID]))
                 {
                     array_push($unmodifiableProducts, $productID);
@@ -4121,9 +4140,11 @@ class execution extends control
         $count = 0;
         if(!empty($planStory))
         {
+            $projectProducts = $this->loadModel('project')->getBranchesByProject($executionID);
             foreach($planStory as $id => $story)
             {
-                if($story->status == 'draft' or $story->status == 'reviewing')
+                $projectBranches = zget($projectProducts, $story->product, array());
+                if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($story->branch) and !empty($projectBranches) and !isset($projectBranches[$story->branch])))
                 {
                     $count++;
                     unset($planStory[$id]);
@@ -4156,7 +4177,7 @@ class execution extends control
         }
 
         $haveDraft = sprintf($this->lang->execution->haveDraft, $count);
-        if(!$execution->multiple) $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
+        if(!$execution->multiple or $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
         if($count != 0) echo js::alert($haveDraft) . js::locate($this->createLink($moduleName, $fromMethod, $param));
         return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }

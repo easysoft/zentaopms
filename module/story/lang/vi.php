@@ -94,6 +94,14 @@ $lang->story->storyRound       = '%s time estimation';
 $lang->story->float            = "『%s』should be positive number, decimals included.";
 $lang->story->saveDraftSuccess = 'Save as draft succeeded.';
 
+$lang->story->changeSyncTip       = "The modification of this story will be synchronized to the following twin requirements";
+$lang->story->syncTip             = "The twin story are synchronized except for product, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
+$lang->story->assignSyncTip       = "Both twin stories modify the assignor synchronously";
+$lang->story->closeSyncTip        = "Twin stories are closed synchronously";
+$lang->story->activateSyncTip     = "Twin stories are activated synchronously";
+$lang->story->relievedSiblingsTip = "After product adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
+$lang->story->batchEditTip        = "{$lang->SRCommon} %sis twin stories, and this operation has been filtered.";
+
 $lang->story->id             = 'ID';
 $lang->story->parent         = 'Mẹ';
 $lang->story->product        = $lang->productCommon;
@@ -332,6 +340,7 @@ $lang->story->action->subdividestory        = array('main' => '$date, được p
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Câu chuyện <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, bị hủy bởi <strong>$actor</strong> Câu chuyện được phân rã <strong>$extra</strong>.');
 $lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
+$lang->story->action->syncsiblings          = array('main' => "\$date, the system judges that this story is adjusted synchronously due to the \$operate of twin story <strong>\$extra</strong>.", 'operate' => 'operateList');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();
@@ -456,3 +465,14 @@ $lang->story->featureBar['browse']['all']       = $lang->all;
 $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
+
+$lang->story->operateList = array();
+$lang->story->operateList['assigned']       = 'assigned';
+$lang->story->operateList['closed']         = 'closed';
+$lang->story->operateList['activated']      = 'activated';
+$lang->story->operateList['changed']        = 'changed';
+$lang->story->operateList['reviewed']       = 'reviewed';
+$lang->story->operateList['edited']         = 'edited';
+$lang->story->operateList['submitreview']   = 'submit review';
+$lang->story->operateList['recalledchange'] = 'recalled change';
+$lang->story->operateList['recalled']       = 'recalled review';

@@ -65,9 +65,14 @@ $('#future').on('change', function()
 
 $('#branch').change(function()
 {
-    var branchID     = $(this).val();
-    var lastPlanLink = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchID);
-    var topPlanLink  = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branchID);
+    if(parentPlanID) return;
+
+    var branchIdList = $(this).val();
+    if(!branchIdList) return;
+
+    var branchIdList = branchIdList.toString();
+    var lastPlanLink = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchIdList);
+    var topPlanLink  = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branchIdList);
 
     $.post(lastPlanLink, function(data)
     {
@@ -82,4 +87,19 @@ $('#branch').change(function()
         $('#parent_chosen').remove();
         $('#parent').chosen();
     })
+});
+
+$('#submit').click(function()
+{
+    var parentPlan = $('#parent').val();
+    var branches   = $('#branch').val();
+    if(parentPlan != 0 && branches)
+    {
+        link = createLink('productplan', 'ajaxGetDiffBranchesTip', "produtID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
+        $.post(link, function(diffBranchesTip)
+        {
+            if((diffBranchesTip != '' && confirm(diffBranchesTip)) || !diffBranchesTip) $('form#dataform').submit();
+        });
+        return false;
+    }
 });

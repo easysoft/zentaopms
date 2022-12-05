@@ -3,3 +3,5 @@
 .nav-tabs>li>a {height: 36px;}
 .table-form>tbody>tr>th {width: 100px !important;}
 .colorpicker {right: 7px; top: 7px; opacity: 1;}
+#siblingList td, #siblingTitle td {padding-left: 65px;}
+#siblingTitle td {font-weight: 700;}

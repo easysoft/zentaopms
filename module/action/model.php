@@ -50,7 +50,7 @@ class actionModel extends model
         $action->extra      = $extra;
         if(!defined('IN_UPGRADE')) $action->vision = $this->config->vision;
 
-        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
+        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,syncsiblings,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
         $action->comment = fixer::stripDataTags($comment);
@@ -949,6 +949,17 @@ class actionModel extends model
                 {
                     list($extra, $isSuperReviewer) = explode('|', $extra);
                     $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+                }
+            }
+
+            if($action->objectType == 'story' and $action->action == 'syncsiblings')
+            {
+                if(!empty($extra) and strpos($extra, '|') !== false)
+                {
+                    list($operate, $storyID) = explode('|', $extra);
+                    $desc['operate'] = $this->lang->$objectType->{$desc['operate']};
+                    $link = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$storyID"), "#$storyID ") : "#$storyID";
+                    $actionDesc = str_replace(array('$extra', '$operate'), array($link, $desc['operate'][$operate]), $desc['main']);
                 }
             }
 

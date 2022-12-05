@@ -17,34 +17,32 @@ function convertStringToDate(dateString)
  * Get conflict stories.
  *
  * @param  int    $planID
- * @param  int    $branch
  * @access public
  * @return void
  */
-function getConflictStories(planID, branch)
+function getConflictStories(planID)
 {
-    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + branch), function(conflictStories)
+    var newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
+    $.get(createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
     {
         if(conflictStories != '')
         {
             var result = confirm(conflictStories) ? true : false;
             if(!result)
             {
-                $('#branch').val(oldBranch[planID]);
+                newBranch = oldBranch[planID];
+                $('#branch').val(oldBranch[planID].split(','));
                 $('#branch').trigger("chosen:updated");
             }
         }
 
-        if(conflictStories == '' || result)
+        var link = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + newBranch + "&planID=" + planID);
+        $.post(link, function(data)
         {
-            var link = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branch);
-            $.post(link, function(data)
-            {
-                $('#parent').replaceWith(data);
-                $('#parent_chosen').remove();
-                $('#parent').chosen();
-            })
-        }
+            $('#parent').replaceWith(data);
+            $('#parent_chosen').remove();
+            $('#parent').chosen();
+        })
     });
 }
 
@@ -88,5 +86,19 @@ $('#future').on('change', function()
     }
 });
 
-
 $('#future').change();
+
+$('#submit').click(function()
+{
+    var parentPlan = $('#parent').val();
+    var branches   = $('#branch').val();
+    if(parentPlan != 0 && branches)
+    {
+        link = createLink('productplan', 'ajaxGetDiffBranchesTip', "produtID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
+        $.post(link, function(diffBranchesTip)
+        {
+            if((diffBranchesTip != '' && confirm(diffBranchesTip)) || !diffBranchesTip) $('form#dataform').submit();
+        });
+        return false;
+    }
+});

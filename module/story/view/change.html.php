@@ -73,6 +73,21 @@
           <?php echo $this->fetch('file', 'buildform');?>
           </td>
         </tr>
+        <?php if(!empty($siblings)):?>
+        <tr id='siblingTitle'>
+          <td colspan='2'>
+            <?php echo $lang->story->changeSyncTip;?>
+            <span data-toggle='tooltip' data-placement='right' title='<?php echo $lang->story->syncTip;?>'><i class='icon-help'></i></span>
+          </td>
+        </tr>
+        <tr id='siblingList'>
+          <td colspan='2'>
+            <ul class='list-unstyled'>
+                <?php include './blocksibling.html.php';?>
+            </ul>
+          </td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>
           <td><?php include './affected.html.php';?></td>

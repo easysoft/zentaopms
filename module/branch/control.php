@@ -260,10 +260,12 @@ class branch extends control
      * @param  string $param
      * @param  int    $projectID
      * @param  bool   $withMainBranch
+     * @param  string $isSiblings
+     * @param  string $fieldID
      * @access public
      * @return void
      */
-    public function ajaxGetBranches($productID, $oldBranch = 0, $param = 'all', $projectID = 0, $withMainBranch = true)
+    public function ajaxGetBranches($productID, $oldBranch = 0, $param = 'all', $projectID = 0, $withMainBranch = true, $isSiblings = 'no', $fieldID = '0')
     {
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product) or $product->type == 'normal') return;
@@ -280,6 +282,7 @@ class branch extends control
             $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
         }
 
+        if($isSiblings == 'yes') return print(html::select("branches[$fieldID]", $branchTagOption, $oldBranch, "onchange='loadBranchRelation(this.value, $fieldID);' class='form-control chosen control-branch'"));
         return print(html::select('branch', $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)' data-last='{$oldBranch}'"));
     }
 

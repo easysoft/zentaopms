@@ -257,7 +257,7 @@ class product extends control
 
             $this->products  = $this->product->getProducts($projectID, 'all', '', false);
             $projectProducts = $this->product->getProducts($projectID);
-            $productPlans    = $this->execution->getPlans($projectProducts, 'skipParent');
+            $productPlans    = $this->execution->getPlans($projectProducts, 'skipParent', $projectID);
 
             if($browseType == 'bybranch') $param = $branchID;
             $stories = $this->story->getExecutionStories($projectID, $productID, $branchID, $sort, $browseType, $param, $storyType, '', $pager);
@@ -924,6 +924,22 @@ class product extends control
     }
 
     /**
+     * Ajax get product by id.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductById($productID)
+    {
+        $product = $this->product->getById($productID);
+
+        $product->branchSourceName = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        $product->branchName       = $this->lang->product->branchName[$product->type];
+        echo json_encode($product);
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
@@ -1037,12 +1053,19 @@ class product extends control
     public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
     {
         $param    = strtolower($param);
-        $plans    = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
-        $field    = $fieldID ? "plans[$fieldID]" : 'plan';
+        if(strpos($param, 'forstory') === false)
+        {
+            $plans = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
+        }
+        else
+        {
+            $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch == '0' ? 'all' : $branch, $param);
+        }
+        $field    = $fieldID !== '' ? "plans[$fieldID]" : 'plan';
         $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';
         $output   = html::select($field, $plans, $planID, "class='form-control chosen' $multiple");
 
-        if($branch == 0 and strpos($param, 'edit')) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
+        if($branch == 0 and strpos($param, 'edit') and (strpos($param, 'forstory') === false)) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
 
         if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
         {

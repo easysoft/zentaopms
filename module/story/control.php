@@ -128,6 +128,7 @@ class story extends control
             $response['result'] = 'success';
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
             $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
             if(!$storyResult or dao::isError())
             {
@@ -164,7 +165,9 @@ class story extends control
                 $action = $fromObjectAction;
                 $extra  = $fromObjectID;
             }
-            $actionID = $this->action->create('story', $storyID, $action, '', $extra);
+            /* Create actions. */
+            $storyIds = $storyResult['ids'];
+            foreach($storyIds as $idItem) $actionID = $this->action->create('story', $idItem, $action, '', $extra);
 
             /* Record submit review action. */
             $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
@@ -437,8 +440,7 @@ class story extends control
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = str_replace('2030-01-01', $this->lang->story->undetermined, $this->loadModel('productplan')->getPairsForStory($productID, $branch, 'skipParent|unexpired|noclosed'));
-        $this->view->planID           = $planID;
+        $this->view->plans            = str_replace('2030-01-01', $this->lang->story->undetermined, $this->loadModel('productplan')->getPairsForStory($productID, $branch == 0 ? '' : $branch, 'skipParent|unexpired|noclosed'));        $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
         $this->view->color            = $color;
@@ -931,6 +933,7 @@ class story extends control
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
         $this->view->story            = $story;
+        $this->view->siblings         = empty($story->siblings) ? array() : $this->story->getByList($story->siblings);
         $this->view->stories          = $stories;
         $this->view->users            = $users;
         $this->view->product          = $product;
@@ -1022,6 +1025,16 @@ class story extends control
 
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
+
+        /* Filter siblings. */
+        $siblings = '';
+        foreach($stories as $id => $story)
+        {
+            if(empty($story->siblings)) continue;
+            $siblings .= "#$id ";
+            unset($stories[$id]);
+        }
+        if(!empty($siblings)) echo js::alert(sprintf($this->lang->story->batchEditTip, $siblings));
 
         $this->loadModel('branch');
         if($productID and !$executionID)
@@ -1251,6 +1264,8 @@ class story extends control
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
+        $this->view->siblings         = empty($story->siblings) ? array() : $this->story->getByList($story->siblings);
+        $this->view->branches         = $this->loadModel('branch')->getPairs($story->product);
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[]       = $this->lang->story->change;
         $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($reviewer)) ? "checked='checked'" : "";
@@ -1420,6 +1435,7 @@ class story extends control
         $this->view->position      = $position;
         $this->view->product       = $product;
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->siblings      = !empty($story->siblings) ? $this->story->getByList($story->siblings) : array();
         $this->view->plan          = $plan;
         $this->view->bugs          = $bugs;
         $this->view->fromBug       = $fromBug;
@@ -1640,7 +1656,7 @@ class story extends control
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
-        $actions     = $this->story->batchReview($storyIdList, $result, $reason);
+        $this->story->batchReview($storyIdList, $result, $reason);
 
         if(dao::isError()) return print(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -1877,8 +1893,15 @@ class story extends control
         $stories = $this->story->getByList($storyIdList);
         $productStoryList = array();
         $productList      = array();
+        $ignoreSiblings   = array();
         foreach($stories as $story)
         {
+            if(!empty($ignoreSiblings) and isset($ignoreSiblings[$story->id]))
+            {
+                unset($stories[$story->id]);
+                continue;
+            }
+
             if($story->parent == -1)
             {
                 $skipStory[] = $story->id;
@@ -1893,6 +1916,11 @@ class story extends control
             $storyProduct = isset($productList[$story->product]) ? $productList[$story->product] : $this->product->getByID($story->product);
             $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
             if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
+
+            if(!empty($story->siblings))
+            {
+                foreach(explode(',', trim($story->siblings, ',')) as $siblingID) $ignoreSiblings[$siblingID] = $siblingID;
+            }
         }
 
         if($this->post->comments)
@@ -1910,6 +1938,8 @@ class story extends control
 
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : '') . "|$preStatus");
                     $this->action->logHistory($actionID, $changes);
+
+                    if(!empty($stories[$storyID]->siblings)) $this->story->syncSiblings($storyID, $stories[$storyID]->siblings, $changes, 'Closed');
                 }
             }
 
@@ -2256,12 +2286,27 @@ class story extends control
     {
         if(!empty($_POST) && isset($_POST['storyIdList']))
         {
-            $allChanges  = $this->story->batchAssignTo();
+            $allChanges = $this->story->batchAssignTo();
             if(dao::isError()) return print(js::error(dao::getError()));
+
+            $assignedSiblings = array();
+            $oldStories       = $this->story->getByList($this->post->storyIdList);
             foreach($allChanges as $storyID => $changes)
             {
                 $actionID = $this->action->create('story', $storyID, 'Assigned', '', $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
+
+                /* Sync siblings. */
+                if(!empty($oldStories[$storyID]->siblings))
+                {
+                    $siblings = $oldStories[$storyID]->siblings;
+                    foreach(explode(',', $siblings) as $siblingID)
+                    {
+                        if(in_array($siblingID, $this->post->storyIdList) or isset($assignedSiblings[$siblingID])) $siblings = str_replace(",$siblingID,", ',', $siblings);
+                    }
+                    $this->story->syncSiblings($storyID, trim($siblings, ','), $changes, 'Assigned');
+                    foreach(explode(',', trim($siblings, ',')) as $assignedID) $assignedSiblings[$assignedID] = $assignedID;
+                }
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -2969,5 +3014,30 @@ class story extends control
         $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
 
         return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
+    }
+
+    /**
+     * AJAX: Deleted story sibling.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxRelieveSibling()
+    {
+        $siblingID = !empty($_POST['siblingID']) ? $_POST['siblingID'] : 0;
+        $story     = $this->story->getByID($siblingID);
+        $siblings  = explode(',', trim($story->siblings, ','));
+
+        if(empty($story->siblings)) return $this->send(array('result' => 'fail'));
+
+        /* batchUnset siblingID from siblings.*/
+        $replaceSql = "UPDATE " . TABLE_STORY . " SET siblings = REPLACE(siblings,',$siblingID,', ',') WHERE `product` = $story->product";
+        $this->dbh->exec($replaceSql);
+
+        /* Update siblings to empty by siblingID and if siblings eq ','.*/
+        $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($siblingID)->orWhere('siblings')->eq(',')->exec();
+
+        if(!dao::isError()) $this->loadModel('action')->create('story', $siblingID, 'relieved');
+        return $this->send(array('result' => 'success', 'silbingsCount' => count($siblings)-1));
     }
 }

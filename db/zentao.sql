@@ -1129,7 +1129,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
 CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL,
-  `branch` mediumint(8) unsigned NOT NULL,
+  `branch` varchar(255) NOT NULL DEFAULT '0',
   `parent` mediumint(9) NOT NULL DEFAULT '0',
   `title` varchar(90) NOT NULL,
   `status` enum('wait','doing','done','closed') NOT NULL default 'wait',
@@ -1480,6 +1480,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `childStories` varchar(255) NOT NULL,
   `linkStories` varchar(255) NOT NULL,
   `linkRequirements` varchar(255) NOT NULL,
+  `siblings` varchar(255) NOT NULL,
   `duplicateStory` mediumint(8) unsigned NOT NULL,
   `version` smallint(6) NOT NULL default '1',
   `feedbackBy` varchar(100) NOT NULL,
