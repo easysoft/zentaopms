@@ -69,7 +69,7 @@
           </td>
           <td class="c-url text-left">
             <?php
-            if($build->scmPath)  echo "<div><i class='icon icon-code' title='{$lang->build->scmPath}'></i> <span title='{$build->scmPath}'>" . (strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath) . '</span></div>';
+            if($build->scmPath)  echo "<div><i class='icon icon-file-code' title='{$lang->build->scmPath}'></i> <span title='{$build->scmPath}'>" . (strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath) . '</span></div>';
             if($build->filePath) echo "<div><i class='icon icon-file-archive' title='{$lang->build->filePath}'></i> <span title='{$build->filePath}'>" . (strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath) . '</span></div>';
             ?>
           </td>
