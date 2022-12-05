@@ -24,7 +24,7 @@
       <div class="host-desc-container">
         <h4><?php echo $lang->zahost->initHost->descTitle; ?></h4>
         <div>
-          <p><?php echo $lang->zahost->initHost->initDescFirst . ' ' . $host->secret; ?></p>
+          <p><?php echo $lang->zahost->initHost->initDescFirst . ' ' . $host->secret . ' -s ' . getWebRoot(true); ?></p>
           <p><?php echo $lang->zahost->initHost->initDescSecond;?></p>
         </div>
 
