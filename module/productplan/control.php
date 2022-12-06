@@ -157,7 +157,7 @@ class productplan extends control
 
         $this->commonAction($plan->product, $plan->branch);
 
-        if($plan->parent)
+        if($plan->parent > 0)
         {
             $parentPlan  = $this->productplan->getByID($plan->parent);
             $branchPairs = array();
