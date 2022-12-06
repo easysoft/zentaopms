@@ -234,14 +234,14 @@ function showBlameAndRelation(line)
         p_line--;
         blame = blames[p_line];
     }
-    if($('#log').data('line') == p_line) return;
+    if($('#log').data('line') == line) return;
 
     var time    = blame.time != 'unknown' ? blame.time : '';
     var user    = blame.committer != 'unknown' ? blame.committer : '';
     var version = blame.revision.toString().substring(0, 10);
     var content = blameTmpl.replace('%line', line).replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
     $('.history').html(content);
-    $('#log').data('line', p_line);
+    $('#log').data('line', line);
     $('#log').css('display', 'flex');
     getRelation(blame.revision);
 }
