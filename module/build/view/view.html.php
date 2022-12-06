@@ -301,6 +301,7 @@ tbody tr td:first-child input {display: none;}
                 <th class='c-status' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='c-status'> <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
+                <th class='c-build w-200px text-left'><?php echo $lang->bug->openedBuild;?></th>
                 <th class='c-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
                 <th class='c-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
@@ -338,6 +339,11 @@ tbody tr td:first-child input {display: none;}
                     <?php echo $this->processStatus('bug', $bug);?>
                   </span>
                 </td>
+                <?php
+                $openedBuilds = '';
+                foreach(explode(',', $bug->openedBuild) as $buildID) $openedBuilds .= ($buildID == 'trunk' ? 'Trunk' : zget($buildPairs, $buildID, '')) . ' ';
+                ?>
+                <td class='text-left' title='<?php echo $openedBuilds;?>'><?php echo $openedBuilds;?></td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                 <td><?php echo zget($users, $bug->resolvedBy);?></td>
