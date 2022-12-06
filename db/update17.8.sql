@@ -7,7 +7,7 @@ ALTER TABLE `zt_release` CHANGE `branch` `branch` varchar(255) NOT NULL;
 ALTER TABLE `zt_release` CHANGE `build` `build` varchar(255) NOT NULL;
 ALTER TABLE `zt_release` ADD `shadow` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `branch`;
 
-ALTER TABLE `zt_host` 
+ALTER TABLE `zt_host`
 DROP COLUMN `cabinet`,
 DROP COLUMN `cpuRate`,
 DROP COLUMN `diskType`,
@@ -56,7 +56,7 @@ CHANGE COLUMN `privateIP` `intranet` varchar(128) NOT NULL AFTER `cpuCores`,
 CHANGE COLUMN `publicIP` `extranet` varchar(128) NOT NULL AFTER `intranet`;
 
 UPDATE zt_host h,
-zt_asset a 
+zt_asset a
 SET h.`name` = a.`name`,
 h.`createdBy` = a.`createdBy`,
 h.`createdDate` = a.`createdDate`,
@@ -130,3 +130,5 @@ ALTER TABLE `zt_build` ADD `builds` varchar(255) NOT NULL AFTER `execution`;
 
 UPDATE `zt_block` SET block = 'scrumrisk'  WHERE module = 'project' AND type = 'scrum' AND block = 'waterfallrisk';
 UPDATE `zt_block` SET block = 'scrumissue' WHERE module = 'project' AND type = 'scrum' AND block = 'waterfallissue';
+
+ALTER TABLE `zt_repofiles` ADD `oldPath` varchar(255) DEFAULT '' AFTER `path`;
