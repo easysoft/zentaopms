@@ -39,12 +39,7 @@
           <?php else:?>
           <tr>
             <th><?php echo $lang->release->product;?></th>
-            <td>
-              <div class='input-group'>
-              <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value)' class='form-control chosen'");?>
-              <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBuilds()' class='form-control chosen control-branch'");?>
-              </div>
-            </td>
+            <td><?php echo html::select('product', $products, $product->id, "onchange='loadBuilds()' class='form-control chosen'");?></td>
             <td></td>
           </tr>
           <?php endif;?>
