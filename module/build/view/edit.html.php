@@ -36,8 +36,8 @@
           </td>
           <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
         </tr>
-        <?php if(!empty($product) and $product->type != 'normal'): ?>
         <tr>
+        <tr class='<?php if(!empty($product) and $product->type == 'normal') echo 'hidden'?>'>
           <th class='w-120px'><?php echo $lang->build->branch;?></th>
           <td>
             <div class='input-group' id='branchBox'>
@@ -45,7 +45,6 @@
             </div>
           </td>
         </tr>
-        <?php endif; ?>
         <?php $disabled = $testtaskID ? 'disabled' : '';?>
         <?php if(!$build->execution):?>
         <tr>

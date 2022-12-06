@@ -44,8 +44,7 @@
           <?php endif;?>
           <td></td>
         </tr>
-        <?php if(!empty($product) and $product->type != 'normal'): ?>
-        <tr>
+        <tr class='<?php if(!empty($product) and $product->type == 'normal') echo 'hidden'?>'>
           <th class='w-120px'><?php echo $lang->build->branch;?></th>
           <td>
             <div class='input-group' id='branchBox'>
@@ -53,7 +52,6 @@
             </div>
           </td>
         </tr>
-        <?php endif; ?>
         <tr class='hide'>
           <th class='w-120px'><?php echo $lang->build->builds;?></th>
           <td id='buildBox'><?php echo html::select('builds[]', array(), '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
