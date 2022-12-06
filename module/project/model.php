@@ -1583,7 +1583,7 @@ class projectModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        if(!$oldProject->hasProduct && $oldProject->name != $project->name) $this->updateProductName($project->name, $projectID);
+        if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent)) $this->updateShadowProduct($project);
 
         /* Get team and language item. */
         $this->loadModel('user');
@@ -1744,7 +1744,7 @@ class projectModel extends model
 
             if(!dao::isError())
             {
-                if(!$oldProject->hasProduct && $oldProject->name != $project->name) $this->updateProductName($project->name, $projectID);
+                if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent)) $this->updateShadowProduct($project);
 
                 if(isset($project->parent))
                 {
@@ -2038,17 +2038,18 @@ class projectModel extends model
     }
 
     /**
-     * Update a product's name as its project.
+     * Update shadow product for its project.
      *
-     * @param  string $projectName
-     * @param  int    $projectID
+     * @param  object $project
      * @access public
      * @return bool
      */
-    public function updateProductName($projectName, $projectID)
+    public function updateShadowProduct($project)
     {
-        $product = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
-        $this->dao->update(TABLE_PRODUCT)->set('name')->eq($projectName)->where('id')->eq($product)->exec();
+        $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project->id)->fetch('product');
+        $topProgram = !empty($project->parent) ? $this->loadModel('program')->getTopByID($project->parent) : 0;
+        $this->dao->update(TABLE_PRODUCT)->set('name')->eq($project->name)->set('program')->eq($topProgram)->where('id')->eq($product)->exec();
+
         return !dao::isError();
     }
 
