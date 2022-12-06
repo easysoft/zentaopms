@@ -3025,7 +3025,6 @@ class bugModel extends model
         $allBranch = "`branch` = 'all'";
         $branchAB = array();
         $branchAB = explode(',', $branch);
-        unset($branchAB[0]);
         $branch = implode($branchAB, "','");
         if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
