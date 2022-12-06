@@ -7179,6 +7179,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   key `product` (`product`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_ticketsource`;
 CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` mediumint(8) unsigned NOT NULL,
@@ -7190,6 +7191,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   key `ticketId` (`ticketId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_ticketrelation`;
 CREATE TABLE IF NOT EXISTS `zt_ticketrelation` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` mediumint unsigned NOT NULL,
