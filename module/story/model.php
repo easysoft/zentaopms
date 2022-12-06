@@ -2229,14 +2229,17 @@ class storyModel extends model
                 if($oldStory->stage == 'wait') $story->stage = 'planned';
                 if($this->session->currentProductType and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
                 {
-                    if(!isset($oldStoryStages[$storyID][$plan->branch]))
+                    foreach(explode(',', $plan->branch) as $planBranch)
                     {
-                        $story->stage = 'planned';
-                        $newStoryStage = new stdclass();
-                        $newStoryStage->story  = $storyID;
-                        $newStoryStage->branch = $plan->branch;
-                        $newStoryStage->stage  = $story->stage;
-                        $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
+                        if(!isset($oldStoryStages[$storyID][$planBranch]))
+                        {
+                            $story->stage = 'planned';
+                            $newStoryStage = new stdclass();
+                            $newStoryStage->story  = $storyID;
+                            $newStoryStage->branch = $planBranch;
+                            $newStoryStage->stage  = $story->stage;
+                            $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
+                        }
                     }
                 }
             }
