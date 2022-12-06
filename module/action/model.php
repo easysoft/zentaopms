@@ -287,6 +287,15 @@ class actionModel extends model
                     if(strpos(',deleted,', ",$actionType,") !== false) $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch();
                     if(!empty($module) and $module->type == 'story') $record['product'] = $module->root;
                     break;
+                case 'review':
+                    $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    if($result)
+                    {
+                        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($result->project)->fetchPairs('product');
+                        $record['product']   = join(',', array_keys($products));
+                        $record['project']   = zget($result, 'project', 0);
+                    }
+                    break;
                 default:
                     $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
                     $record['product']   = zget($result, 'product', '0');
