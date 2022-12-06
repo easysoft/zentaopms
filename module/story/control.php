@@ -298,7 +298,14 @@ class story extends control
         }
 
         $users = $this->user->getPairs('pdfirst|noclosed|nodeleted');
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+        
+        $branchData = explode(',', $branch);
+        foreach($branchData as $branchItem)
+        {
+            $branch = $branchItem;
+            $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+            break;
+        }
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Init vars. */
@@ -440,7 +447,8 @@ class story extends control
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = str_replace('2030-01-01', $this->lang->story->undetermined, $this->loadModel('productplan')->getPairsForStory($productID, $branch == 0 ? '' : $branch, 'skipParent|unexpired|noclosed'));        $this->view->planID           = $planID;
+        $this->view->plans            = str_replace('2030-01-01', $this->lang->story->undetermined, $this->loadModel('productplan')->getPairsForStory($productID, $branch == 0 ? '' : $branch, 'skipParent|unexpired|noclosed'));
+        $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
         $this->view->color            = $color;
@@ -658,8 +666,14 @@ class story extends control
             $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
-        $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
+        $branchData = explode(',', $branch);
+        foreach($branchData as $branchItem)
+        {
+            $branch = $branchItem;
+            $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+            $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
+            break;
+        }
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;
