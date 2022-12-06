@@ -15,7 +15,7 @@
 <?php if($task):?>
 <?php js::set('taskID', $task->task);?>
 <?php js::set('nodeID', $node->id);?>
-<style>.body-modal #mainContent{width:90%;height:100vh}
+<style>.body-modal #mainContent{width:90%}
 </style>
 <?php endif;?>
 <div id='mainContent' class='main-content'>
