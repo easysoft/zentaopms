@@ -956,8 +956,6 @@ class productplan extends control
      */
     public function ajaxGetConflict($planID, $newBranch)
     {
-        if($newBranch == '') return;
-
         $plan        = $this->productplan->getByID($planID);
         $oldBranch   = $plan->branch;
         $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');

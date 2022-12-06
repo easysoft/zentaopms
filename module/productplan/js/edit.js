@@ -13,7 +13,7 @@ function convertStringToDate(dateString)
     return Date.parse(dateString);
 }
 
-$('#branch').change(function()
+$('#dataform').on('change', '#branch', function()
 {
     var newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
     $.get(createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)

@@ -74,7 +74,7 @@ $('#parent').change(function()
     })
 })
 
-$('#branch').change(function()
+$('#dataform').on('change', '#branch', function()
 {
     if(parentPlanID) return;
 
