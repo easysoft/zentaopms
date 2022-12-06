@@ -1473,6 +1473,7 @@ class transferModel extends model
                     }
                     $html .= '</td>';
                 }
+                elseif(strpos($this->transferConfig->textareaFields, $field) !== false) $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' style='overflow:hidden;'") . '</td>';
 
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
             }
