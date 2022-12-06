@@ -1583,7 +1583,7 @@ class projectModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent)) $this->updateShadowProduct($project);
+        if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
 
         /* Get team and language item. */
         $this->loadModel('user');
@@ -1744,7 +1744,7 @@ class projectModel extends model
 
             if(!dao::isError())
             {
-                if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent)) $this->updateShadowProduct($project);
+                if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
 
                 if(isset($project->parent))
                 {
@@ -2048,7 +2048,7 @@ class projectModel extends model
     {
         $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project->id)->fetch('product');
         $topProgram = !empty($project->parent) ? $this->loadModel('program')->getTopByID($project->parent) : 0;
-        $this->dao->update(TABLE_PRODUCT)->set('name')->eq($project->name)->set('program')->eq($topProgram)->where('id')->eq($product)->exec();
+        $this->dao->update(TABLE_PRODUCT)->set('name')->eq($project->name)->set('program')->eq($topProgram)->set('acl')->eq($project->acl)->where('id')->eq($product)->exec();
 
         return !dao::isError();
     }
