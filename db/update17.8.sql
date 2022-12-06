@@ -7,7 +7,7 @@ ALTER TABLE `zt_release` CHANGE `branch` `branch` varchar(255) NOT NULL;
 ALTER TABLE `zt_release` CHANGE `build` `build` varchar(255) NOT NULL;
 ALTER TABLE `zt_release` ADD `shadow` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `branch`;
 
-ALTER TABLE `zt_host` 
+ALTER TABLE `zt_host`
 DROP COLUMN `cabinet`,
 DROP COLUMN `cpuRate`,
 DROP COLUMN `diskType`,
@@ -56,7 +56,7 @@ CHANGE COLUMN `privateIP` `intranet` varchar(128) NOT NULL AFTER `cpuCores`,
 CHANGE COLUMN `publicIP` `extranet` varchar(128) NOT NULL AFTER `intranet`;
 
 UPDATE zt_host h,
-zt_asset a 
+zt_asset a
 SET h.`name` = a.`name`,
 h.`createdBy` = a.`createdBy`,
 h.`createdDate` = a.`createdDate`,
@@ -66,7 +66,7 @@ h.`group` = a.`group`,
 h.`type` = a.`type`,
 h.`deleted` = a.`deleted`
 WHERE
-	h.`assetID` = a.`id`;
+h.`assetID` = a.`id`;
 
 ALTER TABLE `zt_host` DROP COLUMN `assetID`;
 
@@ -91,6 +91,17 @@ CREATE TABLE `zt_image` (
   `fileSize` float unsigned NOT NULL,
   `md5` varchar(64) NOT NULL,
   `desc` text NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_automation` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `node` int(11) unsigned NOT NULL DEFAULT 0,
+	`product` int(11) unsigned NOT NULL DEFAULT 0,
+  `path` varchar(255) NOT NULL DEFAULT '',
+  `shell` mediumtext NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)

@@ -88,7 +88,7 @@ $lang->zahost->image->statusList['inprogress']    = 'Inprogress';
 $lang->zahost->image->statusList['completed']     = 'Completed';
 $lang->zahost->image->statusList['failed']        = 'Failed';
 
-$lang->zahost->image->imageEmpty           = 'No Image';
+$lang->zahost->image->imageEmpty            = 'No Image';
 $lang->zahost->image->downloadImageFail     = 'Failed to create image task';
 $lang->zahost->image->downloadImageSuccess  = 'Successed to create image task';
 $lang->zahost->image->cancelDownloadFail    = 'Failed to cancel image task';
@@ -96,6 +96,7 @@ $lang->zahost->image->cancelDownloadSuccess = 'Successed to cancel image task';
 
 $lang->zahost->empty         = 'No Host';
 
+$lang->zahost->statusList['wait']   = 'Wait';
 $lang->zahost->statusList['ready']  = 'Ready';
 $lang->zahost->statusList['online'] = 'Online';
 

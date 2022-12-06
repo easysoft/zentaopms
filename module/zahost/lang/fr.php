@@ -6,12 +6,12 @@ $lang->zahost->create         = 'Add Host';
 $lang->zahost->view           = 'Host View';
 $lang->zahost->init           = 'Init Host';
 $lang->zahost->edit           = 'Éditer';
+$lang->zahost->editAction     = 'Edit Host';
+$lang->zahost->delete         = 'Delete';
 $lang->zahost->cancel         = "Cancel";
 $lang->zahost->editAction     = 'Éditer Hôte';
 $lang->zahost->delete         = 'Supprimer';
 $lang->zahost->deleteAction   = 'Supprimer Hôte';
-$lang->zahost->byQuery        = 'Recherche';
-$lang->zahost->all            = 'Tous les hôtes';
 $lang->zahost->browseNode     = 'ZAnode Browse';
 $lang->zahost->deleted        = "Deleted";
 
@@ -96,6 +96,7 @@ $lang->zahost->image->cancelDownloadSuccess = 'Successed to cancel image task';
 
 $lang->zahost->empty         = 'No Host';
 
+$lang->zahost->statusList['wait']   = 'Wait';
 $lang->zahost->statusList['ready']  = 'Ready';
 $lang->zahost->statusList['online'] = 'Online';
 

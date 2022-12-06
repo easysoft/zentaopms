@@ -7313,6 +7313,18 @@ CREATE TABLE `zt_image` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_automation`;
+CREATE TABLE `zt_automation` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `node` int(11) unsigned NOT NULL DEFAULT 0,
+  `product` int(11) unsigned NOT NULL DEFAULT 0,
+  `path` varchar(255) NOT NULL DEFAULT '',
+  `shell` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_service`;
 CREATE TABLE IF NOT EXISTS `zt_service` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

@@ -37,6 +37,7 @@ class zahostModel extends model
 
         $this->dao->table      = 'zahost';
         $hostInfo->type        = 'zahost';
+        $hostInfo->status      = 'wait';
         $hostInfo->createdBy   = $this->app->user->account;
         $hostInfo->createdDate = helper::now();
         $hostInfo->secret      = md5($hostInfo->name . time());

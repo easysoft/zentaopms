@@ -96,6 +96,7 @@ $lang->zahost->image->cancelDownloadSuccess = '取消下载镜像任务成功';
 
 $lang->zahost->empty         = '暂时没有宿主机';
 
+$lang->zahost->statusList['wait']   = '待初始化';
 $lang->zahost->statusList['ready']  = '准备中';
 $lang->zahost->statusList['online'] = '已上架';
 

@@ -96,6 +96,7 @@ $lang->zahost->image->cancelDownloadSuccess = 'Successed to cancel image task';
 
 $lang->zahost->empty         = 'No Host';
 
+$lang->zahost->statusList['wait']   = 'Wait';
 $lang->zahost->statusList['ready']  = 'Ready';
 $lang->zahost->statusList['online'] = 'Online';
 
