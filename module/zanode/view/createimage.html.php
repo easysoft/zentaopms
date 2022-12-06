@@ -14,8 +14,8 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php if($task):?>
 <?php js::set('taskID', $task->task);?>
-<?php js::set('extranet', $node->ip);?>
-<style>.body-modal #mainContent{width:90%;}
+<?php js::set('nodeID', $node->id);?>
+<style>.body-modal #mainContent{width:90%}
 </style>
 <?php endif;?>
 <div id='mainContent' class='main-content'>
@@ -57,7 +57,7 @@
 </div>
 <?php if($task):?>
 <script>
-var setProgress = self.setInterval("getTaskProgress()",500);
+var setProgress = self.setInterval("getTaskProgress()",1500);
 
 $(function()
 {
@@ -68,16 +68,16 @@ $(function()
 
 function getTaskProgress()
 {
-    var url = createLink('zanode', 'ajaxGetTaskStatus', 'extranet=' + extranet + '&taskID=' + taskID + '&type=exportVm');
+    var url = createLink('zanode', 'ajaxGetTaskStatus', 'nodeID=' + nodeID + '&taskID=' + taskID + '&type=exportVm');
     $.get(url, function(data)
     {
         var rate   = data.rate;
         var status = data.status;
 
-        if(rate == 1 || status == 'completed') rate = 100;
+        if(rate == 1 || status == 'completed') rate = 1;
 
-        $('.rate').css('width', rate + '%');
-        if(rate == 100 || (status != 'inprogress' && status != 'created'))
+        $('.rate').css('width', rate*100 + '%');
+        if(rate == 1 || (status != 'inprogress' && status != 'created'))
         {
             updateStatus(data);
             clearInterval(setProgress);

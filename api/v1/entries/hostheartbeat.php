@@ -28,6 +28,8 @@ class hostHeartbeatEntry extends baseEntry
 
         /* Check param. */
         $status = $this->requestBody->status;
+        $vms    = $this->requestBody->Vms;
+        $zap    = $this->requestBody->port;
         $now    = helper::now();
         if(!$status) return $this->sendError(400, 'Params error.');
 
@@ -42,15 +44,33 @@ class hostHeartbeatEntry extends baseEntry
         }
 
         $this->dao = $this->loadModel('common')->dao;
-        $assetID = $this->dao->select('id')->from(TABLE_ZAHOST)
+        $id = $this->dao->select('id')->from(TABLE_ZAHOST)
             ->beginIF($secret)->where('secret')->eq($secret)->fi()
             ->beginIF(!$secret)->where('tokenSN')->eq($token)
             ->andWhere('tokenTime')->gt($now)->fi()
             ->fetch('id');
-        if(!$assetID) return $this->sendError(400, 'Secret error.');
+        if(!$id) return $this->sendError(400, 'Secret error.');
 
         $this->dao->update(TABLE_ZAHOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
-        $this->dao->update(TABLE_ZAHOST)->set('heartbeat')->eq($now)->where('id')->eq($assetID)->exec();
+        $this->dao->update(TABLE_ZAHOST)
+        ->set('heartbeat')->eq($now)
+        ->set('zap')->eq($zap)
+        ->where('id')->eq($id)->exec();
+
+        foreach($vms as $vm)
+        {
+            if(!empty($vm->vncPortOnHost))
+            {
+                $this->dao->update(TABLE_ZAHOST)
+                ->set('vnc')->eq($vm->vncPortOnHost)
+                ->set('zap')->eq($vm->agentPortOnHost)
+                ->set('ztf')->eq($vm->ztfPortOnHost)
+                ->set('zd')->eq($vm->zdPortOnHost)
+                ->set('ssh')->eq($vm->sshPortOnHost)
+                ->set('status')->eq($vm->status)
+                ->where('mac')->eq($vm->macAddress)->exec();
+            }
+        }
 
         if(!$secret) return $this->sendSuccess(200, 'success');
 

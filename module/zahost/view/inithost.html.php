@@ -24,10 +24,11 @@
       <div class="host-desc-container">
         <h4><?php echo $lang->zahost->initHost->descTitle; ?></h4>
         <div>
-          <p><?php echo $lang->zahost->initHost->initDescFirst . ' ' . $host->secret . ' -s ' . getWebRoot(true); ?></p>
-          <p><?php echo $lang->zahost->initHost->initDescSecond;?></p>
+          <span class='dot-symbol'></span>
+          <span>
+            <?php echo $lang->zahost->initHost->initDesc . ' ' . $host->secret . ' -z ' . getWebRoot(true); ?>
+          </span>
         </div>
-
         <div id="statusContainer">
         </div>
       </div>

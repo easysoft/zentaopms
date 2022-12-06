@@ -60,8 +60,8 @@ $lang->zahost->initHost->serviceStatus = [
 ];
 $lang->zahost->initHost->title          = "Initialize Host";
 $lang->zahost->initHost->descTitle      = "Follow these steps to complete the initialization on the host:";
-$lang->zahost->initHost->initDesc       = "1. Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
-$lang->zahost->initHost->initDescSecond = "2. Checking Service Status";
+$lang->zahost->initHost->initDesc       = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
+$lang->zahost->initHost->statusTitle    = "Service Status";
 
 $lang->zahost->image = new stdclass;
 $lang->zahost->image->list          = 'Image List';

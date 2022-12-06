@@ -6,7 +6,7 @@ $config->zanode->create->requiredFields = 'name,host,image,cpu,memory,disk,osNam
 $config->zanode->edit->requiredFields   = '';
 $config->zanode->createimage->requiredFields = 'name';
 
-$config->zanode->defaultPort = '8086';
+$config->zanode->defaultPort = '55001';
 
 $config->zanode->os = new stdClass();
 

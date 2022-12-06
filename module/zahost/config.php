@@ -3,7 +3,7 @@ $config->zahost->create = new stdclass();
 $config->zahost->create->requiredFields = 'name,hostType,extranet,cpuCores,memory,diskSize,vsoft';
 $config->zahost->create->ipFields       = 'extranet';
 
-$config->zahost->defaultPort = '8086';
+$config->zahost->defaultPort = '55001';
 
 $config->zahost->edit = new stdclass();
 $config->zahost->edit->requiredFields = 'name,hostType,cpuCores,memory,diskSize,vsoft';

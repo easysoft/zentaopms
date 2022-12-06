@@ -40,6 +40,7 @@ class zahostModel extends model
         $hostInfo->status      = 'wait';
         $hostInfo->createdBy   = $this->app->user->account;
         $hostInfo->createdDate = helper::now();
+        $hostInfo->zap         = $this->config->zahost->defaultPort;
         $hostInfo->secret      = md5($hostInfo->name . time());
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
@@ -142,7 +143,7 @@ class zahostModel extends model
 
         if ($this->ping($address)) return true;
 
-        foreach(array(80, 443, 8086) as $port)
+        foreach(array(80, 443, $this->config->zahost->defaultPort) as $port)
         {
             $fp = fsockopen($address, $port, $errno, $errstr, 3);
             if ($fp) return true;
@@ -268,7 +269,7 @@ class zahostModel extends model
     public function downloadImage($image)
     {
         $host   = $this->getById($image->host);
-        $apiUrl = 'http://' . $host->extranet . ':' . $this->config->zahost->defaultPort . '/api/v1/download/add';
+        $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/download/add';
 
         $apiParams['md5']  = $image->md5;
         $apiParams['url']  = $image->address;
@@ -298,7 +299,7 @@ class zahostModel extends model
     public function queryDownloadImageStatus($image)
     {
         $host   = $this->getById($image->host);
-        $apiUrl = 'http://' . $host->extranet . ':' . $this->config->zahost->defaultPort . '/api/v1/task/getStatus';
+        $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/task/getStatus';
 
         $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
         if(!$result or $result->code != 'success') return $image->status;
@@ -345,7 +346,7 @@ class zahostModel extends model
     public function downloadImageStatus($image)
     {
         $host      = $this->getById($image->host);
-        $statusApi = 'http://' . $host->extranet . '/api/v1/task/status';
+        $statusApi = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/task/status';
 
         $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$host->tokenSN"), 'json'));
 
@@ -368,7 +369,7 @@ class zahostModel extends model
     {
         $zaInfo = $this->queryDownloadImageStatus($image);
         $host   = $this->getById($image->host);
-        $apiUrl = 'http://' . $host->extranet . ':' . $this->config->zahost->defaultPort . '/api/v1/download/cancel';
+        $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/download/cancel';
 
         $apiParams['id']  = intval($zaInfo->taskID);
 
@@ -531,7 +532,7 @@ class zahostModel extends model
      */
     public function getServiceStatus($host)
     {
-        $result = json_decode(commonModel::http("http://{$host->extranet}:8086/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$host->tokenSN")));
+        $result = json_decode(commonModel::http("http://{$host->extranet}:{$host->zap}/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$host->tokenSN")));
         if(empty($result) || $result->code != 'success')
         {
             $result = new stdclass;
