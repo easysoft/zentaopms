@@ -256,7 +256,7 @@ class projectrelease extends control
             ->beginIF($type == 'story')->orderBy($sort)->fi()
             ->page($storyPager)
             ->fetchAll('id');
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story' false);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
@@ -305,6 +305,7 @@ class projectrelease extends control
         $this->view->storyPager   = $storyPager;
         $this->view->bugPager     = $bugPager;
         $this->view->leftBugPager = $leftBugPager;
+        $this->view->builds       = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject', 0, 'execution', '', false);
         $this->display();
     }
 
