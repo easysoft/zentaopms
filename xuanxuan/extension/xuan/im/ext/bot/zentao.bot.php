@@ -646,12 +646,20 @@ class zentaoBot extends xuanBot
             $tr   = '';
             $link = str_replace('x.php', 'index.php', helper::createLink('task', 'view', "taskID=$task->id", 'html'));
             $href = urlencode($sysURL . $link);
+            $isParent = $task->parent == -1;
+            $isChild  = $task->parent > 0;
+            $isMulti  = !empty($task->mode);
             foreach($headMap as $key => $value)
             {
                 switch($key)
                 {
                     case 'name':
-                        $tr .= "<td><a href='xxc:openInApp/zentao-integrated/{$href}'>{$task->$key}</a></td>";
+                        $tr .= "<td>";
+                        if($isParent) $tr .= " <span class='label label-sm circle'>{$lang->task->parentAB}</span>&nbsp;";
+                        if($isChild)  $tr .= " <span class='label label-sm circle'>{$lang->task->childrenAB}</span>&nbsp;";
+                        if($isMulti)  $tr .= " <span class='label label-sm circle'>" . zget($lang->task->modeList, $task->mode) . "</span>&nbsp;";
+                        $tr .= "<a href='xxc:openInApp/zentao-integrated/{$href}'>{$task->$key}</a>";
+                        $tr .= "</td>";
                         break;
                     case 'status':
                         $tr .= "<td class='text-nowrap'>{$this->taskStatusList[$task->$key]}</td>";
@@ -680,7 +688,7 @@ class zentaoBot extends xuanBot
                         $canClose  = in_array($task->status, array('done', 'cancel'));
 
                         /* Disable all if task has children. */
-                        if($task->parent == -1)
+                        if($isParent)
                         {
                             $canStart  = false;
                             $canFinish = false;
