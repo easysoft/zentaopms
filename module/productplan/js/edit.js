@@ -13,14 +13,7 @@ function convertStringToDate(dateString)
     return Date.parse(dateString);
 }
 
-/**
- * Get conflict stories.
- *
- * @param  int    $planID
- * @access public
- * @return void
- */
-function getConflictStories(planID)
+$('#dataform').on('change', '#branch', function()
 {
     var newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
     $.get(createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
@@ -30,21 +23,12 @@ function getConflictStories(planID)
             var result = confirm(conflictStories) ? true : false;
             if(!result)
             {
-                newBranch = oldBranch[planID];
                 $('#branch').val(oldBranch[planID].split(','));
                 $('#branch').trigger("chosen:updated");
             }
         }
-
-        var link = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + newBranch + "&planID=" + planID);
-        $.post(link, function(data)
-        {
-            $('#parent').replaceWith(data);
-            $('#parent_chosen').remove();
-            $('#parent').chosen();
-        })
     });
-}
+});
 
 /**
  * Compute the end date for productplan.
@@ -71,6 +55,18 @@ function computeEndDate(delta)
     $('#begin').val(currentBeginDate);
     $('#end').val(endDate).datetimepicker('update');
 }
+
+$('#parent').change(function()
+{
+    var parentID        = $(this).val();
+    var currentBranches = $('#branch').val() ? $('#branch').val().toString() : '';
+    $.post(createLink('productplan', 'ajaxGetParentBranches', "productID=" + productID + "&parentID=" + parentID + "&currentBranches=" + currentBranches), function(data)
+    {
+        $('#branch').replaceWith(data);
+        $('#branch_chosen').remove();
+        $('#branch').chosen();
+    })
+})
 
 $('#future').on('change', function()
 {

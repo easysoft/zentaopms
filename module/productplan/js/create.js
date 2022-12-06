@@ -63,7 +63,20 @@ $('#future').on('change', function()
     }
 });
 
-$('#branch').change(function()
+$('#parent').change(function()
+{
+    var parentID        = $(this).val();
+    var currentBranches = $('#branch').val() ? $('#branch').val().toString() : '';
+    $.post(createLink('productplan', 'ajaxGetParentBranches', "productID=" + productID + "&parentID=" + parentID + "&currentBranches=" + currentBranches), function(data)
+    {
+        $('#branch').replaceWith(data);
+        $('#branch_chosen').remove();
+        $('#branch').chosen();
+        $('#branch').change();
+    })
+})
+
+$('#dataform').on('change', '#branch', function()
 {
     if(parentPlanID) return;
 
@@ -72,20 +85,11 @@ $('#branch').change(function()
 
     var branchIdList = branchIdList.toString();
     var lastPlanLink = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchIdList);
-    var topPlanLink  = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branchIdList);
-
     $.post(lastPlanLink, function(data)
     {
         data = JSON.parse(data);
         var planTitle = data ? '(' + lastLang + ': ' + data.title + ')' : '';
         $('#title').parent().next('td').html(planTitle);
-    })
-
-    $.post(topPlanLink, function(data)
-    {
-        $('#parent').replaceWith(data);
-        $('#parent_chosen').remove();
-        $('#parent').chosen();
     })
 });
 

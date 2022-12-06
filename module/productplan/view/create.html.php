@@ -37,6 +37,12 @@
             <td class='muted'><?php echo $product->name;?></td><td></td><td></td>
           </tr>
           <?php endif;?>
+          <?php if(!$parent):?>
+          <tr>
+            <th><?php echo $lang->productplan->parent;?></th>
+            <td><?php echo html::select('parent', array(0 => '') + $parentPlanPairs, 0, "class='form-control chosen'");?>
+          </tr>
+          <?php endif;?>
           <?php if($product->type != 'normal'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
@@ -57,12 +63,6 @@
             <td><?php echo html::input('title', '', "class='form-control' required");?></td>
             <td colspan='2' class='muted'><?php if($lastPlan) echo '(' . $lang->productplan->last . ': ' . $lastPlan->title . ')';?></td>
           </tr>
-          <?php if(!$parent):?>
-          <tr>
-            <th><?php echo $lang->productplan->parent;?></th>
-            <td><?php echo html::select('parent', array(0 => '') + $parentPlanPairs, 0, "class='form-control chosen'");?>
-          </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->begin;?></th>
             <td><?php echo html::input('begin', formatTime($begin), "class='form-control form-date'");?></td>
