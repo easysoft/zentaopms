@@ -1203,7 +1203,7 @@ function showCheckedFields(fields)
         else if(!$fieldBox.hasClass('hidden'))
         {
             $fieldBox.addClass('hidden');
-            $field.attr('disabled', true);
+            if($(this).val() != 'branch') $field.attr('disabled', true);
         }
 
         if(config.currentModule == 'story' && $(this).val() == 'source')

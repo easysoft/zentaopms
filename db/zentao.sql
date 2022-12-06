@@ -6554,6 +6554,7 @@ ALTER TABLE `zt_effort` CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT
 ALTER TABLE `zt_effort` CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL AFTER `begin`;
 ALTER TABLE `zt_effort` ADD `deleted` enum('0','1') NOT NULL DEFAULT '0' AFTER `end`;
 ALTER TABLE `zt_effort` ADD `order` tinyint unsigned NOT NULL DEFAULT '0' AFTER `end`;
+ALTER TABLE `zt_effort` ADD `extra` text COLLATE 'utf8_general_ci' NULL AFTER `end`;
 ALTER TABLE `zt_effort` ADD INDEX `execution` (`execution`);
 ALTER TABLE `zt_effort` ADD INDEX `objectID` (`objectID`);
 ALTER TABLE `zt_effort` ADD INDEX `date` (`date`);
@@ -7178,6 +7179,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   key `product` (`product`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_ticketsource`;
 CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` mediumint(8) unsigned NOT NULL,
@@ -7189,6 +7191,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   key `ticketId` (`ticketId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_ticketrelation`;
 CREATE TABLE IF NOT EXISTS `zt_ticketrelation` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` mediumint unsigned NOT NULL,

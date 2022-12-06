@@ -48,7 +48,7 @@
       <thead>
         <tr>
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
-          <th class="c-name w-250px text-left"><?php echo $lang->build->name;?></th>
+          <th class="c-name text-left"><?php echo $lang->build->name;?></th>
           <?php if($project->hasProduct):?>
           <th class="c-name w-150px text-left"><?php echo $lang->build->product;?></th>
           <?php endif;?>
@@ -56,8 +56,8 @@
           <th class="c-name w-150px text-left"><?php echo $lang->executionCommon;?></th>
           <?php endif;?>
           <th class="c-url w-300px text-left"><?php echo $lang->build->url;?></th>
-          <th class="c-date"><?php echo $lang->build->date;?></th>
-          <th class="c-user"><?php echo $lang->build->builder;?></th>
+          <th class="c-date w-90px"><?php echo $lang->build->date;?></th>
+          <th class="c-user w-70px"><?php echo $lang->build->builder;?></th>
           <th class="c-actions-5"><?php echo $lang->actions;?></th>
         </tr>
       </thead>

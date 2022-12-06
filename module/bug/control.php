@@ -488,7 +488,7 @@ class bug extends control
         $steps       = $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect;
         $os          = '';
         $browser     = '';
-        $assignedTo  = '';
+        $assignedTo  = isset($currentProduct->QD) ? $currentProduct->QD : '';
         $deadline    = '';
         $mailto      = '';
         $keywords    = '';
@@ -2504,9 +2504,9 @@ class bug extends control
 
     /**
      * Ajax get released builds.
-     * 
-     * @param  int        $productID 
-     * @param  int|string $branch 
+     *
+     * @param  int        $productID
+     * @param  int|string $branch
      * @access public
      * @return string
      */

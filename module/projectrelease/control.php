@@ -804,13 +804,12 @@ class projectrelease extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  int    $branch
      * @access public
      * @return void
      */
-    public function ajaxLoadBuilds($projectID, $productID, $branch = 0)
+    public function ajaxLoadBuilds($projectID, $productID)
     {
-        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk,withbranch,hasproject', $projectID, 'project', '', false);
+        $builds         = $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withbranch,hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 

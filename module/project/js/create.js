@@ -162,17 +162,16 @@ function setParentProgram(parentProgram)
             var productSelectHtml = data.allProducts;
             var planSelectHtml    = data.plans;
 
-            $('.productsBox .row .col-sm-4 .input-group').each(function(index)
+            $('.productsBox .row .col-sm-6 .input-group').each(function(index)
             {
                 var selectedProduct = $(this).find('[name^=products]').val();
                 var selectedBranch  = $(this).find('[name^=branch]').val();
                 var selectedPlan    = $('#plan' + index ).find('[name^=plans]').val();
 
-                $(this).html(productSelectHtml);
+                $(this).find('[name^=products]').html(productSelectHtml);
                 $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch).attr('data-plan', selectedPlan);
                 $(this).find('[name^=products]').val(selectedProduct).chosen().change();
             });
-            $('.productsBox .row .col-sm-4:last').find('.input-group').append($('.productsBox .addProduct .input-group:first .input-group-addon').prop('outerHTML'));
         }
 
         if(parentProgram != 0)
@@ -245,7 +244,7 @@ function addNewProduct(obj)
         $('.newLine').removeClass('hidden');
         $('.productsBox .row').removeClass('hidden');
         $('.productsBox .row .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
-        if($('#plansBox .col-sm-4').find('select').length > 1) $('.division').removeClass('hide');
+        if($('.productsBox').find("select[name^=products]").length > 1) $('.division').removeClass('hide');
 
         /* Hide the input box for creating a product. */
         $(obj).closest('td').attr('colspan', 3);
