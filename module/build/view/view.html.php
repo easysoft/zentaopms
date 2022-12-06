@@ -209,10 +209,10 @@ tbody tr td:first-child input {display: none;}
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
                 <th class='text-left'>  <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='c-status'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
                 <?php if($childBuilds):?>
                 <th class='c-build w-200px text-left'><?php echo $lang->build->common?></th>
                 <?php endif;?>
-                <th class='c-status'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
                 <th class='c-user'>     <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-date'>     <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
                 <th class='c-user'>     <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
@@ -222,7 +222,7 @@ tbody tr td:first-child input {display: none;}
             </thead>
             <tbody class='text-center'>
               <?php foreach($bugs as $bug):?>
-              <?php $bugLink     = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <?php
               $unlinkClass = strpos(",$build->bugs,", ",$bug->id,") !== false ? '' : "disabled";
               $buildName   = $build->name;
@@ -248,14 +248,14 @@ tbody tr td:first-child input {display: none;}
                 <td class='text-left nobr' title='<?php echo $bug->title?>'>
                     <?php echo html::a($bugLink, $bug->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");?>
                 </td>
-                <?php if($childBuilds):?>
-                <td class='text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
-                <?php endif;?>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
                     <?php echo $this->processStatus('bug', $bug);?>
                   </span>
                 </td>
+                <?php if($childBuilds):?>
+                <td class='text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
+                <?php endif;?>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                 <td><?php echo zget($users, $bug->resolvedBy);?></td>
