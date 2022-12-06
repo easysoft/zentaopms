@@ -41,6 +41,13 @@ $lang->zanode->confirmSuspend  = "Are you sure to suspend the execution node？"
 $lang->zanode->confirmResume   = "Are you sure to resume the execution node？";
 $lang->zanode->actionSuccess   = 'Success';
 $lang->zanode->deleted         = "Deleted";
+$lang->zanode->scriptPath      = "Script path";
+$lang->zanode->shell           = "Shell";
+$lang->zanode->automation      = "Automation";
+
+$lang->automation = new stdClass();
+$lang->automation->path = $lang->zanode->scriptPath;
+$lang->automation->node = $lang->zanode->common;
 
 $lang->zanode->notFoundAgent = 'No Agent service is found';
 $lang->zanode->createVmFail  = 'Failed to create a execution node';

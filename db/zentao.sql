@@ -7321,7 +7321,7 @@ CREATE TABLE `zt_automation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(11) unsigned NOT NULL DEFAULT 0,
   `product` int(11) unsigned NOT NULL DEFAULT 0,
-  `path` varchar(255) NOT NULL DEFAULT '',
+  `scriptPath` varchar(255) NOT NULL DEFAULT '',
   `shell` mediumtext NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,

@@ -41,12 +41,19 @@ $lang->zanode->confirmSuspend  = "Are you sure to suspend the execution node？"
 $lang->zanode->confirmResume   = "Are you sure to resume the execution node？";
 $lang->zanode->actionSuccess   = 'Success';
 $lang->zanode->deleted         = "Deleted";
+$lang->zanode->scriptPath      = "Script path";
+$lang->zanode->shell           = "Shell";
+$lang->zanode->automation      = "Automation";
+
+$lang->automation = new stdClass();
+$lang->automation->path = $lang->zanode->scriptPath;
+$lang->automation->node = $lang->zanode->common;
 
 $lang->zanode->notFoundAgent = 'No Agent service is found';
 $lang->zanode->createVmFail  = 'Failed to create a execution node';
 $lang->zanode->noVncPort     = 'Failed to get vnc port';
-$lang->zanode->nameValid     = "The name can only be letters, numbers, '-', '_', '.', and cannot start with a symbol";
-$lang->zanode->empty         = 'No zanode is found';
+$lang->zanode->nameValid     = "Name must be letters, numbers,'-'，'_'，'.', And cannot begin with a symbol";
+$lang->zanode->empty         = 'Execution node not found.';
 
 $lang->zanode->empty              = 'No Execution Node';
 $lang->zanode->createImaging      = 'Creating';

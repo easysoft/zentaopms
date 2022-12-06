@@ -41,6 +41,13 @@ $lang->zanode->confirmSuspend  = "您确定暂停执行节点吗？";
 $lang->zanode->confirmResume   = "您确定恢复执行节点吗？";
 $lang->zanode->actionSuccess   = '操作成功';
 $lang->zanode->deleted         = "已删除";
+$lang->zanode->scriptPath      = "脚本目录";
+$lang->zanode->shell           = "shell命令";
+$lang->zanode->automation      = "自动化测试";
+
+$lang->automation = new stdClass();
+$lang->automation->path = $lang->zanode->scriptPath;
+$lang->automation->node = $lang->zanode->common;
 
 $lang->zanode->notFoundAgent = '没有发现Agent服务';
 $lang->zanode->createVmFail  = '创建执行节点失败';
