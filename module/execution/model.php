@@ -1582,14 +1582,17 @@ class executionModel extends model
                 ->andWhere('type')->eq('execution')
                 ->fetchPairs();
         }
+        $project = $this->loadModel('project')->getByID($projectID);
 
         $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')
+            ->beginIF($project->division)->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t4.id=t3.product')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
+            ->beginIF($project->division)->andWhere('t4.deleted')->eq('0')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
