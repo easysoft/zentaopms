@@ -87,7 +87,7 @@ class baseHelper
         /* 生成url链接的开始部分。Set the begin parts of the link. */
         if($config->requestType == 'PATH_INFO')  $link = $config->webRoot . $appName;
         if($config->requestType != 'PATH_INFO')  $link = $config->webRoot . $appName . basename($_SERVER['SCRIPT_NAME']);
-        if($config->requestType == 'PATH_INFO2') $link .= '/';
+        if($config->requestType == 'PATH_INFO2') $link = '/';
 
         /**
          * #1: RequestType为GET。When the requestType is GET.
@@ -178,7 +178,7 @@ class baseHelper
      * Check in only body mode or not.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public static function inOnlyBodyMode()
     {
@@ -464,7 +464,7 @@ class baseHelper
 
         $agent = $_SERVER["HTTP_USER_AGENT"];
 
-        /* Chrome should checked before safari.*/
+        /* Chrome should check before safari.*/
         if(strpos($agent, 'Firefox') !== false) $browser['name'] = "firefox";
         if(strpos($agent, 'Opera') !== false)   $browser['name'] = 'opera';
         if(strpos($agent, 'Safari') !== false)  $browser['name'] = 'safari';
@@ -853,7 +853,7 @@ function a($var)
  * Judge the server ip is local or not.
  *
  * @access public
- * @return void
+ * @return bool
  */
 function isLocalIP()
 {
@@ -954,33 +954,42 @@ function htmlSpecialString($string, $flags = '', $encoding = 'UTF-8')
     return htmlspecialchars($string, $flags, $encoding);
 }
 
-if (!function_exists('array_column'))
+if(!function_exists('array_column'))
 {
     function array_column(array $input, $columnKey, $indexKey = null)
     {
         $output = array();
 
-        foreach ($input as $row) {
-            $key = $value = null;
+        foreach($input as $row)
+        {
+            $key    = $value = null;
             $keySet = $valueSet = false;
 
-            if (null !== $indexKey && array_key_exists($indexKey, $row)) {
+            if(null !== $indexKey && array_key_exists($indexKey, $row))
+            {
                 $keySet = true;
-                $key = (string) $row[$indexKey];
+                $key    = (string) $row[$indexKey];
             }
 
-            if (null === $columnKey) {
+            if(null === $columnKey)
+            {
                 $valueSet = true;
-                $value = $row;
-            } elseif (\is_array($row) && \array_key_exists($columnKey, $row)) {
+                $value    = $row;
+            }
+            elseif(\is_array($row) && \array_key_exists($columnKey, $row))
+            {
                 $valueSet = true;
-                $value = $row[$columnKey];
+                $value    = $row[$columnKey];
             }
 
-            if ($valueSet) {
-                if ($keySet) {
+            if($valueSet)
+            {
+                if($keySet)
+                {
                     $output[$key] = $value;
-                } else {
+                }
+                else
+                {
                     $output[] = $value;
                 }
             }

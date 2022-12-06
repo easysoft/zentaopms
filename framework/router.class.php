@@ -315,9 +315,8 @@ class router extends baseRouter
      *
      * @param   string $moduleName     module name
      * @param   string $appName        app name
-     * @param   bool   $exitIfNone     exit or not
      * @access  public
-     * @return  object|bool the config object or false.
+     * @return  void
      */
     public function loadModuleConfig($moduleName, $appName = '')
     {
