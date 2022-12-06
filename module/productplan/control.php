@@ -117,7 +117,7 @@ class productplan extends control
         $this->view->branches        = $branchPairs;
         $this->view->defaultBranch   = $defaultBranch;
         $this->view->parent          = $parent;
-        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($productID, '', 'done,closed');
+        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($productID, 'done,closed');
         $this->display();
     }
 

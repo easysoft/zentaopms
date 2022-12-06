@@ -222,29 +222,14 @@ class productplanModel extends model
      * Get top plan pairs.
      *
      * @param int    $productID
-     * @param int    $branch
      * @param int    $exclude
      * @access public
      * @return array
      */
-    public function getTopPlanPairs($productID, $branch = '', $exclude = '')
+    public function getTopPlanPairs($productID, $exclude = '')
     {
-        $branchQuery = '';
-        if($branch !== '')
-        {
-            $branchQuery .= '(';
-            $branchCount = count(explode(',', $branch));
-            foreach(explode(',', $branch) as $index => $branchID)
-            {
-                $branchQuery .= "CONCAT(',', branch, ',') LIKE '%,$branchID,%'";
-                if($index < $branchCount - 1) $branchQuery .= ' AND ';
-            }
-            $branchQuery .= ')';
-        }
-
         $planPairs = $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
-            ->beginIF($branch !== '' and !empty($branchQuery))->andWhere($branchQuery)->fi()
             ->andWhere('parent')->le(0)
             ->andWhere('deleted')->eq(0)
             ->beginIF($exclude)->andWhere('status')->notin($exclude)
