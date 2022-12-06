@@ -298,14 +298,11 @@ class story extends control
         }
 
         $users = $this->user->getPairs('pdfirst|noclosed|nodeleted');
-        
+
         $branchData = explode(',', $branch);
-        foreach($branchData as $branchItem)
-        {
-            $branch = $branchItem;
-            $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
-            break;
-        }
+        $branch     = current($branchData);
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Init vars. */
@@ -667,13 +664,10 @@ class story extends control
         }
 
         $branchData = explode(',', $branch);
-        foreach($branchData as $branchItem)
-        {
-            $branch = $branchItem;
-            $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
-            $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
-            break;
-        }
+        $branch     = current($branchData);
+
+        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+        $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;

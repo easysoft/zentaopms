@@ -32,16 +32,20 @@
             ?>
             <div class='input-group'>
               <?php echo html::select('product', $products, $build->product, "onchange='loadBranches(this.value);' class='form-control chosen' $disabled required");?>
-              <?php
-              if($build->productType != 'normal')
-              {
-                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branchTagOption, $build->branch, "class='form-control chosen' $disabled");
-              }
-              ?>
             </div>
           </td>
           <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
         </tr>
+        <?php if(!empty($product) and $product->type != 'normal'): ?>
+        <tr>
+          <th class='w-120px'><?php echo $lang->build->branch;?></th>
+          <td>
+            <div class='input-group' id='branchBox'>
+              <?php echo html::select('branch[]', $branchTagOption, $build->branch, "class='form-control chosen' multiple required $disabled"); ?>
+            </div>
+          </td>
+        </tr>
+        <?php endif; ?>
         <?php $disabled = $testtaskID ? 'disabled' : '';?>
         <?php if(!$build->execution):?>
         <tr>

@@ -1069,7 +1069,7 @@ class productplanModel extends model
                 foreach($planStory as $id => $story)
                 {
                     $projectBranches = zget($projectProducts, $story->product, array());
-                    if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($story->branch) and !empty($projectBranches) and !isset($projectBranches[$story->branch])))
+                    if($story->status == 'active' or (!empty($story->branch) and !empty($projectBranches) and !isset($projectBranches[$story->branch])))
                     {
                         unset($planStory[$id]);
                         continue;
