@@ -960,6 +960,13 @@ class productplan extends control
         $oldBranch   = $plan->branch;
         $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
         $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
+        $branchPairs = $this->loadModel('branch')->getPairs($plan->product);
+
+        $removeBranches = '';
+        foreach(explode(',', $oldBranch) as $oldBranchID)
+        {
+            if($oldBranchID and strpos(",$newBranch,", ",$oldBranchID,") === false) $removeBranches .= "{$branchPairs[$oldBranchID]},";
+        }
 
         $conflictStoryCounts = 0;
         $conflictBugCounts   = 0;
@@ -978,15 +985,15 @@ class productplan extends control
 
         if($conflictStoryCounts and $conflictBugCounts)
         {
-            printf($this->lang->productplan->confirmChangePlan, $conflictStoryCounts, $conflictBugCounts);
+            printf($this->lang->productplan->confirmChangePlan, trim($removeBranches, ','), $conflictStoryCounts, $conflictBugCounts);
         }
         elseif($conflictStoryCounts)
         {
-            printf($this->lang->productplan->confirmRemoveStory, $conflictStoryCounts);
+            printf($this->lang->productplan->confirmRemoveStory, trim($removeBranches, ','), $conflictStoryCounts);
         }
         elseif($conflictBugCounts)
         {
-            printf($this->lang->productplan->confirmRemoveBug, $conflictBugCounts);
+            printf($this->lang->productplan->confirmRemoveBug, trim($removeBranches, ','), $conflictBugCounts);
         }
     }
 
