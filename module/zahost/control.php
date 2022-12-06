@@ -33,6 +33,7 @@ class zahost extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $hostList = $this->zahost->getList($browseType, $param, $orderBy, $pager);
+        $nodeList = $this->zahost->getHostNodeGroup();
 
         /* Build the search form. */
         $actionURL = $this->createLink('zahost', 'browse', "browseType=bySearch&param=myQueryID");
@@ -43,6 +44,7 @@ class zahost extends control
 
         $this->view->title      = $this->lang->zahost->common;
         $this->view->hostList   = $hostList;
+        $this->view->nodeList   = $nodeList;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
         $this->view->pager      = $pager;
         $this->view->param      = $param;
@@ -88,6 +90,10 @@ class zahost extends control
             {
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
+            elseif($hostID === false)
+            {
+                return $this->send(array('result' => 'fail', 'message' => array("extranet" => array($this->lang->zahost->netError))));
+            }
 
             $initLink = $this->createLink('zahost', 'inithost', "hostID=$hostID");
             return print("<script>showModal('$initLink')</script>");
@@ -111,7 +117,14 @@ class zahost extends control
         if($_POST)
         {
             $changes = $this->zahost->update($hostID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) 
+            {
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+            elseif($hostID === false)
+            {
+                return $this->send(array('result' => 'fail', 'message' => array("extranet" => array($this->lang->zahost->netError))));
+            }
 
             if(!empty($changes))
             {
@@ -132,20 +145,20 @@ class zahost extends control
     /**
      * Delete host.
      *
-     * @param  int    $assetID
+     * @param  int    $hostID
      * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($assetID, $confirm = 'no')
+    public function delete($hostID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "assetID=$assetID&confirm=yes")));
+            return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "hostID=$hostID&confirm=yes")));
         }
 
-        $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($assetID)->exec();
-        $this->loadModel('action')->create('zahost', $assetID, 'deleted');
+        $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($hostID)->exec();
+        $this->loadModel('action')->create('zahost', $hostID, 'deleted');
 
         /* if ajax request, send result. */
         if($this->server->ajax)
@@ -229,7 +242,7 @@ class zahost extends control
      * @access public
      * @return object
      */
-    public function ajaxDownloadImage($hostID, $imageName)
+    public function downloadImage($hostID, $imageName)
     {
         $image = $this->zahost->getImageByNameAndHostID($imageName, $hostID);
         if(empty($image))
@@ -240,7 +253,8 @@ class zahost extends control
         $this->zahost->downloadImage($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->zahost->image->downloadImageSuccess));
+        if(isonlybody()) return print(js::reload('parent'));
+        return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $hostID)), 'parent'));
     }
 
     /**
@@ -264,6 +278,29 @@ class zahost extends control
         }
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $statusList));
+    }
+
+    /**
+     * Sent cancel download image request to Host.
+     *
+     * @param  int    $hostID
+     * @param  string $imageName
+     * @access public
+     * @return object
+     */
+    public function cancelDownload($imageID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->zahost->cancelDelete, inlink('cancelDownload', "id=$imageID&confirm=yes")));
+        }
+        $image = $this->zahost->getImageByID($imageID);
+
+        $this->zahost->cancelDownload($image);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
+
+        if(isonlybody()) return print(js::reload('parent'));
+        return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $image->host)), 'parent'));
     }
 
     /**

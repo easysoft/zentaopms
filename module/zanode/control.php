@@ -30,7 +30,6 @@ class zanode extends control
 
         $this->app->loadClass('pager', $static = true);
 
-
         $queryID  = ($browseType == 'bysearch')  ? (int)$param : 0;
         $pager    = pager::init($recTotal, $recPerPage, $pageID);
         $nodeList = $this->zanode->getListByQuery($browseType, $queryID, $orderBy, $pager);
@@ -182,6 +181,39 @@ class zanode extends control
     }
 
     /**
+     * Create custom image.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return void
+     */
+    public function createImage($nodeID = 0)
+    {
+        $task        = '';
+        $node        = $this->zanode->getNodeByID($nodeID);
+        $customImage = $this->zanode->getCustomImage($nodeID, 'created,inprogress');
+        if($customImage) $task = $this->zanode->getTaskStatus($node, $customImage->id, 'exportVm');
+
+        if($_POST)
+        {
+            $this->zanode->createImage($nodeID);
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->task = $task;
+        $this->view->node = $node;
+        $this->view->rate = !empty($task->rate) ? $task->rate : 0;
+        $this->display();
+    }
+
+    /**
      * Desctroy node.
      *
      * @param  int  $nodeID
@@ -218,11 +250,13 @@ class zanode extends control
      */
     public function getVNC($nodeID)
     {
-        $vnc = $this->zanode->getVncUrl($nodeID);
+        $node = $this->zanode->getNodeByID($nodeID);
+        $vnc  = $this->zanode->getVncUrl($node);
 
         /* Add action log. */
         if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $nodeID, 'getVNC');
 
+        $this->view->url   = $node->ip . ":" . $node->hzap;
         $this->view->host  = $vnc->hostIP;
         $this->view->token = $vnc->token;
         $this->display();
@@ -253,5 +287,46 @@ class zanode extends control
     {
         $template = $this->loadModel('zahost')->getImageByID($imageID);
         return print(json_encode($template));
+    }
+
+    /**
+     * Ajax get task status.
+     *
+     * @param  int    $extranet
+     * @param  int    $taskID
+     * @param  string $type
+     * @param  string $status
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTaskStatus($nodeID, $taskID = 0, $type = '', $status = '')
+    {
+        $node   = $this->zanode->getNodeByID($nodeID);
+        $result = $this->zanode->getTaskStatus($node, $taskID, $type, $status);
+        return print(json_encode($result));
+    }
+
+    /**
+     * Update image.
+     *
+     * @param  int    $imageID
+     * @access public
+     * @return void
+     */
+    public function ajaxUpdateImage($imageID = 0)
+    {
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+            $this->dao->update(TABLE_IMAGE)->data($data)->where('id')->eq($imageID)->autoCheck()->exec();
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+        }
     }
 }

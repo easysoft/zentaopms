@@ -26,7 +26,7 @@
           </tr>
           <tr>
             <th class='w-120px'><?php echo $lang->zanode->name;?></th>
-            <td class='p-25f'><?php echo html::input('name', $zanode->name, "class='form-control' placeholder=\"{$lang->zanode->nameValid}\"");?></td>
+            <td class='p-25f'><?php echo html::input('name', $zanode->name, "class='form-control' placeholder=\"{$lang->zanode->nameValid}\" readonly='readonly'");?></td>
             <td></td>
           </tr>
           <tr>
@@ -42,7 +42,7 @@
             <td>
               <div class='input-group'>
                 <?php echo html::input('memory', $zanode->memory, "class='form-control' readonly='readonly'");?>
-                <span class="input-group-addon" id="memory-addon"><?php echo $lang->zahost->unitList['GB'];?></span>
+                <span class="input-group-addon" id="memory-addon">GB</span>
               </div>
             </td>
           </tr>
@@ -52,7 +52,7 @@
               <div class='input-group'>
                 <?php echo html::input('diskSize', $zanode->diskSize, "class='form-control' readonly='readonly'");?>
                 <span class='input-group-addon fix-border fix-padding' id='unit'>
-                  <?php echo $lang->zahost->unitList['GB'];?>
+                GB
                 </span>
               </div>
             </td>

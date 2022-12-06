@@ -255,6 +255,7 @@ define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testresult`');
 define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 define('TABLE_ZAHOST',        '`' . $config->db->prefix . 'host`');
 define('TABLE_IMAGE',         '`' . $config->db->prefix . 'image`');
+define('TABLE_AUTOMATION',    '`' . $config->db->prefix . 'automation`');
 
 if(!defined('TABLE_ASSET'))  define('TABLE_ASSET', '`' . $config->db->prefix . 'asset`');
 
@@ -399,6 +400,7 @@ $config->objectTables['stage']         = TABLE_STAGE;
 $config->objectTables['apistruct']     = TABLE_APISTRUCT;
 $config->objectTables['repo']          = TABLE_REPO;
 $config->objectTables['zahost']        = TABLE_ZAHOST;
+$config->objectTables['automation']    = TABLE_AUTOMATION;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';

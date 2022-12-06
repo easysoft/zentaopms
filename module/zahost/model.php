@@ -37,17 +37,25 @@ class zahostModel extends model
 
         $this->dao->table      = 'zahost';
         $hostInfo->type        = 'zahost';
+        $hostInfo->status      = 'wait';
         $hostInfo->createdBy   = $this->app->user->account;
         $hostInfo->createdDate = helper::now();
+        $hostInfo->zap         = $this->config->zahost->defaultPort;
         $hostInfo->secret      = md5($hostInfo->name . time());
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
-            ->check('name', 'unique')
+            ->check('name', 'unique', "type='zahost'")
             ->autoCheck();
         if(dao::isError()) return false;
+
+        $ping = $this->checkAddress($hostInfo->extranet);
+        if(!$ping)
+        {
+            return false;
+        }
 
         $this->dao->insert(TABLE_ZAHOST)->data($hostInfo)->autoCheck()->exec();
         $hostID = $this->dao->lastInsertID();
@@ -79,11 +87,69 @@ class zahostModel extends model
             ->batchCheck('diskSize,memory', 'float');
         if(dao::isError()) return false;
 
+        $ping = $this->checkAddress($hostInfo->extranet);
+        if(!$ping)
+        {
+            return false;
+        }
+
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo, 'name')->autoCheck()
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
             ->where('id')->eq($hostID)->exec();
         return common::createChanges($oldHost, $hostInfo);
+    }
+
+    /**
+     * Ping ip/domain.
+     *
+     * @param  string    $address
+     * @access public
+     * @return bool
+     */
+    public function ping($address)
+    {
+        if (strcasecmp(PHP_OS, 'WINNT') === 0)
+        {
+            exec("ping -n 1 {$address}", $outcome, $status);
+        }
+        elseif (strcasecmp(PHP_OS, 'Linux') === 0)
+        {
+            exec("ping -c 1 {$address}", $outcome, $status);
+        }
+
+        if (0 == $status)
+        {
+            $status = true;
+        }
+        else
+        {
+            $status = false;
+        }
+
+        return $status;
+    }
+
+    /**
+     * Telnet ip/domain.
+     *
+     * @param  string $address
+     * @access public
+     * @return bool
+     */
+    public function checkAddress($address)
+    {
+        $address = str_replace(array('https://', 'http://'), '', $address);
+
+        if ($this->ping($address)) return true;
+
+        foreach(array(80, 443, $this->config->zahost->defaultPort) as $port)
+        {
+            $fp = fsockopen($address, $port, $errno, $errstr, 3);
+            if ($fp) return true;
+        }
+
+        return false;
     }
 
     /**
@@ -137,16 +203,30 @@ class zahostModel extends model
             {
                 $image->id     = 0;
                 $image->status = 'notDownloaded';
+                $image->from   = 'zentao';
+                $image->osName = $image->os;
+                $image->cancelMisc   = sprintf("title='%s' class='btn image-cancel image-cancel-%d %s'", $this->lang->zahost->cancel, $image->id, "disabled");
+                $image->downloadMisc = sprintf("title='%s' class='btn image-download image-download-%d %s'", $this->lang->zahost->image->downloadImage, $image->id, "");
             }
             else
             {
                 $image->id     = $downloadedImage->id;
                 $image->status = $downloadedImage->status;
+                $image->from   = $downloadedImage->from;
+                $image->osName = $image->os;
+
+                $image->cancelMisc   = sprintf("title='%s' data-id='%s' class='btn image-cancel image-cancel-%d %s'", $this->lang->zahost->cancel, $image->id, $image->id, in_array($image->status, array("inprogress", "created")) ? "" : "disabled");
+                $image->downloadMisc = sprintf("title='%s' data-id='%s' class='btn image-download image-download-%d %s'", $this->lang->zahost->image->downloadImage, $image->id, $image->id, in_array($image->status, array("completed", "inprogress", "created"))  || $image->from == 'user' ? "disabled" : "");
             }
 
             $image->host = $hostID;
         }
 
+        $orderBy = explode('_', $orderBy);
+        if(count($orderBy) == 2)
+        {
+            array_multisort(array_column($imageList, $orderBy[0]), $orderBy[1] == 'asc' ? SORT_ASC : SORT_DESC, $imageList);
+        }
         return $imageList;
     }
 
@@ -189,13 +269,13 @@ class zahostModel extends model
     public function downloadImage($image)
     {
         $host   = $this->getById($image->host);
-        $apiUrl = 'http://' . $host->extranet . ':' . $this->config->zahost->defaultPort . '/api/v1/download/add';
+        $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/download/add';
 
         $apiParams['md5']  = $image->md5;
         $apiParams['url']  = $image->address;
         $apiParams['task'] = intval($image->id);
 
-        $response = json_decode(commonModel::http($apiUrl, array($apiParams), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+        $response = json_decode(commonModel::http($apiUrl, array($apiParams), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
 
         if($response and $response->code == 'success')
         {
@@ -214,14 +294,14 @@ class zahostModel extends model
      *
      * @param  object $image
      * @access public
-     * @return string Return Status code.
+     * @return object Return Status code.
      */
     public function queryDownloadImageStatus($image)
     {
         $host   = $this->getById($image->host);
-        $apiUrl = 'http://' . $host->extranet . ':' . $this->config->zahost->defaultPort . '/api/v1/task/getStatus';
+        $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/task/getStatus';
 
-        $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+        $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
         if(!$result or $result->code != 'success') return $image->status;
 
         foreach($result->data as $status => $group)
@@ -243,10 +323,13 @@ class zahostModel extends model
 
                 $this->dao->update(TABLE_IMAGE)
                     ->set('status')->eq($status)
-                    ->set('path')->eq($currentTask->path)
+                    ->set('path')->eq(!empty($currentTask->path) ? $currentTask->path : '')
                     ->where('id')->eq($image->id)->exec();
 
+                $image->taskID = $currentTask->id;
                 break;
+            }else{
+                $image->taskID = 0;
             }
         }
 
@@ -263,9 +346,9 @@ class zahostModel extends model
     public function downloadImageStatus($image)
     {
         $host      = $this->getById($image->host);
-        $statusApi = 'http://' . $host->extranet . '/api/v1/task/status';
+        $statusApi = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/task/status';
 
-        $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array(), 'json'));
+        $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$host->tokenSN"), 'json'));
 
         a($response);
         if($response->code == 200) return true;
@@ -273,6 +356,35 @@ class zahostModel extends model
         dao::$errors[] = $response->msg;
         return false;
 
+    }
+
+    /**
+     * Send cancel download image command to HOST.
+     *
+     * @param  object    $image
+     * @access public
+     * @return bool
+     */
+    public function cancelDownload($image)
+    {
+        $zaInfo = $this->queryDownloadImageStatus($image);
+        $host   = $this->getById($image->host);
+        $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/download/cancel';
+
+        $apiParams['id']  = intval($zaInfo->taskID);
+
+        $response = json_decode(commonModel::http($apiUrl, $apiParams, array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
+
+        if($response and $response->code == 'success')
+        {
+            $this->dao->update(TABLE_IMAGE)
+                ->set('status')->eq('canceled')
+                ->where('id')->eq($image->id)->exec();
+            return true;
+        }
+
+        dao::$errors[] = $this->lang->zahost->image->cancelDownloadFail;
+        return false;
     }
 
     /**
@@ -351,6 +463,21 @@ class zahostModel extends model
     }
 
     /**
+     * Get zanode group by zahost.
+     *
+     * @access public
+     * @return void
+     */
+    public function getHostNodeGroup()
+    {
+        return $this->dao->select('t1.id as hostID, t2.*')->from(TABLE_ZAHOST)->alias('t1')
+            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t2.parent = t1.id')
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchGroup('hostID', 'id');
+    }
+
+    /**
      * Build test task menu.
      *
      * @param  object $host
@@ -405,11 +532,11 @@ class zahostModel extends model
      */
     public function getServiceStatus($host)
     {
-        $result = json_decode(commonModel::http("http://{$host->extranet}:8086/api/v1/service/check", json_encode(array("services" => "all"))));
+        $result = json_decode(commonModel::http("http://{$host->extranet}:{$host->zap}/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$host->tokenSN")));
         if(empty($result) || $result->code != 'success')
         {
             $result = new stdclass;
-            $result->data = $this->lang->zahost->initHost->serviceStatus;
+            $result->data = $this->lang->zahost->init->serviceStatus;
         }
 
         return $result->data;

@@ -7269,6 +7269,9 @@ CREATE TABLE `zt_host` (
   `zap` varchar(10) NOT NULL,
   `provider` varchar(255) NOT NULL DEFAULT '',
   `vnc` int(11) NOT NULL,
+  `ztf` int(11) NOT NULL,
+  `zd` int(11) NOT NULL,
+  `ssh` int(11) NOT NULL,
   `parent` int(11) unsigned NOT NULL DEFAULT '0',
   `image` int(11) unsigned NOT NULL DEFAULT '0',
   `assetID` mediumint(8) unsigned NOT NULL,
@@ -7302,11 +7305,24 @@ CREATE TABLE `zt_image` (
   `path` varchar(64) NOT NULL DEFAULT '',
   `status` varchar(20) NOT NULL DEFAULT '',
   `osName` varchar(32) NOT NULL DEFAULT '',
+  `from` varchar(10) NOT NULL DEFAULT 'zentao',
   `memory` float unsigned NOT NULL,
   `disk` float unsigned NOT NULL,
   `fileSize` float unsigned NOT NULL,
   `md5` varchar(64) NOT NULL,
   `desc` text NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_automation`;
+CREATE TABLE `zt_automation` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `node` int(11) unsigned NOT NULL DEFAULT 0,
+  `product` int(11) unsigned NOT NULL DEFAULT 0,
+  `scriptPath` varchar(255) NOT NULL DEFAULT '',
+  `shell` mediumtext NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)

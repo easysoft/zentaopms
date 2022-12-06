@@ -231,3 +231,6 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 
 .btn.disabled {pointer-events: auto;}
 .btn.disabled i {color: #313c52;}
+
+/* Unset style for qa qa-automation-menu. */
+.qa-automation-menu > a:focus, .qa-automation-menu > a:hover {background: unset!important; cursor: default;}

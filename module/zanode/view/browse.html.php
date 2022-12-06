@@ -57,7 +57,7 @@
             <th class='c-os'><?php common::printOrderLink('t1.osName', $orderBy, $vars, $lang->zanode->osName); ?></th>
             <th class='c-status'><?php common::printOrderLink('t1.status', $orderBy, $vars, $lang->zanode->status); ?></th>
             <th class='c-host'><?php common::printOrderLink('t2.id', $orderBy, $vars, $lang->zanode->hostName); ?>
-            <th class='c-actions-5'><?php echo $lang->actions ?></th>
+            <th class='c-actions-6 text-center'><?php echo $lang->actions ?></th>
           </tr>
         </thead>
         <tbody>
@@ -74,16 +74,19 @@
               <td title="<?php echo $node->hostName; ?>"><?php echo $node->hostName; ?></td>
               <td class='c-actions'>
                 <?php
-                $suspendAttr  = "title='{$lang->zanode->suspend}' class='btn btn-primary' target='hiddenwin'";
-                $suspendAttr .= $node->status == 'suspend' ? ' disabled' : " target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
+                $suspendAttr  = "title='{$lang->zanode->suspend}' target='hiddenwin'";
+                $suspendAttr .= $node->status == 'suspend' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
 
-                $resumeAttr  = "title='{$lang->zanode->resume}' class='btn btn-primary' target='hiddenwin'";
-                $resumeAttr .= $node->status == 'running' ? 'disabled' : " target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
-                $rebootAttr  = "title='{$lang->zanode->reboot}' class='btn btn-primary' target='hiddenwin'";
-                $rebootAttr .= $node->status == 'suspend' ? ' disabled' : " target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+                $resumeAttr  = "title='{$lang->zanode->resume}' target='hiddenwin'";
+                $resumeAttr .= $node->status == 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
+
+                $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
+                $rebootAttr .= $node->status == 'suspend' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+
                 common::printLink('zanode', 'suspend', "zanodeID={$node->id}", "<i class='icon icon-pause'></i> ", '', $suspendAttr);
                 common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-back'></i> ", '', $resumeAttr);
                 common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
+                common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-plus'></i> ", '', "class='btn iframe' title='{$lang->zanode->createImage}' data-width='50%'", '', true);
                 common::printIcon('zanode', 'edit', "id={$node->id}", $node, 'list');
                 common::printLink('zanode', 'delete', "zanodeID={$node->id}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->zanode->destroy}' class='btn btn-primary' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmDelete}\")==false) return false;'");
                 ?>
