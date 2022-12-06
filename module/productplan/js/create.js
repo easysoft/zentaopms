@@ -65,12 +65,14 @@ $('#future').on('change', function()
 
 $('#parent').change(function()
 {
-    var parentID = $(this).val();
-    $.post(createLink('productplan', 'ajaxGetParentBranches', "productID=" + productID + "&parentID=" + parentID), function(data)
+    var parentID        = $(this).val();
+    var currentBranches = $('#branch').val() ? $('#branch').val().toString() : '';
+    $.post(createLink('productplan', 'ajaxGetParentBranches', "productID=" + productID + "&parentID=" + parentID + "&currentBranches=" + currentBranches), function(data)
     {
         $('#branch').replaceWith(data);
         $('#branch_chosen').remove();
         $('#branch').chosen();
+        $('#branch').change();
     })
 })
 

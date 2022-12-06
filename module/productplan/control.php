@@ -1008,20 +1008,26 @@ class productplan extends control
     /**
      * AJAX: Get parent branches.
      *
-     * @param  int $parentID
+     * @param  int    $productID
+     * @param  int    $parentID
+     * @param  string $currentBranches
      * @access public
      * @return void
      */
-    public function ajaxGetParentBranches($productID = 0, $parentID = 0)
+    public function ajaxGetParentBranches($productID = 0, $parentID = 0, $currentBranches = '')
     {
         $branchPairs = $this->loadModel('branch')->getPairs($productID, 'active');
         if(!empty($parentID))
         {
             $parentBranches = array();
             $parentPlan     = $this->productplan->getByID($parentID);
-            foreach(explode(',', $parentPlan->branch) as $parentBranchID) $parentBranches[$parentBranchID] = $branchPairs[$parentBranchID];
+            foreach(explode(',', $parentPlan->branch) as $parentBranchID)
+            {
+                $parentBranches[$parentBranchID] = $branchPairs[$parentBranchID];
+                if(!empty($currentBranches) and strpos(",$currentBranches,", ",$parentBranchID,") === false) $currentBranches = str_replace(",$parentBranchID,", ',', $currentBranches);
+            }
         }
-        return print(html::select('branch[]', empty($parentID) ? $branchPairs : $parentBranches, '', "class='form-control chosen' multiple required"));
+        return print(html::select('branch[]', empty($parentID) ? $branchPairs : $parentBranches, trim($currentBranches, ','), "class='form-control chosen' multiple required"));
     }
 
     /**
