@@ -25,6 +25,8 @@ class zanodemodel extends model
 
     const KVM_CREATE_PATH = '/api/v1/kvm/create';
     const KVM_TOKEN_PATH  = '/api/v1/virtual/getVncToken';
+    const KVM_EXPORT_PATH = '/api/v1/kvm/exportVm';
+    const KVM_STATUS_PATH = '/api/v1/task/getStatus';
 
 
     /**
@@ -43,7 +45,7 @@ class zanodemodel extends model
         $data->type = 'node';
         $this->dao->update(TABLE_ZAHOST)->data($data)
             ->batchCheck($this->config->zanode->create->requiredFields, 'notempty')
-            ->check('name', 'unique');
+            ->check('name', 'unique', "type='node'");
         if(dao::isError()) return false;
 
         if(!preg_match("/^(?!_)(?!-)(?!\.)[a-zA-Z0-9\_\.\-]+$/", $data->name))
@@ -62,17 +64,17 @@ class zanodemodel extends model
         $mac = $this->genmac();
 
         /* Prepare create params. */
-        $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->zanode->defaultPort;
+        $agnetUrl = 'http://' . $host->extranet . ':' . $host->zap;
         $param    = array(
-            'os'           => $image->os,
+            'os'           => $image->osName,
             'path'         => $image->path,
             'name'         => $data->name,
-            'cpu'          => (int)$data->cpu,
-            'disk'         => (int)$data->disk,
+            'cpu'          => (int)$data->cpuCores,
+            'disk'         => (int)$data->diskSize,
             'memory'       => (int)$data->memory,
         );
 
-        $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null));
+        $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null, array("Authorization:$host->tokenSN")));
 
         if(empty($result))
         {
@@ -106,6 +108,56 @@ class zanodemodel extends model
     }
 
     /**
+     * Create Image by zanode.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return void
+     */
+    public function createImage($zanodeID = 0)
+    {
+        $data = fixer::input('post')->get();
+
+        if(empty($data->name)) dao::$errors['message'][] = $this->lang->zanode->imageNameEmpty;
+        if(dao::isError()) return false;
+
+        $node  = $this->getNodeByID($zanodeID);
+        $image = $this->getImageByID($node->image);
+
+        $newImage = new stdClass();
+        $newImage->host   = $node->parent;
+        $newImage->name   = $data->name;
+        $newImage->status = 'created';
+        $newImage->osName = $node->osName;
+        $newImage->from   = $node->id;
+        $newImage->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_IMAGE)
+            ->data($newImage)
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        $newID = $this->dao->lastInsertID();
+
+        /* Prepare create params. */
+        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
+        $param    = array(
+            'backing' => $data->name,
+            'task'    => $newID,
+            'vm'      => $node->name
+        );
+
+        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->hTokenSN")));
+
+        if(!empty($result) and $result->code == 'success') return $newID;
+
+        $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($newID)->exec();
+        return false;
+    }
+
+    /**
      * Action Node.
      *
      * @param  int $id
@@ -115,14 +167,13 @@ class zanodemodel extends model
     public function handleNode($id, $type)
     {
         $node = $this->getNodeByID($id);
-        $host = $this->getHostByID($node->parent);
 
         /* Prepare create params. */
-        $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->zanode->defaultPort;
+        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
         $path     = '/api/v1/kvm/' . $node->name . '/' . $type;
         $param    = array('vmUniqueName' => $node->name);
 
-        $result = commonModel::http($agnetUrl . $path, $param);
+        $result = commonModel::http($agnetUrl . $path, $param, array(), array("Authorization:$node->hTokenSN"));
         $data   = json_decode($result, true);
         if(empty($data)) return $this->lang->zanode->notFoundAgent;
 
@@ -148,15 +199,13 @@ class zanodemodel extends model
     public function destroy($id)
     {
         $node = $this->getNodeByID($id);
-        $host = $this->getHostByID($node->parent);
 
         $req = array( 'name' => $node->name );
 
-        /* Prepare create params. */
-        if($host)
+        if($node)
         {
-            $agnetUrl = 'http://' . $host->extranet . ':' . $this->config->zanode->defaultPort;
-            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req));
+            $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
+            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req), array(), array("Authorization:$node->hTokenSN"));
 
             $data = json_decode($result, true);
             if(empty($data)) return $this->lang->zanode->notFoundAgent;
@@ -288,6 +337,38 @@ class zanodemodel extends model
     }
 
     /**
+     * Get node list.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function getList($orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_ZAHOST)
+            ->where('deleted')->eq(0)
+            ->andWhere("type")->eq('node')
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get node pairs.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function getPairs($orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_ZAHOST)
+            ->where('deleted')->eq(0)
+            ->andWhere("type")->eq('node')
+            ->orderBy($orderBy)
+            ->fetchPairs('id', 'name');
+    }
+
+    /**
      * Get node list by hostID.
      *
      * @param  string $browseType
@@ -358,7 +439,29 @@ class zanodemodel extends model
      */
     public function getimageList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_IMAGE)->orderBy($orderBy)->page($pager)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('from')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Get custom image.
+     *
+     * @param  int          $nodeID
+     * @param  string|array $status
+     * @param  string       $orderBy
+     * @access public
+     * @return void
+     */
+    public function getCustomImage($nodeID = 0, $status = '', $orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('`from`')->eq($nodeID)
+            ->beginIF($status)->andWhere('status')->in($status)->fi()
+            ->orderBy($orderBy)
+            ->fetch();
     }
 
     /**
@@ -369,7 +472,7 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
@@ -421,31 +524,70 @@ class zanodemodel extends model
     /**
      * Get vnc url.
      *
-     * @param  int    $vmID
+     * @param  object    $node
      * @access public
      * @return void
      */
-    public function getVncUrl($vmID)
+    public function getVncUrl($node)
     {
-        $vm = $this->getNodeByID($vmID);
-        if(empty($vm) or empty($vm->parent) or empty($vm->vnc)) return false;
+        if(empty($node) or empty($node->parent) or empty($node->vnc)) return false;
 
-        $host = $this->getHostByID($vm->parent);
-        if(empty($host)) return false;
-
-        $agnetUrl = 'http://' . $host->extranet . ':8086' . static::KVM_TOKEN_PATH;
-        $result   = json_decode(commonModel::http("$agnetUrl?port={$vm->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array(), 'json'));
-
+        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_TOKEN_PATH;
+        $result   = json_decode(commonModel::http("$agnetUrl?port={$node->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$node->hTokenSN"), 'json'));
+        
         if(empty($result) or $result->code != 'success') return false;
 
         $returnData = new stdClass();
-        $returnData->hostIP    = $host->extranet;
-        $returnData->agentPort = $host->agentPort;
-        $returnData->vnc       = $vm->vnc;
+        $returnData->hostIP    = $node->ip;
+        $returnData->agentPort = $node->hzap;
+        $returnData->vnc       = $node->vnc;
         $returnData->token     = $result->data->token;
         return $returnData;
     }
 
+    /**
+     * Get task status by zagent api.
+     *
+     * @param  object $node
+     * @param  int    $taskID
+     * @param  string $type
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function getTaskStatus($node, $taskID = 0, $type = '', $status = '')
+    {
+        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_STATUS_PATH;
+        $result   = json_decode(commonModel::http("$agnetUrl", array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$node->hTokenSN"), 'json'));
+
+        if(empty($result) or $result->code != 'success') return false;
+        $data = $result->data;
+        if(empty($data)) return array();
+
+        if($status and !$taskID and isset($data->$status)) return $data->$status;
+
+        if(!$taskID) return $data;
+
+        foreach($data as $status => $tasks)
+        {
+            if(empty($tasks)) continue;
+
+            foreach($tasks as $task)
+            {
+                if($type == $task->type and $taskID == $task->task) return $task;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Build operateMenu for browse view.
+     *
+     * @param  int    $node
+     * @access public
+     * @return void
+     */
     public function buildOperateMenu($node)
     {
         if($node->deleted) return '';
@@ -457,5 +599,30 @@ class zanodemodel extends model
         $menu .= $this->buildMenu('zanode', 'delete', $params, $node, 'view', 'trash', 'hiddenwin');
 
         return $menu;
+    }
+
+    /**
+     * Set automation setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function setAutomationSetting()
+    {
+        $now  = helper::now();
+        $data = fixer::input('post')
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', $now)
+            ->remove('uid')
+            ->get();
+
+        $this->dao->replace(TABLE_AUTOMATION)
+            ->data($data)
+            ->batchcheck('node,scriptPath', 'notempty')
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
     }
 }

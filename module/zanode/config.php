@@ -1,10 +1,12 @@
 <?php
 $config->zanode->create         = new stdClass();
 $config->zanode->edit           = new stdClass();
+$config->zanode->createimage    = new stdClass();
 $config->zanode->create->requiredFields = 'name,host,image,cpu,memory,disk,osName';
 $config->zanode->edit->requiredFields   = '';
+$config->zanode->createimage->requiredFields = 'name';
 
-$config->zanode->defaultPort = '8086';
+$config->zanode->defaultPort = '55001';
 
 $config->zanode->os = new stdClass();
 
@@ -42,3 +44,4 @@ $config->zanode->search['params']['diskSize']   = array('operator' => '=', 'cont
 $config->zanode->editor = new stdclass();
 $config->zanode->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->zanode->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->zanode->editor->createimage = array('id' => 'desc', 'tools' => 'simpleTools');

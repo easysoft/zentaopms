@@ -117,6 +117,9 @@
   <div class='btn-toolbar pull-right'>
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
+      <?php common::printLink('testcase', 'automation', "productID=$productID", "<i class='icon-testcase muted'> </i>" . $lang->zanode->automation, '', "class='btn btn-link iframe'", true, true)?>
+    </div>
+    <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
         <i class='icon icon-export muted'></i> <?php echo $lang->export ?>
         <span class='caret'></span>
@@ -226,7 +229,7 @@ $(function()
         }
     }
 
-    if((hasNeedconfirmTab || hasGroupTab || hasZerocaseTab) && (hasbysuiteTab || hasBrowseunitsTab)) 
+    if((hasNeedconfirmTab || hasGroupTab || hasZerocaseTab) && (hasbysuiteTab || hasBrowseunitsTab))
     {
         if(hasZerocaseTab)
         {

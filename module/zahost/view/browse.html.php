@@ -38,7 +38,7 @@
       </p>
     </div>
     <?php else:?>
-    <table class='table has-sort-head table-fixed'>
+    <table class='table has-sort-head table-fixed' id='hostTable'>
       <thead>
         <tr>
           <?php $vars = "browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
@@ -52,12 +52,12 @@
           <th class='c-software'>   <?php common::printOrderLink('vsoft', $orderBy, $vars, $lang->zahost->vsoft);?></th>
           <th class='c-status'>     <?php common::printOrderLink('t2.status',       $orderBy, $vars, $lang->zahost->status);?></th>
           <th class='c-datetime'>   <?php common::printOrderLink('registerDate',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
-          <th class='c-actions-2'><?php echo $lang->actions;?></th>
+          <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($hostList as $host):?>
-        <tr class='text-left'>
+        <tr class='text-left' data-status="<?php echo $host->status;?>">
           <td><?php printf('%03d', $host->hostID);?></td>
           <td title='<?php echo $host->name?>'><?php echo html::a($this->inlink('view', "id=$host->hostID"), $host->name, '', "");?></td>
           <td><?php echo zget($lang->zahost->zaHostTypeList, $host->hostType);?></td>
@@ -66,11 +66,15 @@
           <td><?php echo $host->memory . $lang->zahost->unitList['GB'];?></td>
           <td><?php echo $host->diskSize . $lang->zahost->unitList['GB'];?></td>
           <td><?php echo $host->vsoft;?></td>
-          <td><?php echo zget($lang->host->statusList, $host->status);?></td>
+          <td class="status-<?php echo $host->status;?>"><?php echo zget($lang->host->statusList, $host->status);?></td>
           <td><?php echo helper::isZeroDate($host->heartbeat) ? '' : $host->heartbeat;?></td>
           <td class='c-actions'>
-            <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
-            <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");;?>
+            <?php $disabled = !empty($nodeList[$host->hostID]) ? '' : 'disabled';?>
+            <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->delete : $lang->zahost->undeletedNotice;?>
+            <?php if(common::hasPriv('zahost', 'edit')) common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
+            <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
+            <?php if(common::hasPriv('zahost', 'browseImage')) common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'file', '', 'iframe', true, "data-width='60%'", $lang->zahost->image->list);?>
+            <?php if(common::hasPriv('zahost', 'init')) common::printIcon('zahost', 'init', "hostID={$host->hostID}", $host, 'list', 'info', '', ' init', false, "data-placement='bottom'", $lang->zahost->init->title);?>
           </td>
         </tr>
         <?php endforeach;?>

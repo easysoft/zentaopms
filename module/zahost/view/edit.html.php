@@ -46,7 +46,7 @@
             <td>
               <div class='input-group'>
                 <?php echo html::input('memory', $host->memory, "class='form-control'");?>
-                <span class="input-group-addon" id="memory-addon"><?php echo $lang->zahost->unitList['GB'];?></span>
+                <span class="input-group-addon" id="memory-addon">GB</span>
               </div>
             </td>
           </tr>
@@ -56,7 +56,7 @@
               <div class='input-group'>
                 <?php echo html::input('diskSize', $host->diskSize, "class='form-control'");?>
                 <span class='input-group-addon fix-border fix-padding' id='unit'>
-                  <?php echo $lang->zahost->unitList['GB'];?>
+                GB
                 </span>
               </div>
             </td>

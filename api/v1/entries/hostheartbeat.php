@@ -28,35 +28,55 @@ class hostHeartbeatEntry extends baseEntry
 
         /* Check param. */
         $status = $this->requestBody->status;
+        $vms    = $this->requestBody->Vms;
+        $zap    = $this->requestBody->port;
         $now    = helper::now();
         if(!$status) return $this->sendError(400, 'Params error.');
 
-        $conditionField = $secret ? 'secret' : 'token';
+        $conditionField = $secret ? 'secret' : 'tokenSN';
         $conditionValue = $secret ? $secret  : $token;
         $host = new stdclass();
         $host->status = $status;
         if($secret)
         {
-            $host->token       = md5($secret . $now);
-            $host->expiredDate = date('Y-m-d H:i:s', time() + 7200);
+            $host->tokenSN   = md5($secret . $now);
+            $host->tokenTime = date('Y-m-d H:i:s', time() + 7200);
         }
 
         $this->dao = $this->loadModel('common')->dao;
-        $assetID = $this->dao->select('id')->from(TABLE_HOST)
+        $id = $this->dao->select('id')->from(TABLE_ZAHOST)
             ->beginIF($secret)->where('secret')->eq($secret)->fi()
             ->beginIF(!$secret)->where('tokenSN')->eq($token)
             ->andWhere('tokenTime')->gt($now)->fi()
-            ->fetch('assetID');
-        if(!$assetID) return $this->sendError(400, 'Secret error.');
+            ->fetch('id');
+        if(!$id) return $this->sendError(400, 'Secret error.');
 
-        $this->dao->update(TABLE_HOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
-        $this->dao->update(TABLE_HOST)->set('heartbeat')->eq($now)->where('id')->eq($assetID)->exec();
+        $this->dao->update(TABLE_ZAHOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
+        $this->dao->update(TABLE_ZAHOST)
+        ->set('heartbeat')->eq($now)
+        ->set('zap')->eq($zap)
+        ->where('id')->eq($id)->exec();
+
+        foreach($vms as $vm)
+        {
+            if(!empty($vm->vncPortOnHost))
+            {
+                $this->dao->update(TABLE_ZAHOST)
+                ->set('vnc')->eq($vm->vncPortOnHost)
+                ->set('zap')->eq($vm->agentPortOnHost)
+                ->set('ztf')->eq($vm->ztfPortOnHost)
+                ->set('zd')->eq($vm->zdPortOnHost)
+                ->set('ssh')->eq($vm->sshPortOnHost)
+                ->set('status')->eq($vm->status)
+                ->where('mac')->eq($vm->macAddress)->exec();
+            }
+        }
 
         if(!$secret) return $this->sendSuccess(200, 'success');
 
-        $host->expiredTimeUnix = strtotime($host->expiredDate);
+        $host->tokenTimeUnix = strtotime($host->tokenTime);
         unset($host->status);
-        unset($host->expiredDate);
+        unset($host->tokenTime);
         return $this->send(200, $host);
     }
 }
