@@ -1278,6 +1278,7 @@ class project extends control
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->executions      = $executions;
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
         $this->view->projectPairs    = $this->project->getPairsByProgram();
