@@ -19,4 +19,9 @@ $(function()
     {
         $(this).find('.removeButton').addClass('hide');
     });
+
+    $('#legendStories').find('.removeButton').click(function()
+    {
+        $(this).closest('li').remove();
+    })
 });

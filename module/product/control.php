@@ -274,6 +274,7 @@ class product extends control
         if(!$product and $isProjectStory)
         {
             /* Get branch display under multiple products. */
+            $branchOptions = array();
             foreach($projectProducts as $projectProduct)
             {
                 if($projectProduct and $projectProduct->type != 'normal')

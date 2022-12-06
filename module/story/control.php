@@ -2381,7 +2381,7 @@ class story extends control
         if($type == 'remove')
         {
             $result = $this->story->unlinkStory($storyID, $linkedStoryID);
-            return print(js::reload('parent'));
+            helprt::end();
         }
 
         if($_POST)
