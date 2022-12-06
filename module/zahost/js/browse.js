@@ -1,5 +1,5 @@
 $('#hostList tr[data-status="wait"]').hover(function(){
-  $(this).find('.inithost').tooltip('toggle');
+  $(this).find('.init').tooltip('toggle');
 },function(){
-  $(this).find('.inithost').tooltip('hide');
+  $(this).find('.init').tooltip('hide');
 });

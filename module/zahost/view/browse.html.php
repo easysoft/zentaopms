@@ -74,7 +74,7 @@
             <?php if(common::hasPriv('zahost', 'edit')) common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
             <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
             <?php if(common::hasPriv('zahost', 'browseImage')) common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'file', '', 'iframe', true, "data-width='60%'", $lang->zahost->image->list);?>
-            <?php if(common::hasPriv('zahost', 'initHost')) common::printIcon('zahost', 'initHost', "hostID={$host->hostID}", $host, 'list', 'info', '', ' inithost', false, "data-placement='bottom'", $lang->zahost->initHost->title);?>
+            <?php if(common::hasPriv('zahost', 'init')) common::printIcon('zahost', 'init', "hostID={$host->hostID}", $host, 'list', 'info', '', ' init', false, "data-placement='bottom'", $lang->zahost->init->title);?>
           </td>
         </tr>
         <?php endforeach;?>

@@ -37,31 +37,31 @@ $lang->zahost->os         = 'System';
 $lang->zahost->imageName  = 'Image File';
 
 $lang->zahost->createZanode        = 'Create Zanode';
-$lang->zahost->initHostNotice      = 'Save successfully, initialize the ZAhost or return list';
+$lang->zahost->initNotice      = 'Save successfully, initialize the ZAhost or return list';
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
 $lang->zahost->undeletedNotice     = "The host has nodes that cannot be deleted.";
 $lang->zahost->netError            = 'Unable to connect to the host, please check the network and try again.';
 
-$lang->zahost->initHost = new stdclass;
-$lang->zahost->initHost->checkStatus   = "Check Service Status";
-$lang->zahost->initHost->not_install   = "Not installed";
-$lang->zahost->initHost->not_available = "Installed, Not Started";
-$lang->zahost->initHost->ready         = "Ready";
-$lang->zahost->initHost->next          = "Next";
+$lang->zahost->init = new stdclass;
+$lang->zahost->init->checkStatus   = "Check Service Status";
+$lang->zahost->init->not_install   = "Not installed";
+$lang->zahost->init->not_available = "Installed, Not Started";
+$lang->zahost->init->ready         = "Ready";
+$lang->zahost->init->next          = "Next";
 
-$lang->zahost->initHost->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
-$lang->zahost->initHost->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
+$lang->zahost->init->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
+$lang->zahost->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
-$lang->zahost->initHost->serviceStatus = [
+$lang->zahost->init->serviceStatus = [
     "kvm" => 'not_install',
     "novnc" => 'not_install',
     "websockify" => 'not_install',
 ];
-$lang->zahost->initHost->title          = "Initialize Host";
-$lang->zahost->initHost->descTitle      = "Follow these steps to complete the initialization on the host:";
-$lang->zahost->initHost->initDesc       = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
-$lang->zahost->initHost->statusTitle    = "Service Status";
+$lang->zahost->init->title          = "Initialize Host";
+$lang->zahost->init->descTitle      = "Follow these steps to complete the initialization on the host:";
+$lang->zahost->init->initDesc       = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
+$lang->zahost->init->statusTitle    = "Service Status";
 
 $lang->zahost->image = new stdclass;
 $lang->zahost->image->list          = 'Image List';

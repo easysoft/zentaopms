@@ -536,7 +536,7 @@ class zahostModel extends model
         if(empty($result) || $result->code != 'success')
         {
             $result = new stdclass;
-            $result->data = $this->lang->zahost->initHost->serviceStatus;
+            $result->data = $this->lang->zahost->init->serviceStatus;
         }
 
         return $result->data;
