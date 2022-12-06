@@ -88,8 +88,11 @@ tbody tr td:first-child input {display: none;}
                   <?php endif;?>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='c-id' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+                <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+                <?php if($childBuilds):?>
+                <th class='c-build w-200px text-left'><?php echo $lang->build->common;?></th>
+                <?php endif;?>
                 <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-id text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                 <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
@@ -99,7 +102,21 @@ tbody tr td:first-child input {display: none;}
             </thead>
             <tbody class='text-center'>
               <?php foreach($stories as $storyID => $story):?>
-              <?php $unlinkClass = strpos(",$build->stories,", ",$story->id,") !== false ? '' : "disabled";?>
+              <?php
+              $unlinkClass = strpos(",$build->stories,", ",$story->id,") !== false ? '' : "disabled";
+              $buildName   = $build->name;
+              if($unlinkClass == 'disabled')
+              {
+                  foreach($childBuilds as $childBuild)
+                  {
+                      if(strpos(",$childBuild->stories,", ",$story->id,") !== false)
+                      {
+                          $buildName = $childBuild->name;
+                          break;
+                      }
+                  }
+              }
+              ?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
@@ -130,6 +147,9 @@ tbody tr td:first-child input {display: none;}
                   }
                   ?>
                 </td>
+                <?php if($childBuilds):?>
+                <td class='text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
+                <?php endif;?>
                 <td><?php echo zget($users, $story->openedBy);?></td>
                 <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                 <td>
@@ -189,6 +209,9 @@ tbody tr td:first-child input {display: none;}
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
                 <th class='text-left'>  <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
+                <?php if($childBuilds):?>
+                <th class='c-build w-200px text-left'><?php echo $lang->build->common?></th>
+                <?php endif;?>
                 <th class='c-status'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
                 <th class='c-user'>     <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-date'>     <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
@@ -200,7 +223,21 @@ tbody tr td:first-child input {display: none;}
             <tbody class='text-center'>
               <?php foreach($bugs as $bug):?>
               <?php $bugLink     = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-              <?php $unlinkClass = strpos(",$build->bugs,", ",$bug->id,") !== false ? '' : "disabled";?>
+              <?php
+              $unlinkClass = strpos(",$build->bugs,", ",$bug->id,") !== false ? '' : "disabled";
+              $buildName   = $build->name;
+              if($unlinkClass == 'disabled')
+              {
+                  foreach($childBuilds as $childBuild)
+                  {
+                      if(strpos(",$childBuild->bugs,", ",$bug->id,") !== false)
+                      {
+                          $buildName = $childBuild->name;
+                          break;
+                      }
+                  }
+              }
+              ?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
@@ -211,6 +248,9 @@ tbody tr td:first-child input {display: none;}
                 <td class='text-left nobr' title='<?php echo $bug->title?>'>
                     <?php echo html::a($bugLink, $bug->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");?>
                 </td>
+                <?php if($childBuilds):?>
+                <td class='text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
+                <?php endif;?>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
                     <?php echo $this->processStatus('bug', $bug);?>

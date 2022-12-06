@@ -322,6 +322,7 @@ class build extends control
         $this->view->type         = $type;
         $this->view->bugPager     = $bugPager;
         $this->view->branchName   = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
+        $this->view->childBuilds  = empty($build->builds) ? array() : $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
 
         if($this->app->getViewType() == 'json')
         {

@@ -628,8 +628,8 @@ class buildModel extends model
     {
         $build->allBugs    = $build->bugs;
         $build->allStories = $build->stories;
-        $childBuilds = $this->dao->select('bugs, stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
 
+        $childBuilds = $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
         foreach($childBuilds as $childBuild)
         {
             if($childBuild->bugs)    $build->allBugs    .= ",{$childBuild->bugs}";
@@ -687,7 +687,7 @@ class buildModel extends model
         {
             $executionID = $tab == 'execution' ? $extraParams['executionID'] : $build->execution;
             $execution   = $this->loadModel('execution')->getByID($executionID);
-            $build->executionDeleted = $execution ? $execution->deleted : 0; 
+            $build->executionDeleted = $execution ? $execution->deleted : 0;
 
             $testtaskApp = (!empty($execution->type) and $execution->type == 'kanban') ? 'data-app="qa"' : "data-app='{$tab}'";
 
