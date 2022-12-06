@@ -187,16 +187,16 @@ class zanode extends control
      * @access public
      * @return void
      */
-    public function createImage($zanodeID = 0)
+    public function createImage($nodeID = 0)
     {
         $task        = '';
-        $node        = $this->zanode->getNodeByID($zanodeID);
-        $customImage = $this->zanode->getCustomImage($zanodeID, 'created,inprogress');
-        if($customImage) $task = $this->zanode->getTaskStatus($node->ip, $customImage->id, 'exportVm');
+        $node        = $this->zanode->getNodeByID($nodeID);
+        $customImage = $this->zanode->getCustomImage($nodeID, 'created,inprogress');
+        if($customImage) $task = $this->zanode->getTaskStatus($node, $customImage->id, 'exportVm');
 
         if($_POST)
         {
-            $this->zanode->createImage($zanodeID);
+            $this->zanode->createImage($nodeID);
 
             if(dao::isError())
             {
@@ -250,11 +250,13 @@ class zanode extends control
      */
     public function getVNC($nodeID)
     {
-        $vnc = $this->zanode->getVncUrl($nodeID);
+        $node = $this->zanode->getNodeByID($nodeID);
+        $vnc  = $this->zanode->getVncUrl($node);
 
         /* Add action log. */
         if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $nodeID, 'getVNC');
 
+        $this->view->url   = $node->ip . ":" . $node->hzap;
         $this->view->host  = $vnc->hostIP;
         $this->view->token = $vnc->token;
         $this->display();
@@ -297,9 +299,10 @@ class zanode extends control
      * @access public
      * @return void
      */
-    public function ajaxGetTaskStatus($extranet, $taskID = 0, $type = '', $status = '')
+    public function ajaxGetTaskStatus($nodeID, $taskID = 0, $type = '', $status = '')
     {
-        $result = $this->zanode->getTaskStatus($extranet, $taskID, $type, $status);
+        $node   = $this->zanode->getNodeByID($nodeID);
+        $result = $this->zanode->getTaskStatus($node, $taskID, $type, $status);
         return print(json_encode($result));
     }
 

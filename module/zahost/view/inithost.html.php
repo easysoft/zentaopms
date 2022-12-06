@@ -26,7 +26,7 @@
         <div>
           <span class='dot-symbol'></span>
           <span>
-            <?php echo $lang->zahost->initHost->initDesc . ' ' . $host->secret . ' -t ' . getWebRoot(true); ?>
+            <?php echo $lang->zahost->initHost->initDesc . ' ' . $host->secret . ' -z ' . getWebRoot(true); ?>
           </span>
         </div>
         <div id="statusContainer">

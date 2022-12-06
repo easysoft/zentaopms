@@ -25,41 +25,44 @@ class zanodeHeartbeatEntry extends baseEntry
         $token  = isset($header['Authorization']) ? substr($header['Authorization'], 7) : '';
         $secret = isset($this->requestBody->secret) ? $this->requestBody->secret : '';
         if(!$secret and !$token) return $this->sendError(401, 'Unauthorized');
-
+        
         /* Check param. */
-        $status = $this->requestBody->status;
+        $status = isset($this->requestBody->status) ? $this->requestBody->status : '';
+        $mac    = isset($this->requestBody->macAddress) ? $this->requestBody->macAddress : '';
         $now    = helper::now();
-        if(!$status) return $this->sendError(400, 'Params error.');
+        if(!$status || !$mac) return $this->sendError(400, 'Params error.');
 
         $this->dao = $this->loadModel('common')->dao;
-        $id = $this->dao->select('id')->from(TABLE_ZAHOST)
+        $hostID = $this->dao->select('id')->from(TABLE_ZAHOST)
             ->beginIF($secret)->where('secret')->eq($secret)->fi()
             ->beginIF(!$secret)->where('tokenSN')->eq($token)
             ->andWhere('tokenTime')->gt($now)->fi()
             ->fetch('id');
-        if(!$id) return $this->sendError(400, 'Secret error.');
+        if(!$hostID) return $this->sendError(400, 'Secret error.');
 
-        $conditionField = $secret ? 'secret' : 'tokenSN';
-        $conditionValue = $secret ? $secret  : $token;
-        if($secret)
-        {
-            $host = new stdclass();
-            $host->tokenSN     = md5($secret . $now);
-            $host->tokenTime   = date('Y-m-d H:i:s', time() + 7200);
-            $this->dao->update(TABLE_ZAHOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
-        }
+        $node = $this->dao->select('id')->from(TABLE_ZAHOST)
+            ->where('mac')->eq($mac)
+            ->fetch();
+        if(empty($node) || ($node->parent != $hostID || $node->id != $hostID)) return $this->sendError(400, 'Secret error.');
 
         $node = new stdclass();
         $node->zap       = $this->requestBody->agentPortOnHost;
         $node->status    = $this->requestBody->status;
-        $this->dao->update(TABLE_ZAHOST)->data($node)->where('mac')->eq($this->requestBody->macAddress)->exec();
+
+        if($secret)
+        {
+            $node->tokenSN     = md5($secret . $now);
+            $node->tokenTime   = date('Y-m-d H:i:s', time() + 7200);
+        }
+
+        $this->dao->update(TABLE_ZAHOST)->data($node)->where('id')->eq($node->id)->exec();
 
         if(!$secret) return $this->sendSuccess(200, 'success');
 
-        $host->tokenTimeUnix = strtotime($host->tokenTime);
+        $node->tokenTimeUnix = strtotime($node->tokenTime);
 
-        unset($host->status);
-        unset($host->tokenTime);
-        return $this->send(200, $host);
+        unset($node->status);
+        unset($node->tokenTime);
+        return $this->send(200, $node);
     }
 }

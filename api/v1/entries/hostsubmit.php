@@ -29,7 +29,7 @@ class hostSubmitEntry extends baseEntry
 
         /* Check param. */
         $image = new stdclass();
-        $task   = $this->requestBody->task;
+        $task  = $this->requestBody->task;
         $image->status = $this->requestBody->status;
 
         $this->dao = $this->loadModel('common')->dao;

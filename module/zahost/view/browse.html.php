@@ -69,7 +69,6 @@
           <td><?php echo zget($lang->host->statusList, $host->status);?></td>
           <td><?php echo helper::isZeroDate($host->heartbeat) ? '' : $host->heartbeat;?></td>
           <td class='c-actions'>
-            <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
             <?php $disabled = !empty($nodeList[$host->hostID]) ? '' : 'disabled';?>
             <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->delete : $lang->zahost->undeletedNotice;?>
             <?php if(common::hasPriv('zahost', 'edit')) common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
