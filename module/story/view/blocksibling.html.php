@@ -14,7 +14,7 @@ foreach($siblings as $sibling)
 {
     $id         = $sibling->id;
     $title      = '#' . $id . ' '. $sibling->title;
-    $branch     = $branches[$sibling->branch];
+    $branch     = isset($branches[$sibling->branch]) ? $branches[$sibling->branch] : '';
     $stage      = $lang->story->stageList[$sibling->stage];
     $labelClass = $story->branch == $sibling->branch ? 'label-primary' : '';
 
