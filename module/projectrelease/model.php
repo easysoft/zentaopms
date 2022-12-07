@@ -43,8 +43,8 @@ class projectreleaseModel extends model
         {
             foreach($builds as $build)
             {
-                $branch = explode(',', $build->branch);
-                if(is_array($branch)) $branches += $branch;
+                $branchIdList = explode(',', $build->branch);
+                foreach($branchIdList as $branchID) $branches[$branchID] = $branchID;
             }
         }
 
