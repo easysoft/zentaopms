@@ -5247,7 +5247,6 @@ class executionModel extends model
         $_POST = array();
         $_POST['project']   = $projectID;
         $_POST['name']      = $project->name;
-        $_POST['code']      = $project->code;
         $_POST['begin']     = $project->begin;
         $_POST['end']       = $project->end;
         $_POST['realBegan'] = $project->realBegan;
@@ -5260,6 +5259,8 @@ class executionModel extends model
         $_POST['RD']        = $project->RD;
         $_POST['status']    = $project->status;
         $_POST['acl']       = 'open';
+
+        if(!isset($this->config->setCode) or $this->config->setCode == 1) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)
