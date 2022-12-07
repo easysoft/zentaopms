@@ -14,6 +14,7 @@
 <?php include '../../common/view/form.html.php';?>
 <?php js::set('caseResultSave', $lang->save);?>
 <?php js::set('tab', $app->tab);?>
+<?php js::set('confirm', $confirm);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
@@ -27,6 +28,7 @@
         <tr>
           <td colspan='5' style='word-break: break-all;'><strong><?php echo $lang->testcase->precondition;?></strong><br/><?php echo nl2br($run->case->precondition);?></td>
         </tr>
+        <?php if($confirm != 'yes'):?>
         <tr>
           <th class='w-50px'><?php echo $lang->testcase->stepID;?></th>
           <th class='w-p30'><?php  echo $lang->testcase->stepDesc;?></th>
@@ -34,7 +36,9 @@
           <th class='w-100px'><?php echo $lang->testcase->result;?></th>
           <th><?php echo $lang->testcase->real;?></th>
         </tr>
+        <?php endif;?>
       </thead>
+      <?php if($confirm != 'yes'):?>
       <?php
       if(empty($run->case->steps))
       {
@@ -81,6 +85,7 @@
       </tr>
       <?php $childId ++;?>
       <?php endforeach;?>
+      <?php endif;?>
       <tr class='text-center'>
         <td colspan='5' class='form-actions'>
           <?php

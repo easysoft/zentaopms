@@ -78,5 +78,5 @@
     </div>
   </div>
 </div>
-<?php include 'successmodal.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/successmodal.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>

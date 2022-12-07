@@ -47,14 +47,15 @@ $lang->zanode->shell           = "Shell";
 $lang->zanode->automation      = "Automation";
 
 $lang->automation = new stdClass();
-$lang->automation->path = $lang->zanode->scriptPath;
-$lang->automation->node = $lang->zanode->common;
+$lang->automation->scriptPath = $lang->zanode->scriptPath;
+$lang->automation->node       = $lang->zanode->common;
 
-$lang->zanode->notFoundAgent = 'No Agent service is found';
-$lang->zanode->createVmFail  = 'Failed to create a execution node';
-$lang->zanode->noVncPort     = 'Failed to get vnc port';
-$lang->zanode->nameValid     = "Name must be letters, numbers,'-'，'_'，'.', And cannot begin with a symbol";
-$lang->zanode->empty         = 'Execution node not found.';
+$lang->zanode->notFoundAgent  = 'No Agent service is found';
+$lang->zanode->createVmFail   = 'Failed to create a execution node';
+$lang->zanode->noVncPort      = 'Failed to get vnc port';
+$lang->zanode->nameValid      = "Name must be letters, numbers,'-'，'_'，'.', And cannot begin with a symbol";
+$lang->zanode->empty          = 'Execution node not found.';
+$lang->zanode->runCaseConfirm = 'The system detects the presence of an automation script. Whether to execute?';
 
 $lang->zanode->empty              = 'No Execution Node';
 $lang->zanode->createImaging      = 'Creating';

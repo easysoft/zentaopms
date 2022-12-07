@@ -47,14 +47,15 @@ $lang->zanode->shell           = "shell命令";
 $lang->zanode->automation      = "自动化测试";
 
 $lang->automation = new stdClass();
-$lang->automation->path = $lang->zanode->scriptPath;
-$lang->automation->node = $lang->zanode->common;
+$lang->automation->scriptPath = $lang->zanode->scriptPath;
+$lang->automation->node       = $lang->zanode->common;
 
-$lang->zanode->notFoundAgent = '没有发现Agent服务';
-$lang->zanode->createVmFail  = '创建执行节点失败';
-$lang->zanode->noVncPort     = '无法获取执行节点端口';
-$lang->zanode->nameValid     = "名称只能是字母、数字，'-'，'_'，'.'，且不能以符号开头";
-$lang->zanode->empty         = '暂时没有执行节点';
+$lang->zanode->notFoundAgent  = '没有发现Agent服务';
+$lang->zanode->createVmFail   = '创建执行节点失败';
+$lang->zanode->noVncPort      = '无法获取执行节点端口';
+$lang->zanode->nameValid      = "名称只能是字母、数字，'-'，'_'，'.'，且不能以符号开头";
+$lang->zanode->empty          = '暂时没有执行节点';
+$lang->zanode->runCaseConfirm = '系统检测到选择的用例存在自动化测试脚本，是否自动执行用例？';
 
 $lang->zanode->createImage        = '创建镜像';
 $lang->zanode->createImaging      = '正在创建镜像';

@@ -37,11 +37,7 @@ $lang->zahost->os         = '操作系统';
 $lang->zahost->imageName  = '镜像文件';
 
 $lang->zahost->createZanode        = '创建执行节点';
-<<<<<<< HEAD
-$lang->zahost->initNotice      = '保存成功，请您初始化宿主机或返回列表。';
-=======
 $lang->zahost->initNotice          = '保存成功，请您初始化宿主机或返回列表。';
->>>>>>> zenops_46_zhaoke_77683
 $lang->zahost->createZanodeNotice  = '初始化成功，您现在可以创建执行节点了。';
 $lang->zahost->downloadImageNotice = '初始化成功，请下载镜像用于创建执行节点。';
 $lang->zahost->undeletedNotice     = "宿主机下存在执行节点无法删除。";

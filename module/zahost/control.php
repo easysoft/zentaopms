@@ -101,7 +101,8 @@ class zahost extends control
 
         $this->view->title      = $this->lang->zahost->create;
         $this->view->notice     = $this->lang->zahost->initNotice;
-        $this->view->buttonName = $this->lang->zahost->initTitle;
+        $this->view->buttonName = $this->lang->zahost->init->title;
+        $this->view->closeLink  = $this->createLink('zahost', 'browse');
         $this->display();
     }
 
@@ -117,7 +118,7 @@ class zahost extends control
         if($_POST)
         {
             $changes = $this->zahost->update($hostID);
-            if(dao::isError()) 
+            if(dao::isError())
             {
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
@@ -329,13 +330,14 @@ class zahost extends control
     {
         $imageList = $this->zahost->getImagePairs($hostID);
 
-        $this->view->title      = $this->lang->zahost->initTitle;
+        $this->view->title      = $this->lang->zahost->init->title;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->hostID     = $hostID;
         $this->view->host       = $this->zahost->getById($hostID);
         $this->view->notice     = $imageList ? $this->lang->zahost->createZanodeNotice : $this->lang->zahost->downloadImageNotice;
         $this->view->buttonName = $imageList ? $this->lang->zahost->createZanode : $this->lang->zahost->image->downloadImage;
         $this->view->modalLink  = $imageList ? $this->createLink('zanode', 'create', "hostID=$hostID") : $this->createLink('zahost', 'browseImage', "hostID=$hostID");
+        $this->view->closeLink  = $this->createLink('zahost', 'browse');
 
         $this->display();
     }

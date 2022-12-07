@@ -57,18 +57,21 @@ class hostHeartbeatEntry extends baseEntry
         ->set('zap')->eq($zap)
         ->where('id')->eq($id)->exec();
 
-        foreach($vms as $vm)
+        if($vms)
         {
-            if(!empty($vm->vncPortOnHost))
+            foreach($vms as $vm)
             {
-                $this->dao->update(TABLE_ZAHOST)
-                ->set('vnc')->eq($vm->vncPortOnHost)
-                ->set('zap')->eq($vm->agentPortOnHost)
-                ->set('ztf')->eq($vm->ztfPortOnHost)
-                ->set('zd')->eq($vm->zdPortOnHost)
-                ->set('ssh')->eq($vm->sshPortOnHost)
-                ->set('status')->eq($vm->status)
-                ->where('mac')->eq($vm->macAddress)->exec();
+                if(!empty($vm->vncPortOnHost))
+                {
+                    $this->dao->update(TABLE_ZAHOST)
+                        ->set('vnc')->eq($vm->vncPortOnHost)
+                        ->set('zap')->eq($vm->agentPortOnHost)
+                        ->set('ztf')->eq($vm->ztfPortOnHost)
+                        ->set('zd')->eq($vm->zdPortOnHost)
+                        ->set('ssh')->eq($vm->sshPortOnHost)
+                        ->set('status')->eq($vm->status)
+                        ->where('mac')->eq($vm->macAddress)->exec();
+                }
             }
         }
 
