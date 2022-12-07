@@ -577,4 +577,53 @@ class zanodemodel extends model
 
         return $menu;
     }
+
+    /**
+     * Get service status from ZAgent server.
+     *
+     * @param  object $node
+     * @access public
+     * @return array
+     */
+    public function getServiceStatus($node)
+    {
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$node->tokenSN")));
+        if(empty($result->data) || $result->code != 'success')
+        {
+            $result = new stdclass;
+            $result->data = $this->lang->zanode->init->serviceStatus;
+        }
+
+        return array(
+            "ZenAgent" => "ready",
+            "ZTF"      => $result->data->ztfStatus,
+        );
+    }
+
+    /**
+     * Install service.
+     *
+     * @param  object $node
+     * @access public
+     * @return array
+     */
+    public function installService($node, $name)
+    {
+        $param = array(
+            "name" => $name,
+            "secret" => $node->secret,
+            "server" => getWebRoot(true),
+        );
+        $result = json_decode(commonModel::http("http://{$node->extranet}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
+        if(empty($result->data) || $result->code != 'success')
+        {
+            $result = new stdclass;
+            $result->data = $this->lang->zanode->init->serviceStatus;
+        }
+
+        return array(
+            "ZenAgent" => "ready",
+            "ZTF"      => $result->data->ztfStatus,
+        );
+    }
 }
