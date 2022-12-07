@@ -353,6 +353,22 @@ class zanodemodel extends model
     }
 
     /**
+     * Get node pairs.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function getPairs($orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_ZAHOST)
+            ->where('deleted')->eq(0)
+            ->andWhere("type")->eq('node')
+            ->orderBy($orderBy)
+            ->fetchPairs('id', 'name');
+    }
+
+    /**
      * Get node list by hostID.
      *
      * @param  string $browseType
@@ -518,7 +534,7 @@ class zanodemodel extends model
 
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_TOKEN_PATH;
         $result   = json_decode(commonModel::http("$agnetUrl?port={$node->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$node->hTokenSN"), 'json'));
-        
+
         if(empty($result) or $result->code != 'success') return false;
 
         $returnData = new stdClass();
@@ -565,6 +581,13 @@ class zanodemodel extends model
         return $result;
     }
 
+    /**
+     * Build operateMenu for browse view.
+     *
+     * @param  int    $node
+     * @access public
+     * @return void
+     */
     public function buildOperateMenu($node)
     {
         if($node->deleted) return '';
@@ -625,5 +648,30 @@ class zanodemodel extends model
             "ZenAgent" => "ready",
             "ZTF"      => $result->data->ztfStatus,
         );
+    }
+
+    /**
+     * Set automation setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function setAutomationSetting()
+    {
+        $now  = helper::now();
+        $data = fixer::input('post')
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', $now)
+            ->remove('uid')
+            ->get();
+
+        $this->dao->replace(TABLE_AUTOMATION)
+            ->data($data)
+            ->batchcheck('node,scriptPath', 'notempty')
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
     }
 }

@@ -1074,6 +1074,7 @@ $lang->resource->testcase->confirmLibcaseChange    = 'confirmLibcaseChange';
 $lang->resource->testcase->ignoreLibcaseChange     = 'ignoreLibcaseChange';
 $lang->resource->testcase->batchConfirmStoryChange = 'batchConfirmStoryChange';
 $lang->resource->testcase->importToLib             = 'importToLib';
+$lang->resource->testcase->automation              = 'automation';
 
 $lang->testcase->methodOrder[0]   = 'index';
 $lang->testcase->methodOrder[5]   = 'browse';
@@ -1104,6 +1105,7 @@ $lang->testcase->methodOrder[125] = 'confirmLibcaseChange';
 $lang->testcase->methodOrder[130] = 'ignoreLibcaseChange';
 $lang->testcase->methodOrder[135] = 'batchConfirmStoryChange';
 $lang->testcase->methodOrder[140] = 'importToLib';
+$lang->testcase->methodOrder[145] = 'automation';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
