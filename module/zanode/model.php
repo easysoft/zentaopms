@@ -60,9 +60,6 @@ class zanodemodel extends model
         /* Get host info. */
         $host = $this->getHostByID($data->parent);
 
-        /* Gen mac address */
-        $mac = $this->genmac();
-
         /* Prepare create params. */
         $agnetUrl = 'http://' . $host->extranet . ':' . $host->zap;
         $param    = array(
@@ -90,7 +87,7 @@ class zanodemodel extends model
         /* Prepare create execution node data. */
         $data->image       = $data->image;
         $data->parent      = $host->id;
-        $data->mac         = $mac;
+        $data->mac         = $result->data->mac;
         $data->status      = static::STATUS_RUNNING;
         $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
@@ -122,7 +119,6 @@ class zanodemodel extends model
         if(dao::isError()) return false;
 
         $node  = $this->getNodeByID($zanodeID);
-        $image = $this->getImageByID($node->image);
 
         $newImage = new stdClass();
         $newImage->host   = $node->parent;
@@ -456,7 +452,7 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN, t2.secret as secret')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
@@ -615,6 +611,7 @@ class zanodemodel extends model
             "server" => getWebRoot(true),
         );
         $result = json_decode(commonModel::http("http://{$node->extranet}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
+        
         if(empty($result->data) || $result->code != 'success')
         {
             $result = new stdclass;

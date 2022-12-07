@@ -35,9 +35,11 @@
 
       <div class="text-center host-action">
         <button type='button' id='checkServiceStatus' class='btn btn-info margin-top-18'><?php echo $lang->zanode->init->checkStatus; ?></button>
+        <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, "data-app='{$app->tab}'", 'btn'); ?>
+        <!-- <button type='button' class='btn margin-top-18'><?php echo $lang->goback; ?></button> -->
       </div>
     </div>
   </div>
 </div>
-<?php // include 'successmodal.html.php';?>
+<?php include 'successmodal.html.php';?>
 <?php include '../../common/view/footer.html.php'; ?>

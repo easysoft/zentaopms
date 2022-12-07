@@ -135,7 +135,9 @@ class zanode extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->nodeID     = $nodeID;
         $this->view->node       = $this->zanode->getNodeById($nodeID);
-        // $this->view->modalLink  = $imageList ? $this->createLink('zanode', 'create', "nodeID=$nodeID") : $this->createLink('zanode', 'browseImage', "nodeID=$nodeID");
+        $this->view->notice     = $this->lang->zanode->init->initSuccessNoticeTitle;
+        $this->view->buttonName = $this->lang->zanode->init->button;
+        $this->view->modalLink  = $this->createLink('zanode', 'browse');
 
         $this->display();
     }
