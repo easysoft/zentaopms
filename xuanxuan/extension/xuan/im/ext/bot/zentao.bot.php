@@ -353,7 +353,7 @@ class zentaoBot extends xuanBot
             $conds = new stdClass();
             $conds->assignedToList = is_object($user) ? $user->account : false;
             $conds->statusList     = 'wait,doing,done,pause,cancel';
-            return $this->im->task->getListByConds($conds, 'status_asc', 0, $pager);
+            return $this->im->task->getListByConds($conds, 'status_asc', $pager);
         }
 
         $keys             = array();
@@ -364,7 +364,7 @@ class zentaoBot extends xuanBot
         $keys['taskName'] = true;
 
         $conds = $this->parseArguments($args, $keys);
-        return $this->im->task->getListByConds($conds, 'status_asc', 0, $pager);
+        return $this->im->task->getListByConds($conds, 'status_asc', $pager);
     }
 
     /**

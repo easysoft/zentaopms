@@ -20,7 +20,27 @@ class tasksEntry extends entry
      */
     public function get($executionID = 0)
     {
-        if(!$executionID)
+        /* Get tasks by search, search arguments available: pri, assignedTo, status, id, name. Pager arguments will be utilized as well. */
+        if($this->param('search', 0) == 1)
+        {
+            $this->loadModel('task');
+            $searchParams = array();
+            foreach(array('pri' => 'priList', 'assignedTo' => 'assignedToList', 'status' => 'statusList', 'id' => 'idList', 'name' => 'taskName') as $field => $condName)
+            {
+                if($this->param($field, false)) $searchParams[$condName] = $this->param($field);
+            }
+
+            $this->app->loadClass('pager', $static = true);
+            $pager = pager::init($this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+            $tasks = $this->task->getListByConds((object)$searchParams, $this->param('order', 'id_desc'), $pager);
+
+            $data = new stdclass();
+            $data->status = 'success';
+            $data->data   = new stdclass();
+            $data->data->tasks = array_values($tasks);
+            $data->data->pager = (object)$pager;
+        }
+        elseif(!$executionID)
         {
             /* Get my tasks defaultly. */
             $control = $this->loadController('my', 'task');
