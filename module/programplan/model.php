@@ -243,11 +243,11 @@ class programplanModel extends model
             $oldTasks = $oldData->task;
             foreach($oldTasks as $id => $oldTask)
             {
-                if(!isset($tasks->$id)) continue;
-                $tasks->$id->version    = $oldTask->version;
-                $tasks->$id->name       = $oldTask->name;
-                $tasks->$id->estStarted = $oldTask->estStarted;
-                $tasks->$id->deadline   = $oldTask->deadline;
+                if(!isset($tasks[$id])) continue;
+                $tasks[$id]->version    = $oldTask->version;
+                $tasks[$id]->name       = $oldTask->name;
+                $tasks[$id]->estStarted = $oldTask->estStarted;
+                $tasks[$id]->deadline   = $oldTask->deadline;
             }
         }
 
