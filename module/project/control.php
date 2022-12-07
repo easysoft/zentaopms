@@ -1448,23 +1448,27 @@ class project extends control
         /* Set project builds. */
         $projectBuilds = array();
         $productList   = $this->product->getProducts($projectID);
-        $this->app->loadLang('branch');
+        $showBranch    = false;
         if(!empty($builds))
         {
             foreach($builds as $build)
             {
                 $build->builds = $this->build->getByList($build->builds);
-                /* If product is normal, unset branch name. */
-                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
-                {
-                    $build->branchName = '';
-                }
-                else
-                {
-                    $build->branchName = isset($build->branchName) ? $build->branchName : $this->lang->branch->main;
-                }
-
                 $projectBuilds[$build->product][] = $build;
+            }
+
+            /* Get branch name. */
+            $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($projectBuilds));
+            foreach($builds as $build)
+            {
+                $build->branchName = '';
+                if(isset($branchGroups[$build->product]))
+                {
+                    $showBranch  = true;
+                    $branchPairs = $branchGroups[$build->product];
+                    foreach(explode(',', trim($build->branch, ',')) as $branchID) $build->branchName .= "{$branchPairs[$branchID]},";
+                    $build->branchName = trim($build->branchName, ',');
+                }
             }
         }
 
@@ -1482,6 +1486,7 @@ class project extends control
         $this->view->executions    = $this->execution->getPairs();
         $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
         $this->view->type          = $type;
+        $this->view->showBranch    = $showBranch;
 
         $this->display();
     }

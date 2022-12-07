@@ -1298,21 +1298,23 @@ class execution extends control
         /* Set execution builds. */
         $executionBuilds = array();
         $productList     = $this->product->getProducts($executionID);
-        $this->app->loadLang('branch');
+        $showBranch      = false;
         if(!empty($builds))
         {
+            foreach($builds as $build) $executionBuilds[$build->product][] = $build;
+
+            /* Get branch name. */
+            $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($executionBuilds));
             foreach($builds as $build)
             {
-                /* If product is normal, unset branch name. */
-                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
+                $build->branchName = '';
+                if(isset($branchGroups[$build->product]))
                 {
-                    $build->branchName = '';
+                    $showBranch  = true;
+                    $branchPairs = $branchGroups[$build->product];
+                    foreach(explode(',', trim($build->branch, ',')) as $branchID) $build->branchName .= "{$branchPairs[$branchID]},";
+                    $build->branchName = trim($build->branchName, ',');
                 }
-                else
-                {
-                    $build->branchName = isset($build->branchName) ? $build->branchName : $this->lang->branch->main;
-                }
-                $executionBuilds[$build->product][] = $build;
             }
         }
 
@@ -1328,6 +1330,7 @@ class execution extends control
         $this->view->product       = $type == 'product' ? $param : 'all';
         $this->view->products      = $products;
         $this->view->type          = $type;
+        $this->view->showBranch    = $showBranch;
 
         $this->display();
     }
