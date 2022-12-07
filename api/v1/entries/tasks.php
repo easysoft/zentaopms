@@ -27,7 +27,12 @@ class tasksEntry extends entry
             $searchParams = array();
             foreach(array('pri' => 'priList', 'assignedTo' => 'assignedToList', 'status' => 'statusList', 'id' => 'idList', 'name' => 'taskName') as $field => $condName)
             {
-                if($this->param($field, false)) $searchParams[$condName] = $this->param($field);
+                if($this->param($field, false))
+                {
+                    $searchParams[$condName] = $this->param($field);
+                    continue;
+                }
+                if($this->param($condName, false)) $searchParams[$condName] = $this->param($condName);
             }
 
             $this->app->loadClass('pager', $static = true);

@@ -344,27 +344,37 @@ class zentaoBot extends xuanBot
      * @param  object        $user
      * @param  object        $pager
      * @access public
-     * @return object|string
+     * @return array
      */
     public function viewTask($args = array(), $user = null, $pager = null)
     {
+        $keys = array();
+        foreach(array('pri', 'id', 'status', 'assignTo', 'taskName') as $key) $keys[$key] = true;
+
         if(empty($args))
         {
-            $conds = new stdClass();
-            $conds->assignedToList = is_object($user) ? $user->account : false;
-            $conds->statusList     = 'wait,doing,done,pause,cancel';
-            return $this->im->task->getListByConds($conds, 'status_asc', $pager);
+            $keys['assignTo'] = is_object($user) ? $user->account : false;
+            $keys['status']   = 'wait,doing,done,pause,cancel';
         }
 
-        $keys             = array();
-        $keys['pri']      = true;
-        $keys['id']       = true;
-        $keys['status']   = true;
-        $keys['assignTo'] = true;
-        $keys['taskName'] = true;
-
         $conds = $this->parseArguments($args, $keys);
-        return $this->im->task->getListByConds($conds, 'status_asc', $pager);
+        $conds->search = 1;
+        $conds->order  = 'status_asc';
+
+        $result = $this->loadEntry('tasks', 'get', array(), (array)$conds);
+
+        if(isset($result->tasks))
+        {
+            /* Update pager with result. */
+            $pager->setRecTotal($result->total);
+            $pager->setRecPerPage($result->limit);
+            $pager->setPageID($result->page);
+            $pager->setPageTotal();
+
+            return $result->tasks;
+        }
+
+        return array();
     }
 
     /**
@@ -578,26 +588,24 @@ class zentaoBot extends xuanBot
     public function renderTask($tasks, $originArgs, $pager)
     {
         $lang = $this->im->lang;
-        if(!$tasks || $pager->recTotal === 0) return $lang->task->noTask;
 
-        $sysURL = common::getSysURL();
+        $taskCount = $pager->recTotal ? $pager->recTotal : count($tasks);
 
-        if($pager->recTotal == 1)
+        if($taskCount === 0) return $lang->task->noTask;
+
+        if($taskCount == 1)
         {
             $task = current($tasks);
             $link = str_replace('x.php', 'index.php', helper::createLink('task', 'view', "taskID=$task->id", 'html'));
 
             $messages = new stdclass();
             $messages->type = 'url';
-            $messages->url  = $sysURL . $link;
-            return array(sprintf($this->lang->tasksFound, $pager->recTotal), $messages);
+            $messages->url  = common::getSysURL() . $link;
+            return array(sprintf($this->lang->tasksFound, $taskCount), $messages);
         }
 
         $messages = array();
-        if($pager->pageID == 1)
-        {
-            $messages[] = sprintf($this->lang->tasksFound, $pager->recTotal);
-        }
+        if($pager->pageID == 1) $messages[] = sprintf($this->lang->tasksFound, $taskCount);
 
         $taskTable = $this->renderTaskTable($tasks);
 
@@ -633,7 +641,6 @@ class zentaoBot extends xuanBot
     public function renderTaskTable($tasks)
     {
         $lang    = $this->im->lang;
-        $sysURL  = common::getSysURL();
         $headMap = array('id'=>'ID', 'pri' => $lang->task->pri, 'name' => $lang->task->name, 'assignedTo' => $lang->task->assignedTo,  'status' => $lang->task->status, 'estimate' => $lang->task->estimateAB, 'consumed' => $lang->task->consumedAB, 'left' => $lang->task->leftAB, 'actions' => $lang->actions);
         $thead   = '';
 
@@ -645,7 +652,7 @@ class zentaoBot extends xuanBot
         {
             $tr   = '';
             $link = str_replace('x.php', 'index.php', helper::createLink('task', 'view', "taskID=$task->id", 'html'));
-            $href = urlencode($sysURL . $link);
+            $href = urlencode(common::getSysURL() . $link);
             $isParent = $task->parent == -1;
             $isChild  = $task->parent > 0;
             $isMulti  = !empty($task->mode);
@@ -948,11 +955,12 @@ class zentaoBot extends xuanBot
      * @param  string $entry
      * @param  string $action
      * @param  array  $params
+     * @param  array  $query
      * @param  string $version
      * @access public
      * @return object
      */
-    public function loadEntry($entry, $action, $params = array(), $version = 'v1')
+    public function loadEntry($entry, $action, $params = array(), $query = array(), $version = 'v1')
     {
         try
         {
@@ -978,6 +986,10 @@ class zentaoBot extends xuanBot
             if($action == 'post' || $action == 'put')
             {
                 $entry->requestBody = (object)$params;
+            }
+            elseif($action == 'get' && !empty($query))
+            {
+                $entry->setParam($query);
             }
 
             $content = call_user_func_array(array($entry, $action), $params);
