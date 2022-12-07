@@ -1579,6 +1579,7 @@ class execution extends control
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        $deptID      = $this->app->user->admin ? 0 : $this->app->user->dept;
 
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->team;
         $position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
@@ -1586,7 +1587,7 @@ class execution extends control
 
         $this->view->title        = $title;
         $this->view->position     = $position;
-        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();

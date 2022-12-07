@@ -351,8 +351,8 @@ $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.net/goto.p
 $lang->execution->whyNoStories         = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->projectNoStories     = "看起来没有{$lang->SRCommon}可以关联。请检查下项目中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->productStories       = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}{$lang->SRCommon}的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";
-$lang->execution->haveBranchDraft      = "有%s条草稿状态或非本{$lang->executionCommon}关联分支的{$lang->SRCommon}无法关联到该{$lang->executionCommon}";
-$lang->execution->haveDraft            = "有%s条草稿状态的{$lang->SRCommon}无法关联到该{$lang->executionCommon}";
+$lang->execution->haveBranchDraft      = "有%s条非激活状态或不是{$lang->executionCommon}关联分支的{$lang->SRCommon}无法导入";
+$lang->execution->haveDraft            = "有%s条非激活状态的{$lang->SRCommon}无法导入";
 $lang->execution->doneExecutions       = '已结束';
 $lang->execution->selectDept           = '选择部门';
 $lang->execution->selectDeptTitle      = '选择一个部门的成员';
