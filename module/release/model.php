@@ -31,7 +31,21 @@ class releaseModel extends model
             ->fetch();
         if(!$release) return false;
 
-        $release->builds = $this->dao->select('id, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+        $builds = $this->dao->select('id, branch, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+
+        /* Get release's branches by build. */
+        $branches = array();
+        if($release->productType != 'normal')
+        {
+            foreach($builds as $build)
+            {
+                $branch = explode(',', $build->branch);
+                if(is_array($branch)) $branches += $branch;
+            }
+        }
+
+        $release->builds   = $builds;
+        $release->branches = $branches;
 
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
