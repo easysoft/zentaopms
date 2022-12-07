@@ -390,7 +390,7 @@ class tree extends control
         }
         else
         {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch);
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch, 'noMainBranch');
         }
 
         if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject', '', 0, 'book');
@@ -534,12 +534,13 @@ class tree extends control
         }
         else
         {
-            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch);
+            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch, $extra);
         }
 
         if(strpos($extra, 'excludeModuleID') !== false)
         {
-            parse_str($extra, $output);
+            list($excludeModule, $noMainBranch) = explode(',', $extra);
+            parse_str($excludeModule, $output);
             $excludeModuleID = $output['excludeModuleID'];
             if(isset($optionMenu[$excludeModuleID])) unset($optionMenu[$excludeModuleID]);
         }
