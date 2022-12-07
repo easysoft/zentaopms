@@ -115,11 +115,13 @@ $(document).ready(function()
     function setHeight()
     {
         var paneHeight = $(window).height() - 120;
+        if(edition != 'open') paneHeight -= 80;
         if(isonlybody) paneHeight = 500;
         $('#fileTabs .tab-pane').css('height', paneHeight + 'px')
         $('#filesTree').css('height', paneHeight + 35)
     }
     setHeight();
+    $(window).resize(setHeight);
 
     $(document).on('click', '.repoFileName', function()
     {

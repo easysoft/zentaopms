@@ -14,6 +14,7 @@
 <?php
 $browser = helper::getBrowser();
 js::set('browser', $browser['name']);
+js::set('edition', $config->edition);
 ?>
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
