@@ -2,6 +2,7 @@
 #releaseList tr:hover {background-color:unset;}
 td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
-.c-build {width: 250px;}
+.c-build {width: 300px;}
+.c-branch {width: 200px;}
 td.c-build {padding-left:8px !important;}
 .c-product, .c-execution {width: 120px;}

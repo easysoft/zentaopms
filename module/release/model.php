@@ -222,7 +222,11 @@ class releaseModel extends model
             if($linkedBuilds) $builds += $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($linkedBuilds)->fetchAll('id');
             foreach($builds as $build)
             {
-                $branches[$build->branch]  = $build->branch;
+                foreach(explode(',', $build->branch) as $buildBranch)
+                {
+                    if(!isset($branches[$buildBranch])) $branches[$buildBranch] = $buildBranch;
+                }
+
                 $projects[$build->project] = $build->project;
 
                 if($this->post->sync)
