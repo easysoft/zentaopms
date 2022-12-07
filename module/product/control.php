@@ -356,7 +356,7 @@ class product extends control
         $this->view->productName     = $productName;
         $this->view->moduleID        = $moduleID;
         $this->view->stories         = $stories;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, '', true);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired', true);
         $this->view->productPlans    = isset($productPlans) ? array(0 => '') + $productPlans : array();
         $this->view->summary         = $this->product->summary($stories, $storyType);
         $this->view->moduleTree      = $moduleTree;
