@@ -536,6 +536,14 @@ class tree extends control
         {
             $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch);
         }
+
+        if(strpos($extra, 'excludeModuleID') !== false)
+        {
+            parse_str($extra, $output);
+            $excludeModuleID = $output['excludeModuleID'];
+            if(isset($optionMenu[$excludeModuleID])) unset($optionMenu[$excludeModuleID]);
+        }
+
         if($returnType == 'html')
         {
             //Code for task #5081.
