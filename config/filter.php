@@ -2,7 +2,7 @@
 $filter                    = new stdclass();
 $filter->rules             = new stdclass();
 $filter->rules->md5        = '/^[a-z0-9]{32}$/';
-$filter->rules->base64     = '/^[a-zA-Z0-9\+\/\=]+$/';
+$filter->rules->base64     = '/^[a-zA-Z0-9\+\/\=\.]+$/';
 $filter->rules->checked    = '/^[0-9,\-]+$/';
 $filter->rules->idList     = '/^[0-9\|]+$/';
 $filter->rules->lang       = '/^[a-zA-Z_\-]+$/';
