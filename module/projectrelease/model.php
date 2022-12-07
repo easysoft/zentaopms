@@ -85,7 +85,20 @@ class projectreleaseModel extends model
         {
             $release->project = trim($release->project, ',');
             $release->branch  = trim($release->branch, ',');
-            $release->build   = trim($release->build, ',');
+
+            $branchName = '';
+            if($release->branch != 'normal')
+            {
+                foreach(explode(',', $release->branch) as $releaseBranch)
+                {
+                    $branchName .= $this->loadModel('branch')->getById($releaseBranch);
+                    $branchName .= ',';
+                }
+                $branchName = trim($branchName, ',');
+            }
+            $release->branchName = empty($branchName) ? $this->lang->branch->main : $branchName;
+            $release->build      = trim($release->build, ',');
+
             $buildIdList = array_merge($buildIdList, explode(',', $release->build));
         }
 

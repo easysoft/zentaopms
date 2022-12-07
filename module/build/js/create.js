@@ -14,6 +14,12 @@ $().ready(function()
             if(data) $('#buildBox').html(data);
             $('#builds').attr('data-placeholder', multipleSelect).chosen();
         });
+
+        $.get(createLink('product', 'ajaxGetProductById', 'produtID=' + productID), function(data)
+        {
+            console.log(data.branchName)
+            $('#branchBox').closest('tr').find('th').text(data.branchName);
+        }, 'json');
     });
 
     $('input[name=isIntegrated]').change(function()
@@ -69,6 +75,11 @@ function loadProducts(executionID)
             loadBranches($("#product").val());
         }
     });
+
+    $.get(createLink('product', 'ajaxGetProductById', 'produtID=' + $("#product").val()), function(data)
+    {
+        $('#branchBox').closest('tr').find('th').text(data.branchName);
+    }, 'json');
     loadLastBuild();
 }
 
