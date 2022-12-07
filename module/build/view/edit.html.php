@@ -38,7 +38,7 @@
         </tr>
         <tr>
         <tr class='<?php if(!empty($product) and $product->type == 'normal') echo 'hidden'?>'>
-          <th class='w-120px'><?php echo $lang->build->branch;?></th>
+          <th class='w-120px'><?php echo $product->type == 'normal' ? '' : $lang->product->branchName[$product->type]?></th>
           <td>
             <div class='input-group' id='branchBox'>
               <?php echo html::select('branch[]', $branchTagOption, $build->branch, "class='form-control chosen' multiple required $disabled"); ?>
