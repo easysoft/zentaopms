@@ -63,11 +63,10 @@ class buildModel extends model
      */
     public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t3.name as productName, t4.name as branchName')
+        return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t3.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
-            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.project')->ne(0)
             ->beginIF($projectID)->andWhere('t1.project')->eq((int)$projectID)->fi()
@@ -129,11 +128,10 @@ class buildModel extends model
      */
     public function getExecutionBuilds($executionID, $type = '', $param = '', $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.name as executionName, t3.name as productName, t4.name as branchName')
+        return $this->dao->select('t1.*, t2.name as executionName, t3.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
-            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($executionID)->andWhere('t1.execution')->eq((int)$executionID)->fi()
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()

@@ -35,6 +35,21 @@ class projectreleaseModel extends model
         $release->branch  = trim($release->branch, ',');
         $release->build   = trim($release->build, ',');
 
+        $builds = $this->dao->select('id, branch, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+
+        /* Get release's branches by build. */
+        $branches = array();
+        if($release->productType != 'normal')
+        {
+            foreach($builds as $build)
+            {
+                $branch = explode(',', $build->branch);
+                if(is_array($branch)) $branches += $branch;
+            }
+        }
+
+        $release->branches = $branches;
+
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
         $release->files      = $this->file->getByObject('release', $releaseID);

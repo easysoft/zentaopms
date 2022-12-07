@@ -247,6 +247,7 @@ class projectrelease extends control
 
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        $sort .= ',buildID_asc';
 
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories    = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
@@ -306,6 +307,14 @@ class projectrelease extends control
         $this->view->bugPager     = $bugPager;
         $this->view->leftBugPager = $leftBugPager;
         $this->view->builds       = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject', 0, 'execution', '', false);
+
+        if($this->app->getViewType() == 'json')
+        {
+            unset($this->view->storyPager);
+            unset($this->view->bugPager);
+            unset($this->view->leftBugPager);
+        }
+
         $this->display();
     }
 

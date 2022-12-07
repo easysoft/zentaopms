@@ -373,6 +373,14 @@
                         ?>
                       </td>
                     </tr>
+                    <?php if($product->type != 'normal'):?>
+                    <tr>
+                      <th><?php echo $lang->release->branch;?></th>
+                      <td>
+                        <?php foreach($release->branches as $branchID) echo zget($branches, $branchID, '') . ' ';?>
+                      </td>
+                    </tr>
+                    <?php endif;?>
                     <tr>
                       <th><?php echo $lang->release->status;?></th>
                       <td><?php echo $this->processStatus('release', $release);?></td>
