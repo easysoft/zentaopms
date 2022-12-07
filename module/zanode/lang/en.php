@@ -86,7 +86,9 @@ $lang->zanode->init->not_install   = "Not installed";
 $lang->zanode->init->not_available = "Installed, Not Started";
 $lang->zanode->init->ready         = "Ready";
 $lang->zanode->init->next          = "Next";
+$lang->zanode->init->button        = "Go To Settings";
 
+$lang->zanode->init->initSuccessNoticeTitle = "The initialization is successful, you can perform automated test settings or go to node browse.";
 $lang->zanode->init->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
 $lang->zanode->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
@@ -96,5 +98,5 @@ $lang->zanode->init->serviceStatus = [
 ];
 $lang->zanode->init->title          = "Initialize Node";
 $lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
-$lang->zanode->init->initDesc       = "Execute the init script on the node: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s vm ";
+$lang->zanode->init->initDesc       = "Execute the init script on the node: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s vm -k ";
 $lang->zanode->init->statusTitle    = "Service Status";
