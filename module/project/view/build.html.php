@@ -51,11 +51,14 @@
           <th class="c-name text-left"><?php echo $lang->build->name;?></th>
           <?php if($project->hasProduct):?>
           <th class="c-name w-150px text-left"><?php echo $lang->build->product;?></th>
+          <?php if($showBranch):?>
+          <th class="c-name w-150px text-left"><?php echo $lang->build->branch;?></th>
+          <?php endif;?>
           <?php endif;?>
           <?php if($project->multiple):?>
           <th class="c-name w-150px text-left"><?php echo $lang->executionCommon;?></th>
           <?php endif;?>
-          <th class="c-url w-300px text-left"><?php echo $lang->build->url;?></th>
+          <th class="c-url w-200px text-left"><?php echo $lang->build->url;?></th>
           <th class="c-date w-90px"><?php echo $lang->build->date;?></th>
           <th class="c-user w-70px"><?php echo $lang->build->builder;?></th>
           <th class="c-actions-5"><?php echo $lang->actions;?></th>
@@ -68,7 +71,6 @@
         <tr data-id="<?php echo $productID;?>">
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink($module, 'view', "buildID=$build->id"), sprintf('%03d', $build->id), '', "data-app='project'");?></td>
           <td class="c-name" title='<?php echo $build->name;?>'>
-            <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink($module, 'view', "buildID=$build->id"), $build->name, '', "data-app='project'");?>
             <?php if(!$build->execution):?>
               <span class='icon icon-code-fork text-muted' title='<?php echo $lang->build->integrated;?>'></span>
@@ -76,6 +78,9 @@
           </td>
           <?php if($project->hasProduct):?>
           <td class="c-name text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
+          <?php if($showBranch):?>
+          <td class="c-name text-left" title='<?php echo $build->branchName;?>'><?php echo $build->branchName;?></td>
+          <?php endif;?>
           <?php endif;?>
           <?php if($project->multiple):?>
           <?php if($build->execution):?>
