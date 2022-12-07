@@ -21,7 +21,7 @@ class tasksEntry extends entry
     public function get($executionID = 0)
     {
         /* Get tasks by search, search arguments available: pri, assignedTo, status, id, name. Pager arguments will be utilized as well. */
-        if($this->param('search', 0) == 1)
+        if($this->param('search', 0) == 1) // TODO: document this api.
         {
             $this->loadModel('task');
             $searchParams = array();
