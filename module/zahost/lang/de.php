@@ -37,7 +37,7 @@ $lang->zahost->os         = 'System';
 $lang->zahost->imageName  = 'Image File';
 
 $lang->zahost->createZanode        = 'Create Zanode';
-$lang->zahost->initHostNotice      = 'Save successfully, initialize the ZAhost or return list';
+$lang->zahost->initNotice          = 'Save successfully, initialize the ZAhost or return list';
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
 $lang->zahost->undeletedNotice     = "The host has nodes that cannot be deleted.";
@@ -53,9 +53,10 @@ $lang->zahost->initHost->next          = "Next";
 $lang->zahost->initHost->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
 $lang->zahost->initHost->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
-$lang->zahost->initHost->serviceStatus = [
-    "kvm" => 'not_install',
-    "novnc" => 'not_install',
+$lang->zahost->init->serviceStatus = [
+    "kvm"        => 'not_install',
+    "nginx"      => 'not_install',
+    "novnc"      => 'not_install',
     "websockify" => 'not_install',
 ];
 $lang->zahost->initHost->title          = "Initialize Host";

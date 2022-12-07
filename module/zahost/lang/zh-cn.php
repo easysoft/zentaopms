@@ -37,31 +37,32 @@ $lang->zahost->os         = '操作系统';
 $lang->zahost->imageName  = '镜像文件';
 
 $lang->zahost->createZanode        = '创建执行节点';
-$lang->zahost->initHostNotice      = '保存成功，请您初始化宿主机或返回列表。';
+$lang->zahost->initNotice          = '保存成功，请您初始化宿主机或返回列表。';
 $lang->zahost->createZanodeNotice  = '初始化成功，您现在可以创建执行节点了。';
 $lang->zahost->downloadImageNotice = '初始化成功，请下载镜像用于创建执行节点。';
 $lang->zahost->undeletedNotice     = "宿主机下存在执行节点无法删除。";
 $lang->zahost->netError            = '无法连接到宿主机，请检查网络后重试。';
 
-$lang->zahost->initHost = new stdclass;
-$lang->zahost->initHost->statusTitle = "服务状态";
-$lang->zahost->initHost->checkStatus = "检测服务状态";
-$lang->zahost->initHost->not_install = "未安装";
-$lang->zahost->initHost->not_available = "已安装，未启动";
-$lang->zahost->initHost->ready = "已就绪";
-$lang->zahost->initHost->next = "下一步";
+$lang->zahost->init = new stdclass;
+$lang->zahost->init->statusTitle = "服务状态";
+$lang->zahost->init->checkStatus = "检测服务状态";
+$lang->zahost->init->not_install = "未安装";
+$lang->zahost->init->not_available = "已安装，未启动";
+$lang->zahost->init->ready = "已就绪";
+$lang->zahost->init->next = "下一步";
 
-$lang->zahost->initHost->initFailNoticeTitle = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
-$lang->zahost->initHost->initFailNoticeDesc = "1. 重新执行脚本 <br/>2. 查看初始化常见问题";
-$lang->zahost->initHost->serviceStatus = [
-    "kvm" => 'not_install',
-    "novnc" => 'not_install',
+$lang->zahost->init->initFailNoticeTitle = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
+$lang->zahost->init->initFailNoticeDesc = "1. 重新执行脚本 <br/>2. 查看初始化常见问题";
+$lang->zahost->init->serviceStatus = [
+    "kvm"        => 'not_install',
+    "nginx"      => 'not_install',
+    "novnc"      => 'not_install',
     "websockify" => 'not_install',
 ];
-$lang->zahost->initHost->title          = "初始化宿主机";
-$lang->zahost->initHost->descTitle      = "请根据引导完成宿主机上的初始化: ";
-$lang->zahost->initHost->initDesc       = "1. 在宿主机上执行：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
-$lang->zahost->initHost->statusTitle    = "Service Status";
+$lang->zahost->init->title          = "初始化宿主机";
+$lang->zahost->init->descTitle      = "请根据引导完成宿主机上的初始化: ";
+$lang->zahost->init->initDesc       = "1. 在宿主机上执行：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
+$lang->zahost->init->statusTitle    = "服务状态";
 
 $lang->zahost->image = new stdclass;
 $lang->zahost->image->list          = '镜像仓库';
