@@ -17,7 +17,6 @@ $().ready(function()
 
         $.get(createLink('product', 'ajaxGetProductById', 'produtID=' + productID), function(data)
         {
-            console.log(data.branchName)
             $('#branchBox').closest('tr').find('th').text(data.branchName);
         }, 'json');
     });
@@ -80,6 +79,7 @@ function loadProducts(executionID)
     {
         $('#branchBox').closest('tr').find('th').text(data.branchName);
     }, 'json');
+
     loadLastBuild();
 }
 

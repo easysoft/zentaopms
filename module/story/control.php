@@ -950,6 +950,7 @@ class story extends control
         $this->view->productStories   = $productStories;
         $this->view->branchOption     = $branchOption;
         $this->view->branchTagOption  = $branchTagOption;
+        $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
         $this->view->lastReviewer     = $this->story->getLastReviewer($story->id);

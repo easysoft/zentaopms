@@ -109,7 +109,6 @@
             <div class='form-group'>
               <div>
                 <ul class='list-unstyled'>
-                  <?php $branches = $branchTagOption;?>
                   <?php include './blocksibling.html.php';?>
                 </ul>
               </div>
