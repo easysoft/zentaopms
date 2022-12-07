@@ -57,7 +57,7 @@
 </div>
 <?php if($task):?>
 <script>
-var setProgress = self.setInterval("getTaskProgress()",1500);
+var setProgress = self.setInterval("getTaskProgress()", 1500);
 
 $(function()
 {
@@ -76,7 +76,7 @@ function getTaskProgress()
 
         if(rate == 1 || status == 'completed') rate = 1;
 
-        $('.rate').css('width', rate + '%');
+        $('.rate').css('width', rate*100 + '%');
         if(rate == 1 || (status != 'inprogress' && status != 'created'))
         {
             updateStatus(data);
