@@ -57,7 +57,7 @@
             <th class='c-os'><?php common::printOrderLink('t1.osName', $orderBy, $vars, $lang->zanode->osName); ?></th>
             <th class='c-status'><?php common::printOrderLink('t1.status', $orderBy, $vars, $lang->zanode->status); ?></th>
             <th class='c-host'><?php common::printOrderLink('t2.id', $orderBy, $vars, $lang->zanode->hostName); ?>
-            <th class='c-actions-7 text-center'><?php echo $lang->actions ?></th>
+            <th class='c-actions-6 text-center'><?php echo $lang->actions ?></th>
           </tr>
         </thead>
         <tbody>
@@ -83,8 +83,14 @@
                 $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
                 $rebootAttr .= $node->status == 'suspend' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
-                if(common::hasPriv('zahost', 'suspend')) common::printLink('zanode', 'suspend', "zanodeID={$node->id}", "<i class='icon icon-pause'></i> ", '', $suspendAttr);
-                if(common::hasPriv('zahost', 'resume')) common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-back'></i> ", '', $resumeAttr);
+                if($node->status == "suspend")
+                {
+                    if(common::hasPriv('zahost', 'resume')) common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-back'></i> ", '', $resumeAttr);
+                }
+                else
+                {
+                    if(common::hasPriv('zahost', 'suspend')) common::printLink('zanode', 'suspend', "zanodeID={$node->id}", "<i class='icon icon-pause'></i> ", '', $suspendAttr);
+                }
                 if(common::hasPriv('zahost', 'reboot')) common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
                 if(common::hasPriv('zahost', 'createImage')) common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-plus'></i> ", '', "class='btn iframe' title='{$lang->zanode->createImage}' data-width='50%'", '', true);
                 if(common::hasPriv('zahost', 'edit')) common::printIcon('zanode', 'edit', "id={$node->id}", $node, 'list');
