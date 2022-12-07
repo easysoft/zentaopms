@@ -145,3 +145,5 @@ ALTER TABLE `zt_build` ADD `builds` varchar(255) NOT NULL AFTER `execution`;
 
 UPDATE `zt_block` SET block = 'scrumrisk'  WHERE module = 'project' AND type = 'scrum' AND block = 'waterfallrisk';
 UPDATE `zt_block` SET block = 'scrumissue' WHERE module = 'project' AND type = 'scrum' AND block = 'waterfallissue';
+
+ALTER TABLE `zt_repofiles` ADD `oldPath` varchar(255) DEFAULT '' AFTER `path`;

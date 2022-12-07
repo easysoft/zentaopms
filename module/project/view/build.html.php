@@ -11,8 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('allExecutions', $allExecutions)?>
-<?php js::set('executions', $executions)?>
 <?php js::set('projectID', $projectID)?>
 <?php js::set('noDevStage', $lang->project->noDevStage)?>
 <?php js::set('createExecution', $lang->project->createExecution)?>
@@ -81,7 +79,23 @@
           <td class="c-name text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
           <?php endif;?>
           <?php if($project->multiple):?>
+          <?php if($build->execution):?>
           <td class="c-name text-left" title='<?php echo $build->executionName;?>'><?php echo $build->executionName;?></td>
+          <?php else:?>
+          <td class="c-name text-left">
+            <?php $childExecutions = array();?>
+            <?php foreach($build->builds as $childBuild):?>
+            <?php $childExecutions[$childBuild->execution] = $childBuild->execution;?>
+            <?php endforeach;?>
+
+            <?php foreach($childExecutions as $execution):?>
+            <?php $executionName = zget($executions, $execution, '');?>
+            <?php if($executionName):?>
+            <span title="<?php echo $executionName;?>"><?php echo $executionName;?></span></br>
+            <?php endif;?>
+            <?php endforeach;?>
+          </td>
+          <?php endif;?>
           <?php endif;?>
           <td class="c-url" title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
           <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>

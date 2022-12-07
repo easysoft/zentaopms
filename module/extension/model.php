@@ -780,11 +780,10 @@ class extensionModel extends model
     /**
      * Update an extension.
      *
-     * @param  string    $extension
-     * @param  string    $status
-     * @param  array     $files
+     * @param  string        $extension
+     * @param  array|object  $data
      * @access public
-     * @return void
+     * @return int
      */
     public function updateExtension($extension, $data)
     {

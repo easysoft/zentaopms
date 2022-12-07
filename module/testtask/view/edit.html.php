@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('projectID', $task->project);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -24,16 +25,18 @@
     </div>
     <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
-        <tr class="<?php if(isset($project) and !$project->multiple) echo 'hide';?>">
+        <?php echo html::hidden('product', $task->product);?>
+        <?php if(!empty($project) and !$project->multiple):?>
+        <?php echo html::hidden('execution', $task->execution);?>
+        <?php else:?>
+        <tr class='<?php echo ($app->tab == 'execution' and $task->execution) ? 'hide' : '';?>'>
           <th class='w-100px'><?php echo $lang->testtask->execution;?></th>
           <td class='w-p35-f'>
-            <?php
-            echo html::select('execution', $executions, $task->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");
-            echo html::hidden('product', $task->product);
-            ?>
+            <?php echo html::select('execution', $executions, $task->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
           </td>
           <td></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th class='w-100px'><?php echo $lang->testtask->build;?></th>
           <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>

@@ -232,8 +232,8 @@ $lang->action->desc->resume               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->reboot               = '$date, 由 <strong>$actor</strong> 重启。' . "\n";
 $lang->action->desc->destroy              = '$date, 由 <strong>$actor</strong> 销毁。' . "\n";
 $lang->action->desc->switchtolight        = '$date, 由于 <strong>'. $lang->admin->system .'</strong> 从全生命周期管理模式切换为轻量管理模式，项目访问控制由项目集内公开调整为私有。' . "\n";
-$lang->action->desc->unlinkproduct        = '$date, 系统判断由于迭代所属项目与$extra取消关联，同步将迭代与$extra取消关联。' . "\n";
 $lang->action->desc->getvnc               = '$date, <strong>$actor</strong>对执行节点 <strong>$extra</strong> 进行了远程操控。' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, 系统判断由于' . $lang->executionCommon . '所属项目与$extra取消关联，同步将' . $lang->executionCommon . '与$extra取消关联。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";

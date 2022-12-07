@@ -235,7 +235,7 @@ h3 {font-size: 16px;}
 #fileTabs .nav-tabs > li.active > a::after {background: #FFFFFF;}
 #fileTabs > .tabs-navbar {overflow: hidden; padding-bottom: 10px; position: relative; height: 35px; background: #efefef;}
 #fileTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex; padding-left: 25px;}
-.repoCode .content, .repoCode .btn {background-color: #efefef; border: none;}
+.repoCode .content, .repoCode .btn:not(.btn-primary) {background-color: #efefef; border: none;}
 .repoCode .btn.btn-right, .repoCode .btn.btn-left {margin-right: 0; padding: 6px 6px;}
 #related .btn-right, #related .btn-left {padding-top: 9px;}
 #log .action-btn {margin-top: -7px;}

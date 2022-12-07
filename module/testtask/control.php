@@ -250,7 +250,7 @@ class testtask extends control
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID, 'stagefilter');
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withexecution', $projectID, 'project');
 
         $execution = $this->loadModel('execution')->getByID($executionID);
         if(!empty($execution) and $execution->type == 'kanban') $this->lang->testtask->execution = str_replace($this->lang->execution->common, $this->lang->kanban->common, $this->lang->testtask->execution);
@@ -816,13 +816,18 @@ class testtask extends control
                     $executions[$executionID] = $project->name . "({$this->lang->project->disableExecution})";
                 }
             }
+            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $executionID, 'execution');
+        }
+        else
+        {
+            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $task->project, 'project');
         }
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->task         = $task;
         $this->view->project      = $this->project->getByID($projectID);
         $this->view->executions   = $executions;
-        $this->view->builds       = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');
+        $this->view->builds       = empty($productID) ? array() : $builds;
         $this->view->testreports  = $this->loadModel('testreport')->getPairs($task->product, $task->testreport);
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted|noclosed', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
@@ -1430,7 +1435,7 @@ class testtask extends control
         $this->view->case    = $case;
         $this->view->runID   = $runID;
         $this->view->results = $results;
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $case->branch, $params = '');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $case->branch);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         $this->display();
@@ -1500,7 +1505,7 @@ class testtask extends control
 
         $projectID  = $this->app->tab == 'qa' ? 0 : $this->session->project;
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk', 0, 'execution', '', false);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -1510,6 +1515,7 @@ class testtask extends control
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->view->productID  = $productID;
+        $this->view->projectID  = $projectID;
         $this->display();
     }
 

@@ -374,3 +374,9 @@ $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
 
 $lang->project->multiple = "启用{$lang->executionCommon}";
+
+$lang->project->copyProject = new stdClass();
+$lang->project->copyProject->nameTips           = '『项目名称』不可重复需要修改。';
+$lang->project->copyProject->codeTips           = '『项目代号』不可重复需要修改。';
+$lang->project->copyProject->endTips            = '『计划完成』不能为空。';
+$lang->project->copyProject->daysTips           = '『可用工作日』应当是数字。';

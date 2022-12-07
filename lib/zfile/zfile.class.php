@@ -19,10 +19,11 @@ class zfile
      * @param  bool      $logLevel
      * @param  string    $logFile 
      * @param  array     $excludeFiles
+     * @param  bool      $toIsLink
      * @access public
      * @return array     copied files, count, size or message.
      */
-    public function copyDir($from, $to, $logLevel = false, $logFile = '', $excludeFiles = array())
+    public function copyDir($from, $to, $logLevel = false, $logFile = '', $excludeFiles = array(), $toIsLink = false)
     {
         static $copiedFiles = array();
         static $errorFiles  = array();
@@ -42,7 +43,16 @@ class zfile
         if(!empty($log['message'])) return $log;
 
         $from = realpath($from) . '/';
-        $to   = realpath($to) . '/';
+        if(is_link($to) || $toIsLink)
+        {
+            $to = $to . '/';
+
+            $toIsLink = true;
+        }
+        else
+        {
+            $to = realpath($to) . '/';
+        }
 
         $entries = scandir($from);
         foreach($entries as $entry)
@@ -83,7 +93,7 @@ class zfile
             {
                 $nextFrom = $fullEntry;
                 $nextTo   = $to . $entry;
-                $result   = $this->copyDir($nextFrom, $nextTo, $logLevel, $logFile);
+                $result   = $this->copyDir($nextFrom, $nextTo, $logLevel, $logFile, array(), $toIsLink);
                 $count   += $result['count'];
                 $size    += $result['size'];
             }

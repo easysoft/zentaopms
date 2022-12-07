@@ -640,7 +640,7 @@ class myModel extends model
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs();
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getAllModulePairs();
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList;
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($products);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($products, 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
@@ -911,7 +911,7 @@ class myModel extends model
         $this->config->ticket->search['params']['module']['values']  = array('' => '') + $this->loadModel('tree')->getAllModulePairs();
         $grantProducts = $this->loadModel('feedback')->getGrantProducts();
         $productIDlist = array_keys($grantProducts);
-        $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productIDlist);
+        $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productIDlist, 'all', 'releasetag');
 
         $this->loadModel('search')->setSearchParams($this->config->ticket->search);
     }

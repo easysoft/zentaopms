@@ -38,6 +38,7 @@ $(function()
         $('#filesTree').css('height', paneHeight + 45)
     }
     setHeight();
+    $(window).resize(setHeight);
 
     $(document).on('click', '.repoFileName', function()
     {

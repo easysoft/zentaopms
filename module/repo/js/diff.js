@@ -46,7 +46,7 @@ function getDiffs(fileName)
     {
         if(diff.fileName == fileName)
         {
-            if(typeof diff.contents[0].lines != 'object') return result;
+            if(!diff.contents || typeof diff.contents[0].lines != 'object') return result;
 
             var lines = diff.contents[0].lines;
             $.each(lines, function(l, code)
@@ -115,11 +115,13 @@ $(document).ready(function()
     function setHeight()
     {
         var paneHeight = $(window).height() - 120;
+        if(edition != 'open') paneHeight -= 80;
         if(isonlybody) paneHeight = 500;
         $('#fileTabs .tab-pane').css('height', paneHeight + 'px')
         $('#filesTree').css('height', paneHeight + 35)
     }
     setHeight();
+    $(window).resize(setHeight);
 
     $(document).on('click', '.repoFileName', function()
     {
