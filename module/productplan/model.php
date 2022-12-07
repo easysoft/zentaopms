@@ -325,7 +325,7 @@ class productplanModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF($branch !== 'all' and $branch !== '')->andWhere($branchQuery)->fi()
+            ->beginIF($branch !== 'all' and $branch !== '' and !empty($branchQuery))->andWhere($branchQuery)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
@@ -1054,7 +1054,7 @@ class productplanModel extends model
                 foreach($planStory as $id => $story)
                 {
                     $projectBranches = zget($projectProducts, $story->product, array());
-                    if($story->status == 'draft' or $story->status == 'reviewing' or (!empty($story->branch) and !empty($projectBranches) and !isset($projectBranches[$story->branch])))
+                    if($story->status == 'active' or (!empty($story->branch) and !empty($projectBranches) and !isset($projectBranches[$story->branch])))
                     {
                         unset($planStory[$id]);
                         continue;

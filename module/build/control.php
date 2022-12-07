@@ -199,7 +199,10 @@ class build extends control
         {
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
-        if(!isset($branchTagOption[$build->branch])) $branchTagOption[$build->branch] = $this->branch->getById($build->branch, 0, 'name');
+        foreach(explode(',', $build->branch) as $buildBranch)
+        {
+            if(!isset($branchTagOption[$buildBranch])) $branchTagOption[$buildBranch] = $this->branch->getById($buildBranch, 0, 'name');
+        }
 
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
@@ -306,6 +309,16 @@ class build extends control
         $this->view->generatedBugPager = $generatedBugPager;
 
         $this->executeHooks($buildID);
+        $branchName = '';
+        if($build->productType != 'normal')
+        {
+            foreach(explode(',', $build->branch) as $buildBranch)
+            {
+                $branchName .= $this->loadModel('branch')->getById($buildBranch);
+                $branchName .= ',';
+            }
+            $branchName = trim($branchName, ',');
+        }
 
         /* Assign. */
         $this->view->canBeChanged = common::canBeChanged('build', $build); // Determines whether an object is editable.
@@ -321,7 +334,7 @@ class build extends control
         $this->view->bugs         = $bugs;
         $this->view->type         = $type;
         $this->view->bugPager     = $bugPager;
-        $this->view->branchName   = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
+        $this->view->branchName   = empty($branchName) ? $this->lang->branch->main : $branchName;
         $this->view->childBuilds  = empty($build->builds) ? array() : $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
 
         if($this->app->getViewType() == 'json')

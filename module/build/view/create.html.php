@@ -33,12 +33,6 @@
           <td>
             <div class='input-group' id='productBox'>
               <?php echo html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
-              <?php
-              if(!empty($product) and $product->type != 'normal')
-              {
-                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, key($product->branches), "class='form-control chosen'");
-              }
-              ?>
             </div>
           </td>
           <?php else:?>
@@ -49,6 +43,14 @@
           </td>
           <?php endif;?>
           <td></td>
+        </tr>
+        <tr class='<?php if(!empty($product) and $product->type == 'normal') echo 'hidden'?>'>
+          <th class='w-120px'><?php echo $lang->build->branch;?></th>
+          <td>
+            <div class='input-group' id='branchBox'>
+              <?php echo html::select('branch[]', $branches, key($product->branches), "class='form-control chosen' multiple required"); ?>
+            </div>
+          </td>
         </tr>
         <tr class='hide'>
           <th class='w-120px'><?php echo $lang->build->builds;?></th>

@@ -382,21 +382,44 @@ class buildModel extends model
             ->setDefault('product', 0)
             ->setDefault('branch', 0)
             ->setDefault('builds', '')
-            ->cleanInt('product,branch')
+            ->cleanInt('product')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->join('builds', ',')
+            ->join('branch', ',')
             ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid')
             ->get();
 
-        if($this->post->isIntegrated == 'yes') $build->execution = 0;
+        if($this->post->isIntegrated == 'yes')
+        {
+            $build->execution = 0;
+            $branchPairs    = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchPairs();
+            $relationBranch = array();
+            foreach($branchPairs as $branches)
+            {
+                foreach(explode(',', $branches) as $branch)
+                {
+                    if(!isset($relationBranch[$branch])) $relationBranch[$branch] = $branch;
+                }
+            }
+            $build->branch = implode(',', $relationBranch);
+        }
+
+        $product = $this->loadModel('product')->getByID($build->product);
+        if($product->type != 'normal' and $this->post->isIntegrated == 'no' and !isset($_POST['branch']))
+        {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+        }
+
+        if(dao::isError()) return false;
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($this->config->build->create->requiredFields, 'notempty')
-            ->check('name', 'unique', "product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
+            ->check('name', 'unique', "product = {$build->product} AND branch = '{$build->branch}' AND deleted = '0'")
             ->checkFlow()
             ->exec();
 
@@ -426,17 +449,27 @@ class buildModel extends model
             ->setIF(!isset($_POST['branch']), 'branch', $oldBuild->branch)
             ->setDefault('product', $oldBuild->product)
             ->setDefault('builds', '')
-            ->cleanInt('product,branch,execution')
+            ->cleanInt('product,execution')
             ->join('builds', ',')
+            ->join('branch', ',')
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();
+
+        $product = $this->loadModel('product')->getByID($build->product);
+        if($product->type != 'normal' and $this->post->isIntegrated == 'no' and !isset($_POST['branch']))
+        {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+        }
+
+        if(dao::isError()) return false;
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')
             ->where('id')->eq($buildID)
-            ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
+            ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = '{$build->branch}' AND deleted = '0'")
             ->checkFlow()
             ->exec();
         if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
