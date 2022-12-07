@@ -45,3 +45,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
 
 UPDATE `zt_grouppriv` SET `module` = 'dataview' WHERE `module` = 'dataset' AND `method` in ('create', 'browse', 'edit', 'delete');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'dataset' AND `method` = 'view';
+
+ALTER TABLE `zt_chart` ADD `sql`     text       NOT NULL AFTER `desc`;
+ALTER TABLE `zt_chart` ADD `fields`  mediumtext NOT NULL AFTER `sql`;
+ALTER TABLE `zt_chart` ADD `objects` mediumtext NOT NULL AFTER `fields`;
