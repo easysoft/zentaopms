@@ -1582,17 +1582,14 @@ class executionModel extends model
                 ->andWhere('type')->eq('execution')
                 ->fetchPairs();
         }
-        $project = $this->loadModel('project')->getByID($projectID);
 
         $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')
-            ->beginIF(!empty($project->division))->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t4.id=t3.product')->fi()
+            ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
-            ->beginIF(!empty($project->division))->andWhere('t4.deleted')->eq('0')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
@@ -1607,7 +1604,13 @@ class executionModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchPairs();
+        if(empty($productID) and !empty($executions))
+        {
+            $projectProductList = $this->dao->select('t1.project, t1.product, t2.deleted')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+                ->where('t1.project')->in(array_keys($executions))
+                ->fetchAll('project');
+        }
 
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
@@ -1671,9 +1674,11 @@ class executionModel extends model
             }
 
             /* Bind execution product */
-            if(!empty($projectProductIdList) and !empty($projectProductIdList[$execution->id]))
+            if(!empty($projectProductList) and !empty($projectProductList[$execution->id]))
             {
-                $execution->product = $projectProductIdList[$execution->id];
+                $execution->product = $projectProductList[$execution->id]->product;
+
+                if($projectProductList[$execution->id]->deleted) unset($executions[$key]);
             }
         }
         return array_values($executions);
