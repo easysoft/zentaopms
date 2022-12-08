@@ -1466,7 +1466,10 @@ class project extends control
                 {
                     $showBranch  = true;
                     $branchPairs = $branchGroups[$build->product];
-                    foreach(explode(',', trim($build->branch, ',')) as $branchID) $build->branchName .= "{$branchPairs[$branchID]},";
+                    foreach(explode(',', trim($build->branch, ',')) as $branchID)
+                    {
+                        if(isset($branchPairs[$branchID])) $build->branchName .= "{$branchPairs[$branchID]},";
+                    }
                     $build->branchName = trim($build->branchName, ',');
                 }
             }
