@@ -497,22 +497,20 @@ class bugModel extends model
     }
 
     /**
-     * Get bug list of a plan or build.
+     * Get bug list of a plan.
      *
-     * @param  int    $LinkID planID|$buildID
+     * @param  int    $planID
      * @param  string $status
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $viewType plan|build
      * @access public
      * @return void
      */
-    public function getLinkBugs($LinkID, $status = 'all', $orderBy = 'id_desc', $pager = null, $viewType = 'plan')
+    public function getPlanBugs($PlanID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $view = $viewType == 'plan' ? 'plan' : 'build';
         $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_BUG)
-            ->where($view)->eq((int)$LinkID)->fi()
+            ->where('plan')->eq((int)$PlanID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
@@ -1520,7 +1518,7 @@ class bugModel extends model
     /**
      * Get bugs to link.
      *
-     * @param  int    $bugID
+     * @param  int|array|string $bugID
      * @param  string $browseType
      * @param  int    $queryID
      * @param  object $pager

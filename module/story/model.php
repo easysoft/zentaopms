@@ -3674,28 +3674,25 @@ class storyModel extends model
     }
 
     /**
-     * Get stories list of a plan or build.
+     * Get stories list of a plan.
      *
-     * @param  int    $LinkID planID|buildID
+     * @param  int    $planID
      * @param  string $status
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $viewType plan|build
      * @access public
      * @return array
      */
-    public function getLinkStories($LinkID, $status = 'all', $orderBy = 'id_desc', $pager = null, $viewType = 'plan')
+    public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $table  = $viewType == 'plan' ? 'zt_planstory' : 'zt_buildstory';
-        $fields = $viewType == 'plan' ? 't1.plan' : 't1.build';
         if(strpos($orderBy, 'module') !== false)
         {
             $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';
-            $stories = $this->dao->select('distinct t1.story, ' . $fields . ', t1.order, t2.*')
-                ->from($table)->alias('t1')
+            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
+                ->from(TALBE_PLANSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
-                ->where($fields)->eq($LinkID)
+                ->where('t1.plan')->eq($planID)
                 ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)
@@ -3703,10 +3700,10 @@ class storyModel extends model
         }
         else
         {
-            $stories = $this->dao->select("distinct t1.story, ". $fields . ", t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder")
-                ->from($table)->alias('t1')
+            $stories = $this->dao->select("distinct t1.story, t1.plan, t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder")
+                ->from(TABLE_PLANSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where($fields)->eq($LinkID)
+                ->where('t1.plan')->eq($planID)
                 ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)

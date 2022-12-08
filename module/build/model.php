@@ -31,24 +31,6 @@ class buildModel extends model
             ->fetch();
         if(!$build) return false;
 
-        /* Sync linked stories and bugs. */
-        $storyPairs = explode(',', $build->stories);
-
-        $buildBugs  = trim($build->bugs, ',');
-        if(strpos($buildBugs, ',') !== false) $buildBugs = str_replace(',', "','", $buildBugs);
-        $this->dao->update(TABLE_BUG)->set('build')->eq((int)$buildID)->where('id')->in("$buildBugs")->exec();
-        $this->dao->delete()->from('zt_buildstory')->where('build')->eq($build->id)->exec();
-
-        $order = 1;
-        foreach($storyPairs as $storyID)
-        {
-             $buildStory = new stdclass();
-             $buildStory->build = $build->id;
-             $buildStory->story = $storyID;
-             $buildStory->order = $order ++;
-             $this->dao->replace('zt_buildstory')->data($buildStory)->exec();
-        }
-
         $build = $this->joinChildBuilds($build);
         $build = $this->loadModel('file')->replaceImgURL($build, 'desc');
         $build->files = $this->file->getByObject('build', $buildID);

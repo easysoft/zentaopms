@@ -69,6 +69,7 @@ $lang->build->notice->createTest      = "该版本所属执行已删除，不能
 $lang->build->confirmChangeBuild = "分支『%s』解除关联后，分支下的%s个{$lang->SRCommon}和%s个Bug将同步从版本移除，是否解除？";
 $lang->build->confirmRemoveStory = "分支『%s』解除关联后，分支下的%s个{$lang->SRCommon}将同步从计划中移除，是否解除？";
 $lang->build->confirmRemoveBug   = "分支『%s』解除关联后，分支下的%s个Bug将同步从计划中移除，是否解除？";
+$lang->build->confirmRemoveTips  = "确认删除分支『%s』吗？";
 
 $lang->build->finishStories = " 本次共完成 %s 个{$lang->SRCommon}";
 $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';

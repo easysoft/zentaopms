@@ -1,23 +1,6 @@
 $().ready(function()
 {
     var oldExecutionID = $('#execution').val();
-    $('#dataform').on('change', '#branch', function()
-    {
-          var newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
-          $.get(createLink('build', 'ajaxGetBranch', 'buildID=' + buildID + '&newBranch=' + newBranch), function(unlinkBranch)
-          {
-              if(unlinkBranch != '')
-              {
-                  var result = confirm(unlinkBranch) ? true : false;
-                  if(!result)
-                  {
-                      $('#branch').val(oldBranch[buildID].split(','));
-                      $('#branch').trigger("chosen:updated");
-                  }
-              }
-          });
-    });
-
     $(document).on('change', '#product, #branch', function()
     {
         var productID = $('#product').val();
@@ -34,6 +17,20 @@ $().ready(function()
                 $('#builds').attr('data-placeholder', multipleSelect).chosen();
             });
         }
+
+        var newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
+        $.get(createLink('build', 'ajaxGetBranch', 'buildID=' + buildID + '&newBranch=' + newBranch), function(unlinkBranch)
+        {
+            if(unlinkBranch != '')
+            {
+                var result = confirm(unlinkBranch) ? true : false;
+                if(!result)
+                {
+                    $('#branch').val(oldBranch[buildID].split(','));
+                    $('#branch').trigger("chosen:updated");
+                }
+            }
+        });
 
         $.get(createLink('product', 'ajaxGetProductById', 'produtID=' + productID), function(data)
         {

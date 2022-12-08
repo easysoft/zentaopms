@@ -713,14 +713,16 @@ class build extends control
     {
         $build        = $this->build->getByID($buildID);
         $oldBranch    = $build->branch;
-        $buildStories = $this->loadModel('story')->getLinkStories($buildID, 'all', '', '', 'build');
-        $buildBugs    = $this->loadModel('bug')->getLinkBugs($buildID, 'all', '', '', 'build');
+        $buildStories = $this->loadModel('story')->getByList($build->allStories);
+        $buildBugs    = $this->loadModel('bug')->getByList($build->allBugs);
         $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
+        $this->app->loadLang('branc');
 
         $removeBranches = '';
         foreach(explode(',', $oldBranch) as $oldBranchID)
         {
             if($oldBranchID and strpos(",$newBranch,", ",$oldBranchID,") === false) $removeBranches .= "{$branchPairs[$oldBranchID]},";
+            if($oldBranchID == '0') $removeBranches = $this->lang->branch->main;
         }
 
         $unlinkStoryCounts = 0;
@@ -748,7 +750,11 @@ class build extends control
         }
         elseif($unlinkBugCounts)
         {
-            printf($this->lang->build->confirmRemoveBug, trim($removeBranches, ','), $conflictBugCounts);
+            printf($this->lang->build->confirmRemoveBug, trim($removeBranches, ','), $unlinkBugCounts);
+        }
+        else
+        {
+            printf($this->lang->build->confirmRemoveTips, trim($removeBranches, ','));
         }
     }
 
