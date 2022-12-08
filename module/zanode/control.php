@@ -138,6 +138,7 @@ class zanode extends control
         $this->view->notice     = $this->lang->zanode->init->initSuccessNoticeTitle;
         $this->view->buttonName = $this->lang->zanode->init->button;
         $this->view->modalLink  = $this->createLink('zanode', 'browse');
+        $this->view->closeLink  = $this->createLink('zanode', 'browse');
 
         $this->display();
     }
