@@ -360,17 +360,22 @@ class zentaoBot extends xuanBot
         $conds = $this->parseArguments($args, $keys);
         $conds->search = 1;
         $conds->order  = 'status_asc';
+        $conds->limit  = 10;
+
+        if(is_object($pager))
+        {
+            $conds->page  = $pager->pageID;
+            $conds->limit = $pager->recPerPage;
+        }
 
         $result = $this->loadEntry('tasks', 'get', array(), (array)$conds);
 
         if(isset($result->tasks))
         {
-            /* Update pager with result. */
             $pager->setRecTotal($result->total);
             $pager->setRecPerPage($result->limit);
             $pager->setPageID($result->page);
             $pager->setPageTotal();
-
             return $result->tasks;
         }
 
@@ -459,7 +464,7 @@ class zentaoBot extends xuanBot
 
         if(empty($params))
         {
-            $originCommand = rawurlencode($this->lang->finishTask . ' ' . implode(' ', $originArgs));
+            $originCommand = rawurlencode($this->lang->finishCommand . ' ' . implode(' ', $originArgs));
 
             $json = (object)array
             (
@@ -609,7 +614,7 @@ class zentaoBot extends xuanBot
 
         $taskTable = $this->renderTaskTable($tasks);
 
-        $originCommand = $this->lang->viewTask . ' ' . implode(' ', $originArgs);
+        $originCommand = $this->lang->viewCommand . ' ' . implode(' ', $originArgs);
         $paging        = "$pager->pageID / $pager->pageTotal";
         if($pager->pageID != 1)
         {
@@ -682,13 +687,13 @@ class zentaoBot extends xuanBot
                         }
                         else
                         {
-                            $tr .= "<td class='text-nowrap'>{$this->users[$task->$key]}</td>";
+                            $tr .= "<td class='text-nowrap'>{$task->assignedTo->realname}</td>";
                         }
                     break;
                     case 'actions':
-                        $startUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->startTask} #$task->id";
-                        $finishUrl = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->finishTask} #$task->id";
-                        $closeUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->closeTask} #$task->id";
+                        $startUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->startCommand} #$task->id";
+                        $finishUrl = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->finishCommand} #$task->id";
+                        $closeUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->closeCommand} #$task->id";
 
                         $canStart  = in_array($task->status, array('wait', 'pause'));
                         $canFinish = in_array($task->status, array('wait', 'pause', 'doing'));
@@ -777,7 +782,7 @@ class zentaoBot extends xuanBot
 
         if(count($args) == 0)
         {
-            $originCommand = rawurlencode($this->lang->startTask . ' ' . implode(' ', $originArgs));
+            $originCommand = rawurlencode($this->lang->startCommand . ' ' . implode(' ', $originArgs));
 
             $realStarted = $this->formatDate($task, 'realStarted');
 
