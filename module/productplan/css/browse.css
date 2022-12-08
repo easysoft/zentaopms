@@ -1,7 +1,7 @@
 .table td.content div {height: 25px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; float: left; max-width: calc(100% - 20px);}
 .table td.content .more {position: absolute; right: 16px;}
 .table td.content .more .icon {color: #838a9d;}
-td.c-branch {overflow: hidden; text-align: left !important; text-overflow: ellipsis; white-space: nowrap;}
+td.c-branch {overflow: hidden; text-align: left !important; white-space: nowrap;}
 
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
 .table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
@@ -17,11 +17,12 @@ td.c-branch {overflow: hidden; text-align: left !important; text-overflow: ellip
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
 
 .c-title {width: 160px;}
-.c-branch {width: 100px;}
+.c-branch {width: 130px;}
 .c-story, .c-status {width: 80px;}
 .c-execution {width: 60px !important;}
 .c-bug, .c-hour {width: 60px;}
-.c-desc {width: 160px;}
+.c-desc {width: 140px;}
+.c-date {width: 90px;}
 
 .plan-name {position: relative; display: flex; align-items: center;}
 .plan-name > span {flex: none;}

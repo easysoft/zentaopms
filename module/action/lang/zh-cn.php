@@ -225,8 +225,9 @@ $lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
 $lang->action->desc->submitreview         = '$date, 由 <strong>$actor</strong> 提交评审。' . "\n";
 $lang->action->desc->ganttmove            = '$date, 由 <strong>$actor</strong> 排序。' . "\n";
+$lang->action->desc->relieved             = '$date, 由 <strong>$actor</strong> 解除孪生需求关系。' . "\n";
 $lang->action->desc->switchtolight        = '$date, 由于 <strong>'. $lang->admin->system .'</strong> 从全生命周期管理模式切换为轻量管理模式，项目访问控制由项目集内公开调整为私有。' . "\n";
-$lang->action->desc->unlinkproduct        = '$date, 系统判断由于迭代所属项目与$extra取消关联，同步将迭代与$extra取消关联。' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, 系统判断由于' . $lang->executionCommon . '所属项目与$extra取消关联，同步将' . $lang->executionCommon . '与$extra取消关联。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -395,6 +396,8 @@ $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
 $lang->action->label->ganttmove             = '排序了';
 $lang->action->label->submitreview          = '提交了评审';
+$lang->action->label->syncsiblings          = '同步修改了';
+$lang->action->label->relieved              = '解除了';
 $lang->action->label->switchtolight         = '从全生命周期管理模式切换为轻量管理模式';
 $lang->action->label->linkedrepo            = '关联代码库到';
 $lang->action->label->unlinkedrepo          = '取消了项目与代码库的关联';

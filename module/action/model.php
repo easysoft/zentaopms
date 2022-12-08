@@ -50,7 +50,7 @@ class actionModel extends model
         $action->extra      = $extra;
         if(!defined('IN_UPGRADE')) $action->vision = $this->config->vision;
 
-        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
+        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,syncsiblings,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
         $action->comment = fixer::stripDataTags($comment);
@@ -286,6 +286,15 @@ class actionModel extends model
                     if(strpos(',deleted,', ",$actionType,") === false) $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($extra)->fetch();
                     if(strpos(',deleted,', ",$actionType,") !== false) $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch();
                     if(!empty($module) and $module->type == 'story') $record['product'] = $module->root;
+                    break;
+                case 'review':
+                    $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    if($result)
+                    {
+                        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($result->project)->fetchPairs('product');
+                        $record['product']   = join(',', array_keys($products));
+                        $record['project']   = zget($result, 'project', 0);
+                    }
                     break;
                 default:
                     $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
@@ -949,6 +958,17 @@ class actionModel extends model
                 {
                     list($extra, $isSuperReviewer) = explode('|', $extra);
                     $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+                }
+            }
+
+            if($action->objectType == 'story' and $action->action == 'syncsiblings')
+            {
+                if(!empty($extra) and strpos($extra, '|') !== false)
+                {
+                    list($operate, $storyID) = explode('|', $extra);
+                    $desc['operate'] = $this->lang->$objectType->{$desc['operate']};
+                    $link = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$storyID"), "#$storyID ") : "#$storyID";
+                    $actionDesc = str_replace(array('$extra', '$operate'), array($link, $desc['operate'][$operate]), $desc['main']);
                 }
             }
 

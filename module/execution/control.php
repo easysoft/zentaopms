@@ -898,7 +898,7 @@ class execution extends control
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan');
+        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan', $executionID);
         $allPlans = array('' => '');
         if(!empty($plans))
         {
@@ -1097,7 +1097,7 @@ class execution extends control
         $modules  = $this->tree->getAllModulePairs('bug');
 
         /* Get module tree.*/
-        $extra = array('executionID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
+        $extra = array('projectID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
         if($executionID and empty($productID) and count($products) > 1)
         {
             $moduleTree = $this->tree->getBugTreeMenu($executionID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
@@ -1205,7 +1205,7 @@ class execution extends control
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('executionID' => $executionID, 'productID' => $productID), $branchID);
+            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $executionID, 'productID' => $productID), $branchID);
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
@@ -1298,21 +1298,26 @@ class execution extends control
         /* Set execution builds. */
         $executionBuilds = array();
         $productList     = $this->product->getProducts($executionID);
-        $this->app->loadLang('branch');
+        $showBranch      = false;
         if(!empty($builds))
         {
+            foreach($builds as $build) $executionBuilds[$build->product][] = $build;
+
+            /* Get branch name. */
+            $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($executionBuilds));
             foreach($builds as $build)
             {
-                /* If product is normal, unset branch name. */
-                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
+                $build->branchName = '';
+                if(isset($branchGroups[$build->product]))
                 {
-                    $build->branchName = '';
+                    $showBranch  = true;
+                    $branchPairs = $branchGroups[$build->product];
+                    foreach(explode(',', trim($build->branch, ',')) as $branchID)
+                    {
+                        if(isset($branchPairs[$branchID])) $build->branchName .= "{$branchPairs[$branchID]},";
+                    }
+                    $build->branchName = trim($build->branchName, ',');
                 }
-                else
-                {
-                    $build->branchName = isset($build->branchName) ? $build->branchName : $this->lang->branch->main;
-                }
-                $executionBuilds[$build->product][] = $build;
             }
         }
 
@@ -1328,6 +1333,7 @@ class execution extends control
         $this->view->product       = $type == 'product' ? $param : 'all';
         $this->view->products      = $products;
         $this->view->type          = $type;
+        $this->view->showBranch    = $showBranch;
 
         $this->display();
     }
@@ -1579,6 +1585,7 @@ class execution extends control
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        $deptID      = $this->app->user->admin ? 0 : $this->app->user->dept;
 
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->team;
         $position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
@@ -1586,7 +1593,7 @@ class execution extends control
 
         $this->view->title        = $title;
         $this->view->position     = $position;
-        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
@@ -1645,7 +1652,20 @@ class execution extends control
                 }
                 else
                 {
-                    return print(js::confirm($this->lang->execution->importPlanStory, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
+                    $executionProductList  = $this->loadModel('product')->getProducts($executionID);
+                    $multiBranchProduct = false;
+                    foreach($executionProductList as $executionProduct)
+                    {
+                        if($executionProduct->type != 'normal')
+                        {
+                            $multiBranchProduct = true;
+                            break;
+                        }
+                    }
+
+                    $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
+
+                    return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
             }
 
@@ -1689,10 +1709,11 @@ class execution extends control
             $linkedBranches = array();
             foreach($products as $productIndex => $product)
             {
+                $productPlans[$productIndex] = array();
                 foreach($branches[$productIndex] as $branchID => $branch)
                 {
                     $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex][$branchID]   = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
@@ -1724,10 +1745,11 @@ class execution extends control
             $linkedBranches = array();
             foreach($products as $productIndex => $product)
             {
+                $productPlans[$productIndex] = array();
                 foreach($branches[$productIndex] as $branchID => $branch)
                 {
                     $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex][$branchID]   = isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
                 }
             }
 
@@ -1776,27 +1798,15 @@ class execution extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));
             }
 
-            $planID = '';
-            if(isset($_POST['plans']))
-            {
-                foreach($_POST['plans'] as $plans)
-                {
-                    foreach($plans as $planID)
-                    {
-                        if(!empty($planID)) break;
-                    }
-                }
-            }
-
             if(!empty($projectID) and $project->model == 'kanban')
             {
                 $execution = $this->execution->getById($executionID);
                 $this->loadModel('kanban')->createRDKanban($execution);
             }
 
-            if(!empty($planID))
+            if(!empty($_POST['plans']))
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=1&confirm=no")));
             }
             else
             {
@@ -1904,7 +1914,20 @@ class execution extends control
         }
         elseif(!empty($newPlans))
         {
-            return print(js::confirm($this->lang->execution->importEditPlanStory, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
+            $executionProductList  = $this->loadModel('product')->getProducts($executionID);
+            $multiBranchProduct = false;
+            foreach($executionProductList as $executionProduct)
+            {
+                if($executionProduct->type != 'normal')
+                {
+                    $multiBranchProduct = true;
+                    break;
+                }
+            }
+
+            $importEditPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory;
+
+            return print(js::confirm($importEditPlanStoryTips, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
         }
 
         /* Set menu. */
@@ -2003,12 +2026,15 @@ class execution extends control
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
+            $productPlans[$productID] = array();
+
             foreach($branches[$productID] as $branchID => $branch)
             {
+                $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+
                 $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
-                $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
-                if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID][$branchID] += $plans[$productID][BRANCH_MAIN];
+                if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID] += $plans[$productID][BRANCH_MAIN];
                 if(!empty($executionStories[$productID][$branchID]))
                 {
                     array_push($unmodifiableProducts, $productID);
@@ -4121,9 +4147,11 @@ class execution extends control
         $count = 0;
         if(!empty($planStory))
         {
+            $projectProducts = $this->loadModel('project')->getBranchesByProject($executionID);
             foreach($planStory as $id => $story)
             {
-                if($story->status == 'draft' or $story->status == 'reviewing')
+                $projectBranches = zget($projectProducts, $story->product, array());
+                if($story->status != 'active' or (!empty($story->branch) and !empty($projectBranches) and !isset($projectBranches[$story->branch])))
                 {
                     $count++;
                     unset($planStory[$id]);
@@ -4155,8 +4183,20 @@ class execution extends control
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        $haveDraft = sprintf($this->lang->execution->haveDraft, $count);
-        if(!$execution->multiple) $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
+        $executionProductList  = $this->loadModel('product')->getProducts($executionID);
+        $multiBranchProduct = false;
+        foreach($executionProductList as $executionProduct)
+        {
+            if($executionProduct->type != 'normal')
+            {
+                $multiBranchProduct = true;
+                break;
+            }
+        }
+        $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->haveBranchDraft : $this->lang->execution->haveDraft;
+
+        $haveDraft = sprintf($importPlanStoryTips, $count);
+        if(!$execution->multiple or $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
         if($count != 0) echo js::alert($haveDraft) . js::locate($this->createLink($moduleName, $fromMethod, $param));
         return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }

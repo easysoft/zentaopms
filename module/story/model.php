@@ -49,11 +49,18 @@ class storyModel extends model
 
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.story')->eq($storyID)
-            ->andWhere('t2.type')->in('sprint,stage,kanban')
+            ->where('t2.type')->in('sprint,stage,kanban')
+            ->beginIF($story->siblings)->andWhere('t1.story')->in(ltrim($story->siblings, ',') . $story->id)
+            ->beginIF(!$story->siblings)->andWhere('t1.story')->in($story->id)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
-        $story->tasks  = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->orderBy('id DESC')->fetchGroup('execution');
+        $story->tasks  = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->beginIF($story->siblings)->andWhere('story')->in(ltrim($story->siblings, ',') . $story->id)
+            ->beginIF(!$story->siblings)->andWhere('story')->in($story->id)
+            ->orderBy('id DESC')
+            ->fetchGroup('execution');
+
         $story->stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
         //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
         //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
@@ -159,13 +166,20 @@ class storyModel extends model
         }
 
         /* Get affected bugs. */
-        $story->bugs = $this->dao->findByStory($story->id)->from(TABLE_BUG)
+        $story->bugs = $this->dao->select('*')->from(TABLE_BUG)
+            ->where('status')->ne('closed')
+            ->beginIF($story->siblings)->andWhere('story')->in(ltrim($story->siblings, ',') . $story->id)
+            ->beginIF(!$story->siblings)->andWhere('story')->in($story->id)
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
 
         /* Get affected cases. */
-        $story->cases = $this->dao->findByStory($story->id)->from(TABLE_CASE)->andWhere('deleted')->eq(0)->fetchAll();
+        $story->cases = $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($story->siblings)->andWhere('story')->in(ltrim($story->siblings, ',') . $story->id)
+            ->beginIF(!$story->siblings)->andWhere('story')->in($story->id)
+            ->fetchAll();
 
         return $story;
     }
@@ -228,173 +242,223 @@ class storyModel extends model
             ->join('assignedTo', '')
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane,ticket')
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane,ticket,branches,modules,plans')
             ->get();
 
         /* Check repeat story. */
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
         if(isset($result['stop']) and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
-
         if($story->status != 'draft' and $this->checkForceReview()) $story->status = 'reviewing';
-        if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $this->post->plan > 0 ? 'planned' : 'wait';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
 
-        $requiredFields = "," . $this->config->story->create->requiredFields . ",";
-
-        if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
-        if(strpos($requiredFields, ',estimate,') !== false)
+        $product = $this->loadModel('product')->getById($story->product);
+        if($product->type == 'normal' or $story->type == 'requirement')
         {
-            if(strlen(trim($story->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->story->estimate);
-            $requiredFields = str_replace(',estimate,', ',', $requiredFields);
+            $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
+            $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
+            $this->post->plans    = isset($story->plan) ? array($story->plan) : array(0 => 0);
         }
 
-        $requiredFields = trim($requiredFields, ',');
-
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')
-            ->autoCheck()
-            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
-            ->batchCheck($requiredFields, 'notempty')
-            ->checkFlow()
-            ->exec();
-
-        if(!dao::isError())
+        /* check module */
+        $requiredFields = "," . $this->config->story->create->requiredFields . ",";
+        if(strpos($requiredFields, ',module,') !== false)
         {
-            $storyID = $this->dao->lastInsertID();
-
-            /* Fix bug #21992, user story have no parent story. */
-            if(isset($story->parent) and $story->parent)
+            foreach($this->post->modules as $module)
             {
-                $stories = array($storyID);
-                $this->subdivide($story->parent, $stories);
-            }
-
-            if(!empty($story->plan))
-            {
-                $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
-                $this->loadModel('action')->create('productplan', $story->plan, 'linkstory', '', $storyID);
-            }
-
-            $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
-            $files = $this->file->saveUpload($story->type, $storyID, 1);
-
-            $data          = new stdclass();
-            $data->story   = $storyID;
-            $data->version = 1;
-            $data->title   = $story->title;
-            $data->spec    = $story->spec;
-            $data->verify  = $story->verify;
-            $data->files   = join(',', array_keys($files));
-            $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
-
-            /* Save the story reviewer to storyreview table. */
-            if(isset($_POST['reviewer']))
-            {
-                foreach($this->post->reviewer as $reviewer)
+                if(empty($module))
                 {
-                    if(empty($reviewer)) continue;
-
-                    $reviewData = new stdclass();
-                    $reviewData->story    = $storyID;
-                    $reviewData->version  = 1;
-                    $reviewData->reviewer = $reviewer;
-                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->module);
+                    return false;
                 }
             }
+        }
 
-            /* Project or execution linked story. */
-            if($executionID != 0)
+        $storyIds    = array();
+        $storyFile   = array();
+        $mainStoryID = 0;
+        foreach($this->post->branches as $key => $branch)
+        {
+            $story->branch = $branch;
+            $story->module = $this->post->modules[$key];
+            $story->plan   = $this->post->plans[$key];
+
+            if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $this->post->plan > 0 ? 'planned' : 'wait';
+            if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
+            if(strpos($requiredFields, ',estimate,') !== false)
             {
-                $this->linkStory($executionID, $this->post->product, $storyID);
-                if($executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
-
-                $this->loadModel('kanban');
-
-                $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-                if(isset($_POST['lane'])) $laneID = $_POST['lane'];
-
-                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
-                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-
-                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
-                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'story');
+                if(strlen(trim($story->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->story->estimate);
+                $requiredFields = str_replace(',estimate,', ',', $requiredFields);
             }
 
-            if(is_array($this->post->URS))
+            $requiredFields = trim($requiredFields, ',');
+
+            $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')
+                ->autoCheck()
+                ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
+                ->batchCheck($requiredFields, 'notempty')
+                ->checkFlow()
+                ->exec();
+
+            if(dao::isError()) return false;
+
+            if(!dao::isError())
             {
-                foreach($this->post->URS as $URID)
+                $storyID = $this->dao->lastInsertID();
+
+                /* Fix bug #21992, user story have no parent story. */
+                if(isset($story->parent) and $story->parent)
                 {
-                    $requirement = $this->getByID($URID);
-                    $data = new stdclass();
-                    $data->product  = $story->product;
-                    $data->AType    = 'requirement';
-                    $data->relation = 'subdivideinto';
-                    $data->BType    = 'story';
-                    $data->AID      = $URID;
-                    $data->BID      = $storyID;
-                    $data->AVersion = $requirement->version;
-                    $data->BVersion = 1;
-                    $data->extra    = 1;
-
-                    $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
-
-                    $data->AType    = 'story';
-                    $data->relation = 'subdividedfrom';
-                    $data->BType    = 'requirement';
-                    $data->AID      = $storyID;
-                    $data->BID      = $URID;
-                    $data->AVersion = 1;
-                    $data->BVersion = $requirement->version;
-
-                    $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+                    $stories = array($storyID);
+                    $this->subdivide($story->parent, $stories);
                 }
-            }
 
-            if($bugID > 0)
-            {
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max')) $oldBug = $this->dao->select('feedback, status')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
-
-                $bug = new stdclass();
-                $bug->toStory      = $storyID;
-                $bug->status       = 'closed';
-                $bug->resolution   = 'tostory';
-                $bug->resolvedBy   = $this->app->user->account;
-                $bug->resolvedDate = $now;
-                $bug->closedBy     = $this->app->user->account;
-                $bug->closedDate   = $now;
-                $bug->assignedTo   = 'closed';
-                $bug->assignedDate = $now;
-                $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
-
-                $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
-                $this->action->create('bug', $bugID, 'Closed');
-
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && !dao::isError() && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
-
-                /* add files to story from bug. */
-                $files = $this->dao->select('*')->from(TABLE_FILE)
-                    ->where('objectType')->eq('bug')
-                    ->andWhere('objectID')->eq($bugID)
-                    ->fetchAll();
-                if(!empty($files))
+                if(!empty($story->plan))
                 {
-                    foreach($files as $file)
+                    $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
+                    $this->loadModel('action')->create('productplan', $story->plan, 'linkstory', '', $storyID);
+                }
+
+                $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
+                $files = $this->file->saveUpload($story->type, $storyID, 1);
+                /* Multi branch sync files */
+                !empty($files) ? $storyFile = $files : $files = $storyFile;
+
+                $data          = new stdclass();
+                $data->story   = $storyID;
+                $data->version = 1;
+                $data->title   = $story->title;
+                $data->spec    = $story->spec;
+                $data->verify  = $story->verify;
+                $data->files   = join(',', array_keys($files));
+                $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+
+                /* Save the story reviewer to storyreview table. */
+                if(isset($_POST['reviewer']))
+                {
+                    foreach($this->post->reviewer as $reviewer)
                     {
-                        $file->objectType = 'story';
-                        $file->objectID   = $storyID;
-                        unset($file->id);
-                        $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                        if(empty($reviewer)) continue;
+
+                        $reviewData = new stdclass();
+                        $reviewData->story    = $storyID;
+                        $reviewData->version  = 1;
+                        $reviewData->reviewer = $reviewer;
+                        $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                     }
                 }
+
+                /* Project or execution linked story. */
+                if($executionID != 0)
+                {
+                    $this->linkStory($executionID, $this->post->product, $storyID);
+                    if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+
+                    $this->loadModel('kanban');
+
+                    $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+                    if(isset($_POST['lane'])) $laneID = $_POST['lane'];
+
+                    $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
+                    if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+                    if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
+                    if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'story');
+                }
+
+                if(is_array($this->post->URS))
+                {
+                    foreach($this->post->URS as $URID)
+                    {
+                        $requirement = $this->getByID($URID);
+                        $data = new stdclass();
+                        $data->product  = $story->product;
+                        $data->AType    = 'requirement';
+                        $data->relation = 'subdivideinto';
+                        $data->BType    = 'story';
+                        $data->AID      = $URID;
+                        $data->BID      = $storyID;
+                        $data->AVersion = $requirement->version;
+                        $data->BVersion = 1;
+                        $data->extra    = 1;
+
+                        $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+                        $data->AType    = 'story';
+                        $data->relation = 'subdividedfrom';
+                        $data->BType    = 'requirement';
+                        $data->AID      = $storyID;
+                        $data->BID      = $URID;
+                        $data->AVersion = 1;
+                        $data->BVersion = $requirement->version;
+
+                        $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+                    }
+                }
+
+                if($bugID > 0)
+                {
+                    if(($this->config->edition == 'biz' || $this->config->edition == 'max')) $oldBug = $this->dao->select('feedback, status')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+
+                    $bug = new stdclass();
+                    $bug->toStory      = $storyID;
+                    $bug->status       = 'closed';
+                    $bug->resolution   = 'tostory';
+                    $bug->resolvedBy   = $this->app->user->account;
+                    $bug->resolvedDate = $now;
+                    $bug->closedBy     = $this->app->user->account;
+                    $bug->closedDate   = $now;
+                    $bug->assignedTo   = 'closed';
+                    $bug->assignedDate = $now;
+                    $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+
+                    $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
+                    $this->action->create('bug', $bugID, 'Closed');
+
+                    if(($this->config->edition == 'biz' || $this->config->edition == 'max') && !dao::isError() && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
+
+                    /* add files to story from bug. */
+                    $files = $this->dao->select('*')->from(TABLE_FILE)
+                        ->where('objectType')->eq('bug')
+                        ->andWhere('objectID')->eq($bugID)
+                        ->fetchAll();
+                    if(!empty($files))
+                    {
+                        foreach($files as $file)
+                        {
+                            $file->objectType = 'story';
+                            $file->objectID   = $storyID;
+                            unset($file->id);
+                            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                        }
+                    }
+                }
+                if(!defined('TUTORIAL')) $this->setStage($storyID);
+                if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
+
+                /* Callback the callable method to process the related data for object that is transfered to story. */
+                if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
+
+                $storyIds[] = $storyID;
+                if(empty($mainStoryID)) $mainStoryID = $storyID;
             }
-            if(!defined('TUTORIAL')) $this->setStage($storyID);
-            if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
-
-            /* Callback the callable method to process the related data for object that is transfered to story. */
-            if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
-
-            return array('status' => 'created', 'id' => $storyID);
         }
-        return false;
+
+        /* bind siblings story id */
+        if(count($storyIds) > 1)
+        {
+            foreach($storyIds as $siblingsStoryID)
+            {
+                $siblingsArr = array();
+                foreach($storyIds as $idItem)
+                {
+                    if($idItem != $siblingsStoryID) $siblingsArr[] = $idItem;
+                    $siblings = ',' . implode(',', $siblingsArr) . ',';
+                    $this->dao->update(TABLE_STORY)->set('siblings')->eq($siblings)->where('id')->eq($siblingsStoryID)->exec();
+                }
+            }
+        }
+
+        return array('status' => 'created', 'id' => $mainStoryID, 'ids' => $storyIds);
     }
 
     /**
@@ -739,6 +803,16 @@ class storyModel extends model
                 $data->files   = $story->files = $addedFiles . trim($storyFiles, ',');
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
+                /* Sync siblings. */
+                if(!empty($oldStory->siblings))
+                {
+                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    {
+                        $data->story = $siblingID;
+                        $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+                    }
+                }
+
                 /* IF is story and has changed, update its relation version to new. */
                 if($oldStory->type == 'story')
                 {
@@ -767,6 +841,16 @@ class storyModel extends model
                     $reviewData->version  = $story->version;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                    /* Sync siblings. */
+                    if(!empty($oldStory->siblings))
+                    {
+                        foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                        {
+                            $reviewData->story = $siblingID;
+                            $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                        }
+                    }
                 }
 
                 if($reviewerHasChanged)
@@ -776,7 +860,9 @@ class storyModel extends model
                 }
             }
 
-            return common::createChanges($oldStory, $story);
+            $changes = common::createChanges($oldStory, $story);
+            if(!empty($oldStory->siblings)) $this->syncSiblings($oldStory->id, $oldStory->siblings, $changes, 'Changed');
+            return $changes;
         }
     }
 
@@ -801,6 +887,17 @@ class storyModel extends model
         {
             dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
             return false;
+        }
+
+        $storyPlan = !empty($_POST['plan']) ? array_filter($_POST['plan']) : array();
+        if(count($storyPlan) > 1)
+        {
+            $oldStoryPlan = !empty($oldStory->planTitle) ? array_keys($oldStory->planTitle) : array();
+            if(!empty(array_diff($storyPlan,$oldStoryPlan)) or !empty(array_diff($oldStoryPlan,$storyPlan)))
+            {
+                dao::$errors[] = $this->lang->story->notice->changePlan;
+                return false;
+            }
         }
 
         $story = fixer::input('post')
@@ -835,6 +932,14 @@ class storyModel extends model
             ->join('childStories', ',')
             ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview')
             ->get();
+
+        /* Relieve siblings when change product. */
+        if(!empty($oldStory->siblings) and $story->product != $oldStory->product)
+        {
+            $this->dbh->exec("UPDATE " . TABLE_STORY . " SET siblings = REPLACE(siblings, ',$storyID,', ',') WHERE `product` = $oldStory->product");
+            $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($storyID)->orWhere('siblings')->eq(',')->exec();
+            $oldStory->siblings = '';
+        }
 
         if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
         if($oldStory->type == 'requirement' and !isset($story->linkRequirements)) $story->linkRequirements = '';
@@ -887,6 +992,19 @@ class storyModel extends model
                 ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))
                 ->exec();
 
+            /* Sync siblings. */
+            if(!empty($oldStory->siblings))
+            {
+                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                {
+                    $this->dao->delete()->from(TABLE_STORYREVIEW)
+                        ->where('story')->eq($siblingID)
+                        ->andWhere('version')->eq($oldStory->version)
+                        ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))
+                        ->exec();
+                }
+            }
+
             foreach($_POST['reviewer'] as $reviewer)
             {
                 if($oldStory->status == 'reviewing' and in_array($reviewer, array_keys($oldReviewer))) continue;
@@ -896,6 +1014,16 @@ class storyModel extends model
                 $reviewData->version  = $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                /* Sync siblings. */
+                if(!empty($oldStory->siblings))
+                {
+                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    {
+                        $reviewData->story = $siblingID;
+                        $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                    }
+                }
             }
 
             if($oldStory->status == 'reviewing') $story = $this->updateStoryByReview($storyID, $oldStory, $story);
@@ -933,6 +1061,18 @@ class storyModel extends model
                 $data->verify = $story->verify;
                 $data->files  = $story->files = $addedFiles . trim($storyFiles, ',');
                 $this->dao->update(TABLE_STORYSPEC)->data($data)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->exec();
+
+                /* Sync siblings. */
+                if(!empty($oldStory->siblings))
+                {
+                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    {
+                        $this->dao->update(TABLE_STORYSPEC)->data($data)
+                            ->where('story')->eq((int)$siblingID)
+                            ->andWhere('version')->eq($oldStory->version)
+                            ->exec();
+                    }
+                }
             }
 
             if($story->product != $oldStory->product)
@@ -1061,6 +1201,8 @@ class storyModel extends model
 
                 if(isset($story->finalResult)) $this->recordReviewAction($story);
             }
+
+            if(!empty($oldStory->siblings)) $this->syncSiblings($oldStory->id, $oldStory->siblings, $changes, 'Edited');
 
             return true;
         }
@@ -1475,7 +1617,28 @@ class storyModel extends model
         /* Fix bug #671. */
         $this->lang->story->closedReason = $this->lang->story->rejectedReason;
 
-        $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($this->post->result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
+        $this->dao->update(TABLE_STORYREVIEW)
+            ->set('result')->eq($this->post->result)
+            ->set('reviewDate')->eq($now)
+            ->where('story')->eq($storyID)
+            ->andWhere('version')->eq($oldStory->version)
+            ->andWhere('reviewer')->eq($this->app->user->account)
+            ->exec();
+
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->update(TABLE_STORYREVIEW)
+                    ->set('result')->eq($this->post->result)
+                    ->set('reviewDate')->eq($now)
+                    ->where('story')->eq($siblingID)
+                    ->andWhere('version')->eq($oldStory->version)
+                    ->andWhere('reviewer')->eq($this->app->user->account)
+                    ->exec();
+            }
+        }
 
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
@@ -1507,6 +1670,8 @@ class storyModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
+        if(!empty($oldStory->siblings)) $this->syncSiblings($oldStory->id, $oldStory->siblings, $changes, 'Reviewed');
+
         return true;
     }
 
@@ -1525,17 +1690,23 @@ class storyModel extends model
         $actions = array();
         $this->loadModel('action');
 
-        $oldStories   = $this->getByList($storyIdList);
-        $hasResult    = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
-        $reviewerList = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
+        $reviewedSiblings = array();
+        $oldStories       = $this->getByList($storyIdList);
+        $hasResult        = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
+        $reviewerList     = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
         foreach($storyIdList as $storyID)
         {
             if(!$storyID) continue;
 
             $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
             $oldStory        = $oldStories[$storyID];
-
             if($oldStory->status != 'reviewing') continue;
+
+            foreach($reviewerList[$storyID] as $reviewer => $reviewerInfo)
+            {
+                if($reviewerInfo->version != $oldStory->version) unset($reviewerList[$storyID][$reviewer]);
+            }
+
             if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and $isSuperReviewer === false) continue;
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
             if($oldStory->version > 1 and $result == 'reject') continue;
@@ -1548,6 +1719,21 @@ class storyModel extends model
             $story->status         = $oldStory->status;
 
             $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
+
+            /* Sync siblings. */
+            if(!empty($oldStory->siblings))
+            {
+                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                {
+                    $this->dao->update(TABLE_STORYREVIEW)
+                        ->set('result')->eq($result)
+                        ->set('reviewDate')->eq($now)
+                        ->where('story')->eq($siblingID)
+                        ->andWhere('version')->eq($oldStory->version)
+                        ->andWhere('reviewer')->eq($this->app->user->account)
+                        ->exec();
+                }
+            }
 
             /* Update the story status by review rules. */
             $reviewedBy = explode(',', trim($story->reviewedBy, ','));
@@ -1571,6 +1757,19 @@ class storyModel extends model
             $story->id         = $storyID;
             $story->version    = $oldStory->version;
             $actions[$storyID] = $this->recordReviewAction($story, $result, $reason);
+
+            /* Sync siblings. */
+            $changes = common::createChanges($oldStory, $story);
+            if(!empty($oldStory->siblings))
+            {
+                $siblings = $oldStory->siblings;
+                foreach(explode(',', $siblings) as $siblingID)
+                {
+                    if(in_array($siblingID, $storyIdList) or isset($reviewedSiblings[$siblingID])) $siblings = str_replace(",$siblingID,", ',', $siblings);
+                }
+                $this->syncSiblings($storyID, trim($siblings, ','), $changes, 'Reviewed');
+                foreach(explode(',', trim($siblings, ',')) as $reviewedID) $reviewedSiblings[$reviewedID] = $reviewedID;
+            }
         }
 
         return $actions;
@@ -1585,11 +1784,26 @@ class storyModel extends model
      */
     public function recallReview($storyID)
     {
-        $story     = $this->getById($storyID);
-        $isChanged = $story->changedBy ? true : false;
-        $status    = $isChanged ? 'changing' : 'draft';
-        $this->dao->update(TABLE_STORY)->set('status')->eq($status)->where('id')->eq($storyID)->exec();
-        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->exec();
+        $oldStory  = $this->getById($storyID);
+        $isChanged = $oldStory->changedBy ? true : false;
+
+        $story = clone $oldStory;
+        $story->status = $isChanged ? 'changing' : 'draft';
+        $this->dao->update(TABLE_STORY)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
+
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
+
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->exec();
+            }
+        }
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'recalled');
     }
 
     /**
@@ -1601,16 +1815,31 @@ class storyModel extends model
      */
     public function recallChange($storyID)
     {
-        $story = $this->getById($storyID);
+        $oldStory = $this->getById($storyID);
 
         /* Update story title and version and status. */
-        $preVersion = $story->version - 1;
-        $preTitle   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($preVersion)->fetch('title');
-        $this->dao->update(TABLE_STORY)->set('title')->eq($preTitle)->set('version')->eq($preVersion)->set('status')->eq('active')->where('id')->eq($storyID)->exec();
+        $story = clone $oldStory;
+        $story->version = $oldStory->version - 1;
+        $story->title   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->fetch('title');
+        $story->status  = 'active';
+        $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
 
         /* Delete versions that is after this version. */
-        $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->exec();
-        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->exec();
+        $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
+
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($siblingID)->andWHere('version')->eq($oldStory->version)->exec();
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->exec();
+            }
+        }
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'recalledChange');
     }
 
     /**
@@ -1643,6 +1872,15 @@ class storyModel extends model
 
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->exec();
+            }
+        }
+
         if(isset($_POST['reviewer']))
         {
             foreach($this->post->reviewer as $reviewer)
@@ -1654,12 +1892,25 @@ class storyModel extends model
                 $reviewData->version  = $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                /* Sync siblings. */
+                if(!empty($oldStory->siblings))
+                {
+                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    {
+                        $reviewData->story = $siblingID;
+                        $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                    }
+                }
             }
             $story->status = 'reviewing';
         }
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->eq($storyID)->exec();
-        if(!dao::isError()) return common::createChanges($oldStory, $story);
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'submitReview');
+        if(!dao::isError()) return $changes;
 
         return false;
     }
@@ -1797,7 +2048,10 @@ class storyModel extends model
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
         }
-        return common::createChanges($oldStory, $story);
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'Closed');
+        return $changes;
     }
 
     /**
@@ -1975,14 +2229,17 @@ class storyModel extends model
                 if($oldStory->stage == 'wait') $story->stage = 'planned';
                 if($this->session->currentProductType and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
                 {
-                    if(!isset($oldStoryStages[$storyID][$plan->branch]))
+                    foreach(explode(',', $plan->branch) as $planBranch)
                     {
-                        $story->stage = 'planned';
-                        $newStoryStage = new stdclass();
-                        $newStoryStage->story  = $storyID;
-                        $newStoryStage->branch = $plan->branch;
-                        $newStoryStage->stage  = $story->stage;
-                        $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
+                        if(!isset($oldStoryStages[$storyID][$planBranch]))
+                        {
+                            $story->stage = 'planned';
+                            $newStoryStage = new stdclass();
+                            $newStoryStage->story  = $storyID;
+                            $newStoryStage->branch = $planBranch;
+                            $newStoryStage->stage  = $story->stage;
+                            $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
+                        }
                     }
                 }
             }
@@ -2312,7 +2569,10 @@ class storyModel extends model
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq((int)$storyID)->exec();
-        if(!dao::isError()) return common::createChanges($oldStory, $story);
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'Assigned');
+        if(!dao::isError()) return $changes;
         return false;
     }
 
@@ -2329,9 +2589,15 @@ class storyModel extends model
         $storyIdList = $this->post->storyIdList;
         $assignedTo  = $this->post->assignedTo;
         $oldStories  = $this->getByList($storyIdList);
+        $ignoreStories = '';
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+            if($oldStory->status == 'closed')
+            {
+                $ignoreStories .= "#{$storyID},";
+                continue;
+            }
             if($assignedTo == $oldStory->assignedTo) continue;
 
             $story = new stdclass();
@@ -2344,6 +2610,13 @@ class storyModel extends model
 
             $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
+
+        if($ignoreStories)
+        {
+            $ignoreStories = trim($ignoreStories, ',');
+            echo js::alert(sprintf($this->lang->story->ignoreClosedStory, $ignoreStories));
+        }
+
         return $allChanges;
     }
 
@@ -2381,14 +2654,28 @@ class storyModel extends model
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
-        if($story->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
+        if($story->status == 'active')
+        {
+            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
+
+            /* Sync siblings. */
+            if(!empty($oldStory->siblings))
+            {
+                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                {
+                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->exec();
+                }
+            }
+        }
 
         $this->setStage($storyID);
 
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
 
-        return common::createChanges($oldStory, $story);
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'Activated');
+        return $changes;
     }
 
     /**
@@ -3481,6 +3768,7 @@ class storyModel extends model
             ->andWhere('status')->notin('closed,draft')
             ->andWhere('product')->eq($productID)
             ->andWhere('plan')->in('0,')
+            ->andWhere('siblings')->eq('')
             ->beginIF($append)->orWhere('id')->in($append)->fi()
             ->fetchPairs();
         return array(0 => '') + $stories ;
@@ -5140,9 +5428,9 @@ class storyModel extends model
 
             foreach($requirements as $requirement)
             {
-                $stories = $this->getRelation($requirement->id, 'requirement');
+                $stories = $this->getRelation($requirement->id, 'requirement', array('id', 'title', 'parent'));
                 $stories = empty($stories) ? array() : $stories;
-                foreach($stories as $id => $title)
+                foreach($stories as $id => $story)
                 {
                     if($projectStories and !isset($projectStories[$id]))
                     {
@@ -5151,10 +5439,11 @@ class storyModel extends model
                     }
 
                     $stories[$id] = new stdclass();
-                    $stories[$id]->title = $title;
-                    $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
-                    $stories[$id]->bugs  = $this->loadModel('bug')->getStoryBugs($id);
-                    $stories[$id]->tasks = $this->loadModel('task')->getStoryTasks($id);
+                    $stories[$id]->parent = $story->parent;
+                    $stories[$id]->title  = $story->title;
+                    $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
+                    $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
+                    $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
                     if($this->config->edition == 'max')
                     {
                         $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
@@ -5747,6 +6036,16 @@ class storyModel extends model
             /* Delete versions that is after this version. */
             $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWHere('version')->in($oldStory->version)->exec();
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->in($oldStory->version)->exec();
+
+            /* Sync siblings. */
+            if(!empty($oldStory->siblings))
+            {
+                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                {
+                    $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($siblingID)->andWHere('version')->in($oldStory->version)->exec();
+                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->in($oldStory->version)->exec();
+                }
+            }
         }
 
         if($result == 'reject')
@@ -5851,6 +6150,19 @@ class storyModel extends model
             ->andWhere('version')->eq($oldStory->version)
             ->andWhere('result')->eq('')
             ->exec();
+
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->delete()->from(TABLE_STORYREVIEW)
+                    ->where('story')->eq($siblingID)
+                    ->andWhere('version')->eq($oldStory->version)
+                    ->andWhere('result')->eq('')
+                    ->exec();
+            }
+        }
 
         return $story;
     }
@@ -5979,7 +6291,16 @@ class storyModel extends model
 
         /* Get related objects title or names. */
         $relatedSpecs = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
+
+        $fileIdList = array();
+        foreach($relatedSpecs as $relatedSpec)
+        {
+            if(!empty($relatedSpec[0]->files)) $fileIdList[] = $relatedSpec[0]->files;
+        }
+        $fileIdList   = array_unique($fileIdList);
         $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $filesInfo    = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('id')->in($fileIdList)->andWhere('extra')->ne('editor')->fetchAll('id');
+
         foreach($stories as $story)
         {
             $story->spec   = '';
@@ -5990,6 +6311,11 @@ class storyModel extends model
                 $story->title  = $storySpec->title;
                 $story->spec   = $storySpec->spec;
                 $story->verify = $storySpec->verify;
+
+                if(!empty($storySpec->files) and empty($relatedFiles[$story->id]) and !empty($filesInfo[$storySpec->files]))
+                {
+                    $relatedFiles[$story->id][0] = $filesInfo[$storySpec->files];
+                }
             }
 
             if($this->post->fileType == 'csv')
@@ -6078,22 +6404,33 @@ class storyModel extends model
      * Get the story status after activation.
      *
      * @param  int    $storyID
+     * @param  bool   $hasSiblings
      * @access public
      * @return void
      */
-    public function getActivateStatus($storyID)
+    public function getActivateStatus($storyID, $hasSiblings = true)
     {
         $status     = 'active';
+        $action     = $hasSiblings ? 'closed,reviewrejected,syncsiblings' : 'closed,reviewrejected';
         $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
-            ->andWhere('action')->in('closed,reviewrejected')
+            ->andWhere('action')->in($action)
             ->orderBy('id_desc')
             ->fetch();
 
         $lastAction = $lastRecord->action;
-        if($lastAction == 'reviewrejected') $status = 'draft';
-        if($lastAction == 'closed') $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
+        if(strpos('closed,reviewrejected', $lastAction) !== false)
+        {
+            $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
+        }
+
+        /* When activating twin story, you need to check the status of the twin story selected when closing. */
+        if($lastAction == 'syncsiblings')
+        {
+            $syncStoryID = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 0;
+            $status      = $this->getActivateStatus($syncStoryID, false);
+        }
 
         return $status;
     }
@@ -6131,5 +6468,48 @@ class storyModel extends model
             ->fetch('new');
 
         return $lastReviewer;
+    }
+
+    /**
+     * Sync siblings.
+     *
+     * @param  int    $storyID
+     * @param  string $siblings
+     * @param  array  $changes
+     * @param  string $operate
+     * @access public
+     * @return void
+     */
+    public function syncSiblings($storyID, $siblings, $changes, $operate)
+    {
+        if(empty($siblings) or empty($changes)) return;
+
+        /* Get the fields and values to be synchronized. */
+        $syncFieldList = array();
+        foreach($changes as $changeInfo)
+        {
+            $fieldName  = $changeInfo['field'];
+            $fieldValue = $changeInfo['new'];
+
+            if(strpos('product,branch,module,plan,spec,verify,files,reviewers', $fieldName) !== false) continue;
+            $syncFieldList[$fieldName] = $fieldValue;
+        }
+
+        if(empty($syncFieldList)) return;
+
+        /* Synchronize and record dynamics. */
+        $this->loadModel('action');
+        $siblings = explode(',', trim($siblings, ','));
+        foreach($siblings as $siblingID)
+        {
+            $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq((int)$siblingID)->exec();
+            if(!dao::isError())
+            {
+                $this->setStage($siblingID);
+
+                $actionID = $this->action->create('story', $siblingID, 'syncsiblings', '', "$operate|$storyID");
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
     }
 }

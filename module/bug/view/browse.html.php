@@ -328,7 +328,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                           {
                               $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
                               echo "<li class='option' data-key='$key'>";
-                              echo html::a('javascript:;', $build, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\"");
+                              echo html::a('javascript:;', $build . (in_array($key, $releasedBuilds) ? " <span class='label label-primary label-outline'>{$lang->build->released}</span> " : ''), '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\"");
                               echo "</li>";
                           }
                           echo "</ul>";

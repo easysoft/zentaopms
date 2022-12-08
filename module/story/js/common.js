@@ -94,3 +94,49 @@ function loadURS()
         $('#URS').chosen();
     });
 }
+
+$('.sibling').mouseover(function() {
+    $(this).parent('ul').find('a.unlink').addClass('hide');
+    $(this).find('.unlink').removeClass('hide');
+});
+$('.sibling').mouseenter(function() {
+    $('[data-toggle="popover"]').popover('hide');
+});
+$('.sibling').mouseout(function() {
+    $(this).find('.unlink').addClass('hide');
+});
+
+$('[data-toggle="popover"]').each(function(item) {
+    $index = $(this).attr('data-id');
+    $(this).popover({
+        placement: 'bottom',
+        html: true,
+        content: '<div class="popover-icon"><i class="icon-info"></i></div><div class="content">' + relievedTip + '</div><div class="popover-custom text-right"><a href="javascript:relieve(' + $index + ')" class="text-active btn-info">' + relieved + '</a> <a href="javascript:popoverCancel(' + $index + ');" class="text-cancel">' + cancel + '</a></div>'
+    });
+})
+
+function relieve(index)
+{
+    $.post(relieveURL, {siblingID:index}, function(data){
+        $('[data-id="' + index + '"]').popover('hide');
+
+        if(data.result == 'success')
+        {
+            if(data.silbingsCount != 0) $('[data-id="' + index + '"]').parent('li').remove();
+            if(data.silbingsCount == 0 || index == storyID)
+            {
+                $('[href="#legendSiblings"]').parent('li').next('li').addClass('active');;
+                $('[href="#legendSiblings"]').parent('li').remove();
+                $('#legendSiblings').next('div').addClass('active');
+                $('#legendSiblings').remove();
+                $('#siblingTitle').remove();
+                $('#siblingList').remove();
+            }
+        }
+    }, 'json');
+}
+
+function popoverCancel(index)
+{
+    $('[data-id="' + index + '"]').popover('hide').addClass('hide');
+}

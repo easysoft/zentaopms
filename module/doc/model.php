@@ -821,6 +821,16 @@ class docModel extends model
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
 
+        if($doc->type == 'chapter' and $doc->parent)
+        {
+            $parentDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$doc->parent)->fetch();
+            if(strpos($parentDoc->path, ",$docID,") !== false)
+            {
+                dao::$errors['parent'] = $this->lang->doc->errorParentChapter;
+                return false;
+            }
+        }
+
         if(!empty($doc->acl) and $doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
         $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();

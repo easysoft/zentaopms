@@ -12,7 +12,7 @@
 global $config;
 $lang->story->create            = "Create Story";
 
-$lang->story->requirement       = zget($lang, 'URCommon', "Requirement");
+$lang->story->requirement       = 'UR';
 $lang->story->story             = zget($lang, 'SRCommon', "Story");
 $lang->story->createStory       = 'Create ' . $lang->story->story;
 $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
@@ -76,6 +76,10 @@ $lang->story->undetermined       = 'undetermined';
 $lang->story->order              = 'Order';
 $lang->story->saveDraft          = 'Save as draft';
 $lang->story->doNotSubmit        = 'Do Not Submit';
+$lang->story->currentBranch      = 'Current Branch';
+$lang->story->siblings           = 'Siblings story';
+$lang->story->relieved           = 'Relieved';
+$lang->story->relievedSiblings   = 'Relieved Siblings';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";
@@ -95,6 +99,15 @@ $lang->story->successToTask    = "Converted to task.";
 $lang->story->storyRound       = '%s time estimation';
 $lang->story->float            = "『%s』should have positive number, or decimals.";
 $lang->story->saveDraftSuccess = 'Save as draft succeeded.';
+
+$lang->story->changeSyncTip       = "The modification of this story will be synchronized to the following twin requirements";
+$lang->story->syncTip             = "The twin story are synchronized except for product, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
+$lang->story->relievedTip         = "The twin relationship cannot be restored after dissolving, the content of the demand is no longer synchronized, whether to dissolving?";
+$lang->story->assignSyncTip       = "Both twin stories modify the assignor synchronously";
+$lang->story->closeSyncTip        = "Twin stories are closed synchronously";
+$lang->story->activateSyncTip     = "Twin stories are activated synchronously";
+$lang->story->relievedSiblingsTip = "After product adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
+$lang->story->batchEditTip        = "{$lang->SRCommon} %sis twin stories, and this operation has been filtered.";
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';
@@ -308,6 +321,7 @@ $lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
 $lang->story->confirmRecallChange  = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
 $lang->story->confirmRecallReview  = "Are you sure you want to withdraw the review?";
 $lang->story->noStoryToTask        = "Only the activated {$lang->SRCommon} can be converted into a task!";
+$lang->story->ignoreClosedStory    = "{$lang->SRCommon} %s status is closed, and the operation has been filtered.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Scope';
@@ -341,6 +355,7 @@ $lang->story->action->subdividestory        = array('main' => '$date, decomposed
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, unlinked by <strong>$actor</strong> from Story <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, unlinked by <strong>$actor</strong> Decomposed Story <strong>$extra</strong>.');
 $lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
+$lang->story->action->syncsiblings          = array('main' => "\$date, the system judges that this story is adjusted synchronously due to the \$operate of twin story <strong>\$extra</strong>.", 'operate' => 'operateList');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();
@@ -429,6 +444,7 @@ $lang->story->chosen->reviewedBy = 'Choose ReviewedBy';
 $lang->story->notice = new stdClass();
 $lang->story->notice->closed           = 'Story that you select is closed!';
 $lang->story->notice->reviewerNotEmpty = 'This requirement needs to be reviewed, and the reviewedby is required.';
+$lang->story->notice->changePlan       = 'The plan can be changed to only one item.';
 
 $lang->story->convertToTask = new stdClass();
 $lang->story->convertToTask->fieldList = array();
@@ -466,6 +482,17 @@ $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 
+$lang->story->operateList = array();
+$lang->story->operateList['assigned']       = 'assigned';
+$lang->story->operateList['closed']         = 'closed';
+$lang->story->operateList['activated']      = 'activated';
+$lang->story->operateList['changed']        = 'changed';
+$lang->story->operateList['reviewed']       = 'reviewed';
+$lang->story->operateList['edited']         = 'edited';
+$lang->story->operateList['submitreview']   = 'submit review';
+$lang->story->operateList['recalledchange'] = 'recalled change';
+$lang->story->operateList['recalled']       = 'recalled review';
+
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = 'Create Requirement';
 $lang->requirement->batchCreate        = "Batch Create";
@@ -490,3 +517,7 @@ $lang->requirement->batchAssignTo      = "Batch Assign";
 $lang->requirement->batchChangeModule  = "Batch Change Modules";
 $lang->requirement->submitReview       = $lang->story->submitReview;
 $lang->requirement->linkStory          = 'Link Story';
+
+$lang->story->addBranch      = 'Add %s';
+$lang->story->deleteBranch   = 'Delete %s';
+$lang->story->notice->branch = 'Each branch will establish a requirement, and the requirements are twins. The twins requirements are synchronized except for the product, branch, module, plan, and stage fields. You can manually remove the twins relationship later';

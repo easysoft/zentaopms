@@ -76,6 +76,10 @@ $lang->story->undetermined       = '待定';
 $lang->story->order              = '排序';
 $lang->story->saveDraft          = '存为草稿';
 $lang->story->doNotSubmit        = '保存暂不提交';
+$lang->story->currentBranch      = '当前%s';
+$lang->story->siblings           = '孪生需求';
+$lang->story->relieved           = '解除';
+$lang->story->relievedSiblings   = '解除孪生需求';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";
@@ -95,6 +99,15 @@ $lang->story->successToTask    = '批量转任务成功';
 $lang->story->storyRound       = '第 %s 轮估算';
 $lang->story->float            = "『%s』应当是正数，可以是小数。";
 $lang->story->saveDraftSuccess = '存为草稿成功';
+
+$lang->story->changeSyncTip       = "该需求的修改会同步到如下的孪生需求";
+$lang->story->syncTip             = "孪生需求间除产品、分支 、模块、计划、阶段外均同步，孪生关系解除后不再同步";
+$lang->story->relievedTip         = "孪生关系解除后无法恢复，需求的内容不再同步，是否解除？";
+$lang->story->assignSyncTip       = "孪生需求均同步修改指派人";
+$lang->story->closeSyncTip        = "孪生需求均同步关闭";
+$lang->story->activateSyncTip     = "孪生需求均同步激活";
+$lang->story->relievedSiblingsTip = '产品调整后，本需求自动解除孪生关系，需求不再同步，是否保存？';
+$lang->story->batchEditTip        = "{$lang->SRCommon} %s为孪生需求，本次操作已被过滤。";
 
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';
@@ -308,6 +321,7 @@ $lang->story->errorDuplicateStory   = $lang->SRCommon . '%s不存在';
 $lang->story->confirmRecallChange   = "撤销变更后，需求内容会回退至变更前的版本，您确定要撤销吗？";
 $lang->story->confirmRecallReview   = "您确定要撤回评审吗？";
 $lang->story->noStoryToTask         = "只有激活的{$lang->SRCommon}才能转为任务！";
+$lang->story->ignoreClosedStory     = "{$lang->SRCommon} %s 状态为已关闭，本次操作已被过滤。";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";
@@ -341,6 +355,7 @@ $lang->story->action->subdividestory        = array('main' => "\$date, 由 <stro
 $lang->story->action->unlinkrelatedstory    = array('main' => "\$date, 由 <strong>\$actor</strong> 移除相关{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->unlinkchildstory      = array('main' => "\$date, 由 <strong>\$actor</strong> 移除细分{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->recalledchange        = array('main' => "\$date, 由 <strong>\$actor</strong> 撤销变更。");
+$lang->story->action->syncsiblings          = array('main' => "\$date, 系统判断由于孪生需求 <strong>\$extra</strong> \$operate，本需求同步调整。", 'operate' => 'operateList');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
@@ -429,6 +444,7 @@ $lang->story->chosen->reviewedBy = '选择评审人...';
 $lang->story->notice = new stdClass();
 $lang->story->notice->closed           = "您选择的{$lang->SRCommon}已经被关闭了！";
 $lang->story->notice->reviewerNotEmpty = '该需求需要评审，评审人员不能为空。';
+$lang->story->notice->changePlan       = '所属计划只能改为一条，修改后才能保存成功。';
 
 $lang->story->convertToTask = new stdClass();
 $lang->story->convertToTask->fieldList = array();
@@ -466,6 +482,17 @@ $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 
+$lang->story->operateList = array();
+$lang->story->operateList['assigned']       = '指派';
+$lang->story->operateList['closed']         = '关闭';
+$lang->story->operateList['activated']      = '激活';
+$lang->story->operateList['changed']        = '变更';
+$lang->story->operateList['reviewed']       = '评审';
+$lang->story->operateList['edited']         = '编辑';
+$lang->story->operateList['submitreview']   = '提交评审';
+$lang->story->operateList['recalledchange'] = '撤销变更';
+$lang->story->operateList['recalled']       = '撤销评审';
+
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = "提{$lang->URCommon}";
 $lang->requirement->batchCreate        = "批量创建";
@@ -490,3 +517,7 @@ $lang->requirement->batchAssignTo      = "批量指派";
 $lang->requirement->batchChangeModule  = "批量修改模块";
 $lang->requirement->submitReview       = $lang->story->submitReview;
 $lang->requirement->linkStory          = "关联{$lang->SRCommon}";
+
+$lang->story->addBranch      = '添加%s';
+$lang->story->deleteBranch   = '删除%s';
+$lang->story->notice->branch = '每个分支会建立一个需求，需求间互为孪生关系，孪生需求间除产品、分支、模块、计划、阶段字段外均同步，后期您可以手动解除孪生关系';

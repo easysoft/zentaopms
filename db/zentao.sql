@@ -321,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
-  `branch` mediumint(8) unsigned NOT NULL default '0',
+  `branch` varchar(255) NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL default '0',
   `builds` varchar(255) NOT NULL,
   `name` char(150) NOT NULL,
@@ -1129,7 +1129,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
 CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL,
-  `branch` mediumint(8) unsigned NOT NULL,
+  `branch` varchar(255) NOT NULL DEFAULT '0',
   `parent` mediumint(9) NOT NULL DEFAULT '0',
   `title` varchar(90) NOT NULL,
   `status` enum('wait','doing','done','closed') NOT NULL default 'wait',
@@ -1480,6 +1480,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `childStories` varchar(255) NOT NULL,
   `linkStories` varchar(255) NOT NULL,
   `linkRequirements` varchar(255) NOT NULL,
+  `siblings` varchar(255) NOT NULL,
   `duplicateStory` mediumint(8) unsigned NOT NULL,
   `version` smallint(6) NOT NULL default '1',
   `feedbackBy` varchar(100) NOT NULL,
@@ -6553,6 +6554,7 @@ ALTER TABLE `zt_effort` CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT
 ALTER TABLE `zt_effort` CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL AFTER `begin`;
 ALTER TABLE `zt_effort` ADD `deleted` enum('0','1') NOT NULL DEFAULT '0' AFTER `end`;
 ALTER TABLE `zt_effort` ADD `order` tinyint unsigned NOT NULL DEFAULT '0' AFTER `end`;
+ALTER TABLE `zt_effort` ADD `extra` text COLLATE 'utf8_general_ci' NULL AFTER `end`;
 ALTER TABLE `zt_effort` ADD INDEX `execution` (`execution`);
 ALTER TABLE `zt_effort` ADD INDEX `objectID` (`objectID`);
 ALTER TABLE `zt_effort` ADD INDEX `date` (`date`);
@@ -7177,6 +7179,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   key `product` (`product`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_ticketsource`;
 CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` mediumint(8) unsigned NOT NULL,
@@ -7188,6 +7191,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   key `ticketId` (`ticketId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_ticketrelation`;
 CREATE TABLE IF NOT EXISTS `zt_ticketrelation` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` mediumint unsigned NOT NULL,

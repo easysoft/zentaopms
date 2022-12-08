@@ -63,23 +63,47 @@ $('#future').on('change', function()
     }
 });
 
-$('#branch').change(function()
+$('#parent').change(function()
 {
-    var branchID     = $(this).val();
-    var lastPlanLink = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchID);
-    var topPlanLink  = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branchID);
+    var parentID        = $(this).val();
+    var currentBranches = $('#branch').val() ? $('#branch').val().toString() : '';
+    $.post(createLink('productplan', 'ajaxGetParentBranches', "productID=" + productID + "&parentID=" + parentID + "&currentBranches=" + currentBranches), function(data)
+    {
+        $('#branch').replaceWith(data);
+        $('#branch_chosen').remove();
+        $('#branch').chosen();
+        $('#branch').change();
+    })
+})
 
+$('#dataform').on('change', '#branch', function()
+{
+    if(parentPlanID) return;
+
+    var branchIdList = $(this).val();
+    if(!branchIdList) return;
+
+    var branchIdList = branchIdList.toString();
+    var lastPlanLink = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchIdList);
     $.post(lastPlanLink, function(data)
     {
         data = JSON.parse(data);
         var planTitle = data ? '(' + lastLang + ': ' + data.title + ')' : '';
         $('#title').parent().next('td').html(planTitle);
     })
+});
 
-    $.post(topPlanLink, function(data)
+$('#submit').click(function()
+{
+    var parentPlan = $('#parent').val();
+    var branches   = $('#branch').val();
+    if(parentPlan != 0 && branches)
     {
-        $('#parent').replaceWith(data);
-        $('#parent_chosen').remove();
-        $('#parent').chosen();
-    })
+        link = createLink('productplan', 'ajaxGetDiffBranchesTip', "produtID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
+        $.post(link, function(diffBranchesTip)
+        {
+            if((diffBranchesTip != '' && confirm(diffBranchesTip)) || !diffBranchesTip) $('form#dataform').submit();
+        });
+        return false;
+    }
 });

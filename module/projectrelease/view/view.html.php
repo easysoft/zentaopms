@@ -71,6 +71,7 @@
                     </th>
                     <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                     <th class="text-left"><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
+                    <th class='c-build w-200px text-left'><?php echo $lang->build->common;?></th>
                     <th class='c-user'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
                     <th class='w-80px text-right' style='padding-right:20px'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                     <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
@@ -98,6 +99,7 @@
                       echo html::a($storyLink,$story->title, '', "class='preview'");
                       ?>
                     </td>
+                    <td class='c-build text-left' title='<?php echo $story->buildName?>'><?php echo $story->buildName?></td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td class='text-right' style='padding-right:25px' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                     <td>
@@ -167,6 +169,7 @@
                     </th>
                     <th class='text-left'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
                     <th class='w-100px'>  <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
+                    <th class='c-build w-200px text-left'><?php echo $lang->bug->resolvedBuild;?></th>
                     <th class='c-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
                     <th class='w-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
                     <th class='c-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
@@ -191,6 +194,8 @@
                     <td>
                       <span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span>
                     </td>
+                    <?php $resolvedBuildName = zget($builds, $bug->resolvedBuild, '');?>
+                    <td class='c-build text-left' title='<?php echo $resolvedBuildName?>'><?php echo $resolvedBuildName;?></td>
                     <td><?php echo zget($users, $bug->openedBy);?></td>
                     <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                     <td><?php echo zget($users, $bug->resolvedBy);?></td>
@@ -257,6 +262,7 @@
                     <th class='w-80px' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
                     <th class='text-left'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
                     <th class='w-100px'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
+                    <th class='c-build w-200px text-left'><?php echo $lang->bug->openedBuild;?></th>
                     <th class='c-user'>    <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                     <th class='w-150px'>   <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
                     <th class='w-50px'>    <?php echo $lang->actions;?></th>
@@ -295,6 +301,11 @@
                     </td>
                     <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                     <td><span class='status-<?php echo $bug->status?>'> <?php echo $this->processStatus('bug', $bug);?></span></td>
+                    <?php
+                    $openedBuildName = '';
+                    foreach(explode(',', $bug->openedBuild) as $buildID) $openedBuildName .= zget($builds, $buildID, '') . ' ';
+                    ?>
+                    <td class='c-build text-left' title='<?php echo $openedBuildName?>'><?php echo $openedBuildName;?></td>
                     <td><?php echo zget($users, $bug->openedBy);?></td>
                     <td><?php echo $bug->openedDate?></td>
                     <td class='c-actions'>
@@ -335,7 +346,7 @@
                   <table class='table table-data'>
                     <?php if($project->hasProduct):?>
                     <tr>
-                      <th class='w-90px'><?php echo $lang->release->product;?></th>
+                      <th class='w-100px'><?php echo $lang->release->product;?></th>
                       <td><?php echo $release->productName;?></td>
                     </tr>
                     <?php if($release->productType != 'normal'):?>
@@ -362,6 +373,14 @@
                         ?>
                       </td>
                     </tr>
+                    <?php if($product->type != 'normal'):?>
+                    <tr>
+                      <th><?php echo $lang->release->branch;?></th>
+                      <td>
+                        <?php foreach($release->branches as $branchID) echo zget($branches, $branchID, '') . ' ';?>
+                      </td>
+                    </tr>
+                    <?php endif;?>
                     <tr>
                       <th><?php echo $lang->release->status;?></th>
                       <td><?php echo $this->processStatus('release', $release);?></td>

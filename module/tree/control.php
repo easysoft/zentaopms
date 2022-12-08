@@ -390,7 +390,7 @@ class tree extends control
         }
         else
         {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch);
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch, 'noMainBranch');
         }
 
         if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject', '', 0, 'book');
@@ -534,8 +534,17 @@ class tree extends control
         }
         else
         {
-            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch);
+            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch, $extra);
         }
+
+        if(strpos($extra, 'excludeModuleID') !== false)
+        {
+            list($excludeModule, $noMainBranch) = explode(',', $extra);
+            parse_str($excludeModule, $output);
+            $excludeModuleID = $output['excludeModuleID'];
+            if(isset($optionMenu[$excludeModuleID])) unset($optionMenu[$excludeModuleID]);
+        }
+
         if($returnType == 'html')
         {
             //Code for task #5081.
@@ -552,13 +561,13 @@ class tree extends control
                 $changeFunc = '';
                 if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
                 if($viewType == 'task') $changeFunc = "onchange='setStories(this.value, $rootID)'";
-                $field = $fieldID ? "modules[$fieldID]" : 'module';
+                $field = $fieldID !== '' ? "modules[$fieldID]" : 'module';
 
                 $currentModule   = $this->tree->getById($currentModuleID);
                 $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
 
                 $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
-                if(count($optionMenu) == 1 and $needManage)
+                if(count($optionMenu) == 1 and $needManage !== 'false')
                 {
                     $output .= "<span class='input-group-addon'>";
                     $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");

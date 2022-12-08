@@ -955,13 +955,22 @@ EOF;
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $typeList = array();
         if($this->app->rawMethod == 'contribute')
         {
             $reviewList = $this->my->getReviewedList($browseType, $orderBy, $pager);
         }
         else
         {
+            $this->lang->my->auditMenu->audit = $this->my->getReviewingTypeList();
             $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
+        }
+
+        $this->view->flows = array();
+        if($this->config->edition == 'max')
+        {
+            $this->app->loadLang('approval');
+            $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
         }
 
         $this->view->title       = $this->lang->review->common;

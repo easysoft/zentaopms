@@ -89,7 +89,7 @@ class testsuite extends control
                 $privateNum++;
             }
         }
-        $suitesNum = !empty(count($suites, 0)) ? count($suites, 0) : 0;
+        $suitesNum = !empty($suites) ? count($suites) : 0;
         $publicNum = $suitesNum - $privateNum;
         $summary   = str_replace(array('%total%', '%public%', '%private%'), array($suitesNum, $publicNum, $privateNum), $this->lang->testsuite->summary);
 

@@ -31,7 +31,6 @@
     <div class='page-title'>
       <span class='label label-id'><?php echo $plan->id;?></span>
       <span title='<?php echo $plan->title;?>' class='text'><?php echo $plan->title;?></span>
-      <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branchOption[$branch] . '</span>';?>
       <span class='label label-info label-badge'>
         <?php echo ($plan->begin == $config->productplan->future || $plan->end == $config->productplan->future) ? $lang->productplan->future : $plan->begin . '~' . $plan->end;?>
       </span>
@@ -559,7 +558,11 @@
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th><?php echo $lang->product->branch;?></th>
-                  <td><?php echo $branchOption[$plan->branch];?></td>
+                  <?php
+                  $branches = '';
+                  foreach(explode(',', $branch) as $branchID) $branches .= "{$branchOption[$branchID]},";
+                  ?>
+                  <td><?php echo trim($branches, ',');?></td>
                 </tr>
                 <?php endif;?>
                 <tr>

@@ -130,7 +130,11 @@ class pager extends basePager
                     }
                 }
 
-                echo "<ul class='pager' $pageSizeOptions data-page-cookie='{$this->pageCookie}' data-ride='pager' data-rec-total='{$this->recTotal}' data-rec-per-page='{$this->recPerPage}' data-page='{$this->pageID}' data-link-creator='" . helper::createLink($this->moduleName, $this->methodName, $params) . "'></ul>";
+                global $app, $lang;
+                $appendApp  = '';
+                $moduleName = $this->moduleName;
+                if(isset($lang->navGroup->{$moduleName}) and $lang->navGroup->{$moduleName} != $app->tab) $appendApp = "#app={$app->tab}";
+                echo "<ul class='pager' $pageSizeOptions data-page-cookie='{$this->pageCookie}' data-ride='pager' data-rec-total='{$this->recTotal}' data-rec-per-page='{$this->recPerPage}' data-page='{$this->pageID}' data-link-creator='" . helper::createLink($this->moduleName, $this->methodName, $params) . $appendApp . "'></ul>";
             }
         }
         else

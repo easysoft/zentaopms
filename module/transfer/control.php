@@ -163,12 +163,16 @@ class transfer extends control
             if($product->type == 'normal') unset($fields['branch']);
             if($this->session->storyType == 'requirement') unset($fields['plan']);
         }
-
         if($model == 'bug')
         {
             $product = $this->loadModel('product')->getByID($this->session->bugTransferParams['productID']);
             if($product->type == 'normal') unset($fields['branch']);
             if($product->shadow and ($this->app->tab == 'execution' or $this->app->tab == 'project')) unset($fields['product']);
+        }
+        if($model == 'testcase')
+        {
+            $product = $this->loadModel('product')->getByID($this->session->testcaseTransferParams['productID']);
+            if($product->type == 'normal') unset($fields['branch']);
         }
         if($model == 'task') $datas = $this->task->processDatas4Task($datas);
         $html = $this->transfer->buildNextList($datas->datas, $lastID, $fields, $pagerID, $model);

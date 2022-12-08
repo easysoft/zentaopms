@@ -11,8 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('allExecutions', $allExecutions)?>
-<?php js::set('executions', $executions)?>
 <?php js::set('projectID', $projectID)?>
 <?php js::set('noDevStage', $lang->project->noDevStage)?>
 <?php js::set('createExecution', $lang->project->createExecution)?>
@@ -52,15 +50,17 @@
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
           <th class="c-name text-left"><?php echo $lang->build->name;?></th>
           <?php if($project->hasProduct):?>
-          <th class="c-name w-200px text-left"><?php echo $lang->build->product;?></th>
+          <th class="c-name w-150px text-left"><?php echo $lang->build->product;?></th>
+          <?php if($showBranch):?>
+          <th class="c-name w-150px text-left"><?php echo $lang->build->branch;?></th>
+          <?php endif;?>
           <?php endif;?>
           <?php if($project->multiple):?>
-          <th class="c-name text-left"><?php echo $lang->executionCommon;?></th>
+          <th class="c-name w-150px text-left"><?php echo $lang->executionCommon;?></th>
           <?php endif;?>
-          <th class="c-url"><?php echo $lang->build->scmPath;?></th>
-          <th class="c-url"><?php echo $lang->build->filePath;?></th>
-          <th class="c-date"><?php echo $lang->build->date;?></th>
-          <th class="c-user"><?php echo $lang->build->builder;?></th>
+          <th class="c-url w-200px text-left"><?php echo $lang->build->url;?></th>
+          <th class="c-date w-90px"><?php echo $lang->build->date;?></th>
+          <th class="c-user w-70px"><?php echo $lang->build->builder;?></th>
           <th class="c-actions-5"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -71,20 +71,42 @@
         <tr data-id="<?php echo $productID;?>">
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink($module, 'view', "buildID=$build->id"), sprintf('%03d', $build->id), '', "data-app='project'");?></td>
           <td class="c-name" title='<?php echo $build->name;?>'>
-            <?php if(!$build->execution):?>
-            <span class='icon icon-code-fork text-muted'></span>
-            <?php endif;?>
-            <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink($module, 'view', "buildID=$build->id"), $build->name, '', "data-app='project'");?>
+            <?php if(!$build->execution):?>
+              <span class='icon icon-code-fork text-muted' title='<?php echo $lang->build->integrated;?>'></span>
+            <?php endif;?>
           </td>
           <?php if($project->hasProduct):?>
           <td class="c-name text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
+          <?php if($showBranch):?>
+          <td class="c-name text-left" title='<?php echo $build->branchName;?>'><?php echo $build->branchName;?></td>
+          <?php endif;?>
           <?php endif;?>
           <?php if($project->multiple):?>
+          <?php if($build->execution):?>
           <td class="c-name text-left" title='<?php echo $build->executionName;?>'><?php echo $build->executionName;?></td>
+          <?php else:?>
+          <td class="c-name text-left">
+            <?php $childExecutions = array();?>
+            <?php foreach($build->builds as $childBuild):?>
+            <?php $childExecutions[$childBuild->execution] = $childBuild->execution;?>
+            <?php endforeach;?>
+
+            <?php foreach($childExecutions as $execution):?>
+            <?php $executionName = zget($executions, $execution, '');?>
+            <?php if($executionName):?>
+            <span title="<?php echo $executionName;?>"><?php echo $executionName;?></span></br>
+            <?php endif;?>
+            <?php endforeach;?>
+          </td>
           <?php endif;?>
-          <td class="c-url" title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
-          <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
+          <?php endif;?>
+          <td class="c-url text-left">
+            <?php
+            if($build->scmPath)  echo "<div><i class='icon icon-file-code' title='{$lang->build->scmPath}'></i> <span title='{$build->scmPath}'>" . (strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath, $build->scmPath, '_blank')  : $build->scmPath) . '</span></div>';
+            if($build->filePath) echo "<div><i class='icon icon-file-archive' title='{$lang->build->filePath}'></i> <span title='{$build->filePath}'>" . (strpos($build->filePath, 'http') === 0 ? html::a($build->filePath, $build->filePath, '_blank') : $build->filePath) . '</span></div>';
+            ?>
+          </td>
           <td class="c-date"><?php echo $build->date?></td>
           <td class="c-user em"><?php echo zget($users, $build->builder);?></td>
           <td class="c-actions"><?php echo $this->build->buildOperateMenu($build, 'browse');?></td>

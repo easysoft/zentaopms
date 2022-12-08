@@ -90,21 +90,18 @@ function loadExecutionRelated(executionID)
  * Load execution builds.
  *
  * @param  int $executionID
- * @param  int $selected
  * @access public
  * @return void
  */
-function loadExecutionBuilds(executionID, selected)
+function loadExecutionBuilds(executionID)
 {
     var selectedBuild = $('#build').val();
 
     if(!selectedBuild) selectedBuild = 0;
     var link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild);
-    if(executionID == 0) link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + $('#product').val() + '&varName=resolvedBuild&build=' + selectedBuild);
+    if(executionID == 0) link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=build&build=' + selectedBuild + '&branch=&index=&needCreate=&type=noempty,notrunk,withexecution');
     $('#buildBox').load(link, function()
     {
-        $('#resolvedBuild').attr('id', 'build').attr('name', 'build').find('option[value=trunk]').remove();
-        if(selected) $('#build').val(selected);
         $('#build').chosen();
     });
 }

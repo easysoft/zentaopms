@@ -31,7 +31,21 @@ class releaseModel extends model
             ->fetch();
         if(!$release) return false;
 
-        $release->builds = $this->dao->select('id, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+        $builds = $this->dao->select('id, branch, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+
+        /* Get release's branches by build. */
+        $branches = array();
+        if($release->productType != 'normal')
+        {
+            foreach($builds as $build)
+            {
+                $branchIdList = explode(',', $build->branch);
+                foreach($branchIdList as $branchID) $branches[$branchID] = $branchID;
+            }
+        }
+
+        $release->builds   = $builds;
+        $release->branches = $branches;
 
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
@@ -123,12 +137,13 @@ class releaseModel extends model
         $buildIdList = array();
         foreach($releases as $release)
         {
-            if($branch != 'all')
+            if($branch != 'all' and $branch !== '')
             {
                 $inBranch = false;
                 foreach(explode(',', trim($release->branch, ',')) as $branchID)
                 {
-                    if(empty($branchID)) continue;
+                    if($branchID === '') continue;
+
                     if(strpos(",{$branch},", ",{$branchID},") !== false) $inBranch = true;
                 }
                 if(!$inBranch) continue;
@@ -221,10 +236,14 @@ class releaseModel extends model
             if($linkedBuilds) $builds += $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($linkedBuilds)->fetchAll('id');
             foreach($builds as $build)
             {
-                $branches[$build->branch]  = $build->branch;
+                foreach(explode(',', $build->branch) as $buildBranch)
+                {
+                    if(!isset($branches[$buildBranch])) $branches[$buildBranch] = $buildBranch;
+                }
+
                 $projects[$build->project] = $build->project;
 
-                if($this->post->sync == 'true')
+                if($this->post->sync)
                 {
                     $build->stories = trim($build->stories, ',');
                     $build->bugs    = trim($build->bugs, ',');
@@ -232,7 +251,7 @@ class releaseModel extends model
                     if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
                 }
             }
-            if($this->post->sync == 'true' and $release->bugs)
+            if($this->post->sync and $release->bugs)
             {
                 $releaseBugs   = $this->loadModel('bug')->getReleaseBugs(array_keys($builds), $release->product, $release->branch);
                 $release->bugs = join(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));

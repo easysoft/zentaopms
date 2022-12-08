@@ -257,7 +257,7 @@ class product extends control
 
             $this->products  = $this->product->getProducts($projectID, 'all', '', false);
             $projectProducts = $this->product->getProducts($projectID);
-            $productPlans    = $this->execution->getPlans($projectProducts, 'skipParent');
+            $productPlans    = $this->execution->getPlans($projectProducts, 'skipParent', $projectID);
 
             if($browseType == 'bybranch') $param = $branchID;
             $stories = $this->story->getExecutionStories($projectID, $productID, $branchID, $sort, $browseType, $param, $storyType, '', $pager);
@@ -271,13 +271,31 @@ class product extends control
         /* Display status of branch. */
         $branchOption    = array();
         $branchTagOption = array();
-        if($product and $product->type != 'normal')
+        if(!$product and $isProjectStory)
         {
-            $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
-            foreach($branches as $branchInfo)
+            /* Get branch display under multiple products. */
+            $branchOptions = array();
+            foreach($projectProducts as $projectProduct)
             {
-                $branchOption[$branchInfo->id]    = $branchInfo->name;
-                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                if($projectProduct and $projectProduct->type != 'normal')
+                {
+                    $branches = $this->loadModel('branch')->getList($projectProduct->id, $projectID, 'all');
+                    foreach($branches as $branchInfo) $branchOptions[$projectProduct->id][$branchInfo->id] = $branchInfo->name;
+                }
+            }
+
+            $this->view->branchOptions = $branchOptions;
+        }
+        else
+        {
+            if($product and $product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+                foreach($branches as $branchInfo)
+                {
+                    $branchOption[$branchInfo->id]    = $branchInfo->name;
+                    $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                }
             }
         }
 
@@ -338,7 +356,7 @@ class product extends control
         $this->view->productName     = $productName;
         $this->view->moduleID        = $moduleID;
         $this->view->stories         = $stories;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, '', true);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired', true);
         $this->view->productPlans    = isset($productPlans) ? array(0 => '') + $productPlans : array();
         $this->view->summary         = $this->product->summary($stories, $storyType);
         $this->view->moduleTree      = $moduleTree;
@@ -907,6 +925,22 @@ class product extends control
     }
 
     /**
+     * Ajax get product by id.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductById($productID)
+    {
+        $product = $this->product->getById($productID);
+
+        $product->branchSourceName = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        $product->branchName       = $this->lang->product->branchName[$product->type];
+        echo json_encode($product);
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
@@ -1020,12 +1054,19 @@ class product extends control
     public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
     {
         $param    = strtolower($param);
-        $plans    = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
-        $field    = $fieldID ? "plans[$fieldID]" : 'plan';
+        if(strpos($param, 'forstory') === false)
+        {
+            $plans = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
+        }
+        else
+        {
+            $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch == '0' ? 'all' : $branch, $param);
+        }
+        $field    = $fieldID !== '' ? "plans[$fieldID]" : 'plan';
         $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';
         $output   = html::select($field, $plans, $planID, "class='form-control chosen' $multiple");
 
-        if($branch == 0 and strpos($param, 'edit')) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
+        if($branch == 0 and strpos($param, 'edit') and (strpos($param, 'forstory') === false)) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
 
         if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
         {
@@ -1351,7 +1392,7 @@ class product extends control
         $this->view->title      = $this->lang->product->line;
         $this->view->position[] = $this->lang->product->line;
 
-        $this->view->programs = array('') + $this->loadModel('program')->getTopPairs();
+        $this->view->programs = array('') + $this->loadModel('program')->getTopPairs('', 'withDeleted');
         $this->view->lines    = $this->product->getLines();
         $this->display();
     }

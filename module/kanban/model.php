@@ -818,8 +818,11 @@ class kanbanModel extends model
         }
         elseif($branchID)
         {
-            $branchName = $this->branch->getById($branchID);
-            $branches   = array($branchID => $branchName);
+            foreach(explode(',', $branchID) as $id)
+            {
+                $branchName = $this->branch->getById($id);
+                $branches[$id] = $branchName;
+            }
         }
 
         foreach($branches as $id => $name)
@@ -1511,6 +1514,8 @@ class kanbanModel extends model
                         $cardData['status']     = $object->status;
                         $cardData['left']       = $object->left;
                         $cardData['estStarted'] = $object->estStarted;
+                        $cardData['mode']       = $object->mode;
+                        if($object->mode == 'multi') $cardData['teamMembers'] = $object->teamMembers;
                     }
                     else
                     {

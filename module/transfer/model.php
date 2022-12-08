@@ -1447,7 +1447,7 @@ class transferModel extends model
                     if($model == 'bug' and $field == 'steps') $selected = str_replace("\n\n\n\n\n\n", '', $selected);
                     $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
                 }
-                elseif($field == 'stepDesc' or $field == 'stepExpect')
+                elseif($field == 'stepDesc' or $field == 'stepExpect' or $field == 'precondition')
                 {
                     $stepDesc = $this->process4Testcase($field, $tmpList, $row);
                     if($stepDesc) $html .= '<td>' . $stepDesc . '</td>';
@@ -1473,6 +1473,7 @@ class transferModel extends model
                     }
                     $html .= '</td>';
                 }
+                elseif(strpos($this->transferConfig->textareaFields, $field) !== false) $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' style='overflow:hidden;'") . '</td>';
 
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
             }
@@ -1484,7 +1485,7 @@ class transferModel extends model
     }
 
     /**
-     * Process stepExpect and stepDesc for testcase.
+     * Process stepExpect、stepDesc and precondition for testcase.
      *
      * @param  int    $field
      * @param  int    $datas
@@ -1497,6 +1498,7 @@ class transferModel extends model
         $stepData = $this->testcase->processDatas($datas);
 
         $html = '';
+        if($field == 'precondition' and isset($datas[$key])) return html::textarea("precondition[$key]", htmlSpecialString($datas[$key]->precondition), "class='form-control' style='overflow:hidden'");
         if($field == 'stepExpect') return $html;
         if(isset($stepData[$key]['desc']))
         {

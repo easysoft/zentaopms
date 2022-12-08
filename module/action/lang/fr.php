@@ -225,8 +225,9 @@ $lang->action->desc->reopen               = '$date, reopened by <strong>$actor</
 $lang->action->desc->merged               = '$date, merged by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->submitreview         = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->ganttmove            = '$date, sort by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->relieved             = '$date, relieved by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
-$lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the sprints of the project from the $extra.' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the ' . $lang->executionCommon . 's of the project from the $extra.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -395,6 +396,8 @@ $lang->action->label->tolib                 = 'Importé';
 $lang->action->label->updatetolib           = 'MàJ';
 $lang->action->label->ganttmove             = 'sorted';
 $lang->action->label->submitreview          = 'submitted';
+$lang->action->label->syncsiblings          = 'synchronized changes';
+$lang->action->label->relieved              = 'relieved';
 $lang->action->label->switchtolight         = 'switch from ALM mode to light mode';
 $lang->action->label->linkedrepo            = 'Linked Code Repo';
 $lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';

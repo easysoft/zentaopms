@@ -341,6 +341,7 @@ class weeklyModel extends model
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->ge(0)
             ->groupBy('type')
             ->fetchPairs();
     }
