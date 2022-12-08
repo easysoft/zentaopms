@@ -605,7 +605,7 @@ class productplan extends control
      */
     public function ajaxGetProductplans($productID, $branch = 0, $number = '', $expired = '')
     {
-        $plans    = $this->productplan->getPairs($productID, $branch, $expired, true);
+        $plans    = $this->productplan->getPairs($productID, empty($branch) ? '' : $branch, $expired, true);
         $planName = $number === '' ? 'plan' : "plan[$number]";
         $plans    = empty($plans) ? array('' => '') : $plans;
         echo html::select($planName, $plans, '', "class='form-control'");
