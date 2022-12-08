@@ -138,6 +138,7 @@ class zanode extends control
         $this->view->notice     = $this->lang->zanode->init->initSuccessNoticeTitle;
         $this->view->buttonName = $this->lang->zanode->init->button;
         $this->view->modalLink  = $this->createLink('zanode', 'browse');
+        $this->view->closeLink  = $this->createLink('zanode', 'browse');
 
         $this->display();
     }
@@ -360,6 +361,20 @@ class zanode extends control
     {
         $node          = $this->zanode->getNodeById($hostID);
         $serviceStatus = $this->zanode->getServiceStatus($node);
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
+    }
+
+    /**
+     * ajaxRunZTFScript
+     *
+     * @param  int    $scriptID
+     * @access public
+     * @return void
+     */
+    public function ajaxRunZTFScript($scriptID = 0)
+    {
+        $script = $this->zanode->getAutomationByID($scriptID);
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
     }

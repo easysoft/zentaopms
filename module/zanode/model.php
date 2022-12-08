@@ -490,6 +490,19 @@ class zanodemodel extends model
     }
 
     /**
+     * Get automation by id.
+     *
+     * @param  int $id
+     * @return object
+     */
+    public function getScriptByID($id)
+    {
+        return $this->dao->select('*')->from(TABLE_AUTOMATION)
+            ->where('id')->eq($id)
+            ->fetch();
+    }
+
+    /**
      * Generage unique mac address.
      *
      * @return void
@@ -636,7 +649,7 @@ class zanodemodel extends model
             "server" => getWebRoot(true),
         );
         $result = json_decode(commonModel::http("http://{$node->extranet}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
-        
+
         if(empty($result->data) || $result->code != 'success')
         {
             $result = new stdclass;
@@ -664,6 +677,19 @@ class zanodemodel extends model
     }
 
     /**
+     * Get automation by id.
+     *
+     * @param  int $id
+     * @return object
+     */
+    public function getAutomationByID($id)
+    {
+        return $this->dao->select('*')->from(TABLE_AUTOMATION)
+            ->where('id')->eq($id)
+            ->fetch();
+    }
+
+    /**
      * Set automation setting.
      *
      * @access public
@@ -686,5 +712,35 @@ class zanodemodel extends model
 
         if(dao::isError()) return false;
         return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Run ZTFScript.
+     *
+     * @access public
+     * @return void
+     */
+    public function runZTFScript()
+    {
+        $params = array(
+            'cmd'       => '',
+            'ids'       => '',
+            'path'      => '',
+            'task'      => '',
+            'workspace' => ''
+        );
+
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
+
+        if(empty($result->data) || $result->code != 'success')
+        {
+            $result = new stdclass;
+            $result->data = $this->lang->zanode->init->serviceStatus;
+        }
+
+        return array(
+            "ZenAgent" => "ready",
+            "ZTF"      => $result->data->ztfStatus,
+        );
     }
 }
