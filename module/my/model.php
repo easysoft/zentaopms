@@ -1006,7 +1006,7 @@ class myModel extends model
         if($this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
-        $typeList = array_merge($typeList, $this->getReviewingOA('status', true));
+        if($this->getReviewingOA('status', true))         $typeList[] = 'oa';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
         $flows = ($this->config->edition == 'open') ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -1310,12 +1310,10 @@ class myModel extends model
 
         if($checkExists)
         {
-            $typeList = array();
             foreach($oa as $type => $reviewings)
             {
-                if(!empty($reviewings)) $typeList[$type] = true;
+                if(!empty($reviewings)) return true;
             }
-            return array_keys($typeList);
         }
 
         $reviewList = array();
