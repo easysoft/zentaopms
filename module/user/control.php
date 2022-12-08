@@ -1090,8 +1090,7 @@ class user extends control
         }
 
         /* Remove the real path for security reason. */
-        $pathPos       = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
-        $resetFileName = substr($resetFileName, $pathPos + 1);
+        $resetFileName = str_replace($this->app->getBasePath(), '', $resetFileName);
 
         $this->view->title          = $this->lang->user->resetPassword;
         $this->view->status         = 'reset';
