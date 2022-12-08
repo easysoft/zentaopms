@@ -643,7 +643,7 @@ class build extends control
         else
         {
             $branchPairs = $this->loadModel('branch')->getPairs($build->product, 'noempty');
-            $branchAll   = $build->productType == 'branch' ? $this->lang->build->allBranch : $this->lang->build->allPlatform;
+            $branchAll   = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$product->type]);
             $branches    = array('' => $branchAll) + array(BRANCH_MAIN => $this->lang->branch->main);
             if($build->branch)
             {
@@ -707,7 +707,7 @@ class build extends control
     * AJAX: Get unlinkBranch story and bug.
     *
     * @param  int    $buildID
-    * @param  int    $branch
+    * @param  int    $newBranch
     * @access public
     * @return void
     */
@@ -876,7 +876,7 @@ class build extends control
         else
         {
             $branchList = $this->loadModel('branch')->getPairs($build->product, '', $build->execution);
-            $branchAll  = $build->productType == 'branch' ? $this->lang->build->allBranch : $this->lang->build->allPlatform;
+            $branchAll  = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$product->type]);
             $branches   = array('' => $branchAll, BRANCH_MAIN => $this->lang->branch->main);
             if(strpos($build->branch, ',') !== false) $buildBranch = explode(',', $build->branch);
             foreach($buildBranch as $buildKey) $branches += array($buildKey => zget($branchList, $buildKey));
