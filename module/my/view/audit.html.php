@@ -64,7 +64,11 @@
       $statusList = array();
       if(isset($lang->$type->statusList)) $statusList = $lang->$type->statusList;
       if($type == 'attend') $statusList = $lang->attend->reviewStatusList;
-      if(isset($flows[$review->type])) $statusList = $lang->approval->statusList;
+      if(!in_array($type, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$type,") === false)
+      {
+          if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
+          if(isset($flows[$review->type])) $statusList = $rawMethod == 'audit' ? $lang->approval->nodeList : $lang->approval->statusList;
+      }
       ?>
       <tr>
         <td class='c-id'><?php echo $review->id?></td>

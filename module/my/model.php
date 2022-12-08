@@ -1242,7 +1242,7 @@ class myModel extends model
                 $data->title  = (empty($titleFieldName) or !isset($object->$titleFieldName)) ? $title . " #{$object->id}" : $object->$titleFieldName;
                 $data->type   = $objectType;
                 $data->time   = $object->$openedDateField;
-                $data->status = (isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'doing';
+                $data->status = 'doing';
                 $approvalList[] = $data;
             }
         }
