@@ -468,7 +468,7 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN, t2.secret as secret')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN, t2.secret as secret')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
@@ -580,7 +580,7 @@ class zanodemodel extends model
     /**
      * Build operateMenu for browse view.
      *
-     * @param  int    $node
+     * @param  object    $node
      * @access public
      * @return void
      */
