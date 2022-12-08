@@ -12,8 +12,8 @@ $config->transfer->fieldList['sort']       = '';
 $config->transfer->fieldList['dataSource'] = array('module' => '', 'method' => '', 'params' => '', 'pairs' => '', 'lang' => '');
 
 $config->transfer->initFunction   = 'title,control,required,';
-$config->transfer->dateFeilds     = 'estStarted,realStarted,deadline,openedDate,assignedDate,finishedDate,canceledDate,closedDate,lastEditedDate,';
-$config->transfer->datetimeFeilds = '';
+$config->transfer->dateFields     = 'estStarted,realStarted,deadline,openedDate,assignedDate,finishedDate,canceledDate,closedDate,lastEditedDate,';
+$config->transfer->datetimeFields = '';
 $config->transfer->listFields     = '';
 $config->transfer->sysLangFields  = ',pri,status,type,mode,severity,os,browser,resolution,confirmed,source,reviewResult,stage,change,category';
 $config->transfer->sysDataFields  = 'execution,product,user';
