@@ -454,7 +454,7 @@ class productplan extends control
 
         /* Get stories of plan. */
         $this->loadModel('story');
-        $planStories = $this->story->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
+        $planStories = $this->story->getLinkStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
 
         $this->executeHooks($planID);
 
@@ -474,7 +474,7 @@ class productplan extends control
         $this->view->title        = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
         $this->view->position[]   = $this->lang->productplan->view;
         $this->view->planStories  = $planStories;
-        $this->view->planBugs     = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
+        $this->view->planBugs     = $this->loadModel('bug')->getLinkBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
         $this->view->products     = $products;
         $this->view->summary      = $this->product->summary($this->view->planStories);
         $this->view->plan         = $plan;
@@ -706,7 +706,7 @@ class productplan extends control
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
-        $planStories = $this->story->getPlanStories($planID);
+        $planStories = $this->story->getLinkStories($planID);
 
         if($browseType == 'bySearch')
         {
@@ -846,7 +846,7 @@ class productplan extends control
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
-        $planBugs = $this->bug->getPlanBugs($planID);
+        $planBugs = $this->bug->getLinkBugs($planID);
 
         if($browseType == 'bySearch')
         {
@@ -929,8 +929,8 @@ class productplan extends control
                     break;
                 }
             }
-            $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
-            $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
+            $planStories = $this->loadModel('story')->getLinkStories($planID, 'all');
+            $planBugs    = $this->loadModel('bug')->getLinkBugs($planID, 'all');
             if($oldBranch)
             {
                 foreach($planStories as $storyID => $story)
@@ -958,8 +958,8 @@ class productplan extends control
     {
         $plan        = $this->productplan->getByID($planID);
         $oldBranch   = $plan->branch;
-        $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
-        $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
+        $planStories = $this->loadModel('story')->getLinkStories($planID, 'all');
+        $planBugs    = $this->loadModel('bug')->getLinkBugs($planID, 'all');
         $branchPairs = $this->loadModel('branch')->getPairs($plan->product);
 
         $removeBranches = '';

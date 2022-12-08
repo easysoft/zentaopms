@@ -3674,25 +3674,28 @@ class storyModel extends model
     }
 
     /**
-     * Get stories list of a plan.
+     * Get stories list of a plan or build.
      *
-     * @param  int    $planID
+     * @param  int    $LinkID planID|buildID
      * @param  string $status
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $viewType plan|build
      * @access public
      * @return array
      */
-    public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getLinkStories($LinkID, $status = 'all', $orderBy = 'id_desc', $pager = null, $viewType = 'plan')
     {
+        $table  = $viewType == 'plan' ? 'zt_planstory' : 'zt_buildstory';
+        $fields = $viewType == 'plan' ? 't1.plan' : 't1.build';
         if(strpos($orderBy, 'module') !== false)
         {
             $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';
-            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
-                ->from(TABLE_PLANSTORY)->alias('t1')
+            $stories = $this->dao->select('distinct t1.story, ' . $fields . ', t1.order, t2.*')
+                ->from($table)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
-                ->where('t1.plan')->eq($planID)
+                ->where($fields)->eq($LinkID)
                 ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)
@@ -3700,10 +3703,10 @@ class storyModel extends model
         }
         else
         {
-            $stories = $this->dao->select("distinct t1.story, t1.plan, t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder")
-                ->from(TABLE_PLANSTORY)->alias('t1')
+            $stories = $this->dao->select("distinct t1.story, ". $fields . ", t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder")
+                ->from($table)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where('t1.plan')->eq($planID)
+                ->where($fields)->eq($LinkID)
                 ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)
@@ -3997,7 +4000,7 @@ class storyModel extends model
         $orderBy = $this->post->orderBy;
         if(strpos($orderBy, 'order') !== false) $orderBy = str_replace('order', 'id', $orderBy);
 
-        $stories     = $this->loadModel('story')->getPlanStories($planID, 'all');
+        $stories     = $this->loadModel('story')->getLinkStories($planID, 'all');
         $storyIDList = array_keys($stories);
 
         if(strpos($this->post->orderBy, 'order') !== false and !empty($planOrder)) $stories = $this->sortPlanStory($stories, $planOrder, $orderBy);
@@ -5875,7 +5878,7 @@ class storyModel extends model
         $orderBy = common::appendOrder($orderBy);
 
         /* Get all stories by plan. */
-        $stories     = $this->getPlanStories($planID, 'all', $orderBy);
+        $stories     = $this->getLinkStories($planID, 'all', $orderBy);
         $storyIDList = array_keys($stories);
 
         /* Calculate how many numbers there are before the sort list and after the sort list. */

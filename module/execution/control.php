@@ -4138,7 +4138,7 @@ class execution extends control
     public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story', $extra = '', $param = '')
     {
         $planStories = $planProducts = array();
-        $planStory   = $this->loadModel('story')->getPlanStories($planID);
+        $planStory   = $this->loadModel('story')->getLinkStories($planID);
         $execution   = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         $count = 0;

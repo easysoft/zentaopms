@@ -1046,7 +1046,7 @@ class productplanModel extends model
         foreach($newPlans as $planID)
         {
             $planStories = $planProducts = array();
-            $planStory   = $this->loadModel('story')->getPlanStories($planID);
+            $planStory   = $this->loadModel('story')->getLinkStories($planID);
             if(!empty($planStory))
             {
                 $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
