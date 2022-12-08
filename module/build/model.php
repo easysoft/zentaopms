@@ -256,6 +256,7 @@ class buildModel extends model
                 ->fetchPairs();
         }
 
+        $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($products)->fetchPairs('shadow', 'shadow');
         $branchs = strpos($params, 'separate') === false ? "0,$branch" : $branch;
         $allBuilds = $this->dao->select('t1.id, t1.name, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
@@ -264,6 +265,7 @@ class buildModel extends model
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t5')->on('t1.product = t5.id')
             ->where('1=1')
+            ->andWhere('t1.id')->notIN($shadows)
             ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
