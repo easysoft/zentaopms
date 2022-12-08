@@ -349,12 +349,6 @@
                       <th class='w-100px'><?php echo $lang->release->product;?></th>
                       <td><?php echo $release->productName;?></td>
                     </tr>
-                    <?php if($release->productType != 'normal'):?>
-                    <tr>
-                      <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
-                      <td><?php echo $branchName;?></td>
-                    </tr>
-                    <?php endif;?>
                     <?php endif;?>
                     <tr>
                       <th class='w-90px'><?php echo $lang->release->name;?></th>
