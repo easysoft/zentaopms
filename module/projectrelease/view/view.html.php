@@ -377,7 +377,13 @@
                     <tr>
                       <th><?php echo $lang->release->branch;?></th>
                       <td>
-                        <?php foreach($release->branches as $branchID) echo zget($branches, $branchID, '') . ' ';?>
+                        <?php 
+                        foreach($release->branches as $branchID)
+                        {
+                            echo zget($branches, $branchID, '');
+                            if($branchID != end($release->branches)) echo ', ';
+                        }
+                        ?>
                       </td>
                     </tr>
                     <?php endif;?>
