@@ -37,7 +37,7 @@
           <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
         </tr>
         <tr>
-        <tr class='<?php if(!empty($product) and $product->type == 'normal') echo 'hidden'?>'>
+        <tr class='<?php if((!empty($product) and $product->type == 'normal') or empty($product)) echo 'hidden'?>'>
           <th class='w-120px'><?php echo $product->type == 'normal' ? '' : $lang->product->branchName[$product->type]?></th>
           <td>
             <div class='input-group' id='branchBox'>

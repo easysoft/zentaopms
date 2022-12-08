@@ -158,14 +158,14 @@ class treeModel extends model
 
         if($type == 'line') $rootID = 0;
 
-        $branches = array($branch => '');
+        $branches = array();
         if($branch != 'all' and strpos('story|bug|case', $type) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
             if($product and $product->type != 'normal')
             {
                 $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
-                $branches    = array($branch => $branchPairs[$branch]);
+                foreach(explode(',', $branch) as $branchID) $branches += array($branchID => $branchPairs[$branchID]);
             }
             elseif($product and $product->type == 'normal')
             {
@@ -178,7 +178,7 @@ class treeModel extends model
 
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
-        {
+        {   
             $stmt    = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID, $param));
             $modules = array();
             while($module = $stmt->fetch())
