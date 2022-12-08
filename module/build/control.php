@@ -718,6 +718,7 @@ class build extends control
         $buildStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : array();
         $buildBugs    = $build->allBugs ? $this->loadModel('bug')->getByList($build->allBugs) : array();
         $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
+        $typeName = $this->lang->product->branchName[$build->productType];
 
         $removeBranches = '';
         foreach(explode(',', $oldBranch) as $oldBranchID)
@@ -742,15 +743,15 @@ class build extends control
 
         if($unlinkStoryCounts and $unlinkBugCounts)
         {
-            printf($this->lang->build->confirmChangeBuild, $this->lang->product->branchName[$build->productType], trim($removeBranches, ','), $unlinkStoryCounts, $unlinkBugCounts);
+            printf($this->lang->build->confirmChangeBuild, $typeName, trim($removeBranches, ','), $typeName, $unlinkStoryCounts, $unlinkBugCounts);
         }
         elseif($unlinkStoryCounts)
         {
-            printf($this->lang->build->confirmRemoveStory, $this->lang->product->branchName[$build->productType], trim($removeBranches, ','), $unlinkStoryCounts);
+            printf($this->lang->build->confirmRemoveStory, $typeName, trim($removeBranches, ','), $typeName, $unlinkStoryCounts);
         }
         elseif($unlinkBugCounts)
         {
-            printf($this->lang->build->confirmRemoveBug, $this->lang->product->branchName[$build->productType], trim($removeBranches, ','), $unlinkBugCounts);
+            printf($this->lang->build->confirmRemoveBug, $typeName, trim($removeBranches, ','), $typeName, $unlinkBugCounts);
         }
     }
 
