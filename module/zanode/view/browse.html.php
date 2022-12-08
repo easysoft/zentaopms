@@ -75,13 +75,13 @@
               <td class='c-actions'>
                 <?php
                 $suspendAttr  = "title='{$lang->zanode->suspend}' target='hiddenwin'";
-                $suspendAttr .= $node->status == 'suspend' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
+                $suspendAttr .= $node->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
 
                 $resumeAttr  = "title='{$lang->zanode->resume}' target='hiddenwin'";
                 $resumeAttr .= $node->status == 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
 
                 $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
-                $rebootAttr .= $node->status == 'suspend' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+                $rebootAttr .= $node->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
                 if($node->status == "suspend")
                 {

@@ -78,6 +78,8 @@ $lang->zanode->statusList['running']      = 'Running';
 $lang->zanode->statusList['suspend']      = 'Suspend';
 $lang->zanode->statusList['offline']      = 'Offline';
 $lang->zanode->statusList['destroy']      = 'Destroyed';
+$lang->zanode->statusList['shutoff']      = 'Shutoff';
+$lang->zanode->statusList['shutdown']     = 'shutdown';
 $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
 
 $lang->zanode->init = new stdclass;

@@ -78,6 +78,8 @@ $lang->zanode->statusList['running']      = '运行中';
 $lang->zanode->statusList['suspend']      = '暂停';
 $lang->zanode->statusList['offline']      = '下线';
 $lang->zanode->statusList['destroy']      = '已销毁';
+$lang->zanode->statusList['shutoff']      = '已关机';
+$lang->zanode->statusList['shutodown']    = '已关机';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
 
 $lang->zanode->init = new stdclass;
