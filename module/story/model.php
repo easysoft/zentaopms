@@ -5068,6 +5068,11 @@ class storyModel extends model
                 $title  = isset($story->planTitle) ? $story->planTitle : '';
                 $class .= ' text-ellipsis';
             }
+            elseif($id == 'branch')
+            {
+                $title  = zget($branches, $story->branch, '');
+                $class .= ' text-ellipsis';
+            }
             elseif($id == 'sourceNote')
             {
                 $title  = $story->sourceNote;

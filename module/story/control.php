@@ -1074,6 +1074,7 @@ class story extends control
             $modules         = array();
             $branchTagOption = array();
             $products        = array();
+            $plans           = array();
 
             /* Get product id list by the stories. */
             $productIdList = array();
