@@ -80,6 +80,7 @@ $lang->story->currentBranch      = 'Current Branch';
 $lang->story->siblings           = 'Siblings story';
 $lang->story->relieved           = 'Relieved';
 $lang->story->relievedSiblings   = 'Relieved Siblings';
+$lang->story->loadAllStories     = 'Load all stories';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Changer Story";

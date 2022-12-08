@@ -77,11 +77,11 @@ function getStatus(method, params)
  * @access public
  * @return void
  */
-function loadURS()
+function loadURS(allURS)
 {
     var productID       = $('#product').val();
     var branchID        = $('#branch').val();
-    var moduleID        = $('#module').val();
+    var moduleID        = typeof(allURS) == 'undefined' ? $('#module').val() : 0;
     var requirementList = $('#URS').val();
     requirementList     = requirementList ? requirementList.join(',') : '';
 
