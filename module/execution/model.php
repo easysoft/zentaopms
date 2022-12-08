@@ -2935,7 +2935,7 @@ class executionModel extends model
                 $executionBranches = zget($executionProducts, $productID, array());
                 foreach($planIdList as $planID)
                 {
-                    $planStory = $this->story->getLinkStories($planID);
+                    $planStory = $this->story->getPlanStories($planID);
                     if(!empty($planStory))
                     {
                         foreach($planStory as $id => $story)

@@ -657,7 +657,6 @@ class build extends control
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
-        $buildStories = $this->story->getLinkStories($buildID, '', '', '','build');
 
         $executionID = $build->execution ? $build->execution : $build->project;
         if($browseType == 'bySearch')
@@ -670,7 +669,6 @@ class build extends control
         }
 
         $this->view->allStories   = $allStories;
-        $this->view->buildStories = $buildStories;
         $this->view->build        = $build;
         $this->view->buildStories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
