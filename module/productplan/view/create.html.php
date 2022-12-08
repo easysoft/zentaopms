@@ -55,7 +55,7 @@
                 }
             }
             ?>
-            <td><?php echo html::select('branch[]', $branches, '', "class='form-control chosen' multiple required");?></td><td></td><td></td>
+            <td class='required'><?php echo html::select('branch[]', $branches, '', "class='form-control chosen' multiple");?></td><td></td><td></td>
           </tr>
           <?php endif;?>
           <tr>
