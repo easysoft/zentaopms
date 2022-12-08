@@ -155,15 +155,14 @@ class treeModel extends model
 
         if($type == 'line') $rootID = 0;
 
-        $branches = array($branch => '');
+        $branches = array();
         if($branch != 'all' and strpos('story|bug|case', $type) !== false)
         {
-            $product = $this->loadModel('product')->getById($rootID);
-            if(strpos($branch, ',') !== false) $buildBranch = explode(',', $branch);
+            $product     = $this->loadModel('product')->getById($rootID);
             if($product and $product->type != 'normal')
             {
                 $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
-                foreach($buildBranch as $buildKey) $branches = array($buildKey => $branchPairs[$buildKey]);
+                foreach(explode(',', $branch) as $branchID) $branches += array($branchID => $branchPairs[$branchID]);
             }
             elseif($product and $product->type == 'normal')
             {

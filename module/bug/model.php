@@ -510,7 +510,7 @@ class bugModel extends model
     {
         if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_BUG)
-            ->where('plan')->eq((int)$planID)->fi()
+            ->where('plan')->eq((int)$planID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
@@ -1518,7 +1518,7 @@ class bugModel extends model
     /**
      * Get bugs to link.
      *
-     * @param  int|array|string $bugID
+     * @param  int    $bugID
      * @param  string $browseType
      * @param  int    $queryID
      * @param  object $pager
