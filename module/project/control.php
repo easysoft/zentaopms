@@ -1471,6 +1471,8 @@ class project extends control
                         if(isset($branchPairs[$branchID])) $build->branchName .= "{$branchPairs[$branchID]},";
                     }
                     $build->branchName = trim($build->branchName, ',');
+
+                    if(empty($build->branchName) and empty($build->builds)) $build->branchName = $this->lang->branch->main;
                 }
             }
         }
