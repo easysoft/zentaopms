@@ -718,13 +718,11 @@ class build extends control
         $buildStories = $this->loadModel('story')->getByList($build->allStories);
         $buildBugs    = $this->loadModel('bug')->getByList($build->allBugs);
         $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
-        $this->app->loadLang('branch');
 
         $removeBranches = '';
         foreach(explode(',', $oldBranch) as $oldBranchID)
         {
             if($oldBranchID and strpos(",$newBranch,", ",$oldBranchID,") === false) $removeBranches .= "{$branchPairs[$oldBranchID]},";
-            if($oldBranchID == '0') $removeBranches = $this->lang->branch->main;
         }
 
         $unlinkStoryCounts = 0;
@@ -753,10 +751,6 @@ class build extends control
         elseif($unlinkBugCounts)
         {
             printf($this->lang->build->confirmRemoveBug, trim($removeBranches, ','), $unlinkBugCounts);
-        }
-        else
-        {
-            printf($this->lang->build->confirmRemoveTips, trim($removeBranches, ','));
         }
     }
 
@@ -802,12 +796,12 @@ class build extends control
             {
                 foreach($planStories as $storyID => $story)
                 {
-                    if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $this->build->unlinkStory($storyID, $buildID);
+                    if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $this->build->unlinkStory($buildID, $storyID);
                 }
 
                 foreach($planBugs as $bugID => $bug)
                 {
-                    if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $this->build->unlinkBug($bugID, $buildID);
+                    if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $this->build->unlinkBug($buildID, $bugID);
                 }
             }
         }
