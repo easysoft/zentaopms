@@ -95,13 +95,14 @@ class zahost extends control
                 return $this->send(array('result' => 'fail', 'message' => array("extranet" => array($this->lang->zahost->netError))));
             }
 
-            $initLink = $this->createLink('zahost', 'inithost', "hostID=$hostID");
+            $initLink = $this->createLink('zahost', 'init', "hostID=$hostID");
             return print("<script>showModal('$initLink')</script>");
         }
 
         $this->view->title      = $this->lang->zahost->create;
-        $this->view->notice     = $this->lang->zahost->initHostNotice;
-        $this->view->buttonName = $this->lang->zahost->init;
+        $this->view->notice     = $this->lang->zahost->initNotice;
+        $this->view->buttonName = $this->lang->zahost->init->title;
+        $this->view->closeLink  = $this->createLink('zahost', 'browse');
         $this->display();
     }
 
@@ -117,7 +118,7 @@ class zahost extends control
         if($_POST)
         {
             $changes = $this->zahost->update($hostID);
-            if(dao::isError()) 
+            if(dao::isError())
             {
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
@@ -325,17 +326,18 @@ class zahost extends control
      * @param  int      $hostID
      * @return void
      */
-    public function initHost($hostID)
+    public function init($hostID)
     {
         $imageList = $this->zahost->getImagePairs($hostID);
 
-        $this->view->title      = $this->lang->zahost->init;
+        $this->view->title      = $this->lang->zahost->init->title;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->hostID     = $hostID;
         $this->view->host       = $this->zahost->getById($hostID);
         $this->view->notice     = $imageList ? $this->lang->zahost->createZanodeNotice : $this->lang->zahost->downloadImageNotice;
         $this->view->buttonName = $imageList ? $this->lang->zahost->createZanode : $this->lang->zahost->image->downloadImage;
         $this->view->modalLink  = $imageList ? $this->createLink('zanode', 'create', "hostID=$hostID") : $this->createLink('zahost', 'browseImage', "hostID=$hostID");
+        $this->view->closeLink  = $this->createLink('zahost', 'browse');
 
         $this->display();
     }
@@ -344,7 +346,6 @@ class zahost extends control
      * Check service status by ajax.
      *
      * @param  int    $hostID
-     * @param  int    $templateID
      * @access public
      * @return void
      */

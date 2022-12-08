@@ -123,6 +123,25 @@ class zanode extends control
         $this->display();
     }
 
+    /*
+     * Init node.
+     *
+     * @param  int      $hostID
+     * @return void
+     */
+    public function init($nodeID)
+    {
+        $this->view->title      = $this->lang->zanode->initTitle;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->nodeID     = $nodeID;
+        $this->view->node       = $this->zanode->getNodeById($nodeID);
+        $this->view->notice     = $this->lang->zanode->init->initSuccessNoticeTitle;
+        $this->view->buttonName = $this->lang->zanode->init->button;
+        $this->view->modalLink  = $this->createLink('zanode', 'browse');
+
+        $this->display();
+    }
+
     /**
      * Suspend Node.
      *
@@ -328,5 +347,20 @@ class zanode extends control
             }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
         }
+    }
+
+    /**
+     * Check service status by ajax.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetServiceStatus($hostID)
+    {
+        $node          = $this->zanode->getNodeById($hostID);
+        $serviceStatus = $this->zanode->getServiceStatus($node);
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
     }
 }

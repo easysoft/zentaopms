@@ -40,7 +40,7 @@ $lang->zahost->osLang     = 'Language';
 $lang->zahost->imageName  = 'Image File';
 
 $lang->zahost->createZanode        = 'Create Zanode';
-$lang->zahost->initNotice      = 'Save successfully, initialize the ZAhost or return list';
+$lang->zahost->initNotice          = 'Save successfully, initialize the ZAhost or return list';
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
 $lang->zahost->netError            = 'Unable to connect to the host, please check the network and try again.';
@@ -57,9 +57,9 @@ $lang->zahost->init->initFailNoticeTitle = "Initialization failed, check the ini
 $lang->zahost->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
 $lang->zahost->init->serviceStatus = [
-    "nginx" => 'not_install',
-    "kvm" => 'not_install',
-    "novnc" => 'not_install',
+    "kvm"        => 'not_install',
+    "nginx"      => 'not_install',
+    "novnc"      => 'not_install',
     "websockify" => 'not_install',
 ];
 $lang->zahost->init->title       = "Initialize Host";
