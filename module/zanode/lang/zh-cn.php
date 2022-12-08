@@ -98,5 +98,5 @@ $lang->zanode->init->serviceStatus = [
 ];
 $lang->zanode->init->title          = "初始化执行节点";
 $lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
-$lang->zanode->init->initDesc       = "1. 在执行节点上执行：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s vm -k ";
+$lang->zanode->init->initDesc       = "1. 在执行节点上执行：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s zvm -k ";
 $lang->zanode->init->statusTitle    = "Service Status";
