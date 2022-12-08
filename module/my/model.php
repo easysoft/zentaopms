@@ -1038,7 +1038,7 @@ class myModel extends model
         if($browseType == 'all' or $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
         if($browseType == 'all' or $browseType == 'feedback') $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
         if($browseType == 'all' or $browseType == 'oa')       $reviewList = array_merge($reviewList, $this->getReviewingOA());
-        if($browseType == 'all' or !in_array($browseType, array('story', 'testcase', 'project', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
+        if($browseType == 'all' or !in_array($browseType, array('story', 'testcase', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
 
         if(empty($reviewList)) return array();
 
@@ -1175,7 +1175,7 @@ class myModel extends model
             $data = new stdclass();
             $data->id     = $review->id;
             $data->title  = $review->title;
-            $data->type   = 'project';
+            $data->type   = 'projectreview';
             $data->time   = $review->createdDate;
             $data->status = $review->status;
             $reviewList[] = $data;
@@ -1423,7 +1423,7 @@ class myModel extends model
             $review->status = $objectType == 'attend' ? $object->reviewStatus : ((isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
 
-            if($review->type == 'review') $review->type = 'project';
+            if($review->type == 'review') $review->type = 'projectreview';
             if($review->type == 'case')   $review->type = 'testcase';
             $review->title = '';
             if(isset($object->title))

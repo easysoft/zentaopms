@@ -53,11 +53,12 @@
       <?php foreach($reviewList as $review):?>
       <?php
       $type = $review->type;
-      if($type == 'project') $type = 'review';
+      if($type == 'projectreview') $type = 'review';
 
       $typeName = '';
       if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
       if($type == 'story') $typeName = $lang->my->auditMenu->audit->story;
+      if($review->type == 'projectreview') $typeName = $lang->project->common;
       if(isset($flows[$review->type])) $typeName = $flows[$review->type];
 
       $statusList = array();
