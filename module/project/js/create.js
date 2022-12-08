@@ -189,17 +189,6 @@ function setParentProgram(parentProgram)
     });
 
     $('#parent').attr('data-lastSelected', parentProgram);
-
-    if(parentProgram != '0')
-    {
-        $('.productsBox .addProduct .input-group:first').addClass('required');
-        $('.productsBox .row .input-group:first').addClass('required');
-    }
-    else
-    {
-        $('.productsBox .addProduct .input-group').removeClass('required');
-        $('.productsBox .row .input-group').removeClass('required');
-    }
 }
 
 /**

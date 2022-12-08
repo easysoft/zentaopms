@@ -99,7 +99,7 @@
                       echo html::a($storyLink,$story->title, '', "class='preview'");
                       ?>
                     </td>
-                    <td class='text-left' title='<?php echo $story->buildName?>'><?php echo $story->buildName?></td>
+                    <td class='c-build text-left' title='<?php echo $story->buildName?>'><?php echo $story->buildName?></td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td class='text-right' style='padding-right:25px' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                     <td>
@@ -195,7 +195,7 @@
                       <span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span>
                     </td>
                     <?php $resolvedBuildName = zget($builds, $bug->resolvedBuild, '');?>
-                    <td class='text-left' title='<?php echo $resolvedBuildName?>'><?php echo $resolvedBuildName;?></td>
+                    <td class='c-build text-left' title='<?php echo $resolvedBuildName?>'><?php echo $resolvedBuildName;?></td>
                     <td><?php echo zget($users, $bug->openedBy);?></td>
                     <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                     <td><?php echo zget($users, $bug->resolvedBy);?></td>
@@ -305,7 +305,7 @@
                     $openedBuildName = '';
                     foreach(explode(',', $bug->openedBuild) as $buildID) $openedBuildName .= zget($builds, $buildID, '') . ' ';
                     ?>
-                    <td class='text-left' title='<?php echo $openedBuildName?>'><?php echo $openedBuildName;?></td>
+                    <td class='c-build text-left' title='<?php echo $openedBuildName?>'><?php echo $openedBuildName;?></td>
                     <td><?php echo zget($users, $bug->openedBy);?></td>
                     <td><?php echo $bug->openedDate?></td>
                     <td class='c-actions'>
@@ -349,12 +349,6 @@
                       <th class='w-100px'><?php echo $lang->release->product;?></th>
                       <td><?php echo $release->productName;?></td>
                     </tr>
-                    <?php if($release->productType != 'normal'):?>
-                    <tr>
-                      <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
-                      <td><?php echo $branchName;?></td>
-                    </tr>
-                    <?php endif;?>
                     <?php endif;?>
                     <tr>
                       <th class='w-90px'><?php echo $lang->release->name;?></th>
@@ -377,7 +371,13 @@
                     <tr>
                       <th><?php echo $lang->release->branch;?></th>
                       <td>
-                        <?php foreach($release->branches as $branchID) echo zget($branches, $branchID, '') . ' ';?>
+                        <?php 
+                        foreach($release->branches as $branchID)
+                        {
+                            echo zget($branches, $branchID, '');
+                            if($branchID != end($release->branches)) echo ', ';
+                        }
+                        ?>
                       </td>
                     </tr>
                     <?php endif;?>

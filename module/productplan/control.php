@@ -605,7 +605,7 @@ class productplan extends control
      */
     public function ajaxGetProductplans($productID, $branch = 0, $number = '', $expired = '')
     {
-        $plans    = $this->productplan->getPairs($productID, $branch, $expired, true);
+        $plans    = $this->productplan->getPairs($productID, empty($branch) ? '' : $branch, $expired, true);
         $planName = $number === '' ? 'plan' : "plan[$number]";
         $plans    = empty($plans) ? array('' => '') : $plans;
         echo html::select($planName, $plans, '', "class='form-control'");
@@ -1034,7 +1034,7 @@ class productplan extends control
                 if(!empty($currentBranches) and strpos(",$currentBranches,", ",$parentBranchID,") === false) $currentBranches = str_replace(",$parentBranchID,", ',', $currentBranches);
             }
         }
-        return print(html::select('branch[]', empty($parentID) ? $branchPairs : $parentBranches, trim($currentBranches, ','), "class='form-control chosen' multiple required"));
+        return print(html::select('branch[]', empty($parentID) ? $branchPairs : $parentBranches, trim($currentBranches, ','), "class='form-control chosen' multiple"));
     }
 
     /**

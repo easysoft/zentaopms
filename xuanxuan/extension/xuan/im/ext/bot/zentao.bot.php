@@ -344,27 +344,42 @@ class zentaoBot extends xuanBot
      * @param  object        $user
      * @param  object        $pager
      * @access public
-     * @return object|string
+     * @return array
      */
     public function viewTask($args = array(), $user = null, $pager = null)
     {
+        $keys = array();
+        foreach(array('pri', 'id', 'status', 'assignTo', 'taskName') as $key) $keys[$key] = true;
+
         if(empty($args))
         {
-            $conds = new stdClass();
-            $conds->assignedToList = is_object($user) ? $user->account : false;
-            $conds->statusList     = 'wait,doing,done,pause,cancel';
-            return $this->im->task->getListByConds($conds, 'status_asc', 0, $pager);
+            $keys['assignTo'] = is_object($user) ? $user->account : false;
+            $keys['status']   = 'wait,doing,done,pause,cancel';
         }
 
-        $keys             = array();
-        $keys['pri']      = true;
-        $keys['id']       = true;
-        $keys['status']   = true;
-        $keys['assignTo'] = true;
-        $keys['taskName'] = true;
-
         $conds = $this->parseArguments($args, $keys);
-        return $this->im->task->getListByConds($conds, 'status_asc', 0, $pager);
+        $conds->search = 1;
+        $conds->order  = 'status_asc';
+        $conds->limit  = 10;
+
+        if(is_object($pager))
+        {
+            $conds->page  = $pager->pageID;
+            $conds->limit = $pager->recPerPage;
+        }
+
+        $result = $this->loadEntry('tasks', 'get', array(), (array)$conds);
+
+        if(isset($result->tasks))
+        {
+            $pager->setRecTotal($result->total);
+            $pager->setRecPerPage($result->limit);
+            $pager->setPageID($result->page);
+            $pager->setPageTotal();
+            return $result->tasks;
+        }
+
+        return array();
     }
 
     /**
@@ -449,7 +464,7 @@ class zentaoBot extends xuanBot
 
         if(empty($params))
         {
-            $originCommand = rawurlencode($this->lang->finishTask . ' ' . implode(' ', $originArgs));
+            $originCommand = rawurlencode($this->lang->finishCommand . ' ' . implode(' ', $originArgs));
 
             $json = (object)array
             (
@@ -578,30 +593,28 @@ class zentaoBot extends xuanBot
     public function renderTask($tasks, $originArgs, $pager)
     {
         $lang = $this->im->lang;
-        if(!$tasks || $pager->recTotal === 0) return $lang->task->noTask;
 
-        $sysURL = common::getSysURL();
+        $taskCount = $pager->recTotal ? $pager->recTotal : count($tasks);
 
-        if($pager->recTotal == 1)
+        if($taskCount === 0) return $lang->task->noTask;
+
+        if($taskCount == 1)
         {
             $task = current($tasks);
             $link = str_replace('x.php', 'index.php', helper::createLink('task', 'view', "taskID=$task->id", 'html'));
 
             $messages = new stdclass();
             $messages->type = 'url';
-            $messages->url  = $sysURL . $link;
-            return array(sprintf($this->lang->tasksFound, $pager->recTotal), $messages);
+            $messages->url  = common::getSysURL() . $link;
+            return array(sprintf($this->lang->tasksFound, $taskCount), $messages);
         }
 
         $messages = array();
-        if($pager->pageID == 1)
-        {
-            $messages[] = sprintf($this->lang->tasksFound, $pager->recTotal);
-        }
+        if($pager->pageID == 1) $messages[] = sprintf($this->lang->tasksFound, $taskCount);
 
         $taskTable = $this->renderTaskTable($tasks);
 
-        $originCommand = $this->lang->viewTask . ' ' . implode(' ', $originArgs);
+        $originCommand = $this->lang->viewCommand . ' ' . implode(' ', $originArgs);
         $paging        = "$pager->pageID / $pager->pageTotal";
         if($pager->pageID != 1)
         {
@@ -633,7 +646,6 @@ class zentaoBot extends xuanBot
     public function renderTaskTable($tasks)
     {
         $lang    = $this->im->lang;
-        $sysURL  = common::getSysURL();
         $headMap = array('id'=>'ID', 'pri' => $lang->task->pri, 'name' => $lang->task->name, 'assignedTo' => $lang->task->assignedTo,  'status' => $lang->task->status, 'estimate' => $lang->task->estimateAB, 'consumed' => $lang->task->consumedAB, 'left' => $lang->task->leftAB, 'actions' => $lang->actions);
         $thead   = '';
 
@@ -645,7 +657,7 @@ class zentaoBot extends xuanBot
         {
             $tr   = '';
             $link = str_replace('x.php', 'index.php', helper::createLink('task', 'view', "taskID=$task->id", 'html'));
-            $href = urlencode($sysURL . $link);
+            $href = urlencode(common::getSysURL() . $link);
             $isParent = $task->parent == -1;
             $isChild  = $task->parent > 0;
             $isMulti  = !empty($task->mode);
@@ -675,13 +687,13 @@ class zentaoBot extends xuanBot
                         }
                         else
                         {
-                            $tr .= "<td class='text-nowrap'>{$this->users[$task->$key]}</td>";
+                            $tr .= "<td class='text-nowrap'>{$task->assignedTo->realname}</td>";
                         }
                     break;
                     case 'actions':
-                        $startUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->startTask} #$task->id";
-                        $finishUrl = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->finishTask} #$task->id";
-                        $closeUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->closeTask} #$task->id";
+                        $startUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->startCommand} #$task->id";
+                        $finishUrl = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->finishCommand} #$task->id";
+                        $closeUrl  = 'xxc://sendContentToServerBySendbox/' . "{$this->lang->closeCommand} #$task->id";
 
                         $canStart  = in_array($task->status, array('wait', 'pause'));
                         $canFinish = in_array($task->status, array('wait', 'pause', 'doing'));
@@ -770,7 +782,7 @@ class zentaoBot extends xuanBot
 
         if(count($args) == 0)
         {
-            $originCommand = rawurlencode($this->lang->startTask . ' ' . implode(' ', $originArgs));
+            $originCommand = rawurlencode($this->lang->startCommand . ' ' . implode(' ', $originArgs));
 
             $realStarted = $this->formatDate($task, 'realStarted');
 
@@ -948,11 +960,12 @@ class zentaoBot extends xuanBot
      * @param  string $entry
      * @param  string $action
      * @param  array  $params
+     * @param  array  $query
      * @param  string $version
      * @access public
      * @return object
      */
-    public function loadEntry($entry, $action, $params = array(), $version = 'v1')
+    public function loadEntry($entry, $action, $params = array(), $query = array(), $version = 'v1')
     {
         try
         {
@@ -978,6 +991,10 @@ class zentaoBot extends xuanBot
             if($action == 'post' || $action == 'put')
             {
                 $entry->requestBody = (object)$params;
+            }
+            elseif($action == 'get' && !empty($query))
+            {
+                $entry->setParam($query);
             }
 
             $content = call_user_func_array(array($entry, $action), $params);

@@ -691,7 +691,7 @@ class story extends control
             }
             $this->view->titles = $titles;
         }
-        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or !in_array($branch, array_keys($branches))) ? 0 : $branch, 'skipParent|unexpired|noclosed');
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
         $plans['ditto'] = $this->lang->story->ditto;
 
         $priList          = (array)$this->lang->story->priList;
@@ -1074,6 +1074,7 @@ class story extends control
             $modules         = array();
             $branchTagOption = array();
             $products        = array();
+            $plans           = array();
 
             /* Get product id list by the stories. */
             $productIdList = array();

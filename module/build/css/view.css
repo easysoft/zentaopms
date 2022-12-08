@@ -6,3 +6,4 @@
 
 .body-modal #mainContent {min-height: 200px;}
 td.article-content{overflow:auto !important;}
+td.c-build{white-space: nowrap; overflow:hidden;}

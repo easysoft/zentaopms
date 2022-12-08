@@ -53,17 +53,22 @@
       <?php foreach($reviewList as $review):?>
       <?php
       $type = $review->type;
-      if($type == 'project') $type = 'review';
+      if($type == 'projectreview') $type = 'review';
 
       $typeName = '';
       if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
       if($type == 'story') $typeName = $lang->my->auditMenu->audit->story;
+      if($review->type == 'projectreview') $typeName = $lang->project->common;
       if(isset($flows[$review->type])) $typeName = $flows[$review->type];
 
       $statusList = array();
       if(isset($lang->$type->statusList)) $statusList = $lang->$type->statusList;
       if($type == 'attend') $statusList = $lang->attend->reviewStatusList;
-      if(isset($flows[$review->type])) $statusList = $lang->approval->statusList;
+      if(!in_array($type, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$type,") === false)
+      {
+          if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
+          if(isset($flows[$review->type])) $statusList = $rawMethod == 'audit' ? $lang->approval->nodeList : $lang->approval->statusList;
+      }
       ?>
       <tr>
         <td class='c-id'><?php echo $review->id?></td>
