@@ -73,10 +73,10 @@ $lang->im->bot->zentaoBot->prevPage       = 'Prev Page';
 $lang->im->bot->zentaoBot->nextPage       = 'Next Page';
 $lang->im->bot->zentaoBot->effortRecorded = 'Effort recorded for task #%d.';
 
-$lang->im->bot->zentaoBot->finishTask = 'finish';
-$lang->im->bot->zentaoBot->closeTask  = 'close';
-$lang->im->bot->zentaoBot->startTask  = 'start';
-$lang->im->bot->zentaoBot->viewTask   = 'view';
+$lang->im->bot->zentaoBot->finishCommand = 'finish';
+$lang->im->bot->zentaoBot->closeCommand  = 'close';
+$lang->im->bot->zentaoBot->startCommand  = 'start';
+$lang->im->bot->zentaoBot->viewCommand   = 'view';
 
 $lang->im->bot->zentaoBot->errors = new stdclass();
 $lang->im->bot->zentaoBot->errors->emptyResult     = 'No task found.';

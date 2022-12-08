@@ -98,7 +98,7 @@ class baseEntry
      * Get request params.
      *
      * @param  string $key
-     * @param  string $defaultValue
+     * @param  mixed  $defaultValue
      * @access public
      * @return mixed
      */
@@ -112,13 +112,18 @@ class baseEntry
      * 设置请求参数
      * Set request param.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param  string|array  $key   if is array, set params by its key-value pairs.
+     * @param  mixed         $value
      * @access public
-     * @return mixed
+     * @return void
      */
-    public function setParam($key, $value)
+    public function setParam($key, $value = null)
     {
+        if(is_array($key))
+        {
+            foreach($key as $k => $v) $_GET[$k] = $v;
+            return;
+        }
         $_GET[$key] = $value;
     }
 

@@ -81,10 +81,10 @@ $lang->im->bot->zentaoBot->prevPage       = '上一页';
 $lang->im->bot->zentaoBot->nextPage       = '下一页';
 $lang->im->bot->zentaoBot->effortRecorded = '任务 #%d 已完成工时信息填写';
 
-$lang->im->bot->zentaoBot->finishTask = '完成任务';
-$lang->im->bot->zentaoBot->closeTask  = '关闭任务';
-$lang->im->bot->zentaoBot->startTask  = '开始任务';
-$lang->im->bot->zentaoBot->viewTask   = '查看任务';
+$lang->im->bot->zentaoBot->finishCommand = '完成';
+$lang->im->bot->zentaoBot->closeCommand  = '关闭';
+$lang->im->bot->zentaoBot->startCommand  = '开始';
+$lang->im->bot->zentaoBot->viewCommand   = '查看';
 
 $lang->im->bot->zentaoBot->errors = new stdclass();
 $lang->im->bot->zentaoBot->errors->emptyResult     = '未查询到相关匹配信息';
