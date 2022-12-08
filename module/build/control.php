@@ -144,6 +144,8 @@ class build extends control
             $changes = $this->build->update($buildID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('build', $buildID);
+            $change[$buildID] = $changes;
+            $this->unlinkOldBranch($change);
 
             if($changes or $files)
             {
@@ -716,7 +718,7 @@ class build extends control
         $buildStories = $this->loadModel('story')->getByList($build->allStories);
         $buildBugs    = $this->loadModel('bug')->getByList($build->allBugs);
         $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
-        $this->app->loadLang('branc');
+        $this->app->loadLang('branch');
 
         $removeBranches = '';
         foreach(explode(',', $oldBranch) as $oldBranchID)
@@ -769,6 +771,46 @@ class build extends control
     {
         $this->build->batchUnlinkStory($buildID);
         return print(js::locate($this->createLink('build', 'view', "buildID=$buildID&type=story"), 'parent'));
+    }
+
+    /**
+     * Unlink story and bug when edit branch of build.
+     * @param  int    $buildID
+     * @param  int    $oldBranch
+     * @access protected
+     * @return void
+     */
+    protected function unlinkOldBranch($changes)
+    {
+        foreach($changes as $buildID => $changes)
+        {
+            $oldBranch = '';
+            $newBranch = '';
+            foreach($changes as $changeId => $change)
+            {
+                if($change['field'] == 'branch')
+                {
+                    $oldBranch = $change['old'];
+                    $newBranch = $change['new'];
+                    break;
+                }
+            }
+            $build       = $this->build->getByID($buildID);
+            $planStories = $this->loadModel('story')->getByList($build->allStories);
+            $planBugs    = $this->loadModel('bug')->getByList($build->allBugs);
+            if($oldBranch)
+            {
+                foreach($planStories as $storyID => $story)
+                {
+                    if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $this->build->unlinkStory($storyID, $buildID);
+                }
+
+                foreach($planBugs as $bugID => $bug)
+                {
+                    if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $this->build->unlinkBug($bugID, $buildID);
+                }
+            }
+        }
     }
 
     /**

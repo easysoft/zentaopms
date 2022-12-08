@@ -959,7 +959,7 @@ class productplan extends control
         $plan        = $this->productplan->getByID($planID);
         $oldBranch   = $plan->branch;
         $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
-        $planBugs    = $this->loadModel('bug')->getLinkBugs($planID, 'all');
+        $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
         $branchPairs = $this->loadModel('branch')->getPairs($plan->product);
 
         $removeBranches = '';

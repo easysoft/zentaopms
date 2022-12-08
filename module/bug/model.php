@@ -506,11 +506,11 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function getPlanBugs($PlanID, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getPlanBugs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_BUG)
-            ->where('plan')->eq((int)$PlanID)->fi()
+            ->where('plan')->eq((int)$planID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)

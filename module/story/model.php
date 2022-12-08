@@ -3997,7 +3997,7 @@ class storyModel extends model
         $orderBy = $this->post->orderBy;
         if(strpos($orderBy, 'order') !== false) $orderBy = str_replace('order', 'id', $orderBy);
 
-        $stories     = $this->loadModel('story')->getLinkStories($planID, 'all');
+        $stories     = $this->loadModel('story')->getPlanStories($planID, 'all');
         $storyIDList = array_keys($stories);
 
         if(strpos($this->post->orderBy, 'order') !== false and !empty($planOrder)) $stories = $this->sortPlanStory($stories, $planOrder, $orderBy);
@@ -5875,7 +5875,7 @@ class storyModel extends model
         $orderBy = common::appendOrder($orderBy);
 
         /* Get all stories by plan. */
-        $stories     = $this->getLinkStories($planID, 'all', $orderBy);
+        $stories     = $this->getPlanStories($planID, 'all', $orderBy);
         $storyIDList = array_keys($stories);
 
         /* Calculate how many numbers there are before the sort list and after the sort list. */
