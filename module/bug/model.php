@@ -1855,7 +1855,7 @@ class bugModel extends model
                 ->andWhere('deleted')->eq(0)
                 ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
                 ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('product')->eq($productID)->fi()
-                ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('branch')->eq($branchID)->fi()
+                ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false and $branchID != 'all')->andWhere('branch')->eq($branchID)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
