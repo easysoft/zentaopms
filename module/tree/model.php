@@ -158,7 +158,7 @@ class treeModel extends model
 
         if($type == 'line') $rootID = 0;
 
-        $branches = array();
+        $branches = array($branch => '');
         if($branch != 'all' and strpos('story|bug|case', $type) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
