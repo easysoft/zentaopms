@@ -38,6 +38,11 @@
         </tr>
         <tr>
         <tr class='<?php if((!empty($product) and $product->type == 'normal') or empty($product)) echo 'hidden'?>'>
+          <?php
+          if(empty($product)) $product = new stdclass();
+          $productType     = zget($product, 'type', 'normal');
+          $productBranches = zget($product, 'branches', array());
+          ?>
           <th class='w-120px'><?php echo $product->type == 'normal' ? '' : $lang->product->branchName[$product->type]?></th>
           <td>
             <div class='input-group' id='branchBox'>
