@@ -40,5 +40,5 @@
     </div>
   </div>
 </div>
-<?php include 'successmodal.html.php';?>
+<?php include '../../common/view/successmodal.html.php';?>
 <?php include '../../common/view/footer.html.php'; ?>

@@ -363,4 +363,18 @@ class zanode extends control
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
     }
+
+    /**
+     * ajaxRunZTFScript
+     *
+     * @param  int    $scriptID
+     * @access public
+     * @return void
+     */
+    public function ajaxRunZTFScript($scriptID = 0)
+    {
+        $script = $this->zanode->getAutomationByID($scriptID);
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
+    }
 }
