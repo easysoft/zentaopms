@@ -1030,6 +1030,7 @@ class productplan extends control
             $parentPlan     = $this->productplan->getByID($parentID);
             foreach(explode(',', $parentPlan->branch) as $parentBranchID)
             {
+                if(!isset($branchPairs[$parentBranchID])) continue;
                 $parentBranches[$parentBranchID] = $branchPairs[$parentBranchID];
                 if(!empty($currentBranches) and strpos(",$currentBranches,", ",$parentBranchID,") === false) $currentBranches = str_replace(",$parentBranchID,", ',', $currentBranches);
             }
