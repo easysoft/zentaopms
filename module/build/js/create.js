@@ -71,14 +71,15 @@ function loadProducts(executionID)
 
             $('#productBox').append(data);
             $('#product').chosen();
+
+            $.get(createLink('product', 'ajaxGetProductById', 'produtID=' + $("#product").val()), function(data)
+            {
+                $('#branchBox').closest('tr').find('th').text(data.branchName);
+            }, 'json');
+
             loadBranches($("#product").val());
         }
     });
-
-    $.get(createLink('product', 'ajaxGetProductById', 'produtID=' + $("#product").val()), function(data)
-    {
-        $('#branchBox').closest('tr').find('th').text(data.branchName);
-    }, 'json');
 
     loadLastBuild();
 }
@@ -94,7 +95,7 @@ function loadLastBuild()
     var isIntegrated = $('input[name=isIntegrated]:checked').val();
     var projectID    = $('#project').val();
     var executionID  = $('#execution').val();
-    if(isIntegrated == 'yes') executionID = 0; 
+    if(isIntegrated == 'yes') executionID = 0;
     $.get(createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
     {
         $('#lastBuildBox').html(data);
