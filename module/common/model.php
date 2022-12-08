@@ -395,9 +395,9 @@ class commonModel extends model
     /**
      * Deny access.
      *
-     * @param  varchar  $module
-     * @param  varchar  $method
-     * @param  bool     $reload
+     * @param  string  $module
+     * @param  string  $method
+     * @param  bool    $reload
      * @access public
      * @return mixed
      */
@@ -2454,6 +2454,8 @@ EOD;
         }
         catch(EndResponseException $endResponseException)
         {
+            if($this->app->getViewType() == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) die($endResponseException->getContent());
+
             echo $endResponseException->getContent();
         }
     }
