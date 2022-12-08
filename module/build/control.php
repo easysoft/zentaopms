@@ -718,7 +718,7 @@ class build extends control
         $buildStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : array();
         $buildBugs    = $build->allBugs ? $this->loadModel('bug')->getByList($build->allBugs) : array();
         $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
-        $typeName = $this->lang->product->branchName[$build->productType];
+        $typeName     = $this->lang->product->branchName[$build->productType];
 
         $removeBranches = '';
         foreach(explode(',', $oldBranch) as $oldBranchID)
