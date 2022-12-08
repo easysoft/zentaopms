@@ -754,7 +754,7 @@ class project extends control
         $productPlansOrder = array();
         foreach($productPlans as $productID => $plan)
         {
-            $orderPlans    = $this->loadModel('productPlan')->getListByIds(array_keys($plan));
+            $orderPlans    = $this->loadModel('productPlan')->getListByIds(array_keys($plan), true);
             $orderPlansMap = array_keys($orderPlans);
             foreach($orderPlansMap as $planMapID)
             {
