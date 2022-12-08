@@ -1355,4 +1355,24 @@ class productplanModel extends model
         if(!empty($unlinkBugs)) $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('plan')->eq($plan->parent)->andWhere('id')->in($unlinkBugs)->exec();
         $this->dao->update(TABLE_BUG)->set('plan')->eq($plan->id)->where('plan')->eq($plan->parent)->exec();
     }
+
+    /**
+     * Get plan list by ids.
+     *
+     * @param  array  $planIds
+     * @param  boo    $order
+     * @access public
+     * @return array
+     */
+    public function getListByIds($planIds, $order = false)
+    {
+        $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
+            ->where('id')->in($planIds)
+            ->orderBy('begin desc')
+            ->fetchAll('id');
+
+        if($order) $plans = $this->relationBranch($plans);
+
+        return $plans;
+    }
 }
