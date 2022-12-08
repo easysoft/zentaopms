@@ -1034,7 +1034,7 @@ class productplan extends control
                 if(!empty($currentBranches) and strpos(",$currentBranches,", ",$parentBranchID,") === false) $currentBranches = str_replace(",$parentBranchID,", ',', $currentBranches);
             }
         }
-        return print(html::select('branch[]', empty($parentID) ? $branchPairs : $parentBranches, trim($currentBranches, ','), "class='form-control chosen' multiple required"));
+        return print(html::select('branch[]', empty($parentID) ? $branchPairs : $parentBranches, trim($currentBranches, ','), "class='form-control chosen' multiple"));
     }
 
     /**
