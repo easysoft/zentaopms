@@ -715,8 +715,8 @@ class build extends control
     {
         $build        = $this->build->getByID($buildID);
         $oldBranch    = $build->branch;
-        $buildStories = $this->loadModel('story')->getByList($build->allStories);
-        $buildBugs    = $this->loadModel('bug')->getByList($build->allBugs);
+        $buildStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : array();
+        $buildBugs    = $build->allBugs ? $this->loadModel('bug')->getByList($build->allBugs) : array();
         $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
 
         $removeBranches = '';
@@ -742,22 +742,22 @@ class build extends control
 
         if($unlinkStoryCounts and $unlinkBugCounts)
         {
-            printf($this->lang->build->confirmChangeBuild, trim($removeBranches, ','), $unlinkStoryCounts, $unlinkBugCounts);
+            printf($this->lang->build->confirmChangeBuild, $this->lang->product->branchName[$build->productType], trim($removeBranches, ','), $unlinkStoryCounts, $unlinkBugCounts);
         }
         elseif($unlinkStoryCounts)
         {
-            printf($this->lang->build->confirmRemoveStory, trim($removeBranches, ','), $unlinkStoryCounts);
+            printf($this->lang->build->confirmRemoveStory, $this->lang->product->branchName[$build->productType], trim($removeBranches, ','), $unlinkStoryCounts);
         }
         elseif($unlinkBugCounts)
         {
-            printf($this->lang->build->confirmRemoveBug, trim($removeBranches, ','), $unlinkBugCounts);
+            printf($this->lang->build->confirmRemoveBug, $this->lang->product->branchName[$build->productType], trim($removeBranches, ','), $unlinkBugCounts);
         }
     }
 
     /**
      * Batch unlink story.
      *
-     * @param  string $confirm
+     * @param  int   $buildID
      * @access public
      * @return void
      */
@@ -769,8 +769,7 @@ class build extends control
 
     /**
      * Unlink story and bug when edit branch of build.
-     * @param  int    $buildID
-     * @param  int    $oldBranch
+     * @param  array    $changes
      * @access protected
      * @return void
      */

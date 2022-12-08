@@ -69,9 +69,9 @@ $lang->build->finishStories = "  {$lang->SRCommon} Terminées %s";
 $lang->build->resolvedBugs  = '  Bugs Résolus %s';
 $lang->build->createdBugs   = '  Bugs Signalés %s';
 
-$lang->build->confirmChangeBuild = "After branch『%s』disassociation,the branch exists %s {$lang->SRCommon} and %s Bug will remove synchronization from version, whether to cancel？";
-$lang->build->confirmRemoveStory = "After branch『%s』disassociation,the branch exists %s {$lang->SRCommon} will remove synchronization from version, whether to cancel？";
-$lang->build->confirmRemoveBug   = "After branch『%s』disassociation,the branch exists %s Bug will remove synchronization from version, whether to cancel？";
+$lang->build->confirmChangeBuild = "After branch『%s』disassociation,%s {$lang->SRCommon} and %s Bug will remove synchronization from version, whether to cancel？";
+$lang->build->confirmRemoveStory = "After branch『%s』disassociation,%s {$lang->SRCommon} will remove synchronization from version, whether to cancel？";
+$lang->build->confirmRemoveBug   = "After branch『%s』disassociation,%s Bug will remove synchronization from version, whether to cancel？";
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath        = ' Répertoire des codes sources, ex: chemin de la bibliothèque Subversion / GitSource';
