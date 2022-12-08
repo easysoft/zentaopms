@@ -253,6 +253,7 @@ class buildModel extends model
                 ->beginIF($products)->andWhere('product')->in($products)->fi()
                 ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
                 ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
+                ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('deleted')->eq(0)->fi()
                 ->fetchPairs();
         }
 
@@ -456,7 +457,7 @@ class buildModel extends model
             ->get();
 
         $product = $this->loadModel('product')->getByID($build->product);
-        if(!empty($product) and $product->type != 'normal' and $this->post->isIntegrated == 'no' and !isset($_POST['branch']))
+        if(!empty($productgetBuildPairs) and $product->type != 'normal' and $this->post->isIntegrated == 'no' and !isset($_POST['branch']))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
