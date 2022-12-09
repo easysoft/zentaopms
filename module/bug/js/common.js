@@ -279,7 +279,7 @@ function loadAllProductBuilds(productID, buildBox)
             {
                 $(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})
                 var $pkResolvedBuild = $('#pk_resolvedBuild-search');
-                $pkResolvedBuild.closest('.picker').css('width', $pkResolvedBuild.closest('td').width() - $pkResolvedBuild.closest('td').find('.input-group-btn').width());
+                $pkResolvedBuild.closest('.picker').css('width', $pkResolvedBuild.closest('td').width());
             });
         }
     }
