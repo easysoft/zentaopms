@@ -647,11 +647,10 @@ class build extends control
             $branches    = array('' => $branchAll) + array(BRANCH_MAIN => $this->lang->branch->main);
             if($build->branch)
             {
-                if(strpos($build->branch, ',') !== false) $buildBranch = explode(',', $build->branch);
-                foreach($buildBranch as $buildKey)
+                foreach(explode(',', $build->branch) as $branchID)
                 {
-                    if($buildKey == '0') continue;
-                    $branches += array($buildKey => $branchPairs[$buildKey]);
+                    if($branchID == '0') continue;
+                    $branches += array($branchID => $branchPairs[$branchID]);
                 }
             }
 
