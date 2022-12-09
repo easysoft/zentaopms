@@ -84,7 +84,12 @@
           <?php endif;?>
           <?php if($project->multiple):?>
           <?php if($build->execution):?>
-          <td class="c-name text-left" title='<?php echo $build->executionName;?>'><?php echo $build->executionName;?></td>
+          <td class="c-name text-left" title='<?php echo $build->executionName;?>'>
+            <?php echo $build->executionName;?>
+            <?php if($build->executionDeleted):?>
+            <span class='label label-danger'><?php echo $lang->build->deleted;?></span>
+            <?php endif; ?>
+          </td>
           <?php else:?>
           <td class="c-name text-left">
             <?php $childExecutions = array();?>

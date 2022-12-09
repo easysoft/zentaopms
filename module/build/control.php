@@ -283,6 +283,8 @@ class build extends control
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         /* Set menu. */
+        $objectType = 'execution';
+        $objectID   = $build->execution;
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($build->project);
