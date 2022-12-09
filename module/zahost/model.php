@@ -33,6 +33,7 @@ class zahostModel extends model
     {
         $hostInfo = fixer::input('post')
             ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
+            ->trim('extranet')
             ->get();
 
         $this->dao->table      = 'zahost';

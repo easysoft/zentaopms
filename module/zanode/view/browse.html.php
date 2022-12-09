@@ -95,7 +95,7 @@
                 if(common::hasPriv('zahost', 'createImage')) common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-plus'></i> ", '', "class='btn iframe' title='{$lang->zanode->createImage}' data-width='50%'", '', true);
                 if(common::hasPriv('zahost', 'edit')) common::printIcon('zanode', 'edit', "id={$node->id}", $node, 'list');
                 if(common::hasPriv('zahost', 'delete')) common::printLink('zanode', 'delete', "zanodeID={$node->id}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->zanode->destroy}' class='btn btn-primary' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmDelete}\")==false) return false;'");
-                if(common::hasPriv('zahost', 'init')) common::printIcon('zanode', 'init', "hostID={$node->id}", $node, 'list', 'info', '', ' init', false, "data-placement='bottom'", $lang->zanode->init->title);
+                if(common::hasPriv('zahost', 'init')) common::printIcon('zanode', 'init', "hostID={$node->id}", $node, 'list', 'refresh', '', ' init', false, "data-placement='bottom'", $lang->zanode->init->title);
                 ?>
               </td>
             </tr>

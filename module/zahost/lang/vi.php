@@ -53,7 +53,7 @@ $lang->zahost->init->ready         = "Ready";
 $lang->zahost->init->next          = "Next";
 
 $lang->zahost->init->initSuccessNotice   = "The initialization was successful, click Next to complete the next steps.";
-$lang->zahost->init->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
+$lang->zahost->init->initDesc       = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k %s<br>- Click check service status button.";
 $lang->zahost->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
 $lang->zahost->init->serviceStatus = [

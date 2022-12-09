@@ -25,8 +25,8 @@
         <h4><?php echo $lang->zanode->init->descTitle; ?></h4>
         <div>
           <span class='dot-symbol'></span>
-          <span>
-            <?php echo $lang->zanode->init->initDesc . ' ' . $node->secret . ' -z ' . getWebRoot(true); ?>
+          <span class='zahost-init-desc'>
+            <?php echo sprintf($lang->zanode->init->initDesc, $node->secret . ' -z ' . getWebRoot(true)); ?>
           </span>
         </div>
         <div id="statusContainer">
@@ -35,7 +35,7 @@
 
       <div class="text-center host-action">
         <button type='button' id='checkServiceStatus' class='btn btn-info margin-top-18'><?php echo $lang->zanode->init->checkStatus; ?></button>
-        <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, "data-app='{$app->tab}'", 'btn'); ?>
+        <?php echo html::backButton('' . $lang->goback, "data-app='{$app->tab}'", 'btn'); ?>
       </div>
     </div>
   </div>
