@@ -147,6 +147,7 @@ class projectrelease extends control
         $builds         = $this->build->getBuildPairs($this->view->product->id, 'all', 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
+        
         $this->view->title          = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
         $this->view->projectID      = $projectID;
         $this->view->builds         = $builds;
