@@ -460,16 +460,20 @@ class productplanModel extends model
      *
      * @param  int    $productID
      * @param  array  $branches
+     * @param  string $param
      * @param  bool   $skipParent
      * @access public
      * @return array
      */
-    public function getBranchPlanPairs($productID, $branches = '', $skipParent = false)
+    public function getBranchPlanPairs($productID, $branches = '', $param = '', $skipParent = false)
     {
+        $date  = date('Y-m-d');
+        $param = strtolower($param);
         $plans = $this->dao->select('parent,branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 

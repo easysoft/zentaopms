@@ -58,7 +58,7 @@ class releaseModel extends model
      */
     public function getList($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $pager = null)
     {
-        $releases = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
@@ -84,8 +84,19 @@ class releaseModel extends model
 
                 $releaseBuilds[] = $builds[$buildID];
             }
-
             $release->builds = $releaseBuilds;
+
+            $branchName = '';
+            if($release->branch != 'normal')
+            {
+                foreach(explode(',', $release->branch) as $releaseBranch)
+                {
+                    $branchName .= $this->loadModel('branch')->getById($releaseBranch);
+                    $branchName .= ',';
+                }
+                $branchName = trim($branchName, ',');
+            }
+            $release->branchName = empty($branchName) ? $this->lang->branch->main : $branchName;
         }
 
         return $releases;

@@ -253,7 +253,7 @@ class buildModel extends model
                 ->beginIF($products)->andWhere('product')->in($products)->fi()
                 ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
                 ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
-                ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('deleted')->eq(0)->fi()
+                ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('deleted')->eq(0)->fi()
                 ->fetchPairs();
         }
 
@@ -267,7 +267,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t5')->on('t1.product = t5.id')
             ->where('1=1')
             ->andWhere('t1.id')->notIN($shadows)
-            ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
+            ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
             ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
