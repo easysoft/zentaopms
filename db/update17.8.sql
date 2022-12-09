@@ -1,3 +1,4 @@
+ALTER TABLE `zt_case` ADD `script` longtext NOT NULL AFTER `howRun`;
 ALTER TABLE `zt_product` ADD `shadow` tinyint(1) unsigned NOT NULL AFTER `code`;
 ALTER TABLE `zt_project` ADD `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1 AFTER `code`;
 ALTER table `zt_project` ADD `multiple` enum('0', '1') NOT NULL DEFAULT '1' AFTER `fluidBoard`;
