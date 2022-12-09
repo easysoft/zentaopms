@@ -25,6 +25,7 @@ $().ready(function()
     {
         var projectID   = $('#project').val();
         var executionID = $('#execution').val();
+
         if($(this).val() == 'no')
         {
             $('#execution').closest('tr').show();
@@ -35,7 +36,16 @@ $().ready(function()
         {
             $('#execution').closest('tr').hide();
             $('#buildBox').closest('tr').show();
+
+            $.ajaxSettings.async = false;
             loadProducts(projectID);
+            var productID = $('#product').val();
+            $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
+            {
+                if(data) $('#buildBox').html(data);
+                $('#builds').attr('data-placeholder', multipleSelect).chosen();
+            });
+            $.ajaxSettings.async = true;
         }
     });
     $('#product').change();

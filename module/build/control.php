@@ -645,7 +645,10 @@ class build extends control
 
             if($build->branch)
             {
-                foreach(explode(',', $build->branch) as $branchID) $branches += array($branchID => $branchPairs[$branchID]);
+                foreach(explode(',', $build->branch) as $branchID)
+                {
+                    if(isset($branchPairs[$branchID])) $branches += array($branchID => $branchPairs[$branchID]);
+                }
             }
 
             $this->config->product->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
