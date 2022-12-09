@@ -422,6 +422,7 @@ class webhookModel extends model
         $viewLink       = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $objectID);
         $objectTypeName = ($objectType == 'story' and $object->type == 'requirement') ? $this->lang->action->objectTypes['requirement'] : $this->lang->action->objectTypes[$objectType];
         $title          = $this->app->user->realname . $this->lang->action->label->$actionType . $objectTypeName;
+        $host           = (defined('RUN_MODE') and RUN_MODE == 'api') ? '' : $host;
         $text           = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
 
         $mobile = '';

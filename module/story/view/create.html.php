@@ -204,7 +204,12 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <?php if($this->config->URAndSR):?>
           <tr>
             <th><?php echo $hiddenURS ? $lang->story->parent : $lang->story->requirement;?></th>
-            <td colspan="2" class="<?php if($hiddenURS) echo 'hidden';?>"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+            <td colspan="2" class="<?php if($hiddenURS) echo 'hidden';?>">
+              <div class='input-group'>
+                <?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?>
+                <span class='input-group-btn'><?php echo html::commonButton($lang->story->loadAllStories, "class='btn btn-default' onclick='loadURS(true)' data-toggle='tooltip'");?></span>
+              </div>
+            </td>
             <td colspan="2" <?php if($hiddenParent) echo 'hidden';?>>
               <div class='input-group' id='moduleIdBox'>
                 <?php if(!$hiddenURS):?>

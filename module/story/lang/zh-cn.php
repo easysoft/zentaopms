@@ -80,6 +80,7 @@ $lang->story->currentBranch      = '当前%s';
 $lang->story->siblings           = '孪生需求';
 $lang->story->relieved           = '解除';
 $lang->story->relievedSiblings   = '解除孪生需求';
+$lang->story->loadAllStories     = '加载所有需求';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";

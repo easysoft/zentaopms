@@ -59,7 +59,9 @@ $(function()
         return false;
     });
 
-    $(document).on('change', '#module', loadURS);
+    $('#module').on('change', function(){
+        loadURS();
+    });
 
     if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
     {
