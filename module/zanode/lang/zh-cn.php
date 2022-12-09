@@ -78,6 +78,8 @@ $lang->zanode->statusList['running']      = '运行中';
 $lang->zanode->statusList['suspend']      = '暂停';
 $lang->zanode->statusList['offline']      = '下线';
 $lang->zanode->statusList['destroy']      = '已销毁';
+$lang->zanode->statusList['shutoff']      = '已关机';
+$lang->zanode->statusList['shutodown']    = '已关机';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
 
 $lang->zanode->init = new stdclass;
@@ -98,5 +100,4 @@ $lang->zanode->init->serviceStatus = [
 ];
 $lang->zanode->init->title          = "初始化执行节点";
 $lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
-$lang->zanode->init->initDesc       = "1. 在执行节点上执行：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s vm -k ";
-$lang->zanode->init->statusTitle    = "Service Status";
+$lang->zanode->init->initDesc       = "- 在执行节点上执行命令：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s zvm -k %s<br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "Service Status";

@@ -468,7 +468,7 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN, t2.secret as secret')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN, t2.secret as secret')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
@@ -486,6 +486,19 @@ class zanodemodel extends model
         return $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
             ->andWhere("type")->eq('node')
+            ->fetch();
+    }
+
+    /**
+     * Get automation by id.
+     *
+     * @param  int $id
+     * @return object
+     */
+    public function getScriptByID($id)
+    {
+        return $this->dao->select('*')->from(TABLE_AUTOMATION)
+            ->where('id')->eq($id)
             ->fetch();
     }
 
@@ -580,7 +593,7 @@ class zanodemodel extends model
     /**
      * Build operateMenu for browse view.
      *
-     * @param  int    $node
+     * @param  object    $node
      * @access public
      * @return void
      */
@@ -607,16 +620,18 @@ class zanodemodel extends model
     public function getServiceStatus($node)
     {
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$node->tokenSN")));
-        if(empty($result->data) || $result->code != 'success')
+        if(empty($result->data->ztfStatus) || $result->code != 'success')
         {
             $result = new stdclass;
             $result->data = $this->lang->zanode->init->serviceStatus;
+        }else{
+            $result->data = array(
+                "ZenAgent" => "ready",
+                "ZTF"      => $result->data->ztfStatus,
+            );
         }
 
-        return array(
-            "ZenAgent" => "ready",
-            "ZTF"      => $result->data->ztfStatus,
-        );
+        return $result->data;
     }
 
     /**
@@ -634,7 +649,7 @@ class zanodemodel extends model
             "server" => getWebRoot(true),
         );
         $result = json_decode(commonModel::http("http://{$node->extranet}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
-        
+
         if(empty($result->data) || $result->code != 'success')
         {
             $result = new stdclass;
@@ -662,6 +677,19 @@ class zanodemodel extends model
     }
 
     /**
+     * Get automation by id.
+     *
+     * @param  int $id
+     * @return object
+     */
+    public function getAutomationByID($id)
+    {
+        return $this->dao->select('*')->from(TABLE_AUTOMATION)
+            ->where('id')->eq($id)
+            ->fetch();
+    }
+
+    /**
      * Set automation setting.
      *
      * @access public
@@ -684,5 +712,35 @@ class zanodemodel extends model
 
         if(dao::isError()) return false;
         return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Run ZTFScript.
+     *
+     * @access public
+     * @return void
+     */
+    public function runZTFScript()
+    {
+        $params = array(
+            'cmd'       => '',
+            'ids'       => '',
+            'path'      => '',
+            'task'      => '',
+            'workspace' => ''
+        );
+
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
+
+        if(empty($result->data) || $result->code != 'success')
+        {
+            $result = new stdclass;
+            $result->data = $this->lang->zanode->init->serviceStatus;
+        }
+
+        return array(
+            "ZenAgent" => "ready",
+            "ZTF"      => $result->data->ztfStatus,
+        );
     }
 }

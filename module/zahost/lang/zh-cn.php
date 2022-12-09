@@ -61,7 +61,7 @@ $lang->zahost->init->serviceStatus = [
 ];
 $lang->zahost->init->title          = "初始化宿主机";
 $lang->zahost->init->descTitle      = "请根据引导完成宿主机上的初始化: ";
-$lang->zahost->init->initDesc       = "1. 在宿主机上执行：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
+$lang->zahost->init->initDesc       = "- 在宿主机上执行命令：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k %s<br>- 点击检测服务状态。";
 $lang->zahost->init->statusTitle    = "服务状态";
 
 $lang->zahost->image = new stdclass;

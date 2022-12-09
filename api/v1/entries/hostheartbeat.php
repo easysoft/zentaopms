@@ -70,6 +70,7 @@ class hostHeartbeatEntry extends baseEntry
                         ->set('zd')->eq($vm->zdPortOnHost)
                         ->set('ssh')->eq($vm->sshPortOnHost)
                         ->set('status')->eq($vm->status)
+                        ->set('extranet')->eq($vm->ip)
                         ->where('mac')->eq($vm->macAddress)->exec();
                 }
             }
