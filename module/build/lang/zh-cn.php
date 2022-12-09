@@ -56,7 +56,8 @@ $lang->build->bugs           = '解决的Bug';
 $lang->build->generatedBugs  = '产生的Bug';
 $lang->build->noProduct      = " <span id='noProduct' style='color:red'>该{$lang->executionCommon}没有关联{$lang->productCommon}，无法创建版本，请先<a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'>关联{$lang->productCommon}</a></span>";
 $lang->build->noBuild        = '暂时没有版本。';
-$lang->build->emptyExecution =  $lang->executionCommon . '不能为空。';
+$lang->build->emptyExecution = $lang->executionCommon . '不能为空。';
+$lang->build->linkedBuild    = '关联版本';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "已经关联{$lang->SRCommon}、Bug或提交测试单的版本，不能修改其所属{$lang->productCommon}";

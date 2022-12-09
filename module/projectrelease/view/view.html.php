@@ -71,7 +71,7 @@
                     </th>
                     <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                     <th class="text-left"><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
-                    <th class='c-build w-200px text-left'><?php echo $lang->build->common;?></th>
+                    <th class='c-build w-200px text-left'><?php echo $lang->build->linkedBuild;?></th>
                     <th class='c-user'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
                     <th class='w-80px text-right' style='padding-right:20px'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                     <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
@@ -371,7 +371,7 @@
                     <tr>
                       <th><?php echo $lang->release->branch;?></th>
                       <td>
-                        <?php 
+                        <?php
                         foreach($release->branches as $branchID)
                         {
                             echo zget($branches, $branchID, '');

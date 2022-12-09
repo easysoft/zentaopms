@@ -56,7 +56,8 @@ $lang->build->bugs           = 'Resolved Bugs';
 $lang->build->generatedBugs  = 'Reported Bugs';
 $lang->build->noProduct      = " <span id='noProduct' style='color:red'>This {$lang->executionCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'> link {$lang->productCommon}</a></span>";
 $lang->build->noBuild        = 'No builds yet.';
-$lang->build->emptyExecution =  $lang->executionCommon . 'should be not empty.';
+$lang->build->emptyExecution = $lang->executionCommon . 'should be not empty.';
+$lang->build->linkedBuild    = 'Linked Build';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";

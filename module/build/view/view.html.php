@@ -91,7 +91,7 @@ tbody tr td:first-child input {display: none;}
                 <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
                 <?php if($childBuilds):?>
-                <th class='c-build w-200px text-left'><?php echo $lang->build->common;?></th>
+                <th class='c-build w-200px text-left'><?php echo $lang->build->linkedBuild;?></th>
                 <?php endif;?>
                 <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-id text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
@@ -211,7 +211,7 @@ tbody tr td:first-child input {display: none;}
                 <th class='text-left'>  <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='c-status'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
                 <?php if($childBuilds):?>
-                <th class='c-build w-200px text-left'><?php echo $lang->build->common?></th>
+                <th class='c-build w-200px text-left'><?php echo $lang->build->linkedBuild?></th>
                 <?php endif;?>
                 <th class='c-user'>     <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-date'>     <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
