@@ -520,4 +520,4 @@ $lang->requirement->linkStory          = 'Link Story';
 
 $lang->story->addBranch      = 'Add %s';
 $lang->story->deleteBranch   = 'Delete %s';
-$lang->story->notice->branch = 'Each branch will establish a requirement, and the requirements are twins. The twins requirements are synchronized except for the product, branch, module, plan, and stage fields. You can manually remove the twins relationship later';
+$lang->story->notice->branch = 'Each branch will establish a requirement. The requirements are twins. The twins requirements are synchronized except for the product, branch, module, plan, and stage fields. You can manually remove the twins relationship later';
