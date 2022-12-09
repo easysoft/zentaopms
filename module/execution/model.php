@@ -1604,13 +1604,7 @@ class executionModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        if(empty($productID) and !empty($executions))
-        {
-            $projectProductList = $this->dao->select('t1.project, t1.product, t2.deleted')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-                ->where('t1.project')->in(array_keys($executions))
-                ->fetchAll('project');
-        }
+        if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchPairs();
 
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
@@ -1674,11 +1668,9 @@ class executionModel extends model
             }
 
             /* Bind execution product */
-            if(!empty($projectProductList) and !empty($projectProductList[$execution->id]))
+            if(!empty($projectProductIdList) and !empty($projectProductIdList[$execution->id]))
             {
-                $execution->product = $projectProductList[$execution->id]->product;
-
-                if($projectProductList[$execution->id]->deleted) unset($executions[$key]);
+                $execution->product = $projectProductIdList[$execution->id];
             }
         }
         return array_values($executions);
