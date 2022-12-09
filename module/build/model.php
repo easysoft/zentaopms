@@ -545,6 +545,7 @@ class buildModel extends model
 
         $this->loadModel('action');
         foreach($this->post->stories as $storyID) $this->action->create('story', $storyID, 'linked2build', '', $buildID);
+        $this->action->create('build', $buildID, 'linkstory', '', implode(',', $this->post->stories));
     }
 
     /**

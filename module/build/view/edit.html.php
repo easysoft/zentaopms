@@ -46,7 +46,7 @@
           <th class='w-120px'><?php echo $product->type == 'normal' ? '' : $lang->product->branchName[$product->type]?></th>
           <td>
             <div class='input-group' id='branchBox'>
-              <?php echo html::select('branch[]', $branchTagOption, $build->branch, "class='form-control chosen' multiple required $disabled"); ?>
+              <?php echo html::select('branch[]', $branchTagOption, $build->branch, "class='form-control chosen' multiple required"); ?>
             </div>
           </td>
         </tr>
@@ -109,7 +109,9 @@
 </div>
 <?php js::set('productGroups', $productGroups)?>
 <?php js::set('projectID', $build->project)?>
+<?php js::set('oldBranch', $oldBranch)?>
 <?php js::set('builds', $build->builds)?>
+<?php js::set('buildID', $build->id)?>
 <?php js::set('executionID', $build->execution)?>
 <?php js::set('currentTab', $this->app->tab);?>
 <?php js::set('multipleSelect', $lang->build->placeholder->multipleSelect);?>

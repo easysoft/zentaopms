@@ -31,6 +31,7 @@ $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
 $lang->build->project        = 'Project';
 $lang->build->branch         = 'Plateforme/Branche';
+$lang->build->branchAll      = 'All associated %s';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
 $lang->build->integrated     = 'Integrated';
@@ -67,6 +68,10 @@ $lang->build->notice->createTest      = "The execution of this version has been 
 $lang->build->finishStories = "  {$lang->SRCommon} Terminées %s";
 $lang->build->resolvedBugs  = '  Bugs Résolus %s';
 $lang->build->createdBugs   = '  Bugs Signalés %s';
+
+$lang->build->confirmChangeBuild = "After branch『%s』disassociation,under the %s have %s {$lang->SRCommon} and %s Bug will remove synchronization from version, whether to cancel？";
+$lang->build->confirmRemoveStory = "After branch『%s』disassociation,under the %s have %s {$lang->SRCommon} will remove synchronization from version, whether to cancel？";
+$lang->build->confirmRemoveBug   = "After branch『%s』disassociation,under the %s have %s Bug will remove synchronization from version, whether to cancel？";
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath        = ' Répertoire des codes sources, ex: chemin de la bibliothèque Subversion / GitSource';

@@ -103,7 +103,7 @@ tbody tr td:first-child input {display: none;}
             <tbody class='text-center'>
               <?php foreach($stories as $storyID => $story):?>
               <?php
-              $unlinkClass = strpos(",$build->stories,", ",$story->id,") !== false ? '' : "disabled";
+              $unlinkClass = strpos(",$build->allStories,", ",$story->id,") !== false ? '' : "disabled";
               $buildName   = $build->name;
               if($unlinkClass == 'disabled')
               {
@@ -224,7 +224,7 @@ tbody tr td:first-child input {display: none;}
               <?php foreach($bugs as $bug):?>
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <?php
-              $unlinkClass = strpos(",$build->bugs,", ",$bug->id,") !== false ? '' : "disabled";
+              $unlinkClass = strpos(",$build->allBugs,", ",$bug->id,") !== false ? '' : "disabled";
               $buildName   = $build->name;
               if($unlinkClass == 'disabled')
               {

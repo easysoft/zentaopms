@@ -18,6 +18,20 @@ $().ready(function()
             });
         }
 
+        var newBranch = $('#branch').val() ? $('#branch').val().toString() : '';
+        $.get(createLink('build', 'ajaxGetBranch', 'buildID=' + buildID + '&newBranch=' + newBranch), function(unlinkBranch)
+        {
+            if(unlinkBranch != '')
+            {
+                var result = confirm(unlinkBranch) ? true : false;
+                if(!result)
+                {
+                    $('#branch').val(oldBranch[buildID].split(','));
+                    $('#branch').trigger("chosen:updated");
+                }
+            }
+        });
+
         $.get(createLink('product', 'ajaxGetProductById', 'produtID=' + productID), function(data)
         {
             $('#branchBox').closest('tr').find('th').text(data.branchName);
