@@ -38,7 +38,7 @@
       </p>
     </div>
     <?php else:?>
-    <table class='table has-sort-head table-fixed' id='hostTable'>
+    <table class='table has-sort-head' id='hostTable'>
       <thead>
         <tr>
           <?php $vars = "browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>

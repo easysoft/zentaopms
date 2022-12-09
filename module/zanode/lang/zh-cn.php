@@ -18,7 +18,7 @@ $lang->zanode->byQuery         = '搜索';
 $lang->zanode->osName          = '操作系统';
 $lang->zanode->image           = '镜像';
 $lang->zanode->imageName       = '镜像名称';
-$lang->zanode->name            = '执行节点名称';
+$lang->zanode->name            = '名称';
 $lang->zanode->start           = '创建后自动开启';
 $lang->zanode->hostName        = '所属宿主机';
 $lang->zanode->host            = $lang->zanode->hostName;
@@ -81,6 +81,8 @@ $lang->zanode->statusList['destroy']      = '已销毁';
 $lang->zanode->statusList['shutoff']      = '已关机';
 $lang->zanode->statusList['shutodown']    = '已关机';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
+$lang->zanode->statusList['wait']         = '待初始化';
+$lang->zanode->statusList['online']       = '已上架';
 
 $lang->zanode->init = new stdclass;
 $lang->zanode->init->statusTitle   = "服务状态";
@@ -100,4 +102,4 @@ $lang->zanode->init->serviceStatus = [
 ];
 $lang->zanode->init->title          = "初始化执行节点";
 $lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
-$lang->zanode->init->initDesc       = "- 在执行节点上执行命令：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s zvm -k %s<br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "Service Status";
+$lang->zanode->init->initDesc       = "- 在执行节点上执行命令：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s zvm -k %s<br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "服务状态";

@@ -1,5 +1,11 @@
 .zahost-detail .text-right{text-align: right;}
 .zahost-detail .col-8{padding-left: 10px;}
-.zahost-detail .detail-content{color: #838a9d;}
 .table.has-sort-head thead tr th a:after{line-height: 22px;}
 .table.has-sort-head thead tr th a:before{line-height: 22px;}
+.c-cpu {width: 100px;}
+.c-os {width: 200px;}
+.c-memory, .c-diskSize, .c-status, .c-software, .c-instanceNum {width: 90px;}
+.c-datetime {width: 150px;}
+.status-wait {color: #f00;}
+.c-actions {overflow: visible!important;}
+.zanode-mt-8{margin-top: 8px;}

@@ -81,6 +81,8 @@ $lang->zanode->statusList['destroy']      = 'Destroyed';
 $lang->zanode->statusList['shutoff']      = 'Shutoff';
 $lang->zanode->statusList['shutdown']     = 'shutdown';
 $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
+$lang->zanode->statusList['wait']         = 'Waiting For Init';
+$lang->zanode->statusList['online']       = 'Online';
 
 $lang->zanode->init = new stdclass;
 $lang->zanode->init->checkStatus   = "Check Service Status";

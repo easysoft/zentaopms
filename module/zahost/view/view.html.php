@@ -33,7 +33,7 @@
       <div class="detail zahost-detail">
         <div class="detail-title"><?php echo $lang->zahost->view;?></div>
         <div class="detail-content article-content">
-          <div class="main-row">
+          <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
                 <div class="col-4 text-right"><?php echo $lang->zahost->zaHostType;?>:</div>
@@ -53,7 +53,7 @@
               </div>
             </div>
           </div>
-          <div class="main-row">
+          <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
                 <div class="col-4 text-right"><?php echo $lang->zahost->vsoft;?>:</div>

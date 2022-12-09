@@ -39,7 +39,7 @@
       <div class="detail zanode-detail">
         <div class="detail-title"><?php echo $lang->zanode->view; ?></div>
         <div class="detail-content article-content">
-          <div class="main-row">
+          <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
                 <div class="col-4 text-right">IP:</div>
@@ -59,11 +59,11 @@
               </div>
             </div>
           </div>
-          <div class="main-row">
+          <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zanode->hostName; ?>:</div>
-                <div class="col-8"><?php echo $zanode->hostName; ?></div>
+                <div class="col-4 text-right"><?php echo $lang->zanode->status; ?>:</div>
+                <div class="col-8"><?php echo zget($lang->zanode->statusList, $zanode->status); ?></div>
               </div>
             </div>
             <div class="col-4">
@@ -79,11 +79,11 @@
               </div>
             </div>
           </div>
-          <div class="main-row">
+          <div class="main-row main-row-last zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zanode->status; ?>:</div>
-                <div class="col-8"><?php echo zget($lang->zanode->statusList, $zanode->status); ?></div>
+                <div class="col-4 text-right"><?php echo $lang->zanode->hostName; ?>:</div>
+                <div class="col-8"><?php echo $zanode->hostName; ?></div>
               </div>
             </div>
             <div class="col-4"></div>
@@ -114,7 +114,7 @@
           }
           elseif($zanode->status == "suspend")
           {
-            common::printLink('zanode', 'resume', "id={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->resume, '', "title='{$lang->zanode->resume}' class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'");
+            common::printLink('zanode', 'resume', "id={$zanode->id}", "<i class='icon icon-pause'></i> " . $lang->zanode->resume, '', "title='{$lang->zanode->resume}' class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'");
           }
           common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '', "title='{$lang->zanode->getVNC}' class='btn iframe " . (common::hasPriv('zahost', 'getVNC') && $zanode->status == 'running' ? '':'disabled') . "'", '', true);
         }
