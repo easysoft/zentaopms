@@ -50,12 +50,23 @@ class release extends control
         $uri = $this->app->getURI(true);
         $this->session->set('releaseList', $uri, 'product');
         $this->session->set('buildList', $uri);
+        $releases    = $this->release->getList($productID, $branch, $type, $orderBy, $pager);
+        $showBranch  = false;
+        foreach($releases as $release)
+        {
+            if($release->productType != 'normal')
+            {
+                $showBranch = true;
+                break;
+            }
+        }
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->release->getList($productID, $branch, $type, $orderBy, $pager);
+        $this->view->releases   = $releases;
         $this->view->type       = $type;
         $this->view->pager      = $pager;
+        $this->view->showBranch = $showBranch;
         $this->display();
     }
 

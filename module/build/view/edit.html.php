@@ -37,7 +37,7 @@
           <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
         </tr>
         <tr>
-        <tr class='<?php if((!empty($product) and $product->type == 'normal') or empty($product)) echo 'hidden'?>'>
+        <tr class='<?php if((!empty($product) and $product->type == 'normal') or empty($product) or empty($build->execution)) echo 'hidden'?>'>
           <?php
           if(empty($product)) $product = new stdclass();
           $productType     = zget($product, 'type', 'normal');

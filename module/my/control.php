@@ -962,7 +962,10 @@ EOF;
         }
         else
         {
-            $this->lang->my->auditMenu->audit = $this->my->getReviewingTypeList();
+            $typeList = $this->my->getReviewingTypeList();
+            if(!isset($typeList->$browseType)) $browseType = 'all';
+
+            $this->lang->my->auditMenu->audit = $typeList;
             $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
         }
 

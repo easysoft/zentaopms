@@ -87,6 +87,16 @@ class projectrelease extends control
 
         $releases = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
 
+        $showBranch = false;
+        foreach($releases as $release) 
+        {
+            if($release->productType != 'normal')
+            {
+                $showBranch = true;
+                break;
+            }
+        }
+
         $this->view->title       = $objectName . $this->lang->colon . $this->lang->release->browse;
         $this->view->execution   = $execution;
         $this->view->project     = $project;
@@ -97,6 +107,7 @@ class projectrelease extends control
         $this->view->type        = $type;
         $this->view->from        = $this->app->tab;
         $this->view->pager       = $pager;
+        $this->view->showBranch  = $showBranch;
         $this->display();
     }
 
@@ -136,7 +147,7 @@ class projectrelease extends control
         $builds         = $this->build->getBuildPairs($this->view->product->id, 'all', 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
-
+        
         $this->view->title          = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
         $this->view->projectID      = $projectID;
         $this->view->builds         = $builds;

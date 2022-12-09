@@ -31,7 +31,7 @@
 #endLabel {white-space: nowrap;}
 #copyProjectModal .projectSelect {display: inline-block; margin-left: 10px; width: 20%;}
 #copyProjectModal .titleBox{position: relative; bottom: 3px; display: inline-block;}
-a.chosen-single > div > b {top: -4px !important;}
+#copyProjectModal .projectSelect a.chosen-single > div > b {top: -4px !important;}
 
 .productsBox a {border-radius: 2px !important;}
 .productsBox .required:after {right: -9.5px !important;}

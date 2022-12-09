@@ -63,7 +63,7 @@ class buildModel extends model
      */
     public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t3.name as productName')
+        return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t2.deleted as executionDeleted, t3.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
@@ -253,7 +253,7 @@ class buildModel extends model
                 ->beginIF($products)->andWhere('product')->in($products)->fi()
                 ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
                 ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
-                ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('deleted')->eq(0)->fi()
+                ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('deleted')->eq(0)->fi()
                 ->fetchPairs();
         }
 
@@ -267,7 +267,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t5')->on('t1.product = t5.id')
             ->where('1=1')
             ->andWhere('t1.id')->notIN($shadows)
-            ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
+            ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
             ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
@@ -457,7 +457,7 @@ class buildModel extends model
             ->get();
 
         $product = $this->loadModel('product')->getByID($build->product);
-        if(!empty($product) and $product->type != 'normal' and !isset($_POST['branch']))
+        if(!empty($product) and $product->type != 'normal' and !isset($_POST['branch']) and isset($_POST['product']))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
