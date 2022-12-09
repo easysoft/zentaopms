@@ -852,7 +852,7 @@ class transferModel extends model
         $storyDatas = end($stories);
         $lastBranch = $storyDatas->branch;
         $lastType   = $storyDatas->type;
-        $stories    = $this->story->mergePlanTitle($productID , $stories, $lastBranch, $lastType);
+        $stories    = $this->loadModel('story')->mergePlanTitle($productID , $stories, $lastBranch, $lastType);
 
         return $stories;
     }
