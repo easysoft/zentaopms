@@ -466,10 +466,23 @@ class productplanModel extends model
      */
     public function getBranchPlanPairs($productID, $branches = '', $skipParent = false)
     {
+        $branchQuery = '';
+        if($branches !== '' and $branches !== 'all')
+        {
+            $branchQuery .= '(';
+            if(!is_array($branches)) $branches = explode(',', $branches);
+            foreach($branches as $branchID)
+            {
+                $branchQuery .= "CONCAT(',', branch, ',') LIKE '%,$branchID,%'";
+                if($branchID != end($branches)) $branchQuery .= ' OR ';
+            }
+            $branchQuery .= ')';
+        }
+
         $plans = $this->dao->select('parent,branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
+            ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
@@ -482,6 +495,7 @@ class productplanModel extends model
 
                 if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
                 $planPairs[$branch][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
+                if($branch !== BRANCH_MAIN) $planPairs[BRANCH_MAIN][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
             }
         }
         return $planPairs;
