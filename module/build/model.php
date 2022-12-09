@@ -457,7 +457,7 @@ class buildModel extends model
             ->get();
 
         $product = $this->loadModel('product')->getByID($build->product);
-        if(!empty($product) and $product->type != 'normal' and !isset($_POST['branch']))
+        if(!empty($product) and $product->type != 'normal' and !isset($_POST['branch']) and isset($_POST['product']))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
