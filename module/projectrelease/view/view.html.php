@@ -335,7 +335,7 @@
                   <table class='table table-data'>
                     <?php if($project->hasProduct):?>
                     <tr>
-                      <th class='w-90px'><?php echo $lang->release->product;?></th>
+                      <th class='w-100px'><?php echo $lang->release->product;?></th>
                       <td><?php echo $release->productName;?></td>
                     </tr>
                     <?php if($release->productType != 'normal'):?>

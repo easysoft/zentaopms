@@ -36,6 +36,7 @@ $lang->build->execution      = $lang->executionCommon;
 $lang->build->integrated     = 'Integrated';
 $lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Included Builds';
+$lang->build->releasedBuild  = 'Released Build';
 $lang->build->name           = 'Nom';
 $lang->build->date           = 'Date';
 $lang->build->builder        = 'Builder';
@@ -60,6 +61,7 @@ $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the vers
 $lang->build->notice->changeExecution = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
 $lang->build->notice->changeBuilds    = "The version of the submitted test order cannot be modified builds";
 $lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the project version";
+$lang->build->notice->createTest      = "The execution of this version has been deleted, and the test cannot be submitted";
 
 $lang->build->finishStories = "  {$lang->SRCommon} Terminées %s";
 $lang->build->resolvedBugs  = '  Bugs Résolus %s';

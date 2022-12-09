@@ -46,7 +46,10 @@ class release extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->commonAction($productID, $branch);
-        $this->session->set('releaseList', $this->app->getURI(true), 'product');
+
+        $uri = $this->app->getURI(true);
+        $this->session->set('releaseList', $uri, 'product');
+        $this->session->set('buildList', $uri);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
@@ -86,27 +89,6 @@ class release extends control
         $releasedBuilds = $this->release->getReleasedBuilds($productID, $branch);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
-        /* Get the builds of the linked stories or bugs. */
-        $notEmptyBuilds = array();
-        $buildList      = $this->build->getByList(array_keys($builds));
-        foreach($buildList as $build)
-        {
-            if(!$build->execution && !empty($build->builds))
-            {
-                $childBuilds = $this->build->getByList($build->builds);
-                foreach($childBuilds as $childBuild)
-                {
-                    $childBuild->stories = trim($childBuild->stories, ',');
-                    $childBuild->bugs    = trim($childBuild->bugs, ',');
-
-                    if($childBuild->stories) $build->stories .= ',' . $childBuild->stories;
-                    if($childBuild->bugs)    $build->bugs    .= ',' . $childBuild->bugs;
-                }
-            }
-
-            if(!empty($build->stories) or !empty($build->bugs)) $notEmptyBuilds[$build->id] = $build->id;
-        }
-
         $this->commonAction($productID, $branch);
         $this->view->title          = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]     = $this->lang->release->create;
@@ -114,7 +96,7 @@ class release extends control
         $this->view->builds         = $builds;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease    = $this->release->getLast($productID, $branch);
-        $this->view->notEmptyBuilds = $notEmptyBuilds;
+        $this->view->notEmptyBuilds = $this->build->filterLinked(array_keys($builds));
 
         $this->display();
     }
@@ -188,8 +170,10 @@ class release extends control
         $release   = $this->release->getByID($releaseID, true);
         if(!$release) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
-        if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
-        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $uri = $this->app->getURI(true);
+        if(!empty($release->build)) $this->session->set('buildList', $uri);
+        if($type == 'story') $this->session->set('storyList', $uri, 'product');
+        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $uri, 'qa');
 
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -639,7 +623,7 @@ class release extends control
 
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairsForStory($release->product, $release->branch, 'skipParent|withMainPlan');
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, $release->branch);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 'all', $params = '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $searchModules = array();

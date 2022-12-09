@@ -1827,9 +1827,18 @@ class taskModel extends model
         foreach($record->dates as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         if(dao::isError()) return false;
 
+        $task       = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();;
+        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
+
+        /* Check if the current user is in the team. */
+        $inTeam = empty($task->team) ? true : false;
+        foreach($task->team as $teamMember)
+        {
+            if($teamMember->account == $this->app->user->account) $inTeam = true;
+        }
+        if(!$inTeam) return false;
+
         $estimates    = array();
-        $task         = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();;
-        $task->team   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
         $earliestTime = '';
         foreach(array_keys($record->dates) as $id)
         {
@@ -3206,6 +3215,16 @@ class taskModel extends model
             $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
         }
 
+        if($task->mode == 'multi')
+        {
+            $teamMembers = $this->dao->select('t1.realname')->from(TABLE_USER)->alias('t1')
+                ->leftJoin(TABLE_TASKTEAM)->alias('t2')
+                ->on('t1.account = t2.account')
+                ->where('t2.task')->eq($task->id)
+                ->fetchPairs();
+            $task->teamMembers= join(',', array_keys($teamMembers));
+        }
+
         return $task;
     }
 
@@ -3921,8 +3940,15 @@ class taskModel extends model
     public function getToAndCcList($task)
     {
         /* Set toList and ccList. */
-        $toList = $task->assignedTo;
-        $ccList = trim($task->mailto, ',');
+        $toList         = $task->assignedTo;
+        $ccList         = trim($task->mailto, ',');
+        $toTeamTaskList = '';
+        if($task->mode == 'multi')
+        {
+            $toTeamTaskList = $this->getTeamMembers($task->id);
+            $toTeamTaskList = implode(',', $toTeamTaskList);
+            $toList         = $toTeamTaskList;
+        }
 
         if(empty($toList))
         {
@@ -4338,5 +4364,20 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
             $order ++;
         }
+    }
+
+    /**
+     * Get teamTask members.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function getTeamMembers($taskID)
+    {
+        $taskType = $this->dao->select('mode')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('mode');
+        if($taskType != 'multi') return array();
+        $teamMembers = $this->dao->select('account')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchPairs();
+        return empty($teamMembers) ? $teamMembers : array_keys($teamMembers);
     }
 }

@@ -36,7 +36,7 @@
                       <?php endif;?>
                     </label>
                   </div>
-                  <?php endForeach;?>
+                  <?php endforeach;?>
                 </td>
               </tr>
             </tbody>

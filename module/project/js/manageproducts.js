@@ -128,7 +128,7 @@ function notice()
             },
             callback: function(result)
             {
-                if(result) $('div.form-actions').append("<input type='hidden' value='1' name='division'>");
+                if(result) $('#submit').after("<input type='hidden' value='1' name='division'>");
                 $('form#productsBox').submit();
             }
         }

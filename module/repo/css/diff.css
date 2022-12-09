@@ -16,6 +16,7 @@ table.diff {margin-bottom: 0px;}
 .repoCode .diff tr.over td.line-new, .repoCode .diff tr.over td.line-new {background: #8eff8e;}
 .repoCode .diff tr.over td.line-old, .repoCode .diff tr.over td.line-old {background: #f6b2b2;}
 
+.repoCode {min-height: 500px;}
 .repoCode form > .btn {margin-right: 10px;}
 .label-exchange {background-color: #566F7C; cursor: pointer;}
 .label-exchange i {padding: 0;}
@@ -24,3 +25,15 @@ table.diff {margin-bottom: 0px;}
 .body-modal #mainMenu {padding-bottom: 40px;}
 
 .repoCode td.code {white-space: inherit;}
+.repoCode .nav-tabs > li.active > a:before {background: none; height: 0;}
+
+#fileTabs .tab-pane {display: none;}
+#fileTabs .tab-pane.active {display: block;}
+#fileTabs .tab-nav-item {max-width: none !important;}
+#filesTree #modules {margin-top: 5px;}
+#filesTree {overflow-y: auto;}
+
+.file-tree {padding: 0;}
+#sidebar > .sidebar-toggle {left: auto; right: 3px;}
+#sidebar > .sidebar-toggle > .icon {left : -1px;}
+.hide-sidebar #sidebar {width: 0 !important;}

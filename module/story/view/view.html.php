@@ -598,6 +598,29 @@
                     </ul>
                   </td>
                 </tr>
+                <tr>
+                  <th><?php echo $lang->story->linkCommit;?></th>
+                  <td class='pd-0'>
+                    <ul class='list-unstyled'>
+                    <?php
+                    $canViewRevision = common::hasPriv('repo', 'revision');
+                    foreach($linkedCommits as $commit)
+                    {
+                        $revision    = substr($commit->revision, 0, 10);
+                        $commitTitle = $revision . ' ' . $commit->comment;
+                        if($canViewRevision)
+                        {
+                            echo "<li class='link-commit' title='$commitTitle'>" . html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) . ' ' . $commit->comment . '</li>';
+                        }
+                        else
+                        {
+                            echo "<li class='link-commit' title='$commitTitle'>" . "$commitTitle" . '</li>';
+                        }
+                    }
+                    ?>
+                    </ul>
+                  </td>
+                </tr>
                 <?php endif;?>
               </tbody>
             </table>

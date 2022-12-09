@@ -182,6 +182,7 @@ $lang->task->noClosed          = 'Niht geschlossen';
 $lang->task->yesterdayFinished = 'Gestern abgeschlossen';
 $lang->task->allTasks          = 'Alle Aufgaben';
 $lang->task->linkMR            = 'Related MRs';
+$lang->task->linkCommit        = 'Related Commits';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Wartend';
@@ -226,6 +227,10 @@ $lang->task->legendDesc   = 'Aufgabenbeschreibung';
 $lang->task->legendDetail = 'Task Detail';
 $lang->task->legendMisc   = 'Misc.';
 
+$lang->task->action = new stdclass();
+$lang->task->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+
 $lang->task->confirmDelete             = "Möchten Sie diese Aufgabe löschen?";
 $lang->task->confirmDeleteEstimate     = "Do you want to delete it?";
 $lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
@@ -241,6 +246,7 @@ $lang->task->confirmRecord             = '"Reststunden " sind 0. Möchten Sie de
 $lang->task->confirmTransfer           = '"Left Hour" is 0，Do you want to assign to <strong>%s</strong> task?';
 $lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory           = "Es wurde keine Story verknüpft. Sie können %s für dieses Projekt, anschließend %s.";
+$lang->task->noticeLinkStoryNoProduct  = "No story has been linked.";
 $lang->task->noticeSaveRecord          = 'Ihre Stunden wurden nicht gespeichrt. Bitte erst speichern.';
 $lang->task->noticeManageTeam          = 'Task status is %s, can not manage team.';
 $lang->task->commentActions            = '%s. %s, kommentiert von <strong>%s</strong>.';

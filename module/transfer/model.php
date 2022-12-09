@@ -507,7 +507,6 @@ class transferModel extends model
             $modelData = $this->getDatasByFile($tmpFile);
         }
         if(isset($fields['id'])) unset($fields['id']);
-        $this->session->set($model . 'TemplateFields', array_keys($fields));
         return $modelData;
     }
 

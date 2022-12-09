@@ -1097,7 +1097,7 @@ class execution extends control
         $modules  = $this->tree->getAllModulePairs('bug');
 
         /* Get module tree.*/
-        $extra = array('executionID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
+        $extra = array('projectID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
         if($executionID and empty($productID) and count($products) > 1)
         {
             $moduleTree = $this->tree->getBugTreeMenu($executionID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
@@ -1205,7 +1205,7 @@ class execution extends control
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('executionID' => $executionID, 'productID' => $productID), $branchID);
+            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $executionID, 'productID' => $productID), $branchID);
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
@@ -3867,22 +3867,12 @@ class execution extends control
 
         $executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $orderBy, $pager);
 
-        $parentIdList = array();
-        foreach($executionStats as $execution)
-        {
-            if($execution->type != 'stage') continue;
-            if($execution->grade == 2 and $execution->project != $execution->parent) $parentIdList[$execution->parent] = $execution->parent;
-        }
-        $parents = array();
-        if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
-
         $allExecutionsNum = $this->execution->getStatData(0, 'all');
         $this->view->allExecutionsNum = count($allExecutionsNum);
 
         $this->view->executionStats = $executionStats;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject(0);
         $this->view->productID      = $productID;
-        $this->view->parents        = $parents;
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');

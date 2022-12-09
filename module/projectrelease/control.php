@@ -69,7 +69,10 @@ class projectrelease extends control
      */
     public function browse($projectID = 0, $executionID = 0, $type = 'all', $orderBy = 't1.date_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->session->set('releaseList', $this->app->getURI(true), 'project');
+        $uri = $this->app->getURI(true);
+        $this->session->set('releaseList', $uri, 'project');
+        $this->session->set('buildList', $uri);
+
         $project   = $this->project->getById($projectID);
         $execution = $this->loadModel('execution')->getById($executionID);
 
@@ -130,17 +133,17 @@ class projectrelease extends control
         $this->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($this->view->product->id, $this->view->branch, 'notrunk,withbranch|hasproject', $projectID, 'project');
+        $builds         = $this->build->getBuildPairs($this->view->product->id, $this->view->branch, 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
-        unset($builds['trunk']);
 
-        $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
-        $this->view->projectID   = $projectID;
-        $this->view->builds      = $builds;
-        $this->view->lastRelease = $this->projectrelease->getLast($projectID);
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->confirmLink = $this->lang->release->confirmLink;
+        $this->view->title          = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->projectID      = $projectID;
+        $this->view->builds         = $builds;
+        $this->view->lastRelease    = $this->projectrelease->getLast($projectID);
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->confirmLink    = $this->lang->release->confirmLink;
+        $this->view->notEmptyBuilds = $this->build->filterLinked(array_keys($builds));
         $this->display();
     }
 
@@ -187,7 +190,7 @@ class projectrelease extends control
         $bindBuilds = $this->build->getByList($release->build);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch|hasproject', $this->session->project, 'project', '', false);
+        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch|hasproject', $this->session->project, 'project', $release->build, false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($this->session->project);
         foreach($releasedBuilds as $releasedBuild)
         {
@@ -196,7 +199,6 @@ class projectrelease extends control
                 if(!isset($bindBuilds[$bindBuildID])) unset($builds[$bindBuildID]);
             }
         }
-        unset($builds['trunk']);
 
         /* Set project menu. */
         $this->project->setMenu($this->session->project);
@@ -226,9 +228,6 @@ class projectrelease extends control
      */
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $this->session->set('buildList', $this->app->getURI(true), 'execution');
-        $this->session->set('storyList', $this->app->getURI(true), $this->app->tab);
-
         $this->loadModel('story');
         $this->loadModel('bug');
 
@@ -242,6 +241,11 @@ class projectrelease extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate('back'));
         }
+
+        $uri = $this->app->getURI(true);
+        if($release->build)  $this->session->set('buildList', $uri);
+        if($type == 'story') $this->session->set('storyList', $uri, $this->app->tab);
+        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $uri, $this->app->tab);
 
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
@@ -683,7 +687,7 @@ class projectrelease extends control
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairsForStory($release->product, $release->branch, 'skipParent|withMainPlan');
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, $release->branch, 'id_desc', $release->project);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 0, $params = '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 0);
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $searchModules = array();
@@ -811,8 +815,10 @@ class projectrelease extends control
         $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk,withbranch,hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
-        unset($builds['trunk']);
 
-        return print(html::select('build[]', $builds, '', "class='form-control chosen' multiple"));
+        /* Get the builds of the linked stories or bugs. */
+        $notEmptyBuilds = $this->build->filterLinked(array_keys($builds));
+
+        return print(html::select('build[]', $builds, '', "class='form-control chosen' multiple data-notemptybuilds='" . join(',', $notEmptyBuilds) . "'"));
     }
 }

@@ -1035,6 +1035,7 @@ class task extends control
         $this->view->product      = $this->tree->getProduct($task->module);
         $this->view->modulePath   = $this->tree->getParents($task->module);
         $this->view->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
+        $this->view->linkCommits  = $this->loadModel('repo')->getCommitsByObject($taskID, 'task');
         $this->display();
     }
 

@@ -4,7 +4,7 @@
 #legendStories ul li:last-child {display: block;}
 .main-actions .btn-toolbar .btn {padding-right: 6px; padding-left: 6px;}
 .btn-edit-comment {z-index: 100;}
-#legendRelated .table-data tbody>tr>th {width: 90px;}
+#legendRelated .table-data tbody>tr>th {width: 100px;}
 #legendStories .list-unstyled li a {padding: 6px;}
 #legendStories .list-unstyled li a:not(.removeButton) {overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 [lang^='zh'] #legendStories .list-unstyled li:last-child {padding: 6px 12px;}
@@ -13,3 +13,4 @@
 .linkStoryTr > td {padding-left: 0px !important;}
 .removeButton {margin-left: -10px;}
 .resolution {white-space: nowrap; overflow: hidden;}
+.link-commit {overflow: hidden; white-space: nowrap; margin-right: 5px;}

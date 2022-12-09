@@ -453,6 +453,8 @@ class mr extends control
         $this->view->arrange      = $arrange;
         $this->view->sourceBranch = $MR->sourceBranch;
         $this->view->targetBranch = $MR->targetBranch;
+        $this->view->oldRevision  = $MR->targetBranch;
+        $this->view->newRevision  = $MR->sourceBranch;
         $this->display();
     }
 
@@ -697,8 +699,8 @@ class mr extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($productID);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = '');
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = 'releasetag');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         unset($this->config->bug->search['fields']['product']);
         if($product->type == 'normal')

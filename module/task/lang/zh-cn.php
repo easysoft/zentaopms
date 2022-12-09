@@ -182,6 +182,7 @@ $lang->task->noClosed          = '未关闭';
 $lang->task->yesterdayFinished = '昨日完成任务数';
 $lang->task->allTasks          = '总任务';
 $lang->task->linkMR            = '相关合并请求';
+$lang->task->linkCommit        = '相关代码版本';
 
 $lang->task->statusList['']       = '';
 $lang->task->statusList['wait']   = '未开始';
@@ -226,6 +227,10 @@ $lang->task->legendDesc   = '任务描述';
 $lang->task->legendDetail = '任务详情';
 $lang->task->legendMisc   = '其他相关';
 
+$lang->task->action = new stdclass();
+$lang->task->action->linked2revision      = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->unlinkedfromrevision = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
+
 $lang->task->confirmDelete             = "您确定要删除这个任务吗？";
 $lang->task->confirmDeleteEstimate     = "您确定要删除这个记录吗？";
 $lang->task->confirmDeleteLastEstimate = "您确定要删除该条日志吗？删除最后一条工时日志后，该任务状态将调整为未开始。";
@@ -241,6 +246,7 @@ $lang->task->confirmRecord             = '"剩余"为0，任务将标记为"已�
 $lang->task->confirmTransfer           = '剩余工时为0，当前成员已完成任务，任务指派给：<strong>%s</strong>。';
 $lang->task->noticeTaskStart           = '"总计消耗"和"预计剩余"不能同时为0';
 $lang->task->noticeLinkStory           = "没有可关联的相关{$lang->SRCommon}，您可以为当前项目%s，然后%s";
+$lang->task->noticeLinkStoryNoProduct  = "没有可关联的相关{$lang->SRCommon}";
 $lang->task->noticeSaveRecord          = '您有尚未保存的工时记录，请先将其保存。';
 $lang->task->noticeManageTeam          = '任务状态是%s，不能维护团队';
 $lang->task->commentActions            = '%s. %s, 由 <strong>%s</strong> 添加备注。';

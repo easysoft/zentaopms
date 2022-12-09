@@ -443,14 +443,16 @@ $lang->project->noMultiple->kanban->menuOrder[15] = 'settings';
 
 /* QA menu.*/
 $lang->qa->menu = new stdclass();
-$lang->qa->menu->index      = array('link' => "$lang->dashboard|qa|index");
-$lang->qa->menu->bug        = array('link' => "{$lang->bug->common}|bug|browse|productID=%s", 'subModule' => 'bug');
-$lang->qa->menu->testcase   = array('link' => "{$lang->testcase->shortCommon}|testcase|browse|productID=%s", 'subModule' => 'testcase,story');
-$lang->qa->menu->testsuite  = array('link' => "{$lang->testcase->testsuite}|testsuite|browse|productID=%s", 'subModule' => 'testsuite');
-$lang->qa->menu->testtask   = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
-$lang->qa->menu->report     = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
-$lang->qa->menu->caselib    = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
-$lang->qa->menu->automation = array('link' => "{$lang->automation->common}|automation|browse|productID=%s", 'subModule' => 'automation', 'alias' => '');
+$lang->qa->menu->index         = array('link' => "$lang->dashboard|qa|index");
+$lang->qa->menu->bug           = array('link' => "{$lang->bug->common}|bug|browse|productID=%s", 'subModule' => 'bug');
+$lang->qa->menu->testcase      = array('link' => "{$lang->testcase->shortCommon}|testcase|browse|productID=%s", 'subModule' => 'testcase,story');
+$lang->qa->menu->testsuite     = array('link' => "{$lang->testcase->testsuite}|testsuite|browse|productID=%s", 'subModule' => 'testsuite');
+$lang->qa->menu->testtask      = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
+$lang->qa->menu->report        = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
+$lang->qa->menu->caselib       = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
+$lang->qa->menu->automation    = array('link' => "{$lang->automation->common}|project|other|productID=%s", 'subModule' => 'automation', 'alias' => '', 'class' => "qa-automation-menu");
+$lang->qa->menu->zahost        = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
+$lang->qa->menu->zanode        = array('link' => "{$lang->zanode->common}|zanode|browse", 'subModule' => 'zanode');
 
 /* QA menu order. */
 $lang->qa->menuOrder[5]  = 'product';
@@ -464,13 +466,13 @@ $lang->qa->menuOrder[40] = 'caselib';
 $lang->qa->menuOrder[45] = 'automation';
 
 // $lang->qa->menu->automation['subMenu'] = new stdclass();
-// $lang->qa->menu->automation['subMenu']->browse      = array('link' => "{$lang->intro}|automation|browse|productID=%s", 'alias' => '');
+// $lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->automation->common}|zahost|browse", 'alias' => 'create');
 // $lang->qa->menu->automation['subMenu']->framework   = array('link' => '框架|automation|framework|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->data        = array('link' => '数据|automation|date|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->interface   = array('link' => '接口|automation|interface|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->environment = array('link' => '环境|automation|environment|productID=%s', 'alias' => '');
 
-$lang->qa->dividerMenu = ',bug,testtask,caselib,';
+$lang->qa->dividerMenu = ',bug,testtask,caselib,automation,';
 
 /* DevOps menu. */
 $lang->devops->menu = new stdclass();
@@ -717,16 +719,17 @@ $lang->navGroup->api    = 'doc';
 
 $lang->navGroup->report = 'report';
 
-$lang->navGroup->qa         = 'qa';
-$lang->navGroup->bug        = 'qa';
-$lang->navGroup->testcase   = 'qa';
-$lang->navGroup->testtask   = 'qa';
-$lang->navGroup->automation = 'qa';
-$lang->navGroup->testreport = 'qa';
-$lang->navGroup->testcase   = 'qa';
-$lang->navGroup->testtask   = 'qa';
-$lang->navGroup->testsuite  = 'qa';
-$lang->navGroup->caselib    = 'qa';
+$lang->navGroup->qa            = 'qa';
+$lang->navGroup->bug           = 'qa';
+$lang->navGroup->testcase      = 'qa';
+$lang->navGroup->testtask      = 'qa';
+$lang->navGroup->zahost        = 'qa';
+$lang->navGroup->zanode        = 'qa';
+$lang->navGroup->testreport    = 'qa';
+$lang->navGroup->testcase      = 'qa';
+$lang->navGroup->testtask      = 'qa';
+$lang->navGroup->testsuite     = 'qa';
+$lang->navGroup->caselib       = 'qa';
 
 $lang->navGroup->devops           = 'devops';
 $lang->navGroup->repo             = 'devops';

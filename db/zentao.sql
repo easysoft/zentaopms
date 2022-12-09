@@ -7250,65 +7250,81 @@ CREATE TABLE IF NOT EXISTS `zt_account` (
   key `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_asset`;
-CREATE TABLE IF NOT EXISTS `zt_asset` (
+-- DROP TABLE IF EXISTS `zt_host`;
+CREATE TABLE `zt_host` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `status` varchar(30) NOT NULL,
-  `type` varchar(30) NOT NULL,
-  `group` varchar(128) NOT NULL,
-  `createdBy` char(30) NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `type` varchar(30) NOT NULL DEFAULT 'normal',
+  `hostType` varchar(30) NOT NULL DEFAULT '',
+  `mac` varchar(128) NOT NULL,
+  `memory` varchar(30) NOT NULL,
+  `diskSize` varchar(30) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `secret` varchar(50) NOT NULL DEFAULT '',
+  `desc` text NOT NULL,
+  `tokenSN` varchar(50) NOT NULL DEFAULT '',
+  `tokenTime` datetime NOT NULL,
+  `vsoft` varchar(30) NOT NULL DEFAULT '',
+  `heartbeat` datetime NOT NULL,
+  `zap` varchar(10) NOT NULL,
+  `provider` varchar(255) NOT NULL DEFAULT '',
+  `vnc` int(11) NOT NULL,
+  `ztf` int(11) NOT NULL,
+  `zd` int(11) NOT NULL,
+  `ssh` int(11) NOT NULL,
+  `parent` int(11) unsigned NOT NULL DEFAULT '0',
+  `image` int(11) unsigned NOT NULL DEFAULT '0',
+  `assetID` mediumint(8) unsigned NOT NULL,
+  `admin` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `serverRoom` mediumint(8) unsigned NOT NULL,
+  `serverModel` varchar(256) NOT NULL,
+  `hardwareType` varchar(64) NOT NULL,
+  `cpuBrand` varchar(128) NOT NULL,
+  `cpuModel` varchar(128) NOT NULL,
+  `cpuNumber` varchar(16) NOT NULL,
+  `cpuCores` varchar(30) NOT NULL,
+  `intranet` varchar(128) NOT NULL,
+  `extranet` varchar(128) NOT NULL,
+  `osName` varchar(64) NOT NULL,
+  `osVersion` varchar(64) NOT NULL,
+  `group` varchar(128) NOT NULL DEFAULT '',
+  `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
-  `editedBy` char(30) NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+-- DROP TABLE IF EXISTS `zt_image`;
+CREATE TABLE `zt_image` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `host` int(11) unsigned NOT NULL DEFAULT 0,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `address` varchar(64) NOT NULL DEFAULT '',
+  `path` varchar(64) NOT NULL DEFAULT '',
+  `status` varchar(20) NOT NULL DEFAULT '',
+  `osName` varchar(32) NOT NULL DEFAULT '',
+  `from` varchar(10) NOT NULL DEFAULT 'zentao',
+  `memory` float unsigned NOT NULL,
+  `disk` float unsigned NOT NULL,
+  `fileSize` float unsigned NOT NULL,
+  `md5` varchar(64) NOT NULL,
+  `desc` text NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_host`;
-CREATE TABLE IF NOT EXISTS `zt_host` (
-  `id` mediumint(8) unsigned  NOT NULL AUTO_INCREMENT,
-  `assetID`      mediumint(8) UNSIGNED NOT NULL,
-  `admin`        smallint(5)  UNSIGNED NOT NULL DEFAULT 0,
-  `serverRoom`   mediumint(8) UNSIGNED NOT NULL,
-  `cabinet`      varchar(128) NOT NULL,
-  `serverModel`  varchar(256) NOT NULL,
-  `hardwareType` varchar(64)  NOT NULL,
-  `hostType`     enum('physical','virtual') NOT NULL,
-  `cpuBrand`     varchar(128) NOT NULL,
-  `cpuModel`     varchar(128) NOT NULL,
-  `cpuNumber`    varchar(16)  NOT NULL,
-  `cpuCores`     varchar(30)  NOT NULL,
-  `cpuRate`      varchar(30)  NOT NULL,
-  `memory`       varchar(30)  NOT NULL,
-  `diskType`     varchar(30)  NOT NULL,
-  `diskSize`     varchar(30)  NOT NULL,
-  `unit`         enum('GB','TB') NOT NULL DEFAULT 'GB',
-  `privateIP`    varchar(128) NOT NULL,
-  `publicIP`     varchar(128) NOT NULL,
-  `nic`          varchar(128) NOT NULL,
-  `mac`          varchar(128) NOT NULL,
-  `osName`       varchar(64)  NOT NULL,
-  `osVersion`    varchar(64)  NOT NULL,
-  `webserver`    varchar(128) NOT NULL,
-  `database`     varchar(128) NOT NULL,
-  `language`     varchar(16)  NOT NULL,
-  `status`       varchar(50)  NOT NULL,
-  `agentPort` varchar(10) NOT NULL,
-  `instanceNum` tinyint(0) NOT NULL DEFAULT 0,
-  `pri` smallint(5) unsigned NOT NULL DEFAULT 0,
-  `heartbeatTime` datetime NOT NULL,
-  `tags` varchar(50)  NOT NULL DEFAULT '',
-  `provider` varchar(255) NOT NULL DEFAULT '',
-  `bridgeID` varchar(255) NOT NULL DEFAULT '',
-  `cloudKey` varchar(255) NOT NULL DEFAULT '',
-  `cloudSecret` varchar(255) NOT NULL DEFAULT '',
-  `cloudRegion` varchar(255) NOT NULL DEFAULT '',
-  `cloudNamespace` varchar(255) NOT NULL DEFAULT '',
-  `cloudUser` varchar(255) NOT NULL DEFAULT '',
-  `cloudAccount` varchar(255) NOT NULL DEFAULT '',
-  `cloudPassword` varchar(255) NOT NULL DEFAULT '',
-  `couldVPC` varchar(255) NOT NULL DEFAULT '',
+-- DROP TABLE IF EXISTS `zt_automation`;
+CREATE TABLE `zt_automation` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `node` int(11) unsigned NOT NULL DEFAULT 0,
+  `product` int(11) unsigned NOT NULL DEFAULT 0,
+  `scriptPath` varchar(255) NOT NULL DEFAULT '',
+  `shell` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -7554,86 +7570,6 @@ CREATE TABLE IF NOT EXISTS `zt_deployscope` (
   `hosts` text NOT NULL,
   `remove` text NOT NULL,
   `add` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_vm`;
-CREATE TABLE IF NOT EXISTS `zt_vm` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `hostID` int(10) unsigned NOT NULL DEFAULT 0,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `osCategory` varchar(50) NOT NULL DEFAULT '',
-  `osType` varchar(50) NOT NULL DEFAULT '',
-  `osArch` varchar(50) NOT NULL DEFAULT '',
-  `osLang` varchar(50) NOT NULL DEFAULT '',
-  `osCpu` tinyint(2) NOT NULL DEFAULT 0,
-  `osMemory` smallint(6) NOT NULL DEFAULT 0,
-  `osDisk` smallint(6) NOT NULL DEFAULT 0,
-  `status` varchar(50) NOT NULL DEFAULT '',
-  `destroyAt` datetime NULL,
-  `macAddress` varchar(255) NOT NULL DEFAULT '',
-  `workspace` varchar(255) NOT NULL DEFAULT '',
-  `templateID` int(10) unsigned NOT NULL DEFAULT 0,
-  `baseImageID` int(10) unsigned NOT NULL DEFAULT 0,
-  `baseImagePath` varchar(255) NOT NULL DEFAULT '',
-  `desc` varchar(255) NOT NULL DEFAULT '',
-  `heatbeat` datetime NULL,
-  `vncPort` int(10) NOT NULL DEFAULT 0,
-  `instance` varchar(255) NOT NULL DEFAULT '',
-  `eip` varchar(255) NOT NULL DEFAULT '',
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  `public` varchar(50) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_baseimage`;
-CREATE TABLE IF NOT EXISTS `zt_baseimage` (
-  `id` SMALLINT(7) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `osType` varchar(50) NOT NULL DEFAULT '',
-  `os` varchar(50) NOT NULL DEFAULT '',
-  `osCategory` varchar(50) NOT NULL DEFAULT '',
-  `osArch` varchar(50) NOT NULL DEFAULT '',
-  `osLang` varchar(50) NOT NULL DEFAULT '',
-  `suggestCore` tinyint(1) unsigned NOT NULL DEFAULT 0,
-  `suggestMemory` mediumint(6) unsigned NOT NULL DEFAULT 0,
-  `suggestVolume` mediumint(6) unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_vmtemplate`;
-CREATE TABLE IF NOT EXISTS `zt_vmtemplate` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `hostID` int(10) unsigned NOT NULL DEFAULT 0,
-  `templateName` varchar(255) NOT NULL DEFAULT '',
-  `osType` varchar(50) NOT NULL DEFAULT '',
-  `osCategory` varchar(50) NOT NULL DEFAULT '',
-  `osVersion` varchar(50) NOT NULL DEFAULT '',
-  `osLang` varchar(50) NOT NULL,
-  `cpuCoreNum` smallint(4) NOT NULL DEFAULT 0,
-  `memorySize` int NOT NULL DEFAULT 0,
-  `diskSize` int NOT NULL DEFAULT 0,
-  `osArch` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_browser`;
-CREATE TABLE IF NOT EXISTS `zt_browser` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(255) NOT NULL DEFAULT '',
-  `version` varchar(255) NOT NULL DEFAULT '',
-  `lang` varchar(255) NOT NULL DEFAULT '',
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_baseimagebrowser`;
-CREATE TABLE IF NOT EXISTS `zt_baseimagebrowser` (
-  `vmBackingID` int(10) NOT NULL,
-  `browserID` int(10) NOT NULL,
-  PRIMARY KEY (`vmBackingID`, `browserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_traincourse`;
@@ -9642,6 +9578,7 @@ CREATE TABLE IF NOT EXISTS `zt_assetlib` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `registerDate`  datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARSET=utf8;

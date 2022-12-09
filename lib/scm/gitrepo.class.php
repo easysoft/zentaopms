@@ -28,7 +28,9 @@ class GitRepo
         if($branch)
         {
             $branches = $this->branch();
-            if(isset($branches[$branch])) $branch = "origin/$branch";
+            $cmd      = escapeCmd("$this->client branch -r");
+            execCmd($cmd . ' 2>&1', 'string', $result);
+            if(isset($branches[$branch]) and !empty($result)) $branch = "origin/$branch";
         }
         $this->branch = $branch;
         $this->repo   = $repo;
@@ -199,6 +201,8 @@ class GitRepo
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();
 
+        execCmd(escapeCmd("$this->client pull"));
+
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
         /* compatible with svn. */
@@ -263,6 +267,9 @@ class GitRepo
                 $blame['line']      = $matches[5];
                 $blame['lines']     = 1;
                 $blame['content']   = strpos($matches[6], ' ') === false ? $matches[6] : substr($matches[6], 1);
+
+                $log = $this->log('', '', '', 1);
+                $blame['message'] = $log[0]->comment;
 
                 $revision         = $matches[1];
                 $revLine          = $matches[5];
@@ -594,9 +601,10 @@ class GitRepo
                 $parsedFile = new stdclass();
                 $parsedFile->revision = $hash;
                 $parsedFile->path     = '/' . trim($path);
+                $parsedFile->oldPath  = isset($file[2]) ? '/' . trim($file[2]) : '';
                 $parsedFile->type     = 'file';
                 $parsedFile->action   = $action;
-                $logs['files'][$hash][]  = $parsedFile;
+                $logs['files'][$hash][] = $parsedFile;
             }
         }
         return $logs;
@@ -667,12 +675,14 @@ class GitRepo
             }
             elseif(strpos($line, "\t") !== false)
             {
-                list($action, $entry) = explode("\t", $line);
+                $lineList = explode("\t", $line);
+                list($action, $entry) = $lineList;
                 $entry = '/' . trim($entry);
                 $pathInfo = array();
-                $pathInfo['action'] = $action;
-                $pathInfo['kind']   = 'file';
-                $changes[$entry]    = $pathInfo;
+                $pathInfo['action']  = $action;
+                $pathInfo['kind']    = 'file';
+                $pathInfo['oldPath'] = isset($lineList[2]) ? '/' . trim($lineList[2]) : '';
+                $changes[$entry]     = $pathInfo;
             }
         }
 
@@ -711,5 +721,48 @@ class GitRepo
         $zip->create($files, PCLZIP_OPT_REMOVE_PATH, $this->root);
 
         return $config->webRoot . $app->getAppName() . 'data' . DS . 'repo' . DS . "{$this->repo->name}_$branch.zip";
+    }
+
+    /**
+     * List all files.
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  array  $lists
+     * @access public
+     * @return array
+     */
+    public function getAllFiles($path, $revision = 'HEAD', &$lists = array())
+    {
+        if(!scm::checkRevision($revision)) return array();
+
+        $path = ltrim($path, DIRECTORY_SEPARATOR);
+        $sub  = '';
+        chdir($this->root);
+        if(!empty($path)) $sub = ":$path";
+        if(!empty($this->branch))$revision = $this->branch;
+        $cmd = escapeCmd("$this->client ls-tree -l $revision$sub");
+        $list = execCmd($cmd . ' 2>&1', 'array', $result);
+        if($result) return array();
+
+        $infos   = array();
+        foreach($list as $entry)
+        {
+            list($mod, $kind, $revision, $size, $name) = preg_split('/[\t ]+/', $entry);
+
+            /* Get commit info. */
+            $pathName = ltrim($path . DIRECTORY_SEPARATOR . $name, DIRECTORY_SEPARATOR);
+            $info->kind     = $kind == 'tree' ? 'dir' : 'file';
+            if($kind == 'tree')
+            {
+                $this->getAllFiles($pathName, $revision, $lists);
+            }
+            else
+            {
+                $lists[] = rtrim($pathName, DIRECTORY_SEPARATOR);
+            }
+        }
+
+        return $lists;
     }
 }

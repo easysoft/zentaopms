@@ -374,3 +374,9 @@ $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
 
 $lang->project->multiple = "Multi {$lang->executionCommon}";
+
+$lang->project->copyProject = new stdClass();
+$lang->project->copyProject->nameTips           = '『Project Name』Cannot be repeated.';
+$lang->project->copyProject->codeTips           = '『Project Code』Cannot be repeated.';
+$lang->project->copyProject->endTips            = '『Schedule End』Cannot be empty.';
+$lang->project->copyProject->daysTips           = '『Available working days』Should be numerical.';

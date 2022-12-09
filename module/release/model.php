@@ -123,12 +123,13 @@ class releaseModel extends model
         $buildIdList = array();
         foreach($releases as $release)
         {
-            if($branch != 'all')
+            if($branch != 'all' and $branch !== '')
             {
                 $inBranch = false;
                 foreach(explode(',', trim($release->branch, ',')) as $branchID)
                 {
-                    if(empty($branchID)) continue;
+                    if($branchID === '') continue;
+
                     if(strpos(",{$branch},", ",{$branchID},") !== false) $inBranch = true;
                 }
                 if(!$inBranch) continue;
@@ -374,7 +375,7 @@ class releaseModel extends model
             }
             elseif($notify == 'SC' and !empty($release->build))
             {
-                $stories  = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch('stories');
+                $stories  = join(',', $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll());
                 $stories .= $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
                 $stories  = trim($stories, ',');
 
@@ -390,7 +391,7 @@ class releaseModel extends model
                 $objectID = $notify == 'ET' ? $release->build : $release->id;
                 $members  = $this->dao->select('t2.account')->from($table)->alias('t1')
                     ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.$type=t2.root")
-                    ->where('t1.id')->eq($objectID)
+                    ->where('t1.id')->in($objectID)
                     ->andWhere('t2.type')->eq($type)
                     ->fetchPairs();
 

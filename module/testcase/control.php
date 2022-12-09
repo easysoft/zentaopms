@@ -90,6 +90,7 @@ class testcase extends control
     public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $this->loadModel('datatable');
+        $this->app->loadLang('zanode');
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
@@ -2365,6 +2366,38 @@ class testcase extends control
     public function showScript($caseID)
     {
         $this->view->case = $this->testcase->getByID($caseID);
+        $this->display();
+    }
+
+    /**
+     * Automation test setting.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function automation($productID)
+    {
+        $this->loadModel('zanode');
+        $nodeList   = $this->zanode->getPairs();
+        $automation = $this->dao->select('*')->from(TABLE_AUTOMATION)->where('product')->eq($productID)->fetch();
+
+        if($_POST)
+        {
+            $this->zanode->setAutomationSetting();
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            $nodeID = $_POST['node'];
+            $node   = $this->zanode->getNodeByID($_POST['node']);
+
+            return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+        }
+
+        $this->view->title      = $this->lang->zanode->automation;
+        $this->view->automation = $automation;
+        $this->view->nodeList   = $nodeList;
+        $this->view->productID  = $productID;
         $this->display();
     }
 

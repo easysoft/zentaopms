@@ -61,13 +61,73 @@ $("input:checkbox[name='revision[]']").click(function(){
     }
 });
 
+var distance = 0;
+
+/**
+ * Aarrow tabs area.
+ *
+ * @param  string domID
+ * @param  number shift 1|-1
+ * @param  bool   hideRightBtn
+ * @access public
+ * @return void
+ */
+function arrowTabs(domID, shift, hideRightBtn)
+{
+    if($('#' + domID).html() == '') return;
+
+    var hasParent = $('#' + domID + ' .btn-left').length;
+    var $leftBtn  = hasParent ? $('#' + domID + ' .btn-left')  : $('.btn-left');
+    var $rightBtn = hasParent ? $('#' + domID + ' .btn-right') : $('.btn-right');
+
+    $leftBtn.show();
+    $rightBtn.show();
+    if(hideRightBtn) $rightBtn.hide();
+
+    var tabItemWidth = $('#' + domID + ' > .tabs-navbar > .nav-tabs')[0].clientWidth;
+    var tabsWidth    = $('#' + domID)[0].clientWidth;
+    if($('#' + domID + ' .close-bugs').length) tabsWidth = tabsWidth * 0.7;
+
+    if(tabItemWidth < tabsWidth)
+    {
+        $leftBtn.hide();
+        $rightBtn.hide();
+        return;
+    }
+
+    distance += tabsWidth * shift * 0.2;
+    if(distance > 0) distance = 0;
+    if(distance == 0)
+    {
+        $leftBtn.hide();
+    }
+
+    if((tabItemWidth + distance) < tabsWidth * 0.75)
+    {
+        $rightBtn.hide();
+        return arrowTabs(domID, 1, true);
+    }
+
+    $('#' + domID + ' > .tabs-navbar > .nav-tabs')[0].style.transform = 'translateX('+ distance +'px)';
+}
+
 $(function()
 {
     $(document).on('click', '.ajaxPager', function()
     {
         $('#sidebar .side-body').load($(this).attr('data-href'));
         return false;
-    })
+    }).on('click', '#log .btn-close', function()
+    {
+        $tabs = $('#relationTabs').data('zui.tabs');
+        if($tabs) $tabs.closeAll();
+        $('.history').html('');
+        $('#log').data('line', 0);
+        $('#log').hide();
+
+        $('#codeContainer').css('height', codeHeight);
+        $('#related').css('height', 0);
+    });
 
     if($("main").is(".hide-sidebar"))
     {

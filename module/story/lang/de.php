@@ -181,6 +181,7 @@ $lang->story->completeRate     = 'Completion Rate';
 $lang->story->reviewed         = 'Reviewed';
 $lang->story->toBeReviewed     = 'To Be Reviewed';
 $lang->story->linkMR           = 'Related MRs';
+$lang->story->linkCommit       = 'Related Commits';
 
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = 'Die Story gehört nicht zum Projekt wie die vorherige!';
@@ -336,6 +337,8 @@ $lang->story->action->linked2build          = array('main' => '$date, verknüpft
 $lang->story->action->unlinkedfrombuild     = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Build <strong>$extra</strong>.');
 $lang->story->action->linked2release        = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Release <strong>$extra</strong>');
 $lang->story->action->unlinkedfromrelease   = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Release <strong>$extra</strong>.');
+$lang->story->action->linked2revision       = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>');
+$lang->story->action->unlinkedfromrevision  = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>');
 $lang->story->action->linkrelatedstory      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Story <strong>$extra</strong>.');
 $lang->story->action->subdividestory        = array('main' => '$date, aufgeteilt von <strong>$actor</strong> mit Story <strong>$extra</strong>.');
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Story <strong>$extra</strong>.');

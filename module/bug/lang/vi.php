@@ -172,6 +172,8 @@ $lang->bug->legendComment               = 'Ghi chú';
 $lang->bug->legendLife                  = 'Toàn bộ';
 $lang->bug->legendMisc                  = 'Khác';
 $lang->bug->legendRelated               = 'Thông tin liên quan';
+$lang->bug->linkMRs                     = 'Related MRs';
+$lang->bug->linkCommit                  = 'Related Commits';
 
 /* Button. */
 $lang->bug->buttonConfirm = 'Xác nhận';
@@ -376,17 +378,19 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Cột bước';
 
 /* Operating record. */
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved            = array('main' => '$date, được giải quyết bởi <strong>$actor</strong> và giải pháp là <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
-$lang->bug->action->tostory             = array('main' => '$date, được chuyển bởi <strong>$actor</strong> thành <strong>Story</strong> với ID <strong>$extra</strong>.');
-$lang->bug->action->totask              = array('main' => '$date, nhập bởi <strong>$actor</strong> như <strong>Task</strong> with ID <strong>$extra</strong>.');
-$lang->bug->action->linked2plan         = array('main' => '$date, liên kết bởi <strong>$actor</strong> cho kế hoạch <strong>$extra</strong>.');
-$lang->bug->action->unlinkedfromplan    = array('main' => '$date, được xóa bởi <strong>$actor</strong> từ kế hoạch <strong>$extra</strong>.');
-$lang->bug->action->linked2build        = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Bản dựng <strong>$extra</strong>.');
-$lang->bug->action->unlinkedfrombuild   = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ bản dựng <strong>$extra</strong>.');
-$lang->bug->action->linked2release      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Phát hành <strong>$extra</strong>.');
-$lang->bug->action->unlinkedfromrelease = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Phát hành <strong>$extra</strong>.');
-$lang->bug->action->linkrelatedbug      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Bug <strong>$extra</strong>.');
-$lang->bug->action->unlinkrelatedbug    = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Bug <strong>$extra</strong>.');
+$lang->bug->action->resolved             = array('main' => '$date, được giải quyết bởi <strong>$actor</strong> và giải pháp là <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
+$lang->bug->action->tostory              = array('main' => '$date, được chuyển bởi <strong>$actor</strong> thành <strong>Story</strong> với ID <strong>$extra</strong>.');
+$lang->bug->action->totask               = array('main' => '$date, nhập bởi <strong>$actor</strong> như <strong>Task</strong> with ID <strong>$extra</strong>.');
+$lang->bug->action->linked2plan          = array('main' => '$date, liên kết bởi <strong>$actor</strong> cho kế hoạch <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromplan     = array('main' => '$date, được xóa bởi <strong>$actor</strong> từ kế hoạch <strong>$extra</strong>.');
+$lang->bug->action->linked2build         = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Bản dựng <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfrombuild    = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ bản dựng <strong>$extra</strong>.');
+$lang->bug->action->linked2release       = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Phát hành <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromrelease  = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Phát hành <strong>$extra</strong>.');
+$lang->bug->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->bug->action->linkrelatedbug       = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Bug <strong>$extra</strong>.');
+$lang->bug->action->unlinkrelatedbug     = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Bug <strong>$extra</strong>.');
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Chọn bản dựng';

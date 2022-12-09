@@ -20,7 +20,7 @@
       <h2><?php echo $lang->custom->modeManagement;?></h2>
     </div>
     <div class='main-table'>
-      <p class='strong'><?php echo sprintf($lang->custom->currentModeTips, $lang->custom->modeList[$mode], $lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);?> </p>
+      <p class='strong'><?php echo $currentModeTips;?></p>
       <table class='table table-bordered'>
         <thead>
           <tr>
@@ -55,15 +55,15 @@
           <?php endforeach;?>
           <tr class='text-center select-mode'>
             <td class='text-left strong'><?php echo $this->lang->custom->selectUsage;?></td>
-            <td>
-              <?php $primaryClass = $mode == 'light' ? '' : 'btn-primary';?>
-              <?php $disabled     = $mode == 'light' ? 'disabled' : '';?>
-              <?php echo html::commonButton($lang->custom->useLight, "id='useLight' data-mode='light' $disabled", "btn btn-wide $primaryClass");?>
+            <?php $title = $mode == 'light' ? "title='{$currentModeTips}'" : '';?>
+            <td <?php echo $title;?>>
+              <?php $disabled = $mode == 'light' ? 'disabled' : '';?>
+              <?php echo html::commonButton($lang->custom->useLight, "id='useLight' data-mode='light' $disabled", "btn btn-wide btn-primary");?>
             </td>
-            <td>
-              <?php $primaryClass = $mode == 'ALM' ? '' : 'btn-primary';?>
-              <?php $disabled     = $mode == 'ALM' ? 'disabled' : '';?>
-              <?php echo html::commonButton($lang->custom->useALM, "id='useALM' data-mode='ALM' $disabled", "btn btn-wide $primaryClass");?>
+            <?php $title = $mode == 'ALM' ? "title='{$currentModeTips}'" : '';?>
+            <td <?php echo $title;?>>
+              <?php $disabled = $mode == 'ALM' ? 'disabled' : '';?>
+              <?php echo html::commonButton($lang->custom->useALM, "id='useALM' data-mode='ALM' $disabled", "btn btn-wide btn-primary");?>
               <?php echo html::hidden('mode', $mode);?>
             </td>
           </tr>

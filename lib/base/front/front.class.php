@@ -1249,7 +1249,7 @@ EOT;
         }
 
         /* Fix value is '0123' error. */
-        if(is_numeric($value) and !preg_match('/^0[1-9]/', $value))
+        if(is_numeric($value) and !preg_match('/^0[0-9]+/', $value))
         {
             $js .= "{$prefix}{$key} = {$value};";
         }
