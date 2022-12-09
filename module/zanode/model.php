@@ -84,7 +84,7 @@ class zanodemodel extends model
             return false;
         }
 
-        /* Prepare create execution node data. */
+        /* Prepare create ZenAgent Node data. */
         $data->image       = $data->image;
         $data->parent      = $host->id;
         $data->mac         = $result->data->mac;
@@ -93,7 +93,7 @@ class zanodemodel extends model
         $data->createdDate = helper::now();
         $data->vnc         = (int)$result->data->vnc;
 
-        /* Save execution node. */
+        /* Save ZenAgent Node. */
         $this->dao->insert(TABLE_ZAHOST)->data($data)->autoCheck()->exec();
         if(dao::isError()) return false;
 
@@ -209,7 +209,7 @@ class zanodemodel extends model
             if($data['code'] != 'success') return zget($this->lang->zanode->apiError, $data['code'], $data['msg']);
         }
 
-        /* delete execution node. */
+        /* delete ZenAgent Node. */
         $this->dao->update(TABLE_ZAHOST)
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
@@ -219,7 +219,7 @@ class zanodemodel extends model
     }
 
     /**
-     * Get execution node created action record by node ID.
+     * Get ZenAgent Node created action record by node ID.
      *
      * @param  int  $id
      * @access public

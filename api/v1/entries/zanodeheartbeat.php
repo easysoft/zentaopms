@@ -23,8 +23,7 @@ class zanodeHeartbeatEntry extends baseEntry
         /* Check authorize. */
         $header = getallheaders();
         $token  = isset($header['Authorization']) ? substr($header['Authorization'], 7) : '';
-        $secret = isset($this->requestBody->secret) ? $this->requestBody->secret : '';
-        if(!$secret and !$token) return $this->sendError(401, 'Unauthorized');
+        if(!$token) return $this->sendError(401, 'Unauthorized');
         
         /* Check param. */
         $status = isset($this->requestBody->status) ? $this->requestBody->status : '';
@@ -34,8 +33,7 @@ class zanodeHeartbeatEntry extends baseEntry
 
         $this->dao = $this->loadModel('common')->dao;
         $host = $this->dao->select('id,extranet')->from(TABLE_ZAHOST)
-            ->beginIF($secret)->where('secret')->eq($secret)->fi()
-            ->beginIF(!$secret)->where('tokenSN')->eq($token)
+            ->where('tokenSN')->eq($token)
             ->andWhere('tokenTime')->gt($now)->fi()
             ->fetch();
         if(empty($host)) return $this->sendError(400, 'Secret error.');
@@ -49,30 +47,7 @@ class zanodeHeartbeatEntry extends baseEntry
         $node->zap       = $this->requestBody->agentPortOnHost;
         $node->status    = $this->requestBody->status;
 
-        if($secret)
-        {
-            $node->tokenSN     = md5($secret . $now);
-            $node->tokenTime   = date('Y-m-d H:i:s', time() + 7200);
-        }
-
         $this->dao->update(TABLE_ZAHOST)->data($node)->where('id')->eq($node->id)->exec();
-
-        if($secret)
-        {
-            //install services
-            $node->ip = $host->extranet;
-            $nodeStatus = $this->loadModel('zanode')->getServiceStatus($node);
-            if($nodeStatus['ZTF'] != "ready")
-            {
-                $node->secret = $secret;
-                $node->extranet = $host->extranet;
-                $this->loadModel('zanode')->installService($node, "ZTF");
-            }
-        }
-        
-        if(!$secret) return $this->sendSuccess(200, 'success');
-
-        $node->tokenTimeUnix = strtotime($node->tokenTime);
 
         unset($node->status);
         unset($node->tokenTime);

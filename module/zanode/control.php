@@ -1,6 +1,6 @@
 <?php
 /**
- * The control file of execution node of ZenTaoPMS.
+ * The control file of ZenAgent Node of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -13,7 +13,7 @@ class zanode extends control
 {
 
     /**
-     * Browse execution node page.
+     * Browse ZenAgent Node page.
      *
      * @param  string   $browseType
      * @param  string   $param
