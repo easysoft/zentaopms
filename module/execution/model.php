@@ -4656,6 +4656,8 @@ class executionModel extends model
     {
         $this->loadModel('productplan');
 
+        $date  = date('Y-m-d');
+
         $param        = strtolower($param);
         $branchIdList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
         $branchGroups = $this->getBranchByProduct(array_keys($products), $executionID, 'noclosed');
@@ -4686,6 +4688,8 @@ class executionModel extends model
             ->where('t1.product')->in(array_keys($products))
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere($branchQuery)
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
+            ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
