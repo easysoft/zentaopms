@@ -1951,6 +1951,11 @@ class block extends control
             $hasViewPriv['review'] = true;
             $count['review']       = count($reviews);
             $this->view->reviews   = $reviews;
+            if($this->config->edition == 'max')
+            {
+                $this->app->loadLang('approval');
+                $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
+            }
         }
 
         $this->view->selfCall    = $this->selfCall;
