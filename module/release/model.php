@@ -235,6 +235,7 @@ class releaseModel extends model
                 $linkedBuilds = array_merge($linkedBuilds, explode(',', $build->builds));
             }
             if($linkedBuilds) $builds += $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($linkedBuilds)->fetchAll('id');
+            $branches = array();
             foreach($builds as $build)
             {
                 foreach(explode(',', $build->branch) as $buildBranch)
@@ -339,10 +340,14 @@ class releaseModel extends model
         /* update release project and branch */
         if($release->build)
         {
-            $builds = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+            $builds   = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+            $branches = array();
             foreach($builds as $build)
             {
-                $branches[$build->branch]  = $build->branch;
+                foreach(explode(',', $build->branch) as $buildBranch)
+                {
+                    if(!isset($branches[$buildBranch])) $branches[$buildBranch] = $buildBranch;
+                }
                 $projects[$build->project] = $build->project;
             }
             $release->build   = ',' . trim($release->build, ',') . ',';
