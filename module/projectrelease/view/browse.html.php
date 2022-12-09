@@ -53,7 +53,9 @@
         <th class='c-product'><?php echo $lang->projectrelease->product;?></th>
         <?php endif;?>
         <th class='c-build'><?php echo $lang->release->includedBuild;?></th>
+        <?php if($showBranch):?>
         <th class='c-branch text-center'><?php echo $lang->release->branch;?></th>
+        <?php endif;?>
         <th class='c-status text-center'><?php echo $lang->release->status;?></th>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <?php
@@ -88,7 +90,9 @@
         <td class='c-build'><?php if($buildCount) echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project' title='{$build->name}'");?></td>
         <?php if($i == 0):?>
         <?php $status = $this->processStatus('release', $release);?>
+        <?php if($showBranch):?>
         <td <?php echo $rowspan?> class='c-branch text-center'><?php echo $release->branchName; ?></td>
+        <?php endif;?>
         <td <?php echo $rowspan?> class='c-status text-center' title='<?php echo $status;?>'>
           <span class="status-release status-<?php echo $release->status?>"><?php echo $status;?></span>
         </td>

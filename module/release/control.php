@@ -50,12 +50,23 @@ class release extends control
         $uri = $this->app->getURI(true);
         $this->session->set('releaseList', $uri, 'product');
         $this->session->set('buildList', $uri);
+        $releases    = $this->release->getList($productID, $branch, $type, $orderBy, $pager);
+        $showBranch  = false;
+        foreach($releases as $release)
+        {
+            if($release->productType != 'normal')
+            {
+                $showBranch = true;
+                break;
+            }
+        }
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->release->getList($productID, $branch, $type, $orderBy, $pager);
+        $this->view->releases   = $releases;
         $this->view->type       = $type;
         $this->view->pager      = $pager;
+        $this->view->showBranch = $showBranch;
         $this->display();
     }
 
@@ -199,6 +210,7 @@ class release extends control
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
+        $sort = common::appendOrder($orderBy);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('id')->in($release->bugs)
             ->andWhere('deleted')->eq(0)
@@ -207,8 +219,9 @@ class release extends control
             ->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
 
-        $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
+        $sort = common::appendOrder($orderBy);
         if($type == 'leftBug' and strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
+        $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
 
         $leftBugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('id')->in($release->leftBugs)

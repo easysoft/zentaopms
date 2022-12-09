@@ -44,11 +44,16 @@
           <?php endif;?>
           <td></td>
         </tr>
-        <tr class='<?php if(!empty($product) and $product->type == 'normal') echo 'hidden'?>'>
-          <th class='w-120px'><?php echo $product->type == 'normal' ? '' : $lang->product->branchName[$product->type]?></th>
+        <tr class='<?php if((!empty($product) and $product->type == 'normal') or empty($product)) echo 'hidden'?>'>
+          <?php
+          if(empty($product)) $product = new stdclass();
+          $productType     = zget($product, 'type', 'normal');
+          $productBranches = zget($product, 'branches', array());
+          ?>
+          <th class='w-120px'><?php echo $productType == 'normal' ? '' : $lang->product->branchName[$productType]?></th>
           <td>
             <div class='input-group' id='branchBox'>
-              <?php echo html::select('branch[]', $branches, key($product->branches), "class='form-control chosen' multiple required"); ?>
+              <?php echo html::select('branch[]', $branches, key($productBranches), "class='form-control chosen' multiple required"); ?>
             </div>
           </td>
         </tr>

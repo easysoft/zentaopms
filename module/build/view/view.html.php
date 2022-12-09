@@ -148,7 +148,7 @@ tbody tr td:first-child input {display: none;}
                   ?>
                 </td>
                 <?php if($childBuilds):?>
-                <td class='text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
+                <td class='c-build text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
                 <?php endif;?>
                 <td><?php echo zget($users, $story->openedBy);?></td>
                 <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
@@ -254,7 +254,7 @@ tbody tr td:first-child input {display: none;}
                   </span>
                 </td>
                 <?php if($childBuilds):?>
-                <td class='text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
+                <td class='c-build text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
                 <?php endif;?>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
@@ -343,7 +343,7 @@ tbody tr td:first-child input {display: none;}
                 $openedBuilds = '';
                 foreach(explode(',', $bug->openedBuild) as $buildID) $openedBuilds .= ($buildID == 'trunk' ? 'Trunk' : zget($buildPairs, $buildID, '')) . ' ';
                 ?>
-                <td class='text-left' title='<?php echo $openedBuilds;?>'><?php echo $openedBuilds;?></td>
+                <td class='c-build text-left' title='<?php echo $openedBuilds;?>'><?php echo $openedBuilds;?></td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                 <td><?php echo zget($users, $bug->resolvedBy);?></td>

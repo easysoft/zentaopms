@@ -1582,17 +1582,14 @@ class executionModel extends model
                 ->andWhere('type')->eq('execution')
                 ->fetchPairs();
         }
-        $project = $this->loadModel('project')->getByID($projectID);
 
         $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')
-            ->beginIF(!empty($project->division))->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t4.id=t3.product')->fi()
+            ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
-            ->beginIF(!empty($project->division))->andWhere('t4.deleted')->eq('0')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
@@ -2319,7 +2316,7 @@ class executionModel extends model
         $planPairs = array('' => '');
         foreach($products as $productID => $product)
         {
-            $plans = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, true);
+            $plans = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, 'unexpired', true);
             foreach($plans as $plan) $planPairs += $plan;
         }
         $this->config->product->search['params']['plan']['values']   = $planPairs;
@@ -4656,6 +4653,8 @@ class executionModel extends model
     {
         $this->loadModel('productplan');
 
+        $date  = date('Y-m-d');
+
         $param        = strtolower($param);
         $branchIdList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
         $branchGroups = $this->getBranchByProduct(array_keys($products), $executionID, 'noclosed');
@@ -4686,6 +4685,8 @@ class executionModel extends model
             ->where('t1.product')->in(array_keys($products))
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere($branchQuery)
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
+            ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
@@ -5247,7 +5248,6 @@ class executionModel extends model
         $_POST = array();
         $_POST['project']   = $projectID;
         $_POST['name']      = $project->name;
-        $_POST['code']      = $project->code;
         $_POST['begin']     = $project->begin;
         $_POST['end']       = $project->end;
         $_POST['realBegan'] = $project->realBegan;
@@ -5260,6 +5260,8 @@ class executionModel extends model
         $_POST['RD']        = $project->RD;
         $_POST['status']    = $project->status;
         $_POST['acl']       = 'open';
+
+        if(!isset($this->config->setCode) or $this->config->setCode == 1) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)

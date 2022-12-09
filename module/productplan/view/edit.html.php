@@ -43,7 +43,7 @@
           <?php if(!$product->shadow and $product->type != 'normal' and $plan->parent != '-1'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch[]', $branchTagOption, $plan->branch, "class='form-control chosen' multiple");?></td><td></td><td></td>
+            <td class='required'><?php echo html::select('branch[]', $branchTagOption, $plan->branch, "class='form-control chosen' multiple");?></td><td></td><td></td>
           </tr>
           <?php endif;?>
           <tr>

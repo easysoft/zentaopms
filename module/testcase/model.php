@@ -1564,9 +1564,9 @@ class testcaseModel extends model
                 {
                     $caseID       = $this->dao->lastInsertID();
                     $parentStepID = 0;
-                    if($this->post->desc)
+                    if($data->desc)
                     {
-                        foreach($this->post->desc[$key] as $id => $desc)
+                        foreach($data->desc[$key] as $id => $desc)
                         {
                             $desc = trim($desc);
                             if(empty($desc)) continue;
@@ -1576,7 +1576,7 @@ class testcaseModel extends model
                             $stepData->case    = $caseID;
                             $stepData->version = 1;
                             $stepData->desc    = htmlSpecialString($desc);
-                            $stepData->expect  = htmlSpecialString($this->post->expect[$key][$id]);
+                            $stepData->expect  = htmlSpecialString($data->expect[$key][$id]);
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                             if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                             if($stepData->type == 'step')  $parentStepID = 0;

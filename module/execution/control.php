@@ -898,7 +898,7 @@ class execution extends control
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan', $executionID);
+        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan|unexpired|noclosed', $executionID);
         $allPlans = array('' => '');
         if(!empty($plans))
         {
@@ -1312,7 +1312,10 @@ class execution extends control
                 {
                     $showBranch  = true;
                     $branchPairs = $branchGroups[$build->product];
-                    foreach(explode(',', trim($build->branch, ',')) as $branchID) $build->branchName .= "{$branchPairs[$branchID]},";
+                    foreach(explode(',', trim($build->branch, ',')) as $branchID)
+                    {
+                        if(isset($branchPairs[$branchID])) $build->branchName .= "{$branchPairs[$branchID]},";
+                    }
                     $build->branchName = trim($build->branchName, ',');
                 }
             }

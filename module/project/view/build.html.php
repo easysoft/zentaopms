@@ -52,7 +52,7 @@
           <?php if($project->hasProduct):?>
           <th class="c-name w-150px text-left"><?php echo $lang->build->product;?></th>
           <?php if($showBranch):?>
-          <th class="c-name w-150px text-left"><?php echo $lang->build->branch;?></th>
+          <th class="c-name w-200px text-left"><?php echo $lang->build->branch;?></th>
           <?php endif;?>
           <?php endif;?>
           <?php if($project->multiple):?>
@@ -84,7 +84,12 @@
           <?php endif;?>
           <?php if($project->multiple):?>
           <?php if($build->execution):?>
-          <td class="c-name text-left" title='<?php echo $build->executionName;?>'><?php echo $build->executionName;?></td>
+          <td class="c-name text-left" title='<?php echo $build->executionName;?>'>
+            <?php echo $build->executionName;?>
+            <?php if($build->executionDeleted):?>
+            <span class='label label-danger'><?php echo $lang->build->deleted;?></span>
+            <?php endif; ?>
+          </td>
           <?php else:?>
           <td class="c-name text-left">
             <?php $childExecutions = array();?>
@@ -103,8 +108,22 @@
           <?php endif;?>
           <td class="c-url text-left">
             <?php
-            if($build->scmPath)  echo "<div><i class='icon icon-file-code' title='{$lang->build->scmPath}'></i> <span title='{$build->scmPath}'>" . (strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath, $build->scmPath, '_blank')  : $build->scmPath) . '</span></div>';
-            if($build->filePath) echo "<div><i class='icon icon-file-archive' title='{$lang->build->filePath}'></i> <span title='{$build->filePath}'>" . (strpos($build->filePath, 'http') === 0 ? html::a($build->filePath, $build->filePath, '_blank') : $build->filePath) . '</span></div>';
+            if($build->scmPath)
+            {
+                $colorStyle = strpos($build->scmPath, 'http') === 0 ? "style='color:#2463c7;'" : '';
+                echo "<div><i class='icon icon-file-code' $colorStyle title='{$lang->build->scmPath}'></i> ";
+                echo "<span title='{$build->scmPath}'>";
+                echo $colorStyle ? html::a($build->scmPath, $build->scmPath, '_blank', $colorStyle) : $build->scmPath;
+                echo '</span></div>';
+            }
+            if($build->filePath)
+            {
+                $colorStyle = strpos($build->filePath, 'http') === 0 ? "style='color:#2463c7;'" : '';
+                echo "<div><i class='icon icon-download' $colorStyle title='{$lang->build->filePath}'></i> ";
+                echo "<span title='{$build->filePath}'>";
+                echo $colorStyle ? html::a($build->filePath, $build->filePath, '_blank', $colorStyle) : $build->filePath;
+                echo '</span></div>';
+            }
             ?>
           </td>
           <td class="c-date"><?php echo $build->date?></td>

@@ -4358,6 +4358,40 @@ class taskModel extends model
     }
 
     /**
+     * Get task list by conditions.
+     *
+     * @param  object           $conds
+     * @param  string           $orderBy
+     * @param  object           $pager
+     * @access public
+     * @return array
+     */
+    public function getListByConds($conds, $orderBy = 'id_desc', $pager = null)
+    {
+        foreach(array('priList' => array(), 'assignedToList' => array(), 'statusList' => array(), 'idList' => array(), 'taskName' => '') as $condKey => $defaultValue)
+        {
+            if(!isset($conds->$condKey))
+            {
+                $conds->$condKey = $defaultValue;
+                continue;
+            }
+            if(strripos($condKey, 'list') === strlen($condKey) - 4 && !is_array($conds->$condKey)) $conds->$condKey = array_filter(explode(',', $conds->$condKey));
+        }
+
+        return $this->dao->select('*')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->beginIF(!empty($conds->priList))->andWhere('pri')->in($conds->priList)->fi()
+            ->beginIF(!empty($conds->assignedToList))->andWhere('assignedTo')->in($conds->assignedToList)->fi()
+            ->beginIF(!empty($conds->statusList))->andWhere('status')->in($conds->statusList)->fi()
+            ->beginIF(!empty($conds->idList))->andWhere('id')->in($conds->idList)->fi()
+            ->beginIF(!empty($conds->taskName))->andWhere('name')->like("%{$conds->taskName}%")
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get teamTask members.
      *
      * @param  int    $taskID

@@ -408,7 +408,8 @@
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
+          <?php $disabled = empty(array_filter($allPlans)) ? 'disabled' : ''?>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toTaskButton'", 'btn btn-primary ' . $disabled);?></span>
         </div>
       </div>
     </div>

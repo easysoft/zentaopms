@@ -263,7 +263,9 @@ class story extends control
                     }
                     else
                     {
-                        $response['locate'] = $this->session->storyList;
+                        $sessionStoryList = $this->session->storyList;
+                        if(count($_POST['branches']) > 1) $sessionStoryList = preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
+                        $response['locate'] = $sessionStoryList;
                     }
                 }
             }
@@ -691,7 +693,7 @@ class story extends control
             }
             $this->view->titles = $titles;
         }
-        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or !in_array($branch, array_keys($branches))) ? 0 : $branch, 'skipParent|unexpired|noclosed');
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
         $plans['ditto'] = $this->lang->story->ditto;
 
         $priList          = (array)$this->lang->story->priList;
@@ -1064,7 +1066,7 @@ class story extends control
             $moduleList  = $branchProduct ? $modulePairs : array(0 => $modulePairs);
 
             $modules         = array($productID => $moduleList);
-            $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, '', true));
+            $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, '', 'unexpired', true));
             $products        = array($productID => $product);
             $branchTagOption = array($productID => $branchTagOption);
         }
@@ -1074,6 +1076,7 @@ class story extends control
             $modules         = array();
             $branchTagOption = array();
             $products        = array();
+            $plans           = array();
 
             /* Get product id list by the stories. */
             $productIdList = array();
@@ -1095,7 +1098,7 @@ class story extends control
                 $modulePairs = $this->tree->getOptionMenu($storyProduct->id, 'story', 0, $branches);
                 $modules[$storyProduct->id] = $storyProduct->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
 
-                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, $branches, true);
+                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, $branches, 'unexpired', true);
                 if(empty($plans[$storyProduct->id])) $plans[$storyProduct->id][0] = $plans[$storyProduct->id];
 
                 if($storyProduct->type != 'normal') $branchProduct = true;

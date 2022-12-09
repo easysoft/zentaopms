@@ -10,3 +10,4 @@
 ol, ul {padding-left: 20px;}
 .body-modal #mainContent {min-height: 240px;}
 .c-id {width: 110px;}
+td.c-build{white-space: nowrap; overflow:hidden;}

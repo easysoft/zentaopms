@@ -460,16 +460,34 @@ class productplanModel extends model
      *
      * @param  int    $productID
      * @param  array  $branches
+     * @param  string $param
      * @param  bool   $skipParent
      * @access public
      * @return array
      */
-    public function getBranchPlanPairs($productID, $branches = '', $skipParent = false)
+    public function getBranchPlanPairs($productID, $branches = '', $param = '', $skipParent = false)
     {
+        $branchQuery = '';
+        if($branches !== '' and $branches !== 'all')
+        {
+            $branchQuery .= '(';
+            if(!is_array($branches)) $branches = explode(',', $branches);
+            foreach($branches as $branchID)
+            {
+                $branchQuery .= "CONCAT(',', branch, ',') LIKE '%,$branchID,%'";
+                if($branchID != end($branches)) $branchQuery .= ' OR ';
+            }
+            $branchQuery .= ')';
+        }
+
+        $date  = date('Y-m-d');
+        $param = strtolower($param);
         $plans = $this->dao->select('parent,branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
             ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
@@ -482,6 +500,7 @@ class productplanModel extends model
 
                 if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
                 $planPairs[$branch][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
+                if($branch !== BRANCH_MAIN) $planPairs[BRANCH_MAIN][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
             }
         }
         return $planPairs;
@@ -1354,5 +1373,25 @@ class productplanModel extends model
         }
         if(!empty($unlinkBugs)) $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('plan')->eq($plan->parent)->andWhere('id')->in($unlinkBugs)->exec();
         $this->dao->update(TABLE_BUG)->set('plan')->eq($plan->id)->where('plan')->eq($plan->parent)->exec();
+    }
+
+    /**
+     * Get plan list by ids.
+     *
+     * @param  array  $planIds
+     * @param  boo    $order
+     * @access public
+     * @return array
+     */
+    public function getListByIds($planIds, $order = false)
+    {
+        $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
+            ->where('id')->in($planIds)
+            ->orderBy('begin desc')
+            ->fetchAll('id');
+
+        if($order) $plans = $this->relationBranch($plans);
+
+        return $plans;
     }
 }

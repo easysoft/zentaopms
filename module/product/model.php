@@ -1578,7 +1578,13 @@ class productModel extends model
                 if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
 
                 $year = substr($plan->end, 0, 4);
-                $roadmap[$year][$plan->branch][] = $plan;
+                $branchIdList = explode(',', trim($plan->branch, ','));
+                $branchIdList = array_unique($branchIdList);
+                foreach($branchIdList as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $roadmap[$year][$branchID][] = $plan;
+                }
                 $total++;
 
                 if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);
@@ -1595,7 +1601,13 @@ class productModel extends model
             foreach($releases as $release)
             {
                 $year = substr($release->date, 0, 4);
-                $roadmap[$year][$release->branch][] = $release;
+                $branchIdList = explode(',', trim($release->branch, ','));
+                $branchIdList = array_unique($branchIdList);
+                foreach($branchIdList as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $roadmap[$year][$branchID][] = $release;
+                }
                 $total++;
 
                 if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);

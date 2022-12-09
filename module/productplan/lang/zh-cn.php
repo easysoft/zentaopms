@@ -86,7 +86,7 @@ $lang->productplan->title      = '名称';
 $lang->productplan->desc       = '描述';
 $lang->productplan->begin      = '开始日期';
 $lang->productplan->end        = '结束日期';
-$lang->productplan->status     = '计划状态';
+$lang->productplan->status     = '状态';
 $lang->productplan->last       = "上次计划";
 $lang->productplan->future     = '待定';
 $lang->productplan->stories    = "{$lang->SRCommon}数";
@@ -100,7 +100,6 @@ $lang->productplan->childrenAB = "子";
 $lang->productplan->order      = "排序";
 $lang->productplan->deleted    = "已删除";
 $lang->productplan->mailto     = "抄送给";
-$lang->productplan->status     = "计划状态";
 $lang->productplan->planStatus = "状态";
 
 $lang->productplan->statusList['wait']   = '未开始';

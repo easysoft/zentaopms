@@ -1256,7 +1256,7 @@ class storyModel extends model
         if(empty($childrenStatus)) return $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
 
         $status = $oldParentStory->status;
-        if(count($childrenStatus) == 1 and $oldParentStory->status != 'changing')
+        if(count($childrenStatus) == 1 and $oldParentStory->status != 'changing' and $oldParentStory->status != 'reviewing')
         {
             $status = current($childrenStatus);
             if($status == 'draft' or $status == 'changing') $status = 'active';
@@ -5066,6 +5066,11 @@ class storyModel extends model
             elseif($id == 'plan')
             {
                 $title  = isset($story->planTitle) ? $story->planTitle : '';
+                $class .= ' text-ellipsis';
+            }
+            elseif($id == 'branch')
+            {
+                $title  = zget($branches, $story->branch, '');
                 $class .= ' text-ellipsis';
             }
             elseif($id == 'sourceNote')

@@ -109,10 +109,13 @@ class treeModel extends model
             ->andWhere('type')->in($type)
             ->beginIF($grade)->andWhere('grade')->le($grade)->fi()
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)
+            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') === false)
             ->andWhere('(branch')->eq(0)
             ->orWhere('branch')->eq($branch)
             ->markRight(1)
+            ->fi()
+            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') !== false)
+            ->andWhere('branch')->eq($branch)
             ->fi()
             ->beginIF(strpos($param, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy('grade desc, `order`')
@@ -175,7 +178,7 @@ class treeModel extends model
 
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
-        {
+        {   
             $stmt    = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID, $param));
             $modules = array();
             while($module = $stmt->fetch())

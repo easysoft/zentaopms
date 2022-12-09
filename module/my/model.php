@@ -1006,7 +1006,7 @@ class myModel extends model
         if($this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
-        $typeList = array_merge($typeList, $this->getReviewingOA('status', true));
+        if($this->getReviewingOA('status', true))         $typeList[] = 'oa';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
         $flows = ($this->config->edition == 'open') ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -1038,7 +1038,7 @@ class myModel extends model
         if($browseType == 'all' or $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
         if($browseType == 'all' or $browseType == 'feedback') $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
         if($browseType == 'all' or $browseType == 'oa')       $reviewList = array_merge($reviewList, $this->getReviewingOA());
-        if($browseType == 'all' or !in_array($browseType, array('story', 'testcase', 'project', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
+        if($browseType == 'all' or !in_array($browseType, array('story', 'testcase', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
 
         if(empty($reviewList)) return array();
 
@@ -1175,7 +1175,7 @@ class myModel extends model
             $data = new stdclass();
             $data->id     = $review->id;
             $data->title  = $review->title;
-            $data->type   = 'project';
+            $data->type   = 'projectreview';
             $data->time   = $review->createdDate;
             $data->status = $review->status;
             $reviewList[] = $data;
@@ -1242,7 +1242,7 @@ class myModel extends model
                 $data->title  = (empty($titleFieldName) or !isset($object->$titleFieldName)) ? $title . " #{$object->id}" : $object->$titleFieldName;
                 $data->type   = $objectType;
                 $data->time   = $object->$openedDateField;
-                $data->status = (isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'doing';
+                $data->status = 'doing';
                 $approvalList[] = $data;
             }
         }
@@ -1310,12 +1310,10 @@ class myModel extends model
 
         if($checkExists)
         {
-            $typeList = array();
             foreach($oa as $type => $reviewings)
             {
-                if(!empty($reviewings)) $typeList[$type] = true;
+                if(!empty($reviewings)) return true;
             }
-            return array_keys($typeList);
         }
 
         $reviewList = array();
@@ -1423,7 +1421,7 @@ class myModel extends model
             $review->status = $objectType == 'attend' ? $object->reviewStatus : ((isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
 
-            if($review->type == 'review') $review->type = 'project';
+            if($review->type == 'review') $review->type = 'projectreview';
             if($review->type == 'case')   $review->type = 'testcase';
             $review->title = '';
             if(isset($object->title))

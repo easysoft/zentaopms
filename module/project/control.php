@@ -739,7 +739,7 @@ class project extends control
             {
                 $linkedBranchList[$branchID] = $branchID;
 
-                if($branch != BRANCH_MAIN) $productPlans[$productID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
+                if(!isset($productPlans[$productID])) $productPlans[$productID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
                 $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
 
                 if(!empty($projectStories[$productID][$branchID]) or !empty($projectBranches[$productID][$branchID]))
@@ -748,6 +748,17 @@ class project extends control
                     array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
                 }
+            }
+        }
+
+        $productPlansOrder = array();
+        foreach($productPlans as $productID => $plan)
+        {
+            $orderPlans    = $this->loadModel('productPlan')->getListByIds(array_keys($plan), true);
+            $orderPlansMap = array_keys($orderPlans);
+            foreach($orderPlansMap as $planMapID)
+            {
+                $productPlansOrder[$productID][$planMapID] = $productPlans[$productID][$planMapID];
             }
         }
 
@@ -764,7 +775,7 @@ class project extends control
         $this->view->projectID                = $projectID;
         $this->view->allProducts              = array('0' => '') + $allProducts;
         $this->view->multiBranchProducts      = $this->loadModel('product')->getMultiBranchPairs();
-        $this->view->productPlans             = array_filter($productPlans);
+        $this->view->productPlans             = array_filter($productPlansOrder);
         $this->view->linkedProducts           = $linkedProducts;
         $this->view->branches                 = $branches;
         $this->view->executions               = $this->execution->getPairs($projectID);
@@ -1466,8 +1477,13 @@ class project extends control
                 {
                     $showBranch  = true;
                     $branchPairs = $branchGroups[$build->product];
-                    foreach(explode(',', trim($build->branch, ',')) as $branchID) $build->branchName .= "{$branchPairs[$branchID]},";
+                    foreach(explode(',', trim($build->branch, ',')) as $branchID)
+                    {
+                        if(isset($branchPairs[$branchID])) $build->branchName .= "{$branchPairs[$branchID]},";
+                    }
                     $build->branchName = trim($build->branchName, ',');
+
+                    if(empty($build->branchName) and empty($build->builds)) $build->branchName = $this->lang->branch->main;
                 }
             }
         }

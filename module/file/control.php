@@ -131,7 +131,7 @@ class file extends control
         {
             echo(js::alert($this->lang->file->accessDenied));
             if(isonlybody()) return print(js::reload('parent.parent'));
-            return print(js::locate(helper::createLink('my', 'index')));
+            return print(js::locate(helper::createLink('my', 'index'), 'parent.parent'));
         }
 
         /* Judge the mode, down or open. */

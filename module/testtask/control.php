@@ -250,7 +250,7 @@ class testtask extends control
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID, 'stagefilter');
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withexecution', $projectID, 'project');
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withexecution', $projectID, 'project', '', false);
 
         $execution = $this->loadModel('execution')->getByID($executionID);
         if(!empty($execution) and $execution->type == 'kanban') $this->lang->testtask->execution = str_replace($this->lang->execution->common, $this->lang->kanban->common, $this->lang->testtask->execution);
@@ -816,11 +816,11 @@ class testtask extends control
                     $executions[$executionID] = $project->name . "({$this->lang->project->disableExecution})";
                 }
             }
-            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $executionID, 'execution');
+            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $executionID, 'execution', $task->build, false);
         }
         else
         {
-            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $task->project, 'project');
+            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $task->project, 'project', $task->build, false);
         }
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;

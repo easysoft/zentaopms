@@ -287,6 +287,8 @@ class build extends control
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         /* Set menu. */
+        $objectType = 'execution';
+        $objectID   = $build->execution;
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($build->project);
@@ -432,7 +434,7 @@ class build extends control
             return print(html::select($varName, $builds, $build, "class='form-control'"));
         }
 
-        $builds = $this->build->getBuildPairs($productID, $branch, $type, 0, 'project', $build);
+        $builds = $this->build->getBuildPairs($productID, $branch, $type, 0, 'project', $build, false);
         if(strpos($extra, 'multiple') !== false) $varName .= '[]';
         if($isJsonView) return print(json_encode($builds));
         return print(html::select($varName, $builds, $build, "class='form-control chosen' $extra"));
