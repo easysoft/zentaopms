@@ -1056,7 +1056,7 @@ class product extends control
         $param    = strtolower($param);
         if(strpos($param, 'forstory') === false)
         {
-            $plans = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
+            $plans = $this->loadModel('productplan')->getPairs($productID, empty($branch) ? 'all' : $branch, $expired, strpos($param, 'skipparent') !== false);
         }
         else
         {
