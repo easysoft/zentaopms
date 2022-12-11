@@ -240,9 +240,8 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
     var $ganttDataArea  = $ganttView.find('.gantt_data_area');
     var $ganttDridData  = $ganttView.find('.gantt_grid_data');
 
-    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight();
-    ganttHeight += <?php echo count($plans['data'])?> * 25;
-
+    var ganttRowHeight = $ganttView.find('.gantt_row').first().outerHeight() || 25;
+    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight() + <?php echo count($plans['data'])?> * ganttRowHeight;
     <?php if($selectCustom == 'task'):?>
     var ganttWidth  = $ganttDridData.width() - 100;
     <?php else:?>
