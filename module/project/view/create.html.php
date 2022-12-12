@@ -161,7 +161,7 @@
                   </div>
                   <div class='table-col <?php if(!$hasBranch) echo 'hidden';?>'>
                     <div class='input-group required'>
-                      <span class='input-group-addon fix-border'><?php echo $lang->product->branchName['branch'];?></span>
+                      <span class='input-group-addon fix-border'><?php echo $lang->project->branch;?></span>
                       <?php $branchIdList = join(',', $product->branches);?>
                       <?php echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
                     </div>
@@ -204,7 +204,7 @@
                   </div>
                   <div class='table-col hidden'>
                     <div class='input-group required'>
-                      <span class='input-group-addon fix-border'><?php echo $lang->product->branchName['branch'];?></span>
+                      <span class='input-group-addon fix-border'><?php echo $lang->project->branch;?></span>
                       <?php echo html::select("branch", '', '', "class='form-control chosen' multiple");?>
                     </div>
                   </div>

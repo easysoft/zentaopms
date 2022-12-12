@@ -330,7 +330,7 @@ $lang->misc->feature->all['8.2.stable'][] = array('title'=>'导出自定义', 'd
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>"{$lang->SRCommon}、任务、Bug、用例组合检索功能", 'desc' => "<p>在{$lang->SRCommon}、任务、Bug、用例列表页面，可以实现模块和标签的组合检索。</p>");
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'增加新手教程', 'desc' => '<p>增加新手教程，方便新用户了解禅道使用。</p>');
 
-$lang->misc->feature->all['7.4.beta'][] = array('title'=>'产品实现分支功能', 'desc' => "<p>产品增加分支/平台类型，相应的{$lang->SRCommon}、计划、Bug、用例、模块等都增加分支。</p>");
+$lang->misc->feature->all['7.4.beta'][] = array('title'=>'产品实现分支功能', 'desc' => "<p>产品增加平台/分支类型，相应的{$lang->SRCommon}、计划、Bug、用例、模块等都增加分支。</p>");
 $lang->misc->feature->all['7.4.beta'][] = array('title'=>'调整发布模块', 'desc' => '<p>发布增加停止维护操作，当发布停止维护时，创建Bug将不显示这个发布。</p><p>发布中遗留的bug改为手工关联。</p>');
 $lang->misc->feature->all['7.4.beta'][] = array('title'=>"调整{$lang->SRCommon}和Bug的创建页面", 'desc' => '');
 
