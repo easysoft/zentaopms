@@ -149,7 +149,7 @@
                   <div class='table-col <?php if(!$hasBranch) echo 'hidden';?>'>
                     <div class='input-group required'>
                       <span class='input-group-addon fix-border'><?php echo $lang->project->branch;?></span>
-                      <?php $branchIdList = join(',', $product->branches);?>
+                      <?php $branchIdList = isset($product->branches) ? join(',', $product->branches) : '';?>
                       <?php echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
                     </div>
                   </div>
@@ -158,7 +158,7 @@
               <div class="col-sm-6">
                 <div class='input-group' <?php echo "id='plan$i'";?>>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
-                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), $product->plans, "class='form-control chosen' multiple");?>
+                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), isset($product->plans) ? $product->plans : '', "class='form-control chosen' multiple");?>
                   <div class='input-group-btn'>
                     <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>
                     <a href='javascript:;' onclick='removeLine(this)' class='btn btn-link removeLine' <?php if($i == 0) echo "style='visibility: hidden'";?>><i class='icon-close'></i></a>
