@@ -134,7 +134,7 @@
         <?php $i = 0;?>
         <?php foreach($products as $product):?>
         <tr class="<?php echo $hidden;?>">
-          <th><?php echo $lang->project->manageProductPlan;?></th>
+          <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan="3">
             <div class='row'>
               <div class="col-sm-6">
