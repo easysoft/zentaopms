@@ -132,6 +132,7 @@ $(window).unload(function(){
  */
  function addBranchesBox(obj)
  {
+    $('#storyNoticeBranch').closest('tr').removeClass('hidden');
     if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length) return false;
 
     var selectedVal = [];
@@ -193,6 +194,7 @@ $(window).unload(function(){
 
      $('.icon-plus').parent().css('pointer-events', 'auto')
      $('.icon-plus').parent().removeClass('disabled')
+     if($('select[name^="branches"]').length == 2) $('#storyNoticeBranch').closest('tr').addClass('hidden');
  }
 
  /**
