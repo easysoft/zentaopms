@@ -4508,6 +4508,7 @@ class storyModel extends model
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';
         if($action == 'batchcreate' and $story->parent > 0) return false;
+        if($action == 'batchcreate' and !empty($story->twins)) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         /* Adjust code, hide split entry. */
