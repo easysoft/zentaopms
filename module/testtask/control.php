@@ -1209,11 +1209,13 @@ class testtask extends control
      * Run case.
      *
      * @param  int    $runID
-     * @param  String $extras   others params, forexample, caseID=10, version=3
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function runCase($runID, $caseID = 0, $version = 0)
+    public function runCase($runID, $caseID = 0, $version = 0, $confirm = '')
     {
         if($runID)
         {
@@ -1227,6 +1229,12 @@ class testtask extends control
 
         $caseID     = $caseID ? $caseID : $run->case->id;
         $preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        $automation = $this->loadModel('zanode')->getAutomationByProduct($run->case->product);
+        $confirmURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=yes");
+        $cancelURL  = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
+
+        if($automation and $confirm == '') return print(js::confirm($this->lang->zanode->runCaseConfirm, $confirmURL, $cancelURL));
+
         if(!empty($_POST))
         {
             $caseResult = $this->testtask->createResult($runID);
@@ -1289,6 +1297,7 @@ class testtask extends control
         $this->view->caseID   = $caseID;
         $this->view->version  = $version;
         $this->view->runID    = $runID;
+        $this->view->confirm  = $confirm;
 
         $this->display();
     }

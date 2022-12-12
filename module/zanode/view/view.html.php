@@ -42,8 +42,8 @@
           <div class="main-row">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zanode->status; ?>:</div>
-                <div class="col-8"><?php echo zget($lang->zanode->statusList, $zanode->status); ?></div>
+                <div class="col-4 text-right">IP:</div>
+                <div class="col-8"><?php echo $zanode->extranet; ?></div>
               </div>
             </div>
             <div class="col-4">
@@ -79,6 +79,17 @@
               </div>
             </div>
           </div>
+          <div class="main-row">
+            <div class="col-4">
+              <div class="main-row">
+                <div class="col-4 text-right"><?php echo $lang->zanode->status; ?>:</div>
+                <div class="col-8"><?php echo zget($lang->zanode->statusList, $zanode->status); ?></div>
+              </div>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+          </div>
         </div>
       </div>
       <div class="detail zanode-detail">
@@ -105,7 +116,7 @@
           {
             common::printLink('zanode', 'resume', "id={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->resume, '', "title='{$lang->zanode->resume}' class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'");
           }
-          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '', "title='{$lang->zanode->getVNC}' class='btn iframe'", '', true);
+          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '', "title='{$lang->zanode->getVNC}' class='btn iframe " . (common::hasPriv('zahost', 'getVNC') && $zanode->status == 'running' ? '':'disabled') . "'", '', true);
         }
         ?>
         <div class='divider'></div>

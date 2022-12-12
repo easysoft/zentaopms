@@ -37,7 +37,7 @@ $lang->zahost->os         = '操作系统';
 $lang->zahost->imageName  = '镜像文件';
 
 $lang->zahost->createZanode        = '创建执行节点';
-$lang->zahost->initNotice      = '保存成功，请您初始化宿主机或返回列表。';
+$lang->zahost->initNotice          = '保存成功，请您初始化宿主机或返回列表。';
 $lang->zahost->createZanodeNotice  = '初始化成功，您现在可以创建执行节点了。';
 $lang->zahost->downloadImageNotice = '初始化成功，请下载镜像用于创建执行节点。';
 $lang->zahost->undeletedNotice     = "宿主机下存在执行节点无法删除。";
@@ -54,14 +54,15 @@ $lang->zahost->init->next = "下一步";
 $lang->zahost->init->initFailNoticeTitle = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
 $lang->zahost->init->initFailNoticeDesc = "1. 重新执行脚本 <br/>2. 查看初始化常见问题";
 $lang->zahost->init->serviceStatus = [
-    "kvm" => 'not_install',
-    "novnc" => 'not_install',
+    "kvm"        => 'not_install',
+    "nginx"      => 'not_install',
+    "novnc"      => 'not_install',
     "websockify" => 'not_install',
 ];
 $lang->zahost->init->title          = "初始化宿主机";
 $lang->zahost->init->descTitle      = "请根据引导完成宿主机上的初始化: ";
-$lang->zahost->init->initDesc       = "1. 在宿主机上执行：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
-$lang->zahost->init->statusTitle    = "Service Status";
+$lang->zahost->init->initDesc       = "- 在宿主机上执行命令：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k %s<br>- 点击检测服务状态。";
+$lang->zahost->init->statusTitle    = "服务状态";
 
 $lang->zahost->image = new stdclass;
 $lang->zahost->image->list          = '镜像仓库';

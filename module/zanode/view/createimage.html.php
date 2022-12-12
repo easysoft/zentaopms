@@ -57,7 +57,7 @@
 </div>
 <?php if($task):?>
 <script>
-var setProgress = self.setInterval("getTaskProgress()",1500);
+var setProgress = self.setInterval("getTaskProgress()", 1500);
 
 $(function()
 {

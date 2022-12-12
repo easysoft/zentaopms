@@ -4,6 +4,7 @@ $lang->zanode->browse          = '执行节点列表';
 $lang->zanode->create          = '创建执行节点';
 $lang->zanode->editAction      = '编辑执行节点';
 $lang->zanode->view            = '执行节点详情';
+$lang->zanode->initTitle       = '初始化执行节点';
 $lang->zanode->suspend         = '暂停执行节点';
 $lang->zanode->destroy         = '销毁执行节点';
 $lang->zanode->handleVM        = '重启执行节点';
@@ -46,14 +47,15 @@ $lang->zanode->shell           = "shell命令";
 $lang->zanode->automation      = "自动化测试";
 
 $lang->automation = new stdClass();
-$lang->automation->path = $lang->zanode->scriptPath;
-$lang->automation->node = $lang->zanode->common;
+$lang->automation->scriptPath = $lang->zanode->scriptPath;
+$lang->automation->node       = $lang->zanode->common;
 
-$lang->zanode->notFoundAgent = '没有发现Agent服务';
-$lang->zanode->createVmFail  = '创建执行节点失败';
-$lang->zanode->noVncPort     = '无法获取执行节点端口';
-$lang->zanode->nameValid     = "名称只能是字母、数字，'-'，'_'，'.'，且不能以符号开头";
-$lang->zanode->empty         = '暂时没有执行节点';
+$lang->zanode->notFoundAgent  = '没有发现Agent服务';
+$lang->zanode->createVmFail   = '创建执行节点失败';
+$lang->zanode->noVncPort      = '无法获取执行节点端口';
+$lang->zanode->nameValid      = "名称只能是字母、数字，'-'，'_'，'.'，且不能以符号开头";
+$lang->zanode->empty          = '暂时没有执行节点';
+$lang->zanode->runCaseConfirm = '系统检测到选择的用例存在自动化测试脚本，是否自动执行用例？';
 
 $lang->zanode->createImage        = '创建镜像';
 $lang->zanode->createImaging      = '正在创建镜像';
@@ -76,4 +78,26 @@ $lang->zanode->statusList['running']      = '运行中';
 $lang->zanode->statusList['suspend']      = '暂停';
 $lang->zanode->statusList['offline']      = '下线';
 $lang->zanode->statusList['destroy']      = '已销毁';
+$lang->zanode->statusList['shutoff']      = '已关机';
+$lang->zanode->statusList['shutodown']    = '已关机';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
+
+$lang->zanode->init = new stdclass;
+$lang->zanode->init->statusTitle   = "服务状态";
+$lang->zanode->init->checkStatus   = "检测服务状态";
+$lang->zanode->init->not_install   = "未安装";
+$lang->zanode->init->not_available = "已安装，未启动";
+$lang->zanode->init->ready         = "已就绪";
+$lang->zanode->init->next          = "下一步";
+$lang->zanode->init->button        = "去设置";
+
+$lang->zanode->init->initSuccessNoticeTitle = "初始化成功，您可以进行自动化测试设置或返回列表。";
+$lang->zanode->init->initFailNoticeTitle = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
+$lang->zanode->init->initFailNoticeDesc = "1. 重新执行脚本 <br/>2. 查看初始化常见问题";
+$lang->zanode->init->serviceStatus = [
+    "ZenAgent" => 'not_install',
+    "ZTF"      => 'not_install',
+];
+$lang->zanode->init->title          = "初始化执行节点";
+$lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
+$lang->zanode->init->initDesc       = "- 在执行节点上执行命令：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s zvm -k %s<br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "Service Status";

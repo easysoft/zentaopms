@@ -60,9 +60,6 @@ class zanodemodel extends model
         /* Get host info. */
         $host = $this->getHostByID($data->parent);
 
-        /* Gen mac address */
-        $mac = $this->genmac();
-
         /* Prepare create params. */
         $agnetUrl = 'http://' . $host->extranet . ':' . $host->zap;
         $param    = array(
@@ -90,7 +87,7 @@ class zanodemodel extends model
         /* Prepare create execution node data. */
         $data->image       = $data->image;
         $data->parent      = $host->id;
-        $data->mac         = $mac;
+        $data->mac         = $result->data->mac;
         $data->status      = static::STATUS_RUNNING;
         $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
@@ -122,7 +119,6 @@ class zanodemodel extends model
         if(dao::isError()) return false;
 
         $node  = $this->getNodeByID($zanodeID);
-        $image = $this->getImageByID($node->image);
 
         $newImage = new stdClass();
         $newImage->host   = $node->parent;
@@ -472,7 +468,7 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN, t2.secret as secret')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
@@ -490,6 +486,19 @@ class zanodemodel extends model
         return $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
             ->andWhere("type")->eq('node')
+            ->fetch();
+    }
+
+    /**
+     * Get automation by id.
+     *
+     * @param  int $id
+     * @return object
+     */
+    public function getScriptByID($id)
+    {
+        return $this->dao->select('*')->from(TABLE_AUTOMATION)
+            ->where('id')->eq($id)
             ->fetch();
     }
 
@@ -534,7 +543,7 @@ class zanodemodel extends model
 
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_TOKEN_PATH;
         $result   = json_decode(commonModel::http("$agnetUrl?port={$node->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$node->hTokenSN"), 'json'));
-        
+
         if(empty($result) or $result->code != 'success') return false;
 
         $returnData = new stdClass();
@@ -584,7 +593,7 @@ class zanodemodel extends model
     /**
      * Build operateMenu for browse view.
      *
-     * @param  int    $node
+     * @param  object    $node
      * @access public
      * @return void
      */
@@ -599,6 +608,85 @@ class zanodemodel extends model
         $menu .= $this->buildMenu('zanode', 'delete', $params, $node, 'view', 'trash', 'hiddenwin');
 
         return $menu;
+    }
+
+    /**
+     * Get service status from ZAgent server.
+     *
+     * @param  object $node
+     * @access public
+     * @return array
+     */
+    public function getServiceStatus($node)
+    {
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$node->tokenSN")));
+        if(empty($result->data->ztfStatus) || $result->code != 'success')
+        {
+            $result = new stdclass;
+            $result->data = $this->lang->zanode->init->serviceStatus;
+        }else{
+            $result->data = array(
+                "ZenAgent" => "ready",
+                "ZTF"      => $result->data->ztfStatus,
+            );
+        }
+
+        return $result->data;
+    }
+
+    /**
+     * Install service.
+     *
+     * @param  object $node
+     * @access public
+     * @return array
+     */
+    public function installService($node, $name)
+    {
+        $param = array(
+            "name" => $name,
+            "secret" => $node->secret,
+            "server" => getWebRoot(true),
+        );
+        $result = json_decode(commonModel::http("http://{$node->extranet}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
+
+        if(empty($result->data) || $result->code != 'success')
+        {
+            $result = new stdclass;
+            $result->data = $this->lang->zanode->init->serviceStatus;
+        }
+
+        return array(
+            "ZenAgent" => "ready",
+            "ZTF"      => $result->data->ztfStatus,
+        );
+    }
+
+    /**
+     * Get automation by product id.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function getAutomationByProduct($productID = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_AUTOMATION)
+            ->where('product')->eq($productID)
+            ->fetch();
+    }
+
+    /**
+     * Get automation by id.
+     *
+     * @param  int $id
+     * @return object
+     */
+    public function getAutomationByID($id)
+    {
+        return $this->dao->select('*')->from(TABLE_AUTOMATION)
+            ->where('id')->eq($id)
+            ->fetch();
     }
 
     /**
@@ -624,5 +712,35 @@ class zanodemodel extends model
 
         if(dao::isError()) return false;
         return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Run ZTFScript.
+     *
+     * @access public
+     * @return void
+     */
+    public function runZTFScript()
+    {
+        $params = array(
+            'cmd'       => '',
+            'ids'       => '',
+            'path'      => '',
+            'task'      => '',
+            'workspace' => ''
+        );
+
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
+
+        if(empty($result->data) || $result->code != 'success')
+        {
+            $result = new stdclass;
+            $result->data = $this->lang->zanode->init->serviceStatus;
+        }
+
+        return array(
+            "ZenAgent" => "ready",
+            "ZTF"      => $result->data->ztfStatus,
+        );
     }
 }

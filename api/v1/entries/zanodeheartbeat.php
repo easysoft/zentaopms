@@ -33,19 +33,19 @@ class zanodeHeartbeatEntry extends baseEntry
         if(!$status || !$mac) return $this->sendError(400, 'Params error.');
 
         $this->dao = $this->loadModel('common')->dao;
-        $hostID = $this->dao->select('id')->from(TABLE_ZAHOST)
+        $host = $this->dao->select('id,extranet')->from(TABLE_ZAHOST)
             ->beginIF($secret)->where('secret')->eq($secret)->fi()
             ->beginIF(!$secret)->where('tokenSN')->eq($token)
             ->andWhere('tokenTime')->gt($now)->fi()
-            ->fetch('id');
-        if(!$hostID) return $this->sendError(400, 'Secret error.');
+            ->fetch();
+        if(empty($host)) return $this->sendError(400, 'Secret error.');
 
-        $node = $this->dao->select('id')->from(TABLE_ZAHOST)
+        $node = $this->dao->select('id,parent')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
             ->fetch();
-        if(empty($node) || ($node->parent != $hostID || $node->id != $hostID)) return $this->sendError(400, 'Secret error.');
+            
+        if(empty($node) || ($node->parent != $host->id && $node->id != $host->id)) return $this->sendError(400, 'Secret error.');
 
-        $node = new stdclass();
         $node->zap       = $this->requestBody->agentPortOnHost;
         $node->status    = $this->requestBody->status;
 
@@ -57,6 +57,19 @@ class zanodeHeartbeatEntry extends baseEntry
 
         $this->dao->update(TABLE_ZAHOST)->data($node)->where('id')->eq($node->id)->exec();
 
+        if($secret)
+        {
+            //install services
+            $node->ip = $host->extranet;
+            $nodeStatus = $this->loadModel('zanode')->getServiceStatus($node);
+            if($nodeStatus['ZTF'] != "ready")
+            {
+                $node->secret = $secret;
+                $node->extranet = $host->extranet;
+                $this->loadModel('zanode')->installService($node, "ZTF");
+            }
+        }
+        
         if(!$secret) return $this->sendSuccess(200, 'success');
 
         $node->tokenTimeUnix = strtotime($node->tokenTime);

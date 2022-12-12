@@ -37,7 +37,7 @@ $lang->zahost->os         = 'System';
 $lang->zahost->imageName  = 'Image File';
 
 $lang->zahost->createZanode        = 'Create Zanode';
-$lang->zahost->initNotice      = 'Save successfully, initialize the ZAhost or return list';
+$lang->zahost->initNotice          = 'Save successfully, initialize the ZAhost or return list';
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
 $lang->zahost->undeletedNotice     = "The host has nodes that cannot be deleted.";
@@ -54,13 +54,14 @@ $lang->zahost->init->initFailNoticeTitle = "Initialization failed, check the ini
 $lang->zahost->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
 $lang->zahost->init->serviceStatus = [
-    "kvm" => 'not_install',
-    "novnc" => 'not_install',
+    "kvm"        => 'not_install',
+    "nginx"      => 'not_install',
+    "novnc"      => 'not_install',
     "websockify" => 'not_install',
 ];
 $lang->zahost->init->title          = "Initialize Host";
 $lang->zahost->init->descTitle      = "Follow these steps to complete the initialization on the host:";
-$lang->zahost->init->initDesc       = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";
+$lang->zahost->init->initDesc       = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k %s<br>- Click check service status button.";
 $lang->zahost->init->statusTitle    = "Service Status";
 
 $lang->zahost->image = new stdclass;

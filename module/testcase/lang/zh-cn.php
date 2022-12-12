@@ -97,6 +97,9 @@ $lang->testcase->deleted          = '是否删除';
 $lang->testcase->browseUnits      = '单元测试';
 $lang->testcase->suite            = '套件';
 $lang->testcase->executionStatus  = '执行状态';
+$lang->testcase->caseType         = '用例类型';
+$lang->testcase->allType          = '所有类型';
+$lang->testcase->showAutoCase     = '显示自动化用例';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
@@ -146,7 +149,8 @@ $lang->testcase->groupName               = '分组名称';
 $lang->testcase->step                    = '步骤';
 $lang->testcase->stepChild               = '子步骤';
 $lang->testcase->viewAll                 = '查看所有';
-$lang->testcase->importToLib             = "导入用例库";
+$lang->testcase->importToLib             = '导入用例库';
+$lang->testcase->showScript              = '查看自动化脚本';
 
 $lang->testcase->new = '新增';
 
@@ -252,11 +256,13 @@ $lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <st
 $lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
-$lang->testcase->featureBar['browse']['all']         = '全部';
+$lang->testcase->featureBar['browse']['casetype']    = $lang->testcase->caseType;
+$lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = '待评审';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
 $lang->testcase->featureBar['browse']['browseunits'] = '单元测试';
+$lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

@@ -4,6 +4,7 @@ $lang->zanode->browse          = 'Execution Node List';
 $lang->zanode->create          = 'Create Execution Node';
 $lang->zanode->editAction      = 'Edit Execution Node';
 $lang->zanode->view            = 'View Execution Node';
+$lang->zanode->initTitle       = 'Init ZenAgent Node';
 $lang->zanode->suspend         = 'Suspend Execution Node';
 $lang->zanode->destroy         = 'Destroy Execution Node';
 $lang->zanode->handleVM        = 'Restart Execution Node';
@@ -46,16 +47,17 @@ $lang->zanode->shell           = "Shell";
 $lang->zanode->automation      = "Automation";
 
 $lang->automation = new stdClass();
-$lang->automation->path = $lang->zanode->scriptPath;
-$lang->automation->node = $lang->zanode->common;
+$lang->automation->scriptPath = $lang->zanode->scriptPath;
+$lang->automation->node       = $lang->zanode->common;
 
-$lang->zanode->notFoundAgent = 'No Agent service is found';
-$lang->zanode->createVmFail  = 'Failed to create a execution node';
-$lang->zanode->noVncPort     = 'Failed to get vnc port';
-$lang->zanode->nameValid     = "The name can only be letters, numbers, '-', '_', '.', and cannot start with a symbol";
-$lang->zanode->empty         = 'No zanode is found';
+$lang->zanode->notFoundAgent  = 'No Agent service is found';
+$lang->zanode->createVmFail   = 'Failed to create a execution node';
+$lang->zanode->noVncPort      = 'Failed to get vnc port';
+$lang->zanode->nameValid      = "The name can only be letters, numbers, '-', '_', '.', and cannot start with a symbol";
+$lang->zanode->empty          = 'No zanode is found';
+$lang->zanode->runCaseConfirm = 'The system detects the presence of an automation script. Whether to execute?';
 
-$lang->zanode->empty              = 'No Execution Node';
+$lang->zanode->empty              = 'No ZenAgent Node';
 $lang->zanode->createImaging      = 'Creating';
 $lang->zanode->createImageNotice  = 'The system will be created based on the current node，This process requires the execution node to be shut down. Do you want to continue?';
 $lang->zanode->createImageSuccess = 'Successed, You can use this image to create node.';
@@ -76,4 +78,27 @@ $lang->zanode->statusList['running']      = 'Running';
 $lang->zanode->statusList['suspend']      = 'Suspend';
 $lang->zanode->statusList['offline']      = 'Offline';
 $lang->zanode->statusList['destroy']      = 'Destroyed';
+$lang->zanode->statusList['shutoff']      = 'Shutoff';
+$lang->zanode->statusList['shutdown']     = 'shutdown';
 $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
+
+$lang->zanode->init = new stdclass;
+$lang->zanode->init->checkStatus   = "Check Service Status";
+$lang->zanode->init->not_install   = "Not installed";
+$lang->zanode->init->not_available = "Installed, Not Started";
+$lang->zanode->init->ready         = "Ready";
+$lang->zanode->init->next          = "Next";
+$lang->zanode->init->button        = "Go To Settings";
+
+$lang->zanode->init->initSuccessNoticeTitle = "The initialization is successful, you can perform automated test settings or go to node browse.";
+$lang->zanode->init->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
+$lang->zanode->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
+
+$lang->zanode->init->serviceStatus = [
+    "ZenAgent" => 'not_install',
+    "ZTF"      => 'not_install',
+];
+$lang->zanode->init->title          = "Initialize Node";
+$lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
+$lang->zanode->init->initDesc       = "Execute the init script on the node: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s vm -k ";
+$lang->zanode->init->statusTitle    = "Service Status";

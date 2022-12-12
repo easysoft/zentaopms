@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <?php echo html::a($this->createLink('zahost', 'browse'), '×', '', 'class="close"');?>
+        <?php echo html::a($this->createLink('zanode', 'browse'), '×', '', 'class="close"');?>
       </div>
       <div class="modal-body">
         <p>

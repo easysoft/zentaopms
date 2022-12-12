@@ -1687,6 +1687,8 @@ CREATE TABLE IF NOT EXISTS `zt_testresult` (
   `compile` mediumint(8) unsigned NOT NULL,
   `caseResult` char(30) NOT NULL,
   `stepResults` text NOT NULL,
+  `ZTFResults` text NOT NULL,
+  `ZTFTask`    varchar(30) NOT NULL,
   `lastRunner` varchar(30) NOT NULL,
   `date` datetime NOT NULL,
   `duration` float NOT NULL,
@@ -7294,7 +7296,7 @@ CREATE TABLE `zt_host` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_image`;
 CREATE TABLE `zt_image` (

@@ -1,12 +1,110 @@
-ALTER TABLE `zt_case` ADD `script` longtext NOT NULL AFTER `howRun`;
-ALTER TABLE `zt_product` ADD `shadow` tinyint(1) unsigned NOT NULL AFTER `code`;
-ALTER TABLE `zt_project` ADD `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1 AFTER `code`;
-ALTER table `zt_project` ADD `multiple` enum('0', '1') NOT NULL DEFAULT '1' AFTER `fluidBoard`;
-ALTER TABLE `zt_repo` ADD `projects` varchar(255) NOT NULL AFTER `product`;
-ALTER TABLE `zt_release` CHANGE `project` `project` varchar(255) NOT NULL;
-ALTER TABLE `zt_release` CHANGE `branch` `branch` varchar(255) NOT NULL;
-ALTER TABLE `zt_release` CHANGE `build` `build` varchar(255) NOT NULL;
-ALTER TABLE `zt_release` ADD `shadow` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `branch`;
+ALTER TABLE `zt_story` ADD COLUMN `siblings` varchar(255) NOT NULL AFTER `linkRequirements`;
+ALTER TABLE `zt_productplan` MODIFY COLUMN `branch` varchar(255) NOT NULL DEFAULT '0';
+ALTER TABLE `zt_effort` ADD `extra` text COLLATE 'utf8_general_ci' NOT NULL AFTER `end`;
+ALTER TABLE `zt_build` MODIFY COLUMN `branch` varchar(255) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_host`
+DROP COLUMN `cabinet`,
+DROP COLUMN `cpuRate`,
+DROP COLUMN `diskType`,
+DROP COLUMN `unit`,
+DROP COLUMN `nic`,
+DROP COLUMN `webserver`,
+DROP COLUMN `database`,
+DROP COLUMN `language`,
+DROP COLUMN `instanceNum`,
+DROP COLUMN `pri`,
+DROP COLUMN `tags`,
+DROP COLUMN `bridgeID`,
+DROP COLUMN `cloudKey`,
+DROP COLUMN `cloudSecret`,
+DROP COLUMN `cloudRegion`,
+DROP COLUMN `cloudNamespace`,
+DROP COLUMN `cloudUser`,
+DROP COLUMN `cloudAccount`,
+DROP COLUMN `cloudPassword`,
+DROP COLUMN `couldVPC`,
+ADD COLUMN `name` varchar(255) NOT NULL DEFAULT '' AFTER `id`,
+MODIFY COLUMN `type` varchar(30) NOT NULL DEFAULT 'normal' AFTER `name`,
+MODIFY COLUMN `hostType` varchar(30) NOT NULL DEFAULT '' AFTER `type`,
+MODIFY COLUMN `mac` varchar(128) NOT NULL AFTER `hostType`,
+MODIFY COLUMN `memory` varchar(30) NOT NULL AFTER `mac`,
+MODIFY COLUMN `diskSize` varchar(30) NOT NULL AFTER `memory`,
+MODIFY COLUMN `status` varchar(50) NOT NULL AFTER `diskSize`,
+MODIFY COLUMN `secret` varchar(50) NOT NULL DEFAULT '' AFTER `status`,
+ADD COLUMN `desc` text NOT NULL AFTER `secret`,
+CHANGE COLUMN `token` `tokenSN` varchar(50) NOT NULL DEFAULT '' AFTER `desc`,
+CHANGE COLUMN `expiredDate` `tokenTime` datetime NOT NULL AFTER `tokenSN`,
+CHANGE COLUMN `virtualSoftware` `vsoft` varchar(30) NOT NULL DEFAULT '' AFTER `tokenTime`,
+CHANGE COLUMN `heartbeatTime` `heartbeat` datetime NOT NULL AFTER `vsoft`,
+CHANGE COLUMN `agentPort` `zap` varchar(10) NOT NULL AFTER `heartbeat`,
+MODIFY COLUMN `provider` varchar(255) NOT NULL DEFAULT '' AFTER `zap`,
+ADD COLUMN `vnc` int(11) NOT NULL AFTER `provider`,
+ADD COLUMN `ztf` int(11) NOT NULL AFTER `vnc`,
+ADD COLUMN `zd` int(11) NOT NULL AFTER `ztf`,
+ADD COLUMN `ssh` int(11) NOT NULL AFTER `zd`,
+ADD COLUMN `parent` int(11) unsigned NOT NULL DEFAULT '0' AFTER `vnc`,
+ADD COLUMN `image` int(11) unsigned NOT NULL DEFAULT '0' AFTER `parent`,
+ADD COLUMN `group` varchar(128) NOT NULL DEFAULT '' AFTER `osVersion`,
+ADD COLUMN `createdBy` varchar(30) NOT NULL,
+ADD COLUMN  `createdDate` datetime NOT NULL,
+ADD COLUMN  `editedBy` varchar(30) NOT NULL,
+ADD COLUMN  `editedDate` datetime NOT NULL,
+ADD COLUMN  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+CHANGE COLUMN `privateIP` `intranet` varchar(128) NOT NULL AFTER `cpuCores`,
+CHANGE COLUMN `publicIP` `extranet` varchar(128) NOT NULL AFTER `intranet`;
+
+UPDATE zt_host h,
+zt_asset a
+SET h.`name` = a.`name`,
+h.`createdBy` = a.`createdBy`,
+h.`createdDate` = a.`createdDate`,
+h.`editedBy` = a.`editedBy`,
+h.`editedDate` = a.`editedDate`,
+h.`group` = a.`group`,
+h.`type` = a.`type`,
+h.`deleted` = a.`deleted`
+WHERE
+h.`assetID` = a.`id`;
+
+ALTER TABLE `zt_host` DROP COLUMN `assetID`;
+
+DROP TABLE IF EXISTS `zt_asset`;
+DROP TABLE IF EXISTS `zt_baseimagebrowser`;
+DROP TABLE IF EXISTS `zt_browser`;
+DROP TABLE IF EXISTS `zt_baseimage`;
+DROP TABLE IF EXISTS `zt_vmtemplate`;
+DROP TABLE IF EXISTS `zt_vm`;
+
+CREATE TABLE `zt_image` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `host` int(11) unsigned NOT NULL DEFAULT 0,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `address` varchar(64) NOT NULL DEFAULT '',
+  `path` varchar(64) NOT NULL DEFAULT '',
+  `status` varchar(20) NOT NULL DEFAULT '',
+  `osName` varchar(32) NOT NULL DEFAULT '',
+  `from` varchar(10) NOT NULL DEFAULT 'zentao',
+  `memory` float unsigned NOT NULL,
+  `disk` float unsigned NOT NULL,
+  `fileSize` float unsigned NOT NULL,
+  `md5` varchar(64) NOT NULL,
+  `desc` text NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_automation` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `node` int(11) unsigned NOT NULL DEFAULT 0,
+  `product` int(11) unsigned NOT NULL DEFAULT 0,
+  `scriptPath` varchar(255) NOT NULL DEFAULT '',
+  `shell` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE VIEW `ztv_normalproduct` AS SELECT * FROM `zt_product` WHERE `shadow` = 0;
 
@@ -37,9 +135,7 @@ REPLACE INTO `zt_report` (`code`, `name`, `module`, `sql`, `vars`, `langs`, `par
 ('project-progress', '{\"zh-cn\":\"\\u9879\\u76ee\\u8fdb\\u5c55\\u8868\",\"zh-tw\":\"\\u9805\\u76ee\\u9032\\u5c55\\u8868\",\"en\":\"Project Progress Report\",\"de\":\"Project Progress Report\",\"fr\":\"Project Progress Report\",\"vi\":\"Project Progress Report\",\"ja\":\"Project Progress Report\"}', ',project', 'select t1.id,t4.name as project,t4.id,IF(t4.multiple="1",t1.name,"") as execution,t1.status,t2.number as tasks,round(t2.consumed,2) as consumed,round(t2.`left`,2) as `left`,t3.stories,t2.undone as undoneTask,t3.undone as undoneStory,t2.totalReal from TABLE_EXECUTION as t1 \r\nleft join ztv_executionsummary as t2 on t1.id=t2.execution\r\nleft join ztv_projectstories as t3 on t1.id=t3.execution\r\nleft join TABLE_PROJECT as t4 on t4.id=t1.project\r\nwhere t1.deleted=\'0\' and t1.type in (\'sprint\',\'stage\') and if($project=\'\',1,t4.id=$project) and if($execution=\'\',1,t1.id=$execution) and if($status=\'\',1,t1.status=$status)', '{\"varName\":[\"project\",\"execution\",\"status\"],\"showName\":[\"\\u9879\\u76ee\\u5217\\u8868\",\"\\u6267\\u884c\\u5217\\u8868\",\"\\u6267\\u884c\\u72b6\\u6001\"],\"requestType\":[\"select\",\"select\",\"select\"],\"selectList\":[\"project\",\"execution\",\"project.status\"],\"default\":[\"\",\"\",\"\"]}', '{\"stories\":{\"zh-cn\":\"\\u9700\\u6c42\\u6570\",\"zh-tw\":\"\\u9700\\u6c42\\u6570\",\"en\":\"Stories\"},\"tasks\":{\"zh-cn\":\"\\u4efb\\u52a1\\u6570\",\"zh-tw\":\"\\u4efb\\u52a1\\u6570\",\"en\":\"Tasks\"},\"undoneStory\":{\"zh-cn\":\"\\u5269\\u4f59\\u9700\\u6c42\\u6570\",\"zh-tw\":\"\\u5269\\u4f59\\u9700\\u6c42\\u6570\",\"en\":\"Undone Story\"},\"undoneTask\":{\"zh-cn\":\"\\u5269\\u4f59\\u4efb\\u52a1\\u6570\",\"zh-tw\":\"\\u5269\\u4f59\\u4efb\\u52a1\\u6570\",\"en\":\"Undone Task\"},\"consumed\":{\"zh-cn\":\"\\u5df2\\u6d88\\u8017\\u5de5\\u65f6\",\"zh-tw\":\"\\u5df2\\u6d88\\u8017\\u5de5\\u65f6\",\"en\":\"Cost(h)\"},\"left\":{\"zh-cn\":\"\\u5269\\u4f59\\u5de5\\u65f6\",\"zh-tw\":\"\\u5269\\u4f59\\u5de5\\u65f6\",\"en\":\"Left(h)\"},\"consumedPercent\":{\"zh-cn\":\"\\u8fdb\\u5ea6\",\"zh-tw\":\"\\u8fdb\\u5ea6\",\"en\":\"Process\"},\"execution\":{\"zh-cn\":\"\\u6267\\u884c\\u540d\\u79f0\"}}', '{\"group1\":\"project\",\"group2\":\"execution\",\"reportField\":[\"stories\",\"undoneStory\",\"tasks\",\"undoneTask\",\"left\",\"consumed\"],\"reportType\":[\"sum\",\"sum\",\"sum\",\"sum\",\"sum\",\"sum\"],\"sumAppend\":[\"stories\",\"undoneStory\",\"tasks\",\"undoneTask\",\"left\",\"consumed\"],\"percent\":{\"5\":\"1\"},\"contrast\":{\"5\":\"totalReal\"},\"showAlone\":{\"5\":\"1\"}}', 2, '{\"zh-cn\":\"\\u9879\\u76ee\\u7684\\u9700\\u6c42\\u6570\\uff0c\\u4efb\\u52a1\\u6570\\uff0c\\u5df2\\u6d88\\u8017\\u5de5\\u65f6\\uff0c\\u5269\\u4f59\\u5de5\\u65f6\\uff0c\\u5269\\u4f59\\u9700\\u6c42\\u6570\\uff0c\\u5269\\u4f59\\u4efb\\u52a1\\u6570\\uff0c\\u8fdb\\u5ea6\\u3002\",\"zh-tw\":\"\\u9805\\u76ee\\u7684\\u9700\\u6c42\\u6578\\uff0c\\u4efb\\u52d9\\u6578\\uff0c\\u5df2\\u6d88\\u8017\\u5de5\\u6642\\uff0c\\u5269\\u9918\\u5de5\\u6642\\uff0c\\u5269\\u9918\\u9700\\u6c42\\u6578\\uff0c\\u5269\\u9918\\u4efb\\u52d9\\u6578\\uff0c\\u9032\\u5ea6\\u3002\",\"en\":\"\",\"de\":\"\",\"fr\":\"\",\"vi\":\"\",\"ja\":\"\"}', 'admin', '2015-07-23 14:03:06'),
 ('projectbug-type', '{\"zh-cn\":\"\\u9879\\u76eeBug\\u7c7b\\u578b\\u7edf\\u8ba1\\u8868\",\"zh-tw\":\"\\u9805\\u76eeBug\\u985e\\u578b\\u7d71\\u8a08\\u8868\",\"en\":\"Project Bug Type\",\"de\":\"Project Bug Type\",\"fr\":\"Project Bug Type\",\"vi\":\"Project Bug Type\",\"ja\":\"Project Bug Type\"}', ',project,test', 'select t1.id,t3.name as project,t3.id,IF(t3.multiple="1",t1.name,"") as execution,t2.id as bugID,t2.type from TABLE_EXECUTION as t1 \r\nleft join TABLE_BUG as t2 on t1.id=t2.execution\r\nleft join TABLE_PROJECT as t3 on t3.id=t1.project\r\nwhere t1.deleted=\'0\' and t2.deleted=\'0\' and if($project=\'\',1,t3.id=$project) and if($execution=\'\',1,t1.id=$execution)', '{\"varName\":[\"project\",\"execution\"],\"showName\":[\"\\u9879\\u76ee\\u5217\\u8868\",\"\\u6267\\u884c\\u5217\\u8868\"],\"requestType\":[\"select\",\"select\"],\"selectList\":[\"project\",\"execution\"],\"default\":[\"\",\"\"]}', '{\"stories\":{\"zh-cn\":\"\\u9700\\u6c42\\u6570\",\"zh-tw\":\"\\u9700\\u6c42\\u6570\",\"en\":\"Stories\"},\"tasks\":{\"zh-cn\":\"\\u4efb\\u52a1\\u6570\",\"zh-tw\":\"\\u4efb\\u52a1\\u6570\",\"en\":\"Tasks\"},\"undoneStory\":{\"zh-cn\":\"\\u5269\\u4f59\\u9700\\u6c42\\u6570\",\"zh-tw\":\"\\u5269\\u4f59\\u9700\\u6c42\\u6570\",\"en\":\"Undone Story\"},\"undoneTask\":{\"zh-cn\":\"\\u5269\\u4f59\\u4efb\\u52a1\\u6570\",\"zh-tw\":\"\\u5269\\u4f59\\u4efb\\u52a1\\u6570\",\"en\":\"Undone Task\"},\"consumed\":{\"zh-cn\":\"\\u5df2\\u6d88\\u8017\\u5de5\\u65f6\",\"zh-tw\":\"\\u5df2\\u6d88\\u8017\\u5de5\\u65f6\",\"en\":\"Cost(h)\"},\"left\":{\"zh-cn\":\"\\u5269\\u4f59\\u5de5\\u65f6\",\"zh-tw\":\"\\u5269\\u4f59\\u5de5\\u65f6\",\"en\":\"Left(h)\"},\"consumedPercent\":{\"zh-cn\":\"\\u8fdb\\u5ea6\",\"zh-tw\":\"\\u8fdb\\u5ea6\",\"en\":\"Process\"},\"execution\":{\"zh-cn\":\"\\u6267\\u884c\\u540d\\u79f0\"}}', '{\"group1\":\"project\",\"group2\":\"execution\",\"reportField\":[\"type\"],\"reportType\":[\"count\"],\"sumAppend\":[\"\"]}', 2, '{\"zh-cn\":\"\\u6309\\u7167\\u9879\\u76ee\\u7edf\\u8ba1Bug\\u7684\\u7c7b\\u578b\\u5206\\u5e03\\u60c5\\u51b5\\u3002\",\"zh-tw\":\"\\u6309\\u7167\\u9805\\u76ee\\u7d71\\u8a08Bug\\u7684\\u985e\\u578b\\u5206\\u5e03\\u60c5\\u6cc1\\u3002\",\"en\":\"\",\"de\":\"\",\"fr\":\"\",\"vi\":\"\",\"ja\":\"\"}', 'admin', '2015-08-04 13:54:22');
 
-ALTER TABLE `zt_project` ADD `division` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '1' AFTER `vision`;
+ALTER TABLE `zt_repofiles` ADD `oldPath` varchar(255) DEFAULT '' AFTER `path`;
 
-ALTER TABLE `zt_build` ADD `builds` varchar(255) NOT NULL AFTER `execution`;
-
-UPDATE `zt_block` SET block = 'scrumrisk'  WHERE module = 'project' AND type = 'scrum' AND block = 'waterfallrisk';
-UPDATE `zt_block` SET block = 'scrumissue' WHERE module = 'project' AND type = 'scrum' AND block = 'waterfallissue';
+ALTER TABLE `zt_testresult` ADD `ZTFResult` text NOT NULL;
+ALTER TABLE `zt_testresult` ADD `ZTFTask` varchar(255) DEFAULT '';
