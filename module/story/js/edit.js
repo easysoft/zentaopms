@@ -90,4 +90,9 @@ $(function()
             maxAutoDropWidth : document.body.scrollWidth + document.getElementById('duplicateStory').offsetWidth - document.getElementById('duplicateStoryBox').getBoundingClientRect().right
         });
     }
+
+    $('#planIdBox').click(function()
+    {
+        $('#planIdBox .chosen-container').find('div').css('width', '280px')
+    });
 })
