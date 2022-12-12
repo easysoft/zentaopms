@@ -6,3 +6,4 @@ $lang->ci->checkCompileStatus = 'Interface: Fetch Test Result.';
 $lang->ci->job     = 'Construction';
 $lang->ci->task    = 'Task';
 $lang->ci->history = 'History';
+$lang->ci->list    = 'List';

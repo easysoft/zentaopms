@@ -1,12 +1,12 @@
 <?php
 $lang->job->common        = 'Job';
-$lang->job->browse        = 'Afficher Job';
-$lang->job->create        = 'Cr閑r Job';
-$lang->job->edit          = 'Editer Job';
-$lang->job->exec          = 'Ex閏uter Job';
+$lang->job->browse        = 'Afficher Pipeline';
+$lang->job->create        = 'Cr閑r Pipeline';
+$lang->job->edit          = 'Editer Pipeline';
+$lang->job->exec          = 'Ex閏uter Pipeline';
 $lang->job->runPipeline   = 'Run pipeline';
 $lang->job->view          = 'D閠ails Exec';
-$lang->job->delete        = 'Supprimer Job';
+$lang->job->delete        = 'Supprimer Pipeline';
 $lang->job->confirmDelete = 'Voullez-vous supprimer ce job ?';
 $lang->job->dirChange     = 'R閜ertoire change';
 $lang->job->buildTag      = 'Build Tag';
