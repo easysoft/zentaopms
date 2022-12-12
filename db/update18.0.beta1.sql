@@ -138,4 +138,3 @@ REPLACE INTO `zt_report` (`code`, `name`, `module`, `sql`, `vars`, `langs`, `par
 ALTER TABLE `zt_repofiles` ADD `oldPath` varchar(255) DEFAULT '' AFTER `path`;
 
 ALTER TABLE `zt_testresult` ADD `ZTFResult` text NOT NULL;
-ALTER TABLE `zt_testresult` ADD `ZTFTask` varchar(255) DEFAULT '';

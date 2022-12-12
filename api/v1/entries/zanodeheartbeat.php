@@ -32,7 +32,7 @@ class zanodeHeartbeatEntry extends baseEntry
         if(!$status || !$mac) return $this->sendError(400, 'Params error.');
 
         $this->dao = $this->loadModel('common')->dao;
-        $host = $this->dao->select('id,extranet')->from(TABLE_ZAHOST)
+        $host = $this->dao->select('id,extranet,tokenSN')->from(TABLE_ZAHOST)
             ->where('tokenSN')->eq($token)
             ->andWhere('tokenTime')->gt($now)->fi()
             ->fetch();
