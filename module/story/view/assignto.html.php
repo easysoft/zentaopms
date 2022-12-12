@@ -29,7 +29,7 @@
           <th class='w-80px'><?php echo $lang->story->assign;?></th>
           <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $story->assignedTo, "class='form-control chosen'");?></td><td></td>
         </tr>
-        <?php if(!empty($story->siblings)):?>
+        <?php if(!empty($story->twins)):?>
         <tr>
           <th></th>
           <td colspan='2'><i class='icon-exclamation-sign'></i> <?php echo $lang->story->assignSyncTip;?></td>

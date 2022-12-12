@@ -161,9 +161,9 @@ $(window).unload(function(){
      $('.addBranchesBox' + itemIndex + ' #planIdBox').css('flex', '0 0 ' + gap + 'px');
 
      $.ajaxSettings.async = false;
-     loadBranchForSiblings($('#product').val(), branch, itemIndex)
-     loadModuleForSiblings($('#product').val(), branch, itemIndex)
-     loadPlanForSiblings($('#product').val(), branch, itemIndex)
+     loadBranchForTwins($('#product').val(), branch, itemIndex)
+     loadModuleForTwins($('#product').val(), branch, itemIndex)
+     loadPlanForTwins($('#product').val(), branch, itemIndex)
      $.ajaxSettings.async = true;
      $('.addBranchesBox' + itemIndex + ' #branchBox .input-group .input-group-addon').html($.cookie('branchSourceName'))
 
@@ -238,15 +238,15 @@ function loadBranchRelation(branch, branchIndex)
     if(typeof(branch) == 'undefined') branch = 0;
 
     $.ajaxSettings.async = false;
-    loadModuleForSiblings(productID, branch, branchIndex)
-    loadPlanForSiblings(productID, branch, branchIndex)
+    loadModuleForTwins(productID, branch, branchIndex)
+    loadPlanForTwins(productID, branch, branchIndex)
     $.ajaxSettings.async = true;
 
     disableSelectedBranches()
 }
 
 /**
- * Load branch for siblings.
+ * Load branch for twins.
  *
  * @paran  int   $procutID
  * @param  int   $branch
@@ -254,10 +254,10 @@ function loadBranchRelation(branch, branchIndex)
  * @access public
  * @return void
  */
-function loadBranchForSiblings(productID, branch, branchIndex)
+function loadBranchForTwins(productID, branch, branchIndex)
 {
-    var isSiblings = storyType == 'story' ? 'yes' : 'no';
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=" + branch + "&param=active&projectID=" + executionID + "&withMainBranch=1&isSiblings=" + isSiblings + "&fieldID=" + branchIndex), function(data)
+    var isTwins = storyType == 'story' ? 'yes' : 'no';
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=" + branch + "&param=active&projectID=" + executionID + "&withMainBranch=1&isTwins=" + isTwins + "&fieldID=" + branchIndex), function(data)
     {
         if(data)
         {
@@ -271,7 +271,7 @@ function loadBranchForSiblings(productID, branch, branchIndex)
 }
 
 /**
- * Load module for siblings.
+ * Load module for twins.
  *
  * @paran  int   $procutID
  * @param  int   $branch
@@ -279,7 +279,7 @@ function loadBranchForSiblings(productID, branch, branchIndex)
  * @access public
  * @return void
  */
-function loadModuleForSiblings(productID, branch, branchIndex)
+function loadModuleForTwins(productID, branch, branchIndex)
 {
     /* Load module */
     var currentModule = 0;
@@ -306,7 +306,7 @@ function loadModuleForSiblings(productID, branch, branchIndex)
 }
 
 /**
- * Load plan for siblings.
+ * Load plan for twins.
  *
  * @paran  int   $procutID
  * @param  int   $branch
@@ -314,7 +314,7 @@ function loadModuleForSiblings(productID, branch, branchIndex)
  * @access public
  * @return void
  */
-function loadPlanForSiblings(productID, branch, branchIndex)
+function loadPlanForTwins(productID, branch, branchIndex)
 {
     /* Load plan */
     if(branch == '0') branch = '';

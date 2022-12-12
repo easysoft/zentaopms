@@ -11,10 +11,10 @@
  */
 function loadProduct(productID)
 {
-    if(page == 'edit' && siblings && productID != oldProductID)
+    if(page == 'edit' && twins && productID != oldProductID)
     {
-        confirmRelievedSiblings = confirm(relievedSiblingsTip);
-        if(!confirmRelievedSiblings)
+        confirmRelievedTwins = confirm(relievedTwinsTip);
+        if(!confirmRelievedTwins)
         {
             $('#product').val(oldProductID);
             $('#product').trigger("chosen:updated");
@@ -93,8 +93,8 @@ function loadProductBranches(productID)
     $('#branch').remove();
     $('#branch_chosen').remove();
 
-    var isSiblings = storyType == 'story' && page == 'create' ? 'yes' : 'no';
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + executionID + "&withMainBranch=1&isSiblings=" + isSiblings), function(data)
+    var isTwins = storyType == 'story' && page == 'create' ? 'yes' : 'no';
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + executionID + "&withMainBranch=1&isTwins=" + isTwins), function(data)
     {
         if(storyType == 'story' && page == 'create')
         {
@@ -130,8 +130,8 @@ function loadProductBranches(productID)
                 $('#branches0').next('.picker').remove();
                 $('#branches0').chosen();
 
-                loadModuleForSiblings(productID, 0, 0)
-                loadPlanForSiblings(productID, 0, 0)
+                loadModuleForTwins(productID, 0, 0)
+                loadPlanForTwins(productID, 0, 0)
 
                 /* Init multi branch icon-plus. */
                 if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)

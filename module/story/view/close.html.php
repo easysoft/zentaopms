@@ -28,7 +28,7 @@
           <th class='thWidth'><?php echo $lang->story->closedReason;?></th>
           <td class='w-p25-f'><?php echo html::select('closedReason', $reasonList, '', 'class="form-control" onchange="setStory(this.value)"');?></td><td></td>
         </tr>
-        <?php if(!empty($story->siblings)):?>
+        <?php if(!empty($story->twins)):?>
         <tr>
           <th></th>
           <td colspan='2'><i class='icon-exclamation-sign'></i> <?php echo $lang->story->closeSyncTip;?></td>

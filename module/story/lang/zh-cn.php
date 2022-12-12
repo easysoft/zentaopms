@@ -77,9 +77,9 @@ $lang->story->order              = '排序';
 $lang->story->saveDraft          = '存为草稿';
 $lang->story->doNotSubmit        = '保存暂不提交';
 $lang->story->currentBranch      = '当前%s';
-$lang->story->siblings           = '孪生需求';
+$lang->story->twins              = '孪生需求';
 $lang->story->relieved           = '解除';
-$lang->story->relievedSiblings   = '解除孪生需求';
+$lang->story->relievedTwins      = '解除孪生需求';
 $lang->story->loadAllStories     = '加载所有需求';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
@@ -107,7 +107,7 @@ $lang->story->relievedTip         = "孪生关系解除后无法恢复，需求�
 $lang->story->assignSyncTip       = "孪生需求均同步修改指派人";
 $lang->story->closeSyncTip        = "孪生需求均同步关闭";
 $lang->story->activateSyncTip     = "孪生需求均同步激活";
-$lang->story->relievedSiblingsTip = '产品调整后，本需求自动解除孪生关系，需求不再同步，是否保存？';
+$lang->story->relievedTwinsTip    = '产品调整后，本需求自动解除孪生关系，需求不再同步，是否保存？';
 $lang->story->batchEditTip        = "{$lang->SRCommon} %s为孪生需求，本次操作已被过滤。";
 
 $lang->story->id               = '编号';
@@ -356,7 +356,7 @@ $lang->story->action->subdividestory        = array('main' => "\$date, 由 <stro
 $lang->story->action->unlinkrelatedstory    = array('main' => "\$date, 由 <strong>\$actor</strong> 移除相关{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->unlinkchildstory      = array('main' => "\$date, 由 <strong>\$actor</strong> 移除细分{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->recalledchange        = array('main' => "\$date, 由 <strong>\$actor</strong> 撤销变更。");
-$lang->story->action->syncsiblings          = array('main' => "\$date, 系统判断由于孪生需求 <strong>\$extra</strong> \$operate，本需求同步调整。", 'operate' => 'operateList');
+$lang->story->action->synctwins             = array('main' => "\$date, 系统判断由于孪生需求 <strong>\$extra</strong> \$operate，本需求同步调整。", 'operate' => 'operateList');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();

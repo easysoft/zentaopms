@@ -260,13 +260,13 @@ class branch extends control
      * @param  string $browseType
      * @param  int    $projectID
      * @param  bool   $withMainBranch
-     * @param  string $isSiblings
+     * @param  string $isTwins
      * @param  string $fieldID
      * @param  string $multiple
      * @access public
      * @return void
      */
-    public function ajaxGetBranches($productID, $oldBranch = 0, $browseType = 'all', $projectID = 0, $withMainBranch = true, $isSiblings = 'no', $fieldID = '0', $multiple = '')
+    public function ajaxGetBranches($productID, $oldBranch = 0, $browseType = 'all', $projectID = 0, $withMainBranch = true, $isTwins = 'no', $fieldID = '0', $multiple = '')
     {
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product) or $product->type == 'normal') return;
@@ -285,7 +285,7 @@ class branch extends control
 
         $name = $multiple == 'multiple' ? 'branch[]' : 'branch';
 
-        if($isSiblings == 'yes') return print(html::select("branches[$fieldID]", $branchTagOption, $oldBranch, "onchange='loadBranchRelation(this.value, $fieldID);' class='form-control chosen control-branch'"));
+        if($isTwins == 'yes') return print(html::select("branches[$fieldID]", $branchTagOption, $oldBranch, "onchange='loadBranchRelation(this.value, $fieldID);' class='form-control chosen control-branch'"));
         return print(html::select($name, $branchTagOption, $oldBranch, "class='form-control' $multiple onchange='loadBranch(this)' data-last='{$oldBranch}'"));
     }
 

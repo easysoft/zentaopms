@@ -24,8 +24,8 @@
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php js::set('storyStatus', $story->status);?>
 <?php js::set('lastReviewer', explode(',', $lastReviewer))?>
-<?php js::set('siblings', $story->siblings)?>
-<?php js::Set('relievedSiblingsTip', $lang->story->relievedSiblingsTip)?>
+<?php js::set('twins', $story->twins)?>
+<?php js::Set('relievedTwinsTip', $lang->story->relievedTwinsTip)?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -100,8 +100,8 @@
           </div>
           <?php endif;?>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
-          <?php if(!empty($siblings)):?>
-          <div class='detail' id='legendSiblings'>
+          <?php if(!empty($twins)):?>
+          <div class='detail' id='legendTwins'>
             <div class='detail-title'>
               <?php echo $lang->story->changeSyncTip;?>
               <span data-toggle='tooltip' data-placement='right' title='<?php echo $lang->story->syncTip;?>'><i class='icon-help'></i></span>
@@ -109,7 +109,7 @@
             <div class='form-group'>
               <div>
                 <ul class='list-unstyled'>
-                  <?php include './blocksibling.html.php';?>
+                  <?php include './blocktwins.html.php';?>
                 </ul>
               </div>
             </div>
