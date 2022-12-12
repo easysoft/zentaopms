@@ -50,14 +50,14 @@ class storyModel extends model
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
-            ->beginIF($story->siblings)->andWhere('t1.story')->in(ltrim($story->siblings, ',') . $story->id)
-            ->beginIF(!$story->siblings)->andWhere('t1.story')->in($story->id)
+            ->beginIF($story->twins)->andWhere('t1.story')->in(ltrim($story->twins, ',') . $story->id)
+            ->beginIF(!$story->twins)->andWhere('t1.story')->in($story->id)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
         $story->tasks  = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->beginIF($story->siblings)->andWhere('story')->in(ltrim($story->siblings, ',') . $story->id)
-            ->beginIF(!$story->siblings)->andWhere('story')->in($story->id)
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
+            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
             ->orderBy('id DESC')
             ->fetchGroup('execution');
 
@@ -168,8 +168,8 @@ class storyModel extends model
         /* Get affected bugs. */
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->ne('closed')
-            ->beginIF($story->siblings)->andWhere('story')->in(ltrim($story->siblings, ',') . $story->id)
-            ->beginIF(!$story->siblings)->andWhere('story')->in($story->id)
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
+            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
@@ -177,8 +177,8 @@ class storyModel extends model
         /* Get affected cases. */
         $story->cases = $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq(0)
-            ->beginIF($story->siblings)->andWhere('story')->in(ltrim($story->siblings, ',') . $story->id)
-            ->beginIF(!$story->siblings)->andWhere('story')->in($story->id)
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
+            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
             ->fetchAll();
 
         return $story;
@@ -443,17 +443,17 @@ class storyModel extends model
             }
         }
 
-        /* bind siblings story id */
+        /* bind twins story id */
         if(count($storyIds) > 1)
         {
-            foreach($storyIds as $siblingsStoryID)
+            foreach($storyIds as $twinsStoryID)
             {
-                $siblingsArr = array();
+                $twinsArr = array();
                 foreach($storyIds as $idItem)
                 {
-                    if($idItem != $siblingsStoryID) $siblingsArr[] = $idItem;
-                    $siblings = ',' . implode(',', $siblingsArr) . ',';
-                    $this->dao->update(TABLE_STORY)->set('siblings')->eq($siblings)->where('id')->eq($siblingsStoryID)->exec();
+                    if($idItem != $twinsStoryID) $twinsArr[] = $idItem;
+                    $twins = ',' . implode(',', $twinsArr) . ',';
+                    $this->dao->update(TABLE_STORY)->set('twins')->eq($twins)->where('id')->eq($twinsStoryID)->exec();
                 }
             }
         }
@@ -803,12 +803,12 @@ class storyModel extends model
                 $data->files   = $story->files = $addedFiles . trim($storyFiles, ',');
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
-                /* Sync siblings. */
-                if(!empty($oldStory->siblings))
+                /* Sync twins. */
+                if(!empty($oldStory->twins))
                 {
-                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                     {
-                        $data->story = $siblingID;
+                        $data->story = $twinID;
                         $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
                     }
                 }
@@ -842,12 +842,12 @@ class storyModel extends model
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
 
-                    /* Sync siblings. */
-                    if(!empty($oldStory->siblings))
+                    /* Sync twins. */
+                    if(!empty($oldStory->twins))
                     {
-                        foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                        foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                         {
-                            $reviewData->story = $siblingID;
+                            $reviewData->story = $twinID;
                             $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                         }
                     }
@@ -861,7 +861,7 @@ class storyModel extends model
             }
 
             $changes = common::createChanges($oldStory, $story);
-            if(!empty($oldStory->siblings)) $this->syncSiblings($oldStory->id, $oldStory->siblings, $changes, 'Changed');
+            if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Changed');
             return $changes;
         }
     }
@@ -933,12 +933,12 @@ class storyModel extends model
             ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview')
             ->get();
 
-        /* Relieve siblings when change product. */
-        if(!empty($oldStory->siblings) and $story->product != $oldStory->product)
+        /* Relieve twins when change product. */
+        if(!empty($oldStory->twins) and $story->product != $oldStory->product)
         {
-            $this->dbh->exec("UPDATE " . TABLE_STORY . " SET siblings = REPLACE(siblings, ',$storyID,', ',') WHERE `product` = $oldStory->product");
-            $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($storyID)->orWhere('siblings')->eq(',')->exec();
-            $oldStory->siblings = '';
+            $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
+            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            $oldStory->twins = '';
         }
 
         if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
@@ -992,13 +992,13 @@ class storyModel extends model
                 ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))
                 ->exec();
 
-            /* Sync siblings. */
-            if(!empty($oldStory->siblings))
+            /* Sync twins. */
+            if(!empty($oldStory->twins))
             {
-                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                 {
                     $this->dao->delete()->from(TABLE_STORYREVIEW)
-                        ->where('story')->eq($siblingID)
+                        ->where('story')->eq($twinID)
                         ->andWhere('version')->eq($oldStory->version)
                         ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))
                         ->exec();
@@ -1015,12 +1015,12 @@ class storyModel extends model
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
 
-                /* Sync siblings. */
-                if(!empty($oldStory->siblings))
+                /* Sync twins. */
+                if(!empty($oldStory->twins))
                 {
-                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                     {
-                        $reviewData->story = $siblingID;
+                        $reviewData->story = $twinID;
                         $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                     }
                 }
@@ -1062,13 +1062,13 @@ class storyModel extends model
                 $data->files  = $story->files = $addedFiles . trim($storyFiles, ',');
                 $this->dao->update(TABLE_STORYSPEC)->data($data)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
-                /* Sync siblings. */
-                if(!empty($oldStory->siblings))
+                /* Sync twins. */
+                if(!empty($oldStory->twins))
                 {
-                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                     {
                         $this->dao->update(TABLE_STORYSPEC)->data($data)
-                            ->where('story')->eq((int)$siblingID)
+                            ->where('story')->eq((int)$twinID)
                             ->andWhere('version')->eq($oldStory->version)
                             ->exec();
                     }
@@ -1202,7 +1202,7 @@ class storyModel extends model
                 if(isset($story->finalResult)) $this->recordReviewAction($story);
             }
 
-            if(!empty($oldStory->siblings)) $this->syncSiblings($oldStory->id, $oldStory->siblings, $changes, 'Edited');
+            if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Edited');
 
             return true;
         }
@@ -1625,15 +1625,15 @@ class storyModel extends model
             ->andWhere('reviewer')->eq($this->app->user->account)
             ->exec();
 
-        /* Sync siblings. */
-        if(!empty($oldStory->siblings))
+        /* Sync twins. */
+        if(!empty($oldStory->twins))
         {
-            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
             {
                 $this->dao->update(TABLE_STORYREVIEW)
                     ->set('result')->eq($this->post->result)
                     ->set('reviewDate')->eq($now)
-                    ->where('story')->eq($siblingID)
+                    ->where('story')->eq($twinID)
                     ->andWhere('version')->eq($oldStory->version)
                     ->andWhere('reviewer')->eq($this->app->user->account)
                     ->exec();
@@ -1670,7 +1670,7 @@ class storyModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
-        if(!empty($oldStory->siblings)) $this->syncSiblings($oldStory->id, $oldStory->siblings, $changes, 'Reviewed');
+        if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Reviewed');
 
         return true;
     }
@@ -1690,7 +1690,7 @@ class storyModel extends model
         $actions = array();
         $this->loadModel('action');
 
-        $reviewedSiblings = array();
+        $reviewedTwins = array();
         $oldStories       = $this->getByList($storyIdList);
         $hasResult        = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
         $reviewerList     = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
@@ -1720,15 +1720,15 @@ class storyModel extends model
 
             $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
 
-            /* Sync siblings. */
-            if(!empty($oldStory->siblings))
+            /* Sync twins. */
+            if(!empty($oldStory->twins))
             {
-                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                 {
                     $this->dao->update(TABLE_STORYREVIEW)
                         ->set('result')->eq($result)
                         ->set('reviewDate')->eq($now)
-                        ->where('story')->eq($siblingID)
+                        ->where('story')->eq($twinID)
                         ->andWhere('version')->eq($oldStory->version)
                         ->andWhere('reviewer')->eq($this->app->user->account)
                         ->exec();
@@ -1758,17 +1758,17 @@ class storyModel extends model
             $story->version    = $oldStory->version;
             $actions[$storyID] = $this->recordReviewAction($story, $result, $reason);
 
-            /* Sync siblings. */
+            /* Sync twins. */
             $changes = common::createChanges($oldStory, $story);
-            if(!empty($oldStory->siblings))
+            if(!empty($oldStory->twins))
             {
-                $siblings = $oldStory->siblings;
-                foreach(explode(',', $siblings) as $siblingID)
+                $twins = $oldStory->twins;
+                foreach(explode(',', $twins) as $twinID)
                 {
-                    if(in_array($siblingID, $storyIdList) or isset($reviewedSiblings[$siblingID])) $siblings = str_replace(",$siblingID,", ',', $siblings);
+                    if(in_array($twinID, $storyIdList) or isset($reviewedTwins[$twinID])) $twins = str_replace(",$twinID,", ',', $twins);
                 }
-                $this->syncSiblings($storyID, trim($siblings, ','), $changes, 'Reviewed');
-                foreach(explode(',', trim($siblings, ',')) as $reviewedID) $reviewedSiblings[$reviewedID] = $reviewedID;
+                $this->syncTwins($storyID, trim($twins, ','), $changes, 'Reviewed');
+                foreach(explode(',', trim($twins, ',')) as $reviewedID) $reviewedTwins[$reviewedID] = $reviewedID;
             }
         }
 
@@ -1793,17 +1793,17 @@ class storyModel extends model
 
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
-        /* Sync siblings. */
-        if(!empty($oldStory->siblings))
+        /* Sync twins. */
+        if(!empty($oldStory->twins))
         {
-            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
             {
-                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->exec();
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->andWhere('version')->eq($oldStory->version)->exec();
             }
         }
 
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'recalled');
+        if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'recalled');
     }
 
     /**
@@ -1828,18 +1828,18 @@ class storyModel extends model
         $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
-        /* Sync siblings. */
-        if(!empty($oldStory->siblings))
+        /* Sync twins. */
+        if(!empty($oldStory->twins))
         {
-            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
             {
-                $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($siblingID)->andWHere('version')->eq($oldStory->version)->exec();
-                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->exec();
+                $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($twinID)->andWHere('version')->eq($oldStory->version)->exec();
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->andWhere('version')->eq($oldStory->version)->exec();
             }
         }
 
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'recalledChange');
+        if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'recalledChange');
     }
 
     /**
@@ -1872,12 +1872,12 @@ class storyModel extends model
 
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
-        /* Sync siblings. */
-        if(!empty($oldStory->siblings))
+        /* Sync twins. */
+        if(!empty($oldStory->twins))
         {
-            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
             {
-                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->exec();
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->andWhere('version')->eq($oldStory->version)->exec();
             }
         }
 
@@ -1893,12 +1893,12 @@ class storyModel extends model
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
 
-                /* Sync siblings. */
-                if(!empty($oldStory->siblings))
+                /* Sync twins. */
+                if(!empty($oldStory->twins))
                 {
-                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                     {
-                        $reviewData->story = $siblingID;
+                        $reviewData->story = $twinID;
                         $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                     }
                 }
@@ -1909,7 +1909,7 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->eq($storyID)->exec();
 
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'submitReview');
+        if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'submitReview');
         if(!dao::isError()) return $changes;
 
         return false;
@@ -2050,7 +2050,7 @@ class storyModel extends model
         }
 
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'Closed');
+        if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
         return $changes;
     }
 
@@ -2571,7 +2571,7 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq((int)$storyID)->exec();
 
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'Assigned');
+        if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Assigned');
         if(!dao::isError()) return $changes;
         return false;
     }
@@ -2658,12 +2658,12 @@ class storyModel extends model
         {
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
 
-            /* Sync siblings. */
-            if(!empty($oldStory->siblings))
+            /* Sync twins. */
+            if(!empty($oldStory->twins))
             {
-                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                 {
-                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->exec();
+                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->exec();
                 }
             }
         }
@@ -2674,7 +2674,7 @@ class storyModel extends model
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
 
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'Activated');
+        if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Activated');
         return $changes;
     }
 
@@ -3768,7 +3768,7 @@ class storyModel extends model
             ->andWhere('status')->notin('closed,draft')
             ->andWhere('product')->eq($productID)
             ->andWhere('plan')->in('0,')
-            ->andWhere('siblings')->eq('')
+            ->andWhere('twins')->eq('')
             ->beginIF($append)->orWhere('id')->in($append)->fi()
             ->fetchPairs();
         return array(0 => '') + $stories ;
@@ -6042,13 +6042,13 @@ class storyModel extends model
             $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWHere('version')->in($oldStory->version)->exec();
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->in($oldStory->version)->exec();
 
-            /* Sync siblings. */
-            if(!empty($oldStory->siblings))
+            /* Sync twins. */
+            if(!empty($oldStory->twins))
             {
-                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                 {
-                    $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($siblingID)->andWHere('version')->in($oldStory->version)->exec();
-                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->in($oldStory->version)->exec();
+                    $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($twinID)->andWHere('version')->in($oldStory->version)->exec();
+                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->andWhere('version')->in($oldStory->version)->exec();
                 }
             }
         }
@@ -6156,13 +6156,13 @@ class storyModel extends model
             ->andWhere('result')->eq('')
             ->exec();
 
-        /* Sync siblings. */
-        if(!empty($oldStory->siblings))
+        /* Sync twins. */
+        if(!empty($oldStory->twins))
         {
-            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
             {
                 $this->dao->delete()->from(TABLE_STORYREVIEW)
-                    ->where('story')->eq($siblingID)
+                    ->where('story')->eq($twinID)
                     ->andWhere('version')->eq($oldStory->version)
                     ->andWhere('result')->eq('')
                     ->exec();
@@ -6409,14 +6409,14 @@ class storyModel extends model
      * Get the story status after activation.
      *
      * @param  int    $storyID
-     * @param  bool   $hasSiblings
+     * @param  bool   $hasTwins
      * @access public
      * @return void
      */
-    public function getActivateStatus($storyID, $hasSiblings = true)
+    public function getActivateStatus($storyID, $hasTwins = true)
     {
         $status     = 'active';
-        $action     = $hasSiblings ? 'closed,reviewrejected,syncsiblings' : 'closed,reviewrejected';
+        $action     = $hasTwins ? 'closed,reviewrejected,synctwins' : 'closed,reviewrejected';
         $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
@@ -6431,7 +6431,7 @@ class storyModel extends model
         }
 
         /* When activating twin story, you need to check the status of the twin story selected when closing. */
-        if($lastAction == 'syncsiblings')
+        if($lastAction == 'synctwins')
         {
             $syncStoryID = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 0;
             $status      = $this->getActivateStatus($syncStoryID, false);
@@ -6476,18 +6476,18 @@ class storyModel extends model
     }
 
     /**
-     * Sync siblings.
+     * Sync twins.
      *
      * @param  int    $storyID
-     * @param  string $siblings
+     * @param  string $twins
      * @param  array  $changes
      * @param  string $operate
      * @access public
      * @return void
      */
-    public function syncSiblings($storyID, $siblings, $changes, $operate)
+    public function syncTwins($storyID, $twins, $changes, $operate)
     {
-        if(empty($siblings) or empty($changes)) return;
+        if(empty($twins) or empty($changes)) return;
 
         /* Get the fields and values to be synchronized. */
         $syncFieldList = array();
@@ -6504,15 +6504,15 @@ class storyModel extends model
 
         /* Synchronize and record dynamics. */
         $this->loadModel('action');
-        $siblings = explode(',', trim($siblings, ','));
-        foreach($siblings as $siblingID)
+        $twins = explode(',', trim($twins, ','));
+        foreach($twins as $twinID)
         {
-            $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq((int)$siblingID)->exec();
+            $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq((int)$twinID)->exec();
             if(!dao::isError())
             {
-                $this->setStage($siblingID);
+                $this->setStage($twinID);
 
-                $actionID = $this->action->create('story', $siblingID, 'syncsiblings', '', "$operate|$storyID");
+                $actionID = $this->action->create('story', $twinID, 'synctwins', '', "$operate|$storyID");
                 $this->action->logHistory($actionID, $changes);
             }
         }

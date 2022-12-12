@@ -50,7 +50,7 @@ class actionModel extends model
         $action->extra      = $extra;
         if(!defined('IN_UPGRADE')) $action->vision = $this->config->vision;
 
-        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,syncsiblings,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
+        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,synctwins,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
         $action->comment = fixer::stripDataTags($comment);
@@ -961,7 +961,7 @@ class actionModel extends model
                 }
             }
 
-            if($action->objectType == 'story' and $action->action == 'syncsiblings')
+            if($action->objectType == 'story' and $action->action == 'synctwins')
             {
                 if(!empty($extra) and strpos($extra, '|') !== false)
                 {

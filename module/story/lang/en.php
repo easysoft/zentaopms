@@ -77,9 +77,9 @@ $lang->story->order              = 'Order';
 $lang->story->saveDraft          = 'Save as draft';
 $lang->story->doNotSubmit        = 'Do Not Submit';
 $lang->story->currentBranch      = 'Current Branch';
-$lang->story->siblings           = 'Siblings story';
+$lang->story->twins              = 'Twins story';
 $lang->story->relieved           = 'Relieved';
-$lang->story->relievedSiblings   = 'Relieved Siblings';
+$lang->story->relievedTwins      = 'Relieved Twins';
 $lang->story->loadAllStories     = 'Load all stories';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
@@ -107,7 +107,7 @@ $lang->story->relievedTip         = "The twin relationship cannot be restored af
 $lang->story->assignSyncTip       = "Both twin stories modify the assignor synchronously";
 $lang->story->closeSyncTip        = "Twin stories are closed synchronously";
 $lang->story->activateSyncTip     = "Twin stories are activated synchronously";
-$lang->story->relievedSiblingsTip = "After product adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
+$lang->story->relievedTwinsTip    = "After product adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
 $lang->story->batchEditTip        = "{$lang->SRCommon} %sis twin stories, and this operation has been filtered.";
 
 $lang->story->id               = 'ID';
@@ -356,7 +356,7 @@ $lang->story->action->subdividestory        = array('main' => '$date, decomposed
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, unlinked by <strong>$actor</strong> from Story <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, unlinked by <strong>$actor</strong> Decomposed Story <strong>$extra</strong>.');
 $lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
-$lang->story->action->syncsiblings          = array('main' => "\$date, the system judges that this story is adjusted synchronously due to the \$operate of twin story <strong>\$extra</strong>.", 'operate' => 'operateList');
+$lang->story->action->synctwins             = array('main' => "\$date, the system judges that this story is adjusted synchronously due to the \$operate of twin story <strong>\$extra</strong>.", 'operate' => 'operateList');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();

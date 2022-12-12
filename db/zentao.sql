@@ -1480,7 +1480,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `childStories` varchar(255) NOT NULL,
   `linkStories` varchar(255) NOT NULL,
   `linkRequirements` varchar(255) NOT NULL,
-  `siblings` varchar(255) NOT NULL,
+  `twins` varchar(255) NOT NULL,
   `duplicateStory` mediumint(8) unsigned NOT NULL,
   `version` smallint(6) NOT NULL default '1',
   `feedbackBy` varchar(100) NOT NULL,

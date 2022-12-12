@@ -943,7 +943,7 @@ class story extends control
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
         $this->view->story            = $story;
-        $this->view->siblings         = empty($story->siblings) ? array() : $this->story->getByList($story->siblings);
+        $this->view->twins            = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->stories          = $stories;
         $this->view->users            = $users;
         $this->view->product          = $product;
@@ -1037,15 +1037,15 @@ class story extends control
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
 
-        /* Filter siblings. */
-        $siblings = '';
+        /* Filter twins. */
+        $twins = '';
         foreach($stories as $id => $story)
         {
-            if(empty($story->siblings)) continue;
-            $siblings .= "#$id ";
+            if(empty($story->twins)) continue;
+            $twins .= "#$id ";
             unset($stories[$id]);
         }
-        if(!empty($siblings)) echo js::alert(sprintf($this->lang->story->batchEditTip, $siblings));
+        if(!empty($twins)) echo js::alert(sprintf($this->lang->story->batchEditTip, $twins));
 
         $this->loadModel('branch');
         if($productID and !$executionID)
@@ -1276,7 +1276,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->siblings         = empty($story->siblings) ? array() : $this->story->getByList($story->siblings);
+        $this->view->twins            = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->branches         = $this->loadModel('branch')->getPairs($story->product);
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[]       = $this->lang->story->change;
@@ -1447,7 +1447,7 @@ class story extends control
         $this->view->position      = $position;
         $this->view->product       = $product;
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->siblings      = !empty($story->siblings) ? $this->story->getByList($story->siblings) : array();
+        $this->view->twins         = !empty($story->twins) ? $this->story->getByList($story->twins) : array();
         $this->view->plan          = $plan;
         $this->view->bugs          = $bugs;
         $this->view->fromBug       = $fromBug;
@@ -1905,10 +1905,10 @@ class story extends control
         $stories = $this->story->getByList($storyIdList);
         $productStoryList = array();
         $productList      = array();
-        $ignoreSiblings   = array();
+        $ignoreTwins      = array();
         foreach($stories as $story)
         {
-            if(!empty($ignoreSiblings) and isset($ignoreSiblings[$story->id]))
+            if(!empty($ignoreTwins) and isset($ignoreTwins[$story->id]))
             {
                 unset($stories[$story->id]);
                 continue;
@@ -1929,9 +1929,9 @@ class story extends control
             $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
             if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
-            if(!empty($story->siblings))
+            if(!empty($story->twins))
             {
-                foreach(explode(',', trim($story->siblings, ',')) as $siblingID) $ignoreSiblings[$siblingID] = $siblingID;
+                foreach(explode(',', trim($story->twins, ',')) as $twinID) $ignoreTwins[$twinID] = $twinID;
             }
         }
 
@@ -1951,7 +1951,7 @@ class story extends control
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : '') . "|$preStatus");
                     $this->action->logHistory($actionID, $changes);
 
-                    if(!empty($stories[$storyID]->siblings)) $this->story->syncSiblings($storyID, $stories[$storyID]->siblings, $changes, 'Closed');
+                    if(!empty($stories[$storyID]->twins)) $this->story->syncTwins($storyID, $stories[$storyID]->twins, $changes, 'Closed');
                 }
             }
 
@@ -2301,23 +2301,23 @@ class story extends control
             $allChanges = $this->story->batchAssignTo();
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $assignedSiblings = array();
+            $assignedTwins = array();
             $oldStories       = $this->story->getByList($this->post->storyIdList);
             foreach($allChanges as $storyID => $changes)
             {
                 $actionID = $this->action->create('story', $storyID, 'Assigned', '', $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
 
-                /* Sync siblings. */
-                if(!empty($oldStories[$storyID]->siblings))
+                /* Sync twins. */
+                if(!empty($oldStories[$storyID]->twins))
                 {
-                    $siblings = $oldStories[$storyID]->siblings;
-                    foreach(explode(',', $siblings) as $siblingID)
+                    $twins = $oldStories[$storyID]->twins;
+                    foreach(explode(',', $twins) as $twinID)
                     {
-                        if(in_array($siblingID, $this->post->storyIdList) or isset($assignedSiblings[$siblingID])) $siblings = str_replace(",$siblingID,", ',', $siblings);
+                        if(in_array($twinID, $this->post->storyIdList) or isset($assignedTwins[$twinID])) $twins = str_replace(",$twinID,", ',', $twins);
                     }
-                    $this->story->syncSiblings($storyID, trim($siblings, ','), $changes, 'Assigned');
-                    foreach(explode(',', trim($siblings, ',')) as $assignedID) $assignedSiblings[$assignedID] = $assignedID;
+                    $this->story->syncTwins($storyID, trim($twins, ','), $changes, 'Assigned');
+                    foreach(explode(',', trim($twins, ',')) as $assignedID) $assignedTwins[$assignedID] = $assignedID;
                 }
             }
         }
@@ -3029,27 +3029,27 @@ class story extends control
     }
 
     /**
-     * AJAX: Deleted story sibling.
+     * AJAX: Deleted story twin.
      *
      * @access public
      * @return void
      */
-    public function ajaxRelieveSibling()
+    public function ajaxRelieveTwins()
     {
-        $siblingID = !empty($_POST['siblingID']) ? $_POST['siblingID'] : 0;
-        $story     = $this->story->getByID($siblingID);
-        $siblings  = explode(',', trim($story->siblings, ','));
+        $twinID = !empty($_POST['twinID']) ? $_POST['twinID'] : 0;
+        $story  = $this->story->getByID($twinID);
+        $twins  = explode(',', trim($story->twins, ','));
 
-        if(empty($story->siblings)) return $this->send(array('result' => 'fail'));
+        if(empty($story->twins)) return $this->send(array('result' => 'fail'));
 
-        /* batchUnset siblingID from siblings.*/
-        $replaceSql = "UPDATE " . TABLE_STORY . " SET siblings = REPLACE(siblings,',$siblingID,', ',') WHERE `product` = $story->product";
+        /* batchUnset twinID from twins.*/
+        $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$twinID,', ',') WHERE `product` = $story->product";
         $this->dbh->exec($replaceSql);
 
-        /* Update siblings to empty by siblingID and if siblings eq ','.*/
-        $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($siblingID)->orWhere('siblings')->eq(',')->exec();
+        /* Update twins to empty by twinID and if twins eq ','.*/
+        $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($twinID)->orWhere('twins')->eq(',')->exec();
 
-        if(!dao::isError()) $this->loadModel('action')->create('story', $siblingID, 'relieved');
-        return $this->send(array('result' => 'success', 'silbingsCount' => count($siblings)-1));
+        if(!dao::isError()) $this->loadModel('action')->create('story', $twinID, 'relieved');
+        return $this->send(array('result' => 'success', 'silbingsCount' => count($twins)-1));
     }
 }

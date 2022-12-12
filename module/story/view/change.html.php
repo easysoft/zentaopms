@@ -73,17 +73,17 @@
           <?php echo $this->fetch('file', 'buildform');?>
           </td>
         </tr>
-        <?php if(!empty($siblings)):?>
-        <tr id='siblingTitle'>
+        <?php if(!empty($twins)):?>
+        <tr id='twinsTitle'>
           <td colspan='2'>
             <?php echo $lang->story->changeSyncTip;?>
             <span data-toggle='tooltip' data-placement='right' title='<?php echo $lang->story->syncTip;?>'><i class='icon-help'></i></span>
           </td>
         </tr>
-        <tr id='siblingList'>
+        <tr id='twinsList'>
           <td colspan='2'>
             <ul class='list-unstyled'>
-                <?php include './blocksibling.html.php';?>
+                <?php include './blocktwins.html.php';?>
             </ul>
           </td>
         </tr>

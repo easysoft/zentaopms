@@ -26,6 +26,6 @@
 .popover-icon {float:left;}
 .popover .content {margin-left:25px;overflow: overlay;}
 .hide {display:none !important;}
-.sibling > a.viewlink {padding:6px;white-space: nowrap;overflow: hidden;display: inline-flex;max-width: 70%;}
-.sibling > span {max-width: 60px;white-space: nowrap;overflow: hidden;}
+.twins > a.viewlink {padding:6px;white-space: nowrap;overflow: hidden;display: inline-flex;max-width: 70%;}
+.twins > span {max-width: 60px;white-space: nowrap;overflow: hidden;}
 .tooltip-inner {max-width: 500px;}

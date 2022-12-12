@@ -95,14 +95,14 @@ function loadURS(allURS)
     });
 }
 
-$('.sibling').mouseover(function() {
+$('.twins').mouseover(function() {
     $(this).parent('ul').find('a.unlink').addClass('hide');
     $(this).find('.unlink').removeClass('hide');
 });
-$('.sibling').mouseenter(function() {
+$('.twins').mouseenter(function() {
     $('[data-toggle="popover"]').popover('hide');
 });
-$('.sibling').mouseout(function() {
+$('.twins').mouseout(function() {
     $(this).find('.unlink').addClass('hide');
 });
 
@@ -117,7 +117,7 @@ $('[data-toggle="popover"]').each(function(item) {
 
 function relieve(index)
 {
-    $.post(relieveURL, {siblingID:index}, function(data){
+    $.post(relieveURL, {twinID:index}, function(data){
         $('[data-id="' + index + '"]').popover('hide');
 
         if(data.result == 'success')
@@ -125,12 +125,12 @@ function relieve(index)
             if(data.silbingsCount != 0) $('[data-id="' + index + '"]').parent('li').remove();
             if(data.silbingsCount == 0 || index == storyID)
             {
-                $('[href="#legendSiblings"]').parent('li').next('li').addClass('active');;
-                $('[href="#legendSiblings"]').parent('li').remove();
-                $('#legendSiblings').next('div').addClass('active');
-                $('#legendSiblings').remove();
-                $('#siblingTitle').remove();
-                $('#siblingList').remove();
+                $('[href="#legendTwins"]').parent('li').next('li').addClass('active');;
+                $('[href="#legendTwins"]').parent('li').remove();
+                $('#legendTwins').next('div').addClass('active');
+                $('#legendTwins').remove();
+                $('#twinsTitle').remove();
+                $('#twinsList').remove();
             }
         }
     }, 'json');
