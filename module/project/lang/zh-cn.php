@@ -382,3 +382,6 @@ $lang->project->copyProject->nameTips           = '『项目名称』不可重�
 $lang->project->copyProject->codeTips           = '『项目代号』不可重复需要修改。';
 $lang->project->copyProject->endTips            = '『计划完成』不能为空。';
 $lang->project->copyProject->daysTips           = '『可用工作日』应当是数字。';
+
+$lang->project->linkBranchStoryByPlanTips = "项目按计划关联需求时，只导入本项目所关联%s的激活状态的需求。";
+$lang->project->linkNormalStoryByPlanTips = "项目按计划关联需求时，只导入激活状态的需求。";
