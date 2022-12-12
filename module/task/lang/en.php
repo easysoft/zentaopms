@@ -212,8 +212,8 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Done';
 $lang->task->reasonList['cancel'] = 'Cancelled';
 
-$lang->task->modeList['linear'] = 'Serial';
-$lang->task->modeList['multi']  = 'Parallel';
+$lang->task->modeList['linear'] = 'Multiple Person Serial';
+$lang->task->modeList['multi']  = 'Multiple Person Parallel';
 
 $lang->task->afterChoices['continueAdding'] = ' Continue Adding Tasks';
 $lang->task->afterChoices['toTaskList']     = 'Go to Task List';
