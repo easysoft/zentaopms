@@ -621,7 +621,6 @@ class zanodemodel extends model
     public function getServiceStatus($node)
     {
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$node->tokenSN")));
-        var_dump("http://{$node->ip}:{$node->zap}/api/v1/service/check");die;
         if(empty($result->data->ztfStatus) || $result->code != 'success')
         {
             $result = new stdclass;
