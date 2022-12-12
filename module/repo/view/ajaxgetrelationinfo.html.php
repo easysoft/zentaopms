@@ -11,7 +11,7 @@
 <?php
 include '../../common/view/header.lite.html.php';
 js::set('objectType', $objectType);
-js::set('objectID', $object->id);
+js::set('objectID', zget($object, 'id', ''));
 ?>
 <div class="main-col linkContent main">
   <div class="content pane">
@@ -21,54 +21,54 @@ js::set('objectID', $object->id);
           <?php if($objectType == 'story'):?>
           <tr>
             <td class="text">
-              <strong class='text-primary'><?php echo $object->title;?></strong>
+              <strong class='text-primary'><?php echo zget($object, 'title', '');?></strong>
             </td>
           </tr>
           <tr>
             <td class="text">
               <div class="spec-content detail-content article-content">
-                <?php echo $object->spec; ?>
+                <?php echo zget($object, 'spec', ''); ?>
               </div>
             </td>
           </tr>
           <tr>
             <td class="text">
               <div class="detail-content article-content">
-                <?php echo $object->verify; ?>
+                <?php echo zget($object, 'verify', ''); ?>
               </div>
             </td>
           </tr>
           <?php elseif($objectType == 'task'):?>
           <tr>
             <td class="text">
-              <strong class='text-primary'><?php echo $object->name;?></strong>
+              <strong class='text-primary'><?php echo zget($object, 'name', '');?></strong>
             </td>
           </tr>
           <tr>
             <td class="text">
               <div class="spec-content detail-content article-content">
-                <?php echo $object->desc; ?>
+                <?php echo zget($object, 'desc', ''); ?>
               </div>
             </td>
           </tr>
           <tr>
             <td class="text">
               <div class="detail-content article-content">
-                <?php echo $object->storyTitle; ?>
+                <?php echo zget($object, 'storyTitle', ''); ?>
               </div>
             </td>
           </tr>
           <?php elseif($objectType == 'bug'):?>
           <tr>
             <td class="text">
-              <strong class='text-primary' data-id='<?php echo $object->id;?>'><?php echo $object->title;?></strong>
+              <strong class='text-primary' data-id='<?php echo zget($object, 'id', '');?>'><?php echo zget($object, 'title', '');?></strong>
             </td>
           </tr>
-          <?php if($object->steps):?>
+          <?php if(zget($object, 'steps', '')):?>
           <tr>
             <td class="text">
               <div class="spec-content detail-content article-content">
-                <?php echo $object->steps; ?>
+                <?php echo zget($object, 'steps', ''); ?>
               </div>
             </td>
           </tr>
