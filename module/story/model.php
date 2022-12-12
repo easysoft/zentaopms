@@ -2014,6 +2014,7 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
+            ->remove('closeSync')
             ->get();
 
         if(!empty($story->duplicateStory))
@@ -2050,7 +2051,18 @@ class storyModel extends model
         }
 
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
+        if($this->post->closeSync)
+        {
+            /* batchUnset twinID from twins.*/
+            $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$storyID,', ',') WHERE `product` = $oldStory->product";
+            $this->dbh->exec($replaceSql);
+
+            /* Update twins to empty by twinID and if twins eq ','.*/
+            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+
+            if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
+        }
+        if(!empty($oldStory->twins) and !$this->post->closeSync) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
         return $changes;
     }
 

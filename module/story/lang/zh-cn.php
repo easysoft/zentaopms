@@ -522,3 +522,6 @@ $lang->requirement->linkStory          = "关联{$lang->SRCommon}";
 $lang->story->addBranch      = '添加%s';
 $lang->story->deleteBranch   = '删除%s';
 $lang->story->notice->branch = '每个分支会建立一个需求，需求间互为孪生关系。孪生需求间除产品、分支、模块、计划、阶段字段外均保持同步，后期您可以手动解除孪生关系。';
+
+$lang->story->relievedTwinsRelation     = '解除孪生关系';
+$lang->story->relievedTwinsRelationTips = '孪生关系解除后无法恢复，需求的关闭将不再同步。';
