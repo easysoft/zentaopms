@@ -1048,10 +1048,10 @@ class user extends control
     public function logout($referer = 0)
     {
         if(isset($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
+        setcookie('za', false, time() - 3600, $this->config->webRoot);
+        setcookie('zp', false, time() - 3600, $this->config->webRoot);
+        setcookie('tab', false, time() - 3600, $this->config->webRoot);        ;
         session_destroy();
-        setcookie('za', false);
-        setcookie('zp', false);
-        setcookie('tab', false);
 
         if($this->app->getViewType() == 'json') return print(json_encode(array('status' => 'success')));
         $vars = !empty($referer) ? "referer=$referer" : '';
