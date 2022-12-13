@@ -1801,7 +1801,7 @@ class bug extends control
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent'));
+                    return print(js::closeModal('parent.parent', 'this', "typeof(parent.parent.setTitleWidth) == 'function' ? parent.parent.setTitleWidth() : parent.parent.location.reload()"));
                 }
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api')
@@ -1988,7 +1988,7 @@ class bug extends control
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+                    return print(js::closeModal('parent.parent', 'this', "typeof(parent.parent.setTitleWidth) == 'function' ? parent.parent.setTitleWidth() : parent.parent.location.reload()"));
                 }
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api')
