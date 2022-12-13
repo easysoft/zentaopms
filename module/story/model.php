@@ -2227,8 +2227,17 @@ class storyModel extends model
                 if($planID == 0 and !empty($oldStory->plan) and isset($branchPlanPairs[0]) and $branchPlanPairs[0] != $planID) $unlinkPlans[$branchPlanPairs[0]] = empty($unlinkPlans[$branchPlanPairs[0]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[0]]},$storyID";
                 if($planID != 0)
                 {
-                    if(!empty($oldStory->plan) and isset($branchPlanPairs[$plan->branch]) and $branchPlanPairs[$plan->branch] != $planID) $unlinkPlans[$branchPlanPairs[$plan->branch]] = empty($unlinkPlans[$branchPlanPairs[$plan->branch]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[$plan->branch]]},$storyID";
-                    if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
+                    if(!empty($oldStory->plan))
+                    {
+                        foreach(explode(',', $plan->branch) as $planBranch)
+                        {
+                            if(isset($branchPlanPairs[$planBranch]) and $branchPlanPairs[$planBranch] != $planID)
+                            {
+                                $unlinkPlans[$branchPlanPairs[$planBranch]] = empty($unlinkPlans[$branchPlanPairs[$planBranch]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[$planBranch]]},$storyID";
+                            }
+                        }
+                    }
+                    foreach(explode(',', $plan->branch) as $planBranch) if(isset($branchPlanPairs[$planBranch])) $branchPlanPairs[$planBranch] = $planID;
                     $story->plan = $oldStory->plan ? implode(',', $branchPlanPairs) : $planID;
                     $story->plan = trim($story->plan, ',');
                     if($story->plan != $oldStory->plan and !empty($planID)) $link2Plans[$planID]  = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
