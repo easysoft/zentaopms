@@ -36,19 +36,19 @@
           <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->zaHostType;?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zahost->zaHostType;?>:</div>
                 <div class="col-8"><?php echo $lang->zahost->zaHostTypeList[$zahost->hostType];?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->extranet;?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zahost->extranet;?>:</div>
                 <div class="col-8"><?php echo $zahost->extranet;?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->memory;?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zahost->memory;?>:</div>
                 <div class="col-8"><?php echo $zahost->memory;?></div>
               </div>
             </div>
@@ -56,19 +56,19 @@
           <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->vsoft;?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zahost->vsoft;?>:</div>
                 <div class="col-8"><?php echo $zahost->vsoft;?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->cpuCores;?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zahost->cpuCores;?>:</div>
                 <div class="col-8"><?php echo $zahost->cpuCores;?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->diskSize;?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zahost->diskSize;?>:</div>
                 <div class="col-8"><?php echo $zahost->diskSize;?></div>
               </div>
             </div>

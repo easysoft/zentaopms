@@ -42,19 +42,19 @@
           <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right">IP:</div>
+                <div class="col-3 text-right">IP:</div>
                 <div class="col-8"><?php echo $zanode->extranet; ?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zanode->osName; ?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zanode->osName; ?>:</div>
                 <div class="col-8"><?php echo $zanode->osName; ?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zanode->memory; ?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zanode->memory; ?>:</div>
                 <div class="col-8"><?php echo $zanode->memory; ?></div>
               </div>
             </div>
@@ -62,19 +62,19 @@
           <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zanode->status; ?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zanode->status; ?>:</div>
                 <div class="col-8"><?php echo zget($lang->zanode->statusList, $zanode->status); ?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zanode->cpuCores; ?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zanode->cpuCores; ?>:</div>
                 <div class="col-8"><?php echo $zanode->cpuCores; ?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zanode->diskSize; ?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zanode->diskSize; ?>:</div>
                 <div class="col-8"><?php echo $zanode->diskSize; ?></div>
               </div>
             </div>
@@ -82,7 +82,7 @@
           <div class="main-row main-row-last zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zanode->hostName; ?>:</div>
+                <div class="col-3 text-right"><?php echo $lang->zanode->hostName; ?>:</div>
                 <div class="col-8"><?php echo $zanode->hostName; ?></div>
               </div>
             </div>

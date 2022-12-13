@@ -277,8 +277,8 @@ class zanode extends control
         if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $nodeID, 'getVNC');
 
         $this->view->url   = $node->ip . ":" . $node->hzap;
-        $this->view->host  = $vnc->hostIP;
-        $this->view->token = $vnc->token;
+        $this->view->host  = !empty($vnc->hostIP) ? $vnc->hostIP:'';
+        $this->view->token = !empty($vnc->token) ? $vnc->token:'';
         $this->display();
     }
 
