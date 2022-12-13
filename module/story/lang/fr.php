@@ -471,7 +471,7 @@ $lang->story->reviewTip['notReviewer'] = "Vous n'êtes pas l'évaluateur de cett
 $lang->story->reviewTip['reviewed']    = "Révisé";
 
 $lang->story->recallTip = array();
-$lang->story->recallTip['actived']    = "Aucun processus de révision n'a été lancé pour cette Story, et il n'est pas nécessaire de révoquer l'opération.";
+$lang->story->recallTip['actived'] = "Aucun processus de révision n'a été lancé pour cette Story, et il n'est pas nécessaire de révoquer l'opération.";
 
 $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['subStory']   = 'Les sous-stories ne peuvent pas être décomposées.';
