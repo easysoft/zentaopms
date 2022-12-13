@@ -34,5 +34,5 @@ ol, ul {padding-left: 20px;}
 #actionsBox a:last-of-type + .divider {display: none;}
 #actionsBox div.divider:first-child {display: none;}
 
-#bugs th.c-pri, #bugs th.c-actions {width:72px !important;}
+#bugs th.c-pri, #bugs th.c-actions {width:70px !important;}
 #bugs th.c-status, #bugs th.c-user {width:120px !important;}
