@@ -1906,10 +1906,12 @@ class story extends control
         $productStoryList = array();
         $productList      = array();
         $ignoreTwins      = array();
+        $twinsCount       = 0;
         foreach($stories as $story)
         {
             if(!empty($ignoreTwins) and isset($ignoreTwins[$story->id]))
             {
+                $twinsCount ++;
                 unset($stories[$story->id]);
                 continue;
             }
@@ -2019,6 +2021,7 @@ class story extends control
         $this->view->storyType        = $storyType;
         $this->view->reasonList       = $this->lang->story->reasonList;
         $this->view->productStoryList = $productStoryList;
+        $this->view->twinsCount       = $twinsCount;
 
         $this->display();
     }
