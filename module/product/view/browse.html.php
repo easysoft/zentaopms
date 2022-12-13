@@ -620,7 +620,11 @@ js::set('vision',        $this->config->vision);
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $lang->project->linkStoryByPlanTips . ')';?>
+        <h4 class="modal-title">
+          <?php
+          $linkStoryByPlanTips = $product->type == 'normal' ? $lang->project->linkNormalStoryByPlanTips : sprintf($lang->project->linkBranchStoryByPlanTips, $lang->product->branchName[$product->type]);
+          echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $linkStoryByPlanTips . ')';
+          ?>
       </div>
       <div class="modal-body">
         <div class='input-group'>

@@ -597,3 +597,6 @@ $lang->execution->gantt->exporting  = '正在导出……';
 $lang->execution->gantt->exportFail = '导出失败。';
 
 $lang->execution->boardColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761');
+
+$lang->execution->linkBranchStoryByPlanTips = "执行按计划关联需求时，只导入本执行所关联%s的激活状态的需求。";
+$lang->execution->linkNormalStoryByPlanTips = "执行按计划关联需求时，只导入激活状态的需求。";

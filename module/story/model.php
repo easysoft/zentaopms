@@ -2014,6 +2014,7 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
+            ->remove('closeSync')
             ->get();
 
         if(!empty($story->duplicateStory))
@@ -2050,7 +2051,18 @@ class storyModel extends model
         }
 
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
+        if($this->post->closeSync)
+        {
+            /* batchUnset twinID from twins.*/
+            $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$storyID,', ',') WHERE `product` = $oldStory->product";
+            $this->dbh->exec($replaceSql);
+
+            /* Update twins to empty by twinID and if twins eq ','.*/
+            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+
+            if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
+        }
+        if(!empty($oldStory->twins) and !$this->post->closeSync) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Closed');
         return $changes;
     }
 
@@ -2215,8 +2227,17 @@ class storyModel extends model
                 if($planID == 0 and !empty($oldStory->plan) and isset($branchPlanPairs[0]) and $branchPlanPairs[0] != $planID) $unlinkPlans[$branchPlanPairs[0]] = empty($unlinkPlans[$branchPlanPairs[0]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[0]]},$storyID";
                 if($planID != 0)
                 {
-                    if(!empty($oldStory->plan) and isset($branchPlanPairs[$plan->branch]) and $branchPlanPairs[$plan->branch] != $planID) $unlinkPlans[$branchPlanPairs[$plan->branch]] = empty($unlinkPlans[$branchPlanPairs[$plan->branch]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[$plan->branch]]},$storyID";
-                    if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
+                    if(!empty($oldStory->plan))
+                    {
+                        foreach(explode(',', $plan->branch) as $planBranch)
+                        {
+                            if(isset($branchPlanPairs[$planBranch]) and $branchPlanPairs[$planBranch] != $planID)
+                            {
+                                $unlinkPlans[$branchPlanPairs[$planBranch]] = empty($unlinkPlans[$branchPlanPairs[$planBranch]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[$planBranch]]},$storyID";
+                            }
+                        }
+                    }
+                    foreach(explode(',', $plan->branch) as $planBranch) if(isset($branchPlanPairs[$planBranch])) $branchPlanPairs[$planBranch] = $planID;
                     $story->plan = $oldStory->plan ? implode(',', $branchPlanPairs) : $planID;
                     $story->plan = trim($story->plan, ',');
                     if($story->plan != $oldStory->plan and !empty($planID)) $link2Plans[$planID]  = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";

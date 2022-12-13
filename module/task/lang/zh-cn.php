@@ -212,8 +212,8 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = '已完成';
 $lang->task->reasonList['cancel'] = '已取消';
 
-$lang->task->modeList['linear'] = '串行';
-$lang->task->modeList['multi']  = '并行';
+$lang->task->modeList['linear'] = '多人串行';
+$lang->task->modeList['multi']  = '多人并行';
 
 $lang->task->afterChoices['continueAdding'] = "继续为该{$lang->SRCommon}添加任务";
 $lang->task->afterChoices['toTaskList']     = '返回任务列表';

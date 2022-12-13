@@ -382,3 +382,6 @@ $lang->project->copyProject->nameTips           = '『Project Name』Cannot be r
 $lang->project->copyProject->codeTips           = '『Project Code』Cannot be repeated.';
 $lang->project->copyProject->endTips            = '『Schedule End』Cannot be empty.';
 $lang->project->copyProject->daysTips           = '『Available working days』Should be numerical.';
+
+$lang->project->linkBranchStoryByPlanTips = "When the project is scheduled to associate requirements, only the activated requirements associated with the %s of the project are imported.";
+$lang->project->linkNormalStoryByPlanTips = "When the project plans to associate requirements, only the requirements that are active are imported.";

@@ -106,14 +106,18 @@ $('.twins').mouseout(function() {
     $(this).find('.unlink').addClass('hide');
 });
 
-$('[data-toggle="popover"]').each(function(item) {
-    $index = $(this).attr('data-id');
-    $(this).popover({
-        placement: 'bottom',
-        html: true,
-        content: '<div class="popover-icon"><i class="icon-info"></i></div><div class="content">' + relievedTip + '</div><div class="popover-custom text-right"><a href="javascript:relieve(' + $index + ')" class="text-active btn-info">' + relieved + '</a> <a href="javascript:popoverCancel(' + $index + ');" class="text-cancel">' + cancel + '</a></div>'
-    });
-})
+if(typeof(relievedTip) != 'undefined')
+{
+    $('[data-toggle="popover"]').each(function(item) {
+        $index = $(this).attr('data-id');
+        $(this).popover({
+            placement: 'bottom',
+            html: true,
+            content: '<div class="popover-icon"><i class="icon-info"></i></div><div class="content">' + relievedTip + '</div><div class="popover-custom text-right"><a href="javascript:relieve(' + $index + ')" class="text-active btn-info">' + relieved + '</a> <a href="javascript:popoverCancel(' + $index + ');" class="text-cancel">' + cancel + '</a></div>'
+        });
+    })
+}
+
 
 function relieve(index)
 {
