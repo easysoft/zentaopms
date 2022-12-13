@@ -592,3 +592,11 @@ $lang->block->zentaoapp->notSupportKanban     = '移动端暂不支持研发看�
 $lang->block->zentaoapp->notSupportVersion    = '移动端暂不支持该禅道版本';
 $lang->block->zentaoapp->incompatibleVersion  = '当前禅道版本较低，请升级至最新版本后再试';
 $lang->block->zentaoapp->canNotGetVersion     = '获取禅道版本失败，请确认网址是否正确';
+
+$lang->block->guideTabs['flowchart']      = '流程图';
+$lang->block->guideTabs['systemMode']     = '运行模式';
+$lang->block->guideTabs['visionSwitch']   = '界面切换';
+$lang->block->guideTabs['themeSwitch']    = '主题切换';
+$lang->block->guideTabs['preference']     = '个性化设置';
+$lang->block->guideTabs['downloadClient'] = '客户端下载';
+$lang->block->guideTabs['downloadMoblie'] = '移动端下载';

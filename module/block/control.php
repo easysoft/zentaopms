@@ -424,9 +424,9 @@ class block extends control
         {
             $html = $this->fetch('block', 'dynamic');
         }
-        elseif($block->block == 'flowchart')
+        elseif($block->block == 'guide')
         {
-            $html = $this->fetch('block', 'flowchart');
+            $html = $this->fetch('block', 'guide');
         }
         elseif($block->block == 'assigntome')
         {
@@ -1999,11 +1999,11 @@ class block extends control
     }
 
     /**
-     * Print flow chart block
+     * Print guide block
      * @access public
      * @return void
      */
-    public function flowchart()
+    public function guide()
     {
         $this->display();
     }
