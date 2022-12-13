@@ -108,6 +108,7 @@ zentaoxx:
 	sed -i "s/\$$super = \$$this->dao->select('admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('admin');/\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\n\$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$adminArray = explode(',', \$$admins);\n\$$super = in_array(\$$account, \$$adminArray) ? 'super' : '';/g" zentaoxx/extension/xuan/im/control.php
 	sed -i "/foreach(\$$users as \$$user)/i \$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\$$adminArray = explode(',', \$$admins);" zentaoxx/extension/xuan/im/model/user.php
 	sed -i "/if(\!isset(\$$user->signed)) \$$user->signed  = 0;/a \$$user->admin = in_array(\$$user->account, \$$adminArray) ? 'super' : '';" zentaoxx/extension/xuan/im/model/user.php
+	sed -i "/updateUser->ping/d" zentaoxx/extension/xuan/im/model/user.php
 	sed -i "s/\$$user = \$$this->user->login(\$$account, \$$user->password);/\$$user = \$$this->user->login(\$$user);\n\$$url .= \$$this->config->requestType == 'GET' ? '\&' : '?';\n\$$url .= \"{\$$this->config->sessionVar}={\$$this->app->sessionID}\";\n/" zentaoxx/extension/xuan/im/control.php
 	sed -i "s/\$$file->fullURL/\$$file->webPath/" zentaoxx/extension/xuan/im/control.php
 	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/_0_xuanxuan.php
