@@ -62,7 +62,7 @@
                 ?>
                 <?php $vars = "releaseID={$release->id}&type=story&link=$link&param=$param&orderBy=%s";?>
                 <thead>
-                  <tr>
+                  <tr class='text-center'>
                     <th class='c-id text-left'>
                       <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
                       <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -71,17 +71,17 @@
                       <?php endif;?>
                       <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                     </th>
+                    <th class="text-left"><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
                     <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-                    <th class="text-left"><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
-                    <th class='c-build w-200px text-left'><?php echo $lang->build->linkedBuild;?></th>
-                    <th class='c-user'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-                    <th class='w-80px text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
-                    <th class='w-90px text-center'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-                    <th class='w-100px'><?php common::printOrderLink('stage',  $orderBy, $vars, $lang->story->stageAB);?></th>
+                    <th class='c-status'>   <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+                    <th class='c-build'>    <?php echo $lang->build->linkedBuild;?></th>
+                    <th class='c-user'>     <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+                    <th class='c-estimate'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+                    <th class='c-stage'>    <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
                     <th class='c-actions-1'><?php echo $lang->actions?></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody class='text-center'>
                   <?php foreach($stories as $storyID => $story):?>
                   <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
                   <tr>
@@ -94,20 +94,20 @@
                       <?php endif;?>
                       <?php echo sprintf('%03d', $story->id);?>
                     </td>
-                    <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                     <td class='text-left nobr' title='<?php echo $story->title?>'>
                       <?php
                       if($story->parent > 0) echo "<span class='label label-badge label-light' title='{$lang->story->childrenAB}'>{$lang->story->childrenAB}</span>";
                       echo html::a($storyLink,$story->title, '', "class='preview'");
                       ?>
                     </td>
-                    <td class='c-build text-left' title='<?php echo $story->buildName?>'><?php echo $story->buildName?></td>
-                    <td><?php echo zget($users, $story->openedBy);?></td>
-                    <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-                    <td class='text-center'>
+                    <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+                    <td class='c-status'>
                       <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
                     </td>
-                    <td><?php echo $lang->story->stageList[$story->stage];?></td>
+                    <td class='c-build' title='<?php echo $story->buildName?>'><?php echo $story->buildName?></td>
+                    <td><?php echo zget($users, $story->openedBy);?></td>
+                    <td class='c-estimate' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
+                    <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
                     <td class='c-actions'>
                       <?php
                       if(common::hasPriv('release', 'unlinkStory') and $canBeChanged)
@@ -169,14 +169,14 @@
                       <?php endif;?>
                       <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                     </th>
-                    <th class='text-left'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
-                    <th class='w-100px'>  <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
-                    <th class='c-build w-200px text-left'><?php echo $lang->bug->resolvedBuild;?></th>
+                    <th class='text-left'><?php common::printOrderLink('title',  $orderBy, $vars, $lang->bug->title);?></th>
+                    <th class='w-100px'>  <?php common::printOrderLink('status', $orderBy, $vars, $lang->bug->status);?></th>
+                    <th class='c-build'>  <?php echo $lang->bug->resolvedBuild;?></th>
                     <th class='c-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-                    <th class='w-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-                    <th class='c-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
-                    <th class='w-100px'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
-                    <th class='w-50px'>   <?php echo $lang->actions;?></th>
+                    <th class='c-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                    <th class='c-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
+                    <th class='c-date'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
+                    <th class='w-60px'>   <?php echo $lang->actions;?></th>
                   </tr>
                 </thead>
                 <tbody class='text-center'>
@@ -261,13 +261,13 @@
                       <?php endif;?>
                       <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                     </th>
+                    <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
                     <th class='w-80px' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-                    <th class='text-left'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
-                    <th class='w-100px'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
-                    <th class='c-build w-200px text-left'><?php echo $lang->bug->openedBuild;?></th>
-                    <th class='c-user'>    <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                    <th class='w-150px'>   <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-                    <th class='w-50px'>    <?php echo $lang->actions;?></th>
+                    <th class='w-100px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->bug->status);?></th>
+                    <th class='c-build'><?php echo $lang->bug->openedBuild;?></th>
+                    <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                    <th class='w-160px'><?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                    <th class='w-60px'> <?php echo $lang->actions;?></th>
                   </tr>
                 </thead>
                 <?php
@@ -294,6 +294,7 @@
                       <?php endif;?>
                       <?php echo sprintf('%03d', $bug->id);?>
                     </td>
+                    <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                     <td class='c-severity'>
                       <?php if($hasCustomSeverity):?>
                       <span class='<?php echo 'label-severity-custom';?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo $bug->severity;?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span>
@@ -301,7 +302,6 @@
                       <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
                       <?php endif;?>
                     </td>
-                    <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                     <td><span class='status-<?php echo $bug->status?>'> <?php echo $this->processStatus('bug', $bug);?></span></td>
                     <?php
                     $openedBuildName = '';
