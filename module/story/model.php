@@ -4607,12 +4607,15 @@ class storyModel extends model
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $this->lang->story->subdivide;
-                    $title   = ($isClick or $story->status == 'closed') ? $title : $this->lang->story->subDivideTip['twinsSplit'];
                     if(!$isClick and $story->status != 'closed')
                     {
                         if($story->parent > 0)
                         {
                             $title = $this->lang->story->subDivideTip['subStory'];
+                        }
+                        elseif(!empty($story->twins))
+                        {
+                            $title = $this->lang->story->subDivideTip['twinsSplit'];
                         }
                         else
                         {
