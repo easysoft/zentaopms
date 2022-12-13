@@ -472,12 +472,12 @@ $lang->story->reviewTip['reviewed']    = '您已评审';
 
 $lang->story->recallTip = array();
 $lang->story->recallTip['actived']    = '该需求未发起评审流程，无需撤销操作';
-$lang->story->recallTip['twinsSplit'] = '孪生需求不可细分';
 
 $lang->story->subDivideTip = array();
-$lang->story->subDivideTip['subStory']  = '子需求无法细分';
-$lang->story->subDivideTip['notWait']   = '该需求%s，无法进行细分操作';
-$lang->story->subDivideTip['notActive'] = '需求不是激活状态，无法进行细分操作';
+$lang->story->subDivideTip['subStory']   = '子需求无法细分';
+$lang->story->subDivideTip['notWait']    = '该需求%s，无法进行细分操作';
+$lang->story->subDivideTip['notActive']  = '需求不是激活状态，无法进行细分操作';
+$lang->story->subDivideTip['twinsSplit'] = '孪生需求不可细分';
 
 $lang->story->featureBar['browse']['all']       = '全部';
 $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
