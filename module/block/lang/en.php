@@ -47,6 +47,7 @@ $lang->block->welcome      = 'Welcome';
 $lang->block->lblTesttask  = 'Test Request Detail';
 $lang->block->contribute   = 'Personal Contribution';
 $lang->block->finish       = 'Finish';
+$lang->block->guide        = 'Guide';
 
 $lang->block->leftToday           = 'Remained Work';
 $lang->block->myTask              = 'Tasks';
@@ -112,6 +113,7 @@ $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
 $lang->block->titleList['flowchart']      = 'Flow Chart';
+$lang->block->titleList['guide']          = 'Guides';
 $lang->block->titleList['statistic']      = 'Statistic';
 $lang->block->titleList['recentproject']  = 'Recent Project';
 $lang->block->titleList['assigntome']     = 'Assign to me';
@@ -273,8 +275,8 @@ $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
 $lang->block->default['full']['my']['2']['source'] = '';
 
-$lang->block->default['full']['my']['3']['title']  = 'Flow Chart';
-$lang->block->default['full']['my']['3']['block']  = 'flowchart';
+$lang->block->default['full']['my']['3']['title']  = 'Guides';
+$lang->block->default['full']['my']['3']['block']  = 'guide';
 $lang->block->default['full']['my']['3']['source'] = '';
 $lang->block->default['full']['my']['3']['grid']   = 8;
 

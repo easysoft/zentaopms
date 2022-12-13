@@ -47,6 +47,7 @@ $lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
 $lang->block->contribute   = '我的贡献';
 $lang->block->finish       = '已完成';
+$lang->block->guide        = '使用帮助';
 
 $lang->block->leftToday           = '今天剩余工作总计';
 $lang->block->myTask              = '我的任务';
@@ -112,6 +113,7 @@ $lang->block->budget          = '预算';
 $lang->block->left            = '剩余';
 
 $lang->block->titleList['flowchart']      = '流程图';
+$lang->block->titleList['guide']          = '使用帮助';
 $lang->block->titleList['statistic']      = '项目统计';
 $lang->block->titleList['recentproject']  = '我近期参与的项目';
 $lang->block->titleList['assigntome']     = '待处理';
@@ -273,8 +275,8 @@ $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
 $lang->block->default['full']['my']['2']['source'] = '';
 
-$lang->block->default['full']['my']['3']['title']  = '流程图';
-$lang->block->default['full']['my']['3']['block']  = 'flowchart';
+$lang->block->default['full']['my']['3']['title']  = '使用帮助';
+$lang->block->default['full']['my']['3']['block']  = 'guide';
 $lang->block->default['full']['my']['3']['source'] = '';
 $lang->block->default['full']['my']['3']['grid']   = 8;
 

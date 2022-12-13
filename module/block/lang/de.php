@@ -47,6 +47,7 @@ $lang->block->welcome      = 'Willkommen';
 $lang->block->lblTesttask  = 'Test Request Detail';
 $lang->block->contribute   = 'Personal Contribution';
 $lang->block->finish       = 'Finish';
+$lang->block->guide        = 'Guide';
 
 $lang->block->leftToday           = 'Arbeit für Heute';
 $lang->block->myTask              = 'Aufgaben';
@@ -112,6 +113,7 @@ $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
 $lang->block->titleList['flowchart']      = 'Flow Chart';
+$lang->block->titleList['guide']          = 'Guides';
 $lang->block->titleList['statistic']      = 'Statistic';
 $lang->block->titleList['recentproject']  = 'Recent Project';
 $lang->block->titleList['assigntome']     = 'Assign to me';
@@ -239,8 +241,8 @@ $lang->block->default['qa']['1']['params']['count'] = '20';
 //$lang->block->default['qa']['2']['block'] = 'overview';
 //$lang->block->default['qa']['2']['grid']  = 4;
 
-$lang->block->default['qa']['2']['title'] = 'Testcase Overview';
-$lang->block->default['qa']['2']['block'] = 'overview';
+$lang->block->default['qa']['2']['title'] = 'My Bugs';
+$lang->block->default['qa']['2']['block'] = 'bug';
 $lang->block->default['qa']['2']['grid']  = 4;
 
 $lang->block->default['qa']['2']['params']['count']   = 15;
@@ -273,36 +275,36 @@ $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
 $lang->block->default['full']['my']['2']['source'] = '';
 
-$lang->block->default['full']['my']['3']['title']  = 'My Todos';
-$lang->block->default['full']['my']['3']['block']  = 'list';
-$lang->block->default['full']['my']['3']['source'] = 'todo';
-$lang->block->default['full']['my']['3']['grid']   = 4;
+$lang->block->default['full']['my']['3']['title']  = 'Guides';
+$lang->block->default['full']['my']['3']['block']  = 'guide';
+$lang->block->default['full']['my']['3']['source'] = '';
+$lang->block->default['full']['my']['3']['grid']   = 8;
 
-$lang->block->default['full']['my']['4']['title']           = 'Project Statistic';
-$lang->block->default['full']['my']['4']['block']           = 'statistic';
-$lang->block->default['full']['my']['4']['grid']            = 8;
-$lang->block->default['full']['my']['4']['source']          = 'project';
+$lang->block->default['full']['my']['4']['title']           = 'My Todos';
+$lang->block->default['full']['my']['4']['block']           = 'list';
+$lang->block->default['full']['my']['4']['grid']            = 4;
+$lang->block->default['full']['my']['4']['source']          = 'todo';
 $lang->block->default['full']['my']['4']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['5']['title']           = 'Personal Contribution';
-$lang->block->default['full']['my']['5']['block']           = 'contribute';
-$lang->block->default['full']['my']['5']['source']          = '';
-$lang->block->default['full']['my']['5']['grid']            = 4;
+$lang->block->default['full']['my']['5']['title']           = 'Project Statistic';
+$lang->block->default['full']['my']['5']['block']           = 'statistic';
+$lang->block->default['full']['my']['5']['source']          = 'project';
+$lang->block->default['full']['my']['5']['grid']            = 8;
 $lang->block->default['full']['my']['5']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['6']['title']  = 'Recent Project';
-$lang->block->default['full']['my']['6']['block']  = 'recentproject';
-$lang->block->default['full']['my']['6']['source'] = 'project';
-$lang->block->default['full']['my']['6']['grid']   = 8;
+$lang->block->default['full']['my']['6']['title']  = 'Personal Contribution';
+$lang->block->default['full']['my']['6']['block']  = 'contribute';
+$lang->block->default['full']['my']['6']['source'] = '';
+$lang->block->default['full']['my']['6']['grid']   = 4;
 
-$lang->block->default['full']['my']['7']['title']  = 'Todo';
-$lang->block->default['full']['my']['7']['block']  = 'assigntome';
-$lang->block->default['full']['my']['7']['source'] = '';
+$lang->block->default['full']['my']['7']['title']  = 'Recent Project';
+$lang->block->default['full']['my']['7']['block']  = 'recentproject';
+$lang->block->default['full']['my']['7']['source'] = 'project';
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
-$lang->block->default['full']['my']['8']['title']  = 'Human Input';
-$lang->block->default['full']['my']['8']['block']  = 'projectteam';
-$lang->block->default['full']['my']['8']['source'] = 'project';
+$lang->block->default['full']['my']['8']['title']  = 'Todo';
+$lang->block->default['full']['my']['8']['block']  = 'assigntome';
+$lang->block->default['full']['my']['8']['source'] = '';
 $lang->block->default['full']['my']['8']['grid']   = 8;
 
 $lang->block->default['full']['my']['8']['params']['todoCount']     = '20';
