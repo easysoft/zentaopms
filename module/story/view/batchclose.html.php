@@ -34,7 +34,12 @@
       <?php foreach($stories as $storyID => $story):?>
       <tr class='text-center'>
         <td><?php echo $storyID . html::hidden("storyIdList[$storyID]", $storyID);?></td>
-        <td class='text-left'><?php echo $story->title;?></td>
+        <td title='<?php echo $story->title;?>' class='text-left'>
+          <?php echo $story->title;?>
+          <?php if(!empty($story->twins)):?>
+          <span class='label label-outline label-badge'><?php echo "{$lang->story->twins}:"?> <span class='text-blue'><?php echo $twinsCount?></span></span>
+          <?php endif;?>
+        </td>
         <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
         <td class='reasons-td'>
           <?php if($story->status == 'draft') unset($reasonList['cancel']);?>
