@@ -84,7 +84,7 @@
         <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->productplan->status);?></th>
         <?php endif;?>
         <?php if($this->session->currentProductType != 'normal'):?>
-        <th class='c-branch'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->productplan->branch);?></th>
+        <th class='c-branch'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branchName[$product->type]);?></th>
         <?php endif;?>
         <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
         <th class='c-date'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
