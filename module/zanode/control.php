@@ -366,6 +366,21 @@ class zanode extends control
     }
 
     /**
+     * Install service by ajax.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function ajaxInstallService($nodeID, $service)
+    {
+        $node   = $this->zanode->getNodeById($nodeID);
+        $result = $this->zanode->installService($node, $service);
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
+    }
+
+    /**
      * ajaxRunZTFScript
      *
      * @param  int    $scriptID

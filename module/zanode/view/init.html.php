@@ -26,7 +26,7 @@
         <div>
           <span class='dot-symbol'></span>
           <span class='zahost-init-desc'>
-            <?php echo sprintf($lang->zanode->init->initDesc, $node->secret . ' -z ' . getWebRoot(true)); ?>
+            <?php echo sprintf($lang->zanode->init->initDesc, getWebRoot(true)); ?>
           </span>
         </div>
         <div id="statusContainer">

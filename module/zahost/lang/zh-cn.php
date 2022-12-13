@@ -61,7 +61,7 @@ $lang->zahost->init->serviceStatus = [
 ];
 $lang->zahost->init->title          = "初始化宿主机";
 $lang->zahost->init->descTitle      = "请根据引导完成宿主机上的初始化: ";
-$lang->zahost->init->initDesc       = "- 在宿主机上执行命令：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k %s<br>- 点击检测服务状态。";
+$lang->zahost->init->initDesc       = "- 在宿主机上执行命令：curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -k%s -z%s  <br>- 点击检测服务状态。";
 $lang->zahost->init->statusTitle    = "服务状态";
 
 $lang->zahost->image = new stdclass;
@@ -115,6 +115,7 @@ $lang->zahost->cancelDelete            = '是否取消该下载任务？';
 
 $lang->zahost->notice = new stdclass();
 $lang->zahost->notice->ip              = '『%s』格式不正确！';
+
 $lang->zahost->notice->registerCommand = '宿主机注册命令：./zagent-host -t host -s http://%s:%s -i %s -p 8086 -secret %s';
 $lang->zahost->notice->loading         = '加载中...';
 $lang->zahost->notice->noImage         = '无可用的镜像文件';

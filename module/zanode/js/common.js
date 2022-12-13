@@ -25,10 +25,12 @@ $(function()
             data = JSON.parse(data);
             console.log(data);
             $('#osName').val(data.osName);
-            if(data.memory != 0){
+            if(data.memory != 0)
+            {
                 $('#memory').val(data.memory);
             }
-            if(data.memory != 0){
+            if(data.memory != 0)
+            {
                 $('#diskSize').val(data.disk);
             }
         });

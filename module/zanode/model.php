@@ -654,7 +654,7 @@ class zanodemodel extends model
         if(empty($result->data) || $result->code != 'success')
         {
             $result = new stdclass;
-            $result->data = $this->lang->zanode->init->serviceStatus;
+            return $this->lang->zanode->init->serviceStatus;
         }
 
         return array(

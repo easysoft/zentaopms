@@ -44,6 +44,7 @@ $lang->zanode->deleted         = "已删除";
 $lang->zanode->scriptPath      = "脚本目录";
 $lang->zanode->shell           = "shell命令";
 $lang->zanode->automation      = "自动化测试";
+$lang->zanode->install         = "安装";
 
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
@@ -101,4 +102,4 @@ $lang->zanode->init->serviceStatus = [
 ];
 $lang->zanode->init->title          = "初始化执行节点";
 $lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
-$lang->zanode->init->initDesc       = "- 在执行节点上执行命令：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s zvm -k %s<br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "服务状态";
+$lang->zanode->init->initDesc       = "- 在执行节点上执行命令：curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -szvm -z%s  <br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "服务状态";
