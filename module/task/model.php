@@ -1094,6 +1094,7 @@ class taskModel extends model
             ->setIF(strpos($this->config->task->edit->requiredFields, 'story') !== false,    'story',    $this->post->story)
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
 
+            ->setIF($this->post->mode   == 'single', 'mode', '')
             ->setIF($this->post->status == 'done', 'left', 0)
             ->setIF($this->post->status == 'done'   and !$this->post->finishedBy,   'finishedBy',   $this->app->user->account)
             ->setIF($this->post->status == 'done'   and !$this->post->finishedDate, 'finishedDate', $now)
@@ -1191,6 +1192,11 @@ class taskModel extends model
             {
                 $design = $this->loadModel('design')->getByID($task->design);
                 $this->dao->update(TABLE_TASK)->set('designVersion')->eq($design->version)->where('id')->eq($taskID)->exec();
+            }
+
+            if($_POST['mode'] == 'single')
+            {
+                $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
             }
 
             /* Record task version. */

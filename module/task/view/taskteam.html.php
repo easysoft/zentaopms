@@ -87,7 +87,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     <i class="icon icon-angle-down <?php echo $hiddenArrow;?>"></i>
   </td>
   <td class='w-240px'>
-    <?php echo html::select("team[]", $members, '', "class='form-control chosen' data-placeholder='{$lang->task->assignedTo}'")?>
+    <?php echo html::select("team[]", $members, isset($task->assignedTo) ? $task->assignedTo : '', "class='form-control chosen' data-placeholder='{$lang->task->assignedTo}'")?>
     <?php echo html::hidden("teamSource[]", '');?>
   </td>
   <td class='hourBox'>
@@ -341,7 +341,7 @@ $(document).ready(function()
                 $(this).find('option:disabled').removeAttr('disabled').trigger("chosen:updated");
             })
         }
-        if($('#teamMember').val() != '') $taskTeamEditor.find('tfoot .btn').click();
+        if($('#teamMember').val() != '' && page != 'edit') $taskTeamEditor.find('tfoot .btn').click();
     })
 });
 

@@ -7,6 +7,25 @@ $(function()
     {
         $('#consumedSpan').parent().find('button').attr('disabled','disabled')
     }
+
+    $('#mode').change(function()
+    {
+        var mode = $(this).val();
+        if(mode != 'single')
+        {
+            $('#assignedTo').attr('disabled', 'disabled').trigger('chosen:updated')
+            $('.team-group').removeClass('hidden');
+            $('#estimate').attr('disabled', 'disabled')
+            $('#left').attr('disabled', 'disabled')
+        }
+        else
+        {
+            $('#assignedTo').removeAttr('disabled').trigger('chosen:updated')
+            $('.team-group').addClass('hidden');
+            $('#estimate').attr('disabled', false)
+            $('#left').attr('disabled', false)
+        }
+    })
 })
 
 /**
@@ -118,7 +137,7 @@ $('#confirmButton').click(function()
         var $left = $tr.find('[name^=teamLeft]');
         var left  = parseFloat($left.val());
         if(!isNaN(left)) totalLeft += left;
-        if(!$left.prop('readonly') && (isNaN(left) || left <= 0))
+        if(!$left.prop('readonly') && (isNaN(left) || left <= 0) && team.length > 0)
         {
               bootbox.alert(account + ' ' + leftNotEmpty);
               error = true;
@@ -165,12 +184,11 @@ $('#confirmButton').click(function()
 function updateAssignedTo()
 {
     var html       = '';
-    var multiple   = $('#multiple').prop('checked');
+    var mode       = $('#mode').val();
     var assignedTo = $('#assignedTo').val();
-    if(multiple)
+    if(mode != 'single')
     {
         var isTeamMember = false;
-        var mode         = $('#mode').val();
         $('select[name^=team]').each(function()
         {
             if($(this).find('option:selected').text() == '') return;
@@ -202,6 +220,6 @@ function updateAssignedTo()
     }
 
     $('#assignedTo').html(html);
-    if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1) $('[name=assignedTo]').val($('#modalTeam tr.member-wait:first').find('select[name^=team]:first').val());
+    if(mode != 'single' && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1) $('[name=assignedTo]').val($('#modalTeam tr.member-wait:first').find('select[name^=team]:first').val());
     $('#assignedTo').trigger('chosen:updated');
 }

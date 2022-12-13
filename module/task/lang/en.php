@@ -215,6 +215,10 @@ $lang->task->reasonList['cancel'] = 'Cancelled';
 $lang->task->modeList['linear'] = 'Multiple Person Serial';
 $lang->task->modeList['multi']  = 'Multiple Person Parallel';
 
+$lang->task->editModeList['single'] = 'Single';
+$lang->task->editModeList['linear'] = 'Serial';
+$lang->task->editModeList['multi']  = 'Parallel';
+
 $lang->task->afterChoices['continueAdding'] = ' Continue Adding Tasks';
 $lang->task->afterChoices['toTaskList']     = 'Go to Task List';
 $lang->task->afterChoices['toStoryList']    = 'Go to Story List';
