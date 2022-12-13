@@ -8,7 +8,6 @@
 <?php if($app->rawMethod != 'create'):?>
 <style>
 #modalTeam .modal-dialog {width: 855px;}
-#taskTeamEditor .hourBox {padding-bottom: 1px;}
 </style>
 <?php endif;?>
 <?php if($app->rawMethod == 'assignto'):?>
@@ -87,7 +86,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     <i class="icon icon-angle-down <?php echo $hiddenArrow;?>"></i>
   </td>
   <td class='w-240px'>
-    <?php echo html::select("team[]", $members, isset($task->assignedTo) ? $task->assignedTo : '', "class='form-control chosen' data-placeholder='{$lang->task->assignedTo}'")?>
+    <?php echo html::select("team[]", $members, '', "class='form-control chosen' data-placeholder='{$lang->task->assignedTo}'")?>
     <?php echo html::hidden("teamSource[]", '');?>
   </td>
   <td class='hourBox'>

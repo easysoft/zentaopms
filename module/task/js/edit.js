@@ -13,7 +13,15 @@ $(function()
         var mode = $(this).val();
         if(mode != 'single')
         {
-            $('#assignedTo').attr('disabled', 'disabled').trigger('chosen:updated')
+            if(mode != 'multi')
+            {
+                $('#assignedTo').attr('disabled', 'disabled').trigger('chosen:updated')
+            }
+            else
+            {
+                $('#assignedTo').removeAttr('disabled').trigger('chosen:updated')
+            }
+
             $('.team-group').removeClass('hidden');
             $('#estimate').attr('disabled', 'disabled')
             $('#left').attr('disabled', 'disabled')
