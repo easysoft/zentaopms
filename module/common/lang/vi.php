@@ -219,7 +219,7 @@ $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subMod
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
 
-$lang->devops->compile  = 'Compile';
+$lang->devops->compile  = 'Pipelines';
 $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
