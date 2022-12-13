@@ -4607,6 +4607,7 @@ class storyModel extends model
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $this->lang->story->subdivide;
+                    $title   = $isClick ? $title : $this->lang->story->recallTip['twinsSplit'];
                     if(!$isClick and $story->status != 'closed')
                     {
                         if($story->parent > 0)

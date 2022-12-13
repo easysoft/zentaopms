@@ -471,7 +471,8 @@ $lang->story->reviewTip['notReviewer'] = 'You are not the reviewer of this Story
 $lang->story->reviewTip['reviewed']    = 'Reviewed';
 
 $lang->story->recallTip = array();
-$lang->story->recallTip['actived'] = 'The Story has not initiated a review process and no undo action is required.';
+$lang->story->recallTip['actived']    = 'The Story has not initiated a review process and no undo action is required.';
+$lang->story->recallTip['twinsSplit'] = 'The Twins Story cannot be subdivided.';
 
 $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['subStory']  = 'The Sub-stories cannot be subdivided.';

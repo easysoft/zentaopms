@@ -471,7 +471,8 @@ $lang->story->reviewTip['notReviewer'] = '您不是该需求的评审人员，�
 $lang->story->reviewTip['reviewed']    = '您已评审';
 
 $lang->story->recallTip = array();
-$lang->story->recallTip['actived'] = '该需求未发起评审流程，无需撤销操作';
+$lang->story->recallTip['actived']    = '该需求未发起评审流程，无需撤销操作';
+$lang->story->recallTip['twinsSplit'] = '孪生需求不可细分';
 
 $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['subStory']  = '子需求无法细分';
