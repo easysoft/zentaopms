@@ -52,6 +52,11 @@
               <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
             </div>
             <?php echo html::input('title', $story->title, 'class="form-control story-title"');?>
+            <?php if(!empty($story->twins)):?>
+            <div class="input-group-addon">
+              <?php echo html::checkbox('relievedTwins', $lang->story->relievedTwinsRelation, '', "id='relievedTwins' title='{$lang->story->changeRelievedTwinsTips}'");?>
+            </div>
+            <?php endif;?>
           </td>
         </tr>
         <tr>
