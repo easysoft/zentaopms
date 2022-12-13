@@ -87,7 +87,7 @@
           ?>
         </td>
         <?php endif;?>
-        <td>
+        <td title='<?php echo $build ? $build->name : ''?>'>
           <?php if($buildCount):?>
           <?php if($product->type != 'normal'):?>
           <span class='label label-outline label-badge'><?php echo $build->branchName;?></span>
