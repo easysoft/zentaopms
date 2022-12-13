@@ -36,11 +36,30 @@ class ztfSubmitEntry extends baseEntry
 
         $post = file_get_contents('php://input');
         $post = json_decode($post);
-        $resultID = $post->taskId;
 
         $this->loadModel('testresult');
 
-        if($resultID) $this->dao->update(TABLE_TESTRESULT)->set('ZTFResult')->eq(json_encode($post))->where('id')->eq($resultID)->exec();
+        if($post->task) 
+        {
+            $this->app->user = new stdClass;
+            $this->app->user->account = '';
+            $result = $this->loadModel('testtask')->parseZTFFuncResult($post->data, "", 0, 0, 0);
+
+            unset($post->data);
+            if(!empty($result['results'][0]))
+            {
+                $this->dao->update(TABLE_TESTRESULT)
+                    ->set('caseResult')->eq($result['results'][0][0]->caseResult)
+                    ->set('stepResults')->eq($result['results'][0][0]->stepResults)
+                    ->set('ZTFResult')->eq(json_encode($post))
+                    ->where('id')->eq($post->task)
+                    ->exec();
+            }
+            else
+            {
+                $this->dao->update(TABLE_TESTRESULT)->set('ZTFResult')->eq(json_encode($post))->where('id')->eq($post->task)->exec();
+            }
+        }
 
         return $this->sendSuccess(200, 'success');
     }
