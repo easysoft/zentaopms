@@ -66,13 +66,14 @@ $lang->build->notice->changeBuilds    = "The version of the submitted test order
 $lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the project version";
 $lang->build->notice->createTest      = "The execution of this version has been deleted, and the test cannot be submitted";
 
-$lang->build->finishStories = "  Finished {$lang->SRCommon} %s";
-$lang->build->resolvedBugs  = '  Resolved Bug %s';
-$lang->build->createdBugs   = '  Reported Bug %s';
-
 $lang->build->confirmChangeBuild = "After branch『%s』disassociation,under the %s have %s {$lang->SRCommon} and %s Bug will remove synchronization from version, whether to cancel？";
 $lang->build->confirmRemoveStory = "After branch『%s』disassociation,under the %s have %s {$lang->SRCommon} will remove synchronization from version, whether to cancel？";
 $lang->build->confirmRemoveBug   = "After branch『%s』disassociation,under the %s have %s Bug will remove synchronization from version, whether to cancel？";
+$lang->build->confirmRemoveTips  = "Are you sure to delete %s『%s』?";
+
+$lang->build->finishStories = "  Finished {$lang->SRCommon} %s";
+$lang->build->resolvedBugs  = '  Resolved Bug %s';
+$lang->build->createdBugs   = '  Reported Bug %s';
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath        = ' Source code repository, e.g. Subversion/Git Library path';
