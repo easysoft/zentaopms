@@ -3053,6 +3053,6 @@ class story extends control
         $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($twinID)->orWhere('twins')->eq(',')->exec();
 
         if(!dao::isError()) $this->loadModel('action')->create('story', $twinID, 'relieved');
-        return $this->send(array('result' => 'success', 'silbingsCount' => count($twins)-1));
+        return $this->send(array('result' => 'success', 'silbingsCount' => count($twins)));
     }
 }
