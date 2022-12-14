@@ -249,7 +249,7 @@ class product extends control
         $showBranch = $this->loadModel('branch')->showBranch($productID);
 
         /* Get stories. */
-        if($isProjectStory)
+        if($isProjectStory and $storyType == 'story')
         {
             $showBranch = $this->loadModel('branch')->showBranch($productID, 0, $projectID);
 

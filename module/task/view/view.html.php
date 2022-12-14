@@ -339,9 +339,9 @@
               <thead>
               <tr>
                 <th><?php echo $lang->task->team?></th>
-                <th class='text-center c-hours'><?php echo $lang->task->estimate?></th>
-                <th class='text-center c-hours'><?php echo $lang->task->consumed?></th>
-                <th class='text-center c-hours'><?php echo $lang->task->left?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->estimateAB?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->consumedAB?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->leftAB?></th>
                 <th class='text-center'><?php echo $lang->statusAB;?></th>
               </tr>
               </thead>

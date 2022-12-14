@@ -371,10 +371,10 @@ class deptModel extends model
     /**
      * Get users of a deparment.
      *
-     * @param  varchar $browseType inside|outside|all
+     * @param  string  $browseType inside|outside|all
      * @param  int     $deptID
      * @param  object  $pager
-     * @param  varchar $orderBy
+     * @param  string  $orderBy
      * @access public
      * @return array
      */

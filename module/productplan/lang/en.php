@@ -139,6 +139,7 @@ $lang->productplan->endLetterChildTip    = "The completion date of the parent pl
 $lang->productplan->beginLetterParentTip = "The start date of the child plan[%s]: %s, cannot be less than the start date of the parent plan: %s.";
 $lang->productplan->endGreaterParentTip  = "The completion date of the child plan[%s]: %s, cannot be greater than the completion date of the parent plan: %s.";
 $lang->productplan->diffBranchesTip      = "The @branch@『%s』of parent plan is not linked with the child plan. @branch@'s stories and bugs whill be removed from the plan. Do you want to save?";
+$lang->productplan->deleteBranchTip      = "@branch@『%s』are linked with sub plans and cannot be modified.";
 
 $lang->productplan->featureBar['browse']['all']    = 'All';
 $lang->productplan->featureBar['browse']['undone'] = 'Undone';

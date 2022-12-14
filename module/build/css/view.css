@@ -7,3 +7,19 @@
 .body-modal #mainContent {min-height: 200px;}
 td.article-content{overflow:auto !important;}
 td.c-build{white-space: nowrap; overflow:hidden;}
+
+#stories th, #stories td{padding-left:16px;}
+#stories .c-estimate{width:90px; text-align:right}
+#stories .c-status{width:120px}
+#stories .c-stage{width:130px; text-align:left;}
+#bugs .c-status{width:100px;}
+#bugs .c-build{width:160px; text-align:left}
+#bugs .c-user{width:120px;}
+#bugs .c-date{width:130px;}
+#bugs .c-actions-1{width:60px;}
+#generatedBugs .c-id {width:60px;}
+#generatedBugs .c-severity {width:70px;}
+#generatedBugs .c-status {width:100px;}
+#generatedBugs .c-build {width:160px; text-align:left}
+#generatedBugs .c-user {width:100px;}
+#generatedBugs .c-date {width:120px;}

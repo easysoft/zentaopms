@@ -34,3 +34,4 @@ th.c-pri{width:50px;}
 .table td.c-estimate {padding-right: 12px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 .table-footer {z-index: 1;}
+#linkStoryByPlan .modal-header {padding: 20px 0 10px 0; border-bottom: 0px}
