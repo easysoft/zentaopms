@@ -27,6 +27,7 @@ $lang->testtask->batchUnlinkCases = "Mehrere Verknüpfungen aufheben";
 $lang->testtask->batchAssign      = "Mehrere zuordnen";
 $lang->testtask->runCase          = "Ausführen";
 $lang->testtask->running          = "Running";
+$lang->testtask->runningLog       = "Execution Log";
 $lang->testtask->runNode          = ",Execute on node %s";
 $lang->testtask->batchRun         = "Mehrere ausführen";
 $lang->testtask->results          = "Ergebnisse";

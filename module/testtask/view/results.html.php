@@ -140,7 +140,7 @@
                   <tr>
                     <td colspan="6">
                       <p></p>
-                      <p>执行日志</p>
+                      <p><?php echo $lang->testtask->runningLog;?></p>
                       <p><?php echo $result->ZTFResult;?></p>
                     </td>
                   </tr>

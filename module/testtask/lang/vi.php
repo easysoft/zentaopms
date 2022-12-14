@@ -28,6 +28,7 @@ $lang->testtask->batchUnlinkCases = "Hủy liên kết tình huống hàng loạ
 $lang->testtask->batchAssign      = "Bàn giao hàng loạt";
 $lang->testtask->runCase          = "Chạy";
 $lang->testtask->running          = "Running";
+$lang->testtask->runningLog       = "Execution Log";
 $lang->testtask->runNode          = ",Execute on node %s";
 $lang->testtask->batchRun         = "Chạy hàng loạt";
 $lang->testtask->results          = "Kết quả";

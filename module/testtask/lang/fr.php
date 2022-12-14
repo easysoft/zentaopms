@@ -27,6 +27,7 @@ $lang->testtask->batchUnlinkCases = "Exclure CasTests par Lot";
 $lang->testtask->batchAssign      = "Affecter par Lot";
 $lang->testtask->runCase          = "Jouer";
 $lang->testtask->running          = "Running";
+$lang->testtask->runningLog       = "Execution Log";
 $lang->testtask->runNode          = ",Execute on node %s";
 $lang->testtask->batchRun         = "Jouer par Lot";
 $lang->testtask->results          = "Résultats";
