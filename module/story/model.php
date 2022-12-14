@@ -2199,12 +2199,17 @@ class storyModel extends model
         $oldStoryStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
         $unlinkPlans    = array();
         $link2Plans     = array();
+        if(empty($plan))
+        {
+            $plan = new stdClass();
+            $plan->branch = BRANCH_MAIN;
+        }
 
         /* Cycle every story and process it's plan and stage. */
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
-            if($oldStory->branch != BRANCH_MAIN and $oldStory->branch != $plan->branch and $plan->branch != BRANCH_MAIN) continue;
+            if($oldStory->branch != BRANCH_MAIN and !in_array($oldStory->branch, explode(',', $plan->branch)) and $plan->branch != BRANCH_MAIN) continue;
 
             /* Ignore parent story, closed story and story linked to this plan already. */
             if($oldStory->parent < 0) continue;
@@ -2234,6 +2239,14 @@ class storyModel extends model
                     ->where('product')->eq($oldStory->product)
                     ->andWhere('id')->in($oldStory->plan)
                     ->fetchPairs();
+                foreach($branchPlanPairs as $branches => $planParis)
+                {
+                    foreach(explode(',', $branches) as $branch)
+                    {
+                        $branchPlanPairs[$branch] = $planParis;
+                    }
+                    unset($branchPlanPairs[$branches]);
+                }
                 if($planID == 0 and !empty($oldStory->plan) and isset($branchPlanPairs[0]) and $branchPlanPairs[0] != $planID) $unlinkPlans[$branchPlanPairs[0]] = empty($unlinkPlans[$branchPlanPairs[0]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[0]]},$storyID";
                 if($planID != 0)
                 {
@@ -2248,7 +2261,7 @@ class storyModel extends model
                         }
                     }
                     foreach(explode(',', $plan->branch) as $planBranch) if(isset($branchPlanPairs[$planBranch])) $branchPlanPairs[$planBranch] = $planID;
-                    $story->plan = $oldStory->plan ? implode(',', $branchPlanPairs) : $planID;
+                    $story->plan = $oldStory->plan ? implode(',', array_unique($branchPlanPairs)) : $planID;
                     $story->plan = trim($story->plan, ',');
                     if($story->plan != $oldStory->plan and !empty($planID)) $link2Plans[$planID]  = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
                 }
