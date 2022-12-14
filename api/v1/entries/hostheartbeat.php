@@ -35,27 +35,34 @@ class hostHeartbeatEntry extends baseEntry
 
         $conditionField = $secret ? 'secret' : 'tokenSN';
         $conditionValue = $secret ? $secret  : $token;
+
+        $this->dao = $this->loadModel('common')->dao;
+        $hostInfo = $this->dao->select('id,tokenSN')->from(TABLE_ZAHOST)
+            ->beginIF($secret)->where('secret')->eq($secret)->fi()
+            ->beginIF(!$secret)->where('tokenSN')->eq($token)
+            ->andWhere('tokenTime')->gt($now)->fi()
+            ->fetch();
+        if(empty($hostInfo->id))
+        {
+            if(empty($token)) return $this->sendError(400, 'Secret error.');
+            $hostInfo = $this->dao->select('id,tokenSN')->from(TABLE_ZAHOST)
+                ->where('oldTokenSN')->eq($token)
+                ->andWhere('tokenTime')->gt(date(DT_DATETIME1, strtotime($now) - 30))->fi()
+                ->fetch();
+            if(empty($hostInfo->id)) return $this->sendError(400, 'Secret error.');
+        }
+
         $host = new stdclass();
         $host->status = $status;
         if($secret)
         {
-            $host->tokenSN   = md5($secret . $now);
-            $host->tokenTime = date('Y-m-d H:i:s', time() + 7200);
+            $host->tokenSN    = md5($secret . $now);
+            $host->tokenTime  = date('Y-m-d H:i:s', time() + 7200);
+            $host->oldTokenSN = $hostInfo['tokenSN'];
         }
-
-        $this->dao = $this->loadModel('common')->dao;
-        $id = $this->dao->select('id')->from(TABLE_ZAHOST)
-            ->beginIF($secret)->where('secret')->eq($secret)->fi()
-            ->beginIF(!$secret)->where('tokenSN')->eq($token)
-            ->andWhere('tokenTime')->gt($now)->fi()
-            ->fetch('id');
-        if(!$id) return $this->sendError(400, 'Secret error.');
-
+        $host->heartbeat = $now;
+        $host->zap       = $zap;
         $this->dao->update(TABLE_ZAHOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
-        $this->dao->update(TABLE_ZAHOST)
-        ->set('heartbeat')->eq($now)
-        ->set('zap')->eq($zap)
-        ->where('id')->eq($id)->exec();
 
         if($vms)
         {
@@ -81,6 +88,7 @@ class hostHeartbeatEntry extends baseEntry
         $host->tokenTimeUnix = strtotime($host->tokenTime);
         unset($host->status);
         unset($host->tokenTime);
+        unset($host->oldTokenSN);
         return $this->send(200, $host);
     }
 }
