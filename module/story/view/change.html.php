@@ -44,7 +44,8 @@
         <tr>
           <th><?php echo $lang->story->title;?></th>
           <td>
-            <div class='input-group title-group'>
+            <?php $titleGroup = empty($story->twins) ? '' : 'title-group';?>
+            <div class='input-group <?php echo $titleGroup?>'>
               <div class="input-control has-icon-right">
                 <?php echo html::input('title', $story->title, 'class="form-control story-title"');?>
                 <div class="colorpicker">
