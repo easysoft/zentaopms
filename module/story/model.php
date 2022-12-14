@@ -2189,7 +2189,11 @@ class storyModel extends model
         $oldStoryStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
         $unlinkPlans    = array();
         $link2Plans     = array();
-        if(empty($plan)) $plan->branch = array();
+        if(empty($plan))
+        {
+            $plan = new stdClass();
+            $plan->branch = BRANCH_MAIN;
+        }
 
         /* Cycle every story and process it's plan and stage. */
         foreach($storyIdList as $storyID)
@@ -2199,7 +2203,7 @@ class storyModel extends model
 
             /* Ignore parent story, closed story and story linked to this plan already. */
             if($oldStory->parent < 0) continue;
-            if($oldStory->status == 'closed') continue;var_dump($planID);exit;
+            if($oldStory->status == 'closed') continue;
             if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
 
             /* Init story and set last edited data. */
