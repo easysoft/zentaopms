@@ -224,7 +224,7 @@ class zanode extends control
                 $response['message'] = dao::getError();
                 return $this->send($response);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $this->view->task = $task;
@@ -276,7 +276,6 @@ class zanode extends control
         /* Add action log. */
         if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $nodeID, 'getVNC');
 
-        $this->view->title = $this->lang->zanode->getVNC;
         $this->view->url   = $node->ip . ":" . $node->hzap;
         $this->view->host  = !empty($vnc->hostIP) ? $vnc->hostIP:'';
         $this->view->token = !empty($vnc->token) ? $vnc->token:'';

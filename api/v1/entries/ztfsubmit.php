@@ -43,7 +43,8 @@ class ztfSubmitEntry extends baseEntry
         {
             $this->app->user = new stdClass;
             $this->app->user->account = '';
-            $result = $this->loadModel('testtask')->parseZTFFuncResult($post->data, "", 0, 0, 0);
+            $result = $this->loadModel('testtask')->parseZTFFuncResult($post->data->FuncResult, "", 0, 0, 0);
+            $post->log = $post->data->log;
 
             unset($post->data);
             if(!empty($result['results'][0]))

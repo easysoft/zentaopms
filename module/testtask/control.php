@@ -1599,4 +1599,18 @@ class testtask extends control
 
         $this->display();
     }
+
+    /**
+     * Ajax get test result info.
+     *
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetResult($resultID)
+    {
+        $result = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq((int)$resultID)->fetch();
+        $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
+    }
 }

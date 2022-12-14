@@ -1369,11 +1369,13 @@ class testtaskModel extends model
 
         $relatedVersions = array();
         $runIdList       = array();
+        $nodeIdList      = array();
         foreach($results as $result)
         {
             $runIdList[$result->run] = $result->run;
             $relatedVersions[]       = $result->version;
             $runCaseID               = $result->case;
+            if(!empty($result->node)) $nodeIdList[] = $result->node;
         }
         $relatedVersions = array_unique($relatedVersions);
 
@@ -1385,6 +1387,9 @@ class testtaskModel extends model
         $runs = $this->dao->select('t1.id,t2.build')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
             ->where('t1.id')->in($runIdList)
+            ->fetchPairs();
+        $nodes = $this->dao->select('id,name')->from(TABLE_ZAHOST)
+            ->where('id')->in(array_unique($nodeIdList))
             ->fetchPairs();
 
         $this->loadModel('file');
@@ -1412,6 +1417,15 @@ class testtaskModel extends model
         {
             $result->stepResults = unserialize($result->stepResults);
             $result->build       = $result->run ? zget($runs, $result->run, 0) : 0;
+            $result->nodeName    = $result->node ? zget($nodes, $result->node, '') : '';
+
+            if(!empty($result->ZTFResult))
+            {
+                $result->ZTFResult   = json_decode($result->ZTFResult);
+                $result->ZTFResult   = empty($result->ZTFResult->log) ? '' : $result->ZTFResult->log;
+                $result->ZTFResult   = "<li>" . str_replace(array("\r", "\n", "\r\n"), "</li><li>", $result->ZTFResult) . "</li>";
+            }
+
             $result->files       = zget($resultFiles, $resultID, array()); //Get files of case result.
             if(isset($relatedSteps[$result->version]))
             {
