@@ -5,6 +5,7 @@
 .block-guide .nav-secondary > li {position: relative;}
 .block-guide .nav-secondary > li.active {background: #FFF;}
 .block-guide .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
+.block-guide .nav-secondary > li > a:hover {box-shadow: none;}
 .block-guide .nav-secondary > li > a:first-child {padding-right: 36px;}
 .block-guide .nav-secondary > li.active > a:first-child {color: #3C4353; background: transparent; box-shadow: none;}
 .block-guide .nav-secondary > li.active > a:first-child:before {content: ''; display: block; left: -1px; height: 100%; top: 0px; width: 2px; background: #2E7FFF; position: absolute;}
@@ -49,6 +50,15 @@ $(function()
       </ul>
     </div>
     <div class="col tab-content">
+      <div class="tab-pane fade active in" id='<?php echo "tab3{$blockNavId}Contentflowchart";?>'>
+      <?php include 'flowchart.html.php';?>
+      </div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentsystemMode";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentvisionSwitch";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentthemeSwitch";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}Contentpreference";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadClient";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadMoblie";?>'></div>
     </div>
   </div>
 </div>
