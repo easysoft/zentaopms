@@ -58,7 +58,7 @@ class hostHeartbeatEntry extends baseEntry
         {
             $host->tokenSN    = md5($secret . $now);
             $host->tokenTime  = date('Y-m-d H:i:s', time() + 7200);
-            $host->oldTokenSN = $hostInfo['tokenSN'];
+            $host->oldTokenSN = $hostInfo->tokenSN;
         }
         $host->heartbeat = $now;
         $host->zap       = $zap;

@@ -32,10 +32,10 @@
     <thead>
       <tr>
         <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->zahost->image->name);?></th>
-        <th class='c-name'><?php common::printOrderLink('osName', $orderBy, $vars, $lang->zahost->image->os);?></th>
-        <th><?php echo $lang->zahost->status;?></th>
-        <th><?php echo $lang->zahost->image->path;?></th>
-        <th><?php echo $lang->zahost->image->progress;?></th>
+        <th class='c-osName'><?php common::printOrderLink('osName', $orderBy, $vars, $lang->zahost->image->os);?></th>
+        <th class='c-status'><?php echo $lang->zahost->status;?></th>
+        <th class='c-path'><?php echo $lang->zahost->image->path;?></th>
+        <th class='c-progress'><?php echo $lang->zahost->image->progress;?></th>
         <th class='c-actions-3'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
