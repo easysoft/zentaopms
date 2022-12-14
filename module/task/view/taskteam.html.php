@@ -8,7 +8,6 @@
 <?php if($app->rawMethod != 'create'):?>
 <style>
 #modalTeam .modal-dialog {width: 855px;}
-#taskTeamEditor .hourBox {padding-bottom: 1px;}
 </style>
 <?php endif;?>
 <?php if($app->rawMethod == 'assignto'):?>
@@ -341,7 +340,7 @@ $(document).ready(function()
                 $(this).find('option:disabled').removeAttr('disabled').trigger("chosen:updated");
             })
         }
-        if($('#teamMember').val() != '') $taskTeamEditor.find('tfoot .btn').click();
+        if($('#teamMember').val() != '' && page != 'edit') $taskTeamEditor.find('tfoot .btn').click();
     })
 });
 

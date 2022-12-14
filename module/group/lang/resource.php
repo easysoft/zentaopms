@@ -546,7 +546,7 @@ $lang->resource->story->batchChangeModule  = 'batchChangeModule';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 $lang->resource->story->linkStories        = 'linkStoriesAB';
-$lang->resource->story->relieved           = 'relievedSiblings';
+$lang->resource->story->relieved           = 'relievedTwins';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';

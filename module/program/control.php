@@ -29,8 +29,8 @@ class program extends control
     /**
      * Program list.
      *
-     * @param  varchar $status
-     * @param  varchar $orderBy
+     * @param  string  $status
+     * @param  string  $orderBy
      * @access public
      * @return void
      */

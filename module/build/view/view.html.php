@@ -88,15 +88,15 @@ tbody tr td:first-child input {display: none;}
                   <?php endif;?>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+                <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+                <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
                 <?php if($childBuilds):?>
                 <th class='c-build w-200px text-left'><?php echo $lang->build->linkedBuild;?></th>
                 <?php endif;?>
-                <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-                <th class='c-id text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
-                <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-                <th class='c-status'><?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
+                <th class='c-user'>     <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+                <th class='c-estimate'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+                <th class='c-stage'>   <?php common::printOrderLink('stage',     $orderBy, $vars, $lang->story->stageAB);?></th>
                 <th class='c-actions-1'><?php echo $lang->actions?></th>
               </tr>
             </thead>
@@ -125,11 +125,6 @@ tbody tr td:first-child input {display: none;}
                   <?php printf('%03d', $story->id);?>
                   <?php endif;?>
                 </td>
-                <td>
-                  <?php if($story->pri):?>
-                  <span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span>
-                  <?php endif;?>
-                </td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light'>{$lang->story->childrenAB}</span>";
@@ -147,17 +142,20 @@ tbody tr td:first-child input {display: none;}
                   }
                   ?>
                 </td>
+                <td>
+                  <?php if($story->pri):?>
+                  <span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span>
+                  <?php endif;?>
+                </td>
+                <td>
+                  <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
+                </td>
                 <?php if($childBuilds):?>
                 <td class='c-build text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
                 <?php endif;?>
                 <td><?php echo zget($users, $story->openedBy);?></td>
-                <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-                <td>
-                  <span class='status-story status-<?php echo $story->status;?>'>
-                    <?php echo $this->processStatus('story', $story);?>
-                  </span>
-                </td>
-                <td><?php echo $lang->story->stageList[$story->stage];?></td>
+                <td class='c-estimate' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
+                <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
                   if($canBeChanged and common::hasPriv($module, 'unlinkStory'))
@@ -208,14 +206,14 @@ tbody tr td:first-child input {display: none;}
                   <?php endif;?>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='text-left'>  <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
-                <th class='c-status'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
+                <th class='text-left'><?php common::printOrderLink('title',  $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='c-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->bug->status);?></th>
                 <?php if($childBuilds):?>
-                <th class='c-build w-200px text-left'><?php echo $lang->build->linkedBuild?></th>
+                <th class='c-build'><?php echo $lang->build->linkedBuild?></th>
                 <?php endif;?>
                 <th class='c-user'>     <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-date'>     <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-                <th class='c-user'>     <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                <th class='c-user'>     <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
                 <th class='c-date'>     <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
                 <th class='c-actions-1'><?php echo $lang->actions?></th>
               </tr>
@@ -254,7 +252,7 @@ tbody tr td:first-child input {display: none;}
                   </span>
                 </td>
                 <?php if($childBuilds):?>
-                <td class='c-build text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
+                <td class='c-build' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
                 <?php endif;?>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
@@ -297,14 +295,14 @@ tbody tr td:first-child input {display: none;}
             <?php $vars = "buildID={$build->id}&type=generatedBug&link=$link&param=$param&orderBy=%s";?>
             <thead>
               <tr class='text-center'>
-                <th class='c-id text-left'><?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
-                <th class='c-status' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-                <th class='text-left'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
-                <th class='c-status'> <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
-                <th class='c-build w-200px text-left'><?php echo $lang->bug->openedBuild;?></th>
+                <th class='c-id text-left'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+                <th class='text-left'><?php common::printOrderLink('title',   $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='c-severity' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+                <th class='c-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->bug->status);?></th>
+                <th class='c-build'>  <?php echo $lang->bug->openedBuild;?></th>
                 <th class='c-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-                <th class='c-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                <th class='c-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
                 <th class='c-date'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
               </tr>
             </thead>
@@ -324,15 +322,15 @@ tbody tr td:first-child input {display: none;}
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <tr>
                 <td class='text-left'><?php printf('%03d', $bug->id);?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'>
+                    <?php echo html::a($bugLink, $bug->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");?>
+                </td>
                 <td class='c-severity'>
                   <?php if($hasCustomSeverity):?>
                   <span class='label-severity-custom' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span>
                   <?php else:?>
                   <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
                   <?php endif;?>
-                </td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'>
-                    <?php echo html::a($bugLink, $bug->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");?>
                 </td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
@@ -343,7 +341,7 @@ tbody tr td:first-child input {display: none;}
                 $openedBuilds = '';
                 foreach(explode(',', $bug->openedBuild) as $buildID) $openedBuilds .= ($buildID == 'trunk' ? 'Trunk' : zget($buildPairs, $buildID, '')) . ' ';
                 ?>
-                <td class='c-build text-left' title='<?php echo $openedBuilds;?>'><?php echo $openedBuilds;?></td>
+                <td class='c-build' title='<?php echo $openedBuilds;?>'><?php echo $openedBuilds;?></td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                 <td><?php echo zget($users, $bug->resolvedBy);?></td>

@@ -934,6 +934,17 @@ class execution extends control
             $moduleTree = $this->tree->getProjectStoryTreeMenu($executionID, 0, array('treeModel', $createModuleLink));
         }
 
+        $executionProductList  = $this->loadModel('product')->getProducts($executionID);
+        $multiBranch = false;
+        foreach($executionProductList as $executionProduct)
+        {
+            if($executionProduct->type != 'normal')
+            {
+                $multiBranch = true;
+                break;
+            }
+        }
+
         /* Assign. */
         $this->view->title             = $title;
         $this->view->position          = $position;
@@ -963,6 +974,7 @@ class execution extends control
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch        = $showBranch;
         $this->view->storyStages       = $this->product->batchGetStoryStage($stories);
+        $this->view->multiBranch       = $multiBranch;
 
         $this->display();
     }

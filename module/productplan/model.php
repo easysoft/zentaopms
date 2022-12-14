@@ -595,10 +595,42 @@ class productplanModel extends model
             ->get();
 
         $product = $this->loadModel('product')->getByID($oldPlan->product);
-        if($product->type != 'normal' and $oldPlan->parent != -1 and !isset($_POST['branch']))
+        if($product->type != 'normal')
         {
-            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+            if(!isset($_POST['branch']))
+            {
+                $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+                dao::$errors['branch'] = sprintf($this->lang->error->notempty, $this->lang->product->branch);
+            }
+            else
+            {
+                if($oldPlan->parent == -1)
+                {
+                    /* Get branches of child plans. */
+                    $childBranches = array();
+                    $childPlans    = $this->getChildren($oldPlan->id);
+                    $branchPairs   = $this->loadModel('branch')->getPairs($oldPlan->product);
+                    foreach($childPlans as $children)
+                    {
+                        foreach(explode(',', $children->branch) as $childBranchID) $childBranches[$childBranchID] = $childBranchID;
+                    }
+
+                    /* Get branches of parent plan that cannot delete. */
+                    $canDeleteBranch = true;
+                    $deleteBranches  = '';
+                    foreach(explode(',', $oldPlan->branch) as $oldBranchID)
+                    {
+                        if(strpos(",$plan->branch,", ",$oldBranchID,") === false and isset($childBranches[$oldBranchID]))
+                        {
+                            $canDeleteBranch = false;
+                            if(isset($branchPairs[$oldBranchID])) $deleteBranches .= "{$branchPairs[$oldBranchID]},";
+                        }
+                    }
+
+                    $this->lang->productplan->deleteBranchTip = str_replace('@branch@', $this->lang->product->branchName[$product->type], $this->lang->productplan->deleteBranchTip);
+                    if(!$canDeleteBranch) dao::$errors[] = sprintf($this->lang->productplan->deleteBranchTip, trim($deleteBranches, ','));
+                }
+            }
         }
 
         $parentPlan = $this->getByID($plan->parent);
