@@ -117,7 +117,7 @@
   <div class='btn-toolbar pull-right'>
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
-      <?php common::printLink('testcase', 'automation', "productID=$productID", "<i class='icon-testcase muted'> </i>" . $lang->zanode->automation, '', "class='btn btn-link iframe'", true, true)?>
+      <?php common::printLink('testcase', 'automation', "productID=$productID", "<i class='icon-testcase muted'> </i>" . $lang->testcase->automation, '', "class='btn btn-link iframe'", true, true)?>
     </div>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>

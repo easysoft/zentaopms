@@ -97,6 +97,10 @@ $lang->testcase->deleted          = '是否删除';
 $lang->testcase->browseUnits      = '单元测试';
 $lang->testcase->suite            = '套件';
 $lang->testcase->executionStatus  = '执行状态';
+$lang->testcase->caseType         = '用例类型';
+$lang->testcase->allType          = '所有类型';
+$lang->testcase->showAutoCase     = '显示自动化用例';
+$lang->testcase->automation       = '自动化测试';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
