@@ -718,30 +718,23 @@ class zanodemodel extends model
     /**
      * Run ZTFScript.
      *
+     * @param  int    $scriptID
+     * @param  int    $caseID
+     * @param  int    $task     //testtaskID
      * @access public
      * @return void
      */
-    public function runZTFScript()
+    public function runZTFScript($scriptID = 0, $caseID = 0, $task = 0)
     {
+        $automation = $this->getAutomationByID($scriptID);
+        $node       = $this->getNodeByID($automation->node);
         $params = array(
-            'cmd'       => '',
-            'ids'       => '',
-            'path'      => '',
-            'task'      => '',
-            'workspace' => ''
+            'cmd'  => $automation->shell,
+            'ids'  => $caseID,
+            'path' => $automation->scriptPath,
+            'task' => $task
         );
 
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
-
-        if(empty($result->data) || $result->code != 'success')
-        {
-            $result = new stdclass;
-            $result->data = $this->lang->zanode->init->serviceStatus;
-        }
-
-        return array(
-            "ZenAgent" => "ready",
-            "ZTF"      => $result->data->ztfStatus,
-        );
     }
 }
