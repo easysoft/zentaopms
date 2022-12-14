@@ -180,7 +180,7 @@ class build extends control
         {
             $productGroups = $this->product->getProducts($build->project);
             $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
-            $builds        = $this->build->getBuildPairs($build->product, $build->branch, 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
+            $builds        = $this->build->getBuildPairs($build->product, 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
         }
 
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
