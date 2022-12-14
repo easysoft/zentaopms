@@ -1,13 +1,13 @@
 <?php
 $lang->job->common        = '构建任务';
 $lang->job->browse        = '浏览构建任务';
-$lang->job->create        = '创建构建任务';
-$lang->job->edit          = '编辑构建任务';
-$lang->job->exec          = '执行构建';
+$lang->job->create        = '添加流水线';
+$lang->job->edit          = '编辑流水线';
+$lang->job->exec          = '执行流水线';
 $lang->job->runPipeline   = '运行流水线';
 $lang->job->view          = '执行详情';
-$lang->job->delete        = '删除构建任务';
-$lang->job->confirmDelete = '确认删除该构建任务';
+$lang->job->delete        = '删除流水线';
+$lang->job->confirmDelete = '确认删除该流水线';
 $lang->job->dirChange     = '目录改动';
 $lang->job->buildTag      = '打标签';
 $lang->job->execSuccess   = '执行成功';
@@ -23,7 +23,7 @@ $lang->job->jenkins         = 'Jenkins';
 $lang->job->jkHost          = 'Jenkins服务器';
 $lang->job->jkJob           = 'Jenkins任务';
 $lang->job->buildSpec       = '构建对象'; // 'pipeline@server'
-$lang->job->engine          = '构建引擎';
+$lang->job->engine          = '引擎';
 $lang->job->server          = '服务器';
 $lang->job->pipeline        = '流水线';
 $lang->job->buildType       = '构建类型';

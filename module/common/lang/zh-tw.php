@@ -266,7 +266,7 @@ $lang->testcase->case      = '用例';
 $lang->testcase->testsuite = '套件';
 $lang->testcase->caselib   = '用例庫';
 
-$lang->devops->compile  = '構建';
+$lang->devops->compile  = '流水線';
 $lang->devops->mr       = '合併請求';
 $lang->devops->repo     = '版本庫';
 $lang->devops->rules    = '指令';
