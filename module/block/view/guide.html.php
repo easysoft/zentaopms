@@ -8,9 +8,8 @@
 .block-guide .nav-secondary > li.active > a:first-child:focus,
 .block-guide .nav-secondary > li > a:first-child:hover {box-shadow: none; border-radius: 4px 0 0 4px;}
 .block-guide .nav-secondary > li.active > a:first-child:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
-.block-guide .nav-secondary > li > a.btn-view {position: absolute; top: 0; right: 0; bottom: 0; padding: 8px; width: 36px; text-align: center; opacity: 0;}
-.block-guide .nav-secondary > li:hover > a.btn-view {opacity: 1;}
-.block-guide .nav-secondary > li.active > a.btn-view {box-shadow: none;}
+.block-guide .nav-secondary > li > a > span.btn-view {position: absolute; top: 0; right: 0; bottom: 0; padding: 8px; width: 36px; text-align: center; opacity: 0;}
+.block-guide .nav-secondary > li:hover > a > span.btn-view {opacity: 1;}
 .block-guide .nav-secondary > li.switch-icon {display: none;}
 </style>
 <script>
@@ -35,8 +34,10 @@ $(function()
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <?php foreach($lang->block->guideTabs as $tab => $tabName):?>
         <li <?php if($tab == 'flowchart') echo "class='active' id='activeGuide'";?>>
-          <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab"><?php echo $tabName;?></a>
-          <?php echo html::a('###', "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view'");?>
+          <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
+            <?php echo $tabName;?>
+            <span class='btn-view'><i class='icon-arrow-right text-primary'></i><span>
+          </a>
         </li>
         <?php endforeach;?>
       </ul>
