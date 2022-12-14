@@ -75,7 +75,7 @@
                     <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                     <th class='c-status'>   <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
                     <th class='c-build'>    <?php echo $lang->build->linkedBuild;?></th>
-                    <th class='c-user'>     <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+                    <th class='c-user text-left'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
                     <th class='c-estimate'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                     <th class='c-stage'>    <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
                     <th class='c-actions-1'><?php echo $lang->actions?></th>
@@ -105,7 +105,7 @@
                       <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
                     </td>
                     <td class='c-build' title='<?php echo $story->buildName?>'><?php echo $story->buildName?></td>
-                    <td><?php echo zget($users, $story->openedBy);?></td>
+                    <td class='text-left'><?php echo zget($users, $story->openedBy);?></td>
                     <td class='c-estimate' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                     <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
                     <td class='c-actions'>
