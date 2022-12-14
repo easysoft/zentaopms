@@ -778,7 +778,7 @@ class storyModel extends model
             ->get();
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
-        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles')
+        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
             ->checkFlow()
@@ -804,7 +804,7 @@ class storyModel extends model
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
                 /* Sync twins. */
-                if(!empty($oldStory->twins))
+                if(!isset($story->relievedTwins) and !empty($oldStory->twins))
                 {
                     foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                     {
@@ -843,7 +843,7 @@ class storyModel extends model
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
 
                     /* Sync twins. */
-                    if(!empty($oldStory->twins))
+                    if(!isset($story->relievedTwins) and !empty($oldStory->twins))
                     {
                         foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                         {
@@ -861,7 +861,17 @@ class storyModel extends model
             }
 
             $changes = common::createChanges($oldStory, $story);
-            if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Changed');
+
+            if(isset($story->relievedTwins))
+            {
+                $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
+                $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            }
+            elseif(!empty($oldStory->twins))
+            {
+                $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Changed');
+            }
+
             return $changes;
         }
     }
