@@ -1,22 +1,24 @@
 <?php
-$twinsCount = !empty($story->twins) ? count(explode( ',', trim($story->twins, ','))) + 1 : 0;
-$lang->story->currentBranch = sprintf($this->lang->story->currentBranch, $this->lang->product->branchName[$product->type]);
-js::set('relieveURL',  inlink('ajaxRelieveTwins'));
-js::set('storyID',     $story->id);
-js::set('relieved',    $lang->story->relieved);
-js::set('relievedTip', $lang->story->relievedTip);
-js::set('cancel',      $lang->cancel);
-$canViewLinkStory = common::hasPriv('story', 'view');
-$canRelieved      = common::hasPriv('story', 'relieved');
-array_unshift($twins, $story);
-$twinsClass = isonlybody() ? 'showinonlybody' : 'iframe';
-?>
+if(isset($twins))
+{
+   $twinsCount = !empty($story->twins) ? count(explode( ',', trim($story->twins, ','))) + 1 : 0;
+   $lang->story->currentBranch = sprintf($this->lang->story->currentBranch, $this->lang->product->branchName[$product->type]);
+   js::set('relieveURL',  inlink('ajaxRelieveTwins'));
+   js::set('storyID',     $story->id);
+   js::set('relieved',    $lang->story->relieved);
+   js::set('relievedTip', $lang->story->relievedTip);
+   js::set('cancel',      $lang->cancel);
+   $canViewLinkStory = common::hasPriv('story', 'view');
+   $canRelieved      = common::hasPriv('story', 'relieved');
+   array_unshift($twins, $story);
+   $twinsClass = isonlybody() ? 'showinonlybody' : 'iframe';
+}?>
 <div class='tabs'>
   <ul class='nav nav-tabs'>
     <li class='active'><a data-toggle='tab' href='#affectedProjects'><?php echo $lang->story->affectedProjects;?> <?php $count = count($story->executions); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
     <li><a data-toggle='tab' href='#affectedBugs'><?php echo $lang->story->affectedBugs;?> <?php $count = count($story->bugs); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
     <li><a data-toggle='tab' href='#affectedCases'><?php echo $lang->story->affectedCases;?> <?php $count = count($story->cases); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
-    <li><a data-toggle='tab' href='#affectedTwins'><?php if(count($twins) != 1) echo $lang->story->affectedTwins;?> <?php if($twinsCount > 0) echo "<span class='label label-danger label-badge label-circle'>" . $twinsCount . "</span>" ?></a></li>
+    <li><a data-toggle='tab' href='#affectedTwins'><?php if(isset($twins) and count($twins) != 1) echo $lang->story->affectedTwins;?> <?php if(isset($twins) and $twinsCount > 0) echo "<span class='label label-danger label-badge label-circle'>" . $twinsCount . "</span>" ?></a></li>
   </ul>
   <div class='tab-content'>
     <div class='tab-pane active' id='affectedProjects'>
@@ -112,7 +114,7 @@ $twinsClass = isonlybody() ? 'showinonlybody' : 'iframe';
         </tbody>
       </table>
     </div>
-    <?php if(count($twins) != 1):?>
+    <?php if(isset($twins) and count($twins) != 1):?>
     <div class='tab-pane' id='affectedTwins'>
       <table class='table'>
         <thead>
