@@ -1,7 +1,8 @@
-.c-id {width: 180px;}
+.c-id {width: 70px;}
 .c-memory{width: 100px;}
 .c-status {width: 70px;}
-.c-ip, .c-cpu, .c-host {width: 100px;}
+.c-cpu, .c-host {width: 100px;}
+.c-ip{width: 150px;}
 .c-os {width: 120px;}
 .c-actions-7{width: 205px;}
 .createImage{margin-right: 4px;}

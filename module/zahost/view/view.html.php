@@ -77,7 +77,7 @@
       </div>
       <div class="detail zahost-detail">
         <div class="detail-title"><?php echo $lang->zahost->desc;?></div>
-        <div class="detail-content article-content"><?php echo !empty($zahost->desc) ? $zahost->desc : $lang->noData;?></div>
+        <div class="detail-content article-content"><?php echo !empty($zahost->desc) ? htmlspecialchars_decode($zahost->desc) : $lang->noData;?></div>
       </div>
       <?php if(!empty($nodeList)): ?>
       <div class="detail">

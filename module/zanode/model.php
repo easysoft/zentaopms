@@ -645,11 +645,11 @@ class zanodemodel extends model
     public function installService($node, $name)
     {
         $param = array(
-            "name" => $name,
+            "name" => strtolower($name),
             "secret" => $node->secret,
             "server" => getWebRoot(true),
         );
-        $result = json_decode(commonModel::http("http://{$node->extranet}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
 
         if(empty($result->data) || $result->code != 'success')
         {
