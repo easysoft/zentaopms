@@ -116,7 +116,7 @@
           {
             common::printLink('zanode', 'resume', "id={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->resume, '', "title='{$lang->zanode->resume}' class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'");
           }
-          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '', "title='{$lang->zanode->getVNC}' class='btn iframe " . (common::hasPriv('zanode', 'getVNC') && $zanode->status == 'running' ? '':'disabled') . "'", '', true);
+          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '_blank', "title='{$lang->zanode->getVNC}' class='btn " . (common::hasPriv('zanode', 'getVNC') && $zanode->status == 'running' ? '':'disabled') . "'");
         }
         ?>
         <div class='divider'></div>

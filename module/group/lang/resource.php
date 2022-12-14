@@ -1052,6 +1052,7 @@ $lang->resource->testcase->batchCreate             = 'batchCreate';
 $lang->resource->testcase->createBug               = 'createBug';
 $lang->resource->testcase->view                    = 'view';
 $lang->resource->testcase->edit                    = 'edit';
+$lang->resource->testcase->showScript              = 'showScript';
 $lang->resource->testcase->linkCases               = 'linkCases';
 $lang->resource->testcase->linkBugs                = 'linkBugs';
 $lang->resource->testcase->batchEdit               = 'batchEdit';
@@ -1106,6 +1107,7 @@ $lang->testcase->methodOrder[130] = 'ignoreLibcaseChange';
 $lang->testcase->methodOrder[135] = 'batchConfirmStoryChange';
 $lang->testcase->methodOrder[140] = 'importToLib';
 $lang->testcase->methodOrder[145] = 'automation';
+$lang->testcase->methodOrder[150] = 'showScript';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();

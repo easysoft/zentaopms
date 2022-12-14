@@ -94,19 +94,20 @@ class testcaseTest
     /**
      * Test get cases of a module.
      *
-     * @param  int   $productID
-     * @param  int   $branch
-     * @param  int   $moduleIdList
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleIdList
      * @param  string $browseType
      * @param  string $auto
+     * @param  string $caseType
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getModuleCasesTest($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $auto = 'no')
+    public function getModuleCasesTest($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getModuleCases($productID, $branch, $moduleIdList, $orderBy, $pager, $browseType, $auto);
+        $objects = $this->objectModel->getModuleCases($productID, $branch, $moduleIdList, $browseType, $auto, $caseType, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
@@ -116,19 +117,20 @@ class testcaseTest
     /**
      * Test get project cases of a module.
      *
-     * @param  int   $productID
-     * @param  int   $branch
-     * @param  int   $moduleIdList
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleIdList
      * @param  string $browseType
      * @param  string $auto
+     * @param  string $caseType
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getModuleProjectCasesTest($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $auto = 'no')
+    public function getModuleProjectCasesTest($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getModuleProjectCases($productID, $branch, $moduleIdList, $orderBy, $pager, $browseType, $auto);
+        $objects = $this->objectModel->getModuleProjectCases($productID, $branch, $moduleIdList, $browseType, $auto, $caseType, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
@@ -221,7 +223,7 @@ class testcaseTest
      */
     public function getTestCasesTest($productID, $browseType, $queryID, $auto = 'no')
     {
-        $objects = $this->objectModel->getTestCases($productID, 0, $browseType, $queryID, $moduleID, 'id_desc', null, $auto);
+        $objects = $this->objectModel->getTestCases($productID, 0, $browseType, $queryID, $moduleID, '', 'id_desc', null, $auto);
 
         if(dao::isError()) return dao::getError();
 
