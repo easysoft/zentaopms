@@ -24,7 +24,7 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $task->id?></span>
       <span class="text" title='<?php echo $task->name;?>' style='color: <?php echo $task->color; ?>'>
-        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->multipleAB . (common::checkNotCN() ? ' ' : '') . $lang->task->modeList[$task->mode] . '</span>';?>
+        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . (common::checkNotCN() ? ' ' : '') . $lang->task->modeList[$task->mode] . '</span>';?>
         <?php if($task->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->childrenAB . '</span>';?>
         <?php if($task->parent > 0) echo isset($task->parentName) ? html::a(inlink('view', "taskID={$task->parent}"), $task->parentName) . ' / ' : '';?><?php echo $task->name;?>
       </span>
