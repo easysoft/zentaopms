@@ -474,9 +474,10 @@ $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = "Aucun processus de révision n'a été lancé pour cette Story, et il n'est pas nécessaire de révoquer l'opération.";
 
 $lang->story->subDivideTip = array();
-$lang->story->subDivideTip['subStory']  = 'Les sous-stories ne peuvent pas être décomposées.';
-$lang->story->subDivideTip['notWait']   = "L'exigence %s ne peut pas être subdivisée.";
-$lang->story->subDivideTip['notActive'] = "Cette Story n'est pas active et ne peut être subdivisée.";
+$lang->story->subDivideTip['subStory']   = 'Les sous-stories ne peuvent pas être décomposées.';
+$lang->story->subDivideTip['notWait']    = "L'exigence %s ne peut pas être subdivisée.";
+$lang->story->subDivideTip['notActive']  = "Cette Story n'est pas active et ne peut être subdivisée.";
+$lang->story->subDivideTip['twinsSplit'] = 'The Twins Story cannot be subdivided.';
 
 $lang->story->featureBar['browse']['all']       = $lang->all;
 $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
