@@ -4831,7 +4831,7 @@ class storyModel extends model
                 $executionID = empty($execution) ? 0 : $execution->id;
 
                 /* Adjust code, hide split entry. */
-                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct and false)
+                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $this->lang->story->subdivide;
