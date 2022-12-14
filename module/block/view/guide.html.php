@@ -1,5 +1,6 @@
 <style>
 .block-guide .col-nav {border-right: 1px solid #EBF2FB; width: 170px; padding: 0;}
+.block-guide .panel-body {padding-top: 0;}
 .block-guide .nav-secondary > li {position: relative;}
 .block-guide .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
 .block-guide .nav-secondary > li > a:first-child {padding-right: 36px;}
@@ -33,6 +34,7 @@ $(function()
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <?php foreach($lang->block->guideTabs as $tab => $tabName):?>
+        <?php if(strpos($tab, 'download') !== false and (!isset($config->xxserver->installed) or !$config->xuanxuan->turnon)) continue;?>
         <li <?php if($tab == 'flowchart') echo "class='active' id='activeGuide'";?>>
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>
