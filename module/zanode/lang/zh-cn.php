@@ -5,20 +5,19 @@ $lang->zanode->create          = '创建执行节点';
 $lang->zanode->editAction      = '编辑执行节点';
 $lang->zanode->view            = '执行节点详情';
 $lang->zanode->initTitle       = '初始化执行节点';
-$lang->zanode->suspend         = '暂停执行节点';
+$lang->zanode->suspend         = '休眠执行节点';
 $lang->zanode->destroy         = '销毁执行节点';
-$lang->zanode->handleVM        = '重启执行节点';
 $lang->zanode->boot            = '启动执行节点';
 $lang->zanode->reboot          = '重启执行节点';
 $lang->zanode->shutdown        = '关闭执行节点';
-$lang->zanode->resume          = '恢复执行节点';
+$lang->zanode->resume          = '启动执行节点';
 $lang->zanode->getVNC          = '远程管理';
 $lang->zanode->all             = '全部';
 $lang->zanode->byQuery         = '搜索';
 $lang->zanode->osName          = '操作系统';
 $lang->zanode->image           = '镜像';
-$lang->zanode->imageName       = '镜像名称';
-$lang->zanode->name            = '执行节点名称';
+$lang->zanode->imageName       = '快照名称';
+$lang->zanode->name            = '名称';
 $lang->zanode->start           = '创建后自动开启';
 $lang->zanode->hostName        = '所属宿主机';
 $lang->zanode->host            = $lang->zanode->hostName;
@@ -45,6 +44,7 @@ $lang->zanode->deleted         = "已删除";
 $lang->zanode->scriptPath      = "脚本目录";
 $lang->zanode->shell           = "shell命令";
 $lang->zanode->automation      = "自动化测试";
+$lang->zanode->install         = "安装";
 
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
@@ -57,11 +57,11 @@ $lang->zanode->nameValid      = "名称只能是字母、数字，'-'，'_'，'.
 $lang->zanode->empty          = '暂时没有执行节点';
 $lang->zanode->runCaseConfirm = '系统检测到选择的用例存在自动化测试脚本，是否自动执行用例？';
 
-$lang->zanode->createImage        = '创建镜像';
-$lang->zanode->createImaging      = '正在创建镜像';
-$lang->zanode->createImageNotice  = '系统将基于当前执行节点创建镜像，该过程需要关闭该执行节点，确定要继续么？';
-$lang->zanode->createImageSuccess = '镜像创建成功，您可以使用此镜像创建执行节点。';
-$lang->zanode->createImageFail    = '镜像创建失败';
+$lang->zanode->createImage        = '创建快照';
+$lang->zanode->createImaging      = '正在创建快照';
+$lang->zanode->createImageNotice  = '系统将基于当前执行节点创建快照，该过程需要关闭该执行节点，确定要继续么？';
+$lang->zanode->createImageSuccess = '快照创建成功，您可以使用此快照创建执行节点。';
+$lang->zanode->createImageFail    = '快照创建失败';
 $lang->zanode->createImageButton  = '去创建';
 
 $lang->zanode->imageNameEmpty = '名称不能为空';
@@ -81,6 +81,8 @@ $lang->zanode->statusList['destroy']      = '已销毁';
 $lang->zanode->statusList['shutoff']      = '已关机';
 $lang->zanode->statusList['shutodown']    = '已关机';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
+$lang->zanode->statusList['wait']         = '待初始化';
+$lang->zanode->statusList['online']       = '已上架';
 
 $lang->zanode->init = new stdclass;
 $lang->zanode->init->statusTitle   = "服务状态";
@@ -100,4 +102,4 @@ $lang->zanode->init->serviceStatus = [
 ];
 $lang->zanode->init->title          = "初始化执行节点";
 $lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
-$lang->zanode->init->initDesc       = "- 在执行节点上执行命令：bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -s zvm -k %s<br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "Service Status";
+$lang->zanode->init->initDesc       = "- 在执行节点上执行命令：curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -szvm -z%s  <br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "服务状态";

@@ -197,17 +197,28 @@ class zahostModel extends model
             ->page($pager)
             ->fetchAll('name');
 
+        $refreshPageData = false;
         foreach($imageList as &$image)
         {
             $downloadedImage = zget($downloadedImageList, $image->name, '');
             if(empty($downloadedImage))
             {
+                $refreshPageData = true;
                 $image->id     = 0;
                 $image->status = 'notDownloaded';
                 $image->from   = 'zentao';
                 $image->osName = $image->os;
+                $image->host   = $hostID;
+                $image->status = 'notDownloaded';
+
+                unset($image->os);
+                $this->dao->insert(TABLE_IMAGE)->data($image, 'desc')->autoCheck()->exec();
+
                 $image->cancelMisc   = sprintf("title='%s' class='btn image-cancel image-cancel-%d %s'", $this->lang->zahost->cancel, $image->id, "disabled");
                 $image->downloadMisc = sprintf("title='%s' class='btn image-download image-download-%d %s'", $this->lang->zahost->image->downloadImage, $image->id, "");
+                if(dao::isError()) continue;
+
+                $image->id = $this->dao->lastInsertID();
             }
             else
             {
@@ -223,10 +234,13 @@ class zahostModel extends model
             $image->host = $hostID;
         }
 
-        $orderBy = explode('_', $orderBy);
-        if(count($orderBy) == 2)
+        if($refreshPageData)
         {
-            array_multisort(array_column($imageList, $orderBy[0]), $orderBy[1] == 'asc' ? SORT_ASC : SORT_DESC, $imageList);
+            $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('host')->eq($hostID)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('name');
         }
         return $imageList;
     }

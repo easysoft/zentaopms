@@ -26,7 +26,7 @@
         <div>
           <span class='dot-symbol'></span>
           <span class='zahost-init-desc'>
-            <?php echo sprintf($lang->zahost->init->initDesc, $host->secret . ' -z ' . getWebRoot(true)); ?>
+            <?php echo sprintf($lang->zahost->init->initDesc, $host->secret, getWebRoot(true)); ?>
           </span>
         </div>
         <div id="statusContainer">

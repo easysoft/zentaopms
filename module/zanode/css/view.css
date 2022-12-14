@@ -1,5 +1,6 @@
 .zanode-detail .text-right{text-align: right;}
 .zanode-detail .col-8{padding-left: 10px;}
-.zanode-detail .detail-content{color: #838a9d;}
 .table.has-sort-head thead tr th a:after{line-height: 22px;}
 .table.has-sort-head thead tr th a:before{line-height: 22px;}
+.main-row-last{table-layout: auto;}
+.zanode-mt-8{margin-top: 8px;}

@@ -164,7 +164,7 @@ $routes['/reports'] = 'reports';
 $routes['/host/heartbeat'] = 'hostHeartbeat';
 $routes['/host/submitResult'] = 'hostSubmit';
 
-$routes['/zanode/heartbeat'] = 'zanodeHeartbeat';
+$routes['/ztf/submitResult'] = 'ztfSubmit';
 
 $routes['/z/folders']           = 'zfolders';
 $routes['/z/folders/:id']       = 'zfolder';

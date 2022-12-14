@@ -186,10 +186,10 @@ $lang->action->desc->syncexecution   = '$date, starting the task sets the execut
 $lang->action->desc->reopen          = '$date, reopened by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->merged          = '$date, merged by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->submitreview    = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->suspend         = '$date, the execution node is suspended by <strong>$actor</strong> .' . "\n";
-$lang->action->desc->resume          = '$date, the execution node is resumed by <strong>$actor</strong> .' . "\n";
-$lang->action->desc->reboot          = '$date, the execution node is reboot by <strong>$actor</strong> .' . "\n";
-$lang->action->desc->destroy         = '$date, the execution node is destroyed by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->suspend         = '$date, the ZenAgent Node is suspended by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->resume          = '$date, the ZenAgent Node is resumed by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->reboot          = '$date, the ZenAgent Node is reboot by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->destroy         = '$date, the ZenAgent Node is destroyed by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";

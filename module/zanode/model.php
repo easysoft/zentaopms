@@ -84,7 +84,7 @@ class zanodemodel extends model
             return false;
         }
 
-        /* Prepare create execution node data. */
+        /* Prepare create ZenAgent Node data. */
         $data->image       = $data->image;
         $data->parent      = $host->id;
         $data->mac         = $result->data->mac;
@@ -93,7 +93,7 @@ class zanodemodel extends model
         $data->createdDate = helper::now();
         $data->vnc         = (int)$result->data->vnc;
 
-        /* Save execution node. */
+        /* Save ZenAgent Node. */
         $this->dao->insert(TABLE_ZAHOST)->data($data)->autoCheck()->exec();
         if(dao::isError()) return false;
 
@@ -145,7 +145,7 @@ class zanodemodel extends model
             'vm'      => $node->name
         );
 
-        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->hTokenSN")));
+        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
 
         if(!empty($result) and $result->code == 'success') return $newID;
 
@@ -169,7 +169,7 @@ class zanodemodel extends model
         $path     = '/api/v1/kvm/' . $node->name . '/' . $type;
         $param    = array('vmUniqueName' => $node->name);
 
-        $result = commonModel::http($agnetUrl . $path, $param, array(), array("Authorization:$node->hTokenSN"));
+        $result = commonModel::http($agnetUrl . $path, $param, array(), array("Authorization:$node->tokenSN"));
         $data   = json_decode($result, true);
         if(empty($data)) return $this->lang->zanode->notFoundAgent;
 
@@ -201,7 +201,7 @@ class zanodemodel extends model
         if($node)
         {
             $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
-            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req), array(), array("Authorization:$node->hTokenSN"));
+            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req), array(), array("Authorization:$node->tokenSN"));
 
             $data = json_decode($result, true);
             if(empty($data)) return $this->lang->zanode->notFoundAgent;
@@ -209,7 +209,7 @@ class zanodemodel extends model
             if($data['code'] != 'success') return zget($this->lang->zanode->apiError, $data['code'], $data['msg']);
         }
 
-        /* delete execution node. */
+        /* delete ZenAgent Node. */
         $this->dao->update(TABLE_ZAHOST)
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
@@ -219,7 +219,7 @@ class zanodemodel extends model
     }
 
     /**
-     * Get execution node created action record by node ID.
+     * Get ZenAgent Node created action record by node ID.
      *
      * @param  int  $id
      * @access public
@@ -468,7 +468,8 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        return $this->dao->select('t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as hTokenSN, t2.secret as secret')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as tokenSN, t2.secret as secret')->from(TABLE_ZAHOST)
+            ->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
@@ -542,7 +543,7 @@ class zanodemodel extends model
         if(empty($node) or empty($node->parent) or empty($node->vnc)) return false;
 
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_TOKEN_PATH;
-        $result   = json_decode(commonModel::http("$agnetUrl?port={$node->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$node->hTokenSN"), 'json'));
+        $result   = json_decode(commonModel::http("$agnetUrl?port={$node->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$node->tokenSN"), 'json'));
 
         if(empty($result) or $result->code != 'success') return false;
 
@@ -567,7 +568,7 @@ class zanodemodel extends model
     public function getTaskStatus($node, $taskID = 0, $type = '', $status = '')
     {
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_STATUS_PATH;
-        $result   = json_decode(commonModel::http("$agnetUrl", array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$node->hTokenSN"), 'json'));
+        $result   = json_decode(commonModel::http("$agnetUrl", array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$node->tokenSN"), 'json'));
 
         if(empty($result) or $result->code != 'success') return false;
         $data = $result->data;
@@ -653,7 +654,7 @@ class zanodemodel extends model
         if(empty($result->data) || $result->code != 'success')
         {
             $result = new stdclass;
-            $result->data = $this->lang->zanode->init->serviceStatus;
+            return $this->lang->zanode->init->serviceStatus;
         }
 
         return array(

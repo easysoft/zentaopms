@@ -1,6 +1,6 @@
 <?php
 /**
- * The control file of execution node of ZenTaoPMS.
+ * The control file of ZenAgent Node of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -13,7 +13,7 @@ class zanode extends control
 {
 
     /**
-     * Browse execution node page.
+     * Browse ZenAgent Node page.
      *
      * @param  string   $browseType
      * @param  string   $param
@@ -224,7 +224,7 @@ class zanode extends control
                 $response['message'] = dao::getError();
                 return $this->send($response);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->view->task = $task;
@@ -276,9 +276,10 @@ class zanode extends control
         /* Add action log. */
         if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $nodeID, 'getVNC');
 
+        $this->view->title = $this->lang->zanode->getVNC;
         $this->view->url   = $node->ip . ":" . $node->hzap;
-        $this->view->host  = $vnc->hostIP;
-        $this->view->token = $vnc->token;
+        $this->view->host  = !empty($vnc->hostIP) ? $vnc->hostIP:'';
+        $this->view->token = !empty($vnc->token) ? $vnc->token:'';
         $this->display();
     }
 
@@ -363,6 +364,21 @@ class zanode extends control
         $serviceStatus = $this->zanode->getServiceStatus($node);
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
+    }
+
+    /**
+     * Install service by ajax.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function ajaxInstallService($nodeID, $service)
+    {
+        $node   = $this->zanode->getNodeById($nodeID);
+        $result = $this->zanode->installService($node, $service);
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
     }
 
     /**

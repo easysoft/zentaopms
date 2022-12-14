@@ -1,19 +1,7 @@
-.dot-symbol{
-    margin-right: 10px;
-}
-#statusContainer h5{
-    line-height: 20px;
-}
-.host-desc-container{
-    margin-top: 20px;
-}
-.host-action{
-    margin-top: 60px;
-}
-.host-action .btn{
-    margin-left: 20px;
-    min-width: 100px;
-}
-.zahost-init-desc{
-    display: inline-block;
-}
+.dot-symbol{margin-right: 10px;}
+#statusContainer h5{line-height: 20px;}
+.host-desc-container{margin-top: 20px;}
+.host-action{margin-top: 60px;}
+.host-action .btn{margin-left: 20px;min-width: 100px;}
+.zahost-init-desc{display: inline-block;}
+.node-init-install{margin-left: 10px;color: #2463c7}
