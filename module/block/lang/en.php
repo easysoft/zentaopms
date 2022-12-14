@@ -592,3 +592,11 @@ $lang->block->zentaoapp->notSupportKanban     = 'The mobile terminal does not su
 $lang->block->zentaoapp->notSupportVersion    = 'This version of ZenTao is not currently supported on the mobile terminal';
 $lang->block->zentaoapp->incompatibleVersion  = 'The current version of ZenTao is lower, please upgrade to the latest version and try again';
 $lang->block->zentaoapp->canNotGetVersion     = 'Failed to get ZenTao version, please confirm if the URL is correct';
+
+$lang->block->guideTabs['flowchart']      = 'Flowchart';
+$lang->block->guideTabs['systemMode']     = 'Operating Modes';
+$lang->block->guideTabs['visionSwitch']   = 'Interface Switch';
+$lang->block->guideTabs['themeSwitch']    = 'Theme Switch';
+$lang->block->guideTabs['preference']     = 'Personalized setting';
+$lang->block->guideTabs['downloadClient'] = 'Desktop Client download';
+$lang->block->guideTabs['downloadMoblie'] = 'Mobile Apps download';
