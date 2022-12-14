@@ -1234,6 +1234,11 @@ class testtask extends control
         $cancelURL  = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
 
         if($automation and $confirm == '') return print(js::confirm($this->lang->zanode->runCaseConfirm, $confirmURL, $cancelURL));
+        if($confirm == 'yes')
+        {
+            $resultID = $this->testtask->initResult($runID, $caseID, $run->case->version, $automation->node);
+            if(!dao::isError()) $this->zanode->runZTFScript($automation->id, $caseID, $resultID);
+        }
 
         if(!empty($_POST))
         {

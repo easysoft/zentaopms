@@ -1171,6 +1171,31 @@ class testtaskModel extends model
     }
 
     /**
+     * Init testtask result.
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function initResult($runID = 0, $caseID = 0, $version = 0, $nodeID = 0)
+    {
+        $result = new stdClass();
+        $result->run        = $runID;
+        $result->case       = $caseID;
+        $result->version    = $version;
+        $result->node       = $nodeID;
+        $result->date       = helper::now();
+        $result->lastRunner = $this->app->user->account;
+
+        $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+        if(!dao::isError()) return $resultID = $this->dao->lastInsertID();
+        return false;
+    }
+
+    /**
      * Create test result
      *
      * @param  int   $runID
