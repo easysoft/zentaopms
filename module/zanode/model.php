@@ -320,7 +320,7 @@ class zanodemodel extends model
             $query = str_replace('`hostID`', 't2.`id`', $query);
         }
 
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as hostName, t2.extranet,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.deleted')->eq(0)

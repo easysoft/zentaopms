@@ -1,4 +1,5 @@
-.c-id {width: 60px;}
+.c-id {width: 180px;}
+.c-memory{width: 100px;}
 .c-status {width: 70px;}
 .c-ip, .c-cpu, .c-host {width: 100px;}
 .c-os {width: 120px;}
