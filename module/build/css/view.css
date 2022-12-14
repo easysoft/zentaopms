@@ -8,7 +8,7 @@
 td.article-content{overflow:auto !important;}
 td.c-build{white-space: nowrap; overflow:hidden;}
 
-#stories th, #stories td{padding-left:16px;}
+#stories th, #stories td{padding-left:16px;padding-right:16px;}
 #stories .c-estimate{width:90px; text-align:right}
 #stories .c-status{width:120px}
 #stories .c-stage{width:130px; text-align:left;}

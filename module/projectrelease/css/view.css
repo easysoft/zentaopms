@@ -11,7 +11,7 @@ ol, ul {padding-left: 20px;}
 .c-id {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 td.c-build{white-space: nowrap; overflow:hidden;}
 
-#stories th, #stories td{padding-left:16px;}
+#stories th, #stories td{padding-left:16px;padding-right:16px;}
 #stories .c-build{width:160px; text-align:left;}
 #stories .c-status{width:120px;}
 #stories .c-stage{width:130px; text-align:left;}
