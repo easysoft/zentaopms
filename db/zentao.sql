@@ -1688,6 +1688,7 @@ CREATE TABLE IF NOT EXISTS `zt_testresult` (
   `caseResult` char(30) NOT NULL,
   `stepResults` text NOT NULL,
   `ZTFResults` text NOT NULL,
+  `node` int(8) unsigned NOT NULL DEFAULT '0',
   `lastRunner` varchar(30) NOT NULL,
   `date` datetime NOT NULL,
   `duration` float NOT NULL,
