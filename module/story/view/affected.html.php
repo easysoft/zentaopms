@@ -1,17 +1,11 @@
 <?php
 if(isset($twins))
 {
-   $twinsCount = !empty($story->twins) ? count(explode( ',', trim($story->twins, ','))) + 1 : 0;
-   $lang->story->currentBranch = sprintf($this->lang->story->currentBranch, $this->lang->product->branchName[$product->type]);
-   js::set('relieveURL',  inlink('ajaxRelieveTwins'));
-   js::set('storyID',     $story->id);
-   js::set('relieved',    $lang->story->relieved);
-   js::set('relievedTip', $lang->story->relievedTip);
-   js::set('cancel',      $lang->cancel);
+   $twinsCount       = !empty($story->twins) ? count(explode( ',', trim($story->twins, ','))) + 1 : 0;
+   $twinsClass       = isonlybody() ? 'showinonlybody' : 'iframe';
    $canViewLinkStory = common::hasPriv('story', 'view');
-   $canRelieved      = common::hasPriv('story', 'relieved');
+   $lang->story->currentBranch = sprintf($this->lang->story->currentBranch, $this->lang->product->branchName[$product->type]);
    array_unshift($twins, $story);
-   $twinsClass = isonlybody() ? 'showinonlybody' : 'iframe';
 }?>
 <div class='tabs'>
   <ul class='nav nav-tabs'>
@@ -134,10 +128,10 @@ if(isset($twins))
               $branch = isset($branches[$twin->branch]) ? $branches[$twin->branch] : '';
               $labelClass = $story->branch == $twin->branch ? 'label-primary' : '';
           ?>
-          <tr class='text-center' id= 'twinsList'>
+          <tr class='text-center'>
             <td><?php echo $twin->id;?></td>
             <td><span class='label <?php echo $labelClass;?> label-outline label-badge' title='<?php echo $branch;?>'><?php echo $branch;?></span></td>
-            <td class='text-left twins'><?php echo ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$twin->id", '', true), "$twin->title", '', "class='$twinsClass viewlink'") : "$twin->title"); if($canRelieved) echo "<a class='unlink hide' data-id='$twin->id' data-toggle='popover'><i class='icon icon-unlink btn-info'></i></a>";?></td>
+            <td class='text-left twins'><?php echo ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$twin->id", '', true), "$twin->title", '', "class='$twinsClass viewlink'") : "$twin->title");?></td>
             <td><span class='status-twins status-<?php echo $twin->status?>'><?php echo $this->processStatus('story', $twin);?></span></td>
             <td><?php echo $lang->story->stageList[$twin->stage];?></td>
             <td><?php echo zget($users, $twin->openedBy);?></td>

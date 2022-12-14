@@ -96,7 +96,7 @@ function loadURS(allURS)
 }
 
 $('.twins').mouseover(function() {
-    $(this).find('a.unlink').addClass('hide');
+    $(this).parent('ul').find('a.unlink').addClass('hide');
     $(this).find('.unlink').removeClass('hide');
 });
 $('.twins').mouseenter(function() {
@@ -126,8 +126,17 @@ function relieve(index)
 
         if(data.result == 'success')
         {
-            if(data.silbingsCount != 1) $('[data-id="' + index + '"]').closest('tr').remove();
-            parent.location.reload();
+            if(data.silbingsCount != 0) $('[data-id="' + index + '"]').parent('li').remove();
+            if(data.silbingsCount == 0 || index == storyID)
+            {
+                $('[href="#legendTwins"]').parent('li').next('li').addClass('active');;
+                $('[href="#legendTwins"]').parent('li').remove();
+                $('#legendTwins').next('div').addClass('active');
+                $('#legendTwins').remove();
+                $('#twinsTitle').remove();
+                $('#twinsList').remove();
+            }
+
         }
     }, 'json');
 }
