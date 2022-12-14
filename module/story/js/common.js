@@ -136,7 +136,6 @@ function relieve(index)
                 $('#twinsTitle').remove();
                 $('#twinsList').remove();
             }
-
         }
     }, 'json');
 }
