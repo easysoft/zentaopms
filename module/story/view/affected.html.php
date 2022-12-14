@@ -1,7 +1,6 @@
 <?php
 if(isset($twins))
 {
-   $twinsCount       = !empty($story->twins) ? count(explode( ',', trim($story->twins, ','))) + 1 : 0;
    $twinsClass       = isonlybody() ? 'showinonlybody' : 'iframe';
    $canViewLinkStory = common::hasPriv('story', 'view');
    $lang->story->currentBranch = sprintf($this->lang->story->currentBranch, $this->lang->product->branchName[$product->type]);
@@ -12,7 +11,7 @@ if(isset($twins))
     <li class='active'><a data-toggle='tab' href='#affectedProjects'><?php echo $lang->story->affectedProjects;?> <?php $count = count($story->executions); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
     <li><a data-toggle='tab' href='#affectedBugs'><?php echo $lang->story->affectedBugs;?> <?php $count = count($story->bugs); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
     <li><a data-toggle='tab' href='#affectedCases'><?php echo $lang->story->affectedCases;?> <?php $count = count($story->cases); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
-    <li><a data-toggle='tab' href='#affectedTwins'><?php if(isset($twins) and count($twins) != 1) echo $lang->story->affectedTwins;?> <?php if(isset($twins) and $twinsCount > 0) echo "<span class='label label-danger label-badge label-circle'>" . $twinsCount . "</span>" ?></a></li>
+    <li><a data-toggle='tab' href='#affectedTwins'><?php if(isset($twins) and count($twins) > 1) echo $lang->story->affectedTwins;?> <?php if(isset($twins) and count($twins) > 1) echo "<span class='label label-danger label-badge label-circle'>" . count($twins) . "</span>" ?></a></li>
   </ul>
   <div class='tab-content'>
     <div class='tab-pane active' id='affectedProjects'>
@@ -108,7 +107,7 @@ if(isset($twins))
         </tbody>
       </table>
     </div>
-    <?php if(isset($twins) and count($twins) != 1):?>
+    <?php if(isset($twins)):?>
     <div class='tab-pane' id='affectedTwins'>
       <table class='table'>
         <thead>
@@ -122,7 +121,7 @@ if(isset($twins))
             <th class='c-user'><?php echo $lang->story->lastEditedByAB;?></th>
           </tr>
         </thead>
-        <tbody class='<?php if($twinsCount > $config->story->affectedFixedNum)  echo "linkbox";?>'>
+        <tbody class='<?php if(count($twins) > $config->story->affectedFixedNum)  echo "linkbox";?>'>
           <?php foreach($twins as $twin):?>
           <?php
               $branch = isset($branches[$twin->branch]) ? $branches[$twin->branch] : '';
