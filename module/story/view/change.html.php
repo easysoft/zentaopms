@@ -44,19 +44,23 @@
         <tr>
           <th><?php echo $lang->story->title;?></th>
           <td>
-            <div class="colorpicker">
-              <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-              <ul class="dropdown-menu clearfix">
-                <li class="heading"><?php echo $lang->story->colorTag; ?><i class="icon icon-close"></i></li>
-              </ul>
-              <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
+            <div class='input-group title-group'>
+              <div class="input-control has-icon-right">
+                <?php echo html::input('title', $story->title, 'class="form-control story-title"');?>
+                <div class="colorpicker">
+                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                  <ul class="dropdown-menu clearfix">
+                    <li class="heading"><?php echo $lang->story->colorTag; ?><i class="icon icon-close"></i></li>
+                  </ul>
+                  <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
+                </div>
+              </div>
+              <?php if(!empty($story->twins)):?>
+              <div class="input-group-addon">
+                <?php echo html::checkbox('relievedTwins', $lang->story->relievedTwinsRelation, '', "id='relievedTwins' title='{$lang->story->changeRelievedTwinsTips}'");?>
+              </div>
+              <?php endif;?>
             </div>
-            <?php echo html::input('title', $story->title, 'class="form-control story-title"');?>
-            <?php if(!empty($story->twins)):?>
-            <div class="input-group-addon">
-              <?php echo html::checkbox('relievedTwins', $lang->story->relievedTwinsRelation, '', "id='relievedTwins' title='{$lang->story->changeRelievedTwinsTips}'");?>
-            </div>
-            <?php endif;?>
           </td>
         </tr>
         <tr>
