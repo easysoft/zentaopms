@@ -121,7 +121,6 @@ $lang->story->source           = "来源";
 $lang->story->sourceNote       = '来源备注';
 $lang->story->fromBug          = '来源Bug';
 $lang->story->title            = "{$lang->SRCommon}名称";
-$lang->story->titleAB          = "标题";
 $lang->story->type             = "需求类型";
 $lang->story->category         = "类别";
 $lang->story->color            = '标题颜色';
