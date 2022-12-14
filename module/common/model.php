@@ -2486,9 +2486,7 @@ EOD;
         }
         catch(EndResponseException $endResponseException)
         {
-            if($this->app->getViewType() == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) die($endResponseException->getContent());
-
-            echo $endResponseException->getContent();
+            die($endResponseException->getContent());
         }
     }
 
