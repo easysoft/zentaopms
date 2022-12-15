@@ -1,5 +1,5 @@
 <style>
-.block-guide .panel-body {padding: 0;height: 286px;}
+.block-guide .panel-body {padding: 0; height: 286px;}
 .block-guide .panel-body .table-row {height: 100%; border-top: 1px solid #EEE;}
 .block-guide .col-nav {border-right: 1px solid #EBF2FB; width: 170px; padding: 0; background: #F3F6FA;}
 .block-guide .nav-secondary > li {position: relative;}
@@ -14,6 +14,10 @@
 .block-guide .nav-secondary > li.active > a > span.btn-view,
 .block-guide .nav-secondary > li:hover > a > span.btn-view {opacity: 1;}
 .block-guide .nav-secondary > li.switch-icon {display: none;}
+.block-guide .tab-pane .app-qrcode {padding: 10px 20px;}
+.block-guide .tab-pane .app-qrcode .col-md-12 {padding-left: 0; padding-top: 10px;}
+.block-guide .tab-pane .app-qrcode .qrcode-down img {padding-top: 24px; width: 120px;}
+.block-guide .tab-pane .app-qrcode .qrcode-down .text-primary {padding-top: 10px;}
 <?php if(common::checkNotCN()):?>
 .block-guide .col-nav {width: 215px;}
 <?php endif;?>
@@ -58,7 +62,25 @@ $(function()
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentthemeSwitch";?>'></div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}Contentpreference";?>'></div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadClient";?>'></div>
-      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadMoblie";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadMoblie";?>'>
+        <div class='table-row app-qrcode'>
+          <div class="col-4">
+            <div class='col'><h4><?php echo $lang->block->zentaoapp->commom;?></h4></div>
+            <div class="col dataTitle"><?php echo $lang->block->zentaoapp->desc;?></div>
+            <div class='col pull-left col-md-12'>
+              <div class="pull-left col-md-7">
+                <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_index.png');?></div>
+                <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_execution.png');?></div>
+                <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_statistic.png');?></div>
+              </div>
+              <div class="pull-left col-md-4 text-center qrcode-down">
+                <div><?php echo html::image($config->webRoot . 'theme/default/images/main/mobile_qrcode.png');?></div>
+                <div class="text-center text-primary"><?php echo $lang->block->zentaoapp->downloadTip;?></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

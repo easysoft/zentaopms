@@ -573,6 +573,7 @@ $lang->block->flowchart['dev']     = array('Développeurs', 'Réclament Tâches/
 $lang->block->flowchart['tester']  = array('Testeurs', 'Rédigent CasTests', 'Jouent CasTests', 'Détectent Bugs', 'Vérifient Corrections', 'Ferment Bugs');
 
 $lang->block->zentaoapp = new stdclass();
+$lang->block->zentaoapp->commom               = 'Zentao App';
 $lang->block->zentaoapp->thisYearInvestment   = 'Investment The Year';
 $lang->block->zentaoapp->sinceTotalInvestment = 'Total Investment';
 $lang->block->zentaoapp->myStory              = 'My Story';
@@ -592,6 +593,8 @@ $lang->block->zentaoapp->notSupportKanban     = 'The mobile terminal does not su
 $lang->block->zentaoapp->notSupportVersion    = 'This version of ZenTao is not currently supported on the mobile terminal';
 $lang->block->zentaoapp->incompatibleVersion  = 'The current version of ZenTao is lower, please upgrade to the latest version and try again';
 $lang->block->zentaoapp->canNotGetVersion     = 'Failed to get ZenTao version, please confirm if the URL is correct';
+$lang->block->zentaoapp->desc                 = 'ZenTao mobile app provides you with a mobile work environment, which is convenient for managing personal to-do tasks at any time, tracking project progress, and enhancing the flexibility and agility of project management.';
+$lang->block->zentaoapp->downloadTip          = 'Scan QR code to download';
 
 $lang->block->guideTabs['flowchart']      = 'Flowchart';
 $lang->block->guideTabs['systemMode']     = 'Operating Modes';
