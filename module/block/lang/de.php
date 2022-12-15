@@ -99,6 +99,7 @@ $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span c
 $lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<span class='label-action'>%s</span>%s<span class='label-name'>%s</span></span>";
 $lang->block->cannotPlaceInLeft  = 'Kann den Block nicht auf der linken Seite platzieren.';
 $lang->block->cannotPlaceInRight = 'Kann den Block nicht auf der rechten Seite platzieren.';
+$lang->block->tutorial           = 'Enter the tutorial';
 
 $lang->block->productName  = $lang->productCommon . ' Name';
 $lang->block->totalStory   = 'Total Story';

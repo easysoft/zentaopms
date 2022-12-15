@@ -1,4 +1,7 @@
 <style>
+.block-guide .tutorialBtn {margin-right: 10px;}
+.block-guide .tutorialBtn, .block-guide a.tutorialBtn:hover {color: #FFF; background: #FF9F46;}
+.block-guide .flowchart {padding: 20px 24px 20px 24px;}
 .block-guide .panel-body {padding: 0;height: 286px;}
 .block-guide .panel-body .table-row {height: 100%; border-top: 1px solid #EEE;}
 .block-guide .col-nav {border-right: 1px solid #EBF2FB; width: 170px; padding: 0; background: #F3F6FA;}
@@ -32,6 +35,17 @@ $(function()
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
         e.preventDefault();
     });
+    $nav.find('li').click(function()
+    {
+        if($(this).attr('id') == 'flowchart')
+        {
+            $('.block-guide .tutorialBtn').removeClass('hidden');
+        }
+        else
+        {
+            $('.block-guide .tutorialBtn').addClass('hidden');
+        }
+    })
 });
 </script>
 <div class="panel-body">
@@ -40,7 +54,7 @@ $(function()
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <?php foreach($lang->block->guideTabs as $tab => $tabName):?>
         <?php if(strpos($tab, 'download') !== false and (!isset($config->xxserver->installed) or !$config->xuanxuan->turnon)) continue;?>
-        <li <?php if($tab == 'flowchart') echo "class='active' id='activeGuide'";?>>
+        <li <?php if($tab == 'flowchart') echo "class='active'";?> id="<?php echo $tab;?>">
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>
             <span class='btn-view'><i class='icon-arrow-right text-primary'></i><span>

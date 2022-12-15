@@ -9,7 +9,6 @@
 <?php endforeach; ?>
 </div>
 <style>
-.flowchart {padding: 20px 24px 20px 24px;}
 .flow-item {float: left; width: 16.66667%; max-width: 180px; text-align: center; margin-bottom: 9px; padding-right: 15px;}
 .flow-item > div {position: relative; padding: 5px 0 5px 8px; line-height: 20px; background: #66A2FF; white-space:nowrap; overflow: visible; color: #3c4353}
 .flow-item > div:before, .flow-item > div:after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 15px 0 15px 10px; border-color: transparent transparent transparent #66A2FF; position: absolute; left: 0; top: 0;}
