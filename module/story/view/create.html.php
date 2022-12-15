@@ -124,6 +124,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
           </tr>
           <tr class='<?php if($branches) echo "hidden"; ?> switchBranch'>
+            <?php if(!$hiddenPlan):?>
             <th class='planTh'><?php echo $lang->story->planAB;?></th>
             <td colspan="2">
               <div class='input-group' id='planIdBox'>
@@ -141,6 +142,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 ?>
               </div>
             </td>
+            <?php else:?>
+            <th class='planTh'><?php echo $lang->story->assignedTo;?></th>
+            <?php endif;?>
             <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
               <div class='input-group'>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
