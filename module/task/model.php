@@ -945,9 +945,10 @@ class taskModel extends model
             /* Insert or update team. */
             if($mode == 'multi' and isset($teams[$account]))
             {
-                $this->dao->update(TABLE_TASKTEAM)->set("estimate= estimate + {$member->estimate}")
-                    ->set("`left` = `left` + {$member->left}")
-                    ->set("`consumed` = `consumed` + {$member->consumed}")
+                $this->dao->update(TABLE_TASKTEAM)
+                    ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
+                    ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
+                    ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
                     ->where('task')->eq($member->task)
                     ->andWhere('account')->eq($member->account)
                     ->exec();
