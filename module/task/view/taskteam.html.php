@@ -144,19 +144,17 @@ $(document).ready(function()
     showTeamMenu();
     <?php endif;?>
 
+    <?php if(isset($task->mode) and $task->mode == 'multi'):?>
     $('tr.teamTemplate').closest('tbody.sortable').sortable('destroy');
-
-    <?php if(empty($task->mode) or $task->mode != 'multi'):?>
-    var canSort = false;
+    <?php else:?>
     var options = {
-        trigger: '.icon-move',
-        selector: 'tr.teamTemplate',
+        selector: '.icon-move',
         dragCssClass: 'drag-row',
         reverse: true,
         finish: setLineNumber
     }
 
-    $('#taskTeamEditor > .sortable').sortable(options);
+    $('#taskTeamEditor tbody.sortable').sortable(options);
     <?php endif;?>
 
     /* Init task team manage dialog */
