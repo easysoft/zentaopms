@@ -78,8 +78,8 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
               <span class="input-group-btn team-group hidden"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
             </div>
           </td>
-          <td>
-            <div class="checkbox-primary c-multipleTask affair" style='display: inline-block'>
+          <td colspan='2'>
+            <div class="checkbox-primary c-multipleTask affair" style='display: inline-block; margin-right: -30px'>
               <input type="checkbox" name="multiple" value="1" id="multipleBox" /><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
             </div>
             <div class='hidden modeBox' style='display: inline-block'><?php echo html::radio('mode', $lang->task->modeList, !empty($task->mode) ? $task->mode: 'linear');?></div>
