@@ -10,6 +10,7 @@
 ol, ul {padding-left: 20px;}
 .c-id {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 td.c-build{white-space: nowrap; overflow:hidden;}
+th.c-user,td.c-user{text-align:left}
 
 #stories th, #stories td{padding-left:16px;padding-right:16px;}
 #stories .c-build{width:160px; text-align:left;}

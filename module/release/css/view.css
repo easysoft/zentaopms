@@ -11,6 +11,7 @@ ol, ul {padding-left: 20px;}
 .body-modal #mainContent {min-height: 240px;}
 .c-id {width: 110px;}
 td.c-build{white-space: nowrap; overflow:hidden;}
+th.c-user,td.c-user{text-align:left}
 
 #stories th, #stories td{padding-left:16px;padding-right:16px;}
 #stories .c-build{width:160px; text-align:left;}
