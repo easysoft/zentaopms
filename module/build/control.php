@@ -876,9 +876,10 @@ class build extends control
         }
         else
         {
-            $branchList = $this->loadModel('branch')->getPairs($build->product, '', $build->execution);
-            $branchAll  = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$product->type]);
-            $branches   = array('' => $branchAll, BRANCH_MAIN => $this->lang->branch->main);
+            $buildBranch = array();
+            $branchList  = $this->loadModel('branch')->getPairs($build->product, '', $build->execution);
+            $branchAll   = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$product->type]);
+            $branches    = array('' => $branchAll, BRANCH_MAIN => $this->lang->branch->main);
             if(strpos($build->branch, ',') !== false) $buildBranch = explode(',', $build->branch);
             foreach($buildBranch as $buildKey) $branches += array($buildKey => zget($branchList, $buildKey));
 
