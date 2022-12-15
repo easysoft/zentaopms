@@ -180,7 +180,7 @@ class build extends control
         {
             $productGroups = $this->product->getProducts($build->project);
             $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
-            $builds        = $this->build->getBuildPairs($build->product, $build->branch, 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
+            $builds        = $this->build->getBuildPairs($build->product, 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
         }
 
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
@@ -876,9 +876,10 @@ class build extends control
         }
         else
         {
-            $branchList = $this->loadModel('branch')->getPairs($build->product, '', $build->execution);
-            $branchAll  = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$product->type]);
-            $branches   = array('' => $branchAll, BRANCH_MAIN => $this->lang->branch->main);
+            $buildBranch = array();
+            $branchList  = $this->loadModel('branch')->getPairs($build->product, '', $build->execution);
+            $branchAll   = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$product->type]);
+            $branches    = array('' => $branchAll, BRANCH_MAIN => $this->lang->branch->main);
             if(strpos($build->branch, ',') !== false) $buildBranch = explode(',', $build->branch);
             foreach($buildBranch as $buildKey) $branches += array($buildKey => zget($branchList, $buildKey));
 

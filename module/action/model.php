@@ -1842,6 +1842,11 @@ class actionModel extends model
                 }
             }
         }
+        elseif($action->objectType == 'release')
+        {
+            $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($action->objectID)->fetch();
+            if($release->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(0)->where('id')->eq($release->shadow)->exec();
+        }
 
         /* Update deleted field in object table. */
         $table = $this->config->objectTables[$action->objectType];

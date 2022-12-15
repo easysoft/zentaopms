@@ -1587,7 +1587,7 @@ class productModel extends model
                 }
                 $total++;
 
-                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);
+                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap, $branch);
             }
         }
 
@@ -1610,11 +1610,11 @@ class productModel extends model
                 }
                 $total++;
 
-                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);
+                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap, $branch);
             }
         }
 
-        if($count > 0) return $this->processRoadmap($roadmap);
+        if($count > 0) return $this->processRoadmap($roadmap, $branch);
 
         $groupRoadmap = array();
         foreach($roadmap as $year => $branchRoadmaps)
@@ -1655,16 +1655,18 @@ class productModel extends model
      * Process roadmap.
      *
      * @param  array  $roadmap
+     * @param  int    $branch
      * @access public
      * @return array
      */
-    public function processRoadmap($roadmapGroups)
+    public function processRoadmap($roadmapGroups, $branch)
     {
         $newRoadmap = array();
         foreach($roadmapGroups as $year => $branchRoadmaps)
         {
-            foreach($branchRoadmaps as $branch => $roadmaps)
+            foreach($branchRoadmaps as $branchID => $roadmaps)
             {
+                if($branch != $branchID) continue;
                 foreach($roadmaps as $roadmap) $newRoadmap[] = $roadmap;
             }
         }

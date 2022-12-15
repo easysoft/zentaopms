@@ -778,7 +778,7 @@ class storyModel extends model
             ->get();
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
-        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles')
+        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
             ->checkFlow()
@@ -804,7 +804,7 @@ class storyModel extends model
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
                 /* Sync twins. */
-                if(!empty($oldStory->twins))
+                if(!isset($story->relievedTwins) and !empty($oldStory->twins))
                 {
                     foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                     {
@@ -843,7 +843,7 @@ class storyModel extends model
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
 
                     /* Sync twins. */
-                    if(!empty($oldStory->twins))
+                    if(!isset($story->relievedTwins) and !empty($oldStory->twins))
                     {
                         foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                         {
@@ -861,7 +861,17 @@ class storyModel extends model
             }
 
             $changes = common::createChanges($oldStory, $story);
-            if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Changed');
+
+            if(isset($story->relievedTwins))
+            {
+                $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
+                $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            }
+            elseif(!empty($oldStory->twins))
+            {
+                $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Changed');
+            }
+
             return $changes;
         }
     }
@@ -1956,10 +1966,6 @@ class storyModel extends model
             }
 
             if(dao::isError()) return print(js::error(dao::getError()));
-
-            $isonlybody = isonlybody();
-            unset($_GET['onlybody']);
-            return print(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), $isonlybody ? 'parent.parent' : 'parent'));
         }
         else
         {
@@ -2189,12 +2195,17 @@ class storyModel extends model
         $oldStoryStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
         $unlinkPlans    = array();
         $link2Plans     = array();
+        if(empty($plan))
+        {
+            $plan = new stdClass();
+            $plan->branch = BRANCH_MAIN;
+        }
 
         /* Cycle every story and process it's plan and stage. */
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
-            if($oldStory->branch != BRANCH_MAIN and $oldStory->branch != $plan->branch and $plan->branch != BRANCH_MAIN) continue;
+            if($oldStory->branch != BRANCH_MAIN and !in_array($oldStory->branch, explode(',', $plan->branch)) and $plan->branch != BRANCH_MAIN) continue;
 
             /* Ignore parent story, closed story and story linked to this plan already. */
             if($oldStory->parent < 0) continue;
@@ -2224,6 +2235,14 @@ class storyModel extends model
                     ->where('product')->eq($oldStory->product)
                     ->andWhere('id')->in($oldStory->plan)
                     ->fetchPairs();
+                foreach($branchPlanPairs as $branches => $planParis)
+                {
+                    foreach(explode(',', $branches) as $branch)
+                    {
+                        $branchPlanPairs[$branch] = $planParis;
+                    }
+                    unset($branchPlanPairs[$branches]);
+                }
                 if($planID == 0 and !empty($oldStory->plan) and isset($branchPlanPairs[0]) and $branchPlanPairs[0] != $planID) $unlinkPlans[$branchPlanPairs[0]] = empty($unlinkPlans[$branchPlanPairs[0]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[0]]},$storyID";
                 if($planID != 0)
                 {
@@ -2238,7 +2257,7 @@ class storyModel extends model
                         }
                     }
                     foreach(explode(',', $plan->branch) as $planBranch) if(isset($branchPlanPairs[$planBranch])) $branchPlanPairs[$planBranch] = $planID;
-                    $story->plan = $oldStory->plan ? implode(',', $branchPlanPairs) : $planID;
+                    $story->plan = $oldStory->plan ? implode(',', array_unique($branchPlanPairs)) : $planID;
                     $story->plan = trim($story->plan, ',');
                     if($story->plan != $oldStory->plan and !empty($planID)) $link2Plans[$planID]  = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
                 }
@@ -3786,7 +3805,7 @@ class storyModel extends model
             ->andWhere('parent')->le(0)
             ->andWhere('type')->eq('story')
             ->andWhere('stage')->eq('wait')
-            ->andWhere('status')->notin('closed,draft')
+            ->andWhere('status')->eq('active')
             ->andWhere('product')->eq($productID)
             ->andWhere('plan')->in('0,')
             ->andWhere('twins')->eq('')
@@ -4529,6 +4548,7 @@ class storyModel extends model
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';
         if($action == 'batchcreate' and $story->parent > 0) return false;
+        if($action == 'batchcreate' and !empty($story->twins)) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         /* Adjust code, hide split entry. */
@@ -4632,6 +4652,10 @@ class storyModel extends model
                         if($story->parent > 0)
                         {
                             $title = $this->lang->story->subDivideTip['subStory'];
+                        }
+                        elseif(!empty($story->twins))
+                        {
+                            $title = $this->lang->story->subDivideTip['twinsSplit'];
                         }
                         else
                         {
@@ -4803,7 +4827,7 @@ class storyModel extends model
                 $executionID = empty($execution) ? 0 : $execution->id;
 
                 /* Adjust code, hide split entry. */
-                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct and false)
+                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $this->lang->story->subdivide;

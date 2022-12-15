@@ -293,4 +293,6 @@ function addNewLine(obj)
 function removeLine(obj)
 {
     $(obj).closest('tr').remove();
+    disableSelectedProduct();
+    if($("select[name^='products']").length < 2) $('.division').addClass('hide'); 
 }
