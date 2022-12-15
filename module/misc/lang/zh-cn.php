@@ -103,6 +103,7 @@ $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“�
 $lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[运营管理界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
 
+$lang->misc->releaseDate['18.0.beta2']  = '2022-12-14';
 $lang->misc->releaseDate['18.0.beta1']  = '2022-11-16';
 $lang->misc->releaseDate['17.8']        = '2022-11-02';
 $lang->misc->releaseDate['17.7']        = '2022-10-19';
@@ -193,6 +194,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['18.0.beta2'][] = array('title' => '优化多分支/多平台产品，支持创建孪生需求，计划、版本、发布支持跨分支关联需求和bug，新增5个BI大屏，并且禅道客户端实现了机器人会话机制。', 'desc' => '');
 $lang->misc->feature->all['18.0.beta1'][] = array('title' => '主要对禅道多项核心流程进行改进，新增项目型项目、无迭代项目；支持项目跨项目集关联产品；支持轻量管理模式和全生命周期管理模式进行切换。', 'desc' => '');
 $lang->misc->feature->all['17.8'][]       = array('title' => '列表状态颜色、仪表盘颜色的改版和任务日志页面的优化。', 'desc' => '');
 $lang->misc->feature->all['17.7'][]       = array('title' => '过渡版本表格优化完成。新增工单功能，优化了反馈功能。修复Bug。', 'desc' => '');

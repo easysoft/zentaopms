@@ -577,6 +577,13 @@ class upgradeModel extends model
                 $this->xuanNotifyGroupHiddenUsers();
                 $this->initShadowBuilds();
                 break;
+            case '18_0_beta1':
+                if(!$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+                break;
         }
 
         $this->deletePatch();
@@ -1058,6 +1065,10 @@ class upgradeModel extends model
             case '17_8':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.8'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.5.sql';
+                $confirmContent .= file_get_contents($xuanxuanSql);
+            case '18_0_beta1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta1'));
+                $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
         }
 

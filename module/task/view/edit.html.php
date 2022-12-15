@@ -132,7 +132,25 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php endif;?>
               <tr class="modeBox">
                 <th><?php echo $lang->task->mode;?></th>
-                <td><?php echo $task->status == 'wait' ? html::select('mode', $lang->task->editModeList, $task->mode, "class='form-control chosen'") : zget($lang->task->editModeList, $task->mode);?></td>
+                <td>
+                  <?php
+                  if($task->status == 'wait')
+                  {
+                      echo html::select('mode', $lang->task->editModeList, $task->mode, "class='form-control chosen'");
+                  }
+                  else
+                  {
+                      if($task->mode == '')
+                      {
+                          echo $lang->task->editModeList['single'];
+                      }
+                      else
+                      {
+                          echo zget($lang->task->editModeList, $task->mode);
+                      }
+                  }
+                  ?>
+                </td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
