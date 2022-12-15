@@ -17,6 +17,10 @@
 <?php js::set('taskCaseBrowseType', ($browseType == 'bymodule' and $this->session->taskCaseBrowseType == 'bysearch') ? 'all' : $this->session->taskCaseBrowseType);?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('moduleID', $moduleID);?>
+<?php $this->app->loadLang('zanode');?>
+<?php js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);?>
+<?php js::set('confirmURL',     $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=id_desc&from=testcase&taskID=$taskID&confirm=yes"));?>
+<?php js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=id_desc&from=testcase&taskID=$taskID&confirm=no"));?>
 <div id='mainContent' class='main-row fade'>
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
@@ -131,8 +135,7 @@
           <?php
           if($canBatchRun)
           {
-              $actionLink = inLink('batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$taskID");
-              echo html::commonButton($lang->testtask->runCase, "onclick=\"setFormAction('$actionLink')\"");
+              echo html::commonButton($lang->testtask->runCase, "onclick=\"confirmAction()\"");
           }
           ?>
         </div>
@@ -163,5 +166,19 @@ if($shortcut.size() > 0)
 $(function(){$('#casesForm').table();})
 <?php endif;?>
 $("thead").find('.c-assignedTo').attr('class', '');
+function confirmAction()
+{
+    if(confirm(runCaseConfirm))
+    {
+        setFormAction(confirmURL, '', '#caseList');
+    }
+    else
+    {
+        setFormAction(cancelURL, '', '#caseList');
+    }
+
+    return false;
+}
+</script>
 </script>
 <?php include '../../common/view/footer.html.php';?>

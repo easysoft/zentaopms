@@ -234,14 +234,6 @@ class zahostModel extends model
             $image->host = $hostID;
         }
 
-        if($refreshPageData)
-        {
-            $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('host')->eq($hostID)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('name');
-        }
         return $imageList;
     }
 

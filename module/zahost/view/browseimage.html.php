@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::set('hostID', $hostID);?>
 <?php js::set('downloadLink', $hostID);?>
 <div id='mainMenu' class='clearfix'>
