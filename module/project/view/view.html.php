@@ -242,6 +242,24 @@
             <div class="detail-content">
               <table class="table table-data data-basic">
                 <tbody>
+                  <?php if(empty($project->hasProduct) and !empty($config->URAndSR) and $project->model !== 'kanban' and isset($lang->project->menu->storyGroup)):?>
+                  <tr>
+                    <th><?php echo $lang->story->common;?></th>
+                    <td title="<?php echo $statData->storyCount;?>"><?php echo $statData->storyCount;?></td>
+                    <th><?php echo $lang->requirement->common;?></th>
+                    <td title="<?php echo $statData->requirementCount;?>"><?php echo $statData->requirementCount;?></td>
+                  </tr>
+                  <tr>
+                    <th><?php echo $lang->task->common;?></th>
+                    <td title="<?php echo $statData->taskCount;?>"><?php echo $statData->taskCount;?></td>
+                    <th><?php echo $lang->bug->common;?></th>
+                    <td title="<?php echo $statData->bugCount;?>"><?php echo $statData->bugCount;?></td>
+                  </tr>
+                  <tr>
+                    <th><?php echo $lang->project->budget;?></th>
+                    <td title="<?php echo $project->budget;?>"><?php echo $project->budget;?></td>
+                  </tr>
+                  <?php else:?>
                   <tr>
                     <th><?php echo $lang->story->common;?></th>
                     <td title="<?php echo $statData->storyCount;?>"><?php echo $statData->storyCount;?></td>
@@ -254,6 +272,7 @@
                     <th><?php echo $lang->project->budget;?></th>
                     <td title="<?php echo $project->budget;?>"><?php echo $project->budget;?></td>
                   </tr>
+                  <?php endif;?>
                 </tbody>
               </table>
             </div>

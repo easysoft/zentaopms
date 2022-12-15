@@ -318,6 +318,7 @@ $lang->action->label->suspend               = 'suspended';
 $lang->action->label->resume                = 'resumed';
 $lang->action->label->reboot                = 'reboot';
 $lang->action->label->destroy               = 'destroyed';
+$lang->action->label->synctwins             = 'synchronized changes';
 $lang->action->label->linkedrepo            = 'Linked Code Repo';
 $lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
 

@@ -753,11 +753,14 @@ class projectModel extends model
     public function getStatData($projectID)
     {
         $executions = $this->loadModel('execution')->getPairs($projectID);
-        $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
+        $storyTypeCount = $this->dao->select('count(t2.story) as storyCount,t1.type')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
             ->where('t2.project')->eq($projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->fetch('storyCount');
+            ->groupBy('t1.type')
+            ->fetchPairs('type', 'storyCount');
+        $storyCount       = isset($storyTypeCount['story']) ? $storyTypeCount['story'] : 0;
+        $requirementCount = isset($storyTypeCount['requirement']) ? $storyTypeCount['requirement'] : 0;
 
         $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('taskCount');
         $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->in($projectID)->andWhere('deleted')->eq(0)->fetch('bugCount');
@@ -773,13 +776,14 @@ class projectModel extends model
             ->fetch('count');
 
         $statData = new stdclass();
-        $statData->storyCount    = $storyCount;
-        $statData->taskCount     = $taskCount;
-        $statData->bugCount      = $bugCount;
-        $statData->waitCount     = zget($statusPairs, 'wait', 0);
-        $statData->doingCount    = zget($statusPairs, 'doing', 0);
-        $statData->finishedCount = $finishedCount;
-        $statData->delayedCount  = $delayedCount;
+        $statData->storyCount       = $storyCount;
+        $statData->requirementCount = $requirementCount;
+        $statData->taskCount        = $taskCount;
+        $statData->bugCount         = $bugCount;
+        $statData->waitCount        = zget($statusPairs, 'wait', 0);
+        $statData->doingCount       = zget($statusPairs, 'doing', 0);
+        $statData->finishedCount    = $finishedCount;
+        $statData->delayedCount     = $delayedCount;
 
         return $statData;
     }
@@ -1243,6 +1247,20 @@ class projectModel extends model
             }
         }
 
+        if($_POST['products'])
+        {
+            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
+            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
+            foreach($_POST['products'] as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                {
+                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    return false;
+                }
+            }
+        }
+
         $program = new stdClass();
         if($project->parent)
         {
@@ -1485,6 +1503,7 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('parent', 0)
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
@@ -1508,12 +1527,27 @@ class projectModel extends model
             if(dao::isError()) return false;
         }
 
+        if($_POST['products'])
+        {
+            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
+            $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
+            foreach($_POST['products'] as $index => $productID)
+            {
+                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                {
+                    dao::$errors[] = $this->lang->project->emptyBranch;
+                    return false;
+                }
+            }
+        }
+
         /* Judge products not empty. */
         $linkedProductsCount = 0;
         foreach($_POST['products'] as $product)
         {
             if(!empty($product)) $linkedProductsCount++;
         }
+
         if(empty($linkedProductsCount))
         {
             dao::$errors[] = $this->lang->project->errorNoProducts;
@@ -1553,7 +1587,7 @@ class projectModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        if(!$oldProject->hasProduct && $oldProject->name != $project->name) $this->updateProductName($project->name, $projectID);
+        if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
 
         /* Get team and language item. */
         $this->loadModel('user');
@@ -1714,7 +1748,7 @@ class projectModel extends model
 
             if(!dao::isError())
             {
-                if(!$oldProject->hasProduct && $oldProject->name != $project->name) $this->updateProductName($project->name, $projectID);
+                if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
 
                 if(isset($project->parent))
                 {
@@ -2008,17 +2042,18 @@ class projectModel extends model
     }
 
     /**
-     * Update a product's name as its project.
+     * Update shadow product for its project.
      *
-     * @param  string $projectName
-     * @param  int    $projectID
+     * @param  object $project
      * @access public
      * @return bool
      */
-    public function updateProductName($projectName, $projectID)
+    public function updateShadowProduct($project)
     {
-        $product = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
-        $this->dao->update(TABLE_PRODUCT)->set('name')->eq($projectName)->where('id')->eq($product)->exec();
+        $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project->id)->fetch('product');
+        $topProgram = !empty($project->parent) ? $this->loadModel('program')->getTopByID($project->parent) : 0;
+        $this->dao->update(TABLE_PRODUCT)->set('name')->eq($project->name)->set('program')->eq($topProgram)->set('acl')->eq($project->acl)->where('id')->eq($product)->exec();
+
         return !dao::isError();
     }
 
@@ -2403,24 +2438,29 @@ class projectModel extends model
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
 
-            if(isset($existedProducts[$productID][$branch])) continue;
+            if(!is_array($branch)) $branch = array($branch => $branch);
 
-            if(isset($oldProjectProducts[$productID][$branch]))
+            foreach($branch as $branchID)
             {
-                $oldProjectProduct = $oldProjectProducts[$productID][$branch];
-                if($this->app->rawMethod != 'edit') $oldPlan = $oldProjectProduct->plan;
+                if(isset($existedProducts[$productID][$branchID])) continue;
+
+                if(isset($oldProjectProducts[$productID][$branchID]))
+                {
+                    $oldProjectProduct = $oldProjectProducts[$productID][$branchID];
+                    if($this->app->rawMethod != 'edit') $oldPlan = $oldProjectProduct->plan;
+                }
+
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->product = $productID;
+                $data->branch  = $branchID;
+                $data->plan    = isset($plans[$productID]) ? implode(',', $plans[$productID]) : $oldPlan;
+                $data->plan    = trim($data->plan, ',');
+                $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
+
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                $existedProducts[$productID][$branchID] = true;
             }
-
-            $data = new stdclass();
-            $data->project = $projectID;
-            $data->product = $productID;
-            $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
-            $data->plan    = trim($data->plan, ',');
-            $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
-
-            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            $existedProducts[$productID][$branch] = true;
         }
 
         /* Delete the execution linked products that is not linked with the execution. */

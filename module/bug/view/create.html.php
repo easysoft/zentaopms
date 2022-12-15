@@ -31,7 +31,7 @@ js::set('requiredFields', $config->bug->create->requiredFields);
 js::set('showFields', $showFields);
 js::set('projectExecutionPairs', $projectExecutionPairs);
 js::set('productID', $productID);
-js::set('releasedBuild', $lang->build->releasedBuild);
+js::set('released', $lang->build->released);
 if($this->app->tab == 'execution') js::set('objectID', zget($execution, 'id', ''));
 if($this->app->tab == 'project')   js::set('objectID', $projectID);
 ?>

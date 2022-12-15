@@ -9,3 +9,17 @@
 #tabsNav .nav-tabs > li.active + li.pull-right {margin-right: 0;}
 ol, ul {padding-left: 20px;}
 .c-id {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+td.c-build{white-space: nowrap; overflow:hidden;}
+th.c-user,td.c-user{text-align:left}
+
+#stories th, #stories td{padding-left:16px;padding-right:16px;}
+#stories .c-build{width:160px; text-align:left;}
+#stories .c-status{width:120px;}
+#stories .c-stage{width:112px; text-align:left;}
+#stories .c-estimate{width:90px; text-align:right;}
+#bugs .c-build{width:160px; text-align:left;}
+#bugs .c-user{width:120px;}
+#bugs .c-date{width:130px;}
+#leftBugs .c-build{width:160px; text-align:left;}
+#leftBugs .c-user{width:120px;}
+#leftBugs .c-date{width:160px;}

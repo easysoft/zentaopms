@@ -1044,12 +1044,7 @@ function disableSelectedProduct()
     $("select[id^='products']").each(function()
     {
         var selectedProduct = $(this).val();
-        if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0 && !multiBranchProducts[selectedProduct]) selectedVal.push(selectedProduct);
-        if(multiBranchProducts[selectedProduct])
-        {
-            var isDisabled = checkMultiProducts(this);
-            if(isDisabled) selectedVal.push(selectedProduct);
-        }
+        if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0) selectedVal.push(selectedProduct);
     })
 
     $("select[id^='products']").each(function()
@@ -1208,7 +1203,7 @@ function showCheckedFields(fields)
         else if(!$fieldBox.hasClass('hidden'))
         {
             $fieldBox.addClass('hidden');
-            $field.attr('disabled', true);
+            if($(this).val() != 'branch') $field.attr('disabled', true);
         }
 
         if(config.currentModule == 'story' && $(this).val() == 'source')

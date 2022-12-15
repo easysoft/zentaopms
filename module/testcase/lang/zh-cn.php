@@ -20,7 +20,7 @@ $lang->testcase->howRun           = '测试方式';
 $lang->testcase->frequency        = '使用频率';
 $lang->testcase->path             = '路径';
 $lang->testcase->lib              = "所属库";
-$lang->testcase->branch           = "分支/平台";
+$lang->testcase->branch           = "平台/分支";
 $lang->testcase->moduleAB         = '模块';
 $lang->testcase->story            = "相关{$lang->SRCommon}";
 $lang->testcase->storyVersion     = "{$lang->SRCommon}版本";
@@ -186,7 +186,7 @@ $lang->testcase->confirmDelete         = '您确认要删除该测试用例吗�
 $lang->testcase->confirmBatchDelete    = '您确认要批量删除这些测试用例吗？';
 $lang->testcase->ditto                 = '同上';
 $lang->testcase->dittoNotice           = '该用例与上一用例不属于同一产品！';
-$lang->testcase->confirmUnlinkTesttask = '用例[%s]已关联在之前所属分支/平台的测试单中，调整分支/平台后，将从之前所属分支/平台的测试单中移除，请确认是否继续修改。';
+$lang->testcase->confirmUnlinkTesttask = '用例[%s]已关联在之前所属平台/分支的测试单中，调整平台/分支后，将从之前所属平台/分支的测试单中移除，请确认是否继续修改。';
 
 $lang->testcase->reviewList[0] = '否';
 $lang->testcase->reviewList[1] = '是';

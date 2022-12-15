@@ -49,10 +49,12 @@
       <thead>
         <tr>
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
-          <th class="c-name w-200px text-left <?php echo $hidden;?>"><?php echo $lang->build->product;?></th>
+          <th class="c-name w-150px text-left <?php echo $hidden;?>"><?php echo $lang->build->product;?></th>
+          <?php if($showBranch):?>
+          <th class="c-name w-150px text-left <?php echo $hidden;?>"><?php echo $lang->build->branch;?></th>
+          <?php endif;?>
           <th class="c-name text-left"><?php echo $lang->build->name;?></th>
-          <th class="c-url"><?php echo $lang->build->scmPath;?></th>
-          <th class="c-url"><?php echo $lang->build->filePath;?></th>
+          <th class="c-url w-200px text-left"><?php echo $lang->build->url;?></th>
           <th class="c-date"><?php echo $lang->build->date;?></th>
           <th class="c-user"><?php echo $lang->build->builder;?></th>
           <th class="c-actions-5"><?php echo $lang->actions;?></th>
@@ -64,12 +66,30 @@
         <tr data-id="<?php echo $productID;?>">
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink('build', 'view', "buildID=$build->id"), sprintf('%03d', $build->id));?></td>
           <td class="c-name text-left <?php echo $hidden;?>" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
-          <td class="c-name">
-            <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
-            <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?>
+          <?php if($showBranch):?>
+          <td class="c-name text-left <?php echo $hidden;?>" title='<?php echo $build->branchName;?>'><?php echo $build->branchName;?></td>
+          <?php endif;?>
+          <td class="c-name"><?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?></td>
+          <td class="c-url text-left">
+            <?php
+            if($build->scmPath)
+            {
+                $colorStyle = strpos($build->scmPath, 'http') === 0 ? "style='color:#2463c7;'" : '';
+                echo "<div><i class='icon icon-file-code' $colorStyle title='{$lang->build->scmPath}'></i> ";
+                echo "<span title='{$build->scmPath}'>";
+                echo $colorStyle ? html::a($build->scmPath, $build->scmPath, '_blank', $colorStyle) : $build->scmPath;
+                echo '</span></div>';
+            }
+            if($build->filePath)
+            {
+                $colorStyle = strpos($build->filePath, 'http') === 0 ? "style='color:#2463c7;'" : '';
+                echo "<div><i class='icon icon-download' $colorStyle title='{$lang->build->filePath}'></i> ";
+                echo "<span title='{$build->filePath}'>";
+                echo $colorStyle ? html::a($build->filePath, $build->filePath, '_blank', $colorStyle) : $build->filePath;
+                echo '</span></div>';
+            }
+            ?>
           </td>
-          <td class="c-url" title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
-          <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
           <td class="c-date"><?php echo $build->date?></td>
           <td class="c-user em"><?php echo zget($users, $build->builder);?></td>
           <td class="c-actions"><?php echo $this->build->buildOperateMenu($build, 'browse', "executionID={$execution->id}&productID={$productID}");?></td>

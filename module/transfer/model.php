@@ -506,8 +506,30 @@ class transferModel extends model
         {
             $modelData = $this->getDatasByFile($tmpFile);
         }
+
+        $modelData = $this->processDate($modelData);
         if(isset($fields['id'])) unset($fields['id']);
         return $modelData;
+    }
+
+    /**
+     * Process datas, convert date to YYYY-mm-dd, convert datetime to YYYY-mm-dd HH:ii:ss.
+     *
+     * @param  array   $datas
+     * @access public
+     * @return array
+     */
+    public function processDate($datas)
+    {
+        foreach($datas as $index => $data)
+        {
+            foreach($data as $field => $value)
+            {
+                if(strpos($this->modelConfig->dateFields, $field) !== false or strpos($this->modelConfig->datetimeFields, $field) !== false) $data->$field = $this->loadModel('common')->formatDate($value);
+            }
+            $datas[$index] = $data;
+        }
+        return $datas;
     }
 
     /**
@@ -830,7 +852,7 @@ class transferModel extends model
         $storyDatas = end($stories);
         $lastBranch = $storyDatas->branch;
         $lastType   = $storyDatas->type;
-        $stories    = $this->story->mergePlanTitle($productID , $stories, $lastBranch, $lastType);
+        $stories    = $this->loadModel('story')->mergePlanTitle($productID , $stories, $lastBranch, $lastType);
 
         return $stories;
     }
@@ -940,7 +962,7 @@ class transferModel extends model
             foreach($data as $field => $cellValue)
             {
                 if(empty($cellValue)) continue;
-                if(strpos($this->transferConfig->dateFeilds, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
+                if(strpos($this->transferConfig->dateFields, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
                 if(is_array($cellValue)) continue;
 
                 if(!empty($fieldList[$field]['from']) and in_array($fieldList[$field]['control'], array('select', 'multiple')))
@@ -1325,8 +1347,8 @@ class transferModel extends model
         if(!isset($modelConfig->export)) $modelConfig->export = new stdClass();
         if(!isset($modelConfig->import)) $modelConfig->export = new stdClass();
 
-        $modelConfig->dateFeilds     = isset($modelConfig->dateFeilds)     ? $modelConfig->dateFeilds     : $transferConfig->dateFeilds;
-        $modelConfig->datetimeFeilds = isset($modelConfig->datetimeFeilds) ? $modelConfig->datetimeFeilds : $transferConfig->datetimeFeilds;
+        $modelConfig->dateFields     = isset($modelConfig->dateFields)     ? $modelConfig->dateFields     : $transferConfig->dateFields;
+        $modelConfig->datetimeFields = isset($modelConfig->datetimeFields) ? $modelConfig->datetimeFields : $transferConfig->datetimeFields;
         $modelConfig->sysLangFields  = isset($modelConfig->sysLangFields)  ? $modelConfig->sysLangFields  : $transferConfig->sysLangFields;
         $modelConfig->sysDataFields  = isset($modelConfig->sysDataFields)  ? $modelConfig->sysDataFields  : $transferConfig->sysDataFields;
         $modelConfig->listFields     = isset($modelConfig->listFields)     ? $modelConfig->listFields     : $transferConfig->listFields;
@@ -1447,7 +1469,7 @@ class transferModel extends model
                     if($model == 'bug' and $field == 'steps') $selected = str_replace("\n\n\n\n\n\n", '', $selected);
                     $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
                 }
-                elseif($field == 'stepDesc' or $field == 'stepExpect')
+                elseif($field == 'stepDesc' or $field == 'stepExpect' or $field == 'precondition')
                 {
                     $stepDesc = $this->process4Testcase($field, $tmpList, $row);
                     if($stepDesc) $html .= '<td>' . $stepDesc . '</td>';
@@ -1473,6 +1495,7 @@ class transferModel extends model
                     }
                     $html .= '</td>';
                 }
+                elseif(strpos($this->transferConfig->textareaFields, $field) !== false) $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' style='overflow:hidden;'") . '</td>';
 
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
             }
@@ -1484,7 +1507,7 @@ class transferModel extends model
     }
 
     /**
-     * Process stepExpect and stepDesc for testcase.
+     * Process stepExpect、stepDesc and precondition for testcase.
      *
      * @param  int    $field
      * @param  int    $datas
@@ -1497,6 +1520,7 @@ class transferModel extends model
         $stepData = $this->testcase->processDatas($datas);
 
         $html = '';
+        if($field == 'precondition' and isset($datas[$key])) return html::textarea("precondition[$key]", htmlSpecialString($datas[$key]->precondition), "class='form-control' style='overflow:hidden'");
         if($field == 'stepExpect') return $html;
         if(isset($stepData[$key]['desc']))
         {

@@ -144,6 +144,8 @@ class build extends control
             $changes = $this->build->update($buildID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('build', $buildID);
+            $change[$buildID] = $changes;
+            $this->unlinkOldBranch($change);
 
             if($changes or $files)
             {
@@ -162,6 +164,7 @@ class build extends control
         $this->loadModel('execution');
         $this->loadModel('product');
         $build = $this->build->getById((int)$buildID);
+        $oldBranch = array($buildID => $build->branch);
 
         /* Set menu. */
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($build->project);
@@ -177,10 +180,11 @@ class build extends control
         {
             $productGroups = $this->product->getProducts($build->project);
             $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
-            $builds        = $this->build->getBuildPairs($build->product, $build->branch, 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
+            $builds        = $this->build->getBuildPairs($build->product, 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
         }
 
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
+        if($build->execution and !isset($executions[$build->execution])) $executions[$build->execution] = $this->loadModel('execution')->getById($build->execution)->name;
 
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
@@ -198,7 +202,10 @@ class build extends control
         {
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
-        if(!isset($branchTagOption[$build->branch])) $branchTagOption[$build->branch] = $this->branch->getById($build->branch, 0, 'name');
+        foreach(explode(',', $build->branch) as $buildBranch)
+        {
+            if(!isset($branchTagOption[$buildBranch])) $branchTagOption[$buildBranch] = $this->branch->getById($buildBranch, 0, 'name');
+        }
 
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
@@ -209,6 +216,7 @@ class build extends control
         $this->view->product         = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
         $this->view->branchTagOption = $branchTagOption;
         $this->view->orderBy         = $orderBy;
+        $this->view->oldBranch       = $oldBranch;
         $this->view->executions      = $executions;
         $this->view->productGroups   = $productGroups;
         $this->view->products        = $products;
@@ -279,6 +287,8 @@ class build extends control
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         /* Set menu. */
+        $objectType = 'execution';
+        $objectID   = $build->execution;
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($build->project);
@@ -305,6 +315,16 @@ class build extends control
         $this->view->generatedBugPager = $generatedBugPager;
 
         $this->executeHooks($buildID);
+        $branchName = '';
+        if($build->productType != 'normal')
+        {
+            foreach(explode(',', $build->branch) as $buildBranch)
+            {
+                $branchName .= $this->loadModel('branch')->getById($buildBranch);
+                $branchName .= ',';
+            }
+            $branchName = trim($branchName, ',');
+        }
 
         /* Assign. */
         $this->view->canBeChanged = common::canBeChanged('build', $build); // Determines whether an object is editable.
@@ -320,7 +340,8 @@ class build extends control
         $this->view->bugs         = $bugs;
         $this->view->type         = $type;
         $this->view->bugPager     = $bugPager;
-        $this->view->branchName   = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
+        $this->view->branchName   = empty($branchName) ? $this->lang->branch->main : $branchName;
+        $this->view->childBuilds  = empty($build->builds) ? array() : $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
 
         if($this->app->getViewType() == 'json')
         {
@@ -413,7 +434,7 @@ class build extends control
             return print(html::select($varName, $builds, $build, "class='form-control'"));
         }
 
-        $builds = $this->build->getBuildPairs($productID, $branch, $type, 0, 'project', $build);
+        $builds = $this->build->getBuildPairs($productID, $branch, $type, 0, 'project', $build, false);
         if(strpos($extra, 'multiple') !== false) $varName .= '[]';
         if($isJsonView) return print(json_encode($builds));
         return print(html::select($varName, $builds, $build, "class='form-control chosen' $extra"));
@@ -624,8 +645,16 @@ class build extends control
         else
         {
             $branchPairs = $this->loadModel('branch')->getPairs($build->product, 'noempty');
-            $branches    = array('' => '') + array(BRANCH_MAIN => $this->lang->branch->main);
-            if($build->branch) $branches += array($build->branch => $branchPairs[$build->branch]);
+            $branchAll   = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$product->type]);
+            $branches    = array('' => $branchAll) + array(BRANCH_MAIN => $this->lang->branch->main);
+            if($build->branch)
+            {
+                foreach(explode(',', $build->branch) as $branchID)
+                {
+                    if($branchID == '0') continue;
+                    $branches += array($branchID => $branchPairs[$branchID]);
+                }
+            }
 
             $this->config->product->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $this->config->product->search['params']['branch']['values'] = $branches;
@@ -655,22 +684,82 @@ class build extends control
     /**
      * Unlink story
      *
+     * @param  int    $buildID
      * @param  int    $storyID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function unlinkStory($buildID, $storyID)
+    public function unlinkStory($buildID, $storyID, $confirm = 'no')
     {
-        $this->build->unlinkStory($buildID, $storyID);
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->build->confirmUnlinkStory, inlink('unlinkstory', "buildID=$buildID&storyID=$storyID&confirm=yes")));
+        }
+        else
+        {
+            $this->build->unlinkStory($buildID, $storyID);
+            $this->loadModel('action')->create('build', $buildID, 'unlinkstory', '', $storyID);
+            return print(js::reload('parent'));
+        }
+    }
 
-        return print(js::reload('parent'));
+    /**
+    * AJAX: Get unlinkBranch story and bug.
+    *
+    * @param  int    $buildID
+    * @param  int    $newBranch
+    * @access public
+    * @return void
+    */
+    public function ajaxGetBranch($buildID, $newBranch)
+    {
+        $build        = $this->build->getByID($buildID);
+        $oldBranch    = $build->branch;
+        $buildStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : array();
+        $buildBugs    = $build->allBugs ? $this->loadModel('bug')->getByList($build->allBugs) : array();
+        $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
+        $typeName     = $this->lang->product->branchName[$build->productType];
+
+        $removeBranches = '';
+        foreach(explode(',', $oldBranch) as $oldBranchID)
+        {
+            if($oldBranchID and strpos(",$newBranch,", ",$oldBranchID,") === false) $removeBranches .= "{$branchPairs[$oldBranchID]},";
+        }
+
+        $unlinkStoryCounts = 0;
+        $unlinkBugCounts   = 0;
+        if($oldBranch)
+        {
+            foreach($buildStories as $storyID => $story)
+            {
+                if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $unlinkStoryCounts ++;
+            }
+
+            foreach($buildBugs as $bugID => $bug)
+            {
+                if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $unlinkBugCounts ++;
+            }
+        }
+
+        if($unlinkStoryCounts and $unlinkBugCounts)
+        {
+            printf($this->lang->build->confirmChangeBuild, $typeName, trim($removeBranches, ','), $typeName, $unlinkStoryCounts, $unlinkBugCounts);
+        }
+        elseif($unlinkStoryCounts)
+        {
+            printf($this->lang->build->confirmRemoveStory, $typeName, trim($removeBranches, ','), $typeName, $unlinkStoryCounts);
+        }
+        elseif($unlinkBugCounts)
+        {
+            printf($this->lang->build->confirmRemoveBug, $typeName, trim($removeBranches, ','), $typeName, $unlinkBugCounts);
+        }
     }
 
     /**
      * Batch unlink story.
      *
-     * @param  string $confirm
+     * @param  int   $buildID
      * @access public
      * @return void
      */
@@ -678,6 +767,45 @@ class build extends control
     {
         $this->build->batchUnlinkStory($buildID);
         return print(js::locate($this->createLink('build', 'view', "buildID=$buildID&type=story"), 'parent'));
+    }
+
+    /**
+     * Unlink story and bug when edit branch of build.
+     * @param  array    $changes
+     * @access protected
+     * @return void
+     */
+    protected function unlinkOldBranch($changes)
+    {
+        foreach($changes as $buildID => $changes)
+        {
+            $oldBranch = '';
+            $newBranch = '';
+            foreach($changes as $changeId => $change)
+            {
+                if($change['field'] == 'branch')
+                {
+                    $oldBranch = $change['old'];
+                    $newBranch = $change['new'];
+                    break;
+                }
+            }
+            $build       = $this->build->getByID($buildID);
+            $planStories = $this->loadModel('story')->getByList($build->allStories);
+            $planBugs    = $this->loadModel('bug')->getByList($build->allBugs);
+            if($oldBranch)
+            {
+                foreach($planStories as $storyID => $story)
+                {
+                    if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $this->build->unlinkStory($buildID, $storyID);
+                }
+
+                foreach($planBugs as $bugID => $bug)
+                {
+                    if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $this->build->unlinkBug($buildID, $bugID);
+                }
+            }
+        }
     }
 
     /**
@@ -748,8 +876,13 @@ class build extends control
         }
         else
         {
-            $branchName = $this->loadModel('branch')->getById($build->branch);
-            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $build->branch => $branchName);
+            $buildBranch = array();
+            $branchList  = $this->loadModel('branch')->getPairs($build->product, '', $build->execution);
+            $branchAll   = sprintf($this->lang->build->branchAll, $this->lang->product->branchName[$product->type]);
+            $branches    = array('' => $branchAll, BRANCH_MAIN => $this->lang->branch->main);
+            if(strpos($build->branch, ',') !== false) $buildBranch = explode(',', $build->branch);
+            foreach($buildBranch as $buildKey) $branches += array($buildKey => zget($branchList, $buildKey));
+
 
             $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $this->config->bug->search['params']['branch']['values'] = $branches;

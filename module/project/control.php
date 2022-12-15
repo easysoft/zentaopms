@@ -492,12 +492,9 @@ class project extends control
                 $planIdList = array();
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planList)
+                    foreach($plans as $planID)
                     {
-                        foreach($planList as $planID)
-                        {
-                            $planIdList[$planID] = $planID;
-                        }
+                        $planIdList[$planID] = $planID;
                     }
                 }
 
@@ -587,10 +584,8 @@ class project extends control
             if(!$copyProject->hasProduct) $shadow = 1;
             foreach($products as $product)
             {
-                foreach($product->branches as $branch)
-                {
-                    $productPlans[$product->id][$branch] = $this->loadModel('productplan')->getPairs($product->id, $branch, 'noclosed', true);
-                }
+                $branches = implode(',', $product->branches);
+                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id, $branches, 'noclosed', true);
             }
         }
 
@@ -722,9 +717,8 @@ class project extends control
 
         $withProgram = $this->config->systemMode == 'ALM' ? true : false;
 
-        $linkedBranches      = array();
         $linkedBranchList    = array();
-        $productPlans        = array(0 => '');
+        $productPlans        = array();
         $branches            = $this->project->getBranchesByProject($projectID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
         $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
@@ -743,11 +737,10 @@ class project extends control
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
             foreach($branches[$productID] as $branchID => $branch)
             {
-                $linkedBranchList[$branchID]           = $branchID;
-                $linkedBranches[$productID][$branchID] = $branchID;
+                $linkedBranchList[$branchID] = $branchID;
 
-                if($branch != BRANCH_MAIN) $productPlans[$productID][$branchID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
-                $productPlans[$productID][$branchID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                if(!isset($productPlans[$productID])) $productPlans[$productID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
+                $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
 
                 if(!empty($projectStories[$productID][$branchID]) or !empty($projectBranches[$productID][$branchID]))
                 {
@@ -755,6 +748,17 @@ class project extends control
                     array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
                 }
+            }
+        }
+
+        $productPlansOrder = array();
+        foreach($productPlans as $productID => $plan)
+        {
+            $orderPlans    = $this->loadModel('productPlan')->getListByIds(array_keys($plan), true);
+            $orderPlansMap = array_keys($orderPlans);
+            foreach($orderPlansMap as $planMapID)
+            {
+                $productPlansOrder[$productID][$planMapID] = $productPlans[$productID][$planMapID];
             }
         }
 
@@ -771,9 +775,8 @@ class project extends control
         $this->view->projectID                = $projectID;
         $this->view->allProducts              = array('0' => '') + $allProducts;
         $this->view->multiBranchProducts      = $this->loadModel('product')->getMultiBranchPairs();
-        $this->view->productPlans             = array_filter($productPlans);
+        $this->view->productPlans             = array_filter($productPlansOrder);
         $this->view->linkedProducts           = $linkedProducts;
-        $this->view->linkedBranches           = $linkedBranches;
         $this->view->branches                 = $branches;
         $this->view->executions               = $this->execution->getPairs($projectID);
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
@@ -1456,23 +1459,32 @@ class project extends control
         /* Set project builds. */
         $projectBuilds = array();
         $productList   = $this->product->getProducts($projectID);
-        $this->app->loadLang('branch');
+        $showBranch    = false;
         if(!empty($builds))
         {
             foreach($builds as $build)
             {
                 $build->builds = $this->build->getByList($build->builds);
-                /* If product is normal, unset branch name. */
-                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
-                {
-                    $build->branchName = '';
-                }
-                else
-                {
-                    $build->branchName = isset($build->branchName) ? $build->branchName : $this->lang->branch->main;
-                }
-
                 $projectBuilds[$build->product][] = $build;
+            }
+
+            /* Get branch name. */
+            $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($projectBuilds));
+            foreach($builds as $build)
+            {
+                $build->branchName = '';
+                if(isset($branchGroups[$build->product]))
+                {
+                    $showBranch  = true;
+                    $branchPairs = $branchGroups[$build->product];
+                    foreach(explode(',', trim($build->branch, ',')) as $branchID)
+                    {
+                        if(isset($branchPairs[$branchID])) $build->branchName .= "{$branchPairs[$branchID]},";
+                    }
+                    $build->branchName = trim($build->branchName, ',');
+
+                    if(empty($build->branchName) and empty($build->builds)) $build->branchName = $this->lang->branch->main;
+                }
             }
         }
 
@@ -1490,6 +1502,7 @@ class project extends control
         $this->view->executions    = $this->execution->getPairs();
         $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
         $this->view->type          = $type;
+        $this->view->showBranch    = $showBranch;
 
         $this->display();
     }
@@ -1618,11 +1631,12 @@ class project extends control
         $this->project->setMenu($projectID);
 
         $project = $this->project->getById($projectID);
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
 
         $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->team;
         $this->view->projectID    = $projectID;
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
-        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         $this->view->canBeChanged = common::canModify('project', $project);
 
         $this->display();

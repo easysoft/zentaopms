@@ -128,6 +128,7 @@ class story extends control
             $response['result'] = 'success';
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
             $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
             if(!$storyResult or dao::isError())
             {
@@ -164,7 +165,9 @@ class story extends control
                 $action = $fromObjectAction;
                 $extra  = $fromObjectID;
             }
-            $actionID = $this->action->create('story', $storyID, $action, '', $extra);
+            /* Create actions. */
+            $storyIds = $storyResult['ids'];
+            foreach($storyIds as $idItem) $actionID = $this->action->create('story', $idItem, $action, '', $extra);
 
             /* Record submit review action. */
             $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
@@ -260,7 +263,9 @@ class story extends control
                     }
                     else
                     {
-                        $response['locate'] = $this->session->storyList;
+                        $sessionStoryList = $this->session->storyList;
+                        if(count($_POST['branches']) > 1) $sessionStoryList = preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
+                        $response['locate'] = $sessionStoryList;
                     }
                 }
             }
@@ -295,7 +300,11 @@ class story extends control
         }
 
         $users = $this->user->getPairs('pdfirst|noclosed|nodeleted');
+
+        $branchData = explode(',', $branch);
+        $branch     = current($branchData);
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Init vars. */
@@ -437,7 +446,7 @@ class story extends control
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = str_replace('2030-01-01', $this->lang->story->undetermined, $this->loadModel('productplan')->getPairsForStory($productID, $branch, 'skipParent|unexpired|noclosed'));
+        $this->view->plans            = str_replace('2030-01-01', $this->lang->story->undetermined, $this->loadModel('productplan')->getPairsForStory($productID, $branch == 0 ? '' : $branch, 'skipParent|unexpired|noclosed'));
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
@@ -656,7 +665,10 @@ class story extends control
             $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+        $branchData = explode(',', $branch);
+        $branch     = current($branchData);
+
+        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
 
         /* Get reviewers. */
@@ -681,7 +693,7 @@ class story extends control
             }
             $this->view->titles = $titles;
         }
-        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or !in_array($branch, array_keys($branches))) ? 0 : $branch, 'skipParent|unexpired|noclosed');
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
         $plans['ditto'] = $this->lang->story->ditto;
 
         $priList          = (array)$this->lang->story->priList;
@@ -931,6 +943,7 @@ class story extends control
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
         $this->view->story            = $story;
+        $this->view->twins            = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->stories          = $stories;
         $this->view->users            = $users;
         $this->view->product          = $product;
@@ -939,6 +952,7 @@ class story extends control
         $this->view->productStories   = $productStories;
         $this->view->branchOption     = $branchOption;
         $this->view->branchTagOption  = $branchTagOption;
+        $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
         $this->view->lastReviewer     = $this->story->getLastReviewer($story->id);
@@ -1023,6 +1037,16 @@ class story extends control
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
 
+        /* Filter twins. */
+        $twins = '';
+        foreach($stories as $id => $story)
+        {
+            if(empty($story->twins)) continue;
+            $twins .= "#$id ";
+            unset($stories[$id]);
+        }
+        if(!empty($twins)) echo js::alert(sprintf($this->lang->story->batchEditTip, $twins));
+
         $this->loadModel('branch');
         if($productID and !$executionID)
         {
@@ -1042,7 +1066,7 @@ class story extends control
             $moduleList  = $branchProduct ? $modulePairs : array(0 => $modulePairs);
 
             $modules         = array($productID => $moduleList);
-            $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, '', true));
+            $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, '', 'unexpired', true));
             $products        = array($productID => $product);
             $branchTagOption = array($productID => $branchTagOption);
         }
@@ -1052,6 +1076,7 @@ class story extends control
             $modules         = array();
             $branchTagOption = array();
             $products        = array();
+            $plans           = array();
 
             /* Get product id list by the stories. */
             $productIdList = array();
@@ -1073,7 +1098,7 @@ class story extends control
                 $modulePairs = $this->tree->getOptionMenu($storyProduct->id, 'story', 0, $branches);
                 $modules[$storyProduct->id] = $storyProduct->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
 
-                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, $branches, true);
+                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, $branches, 'unexpired', true);
                 if(empty($plans[$storyProduct->id])) $plans[$storyProduct->id][0] = $plans[$storyProduct->id];
 
                 if($storyProduct->type != 'normal') $branchProduct = true;
@@ -1251,6 +1276,8 @@ class story extends control
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
+        $this->view->twins            = empty($story->twins) ? array() : $this->story->getByList($story->twins);
+        $this->view->branches         = $this->loadModel('branch')->getPairs($story->product);
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[]       = $this->lang->story->change;
         $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($reviewer)) ? "checked='checked'" : "";
@@ -1421,6 +1448,7 @@ class story extends control
         $this->view->position      = $position;
         $this->view->product       = $product;
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->twins         = !empty($story->twins) ? $this->story->getByList($story->twins) : array();
         $this->view->plan          = $plan;
         $this->view->bugs          = $bugs;
         $this->view->fromBug       = $fromBug;
@@ -1642,7 +1670,7 @@ class story extends control
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
-        $actions     = $this->story->batchReview($storyIdList, $result, $reason);
+        $this->story->batchReview($storyIdList, $result, $reason);
 
         if(dao::isError()) return print(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -1879,8 +1907,17 @@ class story extends control
         $stories = $this->story->getByList($storyIdList);
         $productStoryList = array();
         $productList      = array();
+        $ignoreTwins      = array();
+        $twinsCount       = 0;
         foreach($stories as $story)
         {
+            if(!empty($ignoreTwins) and isset($ignoreTwins[$story->id]))
+            {
+                $twinsCount ++;
+                unset($stories[$story->id]);
+                continue;
+            }
+
             if($story->parent == -1)
             {
                 $skipStory[] = $story->id;
@@ -1895,6 +1932,11 @@ class story extends control
             $storyProduct = isset($productList[$story->product]) ? $productList[$story->product] : $this->product->getByID($story->product);
             $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
             if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
+
+            if(!empty($story->twins))
+            {
+                foreach(explode(',', trim($story->twins, ',')) as $twinID) $ignoreTwins[$twinID] = $twinID;
+            }
         }
 
         if($this->post->comments)
@@ -1912,6 +1954,8 @@ class story extends control
 
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : '') . "|$preStatus");
                     $this->action->logHistory($actionID, $changes);
+
+                    if(!empty($stories[$storyID]->twins)) $this->story->syncTwins($storyID, $stories[$storyID]->twins, $changes, 'Closed');
                 }
             }
 
@@ -1979,6 +2023,7 @@ class story extends control
         $this->view->storyType        = $storyType;
         $this->view->reasonList       = $this->lang->story->reasonList;
         $this->view->productStoryList = $productStoryList;
+        $this->view->twinsCount       = $twinsCount;
 
         $this->display();
     }
@@ -2258,12 +2303,27 @@ class story extends control
     {
         if(!empty($_POST) && isset($_POST['storyIdList']))
         {
-            $allChanges  = $this->story->batchAssignTo();
+            $allChanges = $this->story->batchAssignTo();
             if(dao::isError()) return print(js::error(dao::getError()));
+
+            $assignedTwins = array();
+            $oldStories       = $this->story->getByList($this->post->storyIdList);
             foreach($allChanges as $storyID => $changes)
             {
                 $actionID = $this->action->create('story', $storyID, 'Assigned', '', $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
+
+                /* Sync twins. */
+                if(!empty($oldStories[$storyID]->twins))
+                {
+                    $twins = $oldStories[$storyID]->twins;
+                    foreach(explode(',', $twins) as $twinID)
+                    {
+                        if(in_array($twinID, $this->post->storyIdList) or isset($assignedTwins[$twinID])) $twins = str_replace(",$twinID,", ',', $twins);
+                    }
+                    $this->story->syncTwins($storyID, trim($twins, ','), $changes, 'Assigned');
+                    foreach(explode(',', trim($twins, ',')) as $assignedID) $assignedTwins[$assignedID] = $assignedID;
+                }
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -2338,7 +2398,7 @@ class story extends control
         if($type == 'remove')
         {
             $result = $this->story->unlinkStory($storyID, $linkedStoryID);
-            return print(js::reload('parent'));
+            helprt::end();
         }
 
         if($_POST)
@@ -2971,5 +3031,30 @@ class story extends control
         $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
 
         return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
+    }
+
+    /**
+     * AJAX: Deleted story twin.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxRelieveTwins()
+    {
+        $twinID = !empty($_POST['twinID']) ? $_POST['twinID'] : 0;
+        $story  = $this->story->getByID($twinID);
+        $twins  = explode(',', trim($story->twins, ','));
+
+        if(empty($story->twins)) return $this->send(array('result' => 'fail'));
+
+        /* batchUnset twinID from twins.*/
+        $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$twinID,', ',') WHERE `product` = $story->product";
+        $this->dbh->exec($replaceSql);
+
+        /* Update twins to empty by twinID and if twins eq ','.*/
+        $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($twinID)->orWhere('twins')->eq(',')->exec();
+
+        if(!dao::isError()) $this->loadModel('action')->create('story', $twinID, 'relieved');
+        return $this->send(array('result' => 'success', 'silbingsCount' => count($twins)-1));
     }
 }

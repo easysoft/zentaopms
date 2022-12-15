@@ -32,15 +32,23 @@
             ?>
             <div class='input-group'>
               <?php echo html::select('product', $products, $build->product, "onchange='loadBranches(this.value);' class='form-control chosen' $disabled required");?>
-              <?php
-              if($build->productType != 'normal')
-              {
-                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branchTagOption, $build->branch, "class='form-control chosen' $disabled");
-              }
-              ?>
             </div>
           </td>
           <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
+        </tr>
+        <tr>
+        <tr class='<?php if((!empty($product) and $product->type == 'normal') or empty($product) or empty($build->execution)) echo 'hidden'?>'>
+          <?php
+          if(empty($product)) $product = new stdclass();
+          $productType     = zget($product, 'type', 'normal');
+          $productBranches = zget($product, 'branches', array());
+          ?>
+          <th class='w-120px'><?php echo $product->type == 'normal' ? '' : $lang->product->branchName[$product->type]?></th>
+          <td>
+            <div class='input-group' id='branchBox'>
+              <?php echo html::select('branch[]', $branchTagOption, $build->branch, "class='form-control chosen' multiple required"); ?>
+            </div>
+          </td>
         </tr>
         <?php $disabled = $testtaskID ? 'disabled' : '';?>
         <?php if(!$build->execution):?>
@@ -101,7 +109,9 @@
 </div>
 <?php js::set('productGroups', $productGroups)?>
 <?php js::set('projectID', $build->project)?>
+<?php js::set('oldBranch', $oldBranch)?>
 <?php js::set('builds', $build->builds)?>
+<?php js::set('buildID', $build->id)?>
 <?php js::set('executionID', $build->execution)?>
 <?php js::set('currentTab', $this->app->tab);?>
 <?php js::set('multipleSelect', $lang->build->placeholder->multipleSelect);?>

@@ -18,7 +18,7 @@
     <ul class="nav nav-secondary inline-block">
       <li class="nav-heading"><?php echo zget($lang->product->branchName, $product->type);?></li>
       <?php foreach($branches as $branchKey => $branchName):?>
-      <li <?php if($branchKey == 0) echo "class='active'";?>><a data-target="#tabContent<?php echo $branchKey;?>" data-toggle="tab"><?php echo $branchName;?></a></li>
+      <li title="<?php echo $branchName;?>" <?php if($branchKey == 0) echo "class='active'";?>><a data-target="#tabContent<?php echo $branchKey;?>" data-toggle="tab"><?php echo $branchName;?></a></li>
       <?php endforeach;?>
     </ul>
   </div>

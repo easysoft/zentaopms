@@ -11,6 +11,5 @@
 .linkStoryTitle {white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 .linkStoryTr > th {width: 90px;}
 .linkStoryTr > td {padding-left: 0px !important;}
-.removeButton {margin-left: -10px;}
 .resolution {white-space: nowrap; overflow: hidden;}
 .link-commit {overflow: hidden; white-space: nowrap; margin-right: 5px;}

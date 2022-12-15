@@ -9,18 +9,23 @@ $().ready(function()
     {
         var projectID = $('#project').val();
         var productID = $('#product').val();
-        var branch    = $('#branch').length > 0 ? $('#branch').val() : '';
-        $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=' + branch + '&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
+        $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
         {
             if(data) $('#buildBox').html(data);
             $('#builds').attr('data-placeholder', multipleSelect).chosen();
         });
+
+        $.get(createLink('product', 'ajaxGetProductById', 'produtID=' + productID), function(data)
+        {
+            $('#branchBox').closest('tr').find('th').text(data.branchName);
+        }, 'json');
     });
 
     $('input[name=isIntegrated]').change(function()
     {
         var projectID   = $('#project').val();
         var executionID = $('#execution').val();
+
         if($(this).val() == 'no')
         {
             $('#execution').closest('tr').show();
@@ -31,7 +36,16 @@ $().ready(function()
         {
             $('#execution').closest('tr').hide();
             $('#buildBox').closest('tr').show();
+
+            $.ajaxSettings.async = false;
             loadProducts(projectID);
+            var productID = $('#product').val();
+            $.get(createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&index=&needCreate=&type=noempty,notrunk,separate,singled&extra=multiple'), function(data)
+            {
+                if(data) $('#buildBox').html(data);
+                $('#builds').attr('data-placeholder', multipleSelect).chosen();
+            });
+            $.ajaxSettings.async = true;
         }
     });
     $('#product').change();
@@ -67,9 +81,16 @@ function loadProducts(executionID)
 
             $('#productBox').append(data);
             $('#product').chosen();
+
+            $.get(createLink('product', 'ajaxGetProductById', 'produtID=' + $("#product").val()), function(data)
+            {
+                $('#branchBox').closest('tr').find('th').text(data.branchName);
+            }, 'json');
+
             loadBranches($("#product").val());
         }
     });
+
     loadLastBuild();
 }
 
@@ -84,7 +105,7 @@ function loadLastBuild()
     var isIntegrated = $('input[name=isIntegrated]:checked').val();
     var projectID    = $('#project').val();
     var executionID  = $('#execution').val();
-    if(isIntegrated == 'yes') executionID = 0; 
+    if(isIntegrated == 'yes') executionID = 0;
     $.get(createLink('build', 'ajaxGetLastBuild', 'projectID=' + projectID + '&executionID=' + executionID), function(data)
     {
         $('#lastBuildBox').html(data);

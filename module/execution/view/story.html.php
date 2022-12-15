@@ -402,13 +402,17 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <?php $linkStoryByPlanTips = $execution->multiple ? $lang->execution->linkStoryByPlanTips : str_replace($lang->executionCommon, $lang->projectCommon, $lang->execution->linkStoryByPlanTips);?>
+        <?php
+        $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
+        $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->executionCommon, $lang->projectCommon, $linkStoryByPlanTips);
+        ?>
         <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $linkStoryByPlanTips . ')';?>
       </div>
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
+          <?php $disabled = empty(array_filter($allPlans)) ? 'disabled' : ''?>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toTaskButton'", 'btn btn-primary ' . $disabled);?></span>
         </div>
       </div>
     </div>

@@ -24,7 +24,7 @@ $lang->release->batchUnlinkStory = "Batch Unlink Stories";
 $lang->release->batchUnlinkBug   = "Batch Unlink Bugs";
 
 $lang->release->confirmDelete      = "Do you want to delete this release?";
-$lang->release->confirmLink        = "Whether to link the stories completed in the version and the bugs solved to the release?";
+$lang->release->syncFromBuilds     = "Link the stories completed in the version and the bugs solved to the release";
 $lang->release->confirmUnlinkStory = "Do you want to remove this story?";
 $lang->release->confirmUnlinkBug   = "Do you want to remove this bug?";
 $lang->release->existBuild         = '『Build』『%s』existed. You could change『name』or choose a『build』.';

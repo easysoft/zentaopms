@@ -17,6 +17,7 @@
 <?php js::set('today', helper::today());?>
 <?php js::set('productID', $productID);?>
 <?php js::set('oldBranch', $oldBranch);?>
+<?php js::set('planID', $plan->id);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -30,25 +31,25 @@
             <th><?php echo $lang->productplan->product;?></th>
             <td class='muted'><?php echo $product->name;?></td><td></td><td></td>
           </tr>
-          <?php if($product->type != 'normal' and $plan->parent != '-1'):?>
-          <tr>
-            <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch', $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control'");?></td><td></td><td></td>
-          </tr>
           <?php endif;?>
-          <?php endif;?>
-          <tr>
-            <th><?php echo $lang->productplan->title;?></th>
-            <td><?php echo html::input('title', $plan->title, "class='form-control' required");?></td><td></td><td></td>
-          </tr>
           <?php if($plan->parent == '-1'):?>
               <?php echo html::hidden('parent', $plan->parent);?>
           <?php else:?>
           <tr>
             <th><?php echo $lang->productplan->parent;?></th>
-            <td><?php echo html::select('parent', array('0' => '') + $parentPlanPairs, $plan->parent, "class='form-control chosen'");?>
+            <td><?php echo html::select('parent', array(0 => '') + $parentPlanPairs, $plan->parent, "class='form-control chosen'");?>
           </tr>
           <?php endif;?>
+          <?php if(!$product->shadow and $product->type != 'normal'):?>
+          <tr>
+            <th><?php echo $lang->product->branch;?></th>
+            <td class='required'><?php echo html::select('branch[]', $branchTagOption, $plan->branch, "class='form-control chosen' multiple");?></td><td></td><td></td>
+          </tr>
+          <?php endif;?>
+          <tr>
+            <th><?php echo $lang->productplan->title;?></th>
+            <td><?php echo html::input('title', $plan->title, "class='form-control' required");?></td><td></td><td></td>
+          </tr>
           <tr>
             <th><?php echo $lang->productplan->status;?></th>
             <?php $disabled = $plan->parent == -1 ? "disabled='disabled'" : '' ;?>

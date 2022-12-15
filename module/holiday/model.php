@@ -250,8 +250,8 @@ class holidayModel extends model
     /**
      * Get diff days.
      *
-     * @param  varchar $begin
-     * @param  varchar $end
+     * @param  string  $begin
+     * @param  string  $end
      * @access public
      * @return bool
      */

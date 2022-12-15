@@ -12,7 +12,7 @@
 global $config;
 $lang->story->create            = "Créer Story";
 
-$lang->story->requirement       = zget($lang, 'URCommon', "Requirement");
+$lang->story->requirement       = 'UR';
 $lang->story->story             = zget($lang, 'SRCommon', "Story");
 $lang->story->createStory       = 'Create ' . $lang->story->story;
 $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
@@ -76,6 +76,11 @@ $lang->story->undetermined       = 'undetermined';
 $lang->story->order              = 'Order';
 $lang->story->saveDraft          = 'Save as draft';
 $lang->story->doNotSubmit        = 'Do Not Submit';
+$lang->story->currentBranch      = 'Current Branch';
+$lang->story->twins              = 'Twins story';
+$lang->story->relieved           = 'Relieved';
+$lang->story->relievedTwins      = 'Relieved Twins';
+$lang->story->loadAllStories     = 'Load all stories';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Changer Story";
@@ -95,6 +100,15 @@ $lang->story->successToTask    = "Converted to task.";
 $lang->story->storyRound       = '%s time estimation';
 $lang->story->float            = "『 %s 』doit avoir des nombres positifs ou décimaux.";
 $lang->story->saveDraftSuccess = 'Save as draft succeeded.';
+
+$lang->story->changeSyncTip       = "The modification of this story will be synchronized to the following twin requirements";
+$lang->story->syncTip             = "The twin story are synchronized except for product, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
+$lang->story->relievedTip         = "The twin relationship cannot be restored after dissolving, the content of the demand is no longer synchronized, whether to dissolving?";
+$lang->story->assignSyncTip       = "Both twin stories modify the assignor synchronously";
+$lang->story->closeSyncTip        = "Twin stories are closed synchronously";
+$lang->story->activateSyncTip     = "Twin stories are activated synchronously";
+$lang->story->relievedTwinsTip    = "After product adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
+$lang->story->batchEditTip        = "{$lang->SRCommon} %sis twin stories, and this operation has been filtered.";
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';
@@ -133,6 +147,7 @@ $lang->story->assignedTo       = 'Assignée à';
 $lang->story->assignedToAB     = 'Attribuer';
 $lang->story->assignedDate     = 'Date Assignation';
 $lang->story->lastEditedBy     = 'Editée par';
+$lang->story->lastEditedByAB   = 'Editée par';
 $lang->story->lastEditedDate   = 'Date Edition';
 $lang->story->closedBy         = 'Fermée par';
 $lang->story->closedDate       = 'Date Fermeture';
@@ -284,6 +299,7 @@ $lang->story->checkAffection       = 'Influence';
 $lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'CasTests';
+$lang->story->affectedTwins        = 'des jumeaux';
 
 $lang->story->specTemplate         = "En tant que < type utilisateur >, je veux < différents objectifs > pour < différentes raisons >.";
 $lang->story->needNotReview        = 'Aucune Validation Requise';
@@ -309,6 +325,7 @@ $lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
 $lang->story->confirmRecallChange  = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
 $lang->story->confirmRecallReview  = "Are you sure you want to withdraw the review?";
 $lang->story->noStoryToTask        = "Only the activated {$lang->SRCommon} can be converted into a task!";
+$lang->story->ignoreClosedStory    = "{$lang->SRCommon} %s status is closed, and the operation has been filtered.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Périmètre';
@@ -344,6 +361,7 @@ $lang->story->action->subdividestory        = array('main' => '$date, décompos�
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, dissociée par <strong>$actor</strong> de la Story <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
 $lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
+$lang->story->action->synctwins             = array('main' => "\$date, the system judges that this story is adjusted synchronously due to the \$operate of twin story <strong>\$extra</strong>.", 'operate' => 'operateList');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();
@@ -432,6 +450,7 @@ $lang->story->chosen->reviewedBy = 'Choisir valideur';
 $lang->story->notice = new stdClass();
 $lang->story->notice->closed           = 'La Story que vous avez sélectionnée est malheureusement fermée !';
 $lang->story->notice->reviewerNotEmpty = 'This requirement needs to be reviewed, and the reviewedby is required.';
+$lang->story->notice->changePlan       = 'The plan can be changed to only one item.';
 
 $lang->story->convertToTask = new stdClass();
 $lang->story->convertToTask->fieldList = array();
@@ -460,14 +479,26 @@ $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = "Aucun processus de révision n'a été lancé pour cette Story, et il n'est pas nécessaire de révoquer l'opération.";
 
 $lang->story->subDivideTip = array();
-$lang->story->subDivideTip['subStory']  = 'Les sous-stories ne peuvent pas être décomposées.';
-$lang->story->subDivideTip['notWait']   = "L'exigence %s ne peut pas être subdivisée.";
-$lang->story->subDivideTip['notActive'] = "Cette Story n'est pas active et ne peut être subdivisée.";
+$lang->story->subDivideTip['subStory']   = 'Les sous-stories ne peuvent pas être décomposées.';
+$lang->story->subDivideTip['notWait']    = "L'exigence %s ne peut pas être subdivisée.";
+$lang->story->subDivideTip['notActive']  = "Cette Story n'est pas active et ne peut être subdivisée.";
+$lang->story->subDivideTip['twinsSplit'] = 'The Twins Story cannot be subdivided.';
 
 $lang->story->featureBar['browse']['all']       = $lang->all;
 $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
+
+$lang->story->operateList = array();
+$lang->story->operateList['assigned']       = 'assigned';
+$lang->story->operateList['closed']         = 'closed';
+$lang->story->operateList['activated']      = 'activated';
+$lang->story->operateList['changed']        = 'changed';
+$lang->story->operateList['reviewed']       = 'reviewed';
+$lang->story->operateList['edited']         = 'edited';
+$lang->story->operateList['submitreview']   = 'submit review';
+$lang->story->operateList['recalledchange'] = 'recalled change';
+$lang->story->operateList['recalled']       = 'recalled review';
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = 'Create Requirement';
@@ -493,3 +524,11 @@ $lang->requirement->batchAssignTo      = "Batch Assign";
 $lang->requirement->batchChangeModule  = "Batch Change Modules";
 $lang->requirement->submitReview       = $lang->story->submitReview;
 $lang->requirement->linkStory          = 'Lier Story';
+
+$lang->story->addBranch      = 'Add %s';
+$lang->story->deleteBranch   = 'Delete %s';
+$lang->story->notice->branch = 'Each branch will establish a requirement. The requirements are twins. The twins requirements are synchronized except for the product, branch, module, plan, and stage fields. You can manually remove the twins relationship later';
+
+$lang->story->relievedTwinsRelation     = 'Relieved twins relationship';
+$lang->story->relievedTwinsRelationTips = 'After the twins relationship is terminated, it cannot be restored and the shutdown of the requirement is no longer synchronized.';
+$lang->story->changeRelievedTwinsTips   = 'After the twins relationship is terminated, the twin stories are no longer synchronized.';

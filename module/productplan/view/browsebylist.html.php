@@ -84,7 +84,7 @@
         <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->productplan->status);?></th>
         <?php endif;?>
         <?php if($this->session->currentProductType != 'normal'):?>
-        <th class='c-branch'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->productplan->branch);?></th>
+        <th class='c-branch'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branchName[$product->type]);?></th>
         <?php endif;?>
         <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
         <th class='c-date'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
@@ -161,7 +161,9 @@
         <td><?php echo zget($statusList, $plan->status)?></td>
         <?php endif;?>
         <?php if($this->session->currentProductType != 'normal'):?>
-        <td class='c-branch' title='<?php echo $branchOption[$plan->branch];?>'><?php if($plan->parent != '-1') echo $branchOption[$plan->branch];?></td>
+        <?php $planBranches = '';?>
+        <?php foreach(explode(',', $plan->branch) as $branchID) $planBranches .= $branchOption[$branchID] . ',';?>
+        <td class='c-branch' title='<?php echo trim($planBranches, ',');?>'><?php echo trim($planBranches, ',');?></td>
         <?php endif;?>
         <td><?php echo $plan->begin == $config->productplan->future ? $lang->productplan->future : $plan->begin;?></td>
         <td><?php echo $plan->end == $config->productplan->future ? $lang->productplan->future : $plan->end;?></td>

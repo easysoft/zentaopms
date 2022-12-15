@@ -103,6 +103,7 @@ $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“�
 $lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[运营管理界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
 
+$lang->misc->releaseDate['18.0.beta2']  = '2022-12-14';
 $lang->misc->releaseDate['18.0.beta1']  = '2022-11-16';
 $lang->misc->releaseDate['17.8']        = '2022-11-02';
 $lang->misc->releaseDate['17.7']        = '2022-10-19';
@@ -193,6 +194,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['18.0.beta2'][] = array('title' => '优化多分支/多平台产品，支持创建孪生需求，计划、版本、发布支持跨分支关联需求和bug，新增5个BI大屏，并且禅道客户端实现了机器人会话机制。', 'desc' => '');
 $lang->misc->feature->all['18.0.beta1'][] = array('title' => '主要对禅道多项核心流程进行改进，新增项目型项目、无迭代项目；支持项目跨项目集关联产品；支持轻量管理模式和全生命周期管理模式进行切换。', 'desc' => '');
 $lang->misc->feature->all['17.8'][]       = array('title' => '列表状态颜色、仪表盘颜色的改版和任务日志页面的优化。', 'desc' => '');
 $lang->misc->feature->all['17.7'][]       = array('title' => '过渡版本表格优化完成。新增工单功能，优化了反馈功能。修复Bug。', 'desc' => '');
@@ -330,7 +332,7 @@ $lang->misc->feature->all['8.2.stable'][] = array('title'=>'导出自定义', 'd
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>"{$lang->SRCommon}、任务、Bug、用例组合检索功能", 'desc' => "<p>在{$lang->SRCommon}、任务、Bug、用例列表页面，可以实现模块和标签的组合检索。</p>");
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'增加新手教程', 'desc' => '<p>增加新手教程，方便新用户了解禅道使用。</p>');
 
-$lang->misc->feature->all['7.4.beta'][] = array('title'=>'产品实现分支功能', 'desc' => "<p>产品增加分支/平台类型，相应的{$lang->SRCommon}、计划、Bug、用例、模块等都增加分支。</p>");
+$lang->misc->feature->all['7.4.beta'][] = array('title'=>'产品实现分支功能', 'desc' => "<p>产品增加平台/分支类型，相应的{$lang->SRCommon}、计划、Bug、用例、模块等都增加分支。</p>");
 $lang->misc->feature->all['7.4.beta'][] = array('title'=>'调整发布模块', 'desc' => '<p>发布增加停止维护操作，当发布停止维护时，创建Bug将不显示这个发布。</p><p>发布中遗留的bug改为手工关联。</p>');
 $lang->misc->feature->all['7.4.beta'][] = array('title'=>"调整{$lang->SRCommon}和Bug的创建页面", 'desc' => '');
 

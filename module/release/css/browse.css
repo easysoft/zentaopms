@@ -3,6 +3,8 @@ td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #releaseList tbody>tr:hover{background-color: unset!important;}
 .main-table tbody>tr>td:first-child{padding: 2px 8px!important;}
 
-.c-id {width: 60px}
-.c-branch {width: 100px}
-.c-project, c-build {width: 200px;}
+#releaseList th, #releaseList td{padding-left:16px !important;padding-right:16px !important;}
+#releaseList .c-id {width: 60px}
+#releaseList .c-branch {width: 100px}
+#releaseList .c-date {width: 160px}
+#releaseList .c-project, #releaseList .c-build {width: 180px;}
