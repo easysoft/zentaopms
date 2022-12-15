@@ -256,10 +256,11 @@ class buildModel extends model
                 ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('deleted')->eq(0)->fi()
                 ->fetchPairs();
         }
+        $branchPairs = $this->dao->select('id,name')->from(TABLE_BRANCH)->fetchPairs();
 
         $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($products)->fetchPairs('shadow', 'shadow');
         $branchs = strpos($params, 'separate') === false ? "0,$branch" : $branch;
-        $allBuilds = $this->dao->select('t1.id, t1.name, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
+        $allBuilds = $this->dao->select('t1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
             ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on("FIND_IN_SET(t1.id,t3.build)")
@@ -289,7 +290,29 @@ class buildModel extends model
             if((strpos($params, 'withexecution') !== false) and $build->execution and isset($executions[$build->execution])) continue;
 
             if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
-            $branchName = $build->branchName ? $build->branchName : $this->lang->branch->main;
+
+            if(!empty($build->branch))
+            {
+                $branchName = '';
+                foreach(explode(',', $build->branch) as $buildBranch)
+                {
+                    if(empty($buildBranch))
+                    {
+                        $branchName .= $this->lang->branch->main;
+                    }
+                    else
+                    {
+                        $branchName .= isset($branchPairs[$buildBranch]) ? $branchPairs[$buildBranch] : '';
+                    }
+                    $branchName .= ',';
+                }
+
+                $branchName = trim($branchName, ',');
+            }
+            else
+            {
+                $branchName = $this->lang->branch->main;
+            }
 
             $buildName = $build->name;
             if(strpos($params, 'withbranch') !== false and $build->productType != 'normal') $buildName = $branchName . '/' . $buildName;
