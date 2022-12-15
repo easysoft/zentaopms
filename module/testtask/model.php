@@ -1352,7 +1352,14 @@ class testtaskModel extends model
             $result->lastRunner  = $this->app->user->account;
             $result->date        = $now;
             if(isset($postData->node)) $result->node = $postData->node;
+
             $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+            if(!dao::isError() and isset($postData->node))
+            {
+                $resultID = $this->dao->lastInsertID();
+                $this->loadModel('zanode')->runZTFScript($postData->automation, $caseID, $resultID);
+            }
+
             $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($caseID)->exec();
 
             if($runID)

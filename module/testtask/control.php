@@ -1326,7 +1326,11 @@ class testtask extends control
 
         if($this->post->results)
         {
-            if($confirm == 'yes') $this->post->set('node', $automation->node);
+            if($confirm == 'yes')
+            {
+                $this->post->set('node', $automation->node);
+                $this->post->set('automation', $automation->id);
+            }
             $this->testtask->batchRun($from, $taskID);
             $this->loadModel('action');
             foreach(array_keys($this->post->results) as $caseID) $this->action->create('case', $caseID, 'run', '', $taskID);

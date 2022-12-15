@@ -57,7 +57,6 @@ $lang->zanode->nameValid      = "The name can only be letters, numbers, '-', '_'
 $lang->zanode->empty          = 'No zanode is found';
 $lang->zanode->runCaseConfirm = 'The system detects the presence of an automation script. Whether to execute?';
 
-$lang->zanode->empty              = 'No ZenAgent Node';
 $lang->zanode->createImage        = 'Create Image';
 $lang->zanode->createImaging      = 'Creating';
 $lang->zanode->createImageNotice  = 'The system will be created based on the current node，This process requires the ZenAgent Node to be shut down. Do you want to continue?';
@@ -66,6 +65,8 @@ $lang->zanode->createImageFail    = 'Failed to create';
 $lang->zanode->createImageButton  = 'Create image';
 
 $lang->zanode->imageNameEmpty = 'Name can not be empty.';
+
+$lang->zanode->runTimeout = 'Network connection timeout, please check the host and execution node status.';
 
 $lang->zanode->apiError['-10100'] = 'ZenAgent Node not found.';
 
@@ -86,6 +87,7 @@ $lang->zanode->statusList['wait']         = 'Waiting For Init';
 $lang->zanode->statusList['online']       = 'Online';
 
 $lang->zanode->init = new stdclass;
+$lang->zanode->init->statusTitle   = "Service Status";
 $lang->zanode->init->checkStatus   = "Check Service Status";
 $lang->zanode->init->not_install   = "Not installed";
 $lang->zanode->init->not_available = "Installed, Not Started";
@@ -96,7 +98,6 @@ $lang->zanode->init->button        = "Go To Settings";
 $lang->zanode->init->initSuccessNoticeTitle = "The initialization is successful, you can perform automated test settings or go to node browse.";
 $lang->zanode->init->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
 $lang->zanode->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
-
 $lang->zanode->init->serviceStatus = [
     "ZenAgent" => 'not_install',
     "ZTF"      => 'not_install',
@@ -104,4 +105,3 @@ $lang->zanode->init->serviceStatus = [
 $lang->zanode->init->title          = "Initialize Node";
 $lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
 $lang->zanode->init->initDesc       = "Execute the init script on the node: curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -szvm -z%s   <br>- Click check service status button.";
-$lang->zanode->init->statusTitle    = "Service Status";

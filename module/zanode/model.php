@@ -736,5 +736,9 @@ class zanodemodel extends model
         );
 
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
+        if(empty($result->data) || $result->code != 'success')
+        {
+            return  dao::$errors[] = $this->lang->zanode->runTimeout;
+        }
     }
 }
