@@ -189,7 +189,7 @@ class zahostModel extends model
      */
     public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
     {
-        $imageList = json_decode(file_get_contents($this->config->zahost->imageListUrl));
+        $imageList    = json_decode(file_get_contents($this->config->zahost->imageListUrl));
 
         $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('host')->eq($hostID)
@@ -198,40 +198,22 @@ class zahostModel extends model
             ->fetchAll('name');
 
         $refreshPageData = false;
-        foreach($imageList as &$image)
+        foreach($imageList as $remoteImage)
         {
-            $downloadedImage = zget($downloadedImageList, $image->name, '');
+            $downloadedImage = zget($downloadedImageList, $remoteImage->name, '');
             if(empty($downloadedImage))
             {
                 $refreshPageData = true;
-                $image->id     = 0;
-                $image->status = 'notDownloaded';
-                $image->from   = 'zentao';
-                $image->osName = $image->os;
-                $image->host   = $hostID;
-                $image->status = 'notDownloaded';
+                $remoteImage->id     = 0;
+                $remoteImage->status = 'notDownloaded';
+                $remoteImage->from   = 'zentao';
+                $remoteImage->osName = $remoteImage->os;
+                $remoteImage->host   = $hostID;
+                $remoteImage->status = 'notDownloaded';
 
-                unset($image->os);
-                $this->dao->insert(TABLE_IMAGE)->data($image, 'desc')->autoCheck()->exec();
-
-                $image->cancelMisc   = sprintf("title='%s' class='btn image-cancel image-cancel-%d %s'", $this->lang->zahost->cancel, $image->id, "disabled");
-                $image->downloadMisc = sprintf("title='%s' class='btn image-download image-download-%d %s'", $this->lang->zahost->image->downloadImage, $image->id, "");
-                if(dao::isError()) continue;
-
-                $image->id = $this->dao->lastInsertID();
+                unset($remoteImage->os);
+                $this->dao->insert(TABLE_IMAGE)->data($remoteImage, 'desc')->autoCheck()->exec();
             }
-            else
-            {
-                $image->id     = $downloadedImage->id;
-                $image->status = $downloadedImage->status;
-                $image->from   = $downloadedImage->from;
-                $image->osName = $image->os;
-
-                $image->cancelMisc   = sprintf("title='%s' data-id='%s' class='btn image-cancel image-cancel-%d %s'", $this->lang->zahost->cancel, $image->id, $image->id, in_array($image->status, array("inprogress", "created")) ? "" : "disabled");
-                $image->downloadMisc = sprintf("title='%s' data-id='%s' class='btn image-download image-download-%d %s'", $this->lang->zahost->image->downloadImage, $image->id, $image->id, in_array($image->status, array("completed", "inprogress", "created"))  || $image->from == 'user' ? "disabled" : "");
-            }
-
-            $image->host = $hostID;
         }
 
         if($refreshPageData)
@@ -242,7 +224,21 @@ class zahostModel extends model
             ->page($pager)
             ->fetchAll('name');
         }
-        return $imageList;
+        
+        foreach($downloadedImageList as $image)
+        {
+            if($image->status == 'notDownloaded')
+            {
+                $image->cancelMisc   = sprintf("title='%s' class='btn image-cancel image-cancel-%d %s'", $this->lang->zahost->cancel, $image->id, "disabled");
+                $image->downloadMisc = sprintf("title='%s' class='btn image-download image-download-%d %s'", $this->lang->zahost->image->downloadImage, $image->id, "");
+            }
+            else{
+                $image->cancelMisc   = sprintf("title='%s' data-id='%s' class='btn image-cancel image-cancel-%d %s'", $this->lang->zahost->cancel, $image->id, $image->id, in_array($image->status, array("inprogress", "created")) ? "" : "disabled");
+                $image->downloadMisc = sprintf("title='%s' data-id='%s' class='btn image-download image-download-%d %s'", $this->lang->zahost->image->downloadImage, $image->id, $image->id, in_array($image->status, array("completed", "inprogress", "created"))  || $image->from == 'user' ? "disabled" : "");
+            }
+        }
+
+        return $downloadedImageList;
     }
 
     /**
