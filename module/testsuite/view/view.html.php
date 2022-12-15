@@ -12,8 +12,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php $this->app->loadLang('zanode');?>
 <?php js::set('confirmUnlink', $lang->testsuite->confirmUnlinkCase)?>
 <?php js::set('flow', $config->global->flow);?>
+<?php js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);?>
+<?php js::set('confirmURL',     $this->createLink('testtask', 'batchRun', "productID=$suite->product&orderBy=id_desc&from=testcase&taskID=0&confirm=yes"));?>
+<?php js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$suite->product&orderBy=id_desc&from=testcase&taskID=0&confirm=no"));?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->testsuiteList ? $this->session->testsuiteList : $this->createLink('testsuite', 'browse', "productID=$suite->product");?>
@@ -130,7 +134,7 @@
                 echo "<li>" . html::a('javascript:;', $lang->testsuite->unlinkCase, '', $misc) . "</li>";
 
                 $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-                $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
+                $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"confirmAction()\"" : $class;
                 echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";
                 ?>
               </ul>
@@ -160,4 +164,19 @@
   </div>
   <?php endif;?>
 </div>
+<script>
+function confirmAction()
+{
+    if(confirm(runCaseConfirm))
+    {
+        setFormAction(confirmURL, '', '#caseList');
+    }
+    else
+    {
+        setFormAction(cancelURL, '', '#caseList');
+    }
+
+    return false;
+}
+</script>
 <?php include '../../common/view/footer.html.php';?>

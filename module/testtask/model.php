@@ -1320,6 +1320,7 @@ class testtaskModel extends model
             $postReals   = $postData->reals[$caseID];
 
             $caseResult  = $result ? $result : 'pass';
+            if($postData->node) $caseResult = '';
             $stepResults = array();
             if($dbSteps)
             {
@@ -1350,6 +1351,7 @@ class testtaskModel extends model
             $result->stepResults = serialize($stepResults);
             $result->lastRunner  = $this->app->user->account;
             $result->date        = $now;
+            if(isset($postData->node)) $result->node = $postData->node;
             $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
             $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($caseID)->exec();
 
