@@ -985,3 +985,20 @@ function setBranchRelated(branchID, productID, num)
         $.ajaxSettings.async = true;
     }
 }
+
+/**
+ * Set title field width.
+ *
+ * @access public
+ * @return void
+ */
+function setTitleWidth()
+{
+    if(window.config.currentMethod != 'browse') return false;
+
+    if($('#bugList thead th.c-title').width() < 150) $('#bugList thead th.c-title').width(150);
+    setTimeout(function()
+    {
+        if($('#bugList thead th.c-title').width() < 150) $('#bugList thead th.c-title').width(150);
+    }, 400)
+}

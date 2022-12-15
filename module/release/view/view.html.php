@@ -105,7 +105,7 @@
                       <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
                     </td>
                     <td class='c-build' title='<?php echo $story->buildName?>'><?php echo $story->buildName?></td>
-                    <td><?php echo zget($users, $story->openedBy);?></td>
+                    <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
                     <td class='c-estimate' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                     <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
                     <td class='c-actions'>
@@ -198,10 +198,10 @@
                     </td>
                     <?php $resolvedBuildName = zget($builds, $bug->resolvedBuild, '');?>
                     <td class='c-build text-left' title='<?php echo $resolvedBuildName?>'><?php echo $resolvedBuildName;?></td>
-                    <td><?php echo zget($users, $bug->openedBy);?></td>
-                    <td><?php echo substr($bug->openedDate, 5, 11)?></td>
-                    <td><?php echo zget($users, $bug->resolvedBy);?></td>
-                    <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
+                    <td class='c-user'><?php echo zget($users, $bug->openedBy);?></td>
+                    <td class='c-date'><?php echo substr($bug->openedDate, 5, 11)?></td>
+                    <td class='c-user'><?php echo zget($users, $bug->resolvedBy);?></td>
+                    <td class='c-date'><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
                     <td class='c-actions'>
                       <?php
                       if(common::hasPriv('release', 'unlinkBug') and $canBeChanged)
@@ -308,8 +308,8 @@
                     foreach(explode(',', $bug->openedBuild) as $buildID) $openedBuildName .= zget($builds, $buildID, '') . ' ';
                     ?>
                     <td class='c-build text-left' title='<?php echo $openedBuildName?>'><?php echo $openedBuildName;?></td>
-                    <td><?php echo zget($users, $bug->openedBy);?></td>
-                    <td><?php echo $bug->openedDate?></td>
+                    <td class='c-user'><?php echo zget($users, $bug->openedBy);?></td>
+                    <td class='c-date'><?php echo $bug->openedDate?></td>
                     <td class='c-actions'>
                       <?php
                       if(common::hasPriv('release', 'unlinkBug') and $canBeChanged)

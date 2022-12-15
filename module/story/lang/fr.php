@@ -147,6 +147,7 @@ $lang->story->assignedTo       = 'Assignée à';
 $lang->story->assignedToAB     = 'Attribuer';
 $lang->story->assignedDate     = 'Date Assignation';
 $lang->story->lastEditedBy     = 'Editée par';
+$lang->story->lastEditedByAB   = 'Editée par';
 $lang->story->lastEditedDate   = 'Date Edition';
 $lang->story->closedBy         = 'Fermée par';
 $lang->story->closedDate       = 'Date Fermeture';
@@ -297,6 +298,7 @@ $lang->story->checkAffection       = 'Influence';
 $lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'CasTests';
+$lang->story->affectedTwins        = 'des jumeaux';
 
 $lang->story->specTemplate         = "En tant que < type utilisateur >, je veux < différents objectifs > pour < différentes raisons >.";
 $lang->story->needNotReview        = 'Aucune Validation Requise';
@@ -474,9 +476,10 @@ $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = "Aucun processus de révision n'a été lancé pour cette Story, et il n'est pas nécessaire de révoquer l'opération.";
 
 $lang->story->subDivideTip = array();
-$lang->story->subDivideTip['subStory']  = 'Les sous-stories ne peuvent pas être décomposées.';
-$lang->story->subDivideTip['notWait']   = "L'exigence %s ne peut pas être subdivisée.";
-$lang->story->subDivideTip['notActive'] = "Cette Story n'est pas active et ne peut être subdivisée.";
+$lang->story->subDivideTip['subStory']   = 'Les sous-stories ne peuvent pas être décomposées.';
+$lang->story->subDivideTip['notWait']    = "L'exigence %s ne peut pas être subdivisée.";
+$lang->story->subDivideTip['notActive']  = "Cette Story n'est pas active et ne peut être subdivisée.";
+$lang->story->subDivideTip['twinsSplit'] = 'The Twins Story cannot be subdivided.';
 
 $lang->story->featureBar['browse']['all']       = $lang->all;
 $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
@@ -525,3 +528,4 @@ $lang->story->notice->branch = 'Each branch will establish a requirement. The re
 
 $lang->story->relievedTwinsRelation     = 'Relieved twins relationship';
 $lang->story->relievedTwinsRelationTips = 'After the twins relationship is terminated, it cannot be restored and the shutdown of the requirement is no longer synchronized.';
+$lang->story->changeRelievedTwinsTips   = 'After the twins relationship is terminated, the twin stories are no longer synchronized.';

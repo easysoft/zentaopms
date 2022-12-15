@@ -44,14 +44,24 @@
         <tr>
           <th><?php echo $lang->story->title;?></th>
           <td>
-            <div class="colorpicker">
-              <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-              <ul class="dropdown-menu clearfix">
-                <li class="heading"><?php echo $lang->story->colorTag; ?><i class="icon icon-close"></i></li>
-              </ul>
-              <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
+            <?php $titleGroup = empty($story->twins) ? '' : 'title-group';?>
+            <div class='input-group <?php echo $titleGroup?>'>
+              <div class="input-control has-icon-right">
+                <?php echo html::input('title', $story->title, 'class="form-control story-title"');?>
+                <div class="colorpicker">
+                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                  <ul class="dropdown-menu clearfix">
+                    <li class="heading"><?php echo $lang->story->colorTag; ?><i class="icon icon-close"></i></li>
+                  </ul>
+                  <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
+                </div>
+              </div>
+              <?php if(!empty($story->twins)):?>
+              <div class="input-group-addon">
+                <?php echo html::checkbox('relievedTwins', $lang->story->relievedTwinsRelation, '', "id='relievedTwins' title='{$lang->story->changeRelievedTwinsTips}'");?>
+              </div>
+              <?php endif;?>
             </div>
-            <?php echo html::input('title', $story->title, 'class="form-control story-title"');?>
           </td>
         </tr>
         <tr>
@@ -73,21 +83,6 @@
           <?php echo $this->fetch('file', 'buildform');?>
           </td>
         </tr>
-        <?php if(!empty($twins)):?>
-        <tr id='twinsTitle'>
-          <td colspan='2'>
-            <?php echo $lang->story->changeSyncTip;?>
-            <span data-toggle='tooltip' data-placement='right' title='<?php echo $lang->story->syncTip;?>'><i class='icon-help'></i></span>
-          </td>
-        </tr>
-        <tr id='twinsList'>
-          <td colspan='2'>
-            <ul class='list-unstyled'>
-                <?php include './blocktwins.html.php';?>
-            </ul>
-          </td>
-        </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>
           <td><?php include './affected.html.php';?></td>

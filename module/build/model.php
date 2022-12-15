@@ -479,6 +479,46 @@ class buildModel extends model
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();
 
+        if(empty($oldBuild->execution))
+        {
+            $buildBranch = array();
+            foreach(explode(',', trim($build->branch, ',')) as $branchID) $buildBranch[$branchID] = $branchID;
+
+            /* Get delete builds. */
+            $deleteBuilds = array();
+            foreach(explode(',', $oldBuild->builds) as $oldBuildID)
+            {
+                if(empty($oldBuildID)) continue;
+                if(strpos(",$newBuilds,", ",$oldBuildID,") === false) $deleteBuilds[$oldBuildID] = $oldBuildID;
+            }
+
+            /* Delete the branch when the branch of the deleted build has no linked stories. */
+            $deleteBuildBranches = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->in($deleteBuilds)->fetchPairs();
+            $linkedStoryBranches = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->in($oldBuild->stories)->fetchPairs('branch');
+            foreach($deleteBuildBranches as $deleteBuildBranch)
+            {
+                foreach(explode(',', $deleteBuildBranch) as $deleteBuildBranchID)
+                {
+                    if(empty($deleteBuildBranchID) or isset($linkedStoryBranches[$deleteBuildBranchID])) continue;
+                    unset($buildBranch[$deleteBuildBranchID]);
+                }
+            }
+
+            /* Add branch of new builds. */
+            $newBuilds        = isset($build->builds) ? $build->builds : '';
+            $newBuildBranches = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->in($newBuilds)->fetchPairs();
+            foreach($newBuildBranches as $newBuildBranch)
+            {
+                foreach(explode(',', $newBuildBranch) as $newBuildBranchID)
+                {
+                    if(empty($newBuildBranchID)) continue;
+                    if(!isset($buildBranch[$newBuildBranchID])) $buildBranch[$newBuildBranchID] = $newBuildBranchID;
+                }
+            }
+
+            $build->branch = implode(',', $buildBranch);
+        }
+
         $product = $this->loadModel('product')->getByID($build->product);
         if(!empty($product) and $product->type != 'normal' and !isset($_POST['branch']) and isset($_POST['product']))
         {

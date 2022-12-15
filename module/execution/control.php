@@ -4195,14 +4195,22 @@ class execution extends control
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        $executionProductList  = $this->loadModel('product')->getProducts($executionID);
         $multiBranchProduct = false;
-        foreach($executionProductList as $executionProduct)
+        if($productID)
         {
-            if($executionProduct->type != 'normal')
+            $product = $this->loadModel('product')->getByID($productID);
+            if($product->type != 'normal') $multiBranchProduct = true;
+        }
+        else
+        {
+            $executionProductList = $this->loadModel('product')->getProducts($executionID);
+            foreach($executionProductList as $executionProduct)
             {
-                $multiBranchProduct = true;
-                break;
+                if($executionProduct->type != 'normal')
+                {
+                    $multiBranchProduct = true;
+                    break;
+                }
             }
         }
         $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->haveBranchDraft : $this->lang->execution->haveDraft;
