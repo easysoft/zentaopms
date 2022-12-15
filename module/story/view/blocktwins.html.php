@@ -17,12 +17,13 @@ foreach($twins as $twin)
     $branch     = isset($branches[$twin->branch]) ? $branches[$twin->branch] : '';
     $stage      = $lang->story->stageList[$twin->stage];
     $labelClass = $story->branch == $twin->branch ? 'label-primary' : '';
+    $hide       = $this->app->rawMethod == 'edit' ? '' : 'hide';
 
     echo "<li title='$title' class='twins'>";
     echo "<span class='label {$labelClass} label-outline label-badge' title='$branch'>{$branch}</span> ";
     echo "<span class='label label-outline' title='{$stage}'>{$stage}</span> ";
     echo ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id", '', true), "$title", '', "class='$class viewlink' data-width='80%'") : "$title");
-    if($canRelieved) echo "<a class='unlink hide' data-id='$id' data-toggle='popover'><i class='icon icon-unlink btn-info'></i></a>";
+    if($canRelieved) echo "<a class='unlink $hide' data-id='$id' data-toggle='popover'><i class='icon icon-unlink btn-info'></i></a>";
     echo "</li>";
 }
 ?>

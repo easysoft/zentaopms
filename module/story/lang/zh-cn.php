@@ -476,9 +476,10 @@ $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = '该需求未发起评审流程，无需撤销操作';
 
 $lang->story->subDivideTip = array();
-$lang->story->subDivideTip['subStory']  = '子需求无法细分';
-$lang->story->subDivideTip['notWait']   = '该需求%s，无法进行细分操作';
-$lang->story->subDivideTip['notActive'] = '需求不是激活状态，无法进行细分操作';
+$lang->story->subDivideTip['subStory']   = '子需求无法细分';
+$lang->story->subDivideTip['notWait']    = '该需求%s，无法进行细分操作';
+$lang->story->subDivideTip['notActive']  = '需求不是激活状态，无法进行细分操作';
+$lang->story->subDivideTip['twinsSplit'] = '孪生需求不可细分';
 
 $lang->story->featureBar['browse']['all']       = '全部';
 $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
@@ -527,3 +528,4 @@ $lang->story->notice->branch = '每个分支会建立一个需求，需求间互
 
 $lang->story->relievedTwinsRelation     = '解除孪生关系';
 $lang->story->relievedTwinsRelationTips = '孪生关系解除后无法恢复，需求的关闭将不再同步。';
+$lang->story->changeRelievedTwinsTips   = '孪生关系解除后无法恢复，孪生需求间内容不再同步。';

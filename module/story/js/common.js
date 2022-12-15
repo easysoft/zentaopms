@@ -96,13 +96,17 @@ function loadURS(allURS)
 }
 
 $('.twins').mouseover(function() {
+    if(page == 'edit') return;
     $(this).parent('ul').find('a.unlink').addClass('hide');
     $(this).find('.unlink').removeClass('hide');
 });
+
 $('.twins').mouseenter(function() {
     $('[data-toggle="popover"]').popover('hide');
 });
+
 $('.twins').mouseout(function() {
+    if(page == 'edit') return;
     $(this).find('.unlink').addClass('hide');
 });
 
@@ -142,5 +146,8 @@ function relieve(index)
 
 function popoverCancel(index)
 {
-    $('[data-id="' + index + '"]').popover('hide').addClass('hide');
+    $('[data-id="' + index + '"]').popover('hide');
+    if(page == 'edit') return;
+
+    $('[data-id="' + index + '"]').addClass('hide');
 }

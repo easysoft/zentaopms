@@ -2350,21 +2350,23 @@ class bug extends control
                 $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
                 $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
 
-                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
-                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
+                $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+                $projectID = $object->type == 'project' ? $object->id : $object->parent;
+                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
+                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
             }
 
             $this->transfer->export('bug');
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
         $product = $this->loadModel('product')->getByID($productID);
-        if($product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
+        if(isset($product->type) and $product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
             if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
-            if($product->shadow) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
+            if(!empty($product->shadow)) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
         }
 
         $fileName = $this->lang->bug->common;

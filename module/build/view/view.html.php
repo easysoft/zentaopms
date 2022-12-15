@@ -92,7 +92,7 @@ tbody tr td:first-child input {display: none;}
                 <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
                 <?php if($childBuilds):?>
-                <th class='c-build w-200px text-left'><?php echo $lang->build->linkedBuild;?></th>
+                <th class='c-build'><?php echo $lang->build->linkedBuild;?></th>
                 <?php endif;?>
                 <th class='c-user'>     <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-estimate'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
@@ -151,9 +151,9 @@ tbody tr td:first-child input {display: none;}
                   <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
                 </td>
                 <?php if($childBuilds):?>
-                <td class='c-build text-left' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
+                <td class='c-build' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
                 <?php endif;?>
-                <td><?php echo zget($users, $story->openedBy);?></td>
+                <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
                 <td class='c-estimate' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                 <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
@@ -254,10 +254,10 @@ tbody tr td:first-child input {display: none;}
                 <?php if($childBuilds):?>
                 <td class='c-build' title='<?php echo $buildName?>'><?php echo $buildName;?></td>
                 <?php endif;?>
-                <td><?php echo zget($users, $bug->openedBy);?></td>
-                <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
-                <td><?php echo zget($users, $bug->resolvedBy);?></td>
-                <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
+                <td class='c-user'><?php echo zget($users, $bug->openedBy);?></td>
+                <td class='c-date'><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
+                <td class='c-user'><?php echo zget($users, $bug->resolvedBy);?></td>
+                <td class='c-date'><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
                 <td class='c-actions'>
                   <?php
                   if($canBeChanged and common::hasPriv($module, 'unlinkBug'))
@@ -342,10 +342,10 @@ tbody tr td:first-child input {display: none;}
                 foreach(explode(',', $bug->openedBuild) as $buildID) $openedBuilds .= ($buildID == 'trunk' ? 'Trunk' : zget($buildPairs, $buildID, '')) . ' ';
                 ?>
                 <td class='c-build' title='<?php echo $openedBuilds;?>'><?php echo $openedBuilds;?></td>
-                <td><?php echo zget($users, $bug->openedBy);?></td>
-                <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
-                <td><?php echo zget($users, $bug->resolvedBy);?></td>
-                <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
+                <td class='c-user'><?php echo zget($users, $bug->openedBy);?></td>
+                <td class='c-date'><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
+                <td class='c-user'><?php echo zget($users, $bug->resolvedBy);?></td>
+                <td class='c-date'><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
               </tr>
               <?php endforeach;?>
             </tbody>
