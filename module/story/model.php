@@ -3805,7 +3805,7 @@ class storyModel extends model
             ->andWhere('parent')->le(0)
             ->andWhere('type')->eq('story')
             ->andWhere('stage')->eq('wait')
-            ->andWhere('status')->notin('closed,draft')
+            ->andWhere('status')->eq('active')
             ->andWhere('product')->eq($productID)
             ->andWhere('plan')->in('0,')
             ->andWhere('twins')->eq('')
