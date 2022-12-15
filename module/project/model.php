@@ -753,11 +753,14 @@ class projectModel extends model
     public function getStatData($projectID)
     {
         $executions = $this->loadModel('execution')->getPairs($projectID);
-        $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
+        $storyTypeCount = $this->dao->select('count(t2.story) as storyCount,t1.type')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
             ->where('t2.project')->eq($projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->fetch('storyCount');
+            ->groupBy('t1.type')
+            ->fetchPairs('type', 'storyCount');
+        $storyCount       = isset($storyTypeCount['story']) ? $storyTypeCount['story'] : 0;
+        $requirementCount = isset($storyTypeCount['requirement']) ? $storyTypeCount['requirement'] : 0;
 
         $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('taskCount');
         $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->in($projectID)->andWhere('deleted')->eq(0)->fetch('bugCount');
@@ -773,13 +776,14 @@ class projectModel extends model
             ->fetch('count');
 
         $statData = new stdclass();
-        $statData->storyCount    = $storyCount;
-        $statData->taskCount     = $taskCount;
-        $statData->bugCount      = $bugCount;
-        $statData->waitCount     = zget($statusPairs, 'wait', 0);
-        $statData->doingCount    = zget($statusPairs, 'doing', 0);
-        $statData->finishedCount = $finishedCount;
-        $statData->delayedCount  = $delayedCount;
+        $statData->storyCount       = $storyCount;
+        $statData->requirementCount = $requirementCount;
+        $statData->taskCount        = $taskCount;
+        $statData->bugCount         = $bugCount;
+        $statData->waitCount        = zget($statusPairs, 'wait', 0);
+        $statData->doingCount       = zget($statusPairs, 'doing', 0);
+        $statData->finishedCount    = $finishedCount;
+        $statData->delayedCount     = $delayedCount;
 
         return $statData;
     }
