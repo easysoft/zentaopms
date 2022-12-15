@@ -34,6 +34,7 @@ $lang->build->branch         = '平台/分支';
 $lang->build->branchAll      = '所有关联%s';
 $lang->build->branchName     = '所属%s';
 $lang->build->execution      = '所属' . $lang->executionCommon;
+$lang->build->executionAB    = '所属执行';
 $lang->build->integrated     = '集成版本';
 $lang->build->singled        = '单一版本';
 $lang->build->builds         = '包含版本';
