@@ -11,7 +11,7 @@ if(isset($twins))
     <li class='active'><a data-toggle='tab' href='#affectedProjects'><?php echo $lang->story->affectedProjects;?> <?php $count = count($story->executions); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
     <li><a data-toggle='tab' href='#affectedBugs'><?php echo $lang->story->affectedBugs;?> <?php $count = count($story->bugs); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
     <li><a data-toggle='tab' href='#affectedCases'><?php echo $lang->story->affectedCases;?> <?php $count = count($story->cases); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
-    <li><a data-toggle='tab' href='#affectedTwins'><?php if(count($twins) > 0) echo $lang->story->affectedTwins;?> <?php if(count($twins) > 0) echo "<span class='label label-danger label-badge label-circle'>" . count($twins) . "</span>" ?></a></li>
+    <li><a data-toggle='tab' href='#affectedTwins'><?php if(isset($twins) and count($twins) > 0) echo $lang->story->affectedTwins;?> <?php if(isset($twins) and count($twins) > 0) echo "<span class='label label-danger label-badge label-circle'>" . count($twins) . "</span>" ?></a></li>
   </ul>
   <div class='tab-content'>
     <div class='tab-pane active' id='affectedProjects'>
