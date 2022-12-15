@@ -68,7 +68,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <td class='w-60px <?php if((!$branches and $type == 'story') or $type == 'requirement') echo "hidden"; ?> switchBranch'></td>
             <td colspan="2" class='<?php if($branches and $type == 'story') echo "hidden"; ?> switchBranch'>
             <div class='input-group' id='moduleIdBox'>
+              <?php if(!$hiddenProduct):?>
               <div class="input-group-addon"><?php echo $lang->story->module;?></div>
+              <?php endif;?>
               <?php
               echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
               if(count($moduleOptionMenu) == 1)
