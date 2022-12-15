@@ -164,6 +164,7 @@
           </div>
         </div>
       </div>
+      <?php if(!empty($result->stepResults)):?>
       <?php foreach($result->stepResults as $stepID => $stepResult):?>
       <div class="modal fade" id="stepResult<?php echo $result->id . '-' .$stepID;?>">
         <div class="modal-dialog">
@@ -177,6 +178,7 @@
         </div>
       </div>
       <?php endforeach;?>
+      <?php endif;?>
       <?php endforeach;?>
       <div id='resultTip' class='hide'><?php if($count > 0) echo $failCount > 0 ? "<span>" . sprintf($lang->testtask->showFail, $failCount) . "</span>":"<span class='text-success'>{$lang->testtask->passAll}</span>";?></div>
       <style>

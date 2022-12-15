@@ -232,6 +232,7 @@ class testcase extends control
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
         $this->view->showBranch      = $showBranch;
         $this->view->libraries       = $this->loadModel('caselib')->getLibraries();
+        $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
 
         $this->display();
     }

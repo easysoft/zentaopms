@@ -579,6 +579,7 @@ class testtask extends control
         $this->view->suites         = $this->loadModel('testsuite')->getSuitePairs($productID);
         $this->view->suiteName      = isset($suiteName) ? $suiteName : $this->lang->testtask->browseBySuite;
         $this->view->canBeChanged   = $canBeChanged;
+        $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
 
         $this->display();
     }
@@ -1233,7 +1234,7 @@ class testtask extends control
         $confirmURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=yes");
         $cancelURL  = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
 
-        if($automation and $confirm == '') return print(js::confirm($this->lang->zanode->runCaseConfirm, $confirmURL, $cancelURL));
+        if($automation and $confirm == '' and $run->case->auto == 'auto') return print(js::confirm($this->lang->zanode->runCaseConfirm, $confirmURL, $cancelURL));
         if($confirm == 'yes')
         {
             $resultID = $this->testtask->initResult($runID, $caseID, $run->case->version, $automation->node);
@@ -1326,11 +1327,6 @@ class testtask extends control
 
         if($this->post->results)
         {
-            if($confirm == 'yes')
-            {
-                $this->post->set('node', $automation->node);
-                $this->post->set('automation', $automation->id);
-            }
             $this->testtask->batchRun($from, $taskID);
             $this->loadModel('action');
             foreach(array_keys($this->post->results) as $caseID) $this->action->create('case', $caseID, 'run', '', $taskID);

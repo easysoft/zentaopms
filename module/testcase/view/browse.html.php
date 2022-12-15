@@ -285,17 +285,38 @@ js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$
 <script>
 $('#module' + moduleID).closest('li').addClass('active');
 $('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
+function runAutocase()
+{
+    var caseIDList = [];
+    $.each($('input[name^=caseIDList]:checked'),function(){
+        caseIDList.push($(this).val());
+    });
+
+    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=<?php echo $automation->id;?>')
+
+    var postData = {'caseIDList' : caseIDList.join(',')};
+    $.post(url, postData, function(result)
+    {
+        if(result.result == 'fail')
+        {
+            alert(result.message);
+            return false;
+        }
+        return true;
+    }, 'json');
+}
+
 function confirmAction(obj)
 {
     if(confirm(runCaseConfirm))
     {
-        setFormAction(confirmURL, '', '#caseList');
+        var result = runAutocase();
+        if(result) setFormAction(confirmURL, '', '#caseList');
     }
     else
     {
         setFormAction(cancelURL, '', '#caseList');
     }
-
     return false;
 }
 <?php if($useDatatable):?>

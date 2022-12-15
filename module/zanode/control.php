@@ -386,4 +386,30 @@ class zanode extends control
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
     }
+
+    /**
+     * ajaxRunZTFScript
+     *
+     * @param  int    $scriptID
+     * @access public
+     * @return void
+     */
+    public function ajaxRunZTFScript($scriptID = 0)
+    {
+        if($_POST)
+        {
+            $caseIDList = $_POST['caseIDList'];
+            $script     = $this->zanode->getAutomationByID($scriptID);
+            $cases = $this->loadModel('testcase')->getByList($caseIDList);
+
+            foreach($cases as $id => $case)
+            {
+                $resultID = $this->loadModel('testtask')->initResult(0, $id, $case->version, $script->node);
+                if(!dao::isError()) $this->zanode->runZTFScript($script->id, $id, $resultID);
+            }
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => 'success'));
+        }
+    }
 }
