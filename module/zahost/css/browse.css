@@ -1,4 +1,4 @@
-.c-ip {width: 100px;}
+.c-ip {width: 180px;}
 .c-memory, .c-diskSize, .c-status, .c-cpu, .c-software, .c-instanceNum {width: 90px;}
 .c-datetime {width: 150px;}
 .status-wait {color: #f00;}

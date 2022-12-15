@@ -66,6 +66,8 @@ $lang->zanode->createImageButton  = '去创建';
 
 $lang->zanode->imageNameEmpty = '名称不能为空';
 
+$lang->zanode->runTimeout = '网络连接超时，请检查宿主机和执行节点状态';
+
 $lang->zanode->apiError['-10100'] = '执行节点不存在';
 
 $lang->zanode->publicList[0] = '不共享';

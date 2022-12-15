@@ -52,11 +52,11 @@
             <th class='c-name'><?php common::printOrderLink('t1.name', $orderBy, $vars, $lang->zanode->name); ?></th>
             <th class='c-ip'><?php common::printOrderLink('t1.extranet', $orderBy, $vars, $lang->zanode->extranet); ?></th>
             <th class='c-cpu'><?php common::printOrderLink('t1.cpuCores', $orderBy, $vars, $lang->zanode->cpuCores); ?></th>
-            <th class='c-number'><?php common::printOrderLink('t1.memory', $orderBy, $vars, $lang->zanode->memory); ?></th>
+            <th class='c-memory'><?php common::printOrderLink('t1.memory', $orderBy, $vars, $lang->zanode->memory); ?></th>
             <th class='c-number'><?php common::printOrderLink('t1.diskSize', $orderBy, $vars, $lang->zanode->diskSize); ?></th>
             <th class='c-os'><?php common::printOrderLink('t1.osName', $orderBy, $vars, $lang->zanode->osName); ?></th>
             <th class='c-status'><?php common::printOrderLink('t1.status', $orderBy, $vars, $lang->zanode->status); ?></th>
-            <th class='c-host'><?php common::printOrderLink('t2.id', $orderBy, $vars, $lang->zanode->hostName); ?>
+            <th class='c-host'><?php common::printOrderLink('t2.name', $orderBy, $vars, $lang->zanode->hostName); ?>
             <th class='c-actions-7 text-center'><?php echo $lang->actions ?></th>
           </tr>
         </thead>

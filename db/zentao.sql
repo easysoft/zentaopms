@@ -7266,6 +7266,7 @@ CREATE TABLE `zt_host` (
   `desc` text NOT NULL,
   `tokenSN` varchar(50) NOT NULL DEFAULT '',
   `tokenTime` datetime NOT NULL,
+  `oldTokenSN` varchar(50) NOT NULL DEFAULT '',
   `vsoft` varchar(30) NOT NULL DEFAULT '',
   `heartbeat` datetime NOT NULL,
   `zap` varchar(10) NOT NULL,

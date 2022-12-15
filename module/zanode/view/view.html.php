@@ -94,7 +94,7 @@
       </div>
       <div class="detail zanode-detail">
         <div class="detail-title"><?php echo $lang->zanode->desc; ?></div>
-        <div class="detail-content article-content"><?php echo !empty($zanode->desc) ? $zanode->desc : $lang->noData; ?></div>
+        <div class="detail-content article-content"><?php echo !empty($zanode->desc) ? htmlspecialchars_decode($zanode->desc) : $lang->noData; ?></div>
       </div>
       <?php
       $canBeChanged = common::canBeChanged('zanode', $zanode);

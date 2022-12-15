@@ -22,7 +22,28 @@ $(function()
 
     $('#casesResults table caption .result-tip').html($('#resultTip').html());
 
-    $('tr:first').click();
+    if($('tr:first').data('status') == 'ready')
+    {
+        $('tr:first').click();
+    }
+    else
+    {
+        var resultInterval = setInterval(() => {
+            var id = $('tr:first').data('id')
+            var link = createLink('testtask', 'ajaxGetResult', 'resultID=' + id);
+            $.get(link, function(task)
+            {
+                task = JSON.parse(task);
+                task = task.data;
+                if(task.ZTFResult != '')
+                {
+                    clearInterval(resultInterval);
+                    window.location.reload();
+                }
+            });
+        }, 1000);
+        
+    }
 
     $('#casesResults').click(function(event)
     {

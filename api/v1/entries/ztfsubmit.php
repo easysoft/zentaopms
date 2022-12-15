@@ -43,7 +43,15 @@ class ztfSubmitEntry extends baseEntry
         {
             $this->app->user = new stdClass;
             $this->app->user->account = '';
-            $result = $this->loadModel('testtask')->parseZTFFuncResult($post->data, "", 0, 0, 0);
+            if(!empty($post->data->funcResult))
+            {
+                $result = $this->loadModel('testtask')->parseZTFFuncResult($post->data->funcResult, "", 0, 0, 0);
+            }
+            else
+            {
+                $result = array();
+            }
+            $post->log = !empty($post->data->log) ? $post->data->log: '';
 
             unset($post->data);
             if(!empty($result['results'][0]))
@@ -57,7 +65,10 @@ class ztfSubmitEntry extends baseEntry
             }
             else
             {
-                $this->dao->update(TABLE_TESTRESULT)->set('ZTFResult')->eq(json_encode($post))->where('id')->eq($post->task)->exec();
+                $this->dao->update(TABLE_TESTRESULT)
+                    ->set('ZTFResult')->eq(json_encode($post))
+                    ->set('caseResult')->eq('n/a')
+                    ->where('id')->eq($post->task)->exec();
             }
         }
 

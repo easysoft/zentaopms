@@ -23,6 +23,9 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
 js::set('productID',      $productID);
 js::set('branch',         $branch);
 js::set('suiteID',        $suiteID);
+js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);
+js::set('confirmURL',     $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy&from=testcase&taskID=0&confirm=yes"));
+js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy&from=testcase&taskID=0&confirm=no"));
 ?>
 <?php if($this->app->tab == 'project'):?>
 <style>
@@ -127,7 +130,7 @@ js::set('suiteID',        $suiteID);
           <div class='btn-group dropup'>
             <?php
             $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-            $misc = $canBatchRun ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
+            $misc = $canBatchRun ? "onclick=\"confirmAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->testtask->runCase, $misc);
 
             $caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
@@ -282,6 +285,19 @@ js::set('suiteID',        $suiteID);
 <script>
 $('#module' + moduleID).closest('li').addClass('active');
 $('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
+function confirmAction(obj)
+{
+    if(confirm(runCaseConfirm))
+    {
+        setFormAction(confirmURL, '', '#caseList');
+    }
+    else
+    {
+        setFormAction(cancelURL, '', '#caseList');
+    }
+
+    return false;
+}
 <?php if($useDatatable):?>
 $(function(){$('#caseForm').table();})
 <?php endif;?>

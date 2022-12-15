@@ -1171,6 +1171,31 @@ class testtaskModel extends model
     }
 
     /**
+     * Init testtask result.
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function initResult($runID = 0, $caseID = 0, $version = 0, $nodeID = 0)
+    {
+        $result = new stdClass();
+        $result->run        = $runID;
+        $result->case       = $caseID;
+        $result->version    = $version;
+        $result->node       = $nodeID;
+        $result->date       = helper::now();
+        $result->lastRunner = $this->app->user->account;
+
+        $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+        if(!dao::isError()) return $resultID = $this->dao->lastInsertID();
+        return false;
+    }
+
+    /**
      * Create test result
      *
      * @param  int   $runID
@@ -1295,6 +1320,7 @@ class testtaskModel extends model
             $postReals   = $postData->reals[$caseID];
 
             $caseResult  = $result ? $result : 'pass';
+            if($postData->node) $caseResult = '';
             $stepResults = array();
             if($dbSteps)
             {
@@ -1325,7 +1351,15 @@ class testtaskModel extends model
             $result->stepResults = serialize($stepResults);
             $result->lastRunner  = $this->app->user->account;
             $result->date        = $now;
+            if(isset($postData->node)) $result->node = $postData->node;
+
             $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+            if(!dao::isError() and isset($postData->node))
+            {
+                $resultID = $this->dao->lastInsertID();
+                $this->loadModel('zanode')->runZTFScript($postData->automation, $caseID, $resultID);
+            }
+
             $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($caseID)->exec();
 
             if($runID)
@@ -1369,11 +1403,13 @@ class testtaskModel extends model
 
         $relatedVersions = array();
         $runIdList       = array();
+        $nodeIdList      = array();
         foreach($results as $result)
         {
             $runIdList[$result->run] = $result->run;
             $relatedVersions[]       = $result->version;
             $runCaseID               = $result->case;
+            if(!empty($result->node)) $nodeIdList[] = $result->node;
         }
         $relatedVersions = array_unique($relatedVersions);
 
@@ -1385,6 +1421,9 @@ class testtaskModel extends model
         $runs = $this->dao->select('t1.id,t2.build')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
             ->where('t1.id')->in($runIdList)
+            ->fetchPairs();
+        $nodes = $this->dao->select('id,name')->from(TABLE_ZAHOST)
+            ->where('id')->in(array_unique($nodeIdList))
             ->fetchPairs();
 
         $this->loadModel('file');
@@ -1412,6 +1451,15 @@ class testtaskModel extends model
         {
             $result->stepResults = unserialize($result->stepResults);
             $result->build       = $result->run ? zget($runs, $result->run, 0) : 0;
+            $result->nodeName    = $result->node ? zget($nodes, $result->node, '') : '';
+
+            if(!empty($result->ZTFResult))
+            {
+                $result->ZTFResult   = json_decode($result->ZTFResult);
+                $result->ZTFResult   = empty($result->ZTFResult->log) ? '' : $result->ZTFResult->log;
+                $result->ZTFResult   = "<li>" . str_replace(array("\r", "\n", "\r\n"), "</li><li>", $result->ZTFResult) . "</li>";
+            }
+
             $result->files       = zget($resultFiles, $resultID, array()); //Get files of case result.
             if(isset($relatedSteps[$result->version]))
             {

@@ -320,7 +320,7 @@ class zanodemodel extends model
             $query = str_replace('`hostID`', 't2.`id`', $query);
         }
 
-        return $this->dao->select('t1.*, t1.name as hostName, t2.extranet,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as hostName, t2.extranet,t3.osName')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.deleted')->eq(0)
@@ -645,11 +645,11 @@ class zanodemodel extends model
     public function installService($node, $name)
     {
         $param = array(
-            "name" => $name,
+            "name" => strtolower($name),
             "secret" => $node->secret,
             "server" => getWebRoot(true),
         );
-        $result = json_decode(commonModel::http("http://{$node->extranet}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
 
         if(empty($result->data) || $result->code != 'success')
         {
@@ -718,30 +718,27 @@ class zanodemodel extends model
     /**
      * Run ZTFScript.
      *
+     * @param  int    $scriptID
+     * @param  int    $caseID
+     * @param  int    $task     //testtaskID
      * @access public
      * @return void
      */
-    public function runZTFScript()
+    public function runZTFScript($scriptID = 0, $caseID = 0, $task = 0)
     {
+        $automation = $this->getAutomationByID($scriptID);
+        $node       = $this->getNodeByID($automation->node);
         $params = array(
-            'cmd'       => '',
-            'ids'       => '',
-            'path'      => '',
-            'task'      => '',
-            'workspace' => ''
+            'cmd'  => $automation->shell,
+            'ids'  => $caseID,
+            'path' => $automation->scriptPath,
+            'task' => $task
         );
 
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
-
         if(empty($result->data) || $result->code != 'success')
         {
-            $result = new stdclass;
-            $result->data = $this->lang->zanode->init->serviceStatus;
+            return  dao::$errors[] = $this->lang->zanode->runTimeout;
         }
-
-        return array(
-            "ZenAgent" => "ready",
-            "ZTF"      => $result->data->ztfStatus,
-        );
     }
 }
