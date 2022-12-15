@@ -304,7 +304,7 @@ class build extends control
             $objectID   = $build->execution;
         }
 
-        $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
+        $executions    = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
         $executionType = $build->execution ? $this->execution->getByID($build->execution) : '';
 
         $this->commonActions($build->project);
