@@ -866,6 +866,7 @@ class storyModel extends model
             {
                 $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
                 $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+                if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
             }
             elseif(!empty($oldStory->twins))
             {
