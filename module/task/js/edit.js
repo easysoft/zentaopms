@@ -23,15 +23,15 @@ $(function()
             }
 
             $('.team-group').removeClass('hidden');
-            $('#estimate').attr('disabled', 'disabled')
-            $('#left').attr('disabled', 'disabled')
+            $('#estimate').attr('readonly', 'readonly');
+            $('#left').attr('readonly', 'readonly');
         }
         else
         {
             $('#assignedTo').removeAttr('disabled').trigger('chosen:updated')
             $('.team-group').addClass('hidden');
-            $('#estimate').attr('disabled', false)
-            $('#left').attr('disabled', false)
+            $('#estimate').removeAttr('readonly');
+            $('#left').removeAttr('readonly');
         }
     })
 })
