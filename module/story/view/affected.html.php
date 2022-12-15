@@ -4,14 +4,14 @@ if(isset($twins))
    $twinsClass       = isonlybody() ? 'showinonlybody' : 'iframe';
    $canViewLinkStory = common::hasPriv('story', 'view');
    $lang->story->currentBranch = sprintf($this->lang->story->currentBranch, $this->lang->product->branchName[$product->type]);
-   array_unshift($twins, $story);
+   unset($twins[$story->id]);
 }?>
 <div class='tabs'>
   <ul class='nav nav-tabs'>
     <li class='active'><a data-toggle='tab' href='#affectedProjects'><?php echo $lang->story->affectedProjects;?> <?php $count = count($story->executions); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
     <li><a data-toggle='tab' href='#affectedBugs'><?php echo $lang->story->affectedBugs;?> <?php $count = count($story->bugs); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
     <li><a data-toggle='tab' href='#affectedCases'><?php echo $lang->story->affectedCases;?> <?php $count = count($story->cases); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
-    <li><a data-toggle='tab' href='#affectedTwins'><?php if(isset($twins) and count($twins) > 1) echo $lang->story->affectedTwins;?> <?php if(isset($twins) and count($twins) > 1) echo "<span class='label label-danger label-badge label-circle'>" . count($twins) . "</span>" ?></a></li>
+    <li><a data-toggle='tab' href='#affectedTwins'><?php if(count($twins) > 0) echo $lang->story->affectedTwins;?> <?php if(count($twins) > 0) echo "<span class='label label-danger label-badge label-circle'>" . count($twins) . "</span>" ?></a></li>
   </ul>
   <div class='tab-content'>
     <div class='tab-pane active' id='affectedProjects'>
@@ -130,7 +130,7 @@ if(isset($twins))
           <tr class='text-center'>
             <td><?php echo $twin->id;?></td>
             <td><span class='label <?php echo $labelClass;?> label-outline label-badge' title='<?php echo $branch;?>'><?php echo $branch;?></span></td>
-            <td class='text-left twins'><?php echo ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$twin->id", '', true), "$twin->title", '', "class='$twinsClass viewlink'") : "$twin->title");?></td>
+            <td class='text-left'><?php echo ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$twin->id", '', true), "$twin->title", '', "class='$twinsClass viewlink'") : "$twin->title");?></td>
             <td><span class='status-twins status-<?php echo $twin->status?>'><?php echo $this->processStatus('story', $twin);?></span></td>
             <td><?php echo $lang->story->stageList[$twin->stage];?></td>
             <td><?php echo zget($users, $twin->openedBy);?></td>
