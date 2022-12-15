@@ -35,6 +35,20 @@ $(function()
     window.parent.appHeaderStyleUpdated = true;
     window.open('xxc://setAppHeaderStyle/zentao-integrated/' + encodeURIComponent(JSON.stringify(clientHeaderStyle)), '_blank');
 });
+setTimeout(function() // Override confirm, prompt and alert methods.
+{
+    window.confirm = function() {
+        console.warn('\"window.confirm\" is disabled in webview.');
+        return true;
+    };
+    window.prompt = function() {
+        console.warn('\"window.prompt\" is disabled in webview.');
+    };
+    window.alert = function(msg) {
+        const win = window.parent ? window.parent : window;
+        win.open(`xxc://webview/alert/${encodeURIComponent(msg)}`, '_blank');
+    };
+});
 </script>
 <?php if($this->app->moduleName =='user' && $this->app->methodName == 'deny'): ?>
 <script>
