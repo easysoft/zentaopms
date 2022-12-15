@@ -183,7 +183,8 @@ class build extends control
             $builds        = $this->build->getBuildPairs($build->product, 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
         }
 
-        $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
+        $executions    = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
+        $executionType = $build->execution ? $this->execution->getByID($build->execution) : '';
         if($build->execution and !isset($executions[$build->execution])) $executions[$build->execution] = $this->loadModel('execution')->getById($build->execution)->name;
 
         /* Get stories and bugs. */
@@ -218,6 +219,7 @@ class build extends control
         $this->view->orderBy         = $orderBy;
         $this->view->oldBranch       = $oldBranch;
         $this->view->executions      = $executions;
+        $this->view->executionType   = (!empty($executionType) and $executionType->type == 'stage') ? 1 : 0;
         $this->view->productGroups   = $productGroups;
         $this->view->products        = $products;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter', $build->builder);
@@ -303,6 +305,7 @@ class build extends control
         }
 
         $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
+        $executionType = $build->execution ? $this->execution->getByID($build->execution) : '';
 
         $this->commonActions($build->project);
 
@@ -329,19 +332,20 @@ class build extends control
         /* Assign. */
         $this->view->canBeChanged = common::canBeChanged('build', $build); // Determines whether an object is editable.
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->build        = $build;
-        $this->view->buildPairs   = $this->build->getBuildPairs(0, 'all', 'noempty,notrunk', $objectID, $objectType);
-        $this->view->builds       = $this->build->getByList(array_keys($this->view->buildPairs));
-        $this->view->executions   = $executions;
-        $this->view->actions      = $this->loadModel('action')->getList('build', $buildID);
-        $this->view->link         = $link;
-        $this->view->param        = $param;
-        $this->view->orderBy      = $orderBy;
-        $this->view->bugs         = $bugs;
-        $this->view->type         = $type;
-        $this->view->bugPager     = $bugPager;
-        $this->view->branchName   = empty($branchName) ? $this->lang->branch->main : $branchName;
-        $this->view->childBuilds  = empty($build->builds) ? array() : $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
+        $this->view->build         = $build;
+        $this->view->buildPairs    = $this->build->getBuildPairs(0, 'all', 'noempty,notrunk', $objectID, $objectType);
+        $this->view->builds        = $this->build->getByList(array_keys($this->view->buildPairs));
+        $this->view->executions    = $executions;
+        $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
+        $this->view->link          = $link;
+        $this->view->param         = $param;
+        $this->view->orderBy       = $orderBy;
+        $this->view->bugs          = $bugs;
+        $this->view->type          = $type;
+        $this->view->bugPager      = $bugPager;
+        $this->view->branchName    = empty($branchName) ? $this->lang->branch->main : $branchName;
+        $this->view->childBuilds   = empty($build->builds) ? array() : $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
+        $this->view->executionType = (!empty($executionType) and $executionType->type == 'stage') ? 1 : 0;
 
         if($this->app->getViewType() == 'json')
         {

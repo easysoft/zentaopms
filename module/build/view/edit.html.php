@@ -64,7 +64,7 @@
           </td>
         </tr>
         <?php elseif(!empty($multipleProject)):?>
-        <th class='w-120px'><?php echo $lang->build->execution;?></th>
+        <th class='w-120px'><?php echo $executionType ? $lang->build->executionAB : $lang->build->execution;?></th>
         <td id='executionsBox'><?php echo html::select('execution', $executions, $build->execution, "class='form-control chosen' required $disabled");?></td>
         <td><?php if($disabled) echo $lang->build->notice->changeExecution;?></td>
         <?php endif;?>
