@@ -404,6 +404,7 @@ class zanode extends control
 
             foreach($cases as $id => $case)
             {
+                if($case->auto != 'auto') continue;
                 $resultID = $this->loadModel('testtask')->initResult(0, $id, $case->version, $script->node);
                 if(!dao::isError()) $this->zanode->runZTFScript($script->id, $id, $resultID);
             }

@@ -74,7 +74,7 @@
           </thead>
           <tbody>
             <?php foreach($runs as $run):?>
-            <tr data-id='<?php echo $run->id?>'>
+            <tr data-id='<?php echo $run->id?>' data-auto='<?php echo $run->auto;?>'>
               <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $useDatatable ? 'datatable' : 'table');?>
             </tr>
             <?php endforeach;?>
@@ -189,6 +189,18 @@ function runAutocase()
 
 function confirmAction(obj)
 {
+    var autoRun = 'no';
+    $.each($('input[name^=caseIDList]:checked'),function(){
+       var dataAuto = $(this).parents('tr').attr('data-auto');
+       if(dataAuto == 'auto') autoRun = dataAuto;
+    });
+
+    if(autoRun == 'no')
+    {
+        setFormAction(cancelURL, '', '#caseList');
+        return false;
+    }
+
     if(confirm(runCaseConfirm))
     {
         var result = runAutocase();

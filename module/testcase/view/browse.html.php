@@ -114,7 +114,7 @@ js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$
         </thead>
         <tbody>
           <?php foreach($cases as $case):?>
-          <tr data-id='<?php echo $case->id?>'>
+          <tr data-id='<?php echo $case->id?>' data-auto='<?php echo $case->auto;?>'>
             <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
           </tr>
           <?php $caseProductIds[$case->product] = $case->product;?>
@@ -308,6 +308,18 @@ function runAutocase()
 
 function confirmAction(obj)
 {
+    var autoRun = 'no';
+    $.each($('input[name^=caseIDList]:checked'),function(){
+       var dataAuto = $(this).parents('tr').attr('data-auto');
+       if(dataAuto == 'auto') autoRun = dataAuto;
+    });
+
+    if(autoRun == 'no')
+    {
+        setFormAction(cancelURL, '', '#caseList');
+        return false;
+    }
+
     if(confirm(runCaseConfirm))
     {
         var result = runAutocase();

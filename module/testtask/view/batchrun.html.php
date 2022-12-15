@@ -30,6 +30,7 @@
         </tr>
       </thead>
       <?php foreach($cases as $caseID => $case):?>
+      <?php if($case->auto == 'auto' and $confirm == 'yes') continue;?>
       <?php if($case->status == 'wait') continue;?>
       <?php if(!$productID) echo html::hidden("caseIDList[$case->id]", $caseID); ?>
       <tr class='text-center'>

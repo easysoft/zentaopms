@@ -75,7 +75,7 @@
           <?php if($cases):?>
           <tbody>
             <?php foreach($cases as $case):?>
-            <tr>
+            <tr data-auto='<?php echo $case->auto;?>'>
               <td class='c-id'>
                 <?php if($hasCheckbox):?>
                 <?php echo html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id)));?>
@@ -188,6 +188,18 @@ function runAutocase()
 
 function confirmAction(obj)
 {
+    var autoRun = 'no';
+    $.each($('input[name^=caseIDList]:checked'),function(){
+       var dataAuto = $(this).parents('tr').attr('data-auto');
+       if(dataAuto == 'auto') autoRun = dataAuto;
+    });
+
+    if(autoRun == 'no')
+    {
+        setFormAction(cancelURL, '', '#caseList');
+        return false;
+    }
+
     if(confirm(runCaseConfirm))
     {
         var result = runAutocase();
