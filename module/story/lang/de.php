@@ -147,6 +147,7 @@ $lang->story->assignedTo       = 'Zuständiger';
 $lang->story->assignedToAB     = 'Assign';
 $lang->story->assignedDate     = 'Zugewisen am';
 $lang->story->lastEditedBy     = 'Letzte Bearbeitung';
+$lang->story->lastEditedByAB   = 'Letzte Bearbeitung';
 $lang->story->lastEditedDate   = 'Bearbeitet am';
 $lang->story->closedBy         = 'Geschlossen von';
 $lang->story->closedDate       = 'Geschlossen am';
@@ -297,6 +298,7 @@ $lang->story->checkAffection       = 'Impact';
 $lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs         = 'Bug';
 $lang->story->affectedCases        = 'Fall';
+$lang->story->affectedTwins        = 'Zwillinge';
 
 $lang->story->specTemplate         = "Als ein < type of user >, möchte ich < some goal > dass < some reason >.";
 $lang->story->needNotReview        = 'Keine Prüfung';

@@ -147,6 +147,7 @@ $lang->story->assignedTo       = '指派给';
 $lang->story->assignedToAB     = '指派';
 $lang->story->assignedDate     = '指派日期';
 $lang->story->lastEditedBy     = '最后修改';
+$lang->story->lastEditedByAB   = '最后修改者';
 $lang->story->lastEditedDate   = '最后修改日期';
 $lang->story->closedBy         = '由谁关闭';
 $lang->story->closedDate       = '关闭日期';
@@ -297,6 +298,7 @@ $lang->story->checkAffection       = '影响范围';
 $lang->story->affectedProjects     = "影响的{$lang->project->common}或{$lang->execution->common}";
 $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
+$lang->story->affectedTwins        = '影响的孪生需求';
 
 $lang->story->specTemplate          = "建议参考的模板：作为一名<某种类型的用户>，我希望<达成某些目的>，这样可以<开发的价值>。";
 $lang->story->needNotReview         = '不需要评审';

@@ -147,6 +147,7 @@ $lang->story->assignedTo       = 'Assignée à';
 $lang->story->assignedToAB     = 'Attribuer';
 $lang->story->assignedDate     = 'Date Assignation';
 $lang->story->lastEditedBy     = 'Editée par';
+$lang->story->lastEditedByAB   = 'Editée par';
 $lang->story->lastEditedDate   = 'Date Edition';
 $lang->story->closedBy         = 'Fermée par';
 $lang->story->closedDate       = 'Date Fermeture';
@@ -297,6 +298,7 @@ $lang->story->checkAffection       = 'Influence';
 $lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'CasTests';
+$lang->story->affectedTwins        = 'des jumeaux';
 
 $lang->story->specTemplate         = "En tant que < type utilisateur >, je veux < différents objectifs > pour < différentes raisons >.";
 $lang->story->needNotReview        = 'Aucune Validation Requise';
