@@ -1966,10 +1966,6 @@ class storyModel extends model
             }
 
             if(dao::isError()) return print(js::error(dao::getError()));
-
-            $isonlybody = isonlybody();
-            unset($_GET['onlybody']);
-            return print(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), $isonlybody ? 'parent.parent' : 'parent'));
         }
         else
         {
