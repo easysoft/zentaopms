@@ -63,15 +63,20 @@ class zanode extends control
      */
     public function create()
     {
+        $this->loadModel('zahost');
         if(!empty($_POST))
         {
-            $this->zanode->create();
+            $nodeID = $this->zanode->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $initLink = $this->createLink('zanode', 'init', "nodeID=$nodeID");
+            return print("<script>showModal('$initLink')</script>");
         }
 
         $this->view->title     = $this->lang->zanode->create;
         $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs('host');
+        $this->view->notice     = $this->lang->zanode->initNotice;
+        $this->view->buttonName = $this->lang->zanode->initButton;
+        $this->view->closeLink  = $this->createLink('zanode', 'browse');
 
         return $this->display();
     }
@@ -225,7 +230,7 @@ class zanode extends control
                 $response['message'] = dao::getError();
                 return $this->send($response);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->view->task = $task;
@@ -277,6 +282,7 @@ class zanode extends control
         /* Add action log. */
         if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $nodeID, 'getVNC');
 
+        $this->view->title = $this->lang->zanode->getVNC;
         $this->view->url   = $node->ip . ":" . $node->hzap;
         $this->view->host  = !empty($vnc->hostIP) ? $vnc->hostIP:'';
         $this->view->token = !empty($vnc->token) ? $vnc->token:'';

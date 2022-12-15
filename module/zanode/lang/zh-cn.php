@@ -16,7 +16,7 @@ $lang->zanode->all             = '全部';
 $lang->zanode->byQuery         = '搜索';
 $lang->zanode->osName          = '操作系统';
 $lang->zanode->image           = '镜像';
-$lang->zanode->imageName       = '快照名称';
+$lang->zanode->imageName       = '镜像名称';
 $lang->zanode->name            = '名称';
 $lang->zanode->start           = '创建后自动开启';
 $lang->zanode->hostName        = '所属宿主机';
@@ -57,11 +57,11 @@ $lang->zanode->nameValid      = "名称只能是字母、数字，'-'，'_'，'.
 $lang->zanode->empty          = '暂时没有执行节点';
 $lang->zanode->runCaseConfirm = '系统检测到选择的用例存在自动化测试脚本，是否自动执行用例？';
 
-$lang->zanode->createImage        = '创建快照';
-$lang->zanode->createImaging      = '正在创建快照';
-$lang->zanode->createImageNotice  = '系统将基于当前执行节点创建快照，该过程需要关闭该执行节点，确定要继续么？';
-$lang->zanode->createImageSuccess = '快照创建成功，您可以使用此快照创建执行节点。';
-$lang->zanode->createImageFail    = '快照创建失败';
+$lang->zanode->createImage        = '导出镜像';
+$lang->zanode->createImaging      = '正在导出镜像';
+$lang->zanode->createImageNotice  = '系统将基于当前执行节点导出镜像，该过程需要关闭该执行节点，确定要继续么？';
+$lang->zanode->createImageSuccess = '镜像导出成功，您可以使用此镜像创建执行节点。';
+$lang->zanode->createImageFail    = '镜像导出失败';
 $lang->zanode->createImageButton  = '去创建';
 
 $lang->zanode->imageNameEmpty = '名称不能为空';
@@ -85,6 +85,9 @@ $lang->zanode->statusList['shutodown']    = '已关机';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
 $lang->zanode->statusList['wait']         = '待初始化';
 $lang->zanode->statusList['online']       = '已上架';
+
+$lang->zanode->initNotice = "保存成功，请初始化执行节点或返回列表。";
+$lang->zanode->initButton = "去初始化";
 
 $lang->zanode->init = new stdclass;
 $lang->zanode->init->statusTitle   = "服务状态";

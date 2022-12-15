@@ -73,7 +73,7 @@
             <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->delete : $lang->zahost->undeletedNotice;?>
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
             <?php echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
-            <?php common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'file', '', 'iframe', true, "data-width='60%'", $lang->zahost->image->list);?>
+            <?php common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'snap-house', '', 'iframe', true, "data-width='60%'", $lang->zahost->image->list);?>
             <?php common::printIcon('zahost', 'init', "hostID={$host->hostID}", $host, 'list', 'refresh', '', ' init', false, "data-placement='bottom'", $lang->zahost->init->title);?>
           </td>
         </tr>

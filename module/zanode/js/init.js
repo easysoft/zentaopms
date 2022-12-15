@@ -5,7 +5,7 @@ $('#checkServiceStatus').click(function(){
         var html = "<h4 style='margin-top: 20px;'>" + zanodeLang.init.statusTitle + "</h4>";
         var isSuccess = true
 
-        for (var key in resultData.data) 
+        for (var key in resultData.data)
         {
             var installHtml = "";
             if(key == "ZTF")
