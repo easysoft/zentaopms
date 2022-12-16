@@ -69,11 +69,13 @@ $(function()
     </div>
     <div class="col tab-content">
       <div class="tab-pane fade active in" id='<?php echo "tab3{$blockNavId}Contentflowchart";?>'>
-      <?php include 'flowchart.html.php';?>
+        <?php include 'flowchart.html.php';?>
       </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentsystemMode";?>'></div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentvisionSwitch";?>'></div>
-      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentthemeSwitch";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentthemeSwitch";?>'>
+        <?php include 'themeswitch.html.php';?>
+      </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}Contentpreference";?>'></div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadClient";?>'></div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadMoblie";?>'>

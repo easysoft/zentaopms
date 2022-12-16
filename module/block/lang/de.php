@@ -604,3 +604,12 @@ $lang->block->guideTabs['themeSwitch']    = 'Theme Switch';
 $lang->block->guideTabs['preference']     = 'Personalized setting';
 $lang->block->guideTabs['downloadClient'] = 'Desktop Client download';
 $lang->block->guideTabs['downloadMoblie'] = 'Mobile Apps download';
+
+$lang->block->themes['default']    = 'Default';
+$lang->block->themes['blue']       = 'Young Blue';
+$lang->block->themes['green']      = 'Green';
+$lang->block->themes['red']        = 'Red';
+$lang->block->themes['pink']       = 'Pink';
+$lang->block->themes['blackberry'] = 'Blackberry';
+$lang->block->themes['classic']    = 'Classic';
+$lang->block->themes['purple']     = 'Purple';

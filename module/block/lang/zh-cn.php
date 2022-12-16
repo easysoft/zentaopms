@@ -604,3 +604,12 @@ $lang->block->guideTabs['themeSwitch']    = '主题切换';
 $lang->block->guideTabs['preference']     = '个性化设置';
 $lang->block->guideTabs['downloadClient'] = '客户端下载';
 $lang->block->guideTabs['downloadMoblie'] = '移动端下载';
+
+$lang->block->themes['default']    = '禅道蓝';
+$lang->block->themes['blue']       = '青春蓝';
+$lang->block->themes['green']      = '叶兰绿';
+$lang->block->themes['red']        = '赤诚红';
+$lang->block->themes['pink']       = '芙蕖粉';
+$lang->block->themes['blackberry'] = '露莓黑';
+$lang->block->themes['classic']    = '经典蓝';
+$lang->block->themes['purple']     = '玉烟紫';
