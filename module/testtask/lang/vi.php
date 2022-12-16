@@ -97,6 +97,7 @@ $lang->testtask->caseCount        = 'Case Count';
 $lang->testtask->passCount        = 'Pass';
 $lang->testtask->failCount        = 'Fail';
 $lang->testtask->summary          = '%s cases, %s failures, %s time.';
+$lang->testtask->stepSummary      = 'Total %s steps, %s passes, %s failures.';
 
 $lang->testtask->beginAndEnd = 'Thời gian';
 $lang->testtask->to          = 'Tới';

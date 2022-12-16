@@ -108,6 +108,7 @@ $lang->testtask->caseCount         = 'Compteur CasTest';
 $lang->testtask->passCount         = 'Pass';
 $lang->testtask->failCount         = 'Fail';
 $lang->testtask->summary           = '%s CasTest, %s échecs, %s heures.';
+$lang->testtask->stepSummary       = 'Total %s steps, %s passes, %s failures.';
 $lang->testtask->pageSummary       = 'Total testtasks: <strong>%s</strong>.';
 $lang->testtask->mySummary         = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>.';
 $lang->testtask->allSummary        = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>, Done: <strong>%s</strong>.';
