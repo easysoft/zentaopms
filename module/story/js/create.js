@@ -320,7 +320,7 @@ function loadPlanForTwins(productID, branch, branchIndex)
 {
     /* Load plan */
     if(branch == '0') branch = '';
-    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=0&fieldID=' + branchIndex + '&needCreate=false&expired=unexpired&param=skipParent|forStory,' + config.currentMethod);
+    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=0&fieldID=' + branchIndex + '&needCreate=false&expired=unexpired&param=skipParent,forStory,' + config.currentMethod);
     if(branchIndex > 0)
     {
         var $planIdBox = $('.addBranchesBox'+ branchIndex +' #planIdBox');
