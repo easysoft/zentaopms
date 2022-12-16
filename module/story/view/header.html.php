@@ -216,7 +216,7 @@ function loadProductPlans(productID, branch)
 
     var param      = rawMethod == 'edit' ? 'skipParent|forStory' : 'skipParent';
     var expired    = config.currentMethod == 'create' ? 'unexpired' : '';
-    var planLink   = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent|forStory|' + config.currentMethod);
+    var planLink   = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,forStory,' + config.currentMethod);
     var $planIdBox = rawMethod == 'create' ? $('.switchBranch #planIdBox') : $('#planIdBox');
 
     $planIdBox.load(planLink, function()
