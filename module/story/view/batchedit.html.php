@@ -84,7 +84,8 @@ foreach(explode(',', $showFields) as $field)
           </td>
           <?php if(!$hiddenPlan):?>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
-            <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? array('' => '') + $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control picker-select' data-drop-width='auto'");?>
+            <?php $planDisabled = $story->parent < 0 ? "disabled='disabled'" : '';?>
+            <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? array('' => '') + $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control picker-select' data-drop-width='auto' $planDisabled");?>
           </td>
           <?php endif;?>
           <td title='<?php echo $story->title?>'>
