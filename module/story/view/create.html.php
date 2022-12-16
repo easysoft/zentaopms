@@ -147,7 +147,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <?php endif;?>
             <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
               <div class='input-group'>
+                <?php if(!$hiddenPlan):?>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
+                <?php endif;?>
                 <?php echo html::select('assignedTo', $hiddenProduct ? $teamUsers : $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
