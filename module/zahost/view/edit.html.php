@@ -31,11 +31,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->zahost->name;?></th>
-            <td><?php echo html::input('name', $host->name, "class='form-control' disabled");?></td>
+            <td><?php echo html::input('name', $host->name, "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zahost->IP;?></th>
-            <td><?php echo html::input('extranet', $host->extranet, "class='form-control' disabled");?></td>
+            <td><?php echo html::input('extranet', $host->extranet, "class='form-control' readonly");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zahost->cpuCores;?></th>
