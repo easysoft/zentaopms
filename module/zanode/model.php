@@ -736,7 +736,7 @@ class zanodemodel extends model
         );
 
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->ztf}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
-        if(empty($result->data) || $result->code != 0)
+        if($result->code != 0)
         {
             $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
             return  dao::$errors = $this->lang->zanode->runTimeout;

@@ -296,15 +296,18 @@ function runAutocase()
     var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation)
 
     var postData = {'caseIDList' : caseIDList.join(',')};
+
+    var response = true;
     $.post(url, postData, function(result)
     {
         if(result.result == 'fail')
         {
             alert(result.message);
-            return false;
+            response = false;
         }
-        return true;
     }, 'json');
+
+    return response;
 }
 
 function confirmAction(obj)

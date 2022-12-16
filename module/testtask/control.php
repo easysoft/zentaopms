@@ -1381,7 +1381,13 @@ class testtask extends control
 
         /* Set modules. */
         $moduleOptionMenu = array(0 => '/');
-        foreach($cases as $case) $moduleOptionMenu += $this->tree->getModulesName($case->module);
+        foreach($cases as $caseID => $case)
+        {
+            if($case->auto == 'auto' and $confirm == 'yes') unset($cases[$caseID]);
+            $moduleOptionMenu += $this->tree->getModulesName($case->module);
+        }
+        if(empty($cases)) return print(js::locate($url));
+
         $this->view->moduleOptionMenu = $moduleOptionMenu;
 
         /* If case has changed and not confirmed, remove it. */
