@@ -89,7 +89,7 @@ class releaseModel extends model
             $branchName = '';
             if($release->branch != 'normal')
             {
-                foreach(explode(',', $release->branch) as $releaseBranch)
+                foreach(explode(',', trim($release->branch, ',')) as $releaseBranch)
                 {
                     $branchName .= $this->loadModel('branch')->getById($releaseBranch);
                     $branchName .= ',';

@@ -147,7 +147,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <?php endif;?>
             <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
               <div class='input-group'>
+                <?php if(!$hiddenPlan):?>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
+                <?php endif;?>
                 <?php echo html::select('assignedTo', $hiddenProduct ? $teamUsers : $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
@@ -407,10 +409,12 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 
-var gap = $('#assignedTo').parent().parent().width();
-$('#planIdBox').css('flex', '0 0 ' + gap + 'px')
-$("#branches0").parent().parent().css('flex', '1 0 160px')
-$("#modules0").parent().parent().css('flex', '1 0 160px')
+setTimeout(() => {
+  gap = $('#assignedTo').parent().parent().width();
+  $('#planIdBox').css('flex', '0 0 ' + gap + 'px')
+  $("#branches0").parent().parent().css('flex', '1 0 160px')
+  $("#modules0").parent().parent().css('flex', '1 0 160px')
+}, 600);
 
 </script>
 <?php include '../../common/view/footer.html.php';?>

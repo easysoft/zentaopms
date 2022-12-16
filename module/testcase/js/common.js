@@ -138,7 +138,7 @@ function setStories()
         var value = $('#story').val();
         if(!stories) stories = '<select id="story" name="story"></select>';
         $('#story').replaceWith(stories);
-        $('#story').val(value);
+        $('#story').val(value).attr('onchange', 'setPreview()');
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
         $("#story").picker();
