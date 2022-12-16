@@ -210,10 +210,7 @@ class zanodemodel extends model
         }
 
         /* delete ZenAgent Node. */
-        $this->dao->update(TABLE_ZAHOST)
-            ->set('deleted')->eq(1)
-            ->where('id')->eq($id)
-            ->exec();
+        $this->dao->delete()->from(TABLE_ZAHOST)->where('id')->eq($id)->exec();;
         $this->loadModel('action')->create('zanode', $id, 'destroy');
         return;
     }

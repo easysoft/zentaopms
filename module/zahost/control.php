@@ -122,7 +122,7 @@ class zahost extends control
             {
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
-            elseif($hostID === false)
+            elseif($changes === false)
             {
                 return $this->send(array('result' => 'fail', 'message' => array("extranet" => array($this->lang->zahost->netError))));
             }
@@ -239,17 +239,13 @@ class zahost extends control
      * Sent download image request to Host.
      *
      * @param  int    $hostID
-     * @param  string $imageName
+     * @param  int $imageID
      * @access public
      * @return object
      */
-    public function downloadImage($hostID, $imageName)
+    public function downloadImage($hostID, $imageID)
     {
-        $image = $this->zahost->getImageByNameAndHostID($imageName, $hostID);
-        if(empty($image))
-        {
-            $image = $this->zahost->createImage($hostID, $imageName);
-        }
+        $image = $this->zahost->getImageByID($imageID);
 
         $this->zahost->downloadImage($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));

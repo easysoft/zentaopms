@@ -245,26 +245,19 @@ class zanode extends control
      * @param  int  $nodeID
      * @return void
      */
-    public function delete($nodeID, $confirm = 'no')
+    public function delete($nodeID)
     {
-        if($confirm == 'no')
+        $error = $this->zanode->destroy($nodeID);
+
+        if($error)
         {
-            return print(js::confirm($this->lang->zanode->confirmDelete, inlink('delete', "nodeID=$nodeID&confirm=yes")));
+            return print(js::alert($error));
         }
         else
         {
-            $error = $this->zanode->destroy($nodeID);
-
-            if($error)
-            {
-                return print(js::alert($error));
-            }
-            else
-            {
-                if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
-                return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
-            }
-    }
+            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
+        }
     }
 
     /**
