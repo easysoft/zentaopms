@@ -29,7 +29,8 @@ table.diff {margin-bottom: 0px;}
 
 #fileTabs .tab-pane {display: none;}
 #fileTabs .tab-pane.active {display: block;}
-#fileTabs .tab-nav-item {max-width: none !important;}
+#fileTabs .tab-nav-item {max-width: none !important; white-space: nowrap;}
+#fileTabs .tab-nav-item > .tab-nav-link > .close {float: none; position: inherit; right: -1px; top: 2px;}
 #filesTree #modules {margin-top: 5px;}
 #filesTree {overflow-y: auto;}
 
