@@ -55,11 +55,15 @@ class zentaoBot extends xuanBot
             $this->commands[] = array('command' => $command, 'alias' => $this->lang->commands->$command->alias, 'description' => $this->lang->commands->$command->description, 'internal' => true);
         }
 
+        /* Backup user model of im module, load user module and restore. Use `$this->userModel` as user module from now on. */
+        $imUser = $this->im->user;
+        $this->userModel = $this->im->loadModel('user');
+        $this->im->user = $imUser;
+
         $this->im->loadModel('task');
-        $this->im->loadModel('user');
         $this->im->app->loadClass('pager', $static = true);
 
-        $this->users          = array_filter($this->im->user->getPairs('noclosed|noletter'));
+        $this->users          = array_filter($this->userModel->getPairs('noclosed|noletter'));
         $this->taskStatusList = array_filter($this->im->lang->task->statusList);
         $this->help           = $this->lang->help;
 
@@ -971,11 +975,11 @@ class zentaoBot extends xuanBot
         {
             $this->im->loadModel('user');
 
-            $user = $this->im->user->getByID($this->im->app->input['userID'], 'id');
+            $user = $this->userModel->getByID($this->im->app->input['userID'], 'id');
             /* Authorize him and save to session. */
-            $user->rights = $this->im->user->authorize($user->account);
-            $user->groups = $this->im->user->getGroups($user->account);
-            $user->view   = $this->im->user->grantUserView($user->account, $user->rights['acls'], $user->rights['projects']);
+            $user->rights = $this->userModel->authorize($user->account);
+            $user->groups = $this->userModel->getGroups($user->account);
+            $user->view   = $this->userModel->grantUserView($user->account, $user->rights['acls'], $user->rights['projects']);
             $user->admin  = strpos($this->im->app->company->admins, ",{$user->account},") !== false;
 
             global $app;
