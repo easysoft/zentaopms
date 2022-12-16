@@ -99,7 +99,6 @@ class zahostModel extends model
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
             ->where('id')->eq($hostID)->exec();
-
         return common::createChanges($oldHost, $hostInfo);
     }
 
