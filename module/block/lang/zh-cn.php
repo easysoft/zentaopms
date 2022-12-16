@@ -47,6 +47,7 @@ $lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
 $lang->block->contribute   = '我的贡献';
 $lang->block->finish       = '已完成';
+$lang->block->guide        = '使用帮助';
 
 $lang->block->leftToday           = '今天剩余工作总计';
 $lang->block->myTask              = '我的任务';
@@ -98,6 +99,7 @@ $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span c
 $lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<span class='label-action'>%s</span>%s<span class='label-name'>%s</span></span>";
 $lang->block->cannotPlaceInLeft  = '此区块无法放置在左侧。';
 $lang->block->cannotPlaceInRight = '此区块无法放置在右侧。';
+$lang->block->tutorial           = '进入新手教程';
 
 $lang->block->productName  = $lang->productCommon . '名称';
 $lang->block->totalStory   = '总' . $lang->SRCommon;
@@ -112,6 +114,7 @@ $lang->block->budget          = '预算';
 $lang->block->left            = '剩余';
 
 $lang->block->titleList['flowchart']      = '流程图';
+$lang->block->titleList['guide']          = '使用帮助';
 $lang->block->titleList['statistic']      = '项目统计';
 $lang->block->titleList['recentproject']  = '我近期参与的项目';
 $lang->block->titleList['assigntome']     = '待处理';
@@ -273,8 +276,8 @@ $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
 $lang->block->default['full']['my']['2']['source'] = '';
 
-$lang->block->default['full']['my']['3']['title']  = '流程图';
-$lang->block->default['full']['my']['3']['block']  = 'flowchart';
+$lang->block->default['full']['my']['3']['title']  = '使用帮助';
+$lang->block->default['full']['my']['3']['block']  = 'guide';
 $lang->block->default['full']['my']['3']['source'] = '';
 $lang->block->default['full']['my']['3']['grid']   = 8;
 
@@ -563,14 +566,15 @@ $lang->block->gridOptions[8] = '左侧';
 $lang->block->gridOptions[4] = '右侧';
 
 $lang->block->flowchart            = array();
-$lang->block->flowchart['admin']   = array('管理员', '维护公司', '添加用户', '维护权限');
+$lang->block->flowchart['admin']   = array('管理员', '维护部门', '添加用户', '维护权限');
 if($config->systemMode == 'ALM') $lang->block->flowchart['program'] = array('项目集负责人', '创建项目集', '关联产品', "创建项目", "制定预算和规划", '添加干系人');
 $lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', "维护计划", "维护需求", '创建发布');
-$lang->block->flowchart['project'] = array('项目经理', '创建项目、' . $lang->executionCommon, '维护团队', "关联需求", '分解任务', '跟踪进度');
+$lang->block->flowchart['project'] = array('项目经理', '创建项目、' . $lang->execution->common, '维护团队', "关联需求", '分解任务', '跟踪进度');
 $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug', '设计实现方案', '更新状态', '完成任务和Bug', '提交代码');
 $lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');
 
 $lang->block->zentaoapp = new stdclass();
+$lang->block->zentaoapp->commom               = '禅道移动端';
 $lang->block->zentaoapp->thisYearInvestment   = '今年投入';
 $lang->block->zentaoapp->sinceTotalInvestment = '从使用至今，总投入';
 $lang->block->zentaoapp->myStory              = '我的需求';
@@ -590,3 +594,22 @@ $lang->block->zentaoapp->notSupportKanban     = '移动端暂不支持研发看�
 $lang->block->zentaoapp->notSupportVersion    = '移动端暂不支持该禅道版本';
 $lang->block->zentaoapp->incompatibleVersion  = '当前禅道版本较低，请升级至最新版本后再试';
 $lang->block->zentaoapp->canNotGetVersion     = '获取禅道版本失败，请确认网址是否正确';
+$lang->block->zentaoapp->desc                 = '禅道移动端为您提供移动办公的环境，方便随时管理个人待办事务，跟进项目进度，增强了项目管理的灵活性和敏捷性。';
+$lang->block->zentaoapp->downloadTip          = '扫描二维码下载';
+
+$lang->block->guideTabs['flowchart']      = '流程图';
+$lang->block->guideTabs['systemMode']     = '运行模式';
+$lang->block->guideTabs['visionSwitch']   = '界面切换';
+$lang->block->guideTabs['themeSwitch']    = '主题切换';
+$lang->block->guideTabs['preference']     = '个性化设置';
+$lang->block->guideTabs['downloadClient'] = '客户端下载';
+$lang->block->guideTabs['downloadMoblie'] = '移动端下载';
+
+$lang->block->themes['default']    = '禅道蓝';
+$lang->block->themes['blue']       = '青春蓝';
+$lang->block->themes['green']      = '叶兰绿';
+$lang->block->themes['red']        = '赤诚红';
+$lang->block->themes['pink']       = '芙蕖粉';
+$lang->block->themes['blackberry'] = '露莓黑';
+$lang->block->themes['classic']    = '经典蓝';
+$lang->block->themes['purple']     = '玉烟紫';
