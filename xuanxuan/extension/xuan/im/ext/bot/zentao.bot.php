@@ -687,7 +687,7 @@ class zentaoBot extends xuanBot
                         }
                         else
                         {
-                            $tr .= "<td class='text-nowrap'>{$task->assignedTo->realname}</td>";
+                            $tr .= "<td class='text-nowrap'>" . (empty($task->assignedTo) ? $lang->task->noAssigned : $task->assignedTo->realname) . "</td>";
                         }
                     break;
                     case 'actions':
@@ -861,7 +861,7 @@ class zentaoBot extends xuanBot
                         'realStarted' => $realStarted,
                         'consumed' => $consumed,
                     ));
-                    if($task->result and $task->result == 'fail')
+                    if(isset($task->result) and $task->result == 'fail')
                     {
                         $reply->messages[] = $task->message;
                     }
