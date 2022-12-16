@@ -1239,6 +1239,7 @@ class testtask extends control
         {
             $resultID = $this->testtask->initResult($runID, $caseID, $run->case->version, $automation->node);
             if(!dao::isError()) $this->zanode->runZTFScript($automation->id, $caseID, $resultID);
+            if(dao::isError()) return print(js::error(dao::getError()) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
         }
 
         if(!empty($_POST))

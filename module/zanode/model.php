@@ -725,6 +725,13 @@ class zanodemodel extends model
     {
         $automation = $this->getAutomationByID($scriptID);
         $node       = $this->getNodeByID($automation->node);
+
+        if(empty($node) or $node->status != 'running' or !$node->ip or !$node->ztf or !$node->tokenSN)
+        {
+            $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
+            return  dao::$errors = $this->lang->zanode->runTimeout;
+        }
+
         $params = array(
             'cmd'  => $automation->shell,
             'ids'  => strval($caseID),
@@ -733,7 +740,7 @@ class zanodemodel extends model
         );
 
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->ztf}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
-        if($result->code != 0)
+        if(empty($result) or $result->code != 0)
         {
             $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
             return  dao::$errors = $this->lang->zanode->runTimeout;

@@ -20,6 +20,12 @@
     </div>
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
+        <?php if(!$productID):?>
+        <tr>
+          <th class='w-80px'><?php echo $lang->testcase->product;?></th>
+          <td class='required'><?php echo html::select('product', $products, '', "class='form-control picker-select' onchange='loadProduct(this.value)'");?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th class='w-80px'><?php echo $lang->zanode->common;?></th>
           <td class='required'><?php echo html::select('node', $nodeList, !empty($automation->node) ? $automation->node : '', "class='form-control picker-select'");?></td>
@@ -34,7 +40,7 @@
         </tr>
         <tr>
           <td colspan='2' class='text-center'>
-            <?php echo html::hidden('product', $productID);?>
+            <?php if($productID) echo html::hidden('product', $productID);?>
             <?php if($automation) echo html::hidden('id', $automation->id);?>
             <?php echo html::submitButton();?>
           </td>
@@ -43,4 +49,32 @@
     </form>
   </div>
 </div>
+<script>
+$(function()
+{
+    if($("#product").length > 0){
+        $('#product').change();
+    }
+})
+
+function loadProduct(obj)
+{
+    $('#node').data('zui.picker').setValue(<?php echo key($nodeList)?>);
+    $('#shell').val('');
+    $('#scriptPath').val('');
+    var url = createLink('zanode', 'ajaxGetZTFScript', "type=product&objectID=" + obj)
+    $.get(url, function(result)
+    {
+        if(result.result == 'success')
+        {
+            data = result.data;
+            if(!data) return false;
+            $('#node').data('zui.picker').setValue(data.node)
+            $('#shell').val(data.shell);
+            $('#scriptPath').val(data.scriptPath);
+            $('#submit').before("<input type='hidden' name='id' value='" + data.id + "'>");
+        }
+    }, 'json');
+}
+</script>
 <?php include '../../common/view/footer.html.php';?>

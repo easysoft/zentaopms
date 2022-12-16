@@ -41,6 +41,7 @@ $lang->zahost->initNotice          = 'Save successfully, initialize the ZAhost o
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
 $lang->zahost->undeletedNotice     = "The host has nodes that cannot be deleted.";
+$lang->zahost->uninitNotice        = 'Please init the host first';
 $lang->zahost->netError            = 'Unable to connect to the host, please check the network and try again.';
 
 $lang->zahost->init = new stdclass;

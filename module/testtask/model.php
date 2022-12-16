@@ -1448,12 +1448,10 @@ class testtaskModel extends model
 
             if(!empty($result->ZTFResult))
             {
-                $result->ZTFResult   = json_decode($result->ZTFResult);
-                $result->ZTFResult   = empty($result->ZTFResult->log) ? '' : $result->ZTFResult->log;
-                $result->ZTFResult   = "<li>" . str_replace(array("\r", "\n", "\r\n"), "</li><li>", $result->ZTFResult) . "</li>";
+                $result->ZTFResult = $this->formatZtfLog($result->ZTFResult, $result->stepResults);
             }
 
-            $result->files       = zget($resultFiles, $resultID, array()); //Get files of case result.
+            $result->files = zget($resultFiles, $resultID, array()); //Get files of case result.
             if(isset($relatedSteps[$result->version]))
             {
                 $relatedStep = $relatedSteps[$result->version];
@@ -1475,6 +1473,59 @@ class testtaskModel extends model
             if(!empty($result->stepResults)) foreach($result->stepResults as $stepID => $stepResult) $result->stepResults[$stepID]['files'] = isset($stepFiles[$resultID][$stepID]) ? $stepFiles[$resultID][$stepID] : array();
         }
         return $results;
+    }
+
+    /**
+     * Format ztf log.
+     *
+     * @param  string $log
+     * @access public
+     * @return string
+     */
+    public function formatZtfLog($result, $stepResults)
+    {
+        $logObj  = json_decode($result);
+        $logs    = empty($logObj->log) ? '' : $logObj->log;
+        if(empty($logs)) return '';
+
+        $logs     = str_replace(array("\r", "\n", "\r\n"), "\n", $logs);
+        $logList  = explode("\n", $logs);
+        $logHtml  = "";
+
+        foreach($logList as $log)
+        {
+            $log = preg_replace("/^[\d\-:.\x20]+/", '', $log);
+            $log = trim($log);
+            if(empty($log)) continue;
+            $log = preg_replace(array("/:\x20失败/", "/:\x20fail/", "/:\x20成功/", "/:\x20pass/"), array(': <strong class="result-testcase fail">失败</strong>',': <strong class="result-testcase fail">fail</strong>',': <strong class="result-testcase pass">成功</strong>',': <strong class="result-testcase fail">pass</strong>'), $log);
+
+            $logHtml .= "<li>" . $log . "</li>";
+        }
+
+        if(!empty($stepResults))
+        {
+            $total     = count($stepResults);
+            $failCount = $passCount = 0;
+
+            foreach($stepResults as $step)
+            {
+                if($step['result'] == 'pass')
+                {
+                    $passCount++;
+                }
+                elseif($step['result'] == 'fail')
+                {
+                    $failCount++;
+                }
+            }
+
+            $caseResult = $passCount ? 'pass':'fail';
+            $logHtml .= "<li class='result-testcase {$caseResult}'>" 
+                        . sprintf($this->lang->testtask->stepSummary, $total, $passCount, $failCount)
+                        . "</li>";
+        }
+        
+        return $logHtml;
     }
 
     /**

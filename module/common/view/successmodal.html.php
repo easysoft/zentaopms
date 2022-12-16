@@ -16,8 +16,9 @@
       <div class="modal-body">
         <p>
           <i class="icon-check-circle icon"></i><?php echo $notice;?>
-          <?php $modalLink = !empty($modalLink) ? $modalLink : '';?>
-          <?php echo html::a($modalLink, $buttonName, '', 'id="modalLink"');?>
+          <?php $modalLink = !empty($modalLink)  ? $modalLink : '';?>
+          <?php $class     = !empty($modalClass) ? $modalClass : '';?>
+          <?php echo html::a($modalLink, $buttonName, '', "id='modalLink' class='$class'");?>
         </p>
       </div>
     </div>
