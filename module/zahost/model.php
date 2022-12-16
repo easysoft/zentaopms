@@ -89,16 +89,16 @@ class zahostModel extends model
         if(dao::isError()) return false;
 
         $ping = $this->checkAddress($hostInfo->extranet);
+
         if(!$ping)
         {
             return false;
         }
 
-        $this->dao->update(TABLE_ZAHOST)->data($hostInfo, 'name')->autoCheck()
+        $this->dao->update(TABLE_ZAHOST)->data($hostInfo)->autoCheck()
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
             ->where('id')->eq($hostID)->exec();
-            var_dump(common::createChanges($oldHost, $hostInfo));die;
         return common::createChanges($oldHost, $hostInfo);
     }
 
@@ -225,7 +225,7 @@ class zahostModel extends model
             ->page($pager)
             ->fetchAll('name');
         }
-        
+
         foreach($downloadedImageList as $image)
         {
             if($image->status == 'notDownloaded')
