@@ -17,6 +17,7 @@
 <?php js::set('taskCaseBrowseType', ($browseType == 'bymodule' and $this->session->taskCaseBrowseType == 'bysearch') ? 'all' : $this->session->taskCaseBrowseType);?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('moduleID', $moduleID);?>
+<?php js::set('automation',     !empty($automation) ? $automation->id : 0);?>
 <?php $this->app->loadLang('zanode');?>
 <?php js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);?>
 <?php js::set('confirmURL',     $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=id_desc&from=testcase&taskID=$taskID&confirm=yes"));?>
@@ -173,7 +174,7 @@ function runAutocase()
         caseIDList.push($(this).val());
     });
 
-    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=<?php echo $automation->id;?>');
+    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation)
 
     var postData = {'caseIDList' : caseIDList.join(',')};
     $.post(url, postData, function(result)
@@ -195,7 +196,7 @@ function confirmAction(obj)
        if(dataAuto == 'auto') autoRun = dataAuto;
     });
 
-    if(autoRun == 'no')
+    if(autoRun == 'no' || !automation)
     {
         setFormAction(cancelURL, '', '#caseList');
         return false;

@@ -23,6 +23,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
 js::set('productID',      $productID);
 js::set('branch',         $branch);
 js::set('suiteID',        $suiteID);
+js::set('automation',     !empty($automation) ? $automation->id : 0);
 js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);
 js::set('confirmURL',     $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy&from=testcase&taskID=0&confirm=yes"));
 js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy&from=testcase&taskID=0&confirm=no"));
@@ -292,7 +293,7 @@ function runAutocase()
         caseIDList.push($(this).val());
     });
 
-    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=<?php echo $automation->id;?>')
+    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation)
 
     var postData = {'caseIDList' : caseIDList.join(',')};
     $.post(url, postData, function(result)
@@ -314,7 +315,7 @@ function confirmAction(obj)
        if(dataAuto == 'auto') autoRun = dataAuto;
     });
 
-    if(autoRun == 'no')
+    if(autoRun == 'no' || !automation)
     {
         setFormAction(cancelURL, '', '#caseList');
         return false;
