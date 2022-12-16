@@ -142,8 +142,8 @@ class zanode extends control
         $this->view->node       = $this->zanode->getNodeById($nodeID);
         $this->view->notice     = $this->lang->zanode->init->initSuccessNoticeTitle;
         $this->view->buttonName = $this->lang->zanode->init->button;
-        $productID              = $this->session->product ? $this->session->product : 0;
-        $this->view->modalLink  = $this->createLink('testcase', 'browse', "productID={$productID}");
+        $this->view->modalLink  = $this->createLink('testcase', 'automation', 0, '', true);
+        $this->view->modalClass = 'iframe';
         $this->view->closeLink  = $this->createLink('zanode', 'browse');
 
         $this->display();
@@ -381,7 +381,21 @@ class zanode extends control
     }
 
     /**
-     * ajaxRunZTFScript
+     * Ajax: get ZTF script.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetZTFScript($type = 'product', $objectID = 0)
+    {
+        $script = array();
+        if($type == '')        $script = $this->zanode->getAutomationByID($objectID);
+        if($type == 'product') $script = $this->zanode->getAutomationByProduct($objectID);
+        return $this->send(array('result' => 'success', 'data' => $script));
+    }
+
+    /**
+     * Ajax: run ZTF script.
      *
      * @param  int    $scriptID
      * @access public

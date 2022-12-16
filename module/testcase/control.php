@@ -2375,7 +2375,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function automation($productID)
+    public function automation($productID = 0)
     {
         $this->loadModel('zanode');
         $nodeList   = $this->zanode->getPairs();
@@ -2397,6 +2397,8 @@ class testcase extends control
         $this->view->automation = $automation;
         $this->view->nodeList   = $nodeList;
         $this->view->productID  = $productID;
+        $this->view->products   = $this->product->getPairs('', 0, '', 'all');
+
         $this->display();
     }
 
