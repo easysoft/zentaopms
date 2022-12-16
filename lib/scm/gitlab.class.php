@@ -257,7 +257,7 @@ class gitlab
         $param = new stdclass;
         $param->ref = ($revision and $revision != 'HEAD') ? $revision : $this->branch;
         $results = $this->fetch($api, $param);
-        if(isset($results->message)) return array();
+        if(empty($results) or isset($results->message)) return array();
 
         $blames   = array();
         $revLine  = 0;
