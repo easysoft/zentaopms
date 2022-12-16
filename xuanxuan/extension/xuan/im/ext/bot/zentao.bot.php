@@ -408,7 +408,7 @@ class zentaoBot extends xuanBot
         if($task->status != 'done' && $task->status != 'cancel') return sprintf($this->lang->errors->invalidStatus, $this->taskStatusList[$task->status]);
 
         $task = $this->loadEntry('taskclose', 'post', array('taskID' => $taskID, 'comment' => $comment));
-        if($task->result == 'fail') return $task->message;
+        if(isset($task->result) && $task->result == 'fail') return $task->message;
 
         $link = str_replace('x.php', 'index.php', helper::createLink('task', 'view', "taskID=$taskID", 'html'));
         $messages = new stdClass();
@@ -687,7 +687,7 @@ class zentaoBot extends xuanBot
                         }
                         else
                         {
-                            $tr .= "<td class='text-nowrap'>" . (empty($task->assignedTo) ? $lang->task->noAssigned : $task->assignedTo->realname) . "</td>";
+                            $tr .= "<td class='text-nowrap'>" . (empty($task->assignedTo) ? $lang->task->noAssigned : (is_object($task->assignedTo) ? $task->assignedTo->realname : $task->assignedTo)) . "</td>";
                         }
                     break;
                     case 'actions':
