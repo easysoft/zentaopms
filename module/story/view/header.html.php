@@ -105,6 +105,7 @@ function loadProductBranches(productID)
                 $('.switchBranch').toggleClass('hidden');
                 $('.switchBranch').toggleClass('disable');
             }
+            $('#storyNoticeBranch').closest('tr').addClass('hidden');
             originProductType = newProductType;
 
             $('tr[class^="addBranchesBox"]').remove();

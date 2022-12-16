@@ -117,7 +117,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               </div>
             </td>
           </tr>
-          <tr class='hidden switchBranch' >
+          <tr class='hidden' >
             <th></th>
             <td colspan="4" id="storyNoticeBranch">
               <i class="icon-exclamation-sign"></i> <?php echo $lang->story->notice->branch;?>
