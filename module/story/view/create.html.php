@@ -403,10 +403,12 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 
-var gap = $('#assignedTo').parent().parent().width();
-$('#planIdBox').css('flex', '0 0 ' + gap + 'px')
-$("#branches0").parent().parent().css('flex', '1 0 160px')
-$("#modules0").parent().parent().css('flex', '1 0 160px')
+setTimeout(() => {
+  gap = $('#assignedTo').parent().parent().width();
+  $('#planIdBox').css('flex', '0 0 ' + gap + 'px')
+  $("#branches0").parent().parent().css('flex', '1 0 160px')
+  $("#modules0").parent().parent().css('flex', '1 0 160px')
+}, 600);
 
 </script>
 <?php include '../../common/view/footer.html.php';?>
