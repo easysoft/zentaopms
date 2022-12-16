@@ -111,23 +111,31 @@ function arrowTabs(domID, shift, hideRightBtn)
     $('#' + domID + ' > .tabs-navbar > .nav-tabs')[0].style.transform = 'translateX('+ distance +'px)';
 }
 
+/**
+ * Close commit relations.
+ *
+ * @access public
+ * @return void
+ */
+function closeRelation()
+{
+    $tabs = $('#relationTabs').data('zui.tabs');
+    if($tabs) $tabs.closeAll();
+    $('.history').html('');
+    $('#log').data('line', 0);
+    $('#log').hide();
+
+    $('#codeContainer').css('height', codeHeight);
+    $('#related').css('height', 0);
+};
+
 $(function()
 {
     $(document).on('click', '.ajaxPager', function()
     {
         $('#sidebar .side-body').load($(this).attr('data-href'));
         return false;
-    }).on('click', '#log .btn-close', function()
-    {
-        $tabs = $('#relationTabs').data('zui.tabs');
-        if($tabs) $tabs.closeAll();
-        $('.history').html('');
-        $('#log').data('line', 0);
-        $('#log').hide();
-
-        $('#codeContainer').css('height', codeHeight);
-        $('#related').css('height', 0);
-    });
+    }).on('click', '#log .btn-close', closeRelation);
 
     if($("main").is(".hide-sidebar"))
     {
