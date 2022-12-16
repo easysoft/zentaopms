@@ -1603,9 +1603,9 @@ class testcaseModel extends model
                 {
                     $caseID       = $this->dao->lastInsertID();
                     $parentStepID = 0;
-                    if($this->post->desc)
+                    if($data->desc)
                     {
-                        foreach($this->post->desc[$key] as $id => $desc)
+                        foreach($data->desc[$key] as $id => $desc)
                         {
                             $desc = trim($desc);
                             if(empty($desc)) continue;
@@ -1615,7 +1615,7 @@ class testcaseModel extends model
                             $stepData->case    = $caseID;
                             $stepData->version = 1;
                             $stepData->desc    = htmlSpecialString($desc);
-                            $stepData->expect  = htmlSpecialString($this->post->expect[$key][$id]);
+                            $stepData->expect  = htmlSpecialString($data->expect[$key][$id]);
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                             if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                             if($stepData->type == 'step')  $parentStepID = 0;
@@ -2080,7 +2080,7 @@ class testcaseModel extends model
                     $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
                 }
 
-                $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-ztf'></i>" : '';
+                $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-draft-edit'></i>" : '';
                 if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                 echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]" . $autoIcon, '', "data-app='{$this->app->tab}'") : html::a($caseLink, $case->title . $autoIcon, null, "style='color: $case->color' data-app='{$this->app->tab}'")) : "<span style='color: $case->color'>$case->title</span>";

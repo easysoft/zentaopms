@@ -14,7 +14,7 @@
 include '../../common/view/header.html.php';
 js::set('requiredFields', $config->bug->create->requiredFields);
 js::set('productID', $productID);
-js::set('releasedBuild', $lang->build->releasedBuild);
+js::set('released', $lang->build->released);
 ?>
 <?php
 $visibleFields  = array();

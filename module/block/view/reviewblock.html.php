@@ -29,13 +29,21 @@
       <?php foreach($reviews as $review):?>
       <?php
       $type = $review->type;
-      if($type == 'project') $type = 'review';
+      if($type == 'projectreview') $type = 'review';
 
-      $typeName = $lang->$type->common;
+      $typeName = '';
+      if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
       if($type == 'story') $typeName = $lang->my->auditMenu->audit->story;
+      if($review->type == 'projectreview') $typeName = $lang->project->common;
+      if(isset($flows[$review->type])) $typeName = $flows[$review->type];
 
-      $statusList = $lang->$type->statusList;
+      $statusList = array();
+      if(isset($lang->$type->statusList)) $statusList = $lang->$type->statusList;
       if($type == 'attend') $statusList = $lang->attend->reviewStatusList;
+      if(!in_array($type, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$type,") === false)
+      {
+          $statusList = $lang->approval->nodeList;
+      }
       ?>
       <tr>
         <td class='c-id'><?php echo $review->id?></td>
@@ -81,6 +89,10 @@
           elseif(strpos(",{$config->my->oaObjectType},", ",$module,") !== false)
           {
               common::printLink($module, 'view', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
+          }
+          elseif(!in_array($module, array('story', 'testcase', 'feedback')))
+          {
+              common::printLink($module, 'approvalreview', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
           }
           else
           {

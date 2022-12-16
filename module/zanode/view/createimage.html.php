@@ -75,6 +75,7 @@ function getTaskProgress()
         var status = data.status;
 
         if(rate == 1 || status == 'completed') rate = 1;
+        if(status == 'inprogress' && rate >= 1) rate = 0.97;
 
         $('.rate').css('width', rate*100 + '%');
         if(rate == 1 || (status != 'inprogress' && status != 'created'))

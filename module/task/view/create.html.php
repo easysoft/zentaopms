@@ -79,15 +79,12 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             </div>
           </td>
           <td>
-            <div class="checkbox-primary c-multipleTask affair">
+            <div class="checkbox-primary c-multipleTask affair" style='display: inline-block'>
               <input type="checkbox" name="multiple" value="1" id="multipleBox" /><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
             </div>
-            <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
+            <div class='hidden modeBox' style='display: inline-block'><?php echo html::radio('mode', $lang->task->modeList, !empty($task->mode) ? $task->mode: 'linear');?></div>
+          <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
-        </tr>
-        <tr class='hidden modeBox'>
-          <th><?php echo $lang->task->mode;?></th>
-          <td><?php echo html::select('mode', $lang->task->modeList, $task->mode, "class='form-control chosen'");?></td>
         </tr>
         <?php if($execution->type == 'kanban'):?>
         <tr>

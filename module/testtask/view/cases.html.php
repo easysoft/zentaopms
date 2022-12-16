@@ -17,6 +17,7 @@
 <?php js::set('taskCaseBrowseType', ($browseType == 'bymodule' and $this->session->taskCaseBrowseType == 'bysearch') ? 'all' : $this->session->taskCaseBrowseType);?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('moduleID', $moduleID);?>
+<?php js::set('automation',     !empty($automation) ? $automation->id : 0);?>
 <?php $this->app->loadLang('zanode');?>
 <?php js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);?>
 <?php js::set('confirmURL',     $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=id_desc&from=testcase&taskID=$taskID&confirm=yes"));?>
@@ -74,7 +75,7 @@
           </thead>
           <tbody>
             <?php foreach($runs as $run):?>
-            <tr data-id='<?php echo $run->id?>'>
+            <tr data-id='<?php echo $run->id?>' data-auto='<?php echo $run->auto;?>'>
               <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $useDatatable ? 'datatable' : 'table');?>
             </tr>
             <?php endforeach;?>
@@ -166,19 +167,54 @@ if($shortcut.size() > 0)
 $(function(){$('#casesForm').table();})
 <?php endif;?>
 $("thead").find('.c-assignedTo').attr('class', '');
-function confirmAction()
+function runAutocase()
 {
+    var caseIDList = [];
+    $.each($('input[name^=caseIDList]:checked'),function(){
+        caseIDList.push($(this).val());
+    });
+
+    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation)
+
+    var postData = {'caseIDList' : caseIDList.join(',')};
+
+    var response = true;
+    $.post(url, postData, function(result)
+    {
+        if(result.result == 'fail')
+        {
+            alert(result.message);
+            response = false;
+        }
+    }, 'json');
+
+    return response;
+}
+
+function confirmAction(obj)
+{
+    var autoRun = 'no';
+    $.each($('input[name^=caseIDList]:checked'),function(){
+       var dataAuto = $(this).parents('tr').attr('data-auto');
+       if(dataAuto == 'auto') autoRun = dataAuto;
+    });
+
+    if(autoRun == 'no' || !automation)
+    {
+        setFormAction(cancelURL, '', '#caseList');
+        return false;
+    }
+
     if(confirm(runCaseConfirm))
     {
-        setFormAction(confirmURL, '', '#caseList');
+        var result = runAutocase();
+        if(result) setFormAction(confirmURL, '', '#caseList');
     }
     else
     {
         setFormAction(cancelURL, '', '#caseList');
     }
-
     return false;
 }
-</script>
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -668,7 +668,7 @@ class todo extends control
      * AJAX: get program id.
      *
      * @param  int     $objectID
-     * @param  varchar $objectType
+     * @param  string  $objectType
      * @access public
      * @return void
      */

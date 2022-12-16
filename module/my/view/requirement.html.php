@@ -76,7 +76,7 @@
       <tbody>
         <?php foreach($stories as $story):?>
         <?php
-        $storyLink    = $this->createLink('story', 'view', "id=$story->id");
+        $storyLink    = $this->createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=requirement");
         $canBeChanged = common::canBeChanged('story', $story);
         $spanClass    = $canBatchAction ? 'c-span' : '';
         ?>

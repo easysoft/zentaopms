@@ -33,3 +33,6 @@ ol, ul {padding-left: 20px;}
 #mainMenu .btn-toolbar .page-title .text {max-width: 434px; overflow: hidden; white-space:nowrap; margin-right: 6px;}
 #actionsBox a:last-of-type + .divider {display: none;}
 #actionsBox div.divider:first-child {display: none;}
+
+#bugs th.c-pri, #bugs th.c-actions {width:70px !important;}
+#bugs th.c-status, #bugs th.c-user {width:120px !important;}

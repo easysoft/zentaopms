@@ -395,9 +395,9 @@ class commonModel extends model
     /**
      * Deny access.
      *
-     * @param  varchar  $module
-     * @param  varchar  $method
-     * @param  bool     $reload
+     * @param  string  $module
+     * @param  string  $method
+     * @param  bool    $reload
      * @access public
      * @return mixed
      */
@@ -937,6 +937,38 @@ class commonModel extends model
         $html = $link ? html::a($link, "$icon {$lang->$tab->common}", '', "class='$className' style='padding-top: 2px'") : "$icon {$lang->$tab->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
+    }
+
+    /**
+     * Format the date to YYYY-mm-dd, format the datetime to YYYY-mm-dd HH:ii:ss.
+     *
+     * @param  int    $date
+     * @param  string $type date|datetime|''
+     * @access public
+     * @return string
+     */
+    public function formatDate($date, $type = '')
+    {
+        $datePattern     = '\w{4}(\/|-)\w{1,2}(\/|-)\w{1,2}';
+        $datetimePattern = $datePattern . ' \w{1,2}\:\w{1,2}\:\w{1,2}';
+
+        if(empty($type))
+        {
+            if(!preg_match("/$datePattern/", $date) and !preg_match("/$datetimePattern/", $date)) return $date;
+            if(preg_match("/$datePattern/", $date) === 1)     $type = 'date';
+            if(preg_match("/$datetimePattern/", $date) === 1) $type = 'datetime';
+        }
+
+        if(helper::isZeroDate($date))
+        {
+            if($type == 'date')     return '0000-00-00';
+            if($type == 'datetime') return '0000-00-00 00:00:00';
+        }
+
+        if($type == 'date')     $format = 'Y-m-d';
+        if($type == 'datetime') $format = 'Y-m-d H:i:s';
+
+        return date($format, strtotime($date));
     }
 
     /**
@@ -2454,7 +2486,7 @@ EOD;
         }
         catch(EndResponseException $endResponseException)
         {
-            echo $endResponseException->getContent();
+            die($endResponseException->getContent());
         }
     }
 

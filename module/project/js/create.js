@@ -11,7 +11,7 @@ $(function()
         if(hasProduct == 1)
         {
             var chosenProducts = 0;
-            $("#productsBox select[name^='products']").each(function()
+            $(".productsBox select[name^='products']").each(function()
             {
                 if($(this).val() > 0) chosenProducts ++;
             });
@@ -29,16 +29,16 @@ $(function()
 
     setAclList($("#parent").val());
 
-    if(typeof(currentPlanID) == 'undefined')
+    if(typeof(currentPlanID) == 'undefined' && copyProjectID == 0)
     {
-        $('#productsBox select[id^="products"]').each(function()
+        $('.productsBox select[id^="products"]').each(function()
         {
-            var branchID = 0;
-            if($(this).closest('.input-group').find('select[id^="branch"]').size() > 0)
+            var branch = 0;
+            if($(this).closest('.table-row').find('select[name^="branch"]').size() > 0)
             {
-                var branchID = $(this).closest('.input-group').find('select[id^="branch"]').val();
+                var branch = $(this).closest('.table-row').find('select[name^="branch"]');
             }
-            loadPlans($(this), branchID);
+            loadPlans($(this), branch);
         });
     }
 
@@ -63,7 +63,7 @@ $(function()
         $('#daysLabelInfo').remove();
 
         /* Determine whether the products of the same branch are linked. */
-        $("#productsBox select[name^='products']").each(function()
+        $(".productsBox select[name^='products']").each(function()
         {
             var productID = $(this).val();
             if(typeof(products[productID]) == 'undefined') products[productID] = new Array();
@@ -98,7 +98,6 @@ $(function()
     }
 
     /* Init for copy execution. */
-    $("select[id^=branch]").each(disableSelectedBranch);
     disableSelectedProduct();
 
     /* Check the all products and branches control when uncheck the product. */
@@ -106,13 +105,9 @@ $(function()
     {
         if($(this).val() == 0)
         {
-            $("select[id^='branch']").each(disableSelectedBranch);
-
             disableSelectedProduct();
         }
     });
-
-    $(document).on('change', "select[id^='branch']", disableSelectedBranch);
 
     if(copyProjectID > 0 && copyType != 'previous')
     {
@@ -167,17 +162,16 @@ function setParentProgram(parentProgram)
             var productSelectHtml = data.allProducts;
             var planSelectHtml    = data.plans;
 
-            $('#productsBox .row .col-sm-4 .input-group').each(function(index)
+            $('.productsBox .row .col-sm-6 .input-group').each(function(index)
             {
                 var selectedProduct = $(this).find('[name^=products]').val();
                 var selectedBranch  = $(this).find('[name^=branch]').val();
                 var selectedPlan    = $('#plan' + index ).find('[name^=plans]').val();
 
-                $(this).html(productSelectHtml);
+                $(this).find('[name^=products]').html(productSelectHtml);
                 $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch).attr('data-plan', selectedPlan);
                 $(this).find('[name^=products]').val(selectedProduct).chosen().change();
             });
-            $('#productsBox .row .col-sm-4:last').find('.input-group').append($('#productsBox .addProduct .input-group:first .input-group-addon').prop('outerHTML'));
         }
 
         if(parentProgram != 0)
@@ -195,17 +189,6 @@ function setParentProgram(parentProgram)
     });
 
     $('#parent').attr('data-lastSelected', parentProgram);
-
-    if(parentProgram != '0')
-    {
-        $('#productsBox .addProduct .input-group:first').addClass('required');
-        $('#productsBox .row .input-group:first').addClass('required');
-    }
-    else
-    {
-        $('#productsBox .addProduct .input-group').removeClass('required');
-        $('#productsBox .row .input-group').removeClass('required');
-    }
 }
 
 /**
@@ -232,35 +215,37 @@ function addNewProduct(obj)
     if($(obj).attr('checked'))
     {
         /* Hide product and plan dropdown controls. */
-        $('#productsBox .row .col-sm-4').addClass('hidden');
-        $('#productsBox .row .col-sm-4 .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
-        $('#plansBox').closest('tr').addClass('hidden');
-        $('#plansBox .col-sm-4').find('select').attr('disabled', true).trigger("chosen:updated");
+        $('.newLine').addClass('hidden');
+        $('.productsBox .row').addClass('hidden');
+        $('.productsBox .row .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
         $('.division').addClass('hide');
 
         /* Displays the input box for creating a product. */
+        $(obj).closest('td').attr('colspan', 1);
         $("[name^='newProduct']").prop('checked', true);
         $('#productName').removeAttr('disabled', true);
-        $('#productsBox .addProduct').removeClass('hidden');
+        $('.productsBox .addProduct').removeClass('hidden');
         $('#productTitle').html(productName);
     }
     else
     {
         /* Show product and product dropdown controls. */
-        $('#productsBox .row .col-sm-4').removeClass('hidden');
-        $('#productsBox .row .col-sm-4 .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
-        $('#plansBox').closest('tr').removeClass('hidden');
-        $('#plansBox .col-sm-4').find('select').removeAttr('disabled', true).trigger("chosen:updated");
-        if($('#plansBox .col-sm-4').find('select').length > 1) $('.division').removeClass('hide');
+        $('.newLine').removeClass('hidden');
+        $('.productsBox .row').removeClass('hidden');
+        $('.productsBox .row .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
+        if($('.productsBox').find("select[name^=products]").length > 1) $('.division').removeClass('hide');
 
         /* Hide the input box for creating a product. */
+        $(obj).closest('td').attr('colspan', 3);
         $("[name^='newProduct']").prop('checked', false);
         $('#productName').attr('disabled', true);
-        $('#productsBox .addProduct').addClass('hidden');
+        $('.productsBox .addProduct').addClass('hidden');
 
-        $('#productTitle').html(manageProducts);
+        $('#productTitle').html(manageProductPlan);
     }
-    $('#productsBox div + .text-danger.help-text').remove();
+
+    $('.productsBox div + .text-danger.help-text').remove();
+    disableSelectedProduct();
 }
 
 /**
@@ -295,7 +280,7 @@ function loadBranches(product)
     $("#planDefault").remove();
 
     var chosenProducts = [];
-    $("#productsBox select[name^='products']").each(function()
+    $(".productsBox select[name^='products']").each(function()
     {
         var $product  = $(product);
         var productID = $(this).val();
@@ -311,111 +296,111 @@ function loadBranches(product)
 
     (chosenProducts.length > 1 && model == 'waterfall') ? $('.division').removeClass('hide') : $('.division').addClass('hide');
 
-    if($('#productsBox .row .input-group:last select:first').val() != 0)
+    var $tableRow = $(product).closest('.table-row');
+    var index     = $tableRow.find('select:first').attr('id').replace('products' , '');
+    var oldBranch = $(product).attr('data-branch') !== undefined ? $(product).attr('data-branch') : 0;
+    if($(product).val() != 0)
     {
-        var length = $('#productsBox .row .input-group').size();
-        var $html  = $('#productsBox .row .col-sm-4:last').html().replace('required', '');
-        $('#productsBox .row .col-sm-4:last').find('.input-group-addon').remove();
-        $('#productsBox .row').append('<div class="col-sm-4">' + $html + '</div>');
-        if($('#productsBox .row .input-group:last select').size() >= 2) $('#productsBox .row .input-group:last select:last').remove();
-        $('#productsBox .row .input-group:last .chosen-container').remove();
-        $('#productsBox .row .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
-        $('#productsBox .row .input-group:last .chosen').chosen();
-
-        $('[data-toggle="popover"]').popover();
-
-        adjustProductBoxMargin();
+        $(product).closest('tr').find('.newProduct').addClass('hidden')
+    }
+    else
+    {
+        $(product).closest('tr').find('.newProduct').removeClass('hidden')
     }
 
-    var $inputgroup = $(product).closest('.input-group');
-    if($inputgroup.find('select').size() >= 2) $inputgroup.removeClass('has-branch').find('select:last').remove();
-    if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
+    if(!multiBranchProducts[$(product).val()])
+    {
+        $tableRow.find('.table-col:last select').val('').trigger('chosen:updated');
+        $tableRow.find('.table-col:last').addClass('hidden');
+    }
 
-    var index     = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    var oldBranch = $(product).attr('data-branch') !== undefined ? $(product).attr('data-branch') : 0;
     $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranch + "&param=active"), function(data)
     {
         if(data)
         {
-            $inputgroup.addClass('has-branch').append(data);
-            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
+            $tableRow.find("select[name^='branch']").replaceWith(data);
+            $tableRow.find('.table-col:last .chosen-container').remove();
+            $tableRow.find('.table-col:last').removeClass('hidden');
+            $tableRow.find("select[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this)").chosen();
 
-            $inputgroup.find('select:last').each(disableSelectedBranch);
             disableSelectedProduct();
         }
 
-        var branchID = $('#branch' + index).val();
-        loadPlans(product, branchID);
+        var branch = $('#branch' + index);
+        loadPlans(product, branch);
     });
-
-    if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
 }
 
 /**
  * Load plans.
  *
  * @param  obj $product
- * @param  int $branchID
+ * @param  obj $branchID
  * @access public
  * @return void
  */
-function loadPlans(product, branchID)
+function loadPlans(product, branch)
 {
-    if($('#plansBox').size() == 0) return false;
-
     var productID = $(product).val();
-    var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
+    var branchID  = $(branch).val() == null ? 0 : '0,' + $(branch).val();
     var planID    = $(product).attr('data-plan') !== undefined ? $(product).attr('data-plan') : 0;
     var index     = $(product).attr('id').replace('products', '');
 
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent,multiple'), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent,multiple'), function(data)
     {
         if(data)
         {
-            if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
-            $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + '][' + branchID + '][]').attr('id', 'plans' + productID).chosen();
-
-            adjustPlanBoxMargin();
+            $("div#plan" + index).find("select[name^='plans']").replaceWith(data);
+            $("div#plan" + index).find('.chosen-container').remove();
+            $("div#plan" + index).find('select').attr('name', 'plans[' + productID + ']' + '[]').attr('id', 'plans' + productID).chosen();
         }
     });
 }
 
 /**
- * Adjust product box margin.
- *
+ * Add new line for link product.
+ * 
+ * @param  obj $obj 
  * @access public
  * @return void
  */
-function adjustProductBoxMargin()
+function addNewLine(obj)
 {
-    var productRows = Math.ceil($('#productsBox > .row > .col-sm-4').length / 3);
-    if(productRows > 1)
+    var newLine = $(obj).closest('tr').clone();
+    var index   = 0; 
+    $(".productsBox select[name^='products']").each(function()
     {
-        for(i = 1; i <= productRows - 1; i++)
-        {
-            $('#productsBox .row .col-sm-4:lt(' + (i * 3) + ')').css('margin-bottom', '10px');
-            $('#productsBox .row .col-sm-4').eq(i * 3).css('padding-right', '6px');
-        }
-    }
+        var id = $(this).attr('id').replace('products' , '');
+
+        id = parseInt(id);
+        id ++;
+
+        index = id > index ? id : index;
+    })
+
+    newLine.find('.newProduct').remove();
+    newLine.find('.addProduct').remove();
+    newLine.addClass('newLine');
+    newLine.find('th').html('');
+    newLine.find('.removeLine').css('visibility', 'visible');
+    newLine.find('.chosen-container').remove();
+    newLine.find('.productsBox .table-col:last').addClass('hidden');
+    newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('').chosen();
+    newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]').chosen();
+    newLine.find("div[id^='plan']").attr('id', 'plan' + index);
+
+    $(obj).closest('tr').after(newLine);
+    var product = newLine.find("select[name^='products']");
+    var branch  = newLine.find("select[name^='branch']");
+    loadPlans(product, branch);
+    disableSelectedProduct();
 }
 
-/**
- * Adjust plan box margin.
- *
- * @access public
- * @return void
- */
-function adjustPlanBoxMargin()
+function removeLine(obj)
 {
-    var planRows = Math.ceil($('#plansBox > .row > .col-sm-4').length / 3);
-    if(planRows > 1)
-    {
-        for(j = 1; j <= planRows - 1; j++)
-        {
-            $('#plansBox .col-sm-4:lt(' + (j * 3) + ')').css('margin-bottom', '10px');
-            $('#plansBox .col-sm-4').eq(j * 3).css('padding-right', '6px');
-        }
-    }
+    $(obj).closest('tr').remove();
+    disableSelectedProduct();
+    if($("select[name^='products']").length < 2) $('.division').addClass('hide'); 
 }
 
 /**

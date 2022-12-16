@@ -1719,7 +1719,7 @@ class baseRouter
         }
 
         /* 1. 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。 If extensionLevel == 2 and site extensionFile exists, return it. */
-        if($this->config->framework->extensionLevel == 2 and !empty( $moduleExtPaths['site']))
+        if($this->config->framework->extensionLevel == 2 and !empty($moduleExtPaths['site']))
         {
             $this->extActionFile = $moduleExtPaths['site'] . $this->methodName . '.php';
             if(file_exists($this->extActionFile)) return true;
@@ -1757,7 +1757,7 @@ class baseRouter
         if(empty($moduleExtPaths)) return false;
 
         /* 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。If extensionLevel == 2 and site extensionFile exists, return it. */
-        if($this->config->framework->extensionLevel == 2 and !empty( $moduleExtPaths['site']))
+        if($this->config->framework->extensionLevel == 2 and !empty($moduleExtPaths['site']))
         {
             $locateFile  = $moduleExtPaths['site'] . $this->methodName . '.302';
             if(file_exists($locateFile)) $this->sendAPI($locateFile);
@@ -2497,9 +2497,8 @@ class baseRouter
      *
      * @param   string $moduleName     module name
      * @param   string $appName        app name
-     * @param   bool   $exitIfNone     exit or not
      * @access  public
-     * @return  object|bool the config object or false.
+     * @return  void
      */
     public function loadModuleConfig($moduleName, $appName = '')
     {
@@ -2525,7 +2524,7 @@ class baseRouter
             if(!empty($extConfigPath['saas']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['saas'], '.php'));
             if(!empty($extConfigPath['custom'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['custom'], '.php'));
         }
-        if($config->framework->extensionLevel == 2 and !empty($extConfigPath['site']))   $siteExtConfigFiles   = helper::ls($extConfigPath['site'], '.php');
+        if($config->framework->extensionLevel == 2 and !empty($extConfigPath['site'])) $siteExtConfigFiles = helper::ls($extConfigPath['site'], '.php');
         $extConfigFiles = array_merge($commonExtConfigFiles, $siteExtConfigFiles);
 
         /* 将主配置文件和扩展配置文件合并在一起。Put the main config file and extension config files together. */
@@ -2690,12 +2689,12 @@ class baseRouter
             if($this->config->framework->extensionLevel >= 1)
             {
                 if(!empty($extLangPath['common'])) $commonExtLangFiles = helper::ls($extLangPath['common'] . $this->clientLang, '.php');
-                if(!empty($extLangPath['xuan'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['xuan'] . $this->clientLang, '.php'));
+                if(!empty($extLangPath['xuan']))   $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['xuan'] . $this->clientLang, '.php'));
                 if(!empty($extLangPath['vision'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['vision'] . $this->clientLang, '.php'));
                 if(!empty($extLangPath['custom'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['custom'] . $this->clientLang, '.php'));
                 if(!empty($extLangPath['saas']))   $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['saas'] . $this->clientLang, '.php'));
             }
-            if($this->config->framework->extensionLevel == 2 and !empty($extLangPath['site']))   $siteExtLangFiles   = helper::ls($extLangPath['site'] . $this->clientLang, '.php');
+            if($this->config->framework->extensionLevel == 2 and !empty($extLangPath['site'])) $siteExtLangFiles = helper::ls($extLangPath['site'] . $this->clientLang, '.php');
             $extLangFiles  = array_merge($commonExtLangFiles, $siteExtLangFiles);
         }
 

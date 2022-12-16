@@ -91,7 +91,7 @@ class testtaskModel extends model
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
             ->beginIF(!in_array(strtolower($scopeAndStatus[1]), array('totalstatus', 'review'), true))->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
-            ->beginIF($branch !== 'all')->andWhere('t4.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere("CONCAT(',', t4.branch, ',')")->like("%,$branch,%")->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
             ->beginIF($branch == BRANCH_MAIN)
@@ -1351,15 +1351,8 @@ class testtaskModel extends model
             $result->stepResults = serialize($stepResults);
             $result->lastRunner  = $this->app->user->account;
             $result->date        = $now;
-            if(isset($postData->node)) $result->node = $postData->node;
 
             $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
-            if(!dao::isError() and isset($postData->node))
-            {
-                $resultID = $this->dao->lastInsertID();
-                $this->loadModel('zanode')->runZTFScript($postData->automation, $caseID, $resultID);
-            }
-
             $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($caseID)->exec();
 
             if($runID)
@@ -1479,7 +1472,7 @@ class testtaskModel extends model
             }
 
             /* Get files of step result. */
-            foreach($result->stepResults as $stepID => $stepResult) $result->stepResults[$stepID]['files'] = isset($stepFiles[$resultID][$stepID]) ? $stepFiles[$resultID][$stepID] : array();
+            if(!empty($result->stepResults)) foreach($result->stepResults as $stepID => $stepResult) $result->stepResults[$stepID]['files'] = isset($stepFiles[$resultID][$stepID]) ? $stepFiles[$resultID][$stepID] : array();
         }
         return $results;
     }

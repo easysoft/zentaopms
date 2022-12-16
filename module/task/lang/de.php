@@ -213,8 +213,12 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Erledigt';
 $lang->task->reasonList['cancel'] = 'Abgebrochen';
 
-$lang->task->modeList['linear'] = 'Serial';
-$lang->task->modeList['multi']  = 'Parallel';
+$lang->task->modeList['linear'] = 'Multiple Person Serial';
+$lang->task->modeList['multi']  = 'Multiple Person Parallel';
+
+$lang->task->editModeList['single'] = 'Single';
+$lang->task->editModeList['linear'] = 'Serial';
+$lang->task->editModeList['multi']  = 'Parallel';
 
 $lang->task->afterChoices['continueAdding'] = ' Weitere Aufgaben erfassen';
 $lang->task->afterChoices['toTaskList']     = 'Zurück zur Aufgabenliste';

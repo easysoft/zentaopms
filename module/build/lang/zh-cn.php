@@ -31,15 +31,17 @@ $lang->build->id             = 'ID';
 $lang->build->product        = '所属' . $lang->productCommon;
 $lang->build->project        = '所属项目';
 $lang->build->branch         = '平台/分支';
+$lang->build->branchAll      = '所有关联%s';
 $lang->build->branchName     = '所属%s';
 $lang->build->execution      = '所属' . $lang->executionCommon;
 $lang->build->integrated     = '集成版本';
 $lang->build->singled        = '单一版本';
 $lang->build->builds         = '包含版本';
-$lang->build->releasedBuild  = '发布版本';
+$lang->build->released       = '发布';
 $lang->build->name           = '名称编号';
 $lang->build->date           = '打包日期';
 $lang->build->builder        = '构建者';
+$lang->build->url            = '地址';
 $lang->build->scmPath        = '源代码地址';
 $lang->build->filePath       = '下载地址';
 $lang->build->desc           = '描述';
@@ -54,7 +56,8 @@ $lang->build->bugs           = '解决的Bug';
 $lang->build->generatedBugs  = '产生的Bug';
 $lang->build->noProduct      = " <span id='noProduct' style='color:red'>该{$lang->executionCommon}没有关联{$lang->productCommon}，无法创建版本，请先<a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'>关联{$lang->productCommon}</a></span>";
 $lang->build->noBuild        = '暂时没有版本。';
-$lang->build->emptyExecution =  $lang->executionCommon . '不能为空。';
+$lang->build->emptyExecution = $lang->executionCommon . '不能为空。';
+$lang->build->linkedBuild    = '关联版本';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "已经关联{$lang->SRCommon}、Bug或提交测试单的版本，不能修改其所属{$lang->productCommon}";
@@ -62,6 +65,11 @@ $lang->build->notice->changeExecution = "提交测试单的版本，不能修改
 $lang->build->notice->changeBuilds    = "提交测试单的版本，不能修改关联版本";
 $lang->build->notice->autoRelation    = "相关版本下完成的需求、解决的Bug、产生的Bug将会自动关联到项目版本中";
 $lang->build->notice->createTest      = "该版本所属执行已删除，不能提交测试";
+
+$lang->build->confirmChangeBuild = "%s『%s』解除关联后，%s下 %s个{$lang->SRCommon}和%s个Bug将同步从版本移除，是否解除？";
+$lang->build->confirmRemoveStory = "%s『%s』解除关联后，%s下 %s个{$lang->SRCommon}将同步从计划中移除，是否解除？";
+$lang->build->confirmRemoveBug   = "%s『%s』解除关联后，%s下 %s个Bug将同步从计划中移除，是否解除？";
+$lang->build->confirmRemoveTips  = "确认删除%s『%s』吗？";
 
 $lang->build->finishStories = " 本次共完成 %s 个{$lang->SRCommon}";
 $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';

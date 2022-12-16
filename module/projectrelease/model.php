@@ -35,6 +35,10 @@ class projectreleaseModel extends model
         $release->branch  = trim($release->branch, ',');
         $release->build   = trim($release->build, ',');
 
+        $release->branches = array();
+        $branchIdList = explode(',', $release->branch);
+        foreach($branchIdList as $branchID) $release->branches[$branchID] = $branchID;
+
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
         $release->files      = $this->file->getByObject('release', $releaseID);
@@ -55,7 +59,7 @@ class projectreleaseModel extends model
      */
     public function getList($projectID, $type = 'all', $orderBy = 't1.date_desc', $pager = null)
     {
-        $releases = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere("FIND_IN_SET($projectID, t1.project)")
@@ -70,7 +74,20 @@ class projectreleaseModel extends model
         {
             $release->project = trim($release->project, ',');
             $release->branch  = trim($release->branch, ',');
-            $release->build   = trim($release->build, ',');
+
+            $branchName = '';
+            if($release->branch != 'normal')
+            {
+                foreach(explode(',', $release->branch) as $releaseBranch)
+                {
+                    $branchName .= $this->loadModel('branch')->getById($releaseBranch);
+                    $branchName .= ',';
+                }
+                $branchName = trim($branchName, ',');
+            }
+            $release->branchName = empty($branchName) ? $this->lang->branch->main : $branchName;
+            $release->build      = trim($release->build, ',');
+
             $buildIdList = array_merge($buildIdList, explode(',', $release->build));
         }
 

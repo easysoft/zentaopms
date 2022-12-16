@@ -101,7 +101,7 @@ class zanodemodel extends model
 
         /* update action log. */
         $this->loadModel('action')->create('zanode', $nodeID, 'Created');
-        return true;
+        return $nodeID;
     }
 
     /**
@@ -730,15 +730,16 @@ class zanodemodel extends model
         $node       = $this->getNodeByID($automation->node);
         $params = array(
             'cmd'  => $automation->shell,
-            'ids'  => $caseID,
+            'ids'  => strval($caseID),
             'path' => $automation->scriptPath,
-            'task' => $task
+            'task' => intval($task)
         );
 
-        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
-        if(empty($result->data) || $result->code != 'success')
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->ztf}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
+        if($result->code != 0)
         {
-            return  dao::$errors[] = $this->lang->zanode->runTimeout;
+            $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
+            return  dao::$errors = $this->lang->zanode->runTimeout;
         }
     }
 }

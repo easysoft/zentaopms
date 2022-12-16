@@ -31,6 +31,7 @@ $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
 $lang->build->project        = '所屬項目';
 $lang->build->branch         = '平台/分支';
+$lang->build->branchAll      = '所有關聯%s';
 $lang->build->branchName     = '所屬%s';
 $lang->build->execution      = '所屬' . $lang->executionCommon;
 $lang->build->name           = '名稱編號';

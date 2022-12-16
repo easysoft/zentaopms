@@ -31,15 +31,17 @@ $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
 $lang->build->project        = 'Project';
 $lang->build->branch         = 'Platform/Branch';
+$lang->build->branchAll      = 'All associated %s';
 $lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
 $lang->build->integrated     = 'Integrated';
 $lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Included Builds';
-$lang->build->releasedBuild  = 'Released Build';
+$lang->build->released       = 'Released';
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Datum';
 $lang->build->builder        = 'Builder';
+$lang->build->url            = 'URL';
 $lang->build->scmPath        = 'SCM Pfad';
 $lang->build->filePath       = 'Dateipfad';
 $lang->build->desc           = 'Beschreibung';
@@ -54,7 +56,8 @@ $lang->build->bugs           = 'Gelöster Bug';
 $lang->build->generatedBugs  = 'Left Bug';
 $lang->build->noProduct      = " <span id='noProduct' style='color:red'>Dieses {$lang->executionCommon} ist nicht mit einem {$lang->productCommon} verknüpft, daher kann das Build nicht erstellt werden. Bitte erst <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'> {$lang->productCommon} verknüpfen.</a></span>";
 $lang->build->noBuild        = 'Keine Builds. ';
-$lang->build->emptyExecution =  $lang->executionCommon . 'should be not empty.';
+$lang->build->emptyExecution = $lang->executionCommon . 'should be not empty.';
+$lang->build->linkedBuild    = 'Linked Build';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
@@ -62,6 +65,11 @@ $lang->build->notice->changeExecution = "The version of the submitted test order
 $lang->build->notice->changeBuilds    = "The version of the submitted test order cannot be modified builds";
 $lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the project version";
 $lang->build->notice->createTest      = "The execution of this version has been deleted, and the test cannot be submitted";
+
+$lang->build->confirmChangeBuild = "After branch『%s』disassociation,under the %s have %s {$lang->SRCommon} and %s Bug will remove synchronization from version, whether to cancel？";
+$lang->build->confirmRemoveStory = "After branch『%s』disassociation,under the %s have %s {$lang->SRCommon} will remove synchronization from version, whether to cancel？";
+$lang->build->confirmRemoveBug   = "After branch『%s』disassociation,under the %s have %s Bug will remove synchronization from version, whether to cancel？";
+$lang->build->confirmRemoveTips  = "Are you sure to delete %s『%s』?";
 
 $lang->build->finishStories = "  %s {$lang->SRCommon} sind abgeschlossen.";
 $lang->build->resolvedBugs  = '  %s Bugs sind gelöst.';

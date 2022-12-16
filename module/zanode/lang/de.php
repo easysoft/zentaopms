@@ -86,6 +86,9 @@ $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
 $lang->zanode->statusList['wait']         = 'Waiting For Init';
 $lang->zanode->statusList['online']       = 'Online';
 
+$lang->zanode->initNotice = "Succeeded. Please initialize the execution node or return to the list.";
+$lang->zanode->initButton = "Initialize;
+
 $lang->zanode->init = new stdclass;
 $lang->zanode->init->statusTitle   = "Service Status";
 $lang->zanode->init->checkStatus   = "Check Service Status";

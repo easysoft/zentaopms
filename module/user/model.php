@@ -663,6 +663,8 @@ class userModel extends model
                 $this->mail->syncSendCloud('sync', $user->email, $user->realname);
             }
         }
+
+        if($_POST['account'] == $this->app->user->account and $user->role != $_SESSION['user']->role) $_SESSION['user']->role = $user->role;
     }
 
     /**

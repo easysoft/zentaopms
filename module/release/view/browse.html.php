@@ -52,6 +52,9 @@
         <th class='c-id'><?php echo $lang->release->id;?></th>
         <th class="c-name"><?php echo $lang->release->name;?></th>
         <th class='c-build'><?php echo $lang->release->includedBuild;?></th>
+        <?php if($showBranch):?>
+        <th class="c-name w-200px"><?php echo $lang->release->branch;?></th>
+        <?php endif;?>
         <th class='c-project'><?php echo $lang->release->relatedProject;?></th>
         <th class='text-center c-status'><?php echo $lang->release->status;?></th>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
@@ -84,7 +87,7 @@
           ?>
         </td>
         <?php endif;?>
-        <td>
+        <td title='<?php echo $build ? $build->name : ''?>'>
           <?php if($buildCount):?>
           <?php if($product->type != 'normal'):?>
           <span class='label label-outline label-badge'><?php echo $build->branchName;?></span>
@@ -98,6 +101,11 @@
           ?>
         <?php endif;?>
         </td>
+        <?php if($i == 1):?>
+        <?php if($showBranch):?>
+        <td <?php echo $rowspan?> class='c-branch text-center'><?php echo $release->branchName; ?></td>
+        <?php endif;?>
+        <?php endif;?>
         <td><?php if($buildCount) echo $build->projectName;?></td>
         <?php if($i == 1):?>
         <?php $status = $this->processStatus('release', $release);?>

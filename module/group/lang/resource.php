@@ -547,6 +547,7 @@ $lang->resource->story->batchChangeModule  = 'batchChangeModule';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 $lang->resource->story->linkStories        = 'linkStoriesAB';
+$lang->resource->story->relieved           = 'relievedTwins';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -576,6 +577,7 @@ $lang->story->methodOrder[120] = 'batchChangeModule';
 $lang->story->methodOrder[125] = 'batchToTask';
 $lang->story->methodOrder[130] = 'processStoryChange';
 $lang->story->methodOrder[135] = 'linkStories';
+$lang->story->methodOrder[140] = 'relieved';
 
 /* Requirement. */
 $lang->resource->requirement = new stdclass();

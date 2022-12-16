@@ -31,7 +31,11 @@ class releaseModel extends model
             ->fetch();
         if(!$release) return false;
 
-        $release->builds = $this->dao->select('id, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+        $release->builds = $this->dao->select('id, branch, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+
+        $release->branches = array();
+        $branchIdList = explode(',', trim($release->branch, ','));
+        foreach($branchIdList as $branchID) $release->branches[$branchID] = $branchID;
 
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
@@ -54,7 +58,7 @@ class releaseModel extends model
      */
     public function getList($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $pager = null)
     {
-        $releases = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
@@ -80,8 +84,19 @@ class releaseModel extends model
 
                 $releaseBuilds[] = $builds[$buildID];
             }
-
             $release->builds = $releaseBuilds;
+
+            $branchName = '';
+            if($release->branch != 'normal')
+            {
+                foreach(explode(',', $release->branch) as $releaseBranch)
+                {
+                    $branchName .= $this->loadModel('branch')->getById($releaseBranch);
+                    $branchName .= ',';
+                }
+                $branchName = trim($branchName, ',');
+            }
+            $release->branchName = empty($branchName) ? $this->lang->branch->main : $branchName;
         }
 
         return $releases;
@@ -220,12 +235,17 @@ class releaseModel extends model
                 $linkedBuilds = array_merge($linkedBuilds, explode(',', $build->builds));
             }
             if($linkedBuilds) $builds += $this->dao->select('id,project,branch,builds,stories,bugs')->from(TABLE_BUILD)->where('id')->in($linkedBuilds)->fetchAll('id');
+            $branches = array();
             foreach($builds as $build)
             {
-                $branches[$build->branch]  = $build->branch;
+                foreach(explode(',', $build->branch) as $buildBranch)
+                {
+                    if(!isset($branches[$buildBranch])) $branches[$buildBranch] = $buildBranch;
+                }
+
                 $projects[$build->project] = $build->project;
 
-                if($this->post->sync == 'true')
+                if($this->post->sync)
                 {
                     $build->stories = trim($build->stories, ',');
                     $build->bugs    = trim($build->bugs, ',');
@@ -233,7 +253,7 @@ class releaseModel extends model
                     if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
                 }
             }
-            if($this->post->sync == 'true' and $release->bugs)
+            if($this->post->sync and $release->bugs)
             {
                 $releaseBugs   = $this->loadModel('bug')->getReleaseBugs(array_keys($builds), $release->product, $release->branch);
                 $release->bugs = join(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));
@@ -320,10 +340,14 @@ class releaseModel extends model
         /* update release project and branch */
         if($release->build)
         {
-            $builds = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+            $builds   = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+            $branches = array();
             foreach($builds as $build)
             {
-                $branches[$build->branch]  = $build->branch;
+                foreach(explode(',', $build->branch) as $buildBranch)
+                {
+                    if(!isset($branches[$buildBranch])) $branches[$buildBranch] = $buildBranch;
+                }
                 $projects[$build->project] = $build->project;
             }
             $release->build   = ',' . trim($release->build, ',') . ',';

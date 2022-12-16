@@ -2,4 +2,9 @@
 #affectedProjects .table + h6 {border-top: 1px solid #ddd;}
 .nav-tabs>li>a {height: 36px;}
 .table-form>tbody>tr>th {width: 100px !important;}
-.colorpicker {right: 7px; top: 7px; opacity: 1;}
+.colorpicker {right: -1px; top: 7px; opacity: 1;}
+#twinsList td, #twinsTitle td {padding-left: 65px;}
+#twinsTitle td {font-weight: 700;}
+
+.title-group.required:after {display: none;}
+.title-group.required > .required:after {display: block; right: 32px; top: 5px;}

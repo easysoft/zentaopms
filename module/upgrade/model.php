@@ -577,6 +577,13 @@ class upgradeModel extends model
                 $this->xuanNotifyGroupHiddenUsers();
                 $this->initShadowBuilds();
                 break;
+            case '18_0_beta1':
+                if(!$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+                break;
         }
 
         $this->deletePatch();
@@ -755,6 +762,9 @@ class upgradeModel extends model
                 break;
             case 'max3_3':
                 $this->addReviewIssusApprovalData();
+                break;
+            case 'max4_0_beta1':
+                $this->initReviewEfforts();
                 break;
         }
     }
@@ -1055,6 +1065,10 @@ class upgradeModel extends model
             case '17_8':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.8'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.5.sql';
+                $confirmContent .= file_get_contents($xuanxuanSql);
+            case '18_0_beta1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta1'));
+                $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
         }
 
@@ -7966,6 +7980,33 @@ class upgradeModel extends model
 
             $shadowBuildID = $this->dao->lastInsertID();
             $this->dao->update(TABLE_RELEASE)->set('shadow')->eq($shadowBuildID)->where('id')->eq($release->id)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Init review efforts.
+     *
+     * @access public
+     * @return void
+     */
+    public function initReviewEfforts()
+    {
+        $nodes = $this->dao->select('t1.id,t3.id as reviewID,t3.title,t2.id as approvalID,t1.extra as consumed')->from(TABLE_APPROVALNODE)->alias('t1')
+            ->leftJoin(TABLE_APPROVAL)->alias('t2')->on("t1.approval=t2.id")
+            ->leftJoin(TABLE_REVIEW)->alias('t3')->on("t2.objectID=t3.id")
+            ->where('t3.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.objectType')->eq('review')
+            ->andWhere('t1.extra')->ne('')
+            ->andWhere('t1.extra')->ne(0)
+            ->orderBy('t1.approval,t1.id')
+            ->fetchAll('id');
+        $this->loadModel('effort');
+        foreach($nodes as $node)
+        {
+            $this->dao->delete()->from(TABLE_EFFORT)->where('objectType')->eq('review')->andWhere('objectID')->eq($node->reviewID)->exec();
+            $this->effort->create('review', $node->reviewID, (int)$node->consumed, $node->title, $node->approvalID);
         }
         return true;
     }
