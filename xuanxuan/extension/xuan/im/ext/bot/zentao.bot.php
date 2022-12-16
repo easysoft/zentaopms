@@ -353,8 +353,8 @@ class zentaoBot extends xuanBot
 
         if(empty($args))
         {
-            $keys['assignTo'] = is_object($user) ? $user->account : false;
-            $keys['status']   = 'wait,doing,done,pause,cancel';
+            $args['assignTo'] = is_object($user) ? $user->account : false;
+            $args['status']   = 'wait,doing,done,pause,cancel';
         }
 
         $conds = $this->parseArguments($args, $keys);

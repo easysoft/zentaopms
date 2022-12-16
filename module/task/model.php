@@ -945,9 +945,10 @@ class taskModel extends model
             /* Insert or update team. */
             if($mode == 'multi' and isset($teams[$account]))
             {
-                $this->dao->update(TABLE_TASKTEAM)->set("estimate= estimate + {$member->estimate}")
-                    ->set("`left` = `left` + {$member->left}")
-                    ->set("`consumed` = `consumed` + {$member->consumed}")
+                $this->dao->update(TABLE_TASKTEAM)
+                    ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
+                    ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
+                    ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
                     ->where('task')->eq($member->task)
                     ->andWhere('account')->eq($member->account)
                     ->exec();
@@ -1071,6 +1072,7 @@ class taskModel extends model
 
         /* If a multiple task is assigned to a team member who is not the task, assign to the team member instead. */
         if(!$this->post->assignedTo and !empty($oldTask->team) and !empty($_POST['team'])) $_POST['assignedTo'] = $this->getAssignedTo4Multi($_POST['team'], $oldTask);
+        if(!$oldTask->mode and !$this->post->assignedTo and !empty($_POST['team'])) $_POST['assignedTo'] = $_POST['team'][0];
 
         /* When the selected parent task is a common task and has consumption, select other parent tasks. */
         if($this->post->parent > 0)

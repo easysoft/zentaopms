@@ -1906,12 +1906,11 @@ class story extends control
         $productStoryList = array();
         $productList      = array();
         $ignoreTwins      = array();
-        $twinsCount       = 0;
+        $twinsCount       = array();
         foreach($stories as $story)
         {
             if(!empty($ignoreTwins) and isset($ignoreTwins[$story->id]))
             {
-                $twinsCount ++;
                 unset($stories[$story->id]);
                 continue;
             }
@@ -1933,7 +1932,12 @@ class story extends control
 
             if(!empty($story->twins))
             {
-                foreach(explode(',', trim($story->twins, ',')) as $twinID) $ignoreTwins[$twinID] = $twinID;
+                $twinsCount[$story->id] = 0;
+                foreach(explode(',', trim($story->twins, ',')) as $twinID)
+                {
+                    $twinsCount[$story->id] ++;
+                    $ignoreTwins[$twinID] = $twinID;
+                }
             }
         }
 

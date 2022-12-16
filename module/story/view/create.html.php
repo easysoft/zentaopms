@@ -68,7 +68,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <td class='w-60px <?php if((!$branches and $type == 'story') or $type == 'requirement') echo "hidden"; ?> switchBranch'></td>
             <td colspan="2" class='<?php if($branches and $type == 'story') echo "hidden"; ?> switchBranch'>
             <div class='input-group' id='moduleIdBox'>
+              <?php if(!$hiddenProduct):?>
               <div class="input-group-addon"><?php echo $lang->story->module;?></div>
+              <?php endif;?>
               <?php
               echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
               if(count($moduleOptionMenu) == 1)
@@ -122,6 +124,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
           </tr>
           <tr class='<?php if($branches) echo "hidden"; ?> switchBranch'>
+            <?php if(!$hiddenPlan):?>
             <th class='planTh'><?php echo $lang->story->planAB;?></th>
             <td colspan="2">
               <div class='input-group' id='planIdBox'>
@@ -139,11 +142,12 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 ?>
               </div>
             </td>
+            <?php else:?>
+            <th class='planTh'><?php echo $lang->story->assignedTo;?></th>
+            <?php endif;?>
             <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
               <div class='input-group'>
-                <?php if(!$hiddenPlan):?>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
-                <?php endif;?>
                 <?php echo html::select('assignedTo', $hiddenProduct ? $teamUsers : $users, '', "class='form-control picker-select'");?>
               </div>
             </td>

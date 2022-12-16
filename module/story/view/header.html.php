@@ -1,6 +1,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('rawMethod', $this->app->rawMethod);?>
+<?php js::set('hiddenProduct', isset($hiddenProduct) ? $hiddenProduct : false);?>
 <script>
 /**
  * Load product.
@@ -194,7 +195,7 @@ function loadProductModules(productID, branch)
     $moduleIDBox.load(moduleLink, function()
     {
         $moduleIDBox.find('#module').chosen();
-        if(typeof(storyModule) == 'string' && config.currentMethod != 'edit') $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
+        if(typeof(storyModule) == 'string' && config.currentMethod != 'edit' && !hiddenProduct) $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
         $moduleIDBox.fixInputGroup();
     });
 }
