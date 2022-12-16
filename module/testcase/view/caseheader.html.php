@@ -15,6 +15,7 @@
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 #mainMenu .pull-left .checkbox-primary {margin-top: 5px;}
 #mainMenu .dividing-line {width: 1px; height: 16px; display: inline-block; background: #D8DBDE; margin: 7px 8px 0 0; float: left;}
+#byTypeTab li.split{border-top: 1px solid #eee;}
 </style>
 <div id='mainMenu' class='clearfix'>
   <?php if(!($this->app->rawMethod == 'groupcase')):?>
@@ -71,7 +72,7 @@
 
         echo "<div id='byTypeTab' class='btn-group'>";
         echo html::a('javascript:;', "<span class='text'>{$currentLable}</span>" . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
-        echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto; width:120px;'>";
+        echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto; width:130px;'>";
 
         foreach($lang->testcase->typeList as $type => $typeName)
         {
@@ -89,6 +90,7 @@
             echo "</li>";
         }
 
+        echo "<li class='split'></li>";
         echo html::checkbox('showAutoCase', array('1' => $lang->testcase->showAutoCase), '', $this->cookie->showAutoCase ? 'checked=checked' : '');
         echo '</ul></div>';
     }

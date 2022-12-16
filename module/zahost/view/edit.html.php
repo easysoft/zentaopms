@@ -31,7 +31,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->zahost->name;?></th>
-            <td><?php echo html::input('name', $host->name, "class='form-control'");?></td>
+            <td><?php echo html::input('name', $host->name, "class='form-control' disabled");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zahost->IP;?></th>

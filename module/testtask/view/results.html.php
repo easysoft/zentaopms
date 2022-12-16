@@ -45,7 +45,11 @@
         <tr class='result-item' data-id='<?php echo $result->id?>' data-status='<?php echo $result->node > 0 && empty($result->ZTFResult) ? 'running': 'ready';?>' id='result-<?php echo $class?>' style='cursor: pointer'>
           <td class='w-120px'> &nbsp; #<?php echo $result->id?></td>
           <td class='w-180px'><?php echo $result->date;?></td>
-          <td><?php echo zget($users, $result->lastRunner) . ' ' . $lang->testtask->runCase . ($result->node > 0 && empty($result->ZTFResult) ? sprintf($lang->testtask->runNode, $result->nodeName):'') . ($result->node > 0 ? "&nbsp;&nbsp;<span class=\"label label-badge\">{$lang->testtask->auto}</span>" : "");?></td>
+          <?php if($result->node > 0):?>
+          <td><?php echo sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName) . "&nbsp;&nbsp;<span class=\"label label-badge\">{$lang->testtask->auto}</span>";?></td>
+          <?php else:?>
+          <td><?php echo zget($users, $result->lastRunner) . ' ' . $lang->testtask->runCase;?></td>
+          <?php endif;?>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
           <td class='w-50px text-right'>
             <?php if($result->node == 0 || !empty($result->ZTFResult)):?>
