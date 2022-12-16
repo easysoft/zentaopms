@@ -41,6 +41,7 @@ $lang->zahost->initNotice          = '保存成功，请您初始化宿主机或
 $lang->zahost->createZanodeNotice  = '初始化成功，您现在可以创建执行节点了。';
 $lang->zahost->downloadImageNotice = '初始化成功，请下载镜像用于创建执行节点。';
 $lang->zahost->undeletedNotice     = "宿主机下存在执行节点无法删除。";
+$lang->zahost->uninitNotice        = '请先初始化宿主机';
 $lang->zahost->netError            = '无法连接到宿主机，请检查网络后重试。';
 
 $lang->zahost->init = new stdclass;

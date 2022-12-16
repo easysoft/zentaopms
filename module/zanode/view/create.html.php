@@ -23,11 +23,11 @@
           <tr>
             <th><?php echo $lang->zanode->hostName;?></th>
             <td><?php echo html::select('parent', $hostPairs, '', "class='form-control chosen'")?></td>
+            <td></td>
           </tr>
           <tr>
             <th class='w-120px'><?php echo $lang->zanode->name;?></th>
             <td class='p-25f'><?php echo html::input('name', '', "class='form-control' placeholder=\"{$lang->zanode->nameValid}\"");?></td>
-            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->zanode->image;?></th>
@@ -67,7 +67,7 @@
             <td></td>
           </tr>
           <tr>
-            <td colspan="2" class='text-center form-actions'>
+            <td colspan="3" class='text-center form-actions'>
               <?php echo html::submitButton();?>
               <?php echo html::a(inlink('browse'), $lang->goback, '', "class='btn btn-wide btn-back'");?>
             </td>
