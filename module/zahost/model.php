@@ -475,13 +475,23 @@ class zahostModel extends model
             $query = $this->session->zahostQuery;
         }
 
-        return $this->dao->select('*,id as hostID')->from(TABLE_ZAHOST)
+        $list = $this->dao->select('*,id as hostID')->from(TABLE_ZAHOST)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('zahost')
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+        
+        foreach($list as $host)
+        {
+            if(time() - strtotime($host->heartbeat) > 120 && $host->status == 'online')
+            {
+                $host->status = 'offline';
+            }
+        }
+
+        return $list;
     }
 
     /**

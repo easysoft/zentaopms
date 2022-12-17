@@ -67,7 +67,7 @@
             <td></td>
           </tr>
           <tr>
-            <td colspan='2' class='text-center form-actions'>
+            <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
               <?php echo html::backButton();?>
               <?php echo html::hidden('type', 'za');?>

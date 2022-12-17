@@ -98,9 +98,12 @@ $lang->zahost->image->cancelDownloadSuccess = 'Successed to cancel image task';
 
 $lang->zahost->empty         = 'No Host';
 
-$lang->zahost->statusList['wait']   = 'Wait';
-$lang->zahost->statusList['ready']  = 'Ready';
-$lang->zahost->statusList['online'] = 'Online';
+$lang->zahost->statusList['wait']    = 'Wait';
+$lang->zahost->statusList['ready']   = 'Online';
+$lang->zahost->statusList['online']  = 'Online';
+$lang->zahost->statusList['online']  = 'Online';
+$lang->zahost->statusList['offline'] = 'Offline';
+$lang->zahost->statusList['busy']    = 'Busy';
 
 $lang->zahost->vsoft = 'VM Software';
 $lang->zahost->softwareList['kvm'] = 'KVM';
