@@ -268,10 +268,23 @@ class zahost extends control
         $imageList = $this->zahost->getImageList($hostID);
         foreach($imageList as $image)
         {
-            $image = $this->zahost->queryDownloadImageStatus($image);
+            $image      = $this->zahost->queryDownloadImageStatus($image);
             $statusName = zget($this->lang->zahost->image->statusList, $image->status,'');
 
-            $statusList[$image->id] = array('statusCode' => $image->status, 'status' => $statusName, 'progress' => $image->status == 'inprogress' ? $image->rate * 100 . '%' : '');
+            if($image->status == 'inprogress')
+            {
+                 $status = $image->rate * 100 . '%';
+            }
+            elseif($image->status == 'completed')
+            {
+                $status = '100%';
+            }
+            else
+            {
+                $status = '';
+            }
+
+            $statusList[$image->id] = array('statusCode' => $image->status, 'status' => $statusName, 'progress' => $status, 'path' => $image->path);
         }
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $statusList));

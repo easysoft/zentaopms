@@ -29,6 +29,7 @@ function updateProgress() {
                 }
                  else if (statusList[imageID].statusCode == 'completed')
                  {
+                    $('.image-path-' + imageID).text(statusList[imageID].path);
                     $('.image-download-' + imageID).addClass('disabled');
                     $('.image-cancel-' + imageID).addClass('disabled');
                     $('.image-cancel-' + imageID).attr('href', '#');

@@ -13,7 +13,7 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::set('hostID', $hostID);?>
 <div id='mainMenu' class='clearfix'>
-  <div class='pull-left btn-toolbar main-header'>
+  <div class='pull-left btn-toolbar main-header main-header-image'>
     <?php echo isonlybody() ? ('<h2><span title="' . $lang->zahost->image->browseImage . '">' . $lang->zahost->image->browseImage . '</span></h2>') : html::a($this->createLink('zahost', 'browseimage', "hostID=$hostID"), "<span class='text'>{$lang->zahost->image->browseImage}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
 </div>
@@ -44,7 +44,7 @@
         <td title="<?php echo $image->name;?>"><?php echo $image->name;?></td>
         <td><?php echo $image->osName;?></td>
         <td class='image-status-<?php echo zget($image, 'id', 0);?>'><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>
-        <td><?php echo $image->status == 'completed' ? zget($image, 'path', '') : '';?></td>
+        <td class='image-path-<?php echo zget($image, 'id', 0);?>'><?php echo $image->status == 'completed' ? zget($image, 'path', '') : '';?></td>
         <td class="image-progress-<?php echo zget($image, 'id', 0);?>"><?php echo $image->status == 'completed' ? '100%' : '';?></td>
         <td class='c-actions'>
           <?php if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "hostID={$hostID}&imageID={$image->id}"), '<i class="icon-download"></i>', 'hiddenwin', zget($image, 'downloadMisc', ''));?>

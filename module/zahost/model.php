@@ -311,39 +311,48 @@ class zahostModel extends model
      */
     public function queryDownloadImageStatus($image)
     {
-        $host   = $this->getById($image->host);
-        $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/task/getStatus';
+        if(empty($this->imageStatusList))
+        {
+            $host   = $this->getById($image->host);
+            $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/task/getStatus';
+    
+            $this->imageStatusList = $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
+            if(!$result or $result->code != 'success') return $image->status;
+        }else{
+            $result = $this->imageStatusList;
+        }
 
-        $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
-        if(!$result or $result->code != 'success') return $image->status;
-
+        $currentTask = null;
         foreach($result->data as $status => $group)
         {
-            $currentTask = null;
-            foreach($group as $host)
+            foreach($group as $task)
             {
-                if($host->task == $image->id )
+                if($task->task == $image->id)
                 {
-                    $currentTask = $host;
-                    break;
+                    $task->endDate = substr($task->endDate, 0, 19);
+                    if(empty($currentTask) || strtotime($task->endDate) > strtotime($currentTask->endDate))
+                    {
+                        $currentTask = $task;
+                    }
                 }
             }
+        }
 
-            if($currentTask)
-            {
-                $image->rate   = $currentTask->rate;
-                $image->status = $status;
+        if($currentTask)
+        {
+            $image->rate   = $currentTask->rate;
+            $image->status = $currentTask->status;
 
-                $this->dao->update(TABLE_IMAGE)
-                    ->set('status')->eq($status)
-                    ->set('path')->eq(!empty($currentTask->path) ? $currentTask->path : '')
-                    ->where('id')->eq($image->id)->exec();
+            $this->dao->update(TABLE_IMAGE)
+                ->set('status')->eq($image->status)
+                ->set('path')->eq(!empty($currentTask->path) ? $currentTask->path : '')
+                ->where('id')->eq($image->id)->exec();
 
-                $image->taskID = $currentTask->id;
-                break;
-            }else{
-                $image->taskID = 0;
-            }
+            $image->taskID = $currentTask->id;
+        }
+        else
+        {
+            $image->taskID = 0;
         }
 
         return $image;

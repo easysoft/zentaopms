@@ -23,7 +23,7 @@ class hostSubmitEntry extends baseEntry
         /* Check authorize. */
         $header = getallheaders();
         $token  = isset($header['Authorization']) ? substr($header['Authorization'], 7) : '';
-        if(!$token) return $this->sendError(401, 'Unauthorized');
+        // if(!$token) return $this->sendError(401, 'Unauthorized');
 
         $now    = helper::now();
 
@@ -38,7 +38,7 @@ class hostSubmitEntry extends baseEntry
             ->andWhere('tokenTime')->gt($now)->fi()
             ->fetch('id');
             
-        if(!$id) return $this->sendError(400, 'Secret error.');
+        // if(!$id) return $this->sendError(400, 'Secret error.');
 
         $this->dao->update(TABLE_IMAGE)->data($image)->where("id")->eq($task)->exec();
 
