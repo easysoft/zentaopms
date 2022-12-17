@@ -12,10 +12,9 @@
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::set('hostID', $hostID);?>
-<?php js::set('downloadLink', $hostID);?>
 <div id='mainMenu' class='clearfix'>
-  <div class='pull-left btn-toolbar'>
-    <?php echo isonlybody() ? ('<span title="' . $lang->zahost->image->browseImage . '">' . $lang->zahost->image->browseImage . '</span>') : html::a($this->createLink('zahost', 'browseimage', "hostID=$hostID"), "<span class='text'>{$lang->zahost->image->browseImage}</span>", '', "class='btn btn-link btn-active-text'");?>
+  <div class='pull-left btn-toolbar main-header'>
+    <?php echo isonlybody() ? ('<h2><span title="' . $lang->zahost->image->browseImage . '">' . $lang->zahost->image->browseImage . '</span></h2>') : html::a($this->createLink('zahost', 'browseimage', "hostID=$hostID"), "<span class='text'>{$lang->zahost->image->browseImage}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
 </div>
 <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>' data-module='vmTemplate'></div>
@@ -48,7 +47,7 @@
         <td><?php echo $image->status == 'completed' ? zget($image, 'path', '') : '';?></td>
         <td class="image-progress-<?php echo zget($image, 'id', 0);?>"><?php echo $image->status == 'completed' ? '100%' : '';?></td>
         <td class='c-actions'>
-          <?php if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "hostID={$hostID}&id={$image->id}&imageID={$image->id}"), '<i class="icon-download"></i>', 'hiddenwin', zget($image, 'downloadMisc', ''));?>
+          <?php if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "hostID={$hostID}&imageID={$image->id}"), '<i class="icon-download"></i>', 'hiddenwin', zget($image, 'downloadMisc', ''));?>
           <?php if(common::hasPriv('zahost', 'cancelDownload')) echo html::a($this->createLink('zahost', 'cancelDownload', "id={$image->id}"), '<i class="icon-close"></i>', 'hiddenwin', zget($image, 'cancelMisc', ''));?>
         </td>
       </tr>

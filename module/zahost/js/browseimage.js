@@ -35,7 +35,9 @@ function updateProgress() {
                 }
                 else
                 {
+                    var link = createLink('zahost', 'downloadImage', "hostID="+hostID+"&imageID="+imageID);
                     $('.image-download-' + imageID).removeClass('disabled');
+                    $('.image-download-' + imageID).attr('href', link);
                     $('.image-cancel-' + imageID).addClass('disabled');
                     $('.image-cancel-' + imageID).attr('href', '#');
                     $('.image-progress-' + imageID).text('');
