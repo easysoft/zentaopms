@@ -37,7 +37,7 @@ class transferModel extends model
     }
 
     /**
-     * Commom Actions.
+     * Common Actions.
      *
      * @param  int    $model
      * @access public
