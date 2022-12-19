@@ -4,17 +4,15 @@
 .block-guide .tutorialBtn, .block-guide a.tutorialBtn:hover {color: #FFF; background: #FF9F46;}
 .block-guide .flowchart {padding: 20px 24px 20px 24px;}
 .block-guide .panel-body .table-row {height: 100%; border-top: 1px solid #EEE;}
-.block-guide .col-nav {border-right: 1px solid #EBF2FB; width: 170px; padding: 0; background: #F3F6FA;}
+.block-guide .col-nav {border-right: 1px solid #EBF2FB; width: 130px; padding: 0;}
 .block-guide .nav-secondary > li {position: relative;}
 .block-guide .nav-secondary > li.active {background: #FFF;}
 .block-guide .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
 .block-guide .nav-secondary > li > a:hover {box-shadow: none;}
 .block-guide .nav-secondary > li > a:first-child {padding-right: 36px;}
 .block-guide .nav-secondary > li.active > a:first-child {color: #3C4353; background: transparent; box-shadow: none;}
-.block-guide .nav-secondary > li.active > a:first-child:before {content: ''; display: block; left: -1px; height: 100%; top: 0px; width: 2px; background: #2E7FFF; position: absolute;}
+.block-guide .nav-secondary > li.active > a:first-child:before {content: ''; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #2E7FFF; position: absolute;}
 .block-guide .nav-secondary > li > a > span.btn-view {position: absolute; top: 0; right: 0; bottom: 0; padding: 8px; width: 36px; text-align: center; opacity: 0;}
-.block-guide .nav-secondary > li a:hover {background: #FFF;}
-.block-guide .nav-secondary > li.active > a > span.btn-view,
 .block-guide .nav-secondary > li:hover > a > span.btn-view {opacity: 1;}
 .block-guide .nav-secondary > li.switch-icon {display: none;}
 .block-guide .tab-pane .app-client .menu,
