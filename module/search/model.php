@@ -978,6 +978,7 @@ class searchModel extends model
         $programs       = $this->app->user->view->programs;
         $projects       = $this->app->user->view->projects;
         $executions     = $this->app->user->view->sprints;
+        $ticketProducts = $this->loadModel('feedback')->getGrantProducts();
 
         $objectPairs = array();
         $total       = count($results);
@@ -992,7 +993,7 @@ class searchModel extends model
             $objectExecutions = array();
             if(!isset($this->config->objectTables[$objectType])) continue;
             $table = $this->config->objectTables[$objectType];
-            if(strpos(',bug,case,testcase,productplan,release,story,testtask,', ",$objectType,") !== false)
+            if(strpos(',bug,case,testcase,productplan,release,story,testtask,ticket,', ",$objectType,") !== false)
             {
                $objectProducts = $this->dao->select('id,product')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('product', 'id');
             }
@@ -1103,7 +1104,7 @@ class searchModel extends model
             foreach($objectProducts as $productID => $idList)
             {
                 if(empty($productID)) continue;
-                if(strpos(",$products,", ",$productID,") === false)
+                if(strpos(",$products,", ",$productID,") === false or ($objectType == 'ticket' and !isset($ticketProducts[$productID])))
                 {
                     foreach($idList as $object)
                     {
