@@ -99,7 +99,7 @@ $(function()
                 </ul>
               </nav>
               <div class="pull-left col-md-9 text-center client-desc">
-                <?php echo html::image($config->webRoot . 'theme/default/images/guide/client_cn.png');?>
+                <?php echo html::image($config->webRoot . 'theme/default/images/guide/' . (common::checkNotCN() ? 'client_en.png' : 'client_cn.png'));?>
               </div>
             </div>
           </div>
