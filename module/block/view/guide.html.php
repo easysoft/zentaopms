@@ -66,6 +66,7 @@ $(function()
         <?php foreach($lang->block->guideTabs as $tab => $tabName):?>
         <?php if(strpos($tab, 'download') !== false and (!isset($config->xxserver->installed) or !$config->xuanxuan->turnon)) continue;?>
         <?php if($tab == 'downloadMoblie' and common::checkNotCN()) continue;?>
+        <?php if(($tab == 'preference' or $tab == 'systemMode') and $this->config->vision == 'lite') continue;?>
         <li <?php if($tab == 'flowchart') echo "class='active'";?> id="<?php echo $tab;?>">
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>
