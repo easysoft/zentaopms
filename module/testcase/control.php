@@ -2364,7 +2364,9 @@ class testcase extends control
      */
     public function showScript($caseID)
     {
-        $this->view->case = $this->testcase->getByID($caseID);
+        $case = $this->testcase->getByID($caseID);
+        if($case) $case->script = html_entity_decode($case->script);
+        $this->view->case = $case;
         $this->display();
     }
 
@@ -2390,7 +2392,10 @@ class testcase extends control
             $nodeID = $_POST['node'];
             $node   = $this->zanode->getNodeByID($_POST['node']);
 
-            return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+            $locatelink = $this->createLink('testcase', 'browse', "productID={$_POST['product']}");
+            $locatelink = str_replace('?onlybody=yes', '', $locatelink);
+
+            return print(js::locate($locatelink, 'parent.parent'));
         }
 
         $this->view->title      = $this->lang->zanode->automation;

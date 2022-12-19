@@ -66,8 +66,8 @@ $lang->zahost->init->initDesc       = "- 在宿主机上执行命令：curl -sSL
 $lang->zahost->init->statusTitle    = "服务状态";
 
 $lang->zahost->image = new stdclass;
-$lang->zahost->image->list          = '镜像仓库';
-$lang->zahost->image->browseImage   = '镜像仓库';
+$lang->zahost->image->list          = '镜像列表';
+$lang->zahost->image->browseImage   = '镜像列表';
 $lang->zahost->image->createImage   = '创建镜像';
 $lang->zahost->image->choseImage    = '选择镜像';
 $lang->zahost->image->downloadImage = '下载镜像';

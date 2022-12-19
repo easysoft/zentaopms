@@ -69,14 +69,14 @@
           <td class="status-<?php echo $host->status;?>"><?php echo zget($lang->host->statusList, $host->status);?></td>
           <td><?php echo helper::isZeroDate($host->heartbeat) ? '' : $host->heartbeat;?></td>
           <td class='c-actions'>
-            <?php $disabled = !empty($nodeList[$host->hostID]) ? 'disabled' : '';?>
-            <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->undeletedNotice : $lang->zahost->delete;?>
-            <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
-            <?php echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
             <?php $disabled = ($host->status == 'wait') ? 'disabled' : '';?>
             <?php $title    = ($host->status == 'wait') ? $lang->zahost->uninitNotice: $lang->zahost->image->list;?>
             <?php common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'snap-house', '', "iframe $disabled", true, "data-width='60%'", $title);?>
+            <?php $disabled = !empty($nodeList[$host->hostID]) ? 'disabled' : '';?>
+            <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->undeletedNotice : $lang->zahost->delete;?>
+            <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
             <?php common::printIcon('zahost', 'init', "hostID={$host->hostID}", $host, 'list', 'refresh', '', ' init', false, "data-placement='bottom'", $lang->zahost->init->title);?>
+            <?php echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
           </td>
         </tr>
         <?php endforeach;?>
