@@ -171,21 +171,27 @@ class story extends control
 
             /* Record submit review action. */
             $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
-            if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
+            if($story->status == 'reviewing')
+            {
+                foreach($storyIds as $idItem) $this->action->create('story', $idItem, 'submitReview');
+            }
 
             if($objectID != 0)
             {
                 $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
                 if($object->type != 'project')
                 {
-                    $this->action->create('story', $storyID, 'linked2project', '', $object->project);
+                    foreach($storyIds as $idItem)
+                    {
+                        $this->action->create('story', $idItem, 'linked2project', '', $object->project);
 
-                    $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
-                    if($object->multiple) $this->action->create('story', $storyID, $actionType, '', $objectID);
+                        $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
+                        if($object->multiple) $this->action->create('story', $idItem, $actionType, '', $objectID);
+                    }
                 }
                 else
                 {
-                    $this->action->create('story', $storyID, 'linked2project', '', $objectID);
+                    foreach($storyIds as $idItem) $this->action->create('story', $idItem, 'linked2project', '', $objectID);
                 }
             }
 

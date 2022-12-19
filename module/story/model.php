@@ -6507,7 +6507,7 @@ class storyModel extends model
             $fieldName  = $changeInfo['field'];
             $fieldValue = $changeInfo['new'];
 
-            if(strpos('product,branch,module,plan,spec,verify,files,reviewers', $fieldName) !== false) continue;
+            if(strpos('product,branch,module,plan,stage,stagedBy,spec,verify,files,reviewers', $fieldName) !== false) continue;
             $syncFieldList[$fieldName] = $fieldValue;
         }
 
