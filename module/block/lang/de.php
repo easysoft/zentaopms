@@ -574,7 +574,7 @@ $lang->block->flowchart['dev']     = array('Entwickler', 'Aufgabe/Bugs anfordern
 $lang->block->flowchart['tester']  = array('QS Team', 'Fälle erstellen', 'Fälle ausführen', 'Bug Berichte', 'Bugs überprüfen', 'Bugs schließen');
 
 $lang->block->zentaoapp = new stdclass();
-$lang->block->zentaoapp->commom               = 'Zentao App';
+$lang->block->zentaoapp->commom               = 'ZenTao App';
 $lang->block->zentaoapp->thisYearInvestment   = 'Investment The Year';
 $lang->block->zentaoapp->sinceTotalInvestment = 'Total Investment';
 $lang->block->zentaoapp->myStory              = 'My Story';
@@ -596,6 +596,15 @@ $lang->block->zentaoapp->incompatibleVersion  = 'The current version of ZenTao i
 $lang->block->zentaoapp->canNotGetVersion     = 'Failed to get ZenTao version, please confirm if the URL is correct';
 $lang->block->zentaoapp->desc                 = 'ZenTao mobile app provides you with a mobile work environment, which is convenient for managing personal to-do tasks at any time, tracking project progress, and enhancing the flexibility and agility of project management.';
 $lang->block->zentaoapp->downloadTip          = 'Scan QR code to download';
+
+$lang->block->zentaoclient = new stdClass();
+$lang->block->zentaoclient->common = 'ZenTao Client';
+$lang->block->zentaoclient->desc   = 'You can directly use ZenTao through the ZenTao desktop client without frequently switching browsers. In addition, the ZenTao client also provides functions such as chat, information notification, robot, and embedding Zen Tao applet, which makes teamwork more convenient.';
+
+$lang->block->zentaoclient->edition = new stdclass();
+$lang->block->zentaoclient->edition->win64   = 'Windows';
+$lang->block->zentaoclient->edition->linux64 = 'Linux';
+$lang->block->zentaoclient->edition->mac64   = 'Mac OS';
 
 $lang->block->guideTabs['flowchart']      = 'Flowchart';
 $lang->block->guideTabs['systemMode']     = 'Operating Modes';

@@ -574,7 +574,7 @@ $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug',
 $lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');
 
 $lang->block->zentaoapp = new stdclass();
-$lang->block->zentaoapp->commom               = '禅道移动端';
+$lang->block->zentaoapp->common               = '禅道移动端';
 $lang->block->zentaoapp->thisYearInvestment   = '今年投入';
 $lang->block->zentaoapp->sinceTotalInvestment = '从使用至今，总投入';
 $lang->block->zentaoapp->myStory              = '我的需求';
@@ -596,6 +596,15 @@ $lang->block->zentaoapp->incompatibleVersion  = '当前禅道版本较低，请�
 $lang->block->zentaoapp->canNotGetVersion     = '获取禅道版本失败，请确认网址是否正确';
 $lang->block->zentaoapp->desc                 = '禅道移动端为您提供移动办公的环境，方便随时管理个人待办事务，跟进项目进度，增强了项目管理的灵活性和敏捷性。';
 $lang->block->zentaoapp->downloadTip          = '扫描二维码下载';
+
+$lang->block->zentaoclient = new stdClass();
+$lang->block->zentaoclient->common = '禅道客户端';
+$lang->block->zentaoclient->desc   = '您可以使用禅道桌面客户端直接使用禅道，无需频繁切换浏览器。除此之外客户端还提供了聊天、消息通知、机器人、内嵌禅道小程序等功能，团队协作更方便快捷。';
+
+$lang->block->zentaoclient->edition = new stdclass();
+$lang->block->zentaoclient->edition->win64   = 'Windows版';
+$lang->block->zentaoclient->edition->linux64 = 'Linux版';
+$lang->block->zentaoclient->edition->mac64   = 'Mac版';
 
 $lang->block->guideTabs['flowchart']      = '流程图';
 $lang->block->guideTabs['systemMode']     = '运行模式';

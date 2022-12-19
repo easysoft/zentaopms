@@ -17,6 +17,13 @@
 .block-guide .nav-secondary > li.active > a > span.btn-view,
 .block-guide .nav-secondary > li:hover > a > span.btn-view {opacity: 1;}
 .block-guide .nav-secondary > li.switch-icon {display: none;}
+.block-guide .tab-pane .app-client .menu,
+.block-guide .tab-pane .app-client .tree-menu li {padding-left: 0;}
+.block-guide .tab-pane .app-client .tree-menu li {line-height: 56px; border-bottom: 1px solid #EDEEF2;}
+.block-guide .tab-pane .app-client .tree-menu li a.iframe {display: flex;}
+.block-guide .tab-pane .app-client .tree-menu li .avatar {background: #E6EAF1; width: 24px; height: 24px; margin-top: 16px; margin-right: 5px;}
+.block-guide .tab-pane .app-client .tree-menu li .avatar img {padding: 6px;}
+.block-guide .tab-pane .app-client .client-desc {padding-top: 12px;}
 .block-guide .tab-pane .app-qrcode {padding: 10px 20px;}
 .block-guide .tab-pane .app-qrcode .col-md-12 {padding-left: 0; padding-top: 10px;}
 .block-guide .tab-pane .app-qrcode .qrcode-down img {padding-top: 24px; width: 120px;}
@@ -58,6 +65,7 @@ $(function()
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <?php foreach($lang->block->guideTabs as $tab => $tabName):?>
         <?php if(strpos($tab, 'download') !== false and (!isset($config->xxserver->installed) or !$config->xuanxuan->turnon)) continue;?>
+        <?php if($tab == 'downloadMoblie' and common::checkNotCN()) continue;?>
         <li <?php if($tab == 'flowchart') echo "class='active'";?> id="<?php echo $tab;?>">
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>
@@ -77,11 +85,30 @@ $(function()
         <?php include 'themeswitch.html.php';?>
       </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}Contentpreference";?>'></div>
-      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadClient";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadClient";?>'>
+        <div class='table-row app-client'>
+          <div class="col-4">
+            <div class='col'><h4><?php echo $lang->block->zentaoclient->common;?></h4></div>
+            <div class="col dataTitle"><?php echo $lang->block->zentaoclient->desc;?></div>
+            <div class='col pull-left col-md-12'>
+              <nav class="menu pull-left col-md-3" data-ride="menu">
+                <ul class="tree tree-menu" data-ride="tree">
+                  <?php foreach($lang->block->zentaoclient->edition as $edition => $editionName):?>
+                  <li><?php echo html::a($this->createLink('misc', 'downloadClient', "action=getPackage&os=$edition", '', true), '<div class="avatar has-img avatar-circle">' . html::image($config->webRoot . "theme/default/images/guide/edition_{$edition}.png") . "</div> $editionName", '', 'class="iframe"');?></li>
+                  <?php endforeach;?>
+                </ul>
+              </nav>
+              <div class="pull-left col-md-9 text-center client-desc">
+                <?php echo html::image($config->webRoot . 'theme/default/images/guide/client_cn.png');?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadMoblie";?>'>
         <div class='table-row app-qrcode'>
           <div class="col-4">
-            <div class='col'><h4><?php echo $lang->block->zentaoapp->commom;?></h4></div>
+            <div class='col'><h4><?php echo $lang->block->zentaoapp->common;?></h4></div>
             <div class="col dataTitle"><?php echo $lang->block->zentaoapp->desc;?></div>
             <div class='col pull-left col-md-12'>
               <div class="pull-left col-md-7">
