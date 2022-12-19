@@ -72,10 +72,17 @@
             <?php $disabled = ($host->status == 'wait') ? 'disabled' : '';?>
             <?php $title    = ($host->status == 'wait') ? $lang->zahost->uninitNotice: $lang->zahost->image->browseImage;?>
             <?php common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'snap-house', '', "iframe $disabled", true, "data-width='60%'", $title);?>
+<<<<<<< HEAD
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
             <?php common::printIcon('zahost', 'init', "hostID={$host->hostID}", $host, 'list', 'refresh', '', ' init', false, "data-placement='bottom'", $lang->zahost->init->title);?>
             <?php $disabled = !empty($nodeList[$host->hostID]) ? 'disabled' : '';?>
             <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->undeletedNotice : $lang->zahost->delete;?>
+=======
+            <?php $disabled = !empty($nodeList[$host->hostID]) ? 'disabled' : '';?>
+            <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->undeletedNotice : $lang->zahost->delete;?>
+            <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
+            <?php common::printIcon('zahost', 'init', "hostID={$host->hostID}", $host, 'list', 'refresh', '', ' init', false, "data-placement='bottom'", $lang->zahost->init->title);?>
+>>>>>>> 6d20a680439abb95e8252d1ee346d3f94e9e9928
             <?php echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
           </td>
         </tr>

@@ -68,6 +68,10 @@ $lang->zahost->init->initDesc       = "- 在宿主机上执行命令：%s %s <br
 $lang->zahost->init->statusTitle    = "服务状态";
 
 $lang->zahost->image = new stdclass;
+<<<<<<< HEAD
+=======
+$lang->zahost->image->list          = '镜像列表';
+>>>>>>> 6d20a680439abb95e8252d1ee346d3f94e9e9928
 $lang->zahost->image->browseImage   = '镜像列表';
 $lang->zahost->image->createImage   = '创建镜像';
 $lang->zahost->image->choseImage    = '选择镜像';
@@ -84,11 +88,11 @@ $lang->zahost->image->os         = $lang->zahost->os;
 $lang->zahost->image->imageName  = $lang->zahost->imageName;
 $lang->zahost->image->progress   = '下载进度';
 
-$lang->zahost->image->statusList['notDownloaded'] = '待下载';
+$lang->zahost->image->statusList['notDownloaded'] = '可下载';
 $lang->zahost->image->statusList['created']       = '下载中';
-$lang->zahost->image->statusList['canceled']      = '待下载';
+$lang->zahost->image->statusList['canceled']      = '可下载';
 $lang->zahost->image->statusList['inprogress']    = '下载中';
-$lang->zahost->image->statusList['completed']     = '已下载';
+$lang->zahost->image->statusList['completed']     = '可使用';
 $lang->zahost->image->statusList['failed']        = '下载失败';
 
 $lang->zahost->image->imageEmpty           = '无镜像';
