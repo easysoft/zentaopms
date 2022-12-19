@@ -35,5 +35,5 @@
 .block-sm .row-3 .flow-item-1, .block-sm .row-3 .flow-item-3 {width: 25%}
 .block-sm .flow-item > div:after {right: -6px;}
 
-.flow-item-display {overflow: hidden; white-space:nowrap; text-overflow: clip;}
+.flow-item-display {overflow: hidden; white-space:nowrap; text-overflow: clip; font-size: 12px;}
 </style>
