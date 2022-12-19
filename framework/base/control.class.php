@@ -375,7 +375,7 @@ class baseControl
 
     /**
      * 如果客户端是手机的话，视图文件增加m.前缀。
-     * If the clent is mobile, add m. as prefix for view file.
+     * If the client is mobile, add m. as prefix for view file.
      *
      * @access public
      * @return void

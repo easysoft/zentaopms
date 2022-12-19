@@ -1081,7 +1081,7 @@ class baseRouter
     }
 
     /**
-     * 从HTTP_ACCEPT_LANGUAGE中提出去支持的语言。
+     * 从HTTP_ACCEPT_LANGUAGE中剔除去支持的语言。
      * Parse the lang str from HTTP_ACCEPT_LANGUAGE header.
      *
      * @access public
