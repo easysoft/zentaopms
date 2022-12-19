@@ -344,7 +344,7 @@ class myModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t1.id')->in(array_keys($objectIDList))
                 ->orderBy($orderBy)
-                ->page($pager)
+                ->page($pager, 't1.id')
                 ->fetchAll('id');
         }
         elseif($objectType == 'requirement' or $objectType == 'story' or $objectType == 'bug')
