@@ -23,3 +23,25 @@ $('#checkServiceStatus').click(function(){
     });
     return
 })
+
+$('.btn-init-copy').live('click', function()
+{
+    var copyText = $('#initBash');
+    copyText.show();
+    copyText .select();
+    document.execCommand("Copy");
+    copyText.hide();
+    $('.btn-init-copy').tooltip({
+        trigger: 'click',
+        placement: 'bottom',
+        title: zahostLang.copied,
+        tipClass: 'tooltip-success'
+    });
+
+    $(this).tooltip('show');
+    var that = this;
+    setTimeout(function()
+    {
+        $(that).tooltip('hide')
+    }, 2000)
+})

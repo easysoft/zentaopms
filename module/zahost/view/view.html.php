@@ -57,7 +57,7 @@
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zahost->vsoft;?>:</div>
-                <div class="col-8"><?php echo $zahost->vsoft;?></div>
+                <div class="col-8"><?php echo zget($lang->zahost->softwareList, $zahost->vsoft);?></div>
               </div>
             </div>
             <div class="col-4">

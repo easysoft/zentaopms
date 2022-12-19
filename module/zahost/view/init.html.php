@@ -26,7 +26,8 @@
         <div>
           <span class='dot-symbol'></span>
           <span class='zahost-init-desc'>
-            <?php echo sprintf($lang->zahost->init->initDesc, $host->secret, getWebRoot(true)); ?>
+            <textarea style="display:none;" id="initBash"><?php echo $initBash; ?></textarea>
+            <?php echo sprintf($lang->zahost->init->initDesc, $initBash, "<button type='button' class='btn btn-info btn-mini btn-init-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zahost->copy .  "'></i></button>"); ?>
           </span>
         </div>
         <div id="statusContainer">

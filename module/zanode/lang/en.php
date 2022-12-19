@@ -45,6 +45,8 @@ $lang->zanode->scriptPath      = "Script path";
 $lang->zanode->shell           = "Shell";
 $lang->zanode->automation      = "Automation";
 $lang->zanode->install         = "Install";
+$lang->zanode->copy            = 'Click to copy';
+$lang->zanode->copied          = 'Copy successful';
 
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
@@ -107,4 +109,4 @@ $lang->zanode->init->serviceStatus = [
 ];
 $lang->zanode->init->title          = "Initialize Node";
 $lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
-$lang->zanode->init->initDesc       = "Execute the init script on the node: curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -szvm -z%s   <br>- Click check service status button.";
+$lang->zanode->init->initDesc       = "Execute the init script on the node: %s %s   <br>- Click check service status button.";

@@ -140,6 +140,7 @@ class zanode extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->nodeID     = $nodeID;
         $this->view->node       = $this->zanode->getNodeById($nodeID);
+        $this->view->initBash   = sprintf($this->config->zanode->initBash, getWebRoot(true));
         $this->view->notice     = $this->lang->zanode->init->initSuccessNoticeTitle;
         $this->view->buttonName = $this->lang->zanode->init->button;
         $this->view->modalLink  = $this->createLink('testcase', 'automation', 0, '', true);

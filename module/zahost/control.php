@@ -202,7 +202,7 @@ class zahost extends control
 
         $imageList = $this->zahost->getImageList($hostID, $browseType, $param, $orderBy, $pager);
 
-        $this->view->title      = $this->lang->zahost->image->list;
+        $this->view->title      = $this->lang->zahost->image->browseImage;
         $this->view->hostID     = $hostID;
         $this->view->imageList  = $imageList;
         $this->view->pager      = $pager;
@@ -246,7 +246,6 @@ class zahost extends control
     public function downloadImage($hostID, $imageID)
     {
         $image = $this->zahost->getImageByID($imageID);
-
         $this->zahost->downloadImage($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
@@ -343,6 +342,7 @@ class zahost extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->hostID     = $hostID;
         $this->view->host       = $this->zahost->getById($hostID);
+        $this->view->initBash   = sprintf($this->config->zahost->initBash, $this->view->host->secret, getWebRoot(true));
         $this->view->notice     = $imageList ? $this->lang->zahost->createZanodeNotice : $this->lang->zahost->downloadImageNotice;
         $this->view->buttonName = $imageList ? $this->lang->zahost->createZanode : $this->lang->zahost->image->downloadImage;
         $this->view->modalLink  = $imageList ? $this->createLink('zanode', 'create', "hostID=$hostID") : $this->createLink('zahost', 'browseImage', "hostID=$hostID");

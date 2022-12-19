@@ -8,6 +8,8 @@ $config->zanode->createimage->requiredFields = 'name';
 
 $config->zanode->defaultPort = '55001';
 
+$config->zanode->initBash = 'curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -szvm -z%s';
+
 $config->zanode->os = new stdClass();
 
 $config->zanode->os->cpuCores = array();

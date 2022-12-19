@@ -43,7 +43,7 @@
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right">IP:</div>
-                <div class="col-8"><?php echo $zanode->extranet; ?></div>
+                <div class="col-8"><?php echo $zanode->ip; ?></div>
               </div>
             </div>
             <div class="col-4">

@@ -44,3 +44,25 @@ $('#statusContainer').on('click', '.node-init-install', function(){
         $('#checkServiceStatus').trigger("click")
     })
 })
+
+$('.btn-init-copy').live('click', function()
+{
+    var copyText = $('#initBash');
+    copyText.show();
+    copyText .select();
+    document.execCommand("Copy");
+    copyText.hide();
+    $('.btn-init-copy').tooltip({
+        trigger: 'click',
+        placement: 'bottom',
+        title: zanodeLang.copied,
+        tipClass: 'tooltip-success'
+    });
+
+    $(this).tooltip('show');
+    var that = this;
+    setTimeout(function()
+    {
+        $(that).tooltip('hide')
+    }, 2000)
+})

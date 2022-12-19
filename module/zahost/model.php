@@ -485,7 +485,7 @@ class zahostModel extends model
         
         foreach($list as $host)
         {
-            if(time() - strtotime($host->heartbeat) > 120 && $host->status == 'online')
+            if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
             {
                 $host->status = 'offline';
             }

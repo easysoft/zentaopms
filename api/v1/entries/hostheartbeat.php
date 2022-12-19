@@ -68,18 +68,19 @@ class hostHeartbeatEntry extends baseEntry
         {
             foreach($vms as $vm)
             {
-                if(!empty($vm->vncPortOnHost))
-                {
-                    $this->dao->update(TABLE_ZAHOST)
-                        ->set('vnc')->eq($vm->vncPortOnHost)
-                        ->set('zap')->eq($vm->agentPortOnHost)
-                        ->set('ztf')->eq($vm->ztfPortOnHost)
-                        ->set('zd')->eq($vm->zdPortOnHost)
-                        ->set('ssh')->eq($vm->sshPortOnHost)
-                        ->set('status')->eq($vm->status)
-                        ->set('extranet')->eq($vm->ip)
-                        ->where('mac')->eq($vm->macAddress)->exec();
-                }
+                $heartbeat = strtotime(substr($vm->heartbeat, 0, 19));
+                $vmData = array(
+                    'vnc'       => $vm->vncPortOnHost,
+                    'zap'       => $vm->agentPortOnHost,
+                    'ztf'       => $vm->ztfPortOnHost,
+                    'zd'        => $vm->zdPortOnHost,
+                    'ssh'       => $vm->sshPortOnHost,
+                    'status'    => $vm->status,
+                    'extranet'  => $vm->ip,
+                );
+                if($heartbeat > 0) $vmData['heartbeat'] = date("Y-m-d H:i:s", $heartbeat);
+                
+                $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('mac')->eq($vm->macAddress)->exec();
             }
         }
 

@@ -14,6 +14,8 @@ $lang->zahost->byQuery        = '搜索';
 $lang->zahost->all            = '全部主机';
 $lang->zahost->browseNode     = '执行节点列表';
 $lang->zahost->deleted        = "已删除";
+$lang->zahost->copy           = '复制';
+$lang->zahost->copied         = '复制成功';
 
 $lang->zahost->name        = '名称';
 $lang->zahost->IP          = 'IP/域名';
@@ -62,12 +64,11 @@ $lang->zahost->init->serviceStatus = [
 ];
 $lang->zahost->init->title          = "初始化宿主机";
 $lang->zahost->init->descTitle      = "请根据引导完成宿主机上的初始化: ";
-$lang->zahost->init->initDesc       = "- 在宿主机上执行命令：curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -k%s -z%s  <br>- 点击检测服务状态。";
+$lang->zahost->init->initDesc       = "- 在宿主机上执行命令：%s %s <br>- 点击检测服务状态。";
 $lang->zahost->init->statusTitle    = "服务状态";
 
 $lang->zahost->image = new stdclass;
-$lang->zahost->image->list          = '镜像仓库';
-$lang->zahost->image->browseImage   = '镜像仓库';
+$lang->zahost->image->browseImage   = '镜像列表';
 $lang->zahost->image->createImage   = '创建镜像';
 $lang->zahost->image->choseImage    = '选择镜像';
 $lang->zahost->image->downloadImage = '下载镜像';

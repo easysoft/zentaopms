@@ -14,6 +14,8 @@ $lang->zahost->byQuery        = 'Search';
 $lang->zahost->all            = 'All';
 $lang->zahost->browseNode     = 'ZAnode Browse';
 $lang->zahost->deleted        = "Deleted";
+$lang->zahost->copy           = 'Click to copy';
+$lang->zahost->copied         = 'Copy successful';
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'Extranet Address';
@@ -68,7 +70,6 @@ $lang->zahost->init->initDesc    = "Execute the init script on the host: bash <(
 $lang->zahost->init->statusTitle = "Service Status";
 
 $lang->zahost->image = new stdclass;
-$lang->zahost->image->list          = 'Image List';
 $lang->zahost->image->browseImage   = 'Image List';
 $lang->zahost->image->createImage   = 'Create Image';
 $lang->zahost->image->choseImage    = 'Select Image';
