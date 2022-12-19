@@ -155,7 +155,7 @@ zentaoxx:
 	sed -i "s/\$$this->im->userGetChangedPassword()/array()/" zentaoxx/extension/xuan/im/control.php
 	sed -i "/.*->getAllDepts();/d" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/lang->user->status/lang->user->clientStatus/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
-	sed -i "s/.*->getRoleList();/"s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/"/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
+	sed -i "s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	cp tools/en2other.php zentaoxx/tools; cd zentaoxx/tools; php en2other.php ../
