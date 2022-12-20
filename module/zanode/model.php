@@ -344,7 +344,7 @@ class zanodemodel extends model
                     continue;
                 }
 
-                if($host->status != self::STATUS_RUNNING || time() - strtotime($host->heartbeat) > 60)
+                if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60)
                 {
                     $l->status = self::STATUS_SHUTOFF;
                     continue;
@@ -413,7 +413,7 @@ class zanodemodel extends model
         {
             if($node->status == 'running' || $node->status == 'ready')
             {
-                if(empty($host) || $host->status != self::STATUS_RUNNING)
+                if(empty($host) || $host->status != 'online')
                 {
                     $node->status = self::STATUS_SHUTOFF;
                 }
@@ -523,7 +523,7 @@ class zanodemodel extends model
         $host = $this->loadModel("zahost")->getByID($node->parent);
         if($node->status == 'running' || $node->status == 'ready')
         {
-            if(empty($host) || $host->status != self::STATUS_RUNNING)
+            if(empty($host) || $host->status != 'online')
             {
                 $node->status = self::STATUS_SHUTOFF;
             }
@@ -552,7 +552,7 @@ class zanodemodel extends model
         $host = $this->loadModel("zahost")->getByID($node->parent);
         if($node->status == 'running' || $node->status == 'ready')
         {
-            if(empty($host) || $host->status != self::STATUS_RUNNING)
+            if(empty($host) || $host->status != 'online')
             {
                 $node->status = self::STATUS_SHUTOFF;
             }
