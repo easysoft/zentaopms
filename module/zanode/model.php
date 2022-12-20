@@ -328,13 +328,31 @@ class zanodemodel extends model
             ->page($pager)
             ->fetchAll();
         
+        $hostIDList = array_column($list, 'parent');
+        $hosts = $this->dao->select('id,status,heartbeat')->from(TABLE_ZAHOST)
+        ->where('id')->in(array_unique($hostIDList))
+        ->fetchAll('id');
+        
         foreach($list as $l)
         {
+            $host = zget($hosts, $l->parent);
             if($l->status == 'running' || $l->status == 'ready')
             {
+                if(empty($host)) 
+                {
+                    $l->status = self::STATUS_SHUTOFF;
+                    continue;
+                }
+
+                if($host->status != self::STATUS_RUNNING || time() - strtotime($host->heartbeat) > 60)
+                {
+                    $l->status = self::STATUS_SHUTOFF;
+                    continue;
+                }
+
                 if(time() - strtotime($l->heartbeat) > 60)
                 {
-                    $l->status = 'launch';
+                    $l->status = self::STATUS_LAUNCH;
                 }
             }
         }
@@ -384,11 +402,29 @@ class zanodemodel extends model
      */
     public function getListByHost($hostID, $orderBy = 'id_desc')
     {
-        return $this->dao->select('id, name, vnc, cpuCores, memory, diskSize, osName, status')->from(TABLE_ZAHOST)
+        $list = $this->dao->select('id, name, vnc, cpuCores, memory, diskSize, osName, status')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)
             ->andWhere("parent")->eq($hostID)
             ->orderBy($orderBy)
             ->fetchAll();
+
+        $host = $this->loadModel("zahost")->getByID($hostID);
+        foreach($list as $node)
+        {
+            if($node->status == 'running' || $node->status == 'ready')
+            {
+                if(empty($host) || $host->status != self::STATUS_RUNNING)
+                {
+                    $node->status = self::STATUS_SHUTOFF;
+                }
+                elseif(time() - strtotime($node->heartbeat) > 60)
+                {
+                    $node->status = self::STATUS_LAUNCH;
+                }
+            }
+        }
+
+        return $list;
     }
 
 
@@ -477,12 +513,27 @@ class zanodemodel extends model
      */
     public function getNodeByID($id)
     {
-        return $this->dao->select('t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as tokenSN, t2.secret as secret')->from(TABLE_ZAHOST)
+        $node = $this->dao->select('t1.*, t2.name as hostName, t2.extranet as ip,t2.zap as hzap,t3.osName, t2.tokenSN as tokenSN, t2.secret as secret')->from(TABLE_ZAHOST)
             ->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
             ->fetch();
+
+        $host = $this->loadModel("zahost")->getByID($node->parent);
+        if($node->status == 'running' || $node->status == 'ready')
+        {
+            if(empty($host) || $host->status != self::STATUS_RUNNING)
+            {
+                $node->status = self::STATUS_SHUTOFF;
+            }
+            elseif(time() - strtotime($node->heartbeat) > 60)
+            {
+                $node->status = self::STATUS_LAUNCH;
+            }
+        }
+
+        return $node;
     }
 
     /**
@@ -493,10 +544,25 @@ class zanodemodel extends model
      */
     public function getNodeByMac($mac)
     {
-        return $this->dao->select('*')->from(TABLE_ZAHOST)
+        $node = $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
             ->andWhere("type")->eq('node')
             ->fetch();
+        
+        $host = $this->loadModel("zahost")->getByID($node->parent);
+        if($node->status == 'running' || $node->status == 'ready')
+        {
+            if(empty($host) || $host->status != self::STATUS_RUNNING)
+            {
+                $node->status = self::STATUS_SHUTOFF;
+            }
+            elseif(time() - strtotime($node->heartbeat) > 60)
+            {
+                $node->status = self::STATUS_LAUNCH;
+            }
+        }
+
+        return $node;
     }
 
     /**

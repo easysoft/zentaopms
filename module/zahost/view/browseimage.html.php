@@ -41,10 +41,11 @@
     <tbody>
       <?php foreach($imageList as $image):?>
       <tr>
+        <?php $path = $image->status == 'completed' ? zget($image, 'path', '') : '';?>
         <td title="<?php echo $image->name;?>"><?php echo $image->name;?></td>
         <td><?php echo $image->osName;?></td>
         <td class='image-status-<?php echo zget($image, 'id', 0);?>'><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>
-        <td class='image-path-<?php echo zget($image, 'id', 0);?>'><?php echo $image->status == 'completed' ? zget($image, 'path', '') : '';?></td>
+        <td title="<?php echo $path;?>" class='image-path-<?php echo zget($image, 'id', 0);?>'><?php echo $path?></td>
         <td class="image-progress-<?php echo zget($image, 'id', 0);?>"><?php echo $image->status == 'completed' ? '100%' : '';?></td>
         <td class='c-actions'>
           <?php if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "hostID={$hostID}&imageID={$image->id}"), '<i class="icon-download"></i>', 'hiddenwin', zget($image, 'downloadMisc', ''));?>

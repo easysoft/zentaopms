@@ -418,9 +418,16 @@ class zahostModel extends model
      */
     public function getById($hostID)
     {
-        return $this->dao->select('*,id as hostID')->from(TABLE_ZAHOST)
+        $host = $this->dao->select('*,id as hostID')->from(TABLE_ZAHOST)
             ->where('id')->eq($hostID)
             ->fetch();
+
+        if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
+        {
+            $host->status = 'offline';
+        }
+
+        return $host;
     }
 
     /**
