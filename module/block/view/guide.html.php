@@ -61,12 +61,18 @@ $(function()
             var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || 0;
             localStorage.setItem('visionPosition', scrollTop);
         }
+        else
+        {
+            localStorage.getItem('visionPosition') && localStorage.removeItem('visionPosition');
+        }
 
     })
-    if(localStorage.getItem('visionPosition'))
+    if(localStorage.getItem('visionPosition') && Number(localStorage.getItem('visionPosition')))
     {
+        var scrollTopNum = Number(localStorage.getItem('visionPosition'));
+        document.getElementById('guideBody').scrollTo = 0;
         $('#visionSwitch > a').click();
-        localStorage.removeItem('visionPosition');
+        window.scrollTo(0, scrollTopNum);
     }
     else
     {
@@ -74,14 +80,6 @@ $(function()
     }
 
 });
-
-window.onunload  = function () {
-    if(!localStorage.getItem('visionPosition'))
-    {
-        return;
-    }
-    document.getElementById('guideBody').scrollTo = Number(localStorage.getItem('visionPosition'));
-}
 </script>
 
 <div class="panel-body" id="guideBody">
