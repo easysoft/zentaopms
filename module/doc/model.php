@@ -306,6 +306,7 @@ class docModel extends model
                 if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
             }
         }
+        if($oldLib->acl != $lib->acl and $lib->acl == 'open') $lib->users = '';
 
         $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
         $this->dao->update(TABLE_DOCLIB)->data($lib)->autoCheck()
@@ -1528,6 +1529,7 @@ class docModel extends model
                     ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                     ->andWhere('t1.vision')->eq($this->config->vision)
                     ->andWhere('t1.deleted')->eq(0)
+                    ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                     ->fetchPairs();
             }
 

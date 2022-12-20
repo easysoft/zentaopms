@@ -2236,6 +2236,7 @@ class project extends control
         }
 
         $linkedBranches      = array();
+        $linkedBranchIdList  = array();
         $branches            = $this->project->getBranchesByProject($projectID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
         $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', $linkedProductIdList);
@@ -2253,6 +2254,7 @@ class project extends control
             foreach($branches[$productID] as $branchID => $branch)
             {
                 $linkedBranches[$productID][$branchID] = $branchID;
+                $linkedBranchIdList[$branchID] = $branchID;
 
                 if(!empty($projectStories[$productID][$branchID]) or !empty($projectBranches[$productID][$branchID]))
                 {
@@ -2263,7 +2265,7 @@ class project extends control
             }
         }
 
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed', $linkedBranchIdList);
         if($this->config->systemMode == 'ALM')
         {
             $topProgramID           = $project->parent ? $this->program->getTopByPath($project->path) : 0;

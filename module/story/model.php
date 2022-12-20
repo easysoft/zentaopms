@@ -866,6 +866,7 @@ class storyModel extends model
             {
                 $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
                 $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+                if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
             }
             elseif(!empty($oldStory->twins))
             {
@@ -2227,41 +2228,6 @@ class storyModel extends model
             if($this->session->currentProductType == 'normal') $story->plan = $planID;
             if(empty($oldPlanID)) $story->plan = $planID;
             if($oldStory->branch) $story->plan = $planID;
-
-            /* Append the plan id to plan field if product is multi and story is all branch. */
-            if($this->session->currentProductType != 'normal' and empty($story->branch))
-            {
-                $branchPlanPairs = $this->dao->select('branch, id as plan')->from(TABLE_PRODUCTPLAN)
-                    ->where('product')->eq($oldStory->product)
-                    ->andWhere('id')->in($oldStory->plan)
-                    ->fetchPairs();
-                foreach($branchPlanPairs as $branches => $planParis)
-                {
-                    foreach(explode(',', $branches) as $branch)
-                    {
-                        $branchPlanPairs[$branch] = $planParis;
-                    }
-                    unset($branchPlanPairs[$branches]);
-                }
-                if($planID == 0 and !empty($oldStory->plan) and isset($branchPlanPairs[0]) and $branchPlanPairs[0] != $planID) $unlinkPlans[$branchPlanPairs[0]] = empty($unlinkPlans[$branchPlanPairs[0]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[0]]},$storyID";
-                if($planID != 0)
-                {
-                    if(!empty($oldStory->plan))
-                    {
-                        foreach(explode(',', $plan->branch) as $planBranch)
-                        {
-                            if(isset($branchPlanPairs[$planBranch]) and $branchPlanPairs[$planBranch] != $planID)
-                            {
-                                $unlinkPlans[$branchPlanPairs[$planBranch]] = empty($unlinkPlans[$branchPlanPairs[$planBranch]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[$planBranch]]},$storyID";
-                            }
-                        }
-                    }
-                    foreach(explode(',', $plan->branch) as $planBranch) if(isset($branchPlanPairs[$planBranch])) $branchPlanPairs[$planBranch] = $planID;
-                    $story->plan = $oldStory->plan ? implode(',', array_unique($branchPlanPairs)) : $planID;
-                    $story->plan = trim($story->plan, ',');
-                    if($story->plan != $oldStory->plan and !empty($planID)) $link2Plans[$planID]  = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
-                }
-            }
 
             /* Change stage. */
             if($planID)
@@ -6541,7 +6507,7 @@ class storyModel extends model
             $fieldName  = $changeInfo['field'];
             $fieldValue = $changeInfo['new'];
 
-            if(strpos('product,branch,module,plan,spec,verify,files,reviewers', $fieldName) !== false) continue;
+            if(strpos('product,branch,module,plan,stage,stagedBy,spec,verify,files,reviewers', $fieldName) !== false) continue;
             $syncFieldList[$fieldName] = $fieldValue;
         }
 

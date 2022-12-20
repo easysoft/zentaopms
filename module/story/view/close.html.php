@@ -34,7 +34,7 @@
                 <?php echo $lang->story->relievedTwinsRelation;?>
               </label>
             </div>
-            <div style="display: inline-block"><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->story->relievedTwinsRelationTips;?>"></icon></div>   
+            <div class="<?php echo !empty($story->twins) ? '' : 'hidden';?>" style="display: inline-block"><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->story->relievedTwinsRelationTips;?>"></icon></div>   
           </td>
         </tr>  
         <tr id='duplicateStoryBox' style='display:none'>

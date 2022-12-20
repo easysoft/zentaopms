@@ -6,3 +6,5 @@
 .c-days {width: 100px;}
 .c-hours {width: 90px;}
 .c-limited {width: 110px;}
+.picker-drop-menu[id^="pickerDropMenu-pk_"] .picker-option-list > .picker-user-option,
+.picker-drop-menu[id*=" pickerDropMenu-pk_"] .picker-option-list > .picker-user-option {display: flex; align-items: center;}

@@ -131,6 +131,9 @@ $(function()
             $('#daysBox').removeClass('hidden');
         }
     })
+
+    var hasProduct = $('[name=hasProduct]:checked').val();
+    if(hasProduct == 0) $('.productsBox').parent().addClass('hidden')
 });
 
 /**

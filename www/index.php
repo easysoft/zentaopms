@@ -38,7 +38,7 @@ if(!isset($config->installed) or !$config->installed) die(header('location: inst
 
 /* Check for need upgrade. */
 $config->installedVersion = $app->getInstalledVersion();
-if($config->version != $config->installedVersion && file_exists('upgrade.php')) die(header('location: upgrade.php'));
+if($config->version != $config->installedVersion) die(header('location: upgrade.php'));
 
 /* Run the app. */
 $common = $app->loadCommon();

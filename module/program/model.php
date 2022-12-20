@@ -1250,7 +1250,7 @@ class programModel extends model
      * Get program parent pairs
      *
      * @param  string $model
-     * @param  string $mode
+     * @param  string $mode       noclosed|all
      * @param  bool   $showRoot
      * @access public
      * @return array
@@ -1268,7 +1268,7 @@ class programModel extends model
         $treeMenu = array();
         foreach($modules as $module)
         {
-            if(strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
+            if(strpos($mode, 'all') !== false and strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
 
             $moduleName    = $showRoot ? '/' : '';
             $parentModules = explode(',', $module->path);
