@@ -1497,7 +1497,11 @@ class testtaskModel extends model
             $log = preg_replace("/^[\d\-:.\x20]+/", '', $log);
             $log = trim($log);
             if(empty($log)) continue;
-            $log = preg_replace(array("/:\x20失败/", "/:\x20fail/", "/:\x20成功/", "/:\x20pass/"), array(': <strong class="result-testcase fail">失败</strong>',': <strong class="result-testcase fail">fail</strong>',': <strong class="result-testcase pass">成功</strong>',': <strong class="result-testcase fail">pass</strong>'), $log);
+
+            $failHtml = ': <span class="result-testcase fail">' . $this->lang->testtask->fail . '</span>';
+            $passHtml = ': <span class="result-testcase pass">' . $this->lang->testtask->pass . '</span>';
+            
+            $log = preg_replace(array("/:\x20失败/", "/:\x20fail/", "/:\x20成功/", "/:\x20pass/"), array($failHtml, $failHtml, $passHtml, $passHtml), $log);
 
             $logHtml .= "<li>" . $log . "</li>";
         }
