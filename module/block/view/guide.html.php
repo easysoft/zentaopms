@@ -15,6 +15,11 @@
 .block-guide .nav-secondary > li > a > span.btn-view {position: absolute; top: 0; right: 0; bottom: 0; padding: 8px; width: 36px; text-align: center; opacity: 0;}
 .block-guide .nav-secondary > li:hover > a > span.btn-view {opacity: 1;}
 .block-guide .nav-secondary > li.switch-icon {display: none;}
+.block-guide .tab-pane .mode-switch .dataTitle {padding: 14px 20px;}
+.block-guide .tab-pane .mode-switch .mode-block {background: #E6F0FF; margin-left: 10px; cursor: pointer;}
+.block-guide .tab-pane .mode-switch .mode-block:nth-child(2) {margin-left: 5%;}
+.block-guide .tab-pane .mode-switch .mode-block.active {border: 2px solid #2E7FFF;}
+.block-guide .tab-pane .mode-switch .mode-desc {padding: 10px;}
 .block-guide .tab-pane .app-client .menu,
 .block-guide .tab-pane .app-client .tree-menu li {padding-left: 0;}
 .block-guide .tab-pane .app-client .tree-menu li {line-height: 56px; border-bottom: 1px solid #EDEEF2;}
@@ -32,6 +37,8 @@
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
+<?php $usedMode   = zget($this->config->global, 'mode', 'light');?>
+<?php js::set('usedMode', $usedMode);?>
 $(function()
 {
     var $nav = $('#<?php echo $blockNavId;?>');
@@ -43,6 +50,10 @@ $(function()
         if ($next.length) $next.find('a[data-toggle="tab"]').trigger('click');
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
         e.preventDefault();
+    }).on('click', '.mode-block', function()
+    {
+        var mode = $(this).data('mode');
+        if(mode == usedMode) return;
     });
     $nav.find('li').click(function()
     {
@@ -78,7 +89,24 @@ $(function()
       <div class="tab-pane fade active in" id='<?php echo "tab3{$blockNavId}Contentflowchart";?>'>
         <?php include 'flowchart.html.php';?>
       </div>
-      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentsystemMode";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentsystemMode";?>'>
+        <div class='table-row mode-switch'>
+          <div class="col-4">
+            <div class="col dataTitle"><?php echo $lang->block->customModeTip->common;?></div>
+            <div class='col pull-left col-md-12'>
+              <?php foreach($lang->block->customModes as $mode => $modeName):?>
+              <div class="pull-left col-md-5 mode-block<?php if($usedMode == $mode) echo ' active';?>" data-mode='<?php echo $mode;?>'>
+                <div><?php echo html::image($config->webRoot . "theme/default/images/guide/{$mode}.png");?></div>
+                <div class='mode-desc'>
+                  <h4><?php echo $modeName;?></h4>
+                  <?php echo $lang->block->customModeTip->$mode;?>
+                </div>
+              </div>
+              <?php endforeach;?>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentvisionSwitch";?>'></div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentthemeSwitch";?>'>
         <?php include 'themeswitch.html.php';?>

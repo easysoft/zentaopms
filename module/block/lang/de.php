@@ -622,3 +622,11 @@ $lang->block->themes['pink']       = 'Pink';
 $lang->block->themes['blackberry'] = 'Blackberry';
 $lang->block->themes['classic']    = 'Classic';
 $lang->block->themes['purple']     = 'Purple';
+
+$lang->block->customModes['light'] = 'Light Mode';
+$lang->block->customModes['ALM']   = 'ALM Mode';
+
+$lang->block->customModeTip = new stdClass();
+$lang->block->customModeTip->common = 'ZenTao Road operation mode is divided into [Light mode] and [ALM mode].';
+$lang->block->customModeTip->ALM    = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams.';
+$lang->block->customModeTip->light  = 'Provides the core function of project management, suitable for small R&D teams.';

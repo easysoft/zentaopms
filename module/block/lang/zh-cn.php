@@ -622,3 +622,11 @@ $lang->block->themes['pink']       = '芙蕖粉';
 $lang->block->themes['blackberry'] = '露莓黑';
 $lang->block->themes['classic']    = '经典蓝';
 $lang->block->themes['purple']     = '玉烟紫';
+
+$lang->block->customModes['light'] = '轻量管理模式';
+$lang->block->customModes['ALM']   = '全生命周期管理模式';
+
+$lang->block->customModeTip = new stdClass();
+$lang->block->customModeTip->common = '禅道运行模式分为【轻量级管理模式】和【全生命周期管理模式】。';
+$lang->block->customModeTip->ALM    = '适用于中大型团队的管理模式，概念更加完整、严谨，功能更丰富。';
+$lang->block->customModeTip->light  = '适用于小型研发团队的管理模式，提供项目管理的核心功能。';
