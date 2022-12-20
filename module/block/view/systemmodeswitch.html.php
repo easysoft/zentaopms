@@ -2,7 +2,7 @@
 .block-guide .tab-pane .mode-switch .dataTitle {padding: 14px 20px;}
 .block-guide .tab-pane .mode-switch .mode-block {background: #E6F0FF; margin-left: 10px; cursor: pointer;}
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(2) {margin-left: 8%;}
-.block-guide .tab-pane .mode-switch .mode-block.active {border: 2px solid #2E7FFF;}
+.block-guide .tab-pane .mode-switch .mode-block:hover, .block-guide .tab-pane .mode-switch .mode-block.active {box-shadow: 0 0 0 2px #2E7FFF;}
 .block-guide .tab-pane .mode-switch .mode-desc {padding: 10px; font-size: 12px; color: #5E626D;}
 </style>
 <?php $usedMode = zget($this->config->global, 'mode', 'light');?>
@@ -70,7 +70,7 @@ $(function()
         if(selectedMode == 'light' && hasProgram) postData.program = $('#defaultProgram').val();
         $.post(createLink('custom', 'mode'), postData, function(result)
         {
-           if(result.result == 'success') parent.location.reload();
+            if(result.result == 'success') parent.location.reload();
         });
     }
 
@@ -79,6 +79,9 @@ $(function()
     {
         var selectedMode = $(this).data('mode');
         if(selectedMode == usedMode) return;
+
+        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $('#guideBody').offset().top;
+        localStorage.setItem('systemModePosition', scrollTop);
 
         if(selectedMode == 'light' && hasProgram)
         {

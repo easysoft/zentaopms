@@ -59,8 +59,8 @@ $(function()
         }
 
         if($(this).attr('id') !== 'visionSwitch') removePosition('visionPosition');
-
         if($(this).attr('id') !== 'themeSwitch') removePosition('themePosition');
+        if($(this).attr('id') !== 'systemModePosition') removePosition('systemModePosition');
     })
 
     if(localStorage.getItem('visionPosition') && Number(localStorage.getItem('visionPosition')))
@@ -75,6 +75,13 @@ $(function()
         var scrollTopNum = Number(localStorage.getItem('themePosition'));
         document.getElementById('guideBody').scrollTo = scrollTopNum;
         $('#themeSwitch > a').click();
+        window.scrollTo(0, scrollTopNum);
+    }
+    else if(localStorage.getItem('systemModePosition') && Number(localStorage.getItem('systemModePosition')))
+    {
+        var scrollTopNum = Number(localStorage.getItem('systemModePosition'));
+        document.getElementById('guideBody').scrollTo = scrollTopNum;
+        $('#systemMode > a').click();
         window.scrollTo(0, scrollTopNum);
     }
     else
