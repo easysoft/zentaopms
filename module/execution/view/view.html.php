@@ -10,9 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php js::import($this->config->webRoot . 'js/echarts/echarts.common.min.js'); ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::import($this->config->webRoot . 'js/echarts/echarts.common.min.js'); ?>
 <?php js::set('type', $type);?>
 <?php js::set('chartData', $chartData);?>
 <?php js::set('YUnit', $lang->execution->count); ?>

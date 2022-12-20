@@ -20,8 +20,7 @@ function loadBranches(productID)
         oldBranch = productGroups[productID]['branches'];
     }
 
-    projectID = currentTab == 'execution' ? executionID : projectID;
-    $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + projectID + '&withMainBranch=true&isSiblings=no&fieldID=0&multiple=multiple'), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + $('#execution').val() + '&withMainBranch=true&isSiblings=no&fieldID=0&multiple=multiple'), function(data)
     {
         if(data)
         {

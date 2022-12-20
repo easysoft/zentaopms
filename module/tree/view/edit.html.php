@@ -189,7 +189,7 @@ function loadModules(branch)
     if(typeof(branchID) == 'undefined') branchID = 0;
     if(typeof(moduleID) == 'undefined') moduleID = 0;
 
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=excludeModuleID=' + <?php echo $module->id;?> + ',noMainBranch&currentModuleID=' + moduleID);
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=' + type + '&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=excludeModuleID=' + <?php echo $module->id;?> + ',noMainBranch,nodeleted&currentModuleID=' + moduleID);
     $(moduleBox).load(link, function()
     {
         $(this).children('select').attr('id', 'parent').attr('name', 'parent');

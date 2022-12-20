@@ -37,7 +37,7 @@
         <td title='<?php echo $story->title;?>' class='text-left'>
           <?php echo $story->title;?>
           <?php if(!empty($story->twins)):?>
-          <span class='label label-outline label-badge'><?php echo "{$lang->story->twins}:"?> <span class='text-blue'><?php echo $twinsCount?></span></span>
+          <span class='label label-outline label-badge'><?php echo "{$lang->story->twins}:"?> <span class='text-blue'><?php echo $twinsCount[$story->id]?></span></span>
           <?php endif;?>
         </td>
         <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>

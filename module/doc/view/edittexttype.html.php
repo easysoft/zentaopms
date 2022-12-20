@@ -56,7 +56,7 @@
 .modal-title {font-size: 14px !important; font-weight: 700 !important;}
 #basicInfoBox tfoot td {padding-bottom: 0;}
 </style>
-<?php $backLink = $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}") . "#app={$this->app->tab}";?>
+<?php $backLink = $app->session->docList ? $app->session->docList : $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}") . "#app={$this->app->tab}";?>
 <div id="mainContent" class="main-content">
   <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
