@@ -3,7 +3,7 @@
 .block-guide .tab-pane .mode-switch .mode-block {background: #E6F0FF; margin-left: 10px; cursor: pointer;}
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(2) {margin-left: 8%;}
 .block-guide .tab-pane .mode-switch .mode-block.active {border: 2px solid #2E7FFF;}
-.block-guide .tab-pane .mode-switch .mode-desc {padding: 10px;}
+.block-guide .tab-pane .mode-switch .mode-desc {padding: 10px; font-size: 12px; color: #5E626D;}
 </style>
 <?php $usedMode = zget($this->config->global, 'mode', 'light');?>
 <?php js::set('usedMode', $usedMode);?>
