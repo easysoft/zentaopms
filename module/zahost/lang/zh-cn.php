@@ -68,10 +68,7 @@ $lang->zahost->init->initDesc       = "- 在宿主机上执行命令：%s %s <br
 $lang->zahost->init->statusTitle    = "服务状态";
 
 $lang->zahost->image = new stdclass;
-<<<<<<< HEAD
-=======
 $lang->zahost->image->list          = '镜像列表';
->>>>>>> 6d20a680439abb95e8252d1ee346d3f94e9e9928
 $lang->zahost->image->browseImage   = '镜像列表';
 $lang->zahost->image->createImage   = '创建镜像';
 $lang->zahost->image->choseImage    = '选择镜像';
