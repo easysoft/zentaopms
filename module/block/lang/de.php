@@ -632,3 +632,10 @@ $lang->block->visions['lite']        = new stdclass();
 $lang->block->visions['lite']->key   = 'lite';
 $lang->block->visions['lite']->title = 'Operation Management Interface';
 $lang->block->visions['lite']->text  = 'Specially designed for Non-R&D teams, mainly based on the intuitive and visual Kanban project management model.';
+$lang->block->customModes['light'] = 'Light Mode';
+$lang->block->customModes['ALM']   = 'ALM Mode';
+
+$lang->block->customModeTip = new stdClass();
+$lang->block->customModeTip->common = 'ZenTao Road operation mode is divided into [Light mode] and [ALM mode].';
+$lang->block->customModeTip->ALM    = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams.';
+$lang->block->customModeTip->light  = 'Provides the core function of project management, suitable for small R&D teams.';

@@ -632,3 +632,10 @@ $lang->block->visions['lite']        = new stdclass();
 $lang->block->visions['lite']->key   = 'lite';
 $lang->block->visions['lite']->title = '运营管理界面';
 $lang->block->visions['lite']->text  = '专为非研发团队打造，主要以直观、可视化的看板项目管理模型为主。';
+$lang->block->customModes['light'] = '轻量管理模式';
+$lang->block->customModes['ALM']   = '全生命周期管理模式';
+
+$lang->block->customModeTip = new stdClass();
+$lang->block->customModeTip->common = '禅道运行模式分为【轻量级管理模式】和【全生命周期管理模式】。';
+$lang->block->customModeTip->ALM    = '适用于中大型团队的管理模式，概念更加完整、严谨，功能更丰富。';
+$lang->block->customModeTip->light  = '适用于小型研发团队的管理模式，提供项目管理的核心功能。';

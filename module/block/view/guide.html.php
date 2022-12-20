@@ -15,6 +15,8 @@
 .block-guide .nav-secondary > li > a > span.btn-view {position: absolute; top: 0; right: 0; bottom: 0; padding: 8px; width: 36px; text-align: center; opacity: 0;}
 .block-guide .nav-secondary > li:hover > a > span.btn-view {opacity: 1;}
 .block-guide .nav-secondary > li.switch-icon {display: none;}
+.block-guide .tab-pane h4 {color: #0B0F18;}
+.block-guide .tab-pane .dataTitle {font-size: 12px; color: #5E626D;}
 .block-guide .tab-pane .app-client .menu,
 .block-guide .tab-pane .app-client .tree-menu li {padding-left: 0;}
 .block-guide .tab-pane .app-client .tree-menu li {line-height: 56px; border-bottom: 1px solid #EDEEF2;}
@@ -44,7 +46,7 @@ $(function()
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
         e.preventDefault();
     });
-    
+
     $nav.find('li').click(function()
     {
         if($(this).attr('id') == 'flowchart')
@@ -103,7 +105,9 @@ $(function()
       <div class="tab-pane fade active in" id='<?php echo "tab3{$blockNavId}Contentflowchart";?>'>
         <?php include 'flowchart.html.php';?>
       </div>
-      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentsystemMode";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentsystemMode";?>'>
+        <?php include 'systemmodeswitch.html.php';?>
+      </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentvisionSwitch";?>'>
         <?php include 'visionswitch.html.php';?>
       </div>
