@@ -3,7 +3,7 @@
 .block-guide .tab-pane .mode-switch .mode-block {background: #E6F0FF; margin-left: 10px; cursor: pointer;}
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(2) {margin-left: 8%;}
 .block-guide .tab-pane .mode-switch .mode-block.active {border: 2px solid #2E7FFF;}
-.block-guide .tab-pane .mode-switch .mode-desc {padding: 10px;}
+.block-guide .tab-pane .mode-switch .mode-desc {padding: 10px; font-size: 12px; color: #5E626D;}
 </style>
 <?php $usedMode = zget($this->config->global, 'mode', 'light');?>
 <?php js::set('usedMode', $usedMode);?>
@@ -40,7 +40,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->custom->defaultProgram;?></th>
-            <td><?php echo html::select('program', $programs, $programID, "class='form-control chosen'");?></td>
+            <td><?php echo html::select('defaultProgram', $programs, $programID, "class='form-control chosen'");?></td>
           </tr>
         </table>
       </div>
@@ -54,24 +54,33 @@
 <script>
 $(function()
 {
+    var selectedMode = usedMode;
+
     /**
      * Switch system mode.
      *
-     * @param  string mode
      * @access public
      * @return void
      */
-    function switchMode(mode)
-    {}
+    function switchMode()
+    {
+        if(selectedMode == usedMode) return;
+
+        var postData = {mode: selectedMode};
+        if(selectedMode == 'light' && hasProgram) postData.program = $('#defaultProgram').val();
+        $.post(createLink('custom', 'mode'), postData, function(result)
+        {
+           if(result.result == 'success') parent.location.reload();
+        });
+    }
 
     var $nav = $('#<?php echo "tab3{$blockNavId}ContentsystemMode";?>');
     $nav.on('click', '.mode-block', function()
     {
-        var mode = $(this).data('mode');
-        console.log(mode, hasProgram)
-        if(mode == usedMode) return;
+        var selectedMode = $(this).data('mode');
+        if(selectedMode == usedMode) return;
 
-        if(mode == 'light' && hasProgram)
+        if(selectedMode == 'light' && hasProgram)
         {
             $('#selectProgramModal').modal('show');
         }
@@ -79,9 +88,9 @@ $(function()
         {
             bootbox.confirm(changeModeTips, function(result)
             {
-                if(result) $('#modeForm').submit();
+                if(result) switchMode();
             });
         }
-    });
+    }).on('click', '#selectProgramModal .btn-save', switchMode);
 });
 </script>
