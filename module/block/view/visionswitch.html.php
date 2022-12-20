@@ -16,7 +16,7 @@
   <div class="vision-switch-container">
     <?php foreach($lang->block->visions as $vision):?>
     <?php $active = $this->config->vision == $vision->key ? 'active' : '';?>
-    <a href="/index.php?m=my&f=ajaxSwitchVision&vision=<?php echo $vision->key;?>" data-type="ajax" class='vision <?php echo $active;?>' data-value="<?php echo $vision->key;?>">
+    <a href="<?php echo $this->createLink('my', 'ajaxSwitchVision', "vision=$vision->key");?>" data-type="ajax" class='vision <?php echo $active;?>' data-value="<?php echo $vision->key;?>">
       <div class='vision-img' id="<?php echo 'vision-' . $vision->key;?>"></div>
       <div class='vision-title'><?php echo $vision->title;?></div>
       <div class='vision-text'><?php echo $vision->text;?></div>
