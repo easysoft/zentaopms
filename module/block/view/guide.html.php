@@ -57,16 +57,26 @@ $(function()
         {
             $('.block-guide .tutorialBtn').addClass('hidden');
         }
+
         if($(this).attr('id') === 'visionSwitch')
         {
-            var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $(('#guideBody')).offset().top;
-            localStorage.setItem('visionPosition', scrollTop);
+            savePosition('visionPosition');
         }
         else
         {
-            localStorage.getItem('visionPosition') && localStorage.removeItem('visionPosition');
+            removePosition('visionPosition');
+        }
+
+        if($(this).attr('id') === 'themeSwitch')
+        {
+            savePosition('themePosition');
+        }
+        else
+        {
+            removePosition('themePosition');
         }
     })
+
     if(localStorage.getItem('visionPosition') && Number(localStorage.getItem('visionPosition')))
     {
         var scrollTopNum = Number(localStorage.getItem('visionPosition'));
@@ -74,9 +84,41 @@ $(function()
         $('#visionSwitch > a').click();
         window.scrollTo(0, scrollTopNum);
     }
+    else if(localStorage.getItem('themePosition') && Number(localStorage.getItem('themePosition')))
+    {
+        var scrollTopNum = Number(localStorage.getItem('themePosition'));
+        document.getElementById('guideBody').scrollTo = scrollTopNum;
+        $('#themeSwitch > a').click();
+        window.scrollTo(0, scrollTopNum);
+    }
     else
     {
         $('#flowchart > a').click();
+    }
+
+    /**
+     * Save position.
+     *
+     * @param  string $key
+     * @access public
+     * @return void
+     */
+    function savePosition(key)
+    {
+        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $(('#guideBody')).offset().top;
+        localStorage.setItem(key, scrollTop);
+    }
+
+    /**
+     * Remove position.
+     *
+     * @param  string $key
+     * @access public
+     * @return void
+     */
+    function removePosition(key)
+    {
+        localStorage.getItem(key) && localStorage.removeItem(key);
     }
 });
 </script>
