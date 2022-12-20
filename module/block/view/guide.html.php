@@ -15,6 +15,7 @@
 .block-guide .nav-secondary > li > a > span.btn-view {position: absolute; top: 0; right: 0; bottom: 0; padding: 8px; width: 36px; text-align: center; opacity: 0;}
 .block-guide .nav-secondary > li:hover > a > span.btn-view {opacity: 1;}
 .block-guide .nav-secondary > li.switch-icon {display: none;}
+.block-guide .tab-pane .dataTitle {font-size: 12px; color: #5E626D;}
 .block-guide .tab-pane .app-client .menu,
 .block-guide .tab-pane .app-client .tree-menu li {padding-left: 0;}
 .block-guide .tab-pane .app-client .tree-menu li {line-height: 56px; border-bottom: 1px solid #EDEEF2;}
