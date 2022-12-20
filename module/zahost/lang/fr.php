@@ -102,7 +102,6 @@ $lang->zahost->empty         = 'No Host';
 $lang->zahost->statusList['wait']    = 'Wait';
 $lang->zahost->statusList['ready']   = 'Online';
 $lang->zahost->statusList['online']  = 'Online';
-$lang->zahost->statusList['online']  = 'Online';
 $lang->zahost->statusList['offline'] = 'Offline';
 $lang->zahost->statusList['busy']    = 'Busy';
 

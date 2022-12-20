@@ -17,7 +17,6 @@ $lang->zahost->deleted        = "Deleted";
 $lang->zahost->copy           = 'Click to copy';
 $lang->zahost->copied         = 'Copy successful';
 
-
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'Extranet Address';
 $lang->zahost->extranet    = 'Extranet Address';
@@ -102,7 +101,6 @@ $lang->zahost->empty         = 'No Host';
 
 $lang->zahost->statusList['wait']    = 'Wait';
 $lang->zahost->statusList['ready']   = 'Online';
-$lang->zahost->statusList['online']  = 'Online';
 $lang->zahost->statusList['online']  = 'Online';
 $lang->zahost->statusList['offline'] = 'Offline';
 $lang->zahost->statusList['busy']    = 'Busy';
