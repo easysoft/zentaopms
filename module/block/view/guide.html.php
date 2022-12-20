@@ -89,6 +89,7 @@ $(function()
         <?php if(strpos($tab, 'download') !== false and (!isset($config->xxserver->installed) or !$config->xuanxuan->turnon)) continue;?>
         <?php if($tab == 'downloadMoblie' and common::checkNotCN()) continue;?>
         <?php if(($tab == 'preference' or $tab == 'systemMode') and $this->config->vision == 'lite') continue;?>
+        <?php if($tab == 'systemMode' and !common::hasPriv('custom', 'mode')) continue;?>
         <li id="<?php echo $tab;?>">
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>
