@@ -2005,6 +2005,9 @@ class block extends control
      */
     public function guide()
     {
+        $this->app->loadLang('custom');
+        $this->view->programs  = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programID = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
         $this->display();
     }
 
