@@ -58,23 +58,9 @@ $(function()
             $('.block-guide .tutorialBtn').addClass('hidden');
         }
 
-        if($(this).attr('id') === 'visionSwitch')
-        {
-            savePosition('visionPosition');
-        }
-        else
-        {
-            removePosition('visionPosition');
-        }
+        if($(this).attr('id') !== 'visionSwitch') removePosition('visionPosition');
 
-        if($(this).attr('id') === 'themeSwitch')
-        {
-            savePosition('themePosition');
-        }
-        else
-        {
-            removePosition('themePosition');
-        }
+        if($(this).attr('id') !== 'themeSwitch') removePosition('themePosition');
     })
 
     if(localStorage.getItem('visionPosition') && Number(localStorage.getItem('visionPosition')))
@@ -94,19 +80,6 @@ $(function()
     else
     {
         $('#flowchart > a').click();
-    }
-
-    /**
-     * Save position.
-     *
-     * @param  string $key
-     * @access public
-     * @return void
-     */
-    function savePosition(key)
-    {
-        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $(('#guideBody')).offset().top;
-        localStorage.setItem(key, scrollTop);
     }
 
     /**

@@ -15,6 +15,9 @@
 <script>
 $('.themeSwitch > .theme').click(function()
 {
+    var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $('#guideBody').offset().top;
+    localStorage.setItem('themePosition', scrollTop);
+
     selectTheme($(this).attr('data-value'));
 })
 </script>
