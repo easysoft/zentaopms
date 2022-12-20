@@ -66,7 +66,6 @@ $(function()
         {
             localStorage.getItem('visionPosition') && localStorage.removeItem('visionPosition');
         }
-
     })
     if(localStorage.getItem('visionPosition') && Number(localStorage.getItem('visionPosition')))
     {
