@@ -26,11 +26,6 @@
       <tr>
         <td colspan='2' class='text-center form-actions'>
           <?php echo html::submitButton();?>
-          <?php if($showTip == 'true'):?>
-          <div>
-            <p class='text-muted tip'><?php echo $lang->my->alert;?></p>
-          </div>
-          <?php endif;?>
         </td>
       </tr>
     </table>
