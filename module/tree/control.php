@@ -390,7 +390,7 @@ class tree extends control
         }
         else
         {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch, 'noMainBranch');
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch, 'noMainBranch|nodeleted');
         }
 
         if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject', '', 0, 'book');
@@ -567,7 +567,7 @@ class tree extends control
                 $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
 
                 $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
-                if(count($optionMenu) == 1 and $needManage !== 'false')
+                if(count($optionMenu) == 1 and $needManage !== 'false' and $viewType != 'task')
                 {
                     $output .= "<span class='input-group-addon'>";
                     $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");

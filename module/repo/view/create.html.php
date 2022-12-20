@@ -23,7 +23,7 @@
       </div>
       <form id='repoForm' method='post' class='form-ajax'>
         <table class='table table-form'>
-          <?php if($this->app->tab =='project'):?>
+          <?php if($this->app->tab == 'project' or $this->app->tab == 'execution'):?>
           <?php echo html::hidden('product', implode(',', array_keys($products)));?>
           <?php else:?>
           <tr>
