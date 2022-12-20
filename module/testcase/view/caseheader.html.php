@@ -18,22 +18,15 @@
 #byTypeTab li.split{border-top: 1px solid #eee;}
 </style>
 <div id='mainMenu' class='clearfix'>
-  <?php if(!($this->app->rawMethod == 'groupcase')):?>
+  <?php if(!in_array($this->app->rawMethod, array('groupcase', 'browseunits'))):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
-      if($this->app->rawMethod == 'browseunits')
+      echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
+      if(!empty($moduleID))
       {
-          echo $lang->testtask->unitTag[$browseType];
-      }
-      else
-      {
-          echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
-          if(!empty($moduleID))
-          {
-              $removeLink = $browseType == 'bymodule' ? $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
-              echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted' data-app='{$this->app->tab}'");
-          }
+          $removeLink = $browseType == 'bymodule' ? $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
+          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted' data-app='{$this->app->tab}'");
       }
       ?>
     </div>
@@ -46,6 +39,12 @@
     $hasZeroPriv   = common::hasPriv('testcase', 'zerocase');
     $hasUnitPriv   = common::hasPriv('testtask', 'browseunits');
     ?>
+
+    <?php if($this->app->rawMethod == 'browseunits'):?>
+    <?php foreach($lang->testtask->unitTag as $key => $label):?>
+    <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}UnitTab' class='btn btn-link' data-app='{$this->app->tab}'");?>
+    <?php endforeach;?>
+    <?php else:?>
     <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
     <?php
     if(isset($menuItem->hidden)) continue;
@@ -76,12 +75,14 @@
 
         foreach($lang->testcase->typeList as $type => $typeName)
         {
-            if($type == 'unit') continue;
             echo '<li' . ($type == $caseType ? " class='active'" : '') . '>';
-            if(isset($groupBy))
+            if($hasUnitPriv and $type == 'unit')
+            {
+                echo html::a($this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID"), "{$lang->testcase->browseUnits}", '', " data-app='{$this->app->tab}'");
+            }
+            elseif(isset($groupBy))
             {
                 echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$type"), $typeName);
-
             }
             else
             {
@@ -89,10 +90,15 @@
             }
             echo "</li>";
         }
-
-        echo "<li class='split'></li>";
-        echo html::checkbox('showAutoCase', array('1' => $lang->testcase->showAutoCase), '', $this->cookie->showAutoCase ? 'checked=checked' : '');
         echo '</ul></div>';
+    }
+    elseif($hasBrowsePriv and $menuType == 'autocase')
+    {
+        if($this->moduleName == 'testtask' and $this->methodName == 'browseunits') continue;
+        if($this->moduleName == 'story' and $this->methodName == 'zerocase') continue;
+        if($browseType == 'bysuite' or $browseType == 'bysearch') continue;
+
+        echo html::checkbox('showAutoCase', array('1' => $lang->testcase->showAutoCase), '', $this->cookie->showAutoCase ? 'checked=checked' : '');
     }
     elseif($hasBrowsePriv and ($menuType == 'all' or $menuType == 'needconfirm' or $menuType == 'wait'))
     {
@@ -142,15 +148,13 @@
         $projectID = $isProjectApp ? $this->session->project : 0;
         echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->testcase->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
     }
-    elseif($hasUnitPriv and $menuType == 'browseunits' and !$caseType)
-    {
-        echo html::a($this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID"), "<span class='text'>{$lang->testcase->browseUnits}</span>", '', "class='btn btn-link' id='browseunitsTab' data-app='{$this->app->tab}'");
-    }
+
     ?>
     <?php endforeach;?>
     <?php
     if($this->methodName == 'browse') echo "<a id='bysearchTab' class='btn btn-link querybox-toggle'><i class='icon-search icon'></i> {$lang->testcase->bySearch}</a>";
     ?>
+    <?php endif;?>
   </div>
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>

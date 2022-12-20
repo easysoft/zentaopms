@@ -263,7 +263,6 @@ $lang->testcase->featureBar['browse']['wait']        = 'Waiting';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = 'Group View';
 $lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
-$lang->testcase->featureBar['browse']['browseunits'] = 'Unit Test';
 $lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
