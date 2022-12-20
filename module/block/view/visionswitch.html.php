@@ -36,6 +36,9 @@ $(function()
           e.preventDefault();
           return false;
         }
+
+        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $('#guideBody').offset().top;
+        localStorage.setItem('visionPosition', scrollTop);
     })
 })
 </script>

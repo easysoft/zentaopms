@@ -57,16 +57,12 @@ $(function()
         {
             $('.block-guide .tutorialBtn').addClass('hidden');
         }
-        if($(this).attr('id') === 'visionSwitch')
-        {
-            var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $(('#guideBody')).offset().top;
-            localStorage.setItem('visionPosition', scrollTop);
-        }
-        else
-        {
-            localStorage.getItem('visionPosition') && localStorage.removeItem('visionPosition');
-        }
+
+        if($(this).attr('id') !== 'visionSwitch') removePosition('visionPosition');
+
+        if($(this).attr('id') !== 'themeSwitch') removePosition('themePosition');
     })
+
     if(localStorage.getItem('visionPosition') && Number(localStorage.getItem('visionPosition')))
     {
         var scrollTopNum = Number(localStorage.getItem('visionPosition'));
@@ -74,9 +70,28 @@ $(function()
         $('#visionSwitch > a').click();
         window.scrollTo(0, scrollTopNum);
     }
+    else if(localStorage.getItem('themePosition') && Number(localStorage.getItem('themePosition')))
+    {
+        var scrollTopNum = Number(localStorage.getItem('themePosition'));
+        document.getElementById('guideBody').scrollTo = scrollTopNum;
+        $('#themeSwitch > a').click();
+        window.scrollTo(0, scrollTopNum);
+    }
     else
     {
         $('#flowchart > a').click();
+    }
+
+    /**
+     * Remove position.
+     *
+     * @param  string $key
+     * @access public
+     * @return void
+     */
+    function removePosition(key)
+    {
+        localStorage.getItem(key) && localStorage.removeItem(key);
     }
 });
 </script>
@@ -90,6 +105,7 @@ $(function()
         <?php if($tab == 'downloadMoblie' and common::checkNotCN()) continue;?>
         <?php if(($tab == 'preference' or $tab == 'systemMode') and $this->config->vision == 'lite') continue;?>
         <?php if($tab == 'systemMode' and !common::hasPriv('custom', 'mode')) continue;?>
+        <?php if($tab == 'preference' and !common::hasPriv('my', 'preference')) continue;?>
         <li id="<?php echo $tab;?>">
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>
@@ -112,7 +128,9 @@ $(function()
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentthemeSwitch";?>'>
         <?php include 'themeswitch.html.php';?>
       </div>
-      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}Contentpreference";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}Contentpreference";?>'>
+        <?php include 'preference.html.php';?>
+      </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadClient";?>'>
         <div class='table-row app-client'>
           <div class="col-4">
