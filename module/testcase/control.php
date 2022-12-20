@@ -2393,7 +2393,7 @@ class testcase extends control
             $node   = $this->zanode->getNodeByID($_POST['node']);
 
             $locatelink = $this->createLink('testcase', 'browse', "productID={$_POST['product']}");
-            $locatelink = str_replace('?onlybody=yes', '', $locatelink);
+            $locatelink = str_replace(array('?onlybody=yes', '&onlybody=yes'), '', $locatelink);
 
             return print(js::locate($locatelink, 'parent.parent'));
         }
