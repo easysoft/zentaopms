@@ -2006,8 +2006,20 @@ class block extends control
     public function guide()
     {
         $this->app->loadLang('custom');
-        $this->view->programs  = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
-        $this->view->programID = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
+        $this->app->loadLang('my');
+        $this->loadModel('setting');
+
+        $this->view->programs         = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programID        = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
+        $this->view->showTip          = false;
+        $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
+        $this->view->URSR             = $this->setting->getURSR();
+        $this->view->programLink      = isset($this->config->programLink)   ? $this->config->programLink   : 'program-browse';
+        $this->view->productLink      = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
+        $this->view->projectLink      = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
+        $this->view->executionLink    = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
+        $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
+
         $this->display();
     }
 

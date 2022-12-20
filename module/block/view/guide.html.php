@@ -90,6 +90,7 @@ $(function()
         <?php if($tab == 'downloadMoblie' and common::checkNotCN()) continue;?>
         <?php if(($tab == 'preference' or $tab == 'systemMode') and $this->config->vision == 'lite') continue;?>
         <?php if($tab == 'systemMode' and !common::hasPriv('custom', 'mode')) continue;?>
+        <?php if($tab == 'preference' and !common::hasPriv('my', 'preference')) continue;?>
         <li id="<?php echo $tab;?>">
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>
@@ -112,7 +113,9 @@ $(function()
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentthemeSwitch";?>'>
         <?php include 'themeswitch.html.php';?>
       </div>
-      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}Contentpreference";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}Contentpreference";?>'>
+        <?php include 'preference.html.php';?>
+      </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentdownloadClient";?>'>
         <div class='table-row app-client'>
           <div class="col-4">
