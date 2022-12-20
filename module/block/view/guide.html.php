@@ -44,6 +44,7 @@ $(function()
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
         e.preventDefault();
     });
+    
     $nav.find('li').click(function()
     {
         if($(this).attr('id') == 'flowchart')
@@ -54,18 +55,44 @@ $(function()
         {
             $('.block-guide .tutorialBtn').addClass('hidden');
         }
+
+        if($(this).attr('id') === 'visionSwitch')
+        {
+            var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || 0;
+            localStorage.setItem('visionPosition', scrollTop);
+        }
+
     })
+    if(localStorage.getItem('visionPosition'))
+    {
+        $('#visionSwitch > a').click();
+        localStorage.removeItem('visionPosition');
+    }
+    else
+    {
+        $('#flowchart > a').click();
+    }
+
 });
+
+window.onunload  = function () {
+    if(!localStorage.getItem('visionPosition'))
+    {
+        return;
+    }
+    document.getElementById('guideBody').scrollTo = Number(localStorage.getItem('visionPosition'));
+}
 </script>
-<div class="panel-body">
+
+<div class="panel-body" id="guideBody">
   <div class="table-row">
     <div class="col col-nav">
-      <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
+      <ul class="nav nav-stacked nav-secondary scrollbar-hover guide-nav" id='<?php echo $blockNavId;?>'>
         <?php foreach($lang->block->guideTabs as $tab => $tabName):?>
         <?php if(strpos($tab, 'download') !== false and (!isset($config->xxserver->installed) or !$config->xuanxuan->turnon)) continue;?>
         <?php if($tab == 'downloadMoblie' and common::checkNotCN()) continue;?>
         <?php if(($tab == 'preference' or $tab == 'systemMode') and $this->config->vision == 'lite') continue;?>
-        <li <?php if($tab == 'flowchart') echo "class='active'";?> id="<?php echo $tab;?>">
+        <li id="<?php echo $tab;?>">
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>
             <span class='btn-view'><i class='icon-arrow-right text-primary'></i><span>
@@ -79,7 +106,9 @@ $(function()
         <?php include 'flowchart.html.php';?>
       </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentsystemMode";?>'></div>
-      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentvisionSwitch";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentvisionSwitch";?>'>
+        <?php include 'visionswitch.html.php';?>
+      </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentthemeSwitch";?>'>
         <?php include 'themeswitch.html.php';?>
       </div>
