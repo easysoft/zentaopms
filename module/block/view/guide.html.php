@@ -57,10 +57,9 @@ $(function()
         {
             $('.block-guide .tutorialBtn').addClass('hidden');
         }
-
         if($(this).attr('id') === 'visionSwitch')
         {
-            var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || 0;
+            var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $(('#guideBody')).offset().top;
             localStorage.setItem('visionPosition', scrollTop);
         }
         else
@@ -72,7 +71,7 @@ $(function()
     if(localStorage.getItem('visionPosition') && Number(localStorage.getItem('visionPosition')))
     {
         var scrollTopNum = Number(localStorage.getItem('visionPosition'));
-        document.getElementById('guideBody').scrollTo = 0;
+        document.getElementById('guideBody').scrollTo = scrollTopNum;
         $('#visionSwitch > a').click();
         window.scrollTo(0, scrollTopNum);
     }
@@ -80,7 +79,6 @@ $(function()
     {
         $('#flowchart > a').click();
     }
-
 });
 </script>
 
