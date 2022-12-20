@@ -57,18 +57,39 @@ $(function()
         {
             $('.block-guide .tutorialBtn').addClass('hidden');
         }
+        if($(this).attr('id') === 'visionSwitch')
+        {
+            var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $(('#guideBody')).offset().top;
+            localStorage.setItem('visionPosition', scrollTop);
+        }
+        else
+        {
+            localStorage.getItem('visionPosition') && localStorage.removeItem('visionPosition');
+        }
     })
+    if(localStorage.getItem('visionPosition') && Number(localStorage.getItem('visionPosition')))
+    {
+        var scrollTopNum = Number(localStorage.getItem('visionPosition'));
+        document.getElementById('guideBody').scrollTo = scrollTopNum;
+        $('#visionSwitch > a').click();
+        window.scrollTo(0, scrollTopNum);
+    }
+    else
+    {
+        $('#flowchart > a').click();
+    }
 });
 </script>
-<div class="panel-body">
+
+<div class="panel-body" id="guideBody">
   <div class="table-row">
     <div class="col col-nav">
-      <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
+      <ul class="nav nav-stacked nav-secondary scrollbar-hover guide-nav" id='<?php echo $blockNavId;?>'>
         <?php foreach($lang->block->guideTabs as $tab => $tabName):?>
         <?php if(strpos($tab, 'download') !== false and (!isset($config->xxserver->installed) or !$config->xuanxuan->turnon)) continue;?>
         <?php if($tab == 'downloadMoblie' and common::checkNotCN()) continue;?>
         <?php if(($tab == 'preference' or $tab == 'systemMode') and $this->config->vision == 'lite') continue;?>
-        <li <?php if($tab == 'flowchart') echo "class='active'";?> id="<?php echo $tab;?>">
+        <li id="<?php echo $tab;?>">
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>
             <span class='btn-view'><i class='icon-arrow-right text-primary'></i><span>
@@ -84,7 +105,9 @@ $(function()
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentsystemMode";?>'>
         <?php include 'systemmodeswitch.html.php';?>
       </div>
-      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentvisionSwitch";?>'></div>
+      <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentvisionSwitch";?>'>
+        <?php include 'visionswitch.html.php';?>
+      </div>
       <div class="tab-pane fade" id='<?php echo "tab3{$blockNavId}ContentthemeSwitch";?>'>
         <?php include 'themeswitch.html.php';?>
       </div>

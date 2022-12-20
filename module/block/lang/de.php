@@ -623,6 +623,15 @@ $lang->block->themes['blackberry'] = 'Blackberry';
 $lang->block->themes['classic']    = 'Classic';
 $lang->block->themes['purple']     = 'Purple';
 
+$lang->block->visionTitle            = 'The user interface of ZenTao is divided into 【Full feature interface】 and 【Operation Management Interface】.';
+$lang->block->visions['rnd']         = new stdclass();
+$lang->block->visions['rnd']->key    = 'rnd';
+$lang->block->visions['rnd']->title  = 'Full feature interface';
+$lang->block->visions['rnd']->text   = 'Integrates multi-dimensional management of program, product, project, execution, test, etc., and provides a whole-process project management  solution.';
+$lang->block->visions['lite']        = new stdclass();
+$lang->block->visions['lite']->key   = 'lite';
+$lang->block->visions['lite']->title = 'Operation Management Interface';
+$lang->block->visions['lite']->text  = 'Specially designed for Non-R&D teams, mainly based on the intuitive and visual Kanban project management model.';
 $lang->block->customModes['light'] = 'Light Mode';
 $lang->block->customModes['ALM']   = 'ALM Mode';
 

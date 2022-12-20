@@ -623,6 +623,15 @@ $lang->block->themes['blackberry'] = '露莓黑';
 $lang->block->themes['classic']    = '经典蓝';
 $lang->block->themes['purple']     = '玉烟紫';
 
+$lang->block->visionTitle            = '禅道使用界面分为【研发综合界面】和【运营管理界面】。';
+$lang->block->visions['rnd']         = new stdclass();
+$lang->block->visions['rnd']->key    = 'rnd';
+$lang->block->visions['rnd']->title  = '研发综合界面';
+$lang->block->visions['rnd']->text   = '集项目集、产品、项目、执行、测试等多维度管理于一体，提供全过程项目管理解决方案。';
+$lang->block->visions['lite']        = new stdclass();
+$lang->block->visions['lite']->key   = 'lite';
+$lang->block->visions['lite']->title = '运营管理界面';
+$lang->block->visions['lite']->text  = '专为非研发团队打造，主要以直观、可视化的看板项目管理模型为主。';
 $lang->block->customModes['light'] = '轻量管理模式';
 $lang->block->customModes['ALM']   = '全生命周期管理模式';
 
