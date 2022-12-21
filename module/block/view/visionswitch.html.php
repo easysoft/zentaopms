@@ -17,9 +17,9 @@
     <a href="<?php echo $this->createLink('my', 'ajaxSwitchVision', "vision=$vision->key");?>" data-type="ajax" class='vision <?php echo $active;?>' data-value="<?php echo $vision->key;?>">
       <div class='vision-img'>
         <?php if(common::checkNotCN() and $vision->key == 'rnd'):?>
-          <?php echo html::image($config->webRoot . "theme/default/images/guide/vision_{$vision->key}_en.png");?>
+        <?php echo html::image($config->webRoot . "theme/default/images/guide/vision_{$vision->key}_en.png");?>
         <?php else:?>
-          <?php echo html::image($config->webRoot . "theme/default/images/guide/vision_{$vision->key}.png");?>
+        <?php echo html::image($config->webRoot . "theme/default/images/guide/vision_{$vision->key}.png");?>
         <?php endif;?>
       </div>
       <div class='vision-title'><?php echo $vision->title;?></div>
