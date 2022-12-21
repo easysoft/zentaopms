@@ -599,7 +599,7 @@ $lang->block->zentaoapp->downloadTip          = '扫描二维码下载';
 
 $lang->block->zentaoclient = new stdClass();
 $lang->block->zentaoclient->common = '禅道客户端';
-$lang->block->zentaoclient->desc   = '您可以使用禅道桌面客户端直接使用禅道，无需频繁切换浏览器。除此之外客户端还提供了聊天、消息通知、机器人、内嵌禅道小程序等功能，团队协作更方便快捷。';
+$lang->block->zentaoclient->desc   = '您可以使用禅道桌面客户端直接使用禅道，无需频繁切换浏览器。除此之外，客户端还提供了聊天，信息通知，机器人，内嵌禅道小程序等功能，团队协作更方便。';
 
 $lang->block->zentaoclient->edition = new stdclass();
 $lang->block->zentaoclient->edition->win64   = 'Windows版';
@@ -632,6 +632,7 @@ $lang->block->visions['lite']        = new stdclass();
 $lang->block->visions['lite']->key   = 'lite';
 $lang->block->visions['lite']->title = '运营管理界面';
 $lang->block->visions['lite']->text  = '专为非研发团队打造，主要以直观、可视化的看板项目管理模型为主。';
+
 $lang->block->customModes['light'] = '轻量管理模式';
 $lang->block->customModes['ALM']   = '全生命周期管理模式';
 

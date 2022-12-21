@@ -599,7 +599,7 @@ $lang->block->zentaoapp->downloadTip          = 'Scan QR code to download';
 
 $lang->block->zentaoclient = new stdClass();
 $lang->block->zentaoclient->common = 'ZenTao Client';
-$lang->block->zentaoclient->desc   = 'You can directly use ZenTao through the ZenTao desktop client without frequently switching browsers. In addition, the ZenTao client also provides functions such as chat, information notification, robot, and embedding Zen Tao applet, which makes teamwork more convenient.';
+$lang->block->zentaoclient->desc   = 'The ZenTao client provides functions such as chat, information notification, robot, and embedding ZenTao applet, which makes teamwork more convenient without frequently switching browsers.';
 
 $lang->block->zentaoclient->edition = new stdclass();
 $lang->block->zentaoclient->edition->win64   = 'Windows';
@@ -627,11 +627,12 @@ $lang->block->visionTitle            = 'The user interface of ZenTao is divided 
 $lang->block->visions['rnd']         = new stdclass();
 $lang->block->visions['rnd']->key    = 'rnd';
 $lang->block->visions['rnd']->title  = 'Full feature interface';
-$lang->block->visions['rnd']->text   = 'Integrates multi-dimensional management of program, product, project, execution, test, etc., and provides a whole-process project management  solution.';
+$lang->block->visions['rnd']->text   = 'Integrate the program, product, project, execution, test, etc., and provide the lifecycle project management solution.';
 $lang->block->visions['lite']        = new stdclass();
 $lang->block->visions['lite']->key   = 'lite';
 $lang->block->visions['lite']->title = 'Operation Management Interface';
-$lang->block->visions['lite']->text  = 'Specially designed for Non-R&D teams, mainly based on the intuitive and visual Kanban project management model.';
+$lang->block->visions['lite']->text  = 'Specially designed for Non-R&D teams, and based on the visual Kanban project management model.';
+
 $lang->block->customModes['light'] = 'Light Mode';
 $lang->block->customModes['ALM']   = 'ALM Mode';
 

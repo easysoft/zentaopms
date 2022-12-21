@@ -5,6 +5,9 @@
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(2) {margin-left: 8%;}
 .block-guide .tab-pane .mode-switch .mode-block:hover, .block-guide .tab-pane .mode-switch .mode-block.active {box-shadow: 0 0 0 2px #2E7FFF;}
 .block-guide .tab-pane .mode-switch .mode-desc {padding: 4px 4px 10px; font-size: 12px; color: #5E626D;}
+<?php if(common::checkNotCN()):?>
+.block-guide .tab-pane .mode-switch .mode-block:nth-child(1) {padding-bottom: 18px;}
+<?php endif;?>
 </style>
 <?php $usedMode = zget($this->config->global, 'mode', 'light');?>
 <?php js::set('usedMode', $usedMode);?>
