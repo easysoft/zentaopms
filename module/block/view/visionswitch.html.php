@@ -4,10 +4,9 @@
 .vision {width: 47%; border: none; background-color: rgba(230, 240 , 255, 0.4); cursor:pointer; border-radius: 2px; padding: 10px 10px 0 10px;}
 .vision + .vision {margin-left: 10px;}
 .vision:hover {box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);}
-<<<<<<< module/block/view/visionswitch.html.php
 .vision.active {box-shadow: 0 0 0 2px #2E7FFF;}
-.vision-img {height: 118px; width: 100%; background-size: 100% !important;}
-.vision-title {font-size: 14px; color: #0B0F18; padding: 0 8px; margin-top: 10px;}
+.vision-img {width: 100%; background-size: 100% !important;}
+.vision-title {font-size: 14px; color: #0B0F18; padding: 10px 8px 0;}
 .vision-text {font-size: 12px; color: #5E626D; padding: 8px;}
 </style>
 <?php js::set('vision', $this->config->vision);?>
@@ -20,6 +19,8 @@
       <div class='vision-img'>
         <?php if(common::checkNotCN() and $vision->key == 'rnd'):?>
         <?php echo html::image($config->webRoot . "theme/default/images/guide/vision_{$vision->key}_en.png");?>
+        <?php elseif(!common::checkNotCN() and $vision->key == 'rnd'):?>
+        <?php echo html::image($config->webRoot . "theme/default/images/guide/vision_{$vision->key}_cn.png");?>
         <?php else:?>
         <?php echo html::image($config->webRoot . "theme/default/images/guide/vision_{$vision->key}.png");?>
         <?php endif;?>
