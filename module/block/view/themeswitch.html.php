@@ -7,8 +7,8 @@
 #theme-blackberry {background: url('/theme/default/images/guide/theme_blackberry.png') no-repeat;}
 #theme-classic {background: url('/theme/default/images/guide/theme_classic.png') no-repeat;}
 #theme-purple {background: url('/theme/default/images/guide/theme_purple.png') no-repeat;}
-.theme {display: inline-block; margin-left: 10px; color: #FFF; border: none; height: 88px; width: 128px; margin-top: 25px; background-size: 100% !important; position: relative; cursor:pointer}
-.theme-text {position: absolute; top: 64px; left: 43px;}
+.theme {margin-left: 10px; color: #FFF; border: none; height: 103px; margin-top: 25px; background-size: 100% !important; cursor:pointer}
+.theme:hover {box-shadow: 0 0 14px rgba(0, 0, 0, 0.4);}
 .theme-text.active {left: 20px;}
 .theme-text .icon {padding-right: 10px;}
 </style>
@@ -27,11 +27,15 @@ $(function()
 })
 </script>
 <div class='themeSwitch'>
+<?php $i = 0;?>
 <?php foreach($lang->block->themes as $themeKey => $themeName):?>
-<div class='theme' id="<?php echo 'theme-' . $themeKey;?>" data-value="<?php echo $themeKey;?>">
-    <?php $hidden = $app->cookie->theme == $themeKey ? '' : 'hidden';?>
-    <?php $active = $app->cookie->theme == $themeKey ? 'active' : '';?>
-    <div class='theme-text <?php echo $active;?>'><i class="icon icon-check-circle <?php echo $hidden;?>"></i><?php echo $themeName;?></div>
-  </div>
+  <?php if($i % 4 == 0) echo "<div class='col-12 table-row'>"?>
+    <div class='theme col-3' id="<?php echo 'theme-' . $themeKey;?>" data-value="<?php echo $themeKey;?>">
+      <?php $hidden = $app->cookie->theme == $themeKey ? '' : 'hidden';?>
+      <?php $active = $app->cookie->theme == $themeKey ? 'active' : '';?>
+      <div class='theme-text text-center <?php echo $active;?>'><i class="icon icon-check-circle <?php echo $hidden;?>"></i><?php echo $themeName;?></div>
+    </div>
+  <?php if($i % 4 == 3) echo "</div>";?>
+  <?php $i ++;?>
 <?php endforeach;?>
 </div>
