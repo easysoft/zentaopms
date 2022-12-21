@@ -137,6 +137,32 @@ $(function()
         });
 
         $('#casesResults table caption .result-tip').html($('#resultTip').html());
+
+        if($('.result-item:first').data('status') == 'running')
+        {
+            var times = 0;
+            var id    = $('.result-item:first').data('id')
+            var link  = createLink('testtask', 'ajaxGetResult', 'resultID=' + id);
+            
+            var resultInterval = setInterval(() => {
+                times++;
+                if(times > 600)
+                {
+                    clearInterval(resultInterval);
+                }
+                
+                $.get(link, function(task)
+                {
+                    task = JSON.parse(task);
+                    task = task.data;
+                    if(task.ZTFResult != '')
+                    {
+                        clearInterval(resultInterval);
+                        window.location.reload();
+                    }
+                });
+            }, 1000);
+        }
     });
 });
 var sessionString = '<?php echo session_name() . '=' . session_id();?>';

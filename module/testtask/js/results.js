@@ -32,9 +32,17 @@ $(function()
     }
     else
     {
+        var times = 0;
+        var id    = $('tr:first').data('id')
+        var link  = createLink('testtask', 'ajaxGetResult', 'resultID=' + id);
+        
         var resultInterval = setInterval(() => {
-            var id = $('tr:first').data('id')
-            var link = createLink('testtask', 'ajaxGetResult', 'resultID=' + id);
+            times++;
+            if(times > 600)
+            {
+                clearInterval(resultInterval);
+            }
+            
             $.get(link, function(task)
             {
                 task = JSON.parse(task);
@@ -46,7 +54,6 @@ $(function()
                 }
             });
         }, 1000);
-        
     }
 
     $('#casesResults').click(function(event)
