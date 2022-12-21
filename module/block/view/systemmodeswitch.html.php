@@ -1,9 +1,10 @@
 <style>
+.block-guide .tab-pane .mode-switch .mode-title {padding-top: 14px; padding-left: 20px;}
 .block-guide .tab-pane .mode-switch .dataTitle {padding: 14px 20px;}
-.block-guide .tab-pane .mode-switch .mode-block {background: #E6F0FF; margin-left: 10px; cursor: pointer;}
+.block-guide .tab-pane .mode-switch .mode-block {background: rgba(230, 240, 255, 0.4); margin-left: 10px; cursor: pointer; padding-top: 8px;}
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(2) {margin-left: 8%;}
 .block-guide .tab-pane .mode-switch .mode-block:hover, .block-guide .tab-pane .mode-switch .mode-block.active {box-shadow: 0 0 0 2px #2E7FFF;}
-.block-guide .tab-pane .mode-switch .mode-desc {padding: 10px; font-size: 12px; color: #5E626D;}
+.block-guide .tab-pane .mode-switch .mode-desc {padding: 4px 4px 10px; font-size: 12px; color: #5E626D;}
 </style>
 <?php $usedMode = zget($this->config->global, 'mode', 'light');?>
 <?php js::set('usedMode', $usedMode);?>
@@ -11,7 +12,7 @@
 <?php js::set('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$usedMode == 'light' ? 'ALM' : 'light']));?>
 <div class='table-row mode-switch'>
   <div class="col-4">
-    <div class="col dataTitle"><?php echo $lang->block->customModeTip->common;?></div>
+    <p class="col mode-title"><?php echo $lang->block->customModeTip->common;?></p>
     <div class='col pull-left col-md-12'>
       <?php foreach($lang->block->customModes as $mode => $modeName):?>
       <div class="pull-left col-md-5 mode-block<?php if($usedMode == $mode) echo ' active';?>" data-mode='<?php echo $mode;?>'>

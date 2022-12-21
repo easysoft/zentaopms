@@ -3,7 +3,7 @@
 .vision-switch-container {display: flex;}
 #vision-rnd {background: url('/theme/default/images/guide/vision_rnd.png') no-repeat;}
 #vision-lite {background: url('/theme/default/images/guide/vision_lite.png') no-repeat;}
-.vision {width: 47%; border: none; background: #E6F0FF; cursor:pointer; border-radius: 2px;}
+.vision {width: 47%; border: none; background: rgba(230, 240, 255, 0.4); cursor:pointer; border-radius: 2px;}
 .vision + .vision {margin-left: 10px;}
 .vision:hover, .vision.active {box-shadow: 0 0 0 2px #2E7FFF;}
 .vision-img {height: 118px; width: 100%; background-size: 100% !important;}
