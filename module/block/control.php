@@ -426,7 +426,7 @@ class block extends control
         }
         elseif($block->block == 'guide')
         {
-            $html = $this->fetch('block', 'guide');
+            $html = $this->fetch('block', 'guide', "blockID=$block->id");
         }
         elseif($block->block == 'assigntome')
         {
@@ -2000,15 +2000,18 @@ class block extends control
 
     /**
      * Print guide block
+     *
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function guide()
+    public function guide($blockID = 0)
     {
         $this->app->loadLang('custom');
         $this->app->loadLang('my');
         $this->loadModel('setting');
 
+        $this->view->blockID       = $blockID;
         $this->view->programs      = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
         $this->view->programID     = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
         $this->view->URSRList      = $this->loadModel('custom')->getURSRPairs();

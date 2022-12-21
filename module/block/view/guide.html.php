@@ -33,10 +33,14 @@
 <?php endif;?>
 </style>
 <script>
-<?php $blockNavId = 'nav-' . uniqid(); ?>
+<?php $blockNavId = 'nav-' . $blockID; ?>
 $(function()
 {
-    var $nav = $('#<?php echo $blockNavId;?>');
+    var $block             = $('#block<?php echo $blockID;?>');
+    var $nav               = $block.find('#<?php echo $blockNavId;?>');
+    var visionPosition     = "<?php echo 'visionPosition-' . $blockID;?>";
+    var themePosition      = "<?php echo 'themePosition-' . $blockID;?>";
+    var systemModePosition = "<?php echo 'systemModePosition-' . $blockID;?>";
     $nav.on('click', '.switch-icon', function(e)
     {
         var isPrev = $(this).is('.prev');
@@ -58,35 +62,35 @@ $(function()
             $('.block-guide .tutorialBtn').addClass('hidden');
         }
 
-        if($(this).attr('id') !== 'visionSwitch') removePosition('visionPosition');
-        if($(this).attr('id') !== 'themeSwitch') removePosition('themePosition');
-        if($(this).attr('id') !== 'systemModePosition') removePosition('systemModePosition');
+        if($(this).attr('id') !== 'visionSwitch') removePosition(visionPosition);
+        if($(this).attr('id') !== 'themeSwitch') removePosition(themePosition);
+        if($(this).attr('id') !== 'systemMode') removePosition(systemModePosition);
     })
 
-    if(localStorage.getItem('visionPosition') && Number(localStorage.getItem('visionPosition')))
+    if(localStorage.getItem(visionPosition) && Number(localStorage.getItem(visionPosition)))
     {
-        var scrollTopNum = Number(localStorage.getItem('visionPosition'));
-        document.getElementById('guideBody').scrollTo = scrollTopNum;
-        $('#visionSwitch > a').click();
+        var scrollTopNum = Number(localStorage.getItem(visionPosition));
+        $block.scrollTop('#guideBody', scrollTopNum);
+        $block.find('#visionSwitch > a').click();
         window.scrollTo(0, scrollTopNum);
     }
-    else if(localStorage.getItem('themePosition') && Number(localStorage.getItem('themePosition')))
+    else if(localStorage.getItem(themePosition) && Number(localStorage.getItem(themePosition)))
     {
-        var scrollTopNum = Number(localStorage.getItem('themePosition'));
-        document.getElementById('guideBody').scrollTo = scrollTopNum;
-        $('#themeSwitch > a').click();
+        var scrollTopNum = Number(localStorage.getItem(themePosition));
+        $block.scrollTop('#guideBody', scrollTopNum);
+        $block.find('#themeSwitch > a').click();
         window.scrollTo(0, scrollTopNum);
     }
-    else if(localStorage.getItem('systemModePosition') && Number(localStorage.getItem('systemModePosition')))
+    else if(localStorage.getItem(systemModePosition) && Number(localStorage.getItem(systemModePosition)))
     {
-        var scrollTopNum = Number(localStorage.getItem('systemModePosition'));
-        document.getElementById('guideBody').scrollTo = scrollTopNum;
-        $('#systemMode > a').click();
+        var scrollTopNum = Number(localStorage.getItem(systemModePosition));
+        $block.scrollTop('#guideBody', scrollTopNum);
+        $block.find('#systemMode > a').click();
         window.scrollTo(0, scrollTopNum);
     }
     else
     {
-        $('#flowchart > a').click();
+        $block.find('#flowchart > a').click();
     }
 
     /**
