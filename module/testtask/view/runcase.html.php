@@ -121,6 +121,10 @@
 <script>
 $(function()
 {
+    loadResult();
+});
+function loadResult()
+{
     $('#resultsContainer').load("<?php echo $this->createLink('testtask', 'results', "runID={$runID}&caseID=$caseID&version=$version");?> #casesResults", function()
     {
         $('.result-item').click(function()
@@ -158,13 +162,13 @@ $(function()
                     if(task.ZTFResult != '')
                     {
                         clearInterval(resultInterval);
-                        window.location.reload();
+                        loadResult();
                     }
                 });
             }, 1000);
         }
     });
-});
+}
 var sessionString = '<?php echo session_name() . '=' . session_id();?>';
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>
