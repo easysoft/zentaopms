@@ -33,7 +33,7 @@
     flex-wrap: wrap;
 }
 .option-ursr {
-    flex: 1 1 220px;
+    flex: 1 1 200px;
 }
 .option-ursr.picker-option-selected > .border,
 .option-ursr.picker-option-active> .border {
