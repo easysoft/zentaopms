@@ -17,16 +17,18 @@
 .block-guide .nav-secondary > li.switch-icon {display: none;}
 .block-guide .tab-pane h4 {color: #0B0F18;}
 .block-guide .tab-pane .dataTitle {font-size: 12px; color: #5E626D;}
+.block-guide .tab-pane .app-client .menu {margin-top: 10px;}
 .block-guide .tab-pane .app-client .menu,
 .block-guide .tab-pane .app-client .tree-menu li {padding-left: 0;}
-.block-guide .tab-pane .app-client .tree-menu li {line-height: 56px; border-bottom: 1px solid #EDEEF2;}
+.block-guide .tab-pane .app-client .tree-menu li {line-height: 56px; border: 1px solid #EDEEF2;}
+.block-guide .tab-pane .app-client .tree-menu li:nth-child(2) {border-top: none; border-bottom: none;}
 .block-guide .tab-pane .app-client .tree-menu li a.iframe {display: flex;}
 .block-guide .tab-pane .app-client .tree-menu li .avatar {background: #E6EAF1; width: 24px; height: 24px; margin-top: 16px; margin-right: 5px;}
 .block-guide .tab-pane .app-client .tree-menu li .avatar img {padding: 6px;}
 .block-guide .tab-pane .app-client .client-desc {padding-top: 12px;}
 .block-guide .tab-pane .app-qrcode {padding: 10px 20px;}
 .block-guide .tab-pane .app-qrcode .col-md-12 {padding-left: 0; padding-top: 10px;}
-.block-guide .tab-pane .app-qrcode .qrcode-down img {padding-top: 24px; width: 120px;}
+.block-guide .tab-pane .app-qrcode .qrcode-down img {padding-top: 16px;}
 .block-guide .tab-pane .app-qrcode .qrcode-down .text-primary {padding-top: 10px;}
 <?php if(common::checkNotCN()):?>
 .block-guide .col-nav {width: 215px;}
