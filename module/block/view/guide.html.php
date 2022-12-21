@@ -31,6 +31,7 @@
 .block-guide .tab-pane .app-qrcode .col-md-12 {padding-left: 0; padding-top: 10px;}
 .block-guide .tab-pane .app-qrcode .qrcode-down img {padding-top: 16px;}
 .block-guide .tab-pane .app-qrcode .qrcode-down .text-primary {padding-top: 10px;}
+.block-guide .tab-pane {height: 100%;}
 <?php if(common::checkNotCN()):?>
 .block-guide .col-nav {width: 215px;}
 <?php endif;?>

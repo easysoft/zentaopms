@@ -3,8 +3,10 @@
 .vision-switch-container {display: flex;}
 .vision {width: 47%; border: none; background-color: rgba(230, 240 , 255, 0.4); cursor:pointer; border-radius: 2px; padding: 10px 10px 0 10px;}
 .vision + .vision {margin-left: 10px;}
-.vision.active {box-shadow: 0 0 0 2px #2E7FFF;}
 .vision:hover {box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);}
+<<<<<<< module/block/view/visionswitch.html.php
+.vision.active {box-shadow: 0 0 0 2px #2E7FFF;}
+.vision-img {height: 118px; width: 100%; background-size: 100% !important;}
 .vision-title {font-size: 14px; color: #0B0F18; padding: 0 8px; margin-top: 10px;}
 .vision-text {font-size: 12px; color: #5E626D; padding: 8px;}
 </style>
