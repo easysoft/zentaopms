@@ -4,7 +4,7 @@
 .block-guide .tab-pane .mode-switch .mode-block {background: rgba(230, 240, 255, 0.4); margin-left: 10px; cursor: pointer; padding-top: 8px;}
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(2) {margin-left: 8%;}
 .block-guide .tab-pane .mode-switch .mode-block:hover {box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);}
-.block-guide .tab-pane .mode-switch .mode-block.active {box-shadow: 0 0 0 2px #2E7FFF;}
+.block-guide .tab-pane .mode-switch .mode-block.active {box-shadow: 0 0 0 2px #2E7FFF; border-radius: 2px;}
 .block-guide .tab-pane .mode-switch .mode-desc {padding: 4px 4px 10px; font-size: 12px; color: #5E626D;}
 <?php if(common::checkNotCN()):?>
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(1) {padding-bottom: 18px;}
@@ -75,7 +75,7 @@ $(function()
         if(selectedMode == 'light' && hasProgram) postData.program = $('#defaultProgram').val();
         $.post(createLink('custom', 'mode'), postData, function(result)
         {
-            if(result.result == 'success') parent.location.reload();
+            parent.location.reload();
         });
     }
 
