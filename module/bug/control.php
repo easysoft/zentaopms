@@ -2345,15 +2345,18 @@ class bug extends control
         {
             $this->loadModel('transfer');
             $this->session->set('bugTransferParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
-            if(!$productID)
+            if(!$productID or $browseType == 'bysearch')
             {
                 $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
                 $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
 
-                $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-                $projectID = $object->type == 'project' ? $object->id : $object->parent;
-                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
-                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
+                if($executionID)
+                {
+                    $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+                    $projectID = $object->type == 'project' ? $object->id : $object->parent;
+                    $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
+                    $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
+                }
             }
 
             $this->transfer->export('bug');

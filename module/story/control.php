@@ -2839,7 +2839,7 @@ class story extends control
         {
             $this->session->set('storyTransferParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
-            if(!$productID)
+            if(!$productID or $browseType == 'bysearch')
             {
                 $this->config->story->datatable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
                 $this->config->story->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
