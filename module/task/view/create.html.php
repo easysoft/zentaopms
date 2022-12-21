@@ -79,7 +79,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             </div>
           </td>
           <td colspan='2'>
-            <div class="checkbox-primary c-multipleTask affair" style='display: inline-block; margin-right: <?php echo common::checkNotCN() ? '-10px' : '-30px'?>'>
+            <div class="checkbox-primary c-multipleTask affair" style='display: inline-block; margin-right: 10px'>
               <input type="checkbox" name="multiple" value="1" id="multipleBox" /><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
             </div>
             <div class='hidden modeBox' style='display: inline-block'><?php echo html::radio('mode', $lang->task->modeList, !empty($task->mode) ? $task->mode: 'linear');?></div>

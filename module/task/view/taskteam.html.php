@@ -184,7 +184,7 @@ $(document).ready(function()
 
     var disableMembers = function()
     {
-        var mode = $('#mode').length > 0 ? $('#mode').val() : '<?php echo (!empty($task->mode) ? $task->mode : '')?>';
+        var mode = $('[name="mode"]').length > 0 ? $('[name="mode"]').val() : '<?php echo (!empty($task->mode) ? $task->mode : '')?>';
         if(mode == 'multi')
         {
             var members = [];
@@ -268,7 +268,7 @@ $(document).ready(function()
             $newRow.removeClass('highlight');
         }, 1600);
 
-        var taskMode = $('#mode').val();
+        var taskMode = $('[name="mode"]').val();
         if(taskMode == 'multi') $('#taskTeamEditor tr.member .icon-angle-down').addClass('hidden');
 
         disableMembers();
@@ -323,7 +323,7 @@ $(document).ready(function()
         $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
     });
 
-    $('#mode').change(function()
+    $('[name="mode"]').change(function()
     {
         if($(this).val() == 'multi')
         {

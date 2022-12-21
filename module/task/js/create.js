@@ -581,7 +581,7 @@ $('#modalTeam tfoot .btn').click(function()
     var team  = '';
     var time  = 0;
     var error = false;
-    var mode  = $('#mode').val();
+    var mode  = $('[name="mode"]').val();
 
     $('select[name^=team]').each(function()
     {
