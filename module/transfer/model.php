@@ -649,7 +649,7 @@ class transferModel extends model
         {
             foreach($values as $field => $value)
             {
-                if($fieldList[$field]['from'] == 'workflow') continue;
+                if(isset($fieldList[$field]['from']) and $fieldList[$field]['from'] == 'workflow') continue;
                 if(in_array($field, $dataSourceList))
                 {
                     if($fieldList[$field]['control'] == 'multiple')
