@@ -1,3 +1,7 @@
+<style>
+.preference .table-form > tbody > tr > th {font-weight: 400; color: #0B0F18;}
+.preference .chosen-container-single .chosen-single > span {color: #313C52;}
+</style>
 <div class='preference'>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('my', 'preference', "showTip=false")?>'>
     <table align='center' class='table table-form w-320px'>
