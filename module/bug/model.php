@@ -3302,7 +3302,7 @@ class bugModel extends model
         foreach($browserList as $value)
         {
             if(empty($value)) continue;
-            $browser .= $this->lang->bug->browserList[$value] . ',';
+            $browser .= zget($this->lang->bug->browserList, $value) . ',';
         }
         $os      = trim($os, ',');
         $browser = trim($browser, ',');
