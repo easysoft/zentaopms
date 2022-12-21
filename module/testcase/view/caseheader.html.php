@@ -13,7 +13,7 @@
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
-#mainMenu .pull-left .checkbox-primary {margin-top: 5px;}
+#mainMenu .pull-left .checkbox-primary {margin-top: 6px;}
 #mainMenu .dividing-line {width: 1px; height: 16px; display: inline-block; background: #D8DBDE; margin: 7px 8px 0 0; float: left;}
 #byTypeTab li.split{border-top: 1px solid #eee;}
 </style>
