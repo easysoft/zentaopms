@@ -26,6 +26,7 @@
 .block-guide .tab-pane .app-client .tree-menu li .avatar {background: #E6EAF1; width: 24px; height: 24px; margin-top: 16px; margin-right: 5px;}
 .block-guide .tab-pane .app-client .tree-menu li .avatar img {padding: 6px;}
 .block-guide .tab-pane .app-client .client-desc {padding-top: 12px;}
+.block-guide .tab-pane .app-client .client-desc img {height: 195px;}
 .block-guide .tab-pane .app-qrcode {padding: 10px 20px;}
 .block-guide .tab-pane .app-qrcode .col-md-12 {padding-left: 0; padding-top: 10px;}
 .block-guide .tab-pane .app-qrcode .qrcode-down img {padding-top: 16px;}
@@ -170,7 +171,7 @@ $(function()
             <div class='col'><h4><?php echo $lang->block->zentaoapp->common;?></h4></div>
             <div class="col dataTitle"><?php echo $lang->block->zentaoapp->desc;?></div>
             <div class='col pull-left col-md-12'>
-              <div class="pull-left col-md-7">
+              <div class="pull-left col-md-8">
                 <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_index.png');?></div>
                 <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_execution.png');?></div>
                 <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_statistic.png');?></div>
