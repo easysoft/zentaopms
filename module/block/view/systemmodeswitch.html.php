@@ -64,6 +64,9 @@ $(function()
      */
     function switchMode()
     {
+        parent.location.reload();
+        return;
+
         if(selectedMode == usedMode) return;
 
         var postData = {mode: selectedMode};
@@ -77,7 +80,7 @@ $(function()
     var $nav = $('#<?php echo "tab3{$blockNavId}ContentsystemMode";?>');
     $nav.on('click', '.mode-block', function()
     {
-        var selectedMode = $(this).data('mode');
+        selectedMode = $(this).data('mode');
         if(selectedMode == usedMode) return;
 
         var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $('#guideBody').offset().top;
