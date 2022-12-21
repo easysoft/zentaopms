@@ -7,7 +7,7 @@
 .vision.active {box-shadow: 0 0 0 2px #2E7FFF;}
 .vision:hover {box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);}
 .vision-img {height: 118px; width: 100%; background-size: 100% !important;}
-.vision-title {font-size: 14px; color: #0B0F18; padding: 0 8px;}
+.vision-title {font-size: 14px; color: #0B0F18; padding: 0 8px; margin-top: 10px;}
 .vision-text {font-size: 12px; color: #5E626D; padding: 8px;}
 </style>
 <?php if(common::checkNotCN()):?>
