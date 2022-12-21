@@ -46,7 +46,7 @@
           <td class='w-120px'> &nbsp; #<?php echo $result->id?></td>
           <td class='w-180px'><?php echo $result->date;?></td>
           <?php if($result->node > 0):?>
-          <td><?php echo sprintf(empty($result->ZTFResult) ? $lang->testtask->runningNode : $lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName) . "&nbsp;&nbsp;<span class=\"label label-badge\">{$lang->testtask->auto}</span>";?></td>
+          <td><?php echo sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName, empty($result->ZTFResult) ? $lang->testtask->runCase : "<span class='span-warning'>{$lang->testtask->running}</span>") . "&nbsp;&nbsp;<span class=\"label label-badge\">{$lang->testtask->auto}</span>";?></td>
           <?php else:?>
           <td><?php echo zget($users, $result->lastRunner) . ' ' . $lang->testtask->runCase;?></td>
           <?php endif;?>
