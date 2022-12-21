@@ -126,6 +126,10 @@ $(function()
         $('.result-item').click(function()
         {
             var $this = $(this);
+            if($this.data('status') == 'running')
+            {
+                return;
+            }
             $this.toggleClass('show-detail');
             var show = $this.hasClass('show-detail');
             $this.next('.result-detail').toggleClass('hide', !show);
