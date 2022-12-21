@@ -1364,7 +1364,7 @@ class story extends control
         $buildApp   = $tab == 'product' ?   'project' : $tab;
         $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
-        $this->session->set('buildList',   $uri, $buildApp);
+        if(!isonlybody())$this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
 
         $storyID        = (int)$storyID;
