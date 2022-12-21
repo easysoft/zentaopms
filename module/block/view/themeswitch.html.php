@@ -13,12 +13,17 @@
 .theme-text .icon {padding-right: 10px;}
 </style>
 <script>
-$('.themeSwitch > .theme').click(function()
+$(function()
 {
-    var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $('#guideBody').offset().top;
-    localStorage.setItem('themePosition', scrollTop);
+    var $block        = $('#block<?php echo $blockID;?>');
+    var themePosition = "<?php echo 'themePosition-' . $blockID;?>";
+    $block.find('.themeSwitch > .theme').click(function()
+    {
+        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $block.find('#guideBody').offset().top;
+        localStorage.setItem(themePosition, scrollTop);
 
-    selectTheme($(this).attr('data-value'));
+        selectTheme($(this).attr('data-value'));
+    });
 })
 </script>
 <div class='themeSwitch'>

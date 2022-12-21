@@ -28,7 +28,9 @@
 <script>
 $(function()
 {
-    $('.vision-switch .vision').click(function(e)
+    var $block         = $('#block<?php echo $blockID;?>');
+    var visionPosition = "<?php echo 'visionPosition-' . $blockID;?>";
+    $block.find('.vision-switch .vision').click(function(e)
     {
         var selectedVision = $(this).data('value');
         if (vision == selectedVision)
@@ -37,8 +39,8 @@ $(function()
           return false;
         }
 
-        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $('#guideBody').offset().top;
-        localStorage.setItem('visionPosition', scrollTop);
-    })
+        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $block.find('#guideBody').offset().top;
+        localStorage.setItem(visionPosition, scrollTop);
+    });
 })
 </script>

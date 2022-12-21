@@ -64,9 +64,6 @@ $(function()
      */
     function switchMode()
     {
-        parent.location.reload();
-        return;
-
         if(selectedMode == usedMode) return;
 
         var postData = {mode: selectedMode};
@@ -77,14 +74,15 @@ $(function()
         });
     }
 
-    var $nav = $('#<?php echo "tab3{$blockNavId}ContentsystemMode";?>');
-    $nav.on('click', '.mode-block', function()
+    var $block             = $('#block<?php echo $blockID;?>');
+    var systemModePosition = "<?php echo 'systemModePosition-' . $blockID;?>";
+    $block.on('click', '.mode-block', function()
     {
         selectedMode = $(this).data('mode');
         if(selectedMode == usedMode) return;
 
-        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $('#guideBody').offset().top;
-        localStorage.setItem('systemModePosition', scrollTop);
+        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop || $block.find('#guideBody').offset().top;
+        localStorage.setItem(systemModePosition, scrollTop);
 
         if(selectedMode == 'light' && hasProgram)
         {
