@@ -1,3 +1,59 @@
 .tip {margin-top: 10px;}
-.table-form>tbody>tr>th {white-space: nowrap; !important}
-.table-form>tbody>tr>td {width: 75%; !important}
+.table-form>tbody>tr>th {white-space: nowrap!important}
+.table-form>tbody>tr>td {width: 75%!important}
+
+.has-img > .border {
+    display: flex;
+    padding: 5px 16px;
+    border: 1px solid #EDEEF2;
+}
+.has-img.picker-option-active >.border {
+    border: 2px solid #2E7FFF;
+}
+.has-img.picker-option-active {
+    background: rgba(230,240,255, 0.4)!important;
+}
+.has-img-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-left: 5px;
+}
+.has-img-text > .title {
+    color: #0B0F18;
+    font-size: 13px;
+}
+.has-img-text > .context {
+    color: #838A9D;
+    font-size: 12px;
+}
+
+#pickerDropMenu-pk_URSR > .picker-option-list{
+    display: flex;
+    flex-wrap: wrap;
+}
+.option-ursr {
+    flex: 1 1 220px;
+}
+.option-ursr.picker-option-selected > .border,
+.option-ursr.picker-option-active> .border {
+    border: none;
+}
+.option-ursr > .border  {
+    height: 46px;
+    display: flex;
+    padding: 5px 16px;
+    border: 1px solid #EDEEF2;
+    align-items: center;
+}
+.option-ursr > .border > .value {
+    margin-right: 20px;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background: rgba(230,240,255, 0.4);
+}
+.option-ursr > .border > .value > p { 
+    line-height: 20px;
+    text-align: center;
+}
