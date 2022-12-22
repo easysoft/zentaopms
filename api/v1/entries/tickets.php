@@ -38,9 +38,9 @@ class ticketsEntry extends entry
         }
 
         $data = array();
-        $data['page']      = $pager->pageID;
-        $data['total']     = $pager->recTotal;
-        $data['limit']     = $pager->recPerPage;
+        $data['page']    = $pager->pageID;
+        $data['total']   = $pager->recTotal;
+        $data['limit']   = $pager->recPerPage;
         $data['tickets'] = $result;
 
         return $this->send(200, $data);
