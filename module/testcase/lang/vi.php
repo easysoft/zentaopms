@@ -77,7 +77,7 @@ $lang->testcase->deleted          = 'Đã xóa';
 $lang->testcase->browseUnits      = 'Unit Test';
 $lang->testcase->caseType         = 'Case Type';
 $lang->testcase->allType          = 'All Types';
-$lang->testcase->showAutoCase     = 'Show Automated Test Cases';
+$lang->testcase->showAutoCase     = 'Automated Test Cases';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
