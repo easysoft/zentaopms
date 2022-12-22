@@ -1364,7 +1364,7 @@ class story extends control
         $buildApp   = $tab == 'product' ?   'project' : $tab;
         $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
-        $this->session->set('buildList',   $uri, $buildApp);
+        if(!isonlybody())$this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
 
         $storyID        = (int)$storyID;
@@ -1373,6 +1373,7 @@ class story extends control
         if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
+        if(!empty($story->fromBug)) $this->session->set('bugList', $uri, 'qa');
 
         $version = empty($version) ? $story->version : $version;
         $story   = $this->story->mergeReviewer($story, true);
@@ -2839,7 +2840,7 @@ class story extends control
         {
             $this->session->set('storyTransferParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
-            if(!$productID)
+            if(!$productID or $browseType == 'bysearch')
             {
                 $this->config->story->datatable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
                 $this->config->story->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
