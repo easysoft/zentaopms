@@ -8,7 +8,10 @@
 .block-guide .tab-pane .mode-switch .mode-block:hover {box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);}
 .block-guide .tab-pane .mode-switch .mode-block.active {box-shadow: 0 0 0 2px #2E7FFF; border-radius: 2px;}
 .block-guide .tab-pane .mode-switch .mode-desc {padding: 4px 4px 10px; font-size: 12px; color: #5E626D;}
+#selectProgramModal .modal-header {border-bottom: 0;}
+#selectProgramModal .modal-header h4.modal-title {font-weight: 700;}
 #selectProgramModal .modal-dialog {width: 550px;}
+#selectProgramModal .modal-footer {border-top: 0px; text-align: center;}
 <?php if(common::checkNotCN()):?>
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(1) {padding-bottom: 18px;}
 @media screen and (max-width: 988px) {.block-guide .tab-pane .mode-switch .mode-content .mode-block:nth-child(2) img {max-width: 74%;}}
