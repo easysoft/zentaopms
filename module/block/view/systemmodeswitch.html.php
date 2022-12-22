@@ -21,7 +21,7 @@
     <div class='col pull-left col-md-12'>
       <?php foreach($lang->block->customModes as $mode => $modeName):?>
       <div class="pull-left col-md-5 mode-block<?php if($usedMode == $mode) echo ' active';?>" data-mode='<?php echo $mode;?>'>
-        <div><?php echo html::image($config->webRoot . "theme/default/images/guide/{$mode}.png");?></div>
+        <div><?php echo html::image($config->webRoot . "theme/default/images/guide/{$mode}_" . (common::checkNotCN() ? 'en' : 'cn') . ".png");?></div>
         <div class='mode-desc'>
           <h4><?php echo $modeName;?></h4>
           <?php echo $lang->block->customModeTip->$mode;?>
