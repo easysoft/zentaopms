@@ -71,7 +71,7 @@ INSERT INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `co
 ('feedback', 'source', 'varchar', '30', '来源公司', 'input', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00'),
 ('feedback', 'repeatFeedback', 'varchar', '30', '重复反馈', 'select', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00'),
 ('feedback', 'activatedBy', 'varchar', '30', '由谁激活', 'select', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00'),
-('feedback', 'activatedDate', 'datetime', '', '激活日期', 'input', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00');
+('feedback', 'activatedDate', 'datetime', '', '激活日期', 'datetime', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00');
 
 INSERT INTO `zt_workflowaction` (`module`, `action`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `order`, `buildin`, `role`, `virtual`, `conditions`, `verifications`, `hooks`, `linkages`, `js`, `css`, `toList`, `blocks`, `desc`, `status`, `vision`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `method`) VALUES
 ('feedback', 'activate', '激活反馈', 'single', 'different', 'none', 'normal', 'browseandview', 'normal', 'direct', 0, 1, 'buildin', 0, '', '', '', '', '', '', '', '', '', 'enable', 'rnd', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00', 'activate');
