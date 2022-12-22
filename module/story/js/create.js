@@ -307,6 +307,8 @@ function loadModuleForTwins(productID, branch, branchIndex)
 
         $moduleIDBox.fixInputGroup();
     });
+
+    if(requiredFields.indexOf('module') > 0) $('#moduleIdBox #modules' + branchIndex + '_chosen').addClass('required')
 }
 
 /**
