@@ -21,6 +21,11 @@ $routes['/feedbacks/:id']        = 'feedback';
 $routes['/feedbacks/:id/assign'] = 'feedbackAssignto';
 $routes['/feedbacks/:id/close']  = 'feedbackClose';
 
+$routes['/tickets']              = 'tickets';
+$routes['/tickets/:id']          = 'ticket';
+$routes['/tickets/:id/assign']   = 'ticketAssignto';
+$routes['/tickets/:id/close']    = 'ticketClose';
+
 $routes['/options/:type'] = 'options';
 
 $routes['/configurations']       = 'configs';
