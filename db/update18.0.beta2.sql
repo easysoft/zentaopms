@@ -58,3 +58,20 @@ REPLACE INTO `zt_workflowaction` (`module`, `action`, `name`, `type`, `batchMode
 ('ticket', 'finish', '完成工单', 'single', 'different', 'none', 'normal', 'browseandview', 'normal', 'direct', 0, 1, 'buildin', 0, '', '', '', '', '', '', '', '', '', 'enable', 'lite', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00', 'operate'),
 ('ticket', 'close', '关闭工单', 'single', 'different', 'none', 'normal', 'browseandview', 'normal', 'direct', 0, 1, 'buildin', 0, '', '', '', '', '', '', '', '', '', 'enable', 'lite', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00', 'operate'),
 ('ticket', 'view', '工单详情', 'single', 'different', 'none', 'normal', 'browse', 'side', 'direct', 0, 1, 'buildin', 0, '', '', '', '', '', '', '', '', '', 'enable', 'lite', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00', 'view');
+
+UPDATE `zt_workflowfield` SET `name` = '类型'  WHERE `module` = 'feedback' and `field` = 'type';
+UPDATE `zt_workflowfield` SET `name` = '指派人'  WHERE `module` = 'feedback' and `field` = 'assignedTo';
+UPDATE `zt_workflowfield` SET `name` = '创建者'  WHERE `module` = 'feedback' and `field` = 'openedBy';
+UPDATE `zt_workflowfield` SET `name` = '创建时间'  WHERE `module` = 'feedback' and `field` = 'openedDate';
+UPDATE `zt_workflowfield` SET `name` = '反馈邮箱'  WHERE `module` = 'feedback' and `field` = 'notifyEmail';
+UPDATE `zt_workflowfield` SET `name` = '最后操作'  WHERE `module` = 'feedback' and `field` = 'editedBy';
+UPDATE `zt_workflowfield` SET `name` = '最后操作时间'  WHERE `module` = 'feedback' and `field` = 'editedDate';
+
+INSERT INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `canExport`, `canSearch`, `isValue`, `order`, `searchOrder`, `exportOrder`, `buildin`, `role`, `desc`, `readonly`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
+('feedback', 'source', 'varchar', '30', '来源公司', 'input', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00'),
+('feedback', 'repeatFeedback', 'varchar', '30', '重复反馈', 'select', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00'),
+('feedback', 'activatedBy', 'varchar', '30', '由谁激活', 'select', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00'),
+('feedback', 'activatedDate', 'datetime', '', '激活日期', 'input', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00');
+
+INSERT INTO `zt_workflowaction` (`module`, `action`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `order`, `buildin`, `role`, `virtual`, `conditions`, `verifications`, `hooks`, `linkages`, `js`, `css`, `toList`, `blocks`, `desc`, `status`, `vision`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `method`) VALUES
+('feedback', 'activate', '激活反馈', 'single', 'different', 'none', 'normal', 'browseandview', 'normal', 'direct', 0, 1, 'buildin', 0, '', '', '', '', '', '', '', '', '', 'enable', 'rnd', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00', 'activate');
