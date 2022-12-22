@@ -92,7 +92,7 @@
                     common::printLink('zanode', 'suspend', "zanodeID={$node->id}", "<i class='icon icon-pause'></i> ", '', $suspendAttr);
                 }
                 common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
-                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-desktop'></i> ", '_blank', "title='{$lang->zanode->getVNC}' class='btn " . ($node->status == 'running' ? '':'disabled') . "'", '');
+                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-desktop'></i> ", '_blank', "title='{$lang->zanode->getVNC}' class='btn " . (in_array($node->status ,array('running', 'launch')) ? '':'disabled') . "'", '');
                 common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-export'></i> ", '', "class='btn iframe createImage' title='{$lang->zanode->createImage}' data-width='50%'", '', true);
                 common::printIcon('zanode', 'edit', "id={$node->id}", $node, 'list');
                 common::printLink('zanode', 'delete', "zanodeID={$node->id}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->zanode->destroy}' class='btn btn-primary' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmDelete}\")==false) return false;'");
