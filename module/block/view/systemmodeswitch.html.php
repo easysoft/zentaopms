@@ -107,7 +107,7 @@ $(function()
         }
     }).on('click', '#selectProgramModal .btn-save', function()
     {
-        switchMode(selectedMode);
+        switchMode('light');
     });
 });
 </script>
