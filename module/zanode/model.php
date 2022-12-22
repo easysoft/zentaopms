@@ -806,8 +806,8 @@ class zanodemodel extends model
 
         if(empty($node) or $node->status != 'running' or !$node->ip or !$node->ztf or !$node->tokenSN)
         {
-            // $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
-            // return  dao::$errors = $this->lang->zanode->runTimeout;
+            $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
+            return  dao::$errors = $this->lang->zanode->runTimeout;
         }
 
         $params = array(
@@ -820,8 +820,8 @@ class zanodemodel extends model
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->ztf}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
         if(empty($result) or $result->code != 0)
         {
-            // $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
-            // return  dao::$errors = $this->lang->zanode->runTimeout;
+            $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
+            return  dao::$errors = $this->lang->zanode->runTimeout;
         }
     }
 }
