@@ -11,7 +11,7 @@
 #selectProgramModal .modal-dialog {width: 550px;}
 <?php if(common::checkNotCN()):?>
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(1) {padding-bottom: 18px;}
-@media screen and (max-width: 1087px){.block-guide .tab-pane .mode-switch .mode-content .mode-block + .mode-block img {width: 74%;}}
+@media screen and (max-width: 988px) {.block-guide .tab-pane .mode-switch .mode-content .mode-block:nth-child(2) img {max-width: 74%;}}
 <?php endif;?>
 </style>
 <?php $usedMode = zget($this->config->global, 'mode', 'light');?>
@@ -24,7 +24,7 @@
     <div class='col pull-left col-md-12 mode-content'>
       <?php foreach($lang->block->customModes as $mode => $modeName):?>
       <div class="pull-left col-md-5 mode-block<?php if($usedMode == $mode) echo ' active';?>" data-mode='<?php echo $mode;?>'>
-        <div><?php echo html::image($config->webRoot . "theme/default/images/guide/{$mode}_" . (common::checkNotCN() ? 'en' : 'cn') . ".png");?></div>
+        <div style="width: 100%;"><?php echo html::image($config->webRoot . "theme/default/images/guide/{$mode}_" . (common::checkNotCN() ? 'en' : 'cn') . ".png");?></div>
         <div class='mode-desc'>
           <h4><?php echo $modeName;?></h4>
           <?php echo $lang->block->customModeTip->$mode;?>
