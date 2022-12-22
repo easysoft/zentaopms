@@ -1,5 +1,7 @@
 <style>
+.block-guide .tab-pane .mode-switch {padding-bottom: 10px;}
 .block-guide .tab-pane .mode-switch .mode-title {padding-top: 14px; padding-left: 20px;}
+.block-guide .tab-pane .mode-switch .mode-content {display: flex;}
 .block-guide .tab-pane .mode-switch .dataTitle {padding: 14px 20px;}
 .block-guide .tab-pane .mode-switch .mode-block {background: rgba(230, 240, 255, 0.4); margin-left: 10px; cursor: pointer; padding-top: 8px;}
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(2) {margin-left: 8%;}
@@ -9,6 +11,7 @@
 #selectProgramModal .modal-dialog {width: 550px;}
 <?php if(common::checkNotCN()):?>
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(1) {padding-bottom: 18px;}
+@media screen and (max-width: 988px) {.block-guide .tab-pane .mode-switch .mode-content .mode-block:nth-child(2) img {max-width: 74%;}}
 <?php endif;?>
 </style>
 <?php $usedMode = zget($this->config->global, 'mode', 'light');?>
@@ -18,10 +21,10 @@
 <div class='table-row mode-switch'>
   <div class="col-4">
     <p class="col mode-title"><?php echo $lang->block->customModeTip->common;?></p>
-    <div class='col pull-left col-md-12'>
+    <div class='col pull-left col-md-12 mode-content'>
       <?php foreach($lang->block->customModes as $mode => $modeName):?>
       <div class="pull-left col-md-5 mode-block<?php if($usedMode == $mode) echo ' active';?>" data-mode='<?php echo $mode;?>'>
-        <div><?php echo html::image($config->webRoot . "theme/default/images/guide/{$mode}_" . (common::checkNotCN() ? 'en' : 'cn') . ".png");?></div>
+        <div style="width: 100%;"><?php echo html::image($config->webRoot . "theme/default/images/guide/{$mode}_" . (common::checkNotCN() ? 'en' : 'cn') . ".png");?></div>
         <div class='mode-desc'>
           <h4><?php echo $modeName;?></h4>
           <?php echo $lang->block->customModeTip->$mode;?>
@@ -68,14 +71,15 @@ $(function()
      * @access public
      * @return void
      */
-    function switchMode()
+    function switchMode(mode)
     {
-        if(selectedMode == usedMode) return;
+        if(mode == usedMode) return;
 
-        var postData = {mode: selectedMode};
-        if(selectedMode == 'light' && hasProgram) postData.program = $('#defaultProgram').val();
+        var postData = {mode: mode};
+        if(mode == 'light' && hasProgram) postData.program = $('#defaultProgram').val();
         $.post(createLink('custom', 'mode'), postData, function(result)
         {
+            $('#selectProgramModal').modal('hide');
             parent.location.reload();
         });
     }
@@ -98,9 +102,12 @@ $(function()
         {
             bootbox.confirm(changeModeTips, function(result)
             {
-                if(result) switchMode();
+                if(result) switchMode(selectedMode);
             });
         }
-    }).on('click', '#selectProgramModal .btn-save', switchMode);
+    }).on('click', '#selectProgramModal .btn-save', function()
+    {
+        switchMode('light');
+    });
 });
 </script>
