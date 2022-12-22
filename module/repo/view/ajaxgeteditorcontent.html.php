@@ -167,12 +167,11 @@ function getRelation(commit)
 function setTab(titleObj)
 {
     return {
-        id:          titleObj.type + '-' + titleObj.id,
-        title:       titleObj.title,
-        icon:        titleObj.type == 'story' ? 'icon-lightbulb' : (titleObj.type == 'task' ? 'icon-check-sign' : 'icon-bug'),
-        type:        'iframe',
-        url:         createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type),
-        forbidClose: true
+        id:    titleObj.type + '-' + titleObj.id,
+        title: titleObj.title,
+        icon:  titleObj.type == 'story' ? 'icon-lightbulb' : (titleObj.type == 'task' ? 'icon-check-sign' : 'icon-bug'),
+        type:  'iframe',
+        url:   createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type)
     };
 }
 
