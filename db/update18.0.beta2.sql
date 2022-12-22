@@ -1,6 +1,6 @@
 REPLACE INTO `zt_workflow` (`parent`, `child`, `type`, `navigator`, `app`, `position`, `module`, `table`, `name`, `flowchart`, `js`, `css`, `order`, `buildin`, `administrator`, `desc`, `version`, `status`, `approval`, `vision`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `titleField`, `contentField`) VALUES
-('', '', 'flow', 'secondary', 'ticket', '', 'ticket', 'zt_ticket', '工单', '', '', '', 0, 1, '', '', '1.0', 'normal', 'disabled', 'rnd', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00', '', ''),
-('', '', 'flow', 'secondary', 'ticket', '', 'ticket', 'zt_ticket', '工单', '', '', '', 0, 1, '', '', '1.0', 'normal', 'disabled', 'lite', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00', '', '');
+('', '', 'flow', 'secondary', 'feedback', '', 'ticket', 'zt_ticket', '工单', '', '', '', 0, 1, '', '', '1.0', 'normal', 'disabled', 'rnd', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00', '', ''),
+('', '', 'flow', 'secondary', 'feedback', '', 'ticket', 'zt_ticket', '工单', '', '', '', 0, 1, '', '', '1.0', 'normal', 'disabled', 'lite', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00', '', '');
 
 REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `canExport`, `canSearch`, `isValue`, `order`, `searchOrder`, `exportOrder`, `buildin`, `role`, `desc`, `readonly`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
 ('ticket', 'id', 'mediumint', '8', '编号', 'input', '', '', '', '', '', '0', '0', '0', 1, 0, 0, 1, 'buildin', '', '1', 'admin', '2022-12-19 14:13:30', '', '0000-00-00 00:00:00'),
