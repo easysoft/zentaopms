@@ -715,6 +715,7 @@ $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';
 $lang->navGroup->api    = 'doc';
 
+$lang->navGroup->screen = 'report';
 $lang->navGroup->report = 'report';
 
 $lang->navGroup->qa         = 'qa';

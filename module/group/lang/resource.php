@@ -43,6 +43,7 @@ $lang->moduleOrder[100] = 'caselib';
 $lang->moduleOrder[105] = 'automation';
 
 $lang->moduleOrder[110] = 'doc';
+$lang->moduleOrder[113] = 'screen';
 $lang->moduleOrder[115] = 'report';
 
 $lang->moduleOrder[120] = 'company';
@@ -1681,6 +1682,14 @@ $lang->tree->methodOrder[15] = 'updateOrder';
 $lang->tree->methodOrder[20] = 'manageChild';
 $lang->tree->methodOrder[25] = 'edit';
 $lang->tree->methodOrder[30] = 'delete';
+
+/* Screen. */
+$lang->resource->screen = new stdclass();
+$lang->resource->screen->browse = 'browse';
+$lang->resource->screen->view   = 'view';
+
+$lang->screen->methodOrder[0]  = 'browse';
+$lang->screen->methodOrder[5]  = 'view';
 
 /* Report. */
 $lang->resource->report = new stdclass();
