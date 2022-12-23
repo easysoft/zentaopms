@@ -402,7 +402,7 @@ class zanodemodel extends model
      */
     public function getListByHost($hostID, $orderBy = 'id_desc')
     {
-        $list = $this->dao->select('id, name, vnc, cpuCores, memory, diskSize, osName, status')->from(TABLE_ZAHOST)
+        $list = $this->dao->select('id, name, vnc, cpuCores, memory, diskSize, osName, status, heartbeat')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)
             ->andWhere("parent")->eq($hostID)
             ->orderBy($orderBy)
