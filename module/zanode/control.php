@@ -246,8 +246,13 @@ class zanode extends control
      * @param  int  $nodeID
      * @return void
      */
-    public function delete($nodeID)
+    public function delete($nodeID, $confirm = 'no')
     {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->zanode->confirmDelete, inlink('delete', "zanodeID={$nodeID}&confirm=yes")));
+        }
+
         $error = $this->zanode->destroy($nodeID);
 
         if($error)
