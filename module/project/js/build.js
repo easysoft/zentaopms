@@ -13,16 +13,13 @@ function changeProduct(productID)
 
 $(function()
 {
-    $('td .execution').each(function()
+    $('td .execution .label-danger').each(function()
     {
-        $deleted = $(this).find('.label-danger');
-        if($deleted.length > 0)
+        $execution = $(this).closest('.execution');
+        $td = $(this).closest('td');
+        if($td.width() < $execution.width())
         {
-            $td = $(this).closest('td');
-            if($td.width() < $(this).width())
-            {
-                $(this).find('.executionName').css('display', 'inline-block').css('width', $td.width() - $deleted.width()).css('overflow', 'hidden').css('float', 'left');
-            }
+            $execution.find('.executionName').css('display', 'inline-block').css('width', $td.width() - $(this).width()).css('overflow', 'hidden').css('float', 'left');
         }
     })
 })
