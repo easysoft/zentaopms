@@ -104,7 +104,6 @@ class screenModel extends model
         $config->previewScaleType = 'scrollY';
 
         $componentList = json_decode($screen->scheme);
-        $componentList = json_decode(file_get_contents('/home/liugang/repo/git/screen/' . $screen->id . '.json'));
         if(empty($componentList)) $componentList = array();
 
         /* Reset height of canvas. */
@@ -215,7 +214,7 @@ class screenModel extends model
                 $component->option->onChange = "window.location.href = $url";
                 break;
             case 'dept':
-                $component->option->value = $this->filter->dept;
+                $component->option->value = (string)$this->filter->dept;
 
                 $options = array(array('label' => $this->lang->screen->allDepts, 'value' => '0'));
                 $depts = $this->dao->select('id,name')->from(TABLE_DEPT)->where('grade')->eq(1)->fetchAll();
@@ -741,7 +740,7 @@ class screenModel extends model
      */
     public function getBurnData()
     {
-        $type = 'noweekend';
+        $type = 'withdelay';
         $this->loadModel('execution');
         $executions    = $this->execution->getPairs(0, 'sprint') + $this->execution->getPairs(0, 'stage');
         $executionData = array();
@@ -761,7 +760,9 @@ class screenModel extends model
             $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
             $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
             list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
-            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, 'left');
+
+            $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
+            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
 
             $execution->chartData = $chartData;
             $executionData[$executionID] = $execution;

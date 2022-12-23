@@ -2,7 +2,6 @@
 <?php include $app->getModuleRoot() . 'common/view/chart.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js');?>
 <?php js::set('executions', $executions);?>
-<?php js::set('type', $type);?>
 <div class='header'>
   <div class='img-header'>
     <h2 class='title'>迭代燃尽图</h2>
@@ -42,7 +41,7 @@ function initBurnChar()
             },
             right: 0
           },
-          color: ['#42526a', '#2567cf'],
+          color: ['#42526a', '#2567cf', 'red'],
           grid: {
             left: '3%',
             right: '4%',
@@ -129,6 +128,27 @@ function initBurnChar()
             },
           ]
         };
+
+        if(execution.chartData['delayLine'])
+        {
+            var delaySets =
+            {
+                name: "<?php echo $lang->execution->charts->burn->graph->delay;?>",
+                symbol: 'circle',
+                symbolSize: 4,
+                type: 'line',
+                areaStyle: {color: '#2667cf00'},
+                lineStyle: {
+                  "width": 2,
+                  "type": "solid"
+                },
+                data: JSON.parse(execution.chartData['delayLine'])
+            }
+            option.title.subtext = '已延期';
+            option.title.subtextStyle = {color:"red", fontSize: 15};
+            option.series.push(delaySets);
+        }
+
         myChart.setOption(option);
     });
 }
