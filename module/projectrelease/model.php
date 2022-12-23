@@ -69,36 +69,56 @@ class projectreleaseModel extends model
             ->page($pager)
             ->fetchAll();
 
-        $buildIdList = array();
+        $buildIdList   = array();
+        $productIdList = array();
         foreach($releases as $release)
         {
             $release->project = trim($release->project, ',');
             $release->branch  = trim($release->branch, ',');
+            $release->build   = trim($release->build, ',');
 
+            $buildIdList = array_merge($buildIdList, explode(',', $release->build));
+            $productIdList[$release->product] = $release->product;
+        }
+
+        $branchGroup = $this->loadModel('branch')->getByProducts($productIdList);
+        $builds      = $this->dao->select("id,project,product,branch,execution,name,scmPath,filePath")->from(TABLE_BUILD)->where('id')->in(array_unique($buildIdList))->fetchAll('id');
+        foreach($releases as $release)
+        {
             $branchName = '';
-            if($release->branch != 'normal')
+            if(isset($branchGroup[$release->product]))
             {
-                foreach(explode(',', trim($release->branch)) as $releaseBranch)
+                $branches = $branchGroup[$release->product];
+                foreach(explode(',', $release->branch) as $releaseBranch)
                 {
-                    $branchName .= $this->loadModel('branch')->getById($releaseBranch, $release->product);
+                    if($releaseBranch == '') continue;
+                    $branchName .= zget($branches, $releaseBranch, '');
                     $branchName .= ',';
                 }
                 $branchName = trim($branchName, ',');
             }
-            $release->branchName = empty($branchName) ? $this->lang->branch->main : $branchName;
-            $release->build      = trim($release->build, ',');
+            $release->branchName = $branchName;
 
-            $buildIdList = array_merge($buildIdList, explode(',', $release->build));
-        }
-
-        $builds = $this->dao->select("id,project,product,execution,name,scmPath,filePath")->from(TABLE_BUILD)->where('id')->in(array_unique($buildIdList))->fetchAll('id');
-        foreach($releases as $release)
-        {
             $release->buildInfos = array();
             foreach(explode(',', $release->build) as $buildID)
             {
                 if(empty($buildID)) continue;
-                $release->buildInfos[$buildID] = $builds[$buildID];
+
+                $build      = $builds[$buildID];
+                $branchName = '';
+                if(isset($branchGroup[$build->product]))
+                {
+                    $branches = $branchGroup[$build->product];
+                    foreach(explode(',', $build->branch) as $buildBranch)
+                    {
+                        if($buildBranch == '') continue;
+                        $branchName .= zget($branches, $buildBranch, '');
+                        $branchName .= ',';
+                    }
+                    $branchName = trim($branchName, ',');
+                }
+                $build->branchName = $branchName;
+                $release->buildInfos[$buildID] = $build;
             }
         }
         return $releases;
