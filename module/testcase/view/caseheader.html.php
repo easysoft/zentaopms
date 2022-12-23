@@ -41,6 +41,37 @@
     ?>
 
     <?php if($this->app->rawMethod == 'browseunits'):?>
+    <?php
+    $caseType = 'unit';
+    $lang->testcase->typeList[''] = $lang->testcase->allType;
+
+    $currentTypeName = zget($lang->testcase->typeList, $caseType, '');
+    $currentLable    = empty($currentTypeName) ? $lang->testcase->allType : $currentTypeName;
+    if(!isset($param)) $param = 0;
+
+    echo "<div id='byTypeTab' class='btn-group'>";
+    echo html::a('javascript:;', "<span class='text'>{$currentLable}</span>" . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
+    echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto; width:130px;'>";
+
+    foreach($lang->testcase->typeList as $type => $typeName)
+    {
+        echo '<li' . ($type == 'unit' ? " class='active'" : '') . '>';
+        if($hasUnitPriv and $type == 'unit')
+        {
+            echo html::a($this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID"), "{$lang->testcase->browseUnits}", '', " data-app='{$this->app->tab}'");
+        }
+        elseif(isset($groupBy))
+        {
+            echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$type"), $typeName);
+        }
+        else
+        {
+            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type"), $typeName);
+        }
+        echo "</li>";
+    }
+    echo '</ul></div>';
+    ?>
     <?php foreach($lang->testtask->unitTag as $key => $label):?>
     <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}UnitTab' class='btn btn-link' data-app='{$this->app->tab}'");?>
     <?php endforeach;?>
