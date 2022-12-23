@@ -83,15 +83,11 @@
         </tr>
         <?php endforeach;?>
       </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="7" class="text-center form-actions">
-            <?php echo html::submitButton();?>
-            <?php echo html::backButton();?>
-          </td>
-        </tr>
-      </tfoot>
     </table>
+    <div class='table-footer text-center'>
+      <?php echo html::submitButton();?>
+      <?php echo html::backButton();?>
+    </div>
 </div>
 <div class="modal fade" id="promptBox">
   <div class="modal-dialog mw-600px">
