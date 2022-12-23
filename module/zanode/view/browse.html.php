@@ -57,7 +57,7 @@
             <th class='c-os'><?php common::printOrderLink('t1.osName', $orderBy, $vars, $lang->zanode->osName); ?></th>
             <th class='c-status'><?php common::printOrderLink('t1.status', $orderBy, $vars, $lang->zanode->status); ?></th>
             <th class='c-host'><?php common::printOrderLink('t2.name', $orderBy, $vars, $lang->zanode->hostName); ?>
-            <th class='c-actions-7 text-center'><?php echo $lang->actions ?></th>
+            <th class='c-actions-5 text-center'><?php echo $lang->actions ?></th>
           </tr>
         </thead>
         <tbody>
@@ -83,6 +83,7 @@
                 $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
                 $rebootAttr .= $node->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
+                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-desktop'></i> ", '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($node->status ,array('running', 'launch')) ? '':'disabled') . "'", '');
                 if($node->status == "suspend")
                 {
                     common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-back'></i> ", '', $resumeAttr);
@@ -91,12 +92,18 @@
                 {
                     common::printLink('zanode', 'suspend', "zanodeID={$node->id}", "<i class='icon icon-pause'></i> ", '', $suspendAttr);
                 }
+
                 common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
-                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-desktop'></i> ", '_blank', "title='{$lang->zanode->getVNC}' class='btn " . (in_array($node->status ,array('running', 'launch')) ? '':'disabled') . "'", '');
-                common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-export'></i> ", '', "class='btn iframe createImage' title='{$lang->zanode->createImage}' data-width='50%'", '', true);
                 common::printIcon('zanode', 'edit', "id={$node->id}", $node, 'list');
-                common::printLink('zanode', 'delete', "zanodeID={$node->id}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->zanode->destroy}' class='btn btn-primary' target='hiddenwin'");
-                common::printIcon('zanode', 'init', "hostID={$node->id}", $node, 'list', 'refresh', '', ' init', false, "data-placement='bottom'", $lang->zanode->init->title);
+
+                echo "<div class='btn-group'>";
+                echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
+                echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
+                common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-export'></i> ", '', "class='btn btn-action iframe createImage' title='{$lang->zanode->createImage}' data-width='50%'", '', true);
+                common::printIcon('zanode', 'init', "hostID={$node->id}", $node, 'list', 'refresh', '', 'btn btn-action init', false, "data-placement='bottom'", $lang->zanode->init->title);
+                common::printLink('zanode', 'delete', "zanodeID={$node->id}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->zanode->destroy}' class='btn btn-action' target='hiddenwin'");
+                echo "</ul>";
+                echo "</div>";
                 ?>
               </td>
             </tr>
