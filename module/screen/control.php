@@ -12,40 +12,6 @@
 class screen extends control
 {
     /**
-     * Construct function, load dimension.
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @param  string $appName
-     * @access public
-     * @return void
-     */
-    public function __construct($moduleName = '', $methodName = '', $appName = '')
-    {
-        parent::__construct($moduleName, $methodName, $appName);
-        $this->loadModel('dimension');
-    }
-
-    /**
-     * Common Action.
-     *
-     * @param  int    $dimensionID
-     * @param  bool   $setMenu
-     * @access public
-     * @return void
-     */
-    public function commonAction($dimensionID = 0, $setMenu = true)
-    {
-        $dimensions = $this->dimension->getList();
-
-        $dimensionID = $this->dimension->saveState($dimensionID, $dimensions);
-        if($setMenu) $this->dimension->setMenu($dimensionID);
-        $this->loadModel('setting')->setItem($this->app->user->account . 'common.dimension.lastDimension', $dimensionID);
-
-        return $dimensionID;
-    }
-
-    /**
      * Browse screen list.
      *
      * @param  int $dimensionID
