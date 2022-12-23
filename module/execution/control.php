@@ -2450,7 +2450,9 @@ class execution extends control
             $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
             $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
             list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
-            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type);
+
+            $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
+            $chartData    = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
         }
 
         /* Load pager. */
