@@ -547,6 +547,23 @@ CREATE TABLE `zt_dataset` (
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_dataview`;
+CREATE TABLE IF NOT EXISTS `zt_dataview` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group` mediumint(8) unsigned NOT NULL,
+  `name` varchar(155) NOT NULL,
+  `code` varchar(50) NOT NULL,
+  `view` varchar(57) NOT NULL,
+  `sql` text NOT NULL,
+  `fields` mediumtext NOT NULL,
+  `objects` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_dept`;
 CREATE TABLE IF NOT EXISTS `zt_dept` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
