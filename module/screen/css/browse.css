@@ -8,7 +8,7 @@
 .screen {border-radius: 4px; border: solid 1px #ddd; margin-bottom: 20px; position: relative;}
 .screen .top {text-align: center; min-height:182px; position:relative;}
 .screen .top.img {height: 182px; text-align: center;}
-.screen .top.img img {height:100%; width:auto}
+.screen .top.img img {height:100%; overflow: hidden; object-fit: cover; object-position: top;}
 .screen .top .image {height:100%; display:flex; align-items:center; justify-content:center;}
 .screen .top .image i {font-size:100px;}
 .screen .top .image i:before {content: '\f1c5';}

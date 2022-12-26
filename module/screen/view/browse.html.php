@@ -14,9 +14,9 @@
         <div class='col-md-3' data-id='<?php echo $screenID;?>'>
           <a href='<?php echo $viewLink?>' target="_blank" />
             <div class='screen'>
-              <?php if(!empty($file)):?>
+              <?php if(!empty($screen->cover)):?>
               <div class='top img'>
-                <img src='<?php echo $file->webPath;?>' controls='controls' width='100%'/>
+                <img src='<?php echo $screen->cover;?>' controls='controls' width='100%'/>
               </div>
               <?php else:?>
               <div class='top img bg<?php echo $i?>'>
