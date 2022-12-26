@@ -29,10 +29,11 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `zt_chart` ADD `dimension` int(8) NOT NULL default 0 AFTER `name`;
-ALTER TABLE `zt_chart` ADD `group` mediumint(8) unsigned NOT NULL default '0' AFTER `type`;
-ALTER TABLE `zt_chart` ADD `sql`     text       NOT NULL AFTER `desc`;
-ALTER TABLE `zt_chart` ADD `fields`  mediumtext NOT NULL AFTER `sql`;
+ALTER TABLE `zt_chart` ADD `dimension` mediumint(8) NOT NULL DEFAULT 0 AFTER `name`;
+ALTER TABLE `zt_chart` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `type`;
+ALTER TABLE `zt_chart` ADD `fields` mediumtext NOT NULL AFTER `filters`;
+ALTER TABLE `zt_chart` ADD `sql` text NOT NULL AFTER `fields`;
+ALTER TABLE `zt_chart` ADD `builtin` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `sql`;
 ALTER TABLE `zt_chart` ADD `objects` mediumtext NOT NULL AFTER `fields`;
 ALTER TABLE `zt_chart` ADD `editedBy` varchar(30) NOT NULL AFTER `createdDate`;
 ALTER TABLE `zt_chart` ADD `editedDate` datetime NOT NULL AFTER `editedBy`;

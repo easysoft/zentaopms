@@ -427,17 +427,18 @@ CREATE TABLE IF NOT EXISTS `zt_cfd` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_chart`;
 CREATE TABLE `zt_chart` (
-  `id` mediumint NOT NULL AUTO_INCREMENT,
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `dimension` int NOT NULL DEFAULT '0',
+  `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `type` varchar(30) NOT NULL,
-  `group` mediumint unsigned NOT NULL DEFAULT '0',
+  `group` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `dataset` varchar(30) NOT NULL,
   `desc` text NOT NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
   `fields` mediumtext,
   `sql` mediumtext,
+  `builtin` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
