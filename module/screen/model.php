@@ -690,9 +690,10 @@ class screenModel extends model
 
                     foreach($groupCount as $groupValue => $groupCount) $sourceData[$groupValue] = $groupCount;
                 }
-                $component->option->dataset = (array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0;
-                $component->option->series[0]->data[0]->value  = array((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0);
-                $component->option->series[0]->data[1]->value  = array((array_sum($sourceData) != 0 and !empty($sourceData['undone'])) ? $sourceData['undone'] / array_sum($sourceData) : 0);
+                $doneData = round((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0, 4);
+                $component->option->dataset = $doneData;
+                $component->option->series[0]->data[0]->value  = array($doneData);
+                $component->option->series[0]->data[1]->value  = array(1 - $doneData);
             }
 
             return $this->setComponentDefaults($component);
