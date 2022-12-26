@@ -39,6 +39,10 @@ class screen extends control
      */
     public function view($screenID, $year = 2022, $dept = 0, $account = '')
     {
+        if($screenID == 3)
+        {
+            $this->locate($this->createLink('report', 'annualData'));
+        }
         if($screenID == 5)
         {
             $this->loadModel('execution');
