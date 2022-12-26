@@ -7,3 +7,4 @@
 #branch {width: 95px;}
 #storyIdBox .chosen-auto-max-width {width: 215px !important;}
 .form-group {margin-left: 10px; margin-right: 10px;}
+.table tbody > tr > td, .table tbody > tr > th {vertical-align: top;}
