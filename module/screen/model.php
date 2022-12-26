@@ -278,6 +278,9 @@ class screenModel extends model
             case 'bar':
                 return $this->buildBarChart($component, $chart);
                 break;
+            case 'piecircle':
+                return $this->buildPieCircleChart($component, $chart);
+                break;
             case 'pie':
                 return $this->buildPieChart($component, $chart);
                 break;
@@ -636,6 +639,60 @@ class screenModel extends model
 
                 $component->option->dataset->dimensions = $dimensions;
                 $component->option->dataset->source     = $sourceData;
+            }
+
+            return $this->setComponentDefaults($component);
+        }
+    }
+
+    /**
+     * Build piecircle chart.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function buildPieCircleChart($component, $chart)
+    {
+        if(!$chart->settings)
+        {
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "PieCircle";
+            $component->chartConfig = json_decode('{"key":"PieCircle","chartKey":"VPieCircle","conKey":"VCPieCircle","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-circle-258fcce7.png"}');
+            $component->option      = json_decode('{"type":"nomal","series":[{"type":"pie","radius":"70%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
+        }
+        else
+        {
+            if($chart->sql)
+            {
+                $settings = json_decode($chart->settings);
+                if($settings and isset($settings->metric))
+                {
+                    $sourceData = array();
+
+                    $sql     = $this->setFilterSQL($chart);
+                    $results = $this->dao->query($sql)->fetchAll();
+                    $group = $settings->group[0]->field;
+
+                    $groupCount = array();
+                    foreach($results as $result)
+                    {
+                        if($settings->metric[0]->agg == 'count')
+                        {
+                            if(!isset($groupCount[$result->$group])) $groupCount[$result->$group] = 0;
+                            $groupCount[$result->$group]++;
+                        }
+                    }
+
+                    foreach($groupCount as $groupValue => $groupCount) $sourceData[$groupValue] = $groupCount;
+                }
+                $component->option->dataset = (array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0;
+                $component->option->series[0]->data[0]->value  = array((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0);
+                $component->option->series[0]->data[1]->value  = array((array_sum($sourceData) != 0 and !empty($sourceData['undone'])) ? $sourceData['undone'] / array_sum($sourceData) : 0);
             }
 
             return $this->setComponentDefaults($component);
