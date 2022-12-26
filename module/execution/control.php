@@ -1431,7 +1431,9 @@ class execution extends control
         $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
         $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
         list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, $interval, 'Y-m-d', $execution->end);
-        $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, $burnBy);
+
+        $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
+        $chartData    = $this->execution->buildBurnData($executionID, $dateList, $type, $burnBy, $executionEnd);
 
         $dayList = array_fill(1, floor((int)$execution->days / $this->config->execution->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->execution->interval . ($key + 1) . $this->lang->day;
@@ -2486,7 +2488,9 @@ class execution extends control
             $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
             $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
             list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
-            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type);
+
+            $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
+            $chartData    = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
         }
 
         /* Load pager. */

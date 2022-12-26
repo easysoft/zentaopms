@@ -701,6 +701,36 @@ class baseDAO
     }
 
     /**
+     * 返回SQL结果的所有字段信息。
+     * Return the fields meta of PDOStatement.
+     *
+     * @param  string|PDOStatement $stmt
+     * @access public
+     * @return array
+     */
+    public function getColumns($stmt)
+    {
+        /* 如果$stmt是SQL查询语句，先执行查询获得 PDO stmt. */
+        /* If $stmt is a SQL string, query to get PDO stmt. */
+        if(is_string($stmt)) $stmt = $this->query($stmt);
+
+        try
+        {
+            $columns = array();
+            for($columnIndex = 0; $columnIndex < $stmt->columnCount(); $columnIndex++)
+            {
+                $columns[] = $stmt->getColumnMeta($columnIndex);
+            }
+
+            return $columns;
+        }
+        catch (PDOException $e)
+        {
+            $this->sqlError($e);
+        }
+    }
+
+    /**
      * 将记录进行分页，自动设置limit语句。
      * Page the records, set the limit part auto.
      *

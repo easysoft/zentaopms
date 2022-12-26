@@ -25,6 +25,7 @@ class devModel extends model
                 $tables[$group][$subTable] = $table;
             }
         }
+        $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
         return $tables;
     }
 
@@ -60,6 +61,7 @@ class devModel extends model
         }
         catch (PDOException $e)
         {
+            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
             $this->sqlError($e);
         }
 
@@ -72,59 +74,53 @@ class devModel extends model
             $field['name'] = (isset($this->lang->$module->{$rawField->field}) and is_string($this->lang->$module->{$rawField->field})) ? sprintf($this->lang->$module->{$rawField->field}, $this->lang->dev->tableList[$module]) : '';
             if((empty($field['name']) or !is_string($field['name'])) and $aliasModule) $field['name'] = isset($this->lang->$aliasModule->{$rawField->field}) ? $this->lang->$aliasModule->{$rawField->field} : '';
             if($subLang) $field['name'] = isset($this->lang->$aliasModule->$subLang->{$rawField->field}) ? $this->lang->$aliasModule->$subLang->{$rawField->field} : $field['name'];
-            if(!is_string($field['name'])) $field['name'] = '';
-            $field['null'] = $rawField->null;
 
-            if($type == 'enum' or $type == 'set')
-            {
-                $rangeBegin  = $firstPOS + 2;                       // Remove the first quote.
-                $rangeEnd    = strrpos($rawField->type, ')') - 1;   // Remove the last quote.
-                $range       = substr($rawField->type, $rangeBegin, $rangeEnd - $rangeBegin);
-                $field['type'] = $rawField->type;
-                $field['options']['enum']  = str_replace("','", ',', $range);
-            }
-            elseif($type == 'varchar')
-            {
-                $begin  = $firstPOS + 1;
-                $end    = strpos($rawField->type, ')', $begin);
-                $length = substr($rawField->type, $begin, $end - $begin);
-                $field['type']   = 'varchar';
-                $field['options']['max'] = $length;
-                $field['options']['min'] = 0;
-            }
-            elseif($type == 'char')
-            {
-                $begin  = $firstPOS + 1;
-                $end    = strpos($rawField->type, ')', $begin);
-                $length = substr($rawField->type, $begin, $end - $begin);
-                $field['type']   = 'char';
-                $field['options']['max'] = $length;
-                $field['options']['min'] = 0;
-            }
-            elseif($type == 'int')
-            {
-                $begin  = $firstPOS + 1;
-                $end    = strpos($rawField->type, ')', $begin);
-                $length = substr($rawField->type, $begin, $end - $begin);
-                $field['type'] = 'int';
-                $field['options']['max'] = $length;
-                $field['options']['min'] = 0;
-            }
-            elseif($type == 'float' or $type == 'double')
-            {
-                $field['type'] = 'float';
-            }
-            elseif($type == 'date')
-            {
-                $field['type'] = 'date';
-            }
-            else
-            {
-                $field['type'] = $type;
-            }
-            $fields[$rawField->field] = $field;
+            if(!is_string($field['name'])) $field['name'] = '';
+            $field['null']            = $rawField->null;
+            $fields[$rawField->field] = $this->setField($field, $rawField, $type, $firstPOS);
         }
         return $fields;
+    }
+
+    /**
+     * Set table fields field.
+     *
+     * @param  array  $field
+     * @param  array  $rawField
+     * @param  string $type
+     * @param  int    $firstPOS
+     * @access public
+     * @return array
+     */
+    public function setField($field, $rawField, $type, $firstPOS)
+    {
+        if($type == 'enum' or $type == 'set')
+        {
+            $rangeBegin = $firstPOS + 2;                       // Remove the first quote.
+            $rangeEnd   = strrpos($rawField->type, ')') - 1;   // Remove the last quote.
+            $range      = substr($rawField->type, $rangeBegin, $rangeEnd - $rangeBegin);
+            $field['type']             = $rawField->type;
+            $field['options']['enum']  = str_replace("','", ',', $range);
+        }
+        elseif($type == 'varchar' or $type == 'char' or $type == 'int')
+        {
+            $begin  = $firstPOS + 1;
+            $end    = strpos($rawField->type, ')', $begin);
+            $length = substr($rawField->type, $begin, $end - $begin);
+            $field['type']           = $type;
+            $field['options']['max'] = $length;
+            $field['options']['min'] = 0;
+        }
+        elseif($type == 'float' or $type == 'double')
+        {
+            $field['type'] = 'float';
+        }
+        else
+        {
+            $field['type'] = $type;
+        }
+
+        return $field;
     }
 
     /**

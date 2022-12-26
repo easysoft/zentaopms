@@ -29,6 +29,8 @@ function changeDate(begin, end)
             end = end + endarray[i];
         }
     }
-    link = createLink('report', 'projectdeviation', 'begin=' + begin + '&end=' + end);
-    location.href=link;
+
+    var params = window.btoa('begin=' + begin + '&end=' + end);
+    var link = createLink('report', 'preview', 'dimension=' + dimension + '&group=' + group + '&module=report&method=projectdeviation&params=' + params);
+    location.href = link;
 }

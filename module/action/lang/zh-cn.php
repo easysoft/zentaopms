@@ -152,6 +152,7 @@ $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube项目';
 $lang->action->objectTypes['stage']            = '阶段';
 $lang->action->objectTypes['patch']            = '补丁';
 $lang->action->objectTypes['repo']             = '代码库';
+$lang->action->objectTypes['dataview']         = '中间表';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -724,6 +725,7 @@ $lang->action->label->gitlab       = 'GitLab服务器|gitlab|view|id=%s';
 $lang->action->label->stage        = '瀑布模型的阶段|stage|browse|';
 $lang->action->label->module       = '模块|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = '工单|ticket|view|id=%s';
+$lang->action->label->chartgroup   = '分组';
 
 /* Object type. */
 $lang->action->search = new stdclass();

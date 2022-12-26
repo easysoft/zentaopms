@@ -739,7 +739,11 @@ class upgradeModel extends model
                 break;
             case 'biz7_6_2':
                 $this->processFeedbackModule();
-
+                break;
+            case 'biupgrade':
+                $this->addDefaultModules4BI('chart');
+                $modules = $this->addDefaultModules4BI('report');
+                $this->processReportModules($modules);
         }
     }
 
@@ -7925,6 +7929,75 @@ class upgradeModel extends model
 
         /* Delete history module */
         $this->dao->delete()->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->exec();
+    }
+
+    /**
+     * Add default modules for BI.
+     *
+     * @param  string $type
+     * @param  int    $dimension
+     * @access public
+     * @return array
+     */
+    public function addDefaultModules4BI($type = 'report', $dimension = 1)
+    {
+        $this->app->loadLang('report');
+
+        $group = new stdclass();
+        $group->root  = $dimension;
+        $group->grade = 1;
+        $group->type  = $type;
+        $group->owner = 'system';
+        $group->order = 10;
+
+        $modules = array();
+        foreach($this->lang->crystal->moduleList as $module => $name)
+        {
+            if(!$module || !$name) continue;
+
+            $group->name      = $name;
+            $group->collector = $module;
+            $this->dao->replace(TABLE_MODULE)->data($group)->exec();
+
+            $modules[$module] = $this->dao->lastInsertID();
+
+            $group->order += 10;
+        }
+        $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")
+            ->where('type')->eq($type)
+            ->andWhere('grade')->eq('1')
+            ->andWhere('path')->eq('')
+            ->exec();
+
+        return $modules;
+    }
+
+    /**
+     * Process report modules.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function processReportModules($modules)
+    {
+        foreach($modules as $code => $module)
+        {
+            if(!$code || !$module) continue;
+            $this->dao->update(TABLE_REPORT)->set("`module` = REPLACE(`module`, '$code', $module)")->exec();
+        }
+
+        /* Create default dimension. */
+        $this->app->loadLang('dimension');
+        $dimension              = new stdclass();
+        $dimension->name        = $this->lang->dimension->default;
+        $dimension->code        = 'efficiency';
+        $dimension->createdBy   = 'system';
+        $dimension->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
+
+        return !dao::isError();
     }
 
     /**
