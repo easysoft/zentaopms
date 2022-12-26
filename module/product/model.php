@@ -1871,13 +1871,17 @@ class productModel extends model
         $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('closed')
+            ->andWhere('type')->eq('story')
             ->andWhere('closedReason')->eq('done')
-            ->fetchPairs('product', 'finish');
+            ->groupBy('product')
+            ->fetchPairs();
 
         $unclosedStory = $this->dao->select('product, count(1) as unclosed')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('story')
             ->andWhere('status')->ne('closed')
-            ->fetchPairs('product', 'unclosed');
+            ->groupBy('product')
+            ->fetchPairs();
 
         $plans = $this->dao->select('product, count(*) AS count')
             ->from(TABLE_PRODUCTPLAN)
