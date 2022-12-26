@@ -115,7 +115,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
               <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <?php if(common::hasPriv('execution', 'storyView')):?>
-              <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
+              <span class='input-group-btn' id='preview'><a href='#' class='btn iframe' data-width="85%" data-height="300px"><?php echo $lang->preview;?></a></span>
               <?php endif;?>
             </div>
           </td>
