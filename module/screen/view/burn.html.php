@@ -4,7 +4,7 @@
 <?php js::set('executions', $executions);?>
 <div class='header'>
   <div class='img-header'>
-    <h2 class='title'>迭代燃尽图</h2>
+    <h2 class='title'>迭代燃尽图大屏</h2>
     <span class='time'><?php echo '更新时间:' . $date;?></span>
   </div>
 </div>
