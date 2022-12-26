@@ -630,7 +630,7 @@ class screenModel extends model
     }
 
     /**
-     * Build pie chart.
+     * Build piecircle chart.
      *
      * @param  object $component
      * @param  object $chart
