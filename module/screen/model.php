@@ -742,10 +742,11 @@ class screenModel extends model
     {
         $type = 'withdelay';
         $this->loadModel('execution');
-        $executions    = $this->execution->getPairs(0, 'sprint') + $this->execution->getPairs(0, 'stage');
+        $executions    = $this->execution->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
+
         $executionData = array();
 
-        foreach($executions as $executionID => $executionName)
+        foreach($executions as $executionID => $execution)
         {
             $execution = $this->execution->getByID($executionID);
 
@@ -767,7 +768,6 @@ class screenModel extends model
             $execution->chartData = $chartData;
             $executionData[$executionID] = $execution;
         }
-
         return $executionData;
     }
 }
