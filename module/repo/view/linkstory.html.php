@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<style>
+.search-form #story-search .form-actions {width: 115px !important;}
+</style>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
     <h2><?php echo $lang->repo->linkStory;?></h2>
