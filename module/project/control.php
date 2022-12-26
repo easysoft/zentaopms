@@ -762,7 +762,7 @@ class project extends control
             }
         }
 
-        if($project->model != 'kanban') $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
+        $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
