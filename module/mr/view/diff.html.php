@@ -156,7 +156,16 @@ js::set('browser', $browser);
       <?php endif;?>
     </div>
     <?php else:?>
-    <?php include '../../repo/view/diffeditor.html.php';?>
+    <?php
+    if(empty($diffs))
+    {
+        echo "<p class='detail-content'>{$lang->mr->noChanges}</p>";
+    }
+    else
+    {
+        include '../../repo/view/diffeditor.html.php';
+    }
+    ?>
     <?php endif;?>
   </div>
 </div>

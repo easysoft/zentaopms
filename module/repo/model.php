@@ -2341,10 +2341,10 @@ class repoModel extends model
      * @access public
      * @return string
      */
-    public function getFileTree($repo, $branch = '', $diffs = array())
+    public function getFileTree($repo, $branch = '', $diffs = null)
     {
         $allFiles = array();
-        if(empty($diffs))
+        if(is_null($diffs))
         {
             if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
             $files = $this->dao->select('t1.path,t1.action')->from(TABLE_REPOFILES)->alias('t1')
