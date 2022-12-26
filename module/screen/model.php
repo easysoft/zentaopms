@@ -610,6 +610,7 @@ class screenModel extends model
                             $groupCount[$result->$group]++;
                         }
                     }
+                    arsort($groupCount);
 
                     foreach($groupCount as $groupValue => $groupCount)
                     {
