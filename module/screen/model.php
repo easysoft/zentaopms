@@ -672,15 +672,11 @@ class screenModel extends model
                         }
                     }
 
-                    foreach($groupCount as $groupValue => $groupCount)
-                    {
-                        $groupValue = strpos($groupValue, '未') !== false ? 'undone' : 'done';
-                        $sourceData[$groupValue] = $groupCount;
-                    }
+                    foreach($groupCount as $groupValue => $groupCount) $sourceData[$groupValue] = $groupCount;
                 }
-                $component->option->dataset = array_sum($sourceData) != 0 ? $sourceData['undone'] / array_sum($sourceData) : 0;
-                $component->option->series[0]->data[0]->value  = array(array_sum($sourceData) != 0 ? $sourceData['undone'] / array_sum($sourceData) : 0);
-                $component->option->series[0]->data[1]->value  = array(array_sum($sourceData) != 0 ? $sourceData['done'] / array_sum($sourceData) : 0);
+                $component->option->dataset = (array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0;
+                $component->option->series[0]->data[0]->value  = array((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0);
+                $component->option->series[0]->data[1]->value  = array((array_sum($sourceData) != 0 and !empty($sourceData['undone'])) ? $sourceData['undone'] / array_sum($sourceData) : 0);
             }
 
             return $this->setComponentDefaults($component);
