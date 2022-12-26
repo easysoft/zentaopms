@@ -872,7 +872,7 @@ class user extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
-                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
+                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $response['message']))));
                 return $this->send($response);
             }
 

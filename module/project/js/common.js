@@ -253,6 +253,7 @@ function budgetOverrunTips()
 function outOfDateTip(currentID)
 {
     if(window.ignoreTips['dateTip']) return;
+    if(typeof(systemMode) != 'undefined' && systemMode == 'light') return;
     if(batchEditDateTips.includes(Number(currentID))) return;
 
     var end   = currentID ? $('#ends\\[' + currentID + '\\]').val() : $('#end').val();
@@ -265,7 +266,7 @@ function outOfDateTip(currentID)
     {
         var selectedProgramID = currentID ? $("select[name='parents\[" + currentID + "\]']").val() : $('#parent').val();
 
-        if(selectedProgramID == 0) return;
+        if(selectedProgramID == 0 || selectedProgramID == undefined) return;
 
         if(typeof(projectID) == 'undefined') projectID = 0;
         projectID = currentID ? $('#projectIdList\\['+ currentID + '\\]').val() : projectID;

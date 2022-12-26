@@ -85,12 +85,14 @@
           <?php if($project->multiple):?>
           <?php if($build->execution):?>
           <td class="c-name text-left" title='<?php echo $build->executionName;?>'>
+            <span class='execution'>
             <?php $executionName = $build->executionName;?>
-            <?php if($build->executionDeleted) $executionName = "<del>$executionName</del>";?>
+            <?php if($build->executionDeleted) $executionName = "<del class='executionName'>$executionName</del>";?>
             <?php echo $executionName;?>
             <?php if($build->executionDeleted):?>
             <span class='label label-danger'><?php echo $lang->build->deleted;?></span>
             <?php endif; ?>
+            </span>
           </td>
           <?php else:?>
           <td class="c-name text-left">

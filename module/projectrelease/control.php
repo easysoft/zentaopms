@@ -88,7 +88,7 @@ class projectrelease extends control
         $releases = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
 
         $showBranch = false;
-        foreach($releases as $release) 
+        foreach($releases as $release)
         {
             if($release->productType != 'normal')
             {
@@ -147,7 +147,7 @@ class projectrelease extends control
         $builds         = $this->build->getBuildPairs($this->view->product->id, 'all', 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
-        
+
         $this->view->title          = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
         $this->view->projectID      = $projectID;
         $this->view->builds         = $builds;
@@ -252,7 +252,7 @@ class projectrelease extends control
         }
 
         $uri = $this->app->getURI(true);
-        if($release->build)  $this->session->set('buildList', $uri);
+        if($release->build)  $this->session->set('buildList', $uri, 'project');
         if($type == 'story') $this->session->set('storyList', $uri, $this->app->tab);
         if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $uri, $this->app->tab);
 

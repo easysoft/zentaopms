@@ -19,7 +19,7 @@ class userModel extends model
      * @param  array    $users
      * @param  string   $account
      * @access public
-     * @return html
+     * @return string
      */
     public function setUserList($users, $account)
     {
@@ -34,8 +34,9 @@ class userModel extends model
     /**
      * Get inside users list of current company.
      *
+     * @param  string $params
      * @access public
-     * @return void
+     * @return array
      */
     public function getList($params = 'nodeleted')
     {
@@ -53,7 +54,7 @@ class userModel extends model
      * @param  array    $accounts
      * @param  string   $keyField
      * @access public
-     * @return object
+     * @return array
      */
     public function getListByAccounts($accounts = array(), $keyField = 'id')
     {
@@ -150,6 +151,7 @@ class userModel extends model
     /**
      * Get user's avatar pairs.
      *
+     * @param  string $params
      * @access public
      * @return array
      */
@@ -257,7 +259,7 @@ class userModel extends model
     /**
      * Get user info by ID.
      *
-     * @param  mix     $userID
+     * @param  string  $userID
      * @param  string  $field id|account
      * @access public
      * @return object|bool
@@ -308,7 +310,7 @@ class userModel extends model
     public function create()
     {
         $_POST['account'] = trim($_POST['account']);
-        if(!$this->checkPassword()) return;
+        if(!$this->checkPassword()) return false;
         if(strtolower($_POST['account']) == 'guest') return false;
 
         $user = fixer::input('post')
@@ -552,7 +554,7 @@ class userModel extends model
     public function update($userID)
     {
         $_POST['account'] = trim($_POST['account']);
-        if(!$this->checkPassword(true)) return;
+        if(!$this->checkPassword(true)) return false;
 
         $oldUser = $this->getById($userID, 'id');
 
@@ -796,15 +798,15 @@ class userModel extends model
     }
 
     /**
-     * Update password
+     * Update password.
      *
      * @param  string $userID
      * @access public
-     * @return void
+     * @return bool
      */
     public function updatePassword($userID)
     {
-        if(!$this->checkPassword()) return;
+        if(!$this->checkPassword()) return false;
 
         $user = fixer::input('post')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
@@ -826,6 +828,7 @@ class userModel extends model
             if(!empty($this->app->user->modifyPasswordReason)) $this->app->user->modifyPasswordReason = '';
             $this->loadModel('score')->create('user', 'changePassword', $this->computePasswordStrength($this->post->password1));
         }
+        return true;
     }
 
     /**
@@ -837,7 +840,7 @@ class userModel extends model
     public function resetPassword()
     {
         $_POST['account'] = trim($_POST['account']);
-        if(!$this->checkPassword()) return;
+        if(!$this->checkPassword()) return false;
 
         $user = $this->getById($this->post->account);
         if(!$user) return false;
@@ -850,6 +853,7 @@ class userModel extends model
     /**
      * Check the passwds posted.
      *
+     * @param  bool   $canNoPassword
      * @access public
      * @return bool
      */
@@ -970,7 +974,7 @@ class userModel extends model
      * Identify user by PHP_AUTH_USER.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function identifyByPhpAuth()
     {
@@ -987,13 +991,15 @@ class userModel extends model
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
         $this->loadModel('common')->loadConfigFromDB();
+
+        return true;
     }
 
     /**
      * Identify user by cookie.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function identifyByCookie()
     {
@@ -1012,6 +1018,8 @@ class userModel extends model
         $this->loadModel('common')->loadConfigFromDB();
 
         $this->keepLogin($user);
+
+        return true;
     }
 
     /**
@@ -1144,7 +1152,7 @@ class userModel extends model
      * @param  object $user
      * @param  bool   $addAction
      * @access public
-     * @return bool|object
+     * @return false|object
      */
     public function login($user, $addAction = true)
     {
@@ -1172,8 +1180,7 @@ class userModel extends model
     /**
      * Keep the user in login state.
      *
-     * @param  string    $account
-     * @param  string    $password
+     * @param  object    $user
      * @access public
      * @return void
      */
@@ -1342,9 +1349,9 @@ class userModel extends model
     /**
      * Plus the fail times.
      *
-     * @param  int    $account
+     * @param  string    $account
      * @access public
-     * @return void
+     * @return int
      */
     public function failPlus($account)
     {
@@ -1356,7 +1363,7 @@ class userModel extends model
         $this->session->set('loginFails', $sessionFails);
         if($sessionFails >= $this->config->user->failTimes) $this->session->set("{$account}.loginLocked", date('Y-m-d H:i:s'));
 
-        $user  = $this->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+        $user = $this->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch();
         if(empty($user)) return 0;
 
         $fails = $user->fails;
@@ -1379,9 +1386,9 @@ class userModel extends model
     /**
      * Check whether the user is locked.
      *
-     * @param  int    $account
+     * @param  string    $account
      * @access public
-     * @return void
+     * @return bool
      */
     public function checkLocked($account)
     {
@@ -1397,7 +1404,7 @@ class userModel extends model
     /**
      * Unlock the locked user.
      *
-     * @param  int    $account
+     * @param  string    $account
      * @access public
      * @return void
      */
@@ -1425,7 +1432,7 @@ class userModel extends model
      * Upload avatar.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function uploadAvatar()
     {
@@ -1445,9 +1452,9 @@ class userModel extends model
      * @param string $params  withempty|withnote
      *
      * @access public
-     * @return object
+     * @return array
      */
-    public function getContactLists($account, $params= '')
+    public function getContactLists($account, $params = '')
     {
         $contacts  = $this->getListByAccount($account);
         $globalIDs = isset($this->config->my->global->globalContacts) ? $this->config->my->global->globalContacts : '';
@@ -1511,7 +1518,7 @@ class userModel extends model
     /**
      * Get user account and realname pairs from a contact list.
      *
-     * @param  string    $accountList
+     * @param  string|array    $accountList
      * @access public
      * @return array
      */
@@ -1524,7 +1531,7 @@ class userModel extends model
      * Create a contact list.
      *
      * @param  string    $listName
-     * @param  string    $userList
+     * @param  array     $userList
      * @access public
      * @return int
      */
@@ -1555,7 +1562,7 @@ class userModel extends model
      *
      * @param  int    $listID
      * @param  string $listName
-     * @param  string $userList
+     * @param  array  $userList
      * @access public
      * @return void
      */
@@ -1580,7 +1587,7 @@ class userModel extends model
     /**
      * Update global contact.
      *
-     * @param      $listID
+     * @param int  $listID
      * @param bool $isPush
      *
      * @access public
@@ -1732,7 +1739,7 @@ class userModel extends model
      * Check Tmp dir.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function checkTmp()
     {
@@ -2118,7 +2125,7 @@ class userModel extends model
     /**
      * Update user view by object type.
      *
-     * @param  string $objectIdList
+     * @param  int|array  $objectIdList
      * @param  string $objectType
      * @param  array  $users
      * @access public
