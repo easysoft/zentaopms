@@ -79,7 +79,7 @@ function initBurnChar()
                 width: 2,
                 type: 'solid'
               }
-            }
+            },
           },
           series: [
             {

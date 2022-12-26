@@ -1868,6 +1868,17 @@ class productModel extends model
 
         if($storyType == 'requirement') $stories = $requirements;
 
+        $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('closedReason')->eq('done')
+            ->fetchPairs('product', 'finish');
+
+        $unclosedStory = $this->dao->select('product, count(1) as unclosed')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')
+            ->fetchPairs('product', 'unclosed');
+
         $plans = $this->dao->select('product, count(*) AS count')
             ->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
@@ -1893,6 +1904,7 @@ class productModel extends model
         $unResolved = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('status')->eq('active')
+            ->orWhere('resolution')->eq('postponed')
             ->andWhere('product')->in($productKeys)
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
@@ -1951,7 +1963,10 @@ class productModel extends model
         $stats = array();
         foreach($products as $key => $product)
         {
-            $product->stories      = $stories[$product->id];
+            $product->stories                 = $stories[$product->id];
+            $product->stories['finishClosed'] = isset($finishClosedStory[$product->id]) ? $finishClosedStory[$product->id] : 0;
+            $product->stories['unclosed']     = isset($unclosedStory[$product->id]) ? $unclosedStory[$product->id] : 0;
+
             $product->requirements = $requirements[$product->id];
             $product->plans        = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
             $product->releases     = isset($releases[$product->id]) ? $releases[$product->id] : 0;
