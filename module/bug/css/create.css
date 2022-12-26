@@ -58,4 +58,5 @@ html[lang='de'] #keywordsAddonLabel, .task {width: 73px;}
 #bugTypeInputGroup > .table-col {width: 40% !important;}
 
 .pri-text > .label-pri {padding: 2px 6px;}
-.table tbody > tr > td, .table tbody > tr > th {vertical-align: top !important;}
+.table .bug-type td, .table .bug-type th {vertical-align: top !important;}
+.table .bug-type th {padding-top: 14px;}
