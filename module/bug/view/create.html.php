@@ -180,7 +180,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <?php if($showExecution):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
-          <tr>
+          <tr class='bug-type'>
             <th><?php echo $lang->bug->type;?></th>
             <td>
               <div class='table-row'>
