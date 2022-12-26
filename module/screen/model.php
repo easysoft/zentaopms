@@ -104,7 +104,6 @@ class screenModel extends model
         $config->previewScaleType = 'scrollY';
 
         $componentList = json_decode($screen->scheme);
-        $componentList = json_decode(file_get_contents('/home/zhu/zcorp/screen/' . $screen->id . '.json'));
         if(empty($componentList)) $componentList = array();
 
         /* Reset height of canvas. */
