@@ -27,8 +27,8 @@ function updateProgress() {
                     $('.image-download-' + imageID).addClass('disabled');
                     $('.image-cancel-' + imageID).removeClass('disabled');
                 }
-                 else if (statusList[imageID].statusCode == 'completed')
-                 {
+                else if (statusList[imageID].statusCode == 'completed')
+                {
                     $('.image-path-' + imageID).text(statusList[imageID].path);
                     $('.image-path-' + imageID).attr('title', statusList[imageID].path);
                     $('.image-download-' + imageID).addClass('disabled');
@@ -45,7 +45,7 @@ function updateProgress() {
                     $('.image-progress-' + imageID).text('');
                 }
                 $('.image-status-' + imageID).text(statusList[imageID].status);
-                if(statusList[imageID].progress != '')
+                if(statusList[imageID].progress != '' && statusList[imageID].statusCode != 'completed')
                 {
                     $('.image-progress-' + imageID).text(statusList[imageID].progress);
                 }

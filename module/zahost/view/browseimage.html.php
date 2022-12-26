@@ -46,7 +46,7 @@
         <td><?php echo $image->osName;?></td>
         <td class='image-status-<?php echo zget($image, 'id', 0);?>'><?php echo zget($lang->zahost->image->statusList, $image->status, '');?></td>
         <td title="<?php echo $path;?>" class='image-path-<?php echo zget($image, 'id', 0);?>'><?php echo $path?></td>
-        <td class="image-progress-<?php echo zget($image, 'id', 0);?>"><?php echo $image->status == 'completed' ? '100%' : '';?></td>
+        <td class="image-progress-<?php echo zget($image, 'id', 0);?>"></td>
         <td class='c-actions'>
           <?php if(common::hasPriv('zahost', 'downloadImage')) echo html::a($this->createLink('zahost', 'downloadImage', "hostID={$hostID}&imageID={$image->id}"), '<i class="icon-download"></i>', 'hiddenwin', zget($image, 'downloadMisc', ''));?>
           <?php if(common::hasPriv('zahost', 'cancelDownload')) echo html::a($this->createLink('zahost', 'cancelDownload', "id={$image->id}"), '<i class="icon-ban-circle"></i>', 'hiddenwin', zget($image, 'cancelMisc', ''));?>
