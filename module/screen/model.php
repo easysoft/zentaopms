@@ -104,6 +104,7 @@ class screenModel extends model
         $config->previewScaleType = 'scrollY';
 
         $componentList = json_decode($screen->scheme);
+        $componentList = json_decode(file_get_contents('/home/zhu/zcorp/screen/' . $screen->id . '.json'));
         if(empty($componentList)) $componentList = array();
 
         /* Reset height of canvas. */
@@ -544,22 +545,38 @@ class screenModel extends model
 
                     $sql     = $this->setFilterSQL($chart);
                     $results = $this->dao->query($sql)->fetchAll();
+
                     foreach($results as $result)
                     {
                         $key   = $settings->xaxis[0]->name;
                         $field = $settings->xaxis[0]->field;
-                        $row   = array($key => $result->$field);
 
-                        foreach($settings->yaxis as $yaxis)
+                        if($settings->yaxis[0]->agg == 'sum')
                         {
-                            $field = $yaxis->field;
-                            $row[$yaxis->name] = $result->$field;
+                            if(!isset($sourceData[$result->$field])) $sourceData[$result->$field] = array($key => $result->$field);
+
+                            foreach($settings->yaxis as $yaxis)
+                            {
+                                $valueField = $yaxis->field;
+                                if(!isset($sourceData[$result->$field][$yaxis->name])) $sourceData[$result->$field][$yaxis->name] = 0;
+                                $sourceData[$result->$field][$yaxis->name] += $result->$valueField;
+                            }
                         }
-                        $sourceData[] = $row;
+                        else
+                        {
+                            $row = array($key => $result->$field);
+
+                            foreach($settings->yaxis as $yaxis)
+                            {
+                                $field = $yaxis->field;
+                                $row[$yaxis->name] = $result->$field;
+                            }
+                            $sourceData[] = $row;
+                        }
                     }
 
                     $component->option->dataset->dimensions = $dimensions;
-                    $component->option->dataset->source     = $sourceData;
+                    $component->option->dataset->source     = array_values($sourceData);
                 }
             }
 
@@ -665,16 +682,19 @@ class screenModel extends model
                         $metrics[$metric->key] = array('field' => $metric->field, 'name' => $metric->name, 'value' => 0);
                     }
 
-                    $max = 0;
+
                     foreach($results as $result)
                     {
                         if(isset($metrics[$result->$group]))
                         {
                             $field = $metrics[$result->$group]['field'];
-                            $metrics[$result->$group]['value'] = $result->$field;
-
-                            if($max < $result->$field) $max = $result->$field;
+                            $metrics[$result->$group]['value'] += $result->$field;
                         }
+                    }
+                    $max = 0;
+                    foreach($metrics as $data)
+                    {
+                        if($data['value'] > $max) $max = $data['value'];
                     }
 
                     $data  = array('name' => '', 'value' => array());
