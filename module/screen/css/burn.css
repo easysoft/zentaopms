@@ -7,3 +7,5 @@ body {background:rgb(0,16,40);}
 .content {display:flex; justify-content:center; margin-top: 20px;}
 .burn {width: 1300px; display: flex; flex-wrap: wrap; justify-content: space-around; padding: 10px 0;}
 .burn > .container {flex: 0 0 33%; margin-top: 40px; height: 370px; width: 370px; background-image:url("/static/images/burn_bg.png"); background-repeat:no-repeat; background-size: 100% 100%}
+
+.content .table-empty-tip {background: transparent; padding-right: 75px;}
