@@ -156,7 +156,7 @@ class programplan extends control
         $productList = array();
         $this->app->loadLang('stage');
         $project = $this->loadModel('project')->getById($projectID);
-        if($this->session->hasProduct) $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
+        if($this->session->hasProduct) $productList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
 
         $this->view->title      = $this->lang->programplan->create . $this->lang->colon . $project->name;
         $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);

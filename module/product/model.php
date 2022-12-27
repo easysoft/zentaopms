@@ -382,16 +382,17 @@ class productModel extends model
      * @param  int          $projectID
      * @param  string       $status   all|noclosed
      * @param  string|array $append
+     * @param  bool         $noDeleted
      * @access public
      * @return array
      */
-    public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '')
+    public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '', $noDeleted = true)
     {
-        $products = empty($projectID) ? $this->getList(0, 'all', 0, 0, 'all') : $this->getProducts($projectID, $status, '', true, $append);
+        $products = empty($projectID) ? $this->getList(0, 'all', 0, 0, 'all') : $this->getProducts($projectID, $status, '', true, $append, $noDeleted);
         $pairs    = array();
         if(!empty($products))
         {
-            foreach($products as $product) $pairs[$product->id] = $product->name;
+            foreach($products as $product) $pairs[$product->id] = $product->deleted ? $product->name . "({$this->lang->product->deleted})" : $product->name;
         }
 
         return $pairs;
@@ -424,10 +425,11 @@ class productModel extends model
      * @param  string       $orderBy
      * @param  bool         $withBranch
      * @param  string|array $append
+     * @param  bool         $noDeleted
      * @access public
      * @return array
      */
-    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $withBranch = true, $append = '')
+    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $withBranch = true, $append = '', $noDeleted = true)
     {
         if(defined('TUTORIAL'))
         {
@@ -441,7 +443,8 @@ class productModel extends model
         $projectProducts = $this->dao->select("t1.branch, t1.plan, t2.*")
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('t2.deleted')->eq(0)
+            ->where('1=1')
+            ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
             ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
             ->andWhere('t2.vision')->eq($this->config->vision)
