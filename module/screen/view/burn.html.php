@@ -12,7 +12,7 @@
   <?php if(!empty($executions)):?>
   <div class='burn'>
     <?php foreach($executions as $executionID => $execution):?>
-      <div class="container" id= <?php echo 'burn' . $executionID;?>>
+      <div class="container" id="<?php echo 'burn' . $executionID;?>">
       </div>
     <?php endforeach;?>
   </div>
