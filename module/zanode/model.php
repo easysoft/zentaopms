@@ -327,18 +327,18 @@ class zanodemodel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-        
+
         $hostIDList = array_column($list, 'parent');
         $hosts = $this->dao->select('id,status,heartbeat')->from(TABLE_ZAHOST)
         ->where('id')->in(array_unique($hostIDList))
         ->fetchAll('id');
-        
+
         foreach($list as $l)
         {
             $host = zget($hosts, $l->parent);
             if($l->status == 'running' || $l->status == 'ready')
             {
-                if(empty($host)) 
+                if(empty($host))
                 {
                     $l->status = self::STATUS_SHUTOFF;
                     continue;
@@ -548,7 +548,7 @@ class zanodemodel extends model
             ->where('mac')->eq($mac)
             ->andWhere("type")->eq('node')
             ->fetch();
-        
+
         $host = $this->loadModel("zahost")->getByID($node->parent);
         if($node->status == 'running' || $node->status == 'ready')
         {

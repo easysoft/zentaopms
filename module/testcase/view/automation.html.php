@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+.table-form  tr:first-child td:last-child{width:2%;}
+</style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -22,21 +25,33 @@
       <table class='table table-form'>
         <?php if(!$productID):?>
         <tr>
-          <th class='w-80px'><?php echo $lang->testcase->product;?></th>
+          <th class='w-100px'><?php echo $lang->testcase->product;?></th>
           <td class='required'><?php echo html::select('product', $products, '', "class='form-control picker-select' onchange='loadProduct(this.value)'");?></td>
+          <td></td>
         </tr>
         <?php endif;?>
         <tr>
-          <th class='w-80px'><?php echo $lang->zanode->common;?></th>
+          <th class='w-100px'><?php echo $lang->zanode->common;?></th>
           <td class='required'><?php echo html::select('node', $nodeList, !empty($automation->node) ? $automation->node : '', "class='form-control picker-select'");?></td>
+          <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->zanode->scriptPath;?></th>
+          <th>
+            <?php echo $lang->zanode->scriptPath;?>
+          </th>
           <td class='required'><?php echo html::input('scriptPath', !empty($automation->scriptPath) ? $automation->scriptPath : '', "class='form-control'");?></td>
+          <td>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='left' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->zanode->scriptTips;?>"></icon>
+          </td>
         </tr>
         <tr>
-          <th><?php echo $lang->zanode->shell;?></th>
+          <th>
+            <?php echo $lang->zanode->shell;?>
+          </th>
           <td><?php echo html::textarea('shell', !empty($automation->shell) ? $automation->shell : '', "rows='6' class='form-control'");?></td>
+          <td>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='left' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->zanode->shellTips;?>"></icon>
+          </td>
         </tr>
         <tr>
           <td colspan='2' class='text-center'>
@@ -50,6 +65,8 @@
   </div>
 </div>
 <script>
+$('[data-toggle="popover"]').popover();
+
 $(function()
 {
     if($("#product").length > 0){

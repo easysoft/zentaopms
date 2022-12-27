@@ -20,8 +20,8 @@ $lang->zahost->copied         = 'Copy successful';
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'Extranet Address';
 $lang->zahost->extranet    = 'Extranet Address';
-$lang->zahost->cpuCores    = 'CPU';
 $lang->zahost->memory      = 'Memory Size';
+$lang->zahost->cpuCores    = 'CPU';
 $lang->zahost->diskSize    = 'Disk Size';
 $lang->zahost->desc        = 'Description';
 $lang->zahost->type        = 'Type';
@@ -122,3 +122,5 @@ $lang->zahost->notice->ip              = '『%s』incorrect format!';
 $lang->zahost->notice->registerCommand = 'Register command: ./zagent-host -t host -s http://%s:%s -i %s -p 8086 -secret %s';
 $lang->zahost->notice->loading         = 'loading...';
 $lang->zahost->notice->noImage         = 'No available image';
+
+$lang->zahost->tips = 'Host include physical host, k8s clusters, cloud servers, and cloud container instances. Host used to create VMS or container instances. The recommended host OS is ubuntu or CentOS LTS.';

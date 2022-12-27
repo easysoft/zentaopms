@@ -31,4 +31,6 @@ $(function()
     });
 
     $('#osCategory').change();
+
+    $('[data-toggle="popover"]').popover();
 })

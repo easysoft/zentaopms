@@ -110,3 +110,8 @@ $lang->zanode->init->serviceStatus = [
 $lang->zanode->init->title          = "初始化执行节点";
 $lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
 $lang->zanode->init->initDesc       = "- 在执行节点上执行命令：%s %s  <br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "服务状态";
+
+$lang->zanode->tips = '执行节点是由宿主机创建的虚拟机或容器实例，是执行测试任务的测试环境，在执行节点配置自动化测试环境后可以自动执行脚本，结果可以在禅道对应用例执行结果中查看。';
+$lang->zanode->scriptTips = '填写执行节点上自动化测试脚本所在的目录。';
+$lang->zanode->shellTips  = '在执行节点上运行自动化测试脚本前，可以执行自定义的shell命令。';
+$lang->zanode->automationTips = '在执行节点上执行测试任务前，需要设置产品对应的执行节点，自动化测试脚本的目录以及需要执行的自定义Shell命令。';

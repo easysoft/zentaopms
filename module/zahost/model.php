@@ -315,7 +315,7 @@ class zahostModel extends model
         {
             $host   = $this->getById($image->host);
             $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/task/getStatus';
-    
+
             $this->imageStatusList = $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
             if(!$result or $result->code != 'success') return $image->status;
         }else{
@@ -489,7 +489,7 @@ class zahostModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-        
+
         foreach($list as $host)
         {
             if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
@@ -544,6 +544,8 @@ class zahostModel extends model
         $menu   = '';
         $params = "hostID=$host->id";
 
+        $menu  .= $this->buildMenu('zahost', 'browseImage', $params, $host, 'view', 'snap-house', '', 'iframe', true, '', $this->lang->zahost->image->browseImage);
+        $menu  .= "<div class='divider'></div>";
         $menu  .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
         $menu  .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin');
 

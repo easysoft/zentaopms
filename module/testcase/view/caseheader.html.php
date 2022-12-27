@@ -1,4 +1,5 @@
 <?php js::set('flow', $config->global->flow);?>
+<?php $this->app->loadLang('zanode');?>
 <?php $isProjectApp       = $this->app->tab == 'project'?>
 <?php $currentModule      = $isProjectApp ? 'project'  : 'testcase';?>
 <?php $currentMethod      = $isProjectApp ? 'testcase' : 'browse';?>
@@ -10,6 +11,8 @@
 <?php if($config->global->flow == 'full'):?>
 <style>
 .btn-group a i.icon-plus {font-size: 16px;}
+.btn-group .icon-help {line-height: 30px;}
+.btn-group .popover {width:300px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
@@ -192,6 +195,7 @@
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <?php common::printLink('testcase', 'automation', "productID=$productID", "<i class='icon-wrench muted'> </i>" . $lang->testcase->automation, '', "class='btn btn-link iframe'", true, true)?>
+      <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='bottom' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->zanode->automationTips;?>"></icon>
     </div>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
@@ -318,5 +322,7 @@ $(function()
             $needconfirmTab.after("<div class='dividing-line'></div>");
         }
     }
+
+    $('[data-toggle="popover"]').popover();
 });
 </script>
