@@ -740,10 +740,10 @@ class upgradeModel extends model
             case 'biz7_6_2':
                 $this->processFeedbackModule();
                 break;
-            case 'biupgrade':
-                $this->addDefaultModules4BI('chart');
-                $modules = $this->addDefaultModules4BI('report');
-                $this->processReportModules($modules);
+            //case 'biupgrade':
+            //    $this->addDefaultModules4BI('chart');
+            //    $modules = $this->addDefaultModules4BI('report');
+            //    $this->processReportModules($modules);
         }
     }
 
