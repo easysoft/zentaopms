@@ -151,6 +151,30 @@ class zanode extends control
     }
 
     /**
+     * start Node.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function start($nodeID)
+    {
+        $this->handleNode($nodeID, 'boot');
+    }
+
+    /**
+     * shutdown Node.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function close($nodeID)
+    {
+        $this->handleNode($nodeID, 'destroy');
+    }
+
+    /**
      * Suspend Node.
      *
      * @param  int    $nodeID

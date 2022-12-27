@@ -148,8 +148,15 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
                 <?php if(!$this->testcase->forceNotReview()):?>
                 <span class="input-group-addon"><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview0'");?></span>
                 <?php endif;?>
+                <div class="input-group-addon">
+                <?php echo html::checkbox('auto', $lang->testcase->showAutoCase, '', "id='autocase' title='{$lang->testcase->showAutoCase}'");?>
+                </div>
               </div>
             </td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->testcase->autoScript;?></th>
+            <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.9&filesName=script');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->precondition;?></th>
