@@ -40,6 +40,7 @@ $lang->webhook->products    = $lang->productCommon;
 $lang->webhook->executions  = $lang->execution->common;
 $lang->webhook->actions     = 'Log';
 $lang->webhook->deleted     = 'Deleted';
+$lang->webhook->approval    = 'Approval send message';
 
 $lang->webhook->typeList['']            = '';
 $lang->webhook->typeList['dinggroup']   = 'Dingding Robot';
