@@ -1075,7 +1075,7 @@ class upgradeModel extends model
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
             case '18_0_beta2':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta1'));
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta2'));
         }
 
         return $confirmContent;
