@@ -636,6 +636,7 @@ class screenModel extends model
                         $sourceData[] = array($settings->group[0]->name => $groupValue, $settings->metric[0]->field => $groupCount);
                     }
                 }
+                if(empty($sourceData)) $dimensions = array();
 
                 $component->option->dataset->dimensions = $dimensions;
                 $component->option->dataset->source     = $sourceData;
