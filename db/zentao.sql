@@ -439,6 +439,7 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `fields` mediumtext,
   `sql` mediumtext,
   `builtin` tinyint(1) unsigned NOT NULL,
+  `objects` mediumtext NOT NULL,
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
@@ -527,6 +528,7 @@ CREATE TABLE IF NOT EXISTS `zt_cron` (
 CREATE TABLE `zt_dashboard` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `dimension` int(8) NOT NULL default 0,
   `module` mediumint NOT NULL,
   `desc` mediumtext NOT NULL,
   `layout` mediumtext NOT NULL,
@@ -7033,6 +7035,7 @@ CREATE TABLE IF NOT EXISTS `zt_report` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
   `code` varchar(100) NOT NULL,
   `name` text NOT NULL,
+  `dimension` int(8) NOT NULL default 0,
   `module` varchar(100) NOT NULL,
   `sql` text NOT NULL,
   `vars` text NOT NULL,

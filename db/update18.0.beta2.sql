@@ -48,7 +48,8 @@ ALTER TABLE `zt_chart` ADD `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0 
 ALTER TABLE `zt_chart` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `type`;
 ALTER TABLE `zt_chart` ADD `fields` mediumtext NOT NULL AFTER `filters`;
 ALTER TABLE `zt_chart` ADD `sql` text NOT NULL AFTER `fields`;
-ALTER TABLE `zt_chart` ADD `builtin` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `sql`;
+ALTER TABLE `zt_chart` ADD `builtin` tinyint(1) unsigned NOT NULL AFTER `sql`;
+ALTER TABLE `zt_chart` ADD `objects` mediumtext NOT NULL AFTER `builtin`;
 ALTER TABLE `zt_chart` ADD `editedBy` varchar(30) NOT NULL AFTER `createdDate`;
 ALTER TABLE `zt_chart` ADD `editedDate` datetime NOT NULL AFTER `editedBy`;
 ALTER TABLE `zt_chart` MODIFY COLUMN `desc` text NOT NULL;
