@@ -447,9 +447,14 @@ class weeklyModel extends model
         $report = $this->getFromDB($project, $date);
         if(!empty($report)) return $report->ac;
 
+        if(!$date) $date = date('Y-m-d');
+        $lastDay = $this->getLastDay($date);
+        if(empty($lastDay)) $lastDay = $this->getThisMonday($date);
+
         $AC = $this->dao->select('sum(consumed) as consumed')
             ->from(TABLE_EFFORT)
             ->where('project')->eq($project)
+            ->andWhere('date')->le($lastDay)
             ->andWhere('deleted')->eq(0)
             ->fetch('consumed');
 
