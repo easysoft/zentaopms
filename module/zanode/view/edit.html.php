@@ -17,6 +17,7 @@
     <div class='center-block'>
       <div class='main-header'>
         <h2><?php echo $lang->zanode->editAction;?></h2>
+        <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->zanode->tips;?>"></icon>
       </div>
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>

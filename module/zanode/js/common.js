@@ -1,5 +1,7 @@
 $(function()
 {
+    $('[data-toggle="popover"]').popover();
+
     if(config.currentMethod == 'create') $('#parent').change();
 
     $('#parent').change(function()

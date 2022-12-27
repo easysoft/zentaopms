@@ -110,3 +110,8 @@ $lang->zanode->init->serviceStatus = [
 $lang->zanode->init->title          = "Initialize Node";
 $lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
 $lang->zanode->init->initDesc       = "Execute the init script on the node: %s %s   <br>- Click check service status button.";
+
+$lang->zanode->tips = "The execution node is a virtual machine or container instance created by the host machine, which is a test environment for executing test tasks. After the execution node is configured with the automated test environment, the script can be automatically executed, and the results can be viewed in the execution results of Zen Dao's application cases.";
+$lang->zanode->scriptTips = 'Write the directory where the script is located on the execution node.';
+$lang->zanode->shellTips  = 'Before running the automated test script on the execution node, you can execute a custom shell command.';
+$lang->zanode->automationTips = 'Before executing the test task on the execution node, you need to set up the execution node corresponding to the product, the directory of the automated test script, and the custom Shell command to execute.';
