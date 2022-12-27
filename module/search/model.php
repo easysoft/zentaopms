@@ -662,10 +662,26 @@ class searchModel extends model
     {
         list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
 
+        $filterObject = array();
+        foreach($allowedObject as $index => $object)
+        {
+            if(strpos(',feedback,ticket,', ",$object,") !== false)
+            {
+                unset($allowedObject[$index]);
+                $filterObject[] = $object;
+            }
+        }
+
         $typeCount = $this->dao->select("objectType, count(*) as objectCount")
             ->from(TABLE_SEARCHINDEX)
-            ->where('vision')->eq($this->config->vision)
-            ->andWhere('objectType')->in($allowedObject)
+            ->where('((vision')->eq($this->config->vision)
+            ->beginIF(!empty($allowedObject))->andWhere('objectType')->in($allowedObject)->fi()
+            ->markRight(1)
+            ->beginIF(!empty($filterObject))
+            ->orWhere('(objectType')->in($filterObject)
+            ->markRight(1)
+            ->fi()
+            ->markRight(1)
             ->andWhere('addedDate')->le(helper::now())
             ->groupBy('objectType')
             ->fetchPairs('objectType', 'objectCount');
@@ -686,12 +702,28 @@ class searchModel extends model
     {
         list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
 
+        $filterObject = array();
+        foreach($allowedObject as $index => $object)
+        {
+            if(strpos(',feedback,ticket,', ",$object,") !== false)
+            {
+                unset($allowedObject[$index]);
+                $filterObject[] = $object;
+            }
+        }
+
         $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
         $stmt = $this->dao->select("*, {$scoreColumn} as score")
             ->from(TABLE_SEARCHINDEX)
             ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('objectType')->in($allowedObject)
+            ->andWhere('((vision')->eq($this->config->vision)
+            ->beginIF(!empty($allowedObject))->andWhere('objectType')->in($allowedObject)->fi()
+            ->markRight(1)
+            ->beginIF(!empty($filterObject))
+            ->orWhere('(objectType')->in($filterObject)
+            ->markRight(1)
+            ->fi()
+            ->markRight(1)
             ->andWhere('addedDate')->le(helper::now())
             ->orderBy('score_desc, editedDate_desc')
             ->query();
@@ -978,7 +1010,7 @@ class searchModel extends model
         $programs       = $this->app->user->view->programs;
         $projects       = $this->app->user->view->projects;
         $executions     = $this->app->user->view->sprints;
-        $ticketProducts = $this->loadModel('feedback')->getGrantProducts();
+        $grantProducts  = $this->loadModel('feedback')->getGrantProducts();
 
         $objectPairs = array();
         $total       = count($results);
@@ -1100,11 +1132,24 @@ class searchModel extends model
                     }
                 }
             }
+            elseif($objectType == 'feedback')
+            {
+                $objectFeedbacks = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll('id');
+                foreach($objectFeedbacks as $feedbackID => $feedback)
+                {
+                    if($feedback->openedBy == $this->app->user->account or isset($grantProducts[$feedback->product])) continue;
+                    if(isset($objectIdList[$feedbackID]))
+                    {
+                        $recordID = $objectIdList[$feedbackID];
+                        unset($results[$recordID]);
+                    }
+                }
+            }
 
             foreach($objectProducts as $productID => $idList)
             {
                 if(empty($productID)) continue;
-                if(strpos(",$products,", ",$productID,") === false or ($objectType == 'ticket' and !isset($ticketProducts[$productID])))
+                if(strpos(",$products,", ",$productID,") === false or ($objectType == 'ticket' and !isset($grantProducts[$productID])))
                 {
                     foreach($idList as $object)
                     {
