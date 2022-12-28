@@ -17,17 +17,17 @@
   <div class='btn-toolbar pull-left'>
     <?php if($project->division and $project->hasProduct):?>
     <div class='btn-group'>
-      <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
+      <?php $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
           $class = '';
           if($productID == 0) $class = 'class="active"';
           echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy"), $lang->product->allProduct) . "</li>";
-          foreach($productList as $key => $product)
+          foreach($productList as $key => $productName)
           {
               $class = $productID == $key ? 'class="active"' : '';
-              echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy&productID=$key"), $product) . "</li>";
+              echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy&productID=$key"), $productName) . "</li>";
           }
         ?>
       </ul>
@@ -50,10 +50,10 @@
     </div>
     <?php endif;?>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
-     <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
-     <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('programplan', 'create') and $isStage and empty($product->deleted)):?>
+    <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
     <?php else: ?>
-    <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
+    <?php if(common::hasPriv('execution', 'create') and !$isStage) echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
     <?php endif;?>
   </div>
 </div>

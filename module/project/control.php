@@ -1118,6 +1118,7 @@ class project extends control
         $this->view->showToggleIcon = $showToggleIcon;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->productID      = $productID;
+        $this->view->product        = $this->product->getByID($productID);
         $this->view->projectID      = $projectID;
         $this->view->project        = $project;
         $this->view->projects       = $projects;
