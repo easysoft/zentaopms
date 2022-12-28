@@ -56,6 +56,7 @@ $lang->productplan->batchUnlinkBug   = "Retirer Bugs par Lot";
 $lang->productplan->linkedBugs       = 'Bugs Planifiés';
 $lang->productplan->unlinkedBugs     = 'Bugs non Planifiés';
 $lang->productplan->unexpired        = 'Plans non échus';
+$lang->productplan->noAssigned       = 'No Assigned';
 $lang->productplan->all              = 'Tous les Plans';
 $lang->productplan->setDate          = "Set Start and end Date";
 $lang->productplan->expired          = "Expired";
