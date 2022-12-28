@@ -941,7 +941,7 @@ class storyModel extends model
             ->join('linkStories', ',')
             ->join('linkRequirements', ',')
             ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview')
+            ->remove('files,labels,comment,contactListMenu,reviewer,needNotReview')
             ->get();
 
         /* Relieve twins when change product. */
@@ -958,35 +958,6 @@ class storyModel extends model
 
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0) $story->branch = 0;
-        if(!empty($_POST['stages']))
-        {
-            $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
-            $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
-
-            $stageList   = join(',', array_keys($this->lang->story->stageList));
-            $minStagePos = strlen($stageList);
-            $minStage    = '';
-            foreach($this->post->stages as $branch => $stage)
-            {
-                $newStage = new stdclass();
-                $newStage->story  = $storyID;
-                $newStage->branch = $branch;
-                $newStage->stage  = $stage;
-                if(isset($oldStages[$branch]))
-                {
-                    $oldStage = $oldStages[$branch];
-                    $newStage->stagedBy = $oldStage->stagedBy;
-                    if($stage != $oldStage->stage) $newStage->stagedBy = (strpos('tested|verified|released|closed', $stage) !== false) ? $this->app->user->account : '';
-                }
-                if($story->branch == 0) $this->dao->insert(TABLE_STORYSTAGE)->data($newStage)->exec();
-                if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) < $minStagePos)
-                {
-                    $minStage    = $stage;
-                    $minStagePos = strpos($stageList, $stage);
-                }
-            }
-            $story->stage = $minStage;
-        }
 
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->edit['id'], $this->post->uid);
@@ -5111,8 +5082,8 @@ class storyModel extends model
                 $style .= 'overflow: visible;';
 
                 $maxStage    = $story->stage;
-                $maxStagePos = 0;
                 $stageList   = join(',', array_keys($this->lang->story->stageList));
+                $maxStagePos = strpos($stageList, $maxStage);
                 if(isset($storyStages[$story->id]))
                 {
                     foreach($storyStages[$story->id] as $storyBranch => $storyStage)

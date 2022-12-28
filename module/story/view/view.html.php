@@ -303,8 +303,8 @@
                   <td>
                   <?php
                   $maxStage    = $story->stage;
-                  $maxStagePos = 0;
                   $stageList   = join(',', array_keys($this->lang->story->stageList));
+                  $maxStagePos = strpos($stageList, $maxStage);
                   if($story->stages and $branches)
                   {
                       foreach($story->stages as $branch => $stage)
