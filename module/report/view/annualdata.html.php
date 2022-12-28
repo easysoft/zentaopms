@@ -322,7 +322,7 @@ $(function()
                 controlStyle: {
                     itemSize: 18,
                 },
-               
+
             },
             tooltip: {},
             series: [{
