@@ -47,14 +47,15 @@ $lang->zahost->uninitNotice        = 'Please init the host first';
 $lang->zahost->netError            = 'Unable to connect to the host, please check the network and try again.';
 
 $lang->zahost->init = new stdclass;
+$lang->zahost->init->statusTitle = "Status";
 $lang->zahost->init->checkStatus   = "Check Service Status";
 $lang->zahost->init->not_install   = "Not installed";
 $lang->zahost->init->not_available = "Installed, Not Started";
 $lang->zahost->init->ready         = "Ready";
 $lang->zahost->init->next          = "Next";
 
-$lang->zahost->init->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
-$lang->zahost->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
+$lang->zahost->init->initFailNotice    = "Fail，Execute the installation service command on the host or <a href='https://github.com/easysoft/zenagent/' target='_blank'>See Help</a>.";
+$lang->zahost->init->initSuccessNotice = "Succeed，%s and %s。";
 
 $lang->zahost->init->serviceStatus = [
     "kvm"        => 'not_install',

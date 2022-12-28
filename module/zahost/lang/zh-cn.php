@@ -54,8 +54,9 @@ $lang->zahost->init->not_available = "已安装，未启动";
 $lang->zahost->init->ready = "已就绪";
 $lang->zahost->init->next = "下一步";
 
-$lang->zahost->init->initFailNoticeTitle = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
-$lang->zahost->init->initFailNoticeDesc = "1. 重新执行脚本 <br/>2. 查看初始化常见问题";
+$lang->zahost->init->initFailNotice    = "服务未就绪，在宿主机上执行安装服务命令或<a href='https://github.com/easysoft/zenagent/' target='_blank'>查看帮助</a>.";
+$lang->zahost->init->initSuccessNotice = "服务已就绪，您可以在%s后%s。";
+
 $lang->zahost->init->serviceStatus = [
     "kvm"        => 'not_install',
     "nginx"      => 'not_install',

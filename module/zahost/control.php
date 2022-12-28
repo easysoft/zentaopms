@@ -63,13 +63,16 @@ class zahost extends control
      */
     public function view($id, $orderBy = 'id_desc')
     {
+        $zahost = $this->zahost->getById($id);
+
         $this->view->title      = $this->lang->zahost->view;
         $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->zahost->common);
         $this->view->position[] = $this->lang->zahost->view;
 
-        $this->view->zahost     = $this->zahost->getById($id);
+        $this->view->zahost     = $zahost;
         $this->view->orderBy    = $orderBy;
         $this->view->nodeList   = $this->loadModel("zanode")->getListByHost($this->view->zahost->id, $orderBy);
+        $this->view->initBash   = sprintf($this->config->zahost->initBash, $zahost->secret, getWebRoot(true));
         $this->view->actions    = $this->loadModel('action')->getList('zahost', $id);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->display();
@@ -95,14 +98,11 @@ class zahost extends control
                 return $this->send(array('result' => 'fail', 'message' => array("extranet" => array($this->lang->zahost->netError))));
             }
 
-            $initLink = $this->createLink('zahost', 'init', "hostID=$hostID");
-            return print("<script>showModal('$initLink')</script>");
+            $viewLink = $this->createLink('zahost', 'view', "hostID=$hostID");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $viewLink));
         }
 
         $this->view->title      = $this->lang->zahost->create;
-        $this->view->notice     = $this->lang->zahost->initNotice;
-        $this->view->buttonName = $this->lang->zahost->init->title;
-        $this->view->closeLink  = $this->createLink('zahost', 'browse');
         $this->display();
     }
 

@@ -52,7 +52,7 @@
           <th class='c-software'>   <?php common::printOrderLink('vsoft', $orderBy, $vars, $lang->zahost->vsoft);?></th>
           <th class='c-status'>     <?php common::printOrderLink('t2.status',       $orderBy, $vars, $lang->zahost->status);?></th>
           <th class='c-datetime'>   <?php common::printOrderLink('registerDate',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
-          <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -75,7 +75,6 @@
             <?php $disabled = !empty($nodeList[$host->hostID]) ? 'disabled' : '';?>
             <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->undeletedNotice : $lang->zahost->delete;?>
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
-            <?php common::printIcon('zahost', 'init', "hostID={$host->hostID}", $host, 'list', 'refresh', '', ' init', false, "data-placement='bottom'", $lang->zahost->init->title);?>
             <?php echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
           </td>
         </tr>
