@@ -6,7 +6,10 @@ $config->zanode->create->requiredFields = 'name,host,image,cpu,memory,disk,osNam
 $config->zanode->edit->requiredFields   = '';
 $config->zanode->createimage->requiredFields = 'name';
 
-$config->zanode->defaultPort = '55001';
+$config->zanode->defaultPort       = '55001';
+$config->zanode->defaultAccount    = 'z';
+$config->zanode->defaultWinAccount = 'admin';
+$config->zanode->defaultPwd        = 'CQdliYQn6tKkoFhP';
 
 $config->zanode->initBash = 'curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -szvm -z%s';
 
