@@ -557,7 +557,7 @@ class weeklyModel extends model
         $data->project   = $this->loadModel('project')->getByID($projectID);
         $data->weekSN    = $this->getWeekSN($data->project->begin, $date);
         $data->monday    = $this->getThisMonday($date);
-        $data->lastDay   = $this->getLastDay($date);
+        $data->lastDay   = $this->getThisSunday($date);
         $data->staff     = $this->getStaff($projectID, $date);
         $data->finished  = $this->getFinished($projectID, $date);
         $data->postponed = $this->getPostponed($projectID, $date);
