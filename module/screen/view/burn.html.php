@@ -9,12 +9,20 @@
   </div>
 </div>
 <div class='content'>
+  <?php if(!empty($executions)):?>
   <div class='burn'>
     <?php foreach($executions as $executionID => $execution):?>
-      <div class="container" id= <?php echo 'burn' . $executionID;?>>
+      <div class="container" id="<?php echo 'burn' . $executionID;?>">
       </div>
     <?php endforeach;?>
   </div>
+  <?php else:?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->screen->noData;?></span>
+    </p>
+  </div>
+  <?php endif;?>
 </div>
 <script>
 function initBurnChar()

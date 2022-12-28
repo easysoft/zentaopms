@@ -130,9 +130,9 @@ $config->framework->sendXDO         = true;   // Send X-Download-Options header.
 $config->framework->detectDevice['zh-cn'] = true; // 在zh-cn语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
 $config->framework->detectDevice['zh-tw'] = true; // 在zh-tw语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
 $config->framework->detectDevice['en']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
-$config->framework->detectDevice['de']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
-$config->framework->detectDevice['fr']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
-$config->framework->detectDevice['vi']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
+$config->framework->detectDevice['de']    = true; // 在de语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
+$config->framework->detectDevice['fr']    = true; // 在fr语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
+$config->framework->detectDevice['vi']    = true; // 在vi语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
 
 /* IP white list settings.*/
 $config->ipWhiteList   = '*';
