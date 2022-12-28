@@ -457,17 +457,15 @@ class projectModel extends model
     public function getWaterfallPVEVAC($projectID)
     {
         $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
-        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->query();
+        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->andWhere('status')->ne('cancel')->query();
 
-        $PV = 0;
-        $EV = 0;
-        $AC = 0;
+        $PV   = 0;
+        $EV   = 0;
+        $left = 0;
         while($task = $stmt->fetch())
         {
-            if(empty($task->estimate)) continue;
-
-            $PV += $task->estimate;
-            $AC += $task->consumed;
+            $PV   += $task->estimate;
+            $left += $task->left;
             if($task->status == 'done' or $task->closedReason == 'done')
             {
                 $EV += $task->estimate;
@@ -480,7 +478,13 @@ class projectModel extends model
             }
         }
 
-        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV), 'AC' => sprintf("%.2f", $AC));
+        $AC = $this->dao->select('SUM(consumed) as consumed')->from(TABLE_EFFORT)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->eq($projectID)
+            ->fetch('consumed');
+        if(is_null($AC)) $AC = 0;
+
+        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV), 'AC' => sprintf("%.2f", $AC), 'left' => sprintf("%.2f", $left));
     }
 
     /**

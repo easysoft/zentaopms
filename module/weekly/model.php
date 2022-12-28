@@ -386,7 +386,8 @@ class weeklyModel extends model
 
         if(!$date) $date = date('Y-m-d');
         $lastDay = $this->getLastDay($date);
-        if(empty($lastDay)) return array('PV' => 0, 'EV' => 0);
+        $monday  = $this->getThisMonday($date);
+        if(empty($lastDay)) $lastDay = $monday;
 
         $executions = $this->dao->select('id,begin,end,realBegan,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('*')->from(TABLE_TASK)
@@ -405,18 +406,15 @@ class weeklyModel extends model
             if(helper::isZeroDate($task->estStarted)) $task->estStarted = $execution->begin;
             if(helper::isZeroDate($task->deadline))   $task->deadline   = $execution->end;
 
-            if($task->estStarted <= $lastDay)
+            if($task->deadline <= $lastDay)
             {
-                if($task->deadline <= $lastDay)
-                {
-                    $PV += $task->estimate;
-                }
-                else
-                {
-                    $fullDays       = $this->holiday->getActualWorkingDays($task->estStarted, $task->deadline);
-                    $weekActualDays = $this->holiday->getActualWorkingDays($task->estStarted, $lastDay);
-                    if(!empty($fullDays) and !empty($weekActualDays)) $PV += round(count($weekActualDays) / count($fullDays) * $task->estimate, 2);
-                }
+                $PV += $task->estimate;
+            }
+            elseif($task->estStarted <= $lastDay)
+            {
+                $fullDays       = $this->holiday->getActualWorkingDays($task->estStarted, $task->deadline);
+                $weekActualDays = $this->holiday->getActualWorkingDays($task->estStarted, $lastDay);
+                if(!empty($fullDays) and !empty($weekActualDays)) $PV += round(count($weekActualDays) / count($fullDays) * $task->estimate, 2);
             }
 
             if($task->status == 'done' or $task->closedReason == 'done')
@@ -461,6 +459,42 @@ class weeklyModel extends model
         if(is_null($AC)) $AC = 0;
 
         return sprintf("%.2f", $AC);
+    }
+
+    /**
+     * Get left.
+     *
+     * @param  int    $projectID
+     * @param  string $date
+     * @access public
+     * @return float
+     */
+    public function getLeft($projectID, $date = '')
+    {
+        if(!$date) $date = date('Y-m-d');
+        $lastDay = $this->getLastDay($date);
+        $monday  = $this->getThisMonday($date);
+        if(empty($lastDay)) $lastDay = $monday;
+
+        $executions = $this->dao->select('id,begin,end,realBegan,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $stmt       = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere("parent")->ge(0)
+            ->andWhere("deleted")->eq(0)
+            ->andWhere("status")->ne('cancel')
+            ->query();
+
+        $left = 0;
+        while($task = $stmt->fetch())
+        {
+            $execution = $executions[$task->execution];
+            if(helper::isZeroDate($task->estStarted)) $task->estStarted = $execution->begin;
+            if(helper::isZeroDate($task->deadline))   $task->deadline   = $execution->end;
+
+            if($task->deadline <= $lastDay or ($task->estStarted <= $lastDay and $task->deadline > $lastDay)) $left += $task->left;
+        }
+
+        return sprintf("%.2f", $left);
     }
 
     /**
