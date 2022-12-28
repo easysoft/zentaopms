@@ -302,14 +302,21 @@
                   <th><?php echo $lang->story->stage;?></th>
                   <td>
                   <?php
+                  $maxStage    = $story->stage;
+                  $maxStagePos = 0;
+                  $stageList   = join(',', array_keys($this->lang->story->stageList));
                   if($story->stages and $branches)
                   {
-                      foreach($story->stages as $branch => $stage) if(isset($branches[$branch])) echo $branches[$branch] . ' : ' . $lang->story->stageList[$stage] . '<br />';
+                      foreach($story->stages as $branch => $stage)
+                      {
+                          if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) > $maxStagePos)
+                          {
+                              $maxStage    = $stage;
+                              $maxStagePos = strpos($stageList, $stage);
+                          }
+                      }
                   }
-                  else
-                  {
-                      echo $lang->story->stageList[$story->stage];
-                  }
+                  echo $lang->story->stageList[$maxStage];
                   ?>
                   </td>
                 </tr>

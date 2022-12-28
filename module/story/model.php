@@ -5109,13 +5109,22 @@ class storyModel extends model
             elseif($id == 'stage')
             {
                 $style .= 'overflow: visible;';
+
+                $maxStage    = $story->stage;
+                $maxStagePos = 0;
+                $stageList   = join(',', array_keys($this->lang->story->stageList));
                 if(isset($storyStages[$story->id]))
                 {
                     foreach($storyStages[$story->id] as $storyBranch => $storyStage)
                     {
-                        if(isset($branches[$storyBranch])) $title .= $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . "\n";
+                        if(strpos($stageList, $storyStage->stage) !== false and strpos($stageList, $storyStage->stage) > $maxStagePos)
+                        {
+                            $maxStage    = $storyStage->stage;
+                            $maxStagePos = strpos($stageList, $storyStage->stage);
+                        }
                     }
                 }
+                $title .= $this->lang->story->stageList[$maxStage];
             }
             elseif($id == 'feedbackBy')
             {
@@ -5210,23 +5219,7 @@ class storyModel extends model
                 echo $story->estimate . $this->config->hourUnit;
                 break;
             case 'stage':
-                if(isset($storyStages[$story->id]) and !empty($branches))
-                {
-                    echo "<div class='dropdown dropdown-hover'>";
-                    echo $this->lang->story->stageList[$story->stage];
-                    echo "<span class='caret'></span>";
-                    echo "<ul class='dropdown-menu pull-right'>";
-                    foreach($storyStages[$story->id] as $storyBranch => $storyStage)
-                    {
-                        if(isset($branches[$storyBranch])) echo '<li class="text-ellipsis">' . $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . '</li>';
-                    }
-                    echo "</ul>";
-                    echo '</div>';
-                }
-                else
-                {
-                    echo $this->lang->story->stageList[$story->stage];
-                }
+                echo $this->lang->story->stageList[$maxStage];
                 break;
             case 'taskCount':
                 $tasksLink = helper::createLink('story', 'tasks', "storyID=$story->id", '', 'class="iframe"');
