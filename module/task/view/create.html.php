@@ -74,7 +74,14 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           <td>
             <div class="input-group" id="dataPlanGroup">
               <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
-              <?php echo html::input('teamMember', '', "class='form-control team-group fix-border hidden' readonly='readonly'");?>
+              <?php
+              $teamMember = '';
+              if(!empty($task->team))
+              {
+                  foreach($task->team as $team) $teamMember .= ' ' . zget($members, $team->account);
+              }
+              ?>
+              <?php echo html::input('teamMember', $teamMember, "class='form-control team-group fix-border hidden' readonly='readonly'");?>
               <span class="input-group-btn team-group hidden"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
             </div>
           </td>
