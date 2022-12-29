@@ -100,7 +100,7 @@
       <div class="detail zahost-detail">
         <div class="detail-title">
           <?php echo $lang->zahost->init->statusTitle;?>
-          <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-refresh"></i> <span><?php echo $lang->zahost->init->checkStatus;?></span></button>
+          <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-restart"></i> <span class='checkStatus'><?php echo $lang->zahost->init->checkStatus;?></span></button>
         </div>
         <div class="detail-content article-content">
           <div class="main-row">
@@ -116,6 +116,7 @@
               <div class='hide init-success'><?php echo sprintf($lang->zahost->init->initSuccessNotice, $imageLink, $createNode);?></div>
               <div class='hide init-fail'>
                 <?php echo $lang->zahost->init->initFailNotice;?>
+                <textarea style="display:none;" id="initBash"><?php echo $initBash; ?></textarea>
                 <div class="zahost-init">
                 <?php echo "$initBash <button type='button' class='btn btn-info btn-mini btn-init-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zahost->copy .  "'></i></button>"; ?>
                 </div>
