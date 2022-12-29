@@ -10,9 +10,12 @@
       <div class='row'>
         <?php $i = 1;?>
         <?php foreach ($screens as $screenID => $screen):?>
-        <?php $viewLink = $this->createLink('screen', 'view', "id=$screen->id");?>
         <div class='col-md-3' data-id='<?php echo $screenID;?>'>
-          <a href='<?php echo $viewLink?>' target="_blank" />
+          <?php if(common::hasPriv('screen', 'view')):?>
+          <a href='<?php echo $this->createLink('screen', 'view', "id=$screen->id");?>' target="_blank" />
+          <?php else:?>
+          <div>
+          <?php endif;?>
             <div class='screen'>
               <?php if(!empty($screen->cover)):?>
               <div class='top img'>
@@ -31,7 +34,11 @@
                 </div>
               </div>
             </div>
+          <?php if(common::hasPriv('screen', 'view')):?>
           </a>
+          <?php else:?>
+          </div>
+          <?php endif;?>
         </div>
         <?php endforeach;?>
       </div>
