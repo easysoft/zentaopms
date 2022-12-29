@@ -71,6 +71,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .switchBtn > i {padding-left: 7px;}
 #mainContent > .pull-left > .btn-group > .text{display: block;margin-top: 7px;}
 #mainContent > .pull-left > .btn-group > a > .text{overflow: hidden;display: block;}
+#mainContent > .pull-right > .button-group  .text{margin-left: 0px;}
+.pull-right .icon-plus.icon-sm:before{vertical-align: 4%;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
