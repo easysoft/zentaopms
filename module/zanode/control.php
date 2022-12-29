@@ -399,6 +399,11 @@ class zanode extends control
     {
         $node          = $this->zanode->getNodeById($hostID);
         $serviceStatus = $this->zanode->getServiceStatus($node);
+        if ($node->status != 'running' && $node->status != 'wait')
+        {
+            $serviceStatus['ZenAgent'] = "unknown";
+            $serviceStatus['ZTF'] = "unknown";
+        }
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
     }

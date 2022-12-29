@@ -1237,6 +1237,8 @@ $lang->resource->zanode->reboot  = 'reboot';
 $lang->resource->zanode->suspend = 'suspend';
 $lang->resource->zanode->resume  = 'resume';
 $lang->resource->zanode->getVNC  = 'getVNC';
+$lang->resource->zanode->start   = 'boot';
+$lang->resource->zanode->close   = 'shutdown';
 
 $lang->zanode->methodOrder[5]  = 'browse';
 $lang->zanode->methodOrder[10] = 'create';
@@ -1245,6 +1247,8 @@ $lang->zanode->methodOrder[20] = 'reboot';
 $lang->zanode->methodOrder[35] = 'suspend';
 $lang->zanode->methodOrder[30] = 'resume';
 $lang->zanode->methodOrder[35] = 'getVNC';
+$lang->zanode->methodOrder[40] = 'start';
+$lang->zanode->methodOrder[45] = 'close';
 
 $lang->resource->repo                  = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';

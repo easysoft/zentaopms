@@ -353,7 +353,7 @@ class zanodemodel extends model
 
                 if(time() - strtotime($l->heartbeat) > 60)
                 {
-                    $l->status = self::STATUS_LAUNCH;
+                    $l->status = 'wait';
                 }
             }
         }
@@ -420,7 +420,7 @@ class zanodemodel extends model
                 }
                 elseif(time() - strtotime($node->heartbeat) > 60)
                 {
-                    $node->status = self::STATUS_LAUNCH;
+                    $node->status = 'wait';
                 }
             }
         }
@@ -530,7 +530,7 @@ class zanodemodel extends model
             }
             elseif(time() - strtotime($node->heartbeat) > 60)
             {
-                $node->status = self::STATUS_LAUNCH;
+                $node->status = 'wait';
             }
         }
 
@@ -559,7 +559,7 @@ class zanodemodel extends model
             }
             elseif(time() - strtotime($node->heartbeat) > 60)
             {
-                $node->status = self::STATUS_LAUNCH;
+                $node->status = 'wait';
             }
         }
 
