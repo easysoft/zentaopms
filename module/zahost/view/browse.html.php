@@ -75,7 +75,7 @@
             <?php $disabled = !empty($nodeList[$host->hostID]) ? 'disabled' : '';?>
             <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->undeletedNotice : $lang->zahost->delete;?>
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
-            <?php echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
+            <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='$title' class='btn $disabled'");;?>
           </td>
         </tr>
         <?php endforeach;?>

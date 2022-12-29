@@ -18,6 +18,7 @@ $(function()
         }
     });
 
+    if(hostID) $('#parent').change();
     $(document).on("change", '#image', function()
     {
         var image = $('#image').val();

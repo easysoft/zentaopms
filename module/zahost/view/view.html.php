@@ -112,7 +112,7 @@
             </div>
             <div class='result'>
               <?php $imageLink  = html::a($this->createLink('zahost', 'browseImage', "hostID=$zahost->id", '', true), $lang->zahost->image->downloadImage, '', "class='iframe'");?>
-              <?php $createNode = html::a($this->createLink('zanode', 'create'), $lang->zahost->createZanode);?>
+              <?php $createNode = html::a($this->createLink('zanode', 'create', "hostID=$zahost->id"), $lang->zahost->createZanode);?>
               <div class='hide init-success'><?php echo sprintf($lang->zahost->init->initSuccessNotice, $imageLink, $createNode);?></div>
               <div class='hide init-fail'>
                 <?php echo $lang->zahost->init->initFailNotice;?>

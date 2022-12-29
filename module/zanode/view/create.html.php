@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
+<?php js::set('hostID', $hostID);?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -23,7 +24,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->zanode->hostName;?></th>
-            <td><?php echo html::select('parent', $hostPairs, '', "class='form-control chosen'")?></td>
+            <td><?php echo html::select('parent', $hostPairs, $hostID, "class='form-control chosen'")?></td>
             <td></td>
           </tr>
           <tr>
@@ -78,5 +79,4 @@
     </div>
   </div>
 </div>
-<?php include $app->getModuleRoot() . 'common/view/successmodal.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>

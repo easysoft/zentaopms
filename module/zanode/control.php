@@ -55,13 +55,13 @@ class zanode extends control
     }
 
     /**
-     * Create node page.
+     * Create node.
      *
-     * @param  int    $imageID
+     * @param  int    $hostID
      * @access public
      * @return void
      */
-    public function create()
+    public function create($hostID = 0)
     {
         $this->loadModel('zahost');
         if(!empty($_POST))
@@ -73,9 +73,7 @@ class zanode extends control
 
         $this->view->title     = $this->lang->zanode->create;
         $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs('host');
-        $this->view->notice     = $this->lang->zanode->initNotice;
-        $this->view->buttonName = $this->lang->zanode->initButton;
-        $this->view->closeLink  = $this->createLink('zanode', 'browse');
+        $this->view->hostID    = $hostID;
 
         return $this->display();
     }
