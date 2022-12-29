@@ -80,7 +80,7 @@ $lang->zanode->publicList[0] = '不共享';
 $lang->zanode->publicList[1] = '共享';
 
 $lang->zanode->statusList['created']      = '已创建';
-$lang->zanode->statusList['launch']       = '启动中';
+$lang->zanode->statusList['launch']       = '运行中';
 $lang->zanode->statusList['ready']        = '运行中';
 $lang->zanode->statusList['running']      = '运行中';
 $lang->zanode->statusList['suspend']      = '暂停';

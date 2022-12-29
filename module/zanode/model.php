@@ -353,7 +353,7 @@ class zanodemodel extends model
 
                 if(time() - strtotime($l->heartbeat) > 60)
                 {
-                    $l->status = self::STATUS_LAUNCH;
+                    $l->status = 'wait';
                 }
             }
         }
@@ -420,7 +420,7 @@ class zanodemodel extends model
                 }
                 elseif(time() - strtotime($node->heartbeat) > 60)
                 {
-                    $node->status = self::STATUS_LAUNCH;
+                    $node->status = 'wait';
                 }
             }
         }
@@ -530,7 +530,7 @@ class zanodemodel extends model
             }
             elseif(time() - strtotime($node->heartbeat) > 60)
             {
-                $node->status = self::STATUS_LAUNCH;
+                $node->status = 'wait';
             }
         }
 
@@ -559,7 +559,7 @@ class zanodemodel extends model
             }
             elseif(time() - strtotime($node->heartbeat) > 60)
             {
-                $node->status = self::STATUS_LAUNCH;
+                $node->status = 'wait';
             }
         }
 
@@ -696,6 +696,7 @@ class zanodemodel extends model
      */
     public function getServiceStatus($node)
     {
+        echo "http://{$node->ip}:{$node->zap}/api/v1/service/check";die;
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$node->tokenSN")));
         if(empty($result->data->ztfStatus) || $result->code != 'success')
         {
