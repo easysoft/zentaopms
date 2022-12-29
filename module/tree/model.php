@@ -1412,6 +1412,21 @@ class treeModel extends model
     }
 
     /**
+     * Create report link.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  array  $extra
+     * @access public
+     * @return string
+     */
+    public function createReportLink($type, $module, $extra)
+    {
+        $dimension = zget($extra, 'dimension', 0);
+        return html::a(helper::createLink('report', 'browsereport', "dimension={$dimension}&module={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
+    }
+
+    /**
      * Get sons of a module.
      *
      * @param  int    $rootID
@@ -1776,10 +1791,11 @@ class treeModel extends model
             }
         }
 
-        if($type == 'story')
+        if($type == 'story' or strpos($this->config->tree->groupTypes, ",$type,") !== false)
         {
+            $objectType = $type == 'story' ? 'module' : 'chartgroup';
             $this->loadModel('action');
-            if(!empty($createIdList)) $actionID = $this->action->create('module', $rootID, 'created', '', implode(',', $createIdList));
+            if(!empty($createIdList)) $actionID = $this->action->create($objectType, $rootID, 'created', '', implode(',', $createIdList));
 
             if(!empty($editIdList))
             {
@@ -1798,7 +1814,7 @@ class treeModel extends model
                         $changes[] = $change;
                     }
                 }
-                $actionID = $this->action->create('module', $rootID, 'edited', '', implode(',', $editIdList));
+                $actionID = $this->action->create($objectType, $rootID, 'edited', '', implode(',', $editIdList));
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1834,8 +1850,9 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
 
-        if($self->type == 'story')
+        if($self->type == 'story' or strpos($this->config->tree->groupTypes, ",$self->type,") !== false)
         {
+            $objectType = $self->type == 'story' ? 'module' : 'chartgroup';
             $rootID     = isset($module->root) ? $module->root : $self->root;
             $newModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
 
@@ -1849,11 +1866,11 @@ class treeModel extends model
                     break;
                 }
             }
-            $actionID = $this->loadModel('action')->create('module', $self->root, 'edited', '', $moduleID);
+            $actionID = $this->loadModel('action')->create($objectType, $self->root, 'edited', '', $moduleID);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             if(isset($module->root) and $module->root != $self->root)
             {
-                $actionID = $this->action->create('module', $rootID, 'edited', '', $moduleID);
+                $actionID = $this->action->create($objectType, $rootID, 'edited', '', $moduleID);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1947,11 +1964,12 @@ class treeModel extends model
         $childs = $this->getAllChildId($moduleID);
         $childs[$moduleID] = $moduleID;
 
+        $objectType = (!empty($module->type) and strpos($this->config->tree->groupTypes, ",$module->type,") !== false) ? 'chartgroup' : 'module';
         /* Mark deletion when delete a module. */
         $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->in($childs)->exec();
         foreach($childs as $childID)
         {
-            $this->loadModel('action')->create('module', $childID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+            $this->loadModel('action')->create($objectType, $childID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
         }
 
         $this->fixModulePath($module->root, $module->type);
@@ -1981,6 +1999,15 @@ class treeModel extends model
                 $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $this->dao->update(TABLE_TICKET)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $cookieName = 'storyModule';
+                break;
+            case 'chart':
+                $this->dao->update(TABLE_CHART)->set('`group`')->eq($module->parent)->where('`group`')->in($childs)->exec();
+                break;
+            case 'report':
+                $this->dao->update(TABLE_REPORT)->set('`module`')->eq($module->parent)->where('`module`')->in($childs)->exec();
+                break;
+            case 'dataview':
+                $this->dao->update(TABLE_DATAVIEW)->set('`group`')->eq($module->parent)->where('`group`')->in($childs)->exec();
                 break;
             case 'feedback':
                 $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();

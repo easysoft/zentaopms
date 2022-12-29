@@ -876,12 +876,15 @@ class actionModel extends model
             {
                 $desc = $this->lang->$objectType->action->{$action->action};
             }
-            elseif($action->action == 'createmr' and strpos($action->extra, '::') !== false)
+            elseif(strpos('createmr,editmr,removemr', $action->action) !== false and strpos($action->extra, '::') !== false)
             {
-                list($mrCreatedDate, $mrActor, $mrLink) = explode('::', $action->extra);
+                $mrAction = str_replace('mr', '', $action->action) . 'Action';
+                list($mrDate, $mrActor, $mrLink) = explode('::', $action->extra);
+
                 if(isonlybody()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+
                 $this->app->loadLang('mr');
-                $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
+                $desc = sprintf($this->lang->mr->$mrAction, $mrDate, $mrActor, $mrLink);
             }
             elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
             {
@@ -1118,7 +1121,7 @@ class actionModel extends model
             ->beginIF($noMultipleExecutions)->andWhere("IF(`objectType` = 'execution', `objectID` NOT " . helper::dbIN($noMultipleExecutions) . ", '1=1')")->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
-            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
+            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
             ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
             ->andWhere("IF((objectType = 'effort'), (objectID in ($efforts)), '1=1')")
             ->orderBy($orderBy)
@@ -1309,7 +1312,7 @@ class actionModel extends model
                 $objectName  = ($objectType == 'productplan' or $objectType == 'ticket') ? 'title' : 'name';
                 $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
             }
-            elseif($action->objectType == 'module' and !empty($action->extra) and $action->action != 'deleted')
+            elseif(strpos(',module,chartgroup,', ",$action->objectType,") !== false and !empty($action->extra) and $action->action != 'deleted')
             {
                 $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
                 $action->objectName = implode(',', $modules);
@@ -1482,6 +1485,16 @@ class actionModel extends model
 
             if(!is_array($objectLabel)) $actionObjectLabel = $objectLabel;
             if(is_array($objectLabel) and isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
+
+            if($objectType == 'module' and $actionType == 'deleted')
+            {
+                $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch('type');
+                if($moduleType == 'doc')
+                {
+                    $this->app->loadLang('doc');
+                    $actionObjectLabel = $this->lang->doc->menuTitle;
+                }
+            }
         }
 
         if($this->config->edition == 'max' and $objectType == 'assetlib')
@@ -1654,6 +1667,7 @@ class actionModel extends model
             $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
         }
 
+        if($action->objectType == 'chartgroup') $action->objectLink = '';
         if($action->objectType == 'branch' and $action->action == 'mergedbranch') $action->objectLink = 'javascript:void(0)';
         if($action->objectType == 'module')
         {

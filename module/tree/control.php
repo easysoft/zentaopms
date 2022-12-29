@@ -250,6 +250,15 @@ class tree extends control
             $title      = $this->lang->tree->manageTrainpost;
             $position[] = $this->lang->tree->manageTrainpost;
         }
+        elseif($viewType == 'report')
+        {
+            $title      = $this->lang->tree->manageReport;
+            $position[] = $this->lang->tree->manageReport;
+
+            $root = new stdclass();
+            $root->name = $this->lang->tree->report;
+            $this->view->root = $root;
+        }
         elseif(strpos($viewType, 'datasource') !== false)
         {
             $params = explode('_', $viewType);
@@ -300,14 +309,13 @@ class tree extends control
             if(empty($project->hasProduct)) $this->view->root->name = $project->name;
         }
 
-        $parentModules               = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
         $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
-        $this->view->parentModules   = $parentModules;
+        $this->view->parentModules   = $this->tree->getParents($currentModuleID);
         $this->view->branch          = $branch;
         $this->view->from            = $from;
         $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType, $branch);
@@ -388,7 +396,7 @@ class tree extends control
         {
             $this->view->optionMenu = $this->tree->getTaskOptionMenu($module->root);
         }
-        else
+        else if($type != 'chart')
         {
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch, 'noMainBranch|nodeleted');
         }
@@ -500,6 +508,7 @@ class tree extends control
             if($module->type == 'doc') $confirmLang = $this->lang->tree->confirmDeleteMenu;
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
             if($module->type == 'host') $confirmLang = $this->lang->tree->confirmDeleteHost;
+            if(strpos($this->config->tree->groupTypes, ",$module->type,") !== false) $confirmLang = $this->lang->tree->confirmDeleteGroup;
             die(js::confirm($confirmLang, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
         }
         else

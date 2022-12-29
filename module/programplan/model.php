@@ -1031,6 +1031,13 @@ class programplanModel extends model
         if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
         if(dao::isError()) return false;
 
+        if($plan->parent) $parentStage = $this->getByID($plan->parent);
+        if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
+        {
+            dao::$errors['message'][] = $this->lang->programplan->error->parentDuration;
+            return false;
+        }
+
         if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
         if(dao::isError()) return false;
 
@@ -1045,7 +1052,6 @@ class programplanModel extends model
 
         if($plan->parent > 0)
         {
-            $parentStage = $this->getByID($plan->parent);
             $plan->attribute = $parentStage->attribute;
             $plan->acl       = $parentStage->acl;
             $parentPercent   = $parentStage->percent;

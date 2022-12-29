@@ -70,7 +70,7 @@
         </thead>
         <tbody class="sortable" id="productTableList">
         <?php foreach($products as $product):?>
-          <?php $totalStories = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'] + $product->stories['reviewing'];?>
+          <?php $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];?>
           <tr class="text-center" data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
             <td class='c-id text-left'>
               <?php if($canBatchEdit):?>
@@ -95,7 +95,7 @@
             <td><?php echo $product->stories['active'];?></td>
             <td><?php echo $product->stories['changing'];?></td>
             <td><?php echo $product->stories['reviewing'];?></td>
-            <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
+            <td><?php echo $totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100;?>%</td>
             <td><?php echo $product->unResolved;?></td>
             <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>
             <td><?php echo $product->plans;?></td>

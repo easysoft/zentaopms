@@ -141,9 +141,11 @@ if(isset($config->setCode) and $config->setCode == 0) unset($config->project->da
 $config->project->checkList = new stdclass();
 $config->project->checkList->scrum     = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case');
 $config->project->checkList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask');
+$config->project->checkList->kanban    = array('execution', 'build');
 $config->project->maxCheckList = new stdclass();
 $config->project->maxCheckList->scrum     = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case', 'issue', 'risk', 'meeting');
 $config->project->maxCheckList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask', 'review', 'build', 'researchplan', 'issue', 'risk', 'opportunity', 'auditplan', 'gapanalysis', 'meeting');
+$config->project->maxCheckList->kanban    = array('execution', 'build');
 
 $config->project->search['module']                   = 'project';
 $config->project->search['fields']['name']           = $lang->project->name;

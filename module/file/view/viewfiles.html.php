@@ -188,7 +188,7 @@ function setFileName(fileID)
           echo "<li class='file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 
           $objectType = zget($this->config->file->objectType, $file->objectType);
-          if(common::hasPriv($objectType, 'edit', $object))
+          if(common::hasPriv($objectType, 'view', $object))
           {
               echo "<span class='right-icon hidden'>&nbsp; ";
 
@@ -218,8 +218,11 @@ function setFileName(fileID)
               }
 
               common::printLink('file', 'download', "fileID=$file->id", "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->downloadFile}'");
-              if(common::hasPriv('file', 'edit')) echo html::a('###', "<i class='icon icon-pencil-alt'></i>", '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$lang->file->edit}'");
-              if($showDelete and common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id, this)' title='$lang->delete'");
+              if(common::hasPriv($objectType, 'edit', $object))
+              {
+                  if(common::hasPriv('file', 'edit')) echo html::a('###', "<i class='icon icon-pencil-alt'></i>", '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$lang->file->edit}'");
+                  if($showDelete and common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id, this)' title='$lang->delete'");
+              }
               echo '</span>';
           }
           echo '</li>';?>

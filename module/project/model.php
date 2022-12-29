@@ -2946,7 +2946,21 @@ class projectModel extends model
 
             $type  = '';
             $table = constant('TABLE_'. strtoupper($module));
-            if($module == 'execution') $type = $model == 'scrum' ? 'sprint' : 'stage';
+            if($module == 'execution')
+            {
+                switch($model)
+                {
+                case 'scrum':
+                    $type = 'sprint';
+                    break;
+                case 'waterfall':
+                    $type = 'stage';
+                    break;
+                case 'kanban':
+                    $type = 'kanban';
+                    break;
+                }
+            }
 
             $object = $this->getDataByProject($table, $projectID, $type);
             if(!empty($object)) return false;

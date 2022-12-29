@@ -342,9 +342,12 @@ if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db-
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
 
+define('TABLE_SCREEN',    '`' . $config->db->prefix . 'screen`');
 define('TABLE_CHART',     '`' . $config->db->prefix . 'chart`');
 define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
 define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
+define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
+define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -394,6 +397,7 @@ $config->objectTables['jebkins']      = TABLE_PIPELINE;
 $config->objectTables['stage']        = TABLE_STAGE;
 $config->objectTables['apistruct']    = TABLE_APISTRUCT;
 $config->objectTables['repo']         = TABLE_REPO;
+$config->objectTables['dataview']     = TABLE_DATAVIEW;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';

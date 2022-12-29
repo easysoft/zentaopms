@@ -22,6 +22,7 @@ class branchModel extends model
      */
     public function getById($branchID, $productID = 0, $field = 'name')
     {
+        if($branchID == 'all') return false;
         if(empty($branchID))
         {
             if(empty($productID)) $productID = $this->session->product;
