@@ -33,10 +33,11 @@ $lang->zahost->editedBy     = '由谁修改';
 $lang->zahost->editedDate   = '最后修改时间';
 $lang->zahost->registerDate = '最后注册时间';
 
-$lang->zahost->memorySize = $lang->zahost->memory;
-$lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
-$lang->zahost->os         = '操作系统';
-$lang->zahost->imageName  = '镜像文件';
+$lang->zahost->memorySize  = $lang->zahost->memory;
+$lang->zahost->cpuCoreNum  = $lang->zahost->cpuCores;
+$lang->zahost->os          = '操作系统';
+$lang->zahost->imageName   = '镜像文件';
+$lang->zahost->browseImage = '镜像列表';
 
 $lang->zahost->createZanode        = '创建执行节点';
 $lang->zahost->initNotice          = '保存成功，请您初始化宿主机或返回列表。';
