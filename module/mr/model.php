@@ -416,10 +416,36 @@ class mrModel extends model
         $this->linkObjects($MR);
 
         $this->loadModel('action')->create('mr', $MRID, 'edited');
+        $this->createMRLinkedAction($MRID, 'editmr', $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
-   }
+    }
+
+    /**
+     * Create createmr,editmr,removemr action.
+     *
+     * @param  int    $MRID
+     * @param  string $action  createmr|editmr|removemr
+     * @param  string $actionDate
+     * @access public
+     * @return void
+     */
+    public function createMRLinkedAction($MRID, $action, $actionDate = '')
+    {
+        $this->loadModel('action');
+        if(empty($actionDate)) $actionDate = helper::now();
+
+        $MRAction = $actionDate . '::' . $this->app->user->account . '::' . helper::createLink('mr', 'view', "mr={$MRID}");
+
+        $linkedStories = $this->getLinkedObjectPairs($MRID, 'story');
+        $linkedTasks   = $this->getLinkedObjectPairs($MRID, 'task');
+        $linkedBugs    = $this->getLinkedObjectPairs($MRID, 'bug');
+
+        foreach($linkedStories as $storyID) $this->action->create('story', $storyID, $action, '', $MRAction);
+        foreach($linkedTasks as $taskID)    $this->action->create('task', $taskID, $action, '', $MRAction);
+        foreach($linkedBugs as $bugID)      $this->action->create('bug', $bugID, $action, '', $MRAction);
+    }
 
     /**
      * sync MR from GitLab API to Zentao database.
@@ -1722,6 +1748,26 @@ class mrModel extends model
             ->andWhere('t1.BType')->eq($objectType)
             ->andWhere('t1.BID')->eq($objectID)
             ->andWhere('t2.id')->ne(0)
+            ->fetchPairs();
+    }
+
+    /**
+     * Get story,task,bug pairs which linked MR.
+     *
+     * @param  int    $MRID
+     * @param  string $objectType story|task|bug
+     * @access public
+     * @return array
+     */
+    public function getLinkedObjectPairs($MRID, $objectType = 'story')
+    {
+        $table = $this->config->objectTables[$objectType];
+        return $this->dao->select('relation.BID')->from(TABLE_RELATION)->alias('relation')
+            ->leftJoin($table)->alias('object')->on('relation.BID = object.id')
+            ->where('relation.AType')->eq('mr')
+            ->andWhere('relation.BType')->eq($objectType)
+            ->andWhere('relation.AID')->eq($MRID)
+            ->andWhere('object.deleted')->eq(0)
             ->fetchPairs();
     }
 

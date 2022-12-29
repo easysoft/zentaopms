@@ -17,6 +17,8 @@ $lang->mr->diff         = '比对代码';
 $lang->mr->viewInGit    = '在应用中查看';
 $lang->mr->link         = '关联需求、Bug、任务';
 $lang->mr->createAction = '%s, 由 <strong>%s</strong> 提交了 <a href="%s">合并请求</a>。';
+$lang->mr->editAction   = '%s, 由 <strong>%s</strong> 编辑了 <a href="%s">合并请求</a>。';
+$lang->mr->removeAction = '%s, 由 <strong>%s</strong> 删除了 <a href="%s">合并请求</a>。';
 
 $lang->mr->linkList  = '浏览关联需求、Bug、任务';
 $lang->mr->linkStory = '关联需求';
