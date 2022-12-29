@@ -39,7 +39,7 @@ $lang->zahost->os           = 'System';
 $lang->zahost->imageName    = 'Image File';
 $lang->zahost->browseImage  = 'Image List';
 
-$lang->zahost->createZanode        = 'Create Zanode';
+$lang->zahost->createZanode        = 'Create Node';
 $lang->zahost->initNotice          = 'Save successfully, initialize the ZAhost or return list';
 $lang->zahost->createZanodeNotice  = 'Initialization successful, ready to create the zanode';
 $lang->zahost->downloadImageNotice = 'Initialization successful, download the image to create zanode';
