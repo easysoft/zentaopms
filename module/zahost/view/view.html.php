@@ -100,7 +100,7 @@
       <div class="detail zahost-detail">
         <div class="detail-title">
           <?php echo $lang->zahost->init->statusTitle;?>
-          <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-restart"></i> <span class='checkStatus'><?php echo $lang->zahost->init->checkStatus;?></span></button>
+          <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-refresh"></i> <span class='checkStatus'><?php echo $lang->zahost->init->checkStatus;?></span></button>
         </div>
         <div class="detail-content article-content">
           <div class="main-row">
