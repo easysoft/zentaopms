@@ -1,0 +1,11 @@
+.body-modal #mainContent {padding-top: 0px;}
+.article-content #spec .icon-list{margin-right:5px;}
+.qr-code-img {width: 90px; height: 90px; display: inline-block; float: left;}
+.qr-code-details {display: inline-block; margin: 15px 0px 0px 10px;}
+.qr-code-details div{margin: 5px 0px;}
+.qr-code-group {color: #898989;}
+.icon.icon-lg:before {vertical-align: unset;}
+#app-introduction ul{margin-bottom: 5px;}
+#app-introduction a{padding-left: 20px;}
+#app-introduction p{margin-bottom: 15px;}
+.float-right {float: right;}

@@ -227,6 +227,7 @@ $config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
 $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
+$config->openMethods[] = 'zahost.introduction';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

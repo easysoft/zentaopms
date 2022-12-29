@@ -42,14 +42,19 @@ class zahost extends control
         $this->config->zahost->search['onMenuBar'] = 'no';
         $this->loadModel('search')->setSearchParams($this->config->zahost->search);
 
-        $this->view->title      = $this->lang->zahost->common;
-        $this->view->hostList   = $hostList;
-        $this->view->nodeList   = $nodeList;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
-        $this->view->pager      = $pager;
-        $this->view->param      = $param;
-        $this->view->orderBy    = $orderBy;
-        $this->view->browseType = $browseType;
+        $showFeature = false;
+        $skipAutomation = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
+        if(strpos(",$skipAutomation,", $this->app->user->account) === false) $showFeature = true;
+
+        $this->view->title       = $this->lang->zahost->common;
+        $this->view->hostList    = $hostList;
+        $this->view->nodeList    = $nodeList;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
+        $this->view->pager       = $pager;
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
+        $this->view->browseType  = $browseType;
+        $this->view->showFeature = $showFeature;
 
         $this->display();
     }
@@ -348,6 +353,22 @@ class zahost extends control
         $this->view->modalLink  = $imageList ? $this->createLink('zanode', 'create', "hostID=$hostID") : $this->createLink('zahost', 'browseImage', "hostID=$hostID");
         $this->view->closeLink  = $this->createLink('zahost', 'browse');
 
+        $this->display();
+    }
+
+    /**
+     * Introduction.
+     *
+     * @access public
+     * @return void
+     */
+    public function introduction()
+    {
+        $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
+        if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
+        $this->loadModel('setting')->setItem('system.common.global.skipAutomation', $accounts);
+
+        $this->view->title = $this->lang->zahost->automation->title;
         $this->display();
     }
 

@@ -12,7 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->zahost->confirmDelete)?>
-<?php js::set('browseType', $browseType)?>
+<?php js::set('browseType', $browseType);?>
+<?php js::set('showFeature', $showFeature);?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <a href='#' class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon-search icon'></i> <?php echo $lang->zahost->byQuery;?></a>

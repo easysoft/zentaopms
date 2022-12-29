@@ -128,3 +128,23 @@ $lang->zahost->notice->loading         = 'loading...';
 $lang->zahost->notice->noImage         = 'No available image';
 
 $lang->zahost->tips = 'Host include physical host, k8s clusters, cloud servers, and cloud container instances. Host used to create VMS or container instances. The recommended host OS is ubuntu or CentOS LTS.';
+
+$lang->zahost->automation = new stdclass();
+$lang->zahost->automation->title = 'Test Automation Solutions';
+$lang->zahost->automation->abstract      = 'Abstract';
+$lang->zahost->automation->abstractSpec  = 'The Zen Tao automated test solution realizes the centralized management of test cases, test scripts, script execution, test results and test environment, which reduces the cost of test management and improves the efficiency of test execution. Through the solution, you can easily establish an automated test system suitable for the current project management and development process, and reduce the investment of testing work with automation technology.';
+$lang->zahost->automation->framework     = 'Framework';
+$lang->zahost->automation->frameworkSpec = 'The solution architecture based on the KVM virtualization software:';
+
+$lang->zahost->automation->feature1           = '1、Core concepts';
+$lang->zahost->automation->feature1Spec       = "Hosts include physical hosts, k8s clusters, cloud servers, and cloud container instances, which are mainly used to create virtual machines or container instances. The recommended operating system for the host is ubuntu or the LTS version of CentOS.<br/> An execution node is a virtual machine or container instance created by the host and is a test environment where test tasks are executed.";
+$lang->zahost->automation->feature2           = '2、Application introduction';
+$lang->zahost->automation->feature2ZenAgent   = 'ZenAgent is an open source software test automation and scheduling platform, which provides users with a distributed and centrally managed test environment with the help of virtualization technology.';
+$lang->zahost->automation->feature2ZTF        = 'ZTF is an open source automated test management framework of Zen Tao, which helps users to manage test scripts in a unified way. ZTF is deeply integrated with Zen Tao, each script can be associated with a use case in the test management system, and the step information in the script and the use case information in the management system can be synchronized with each other.';
+$lang->zahost->automation->feature2KVM        = 'KVM(for Kernel-based Virtual Machine) is a complete virtualization solution for Linux on x86 hardware, including virtualization extensions (Intel VT or AMD-V).';
+$lang->zahost->automation->feature2Nginx      = 'Nginx is a high-performance HTTP and reverse proxy web server that also provides IMAP/POP3/SMTP services.';
+$lang->zahost->automation->feature2noVNC      = 'noVNC is an HTML VNC client-side JavaScript library and applications built on top of it. noVNC works well on any major browser, including mobile browsers (iOS and Android).';
+$lang->zahost->automation->feature2Websockify = 'Websockify simply converts WebSockets traffic to normal socket traffic. Websockify accepts the WebSockets handshake, parses it, and then starts forwarding traffic in both directions between the client and the destination.';
+$lang->zahost->automation->support            = 'Support';
+$lang->zahost->automation->supportSpec        = 'You can visit the Zen Do website for the help manual:';
+$lang->zahost->automation->groupTitle         = "Welcome to scan the QR code <br/> Get Help";
