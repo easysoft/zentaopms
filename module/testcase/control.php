@@ -395,6 +395,7 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
+            if(!empty($_FILES['scriptFile'])) unset($_FILES['scriptFile']);
             $response['result'] = 'success';
 
             setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
@@ -875,6 +876,8 @@ class testcase extends control
 
         if(!empty($_POST))
         {
+            if(!empty($_FILES['scriptFile'])) unset($_FILES['scriptFile']);
+
             $changes = array();
             if($comment == false or $comment == 'false')
             {

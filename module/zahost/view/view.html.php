@@ -44,14 +44,14 @@
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->zaHostType;?>:</div>
-                <div class="col-7"><?php echo $lang->zahost->zaHostTypeList[$zahost->hostType];?></div>
+                <div class="col-4 text-right"><?php echo $lang->zahost->cpuCores;?>:</div>
+                <div class="col-7"><?php echo $zahost->cpuCores . $lang->zahost->cpuUnit;?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->cpuCores;?>:</div>
-                <div class="col-7"><?php echo $zahost->cpuCores;?></div>
+                <div class="col-4 text-right"><?php echo $lang->zahost->zaHostType;?>:</div>
+                <div class="col-7"><?php echo $lang->zahost->zaHostTypeList[$zahost->hostType];?></div>
               </div>
             </div>
           </div>
@@ -64,14 +64,14 @@
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->diskSize;?>:</div>
-                <div class="col-7"><?php echo $zahost->diskSize;?></div>
+                <div class="col-4 text-right"><?php echo $lang->zahost->memory;?>:</div>
+                <div class="col-7"><?php echo $zahost->memory . $lang->zahost->unitList['GB'];;?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->memory;?>:</div>
-                <div class="col-7"><?php echo $zahost->memory;?></div>
+                <div class="col-4 text-right"><?php echo $lang->zahost->vsoft;?>:</div>
+                <div class="col-7"><?php echo zget($lang->zahost->softwareList, $zahost->vsoft);?></div>
               </div>
             </div>
           </div>
@@ -84,8 +84,8 @@
             </div>
             <div class="col-4">
               <div class="main-row">
-                <div class="col-4 text-right"><?php echo $lang->zahost->vsoft;?>:</div>
-                <div class="col-7"><?php echo zget($lang->zahost->softwareList, $zahost->vsoft);?></div>
+                <div class="col-4 text-right"><?php echo $lang->zahost->diskSize;?>:</div>
+                <div class="col-7"><?php echo $zahost->diskSize . $lang->zahost->unitList['GB'];?></div>
               </div>
             </div>
             <div class="col-4">
@@ -103,12 +103,7 @@
           <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-refresh"></i> <span><?php echo $lang->zahost->init->checkStatus;?></span></button>
         </div>
         <div class="detail-content article-content">
-          <div class="main-row zanode-mt-8">
-            <div>在宿主机上安装必要服务后进行检测:</div>
-            <div class="zahost-init">
-            <textarea style="display:none;" id="initBash"><?php echo $initBash; ?></textarea>
-            <?php echo "$initBash <button type='button' class='btn btn-info btn-mini btn-init-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zahost->copy .  "'></i></button>"; ?>
-            </div>
+          <div class="main-row">
             <div id="statusContainer">
               <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>KVM</span></div>
               <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>Nginx</span></div>

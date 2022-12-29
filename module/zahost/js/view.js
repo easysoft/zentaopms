@@ -6,13 +6,18 @@ function ajaxGetServiceStatus()
         var resultData = JSON.parse(response);
         let html = "";
         let isSuccess = true
+        var service = '';
 
         for (let key in resultData.data) {
+            if(key == 'kvm')        service = 'KVM';
+            if(key == 'nginx')      service = 'Nginx';
+            if(key == 'novnc')      service = 'noVNC';
+            if(key == 'websockify') service = 'Websockify';
             if(resultData.data[key] == 'ready'){
-                html += "<div class='text-success'><span class='dot-symbol'>● </span><span>" + key + ' ' + zahostLang.init[resultData.data[key]] + "</span></div>"
+                html += "<div class='text-success'><span class='dot-symbol'>● </span><span>" + service + ' ' + zahostLang.init[resultData.data[key]] + "</span></div>"
             }else{
                 isSuccess = false
-                html += "<div class='text-danger'><span class='dot-symbol'>● </span><span>" + key + ' ' + zahostLang.init[resultData.data[key]] + "</span></div>"
+                html += "<div class='text-danger'><span class='dot-symbol'>● </span><span>" + service + ' ' + zahostLang.init[resultData.data[key]] + "</span></div>"
             }
         };
 
