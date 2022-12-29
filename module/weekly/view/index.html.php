@@ -39,7 +39,15 @@ $(function()
     <div class='page-title'><h4><?php echo $lang->weekly->summary;?></h4></div>
     <table class='table table-bordered'>
       <tr>
-        <td><?php echo $lang->weekly->progress;?></td>
+        <td>
+          <?php echo $lang->weekly->progress;?>
+          <div id='helpDropdown' class="dropdown dropdown-hover">
+            <a data-toggle="dropdown"><i class="icon-help"></i></a>
+            <div class="dropdown-menu">
+              <?php echo $lang->weekly->reportHelpNotice;?>
+            </div>
+          </div>
+        </td>
         <td></td>
         <td><?php echo $lang->weekly->analysisResult;?></td>
         <td></td>
