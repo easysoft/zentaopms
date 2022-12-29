@@ -323,7 +323,6 @@ class zanodemodel extends model
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.deleted')->eq(0)
             ->andWhere("t1.type")->eq("node")
-            ->andWhere("(t1.createdBy = '{$this->app->user->account}')")
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
