@@ -90,7 +90,7 @@ $lang->zanode->statusList['created']      = '已创建';
 $lang->zanode->statusList['launch']       = '运行中';
 $lang->zanode->statusList['ready']        = '运行中';
 $lang->zanode->statusList['running']      = '运行中';
-$lang->zanode->statusList['suspend']      = '暂停';
+$lang->zanode->statusList['suspend']      = '休眠';
 $lang->zanode->statusList['offline']      = '下线';
 $lang->zanode->statusList['destroy']      = '已销毁';
 $lang->zanode->statusList['shutoff']      = '已关机';
@@ -112,9 +112,9 @@ $lang->zanode->init->ready         = "已就绪";
 $lang->zanode->init->next          = "下一步";
 $lang->zanode->init->button        = "去设置";
 
-$lang->zanode->init->initSuccessNoticeTitle = "服务已就绪，还需两步即可在执行节点上执行自动化测试：1、根据%s配置自动化测试运行环境。<br/>2、进行%s";
+$lang->zanode->init->initSuccessNoticeTitle = "服务已就绪，还需两步即可在执行节点上执行自动化测试：<br/>1、根据%s配置自动化测试运行环境。<br/>2、进行%s";
 $lang->zanode->init->initFailNoticeTitle    = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
-$lang->zanode->init->initFailNoticeDesc     = "1. 重新执行脚本 <br/>2. 查看初始化常见问题";
+$lang->zanode->init->initFailNoticeDesc     = "1、 重新执行脚本 <br/>2、 查看初始化常见问题";
 
 $lang->zanode->init->serviceStatus = [
     "ZenAgent" => 'not_install',

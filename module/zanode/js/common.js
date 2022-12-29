@@ -18,7 +18,7 @@ $(function()
         }
     });
 
-    if(hostID) $('#parent').change();
+    if(typeof(hostID) != "undefined" && hostID) $('#parent').change();
     $(document).on("change", '#image', function()
     {
         var image = $('#image').val();

@@ -109,7 +109,6 @@
                 echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                 common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-export'></i> ", '', "class='btn btn-action iframe createImage' title='{$lang->zanode->createImage}' data-width='55%'", '', true);
-                common::printIcon('zanode', 'init', "hostID={$node->id}", $node, 'list', 'refresh', '', 'btn btn-action init', false, "data-placement='bottom'", $lang->zanode->init->title);
                 common::printLink('zanode', 'delete', "zanodeID={$node->id}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->zanode->destroy}' class='btn btn-action' target='hiddenwin'");
                 echo "</ul>";
                 echo "</div>";
