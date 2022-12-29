@@ -61,8 +61,6 @@ class programplan extends control
         $this->commonAction($projectID, $productID, $type);
         $this->session->set('projectPlanList', $this->app->getURI(true), 'project');
 
-        if(empty($productID)) $productID = $this->productID;
-
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
 
         $products = $this->loadModel('product')->getProducts($projectID);

@@ -52,12 +52,12 @@ class programplanModel extends model
      */
     public function getStage($executionID = 0, $productID = 0, $browseType = 'all', $orderBy = 'id_asc')
     {
-        if(empty($executionID) || empty($productID)) return array();
+        if(empty($executionID)) return array();
 
         $plans = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->eq('stage')
-            ->andWhere('t1.product')->eq($productID)
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($browseType == 'all')->andWhere('t2.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t2.parent')->eq($executionID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
