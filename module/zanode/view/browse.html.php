@@ -95,11 +95,11 @@
 
                 if($node->status == "shutoff")
                 {
-                    common::printLink('zanode', 'start', "zanodeID={$node->id}", "<i class='icon icon-magic'></i> ", '', "class='btn '");
+                    common::printLink('zanode', 'start', "zanodeID={$node->id}", "<i class='icon icon-magic'></i> ", '', "class='btn ' title='{$lang->zanode->boot}'");
                 }
                 else
                 {
-                    common::printLink('zanode', 'close', "zanodeID={$node->id}", "<i class='icon icon-off'></i> ", '', "class='btn '");
+                    common::printLink('zanode', 'close', "zanodeID={$node->id}", "<i class='icon icon-off'></i> ", '', "class='btn ' title='{$lang->zanode->shutdown}'");
                 }
 
                 common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);

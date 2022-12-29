@@ -50,6 +50,16 @@ class testcaseModel extends model
             }
         }
 
+        if(!empty($_POST['auto']))
+        {
+            $_POST['auto'] = 'auto';
+            if($_POST['script']) $_POST['script'] = htmlentities($_POST['script']);
+        }
+        else
+        {
+            unset($_POST['script']);
+        }
+
         $now    = helper::now();
         $status = $this->getStatus('create');
         $case   = fixer::input('post')
@@ -61,7 +71,7 @@ class testcaseModel extends model
             ->setIF($this->app->tab == 'project', 'project', $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
-            ->remove('steps,expects,files,labels,stepType,forceNotReview')
+            ->remove('steps,expects,files,labels,stepType,forceNotReview,scriptFile,scriptName')
             ->setDefault('story', 0)
             ->cleanInt('story,product,branch,module')
             ->join('stage', ',')
@@ -81,6 +91,8 @@ class testcaseModel extends model
         if(!$this->dao->isError())
         {
             $caseID = $this->dao->lastInsertID();
+            $this->config->dangers = '';
+            $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
             $this->loadModel('file')->saveUpload('testcase', $caseID);
             $parentStepID = 0;
             $this->loadModel('score')->create('testcase', 'create', $caseID);
@@ -830,6 +842,17 @@ class testcaseModel extends model
 
         $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
 
+        if(!empty($_POST['auto']))
+        {
+            $_POST['auto'] = 'auto';
+            if($_POST['script']) $_POST['script'] = htmlentities($_POST['script']);
+        }
+        else
+        {
+            $_POST['auto']   = 'no';
+            $_POST['script'] = '';
+        }
+
         $case = fixer::input('post')
             ->add('id', $caseID)
             ->add('version', $version)
@@ -845,7 +868,7 @@ class testcaseModel extends model
             ->setForce('status', $status)
             ->cleanInt('story,product,branch,module')
             ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
-            ->remove('comment,steps,expects,files,labels,linkBug,stepType')
+            ->remove('comment,steps,expects,files,labels,linkBug,stepType,scriptFile,scriptName')
             ->get();
 
         $requiredFields = $this->config->testcase->edit->requiredFields;

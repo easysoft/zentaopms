@@ -112,6 +112,8 @@ $lang->zahost->softwareList['kvm'] = 'KVM';
 $lang->zahost->unitList['GB'] = 'GB';
 $lang->zahost->unitList['TB'] = 'TB';
 
+$lang->zahost->cpuUnit = 'CORE';
+
 $lang->zahost->zaHostType                 = 'Type';
 $lang->zahost->zaHostTypeList['physical'] = 'Physical';
 
