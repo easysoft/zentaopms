@@ -48,6 +48,7 @@ $lang->zanode->scriptPath      = "脚本目录";
 $lang->zanode->shell           = "shell命令";
 $lang->zanode->automation      = "自动化设置";
 $lang->zanode->install         = "安装";
+$lang->zanode->reinstall       = "重装";
 $lang->zanode->copy            = '复制';
 $lang->zanode->copied          = '复制成功';
 $lang->zanode->manual          = '手册';

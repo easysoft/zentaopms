@@ -18,6 +18,14 @@ $('#checkServiceStatus').click(function(){
             if(key == "ZTF")
             {
                 $('.zenagent-status').text(zanodeLang.init[resultData.data[key]])
+                if(resultData.data[key] == 'ready' || resultData.data[key] == 'not_available')
+                {
+                    $('.ztf-install').text(zanodeLang.reinstall);
+                }
+                else
+                {
+                    $('.ztf-install').text(zanodeLang.install);
+                }
             }
             else
             {
@@ -72,4 +80,8 @@ $('.btn-init-copy').live('click', function()
     {
         $(that).tooltip('hide')
     }, 2000)
+})
+
+$(function(){
+    $('#checkServiceStatus').trigger("click")
 })

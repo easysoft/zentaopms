@@ -175,14 +175,14 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="service-status">
               <span class='dot-symbol text-success'>●</span>
               <span>&nbsp;&nbsp;ZenAgent: &nbsp;
-                <span class="zenagent-status"></span>
+                <span class="zenagent-status"><?php echo $lang->zanode->init->not_install; ?></span>
               </span>
             </div>
             <div class="service-status">
               <span class='dot-symbol text-success'>●</span>
               <span>&nbsp;&nbsp;ZTF: &nbsp;
-                <span class="ztf-status"></span>&nbsp;
-                <a class='node-init-install' target='hiddenwin' herf='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm"></i><?php echo $lang->zanode->install ?></a>
+                <span class="ztf-status"><?php echo $lang->zanode->init->not_install; ?></span>&nbsp;
+                <a class='node-init-install' target='hiddenwin' herf='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm"></i><span class="ztf-install"><?php echo $lang->zanode->install ?></span></a>
               </span>
             </div>
             <div class="status-notice">

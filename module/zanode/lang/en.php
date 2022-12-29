@@ -48,6 +48,7 @@ $lang->zanode->scriptPath      = "Script path";
 $lang->zanode->shell           = "Shell";
 $lang->zanode->automation      = "Automation";
 $lang->zanode->install         = "Install";
+$lang->zanode->reinstall       = "Reinstall";
 $lang->zanode->copy            = 'Click to copy';
 $lang->zanode->copied          = 'Copy successful';
 $lang->zanode->manual          = 'Manual';
