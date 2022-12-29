@@ -1219,15 +1219,19 @@ $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 
 $lang->resource->zahost = new stdclass();
-$lang->resource->zahost->browse         = 'browse';
-$lang->resource->zahost->create         = 'create';
-$lang->resource->zahost->edit           = 'editAction';
-$lang->resource->zahost->delete         = 'deleteAction';
+$lang->resource->zahost->browse      = 'browse';
+$lang->resource->zahost->create      = 'create';
+$lang->resource->zahost->edit        = 'editAction';
+$lang->resource->zahost->delete      = 'deleteAction';
+$lang->resource->zahost->view        = 'view';
+$lang->resource->zahost->browseImage = 'browseImage';
 
 $lang->zahost->methodOrder[0]  = 'browse';
 $lang->zahost->methodOrder[5]  = 'create';
 $lang->zahost->methodOrder[10] = 'edit';
 $lang->zahost->methodOrder[15] = 'delete';
+$lang->zahost->methodOrder[20] = 'view';
+$lang->zahost->methodOrder[25] = 'browseImage';
 
 $lang->resource->zanode = new stdclass();
 $lang->resource->zanode->browse  = 'browse';
@@ -1239,6 +1243,8 @@ $lang->resource->zanode->resume  = 'resume';
 $lang->resource->zanode->getVNC  = 'getVNC';
 $lang->resource->zanode->start   = 'boot';
 $lang->resource->zanode->close   = 'shutdown';
+$lang->resource->zanode->view    = 'view';
+$lang->resource->zanode->createImage = 'createImage';
 
 $lang->zanode->methodOrder[5]  = 'browse';
 $lang->zanode->methodOrder[10] = 'create';
@@ -1249,6 +1255,8 @@ $lang->zanode->methodOrder[30] = 'resume';
 $lang->zanode->methodOrder[35] = 'getVNC';
 $lang->zanode->methodOrder[40] = 'start';
 $lang->zanode->methodOrder[45] = 'close';
+$lang->zanode->methodOrder[50] = 'view';
+$lang->zanode->methodOrder[55] = 'createImage';
 
 $lang->resource->repo                  = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';

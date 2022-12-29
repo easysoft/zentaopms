@@ -33,10 +33,11 @@ $lang->zahost->editedBy     = 'EditedBy';
 $lang->zahost->editedDate   = 'EditedDate';
 $lang->zahost->registerDate = 'RegisterDate';
 
-$lang->zahost->memorySize = $lang->zahost->memory;
-$lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
-$lang->zahost->os         = 'System';
-$lang->zahost->imageName  = 'Image File';
+$lang->zahost->memorySize   = $lang->zahost->memory;
+$lang->zahost->cpuCoreNum   = $lang->zahost->cpuCores;
+$lang->zahost->os           = 'System';
+$lang->zahost->imageName    = 'Image File';
+$lang->zahost->browseImage  = 'Image List';
 
 $lang->zahost->createZanode        = 'Create Zanode';
 $lang->zahost->initNotice          = 'Save successfully, initialize the ZAhost or return list';
