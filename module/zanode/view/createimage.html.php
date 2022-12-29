@@ -40,13 +40,14 @@
         <tr>
           <th><?php echo $lang->zanode->imageName;?></th>
           <td><?php echo html::input('name', '', "class='form-control'");?></td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->zanode->desc;?></th>
-          <td><?php echo html::textarea('desc', '', "rows='6' class='form-control'");?></td>
+          <td colspan='2'><?php echo html::textarea('desc', '', "rows='6' class='form-control'");?></td>
         </tr>
         <tr>
-          <td colspan='2' class='text-center'>
+          <td colspan='3' class='text-center'>
             <?php echo html::submitButton('', "onclick='if(confirm(\"{$lang->zanode->createImageNotice}\")==false) return false;'");?>
           </td>
         </tr>
