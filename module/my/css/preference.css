@@ -2,30 +2,35 @@
 .table-form>tbody>tr>th {white-space: nowrap!important}
 .table-form>tbody>tr>td {width: 75%!important}
 
-.has-img > .border {
+.preference > .preference-border {
     display: flex;
     padding: 5px 16px;
     border: 1px solid #EDEEF2;
 }
-.has-img.picker-option-active >.border {
+.preference-border > .preference-img {
+    flex: 0 0 160px;
+}
+.preference.picker-option-active >.preference-border {
     border: 2px solid #2E7FFF;
 }
-.has-img.picker-option-active {
+.preference.picker-option-active {
     background: rgba(230,240,255, 0.4)!important;
 }
-.has-img-text {
+.preference-text {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     padding-left: 5px;
 }
-.has-img-text > .title {
+.preference-text > .title {
     color: #0B0F18;
     font-size: 13px;
 }
-.has-img-text > .context {
+.preference-text > .context {
     color: #838A9D;
     font-size: 12px;
+    overflow: hidden;
+    white-space: normal;
 }
 
 #pickerDropMenu-pk_URSR > .picker-option-list{
@@ -33,7 +38,7 @@
     flex-wrap: wrap;
 }
 .option-ursr {
-    flex: 1 1 200px;
+    flex: 1 1 50%;
 }
 .option-ursr.picker-option-selected > .border,
 .option-ursr.picker-option-active> .border {

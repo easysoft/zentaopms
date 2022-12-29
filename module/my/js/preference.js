@@ -19,46 +19,70 @@ function initPreference() {
         'execution-task': 'kanban',
         'execution-executionkanban': 'list-recent',
     }
-    function optionRenderProgram($option, b) {
+    function optionRenderProgram($option, b) 
+    {
         /* transform ， to , then split to fit lang */
-        var textArr = b.text.replace(/[\uff0c]/g,",").split(',');
-        $option.empty();
-        $option.addClass('has-img')
-        /** dom to prepend
-         *  <div class="border>
-         *    <div class="has-img-img"><img src="theme/default/images/guide/' + b.value + '.png"></div>
-         *    <div class="has-img-text">
-         *      <div class="title"></div>
-         *      <div class="context"></div>
-         *     </div>
-         *  </div> 
-         **/
-        $option.prepend('<div class="border"><div class="has-img-img"><img src="theme/default/images/guide/' + objPngSrc[b.value] + '.png"></div><div class="has-img-text"><div class="title">' + textArr[0] + '</div><div class="context">' + textArr[1] + '</div></div></div>');
+        var textArr = b.text.split('/');
+        if (!$option.hasClass('preference'))
+        {
+            $option.empty();
+            $option.addClass('preference');
+            $option.attr("title", textArr[0]);
+            /** dom to prepend
+             *  <div class="border>
+             *    <div class="preference-img"><img src="theme/default/images/guide/' + b.value + '.png"></div>
+             *    <div class="preference-text">
+             *      <div class="title"></div>
+             *      <div class="context"></div>
+             *     </div>
+             *  </div> 
+             **/
+            $option.prepend('<div class="preference-border"><div class="preference-img"><img src="theme/default/images/guide/' + objPngSrc[b.value] + '.png"></div><div class="preference-text"><div class="title">' + textArr[0] + '</div><div class="context">' + textArr[1] + '</div></div></div>');
+        }
         return $option;
     }
-    function optionRenderURSR($option, b) {
-        $option.addClass('option-ursr');
-        $option.parent().addClass('list-ursr');
-        $option.empty();
-        $option.prepend('<div class="border"><div class="value"><p>' + b.value + '</p></div><div class="context">' + b.text + '</div></div>');
+    function textRenderProgram($text, b) 
+    {
+        $text.empty();
+        $text.addClass('preference-selection');
+        $text.prepend('<span>' + b.split('/')[0] + '</span>')
+        return $text;
+    }
+    
+    function optionRenderURSR($option, b) 
+    {
+        if (!$option.hasClass('option-ursr'))
+        {
+            $option.addClass('option-ursr');
+            $option.parent().addClass('list-ursr');
+            $option.empty();
+            $option.prepend('<div class="border"><div class="value"><p>' + (b.$_index + 1) + '</p></div><div class="context">' + b.text + '</div></div>');
+        }
         return $option;
     }
     
-    $('#programLink').picker({
-        optionRender: optionRenderProgram
+    $('.programLink').picker({
+        optionRender: optionRenderProgram,
+        selectionTextRender: textRenderProgram
     });
-    $('#productLink').picker({
-        optionRender: optionRenderProgram
+    $('.productLink').picker({
+        optionRender: optionRenderProgram,
+        selectionTextRender: textRenderProgram
     });
-    $('#projectLink').picker({
-        optionRender: optionRenderProgram
+    $('.projectLink').picker({
+        optionRender: optionRenderProgram,
+        selectionTextRender: textRenderProgram
     });
-    $('#executionLink').picker({
-        optionRender: optionRenderProgram
+    $('.executionLink').picker({
+        optionRender: optionRenderProgram,
+        selectionTextRender: textRenderProgram
     });
-    $('#URSR').picker({
+    $('.URSR').picker({
         optionRender: optionRenderURSR
     });
 }
 
-initPreference();
+$(function()
+{
+    initPreference();
+})
