@@ -17,19 +17,61 @@ $('#checkServiceStatus').click(function(){
         {
             if(key == "ZTF")
             {
-                $('.zenagent-status').text(zanodeLang.init[resultData.data[key]])
+                if(resultData.data[key] == 'ready')
+                {
+                    $('.dot-ztf').removeClass("text-danger")
+                    $('.dot-ztf').addClass("text-success")
+                }
+                else{
+                    $('.dot-ztf').removeClass("text-success")
+                    $('.dot-ztf').addClass("text-danger")
+                }
+
                 if(resultData.data[key] == 'ready' || resultData.data[key] == 'not_available')
                 {
+                    $('.ztf-status').text(zanodeLang.init[resultData.data[key]])
                     $('.ztf-install').text(zanodeLang.reinstall);
                 }
                 else
                 {
+                    if(resultData.data[key] == 'unknown')
+                    {
+                        $('.ztf-status').text(zanodeLang.init.unknown)
+                    }
+                    else
+                    {
+                        $('.ztf-status').text(zanodeLang.initializing)
+                    }
                     $('.ztf-install').text(zanodeLang.install);
                 }
             }
             else
             {
-                $('.ztf-status').text(zanodeLang.init[resultData.data[key]])
+                if(resultData.data[key] == 'ready')
+                {
+                    $('.dot-zenagent').removeClass("text-danger")
+                    $('.dot-zenagent').addClass("text-success")
+                }
+                else{
+                    $('.dot-zenagent').removeClass("text-success")
+                    $('.dot-zenagent').addClass("text-danger")
+                }
+                $('.zenagent-status').text(zanodeLang.init[resultData.data[key]])
+                if(resultData.data[key] == 'ready')
+                {
+                    $('.node-init-install').show();
+                }
+                else
+                {
+                    if(resultData.data[key] == 'unknown')
+                    {
+                        $('.ztf-zenagent').text(zanodeLang.init.unknown)
+                    }
+                    else
+                    {
+                        $('.zenagent-status').text(zanodeLang.initializing)
+                    }
+                }
             }
             if(resultData.data[key] !== 'ready')
             {
@@ -39,11 +81,13 @@ $('#checkServiceStatus').click(function(){
 
         if(!isSuccess)
         {
-            $('.init-fail').show();
+            // $('.init-fail').show();
+            $('.init-success').hide();
         }
         else
         {
             $('.init-success').show();
+            // $('.init-fail').hide();
         }
     });
     return

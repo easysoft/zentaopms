@@ -55,7 +55,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->sshAddress; ?>:</div>
-                <div class="col-8"><?php echo $account . '@' . $zanode->ip; ?></div>
+                <div class="col-8">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?></div>
               </div>
             </div>
             <div class="col-4">
@@ -136,27 +136,26 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
           $rebootAttr .= $zanode->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
-          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> ", '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
+          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
           if($zanode->status == "suspend")
           {
-              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-back'></i> ", '', $resumeAttr);
+              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-back'></i> " . $lang->zanode->resume, '', $resumeAttr);
           }
           else
           {
-              common::printLink('zanode', 'suspend', "zanodeID={$zanode->id}", "<i class='icon icon-pause'></i> ", '', $suspendAttr);
+              common::printLink('zanode', 'suspend', "zanodeID={$zanode->id}", "<i class='icon icon-pause'></i> " . $lang->zanode->suspend, '', $suspendAttr);
           }
 
           if($zanode->status == "shutoff")
           {
-              common::printLink('zanode', 'start', "zanodeID={$zanode->id}", "<i class='icon icon-magic'></i> ", '', "class='btn '");
+              common::printLink('zanode', 'start', "zanodeID={$zanode->id}", "<i class='icon icon-magic'></i> " . $lang->zanode->boot, '', "class='btn '");
           }
           else
           {
-              common::printLink('zanode', 'close', "zanodeID={$zanode->id}", "<i class='icon icon-off'></i> ", '', "class='btn '");
+              common::printLink('zanode', 'close', "zanodeID={$zanode->id}", "<i class='icon icon-off'></i> " . $lang->zanode->shutdown, '', "class='btn '");
           }
 
-          common::printLink('zanode', 'reboot', "zanodeID={$zanode->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
-          common::printIcon('zanode', 'edit', "id={$zanode->id}", $zanode, 'list');
+          common::printLink('zanode', 'reboot', "zanodeID={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->reboot, '', $rebootAttr);
         }
         ?>
         <div class='divider'></div>
@@ -169,20 +168,20 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
         <div class="detail zanode-detail">
           <div class="detail-title status-container">
             <?php echo $lang->zanode->init->statusTitle; ?>
-            <span id='checkServiceStatus' class="zanode-status-text"><i class="icon icon-restart"></i><?php echo $lang->zanode->init->checkStatus; ?></span>
+            <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-refresh"></i> <span class='checkStatus'><?php echo $lang->zanode->init->checkStatus;?></span></button>
           </div>
           <div class="detail-content statusContainer">
             <div class="service-status">
-              <span class='dot-symbol text-success'>●</span>
-              <span>&nbsp;&nbsp;ZenAgent: &nbsp;
-                <span class="zenagent-status"><?php echo $lang->zanode->init->not_install; ?></span>
+              <span class='dot-symbol dot-zenagent text-danger'>●</span>
+              <span>&nbsp;&nbsp;ZenAgent &nbsp;
+                <span class="zenagent-status"><?php echo $lang->zanode->initializing; ?></span>
               </span>
             </div>
             <div class="service-status">
-              <span class='dot-symbol text-success'>●</span>
-              <span>&nbsp;&nbsp;ZTF: &nbsp;
-                <span class="ztf-status"><?php echo $lang->zanode->init->not_install; ?></span>&nbsp;
-                <a class='node-init-install' target='hiddenwin' herf='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm"></i><span class="ztf-install"><?php echo $lang->zanode->install ?></span></a>
+              <span class='dot-symbol dot-ztf text-danger'>●</span>
+              <span>&nbsp;&nbsp;ZTF &nbsp;
+                <span class="ztf-status"><?php echo $lang->zanode->initializing; ?></span>&nbsp;
+                <a class='node-init-install hide' target='hiddenwin' herf='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm"></i><span class="ztf-install"><?php echo $lang->zanode->install ?></span></a>
               </span>
             </div>
             <div class="status-notice">

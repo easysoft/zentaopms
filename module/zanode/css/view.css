@@ -12,5 +12,5 @@
 .service-status{margin-top: 10px;}
 .vnc-detail{min-height: 60vh;}
 .vnc-mask{width: 100%;height:100%;background-color: rgba(0,0,0,0);position: absolute;}
-#checkServiceStatus{cursor: pointer;display:inline-flex;align-items: center;}
-.status-container{display: inline-flex;align-items: flex-start;}
+#checkServiceStatus{background-color:unset;}
+.checkStatus{color: #313c52;}
