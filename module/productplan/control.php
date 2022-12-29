@@ -358,7 +358,7 @@ class productplan extends control
             else
             {
                 $planGroup = $this->productplan->getGroupByProduct($product->id, 'skipParent', '', $orderBy);
-                $branches  = $this->branch->getPairs($product->id);
+                $branches  = $this->branch->getPairs($product->id, 'active');
 
                 foreach($branches as $id => $name)
                 {
