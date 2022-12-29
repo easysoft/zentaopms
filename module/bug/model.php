@@ -3715,11 +3715,11 @@ class bugModel extends model
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
         if($object == 'branch' and $this->session->currentProductType != 'normal')
         {
-            $productID = current($bugs)->product;
+            $productID      = current($bugs)->product;
             $relatedObjects = $this->dao->select($pairs)->from($table)->where('product')->eq($productID)->fetchPairs();
         }
 
-        if(in_array($object, array('build','resolvedBuild','branch'))) $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
+        if(in_array($object, array('build','resolvedBuild','branch'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
         return array('' => '', 0 => '') + $relatedObjects;
     }
 
