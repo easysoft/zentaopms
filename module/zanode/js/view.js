@@ -96,10 +96,11 @@ $('#checkServiceStatus').click(function(){
 $('.node-init-install').on('click', function(){
     $(this).addClass('load-indicator loading');
     var link = $(this).data('href')
+    var that = this
     $.get(link, function(response)
     {
-        $(this).removeClass('load-indicator');
-        $(this).removeClass('loading');
+        $(that).removeClass('load-indicator');
+        $(that).removeClass('loading');
         $('#checkServiceStatus').trigger("click")
     })
 })
