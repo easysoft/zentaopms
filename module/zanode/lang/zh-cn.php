@@ -22,8 +22,11 @@ $lang->zanode->start           = '创建后自动开启';
 $lang->zanode->hostName        = '所属宿主机';
 $lang->zanode->host            = $lang->zanode->hostName;
 $lang->zanode->extranet        = 'IP/域名';
+$lang->zanode->sshAddress      = 'SSH地址';
 $lang->zanode->osArch          = '架构';
 $lang->zanode->cpuCores        = 'CPU';
+$lang->zanode->defaultUser     = '默认用户';
+$lang->zanode->defaultPwd      = '默认密码';
 $lang->zanode->memory          = '内存';
 $lang->zanode->diskSize        = '硬盘';
 $lang->zanode->desc            = '描述';
@@ -47,6 +50,7 @@ $lang->zanode->automation      = "自动化设置";
 $lang->zanode->install         = "安装";
 $lang->zanode->copy            = '复制';
 $lang->zanode->copied          = '复制成功';
+$lang->zanode->manual          = '手册';
 
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
@@ -100,9 +104,10 @@ $lang->zanode->init->ready         = "已就绪";
 $lang->zanode->init->next          = "下一步";
 $lang->zanode->init->button        = "去设置";
 
-$lang->zanode->init->initSuccessNoticeTitle = "初始化成功，您可以进行自动化测试设置或返回列表。";
-$lang->zanode->init->initFailNoticeTitle = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
-$lang->zanode->init->initFailNoticeDesc = "1. 重新执行脚本 <br/>2. 查看初始化常见问题";
+$lang->zanode->init->initSuccessNoticeTitle = "服务已就绪，还需两步即可在执行节点上执行自动化测试：1、根据%s配置自动化测试运行环境。<br/>2、进行%s";
+$lang->zanode->init->initFailNoticeTitle    = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
+$lang->zanode->init->initFailNoticeDesc     = "1. 重新执行脚本 <br/>2. 查看初始化常见问题";
+
 $lang->zanode->init->serviceStatus = [
     "ZenAgent" => 'not_install',
     "ZTF"      => 'not_install',

@@ -24,7 +24,7 @@ js::import($jsRoot  . 'misc/highlight/highlight.pack.js');
   </div>
   <div class="main-col repoCode main">
     <div class="content panel">
-      <pre class="cpp"><?php echo trim(htmlSpecialString($case->script, defined('ENT_SUBSTITUTE') ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES));?></pre>
+      <pre class="cpp"><?php echo $case->script;?></pre>
     </div>
   </div>
 </div>

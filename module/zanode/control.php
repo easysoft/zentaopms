@@ -68,8 +68,7 @@ class zanode extends control
         {
             $nodeID = $this->zanode->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $initLink = $this->createLink('zanode', 'init', "nodeID=$nodeID");
-            return print("<script>showModal('$initLink')</script>");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "id=$nodeID")));
         }
 
         $this->view->title     = $this->lang->zanode->create;
@@ -121,10 +120,19 @@ class zanode extends control
      */
     public function view($id)
     {
-        $this->view->title   = $this->lang->zanode->view;
-        $this->view->zanode  = $this->zanode->getNodeByID($id);
-        $this->view->actions = $this->loadModel('action')->getList('zanode', $id);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $node = $this->zanode->getNodeByID($id);
+        $vnc  = $this->zanode->getVncUrl($node);
+
+        /* Add action log. */
+        // if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $id, 'getVNC');
+
+        $this->view->url         = $node->ip . ":" . $node->hzap;
+        $this->view->host        = !empty($vnc->hostIP) ? $vnc->hostIP:'';
+        $this->view->token       = !empty($vnc->token) ? $vnc->token:'';
+        $this->view->title       = $this->lang->zanode->view;
+        $this->view->zanode      = $node;
+        $this->view->actions     = $this->loadModel('action')->getList('zanode', $id);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -148,6 +156,30 @@ class zanode extends control
         $this->view->closeLink  = $this->createLink('zanode', 'browse');
 
         $this->display();
+    }
+
+    /**
+     * start Node.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function start($nodeID)
+    {
+        $this->handleNode($nodeID, 'boot');
+    }
+
+    /**
+     * shutdown Node.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function close($nodeID)
+    {
+        $this->handleNode($nodeID, 'destroy');
     }
 
     /**

@@ -171,6 +171,7 @@ class zanodemodel extends model
 
         $result = commonModel::http($agnetUrl . $path, $param, array(), array("Authorization:$node->tokenSN"));
         $data   = json_decode($result, true);
+
         if(empty($data)) return $this->lang->zanode->notFoundAgent;
 
         if($data['code'] != 'success') return zget($this->lang->zanode->apiError, $data['code'], $data['msg']);

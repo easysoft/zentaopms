@@ -28,6 +28,7 @@
           <th class='w-100px'><?php echo $lang->testcase->product;?></th>
           <td class='required'><?php echo html::select('product', $products, '', "class='form-control picker-select' onchange='loadProduct(this.value)'");?></td>
           <td></td>
+          <td></td>
         </tr>
         <?php endif;?>
         <tr>

@@ -152,6 +152,7 @@ $lang->testcase->stepChild               = '子步骤';
 $lang->testcase->viewAll                 = '查看所有';
 $lang->testcase->importToLib             = '导入用例库';
 $lang->testcase->showScript              = '查看自动化脚本';
+$lang->testcase->autoScript              = '自动化脚本';
 
 $lang->testcase->new = '新增';
 

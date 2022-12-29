@@ -70,7 +70,12 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
           <tr>
             <th><?php echo $lang->testcase->type;?></th>
             <?php unset($lang->testcase->typeList['unit']);?>
-            <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
+            <td>
+              <?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?>
+              <div class="input-group-addon">
+              <?php echo html::checkbox('auto', array('auto' => $lang->testcase->showAutoCase), '', "id='autocase' title='{$lang->testcase->showAutoCase}'");?>
+              </div>
+            </td>
             <?php if(strpos(",$showFields,", 'stage') !== false):?>
             <?php $hiddenStage = strpos(",$showFields,", 'stage') !== false ? '' : 'hidden';?>
             <td class="<?php echo $hiddenStage?> stageBox">
@@ -80,6 +85,10 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
               </div>
             </td>
             <?php endif;?>
+          </tr>
+          <tr class='autoScript hide'>
+            <th><?php echo $lang->testcase->autoScript;?></th>
+            <td colspan='2'><?php include './buildscriptform.php';?></td>
           </tr>
           <?php $hiddenStory = strpos(",$showFields,", ',story,') !== false ? '' : 'hidden';?>
           <tr class="<?php echo $hiddenStory?> storyBox">
@@ -151,6 +160,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
               </div>
             </td>
           </tr>
+
           <tr>
             <th><?php echo $lang->testcase->precondition;?></th>
             <td colspan='2'><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
@@ -267,4 +277,15 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
   </div>
 </div>
 <?php js::set('caseModule', $lang->testcase->module)?>
+<script>
+$(":checkbox[name^='auto']").on('click', function(){
+    if($(this).attr('checked'))
+    {
+        $('.autoScript').removeClass('hide')
+    }else
+    {
+        $('.autoScript').addClass('hide')
+    }
+});
+</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -7,3 +7,4 @@
  [lang^=en] .detail > table > tbody th, [lang^=fr] .detail > table > tbody th {width: 100px !important;}
  [lang^=de] .detail > table > tbody th {width: 125px !important;}
  .linkCaseTitle, .linkBugTitle {white-space: nowrap;}
+ #type_chosen{display: table-cell;}

@@ -22,8 +22,11 @@ $lang->zanode->start           = 'Start After Created';
 $lang->zanode->hostName        = 'Host Name';
 $lang->zanode->host            = $lang->zanode->hostName;
 $lang->zanode->extranet        = 'IP/Domain';
+$lang->zanode->sshAddress      = 'SSH Address';
 $lang->zanode->osArch          = 'Arch';
 $lang->zanode->cpuCores        = 'CPU';
+$lang->zanode->defaultUser     = 'Default Account Name';
+$lang->zanode->defaultPwd      = 'Default Password';
 $lang->zanode->memory          = 'Memory Size';
 $lang->zanode->desc            = 'Description';
 $lang->zanode->diskSize        = 'Disk Size';
@@ -47,6 +50,7 @@ $lang->zanode->automation      = "Automation";
 $lang->zanode->install         = "Install";
 $lang->zanode->copy            = 'Click to copy';
 $lang->zanode->copied          = 'Copy successful';
+$lang->zanode->manual          = 'Manual';
 
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
@@ -100,13 +104,15 @@ $lang->zanode->init->ready         = "Ready";
 $lang->zanode->init->next          = "Next";
 $lang->zanode->init->button        = "Go To Settings";
 
-$lang->zanode->init->initSuccessNoticeTitle = "The initialization is successful, you can perform automated test settings or go to node browse.";
-$lang->zanode->init->initFailNoticeTitle = "Initialization failed, check the init script execution log and try the following two solutions:";
-$lang->zanode->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
+$lang->zanode->init->initSuccessNoticeTitle = "The service is ready, and it takes two steps to execute the automated test on the execution node: <br/>1. Configure the automated test running environment according to the %s<br/>2. Go to %s";
+$lang->zanode->init->initFailNoticeTitle    = "Initialization failed, check the init script execution log and try the following two solutions:";
+$lang->zanode->init->initFailNoticeDesc     = "1. Re-execute the script <br/>2. Review the initialization FAQ";
+
 $lang->zanode->init->serviceStatus = [
     "ZenAgent" => 'not_install',
     "ZTF"      => 'not_install',
 ];
+
 $lang->zanode->init->title          = "Initialize Node";
 $lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
 $lang->zanode->init->initDesc       = "Execute the init script on the node: %s %s   <br>- Click check service status button.";

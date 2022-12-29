@@ -57,7 +57,7 @@
             <th class='c-os'><?php common::printOrderLink('t1.osName', $orderBy, $vars, $lang->zanode->osName); ?></th>
             <th class='c-status'><?php common::printOrderLink('t1.status', $orderBy, $vars, $lang->zanode->status); ?></th>
             <th class='c-host'><?php common::printOrderLink('t2.name', $orderBy, $vars, $lang->zanode->hostName); ?>
-            <th class='c-actions-5 text-center'><?php echo $lang->actions ?></th>
+            <th class='c-actions-6 text-center'><?php echo $lang->actions ?></th>
           </tr>
         </thead>
         <tbody>
@@ -91,6 +91,15 @@
                 else
                 {
                     common::printLink('zanode', 'suspend', "zanodeID={$node->id}", "<i class='icon icon-pause'></i> ", '', $suspendAttr);
+                }
+
+                if($node->status == "shutoff")
+                {
+                    common::printLink('zanode', 'start', "zanodeID={$node->id}", "<i class='icon icon-magic'></i> ", '', "class='btn ' title='{$lang->zanode->boot}'");
+                }
+                else
+                {
+                    common::printLink('zanode', 'close', "zanodeID={$node->id}", "<i class='icon icon-off'></i> ", '', "class='btn ' title='{$lang->zanode->shutdown}'");
                 }
 
                 common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);

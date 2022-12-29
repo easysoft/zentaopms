@@ -46,7 +46,7 @@
           <td class='w-120px'> &nbsp; #<?php echo $result->id?></td>
           <td class='w-180px'><?php echo $result->date;?></td>
           <?php if($result->node > 0):?>
-          <td><?php echo sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName, !empty($result->ZTFResult) ? $lang->testtask->runCase : "<span class='span-warning'>{$lang->testtask->running}</span>") . "&nbsp;&nbsp;<span class=\"label label-badge\">{$lang->testtask->auto}</span>";?></td>
+          <td><?php echo sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName, $lang->testtask->runCase) . "&nbsp;&nbsp;<span class=\"label label-badge\">{$lang->testtask->auto}</span>";?></td>
           <?php else:?>
           <td><?php echo zget($users, $result->lastRunner) . ' ' . $lang->testtask->runCase;?></td>
           <?php endif;?>
@@ -54,6 +54,9 @@
           <td class='w-50px text-right'>
             <?php if($result->node == 0 || !empty($result->ZTFResult)):?>
             <strong class='result-testcase <?php echo $result->caseResult;?>'><?php echo $lang->testcase->resultList[$result->caseResult];?></strong>
+            <?php endif;?>
+            <?php if($result->node > 0 and empty($result->ZTFResult)):?>
+            <strong class='span-warning'><?php echo $lang->testtask->running;?></strong>
             <?php endif;?>
         </td>
           <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>

@@ -9,3 +9,9 @@
 .status-wait {color: #f00;}
 .c-actions {overflow: visible!important;}
 .zanode-mt-8{margin-top: 8px;}
+.zahost-init{padding:15px;background: #f4f5f7;margin:10px 0;}
+.fail{color:red;}
+.dot-symbol{padding-right:10px;}
+#statusContainer{margin:0px 0px 10px 0px;}
+#checkServiceStatus{background-color:unset;}
+.service-check{margin-top: 0px;}
