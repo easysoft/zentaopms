@@ -39,25 +39,24 @@ class screen extends control
      */
     public function view($screenID, $year = 2022, $dept = 0, $account = '')
     {
-        if($screenID == 3)
-        {
-            $this->locate($this->createLink('report', 'annualData'));
-        }
+        if($screenID == 3) $this->locate($this->createLink('report', 'annualData'));
+
+        $screen = $this->screen->getByID($screenID, $year, $dept, $account);
+        $this->view->title  = $screen->name;
+        $this->view->screen = $screen;
+
         if($screenID == 5)
         {
             $this->loadModel('execution');
-            $this->view->title      = $this->lang->screen->common;
             $this->view->executions = $this->screen->getBurnData();
-            $this->view->date       = date('Y-m-d h:i:s', time());
+            $this->view->date       = date('Y-m-d h:i:s');
             $this->display('screen', 'burn');
         }
         else
         {
-            $this->view->title   = $this->lang->screen->common;
             $this->view->year    = $year;
             $this->view->dept    = $dept;
             $this->view->account = $account;
-            $this->view->screen  = $this->screen->getByID($screenID, $year, $dept, $account);
             $this->display();
         }
     }
