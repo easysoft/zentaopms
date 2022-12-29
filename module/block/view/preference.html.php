@@ -8,7 +8,10 @@
     padding: 5px 16px;
     border: 1px solid #EDEEF2;
 }
-.preference.picker-option-active >.border {
+.preference-border > .preference-img {
+    flex: 0 0 160px;
+}
+.preference.picker-option-active >.preference-border {
     border: 2px solid #2E7FFF;
 }
 .preference.picker-option-active {
@@ -27,6 +30,8 @@
 .preference-text > .context {
     color: #838A9D;
     font-size: 12px;
+    overflow: hidden;
+    white-space: normal;
 }
 
 #pickerDropMenu-pk_URSR > .picker-option-list{
@@ -58,7 +63,6 @@
     line-height: 20px;
     text-align: center;
 }
-
 </style>
 <div class='preference'>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('my', 'preference', "showTip=false")?>'>
@@ -119,20 +123,21 @@ function initPreference() {
     {
         /* transform ， to , then split to fit lang */
         var textArr = b.text.split('/');
-        if (!$option.hasClass('has-img'))
+        if (!$option.hasClass('preference'))
         {
             $option.empty();
-            $option.addClass('has-img')
+            $option.addClass('preference');
+            $option.attr("title", textArr[0]);
             /** dom to prepend
              *  <div class="border>
-             *    <div class="has-img-img"><img src="theme/default/images/guide/' + b.value + '.png"></div>
-             *    <div class="has-img-text">
+             *    <div class="preference-img"><img src="theme/default/images/guide/' + b.value + '.png"></div>
+             *    <div class="preference-text">
              *      <div class="title"></div>
              *      <div class="context"></div>
              *     </div>
              *  </div> 
              **/
-            $option.prepend('<div class="border"><div class="has-img-img"><img src="theme/default/images/guide/' + objPngSrc[b.value] + '.png"></div><div class="has-img-text"><div class="title">' + textArr[0] + '</div><div class="context">' + textArr[1] + '</div></div></div>');
+            $option.prepend('<div class="preference-border"><div class="preference-img"><img src="theme/default/images/guide/' + objPngSrc[b.value] + '.png"></div><div class="preference-text"><div class="title">' + textArr[0] + '</div><div class="context">' + textArr[1] + '</div></div></div>');
         }
         return $option;
     }
@@ -146,10 +151,13 @@ function initPreference() {
     
     function optionRenderURSR($option, b) 
     {
-        $option.addClass('option-ursr');
-        $option.parent().addClass('list-ursr');
-        $option.empty();
-        $option.prepend('<div class="border"><div class="value"><p>' + b.value + '</p></div><div class="context">' + b.text + '</div></div>');
+        if (!$option.hasClass('option-ursr'))
+        {
+            $option.addClass('option-ursr');
+            $option.parent().addClass('list-ursr');
+            $option.empty();
+            $option.prepend('<div class="border"><div class="value"><p>' + (b.$_index + 1) + '</p></div><div class="context">' + b.text + '</div></div>');
+        }
         return $option;
     }
     
@@ -178,4 +186,5 @@ $(function()
 {
     initPreference();
 })
+
 </script>
