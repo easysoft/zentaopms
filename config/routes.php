@@ -166,7 +166,7 @@ $routes['/modules'] = 'modules';
 
 $routes['/reports'] = 'reports';
 
-$routes['/host/heartbeat'] = 'hostHeartbeat';
+$routes['/host/heartbeat']    = 'hostHeartbeat';
 $routes['/host/submitResult'] = 'hostSubmit';
 
 $routes['/ztf/submitResult'] = 'ztfSubmit';
