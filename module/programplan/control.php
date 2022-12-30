@@ -64,7 +64,7 @@ class programplan extends control
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
 
         $products = $this->loadModel('product')->getProducts($projectID);
-        if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $this->productID, 'programplan', 'browse', $type, 0, 0, '', false);
+        if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'programplan', 'browse', $type, 0, 0, '', false);
 
         $selectCustom = 0; // Display date and task settings.
         $dateDetails  = 1; // Gantt chart detail date display.
@@ -81,7 +81,7 @@ class programplan extends control
 
             if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
 
-            $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID, $selectCustom, false);
+            $plans = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false);
 
             /* Set Custom. */
             foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
@@ -98,7 +98,7 @@ class programplan extends control
             $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
             if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
 
-            $plans = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $this->productID, $baselineID, $selectCustom, false);
+            $plans = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false);
 
             /* Set Custom. */
             foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
@@ -110,7 +110,7 @@ class programplan extends control
         {
             $sort  = common::appendOrder($orderBy);
             $this->loadModel('datatable');
-            $plans = $this->programplan->getPlans($projectID, $this->productID, $sort);
+            $plans = $this->programplan->getPlans($projectID, $productID, $sort);
         }
 
         $zooming = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';
@@ -118,8 +118,9 @@ class programplan extends control
         $this->view->position[]   = $this->lang->programplan->browse;
         $this->view->projectID    = $projectID;
         $this->view->project      = $this->project->getByID($projectID);
-        $this->view->productID    = $this->productID;
-        $this->view->productList  = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->productID    = $productID;
+        $this->view->product      = $this->product->getByID($productID);
+        $this->view->productList  = $this->product->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->type         = $type;
         $this->view->plans        = $plans;
         $this->view->orderBy      = $orderBy;

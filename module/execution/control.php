@@ -2029,7 +2029,7 @@ class execution extends control
         $productPlans     = array(0 => '');
         $linkedBranches   = array();
         $linkedBranchList = array();
-        $linkedProducts   = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
+        $linkedProducts   = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList, false);
         $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
         $executionStories = $this->project->getStoriesByProject($executionID);
 
@@ -2039,7 +2039,7 @@ class execution extends control
         $linkedStoryIDList    = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->deleted ? $linkedProduct->name . "({$this->lang->product->deleted})" : $linkedProduct->name;
             $productPlans[$productID] = array();
 
             foreach($branches[$productID] as $branchID => $branch)

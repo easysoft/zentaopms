@@ -358,7 +358,7 @@ class productplan extends control
             else
             {
                 $planGroup = $this->productplan->getGroupByProduct($product->id, 'skipParent', '', $orderBy);
-                $branches  = $this->branch->getPairs($product->id);
+                $branches  = $this->branch->getPairs($product->id, 'active');
 
                 foreach($branches as $id => $name)
                 {
@@ -383,6 +383,7 @@ class productplan extends control
         $this->view->browseType       = $browseType;
         $this->view->viewType         = $viewType;
         $this->view->orderBy          = $orderBy;
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
         $this->view->pager            = $pager;
         $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch, '', $status = 'closed', 'multiple');

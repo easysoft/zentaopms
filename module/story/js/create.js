@@ -176,7 +176,9 @@ $(window).unload(function(){
         $('.table-col .icon-plus').parent().addClass('disabled')
     }
 
-     itemIndex ++;
+    if(requiredFields.indexOf('module') > 0) $('#modules' + itemIndex + '_chosen').addClass('required')
+
+    itemIndex ++;
  }
 
  /**
@@ -305,6 +307,8 @@ function loadModuleForTwins(productID, branch, branchIndex)
 
         $moduleIDBox.fixInputGroup();
     });
+
+    if(requiredFields.indexOf('module') > 0) $('#moduleIdBox #modules' + branchIndex + '_chosen').addClass('required')
 }
 
 /**

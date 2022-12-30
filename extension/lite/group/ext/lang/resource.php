@@ -984,6 +984,21 @@ if($config->edition == 'biz' or $config->edition == 'max')
     $lang->resource->faq = new stdclass();
     $lang->resource->faq->browse = 'browse';
 
+    /* Ticket */
+    $lang->resource->ticket = new stdclass();
+    $lang->resource->ticket->index          = 'index';
+    $lang->resource->ticket->create         = 'create';
+    $lang->resource->ticket->edit           = 'edit';
+    $lang->resource->ticket->view           = 'view';
+    $lang->resource->ticket->browse         = 'browse';
+    $lang->resource->ticket->assignTo       = 'assign';
+    $lang->resource->ticket->close          = 'close';
+    $lang->resource->ticket->activate       = 'activate';
+    $lang->resource->ticket->delete         = 'delete';
+    $lang->resource->ticket->exportTemplate = 'exportTemplate';
+    $lang->resource->ticket->import         = 'import';
+    $lang->resource->ticket->export         = 'exportAction';
+
     /* Attend */
     $lang->resource->attend = new stdclass();
     $lang->resource->attend->department       = 'department';

@@ -781,11 +781,11 @@ class build extends control
      */
     protected function unlinkOldBranch($changes)
     {
-        foreach($changes as $buildID => $changes)
+        foreach($changes as $buildID => $changeList)
         {
             $oldBranch = '';
             $newBranch = '';
-            foreach($changes as $changeId => $change)
+            foreach($changeList as $changeId => $change)
             {
                 if($change['field'] == 'branch')
                 {
@@ -795,8 +795,8 @@ class build extends control
                 }
             }
             $build       = $this->build->getByID($buildID);
-            $planStories = $this->loadModel('story')->getByList($build->allStories);
-            $planBugs    = $this->loadModel('bug')->getByList($build->allBugs);
+            $planStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : '';
+            $planBugs    = $build->allBugs ? $this->loadModel('bug')->getByList($build->allBugs) : '';
             if($oldBranch)
             {
                 foreach($planStories as $storyID => $story)
