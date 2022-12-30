@@ -49,7 +49,7 @@ class screen extends control
         {
             $this->loadModel('execution');
             $this->view->executions = $this->screen->getBurnData();
-            $this->view->date       = date('Y-m-d h:i:s');
+            $this->view->date       = date('Y-m-d H:i:s');
             $this->display('screen', 'burn');
         }
         else
