@@ -19,8 +19,7 @@
 .block-guide .tab-pane .dataTitle {font-size: 12px; color: #5E626D;}
 .block-guide .tab-pane .app-client .menu {margin-top: 10px;}
 .block-guide .tab-pane .app-client .menu,
-.block-guide .tab-pane .app-client .tree-menu li {padding-left: 0;}
-.block-guide .tab-pane .app-client .tree-menu li {line-height: 56px; border: 1px solid #EDEEF2;}
+.block-guide .tab-pane .app-client .tree-menu li {line-height: 56px; border: 1px solid #EDEEF2; padding-left: 0; white-space: nowrap}
 .block-guide .tab-pane .app-client .tree-menu li:nth-child(2) {border-top: none; border-bottom: none;}
 .block-guide .tab-pane .app-client .tree-menu li a.iframe {display: flex;}
 .block-guide .tab-pane .app-client .tree-menu li .avatar {background: #E6EAF1; width: 24px; height: 24px; margin-top: 16px; margin-right: 5px;}
