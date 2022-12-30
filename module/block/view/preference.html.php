@@ -133,8 +133,8 @@ function initPreference() {
         'project-kanban': 'kanban',
 
         'execution-all': 'list',
-        'execution-task': 'kanban',
-        'execution-executionkanban': 'list-recent',
+        'execution-task': 'list-recent',
+        'execution-executionkanban': 'kanban',
     }
     function optionRenderProgram($option, b) 
     {
