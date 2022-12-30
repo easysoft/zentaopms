@@ -9,12 +9,21 @@
     border: 1px solid #EDEEF2;
 }
 .preference-border > .preference-img {
-    flex: 0 0 160px;
+    flex: 0 0 80px;
 }
 .preference.picker-option-active >.preference-border {
     border: 2px solid #2E7FFF;
 }
 .preference.picker-option-active {
+    background: unset!important;
+}
+.preference.picker-option-active > .preference-border {
+    background: rgba(230,240,255, 0.4)!important;
+}
+.picker-option.picker-option-selected.preference {
+    background: unset!important;
+}
+.picker-option.picker-option-selected.preference > .preference-border {
     background: rgba(230,240,255, 0.4)!important;
 }
 .preference-text {
@@ -34,16 +43,24 @@
     white-space: normal;
 }
 
-#pickerDropMenu-pk_URSR > .picker-option-list{
+.picker-option.picker-option-active, 
+.picker-single .picker-option.picker-option-selected.picker-option-active.option-ursr,
+.picker-option.picker-option-selected.option-ursr {
+    background: unset!important;
+    color: unset;
+}
+.picker-option.picker-option-active > .border, 
+.picker-single .picker-option.picker-option-selected.picker-option-active.option-ursr > .border,
+.picker-single .picker-option.picker-option-selected.picker-option-active.option-ursr > .border {
+    background: rgba(230,240,255, 0.4)!important;
+    border: 1px solid #2E7FFF;
+}
+#pickerDropMenu-pk_URSR > .picker-option-list {
     display: flex;
     flex-wrap: wrap;
 }
 .option-ursr {
     flex: 1 1 50%;
-}
-.option-ursr.picker-option-selected > .border,
-.option-ursr.picker-option-active> .border {
-    border: none;
 }
 .option-ursr > .border  {
     height: 46px;
