@@ -205,6 +205,8 @@ $lang->action->trash      = '回收站';
 $lang->app->common        = '应用';
 $lang->app->serverLink    = '服务器链接';
 $lang->review->common     = '审批';
+$lang->zahost->common     = '宿主机';
+$lang->zanode->common     = '执行节点';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
@@ -287,7 +289,7 @@ $lang->testcase->case      = '用例';
 $lang->testcase->testsuite = '套件';
 $lang->testcase->caselib   = '用例库';
 
-$lang->devops->compile  = '构建';
+$lang->devops->compile  = '流水线';
 $lang->devops->mr       = '合并请求';
 $lang->devops->repo     = '代码库';
 $lang->devops->rules    = '指令';

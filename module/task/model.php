@@ -1840,9 +1840,18 @@ class taskModel extends model
         foreach($record->dates as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         if(dao::isError()) return false;
 
+        $task       = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();;
+        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
+
+        /* Check if the current user is in the team. */
+        $inTeam = empty($task->team) ? true : false;
+        foreach($task->team as $teamMember)
+        {
+            if($teamMember->account == $this->app->user->account) $inTeam = true;
+        }
+        if(!$inTeam) return false;
+
         $estimates    = array();
-        $task         = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();;
-        $task->team   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
         $earliestTime = '';
         foreach(array_keys($record->dates) as $id)
         {

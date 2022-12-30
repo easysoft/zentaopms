@@ -205,6 +205,8 @@ $lang->action->trash      = 'Recycle';
 $lang->app->common        = 'APP';
 $lang->app->serverLink    = 'Server Link';
 $lang->review->common     = 'Review';
+$lang->zahost->common     = 'ZAhost';
+$lang->zanode->common     = 'ZAnode';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -287,7 +289,7 @@ $lang->testcase->case      = 'Test Case';
 $lang->testcase->testsuite = 'Test Suite';
 $lang->testcase->caselib   = 'Case Library';
 
-$lang->devops->compile  = 'Compile';
+$lang->devops->compile  = 'Pipelines';
 $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';

@@ -455,6 +455,8 @@ class mr extends control
         $this->view->arrange      = $arrange;
         $this->view->sourceBranch = $MR->sourceBranch;
         $this->view->targetBranch = $MR->targetBranch;
+        $this->view->oldRevision  = $MR->targetBranch;
+        $this->view->newRevision  = $MR->sourceBranch;
         $this->display();
     }
 

@@ -1,0 +1,13 @@
+body {background-color: #fff; padding-bottom: 20px;}
+.linkContent .panel {margin-bottom: 0; padding-bottom: 10px; border: none;}
+.left-content {padding-top: 15px;}
+.left-content {padding-left: 0px;}
+.left-content tr {line-height: 30px;}
+.left-content th {padding-top: 4px;}
+.right-content {border-left: 1px solid #EDEEF2;}
+.right-content .detail-content {margin-left: 15px;}
+.text {width: 55%; white-space: normal; word-wrap: break-word; word-break: break-all; padding-left: 10px; vertical-align: top;}
+.cell {min-height: 300px;}
+.menu-title {width: 100%;}
+.article-content {margin-top: 0;}
+.spec-content {padding-right: 20px;}

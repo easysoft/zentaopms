@@ -42,12 +42,23 @@
         if($class != 'success') $failCount++;
         $fileCount = '(' . count($result->files) . ')';
         ?>
-        <tr class='result-item' id='result-<?php echo $class?>' style='cursor: pointer'>
+        <tr class='result-item' data-id='<?php echo $result->id?>' data-status='<?php echo $result->node > 0 && empty($result->ZTFResult) ? 'running': 'ready';?>' id='result-<?php echo $class?>' style='cursor: pointer'>
           <td class='w-120px'> &nbsp; #<?php echo $result->id?></td>
           <td class='w-180px'><?php echo $result->date;?></td>
+          <?php if($result->node > 0):?>
+          <td><?php echo sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName, $lang->testtask->runCase) . "&nbsp;&nbsp;<span class=\"label label-badge\">{$lang->testtask->auto}</span>";?></td>
+          <?php else:?>
           <td><?php echo zget($users, $result->lastRunner) . ' ' . $lang->testtask->runCase;?></td>
+          <?php endif;?>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
-          <td class='w-50px text-right'><strong class='result-testcase <?php echo $result->caseResult;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
+          <td class='w-50px text-right'>
+            <?php if($result->node == 0 || !empty($result->ZTFResult)):?>
+            <strong class='result-testcase <?php echo $result->caseResult;?>'><?php echo $lang->testcase->resultList[$result->caseResult];?></strong>
+            <?php endif;?>
+            <?php if($result->node > 0 and empty($result->ZTFResult)):?>
+            <strong class='span-warning'><?php echo $lang->testtask->running;?></strong>
+            <?php endif;?>
+        </td>
           <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-angle-down text-muted'></i></td>
         </tr>
@@ -132,6 +143,15 @@
                     <td><?php echo html::commonButton($lang->testcase->createBug, "onclick='createBug(this)'", "btn btn-primary createBtn");?></td>
                   </tr>
                   <?php endif;?>
+                  <?php if(!empty($result->ZTFResult) && $result->node>0):?>
+                  <tr>
+                    <td colspan="6">
+                      <p></p>
+                      <p><?php echo $lang->testtask->runningLog;?></p>
+                      <p><?php echo $result->ZTFResult;?></p>
+                    </td>
+                  </tr>
+                  <?php endif;?>
                 </tbody>
               </table>
             </form>
@@ -151,6 +171,7 @@
           </div>
         </div>
       </div>
+      <?php if(!empty($result->stepResults)):?>
       <?php foreach($result->stepResults as $stepID => $stepResult):?>
       <div class="modal fade" id="stepResult<?php echo $result->id . '-' .$stepID;?>">
         <div class="modal-dialog">
@@ -164,6 +185,7 @@
         </div>
       </div>
       <?php endforeach;?>
+      <?php endif;?>
       <?php endforeach;?>
       <div id='resultTip' class='hide'><?php if($count > 0) echo $failCount > 0 ? "<span>" . sprintf($lang->testtask->showFail, $failCount) . "</span>":"<span class='text-success'>{$lang->testtask->passAll}</span>";?></div>
       <style>

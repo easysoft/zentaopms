@@ -227,7 +227,7 @@ class gitlab extends control
 
         $gitLab   = $this->gitlab->getByID($id);
         $changes  = common::createChanges($oldGitLab, $gitLab);
-        $this->action->logHistory($actionID, $changes);
+        $this->loadModel('action')->logHistory($actionID, $changes);
         echo js::reload('parent');
     }
 

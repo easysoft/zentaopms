@@ -6,9 +6,9 @@ $lang->compile->syncCompile = '接口：同步构建记录';
 
 $lang->compile->id          = 'ID';
 $lang->compile->name        = '构建名称';
-$lang->compile->buildType   = '构建引擎';
-$lang->compile->status      = '构建状态';
-$lang->compile->time        = '构建时间';
+$lang->compile->buildType   = '引擎';
+$lang->compile->status      = '状态';
+$lang->compile->time        = '最后执行时间';
 $lang->compile->result      = '构建结果';
 $lang->compile->refresh     = '刷新';
 $lang->compile->job         = '构建任务';

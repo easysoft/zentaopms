@@ -579,6 +579,7 @@ class testtask extends control
         $this->view->suites         = $this->loadModel('testsuite')->getSuitePairs($productID);
         $this->view->suiteName      = isset($suiteName) ? $suiteName : $this->lang->testtask->browseBySuite;
         $this->view->canBeChanged   = $canBeChanged;
+        $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
 
         $this->display();
     }
@@ -1209,11 +1210,13 @@ class testtask extends control
      * Run case.
      *
      * @param  int    $runID
-     * @param  String $extras   others params, forexample, caseID=10, version=3
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function runCase($runID, $caseID = 0, $version = 0)
+    public function runCase($runID, $caseID = 0, $version = 0, $confirm = '')
     {
         if($runID)
         {
@@ -1227,6 +1230,18 @@ class testtask extends control
 
         $caseID     = $caseID ? $caseID : $run->case->id;
         $preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        $automation = $this->loadModel('zanode')->getAutomationByProduct($run->case->product);
+        $confirmURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=yes");
+        $cancelURL  = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
+
+        if($automation and $confirm == '' and $run->case->auto == 'auto') return print(js::confirm($this->lang->zanode->runCaseConfirm, $confirmURL, $cancelURL));
+        if($confirm == 'yes')
+        {
+            $resultID = $this->testtask->initResult($runID, $caseID, $run->case->version, $automation->node);
+            if(!dao::isError()) $this->zanode->runZTFScript($automation->id, $caseID, $resultID);
+            if(dao::isError()) return print(js::error(dao::getError()) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+        }
+
         if(!empty($_POST))
         {
             $caseResult = $this->testtask->createResult($runID);
@@ -1289,6 +1304,7 @@ class testtask extends control
         $this->view->caseID   = $caseID;
         $this->view->version  = $version;
         $this->view->runID    = $runID;
+        $this->view->confirm  = $confirm;
 
         $this->display();
     }
@@ -1299,13 +1315,17 @@ class testtask extends control
      * @param  int    $productID
      * @param  string $orderBy
      * @param  string $from
+     * @param  int    $taskID
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase', $taskID = 0)
+    public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase', $taskID = 0, $confirm = '')
     {
         $this->loadModel('tree');
         $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
+        $automation = $this->loadModel('zanode')->getAutomationByProduct($productID);
+
         if($this->post->results)
         {
             $this->testtask->batchRun($from, $taskID);
@@ -1362,7 +1382,13 @@ class testtask extends control
 
         /* Set modules. */
         $moduleOptionMenu = array(0 => '/');
-        foreach($cases as $case) $moduleOptionMenu += $this->tree->getModulesName($case->module);
+        foreach($cases as $caseID => $case)
+        {
+            if($case->auto == 'auto' and $confirm == 'yes') unset($cases[$caseID]);
+            $moduleOptionMenu += $this->tree->getModulesName($case->module);
+        }
+        if(empty($cases)) return print(js::locate($url));
+
         $this->view->moduleOptionMenu = $moduleOptionMenu;
 
         /* If case has changed and not confirmed, remove it. */
@@ -1392,6 +1418,7 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->batchRun;
         $this->view->from       = $from;
+        $this->view->confirm    = $confirm;
         $this->display();
     }
 
@@ -1589,5 +1616,19 @@ class testtask extends control
         $this->view->testtasksPinyin = common::convert2Pinyin($namePairs);
 
         $this->display();
+    }
+
+    /**
+     * Ajax get test result info.
+     *
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetResult($resultID)
+    {
+        $result = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq((int)$resultID)->fetch();
+        $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
     }
 }

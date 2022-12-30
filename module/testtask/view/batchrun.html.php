@@ -30,6 +30,7 @@
         </tr>
       </thead>
       <?php foreach($cases as $caseID => $case):?>
+      <?php if($case->auto == 'auto' and $confirm == 'yes') continue;?>
       <?php if($case->status == 'wait') continue;?>
       <?php if(!$productID) echo html::hidden("caseIDList[$case->id]", $caseID); ?>
       <tr class='text-center'>
@@ -37,7 +38,9 @@
         <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$case->module] . "'>" . $moduleOptionMenu[$case->module] . "</span>"?></td>
         <td class='text-left wordwrap'><?php echo "<span title='{$case->title}'>{$case->title}</span>"?></td>
         <td class='text-left precondition wordwrap'><?php echo "<span title='{$case->precondition}'>{$case->precondition}</span>"?></td>
-        <td class='text-left'><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'", 'block')?></td>
+        <td class='text-left'>
+          <?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'", 'block')?>
+        </td>
         <td>
           <?php if(!empty($steps[$caseID])):?>
           <table class='table table-fixed'>
