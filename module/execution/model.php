@@ -338,7 +338,7 @@ class executionModel extends model
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
             foreach($_POST['products'] as $index => $productID)
             {
-                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                if(isset($multipleProducts[$productID]) and !isset($_POST['branch'][$index]))
                 {
                     dao::$errors[] = $this->lang->project->emptyBranch;
                     return false;
@@ -534,7 +534,7 @@ class executionModel extends model
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
             foreach($_POST['products'] as $index => $productID)
             {
-                if(isset($multipleProducts[$productID]) and empty($_POST['branch'][$index]))
+                if(isset($multipleProducts[$productID]) and !isset($_POST['branch'][$index]))
                 {
                     dao::$errors[] = $this->lang->project->emptyBranch;
                     return false;
