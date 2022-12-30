@@ -1,3 +1,5 @@
+var checkInterval;
+var intervalTimes = 0;
 
 $('#checkServiceStatus').click(function(){
     $.get(createLink('zanode', 'ajaxGetServiceStatus', 'nodeID=' + nodeID), function(response)
@@ -85,6 +87,7 @@ $('#checkServiceStatus').click(function(){
         }
         else
         {
+            clearInterval(checkInterval)
             $('.init-success').show();
             // $('.init-fail').hide();
         }
@@ -150,7 +153,12 @@ $('.btn-pwd-copy').live('click', function()
 
 $(function(){
     $('#checkServiceStatus').trigger("click")
-    setInterval(() => {
+    checkInterval = setInterval(() => {
+        intervalTimes++;
+        if(intervalTimes > 300)
+        {
+            clearInterval(checkInterval)
+        }
         $('#checkServiceStatus').trigger("click")
     }, 2000);
 })
