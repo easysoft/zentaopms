@@ -227,17 +227,21 @@
                 <th><?php echo $lang->story->stage;?></th>
                 <td>
                 <?php
+                $maxStage    = $story->stage;
+                $stageList   = join(',', array_keys($this->lang->story->stageList));
+                $maxStagePos = strpos($stageList, $maxStage);
                 if($story->stages and $branchTagOption)
                 {
                     foreach($story->stages as $branch => $stage)
                     {
-                        if(isset($branchTagOption[$branch])) echo '<p>' . $branchTagOption[$branch] . html::select("stages[$branch]", $lang->story->stageList, $stage, "class='form-control chosen'") . '</p>';
+                        if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) > $maxStagePos)
+                        {
+                            $maxStage    = $stage;
+                            $maxStagePos = strpos($stageList, $stage);
+                        }
                     }
                 }
-                else
-                {
-                    echo html::select('stage', $lang->story->stageList, $story->stage, "class='form-control chosen'");
-                }
+                echo html::select('stage', $lang->story->stageList, $maxStage, "class='form-control chosen'");
                 ?>
                 </td>
               </tr>

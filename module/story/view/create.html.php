@@ -97,10 +97,11 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                     <?php echo html::select('branches[0]', $branches, $branch, "onchange='loadBranchRelation(this.value, 0);' class='form-control chosen control-branch'");?>
                   </div>
                 </div>
-                <div class='table-col' id='moduleIdBox'>
+                <div class='table-col moduleBox' id='moduleIdBox'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo $lang->story->module?></span>
-                    <?php echo html::select('modules[0]', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?>
+                    <?php $required = strpos($config->story->create->requiredFields, 'module') === false ? '' : 'required';?>
+                    <?php echo html::select('modules[0]', $moduleOptionMenu, $moduleID, "class='form-control chosen' $required");?>
                   </div>
                 </div>
                 <div class='table-col' id='planIdBox'>
@@ -379,7 +380,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               <?php echo html::select("branches[$i]", $branches, $branch, "onchange='loadBranchRelation(this.value, $i);' class='form-control chosen control-branch'");?>
             </div>
           </div>
-          <div class='table-col' id='moduleIdBox' style='flex: 1 0 160px'>
+          <div class='table-col moduleBox' id='moduleIdBox' style='flex: 1 0 160px'>
             <div class='input-group'>
               <span class='input-group-addon fix-border'><?php echo $lang->story->module?></span>
               <?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?>
