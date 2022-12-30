@@ -407,6 +407,7 @@ class zanode extends control
             $serviceStatus['ZenAgent'] = "unknown";
             $serviceStatus['ZTF'] = "unknown";
         }
+        $serviceStatus['node'] = $node->status;
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
     }
