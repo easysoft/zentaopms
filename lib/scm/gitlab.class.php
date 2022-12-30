@@ -257,6 +257,7 @@ class gitlab
         $param = new stdclass;
         $param->ref = ($revision and $revision != 'HEAD') ? $revision : $this->branch;
         $results = $this->fetch($api, $param);
+        if(empty($results) or isset($results->message)) return array();
 
         $blames   = array();
         $revLine  = 0;
@@ -268,7 +269,8 @@ class gitlab
             $line = array();
             $line['revision']  = $blame->commit->id;
             $line['committer'] = $blame->commit->committer_name;
-            $line['time']      = $blame->commit->committer_name;
+            $line['message']   = $blame->commit->message;
+            $line['time']      = date('Y-m-d H:i:s', strtotime($blame->commit->committed_date));
             $line['line']      = $lineNumber;
             $line['lines']     = count($blame->lines);
             $line['content']   = array_shift($blame->lines);
@@ -342,7 +344,7 @@ class gitlab
         if(!scm::checkRevision($revision)) return false;
         if($revision == 'HEAD' and $this->branch) $revision = $this->branch;
         $file = $this->files($entry, $revision);
-        return base64_decode($file->content);
+        return isset($file->content) ? base64_decode($file->content) : '';
     }
 
     /**
@@ -688,7 +690,7 @@ class gitlab
     /**
      * Get files by commit.
      *
-     * @param  string    $commit
+     * @param  string  $commit
      * @access public
      * @return void
      */
@@ -717,8 +719,9 @@ class gitlab
             $file->revision = $revision;
             $file->path     = '/' . $row->new_path;
             $file->type     = 'file';
+            $file->oldPath  = '/' . $row->old_path;
 
-            $file->action   = 'M';
+            $file->action = 'M';
             if($row->new_file) $file->action = 'A';
             if($row->renamed_file) $file->action = 'R';
             if($row->deleted_file) $file->action = 'D';
@@ -827,8 +830,9 @@ class gitlab
             foreach($commit->diffs as $diff)
             {
                 $parsedLog->change[$diff->path] = array();
-                $parsedLog->change[$diff->path]['action'] = $diff->action;
-                $parsedLog->change[$diff->path]['kind']   = $diff->type;
+                $parsedLog->change[$diff->path]['action']  = $diff->action;
+                $parsedLog->change[$diff->path]['kind']    = $diff->type;
+                $parsedLog->change[$diff->path]['oldPath'] = $diff->oldPath;
             }
             $parsedLogs[] = $parsedLog;
         }
@@ -852,5 +856,45 @@ class gitlab
         $params['sha']           = $branch;
 
         return "{$this->root}archive.{$ext}" . '?' . http_build_query($params);
+    }
+
+    /**
+     * List all files.
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  array  $lists
+     * @access public
+     * @return array
+     */
+    public function getAllFiles($path = '', $revision = 'HEAD', &$lists = array())
+    {
+        if(!scm::checkRevision($revision)) return array();
+        $api = "tree";
+
+        $param = new stdclass();
+        $param->path      = ltrim($path, '/');
+        $param->ref       = $revision;
+        $param->recursive = 0;
+        if(!empty($this->branch)) $param->ref = $this->branch;
+
+        $list = $this->fetch($api, $param, true);
+        if(empty($list)) return array();
+
+        $infos = array();
+        foreach($list as $file)
+        {
+            if(!isset($file->type)) continue;
+
+            if($file->type == 'blob')
+            {
+                $lists[] = $file->path;
+            }
+            else
+            {
+                $this->getAllFiles($file->path, $revision, $lists);
+            }
+        }
+        return $lists;
     }
 }

@@ -1386,6 +1386,7 @@ class story extends control
         $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch();
         $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
+        $linkedCommits = $this->loadModel('repo')->getCommitsByObject($storyID, 'story');
         $modulePath    = $this->tree->getParents($story->module);
         $storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
         $linkedStories = isset($story->linkStoryTitles) ? array_keys($story->linkStoryTitles) : array();
@@ -1461,6 +1462,7 @@ class story extends control
         $this->view->cases         = $cases;
         $this->view->story         = $story;
         $this->view->linkedMRs     = $linkedMRs;
+        $this->view->linkedCommits = $linkedCommits;
         $this->view->track         = $this->story->getTrackByID($story->id);
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->reviewers     = $reviewers;

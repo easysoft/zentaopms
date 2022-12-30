@@ -166,6 +166,11 @@ $routes['/modules'] = 'modules';
 
 $routes['/reports'] = 'reports';
 
+$routes['/host/heartbeat']    = 'hostHeartbeat';
+$routes['/host/submitResult'] = 'hostSubmit';
+
+$routes['/ztf/submitResult'] = 'ztfSubmit';
+
 $routes['/z/folders']           = 'zfolders';
 $routes['/z/folders/:id']       = 'zfolder';
 $routes['/z/files/:id']         = 'zfile';

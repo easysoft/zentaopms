@@ -5,9 +5,9 @@ $lang->compile->logs   = '構建日誌';
 
 $lang->compile->id          = 'ID';
 $lang->compile->name        = '構建名稱';
-$lang->compile->buildType   = '構建引擎';
-$lang->compile->status      = '構建狀態';
-$lang->compile->time        = '構建時間';
+$lang->compile->buildType   = '引擎';
+$lang->compile->status      = '狀態';
+$lang->compile->time        = '最後執行時間';
 $lang->compile->result      = '構建結果';
 $lang->compile->refresh     = '刷新';
 $lang->compile->job         = '構建任務';

@@ -1,0 +1,25 @@
+.m-repo-ajaxgeteditorcontent {overflow: hidden;}
+#monacoEditor .tip-circular {background: #2e7fff; border-radius: 10px; padding: 0px 7px;}
+#log {margin-top: 8px; display: none; padding: 5px; justify-content: space-between; height: 25px; line-height: 20px; background: #efefef;}
+#log .history {margin-left: 5px; max-width: 90%;}
+#log .action-btn .btn {border: none; background: none;}
+#related {display: none; margin-top: 2px; background: #fff; height: 0px;}
+
+#relationTabs .nav > li > a {padding: 8px 10px; display: flex; white-space: pre;}
+#relationTabs .nav-tabs > li > a > span {margin-right: 5px;}
+#relationTabs .tab-pane {display: none;}
+#relationTabs .tabs-navbar {background: #FFFFFF;}
+#relationTabs .tab-pane.active {display: block;}
+#relationTabs .tab-nav-item {max-width: none !important;}
+#relationTabs .tab-nav-item .icon {line-height: inherit;}
+#relationTabs > .tabs-navbar {overflow: hidden; padding-bottom: 10px; position: relative; height: 35px;}
+#relationTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex;}
+#relationTabs .tab-nav-link .title {max-width: 300px; display: inline-block; white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis; padding: 0 5px;}
+#related .content, #related .btn {background-color: #F4F5F7; border: none;}
+#related .btn.pull-right {margin-right: 0;}
+#related .nav-tabs > li.active > a:before {background: none; height: 0;}
+#related .table-empty-tip {padding: 35px 10px;}
+.repoCode .binary a .icon-download {font-size: 50px;}
+.repoCode .binary, .repoCode .image {text-align: center;}
+.repoCode .binary a {margin: 100px 0px; display: block;}
+.repoCode .image {margin-top: 10px;}

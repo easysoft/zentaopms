@@ -40,7 +40,8 @@ $lang->moduleOrder[85]  = 'testtask';
 $lang->moduleOrder[90]  = 'testsuite';
 $lang->moduleOrder[95]  = 'testreport';
 $lang->moduleOrder[100] = 'caselib';
-$lang->moduleOrder[105] = 'automation';
+$lang->moduleOrder[105] = 'zahost';
+$lang->moduleOrder[108] = 'zanode';
 
 $lang->moduleOrder[110] = 'doc';
 $lang->moduleOrder[113] = 'screen';
@@ -1054,6 +1055,7 @@ $lang->resource->testcase->batchCreate             = 'batchCreate';
 $lang->resource->testcase->createBug               = 'createBug';
 $lang->resource->testcase->view                    = 'view';
 $lang->resource->testcase->edit                    = 'edit';
+$lang->resource->testcase->showScript              = 'showScript';
 $lang->resource->testcase->linkCases               = 'linkCases';
 $lang->resource->testcase->linkBugs                = 'linkBugs';
 $lang->resource->testcase->batchEdit               = 'batchEdit';
@@ -1076,6 +1078,7 @@ $lang->resource->testcase->confirmLibcaseChange    = 'confirmLibcaseChange';
 $lang->resource->testcase->ignoreLibcaseChange     = 'ignoreLibcaseChange';
 $lang->resource->testcase->batchConfirmStoryChange = 'batchConfirmStoryChange';
 $lang->resource->testcase->importToLib             = 'importToLib';
+$lang->resource->testcase->automation              = 'automation';
 
 $lang->testcase->methodOrder[0]   = 'index';
 $lang->testcase->methodOrder[5]   = 'browse';
@@ -1106,6 +1109,8 @@ $lang->testcase->methodOrder[125] = 'confirmLibcaseChange';
 $lang->testcase->methodOrder[130] = 'ignoreLibcaseChange';
 $lang->testcase->methodOrder[135] = 'batchConfirmStoryChange';
 $lang->testcase->methodOrder[140] = 'importToLib';
+$lang->testcase->methodOrder[145] = 'automation';
+$lang->testcase->methodOrder[150] = 'showScript';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
@@ -1214,10 +1219,45 @@ $lang->caselib->methodOrder[40] = 'exportTemplate';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 
-$lang->resource->automation = new stdclass();
-$lang->resource->automation->browse = 'browse';
+$lang->resource->zahost = new stdclass();
+$lang->resource->zahost->browse      = 'browse';
+$lang->resource->zahost->create      = 'create';
+$lang->resource->zahost->edit        = 'editAction';
+$lang->resource->zahost->delete      = 'deleteAction';
+$lang->resource->zahost->view        = 'view';
+$lang->resource->zahost->browseImage = 'browseImage';
 
-$lang->automation->methodOrder[0] = 'browse';
+$lang->zahost->methodOrder[0]  = 'browse';
+$lang->zahost->methodOrder[5]  = 'create';
+$lang->zahost->methodOrder[10] = 'edit';
+$lang->zahost->methodOrder[15] = 'delete';
+$lang->zahost->methodOrder[20] = 'view';
+$lang->zahost->methodOrder[25] = 'browseImage';
+
+$lang->resource->zanode = new stdclass();
+$lang->resource->zanode->browse  = 'browse';
+$lang->resource->zanode->create  = 'create';
+$lang->resource->zanode->destroy = 'destroy';
+$lang->resource->zanode->reboot  = 'reboot';
+$lang->resource->zanode->suspend = 'suspend';
+$lang->resource->zanode->resume  = 'resume';
+$lang->resource->zanode->getVNC  = 'getVNC';
+$lang->resource->zanode->start   = 'boot';
+$lang->resource->zanode->close   = 'shutdown';
+$lang->resource->zanode->view    = 'view';
+$lang->resource->zanode->createImage = 'createImage';
+
+$lang->zanode->methodOrder[5]  = 'browse';
+$lang->zanode->methodOrder[10] = 'create';
+$lang->zanode->methodOrder[15] = 'destroy';
+$lang->zanode->methodOrder[20] = 'reboot';
+$lang->zanode->methodOrder[35] = 'suspend';
+$lang->zanode->methodOrder[30] = 'resume';
+$lang->zanode->methodOrder[35] = 'getVNC';
+$lang->zanode->methodOrder[40] = 'start';
+$lang->zanode->methodOrder[45] = 'close';
+$lang->zanode->methodOrder[50] = 'view';
+$lang->zanode->methodOrder[55] = 'createImage';
 
 $lang->resource->repo                  = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';
@@ -1235,6 +1275,10 @@ $lang->resource->repo->maintain        = 'maintain';
 $lang->resource->repo->setRules        = 'setRules';
 $lang->resource->repo->apiGetRepoByUrl = 'apiGetRepoByUrl';
 $lang->resource->repo->downloadCode    = 'downloadCode';
+$lang->resource->repo->linkStory       = 'linkStory';
+$lang->resource->repo->linkBug         = 'linkBug';
+$lang->resource->repo->linkTask        = 'linkTask';
+$lang->resource->repo->unlink          = 'unlink';
 
 $lang->repo->methodOrder[5]  = 'create';
 $lang->repo->methodOrder[10] = 'edit';
@@ -1251,6 +1295,10 @@ $lang->repo->methodOrder[60] = 'download';
 $lang->repo->methodOrder[65] = 'setRules';
 $lang->repo->methodOrder[70] = 'apiGetRepoByUrl';
 $lang->repo->methodOrder[75] = 'downloadCode';
+$lang->repo->methodOrder[80] = 'linkStory';
+$lang->repo->methodOrder[85] = 'linkBug';
+$lang->repo->methodOrder[90] = 'linkTask';
+$lang->repo->methodOrder[95] = 'unlink';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';

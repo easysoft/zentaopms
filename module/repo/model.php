@@ -318,6 +318,63 @@ class repoModel extends model
     }
 
     /**
+     * Create commit link.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function link($repoID, $revision, $type = 'story')
+    {
+        $this->loadModel('action');
+        if($type == 'story') $links = $this->post->stories;
+        if($type == 'bug')   $links = $this->post->bugs;
+        if($type == 'task')  $links = $this->post->tasks;
+
+        $revisionID = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch('id');
+        foreach($links as $linkID)
+        {
+            $relation           = new stdclass;
+            $relation->AType    = 'revision';
+            $relation->AID      = $revisionID;
+            $relation->relation = 'commit';
+            $relation->BType    = $type;
+            $relation->BID      = $linkID;
+
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+
+            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID);
+            if($type == 'bug')   $this->action->create('bug', $linkID, 'linked2revision', '', $revisionID);
+            if($type == 'task')  $this->action->create('task', $linkID, 'linked2revision', '', $revisionID);
+        }
+    }
+
+    /**
+     * Unlink object and commit revision.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $objectType story|bug|task
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function unlink($repoID, $revision, $objectType, $objectID)
+    {
+        $revisionID = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch('id');
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('AID')->eq($revisionID)
+            ->andWhere('AType')->eq('revision')
+            ->andWhere('relation')->eq('commit')
+            ->andWhere('BType')->eq($objectType)
+            ->andWhere('BID')->eq($objectID)->exec();
+
+        if(!dao::isError()) $this->loadModel('action')->create($objectType, $objectID, 'unlinkedfromrevision', '', $revisionID);
+    }
+
+    /**
      * Save repo state.
      *
      * @param  int    $repoID
@@ -881,6 +938,15 @@ class repoModel extends model
                         $file->revision = $commitID;
                         $file->repo     = $repoID;
                         $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
+
+                        if($file->oldPath and $file->action == 'R')
+                        {
+                            $file->path    = $file->oldPath;
+                            $file->parent  = dirname($file->path);
+                            $file->oldPath = '';
+                            $file->action  = 'D';
+                            $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
+                        }
                     }
                 }
                 $revisionPairs[$commit->revision] = $commit->revision;
@@ -937,7 +1003,20 @@ class repoModel extends model
                 $repoFile->parent   = $parentPath == '\\' ? '/' : $parentPath;
                 $repoFile->type     = $info['kind'];
                 $repoFile->action   = $info['action'];
+                $repoFile->oldPath  = $info['oldPath'];
                 $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
+
+                if($repoFile->oldPath and $repoFile->action == 'R')
+                {
+                    $parentPath = dirname($repoFile->oldPath);
+
+                    $repoFile->path    = $repoFile->oldPath;
+                    $repoFile->parent  = $parentPath == '\\' ? '/' : $parentPath;
+                    $repoFile->type    = $info['kind'];
+                    $repoFile->action  = 'D';
+                    $repoFile->oldPath = '';
+                    $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
+                }
             }
             $version++;
         }
@@ -1170,7 +1249,7 @@ class repoModel extends model
      */
     public function setRepoBranch($branch)
     {
-        setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure);
         $_COOKIE['repoBranch'] = $branch;
     }
 
@@ -1716,11 +1795,10 @@ class repoModel extends model
         }
 
         $action  = new stdclass();
-        $action->actor = $log->author;
-        $action->date  = $log->date;
-        $action->extra = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
-
-        $comment = htmlSpecialString($this->iconvComment($log->msg, $encodings));
+        $action->actor   = $log->author;
+        $action->date    = $log->date;
+        $action->extra   = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
+        $action->comment = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->iconvComment($log->msg, $encodings));
 
         $this->loadModel('action');
         $actions = $objects['actions'];
@@ -1737,7 +1815,6 @@ class repoModel extends model
                 $action->objectID   = $taskID;
                 $action->product    = $productsAndExecutions[$taskID]['product'];
                 $action->execution  = $productsAndExecutions[$taskID]['execution'];
-                $action->comment    = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . $comment;
                 foreach($taskActions as $taskAction => $params)
                 {
                     $_POST = array();
@@ -2181,6 +2258,466 @@ class repoModel extends model
     }
 
     /**
+     * Get file commits.
+     *
+     * @param  object $repo
+     * @param  string $branch
+     * @param  string $parent
+     * @access public
+     * @return array
+     */
+    public function getFileCommits($repo, $branch, $parent = '')
+    {
+        $parent = '/' . ltrim($parent, '/');
+
+        /* Get file commits by repo. */
+        if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
+        $fileCommits = $this->dao->select('t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
+            ->where('t1.repo')->eq($repo->id)
+            ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+            ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
+            ->andWhere('t1.parent')->like("$parent%")->fi()
+            ->orderBy('t2.`time` asc')
+            ->fetchAll('path');
+
+        $files    = array();
+        $folders  = array();
+        $dirList  = array();
+        $fileSort = $dirSort = array(); // Use it to sort array.
+        foreach($fileCommits as $fileCommit)
+        {
+            /* Filter by parent. */
+            if($fileCommit->action == 'D') continue;
+            if(strpos($fileCommit->path, $parent) !== 0) continue;
+
+            $pathList = explode('/', ltrim($fileCommit->path, '/'));
+            if($fileCommit->parent == $parent and $fileCommit->type == 'file')
+            {
+                $file = new stdclass();
+                $file->name     = end($pathList);
+                $file->kind     = 'file';
+                $file->revision = $fileCommit->revision;
+                $file->comment  = $fileCommit->comment;
+                $file->account  = $fileCommit->committer;
+                $file->date     = $fileCommit->time;
+
+                $files[]    = $file;
+                $fileSort[] = $file->name;
+            }
+            else
+            {
+                $childPath = ltrim(substr($fileCommit->path, strlen($parent)), '/');
+                $childPath = explode('/', $childPath);
+                $fileName  = $fileCommit->type == 'dir' ? end($pathList) : $childPath[0];
+                if(in_array($fileName, $dirList)) continue;
+
+                $folder = new stdclass();
+                $folder->name     = $fileName;
+                $folder->kind     = 'dir';
+                $folder->revision = $fileCommit->revision;
+                $folder->comment  = $fileCommit->comment;
+                $folder->account  = $fileCommit->committer;
+                $folder->date     = $fileCommit->time;
+
+                $dirList[] = $fileName;
+                $folders[] = $folder;
+                $dirSort[] = $fileName;
+            }
+        }
+        array_multisort($fileSort, SORT_ASC, $files);
+        array_multisort($dirSort, SORT_ASC, $folders);
+
+        return array_merge($folders, $files);
+    }
+
+    /**
+     * Get html for file tree.
+     *
+     * @param  object $repo
+     * @param  string $branch
+     * @param  array  $diffs
+     * @access public
+     * @return string
+     */
+    public function getFileTree($repo, $branch = '', $diffs = null)
+    {
+        $allFiles = array();
+        if(is_null($diffs))
+        {
+            if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
+            $files = $this->dao->select('t1.path,t1.action')->from(TABLE_REPOFILES)->alias('t1')
+                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
+                ->where('t1.repo')->eq($repo->id)
+                ->andWhere('t1.type')->eq('file')
+                ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+                ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
+                ->orderBy('t2.`time` asc')
+                ->fetchPairs();
+
+            foreach($files as $file => $action)
+            {
+                if($action != 'D') $allFiles[] = $file;
+            }
+        }
+        else
+        {
+            foreach($diffs as $diff) $allFiles[] = $diff->fileName;
+        }
+
+        return $this->buildFileTree($allFiles);
+    }
+
+    /**
+     * Build file tree.
+     *
+     * @param  array  $allFiles
+     * @access public
+     * @return string
+     */
+    public function buildFileTree($allFiles = array())
+    {
+        $files = array();
+        $id    = 0;
+        foreach($allFiles as $key => $file)
+        {
+            $fileName = explode('/', $file);
+            $parent   = '';
+            foreach($fileName as $path)
+            {
+                if($path === '') continue;
+
+                $parentID = $parent == '' ? 0 : $files[$parent]['id'];
+                $parent  .= $parent == '' ? $path : '/' . $path;
+                if(!isset($files[$parent])){
+                    $id++;
+
+                    $files[$parent] = array(
+                        'id'     => $id,
+                        'parent' => $parentID,
+                        'name'   => $path,
+                        'path'   => $parent,
+                        'key'    => $key,
+                    );
+                }
+            }
+        }
+        sort($files);
+        $fileTree = $this->buildTree($files);
+
+        $html  = '<ul data-name="filesTree" data-ride="tree" data-initial-state="preserve" id="modules" class="tree">';
+        foreach($fileTree as $file)
+        {
+            $html .= "<li class='open' data-id='{$file['id']}'>";
+            if(isset($file['children']))
+            {
+                $html .= "<i class='icon icon-folder'></i> {$file['name']}";
+                $html .= $this->getFrontFiles($file['children']);
+            }
+            else
+            {
+                $html .= "<span class='item doc-title text-ellipsis'><i class='icon icon-file-text-alt'></i> " . html::a('#filePath' . $file['key'], $file['name'], '', "class='repoFileName' data-path='{$file['path']}' title='{$file['path']}'") . '</span>';
+            }
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+
+    /**
+     * Build tree.
+     *
+     * @param  array  $files
+     * @param  int    $parent
+     * @access public
+     * @return array
+     */
+    public function buildTree($files = array(), $parent = 0)
+    {
+        $treeList = [];
+        $key      = 0;
+        $pathName = array();
+        $fileName = array();
+        foreach($files as $key => $file)
+        {
+            if ($file['parent'] == $parent)
+            {
+                $treeList[$key] = $file;
+                $fileName[$key] = $file['name'];
+                /* Default value is '~', because his ascii code is large in string. */
+                $pathName[$key] = '~';
+
+                $children = $this->buildTree($files, $file['id']);
+                if($children)
+                {
+                    $treeList[$key]['children'] = $children;
+                    $fileName[$key] = '';
+                    $pathName[$key] = $file['path'];
+                }
+
+                $key++;
+            }
+        }
+        array_multisort($pathName, SORT_ASC, $fileName, SORT_ASC, $treeList);
+
+        return $treeList;
+    }
+
+    /**
+     * Get front files.
+     *
+     * @param  array $nodes
+     * @access public
+     * @return string
+     */
+    public function getFrontFiles($nodes)
+    {
+        $html = '<ul>';
+        foreach($nodes as $childNode)
+        {
+            $html .= "<li class='open'>";
+            if(isset($childNode['children']))
+            {
+                $html .= "<div class='tree-group'>";
+                $html .= "<i class='module-name icon icon-folder'></i> {$childNode['name']}";
+                $html .= '</div>';
+                $html .= $this->getFrontFiles($childNode['children']);
+            }
+            else
+            {
+                $html .= "<span class='item doc-title text-ellipsis'><i class='file icon icon-file-text-alt'></i> " . html::a('#filePath' . $childNode['key'], $childNode['name'], '', "class='repoFileName' data-path='{$childNode['path']}' title='{$childNode['path']}'") . '</span>';
+            }
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+
+    /**
+     * Get git branch and tag.
+     *
+     * @param  int    $repoID
+     * @param  string $oldRevision
+     * @param  string $newRevision
+     * @access public
+     * @return object
+     */
+    public function getBranchesAndTags($repoID, $oldRevision = '0', $newRevision = 'HEAD')
+    {
+        $output = new stdClass();
+
+        $scm  = $this->app->loadClass('scm');
+        $repo = $this->getRepoByID($repoID);
+        if(!$repo) return $output;
+
+        $scm->setEngine($repo);
+        $branches     = $scm->branch();
+        $tags         = $scm->tags('');
+        $branchAndtag = array('branch' => $branches, 'tag' =>$tags);
+
+        $html = '<ul class="tree tree-angles" data-ride="tree" data-idx="0" id="branchesAndTags">';
+        foreach($branchAndtag as $type => $data)
+        {
+            if(empty($data)) continue;
+
+            $html .= "<li data-idx='$type' data-id='$type' class='has-list open in' style='cursor: pointer;'><i class='list-toggle icon'></i>";
+            $html .= "<div class='hide-in-search'><a class='text-muted' title='{$this->lang->repo->{$type}}'>{$this->lang->repo->{$type}}</a></div><ul data-idx='$type'>";
+
+            foreach($data as $name)
+            {
+                $selectedSource = $name == $oldRevision ? 'selected-source' : '';
+                $selectedTarget = $name == $newRevision ? 'selected-target' : '';
+                $html .= "<li data-idx='$name' data-id='$type-$name'><a href='javascript:;' id='$type-$name' class='$selectedSource $selectedTarget branch-or-tag text-ellipsis' title='$name' data-key='$name'>$name</a></li>";
+            }
+
+            $html .= '</ul></li>';
+        }
+        $html .= '</ul>';
+
+        $sourceHtml = str_replace('branch-or-tag', 'branch-or-tag source', $html);
+        $targetHtml = str_replace('branch-or-tag', 'branch-or-tag target', $html);
+
+        $output->sourceHtml = str_replace('selected-source', 'selected', $sourceHtml);
+        $output->targetHtml = str_replace('selected-target', 'selected', $targetHtml);
+        return $output;
+    }
+
+    /**
+     * Get relation by commit.
+     *
+     * @param  int    $repoID
+     * @param  string $commit
+     * @param  string $type story|bug|task
+     * @access public
+     * @return array
+     */
+    public function getRelationByCommit($repoID, $commit, $type = '')
+    {
+        $relationList = $this->dao->select('t1.BID as id, t1.BType as type')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
+            ->where('t2.revision')->eq($commit)
+            ->andWhere('t2.repo')->eq($repoID)
+            ->andWhere('t1.AType')->eq('revision')
+            ->beginIF($type)->andWhere('t1.BType')->eq($type)->fi()
+            ->fetchAll();
+
+        $storyIDs = array();
+        $bugIDs   = array();
+        $taskIDs  = array();
+        foreach($relationList as $relation)
+        {
+            if($relation->type == 'story')
+            {
+                $storyIDs[] = $relation->id;
+            }
+            elseif($relation->type == 'bug')
+            {
+                $bugIDs[] = $relation->id;
+            }
+            elseif($relation->type == 'task')
+            {
+                $taskIDs[] = $relation->id;
+            }
+        }
+        $stories = empty($storyIDs) ? array() : $this->loadModel('story')->getByList($storyIDs);
+        $bugs    = empty($bugIDs)   ? array() : $this->loadModel('bug')->getByList($bugIDs);
+        $tasks   = empty($taskIDs)  ? array() : $this->loadModel('task')->getByList($taskIDs);
+
+        $titleList = array();
+        foreach($relationList as $key => $relation)
+        {
+            if($type) $key = $relation->id;
+
+            $titleList[$key] = array(
+                'id'    => $relation->id,
+                'type'  => $relation->type,
+                'title' => "#$relation->id "
+            );
+            if($relation->type == 'story')
+            {
+                $story = zget($stories, $relation->id, array());
+                $titleList[$key]['title'] .=  zget($story, 'title', '');
+            }
+            elseif($relation->type == 'bug')
+            {
+                $bug = zget($bugs, $relation->id, array());
+                $titleList[$key]['title'] .=  zget($bug, 'title', '');
+            }
+            elseif($relation->type == 'task')
+            {
+                $task = zget($tasks, $relation->id, array());
+                $titleList[$key]['title'] .=  zget($task, 'name', '');
+            }
+        }
+
+        return $titleList;
+    }
+
+    /**
+     * Get relation commit.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType story|bug|task
+     * @access public
+     * @return array
+     */
+    public function getCommitsByObject($objectID, $objectType)
+    {
+        return $this->dao->select('t2.*')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
+            ->where('t1.BID')->eq($objectID)
+            ->andWhere('t1.BType')->eq($objectType)
+            ->andWhere('t1.AType')->eq('revision')
+            ->andWhere('t1.relation')->eq('commit')
+            ->fetchAll();
+    }
+
+    /**
+     * Insert delete record.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function insertDeleteRecord($repoID)
+    {
+        set_time_limit(0);
+        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        if(empty($repo)) return false;
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $values = '';
+        if($repo->SCM == 'Gitlab')
+        {
+            $renameRevisions = $this->dao->select('t1.revision as revisionID,t2.revision')->from(TABLE_REPOFILES)->alias('t1')
+                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                ->where('t1.action')->eq('R')
+                ->andWhere('t1.repo')->eq($repoID)
+                ->andWhere('t1.oldPath')->eq('')
+                ->orderBy('t2.time desc')
+                ->fetchAll('revisionID');
+
+            foreach($renameRevisions as $revision)
+            {
+                $files = $scm->getFilesByCommit($revision->revision);
+                foreach($files as $file)
+                {
+                    if($file->action != 'R') continue;
+                    $parentPath = dirname($file->oldPath) == '\\' ? '/' : dirname($file->oldPath);
+                    $values    .= "($repoID,{$revision->revisionID},'{$file->oldPath}','','$parentPath','{$file->type}','D'),";
+
+                    $this->dao->update(TABLE_REPOFILES)->set('oldPath')->eq($file->oldPath)->where('revision')->eq($revision->revisionID)->andWhere('path')->eq($file->path)->exec();
+                }
+            }
+        }
+        else
+        {
+            $branchGroups = $this->dao->select('t1.id as fileID,t1.revision as revisionID,t2.revision,t3.branch')->from(TABLE_REPOFILES)->alias('t1')
+                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t3.revision=t2.id')
+                ->where('t1.action')->eq('R')
+                ->andWhere('t1.repo')->eq($repoID)
+                ->andWhere('t1.oldPath')->eq('')
+                ->orderBy('t2.time desc')
+                ->fetchGroup('branch');
+
+            $revisionPairs = $this->dao->select('revision,id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetchPairs();
+
+            foreach($branchGroups as $branch => $group)
+            {
+                $firstCommit = end($group);
+                $commits     = $scm->getCommits($firstCommit->revision, 0, $branch);
+                foreach($commits['files'] as $revision => $commit)
+                {
+                    if(!isset($revisionPairs[$revision])) continue;
+                    $revisionID = $revisionPairs[$revision];
+
+                    foreach($commit as $file)
+                    {
+                        if(!$file->oldPath) continue;
+                        $parentPath = dirname($file->oldPath) == '\\' ? '/' : dirname($file->oldPath);
+                        $values    .= "($repoID,$revisionID,'{$file->oldPath}','','$parentPath','{$file->type}','D'),";
+
+                        $this->dao->update(TABLE_REPOFILES)->set('oldPath')->eq($file->oldPath)->where('revision')->eq($revisionID)->andWhere('path')->eq($file->path)->exec();
+                    }
+                }
+            }
+        }
+
+        if($values)
+        {
+            $sql    = 'INSERT INTO ' . TABLE_REPOFILES . ' (`repo`,`revision`,`path`,`oldPath`,`parent`,`type`,`action`) VALUES ' . trim($values, ',');
+            $result = $this->dao->exec($sql);
+        }
+
+        $this->loadModel('setting')->setItem('system.repo.synced', $this->config->repo->synced . ',' . $repoID);
+    }
+
+    /*
      * Remove projects without privileges.
      *
      * @param  array   $productIDList

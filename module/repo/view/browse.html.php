@@ -13,6 +13,7 @@
 <?php js::set('branch',   $branchID);?>
 <?php js::set('lang',     $lang->repo);?>
 <?php js::set('cloneUrl', $cloneUrl);?>
+<?php js::set('syncedRF', $syncedRF);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if(!empty($branchesAndTags)):?>

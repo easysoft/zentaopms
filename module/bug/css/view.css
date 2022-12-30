@@ -8,4 +8,5 @@
 .osContent, .browserContent {margin: 0 0 5px;}
 .browserContent {margin-left: -4px;}
 .resolution {white-space: nowrap; overflow: hidden;}
+.link-commit {overflow: hidden; white-space: nowrap; margin-right: 5px;}
 .main-actions .btn-toolbar{display: inline-flex; flex-wrap: wrap;}

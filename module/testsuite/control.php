@@ -205,6 +205,7 @@ class testsuite extends control
         $this->view->modules      = $this->loadModel('tree')->getOptionMenu($suite->product, 'case', 0, 'all');
         $this->view->branches     = $this->loadModel('branch')->getPairs($suite->product);
         $this->view->canBeChanged = common::canBeChanged('testsuite', $suite);
+        $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
 
         $this->display();
     }

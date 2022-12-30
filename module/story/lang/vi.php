@@ -183,6 +183,7 @@ $lang->story->completeRate   = 'Completion Rate';
 $lang->story->reviewed       = 'Reviewed';
 $lang->story->toBeReviewed   = 'To Be Reviewed';
 $lang->story->linkMR         = 'Related MRs';
+$lang->story->linkCommit     = 'Related Commits';
 
 $lang->story->ditto       = 'Như trên';
 $lang->story->dittoNotice = 'Câu chuyện này chưa liên kết tới cùng sản phẩm bởi bởi vì nó là cuối cùng!';
@@ -335,6 +336,8 @@ $lang->story->action->linked2build          = array('main' => '$date, liên kế
 $lang->story->action->unlinkedfrombuild     = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ bản dựng <strong>$extra</strong>.');
 $lang->story->action->linked2release        = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Phát hành <strong>$extra</strong>');
 $lang->story->action->unlinkedfromrelease   = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Phát hành <strong>$extra</strong>.');
+$lang->story->action->linked2revision       = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>');
+$lang->story->action->unlinkedfromrevision  = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>');
 $lang->story->action->linkrelatedstory      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Câu chuyện <strong>$extra</strong>.');
 $lang->story->action->subdividestory        = array('main' => '$date, được phân rã bởi <strong>$actor</strong> tới Câu chuyện <strong>$extra</strong>.');
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Câu chuyện <strong>$extra</strong>.');

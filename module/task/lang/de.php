@@ -183,6 +183,7 @@ $lang->task->noClosed          = 'Niht geschlossen';
 $lang->task->yesterdayFinished = 'Gestern abgeschlossen';
 $lang->task->allTasks          = 'Alle Aufgaben';
 $lang->task->linkMR            = 'Related MRs';
+$lang->task->linkCommit        = 'Related Commits';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Wartend';
@@ -230,6 +231,10 @@ $lang->task->legendLife   = 'Aufgabenentwicklung';
 $lang->task->legendDesc   = 'Aufgabenbeschreibung';
 $lang->task->legendDetail = 'Task Detail';
 $lang->task->legendMisc   = 'Misc.';
+
+$lang->task->action = new stdclass();
+$lang->task->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
 
 $lang->task->confirmDelete             = "Möchten Sie diese Aufgabe löschen?";
 $lang->task->confirmDeleteEstimate     = "Do you want to delete it?";

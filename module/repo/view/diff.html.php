@@ -11,6 +11,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php
+$browser = helper::getBrowser();
+js::set('browser', $browser['name']);
+js::set('edition', $config->edition);
+?>
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -55,6 +60,7 @@
   </div>
 </div>
 <?php endif;?>
+<?php if($browser['name'] == 'ie'):?>
 <div class="repo panel">
   <div class='panel-heading'>
     <form method='post'>
@@ -117,7 +123,7 @@
         {
             $oldlc = $line->oldlc;
             $newlc = '';
-            if(isset($content->new[$oldlc]))
+            if(isset($content->new[$oldlc]) and !isset($content->new[$oldlc - 1]))
             {
                 $newlc = $line->oldlc;
                 $line->type = 'custom';
@@ -154,6 +160,9 @@
   </div>
   <?php endforeach?>
 </div>
+<?php elseif($diffs):?>
+<?php include 'diffeditor.html.php';?>
+<?php endif;?>
 <div class='revisions hidden'>
   <?php
   if(strpos($repo->SCM, 'Subversion') === false)

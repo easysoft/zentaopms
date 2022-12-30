@@ -938,6 +938,7 @@ class bug extends control
         $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
+        $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bugID, 'bug');
 
         $this->view->projects = array('' => '') + $projects;
 

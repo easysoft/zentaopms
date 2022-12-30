@@ -196,6 +196,7 @@ $lang->story->completeRate     = 'Completion Rate';
 $lang->story->reviewed         = 'Reviewed';
 $lang->story->toBeReviewed     = 'To Be Reviewed';
 $lang->story->linkMR           = 'Related MRs';
+$lang->story->linkCommit       = 'Related Commits';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "La story n'est pas associée au même product que la précédente !";
@@ -353,6 +354,8 @@ $lang->story->action->linked2build          = array('main' => '$date, intégrée
 $lang->story->action->unlinkedfrombuild     = array('main' => '$date, retirée par <strong>$actor</strong> du Build <strong>$extra</strong>.');
 $lang->story->action->linked2release        = array('main' => '$date, ajoutée par <strong>$actor</strong> à la Release <strong>$extra</strong>');
 $lang->story->action->unlinkedfromrelease   = array('main' => '$date, retirée par <strong>$actor</strong> de la Release <strong>$extra</strong>.');
+$lang->story->action->linked2revision       = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>');
+$lang->story->action->unlinkedfromrevision  = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>');
 $lang->story->action->linkrelatedstory      = array('main' => '$date, associée par <strong>$actor</strong> à la Story <strong>$extra</strong>.');
 $lang->story->action->subdividestory        = array('main' => '$date, décomposée par <strong>$actor</strong> en Story <strong>$extra</strong>.');
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, dissociée par <strong>$actor</strong> de la Story <strong>$extra</strong>.');

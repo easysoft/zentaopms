@@ -69,7 +69,8 @@ $(function()
         {
             $('#repoID').html('').append(response);
             $('#repoID').val(repo.id);
-            $('#repoID').chosen().trigger("chosen:updated");;
+            $('#repoID').chosen().trigger("chosen:updated");
+            $('#repoID').change();
         });
 
         if(sourceProject) getBranchPriv(sourceProject);
