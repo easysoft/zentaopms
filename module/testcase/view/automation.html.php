@@ -35,6 +35,7 @@
           <th class='w-100px'><?php echo $lang->zanode->common;?></th>
           <td class='required'><?php echo html::select('node', $nodeList, !empty($automation->node) ? $automation->node : '', "class='form-control picker-select'");?></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <th>
@@ -49,13 +50,13 @@
           <th>
             <?php echo $lang->zanode->shell;?>
           </th>
-          <td><?php echo html::textarea('shell', !empty($automation->shell) ? $automation->shell : '', "rows='6' class='form-control'");?></td>
+          <td colspan='2'><?php echo html::textarea('shell', !empty($automation->shell) ? $automation->shell : '', "rows='6' class='form-control'");?></td>
           <td>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='left' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->zanode->shellTips;?>"></icon>
           </td>
         </tr>
         <tr>
-          <td colspan='2' class='text-center'>
+          <td colspan='3' class='text-center'>
             <?php if($productID) echo html::hidden('product', $productID);?>
             <?php if($automation) echo html::hidden('id', $automation->id);?>
             <?php echo html::submitButton();?>

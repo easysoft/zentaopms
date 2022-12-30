@@ -45,7 +45,7 @@
             <div class="col-4">
               <div class="main-row">
                 <div class="col-4 text-right"><?php echo $lang->zahost->cpuCores;?>:</div>
-                <div class="col-7"><?php echo $zahost->cpuCores . $lang->zahost->cpuUnit;?></div>
+                <div class="col-7"><?php echo $zahost->cpuCores . ' ' . $lang->zahost->cpuUnit;?></div>
               </div>
             </div>
             <div class="col-4">
@@ -65,7 +65,7 @@
             <div class="col-4">
               <div class="main-row">
                 <div class="col-4 text-right"><?php echo $lang->zahost->memory;?>:</div>
-                <div class="col-7"><?php echo $zahost->memory . $lang->zahost->unitList['GB'];;?></div>
+                <div class="col-7"><?php echo $zahost->memory . ' ' . $lang->zahost->unitList['GB'];;?></div>
               </div>
             </div>
             <div class="col-4">
@@ -85,7 +85,7 @@
             <div class="col-4">
               <div class="main-row">
                 <div class="col-4 text-right"><?php echo $lang->zahost->diskSize;?>:</div>
-                <div class="col-7"><?php echo $zahost->diskSize . $lang->zahost->unitList['GB'];?></div>
+                <div class="col-7"><?php echo $zahost->diskSize . ' ' . $lang->zahost->unitList['GB'];?></div>
               </div>
             </div>
             <div class="col-4">
