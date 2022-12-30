@@ -2,6 +2,7 @@
 $lang->zanode->common          = 'ZenAgent Node';
 $lang->zanode->browse          = 'ZenAgent Node List';
 $lang->zanode->create          = 'Create ZenAgent Node';
+$lang->zanode->edit            = 'Edit ZenAgent Node';
 $lang->zanode->editAction      = 'Edit ZenAgent Node';
 $lang->zanode->view            = 'View ZenAgent Node';
 $lang->zanode->initTitle       = 'Init ZenAgent Node';
@@ -96,7 +97,7 @@ $lang->zanode->statusList['destroy']      = 'Destroyed';
 $lang->zanode->statusList['shutoff']      = 'Shutoff';
 $lang->zanode->statusList['shutdown']     = 'shutdown';
 $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
-$lang->zanode->statusList['wait']         = 'Waiting For Init';
+$lang->zanode->statusList['wait']         = 'Initializing';
 $lang->zanode->statusList['online']       = 'Online';
 
 $lang->zanode->initNotice = "Succeeded. Please initialize the execution node or return to the list.";

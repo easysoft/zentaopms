@@ -281,7 +281,7 @@ class zanode extends control
      * @param  int  $nodeID
      * @return void
      */
-    public function delete($nodeID, $confirm = 'no')
+    public function destroy($nodeID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -407,6 +407,7 @@ class zanode extends control
             $serviceStatus['ZenAgent'] = "unknown";
             $serviceStatus['ZTF'] = "unknown";
         }
+        $serviceStatus['node'] = $node->status;
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
     }

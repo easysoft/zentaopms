@@ -36,7 +36,6 @@ $config->zanode->search['fields']['status']     = $lang->zanode->status;
 $config->zanode->search['fields']['cpuCores']   = $lang->zanode->cpuCores;
 $config->zanode->search['fields']['memory']     = $lang->zanode->memory;
 $config->zanode->search['fields']['diskSize']   = $lang->zanode->diskSize;
-$config->zanode->search['fields']['mac']        = $lang->zanode->mac;
 $config->zanode->search['fields']['extranet']   = $lang->zanode->extranet;
 $config->zanode->search['params']['name']       = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->zanode->search['params']['osName']     = array('operator' => 'include', 'control' => 'input', 'values' => '');

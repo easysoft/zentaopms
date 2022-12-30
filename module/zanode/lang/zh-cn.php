@@ -2,6 +2,7 @@
 $lang->zanode->common          = '执行节点';
 $lang->zanode->browse          = '执行节点列表';
 $lang->zanode->create          = '创建执行节点';
+$lang->zanode->edit            = '编辑执行节点';
 $lang->zanode->editAction      = '编辑执行节点';
 $lang->zanode->view            = '执行节点详情';
 $lang->zanode->initTitle       = '初始化执行节点';
@@ -16,7 +17,7 @@ $lang->zanode->bootNode        = '启动';
 $lang->zanode->rebootNode      = '重启';
 $lang->zanode->shutdownNode    = '关闭';
 $lang->zanode->resumeNode      = '恢复';
-$lang->zanode->getVNC          = '远程管理';
+$lang->zanode->getVNC          = '远程';
 $lang->zanode->all             = '全部';
 $lang->zanode->byQuery         = '搜索';
 $lang->zanode->osName          = '操作系统';
@@ -96,7 +97,7 @@ $lang->zanode->statusList['destroy']      = '已销毁';
 $lang->zanode->statusList['shutoff']      = '已关机';
 $lang->zanode->statusList['shutodown']    = '已关机';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
-$lang->zanode->statusList['wait']         = '待初始化';
+$lang->zanode->statusList['wait']         = '初始化中';
 $lang->zanode->statusList['online']       = '已上架';
 
 $lang->zanode->initNotice = "保存成功，请初始化执行节点或返回列表。";

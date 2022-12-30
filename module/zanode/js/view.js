@@ -1,11 +1,5 @@
-var ifm = document.getElementById("vncIframe");
-ifm.height=$('.vnc-detail').css('height')
-$('.vnc-mask').click(function(){
-    window.open(createLink('zanode', 'getVNC', "id=" + nodeID))
-})
-$('.vnc-mask').css('width', $('.vnc-detail').css('width'));
-$('.vnc-mask').css('height', $('.vnc-detail').css('height'));
-
+var checkInterval;
+var intervalTimes = 0;
 
 $('#checkServiceStatus').click(function(){
     $.get(createLink('zanode', 'ajaxGetServiceStatus', 'nodeID=' + nodeID), function(response)
@@ -43,6 +37,13 @@ $('#checkServiceStatus').click(function(){
                         $('.ztf-status').text(zanodeLang.initializing)
                     }
                     $('.ztf-install').text(zanodeLang.install);
+                }
+            }
+            else if(key == "node")
+            {
+                if(nodeStatus != resultData.data[key])
+                {
+                    window.location.reload();
                 }
             }
             else
@@ -86,6 +87,7 @@ $('#checkServiceStatus').click(function(){
         }
         else
         {
+            clearInterval(checkInterval)
             $('.init-success').show();
             // $('.init-fail').hide();
         }
@@ -105,14 +107,36 @@ $('.node-init-install').on('click', function(){
     })
 })
 
-$('.btn-init-copy').live('click', function()
+$('.btn-ssh-copy').live('click', function()
 {
-    var copyText = $('#initBash');
+    var copyText = $('#ssh-copy');
     copyText.show();
     copyText .select();
     document.execCommand("Copy");
     copyText.hide();
-    $('.btn-init-copy').tooltip({
+    $('.btn-ssh-copy').tooltip({
+        trigger: 'click',
+        placement: 'bottom',
+        title: zanodeLang.copied,
+        tipClass: 'tooltip-success'
+    });
+
+    $(this).tooltip('show');
+    var that = this;
+    setTimeout(function()
+    {
+        $(that).tooltip('hide')
+    }, 2000)
+})
+
+$('.btn-pwd-copy').live('click', function()
+{
+    var copyText = $('#pwd-copy');
+    copyText.show();
+    copyText .select();
+    document.execCommand("Copy");
+    copyText.hide();
+    $('.btn-pwd-copy').tooltip({
         trigger: 'click',
         placement: 'bottom',
         title: zanodeLang.copied,
@@ -129,4 +153,12 @@ $('.btn-init-copy').live('click', function()
 
 $(function(){
     $('#checkServiceStatus').trigger("click")
+    checkInterval = setInterval(() => {
+        intervalTimes++;
+        if(intervalTimes > 300)
+        {
+            clearInterval(checkInterval)
+        }
+        $('#checkServiceStatus').trigger("click")
+    }, 2000);
 })
