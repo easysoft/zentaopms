@@ -302,14 +302,21 @@
                   <th><?php echo $lang->story->stage;?></th>
                   <td>
                   <?php
+                  $maxStage    = $story->stage;
+                  $stageList   = join(',', array_keys($this->lang->story->stageList));
+                  $maxStagePos = strpos($stageList, $maxStage);
                   if($story->stages and $branches)
                   {
-                      foreach($story->stages as $branch => $stage) if(isset($branches[$branch])) echo $branches[$branch] . ' : ' . $lang->story->stageList[$stage] . '<br />';
+                      foreach($story->stages as $branch => $stage)
+                      {
+                          if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) > $maxStagePos)
+                          {
+                              $maxStage    = $stage;
+                              $maxStagePos = strpos($stageList, $stage);
+                          }
+                      }
                   }
-                  else
-                  {
-                      echo $lang->story->stageList[$story->stage];
-                  }
+                  echo $lang->story->stageList[$maxStage];
                   ?>
                   </td>
                 </tr>
@@ -602,6 +609,29 @@
                         else
                         {
                             echo "<li title='$linkMRTitle'>" . "#$MRID $linkMRTitle" . '</li>';
+                        }
+                    }
+                    ?>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->story->linkCommit;?></th>
+                  <td class='pd-0'>
+                    <ul class='list-unstyled'>
+                    <?php
+                    $canViewRevision = common::hasPriv('repo', 'revision');
+                    foreach($linkedCommits as $commit)
+                    {
+                        $revision    = substr($commit->revision, 0, 10);
+                        $commitTitle = $revision . ' ' . $commit->comment;
+                        if($canViewRevision)
+                        {
+                            echo "<li class='link-commit' title='$commitTitle'>" . html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) . ' ' . $commit->comment . '</li>';
+                        }
+                        else
+                        {
+                            echo "<li class='link-commit' title='$commitTitle'>" . "$commitTitle" . '</li>';
                         }
                     }
                     ?>

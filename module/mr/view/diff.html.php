@@ -11,6 +11,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php
+$browser = helper::getBrowser();
+js::set('browser', $browser);
+?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php common::printBack(inlink('browse'), 'btn btn-primary');?>
@@ -30,6 +34,7 @@
       <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-red')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
       <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=task"),  html::icon('todo', 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
     </ul>
+    <?php if($browser == 'ie'):?>
     <div class='tab-content'>
       <?php include '../../common/view/form.html.php';?>
       <?php include '../../common/view/kindeditor.html.php';?>
@@ -150,6 +155,18 @@
       </form>
       <?php endif;?>
     </div>
+    <?php else:?>
+    <?php
+    if(empty($diffs))
+    {
+        echo "<p class='detail-content'>{$lang->mr->noChanges}</p>";
+    }
+    else
+    {
+        include '../../repo/view/diffeditor.html.php';
+    }
+    ?>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

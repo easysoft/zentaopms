@@ -61,7 +61,7 @@ $config->execution->search['fields']['estimate']       = $lang->task->estimate;
 $config->execution->search['fields']['left']           = $lang->task->left;
 $config->execution->search['fields']['consumed']       = $lang->task->consumed;
 $config->execution->search['fields']['type']           = $lang->task->type;
-$config->execution->search['fields']['fromBug']        = $lang->task->fromBug;
+$config->execution->search['fields']['fromBug']        = $lang->task->fromBugID;
 $config->execution->search['fields']['closedReason']   = $lang->task->closedReason;
 
 $config->execution->search['fields']['openedBy']       = $lang->task->openedBy;

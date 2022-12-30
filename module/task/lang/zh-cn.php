@@ -46,6 +46,7 @@ $lang->task->export              = "导出数据";
 $lang->task->exportAction        = "导出任务";
 $lang->task->reportChart         = "报表统计";
 $lang->task->fromBug             = '来源Bug';
+$lang->task->fromBugID           = '来源Bug编号';
 $lang->task->case                = '相关用例';
 $lang->task->process             = '处理任务';
 $lang->task->confirmStoryChange  = "确认{$lang->SRCommon}变动";
@@ -182,6 +183,7 @@ $lang->task->noClosed          = '未关闭';
 $lang->task->yesterdayFinished = '昨日完成任务数';
 $lang->task->allTasks          = '总任务';
 $lang->task->linkMR            = '相关合并请求';
+$lang->task->linkCommit        = '相关代码版本';
 
 $lang->task->statusList['']       = '';
 $lang->task->statusList['wait']   = '未开始';
@@ -229,6 +231,10 @@ $lang->task->legendLife   = '任务的一生';
 $lang->task->legendDesc   = '任务描述';
 $lang->task->legendDetail = '任务详情';
 $lang->task->legendMisc   = '其他相关';
+
+$lang->task->action = new stdclass();
+$lang->task->action->linked2revision      = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->unlinkedfromrevision = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
 
 $lang->task->confirmDelete             = "您确定要删除这个任务吗？";
 $lang->task->confirmDeleteEstimate     = "您确定要删除这个记录吗？";

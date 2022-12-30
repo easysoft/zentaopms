@@ -251,7 +251,9 @@ class mr extends control
            if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
         }
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
+
         $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
+        $this->mr->createMRLinkedAction($MRID, 'removemr');
 
         echo js::locate(inlink('browse'), 'parent');
     }
@@ -453,6 +455,8 @@ class mr extends control
         $this->view->arrange      = $arrange;
         $this->view->sourceBranch = $MR->sourceBranch;
         $this->view->targetBranch = $MR->targetBranch;
+        $this->view->oldRevision  = $MR->targetBranch;
+        $this->view->newRevision  = $MR->sourceBranch;
         $this->display();
     }
 

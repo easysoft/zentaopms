@@ -27,14 +27,30 @@ function setDuplicateAndChild(resolution, storyID)
 
 $(function()
 {
-    $('select[id^="duplicateStoryIDList"]').picker(
+    $('td[id^="duplicateStoryBox"]').on('mouseenter', 'select[id^="duplicateStoryIDList"]', function()
     {
-        disableEmptySearch : true,
-        dropWidth : 'auto',
-        onReady: function(event)
+        var options = $(this).find('option').length;
+        if(options <= 1)
         {
-            $(event.picker.$container).addClass('required');
-        }
+            var id = $(this).attr('id');
+            var storyID = id.replace('duplicateStoryIDList', '');
+            var link = createLink('story', 'ajaxGetStoryPairs', 'storyID=' + storyID);
+            var that = $(this);
 
-    });
+            $.get(link, function(data)
+            {
+                that.replaceWith(data);
+                $("#duplicateStoryIDList" + storyID).picker(
+                {
+                    disableEmptySearch : true,
+                    dropWidth : 'auto',
+                    onReady: function(event)
+                    {
+                        $(event.picker.$container).addClass('required');
+                    }
+
+                });
+            })
+        }
+    })
 });

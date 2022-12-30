@@ -35,8 +35,6 @@ class control extends baseControl
 
         $this->app->setOpenApp();
 
-        if(defined('IN_USE') or (defined('RUN_MODE') and !in_array(RUN_MODE, array('api', 'xuanxuan')))) $this->setPreference();
-
         if(!isset($this->config->bizVersion)) return false;
 
         /* Code for task #9224. Set requiredFields for workflow. */
@@ -146,26 +144,6 @@ class control extends baseControl
         }
 
         return true;
-    }
-
-    /**
-     * Go to preference setting page if preference not setted.
-     *
-     * @access public
-     * @return void
-     */
-    public function setPreference()
-    {
-        if(empty($this->app->user->account)) return true;
-        if($this->app->getModuleName() == 'user' and strpos("login,logout", $this->app->getMethodName()) !== false) return true;
-        if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'changepassword') return true;
-        if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'preference') return true;
-
-        if(!isset($this->config->preferenceSetted) and $this->config->vision == 'rnd')
-        {
-            setcookie('tab', 'my', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $this->locate(helper::createLink('my', 'preference'));
-        }
     }
 
     /**

@@ -46,6 +46,7 @@ $lang->task->export              = "Export Data";
 $lang->task->exportAction        = "Export Task";
 $lang->task->reportChart         = "Report Chart";
 $lang->task->fromBug             = 'From Bug';
+$lang->task->fromBugID           = 'From Bug ID';
 $lang->task->case                = 'Linked Case';
 $lang->task->process             = 'Process Task';
 $lang->task->confirmStoryChange  = "Confirm Change";
@@ -182,6 +183,7 @@ $lang->task->noClosed          = 'Unclosed';
 $lang->task->yesterdayFinished = 'Task Finished Yesterday';
 $lang->task->allTasks          = 'Task';
 $lang->task->linkMR            = 'Related MRs';
+$lang->task->linkCommit        = 'Related Commits';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Waiting';
@@ -229,6 +231,10 @@ $lang->task->legendLife   = 'Task Life';
 $lang->task->legendDesc   = 'Task Description';
 $lang->task->legendDetail = 'Task Detail';
 $lang->task->legendMisc   = 'Misc.';
+
+$lang->task->action = new stdclass();
+$lang->task->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
 
 $lang->task->confirmDelete             = "Do you want to delete this task?";
 $lang->task->confirmDeleteEstimate     = "Do you want to delete it?";

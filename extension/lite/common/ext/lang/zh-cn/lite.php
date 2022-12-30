@@ -53,6 +53,10 @@ else
 $lang->task->common = '任务';
 $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
+
+/* Ticket. */
+if($config->edition != 'open') $lang->feedback->menu->ticket = array('link' => '工单|ticket|browse|browseType=unclosed');
+
 /* My menu. */
 $lang->my->menu           = new stdclass();
 $lang->my->menu->index    = array('link' => "$lang->dashboard|my|index");

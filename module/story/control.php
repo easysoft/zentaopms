@@ -1386,6 +1386,7 @@ class story extends control
         $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch();
         $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
+        $linkedCommits = $this->loadModel('repo')->getCommitsByObject($storyID, 'story');
         $modulePath    = $this->tree->getParents($story->module);
         $storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
         $linkedStories = isset($story->linkStoryTitles) ? array_keys($story->linkStoryTitles) : array();
@@ -1461,6 +1462,7 @@ class story extends control
         $this->view->cases         = $cases;
         $this->view->story         = $story;
         $this->view->linkedMRs     = $linkedMRs;
+        $this->view->linkedCommits = $linkedCommits;
         $this->view->track         = $this->story->getTrackByID($story->id);
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->reviewers     = $reviewers;
@@ -1910,7 +1912,6 @@ class story extends control
 
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
-        $productStoryList = array();
         $productList      = array();
         $ignoreTwins      = array();
         $twinsCount       = array();
@@ -1935,7 +1936,6 @@ class story extends control
 
             $storyProduct = isset($productList[$story->product]) ? $productList[$story->product] : $this->product->getByID($story->product);
             $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
-            if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
             if(!empty($story->twins))
             {
@@ -2031,7 +2031,6 @@ class story extends control
         $this->view->storyIdList      = $storyIdList;
         $this->view->storyType        = $storyType;
         $this->view->reasonList       = $this->lang->story->reasonList;
-        $this->view->productStoryList = $productStoryList;
         $this->view->twinsCount       = $twinsCount;
 
         $this->display();
@@ -3065,5 +3064,21 @@ class story extends control
 
         if(!dao::isError()) $this->loadModel('action')->create('story', $twinID, 'relieved');
         return $this->send(array('result' => 'success', 'silbingsCount' => count($twins)-1));
+    }
+
+    /**
+     * Ajax get story pairs.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetStoryPairs($storyID)
+    {
+        $this->app->loadLang('bug');
+        $story   = $this->story->getByID($storyID);
+        $stories = $this->story->getProductStoryPairs($story->product, $story->branch, 0, 'all', 'id_desc', 0, '', $story->type);
+
+        return print html::select("duplicateStoryIDList[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->bug->duplicateTip}'");
     }
 }

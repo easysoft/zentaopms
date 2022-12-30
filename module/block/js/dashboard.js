@@ -243,11 +243,12 @@ $(function()
         containerSelector: '.col-main,.col-side',
         canMoveHere: function($ele, $target)
         {
-            var fixedCol = $ele.data('fixed');
+            var fixedCol   = $ele.data('fixed');
+            var $targetCol = $target.closest('.col-main,.col-side');
+            var targetCol  = $targetCol.hasClass('col-main') ? 'main' : 'side';
+            if($ele.hasClass('block-guide') && targetCol != 'main') return false;
             if(fixedCol)
             {
-                var $targetCol = $target.closest('.col-main,.col-side');
-                var targetCol = $targetCol.hasClass('col-main') ? 'main' : 'side';
                 if(targetCol !== fixedCol)
                 {
                     !sortMessager.isShow && sortMessager.show(fixedCol === 'main' ? config.cannotPlaceInRight : config.cannotPlaceInRight);

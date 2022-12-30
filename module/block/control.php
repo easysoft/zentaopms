@@ -65,7 +65,7 @@ class block extends control
             $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
             if(strpos(",$closedBlock,", ",|assigntome,") === false) $modules['assigntome'] = $this->lang->block->assignToMe;
             if(strpos(",$closedBlock,", ",|dynamic,") === false) $modules['dynamic'] = $this->lang->block->dynamic;
-            if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
+            if(strpos(",$closedBlock,", ",|guide,") === false and $this->config->global->flow == 'full') $modules['guide'] = $this->lang->block->guide;
             if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
             if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
             if(strpos(",$closedBlock,", ",|contribute,") === false and $this->config->vision == 'rnd') $modules['contribute'] = $this->lang->block->contribute;
@@ -424,9 +424,9 @@ class block extends control
         {
             $html = $this->fetch('block', 'dynamic');
         }
-        elseif($block->block == 'flowchart')
+        elseif($block->block == 'guide')
         {
-            $html = $this->fetch('block', 'flowchart');
+            $html = $this->fetch('block', 'guide', "blockID=$block->id");
         }
         elseif($block->block == 'assigntome')
         {
@@ -1999,12 +1999,28 @@ class block extends control
     }
 
     /**
-     * Print flow chart block
+     * Print guide block
+     *
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function flowchart()
+    public function guide($blockID = 0)
     {
+        $this->app->loadLang('custom');
+        $this->app->loadLang('my');
+        $this->loadModel('setting');
+
+        $this->view->blockID       = $blockID;
+        $this->view->programs      = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programID     = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
+        $this->view->URSRList      = $this->loadModel('custom')->getURSRPairs();
+        $this->view->URSR          = $this->setting->getURSR();
+        $this->view->programLink   = isset($this->config->programLink)   ? $this->config->programLink   : 'program-browse';
+        $this->view->productLink   = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
+        $this->view->projectLink   = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
+        $this->view->executionLink = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
+
         $this->display();
     }
 

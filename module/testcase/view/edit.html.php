@@ -214,7 +214,16 @@
               <tr>
                 <th><?php echo $lang->testcase->type;?></th>
                 <?php if($case->type != 'unit') unset($lang->testcase->typeList['unit']);?>
-                <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, "class='form-control chosen'");?></td>
+                <td>
+                  <?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, "class='form-control chosen'");?>
+                  <div class="input-group-addon">
+                  <?php echo html::checkbox('auto', array('auto' => $lang->testcase->showAutoCase), $case->auto, "id='autocase' title='{$lang->testcase->showAutoCase}'");?>
+                  </div>
+                </td>
+              </tr>
+              <tr class='autoScript hide'>
+                <th><?php echo $lang->testcase->autoScript;?></th>
+                <td><?php include './buildscriptform.php';?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->testcase->stage;?></th>
@@ -316,6 +325,24 @@ $(function()
 {
     $('#subNavbar [data-id=testcase]').addClass('active');
     $('#navbar [data-id=testcase]').addClass('active');
+    checkScript();
 })
+
+function checkScript()
+{
+    var autoScript = $(":checkbox[name^='auto']");
+    if(autoScript.attr('checked'))
+    {
+        $('.autoScript').removeClass('hide')
+    }else
+    {
+        $('.autoScript').addClass('hide')
+    }
+
+}
+
+$(":checkbox[name^='auto']").on('click', function(){
+    checkScript();
+});
 </script>
 <?php include '../../common/view/footer.html.php';?>

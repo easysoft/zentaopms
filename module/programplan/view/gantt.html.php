@@ -71,6 +71,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .switchBtn > i {padding-left: 7px;}
 #mainContent > .pull-left > .btn-group > .text{display: block;margin-top: 7px;}
 #mainContent > .pull-left > .btn-group > a > .text{overflow: hidden;display: block;}
+#mainContent > .pull-right > .button-group  .text{margin-left: 0px;}
+.pull-right .icon-plus.icon-sm:before{vertical-align: 4%;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -91,10 +93,10 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
         <?php
           $class = '';
           if($productID == 0) $class = 'class="active"';
-          foreach($productList as $key => $product)
+          foreach($productList as $key => $productName)
           {
               $class = $productID == $key ? 'class="active"' : '';
-              echo "<li $class>" . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), $product) . "</li>";
+              echo "<li $class>" . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), $productName) . "</li>";
           }
         ?>
       </ul>
@@ -118,7 +120,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
     </div>
     <?php
     echo html::a(helper::createLink('programplan', 'ajaxcustom', '', '', true), '<i class="icon icon-cog-outline"></i> ' . $lang->settings, '', "class='iframe btn btn-link' data-width='45%'");
-    if(common::hasPriv('programplan', 'create')) echo html::a($this->createLink('programplan', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'>    </i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
+    if(common::hasPriv('programplan', 'create') and empty($product->deleted)) echo html::a($this->createLink('programplan', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'>    </i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
     ?>
   </div>
   <?php endif;?>

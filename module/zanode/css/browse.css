@@ -1,0 +1,9 @@
+.c-id {width: 70px;}
+.c-memory{width: 100px;}
+.c-status {width: 70px;}
+.c-cpu, .c-host {width: 100px;}
+.c-ip{width: 150px;}
+.c-os {width: 120px;}
+.desktop, .createImage{margin-right: 4px;}
+#helpTab .icon-help {line-height: unset;}
+#bysearchTab {margin-right: 0px;}

@@ -584,6 +584,9 @@ class upgradeModel extends model
                     $this->execSQL($xuanxuanSql);
                 }
                 break;
+            case '18_0_beta2':
+                $this->updateMyBlocks();
+                break;
         }
 
         $this->deletePatch();
@@ -740,10 +743,10 @@ class upgradeModel extends model
             case 'biz7_6_2':
                 $this->processFeedbackModule();
                 break;
-            case 'biupgrade':
-                $this->addDefaultModules4BI('chart');
-                $modules = $this->addDefaultModules4BI('report');
-                $this->processReportModules($modules);
+            //case 'biupgrade':
+            //    $this->addDefaultModules4BI('chart');
+            //    $modules = $this->addDefaultModules4BI('report');
+            //    $this->processReportModules($modules);
         }
     }
 
@@ -1074,6 +1077,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta1'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
+            case '18_0_beta2':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta2'));
         }
 
         return $confirmContent;
@@ -8081,6 +8086,55 @@ class upgradeModel extends model
             $this->dao->delete()->from(TABLE_EFFORT)->where('objectType')->eq('review')->andWhere('objectID')->eq($node->reviewID)->exec();
             $this->effort->create('review', $node->reviewID, (int)$node->consumed, $node->title, $node->approvalID);
         }
+        return true;
+    }
+
+    /**
+     * Update my module blocks.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateMyBlocks()
+    {
+        /* Delete flowchart block. */
+        $this->dao->delete()->from(TABLE_BLOCK)->where('module')->eq('my')->andWhere('block')->eq('flowchart')->exec();
+
+        /* Update block order and insert guide block. */
+        $visionList = array('rnd', 'lite');
+
+        /* Set guide block data. */
+        $guideBlock = new stdclass();
+        $guideBlock->module = 'my';
+        $guideBlock->title  = common::checkNotCN() ? 'Guides' : '使用帮助';
+        $guideBlock->block  = 'guide';
+        $guideBlock->order  = 3;
+        $guideBlock->grid   = 8;
+        foreach($visionList as $vision)
+        {
+            $guideBlock->vision = $vision;
+            $this->dao->update(TABLE_BLOCK)
+                ->set('`order` = `order` + 1')
+                ->where('vision')->eq($vision)
+                ->andWhere('module')->eq('my')
+                ->andWhere('`order`')->ge(3)
+                ->orderBy('`order` desc')
+                ->exec();
+
+            $accountList = $this->dao->select('account')->from(TABLE_BLOCK)
+                ->where('vision')->eq($vision)
+                ->andWhere('module')->eq('my')
+                ->fetchPairs('account');
+
+            foreach($accountList as $account)
+            {
+                if(empty($account)) continue;
+
+                $guideBlock->account = $account;
+                $this->dao->insert(TABLE_BLOCK)->data($guideBlock)->exec();
+            }
+        }
+
         return true;
     }
 }

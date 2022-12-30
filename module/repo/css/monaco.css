@@ -1,0 +1,24 @@
+.m-repo-monaco {overflow: hidden;}
+.repoCode .nav > li > a {padding: 8px 10px;}
+.repoCode .nav-tabs > li > a > span {margin-right: 5px;}
+.repoCode {min-height: 500px;}
+#sidebar.side-col {padding-right: 0;}
+#sidebar .sidebar-toggle {left: auto; right: -3px; z-index: 10; height: 98%;}
+#sidebar .file-tree {padding: 0;}
+#sidebar > .sidebar-toggle > .icon-angle-left {right: auto; left: -1px;}
+.hide-sidebar #sidebar {width: 0 !important;}
+
+#fileTabs .tab-pane {display: none;}
+#fileTabs .tab-pane.active {display: block;}
+#fileTabs .tab-nav-item {max-width: none !important;}
+.repoCode .content {margin-left: 5px;}
+.repoCode .nav > li > a {display: flex; white-space: pre;}
+#sourceSwapper {border: 1px solid #D8DBDE; border-radius: 2px; width: 100%;}
+#sourceSwapper .repo-select {width: 100%;}
+#sourceSwapper .repo-select .caret {margin-top: 6px;}
+#sourceSwapper .hide-in-search {padding-left: 5px;}
+#sourceSwapper .tree li > a {max-width: 100%;}
+.version-name {max-width: 90%}
+#filesTree #modules {margin-top: 5px;}
+#filesTree {overflow-y: auto;}
+.repoCode .nav-tabs > li.active > a:before {background: none; height: 0;}

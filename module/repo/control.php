@@ -261,6 +261,153 @@ class repo extends control
     }
 
     /**
+     * Get diff editor content by ajax.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $entry
+     * @param  string $oldRevision
+     * @param  string $newRevision
+     * @param  string $showBug
+     * @param  string $encoding
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDiffEditorContent($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '')
+    {
+        $file      = $entry;
+        $repo      = $this->repo->getRepoByID($repoID);
+        $entry     = urldecode($this->repo->decodePath($entry));
+        $revision  = str_replace('*', '-', $oldRevision);
+        $nRevision = str_replace('*', '-', $newRevision);
+
+        $entry    = urldecode($entry);
+        $pathInfo = pathinfo($entry);
+        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = strtolower(str_replace('_', '-', $encoding));
+
+        $this->scm->setEngine($repo);
+        $info = $this->scm->info($entry, $nRevision);
+        $path = $entry ? $info->path : '';
+
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
+        $this->view->type        = 'diff';
+        $this->view->encoding    = str_replace('-', '_', $encoding);
+        $this->view->repoID      = $repoID;
+        $this->view->objectID    = $objectID;
+        $this->view->repo        = $repo;
+        $this->view->revision    = $nRevision;
+        $this->view->oldRevision = $revision;
+        $this->view->file        = $file;
+        $this->view->entry       = $entry;
+        $this->view->info        = $info;
+        $this->view->content     = '';
+        $this->view->pathInfo    = $pathInfo;
+        $this->view->suffix      = 'c';
+        $this->view->blames      = array();
+        $this->view->showEditor  = true;
+        $this->display('repo', 'ajaxGetEditorContent');
+    }
+
+    /**
+     * Get editor content by ajax.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $showBug
+     * @param  string $encoding
+     * @access public
+     * @return void
+     */
+    public function ajaxGetEditorContent($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    {
+        $file     = $entry;
+        $repo     = $this->repo->getRepoByID($repoID);
+        $entry    = urldecode($this->repo->decodePath($entry));
+        $revision = str_replace('*', '-', $revision);
+
+        $this->scm->setEngine($repo);
+        $info = $this->scm->info($entry, $revision);
+        $path = $entry ? $info->path : '';
+        if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision"));
+        $content  = $this->scm->cat($entry, $revision);
+        $entry    = urldecode($entry);
+        $pathInfo = pathinfo($entry);
+        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = strtolower(str_replace('_', '-', $encoding));
+
+        $suffix   = '';
+        if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
+        if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repo->isBinary($content, $suffix) ? 'binary' : 'c';
+
+        if(strpos($this->config->repo->images, "|$suffix|") !== false)
+        {
+            $content = base64_encode($content);
+        }
+        elseif($encoding != 'utf-8')
+        {
+            $content = helper::convertEncoding($content, $encoding);
+        }
+
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->type        = 'view';
+        $this->view->showBug     = $showBug;
+        $this->view->encoding    = str_replace('-', '_', $encoding);
+        $this->view->repoID      = $repoID;
+        $this->view->branchID    = $this->cookie->repoBranch;
+        $this->view->objectID    = $objectID;
+        $this->view->repo        = $repo;
+        $this->view->revision    = $revision;
+        $this->view->oldRevision = '';
+        $this->view->file        = $file;
+        $this->view->entry       = $entry;
+        $this->view->path        = $entry;
+        $this->view->info        = $info;
+        $this->view->suffix      = $suffix;
+        $this->view->content     = $content ? $content : '';
+        $this->view->pathInfo    = $pathInfo;
+        $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
+        $this->display();
+    }
+
+    /**
+     * View repo file with monaco editor.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $showBug
+     * @param  string $encoding
+     * @access public
+     * @return void
+     */
+    public function monaco($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    {
+        $file     = $entry;
+        $repo     = $this->repo->getRepoByID($repoID);
+        $entry    = $this->repo->decodePath($entry);
+        $entry    = urldecode($entry);
+        $pathInfo = pathinfo($entry);
+
+        $this->view->title    = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->type     = 'view';
+        $this->view->branchID = $this->cookie->repoBranch;
+        $this->view->showBug  = $showBug;
+        $this->view->encoding = $encoding;
+        $this->view->repoID   = $repoID;
+        $this->view->objectID = $objectID;
+        $this->view->repo     = $repo;
+        $this->view->revision = $revision;
+        $this->view->file     = $file;
+        $this->view->entry    = $entry;
+        $this->view->pathInfo = $pathInfo;
+        $this->display();
+    }
+
+    /**
      * View repo file.
      *
      * @param  int    $repoID
@@ -274,9 +421,13 @@ class repo extends control
      */
     public function view($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
     {
+        $browser = helper::getBrowser();
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $this->repo->setBackSession('view', $withOtherModule = true);
         if($repoID == 0) $repoID = $this->session->repoID;
+
+        $this->commonAction($repoID, $objectID);
+        if($browser['name'] != 'ie') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
 
         if($_POST)
         {
@@ -285,8 +436,6 @@ class repo extends control
 
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=$entry&oldrevision=$oldRevision&newRevision=$newRevision"));
         }
-
-        $this->commonAction($repoID, $objectID);
 
         $file     = $entry;
         $repo     = $this->repo->getRepoByID($repoID);
@@ -427,10 +576,8 @@ class repo extends control
             $this->repo->setRepoBranch('');
         }
 
-        /* Decrypt path and get cacheFile. */
-        $path      = $this->repo->decodePath($path);
-        $cacheFile = $this->repo->getCacheFile($repoID, $path, $revision);
-        $this->scm->setEngine($repo);
+        /* Decrypt path. */
+        $path = $this->repo->decodePath($path);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -444,58 +591,29 @@ class repo extends control
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
         }
 
-        /* Cache infos. */
-        if($refresh or !$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->repo->cacheTime)
+        /* Refresh repo. */
+        if($refresh)
         {
-            /* Get cache infos. */
-            $infos = $this->scm->ls($path, $revision);
+            /* Update code commit history. */
+            $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
 
-            if($infos)
+            if(in_array($repo->SCM, $this->config->repo->gitTypeList))
             {
-                /* Update code commit history. */
-                $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-
-                if($refresh and in_array($repo->SCM, $this->config->repo->gitTypeList))
-                {
-                    $branch = $this->cookie->repoBranch;
-                    $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-                    $_COOKIE['repoBranch'] = $branch;
-                }
-                if($refresh and $repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
-
-                $revisionList = array();
-                foreach($infos as $info) $revisionList[$info->revision] = $info->revision;
-                $comments = $this->repo->getHistory($repoID, $revisionList);
-                foreach($infos as $info)
-                {
-                    if(isset($comments[$info->revision]))
-                    {
-                        $comment = $comments[$info->revision];
-                        $info->comment = $comment->comment;
-                    }
-                }
+                $branch = $this->cookie->repoBranch;
+                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+                $_COOKIE['repoBranch'] = $branch;
             }
-
-            if($cacheFile)
-            {
-                if(!file_exists($cacheFile . '.lock'))
-                {
-                    touch($cacheFile . '.lock');
-                    file_put_contents($cacheFile, serialize($infos));
-                    unlink($cacheFile . '.lock');
-                }
-            }
-        }
-        else
-        {
-            $infos = unserialize(file_get_contents($cacheFile));
+            if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
         }
 
+        /* Get files info. */
+        $infos = $this->repo->getFileCommits($repo, $branchID, $path);
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Set logType and revisions. */
-        $logType   = 'dir';
-        $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
+        $logType      = 'dir';
+        $revisions    = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
+        $lastRevision = current($revisions);
 
         /* Synchronous commit only in root path. */
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
@@ -518,8 +636,9 @@ class repo extends control
         $this->view->path            = urldecode($path);
         $this->view->logType         = $logType;
         $this->view->cloneUrl        = $this->repo->getCloneUrl($repo);
-        $this->view->cacheTime       = date('m-d H:i', filemtime($cacheFile));
+        $this->view->cacheTime       = date('m-d H:i', strtotime($lastRevision->time));
         $this->view->branchOrTag     = $branchOrTag;
+        $this->view->syncedRF        = strpos(",{$this->config->repo->synced},", ",$repoID,") !== false; //Check has synced rename files.
 
         $this->display();
     }
@@ -947,6 +1066,292 @@ class repo extends control
         $this->view->branch     = $branch;
         $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=" . helper::safe64Encode(base64_encode($branch)) . "&objectID=$objectID", '', false);
         $this->display();
+    }
+
+    /**
+     * Link story to commit.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkStory($repoID, $revision, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        if(!empty($_POST['stories']))
+        {
+            $this->repo->link($repoID, $revision, 'story');
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::closeModal('parent', '', "parent.parent[parent.parent.length - 2].getRelation('$revision')"));
+        }
+
+        $this->loadModel('story');
+        $this->app->loadLang('productplan');
+
+        $repo    = $this->repo->getRepoByID($repoID);
+        $product = $this->loadModel('product')->getById($repo->product);
+        $modules = $this->loadModel('tree')->getOptionMenu($repo->product, 'story');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build search form. */
+        unset($this->lang->story->statusList['closed']);
+        $storyStatusList = $this->lang->story->statusList;
+        $queryID         = $browseType == 'bySearch' ? (int)$param : 0;
+
+        unset($this->config->product->search['fields']['product']);
+        $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $this->config->product->search['queryID']                     = $queryID;
+        $this->config->product->search['style']                       = 'simple';
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
+        $this->config->product->search['params']['module']['values']  = $modules;
+        $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
+
+        if($product->type == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->product->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        }
+
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+        session_write_close();
+
+        $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
+        if($browseType == 'bySearch')
+        {
+            $allStories = $this->story->getBySearch($product->id, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), $pager);
+        }
+        else
+        {
+            $allStories = $this->story->getProductStories($product->id, 0, '0', 'draft,active,changed', 'story', 'id_desc', false, array_keys($linkedStories), $pager);
+        }
+
+        $this->view->modules        = $modules;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allStories     = $allStories;
+        $this->view->product        = $product;
+        $this->view->repoID         = $repoID;
+        $this->view->revision       = $revision;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->orderBy        = $orderBy;
+        $this->view->pager          = $pager;
+        $this->display();
+    }
+
+    /**
+     * Link bug to commit.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkBug($repoID, $revision = '', $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        if(!empty($_POST['bugs']))
+        {
+            $this->repo->link($repoID, $revision, 'bug');
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::closeModal('parent', '', "parent.parent[parent.parent.length - 2].getRelation('$revision')"));
+        }
+
+        $this->loadModel('bug');
+        $this->app->loadLang('productplan');
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        $repo    = $this->repo->getRepoByID($repoID);
+        $product = $this->loadModel('product')->getById($repo->product);
+        $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build search form. */
+        $this->config->bug->search['actionURL']                         = $this->createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $this->config->bug->search['queryID']                           = $queryID;
+        $this->config->bug->search['style']                             = 'simple';
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
+        $this->config->bug->search['params']['module']['values']        = $modules;
+        $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($product->id);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($product->id, $branch = 'all', $params = '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($product->id, $branch = 'all', $params = '');
+
+        unset($this->config->bug->search['fields']['product']);
+        if($product->type == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
+            $this->config->bug->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        }
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+        session_write_close();
+
+        $linkedBugs = $this->repo->getRelationByCommit($repoID, $revision, 'bug');
+        if($browseType == 'bySearch')
+        {
+            $allBugs = $this->bug->getBySearch($product->id, 0, $queryID, 'id_desc', array_keys($linkedBugs), $pager);
+        }
+        else
+        {
+            $allBugs = $this->bug->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager);
+        }
+
+        $this->view->modules     = $modules;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allBugs     = $allBugs;
+        $this->view->product     = $product;
+        $this->view->repoID      = $repoID;
+        $this->view->revision    = $revision;
+        $this->view->browseType  = $browseType;
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->display();
+    }
+
+    /**
+     * Link task to commit.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkTask($repoID, $revision = '', $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        if(!empty($_POST['tasks']))
+        {
+            $this->repo->link($repoID, $revision, 'task');
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::closeModal('parent', '', "parent.parent[parent.parent.length - 2].getRelation('$revision')"));
+        }
+
+        $this->loadModel('execution');
+        $this->loadModel('product');
+        $this->app->loadLang('task');
+
+        /* Set browse type. */
+        $browseType = strtolower($browseType);
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        $repo    = $this->repo->getRepoByID($repoID);
+        $product = $this->loadModel('product')->getById($repo->product);
+        $modules = $this->loadModel('tree')->getOptionMenu($product->id, $viewType = 'task');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build search form. */
+        $this->config->execution->search['actionURL']                     = $this->createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID", '', true);
+        $this->config->execution->search['queryID']                       = $queryID;
+        $this->config->execution->search['style']                         = 'simple';
+        $this->config->execution->search['params']['module']['values']    = $modules;
+        $this->config->execution->search['params']['execution']['values'] = $this->product->getExecutionPairsByProduct($product->id);
+
+        /* Get executions by product. */
+        $productExecutions   = $this->product->getExecutionPairsByProduct($product->id);
+        $productExecutionIDs = array_filter(array_keys($productExecutions));
+        $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
+
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+        session_write_close();
+
+        /* Get tasks by executions. */
+        $allTasks = array();
+        foreach($productExecutionIDs as $productExecutionID)
+        {
+            $tasks    = $this->execution->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
+            $allTasks = array_merge($tasks, $allTasks);
+        }
+
+        /* Filter linked tasks. */
+        $linkedTasks   = $this->repo->getRelationByCommit($repoID, $revision, 'task');
+        $linkedTaskIDs = array_keys($linkedTasks);
+        foreach($allTasks as $key => $task)
+        {
+            if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
+        }
+
+        /* Page the records. */
+        $pager->setRecTotal(count($allTasks));
+        $pager->setPageTotal();
+        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+        $count    = 1;
+        $limitMin = ($pager->pageID - 1) * $pager->recPerPage;
+        $limitMax = $pager->pageID * $pager->recPerPage;
+        foreach($allTasks as $key => $task)
+        {
+            if($count <= $limitMin or $count > $limitMax) unset($allTasks[$key]);
+            $count ++;
+        }
+
+        $this->view->modules      = $modules;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allTasks     = $allTasks;
+        $this->view->product      = $product;
+        $this->view->repoID       = $repoID;
+        $this->view->revision     = $revision;
+        $this->view->browseType   = $browseType;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->display();
+    }
+
+    /**
+     * Unlink object and commit revision.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $objectType story|task|bug
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function unlink($repoID, $revision, $objectType, $objectID)
+    {
+        $this->repo->unlink($repoID, $revision, $objectType, $objectID);
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'revision' => $revision));
     }
 
     /**
@@ -1482,5 +1887,133 @@ class repo extends control
         $url = $this->scm->getDownloadUrl($branch, $savePath);
 
         $this->locate($url);
+    }
+
+    /**
+     * Ajax get branches and tags.
+     *
+     * @param  int    $repoID
+     * @param  string $oldRevision
+     * @param  string $newRevision
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBranchesAndTags($repoID, $oldRevision = '0', $newRevision = 'HEAD')
+    {
+        $branchesAndTags = $this->repo->getBranchesAndTags($repoID, $oldRevision, $newRevision);
+        return print(json_encode($branchesAndTags));
+    }
+
+    /**
+     * Get file tree by ajax.
+     *
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return string
+     */
+    public function ajaxGetFileTree($repoID, $branch = '')
+    {
+        $branch = base64_decode($branch);
+        $repo   = $this->repo->getRepoByID($repoID);
+        $files  = $this->repo->getFileTree($repo, $branch);
+        return print($files);
+    }
+
+    /**
+     * Ajax sync rename record.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxSyncRenameRecord($repoID)
+    {
+        $this->repo->insertDeleteRecord($repoID);
+    }
+
+    /**
+     * Get relation by commit.
+     *
+     * @param  int    $repoID
+     * @param  string $commit
+     * @access public
+     * @return object
+     */
+    public function ajaxGetCommitRelation($repoID, $commit)
+    {
+        $titleList = $this->repo->getRelationByCommit($repoID, $commit);
+        return $this->send(array('titleList' => $titleList));
+    }
+
+    /**
+     * Get relation story, task, bug info.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRelationInfo($objectID, $objectType = 'story')
+    {
+        $this->app->loadLang('release');
+        $this->view->object     = $this->loadModel($objectType)->getById($objectID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList($objectType, $objectID);
+        $this->view->objectID   = $objectID;
+        $this->view->objectType = $objectType;
+        $this->display();
+    }
+
+    /**
+     * Ajax get commit info.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCommitInfo()
+    {
+        $line       = $this->post->line;
+        $repo       = $this->repo->getRepoByID($this->post->repoID);
+        $entry      = $this->repo->decodePath($this->post->entry);
+        $revision   = $this->post->revision;
+        $returnType = $this->post->returnType ? $this->post->returnType : 'view';
+
+        $this->scm->setEngine($repo);
+        $blames = $this->scm->blame($entry, $this->post->revision);
+        if(!$blames) $blames =$this->scm->blame($entry, $this->post->sourceRevision);
+
+        while($line > 0)
+        {
+            if(isset($blames[$line]['revision']))
+            {
+                $revision = $blames[$line]['revision'];
+                break;
+            }
+            $line--;
+        }
+        if($returnType == 'json') return $this->send(array('result' => 'success', 'blames' => $blames));
+
+        $commits = $this->scm->getCommits($revision, 1);
+        if(!empty($commits['commits'][$revision]))
+        {
+            $commit = $commits['commits'][$revision];
+
+            $objects = $this->repo->getLinkedObjects($commit->comment);
+            $stories = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('id')->in($objects['stories'])->fetchPairs();
+            $tasks   = $this->dao->select('id,name')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('id')->in($objects['tasks'])->fetchPairs();
+            $bugs    = $this->dao->select('id,title')->from(TABLE_BUG)->where('deleted')->eq(0)->andWhere('id')->in($objects['bugs'])->fetchPairs();
+
+            $this->view->repoID  = $this->post->repoID;
+            $this->view->commit  = $commit;
+            $this->view->stories = $stories;
+            $this->view->tasks   = $tasks;
+            $this->view->bugs    = $bugs;
+            $this->display();
+        }
+        else
+        {
+            echo '';
+        }
     }
 }

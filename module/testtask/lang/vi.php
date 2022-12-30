@@ -27,6 +27,9 @@ $lang->testtask->unlinkCase       = "Hủy liên kết";
 $lang->testtask->batchUnlinkCases = "Hủy liên kết tình huống hàng loạt";
 $lang->testtask->batchAssign      = "Bàn giao hàng loạt";
 $lang->testtask->runCase          = "Chạy";
+$lang->testtask->running          = "Excuting";
+$lang->testtask->runningLog       = "Execution Log";
+$lang->testtask->runNode          = "Executed by %s,Execute on node %s %s";
 $lang->testtask->batchRun         = "Chạy hàng loạt";
 $lang->testtask->results          = "Kết quả";
 $lang->testtask->resultsAction    = "Kết quả tình huống";
@@ -94,6 +97,7 @@ $lang->testtask->caseCount        = 'Case Count';
 $lang->testtask->passCount        = 'Pass';
 $lang->testtask->failCount        = 'Fail';
 $lang->testtask->summary          = '%s cases, %s failures, %s time.';
+$lang->testtask->stepSummary      = 'Total %s steps, %s passes, %s failures.';
 
 $lang->testtask->beginAndEnd = 'Thời gian';
 $lang->testtask->to          = 'Tới';

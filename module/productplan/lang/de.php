@@ -56,6 +56,7 @@ $lang->productplan->batchUnlinkBug   = "Mehrere Verknpfungen aufheben";
 $lang->productplan->linkedBugs       = 'Verknüpfte Bugs';
 $lang->productplan->unlinkedBugs     = 'Unverknüpfte Bugs';
 $lang->productplan->unexpired        = 'Unexpired Plans';
+$lang->productplan->noAssigned       = 'No Assigned';
 $lang->productplan->all              = 'All Plans';
 $lang->productplan->setDate          = "Set Start and end Date";
 $lang->productplan->expired          = "Expired";

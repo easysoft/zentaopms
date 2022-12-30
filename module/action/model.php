@@ -253,6 +253,8 @@ class actionModel extends model
                 case 'task':
                     $fields = 'project, execution, story';
                     $result = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    if(empty($result)) break;
+
                     if($result->story != 0)
                     {
                         $product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($result->story)->fetchPairs('product');
@@ -332,29 +334,30 @@ class actionModel extends model
      */
     public function getList($objectType, $objectID)
     {
-        $modules   = $objectType == 'module' ? $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($objectID)->fetchPairs('id') : array();
+        $objectID  = is_array($objectID) ? $objectID : (int)$objectID;
+        $modules   = $objectType == 'module' ? $this->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
             ->where("objectType IN('project', 'testtask', 'build')")
-            ->andWhere('project')->eq((int)$objectID)
+            ->andWhere('project')->in($objectID)
             ->fi()
             ->beginIF($objectType == 'story')
             ->where('objectType')->in('story,requirement')
-            ->andWhere('objectID')->eq((int)$objectID)
+            ->andWhere('objectID')->in($objectID)
             ->fi()
             ->beginIF($objectType == 'case')
             ->where('objectType')->in('case,testcase')
-            ->andWhere('objectID')->eq((int)$objectID)
+            ->andWhere('objectID')->in($objectID)
             ->fi()
             ->beginIF($objectType == 'module')
             ->where('objectType')->eq($objectType)
-            ->andWhere('((action')->ne('deleted')->andWhere('objectID')->eq((int)$objectID)->markRight(1)
+            ->andWhere('((action')->ne('deleted')->andWhere('objectID')->in($objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
             ->beginIF(strpos('project,case,story,module', $objectType) === false)
             ->where('objectType')->eq($objectType)
-            ->andWhere('objectID')->eq((int)$objectID)
+            ->andWhere('objectID')->in($objectID)
             ->fi()
             ->orderBy('date, id')
             ->fetchAll('id');
@@ -428,6 +431,15 @@ class actionModel extends model
             {
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "taskID=$action->extra"), $name) : $name;
+            }
+            elseif($actionName == 'linked2revision' or $actionName == 'unlinkedfromrevision')
+            {
+                $commit = $this->dao->select('repo,revision')->from(TABLE_REPOHISTORY)->where('id')->eq($action->extra)->fetch();
+                if($commit)
+                {
+                    $revision = substr($commit->revision, 0, 10);
+                    $action->extra = common::hasPriv('repo', 'revision') ? html::a(helper::createLink('repo', 'revision', "repoID=$commit->repo&objectID=0&revision=$commit->revision"), $revision) : $revision;
+                }
             }
             elseif($actionName == 'moved' and $action->objectType != 'module')
             {
@@ -876,12 +888,15 @@ class actionModel extends model
             {
                 $desc = $this->lang->$objectType->action->{$action->action};
             }
-            elseif($action->action == 'createmr' and strpos($action->extra, '::') !== false)
+            elseif(strpos('createmr,editmr,removemr', $action->action) !== false and strpos($action->extra, '::') !== false)
             {
-                list($mrCreatedDate, $mrActor, $mrLink) = explode('::', $action->extra);
+                $mrAction = str_replace('mr', '', $action->action) . 'Action';
+                list($mrDate, $mrActor, $mrLink) = explode('::', $action->extra);
+
                 if(isonlybody()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+
                 $this->app->loadLang('mr');
-                $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
+                $desc = sprintf($this->lang->mr->$mrAction, $mrDate, $mrActor, $mrLink);
             }
             elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
             {
@@ -1118,7 +1133,7 @@ class actionModel extends model
             ->beginIF($noMultipleExecutions)->andWhere("IF(`objectType` = 'execution', `objectID` NOT " . helper::dbIN($noMultipleExecutions) . ", '1=1')")->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
-            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
+            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
             ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
             ->andWhere("IF((objectType = 'effort'), (objectID in ($efforts)), '1=1')")
             ->orderBy($orderBy)

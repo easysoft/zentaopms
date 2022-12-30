@@ -126,27 +126,27 @@ $lang->my->projectLink   = 'Project Default Page';
 $lang->my->executionLink = 'Execution Default Page';
 
 $lang->my->programLinkList = array();
-$lang->my->programLinkList['program-browse']  = 'By default, you go to the program list, where you can view all of the programs';
-$lang->my->programLinkList['program-project'] = 'By default, you go to the list of items in the most recent program, and you can view all items under the current program';
-$lang->my->programLinkList['program-kanban']  = 'Enter the Program Kanban by default, and check the progress of all Programs';
+$lang->my->programLinkList['program-browse']  = 'Project Set List/View all project sets';
+$lang->my->programLinkList['program-kanban']  = 'Project Set Kanban/You can visually view the progress of all project sets';
+$lang->my->programLinkList['program-project'] = 'Project list of the most recent project set/You can view all items under the current project set';
 
 $lang->my->productLinkList = array();
-$lang->my->productLinkList['product-index']     = 'The default access to the product home page, you can understand the company’s overall product status';
-$lang->my->productLinkList['product-all']       = 'By default, you go to the product list, where you can view all the products';
-$lang->my->productLinkList['product-dashboard'] = 'By default, go to the latest product dashboard to see the current product overview';
-$lang->my->productLinkList['product-browse']    = 'By default, go to the list of requirements for the most recent product and see the requirements under the current product';
-$lang->my->productLinkList['product-kanban']    = 'Enter the Product Kanban by default, and check the progress of all Products';
+$lang->my->productLinkList['product-all']       = 'Product List/Can view all products';
+$lang->my->productLinkList['product-kanban']    = 'Product Kanban/You can visually view the progress of all products';
+$lang->my->productLinkList['product-index']     = 'All product dashboards/You can view the statistics of all products';
+$lang->my->productLinkList['product-dashboard'] = 'Last product dashboard/You can view the current product overview';
+$lang->my->productLinkList['product-browse']    = 'Demand list of the latest product/You can view the demand information under the current product';
 
 $lang->my->projectLinkList = array();
-$lang->my->projectLinkList['project-browse']    = 'By default, you go to the project list, where you can view all the projects';
-$lang->my->projectLinkList['project-execution'] = 'Go to Project-Exection by default. You can check all information in Execution';
-$lang->my->projectLinkList['project-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
-$lang->my->projectLinkList['project-kanban']    = 'Enter the Project Kanban by default, and check the progress of all Projects';
+$lang->my->projectLinkList['project-browse']    = 'Project List/Can view all items';
+$lang->my->projectLinkList['project-execution'] = 'All execution lists under the project/View all execution information';
+$lang->my->projectLinkList['project-index']     = 'Recent Project Dashboard/You can view the current project overview';
+$lang->my->projectLinkList['project-kanban']    = 'Project Kanban/The project board can visually view the progress of all projects';
 
 $lang->my->executionLinkList = array();
-$lang->my->executionLinkList['execution-all']             = 'Enter the execution list by default, you can view all executions';
-$lang->my->executionLinkList['execution-task']            = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
-$lang->my->executionLinkList['execution-executionkanban'] = 'By default, you can enter the execution Kanban to view the execution status of projects in progress';
+$lang->my->executionLinkList['execution-all']             = 'Execution list/You can view all executions';
+$lang->my->executionLinkList['execution-task']            = 'List of recently executed tasks/You can view the task information under the current iteration';
+$lang->my->executionLinkList['execution-executionkanban'] = 'Execute Kanban/You can view the implementation status of projects in progress';
 
 $lang->my->confirmReview['pass'] = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT

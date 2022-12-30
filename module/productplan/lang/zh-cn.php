@@ -56,6 +56,7 @@ $lang->productplan->batchUnlinkBug   = "批量移除Bug";
 $lang->productplan->linkedBugs       = 'Bug';
 $lang->productplan->unlinkedBugs     = '未关联Bug';
 $lang->productplan->unexpired        = "未过期";
+$lang->productplan->noAssigned       = '未指派';
 $lang->productplan->all              = "所有计划";
 $lang->productplan->setDate          = "设置计划起止时间";
 $lang->productplan->expired          = "已过期";

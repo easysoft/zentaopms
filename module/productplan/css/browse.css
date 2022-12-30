@@ -36,8 +36,24 @@ td.c-branch {overflow: hidden; text-align: left !important; white-space: nowrap;
 
 .switchButton {background: #fff !important;}
 .panel-actions {position: relative; padding: 0 0; padding-top: 1px;}
+#kanbanContainer {background: #efefef; box-shadow: none;}
+#kanbanContainer {padding-bottom: 0; margin-bottom: 0; border: unset;}
+#kanbanContainer.fullscreen {overflow: auto;}
 .icon-list {padding-left: 7px;}
+.titleBox .icon-delay {padding-right: 8px;}
+
+.kanban-card .productplanInfo .user {float: right;display: block;}
+.kanban-card a[disabled] {color: #313c52;}
+.kanban-card .header .actions {position: absolute;top: 4px;right: 4px;opacity: 0;}
+.kanban-card .productplanDesc {min-width: 100%;color: #838a9d;overflow: hidden;white-space: nowrap;text-overflow: clip;}
+.kanban-card {height: auto !important;padding: 8px 14px !important;min-height: 60px;}
 .icon-kanban {padding-left: 7px; font-size: 16px;}
+.label-wait {background: #EFEFEF !important;color: #838A9D;}
+.label-future {background: #EFEFEF !important;color: #838A9D;border-radius: 9px;}
+.label-doing {background: #f8d2d2 !important;color: #e64b4c;}
+.label-done {background: #dfe9d8 !important;color: #429b16;}
+.label-closed, .label-terminate {background: #e5e5e5 !important;color: #b8b8b8;}
+
 #productplanList thead th.c-title {width: 100%;}
 #productplanList .c-actions {width: 265px;}
 #productplanList .c-actions .btn+.btn {margin-left: -1px;}

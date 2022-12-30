@@ -810,7 +810,7 @@ class kanbanModel extends model
         }
         elseif($branchID == 'all')
         {
-            $branches = $this->branch->getPairs($product->id);
+            $branches = $this->branch->getPairs($product->id, 'active');
         }
         elseif($branchID == BRANCH_MAIN)
         {

@@ -49,6 +49,7 @@ $config->action->objectNameFields['stage']        = 'name';
 $config->action->objectNameFields['apistruct']    = 'name';
 $config->action->objectNameFields['repo']         = 'name';
 $config->action->objectNameFields['dataview']     = 'name';
+$config->action->objectNameFields['zanode']       = 'name';
 
 $config->action->commonImgSize = 870;
 

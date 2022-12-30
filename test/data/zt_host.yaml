@@ -73,7 +73,7 @@ fields:
     loop: 0
     loopfix: ""
     format: ""
-  - field: cpuCores
+  - field: cpu
     note: ""
     prefix: ""
     postfix: ""
@@ -101,7 +101,7 @@ fields:
     loop: 0
     loopfix: ""
     format: ""
-  - field: diskSize
+  - field: disk
     note: ""
     prefix: ""
     postfix: ""
@@ -115,7 +115,7 @@ fields:
     loop: 0
     loopfix: ""
     format: ""
-  - field: publicIP
+  - field: address
     note: ""
     prefix: ""
     postfix: ""
