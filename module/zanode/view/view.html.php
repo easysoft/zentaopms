@@ -20,7 +20,7 @@
 <?php js::set('actionSuccess', $lang->zanode->actionSuccess) ?>
 <?php js::set('nodeID', $zanode->id) ?>
 <?php js::set('zanodeLang', $lang->zanode); ?>
-<?php js::set('vncLink', "http://$url/novnc?port=6080&path=websockify/?token=$token&password=pass") ?>
+<?php js::set('nodeStatus', $zanode->status); ?>
 <?php $browseLink = $this->session->zanodeList ? $this->session->zanodeList : $this->createLink('zanode', 'browse', ""); ?>
 <?php
 $vars    = "id={$zanode->id}&orderBy=%s";
@@ -55,13 +55,14 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->sshAddress; ?>:</div>
-                <div class="col-8">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?></div>
+                <div class="col-8 node-not-wrap">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?> &nbsp; <?php echo "<button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?></div>
               </div>
+              <textarea style="display:none;" id="ssh-copy"><?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?></textarea>
             </div>
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->cpuCores; ?>:</div>
-                <div class="col-8"><?php echo $zanode->cpuCores; ?></div>
+                <div class="col-8"><?php echo $zanode->cpuCores . ' ' . $lang->zahost->cpuUnit; ?></div>
               </div>
             </div>
           </div>
@@ -81,7 +82,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->memory; ?>:</div>
-                <div class="col-8"><?php echo $zanode->memory; ?>GB</div>
+                <div class="col-8"><?php echo $zanode->memory; ?>&nbsp;GB</div>
               </div>
             </div>
           </div>
@@ -95,13 +96,14 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->defaultPwd; ?>:</div>
-                <div class="col-8"><?php echo $config->zanode->defaultPwd; ?></div>
+                <div class="col-8"><?php echo $config->zanode->defaultPwd . ' ' . "<button type='button' class='btn btn-info btn-mini btn-pwd-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?></div>
+                <textarea style="display:none;" id="pwd-copy"><?php echo $config->zanode->defaultPwd; ?></textarea>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->diskSize; ?>:</div>
-                <div class="col-8"><?php echo $zanode->diskSize; ?>GB</div>
+                <div class="col-8"><?php echo $zanode->diskSize; ?>&nbsp;GB</div>
               </div>
             </div>
             <div class="col-4"></div>
@@ -115,57 +117,6 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
       ?>
     </div>
     <div class="cell">
-      <div class="detail vnc-detail">
-        <div class='vnc-mask'></div>
-        <?php echo "<iframe width='100%' id='vncIframe' src='http://$url/novnc?port=6080&path=websockify/?token=$token&password=pass'></iframe>";?>
-      </div>
-    </div>
-    <?php $this->printExtendFields($zanode, 'div', "position=left&inForm=0&inCell=1"); ?>
-    <div class='main-actions'>
-      <div class="btn-toolbar">
-        <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary'); ?>
-        <div class='divider'></div>
-        <?php
-        if (empty($zanode->deleted)) {
-          $suspendAttr  = "title='{$lang->zanode->suspend}' target='hiddenwin'";
-          $suspendAttr .= $zanode->status != 'running' && $zanode->status != 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
-
-          $resumeAttr  = "title='{$lang->zanode->resume}' target='hiddenwin'";
-          $resumeAttr .= $zanode->status == 'running' || $zanode->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
-
-          $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
-          $rebootAttr .= $zanode->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
-
-          if($zanode->status == "suspend")
-          {
-              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-back'></i> " . $lang->zanode->resumeNode, '', $resumeAttr);
-          }
-          else
-          {
-              common::printLink('zanode', 'suspend', "zanodeID={$zanode->id}", "<i class='icon icon-pause'></i> " . $lang->zanode->suspendNode, '', $suspendAttr);
-          }
-
-          if($zanode->status == "shutoff")
-          {
-              common::printLink('zanode', 'start', "zanodeID={$zanode->id}", "<i class='icon icon-magic'></i> " . $lang->zanode->bootNode, '', "title='{$lang->zanode->boot}' class='btn '");
-          }
-          else
-          {
-              common::printLink('zanode', 'close', "zanodeID={$zanode->id}", "<i class='icon icon-off'></i> " . $lang->zanode->shutdownNode, '', "title='{$lang->zanode->shutdown}' class='btn '");
-          }
-
-          common::printLink('zanode', 'reboot', "zanodeID={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->rebootNode, '', $rebootAttr);
-
-          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
-        }
-        ?>
-        <div class='divider'></div>
-        <?php echo $this->zanode->buildOperateMenu($zanode, 'view'); ?>
-      </div>
-    </div>
-  </div>
-  <div class="col-4 side-col">
-      <div class="cell">
         <div class="detail zanode-detail">
           <div class="detail-title status-container">
             <?php echo $lang->zanode->init->statusTitle; ?>
@@ -199,6 +150,51 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           <div class="detail-content article-content"><?php echo !empty($zanode->desc) ? htmlspecialchars_decode($zanode->desc) : $lang->noData; ?></div>
         </div>
       </div>
+    <?php $this->printExtendFields($zanode, 'div', "position=left&inForm=0&inCell=1"); ?>
+    <div class='main-actions'>
+      <div class="btn-toolbar">
+        <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary'); ?>
+        <div class='divider'></div>
+        <?php
+        if (empty($zanode->deleted)) {
+          $suspendAttr  = "title='{$lang->zanode->suspend}' target='hiddenwin'";
+          $suspendAttr .= $zanode->status != 'running' && $zanode->status != 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
+
+          $resumeAttr  = "title='{$lang->zanode->resume}' target='hiddenwin'";
+          $resumeAttr .= $zanode->status == 'running' || $zanode->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
+
+          $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
+          $rebootAttr .= $zanode->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
+
+          if($zanode->status == "suspend")
+          {
+              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-back'></i> " . $lang->zanode->resumeNode, '', $resumeAttr);
+          }
+          else
+          {
+              common::printLink('zanode', 'suspend', "zanodeID={$zanode->id}", "<i class='icon icon-pause'></i> " . $lang->zanode->suspendNode, '', $suspendAttr);
+          }
+
+          if($zanode->status == "shutoff")
+          {
+              common::printLink('zanode', 'start', "zanodeID={$zanode->id}", "<i class='icon icon-magic'></i> " . $lang->zanode->bootNode, '', "title='{$lang->zanode->boot}' class='btn '");
+          }
+          else
+          {
+              common::printLink('zanode', 'close', "zanodeID={$zanode->id}", "<i class='icon icon-off'></i> " . $lang->zanode->shutdownNode, '', "title='{$lang->zanode->shutdown}' class='btn '");
+          }
+
+          common::printLink('zanode', 'reboot', "zanodeID={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->rebootNode, '', $rebootAttr);
+
+        }
+        ?>
+        <div class='divider'></div>
+        <?php echo $this->zanode->buildOperateMenu($zanode, 'view'); ?>
+      </div>
+    </div>
+  </div>
+  <div class="col-4 side-col">
     <div class='cell'><?php include '../../common/view/action.html.php'; ?></div>
 
     <div id='mainActions' class='main-actions'>
