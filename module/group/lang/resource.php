@@ -1249,7 +1249,7 @@ $lang->resource->zanode->view    = 'view';
 $lang->resource->zanode->createImage = 'createImage';
 
 $lang->zanode->methodOrder[0]  = 'browse';
-$lang->zanode->methodOrder[5] = 'create';
+$lang->zanode->methodOrder[5]  = 'create';
 $lang->zanode->methodOrder[10] = 'edit';
 $lang->zanode->methodOrder[15] = 'destroy';
 $lang->zanode->methodOrder[20] = 'reboot';
