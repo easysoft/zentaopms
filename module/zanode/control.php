@@ -43,13 +43,18 @@ class zanode extends control
         $this->config->zanode->search['params']['host']['values'] = array('' => '') + $hosts;
         $this->loadModel('search')->setSearchParams($this->config->zanode->search);
 
-        $this->view->title      = $this->lang->zanode->common;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->nodeList   = $nodeList;
-        $this->view->pager      = $pager;
-        $this->view->param      = $param;
-        $this->view->orderBy    = $orderBy;
-        $this->view->browseType = $browseType;
+        $showFeature = false;
+        $skipAutomation = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
+        if(strpos(",$skipAutomation,", $this->app->user->account) === false) $showFeature = true;
+
+        $this->view->title       = $this->lang->zanode->common;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->nodeList    = $nodeList;
+        $this->view->pager       = $pager;
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
+        $this->view->browseType  = $browseType;
+        $this->view->showFeature = $showFeature;
 
         $this->display();
     }

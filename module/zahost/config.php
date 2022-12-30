@@ -51,3 +51,10 @@ $config->zahost->editor = new stdclass();
 $config->zahost->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->zahost->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 
+$config->zahost->automation = new stdclass();
+$config->zahost->automation->zenAgentURL   = 'https://github.com/easysoft/zenagent/blob/main/guide/deploy/index.md';
+$config->zahost->automation->ztfURL        = 'https://ztf.im/';
+$config->zahost->automation->kvmURL        = 'https://www.linux-kvm.org/page/Documents';
+$config->zahost->automation->nginxURL      = 'http://nginx.org/en/docs/';
+$config->zahost->automation->novncURL      = 'https://novnc.com/info.html';
+$config->zahost->automation->websockifyURL = 'https://github.com/novnc/websockify';

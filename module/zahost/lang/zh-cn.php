@@ -128,3 +128,23 @@ $lang->zahost->notice->loading         = '加载中...';
 $lang->zahost->notice->noImage         = '无可用的镜像文件';
 
 $lang->zahost->tips = '宿主机包括实体主机、k8s集群、云服务器以及云容器实例，主要用于创建虚拟机或容器实例。宿主机推荐安装的操作系统为ubuntu或CentOS的LTS版本。';
+
+$lang->zahost->automation = new stdclass();
+$lang->zahost->automation->title = '自动化测试解决方案';
+$lang->zahost->automation->abstract      = '简介';
+$lang->zahost->automation->abstractSpec  = '禅道自动化测试解决方案实现了对测试用例，测试脚本、脚本执行、测试结果以及测试环境的集中化管理，在降低测试管理成本的同时提高了测试执行的效率。通过解决方案你可以更容易地建立起适配当前项目管理和研发流程的自动化测试体系，借助自动化技术减少测试工作的投入。';
+$lang->zahost->automation->framework     = '架构';
+$lang->zahost->automation->frameworkSpec = '基于KVM虚拟化软件的解决方案架构：';
+
+$lang->zahost->automation->feature1           = '1、核心概念';
+$lang->zahost->automation->feature1Spec       = "宿主机包括实体主机、k8s集群、云服务器以及云容器实例，主要用于创建虚拟机或容器实例。宿主机推荐安装的操作系统为ubuntu或CentOS的LTS版本。<br/> 执行节点是由宿主机创建的虚拟机或容器实例，是执行测试任务的测试环境。";
+$lang->zahost->automation->feature2           = '2、应用介绍';
+$lang->zahost->automation->feature2ZenAgent   = 'ZenAgent是禅道开源的软件自动化测试调度平台，它借助虚拟化技术，为用户提供了一个分布式、集中管理的的测试环境。';
+$lang->zahost->automation->feature2ZTF        = 'ZTF是禅道开源的自动化测试管理框架，它帮助用户将测试脚本统一管理。ZTF与禅道深度集成，每一个脚本都可以和测试管理系统里面的一个用例进行关联，脚本里面的步骤信息和管理系统里面的用例信息可以互相同步。';
+$lang->zahost->automation->feature2KVM        = 'KVM(for Kernel-based Virtual Machine)是x86硬件上Linux的完整虚拟化解决方案，包含虚拟化扩展(Intel VT或AMD-V)。';
+$lang->zahost->automation->feature2Nginx      = 'Nginx是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务。';
+$lang->zahost->automation->feature2noVNC      = 'noVNC是一个HTML VNC客户端JavaScript类库和构建在该类库上的应用程序。 noVNC在任何主流浏览器(包括移动浏览器(iOS和Android)上运行良好。';
+$lang->zahost->automation->feature2Websockify = 'Websockify只是将WebSockets流量转换为正常的socket流量。Websockify接受WebSockets握手，解析它，然后开始在客户端和目标之间双向转发流量。';
+$lang->zahost->automation->support            = '支持';
+$lang->zahost->automation->supportSpec        = '您可以访问禅道官网获取帮助手册：';
+$lang->zahost->automation->groupTitle         = "欢迎扫描二维码<br/>获取帮助";

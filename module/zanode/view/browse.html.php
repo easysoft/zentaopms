@@ -17,6 +17,7 @@
 <?php js::set('confirmReboot', $lang->zanode->confirmReboot) ?>
 <?php js::set('confirmShutdown', $lang->zanode->confirmShutdown) ?>
 <?php js::set('actionSuccess', $lang->zanode->actionSuccess) ?>
+<?php js::set('showFeature', $showFeature);?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <?php echo html::a($this->createLink('zanode', 'browse'), "<span class='text'>{$lang->zanode->all}</span>", '', "class='btn btn-link btn-active-text'"); ?>
