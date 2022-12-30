@@ -4395,10 +4395,11 @@ class executionModel extends model
      * @param  array  $dateList
      * @param  string $type
      * @param  string $burnBy
+     * @param  string $executionEnd
      * @access public
      * @return array
      */
-    public function buildBurnData($executionID, $dateList, $type, $burnBy = 'left')
+    public function buildBurnData($executionID, $dateList, $type, $burnBy = 'left', $executionEnd = '')
     {
         $this->loadModel('report');
         $burnBy = $burnBy ? $burnBy : 'left';
@@ -4410,10 +4411,15 @@ class executionModel extends model
         $firstBurn    = empty($sets) ? 0 : reset($sets);
         $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);
         $firstTime    = $firstTime == 'null' ? 0 : $firstTime;
-        $days         = count($dateList) - 1;
+        /* If the $executionEnd  is passed, the guide should end of execution. */
+        $days         = $executionEnd ? array_search($executionEnd, $dateList) : count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (float)$rate, 3) . ',';
+        foreach($dateList as $i => $date)
+        {
+            $value = ($i > $days ? 0 : round(($days - $i) * (float)$rate, 3)) . ',';
+            $baselineJSON .= $value;
+        }
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);

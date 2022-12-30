@@ -497,6 +497,7 @@ class baseDAO
      * Set the data to update or insert.
      *
      * @param  object $data  the data object or array
+     * @param  string $skipFields the  skip fields
      * @access public
      * @return static|sql the dao object self.
      */
@@ -541,7 +542,7 @@ class baseDAO
     }
 
     /**
-     * 查看SQL索引。
+     * 解析SQL语句。
      * Explain sql.
      *
      * @param  string $sql
@@ -577,7 +578,7 @@ class baseDAO
             $sql = sprintf($this->sqlobj->get(), $this->fields, $this->table);
         }
 
-        /* If the method if select, update or delete, set the lang condition. */
+        /* If the method is select, update or delete, set the lang condition. */
         if($this->autoLang and $this->table != '' and $this->method != 'insert' and $this->method != 'replace')
         {
             $lang = $this->app->getClientLang();
@@ -588,18 +589,18 @@ class baseDAO
             $havingPOS = strrpos($sql, DAO::HAVING);            // The position of HAVING keyword.
             $orderPOS  = strrpos($sql, DAO::ORDERBY);           // The position of ORDERBY keyword.
             $limitPOS  = strrpos($sql, DAO::LIMIT);             // The position of LIMIT keyword.
-            $splitPOS  = $orderPOS ? $orderPOS : $limitPOS;     // If $orderPOS, use it instead of $limitPOS.
-            $splitPOS  = $havingPOS? $havingPOS: $splitPOS;     // If $havingPOS, use it instead of $orderPOS.
-            $splitPOS  = $groupPOS ? $groupPOS : $splitPOS;     // If $groupPOS, use it instead of $havingPOS.
+            $splitPOS  = $orderPOS  ? $orderPOS  : $limitPOS;   // If $orderPOS, use it instead of $limitPOS.
+            $splitPOS  = $havingPOS ? $havingPOS : $splitPOS;   // If $havingPOS, use it instead of $orderPOS.
+            $splitPOS  = $groupPOS  ? $groupPOS  : $splitPOS;   // If $groupPOS, use it instead of $havingPOS.
 
-            /* Set the conditon to be appened. */
+            /* Set the condition to be appended. */
             $tableName = !empty($this->alias) ? $this->alias : $this->table;
 
             if(!empty($this->app->config->cn2tw)) $lang = str_replace('zh-tw', 'zh-cn', $lang);
 
             $langCondition = " $tableName.lang in('{$lang}', 'all') ";
 
-            /* If $spliPOS > 0, split the sql at $splitPOS. */
+            /* If $splitPOS > 0, split the sql at $splitPOS. */
             if($splitPOS)
             {
                 $firstPart = substr($sql, 0, $splitPOS);
@@ -693,6 +694,36 @@ class baseDAO
             {
                 return $this->dbh->query($sql);
             }
+        }
+        catch (PDOException $e)
+        {
+            $this->sqlError($e);
+        }
+    }
+
+    /**
+     * 返回SQL结果的所有字段信息。
+     * Return the fields meta of PDOStatement.
+     *
+     * @param  string|PDOStatement $stmt
+     * @access public
+     * @return array
+     */
+    public function getColumns($stmt)
+    {
+        /* 如果$stmt是SQL查询语句，先执行查询获得 PDO stmt. */
+        /* If $stmt is a SQL string, query to get PDO stmt. */
+        if(is_string($stmt)) $stmt = $this->query($stmt);
+
+        try
+        {
+            $columns = array();
+            for($columnIndex = 0; $columnIndex < $stmt->columnCount(); $columnIndex++)
+            {
+                $columns[] = $stmt->getColumnMeta($columnIndex);
+            }
+
+            return $columns;
         }
         catch (PDOException $e)
         {

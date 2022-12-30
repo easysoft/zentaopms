@@ -181,7 +181,7 @@ class release extends control
         if(!$release) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
         $uri = $this->app->getURI(true);
-        if(!empty($release->build)) $this->session->set('buildList', $uri);
+        if(!empty($release->build)) $this->session->set('buildList', $uri, 'project');
         if($type == 'story') $this->session->set('storyList', $uri, 'product');
         if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $uri, 'qa');
 

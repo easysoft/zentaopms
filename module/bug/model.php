@@ -3222,16 +3222,16 @@ class bugModel extends model
         if(empty($resolvedBuild) or $resolvedBuild == 'trunk') return true;
         if(is_array($bugs)) $bugs = join(',', $bugs);
 
-        $buildBugs  = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($resolvedBuild)->fetch('bugs');
-        $buildBugs .= ',' . $bugs;
-        $buildBugs  = explode(',', trim($buildBugs, ','));
-        $buildBugs  = array_unique($buildBugs);
+        $build     = $this->dao->select('id,product,bugs')->from(TABLE_BUILD)->where('id')->eq($resolvedBuild)->fetch();
+        $buildBugs = $build->bugs . ',' . $bugs;
+        $buildBugs = explode(',', trim($buildBugs, ','));
+        $buildBugs = array_unique($buildBugs);
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq(join(',', $buildBugs))->where('id')->eq($resolvedBuild)->exec();
 
-        $release = $this->dao->select('id,bugs')->from(TABLE_RELEASE)->where('build')->eq($resolvedBuild)->andWhere('deleted')->eq('0')->fetch();
+        $release = $this->dao->select('id,bugs')->from(TABLE_RELEASE)->where('product')->eq($build->product)->andWhere("(FIND_IN_SET('$resolvedBuild', build) or shadow = $resolvedBuild)")->andWhere('deleted')->eq('0')->fetch();
         if($release)
         {
-            $releaseBugs = $release->bugs .',' . $bugs;
+            $releaseBugs = $release->bugs . ',' . $bugs;
             $releaseBugs = explode(',', trim($releaseBugs, ','));
             $releaseBugs = array_unique($releaseBugs);
             $this->dao->update(TABLE_RELEASE)->set('bugs')->eq(join(',', $releaseBugs))->where('id')->eq($release->id)->exec();
@@ -3302,7 +3302,7 @@ class bugModel extends model
         foreach($browserList as $value)
         {
             if(empty($value)) continue;
-            $browser .= $this->lang->bug->browserList[$value] . ',';
+            $browser .= zget($this->lang->bug->browserList, $value) . ',';
         }
         $os      = trim($os, ',');
         $browser = trim($browser, ',');
@@ -3713,8 +3713,13 @@ class bugModel extends model
         /* Get related objects title or names. */
         $table = $this->config->objectTables[$object];
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
+        if($object == 'branch' and $this->session->currentProductType != 'normal')
+        {
+            $productID      = current($bugs)->product;
+            $relatedObjects = $this->dao->select($pairs)->from($table)->where('product')->eq($productID)->fetchPairs();
+        }
 
-        if(in_array($object, array('build','resolvedBuild'))) $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
+        if(in_array($object, array('build','resolvedBuild','branch'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
         return array('' => '', 0 => '') + $relatedObjects;
     }
 

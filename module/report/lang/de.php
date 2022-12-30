@@ -11,6 +11,7 @@
  */
 $lang->report->index              = 'Home';
 $lang->report->list               = 'Liste';
+$lang->report->preview            = 'View Pivot Table';
 $lang->report->item               = 'Eintrag';
 $lang->report->value              = 'Wert';
 $lang->report->percent            = '%';
@@ -53,13 +54,13 @@ $lang->report->dept             = 'Abteilung';
 $lang->report->deviationChart   = 'Projektabweichungskurve';
 
 $lang->reportList = new stdclass();
-$lang->reportList->project = new stdclass();
 $lang->reportList->product = new stdclass();
+$lang->reportList->project = new stdclass();
 $lang->reportList->test    = new stdclass();
 $lang->reportList->staff   = new stdclass();
 
-$lang->reportList->project->lists[10] = "{$lang->execution->common} Abweichnung|report|projectdeviation";
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Zusammenfassung|report|productsummary';
+$lang->reportList->project->lists[10] = "{$lang->execution->common} Abweichnung|report|projectdeviation";
 $lang->reportList->test->lists[10]    = 'Bugs gemeldet|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bugs zugeordnet|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Team Arbeitslast|report|workload';

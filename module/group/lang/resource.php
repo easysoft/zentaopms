@@ -44,6 +44,7 @@ $lang->moduleOrder[105] = 'zahost';
 $lang->moduleOrder[108] = 'zanode';
 
 $lang->moduleOrder[110] = 'doc';
+$lang->moduleOrder[113] = 'screen';
 $lang->moduleOrder[115] = 'report';
 
 $lang->moduleOrder[120] = 'company';
@@ -1732,9 +1733,18 @@ $lang->tree->methodOrder[20] = 'manageChild';
 $lang->tree->methodOrder[25] = 'edit';
 $lang->tree->methodOrder[30] = 'delete';
 
+/* Screen. */
+$lang->resource->screen = new stdclass();
+$lang->resource->screen->browse = 'browse';
+$lang->resource->screen->view   = 'view';
+
+$lang->screen->methodOrder[0]  = 'browse';
+$lang->screen->methodOrder[5]  = 'view';
+
 /* Report. */
 $lang->resource->report = new stdclass();
 $lang->resource->report->index            = 'index';
+$lang->resource->report->preview          = 'preview';
 $lang->resource->report->projectDeviation = 'projectDeviation';
 $lang->resource->report->productSummary   = 'productSummary';
 $lang->resource->report->bugCreate        = 'bugCreate';
@@ -1744,11 +1754,14 @@ $lang->resource->report->annualData       = 'annual';
 $lang->resource->report->allAnnualData    = 'viewEveryoneAnnual';
 
 $lang->report->methodOrder[0]  = 'index';
-$lang->report->methodOrder[5]  = 'projectDeviation';
-$lang->report->methodOrder[10] = 'productSummary';
-$lang->report->methodOrder[15] = 'bugCreate';
-$lang->report->methodOrder[20] = 'workload';
-$lang->report->methodOrder[25] = 'annual';
+$lang->report->methodOrder[5]  = 'preview';
+$lang->report->methodOrder[10] = 'projectDeviation';
+$lang->report->methodOrder[15] = 'productSummary';
+$lang->report->methodOrder[20] = 'bugCreate';
+$lang->report->methodOrder[25] = 'bugAssign';
+$lang->report->methodOrder[30] = 'workload';
+$lang->report->methodOrder[35] = 'annual';
+$lang->report->methodOrder[40] = 'allAnnualData';
 
 /* Search. */
 $lang->resource->search = new stdclass();

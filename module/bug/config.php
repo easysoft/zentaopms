@@ -164,7 +164,7 @@ $config->bug->datatable->fieldList['product']['dataSource'] = array('module' => 
 
 $config->bug->datatable->fieldList['module']['control']    = 'select';
 $config->bug->datatable->fieldList['module']['title']      = 'module';
-$config->bug->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&bug');
+$config->bug->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&bug&0&all');
 
 $config->bug->datatable->fieldList['title']['title']    = 'title';
 $config->bug->datatable->fieldList['title']['fixed']    = 'left';

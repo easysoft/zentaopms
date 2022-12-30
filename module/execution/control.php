@@ -144,7 +144,7 @@ class execution extends control
         $recentExecutions = array_unique($recentExecutions);
         $recentExecutions = array_slice($recentExecutions, 0, 5);
         $recentExecutions = join(',', $recentExecutions);
-        if(!$this->session->multiple)
+        if($this->session->multiple)
         {
             if(!isset($this->config->execution->recentExecutions) or $this->config->execution->recentExecutions != $recentExecutions) $this->setting->updateItem($this->app->user->account . 'common.execution.recentExecutions', $recentExecutions);
             if(!isset($this->config->execution->lastExecution)    or $this->config->execution->lastExecution != $executionID)         $this->setting->updateItem($this->app->user->account . 'common.execution.lastExecution', $executionID);
@@ -1431,7 +1431,9 @@ class execution extends control
         $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
         $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
         list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, $interval, 'Y-m-d', $execution->end);
-        $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, $burnBy);
+
+        $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
+        $chartData    = $this->execution->buildBurnData($executionID, $dateList, $type, $burnBy, $executionEnd);
 
         $dayList = array_fill(1, floor((int)$execution->days / $this->config->execution->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->execution->interval . ($key + 1) . $this->lang->day;
@@ -2027,7 +2029,7 @@ class execution extends control
         $productPlans     = array(0 => '');
         $linkedBranches   = array();
         $linkedBranchList = array();
-        $linkedProducts   = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
+        $linkedProducts   = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList, false);
         $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
         $executionStories = $this->project->getStoriesByProject($executionID);
 
@@ -2037,7 +2039,7 @@ class execution extends control
         $linkedStoryIDList    = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->deleted ? $linkedProduct->name . "({$this->lang->product->deleted})" : $linkedProduct->name;
             $productPlans[$productID] = array();
 
             foreach($branches[$productID] as $branchID => $branch)
@@ -2486,7 +2488,9 @@ class execution extends control
             $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
             $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
             list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
-            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type);
+
+            $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
+            $chartData    = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
         }
 
         /* Load pager. */

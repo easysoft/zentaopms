@@ -74,12 +74,19 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           <td>
             <div class="input-group" id="dataPlanGroup">
               <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
-              <?php echo html::input('teamMember', '', "class='form-control team-group fix-border hidden' readonly='readonly'");?>
+              <?php
+              $teamMember = '';
+              if(!empty($task->team))
+              {
+                  foreach($task->team as $team) $teamMember .= ' ' . zget($members, $team->account);
+              }
+              ?>
+              <?php echo html::input('teamMember', $teamMember, "class='form-control team-group fix-border hidden' readonly='readonly'");?>
               <span class="input-group-btn team-group hidden"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
             </div>
           </td>
           <td colspan='2'>
-            <div class="checkbox-primary c-multipleTask affair" style='display: inline-block; margin-right: <?php echo common::checkNotCN() ? '-10px' : '-30px'?>'>
+            <div class="checkbox-primary c-multipleTask affair" style='display: inline-block; margin-right: 10px'>
               <input type="checkbox" name="multiple" value="1" id="multipleBox" /><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
             </div>
             <div class='hidden modeBox' style='display: inline-block'><?php echo html::radio('mode', $lang->task->modeList, !empty($task->mode) ? $task->mode: 'linear');?></div>
@@ -115,7 +122,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
               <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <?php if(common::hasPriv('execution', 'storyView')):?>
-              <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
+              <span class='input-group-btn' id='preview'><a href='#' class='btn iframe' data-width="85%" data-height="300px"><?php echo $lang->preview;?></a></span>
               <?php endif;?>
             </div>
           </td>

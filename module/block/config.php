@@ -19,7 +19,7 @@ $config->block->moduleIndex['program'] = 'project';
 $config->block->moduleIndex['project'] = 'execution';
 
 $config->block->longBlock = array();
-$config->block->longBlock['']['flowchart']              = 'flowchart';
+$config->block->longBlock['']['guide']                  = 'guide';
 $config->block->longBlock['']['welcome']                = 'welcome';
 $config->block->longBlock['']['assigntome']             = 'assigntome';
 $config->block->longBlock['product']['statistic']       = 'statistic';

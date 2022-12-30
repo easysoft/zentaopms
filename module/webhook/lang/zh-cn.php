@@ -40,6 +40,7 @@ $lang->webhook->products    = $lang->productCommon;
 $lang->webhook->executions  = $lang->execution->common;
 $lang->webhook->actions     = '系统日志';
 $lang->webhook->deleted     = '已删除';
+$lang->webhook->approval    = '审批流推送';
 
 $lang->webhook->typeList['']            = '';
 $lang->webhook->typeList['dinggroup']   = '钉钉群通知机器人';

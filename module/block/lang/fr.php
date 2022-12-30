@@ -47,6 +47,7 @@ $lang->block->welcome      = 'Bienvenue';
 $lang->block->lblTesttask  = 'Détail Recette';
 $lang->block->contribute   = 'Personal Contribution';
 $lang->block->finish       = 'Terminé';
+$lang->block->guide        = 'Guide';
 
 $lang->block->leftToday           = 'Reste à faire';
 $lang->block->myTask              = 'Tâches';
@@ -98,6 +99,7 @@ $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span c
 $lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<span class='label-action'>%s</span>%s<span class='label-name'>%s</span></span>";
 $lang->block->cannotPlaceInLeft  = 'Impossible de placer le bloc à gauche.';
 $lang->block->cannotPlaceInRight = 'Impossible de placer le bloc à droite.';
+$lang->block->tutorial           = 'Enter the tutorial';
 
 $lang->block->productName  = $lang->productCommon . ' Name';
 $lang->block->totalStory   = 'Total';
@@ -112,6 +114,7 @@ $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
 $lang->block->titleList['flowchart']      = 'Flow Chart';
+$lang->block->titleList['guide']          = 'Guides';
 $lang->block->titleList['statistic']      = 'Statistic';
 $lang->block->titleList['recentproject']  = 'Recent Project';
 $lang->block->titleList['assigntome']     = 'Assign to me';
@@ -257,7 +260,7 @@ $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
 $lang->block->default['qa']['4']['title'] = 'Builds en attente';
 $lang->block->default['qa']['4']['block'] = 'testtask';
-$lang->block->default['qa']['4']['grid']  = 8;
+$lang->block->default['qa']['4']['grid']  = 4;
 
 $lang->block->default['qa']['4']['params']['count']   = 15;
 $lang->block->default['qa']['4']['params']['orderBy'] = 'id_desc';
@@ -273,21 +276,21 @@ $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
 $lang->block->default['full']['my']['2']['source'] = '';
 
-$lang->block->default['full']['my']['3']['title']  = 'My Todos';
-$lang->block->default['full']['my']['3']['block']  = 'list';
-$lang->block->default['full']['my']['3']['source'] = 'todo';
-$lang->block->default['full']['my']['3']['grid']   = 4;
+$lang->block->default['full']['my']['3']['title']  = 'Guides';
+$lang->block->default['full']['my']['3']['block']  = 'guide';
+$lang->block->default['full']['my']['3']['source'] = '';
+$lang->block->default['full']['my']['3']['grid']   = 8;
 
-$lang->block->default['full']['my']['4']['title']           = 'Project Statistic';
-$lang->block->default['full']['my']['4']['block']           = 'statistic';
-$lang->block->default['full']['my']['4']['grid']            = 8;
-$lang->block->default['full']['my']['4']['source']          = 'project';
+$lang->block->default['full']['my']['4']['title']  = 'My Todos';
+$lang->block->default['full']['my']['4']['block']  = 'list';
+$lang->block->default['full']['my']['4']['grid']   = 4;
+$lang->block->default['full']['my']['4']['source'] = 'todo';
 $lang->block->default['full']['my']['4']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['5']['title']           = 'Personal Contribution';
-$lang->block->default['full']['my']['5']['block']           = 'contribute';
-$lang->block->default['full']['my']['5']['source']          = '';
-$lang->block->default['full']['my']['5']['grid']            = 4;
+$lang->block->default['full']['my']['5']['title']           = 'Project Statistic';
+$lang->block->default['full']['my']['5']['block']           = 'statistic';
+$lang->block->default['full']['my']['5']['source']          = 'project';
+$lang->block->default['full']['my']['5']['grid']            = 8;
 $lang->block->default['full']['my']['5']['params']['count'] = '20';
 
 $lang->block->default['full']['my']['6']['title']  = 'Recent Projecets';
@@ -563,14 +566,15 @@ $lang->block->gridOptions[8] = 'Left';
 $lang->block->gridOptions[4] = 'Right';
 
 $lang->block->flowchart            = array();
-$lang->block->flowchart['admin']   = array('Administrateur', 'Ajoute Compartiment', 'Ajoute Utilisateurs', 'Administre Privilèges');
+$lang->block->flowchart['admin']   = array('Administrateur', 'Add Departments', 'Ajoute Utilisateurs', 'Administre Privilèges');
 if($config->systemMode == 'ALM') $lang->block->flowchart['program'] = array('Program Owner', 'Create Program', 'Link Product', "Create Project", "Budgeting and planning", 'Add Stakeholder');
 $lang->block->flowchart['product'] = array($lang->productCommon . ' Owner', 'Ajoute ' . $lang->productCommon . '/Modules', 'Ajoute ' . $lang->executionCommon . 's', 'Ajoute Stories', 'Maintient Plans', 'Crée Releases');
-$lang->block->flowchart['project'] = array('Project Manager', 'Add projects and ' . $lang->executionCommon . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
+$lang->block->flowchart['project'] = array('Project Manager', 'Add projects and ' . $lang->execution->common . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
 $lang->block->flowchart['dev']     = array('Développeurs', 'Réclament Tâches/Bugs', 'Effectuent Tâches', 'Corrigent Bugs', 'MàJ Statuts', 'Terminent Tâches/Bugs');
 $lang->block->flowchart['tester']  = array('Testeurs', 'Rédigent CasTests', 'Jouent CasTests', 'Détectent Bugs', 'Vérifient Corrections', 'Ferment Bugs');
 
 $lang->block->zentaoapp = new stdclass();
+$lang->block->zentaoapp->commom               = 'ZenTao App';
 $lang->block->zentaoapp->thisYearInvestment   = 'Investment The Year';
 $lang->block->zentaoapp->sinceTotalInvestment = 'Total Investment';
 $lang->block->zentaoapp->myStory              = 'My Story';
@@ -590,3 +594,49 @@ $lang->block->zentaoapp->notSupportKanban     = 'The mobile terminal does not su
 $lang->block->zentaoapp->notSupportVersion    = 'This version of ZenTao is not currently supported on the mobile terminal';
 $lang->block->zentaoapp->incompatibleVersion  = 'The current version of ZenTao is lower, please upgrade to the latest version and try again';
 $lang->block->zentaoapp->canNotGetVersion     = 'Failed to get ZenTao version, please confirm if the URL is correct';
+$lang->block->zentaoapp->desc                 = 'ZenTao mobile app provides you with a mobile work environment, which is convenient for managing personal to-do tasks at any time, tracking project progress, and enhancing the flexibility and agility of project management.';
+$lang->block->zentaoapp->downloadTip          = 'Scan QR code to download';
+
+$lang->block->zentaoclient = new stdClass();
+$lang->block->zentaoclient->common = 'ZenTao Client';
+$lang->block->zentaoclient->desc   = 'The ZenTao client provides functions such as chat, information notification, robot, and embedding ZenTao applet, which makes teamwork more convenient without frequently switching browsers.';
+
+$lang->block->zentaoclient->edition = new stdclass();
+$lang->block->zentaoclient->edition->win64   = 'Windows';
+$lang->block->zentaoclient->edition->linux64 = 'Linux';
+$lang->block->zentaoclient->edition->mac64   = 'Mac OS';
+
+$lang->block->guideTabs['flowchart']      = 'Flowchart';
+$lang->block->guideTabs['systemMode']     = 'Operating Modes';
+$lang->block->guideTabs['visionSwitch']   = 'Interface Switch';
+$lang->block->guideTabs['themeSwitch']    = 'Theme Switch';
+$lang->block->guideTabs['preference']     = 'Personalized setting';
+$lang->block->guideTabs['downloadClient'] = 'Desktop Client download';
+$lang->block->guideTabs['downloadMoblie'] = 'Mobile Apps download';
+
+$lang->block->themes['default']    = 'Default';
+$lang->block->themes['blue']       = 'Young Blue';
+$lang->block->themes['green']      = 'Green';
+$lang->block->themes['red']        = 'Red';
+$lang->block->themes['pink']       = 'Pink';
+$lang->block->themes['blackberry'] = 'Blackberry';
+$lang->block->themes['classic']    = 'Classic';
+$lang->block->themes['purple']     = 'Purple';
+
+$lang->block->visionTitle            = 'The user interface of ZenTao is divided into 【Full feature interface】 and 【Operation Management Interface】.';
+$lang->block->visions['rnd']         = new stdclass();
+$lang->block->visions['rnd']->key    = 'rnd';
+$lang->block->visions['rnd']->title  = 'Full feature interface';
+$lang->block->visions['rnd']->text   = 'Integrate the program, product, project, execution, test, etc., and provide the lifecycle project management solution.';
+$lang->block->visions['lite']        = new stdclass();
+$lang->block->visions['lite']->key   = 'lite';
+$lang->block->visions['lite']->title = 'Operation Management Interface';
+$lang->block->visions['lite']->text  = 'Specially designed for Non-R&D teams, and based on the visual Kanban project management model.';
+
+$lang->block->customModes['light'] = 'Light Mode';
+$lang->block->customModes['ALM']   = 'ALM Mode';
+
+$lang->block->customModeTip = new stdClass();
+$lang->block->customModeTip->common = 'There are 2 running modes of ZenTao:  Light Mode and ALM Mode.';
+$lang->block->customModeTip->ALM    = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams.';
+$lang->block->customModeTip->light  = 'Provides the core function of project management, suitable for small R&D teams.';

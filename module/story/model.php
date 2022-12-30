@@ -941,7 +941,7 @@ class storyModel extends model
             ->join('linkStories', ',')
             ->join('linkRequirements', ',')
             ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview')
+            ->remove('files,labels,comment,contactListMenu,reviewer,needNotReview')
             ->get();
 
         /* Relieve twins when change product. */
@@ -958,35 +958,6 @@ class storyModel extends model
 
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0) $story->branch = 0;
-        if(!empty($_POST['stages']))
-        {
-            $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
-            $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
-
-            $stageList   = join(',', array_keys($this->lang->story->stageList));
-            $minStagePos = strlen($stageList);
-            $minStage    = '';
-            foreach($this->post->stages as $branch => $stage)
-            {
-                $newStage = new stdclass();
-                $newStage->story  = $storyID;
-                $newStage->branch = $branch;
-                $newStage->stage  = $stage;
-                if(isset($oldStages[$branch]))
-                {
-                    $oldStage = $oldStages[$branch];
-                    $newStage->stagedBy = $oldStage->stagedBy;
-                    if($stage != $oldStage->stage) $newStage->stagedBy = (strpos('tested|verified|released|closed', $stage) !== false) ? $this->app->user->account : '';
-                }
-                if($story->branch == 0) $this->dao->insert(TABLE_STORYSTAGE)->data($newStage)->exec();
-                if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) < $minStagePos)
-                {
-                    $minStage    = $stage;
-                    $minStagePos = strpos($stageList, $stage);
-                }
-            }
-            $story->stage = $minStage;
-        }
 
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->edit['id'], $this->post->uid);
@@ -5109,13 +5080,22 @@ class storyModel extends model
             elseif($id == 'stage')
             {
                 $style .= 'overflow: visible;';
+
+                $maxStage    = $story->stage;
+                $stageList   = join(',', array_keys($this->lang->story->stageList));
+                $maxStagePos = strpos($stageList, $maxStage);
                 if(isset($storyStages[$story->id]))
                 {
                     foreach($storyStages[$story->id] as $storyBranch => $storyStage)
                     {
-                        if(isset($branches[$storyBranch])) $title .= $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . "\n";
+                        if(strpos($stageList, $storyStage->stage) !== false and strpos($stageList, $storyStage->stage) > $maxStagePos)
+                        {
+                            $maxStage    = $storyStage->stage;
+                            $maxStagePos = strpos($stageList, $storyStage->stage);
+                        }
                     }
                 }
+                $title .= $this->lang->story->stageList[$maxStage];
             }
             elseif($id == 'feedbackBy')
             {
@@ -5210,23 +5190,7 @@ class storyModel extends model
                 echo $story->estimate . $this->config->hourUnit;
                 break;
             case 'stage':
-                if(isset($storyStages[$story->id]) and !empty($branches))
-                {
-                    echo "<div class='dropdown dropdown-hover'>";
-                    echo $this->lang->story->stageList[$story->stage];
-                    echo "<span class='caret'></span>";
-                    echo "<ul class='dropdown-menu pull-right'>";
-                    foreach($storyStages[$story->id] as $storyBranch => $storyStage)
-                    {
-                        if(isset($branches[$storyBranch])) echo '<li class="text-ellipsis">' . $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . '</li>';
-                    }
-                    echo "</ul>";
-                    echo '</div>';
-                }
-                else
-                {
-                    echo $this->lang->story->stageList[$story->stage];
-                }
+                echo $this->lang->story->stageList[$maxStage];
                 break;
             case 'taskCount':
                 $tasksLink = helper::createLink('story', 'tasks', "storyID=$story->id", '', 'class="iframe"');

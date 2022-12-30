@@ -251,7 +251,9 @@ class mr extends control
            if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
         }
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
+
         $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
+        $this->mr->createMRLinkedAction($MRID, 'removemr');
 
         echo js::locate(inlink('browse'), 'parent');
     }

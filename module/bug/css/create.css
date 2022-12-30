@@ -49,6 +49,7 @@ html[lang='de'] #keywordsAddonLabel, .task {width: 73px;}
 #osBox {width: 190px;}
 #projectBox .required:after {right: 1px;}
 #branch_chosen {min-width: 90px;}
+#branch_chosen.chosen-container-active .chosen-single{border-left-color: #2e7fff !important;}
 #notifyEmailTd .input-group-addon, #deadlineTd .input-group-addon {border-radius: 2px 0px 2px 0px !important;}
 
 #feedback.input-group + #notifyEmailLabel {position: relative; width: 50%; left: 48%;}
@@ -58,3 +59,5 @@ html[lang='de'] #keywordsAddonLabel, .task {width: 73px;}
 #bugTypeInputGroup > .table-col {width: 40% !important;}
 
 .pri-text > .label-pri {padding: 2px 6px;}
+.table .bug-type td, .table .bug-type th {vertical-align: top !important;}
+.table .bug-type th {padding-top: 14px;}

@@ -154,6 +154,7 @@ $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube Project';
 $lang->action->objectTypes['stage']            = 'Stage';
 $lang->action->objectTypes['patch']            = 'Patch';
 $lang->action->objectTypes['repo']             = 'Repo';
+$lang->action->objectTypes['dataview']         = 'Data View';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -752,6 +753,7 @@ $lang->action->label->gitlab       = 'GitLab Server|gitlab|view|id=%s';
 $lang->action->label->stage        = 'Stage|stage|browse|';
 $lang->action->label->module       = 'Module|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = 'Ticket|ticket|view|id=%s';
+$lang->action->label->chartgroup   = 'Group';
 
 /* Object type. */
 $lang->action->search = new stdclass();

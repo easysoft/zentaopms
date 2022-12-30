@@ -19,11 +19,12 @@
 <?php js::set('branchID', $bug->branch);?>
 <?php js::set('errorNoExecution', $lang->bug->noExecution);?>
 <?php js::set('errorNoProject', $lang->bug->noProject);?>
+<?php $browseLink = $app->session->bugList ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
-    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "btn btn-secondary");?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <?php endif;?>
     <div class="page-title">
@@ -91,7 +92,7 @@
     ?>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php echo html::backButton('<i class="icon icon-back icon-goback"></i> ' . $lang->goback, "id='back' title='{$lang->goback}{$lang->backShortcutKey}'", 'btn');?>
+        <?php common::printBack($browseLink);?>
         <?php if(!$bug->deleted):?>
         <div class='divider'></div>
         <?php echo $this->bug->buildOperateMenu($bug, 'view');?>

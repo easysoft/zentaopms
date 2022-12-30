@@ -47,7 +47,7 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <?php if($project->model != 'kanban'):?>
+        <?php if($project->model != 'kanban' or $disableModel == ''):?>
         <tr>
           <th class='w-130px'><?php echo $lang->project->model;?></th>
           <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
@@ -157,7 +157,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span> 
+                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                     </div>
                   </div>
@@ -230,7 +230,7 @@
         <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php
-              if($disableModel == 'disabled' or $project->model == 'kanban') echo html::hidden('model', $project->model);
+              if($disableModel == 'disabled') echo html::hidden('model', $project->model);
               echo html::submitButton();
               if(!isonlybody()) echo html::backButton();
             ?>

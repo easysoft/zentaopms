@@ -762,7 +762,7 @@ class project extends control
             }
         }
 
-        if($project->model != 'kanban') $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
+        $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
@@ -1116,8 +1116,9 @@ class project extends control
 
         $this->view->executionStats = $executionStats;
         $this->view->showToggleIcon = $showToggleIcon;
-        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->productID      = $productID;
+        $this->view->product        = $this->product->getByID($productID);
         $this->view->projectID      = $projectID;
         $this->view->project        = $project;
         $this->view->projects       = $projects;

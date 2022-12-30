@@ -42,7 +42,7 @@ $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|inde
 $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
-$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
+$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|screen|browse|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
@@ -538,18 +538,18 @@ $lang->doc->menu->api['subMenu']->struct = array('link' => "{$lang->doc->apiStru
 
 /* Report menu.*/
 $lang->report->menu             = new stdclass();
-$lang->report->menu->annual     = array('link' => "{$lang->report->annual}|report|annualData|year=&dept=&userID=" . (isset($_SESSION['user']) ? zget($_SESSION['user'], 'id', 0) : 0), 'target' => '_blank');
-$lang->report->menu->pivotTable = array('link' => "{$lang->report->pivotTable}|report|productsummary", 'alias' => 'projectdeviation,bugcreate,workload,bugassign');
+$lang->report->menu->screen     = array('link' => "{$lang->screen->common}|screen|browse");
+$lang->report->menu->pivotTable = array('link' => "{$lang->report->pivotTable}|report|preview");
 
 /* Report menu order. */
-$lang->report->menuOrder[5]  = 'annual';
+$lang->report->menuOrder[5]  = 'screen';
 $lang->report->menuOrder[10] = 'pivotTable';
 
-$lang->report->menu->pivotTable['subMenu']       = new stdclass();
-$lang->report->menu->pivotTable['subMenu']->product = array('link' => "{$lang->product->common}|report|productsummary");
-$lang->report->menu->pivotTable['subMenu']->project = array('link' => "{$lang->project->common}|report|projectdeviation");
-$lang->report->menu->pivotTable['subMenu']->test    = array('link' => "{$lang->qa->common}|report|bugcreate", 'alias' => 'bugassign');
-$lang->report->menu->pivotTable['subMenu']->staff   = array('link' => "{$lang->system->common}|report|workload");
+$lang->report->menu->pivotTable['subMenu'] = new stdclass();
+$lang->report->menu->pivotTable['subMenu']->product = array('link' => "{$lang->product->common}|report|preview|dimension=&group=product");
+$lang->report->menu->pivotTable['subMenu']->project = array('link' => "{$lang->project->common}|report|preview|dimension=&group=project");
+$lang->report->menu->pivotTable['subMenu']->test    = array('link' => "{$lang->qa->common}|report|preview|dimension=&group=test");
+$lang->report->menu->pivotTable['subMenu']->staff   = array('link' => "{$lang->system->common}|report|preview|dimension=&group=staff");
 
 $lang->report->menu->pivotTable['menuOrder'][5]  = 'product';
 $lang->report->menu->pivotTable['menuOrder'][10] = 'project';
@@ -717,6 +717,7 @@ $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';
 $lang->navGroup->api    = 'doc';
 
+$lang->navGroup->screen = 'report';
 $lang->navGroup->report = 'report';
 
 $lang->navGroup->qa            = 'qa';

@@ -43,6 +43,7 @@ $lang->tree->confirmDelete        = 'Voulez-vous supprimer ce module et tous ses
 $lang->tree->confirmDeleteMenu    = 'Do you want to delete this menu and its child menus?';
 $lang->tree->confirmDelCategory   = 'Voulez-vous supprimer cette catégorie et ses sous-catégories?';
 $lang->tree->confirmDeleteLine    = 'Voulez-vous supprimer cette ligne de produit ?';
+$lang->tree->confirmDeleteGroup   = 'Do you want to delete this group and its child groups?';
 $lang->tree->confirmRoot          = "Les changements du {$lang->productCommon} vont impacter les stories, bugs, casTests du {$lang->productCommon} auquel ils appartiennent, ainsi que les associations de {$lang->executionCommon} et {$lang->productCommon}, ce qui est dangereux. Voulez-vous malgré tout effectuer le changement ?";
 $lang->tree->confirmRoot4Doc      = "Toute modification apportée à la bibliothèque modifiera le document de la bibliothèque à laquelle elle appartient, ce qui est dangereux. Voulez-vous le changer ?";
 $lang->tree->noSubmodule          = "There are no copyable submodules under the current module!";

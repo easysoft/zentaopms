@@ -87,7 +87,15 @@
         <td <?php echo $rowspan?> title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
         <?php endif;?>
         <?php endif;?>
-        <td class='c-build'><?php if($buildCount) echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project' title='{$build->name}'");?></td>
+        <td class='c-build'>
+          <?php
+          if($buildCount)
+          {
+              if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span> ";
+              echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project' title='{$build->name}'");
+          }
+          ?>
+        </td>
         <?php if($i == 0):?>
         <?php $status = $this->processStatus('release', $release);?>
         <?php if($showBranch):?>
