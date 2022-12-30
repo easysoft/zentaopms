@@ -2,6 +2,7 @@
 $lang->zanode->common          = '执行节点';
 $lang->zanode->browse          = '执行节点列表';
 $lang->zanode->create          = '创建执行节点';
+$lang->zanode->edit            = '编辑执行节点';
 $lang->zanode->editAction      = '编辑执行节点';
 $lang->zanode->view            = '执行节点详情';
 $lang->zanode->initTitle       = '初始化执行节点';

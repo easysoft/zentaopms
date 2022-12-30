@@ -281,7 +281,7 @@ class zanode extends control
      * @param  int  $nodeID
      * @return void
      */
-    public function delete($nodeID, $confirm = 'no')
+    public function destroy($nodeID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
