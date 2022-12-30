@@ -2,6 +2,7 @@
 $lang->zanode->common          = 'ZenAgent Node';
 $lang->zanode->browse          = 'ZenAgent Node List';
 $lang->zanode->create          = 'Create ZenAgent Node';
+$lang->zanode->edit            = 'Edit ZenAgent Node';
 $lang->zanode->editAction      = 'Edit ZenAgent Node';
 $lang->zanode->view            = 'View ZenAgent Node';
 $lang->zanode->initTitle       = 'Init ZenAgent Node';
