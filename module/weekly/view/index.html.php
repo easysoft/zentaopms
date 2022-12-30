@@ -13,10 +13,7 @@
 <?php js::set('selectedWeekBegin', $date);?>
 <?php if(common::hasPriv('weekly', 'exportweeklyreport')):?>
 <script>
-$(function()
-{
-  $('#exportreport').modalTrigger();
-});
+$(function(){$('#exportreport').modalTrigger();});
 </script>
 <?php endif;?>
 <div id="mainMenu" class="clearfix text-center">

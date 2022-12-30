@@ -116,13 +116,9 @@ class weeklyModel extends model
     public function save($project, $date)
     {
         $weekStart = $this->getThisMonday($date);
-        $this->dao->delete()->from(TABLE_WEEKLYREPORT)
-            ->where('project')->eq($project)
-            ->andWhere('weekStart')->eq($weekStart)
-            ->exec();
+        $report    = new stdclass();
+        $PVEV      = $this->getPVEV($project, $date);
 
-        $report = new stdclass;
-        $PVEV   = $this->getPVEV($project, $date);
         $report->pv        = $PVEV['PV'];
         $report->ev        = $PVEV['EV'];
         $report->ac        = $this->getAC($project, $date);
@@ -402,6 +398,7 @@ class weeklyModel extends model
         $this->loadModel('holiday');
         while($task = $stmt->fetch())
         {
+            if(empty($task->execution)) continue;
             $execution = $executions[$task->execution];
             if(helper::isZeroDate($task->estStarted)) $task->estStarted = $execution->begin;
             if(helper::isZeroDate($task->deadline))   $task->deadline   = $execution->end;
