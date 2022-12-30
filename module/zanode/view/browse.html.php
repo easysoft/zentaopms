@@ -22,6 +22,7 @@
   <div class='pull-left btn-toolbar'>
     <?php echo html::a($this->createLink('zanode', 'browse'), "<span class='text'>{$lang->zanode->all}</span>", '', "class='btn btn-link btn-active-text'"); ?>
     <a href='#' id='bysearchTab' class='btn btn-link querybox-toggle'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->zanode->byQuery; ?></a>
+    <a href='#' class='btn btn-link' id='helpTab'><i class='icon-help icon'></i> <?php echo $lang->help;?></a>
   </div>
 
   <?php if (common::hasPriv('zanode', 'create')) : ?>

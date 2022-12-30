@@ -5,3 +5,5 @@
 .c-ip{width: 150px;}
 .c-os {width: 120px;}
 .desktop, .createImage{margin-right: 4px;}
+#helpTab .icon-help {line-height: unset;}
+#bysearchTab {margin-right: 0px;}
