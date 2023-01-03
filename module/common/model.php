@@ -125,7 +125,8 @@ class commonModel extends model
                  ->where('id')->eq($projectID)
                  ->exec();
 
-            $this->loadModel('action')->create('project', $projectID, 'syncproject');
+            $actionType = $project->multiple ? 'syncproject' : 'syncmultipleproject';
+            $this->loadModel('action')->create('project', $projectID, $actionType);
         }
         return $project;
     }
@@ -394,9 +395,9 @@ class commonModel extends model
     /**
      * Deny access.
      *
-     * @param  varchar  $module
-     * @param  varchar  $method
-     * @param  bool     $reload
+     * @param  string  $module
+     * @param  string  $method
+     * @param  bool    $reload
      * @access public
      * @return mixed
      */
@@ -936,6 +937,38 @@ class commonModel extends model
         $html = $link ? html::a($link, "$icon {$lang->$tab->common}", '', "class='$className' style='padding-top: 2px'") : "$icon {$lang->$tab->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
+    }
+
+    /**
+     * Format the date to YYYY-mm-dd, format the datetime to YYYY-mm-dd HH:ii:ss.
+     *
+     * @param  int    $date
+     * @param  string $type date|datetime|''
+     * @access public
+     * @return string
+     */
+    public function formatDate($date, $type = '')
+    {
+        $datePattern     = '\w{4}(\/|-)\w{1,2}(\/|-)\w{1,2}';
+        $datetimePattern = $datePattern . ' \w{1,2}\:\w{1,2}\:\w{1,2}';
+
+        if(empty($type))
+        {
+            if(!preg_match("/$datePattern/", $date) and !preg_match("/$datetimePattern/", $date)) return $date;
+            if(preg_match("/$datePattern/", $date) === 1)     $type = 'date';
+            if(preg_match("/$datetimePattern/", $date) === 1) $type = 'datetime';
+        }
+
+        if(helper::isZeroDate($date))
+        {
+            if($type == 'date')     return '0000-00-00';
+            if($type == 'datetime') return '0000-00-00 00:00:00';
+        }
+
+        if($type == 'date')     $format = 'Y-m-d';
+        if($type == 'datetime') $format = 'Y-m-d H:i:s';
+
+        return date($format, strtotime($date));
     }
 
     /**
@@ -1679,7 +1712,7 @@ EOD;
         {
             if($app->getModuleName() != $module) $app->control->loadModel($module);
             $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
-            if(class_exists($modelClass) and is_callable(array($modelClass, 'isClickable')))
+            if(class_exists($modelClass) and method_exists($modelClass, 'isClickable'))
             {
                 //$clickable = call_user_func_array(array($modelClass, 'isClickable'), array('object' => $object, 'method' => $method));
                 // fix bug on php  8.0 link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953
@@ -2364,6 +2397,8 @@ EOD;
      */
     public function checkSafeFile()
     {
+        if($this->app->isContainer()) return false;
+
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
 
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ok.txt';
@@ -2451,7 +2486,7 @@ EOD;
         }
         catch(EndResponseException $endResponseException)
         {
-            echo $endResponseException->getContent();
+            die($endResponseException->getContent());
         }
     }
 
@@ -3169,7 +3204,7 @@ EOD;
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST')
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30)
     {
         global $lang, $app;
         if(!extension_loaded('curl'))
@@ -3191,14 +3226,15 @@ EOD;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_ENCODING, "");
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($curl, CURLOPT_HEADER, FALSE);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 2);
         curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);

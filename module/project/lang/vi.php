@@ -42,6 +42,7 @@ $lang->project->addWhitelist        = 'Project Add Whitelist';
 $lang->project->unbindWhitelist     = 'Project Remove Whitelist';
 $lang->project->manageProducts      = 'Manage Products';
 $lang->project->manageOtherProducts = 'Manage Other Products';
+$lang->project->manageProductPlan   = 'Manage Products And Plans';
 $lang->project->copyTitle           = 'Please select an project to copy';
 $lang->project->errorSameProducts   = 'Project cannot be associated with multiple identical products.';
 $lang->project->errorSameBranches   = 'Project cannot be associated with multiple identical branches.';
@@ -175,15 +176,15 @@ $lang->project->days               = 'Days';
 $lang->project->mailto             = 'Mailto';
 $lang->project->etc                = " , etc";
 $lang->project->product            = 'Product';
-$lang->project->branch             = 'Branch';
+$lang->project->branch             = 'Platform/Branch';
 $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
 $lang->project->kanban             = 'Kanban';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
-$lang->project->projectTypeList[1] = 'Has Product';
-$lang->project->projectTypeList[0] = 'No Product';
+$lang->project->projectTypeList[1] = 'Product-based';
+$lang->project->projectTypeList[0] = 'Non-product-based';
 
 /* Project Kanban. */
 $lang->project->typeList = array();
@@ -335,6 +336,7 @@ $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = 'Waterfall';
 $lang->project->cannotCreateChild      = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
 $lang->project->emptyPM                = 'No manager';
+$lang->project->emptyBranch            = 'Branch can not be empty!';
 $lang->project->cannotChangeToCat      = "It is not empty, so you cannot change it to a parent.";
 $lang->project->cannotCancelCat        = "It has child projects, so you cannot unmark the parent.";
 $lang->project->parentBeginEnd         = "Parent begin&end date: %s ~ %s";

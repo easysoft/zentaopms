@@ -126,7 +126,7 @@ $(function()
             return true;
         }
 
-        if(moduleID == 'html' || moduleID == 'dynamic' || moduleID == 'flowchart' || moduleID == 'assigntome' || moduleID == 'welcome' || moduleID == 'contribute')
+        if(moduleID == 'html' || moduleID == 'dynamic' || moduleID == 'guide' || moduleID == 'assigntome' || moduleID == 'welcome' || moduleID == 'contribute')
         {
             getNotSourceParams(moduleID, blockID, onFinish);
             return true;

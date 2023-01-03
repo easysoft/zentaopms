@@ -74,20 +74,24 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           <td>
             <div class="input-group" id="dataPlanGroup">
               <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
-              <?php echo html::input('teamMember', '', "class='form-control team-group fix-border hidden' readonly='readonly'");?>
+              <?php
+              $teamMember = '';
+              if(!empty($task->team))
+              {
+                  foreach($task->team as $team) $teamMember .= ' ' . zget($members, $team->account);
+              }
+              ?>
+              <?php echo html::input('teamMember', $teamMember, "class='form-control team-group fix-border hidden' readonly='readonly'");?>
               <span class="input-group-btn team-group hidden"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
             </div>
           </td>
-          <td>
-            <div class="checkbox-primary c-multipleTask affair">
+          <td colspan='2'>
+            <div class="checkbox-primary c-multipleTask affair" style='display: inline-block; margin-right: 10px'>
               <input type="checkbox" name="multiple" value="1" id="multipleBox" /><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
             </div>
-            <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
+            <div class='hidden modeBox' style='display: inline-block'><?php echo html::radio('mode', $lang->task->modeList, !empty($task->mode) ? $task->mode: 'linear');?></div>
+          <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
-        </tr>
-        <tr class='hidden modeBox'>
-          <th><?php echo $lang->task->mode;?></th>
-          <td><?php echo html::select('mode', $lang->task->modeList, $task->mode, "class='form-control chosen'");?></td>
         </tr>
         <?php if($execution->type == 'kanban'):?>
         <tr>
@@ -108,11 +112,17 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
         <tr class="<?php echo $hiddenStory?> storyBox">
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
-            <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
+            <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> ">
+              <?php
+              $noticeLinkStory = sprintf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));
+              if(empty($execution->hasProduct)) $noticeLinkStory = $lang->task->noticeLinkStoryNoProduct;
+              echo $noticeLinkStory;
+              ?>
+            </span>
             <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
               <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <?php if(common::hasPriv('execution', 'storyView')):?>
-              <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
+              <span class='input-group-btn' id='preview'><a href='#' class='btn iframe' data-width="85%" data-height="300px"><?php echo $lang->preview;?></a></span>
               <?php endif;?>
             </div>
           </td>

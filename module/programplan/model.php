@@ -52,12 +52,12 @@ class programplanModel extends model
      */
     public function getStage($executionID = 0, $productID = 0, $browseType = 'all', $orderBy = 'id_asc')
     {
-        if(empty($executionID) || empty($productID)) return array();
+        if(empty($executionID)) return array();
 
         $plans = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->eq('stage')
-            ->andWhere('t1.product')->eq($productID)
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($browseType == 'all')->andWhere('t2.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t2.parent')->eq($executionID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
@@ -187,6 +187,7 @@ class programplanModel extends model
             $data->id            = $plan->id;
             $data->type          = 'plan';
             $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
+            $data->name          = $plan->name;
             $data->percent       = $plan->percent;
             $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
             $data->milestone     = zget($this->lang->programplan->milestoneList, $plan->milestone);
@@ -242,11 +243,11 @@ class programplanModel extends model
             $oldTasks = $oldData->task;
             foreach($oldTasks as $id => $oldTask)
             {
-                if(!isset($tasks->$id)) continue;
-                $tasks->$id->version    = $oldTask->version;
-                $tasks->$id->name       = $oldTask->name;
-                $tasks->$id->estStarted = $oldTask->estStarted;
-                $tasks->$id->deadline   = $oldTask->deadline;
+                if(!isset($tasks[$id])) continue;
+                $tasks[$id]->version    = $oldTask->version;
+                $tasks[$id]->name       = $oldTask->name;
+                $tasks[$id]->estStarted = $oldTask->estStarted;
+                $tasks[$id]->deadline   = $oldTask->deadline;
             }
         }
 
@@ -1030,6 +1031,13 @@ class programplanModel extends model
         if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
         if(dao::isError()) return false;
 
+        if($plan->parent) $parentStage = $this->getByID($plan->parent);
+        if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
+        {
+            dao::$errors['message'][] = $this->lang->programplan->error->parentDuration;
+            return false;
+        }
+
         if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
         if(dao::isError()) return false;
 
@@ -1044,7 +1052,6 @@ class programplanModel extends model
 
         if($plan->parent > 0)
         {
-            $parentStage = $this->getByID($plan->parent);
             $plan->attribute = $parentStage->attribute;
             $plan->acl       = $parentStage->acl;
             $parentPercent   = $parentStage->percent;
@@ -1085,12 +1092,15 @@ class programplanModel extends model
         $this->lang->project->name = $this->lang->programplan->name;
         $this->lang->project->code = $this->lang->execution->code;
 
+        $relatedExecutionsID = $this->loadModel('execution')->getRelatedExecutions($planID);
+        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '';
+
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
             ->checkIF($plan->percent != false, 'percent', 'float')
-            ->checkIF(!empty($plan->name), 'name', 'unique', "id != {$planID} and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
+            ->checkIF(!empty($plan->name), 'name', 'unique', "id in ('{$relatedExecutionsID}') and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
             ->checkIF(!empty($plan->code) and $setCode, 'code', 'unique', "id != $planID and type in ('sprint','stage','kanban') and `deleted` = '0'")
             ->where('id')->eq($planID)
             ->exec();

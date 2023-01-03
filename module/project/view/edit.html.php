@@ -47,7 +47,7 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <?php if($project->model != 'kanban'):?>
+        <?php if($project->model != 'kanban' or $disableModel == ''):?>
         <tr>
           <th class='w-130px'><?php echo $lang->project->model;?></th>
           <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
@@ -88,10 +88,7 @@
         <?php endif;?>
         <tr>
           <th id='projectType'><?php echo $lang->project->type;?></th>
-          <td>
-            <?php echo zget($lang->project->projectTypeList, $project->hasProduct);?>
-            <?php echo html::hidden('hasProduct', $project->hasProduct);?>
-          </td>
+          <td colspan='3'><?php echo nl2br(html::radio('hasProduct', $lang->project->projectTypeList, $project->hasProduct, 'disabled'));?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
@@ -107,7 +104,7 @@
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $project->budgetUnit);?></span>
               <?php else:?>
               <span class='input-group-addon'></span>
-              <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control'");?>
+              <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control w-80px'");?>
               <?php endif;?>
             </div>
           </td>
@@ -148,57 +145,56 @@
           <td></td>
           <td></td>
         </tr>
-        <?php if($project->hasProduct):?>
+        <?php if($project->hasProduct and $this->config->vision != 'lite'):?>
+        <?php $i = 0;?>
+        <?php foreach($linkedProducts as $product):?>
         <tr>
-          <th><?php echo $lang->project->manageProducts;?></th>
-          <td class='text-left' id='productsBox' colspan="3">
+          <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
+          <td class='text-left productsBox' colspan="3">
             <div class='row'>
-              <?php $i = 0;?>
-              <?php foreach($linkedProducts as $product):?>
-              <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
-              <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
-              <div class='col-sm-4' style="padding-right: 6px;">
-                <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "' data-lastBranch='" . $branchID . "'");?>
-                  <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\" data-last='" . $branchID . "'");?>
+              <div class="col-sm-6">
+                <div class='table-row'>
+                  <div class='table-col'>
+                    <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+                    <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
+                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
+                    </div>
+                  </div>
+                  <div class='table-col <?php if(!$hasBranch) echo 'hidden';?>'>
+                    <div class='input-group required'>
+                      <span class='input-group-addon fix-border'><?php echo $lang->product->branchName['branch'];?></span>
+                      <?php $branchIdList = join(',', $product->branches);?>
+                      <?php echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <?php $i++;?>
-              <?php endforeach;?>
-              <?php endforeach;?>
-              <div class='col-sm-4 <?php if($projectID) echo 'required';?>' style="padding-right: 6px;">
-                <div class='input-group'>
-                  <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
-                  <span class='input-group-addon fix-border'></span>
+              <div class="col-sm-6">
+                <div class='input-group' <?php echo "id='plan$i'";?>>
+                  <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
+                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), $product->plans, "class='form-control chosen' multiple");?>
+                  <div class='input-group-btn'>
+                    <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>
+                    <a href='javascript:;' onclick='removeLine(this)' class='btn btn-link removeLine' <?php if($i == 0) echo "style='visibility: hidden'";?>><i class='icon-close'></i></a>
+                  </div>
                 </div>
               </div>
             </div>
           </td>
         </tr>
-        <tr>
-          <th id='linkPlan'><?php echo $lang->execution->linkPlan;?></th>
-          <td id="plansBox" colspan="3">
-            <div class='row'>
-              <?php $i = 0;?>
-              <?php foreach($linkedProducts as $product):?>
-                <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
-                <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
-                <div class="col-sm-4" id="plan<?php echo $i;?>" style="padding-right: 6px;"><?php echo html::select("plans[{$product->id}][{$branchID}][]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
-                <?php $i++;?>
-                <?php endforeach;?>
-              <?php endforeach;?>
-              <div class="col-sm-4" id="planDefault" style="padding-right: 6px;"><?php echo html::select("plans[0][0][]", array(), 0, "class='form-control chosen' multiple");?></div>
-            </div>
-          </td>
-        </tr>
+        <?php $i ++;?>
+        <?php endforeach;?>
         <?php endif;?>
         <?php if($project->model == 'waterfall'):?>
         <?php $class    = (!$project->division and count($linkedProducts) < 2) ? 'hide' : '';?>
         <?php $disabled = !empty($executions) ? "disabled='disabled'" : '';?>
         <tr class='<?php echo $class;?> division'>
           <th><?php echo $lang->project->division;?></th>
-          <td colspan='3'><?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?></td>
+          <td colspan='3'>
+            <?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->divisionTips;?>"></icon>
+          </td>
         </tr>
         <?php endif;?>
         <?php if($project->model == 'kanban'):?>
@@ -234,7 +230,7 @@
         <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php
-              if($disableModel == 'disabled' or $project->model == 'kanban') echo html::hidden('model', $project->model);
+              if($disableModel == 'disabled') echo html::hidden('model', $project->model);
               echo html::submitButton();
               if(!isonlybody()) echo html::backButton();
             ?>

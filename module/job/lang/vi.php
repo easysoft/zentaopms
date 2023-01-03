@@ -1,11 +1,11 @@
 <?php
 $lang->job->common        = 'Job';
-$lang->job->browse        = 'Browse Job';
-$lang->job->create        = 'Tạo Job';
-$lang->job->edit          = 'Sửa Job';
-$lang->job->exec          = 'Xử lý Job';
+$lang->job->browse        = 'Browse Pipeline';
+$lang->job->create        = 'Tạo Pipeline';
+$lang->job->edit          = 'Sửa Pipeline';
+$lang->job->exec          = 'Xử lý Pipeline';
 $lang->job->view          = 'Execute Details';
-$lang->job->delete        = 'Xóa Job';
+$lang->job->delete        = 'Xóa Pipeline';
 $lang->job->confirmDelete = 'Bạn có muốn xóa job này?';
 $lang->job->dirChange     = 'Thư mục đã thay đổi';
 $lang->job->buildTag      = 'Tag bản dựng';

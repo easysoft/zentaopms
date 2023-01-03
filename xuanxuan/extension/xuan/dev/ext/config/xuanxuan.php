@@ -1,5 +1,9 @@
 <?php
 $config->dev->group['im']                  = 'xuanxuan';
+$config->dev->group['client']              = 'xuanxuan';
+$config->dev->group['conference']          = 'xuanxuan';
+$config->dev->group['integration']         = 'xuanxuan';
+$config->dev->group['license']             = 'xuanxuan';
 $config->dev->group['im_chatuser']         = 'xuanxuan';
 $config->dev->group['im_message']          = 'xuanxuan';
 $config->dev->group['im_messagestatus']    = 'xuanxuan';

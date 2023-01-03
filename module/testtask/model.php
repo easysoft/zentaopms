@@ -91,7 +91,7 @@ class testtaskModel extends model
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
             ->beginIF(!in_array(strtolower($scopeAndStatus[1]), array('totalstatus', 'review'), true))->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
-            ->beginIF($branch !== 'all')->andWhere('t4.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere("CONCAT(',', t4.branch, ',')")->like("%,$branch,%")->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
             ->beginIF($branch == BRANCH_MAIN)
@@ -1171,6 +1171,31 @@ class testtaskModel extends model
     }
 
     /**
+     * Init testtask result.
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  int    $nodeID
+     * @access public
+     * @return void
+     */
+    public function initResult($runID = 0, $caseID = 0, $version = 0, $nodeID = 0)
+    {
+        $result = new stdClass();
+        $result->run        = $runID;
+        $result->case       = $caseID;
+        $result->version    = $version;
+        $result->node       = $nodeID;
+        $result->date       = helper::now();
+        $result->lastRunner = $this->app->user->account;
+
+        $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+        if(!dao::isError()) return $resultID = $this->dao->lastInsertID();
+        return false;
+    }
+
+    /**
      * Create test result
      *
      * @param  int   $runID
@@ -1295,6 +1320,7 @@ class testtaskModel extends model
             $postReals   = $postData->reals[$caseID];
 
             $caseResult  = $result ? $result : 'pass';
+            if($postData->node) $caseResult = '';
             $stepResults = array();
             if($dbSteps)
             {
@@ -1325,6 +1351,7 @@ class testtaskModel extends model
             $result->stepResults = serialize($stepResults);
             $result->lastRunner  = $this->app->user->account;
             $result->date        = $now;
+
             $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
             $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($caseID)->exec();
 
@@ -1369,11 +1396,13 @@ class testtaskModel extends model
 
         $relatedVersions = array();
         $runIdList       = array();
+        $nodeIdList      = array();
         foreach($results as $result)
         {
             $runIdList[$result->run] = $result->run;
             $relatedVersions[]       = $result->version;
             $runCaseID               = $result->case;
+            if(!empty($result->node)) $nodeIdList[] = $result->node;
         }
         $relatedVersions = array_unique($relatedVersions);
 
@@ -1385,6 +1414,9 @@ class testtaskModel extends model
         $runs = $this->dao->select('t1.id,t2.build')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
             ->where('t1.id')->in($runIdList)
+            ->fetchPairs();
+        $nodes = $this->dao->select('id,name')->from(TABLE_ZAHOST)
+            ->where('id')->in(array_unique($nodeIdList))
             ->fetchPairs();
 
         $this->loadModel('file');
@@ -1398,9 +1430,7 @@ class testtaskModel extends model
         $stepFiles   = array();
         foreach($files as $file)
         {
-            $pathName = $this->file->getRealPathName($file->pathname);
-            $file->webPath  = $this->file->webPath . $pathName;
-            $file->realPath = $this->file->savePath . $pathName;
+            $this->file->setFileWebAndRealPaths($file);
             if($file->objectType == 'caseResult')
             {
                 $resultFiles[$file->objectID][$file->id] = $file;
@@ -1414,7 +1444,14 @@ class testtaskModel extends model
         {
             $result->stepResults = unserialize($result->stepResults);
             $result->build       = $result->run ? zget($runs, $result->run, 0) : 0;
-            $result->files       = zget($resultFiles, $resultID, array()); //Get files of case result.
+            $result->nodeName    = $result->node ? zget($nodes, $result->node, '') : '';
+
+            if(!empty($result->ZTFResult))
+            {
+                $result->ZTFResult = $this->formatZtfLog($result->ZTFResult, $result->stepResults);
+            }
+
+            $result->files = zget($resultFiles, $resultID, array()); //Get files of case result.
             if(isset($relatedSteps[$result->version]))
             {
                 $relatedStep = $relatedSteps[$result->version];
@@ -1433,9 +1470,66 @@ class testtaskModel extends model
             }
 
             /* Get files of step result. */
-            foreach($result->stepResults as $stepID => $stepResult) $result->stepResults[$stepID]['files'] = isset($stepFiles[$resultID][$stepID]) ? $stepFiles[$resultID][$stepID] : array();
+            if(!empty($result->stepResults)) foreach($result->stepResults as $stepID => $stepResult) $result->stepResults[$stepID]['files'] = isset($stepFiles[$resultID][$stepID]) ? $stepFiles[$resultID][$stepID] : array();
         }
         return $results;
+    }
+
+    /**
+     * Format ztf log.
+     *
+     * @param  string $log
+     * @access public
+     * @return string
+     */
+    public function formatZtfLog($result, $stepResults)
+    {
+        $logObj  = json_decode($result);
+        $logs    = empty($logObj->log) ? '' : $logObj->log;
+        if(empty($logs)) return '';
+
+        $logs     = str_replace(array("\r", "\n", "\r\n"), "\n", $logs);
+        $logList  = explode("\n", $logs);
+        $logHtml  = "";
+
+        foreach($logList as $log)
+        {
+            $log = preg_replace("/^[\d\-:.\x20]+/", '', $log);
+            $log = trim($log);
+            if(empty($log)) continue;
+
+            $failHtml = ': <span class="result-testcase fail">' . $this->lang->testtask->fail . '</span>';
+            $passHtml = ': <span class="result-testcase pass">' . $this->lang->testtask->pass . '</span>';
+
+            $log = preg_replace(array("/:\x20失败/", "/:\x20fail/", "/:\x20成功/", "/:\x20pass/"), array($failHtml, $failHtml, $passHtml, $passHtml), $log);
+
+            $logHtml .= "<li>" . $log . "</li>";
+        }
+
+        if(!empty($stepResults))
+        {
+            $total     = count($stepResults);
+            $failCount = $passCount = 0;
+
+            foreach($stepResults as $step)
+            {
+                if($step['result'] == 'pass')
+                {
+                    $passCount++;
+                }
+                elseif($step['result'] == 'fail')
+                {
+                    $failCount++;
+                }
+            }
+
+            $caseResult = $passCount ? 'pass':'fail';
+            $logHtml .= "<li class='result-testcase {$caseResult}'>"
+                        . sprintf($this->lang->testtask->stepSummary, $total, $passCount, $failCount)
+                        . "</li>";
+        }
+
+        return $logHtml;
     }
 
     /**

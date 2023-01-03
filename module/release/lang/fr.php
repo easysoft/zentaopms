@@ -24,13 +24,12 @@ $lang->release->batchUnlinkStory = "Retirer Stories par Lot";
 $lang->release->batchUnlinkBug   = "Retirer Bugs par Lot";
 
 $lang->release->confirmDelete      = "Voulez-vous réellement supprimer cette release ?";
-$lang->release->confirmLink        = "Whether to link the stories completed in the version and the bugs solved to the release?";
+$lang->release->syncFromBuilds     = "Link the stories completed in the version and the bugs solved to the release";
 $lang->release->confirmUnlinkStory = "Voulez-vous retirer cette story de la release ?";
 $lang->release->confirmUnlinkBug   = "Voulez-vous retirer ce bug de la release ?";
 $lang->release->existBuild         = '『Build』『%s』existant. Vous pouvez changer『name』ou choisir un『build』.';
 $lang->release->noRelease          = 'Pas de release à ce jour.';
 $lang->release->errorDate          = "La date de release ne doit pas être supérieure à aujourd'hui.";
-$lang->release->tips               = 'If no build is selected for a release, a build with the same name as the release is created by default.';
 
 $lang->release->basicInfo = 'Infos de Base';
 
@@ -39,7 +38,7 @@ $lang->release->product        = $lang->productCommon;
 $lang->release->branch         = 'Plateforme/Branche';
 $lang->release->project        = 'Project';
 $lang->release->build          = 'Build';
-$lang->release->includedBuild  = 'Included Build';
+$lang->release->includedBuild  = 'Included Builds';
 $lang->release->relatedProject = 'Related Project';
 $lang->release->name           = 'Nom';
 $lang->release->marker         = 'Etape Importante';
@@ -64,9 +63,9 @@ $lang->release->all            = 'Tout';
 $lang->release->notify         = 'Notify';
 $lang->release->notifyUsers    = 'Notify Users';
 $lang->release->mailto         = 'Mailto';
-$lang->release->mailContent    = '<p>Dear users,</p><p style                                                                                               = "margin-left: 30px;">The following requirements and bugs you feedback have been released in the %s. Please contact your account manager to check the latest version.</p>';
-$lang->release->storyList      = '<p style                                                                                                                 = "margin-left: 30px;">Story List：%s。</p>';
-$lang->release->bugList        = '<p style                                                                                                                 = "margin-left: 30px;">Bug List：%s。</p>';
+$lang->release->mailContent    = '<p>Dear users,</p><p style="margin-left: 30px;">The following requirements and bugs you feedback have been released in the %s. Please contact your account manager to check the latest version.</p>';
+$lang->release->storyList      = '<p style="margin-left: 30px;">Story List：%s。</p>';
+$lang->release->bugList        = '<p style="margin-left: 30px;">Bug List：%s。</p>';
 $lang->release->pageAllSummary = 'Total releases: <strong>%total%</strong>, Normal: <strong>%normal%</strong>, Terminate: <strong>%terminate%</strong>.';
 $lang->release->pageSummary    = "Total releases: <strong>%s</strong>.";
 

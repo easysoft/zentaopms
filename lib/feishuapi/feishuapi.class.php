@@ -265,6 +265,11 @@ class feishuapi
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            if($_SERVER['HTTPS'] != 'on')
+            {
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            }
 
             $urlHandlers[] = $ch;
             curl_multi_add_handle($curl, $ch);

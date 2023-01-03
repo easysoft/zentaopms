@@ -20,12 +20,8 @@
       <table class='table table-condensed table-bordered active-disabled table-fixed'>
         <thead class='text-center'>
           <tr>
-            <th rowspan='2' class='w-120px'><?php echo $lang->admin->setModule->module;?></th>
-            <th colspan='2'><?php echo $lang->admin->setModule->optional;?></th>
-          </tr>
-          <tr>
-            <th><?php echo $lang->admin->setModule->opened;?></th>
-            <th><?php echo $lang->admin->setModule->closed;?></th>
+            <th class='w-150px'><?php echo $lang->admin->setModule->module;?></th>
+            <th><?php echo $lang->admin->setModule->optional;?></th>
           </tr>
         </thead>
         <tbody>
@@ -37,42 +33,42 @@
           <?php $code = $group . ucfirst($feature);?>
           <?php if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;?>
           <?php $hasData = true;?>
-          <?php endForeach;?>
+          <?php endforeach;?>
 
           <?php if($hasData):?>
           <tr>
-            <td class='text-right'><?php echo $lang->admin->setModule->{$group};?></td>
+            <td class='text-middle text-right thWidth'>
+              <div class="checkbox-primary checkbox-inline checkbox-right check-all">
+                <input type='checkbox' id='allChecker<?php echo $group;?>' name='allChecker'>
+                <label class='text-right' for='allChecker<?php echo $group;?>'><?php echo $lang->admin->setModule->{$group};?></label>
+              </div>
+            </td>
             <td>
               <?php foreach($features as $feature):?>
               <?php $code = $group. ucfirst($feature);?>
               <?php if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;?>
-              <?php if(strpos(",$closedFeatures,",   ",$code,") !== false) continue;?>
+              <?php $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';?>
               <div class='group-item'>
-              <?php echo html::checkbox("module[{$code}]", array('1' => $lang->admin->setModule->{$feature}), '1', "data-code='{$code}'", 'inline');?>
-              <?php echo html::hidden("module[{$code}][]", '1', 'disabled');?>
+              <?php echo html::checkbox("module[{$code}]", array('1' => $lang->admin->setModule->{$feature}), $value, "data-code='{$code}'", 'inline');?>
+              <?php echo html::hidden("module[{$code}][]", $value, $value ? 'disabled' : '');?>
               </div>
-              <?php endForeach;?>
-            </td>
-            <td>
-              <?php foreach($features as $feature):?>
-              <?php $code = $group . ucfirst($feature);?>
-              <?php if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;?>
-              <?php if(strpos(",$closedFeatures,",   ",$code,") === false) continue;?>
-              <div class='group-item'>
-              <?php echo html::checkbox("module[{$code}]", array('1' => $lang->admin->setModule->{$feature}), '0', "data-code='{$code}'", 'inline');?>
-              <?php echo html::hidden("module[{$code}][]", '0');?>
-              </div>
-              <?php endForeach;?>
+              <?php endforeach;?>
             </td>
           </tr>
           <?php endif;?>
-          <?php endForeach;?>
+          <?php endforeach;?>
           <tr>
-            <td colspan='3' class='text-center'><?php echo html::submitButton();?></td>
+            <td class='text-middle text-right thWidth'>
+              <div class="checkbox-primary checkbox-inline checkbox-right check-all">
+                <input type='checkbox' id='allChecker'>
+                <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
+              </div>
+            </td>
+            <td><?php echo html::submitButton();?></td>
           </tr>
         </tbody>
       </table>
-    </form>`
+    </form>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

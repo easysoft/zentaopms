@@ -40,9 +40,11 @@ $lang->moduleOrder[85]  = 'testtask';
 $lang->moduleOrder[90]  = 'testsuite';
 $lang->moduleOrder[95]  = 'testreport';
 $lang->moduleOrder[100] = 'caselib';
-$lang->moduleOrder[105] = 'automation';
+$lang->moduleOrder[105] = 'zahost';
+$lang->moduleOrder[108] = 'zanode';
 
 $lang->moduleOrder[110] = 'doc';
+$lang->moduleOrder[113] = 'screen';
 $lang->moduleOrder[115] = 'report';
 
 $lang->moduleOrder[120] = 'company';
@@ -237,7 +239,6 @@ $lang->project->methodOrder[190] = 'manageRepo';
 
 $lang->resource->projectbuild = new stdclass();
 $lang->resource->projectbuild->browse           = 'browse';
-$lang->resource->projectbuild->create           = 'create';
 $lang->resource->projectbuild->edit             = 'edit';
 $lang->resource->projectbuild->view             = 'view';
 $lang->resource->projectbuild->delete           = 'delete';
@@ -249,7 +250,6 @@ $lang->resource->projectbuild->unlinkBug        = 'unlinkBug';
 $lang->resource->projectbuild->batchUnlinkBug   = 'batchUnlinkBug';
 
 $lang->projectbuild->methodOrder[5]  = 'browse';
-$lang->projectbuild->methodOrder[10] = 'create';
 $lang->projectbuild->methodOrder[15] = 'edit';
 $lang->projectbuild->methodOrder[20] = 'view';
 $lang->projectbuild->methodOrder[25] = 'delete';
@@ -548,6 +548,7 @@ $lang->resource->story->batchChangeModule  = 'batchChangeModule';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 $lang->resource->story->linkStories        = 'linkStoriesAB';
+$lang->resource->story->relieved           = 'relievedTwins';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -577,6 +578,7 @@ $lang->story->methodOrder[120] = 'batchChangeModule';
 $lang->story->methodOrder[125] = 'batchToTask';
 $lang->story->methodOrder[130] = 'processStoryChange';
 $lang->story->methodOrder[135] = 'linkStories';
+$lang->story->methodOrder[140] = 'relieved';
 
 /* Requirement. */
 $lang->resource->requirement = new stdclass();
@@ -1053,6 +1055,7 @@ $lang->resource->testcase->batchCreate             = 'batchCreate';
 $lang->resource->testcase->createBug               = 'createBug';
 $lang->resource->testcase->view                    = 'view';
 $lang->resource->testcase->edit                    = 'edit';
+$lang->resource->testcase->showScript              = 'showScript';
 $lang->resource->testcase->linkCases               = 'linkCases';
 $lang->resource->testcase->linkBugs                = 'linkBugs';
 $lang->resource->testcase->batchEdit               = 'batchEdit';
@@ -1075,6 +1078,7 @@ $lang->resource->testcase->confirmLibcaseChange    = 'confirmLibcaseChange';
 $lang->resource->testcase->ignoreLibcaseChange     = 'ignoreLibcaseChange';
 $lang->resource->testcase->batchConfirmStoryChange = 'batchConfirmStoryChange';
 $lang->resource->testcase->importToLib             = 'importToLib';
+$lang->resource->testcase->automation              = 'automation';
 
 $lang->testcase->methodOrder[0]   = 'index';
 $lang->testcase->methodOrder[5]   = 'browse';
@@ -1105,6 +1109,8 @@ $lang->testcase->methodOrder[125] = 'confirmLibcaseChange';
 $lang->testcase->methodOrder[130] = 'ignoreLibcaseChange';
 $lang->testcase->methodOrder[135] = 'batchConfirmStoryChange';
 $lang->testcase->methodOrder[140] = 'importToLib';
+$lang->testcase->methodOrder[145] = 'automation';
+$lang->testcase->methodOrder[150] = 'showScript';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
@@ -1213,10 +1219,51 @@ $lang->caselib->methodOrder[40] = 'exportTemplate';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 
-$lang->resource->automation = new stdclass();
-$lang->resource->automation->browse = 'browse';
+$lang->resource->zahost = new stdclass();
+$lang->resource->zahost->browse         = 'browse';
+$lang->resource->zahost->create         = 'create';
+$lang->resource->zahost->edit           = 'editAction';
+$lang->resource->zahost->delete         = 'deleteAction';
+$lang->resource->zahost->view           = 'view';
+$lang->resource->zahost->browseImage    = 'browseImage';
+$lang->resource->zahost->downloadImage  = 'downloadImage';
+$lang->resource->zahost->cancelDownload = 'cancel';
 
-$lang->automation->methodOrder[0] = 'browse';
+$lang->zahost->methodOrder[0]  = 'browse';
+$lang->zahost->methodOrder[5]  = 'create';
+$lang->zahost->methodOrder[10] = 'edit';
+$lang->zahost->methodOrder[15] = 'delete';
+$lang->zahost->methodOrder[20] = 'view';
+$lang->zahost->methodOrder[25] = 'browseImage';
+$lang->zahost->methodOrder[30] = 'downloadImage';
+$lang->zahost->methodOrder[35] = 'cancelDownload';
+
+$lang->resource->zanode = new stdclass();
+$lang->resource->zanode->browse  = 'browse';
+$lang->resource->zanode->create  = 'create';
+$lang->resource->zanode->edit    = 'edit';
+$lang->resource->zanode->destroy = 'destroy';
+$lang->resource->zanode->reboot  = 'reboot';
+$lang->resource->zanode->suspend = 'suspend';
+$lang->resource->zanode->resume  = 'resume';
+$lang->resource->zanode->getVNC  = 'getVNC';
+$lang->resource->zanode->start   = 'boot';
+$lang->resource->zanode->close   = 'shutdown';
+$lang->resource->zanode->view    = 'view';
+$lang->resource->zanode->createImage = 'createImage';
+
+$lang->zanode->methodOrder[0]  = 'browse';
+$lang->zanode->methodOrder[5]  = 'create';
+$lang->zanode->methodOrder[10] = 'edit';
+$lang->zanode->methodOrder[15] = 'destroy';
+$lang->zanode->methodOrder[20] = 'reboot';
+$lang->zanode->methodOrder[35] = 'suspend';
+$lang->zanode->methodOrder[30] = 'resume';
+$lang->zanode->methodOrder[35] = 'getVNC';
+$lang->zanode->methodOrder[40] = 'start';
+$lang->zanode->methodOrder[45] = 'close';
+$lang->zanode->methodOrder[50] = 'view';
+$lang->zanode->methodOrder[55] = 'createImage';
 
 $lang->resource->repo                  = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';
@@ -1234,6 +1281,10 @@ $lang->resource->repo->maintain        = 'maintain';
 $lang->resource->repo->setRules        = 'setRules';
 $lang->resource->repo->apiGetRepoByUrl = 'apiGetRepoByUrl';
 $lang->resource->repo->downloadCode    = 'downloadCode';
+$lang->resource->repo->linkStory       = 'linkStory';
+$lang->resource->repo->linkBug         = 'linkBug';
+$lang->resource->repo->linkTask        = 'linkTask';
+$lang->resource->repo->unlink          = 'unlink';
 
 $lang->repo->methodOrder[5]  = 'create';
 $lang->repo->methodOrder[10] = 'edit';
@@ -1250,6 +1301,10 @@ $lang->repo->methodOrder[60] = 'download';
 $lang->repo->methodOrder[65] = 'setRules';
 $lang->repo->methodOrder[70] = 'apiGetRepoByUrl';
 $lang->repo->methodOrder[75] = 'downloadCode';
+$lang->repo->methodOrder[80] = 'linkStory';
+$lang->repo->methodOrder[85] = 'linkBug';
+$lang->repo->methodOrder[90] = 'linkTask';
+$lang->repo->methodOrder[95] = 'unlink';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
@@ -1684,9 +1739,18 @@ $lang->tree->methodOrder[20] = 'manageChild';
 $lang->tree->methodOrder[25] = 'edit';
 $lang->tree->methodOrder[30] = 'delete';
 
+/* Screen. */
+$lang->resource->screen = new stdclass();
+$lang->resource->screen->browse = 'browse';
+$lang->resource->screen->view   = 'view';
+
+$lang->screen->methodOrder[0]  = 'browse';
+$lang->screen->methodOrder[5]  = 'view';
+
 /* Report. */
 $lang->resource->report = new stdclass();
 $lang->resource->report->index            = 'index';
+$lang->resource->report->preview          = 'preview';
 $lang->resource->report->projectDeviation = 'projectDeviation';
 $lang->resource->report->productSummary   = 'productSummary';
 $lang->resource->report->bugCreate        = 'bugCreate';
@@ -1696,11 +1760,14 @@ $lang->resource->report->annualData       = 'annual';
 $lang->resource->report->allAnnualData    = 'viewEveryoneAnnual';
 
 $lang->report->methodOrder[0]  = 'index';
-$lang->report->methodOrder[5]  = 'projectDeviation';
-$lang->report->methodOrder[10] = 'productSummary';
-$lang->report->methodOrder[15] = 'bugCreate';
-$lang->report->methodOrder[20] = 'workload';
-$lang->report->methodOrder[25] = 'annual';
+$lang->report->methodOrder[5]  = 'preview';
+$lang->report->methodOrder[10] = 'projectDeviation';
+$lang->report->methodOrder[15] = 'productSummary';
+$lang->report->methodOrder[20] = 'bugCreate';
+$lang->report->methodOrder[25] = 'bugAssign';
+$lang->report->methodOrder[30] = 'workload';
+$lang->report->methodOrder[35] = 'annual';
+$lang->report->methodOrder[40] = 'allAnnualData';
 
 /* Search. */
 $lang->resource->search = new stdclass();

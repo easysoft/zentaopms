@@ -43,6 +43,7 @@ $lang->tree->confirmDelete        = 'Do you want to delete this module and its c
 $lang->tree->confirmDeleteMenu    = 'Do you want to delete this menu and its child menus?';
 $lang->tree->confirmDelCategory   = 'Möchten Sie diese Kategorie und ihre Kinderkategorien löschen?';
 $lang->tree->confirmDeleteLine    = "Do you want to delete this {$lang->productCommon} line?";
+$lang->tree->confirmDeleteGroup   = 'Do you want to delete this group and its child groups?';
 $lang->tree->confirmRoot          = "Any changes to the {$lang->productCommon} will change the stories, bugs, cases of {$lang->productCommon} it belongs to, as well as the linkage of {$lang->executionCommon} and {$lang->productCommon}, which is dangerous. Do you want to change it?";
 $lang->tree->confirmRoot4Doc      = "Any changes to the library will change the document of library it belongs to, which is dangerous. Do you want to change it?";
 $lang->tree->noSubmodule          = "There are no copyable submodules under the current module!";

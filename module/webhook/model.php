@@ -422,6 +422,7 @@ class webhookModel extends model
         $viewLink       = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $objectID);
         $objectTypeName = ($objectType == 'story' and $object->type == 'requirement') ? $this->lang->action->objectTypes['requirement'] : $this->lang->action->objectTypes[$objectType];
         $title          = $this->app->user->realname . $this->lang->action->label->$actionType . $objectTypeName;
+        $host           = (defined('RUN_MODE') and RUN_MODE == 'api') ? '' : $host;
         $text           = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
 
         $mobile = '';
@@ -452,7 +453,7 @@ class webhookModel extends model
         {
             $data = $this->getWeixinData($title, $text, $mobile);
         }
-        elseif($webhook->type == 'feishuuser')
+        elseif($webhook->type == 'feishuuser' or $webhook->type == 'feishugroup')
         {
             $data = $this->getFeishuData($title, $text);
         }
@@ -704,11 +705,9 @@ class webhookModel extends model
             $sign = $timestamp . "\n" . $webhook->secret;
             $sign = base64_encode(hash_hmac('sha256', '', $sign, true));
 
-            $content = array();
-            $content['timestamp'] = $timestamp;
-            $content['sign']      = $sign;
-            $content['msg_type']  = 'text';
-            $content['content']   = json_decode($sendData);
+            $content = json_decode($sendData);
+            $content->timestamp = $timestamp;
+            $content->sign      = $sign;
             $sendData = json_encode($content);
         }
 

@@ -46,6 +46,7 @@ $lang->task->export              = "导出数据";
 $lang->task->exportAction        = "导出任务";
 $lang->task->reportChart         = "报表统计";
 $lang->task->fromBug             = '来源Bug';
+$lang->task->fromBugID           = '来源Bug编号';
 $lang->task->case                = '相关用例';
 $lang->task->process             = '处理任务';
 $lang->task->confirmStoryChange  = "确认{$lang->SRCommon}变动";
@@ -182,6 +183,7 @@ $lang->task->noClosed          = '未关闭';
 $lang->task->yesterdayFinished = '昨日完成任务数';
 $lang->task->allTasks          = '总任务';
 $lang->task->linkMR            = '相关合并请求';
+$lang->task->linkCommit        = '相关代码版本';
 
 $lang->task->statusList['']       = '';
 $lang->task->statusList['wait']   = '未开始';
@@ -212,8 +214,12 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = '已完成';
 $lang->task->reasonList['cancel'] = '已取消';
 
-$lang->task->modeList['linear'] = '串行';
-$lang->task->modeList['multi']  = '并行';
+$lang->task->modeList['linear'] = '多人串行';
+$lang->task->modeList['multi']  = '多人并行';
+
+$lang->task->editModeList['single'] = '单人任务';
+$lang->task->editModeList['linear'] = '多人串行';
+$lang->task->editModeList['multi']  = '多人并行';
 
 $lang->task->afterChoices['continueAdding'] = "继续为该{$lang->SRCommon}添加任务";
 $lang->task->afterChoices['toTaskList']     = '返回任务列表';
@@ -225,6 +231,10 @@ $lang->task->legendLife   = '任务的一生';
 $lang->task->legendDesc   = '任务描述';
 $lang->task->legendDetail = '任务详情';
 $lang->task->legendMisc   = '其他相关';
+
+$lang->task->action = new stdclass();
+$lang->task->action->linked2revision      = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->unlinkedfromrevision = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
 
 $lang->task->confirmDelete             = "您确定要删除这个任务吗？";
 $lang->task->confirmDeleteEstimate     = "您确定要删除这个记录吗？";
@@ -241,6 +251,7 @@ $lang->task->confirmRecord             = '"剩余"为0，任务将标记为"已�
 $lang->task->confirmTransfer           = '剩余工时为0，当前成员已完成任务，任务指派给：<strong>%s</strong>。';
 $lang->task->noticeTaskStart           = '"总计消耗"和"预计剩余"不能同时为0';
 $lang->task->noticeLinkStory           = "没有可关联的相关{$lang->SRCommon}，您可以为当前项目%s，然后%s";
+$lang->task->noticeLinkStoryNoProduct  = "没有可关联的相关{$lang->SRCommon}";
 $lang->task->noticeSaveRecord          = '您有尚未保存的工时记录，请先将其保存。';
 $lang->task->noticeManageTeam          = '任务状态是%s，不能维护团队';
 $lang->task->commentActions            = '%s. %s, 由 <strong>%s</strong> 添加备注。';

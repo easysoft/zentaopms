@@ -12,8 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('confirmLink', $lang->release->confirmLink);?>
-<?php js::set('notEmptyBuilds', $notEmptyBuilds);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -23,7 +21,7 @@
       <table class='table table-form'>
         <tbody>
           <tr>
-            <th><?php echo $lang->release->name;?></th>
+            <th class='w-120px'><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' required");?></td>
             <td>
               <div id='markerBox' class='checkbox-primary'>
@@ -34,10 +32,13 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->release->build;?></th>
-            <td><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple");?></td>
+            <th><?php echo $lang->release->includedBuild;?></th>
+            <td><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
             <td>
-              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->release->tips;?>"></icon>
+              <div class="checkbox-primary">
+                <input type="checkbox" name="sync" value="1" id="sync" checked>
+                <label for="sync"><?php echo $lang->release->syncFromBuilds?></label>
+              </div>
             </td>
           </tr>
           <tr>
@@ -69,7 +70,6 @@
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo html::hidden('sync', 'false');?>
               <?php echo html::backButton();?>
             </td>
           </tr>

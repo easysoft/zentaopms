@@ -30,6 +30,8 @@ js::set('tab', $this->app->tab);
 js::set('requiredFields', $config->bug->create->requiredFields);
 js::set('showFields', $showFields);
 js::set('projectExecutionPairs', $projectExecutionPairs);
+js::set('productID', $productID);
+js::set('released', $lang->build->released);
 if($this->app->tab == 'execution') js::set('objectID', zget($execution, 'id', ''));
 if($this->app->tab == 'project')   js::set('objectID', $projectID);
 ?>
@@ -81,7 +83,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
           </tr>
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
-          <tr>
+          <tr class='bug-type'>
             <th><?php echo $showExecution ? $lang->bug->project : $lang->bug->type;?></th>
 
             <?php if(!$showExecution):?>
@@ -128,7 +130,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group' id='buildBox'>
                 <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
-                <?php echo html::select('openedBuild[]', $builds, empty($buildID) ? '' : $buildID, "multiple=multiple class='chosen form-control'");?>
+                <?php echo html::select('openedBuild[]', $builds, empty($buildID) ? '' : $buildID, "multiple=multiple class='picker-select form-control' data-items='" . count($builds) . "'");?>
                 <span class='input-group-addon fix-border' id='buildBoxActions'></span>
                 <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' id='all' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
               </div>
@@ -178,7 +180,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <?php if($showExecution):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
-          <tr>
+          <tr class='bug-type'>
             <th><?php echo $lang->bug->type;?></th>
             <td>
               <div class='table-row'>

@@ -24,13 +24,12 @@ $lang->release->batchUnlinkStory = "Mehrere Storys entfernen";
 $lang->release->batchUnlinkBug   = "Mehrere Bugs entfernen";
 
 $lang->release->confirmDelete      = "Möchten Sie dieses Releas löschen?";
-$lang->release->confirmLink        = "Whether to link the stories completed in the version and the bugs solved to the release?";
+$lang->release->syncFromBuilds     = "Link the stories completed in the version and the bugs solved to the release";
 $lang->release->confirmUnlinkStory = "Möchten Sie diese Story löschen?";
 $lang->release->confirmUnlinkBug   = "Möchten Sie diesen Bug löschen?";
 $lang->release->existBuild         = '『Build』『%s』 existiert bereits. Sie können den 『name』 ändern oder ein anderes 『build』 wählen.';
 $lang->release->noRelease          = 'Keine Releases. ';
 $lang->release->errorDate          = 'The release date should not be greater than today.';
-$lang->release->tips               = 'If no build is selected for a release, a build with the same name as the release is created by default.';
 
 $lang->release->basicInfo = 'Basis Info';
 
@@ -39,7 +38,7 @@ $lang->release->product        = $lang->productCommon;
 $lang->release->branch         = 'Platform/Branch';
 $lang->release->project        = 'Project';
 $lang->release->build          = 'Build';
-$lang->release->includedBuild  = 'Included Build';
+$lang->release->includedBuild  = 'Included Builds';
 $lang->release->relatedProject = 'Related Project';
 $lang->release->name           = 'Name';
 $lang->release->marker         = 'Meilensteine';

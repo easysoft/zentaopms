@@ -28,6 +28,12 @@
           <th class='w-80px'><?php echo $lang->story->assignedTo;?></th>
           <td class='w-p45'><?php echo html::select('assignedTo', $users, $story->closedBy, 'class="form-control chosen"');?></td><td></td>
         </tr>
+        <?php if(!empty($story->twins)):?>
+        <tr>
+          <th></th>
+          <td colspan='2'><i class='icon-exclamation-sign'></i> <?php echo $lang->story->activateSyncTip;?></td>
+        </tr>
+        <?php endif;?>
         <?php $this->printExtendFields($story, 'table');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>

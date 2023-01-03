@@ -156,8 +156,15 @@ class doc extends control
         /* Splice project name. */
         foreach($executions as $executionID => $execution)
         {
-            $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
-            $executions[$executionID] = $executionPrefix . $execution->name;
+            if($execution->multiple)
+            {
+                $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
+                $executions[$executionID] = $executionPrefix . $execution->name;
+            }
+            else
+            {
+                unset($executions[$executionID]);
+            }
         }
 
         /* Get the project that has permission to view. */
@@ -319,7 +326,7 @@ class doc extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, 0);
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
-            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params) . '#app=' . $this->app->tab;
+            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params);
             $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link);
 
             return $this->send($response);
@@ -616,6 +623,7 @@ class doc extends control
      */
     public function delete($docID, $confirm = 'no', $from = 'list')
     {
+        $this->loadModel('file');
         if($confirm == 'no')
         {
             $type = $this->dao->select('type')->from(TABLE_DOC)->where('id')->eq($docID)->fetch('type');
@@ -637,7 +645,7 @@ class doc extends control
                 $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
 
                 $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-                if(empty($fileRecord)) @unlink($file->realPath);
+                if(empty($fileRecord)) $this->file->unlinkFile($file);
             }
 
             /* if ajax request, send result. */

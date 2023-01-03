@@ -168,7 +168,8 @@ $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文档';
 $lang->repo->common       = '代码';
 $lang->repo->codeRepo     = '代码库';
-$lang->report->common     = '统计';
+$lang->screen->common     = '大屏';
+$lang->report->common     = 'BI';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
 $lang->story->common      = $lang->SRCommon;
@@ -204,6 +205,8 @@ $lang->action->trash      = '回收站';
 $lang->app->common        = '应用';
 $lang->app->serverLink    = '服务器链接';
 $lang->review->common     = '审批';
+$lang->zahost->common     = '宿主机';
+$lang->zanode->common     = '执行节点';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
@@ -286,7 +289,7 @@ $lang->testcase->case      = '用例';
 $lang->testcase->testsuite = '套件';
 $lang->testcase->caselib   = '用例库';
 
-$lang->devops->compile  = '构建';
+$lang->devops->compile  = '流水线';
 $lang->devops->mr       = '合并请求';
 $lang->devops->repo     = '代码库';
 $lang->devops->rules    = '指令';
@@ -475,7 +478,7 @@ if(!defined('DT_TIME2'))          define('DT_TIME2', 'H:i');
 if(!defined('LONG_TIME'))         define('LONG_TIME', '2059-12-31');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
-if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '100');
 
 /* datepicker 时间*/
 $lang->datepicker = new stdclass();

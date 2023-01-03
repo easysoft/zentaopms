@@ -1,0 +1,5 @@
+.go-preview-scale {transform: scale(1, 1) !important;}
+.go-preview-scale > div {margin: 0 auto !important;}
+.go-preview.scrollY {background: #001028 !important;}
+.go-preview-entity {width: auto !important; height: auto !important;}
+.hint-layer {width: 400px; white-space: break-spaces!important;}

@@ -110,7 +110,8 @@
     <?php else:?>
     <div class="table-empty-tip">
       <?php $emptyTips = ($app->rawModule == 'execution' and !$project->hasProduct) ? 'projectNoStories' : 'whyNoStories';?>
-      <p><span class="text-muted"><?php echo $lang->{$app->rawModule}->{$emptyTips};?></p>
+      <?php $app->loadLang('projectstory');?>
+      <p><span class="text-muted"><?php echo $project->multiple ? $lang->{$app->rawModule}->{$emptyTips} : $lang->projectstory->whyNoStories;?></p>
     </div>
     <?php endif;?>
   </form>

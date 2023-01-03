@@ -65,7 +65,7 @@ class block extends control
             $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
             if(strpos(",$closedBlock,", ",|assigntome,") === false) $modules['assigntome'] = $this->lang->block->assignToMe;
             if(strpos(",$closedBlock,", ",|dynamic,") === false) $modules['dynamic'] = $this->lang->block->dynamic;
-            if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
+            if(strpos(",$closedBlock,", ",|guide,") === false and $this->config->global->flow == 'full') $modules['guide'] = $this->lang->block->guide;
             if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
             if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
             if(strpos(",$closedBlock,", ",|contribute,") === false and $this->config->vision == 'rnd') $modules['contribute'] = $this->lang->block->contribute;
@@ -253,6 +253,10 @@ class block extends control
         $shortBlocks = $longBlocks = array();
         foreach($blocks as $key => $block)
         {
+            if($block->block == 'waterfallrisk'  and !helper::hasFeature('waterfall_risk'))  continue;
+            if($block->block == 'waterfallissue' and !helper::hasFeature('waterfall_issue')) continue;
+            if($block->block == 'scrumrisk'      and !helper::hasFeature('scrum_risk'))      continue;
+            if($block->block == 'scrumissue'     and !helper::hasFeature('scrum_issue'))     continue;
             if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
             {
                 unset($blocks[$key]);
@@ -420,9 +424,9 @@ class block extends control
         {
             $html = $this->fetch('block', 'dynamic');
         }
-        elseif($block->block == 'flowchart')
+        elseif($block->block == 'guide')
         {
-            $html = $this->fetch('block', 'flowchart');
+            $html = $this->fetch('block', 'guide', "blockID=$block->id");
         }
         elseif($block->block == 'assigntome')
         {
@@ -1233,7 +1237,8 @@ class block extends control
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
-        $progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
+        $left     = (float)$this->weekly->getLeft($this->session->project, $today);
+        $progress = (!empty($this->view->ac) or !empty($left)) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
         $this->view->progress = $progress > 100 ? 100 : $progress;
         $this->view->current  = $current;
     }
@@ -1257,7 +1262,8 @@ class block extends control
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
-        $progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
+        $left     = (float)$data['left'];
+        $progress = (!empty($this->view->ac) or !empty($left)) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
         $this->view->progress = $progress > 100 ? 100 : $progress;
     }
 
@@ -1428,6 +1434,35 @@ class block extends control
         $this->view->stories  = $stories;
         $this->view->bugs     = $bugs;
         $this->view->releases = $releases;
+    }
+
+    /**
+     * Print scrum issue block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumIssueBlock()
+    {
+        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
+        $this->session->set('issueList', $uri, 'project');
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+    }
+
+    /**
+     * Print scrum risk block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printScrumRiskBlock()
+    {
+        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
+        $this->session->set('riskList', $uri, 'project');
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
 
     /**
@@ -1918,6 +1953,11 @@ class block extends control
             $hasViewPriv['review'] = true;
             $count['review']       = count($reviews);
             $this->view->reviews   = $reviews;
+            if($this->config->edition == 'max')
+            {
+                $this->app->loadLang('approval');
+                $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
+            }
         }
 
         $this->view->selfCall    = $this->selfCall;
@@ -1961,12 +2001,28 @@ class block extends control
     }
 
     /**
-     * Print flow chart block
+     * Print guide block
+     *
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function flowchart()
+    public function guide($blockID = 0)
     {
+        $this->app->loadLang('custom');
+        $this->app->loadLang('my');
+        $this->loadModel('setting');
+
+        $this->view->blockID       = $blockID;
+        $this->view->programs      = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programID     = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
+        $this->view->URSRList      = $this->loadModel('custom')->getURSRPairs();
+        $this->view->URSR          = $this->setting->getURSR();
+        $this->view->programLink   = isset($this->config->programLink)   ? $this->config->programLink   : 'program-browse';
+        $this->view->productLink   = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
+        $this->view->projectLink   = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
+        $this->view->executionLink = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
+
         $this->display();
     }
 

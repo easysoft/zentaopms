@@ -22,8 +22,8 @@
 <?php js::set('currentUser', $app->user->account);?>
 <?php js::set('team', $task->members);?>
 <?php js::set('members', $members);?>
+<?php js::set('page', 'edit');?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
-
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
@@ -52,25 +52,15 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
             <div class='detail-title'><?php echo $lang->task->name;?></div>
             <div class='detail-content'>
               <div class='form-group'>
-                <div class='<?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair') echo 'input-group';?>'>
-                  <div class="input-control has-icon-right">
-                    <div class="colorpicker">
-                      <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-                      <ul class="dropdown-menu clearfix">
-                        <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
-                      </ul>
-                      <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $task->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".task-name"  data-provide="colorpicker">
-                    </div>
-                    <?php echo html::input('name', $task->name, 'class="form-control task-name" placeholder="' . $lang->task->name . '"');?>
+                <div class="input-control has-icon-right">
+                  <div class="colorpicker">
+                    <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                    <ul class="dropdown-menu clearfix">
+                      <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
+                    </ul>
+                    <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $task->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".task-name"  data-provide="colorpicker">
                   </div>
-                  <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
-                  <span class='input-group-addon'>
-                    <div class='checkbox-primary'>
-                      <input type='checkBox' name='multiple' id='multiple' value='1' disabled <?php echo empty($task->team) ? '' : 'checked';?> />
-                      <label for='multiple'><?php echo $lang->task->multipleAB;?></label>
-                    </div>
-                  </span>
-                  <?php endif;?>
+                  <?php echo html::input('name', $task->name, 'class="form-control task-name" placeholder="' . $lang->task->name . '"');?>
                 </div>
               </div>
             </div>
@@ -140,6 +130,28 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control chosen'");?></td>
               </tr>
               <?php endif;?>
+              <tr class="modeBox">
+                <th><?php echo $lang->task->mode;?></th>
+                <td>
+                  <?php
+                  if($task->status == 'wait')
+                  {
+                      echo html::select('mode', $lang->task->editModeList, $task->mode, "class='form-control chosen'");
+                  }
+                  else
+                  {
+                      if($task->mode == '')
+                      {
+                          echo $lang->task->editModeList['single'];
+                      }
+                      else
+                      {
+                          echo zget($lang->task->editModeList, $task->mode);
+                      }
+                  }
+                  ?>
+                </td>
+              </tr>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
                 <?php $disableAssignedTo = (!empty($task->team) and $task->mode == 'linear') ? "disabled='disabled'" : '';?>
@@ -159,15 +171,13 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                     $taskMembers = $members;
                 }
                 ?>
-                <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $taskMembers, $task->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></span></td>
-              </tr>
-              <tr class="modeBox <?php echo $task->mode ? '' : 'hidden';?>">
-                <th><?php echo $lang->task->mode;?></th>
-                <td><?php echo zget($lang->task->modeList, $task->mode) . html::hidden('mode', $task->mode);?></td>
-              </tr>
-              <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
-                <th><?php echo $lang->task->team;?></th>
-                <td><?php echo html::a('#modalTeam', $lang->task->team, '', "class='form-control btn' data-toggle='modal'");?></td>
+                <td>
+                  <div class='input-group' id='assignedToIdBox'>
+                    <?php $hiddenTeam = $task->mode != '' ? '' : 'hidden';?>
+                    <?php echo html::select('assignedTo', $taskMembers, $task->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?>
+                    <span class="input-group-btn team-group <?php echo $hiddenTeam;?>"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->type;?></th>

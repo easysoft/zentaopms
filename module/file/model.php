@@ -60,9 +60,7 @@ class fileModel extends model
                 continue;
             }
 
-            $realPathName   = $this->getRealPathName($file->pathname);
-            $file->realPath = $this->savePath . $realPathName;
-            $file->webPath  = $this->webPath . $realPathName;
+            $this->setFileWebAndRealPaths($file);
         }
 
         return $files;
@@ -88,9 +86,7 @@ class fileModel extends model
             return $file;
         }
 
-        $realPathName   = $this->getRealPathName($file->pathname);
-        $file->realPath = $this->savePath . $realPathName;
-        $file->webPath  = $this->webPath . $realPathName;
+        $this->setFileWebAndRealPaths($file);
 
         return $file;
     }
@@ -117,9 +113,7 @@ class fileModel extends model
                 continue;
             }
 
-            $realPathName   = $this->getRealPathName($file->pathname);
-            $file->realPath = $this->savePath . $realPathName;
-            $file->webPath  = $this->webPath . $realPathName;
+            $this->setFileWebAndRealPaths($file);
         }
 
         return $files;
@@ -488,6 +482,20 @@ class fileModel extends model
     }
 
     /**
+     * Set paths: realPath and webPath.
+     *
+     * @param  object $file
+     * @access public
+     * @return void
+     */
+    public function setFileWebAndRealPaths(&$file)
+    {
+        $pathName       = $this->getRealPathName($file->pathname);
+        $file->realPath = $this->savePath . $pathName;
+        $file->webPath  = $this->webPath . $pathName;
+    }
+
+    /**
      * Insert the set image size code.
      *
      * @param  string    $content
@@ -510,6 +518,30 @@ class fileModel extends model
         if($isonlybody) $_GET['onlybody'] = 'yes';
 
         return str_replace(' src="data/upload', ' onload="setImageSize(this,' . $maxSize . ')" src="data/upload', $content);
+    }
+
+    /**
+     * Check file exists or not.
+     *
+     * @param  object $file
+     * @access public
+     * @return bool
+     */
+    public function fileExists($file)
+    {
+        return file_exists($file->realPath);
+    }
+
+    /**
+     * Unlink file.
+     *
+     * @param  object $file
+     * @access public
+     * @return bool|null
+     */
+    public function unlinkFile($file)
+    {
+        return @unlink($file->realPath);
     }
 
     /**
@@ -635,7 +667,6 @@ class fileModel extends model
     public function pasteImage($data, $uid = '', $safe = false)
     {
         if(empty($data)) return '';
-        $data = str_replace('\"', '"', $data);
 
         $dataLength = strlen($data);
         if(ini_get('pcre.backtrack_limit') < $dataLength) ini_set('pcre.backtrack_limit', $dataLength);
@@ -644,7 +675,8 @@ class fileModel extends model
         {
             foreach($out[3] as $key => $base64Image)
             {
-                $extension = strtolower($out[2][$key]);
+                $base64Image = str_replace('\"', '"', $base64Image);
+                $extension   = strtolower($out[2][$key]);
                 if(!in_array($extension, $this->config->file->imageExtensions)) helper::end();
                 $imageData = base64_decode($base64Image);
 
@@ -1021,7 +1053,7 @@ class fileModel extends model
                 {
                     $file = $this->getById($imageID);
                     $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($imageID)->exec();
-                    @unlink($file->realPath);
+                    $this->unlinkFile($file);
                 }
             }
             unset($_SESSION['album'][$uid]);
@@ -1089,7 +1121,7 @@ class fileModel extends model
     {
         if($this->config->file->storageType == 'fs')
         {
-            return file_exists($file->realPath) ? getimagesize($file->realPath) : 0;
+            return file_exists($file->realPath) ? getimagesize($file->realPath) : array(0, 0, $file->extension);
         }
         else if($this->config->file->storageType == 's3')
         {
@@ -1155,7 +1187,7 @@ class fileModel extends model
             $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
             foreach($deleteFiles as $fileID)
             {
-                @unlink($oldObject->files[$fileID]->realPath);
+                $this->unlinkFile($oldObject->files[$fileID]);
                 $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
             }
         }
@@ -1166,5 +1198,42 @@ class fileModel extends model
 
         $newObject->files = trim($oldFiles . $addedFiles, ',');
         $oldObject->files = join(',', array_keys($oldObject->files));
+    }
+
+    /**
+     * Get last modified timestamp of file.
+     *
+     * @param  object $file
+     * @access public
+     * @return int
+     */
+    public function fileMTime($file)
+    {
+        return filemtime($file->realPath);
+    }
+
+    /**
+     * Get file size.
+     *
+     * @param  object $file
+     * @access public
+     * @return int
+     */
+    public function fileSize($file)
+    {
+        return filesize($file->realPath);
+    }
+
+    /**
+     * Save file to local storage temporarily.
+     *
+     * @param  object $file
+     * @access public
+     * @return string
+     */
+    public function saveAsTempFile($file)
+    {
+        /* If the storage type is local, do nothing. */
+        if($this->config->file->storageType == 'fs') return $file->realPath;
     }
 }

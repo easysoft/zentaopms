@@ -15,6 +15,7 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('lastLang', $lang->productplan->last);?>
+<?php js::set('parentPlanID', $parent);?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <div id='mainContent'class='main-content'>
   <div class='center-block'>
@@ -35,24 +36,33 @@
             <th><?php echo $lang->productplan->product;?></th>
             <td class='muted'><?php echo $product->name;?></td><td></td><td></td>
           </tr>
+          <?php endif;?>
+          <?php if(!$parent):?>
+          <tr>
+            <th><?php echo $lang->productplan->parent;?></th>
+            <td><?php echo html::select('parent', array(0 => '') + $parentPlanPairs, 0, "class='form-control chosen'");?>
+          </tr>
+          <?php endif;?>
           <?php if($product->type != 'normal'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch', $branches, $branch, "class='form-control chosen'");?></td><td></td><td></td>
+            <?php
+            if($parent)
+            {
+                foreach($branches as $branchID => $branchName)
+                {
+                    if(strpos(",$parentPlan->branch,", ",$branchID,") === false) unset($branches[$branchID]);
+                }
+            }
+            ?>
+            <td class='required'><?php echo html::select('branch[]', $branches, '', "class='form-control chosen' multiple");?></td><td></td><td></td>
           </tr>
-          <?php endif;?>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->title;?></th>
             <td><?php echo html::input('title', '', "class='form-control' required");?></td>
             <td colspan='2' class='muted'><?php if($lastPlan) echo '(' . $lang->productplan->last . ': ' . $lastPlan->title . ')';?></td>
           </tr>
-          <?php if(!$parent):?>
-          <tr>
-            <th><?php echo $lang->productplan->parent;?></th>
-            <td><?php echo html::select('parent', array('0' => '') + $parentPlanPairs, '', "class='form-control chosen'");?>
-          </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->begin;?></th>
             <td><?php echo html::input('begin', formatTime($begin), "class='form-control form-date'");?></td>
@@ -79,7 +89,6 @@
               <?php echo html::backButton();?>
               <?php echo html::hidden('product', $product->id);?>
               <?php if($parent):?>
-              <?php echo html::hidden('branch', $parentPlan->branch);?>
               <?php echo html::hidden('parent', $parent);?>
               <?php endif;?>
             </td>

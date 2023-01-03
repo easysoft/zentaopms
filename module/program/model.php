@@ -99,7 +99,7 @@ class programModel extends model
         $productPrograms = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
 
         /* Put products of current program first.*/
-        if(!empty($products) and $mode != 'assign' and $programID)
+        if(!empty($products) and isset($products[$programID]) and $mode != 'assign' and $programID)
         {
             $currentProgramProducts = $products[$programID];
             unset($products[$programID]);
@@ -274,7 +274,7 @@ class programModel extends model
         $involvedPrograms = $this->getInvolvedPrograms($this->app->user->account);
 
         /* Get all products under programs. */
-        $productGroup = $this->dao->select('id, program, name')->from(TABLE_PRODUCT)
+        $productGroup = $this->dao->select('id, program, name, shadow')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('program')->in(array_keys($programs))
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
@@ -285,7 +285,12 @@ class programModel extends model
         $productPairs = array();
         foreach($productGroup as $programID => $products)
         {
-            foreach($products as $product) $productPairs[$product->id] = $product->id;
+            foreach($products as $product)
+            {
+                $productPairs[$product->id] = $product->id;
+
+                if($product->shadow) $product->name = $product->name . ' (' . $this->lang->project->common . ')';
+            }
         }
 
         /* Get all plans under products. */
@@ -1026,15 +1031,31 @@ class programModel extends model
      */
     public function getTopPairs($model = '', $mode = '', $isQueryAll = false)
     {
-        return $this->dao->select('id,name')->from(TABLE_PROGRAM)
+        $topPairs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('grade')->eq(1)
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->andWhere('deleted')->eq(0)
+            ->beginIF(strpos($mode, 'withDeleted') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('`order` asc')
             ->fetchPairs();
+
+        if(strpos($mode, 'withDeleted') !== false)
+        {
+            $deletedTopPairs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
+                ->where('type')->eq('program')
+                ->andWhere('grade')->eq(1)
+                ->andWhere('deleted')->eq(1)
+                ->fetchPairs();
+
+            foreach($topPairs as $id => $name)
+            {
+                if(isset($deletedTopPairs[$id])) $topPairs[$id] .= ' (' . $this->lang->program->deleted . ')';
+            }
+        }
+
+        return $topPairs;
     }
 
     /**
@@ -1229,7 +1250,7 @@ class programModel extends model
      * Get program parent pairs
      *
      * @param  string $model
-     * @param  string $mode
+     * @param  string $mode       noclosed|all
      * @param  bool   $showRoot
      * @access public
      * @return array
@@ -1247,7 +1268,7 @@ class programModel extends model
         $treeMenu = array();
         foreach($modules as $module)
         {
-            if(strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
+            if(strpos($mode, 'all') !== false and strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
 
             $moduleName    = $showRoot ? '/' : '';
             $parentModules = explode(',', $module->path);
@@ -1604,7 +1625,7 @@ class programModel extends model
                 $menu .= "<div class='btn-group'>";
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', 'btn-action', '', "data-app='project'");
+                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', 'btn-action', '', "data-app='project'" . ($program->hasProduct ? '' : " disabled='disabled'"));
 
                 $disabledWhitelist = $program->acl == 'open' ? " disabled='disabled' style='pointer-events: none;'" : '';
                 $menu             .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=browse", $program, $type, 'shield-check', '', 'btn-action', '', "data-app='project'" . $disabledWhitelist);

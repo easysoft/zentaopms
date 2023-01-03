@@ -24,4 +24,6 @@ $(function()
         disableEmptySearch : true,
         dropWidth : 'auto'
     });
+    
+    $('[data-toggle="popover"]').popover();
 });

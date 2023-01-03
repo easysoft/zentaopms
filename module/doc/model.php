@@ -91,9 +91,9 @@ class docModel extends model
 
         $products   = $this->loadModel('product')->getPairs();
         $projects   = $this->loadModel('project')->getPairsByProgram();
-        $executions = $this->loadModel('execution')->getPairs();
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
         $waterfalls = array();
-        if(empty($objectID) and ($type == 'all' or $type == 'execution'))
+        if(empty($objectID) and $type != 'product' and $type != 'project' and $type != 'custom')
         {
             $waterfalls = $this->dao->select('t1.id,t2.name')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
@@ -306,6 +306,7 @@ class docModel extends model
                 if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
             }
         }
+        if($oldLib->acl != $lib->acl and $lib->acl == 'open') $lib->users = '';
 
         $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
         $this->dao->update(TABLE_DOCLIB)->data($lib)->autoCheck()
@@ -643,9 +644,7 @@ class docModel extends model
         {
             foreach($files as $file)
             {
-                $pathName       = $this->file->getRealPathName($file->pathname);
-                $file->webPath  = $this->file->webPath . $pathName;
-                $file->realPath = $this->file->savePath . $pathName;
+                $this->loadModel('file')->setFileWebAndRealPaths($file);
                 if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
             }
         }
@@ -822,6 +821,16 @@ class docModel extends model
             ->join('mailto', ',')
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
+
+        if($doc->type == 'chapter' and $doc->parent)
+        {
+            $parentDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$doc->parent)->fetch();
+            if(strpos($parentDoc->path, ",$docID,") !== false)
+            {
+                dao::$errors['parent'] = $this->lang->doc->errorParentChapter;
+                return false;
+            }
+        }
 
         if(!empty($doc->acl) and $doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
@@ -1520,6 +1529,7 @@ class docModel extends model
                     ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                     ->andWhere('t1.vision')->eq($this->config->vision)
                     ->andWhere('t1.deleted')->eq(0)
+                    ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                     ->fetchPairs();
             }
 
@@ -1740,9 +1750,7 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
-            $pathName       = $this->file->getRealPathName($file->pathname);
-            $file->realPath = $this->file->savePath . $pathName;
-            $file->webPath  = $this->file->webPath . $pathName;
+            $this->file->setFileWebAndRealPaths($file);
         }
 
         return $files;
@@ -2849,7 +2857,7 @@ EOT;
         }
 
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
-        if($tab != 'doc') $this->loadModel($tab)->setMenu($objectID);
+        if($tab != 'doc') $this->loadModel($type)->setMenu($objectID);
 
         $this->lang->TRActions  = $this->buildCollectButton4Doc();
         $this->lang->TRActions .= $this->buildCreateButton4Doc($type, $objectID, $libID);

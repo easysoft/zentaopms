@@ -124,7 +124,7 @@
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <td class='text-left nobr'>
             <?php
-            if(isset($bug->shadow))
+            if(isset($bug->shadow) and !empty($bug->shadow))
             {
                 echo html::a($this->createLink('project', 'browse'), $bug->productName, null, "title={$bug->productName}");
             }

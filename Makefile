@@ -108,6 +108,7 @@ zentaoxx:
 	sed -i "s/\$$super = \$$this->dao->select('admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('admin');/\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\n\$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$adminArray = explode(',', \$$admins);\n\$$super = in_array(\$$account, \$$adminArray) ? 'super' : '';/g" zentaoxx/extension/xuan/im/control.php
 	sed -i "/foreach(\$$users as \$$user)/i \$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\$$adminArray = explode(',', \$$admins);" zentaoxx/extension/xuan/im/model/user.php
 	sed -i "/if(\!isset(\$$user->signed)) \$$user->signed  = 0;/a \$$user->admin = in_array(\$$user->account, \$$adminArray) ? 'super' : '';" zentaoxx/extension/xuan/im/model/user.php
+	sed -i "/updateUser->ping/d" zentaoxx/extension/xuan/im/model/user.php
 	sed -i "s/\$$user = \$$this->user->login(\$$account, \$$user->password);/\$$user = \$$this->user->login(\$$user);\n\$$url .= \$$this->config->requestType == 'GET' ? '\&' : '?';\n\$$url .= \"{\$$this->config->sessionVar}={\$$this->app->sessionID}\";\n/" zentaoxx/extension/xuan/im/control.php
 	sed -i "s/\$$file->fullURL/\$$file->webPath/" zentaoxx/extension/xuan/im/control.php
 	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/_0_xuanxuan.php
@@ -152,6 +153,9 @@ zentaoxx:
 	sed -i "s/'..\/..\/common\/view\/header.html.php'/\$$app->getModuleRoot() . 'common\/view\/header.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/\$$this->im->userGetChangedPassword()/array()/" zentaoxx/extension/xuan/im/control.php
+	sed -i "/.*->getAllDepts();/d" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
+	sed -i "s/lang->user->status/lang->user->clientStatus/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
+	sed -i "s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	cp tools/en2other.php zentaoxx/tools; cd zentaoxx/tools; php en2other.php ../

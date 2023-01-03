@@ -46,13 +46,27 @@ class release extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->commonAction($productID, $branch);
-        $this->session->set('releaseList', $this->app->getURI(true), 'product');
+
+        $uri = $this->app->getURI(true);
+        $this->session->set('releaseList', $uri, 'product');
+        $this->session->set('buildList', $uri);
+        $releases    = $this->release->getList($productID, $branch, $type, $orderBy, $pager);
+        $showBranch  = false;
+        foreach($releases as $release)
+        {
+            if($release->productType != 'normal')
+            {
+                $showBranch = true;
+                break;
+            }
+        }
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->release->getList($productID, $branch, $type, $orderBy, $pager);
+        $this->view->releases   = $releases;
         $this->view->type       = $type;
         $this->view->pager      = $pager;
+        $this->view->showBranch = $showBranch;
         $this->display();
     }
 
@@ -82,17 +96,9 @@ class release extends control
             return $this->send(array('result' => 'success', 'message' => $message, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
-        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk|withbranch', 0, 'execution', '', false);
+        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk|withbranch|hasproject', 0, 'execution', '', false);
         $releasedBuilds = $this->release->getReleasedBuilds($productID, $branch);
         foreach($releasedBuilds as $build) unset($builds[$build]);
-
-        /* Get the builds of the linked stories or bugs. */
-        $notEmptyBuilds = array();
-        $buildList      = $this->build->getByList(array_keys($builds));
-        foreach($buildList as $build)
-        {
-            if(!empty($build->stories) or !empty($build->bugs)) $notEmptyBuilds[$build->id] = $build->id;
-        }
 
         $this->commonAction($productID, $branch);
         $this->view->title          = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
@@ -101,7 +107,6 @@ class release extends control
         $this->view->builds         = $builds;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease    = $this->release->getLast($productID, $branch);
-        $this->view->notEmptyBuilds = $notEmptyBuilds;
 
         $this->display();
     }
@@ -139,7 +144,7 @@ class release extends control
         $release = $this->release->getById((int)$releaseID);
         $this->commonAction($release->product);
 
-        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', 0, 'project', $release->build, false);
+        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch|hasproject', 0, 'project', $release->build, false);
         $releasedBuilds = $this->release->getReleasedBuilds($release->product);
         foreach($releasedBuilds as $releasedBuild)
         {
@@ -175,8 +180,10 @@ class release extends control
         $release   = $this->release->getByID($releaseID, true);
         if(!$release) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
-        if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
-        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $uri = $this->app->getURI(true);
+        if(!empty($release->build)) $this->session->set('buildList', $uri, 'project');
+        if($type == 'story') $this->session->set('storyList', $uri, 'product');
+        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $uri, 'qa');
 
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -187,20 +194,23 @@ class release extends control
 
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        $sort .= ',buildID_asc';
 
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
-            ->where('id')->in($release->stories)
-            ->andWhere('deleted')->eq(0)
+        $stories = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
+            ->where('t1.id')->in($release->stories)
+            ->andWhere('t1.deleted')->eq(0)
             ->beginIF($type == 'story')->orderBy($sort)->fi()
             ->page($storyPager)
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
+        $sort = common::appendOrder($orderBy);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('id')->in($release->bugs)
             ->andWhere('deleted')->eq(0)
@@ -209,8 +219,9 @@ class release extends control
             ->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
 
-        $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
+        $sort = common::appendOrder($orderBy);
         if($type == 'leftBug' and strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
+        $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
 
         $leftBugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('id')->in($release->leftBugs)
@@ -242,6 +253,7 @@ class release extends control
         $this->view->storyPager    = $storyPager;
         $this->view->bugPager      = $bugPager;
         $this->view->leftBugPager  = $leftBugPager;
+        $this->view->builds        = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject', 0, 'execution', '', false);
 
         if($this->app->getViewType() == 'json')
         {
@@ -302,7 +314,11 @@ class release extends control
 
             $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
             $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
-            if(empty($build->execution)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
+            $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->shadow)->exec();
+            foreach($builds as $build)
+            {
+                if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
+            }
 
             $message = $this->executeHooks($releaseID);
             if($message) $response['message'] = $message;
@@ -320,7 +336,6 @@ class release extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                     $release = $this->release->getById($releaseID);
-                    $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->build)->andWhere('name')->eq($release->name)->exec();
                 }
 
                 return $this->send($response);
@@ -525,7 +540,7 @@ class release extends control
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($executionIdList, $build->product, 0, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $release->stories, $pager);
+            $allStories = $this->story->getExecutionStories($executionIdList, $release->product, 0, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $release->stories, $pager);
         }
 
         $this->view->allStories     = $allStories;
@@ -623,7 +638,7 @@ class release extends control
 
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairsForStory($release->product, $release->branch, 'skipParent|withMainPlan');
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, $release->branch);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 'all', $params = '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $searchModules = array();

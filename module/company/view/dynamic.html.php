@@ -72,10 +72,11 @@
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text"><?php echo $action->objectLabel;?></span>
               <?php if($action->objectID):?>
-              <span class="label label-id"><?php echo ($action->objectType == 'module' and strpos(',created,edited,moved,', "$action->action") !== false) ? trim($action->extra, ',') : $action->objectID;?></span>
+              <span class="label label-id"><?php echo (strpos(',module,chartgroup,', ",$action->objectType,") !== false and strpos(',created,edited,moved,', "$action->action") !== false) ? trim($action->extra, ',') : $action->objectID;?></span>
               <?php endif;?>
               <?php $tab = '';?>
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
+              <?php if($action->objectType == 'module' and $config->vision == 'lite') $tab = "data-app='project'";?>
               <span class="label-name">
               <?php
               if(empty($action->objectName) and $action->objectID)

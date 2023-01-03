@@ -635,10 +635,10 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
-        $visionList = $this->user->getVisionList();
+        $userVisionList = $this->user->getVisionList();
 
         $user       = $this->user->getById($userID, 'id');
-        $userGroups = $this->loadModel('group')->getByAccount($user->account, implode(',', array_keys($visionList)));
+        $userGroups = $this->loadModel('group')->getByAccount($user->account, count($userVisionList) > 1 ? true : false);
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
         $position[] = $this->lang->user->edit;
@@ -650,7 +650,7 @@ class user extends control
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq(0)->fetchPairs('id', 'name');
         $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visionList = $visionList;
+        $this->view->visionList = $userVisionList;
 
         $this->display();
     }
@@ -872,7 +872,7 @@ class user extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
-                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
+                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $response['message']))));
                 return $this->send($response);
             }
 
@@ -1048,10 +1048,10 @@ class user extends control
     public function logout($referer = 0)
     {
         if(isset($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
+        setcookie('za', false, time() - 3600, $this->config->webRoot);
+        setcookie('zp', false, time() - 3600, $this->config->webRoot);
+        setcookie('tab', false, time() - 3600, $this->config->webRoot);        ;
         session_destroy();
-        setcookie('za', false);
-        setcookie('zp', false);
-        setcookie('tab', false);
 
         if($this->app->getViewType() == 'json') return print(json_encode(array('status' => 'success')));
         $vars = !empty($referer) ? "referer=$referer" : '';
@@ -1090,8 +1090,7 @@ class user extends control
         }
 
         /* Remove the real path for security reason. */
-        $pathPos       = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
-        $resetFileName = substr($resetFileName, $pathPos + 1);
+        $resetFileName = str_replace($this->app->getBasePath(), '', $resetFileName);
 
         $this->view->title          = $this->lang->user->resetPassword;
         $this->view->status         = 'reset';

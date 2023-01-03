@@ -81,8 +81,6 @@ class bugModel extends model
             ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket')
             ->get();
 
-        if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
-
         /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
         if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
@@ -218,8 +216,6 @@ class bugModel extends model
             $bug->keywords    = $data->keywords[$i];
 
             if(isset($data->lanes[$i])) $bug->laneID = $data->lanes[$i];
-
-            if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
 
             /* Assign the bug to the person in charge of the module. */
             if(!empty($moduleOwners[$bug->module]))
@@ -728,6 +724,7 @@ class bugModel extends model
             ->setIF($this->post->assignedTo  == '' and $oldBug->status           == 'closed', 'assignedTo', 'closed')
             ->setIF($this->post->resolution  == '' and $this->post->resolvedDate =='', 'status', 'active')
             ->setIF($this->post->resolution  != '', 'confirmed', 1)
+            ->setIF($this->post->resolution  != '' and $this->post->resolution != 'duplicate', 'duplicateBug', 0)
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF(!$this->post->linkBug, 'linkBug', '')
             ->setIF($this->post->case === '', 'case', 0)
@@ -839,8 +836,9 @@ class bugModel extends model
             {
                 $oldBug = $oldBugs[$bugID];
 
-                $os       = array_filter($data->os[$bugID]);
-                $browsers = array_filter($data->browsers[$bugID]);
+                $os           = array_filter($data->os[$bugID]);
+                $browsers     = array_filter($data->browsers[$bugID]);
+                $duplicateBug = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
 
                 $bug = new stdclass();
                 $bug->id             = $bugID;
@@ -861,7 +859,7 @@ class bugModel extends model
                 $bug->os             = implode(',', $os);
                 $bug->browser        = implode(',', $browsers);
                 $bug->resolution     = $data->resolutions[$bugID];
-                $bug->duplicateBug   = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
+                $bug->duplicateBug   = ($bug->resolution  != '' and $bug->resolution != 'duplicate') ? 0 : $duplicateBug;
 
                 if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
                 if($bug->resolution != '') $bug->confirmed = 1;
@@ -1621,7 +1619,7 @@ class bugModel extends model
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if($this->session->currentProductType == 'normal')
         {
@@ -1857,7 +1855,7 @@ class bugModel extends model
                 ->andWhere('deleted')->eq(0)
                 ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
                 ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('product')->eq($productID)->fi()
-                ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('branch')->eq($branchID)->fi()
+                ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false and $branchID != 'all')->andWhere('branch')->eq($branchID)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -2126,7 +2124,7 @@ class bugModel extends model
      */
     public function getLinkedExecutionByIdList($buildIdList)
     {
-        $builds = $this->dao->select('id,execution')->from(TABLE_BUILD)->where('id')->in($buildIdList)->fetchAll('id');
+        $builds = $this->dao->select('id,execution,builds')->from(TABLE_BUILD)->where('id')->in($buildIdList)->fetchAll('id');
 
         $executionIdList   = array();
         $linkedBuildIdList = array();
@@ -2245,8 +2243,8 @@ class bugModel extends model
 
         if(!empty($stepResults))
         {
-            $bugStep = '';
-            $bugResult = '';
+            $bugStep   = '';
+            $bugResult = isset($stepResults[0]) ? $stepResults[0]['real'] : '';
             $bugExpect = '';
             foreach($steps as $stepId)
             {
@@ -2321,7 +2319,7 @@ class bugModel extends model
         $products = $this->session->product;
         preg_match('/`product` IN \((?P<productIdList>.+)\)/', $this->reportCondition(), $matchs);
         if(!empty($matchs) and isset($matchs['productIdList'])) $products = str_replace('\'', '', $matchs['productIdList']);
-        $builds = $this->loadModel('build')->getBuildPairs($products, $branch = 0, $params = 'hasDeleted');
+        $builds = $this->loadModel('build')->getBuildPairs($products, $branch = 0, $params = 'hasdeleted');
 
         /* Deal with the situation that a bug maybe associate more than one openedBuild. */
         foreach($datas as $buildIDList => $data)
@@ -3025,6 +3023,8 @@ class bugModel extends model
         }
 
         $allBranch = "`branch` = 'all'";
+        $branch    = trim($branch, ',');
+        if(strpos($branch, ',') !== false) $branch = str_replace(',', "','", $branch);
         if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
@@ -3222,16 +3222,16 @@ class bugModel extends model
         if(empty($resolvedBuild) or $resolvedBuild == 'trunk') return true;
         if(is_array($bugs)) $bugs = join(',', $bugs);
 
-        $buildBugs  = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($resolvedBuild)->fetch('bugs');
-        $buildBugs .= ',' . $bugs;
-        $buildBugs  = explode(',', trim($buildBugs, ','));
-        $buildBugs  = array_unique($buildBugs);
+        $build     = $this->dao->select('id,product,bugs')->from(TABLE_BUILD)->where('id')->eq($resolvedBuild)->fetch();
+        $buildBugs = $build->bugs . ',' . $bugs;
+        $buildBugs = explode(',', trim($buildBugs, ','));
+        $buildBugs = array_unique($buildBugs);
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq(join(',', $buildBugs))->where('id')->eq($resolvedBuild)->exec();
 
-        $release = $this->dao->select('id,bugs')->from(TABLE_RELEASE)->where('build')->eq($resolvedBuild)->andWhere('deleted')->eq('0')->fetch();
+        $release = $this->dao->select('id,bugs')->from(TABLE_RELEASE)->where('product')->eq($build->product)->andWhere("(FIND_IN_SET('$resolvedBuild', build) or shadow = $resolvedBuild)")->andWhere('deleted')->eq('0')->fetch();
         if($release)
         {
-            $releaseBugs = $release->bugs .',' . $bugs;
+            $releaseBugs = $release->bugs . ',' . $bugs;
             $releaseBugs = explode(',', trim($releaseBugs, ','));
             $releaseBugs = array_unique($releaseBugs);
             $this->dao->update(TABLE_RELEASE)->set('bugs')->eq(join(',', $releaseBugs))->where('id')->eq($release->id)->exec();
@@ -3302,7 +3302,7 @@ class bugModel extends model
         foreach($browserList as $value)
         {
             if(empty($value)) continue;
-            $browser .= $this->lang->bug->browserList[$value] . ',';
+            $browser .= zget($this->lang->bug->browserList, $value) . ',';
         }
         $os      = trim($os, ',');
         $browser = trim($browser, ',');
@@ -3490,19 +3490,7 @@ class bugModel extends model
                 echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);
                 break;
             case 'openedBuild':
-                $builds = array_flip($builds);
-                foreach(explode(',', $bug->openedBuild) as $build)
-                {
-                    $buildID = zget($builds, $build, '');
-                    if($buildID == 'trunk')
-                    {
-                        echo $build . ' ';
-                    }
-                    elseif($buildID and common::hasPriv('build', 'view'))
-                    {
-                        echo html::a(helper::createLink('build', 'view', "buildID=$buildID"), $build, '', "title='$bug->openedBuild'") . ' ';
-                    }
-                }
+                echo $bug->openedBuild;
                 break;
             case 'assignedTo':
                 $this->printAssignedHtml($bug, $users);
@@ -3725,8 +3713,13 @@ class bugModel extends model
         /* Get related objects title or names. */
         $table = $this->config->objectTables[$object];
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
+        if($object == 'branch' and $this->session->currentProductType != 'normal')
+        {
+            $productID      = current($bugs)->product;
+            $relatedObjects = $this->dao->select($pairs)->from($table)->where('product')->eq($productID)->fetchPairs();
+        }
 
-        if(in_array($object, array('build','resolvedBuild'))) $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
+        if(in_array($object, array('build','resolvedBuild','branch'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
         return array('' => '', 0 => '') + $relatedObjects;
     }
 

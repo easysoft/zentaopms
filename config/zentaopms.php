@@ -227,6 +227,7 @@ $config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
 $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
+$config->openMethods[] = 'zahost.introduction';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
@@ -253,6 +254,11 @@ define('TABLE_TESTTASK',      '`' . $config->db->prefix . 'testtask`');
 define('TABLE_TESTRUN',       '`' . $config->db->prefix . 'testrun`');
 define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testresult`');
 define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
+define('TABLE_ZAHOST',        '`' . $config->db->prefix . 'host`');
+define('TABLE_IMAGE',         '`' . $config->db->prefix . 'image`');
+define('TABLE_AUTOMATION',    '`' . $config->db->prefix . 'automation`');
+
+if(!defined('TABLE_ASSET'))  define('TABLE_ASSET', '`' . $config->db->prefix . 'asset`');
 
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
@@ -342,9 +348,12 @@ if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db-
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
 
+define('TABLE_SCREEN',    '`' . $config->db->prefix . 'screen`');
 define('TABLE_CHART',     '`' . $config->db->prefix . 'chart`');
 define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
 define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
+define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
+define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -394,6 +403,9 @@ $config->objectTables['jebkins']      = TABLE_PIPELINE;
 $config->objectTables['stage']        = TABLE_STAGE;
 $config->objectTables['apistruct']    = TABLE_APISTRUCT;
 $config->objectTables['repo']         = TABLE_REPO;
+$config->objectTables['dataview']     = TABLE_DATAVIEW;
+$config->objectTables['zahost']        = TABLE_ZAHOST;
+$config->objectTables['automation']    = TABLE_AUTOMATION;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';
@@ -403,7 +415,7 @@ $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqu
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint  = array('task', 'story', 'tree', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder');
+$config->programPriv->noSprint  = array('task', 'story', 'tree', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'requirement');
 $config->programPriv->scrum     = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
 $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('task', 'workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 
@@ -420,6 +432,6 @@ $config->dtable->colVars = array('width', 'minWidth', 'type', 'flex', 'fixed', '
 $config->featureGroup = new stdclass();
 $config->featureGroup->product   = array('roadmap', 'track', 'UR');
 $config->featureGroup->scrum     = array();
-$config->featureGroup->waterfall = array('track');
+$config->featureGroup->waterfall = array();
 $config->featureGroup->assetlib  = array();
 $config->featureGroup->other     = array('devops', 'kanban');

@@ -27,6 +27,8 @@ $isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 js::set('browseType', $browseType);
+js::set('account', $this->app->user->account);
+js::set('reviewStory', $lang->product->reviewStory);
 js::set('productID', $productID);
 js::set('projectID', $projectID);
 js::set('branch', $branch);
@@ -38,6 +40,7 @@ js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->execution->treeLevel['all']);
 js::set('foldAll',       $lang->execution->treeLevel['root']);
 js::set('storyType',     $storyType);
+js::set('vision',        $this->config->vision);
 ?>
 <style>
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
@@ -73,13 +76,14 @@ js::set('storyType',     $storyType);
     <?php if($isProjectStory): ?>
     <?php if(!empty($project->hasProduct)):?>
     <div class='btn-group'>
-      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $productName;?>'><?php echo $productName;?></span> <span class='caret'></span></a>
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><div class='text' style="overflow: hidden;" title='<?php echo $productName;?>'><?php echo $productName;?></div> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
-        echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
+        echo '<li ' . (empty($productID) ? "class='active'" : '') . '>' . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
         foreach($projectProducts as $projectProduct)
         {
-            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$projectProduct->id&branch=all"), $projectProduct->name, '', "title='{$projectProduct->name}' class='text-ellipsis'") . "</li>";
+            $active = $projectProduct->id == $productID ? "class='active'" : '';
+            echo "<li $active>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$projectProduct->id&branch=all"), $projectProduct->name, '', "title='{$projectProduct->name}' class='text-ellipsis'") . "</li>";
         }
         ?>
       </ul>
@@ -353,6 +357,7 @@ js::set('storyType',     $storyType);
           <?php foreach($stories as $story):?>
           <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' <?php if(!empty($story->children)) echo "data-children=" . count($story->children);?> data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
             <?php $story->from = $from;?>
+            <?php if(!empty($branchOptions) and isset($branchOptions[$story->product])) $branchOption = $branchOptions[$story->product];?>
             <?php if($this->app->getViewType() == 'xhtml'):?>
             <?php
             foreach($setting as $key => $value)
@@ -401,9 +406,9 @@ js::set('storyType',     $storyType);
           <div class='btn-group dropup'>
             <?php
             foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
-            $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
-            $disabled       = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink     = $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType");
+            $storyProductID  = count($storyProductIds) > 1 ? 0 : $productID;
+            $disabled        = $canBatchEdit ? '' : "disabled='disabled'";
+            $actionLink      = $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType");
             ?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch) echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch):?>
@@ -615,7 +620,11 @@ js::set('storyType',     $storyType);
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $lang->project->linkStoryByPlanTips . ')';?>
+        <h4 class="modal-title">
+          <?php
+          $linkStoryByPlanTips = $product->type == 'normal' ? $lang->project->linkNormalStoryByPlanTips : sprintf($lang->project->linkBranchStoryByPlanTips, $lang->product->branchName[$product->type]);
+          echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $linkStoryByPlanTips . ')';
+          ?>
       </div>
       <div class="modal-body">
         <div class='input-group'>

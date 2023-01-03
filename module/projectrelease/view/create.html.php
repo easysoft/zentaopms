@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('confirmLink', $confirmLink);?>
 <?php js::set('projectID', $projectID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -23,7 +22,7 @@
       <table class='table table-form'>
         <tbody>
           <tr>
-            <th><?php echo $lang->release->name;?></th>
+            <th class='w-120px'><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' required");?></td>
             <td>
               <?php if(!$product->shadow):?>
@@ -40,20 +39,18 @@
           <?php else:?>
           <tr>
             <th><?php echo $lang->release->product;?></th>
-            <td>
-              <div class='input-group'>
-              <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value)' class='form-control chosen'");?>
-              <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBuilds()' class='form-control chosen control-branch'");?>
-              </div>
-            </td>
+            <td><?php echo html::select('product', $products, $product->id, "onchange='loadBuilds()' class='form-control chosen'");?></td>
             <td></td>
           </tr>
           <?php endif;?>
           <tr>
-            <th><?php echo $lang->release->build;?></th>
-            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple");?></td>
+            <th><?php echo $lang->release->includedBuild;?></th>
+            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
             <td>
-              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->release->tips;?>"></icon>
+              <div class="checkbox-primary">
+                <input type="checkbox" name="sync" value="1" id="sync" checked>
+                <label for="sync"><?php echo $lang->release->syncFromBuilds?></label>
+              </div>
             </td>
           </tr>
           <tr>
@@ -85,7 +82,6 @@
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo html::hidden('sync', 'false');?>
               <?php echo html::backButton();?>
             </td>
           </tr>
@@ -94,4 +90,5 @@
     </form>
   </div>
 </div>
+<?php js::set('multipleSelect', $lang->build->placeholder->multipleSelect);?>
 <?php include '../../common/view/footer.html.php';?>

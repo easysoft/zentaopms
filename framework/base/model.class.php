@@ -150,6 +150,15 @@ class baseModel
 
         $this->loadDAO();
         $this->setSuperVars();
+
+        /**
+         * 读取当前模块的tao类。
+         * Load the tao file auto.
+         */
+        $taoClass      = $moduleName . 'Tao';
+        $selfClass     = get_class($this);
+        $parentClasses = class_parents($this);
+        if($selfClass != $taoClass && !isset($parentClasses[$taoClass])) $this->loadTao($moduleName, $this->appName);
     }
 
     /**
@@ -170,11 +179,11 @@ class baseModel
      */
     public function getModuleName()
     {
-        $parentClass = get_parent_class($this);
-        $selfClass   = get_class($this);
-        $className   = $parentClass == 'model' ? $selfClass : $parentClass;
-        if($className == 'extensionModel') return 'extension';
-        return strtolower(str_ireplace(array('ext', 'Model'), '', $className));
+        $className     = get_class($this);
+        $parentClasses = class_parents($this);
+        if(count($parentClasses) > 2) $className = current(array_slice($parentClasses, -3, 1));
+        if(strtolower(substr($className, -5)) == 'model') $className = strtolower(substr($className, 0, strlen($className) - 5));
+        return $className;
     }
 
     /**
@@ -194,41 +203,44 @@ class baseModel
     }
 
     /**
-     * 加载一个模块的model。加载完成后，使用$this->$moduleName来访问这个model对象。
+     * 加载一个模块的model对象。加载完成后，使用$this->$moduleName来访问这个model对象。
      * 比如：loadModel('user')引入user模块的model实例对象，可以通过$this->user来访问它。
      *
-     * Load the model of one module. After loaded, can use $this->$moduleName to visit the model object.
+     * Load the model object of one module. After loaded, can use $this->$moduleName to visit the model object.
      *
-     * @param   string  $moduleName
-     * @access  public
-     * @return  object|bool  the model object or false if model file not exists.
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
     public function loadModel($moduleName, $appName = '')
     {
-        if(empty($moduleName)) return false;
-        if(empty($appName)) $appName = $this->appName;
-        $moduleName = strtolower($moduleName);
+        $model = $this->app->loadTarget($moduleName, $appName);
+        if(!$model) return false;
 
-        global $loadedModels;
-        if(isset($loadedModels[$appName][$moduleName]))
-        {
-            $this->$moduleName = $loadedModels[$appName][$moduleName];
-            return $this->$moduleName;
-        }
+        $this->{$moduleName} = $model;
+        return $model;
+    }
 
-        $modelFile = $this->app->setModelFile($moduleName, $appName);
+    /**
+     * 加载一个模块的tao对象。加载完成后，使用$this->{$moduleName}Tao来访问这个tao对象。
+     * 比如：loadTao('user')引入user模块的tao实例对象，可以通过$this->userTao来访问它。
+     *
+     * Load the tao object of one module. After loaded, can use $this->{$moduleName}Tao to visit the tao object.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool 如果没有tao文件，返回false，否则返回tao对象。If no tao file, return false, else return the tao object.
+     */
+    public function loadTao($moduleName, $appName = '')
+    {
+        $tao = $this->app->loadTarget($moduleName, $appName, 'tao');
+        if(!$tao) return false;
 
-        if(!helper::import($modelFile)) return false;
-        $modelClass = class_exists('ext' . $appName . $moduleName. 'model') ? 'ext' . $appName . $moduleName . 'model' : $appName . $moduleName . 'model';
-        if(!class_exists($modelClass))
-        {
-            $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
-            if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
-        }
-
-        $loadedModels[$appName][$moduleName] = new $modelClass($appName);
-        $this->$moduleName = $loadedModels[$appName][$moduleName];
-        return $this->$moduleName;
+        $taoObjectName = $moduleName . 'Tao';
+        $this->{$taoObjectName} = $tao;
+        return $tao;
     }
 
     /**
@@ -252,32 +264,37 @@ class baseModel
     public function loadExtension($extensionName, $moduleName = '')
     {
         if(empty($extensionName)) return false;
+        if(empty($moduleName)) $moduleName = $this->getModuleName();
 
-        $moduleName    = $moduleName ? $moduleName : $this->getModuleName();
         $moduleName    = strtolower($moduleName);
         $extensionName = strtolower($extensionName);
 
+        $type      = 'model';
+        $className = strtolower(get_class($this));
+        if($className == $moduleName . 'tao' || $className == 'ext' . $moduleName . 'tao') $type = 'tao';
+
         /* 设置扩展类的名字。Set the extension class name. */
         $extensionClass = $extensionName . ucfirst($moduleName);
+        if($type != 'model') $extensionClass .= ucfirst($type);
         if(isset($this->$extensionClass)) return $this->$extensionClass;
 
         /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
-        $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'model');
+        $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $type);
         if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
-        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['custom'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['saas']   . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['custom'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['vision'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['xuan']   . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['common'] . 'class/' . $extensionName . '.class.php';
 
         /* 载入父类。Try to import parent model file auto and then import the extension file. */
-        if(!class_exists($moduleName . 'Model')) helper::import($this->app->getModulePath($this->appName, $moduleName) . 'model.php');
+        if(!class_exists($moduleName . ucfirst($type))) helper::import($this->app->getModulePath($this->appName, $moduleName) . $type . '.php');
         if(!helper::import($extensionFile)) return false;
         if(!class_exists($extensionClass)) return false;
 
         /* 实例化扩展类。Create an instance of the extension class and return it. */
         $extensionObject = new $extensionClass;
-        $extensionClass  = str_replace('Model', '', $extensionClass);
+        if($type == 'model') $extensionClass = str_replace(ucfirst($type), '', $extensionClass);
         $this->$extensionClass = $extensionObject;
         return $extensionObject;
     }

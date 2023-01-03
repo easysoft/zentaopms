@@ -40,6 +40,7 @@ $lang->company     = new stdclass();
 $lang->dept        = new stdclass();
 $lang->group       = new stdclass();
 $lang->user        = new stdclass();
+$lang->screen      = new stdclass();
 $lang->report      = new stdclass();
 $lang->repo        = new stdclass();
 $lang->jenkins     = new stdclass();
@@ -84,6 +85,8 @@ $lang->acl         = new stdclass();
 $lang->curd        = new stdclass();
 $lang->sonarqube   = new stdclass();
 $lang->app         = new stdclass();
+$lang->zahost      = new stdclass();
+$lang->zanode      = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

@@ -382,7 +382,7 @@ function toggleSelectTestStory()
     {
         $('#module').closest('tr').removeClass('hidden');
         $('#multipleBox').closest('td').removeClass('hidden');
-        $('#story').closest('tr').removeClass('hidden');
+        if(showFields.indexOf('story') != -1) $('#story').closest('tr').removeClass('hidden');
         $('#estStarted').closest('tr').removeClass('hidden');
         $('#estimate').closest('.table-col').removeClass('hidden');
         $('#testStoryBox').addClass('hidden');
@@ -581,7 +581,7 @@ $('#modalTeam tfoot .btn').click(function()
     var team  = '';
     var time  = 0;
     var error = false;
-    var mode  = $('#mode').val();
+    var mode  = $('[name="mode"]').val();
 
     $('select[name^=team]').each(function()
     {

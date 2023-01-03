@@ -168,7 +168,8 @@ $lang->devops->common     = 'DevOps';
 $lang->doc->common        = 'Doc';
 $lang->repo->common       = 'Code';
 $lang->repo->codeRepo     = 'Code Repo';
-$lang->report->common     = 'Statistics';
+$lang->screen->common     = 'Screen';
+$lang->report->common     = 'BI';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
 $lang->story->common      = 'Story';
@@ -204,6 +205,8 @@ $lang->action->trash      = 'Recycle';
 $lang->app->common        = 'APP';
 $lang->app->serverLink    = 'Server Link';
 $lang->review->common     = 'Review';
+$lang->zahost->common     = 'ZAhost';
+$lang->zanode->common     = 'ZAnode';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -286,7 +289,7 @@ $lang->testcase->case      = 'Test Case';
 $lang->testcase->testsuite = 'Test Suite';
 $lang->testcase->caselib   = 'Case Library';
 
-$lang->devops->compile  = 'Compile';
+$lang->devops->compile  = 'Pipelines';
 $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
@@ -475,7 +478,7 @@ if(!defined('DT_TIME2'))          define('DT_TIME2',     'H:i');
 if(!defined('LONG_TIME'))         define('LONG_TIME',    '2059-12-31');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
-if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '100');
 
 /* Datepicker. */
 $lang->datepicker = new stdclass();

@@ -452,7 +452,7 @@ class upgradeModel extends model
                 $this->updateProjectLinkedBranch();
                 break;
             case '16_0_beta1':
-                $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
+                $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, commonModel::getSysURL() . $this->app->config->webRoot . 'api.php/v1', '16.0');
                 break;
             case '16_1':
                 $this->moveKanbanData();
@@ -575,6 +575,17 @@ class upgradeModel extends model
                 }
                 $this->xuanSetMuteForHiddenGroups();
                 $this->xuanNotifyGroupHiddenUsers();
+                $this->initShadowBuilds();
+                break;
+            case '18_0_beta1':
+                if(!$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+                break;
+            case '18_0_beta2':
+                $this->updateMyBlocks();
                 break;
         }
 
@@ -731,7 +742,11 @@ class upgradeModel extends model
                 break;
             case 'biz7_6_2':
                 $this->processFeedbackModule();
-
+                break;
+            //case 'biupgrade':
+            //    $this->addDefaultModules4BI('chart');
+            //    $modules = $this->addDefaultModules4BI('report');
+            //    $this->processReportModules($modules);
         }
     }
 
@@ -754,6 +769,9 @@ class upgradeModel extends model
                 break;
             case 'max3_3':
                 $this->addReviewIssusApprovalData();
+                break;
+            case 'max4_0_beta1':
+                $this->initReviewEfforts();
                 break;
         }
     }
@@ -1055,6 +1073,14 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.8'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.5.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
+            case '18_0_beta1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta1'));
+                $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
+                $confirmContent .= file_get_contents($xuanxuanSql);
+            case '18_0_beta2':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta2'));
+            case '18_0_beta3':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta3'));
         }
 
         return $confirmContent;
@@ -4286,7 +4312,7 @@ class upgradeModel extends model
         $moduleRoot = $this->app->getModuleRoot();
 
         $editorDir = $moduleRoot . 'editor';
-        if(is_dir($editor)) $zfile->removeDir($editorDir);
+        if(is_dir($editorDir)) $zfile->removeDir($editorDir);
 
         $translateDir = $moduleRoot . 'translate';
         if(is_dir($translateDir)) $zfile->removeDir($translateDir);
@@ -7557,7 +7583,6 @@ class upgradeModel extends model
 
             $projectID = $this->dao->lastInsertId();
 
-            $this->action->create('project', $projectID, 'openedbysystem');
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             $project->id = $projectID;
@@ -7604,7 +7629,7 @@ class upgradeModel extends model
         foreach($projects as $year => $sprints)
         {
             $project = new stdclass();
-            $project->name           = $year;
+            $project->name           = $year > 0 ? $year : $this->lang->upgrade->unknownDate;
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;
@@ -7914,6 +7939,75 @@ class upgradeModel extends model
     }
 
     /**
+     * Add default modules for BI.
+     *
+     * @param  string $type
+     * @param  int    $dimension
+     * @access public
+     * @return array
+     */
+    public function addDefaultModules4BI($type = 'report', $dimension = 1)
+    {
+        $this->app->loadLang('report');
+
+        $group = new stdclass();
+        $group->root  = $dimension;
+        $group->grade = 1;
+        $group->type  = $type;
+        $group->owner = 'system';
+        $group->order = 10;
+
+        $modules = array();
+        foreach($this->lang->crystal->moduleList as $module => $name)
+        {
+            if(!$module || !$name) continue;
+
+            $group->name      = $name;
+            $group->collector = $module;
+            $this->dao->replace(TABLE_MODULE)->data($group)->exec();
+
+            $modules[$module] = $this->dao->lastInsertID();
+
+            $group->order += 10;
+        }
+        $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")
+            ->where('type')->eq($type)
+            ->andWhere('grade')->eq('1')
+            ->andWhere('path')->eq('')
+            ->exec();
+
+        return $modules;
+    }
+
+    /**
+     * Process report modules.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function processReportModules($modules)
+    {
+        foreach($modules as $code => $module)
+        {
+            if(!$code || !$module) continue;
+            $this->dao->update(TABLE_REPORT)->set("`module` = REPLACE(`module`, '$code', $module)")->exec();
+        }
+
+        /* Create default dimension. */
+        $this->app->loadLang('dimension');
+        $dimension              = new stdclass();
+        $dimension->name        = $this->lang->dimension->default;
+        $dimension->code        = 'efficiency';
+        $dimension->createdBy   = 'system';
+        $dimension->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * Xuan: Set mute and freeze for hidden groups.
      *
      * @access public
@@ -7941,5 +8035,108 @@ class upgradeModel extends model
         $sender->realname = $this->lang->upgrade->archiveChangeNoticeTitle;
         $this->loadModel('im')->messageCreateNotify(array_keys($noticeUsers), '', '', $this->lang->upgrade->archiveChangeNoticeContent, 'text', '', array(), $sender);
         return !dao::isError();
+    }
+
+    /**
+     * Init shadow builds.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initShadowBuilds()
+    {
+        $releases = $this->dao->select('id,product,shadow,build,name,date,createdBy,createdDate,deleted')->from(TABLE_RELEASE)->where('shadow')->eq(0)->fetchAll();
+        foreach($releases as $release)
+        {
+            $shadowBuild = new stdclass();
+            $shadowBuild->product     = $release->product;
+            $shadowBuild->builds      = $release->build;
+            $shadowBuild->name        = $release->name;
+            $shadowBuild->date        = $release->date;
+            $shadowBuild->createdBy   = $release->createdBy;
+            $shadowBuild->createdDate = $release->createdDate;
+            $shadowBuild->deleted     = $release->deleted;
+            $this->dao->insert(TABLE_BUILD)->data($shadowBuild)->exec();
+
+            $shadowBuildID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_RELEASE)->set('shadow')->eq($shadowBuildID)->where('id')->eq($release->id)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Init review efforts.
+     *
+     * @access public
+     * @return void
+     */
+    public function initReviewEfforts()
+    {
+        $nodes = $this->dao->select('t1.id,t3.id as reviewID,t3.title,t2.id as approvalID,t1.extra as consumed')->from(TABLE_APPROVALNODE)->alias('t1')
+            ->leftJoin(TABLE_APPROVAL)->alias('t2')->on("t1.approval=t2.id")
+            ->leftJoin(TABLE_REVIEW)->alias('t3')->on("t2.objectID=t3.id")
+            ->where('t3.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.objectType')->eq('review')
+            ->andWhere('t1.extra')->ne('')
+            ->andWhere('t1.extra')->ne(0)
+            ->orderBy('t1.approval,t1.id')
+            ->fetchAll('id');
+        $this->loadModel('effort');
+        foreach($nodes as $node)
+        {
+            $this->dao->delete()->from(TABLE_EFFORT)->where('objectType')->eq('review')->andWhere('objectID')->eq($node->reviewID)->exec();
+            $this->effort->create('review', $node->reviewID, (int)$node->consumed, $node->title, $node->approvalID);
+        }
+        return true;
+    }
+
+    /**
+     * Update my module blocks.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateMyBlocks()
+    {
+        /* Delete flowchart block. */
+        $this->dao->delete()->from(TABLE_BLOCK)->where('module')->eq('my')->andWhere('block')->eq('flowchart')->exec();
+
+        /* Update block order and insert guide block. */
+        $visionList = array('rnd', 'lite');
+
+        /* Set guide block data. */
+        $guideBlock = new stdclass();
+        $guideBlock->module = 'my';
+        $guideBlock->title  = common::checkNotCN() ? 'Guides' : '使用帮助';
+        $guideBlock->block  = 'guide';
+        $guideBlock->order  = 3;
+        $guideBlock->grid   = 8;
+        foreach($visionList as $vision)
+        {
+            $guideBlock->vision = $vision;
+            $this->dao->update(TABLE_BLOCK)
+                ->set('`order` = `order` + 1')
+                ->where('vision')->eq($vision)
+                ->andWhere('module')->eq('my')
+                ->andWhere('`order`')->ge(3)
+                ->orderBy('`order` desc')
+                ->exec();
+
+            $accountList = $this->dao->select('account')->from(TABLE_BLOCK)
+                ->where('vision')->eq($vision)
+                ->andWhere('module')->eq('my')
+                ->fetchPairs('account');
+
+            foreach($accountList as $account)
+            {
+                if(empty($account)) continue;
+
+                $guideBlock->account = $account;
+                $this->dao->insert(TABLE_BLOCK)->data($guideBlock)->exec();
+            }
+        }
+
+        return true;
     }
 }

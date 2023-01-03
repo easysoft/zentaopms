@@ -16,7 +16,7 @@
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $story->id;?></span>
-      <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '_blank', "title='$story->title'");?>
+      <?php echo $story->title;?>
       <?php $title = $story->type == 'story' ? $lang->story->linkStoriesAB : $lang->story->linkRequirementsAB?>
       <small class='text-muted'> <?php echo $lang->arrow . $title;?></small>
     </h2>

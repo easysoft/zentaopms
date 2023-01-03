@@ -2,7 +2,7 @@
 $filter                    = new stdclass();
 $filter->rules             = new stdclass();
 $filter->rules->md5        = '/^[a-z0-9]{32}$/';
-$filter->rules->base64     = '/^[a-zA-Z0-9\+\/\=]+$/';
+$filter->rules->base64     = '/^[a-zA-Z0-9\+\/\=\.]+$/';
 $filter->rules->checked    = '/^[0-9,\-]+$/';
 $filter->rules->idList     = '/^[0-9\|]+$/';
 $filter->rules->lang       = '/^[a-zA-Z_\-]+$/';
@@ -318,14 +318,16 @@ $filter->execution->export->cookie['checkedItem']         = 'reg::checked';
 $filter->execution->kanban->cookie['taskToOpen']          = 'int';
 $filter->execution->all->cookie['showExecutionBatchEdit'] = 'int';
 
-$filter->testcase->browse->cookie['caseModule']     = 'int';
-$filter->testcase->browse->cookie['caseSuite']      = 'int';
-$filter->testcase->browse->cookie['preBranch']      = 'reg::word';
-$filter->testcase->create->cookie['lastCaseModule'] = 'int';
-$filter->testcase->default->cookie['lastProduct']   = 'int';
-$filter->testcase->default->cookie['preProductID']  = 'int';
-$filter->testcase->export->cookie['checkedItem']    = 'reg::checked';
-$filter->testcase->groupcase->cookie['preBranch']   = 'reg::word';
+$filter->testcase->browse->cookie['caseModule']      = 'int';
+$filter->testcase->browse->cookie['caseSuite']       = 'int';
+$filter->testcase->browse->cookie['preBranch']       = 'reg::word';
+$filter->testcase->browse->cookie['showAutoCase']    = 'int';
+$filter->testcase->create->cookie['lastCaseModule']  = 'int';
+$filter->testcase->default->cookie['lastProduct']    = 'int';
+$filter->testcase->default->cookie['preProductID']   = 'int';
+$filter->testcase->export->cookie['checkedItem']     = 'reg::checked';
+$filter->testcase->groupcase->cookie['preBranch']    = 'reg::word';
+$filter->testcase->groupcase->cookie['showAutoCase'] = 'int';
 
 $filter->testreport->default->cookie['lastProduct']  = 'int';
 $filter->testreport->default->cookie['lastProject']  = 'int';

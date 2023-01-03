@@ -164,7 +164,7 @@ $config->bug->datatable->fieldList['product']['dataSource'] = array('module' => 
 
 $config->bug->datatable->fieldList['module']['control']    = 'select';
 $config->bug->datatable->fieldList['module']['title']      = 'module';
-$config->bug->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&bug');
+$config->bug->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&bug&0&all');
 
 $config->bug->datatable->fieldList['title']['title']    = 'title';
 $config->bug->datatable->fieldList['title']['fixed']    = 'left';
@@ -328,11 +328,13 @@ $config->bug->datatable->fieldList['os']['title']    = 'os';
 $config->bug->datatable->fieldList['os']['fixed']    = 'no';
 $config->bug->datatable->fieldList['os']['width']    = '80';
 $config->bug->datatable->fieldList['os']['required'] = 'no';
+$config->bug->datatable->fieldList['os']['control']  = 'multiple';
 
 $config->bug->datatable->fieldList['browser']['title']    = 'browser';
 $config->bug->datatable->fieldList['browser']['fixed']    = 'no';
 $config->bug->datatable->fieldList['browser']['width']    = '80';
 $config->bug->datatable->fieldList['browser']['required'] = 'no';
+$config->bug->datatable->fieldList['browser']['control']  = 'multiple';
 
 $config->bug->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->bug->datatable->fieldList['mailto']['fixed']    = 'no';

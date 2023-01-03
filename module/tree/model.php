@@ -92,10 +92,13 @@ class treeModel extends model
                 ->beginIF($type == 'task')->andWhere('type')->eq('task')->fi()
                 ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-                ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)
+                ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') === false)
                 ->andWhere("(branch")->eq(0)
                 ->orWhere('branch')->eq($branch)
                 ->markRight(1)
+                ->fi()
+                ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') !== false)
+                ->andWhere('branch')->eq($branch)
                 ->fi()
                 ->beginIF(strpos($param, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
                 ->orderBy('grade desc, `order`, type desc')
@@ -109,10 +112,13 @@ class treeModel extends model
             ->andWhere('type')->in($type)
             ->beginIF($grade)->andWhere('grade')->le($grade)->fi()
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)
+            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') === false)
             ->andWhere('(branch')->eq(0)
             ->orWhere('branch')->eq($branch)
             ->markRight(1)
+            ->fi()
+            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') !== false)
+            ->andWhere('branch')->eq($branch)
             ->fi()
             ->beginIF(strpos($param, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy('grade desc, `order`')
@@ -162,7 +168,7 @@ class treeModel extends model
             if($product and $product->type != 'normal')
             {
                 $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
-                $branches    = array($branch => $branchPairs[$branch]);
+                foreach(explode(',', $branch) as $branchID) $branches += array($branchID => $branchPairs[$branchID]);
             }
             elseif($product and $product->type == 'normal')
             {
@@ -425,10 +431,9 @@ class treeModel extends model
 
         $this->loadModel('branch');
         $projectID        = zget($extra, 'projectID', 0);
-        $executionID      = zget($extra, 'executionID', 0);
         $branches         = array($branch => '');
         $executionModules = array();
-        if($branch and empty($projectID) and empty($executionID))
+        if($branch and empty($projectID))
         {
             $branchName = $this->branch->getById($branch);
             $branches   = array($branch => $branchName);
@@ -438,15 +443,15 @@ class treeModel extends model
         $manage  = $userFunc[1] == 'createManageLink' ? true : false;
         $product = $this->loadModel('product')->getById($rootID);
 
-        $onlyGetLinked = (($projectID or $executionID) and $this->config->vision != 'lite');
-        if(strpos('story|bug|case', $type) !== false and $branch === 'all' and empty($projectID) and empty($executionID))
+        $onlyGetLinked = ($projectID and $this->config->vision != 'lite');
+        if(strpos('story|bug|case', $type) !== false and $branch === 'all' and empty($projectID))
         {
             if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($rootID, 'noempty');
         }
         elseif(strpos(',case,bug,', ",$type,") !== false and $this->app->tab == 'execution')
         {
-            if($product->type != 'normal' and $executionID) $branches += $this->branch->getPairs($product->id, 'noempty', $executionID);
-            if($onlyGetLinked) $executionModules = $this->getTaskTreeModules($executionID, true, $type, array('branchID' => $branch));
+            if($product->type != 'normal' and $projectID) $branches += $this->branch->getPairs($product->id, 'noempty', $projectID);
+            if($onlyGetLinked) $executionModules = $this->getTaskTreeModules($projectID, true, $type, array('branchID' => $branch));
         }
         elseif(($type == 'story' and $this->app->rawModule == 'projectstory') or (strpos(',case,bug,', ",$type,") !== false and $this->app->tab == 'project'))
         {
@@ -1259,7 +1264,7 @@ class treeModel extends model
         $param      = "root={$module->root}&branch=&type=byModule&param={$module->id}";
 
         $extra['type'] = (isset($extra['type']) and $extra['type'] != 'bysearch') ? $extra['type'] : 'all';
-        if($this->app->tab == 'execution') $param = "execuitonID={$extra['executionID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
+        if($this->app->tab == 'execution') $param = "execuitonID={$extra['projectID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
         if($this->app->tab == 'project') $param = "projectID={$extra['projectID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
         return html::a(helper::createLink($moduleName, $methodName, $param), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
@@ -1278,7 +1283,7 @@ class treeModel extends model
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
         $param      = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : "";
-        $param      = $this->app->tab == 'execution' ? "executionID={$extra['executionID']}&" : $param;
+        $param      = $this->app->tab == 'execution' ? "executionID={$extra['projectID']}&" : $param;
         return html::a(helper::createLink($moduleName, $methodName, $param . "root={$module->root}&branch={$extra['branchID']}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
     }
 
@@ -1404,6 +1409,21 @@ class treeModel extends model
     public function createDashboardLink($type, $module, $extra = '')
     {
         return html::a(helper::createLink('dashboard', 'browse', "type=bymodule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
+    }
+
+    /**
+     * Create report link.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  array  $extra
+     * @access public
+     * @return string
+     */
+    public function createReportLink($type, $module, $extra)
+    {
+        $dimension = zget($extra, 'dimension', 0);
+        return html::a(helper::createLink('report', 'browsereport', "dimension={$dimension}&module={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1771,10 +1791,11 @@ class treeModel extends model
             }
         }
 
-        if($type == 'story')
+        if($type == 'story' or strpos($this->config->tree->groupTypes, ",$type,") !== false)
         {
+            $objectType = $type == 'story' ? 'module' : 'chartgroup';
             $this->loadModel('action');
-            if(!empty($createIdList)) $actionID = $this->action->create('module', $rootID, 'created', '', implode(',', $createIdList));
+            if(!empty($createIdList)) $actionID = $this->action->create($objectType, $rootID, 'created', '', implode(',', $createIdList));
 
             if(!empty($editIdList))
             {
@@ -1793,7 +1814,7 @@ class treeModel extends model
                         $changes[] = $change;
                     }
                 }
-                $actionID = $this->action->create('module', $rootID, 'edited', '', implode(',', $editIdList));
+                $actionID = $this->action->create($objectType, $rootID, 'edited', '', implode(',', $editIdList));
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1829,8 +1850,9 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
 
-        if($self->type == 'story')
+        if($self->type == 'story' or strpos($this->config->tree->groupTypes, ",$self->type,") !== false)
         {
+            $objectType = $self->type == 'story' ? 'module' : 'chartgroup';
             $rootID     = isset($module->root) ? $module->root : $self->root;
             $newModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
 
@@ -1844,11 +1866,11 @@ class treeModel extends model
                     break;
                 }
             }
-            $actionID = $this->loadModel('action')->create('module', $self->root, 'edited', '', $moduleID);
+            $actionID = $this->loadModel('action')->create($objectType, $self->root, 'edited', '', $moduleID);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             if(isset($module->root) and $module->root != $self->root)
             {
-                $actionID = $this->action->create('module', $rootID, 'edited', '', $moduleID);
+                $actionID = $this->action->create($objectType, $rootID, 'edited', '', $moduleID);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1942,11 +1964,12 @@ class treeModel extends model
         $childs = $this->getAllChildId($moduleID);
         $childs[$moduleID] = $moduleID;
 
+        $objectType = (!empty($module->type) and strpos($this->config->tree->groupTypes, ",$module->type,") !== false) ? 'chartgroup' : 'module';
         /* Mark deletion when delete a module. */
         $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->in($childs)->exec();
         foreach($childs as $childID)
         {
-            $this->loadModel('action')->create('module', $childID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+            $this->loadModel('action')->create($objectType, $childID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
         }
 
         $this->fixModulePath($module->root, $module->type);
@@ -1976,6 +1999,15 @@ class treeModel extends model
                 $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $this->dao->update(TABLE_TICKET)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $cookieName = 'storyModule';
+                break;
+            case 'chart':
+                $this->dao->update(TABLE_CHART)->set('`group`')->eq($module->parent)->where('`group`')->in($childs)->exec();
+                break;
+            case 'report':
+                $this->dao->update(TABLE_REPORT)->set('`module`')->eq($module->parent)->where('`module`')->in($childs)->exec();
+                break;
+            case 'dataview':
+                $this->dao->update(TABLE_DATAVIEW)->set('`group`')->eq($module->parent)->where('`group`')->in($childs)->exec();
                 break;
             case 'feedback':
                 $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();

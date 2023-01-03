@@ -77,11 +77,11 @@ function getStatus(method, params)
  * @access public
  * @return void
  */
-function loadURS()
+function loadURS(allURS)
 {
     var productID       = $('#product').val();
     var branchID        = $('#branch').val();
-    var moduleID        = $('#module').val();
+    var moduleID        = typeof(allURS) == 'undefined' ? $('#module').val() : 0;
     var requirementList = $('#URS').val();
     requirementList     = requirementList ? requirementList.join(',') : '';
 
@@ -93,4 +93,61 @@ function loadURS()
         $('#URS_chosen').remove();
         $('#URS').chosen();
     });
+}
+
+$('.twins').mouseover(function() {
+    if(page == 'edit') return;
+    $(this).parent('ul').find('a.unlink').addClass('hide');
+    $(this).find('.unlink').removeClass('hide');
+});
+
+$('.twins').mouseenter(function() {
+    $('[data-toggle="popover"]').popover('hide');
+});
+
+$('.twins').mouseout(function() {
+    if(page == 'edit') return;
+    $(this).find('.unlink').addClass('hide');
+});
+
+if(typeof(relievedTip) != 'undefined')
+{
+    $('[data-toggle="popover"]').each(function(item) {
+        $index = $(this).attr('data-id');
+        $(this).popover({
+            placement: 'bottom',
+            html: true,
+            content: '<div class="popover-icon"><i class="icon-info"></i></div><div class="content">' + relievedTip + '</div><div class="popover-custom text-right"><a href="javascript:relieve(' + $index + ')" class="text-active btn-info">' + relieved + '</a> <a href="javascript:popoverCancel(' + $index + ');" class="text-cancel">' + cancel + '</a></div>'
+        });
+    })
+}
+
+
+function relieve(index)
+{
+    $.post(relieveURL, {twinID:index}, function(data){
+        $('[data-id="' + index + '"]').popover('hide');
+
+        if(data.result == 'success')
+        {
+            if(data.silbingsCount != 0) $('[data-id="' + index + '"]').parent('li').remove();
+            if(data.silbingsCount == 0 || index == storyID)
+            {
+                $('[href="#legendTwins"]').parent('li').next('li').addClass('active');;
+                $('[href="#legendTwins"]').parent('li').remove();
+                $('#legendTwins').next('div').addClass('active');
+                $('#legendTwins').remove();
+                $('#twinsTitle').remove();
+                $('#twinsList').remove();
+            }
+        }
+    }, 'json');
+}
+
+function popoverCancel(index)
+{
+    $('[data-id="' + index + '"]').popover('hide');
+    if(page == 'edit') return;
+
+    $('[data-id="' + index + '"]').addClass('hide');
 }

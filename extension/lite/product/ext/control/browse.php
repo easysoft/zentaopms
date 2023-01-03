@@ -90,6 +90,7 @@ class product extends control
         $product = $this->product->getById($productID);
 
         /* Get stories. */
+        if(in_array($browseType, array('reviewing', 'draft', 'changing'))) $browseType .= 'story';
         $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
 
         /* Display status of branch. */

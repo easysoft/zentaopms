@@ -422,6 +422,7 @@
                   <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask", '', true), "#$bug->toTask $bug->toTaskTitle", '', "class='iframe' data-width='80%'");?></td>
                 </tr>
                 <?php endif;?>
+                <?php if(helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->bug->linkMR;?></th>
                   <td>
@@ -434,6 +435,21 @@
                     ?>
                   </td>
                 </tr>
+                <tr>
+                  <th><?php echo $lang->bug->linkCommit;?></th>
+                  <td>
+                    <?php
+                    $canViewRevision = common::hasPriv('repo', 'revision');
+                    foreach($linkCommits as $commit)
+                    {
+                        $revision    = substr($commit->revision, 0, 10);
+                        $commitTitle = $revision . ' ' . $commit->comment;
+                        echo "<div class='link-commit' title='$commitTitle'>" . ($canViewRevision ? html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) . " $commit->comment" : $commitTitle) . '</div>';
+                    }
+                    ?>
+                  </td>
+                </tr>
+                <?php endif;?>
               </tbody>
             </table>
           </div>

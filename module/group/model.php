@@ -154,19 +154,18 @@ class groupModel extends model
      * Get group by account.
      *
      * @param  string    $account
-     * @param  string    $visions
+     * @param  bool      $allVision
      * @access public
      * @return array
      */
-    public function getByAccount($account, $visions = '')
+    public function getByAccount($account, $allVision = false)
     {
-        $visions = empty($visions) ? $this->config->vision : $visions;
         return $this->dao->select('t2.*')->from(TABLE_USERGROUP)->alias('t1')
             ->leftJoin(TABLE_GROUP)->alias('t2')
             ->on('t1.`group` = t2.id')
             ->where('t1.account')->eq($account)
             ->andWhere('t2.project')->eq(0)
-            ->andWhere('t2.vision')->in($visions)
+            ->beginIF(!$allVision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
             ->fetchAll('id');
     }
 

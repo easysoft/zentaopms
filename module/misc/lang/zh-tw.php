@@ -40,7 +40,7 @@ $lang->misc->zentao->support['ask']        = "官方問答";
 $lang->misc->zentao->support['video']      = "使用視頻";
 $lang->misc->zentao->support['qqgroup']    = "官方QQ群";
 
-$lang->misc->zentao->cowin['reportbug']    = "彙報Bug";
+$lang->misc->zentao->cowin['reportbug']    = "反饋Bug";
 $lang->misc->zentao->cowin['feedback']     = "反饋需求";
 $lang->misc->zentao->cowin['translate']    = "參與翻譯";
 $lang->misc->zentao->cowin['recommend']    = "推薦給朋友";
@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "手機訪問";
 $lang->misc->noGDLib     = "請用手機瀏覽器訪問：<strong>%s</strong>";
-$lang->misc->copyright   = "&copy; 2009 - 2018 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a> 電話：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.easycorp.cn' target='_blank'>青島易軟天創網絡科技有限公司</a> 電話：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
 $lang->misc->checkTable  = "檢查修復數據表";
 $lang->misc->needRepair  = "修復表";
 $lang->misc->repairTable = "資料庫表可能因為斷電原因損壞，需要檢查修復！！";

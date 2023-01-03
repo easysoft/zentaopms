@@ -15,6 +15,7 @@
 <?php $browseLink = $app->session->storyList ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php js::set('storyType', $story->type);?>
+<?php js::set('page', $this->app->rawMethod);?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -301,14 +302,21 @@
                   <th><?php echo $lang->story->stage;?></th>
                   <td>
                   <?php
+                  $maxStage    = $story->stage;
+                  $stageList   = join(',', array_keys($this->lang->story->stageList));
+                  $maxStagePos = strpos($stageList, $maxStage);
                   if($story->stages and $branches)
                   {
-                      foreach($story->stages as $branch => $stage) if(isset($branches[$branch])) echo $branches[$branch] . ' : ' . $lang->story->stageList[$stage] . '<br />';
+                      foreach($story->stages as $branch => $stage)
+                      {
+                          if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) > $maxStagePos)
+                          {
+                              $maxStage    = $stage;
+                              $maxStagePos = strpos($stageList, $stage);
+                          }
+                      }
                   }
-                  else
-                  {
-                      echo $lang->story->stageList[$story->stage];
-                  }
+                  echo $lang->story->stageList[$maxStage];
                   ?>
                   </td>
                 </tr>
@@ -319,7 +327,11 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
-                  <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
+                  <td>
+                    <?php if($story->pri):?>
+                    <span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->estimate;?></th>
@@ -415,17 +427,27 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
+          <?php if(!empty($twins)):?>
+          <li class='active'><a href='#legendTwins' data-toggle='tab'><?php echo $lang->story->twins;?></a></li>
+          <?php endif;?>
           <?php if($this->config->URAndSR and !$hiddenURS):?>
-          <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
+          <li class='<?php if(empty($twins)) echo 'active';?>'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
           <?php if($story->type == 'story'):?>
-          <li class="<?php if(!$this->config->URAndSR || $hiddenURS) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
+          <li class="<?php if((!$this->config->URAndSR || $hiddenURS) and empty($twins)) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <?php endif;?>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
+          <?php if(!empty($twins)):?>
+          <div class='tab-pane active' id='legendTwins'>
+            <ul class="list-unstyled">
+                <?php include './blocktwins.html.php';?>
+            </ul>
+          </div>
+          <?php endif;?>
           <?php if($this->config->URAndSR and !$hiddenURS):?>
-          <div class='tab-pane active' id='legendStories'>
+          <div class='tab-pane <?php if(empty($twins)) echo 'active';?>' id='legendStories'>
             <ul class="list-unstyled">
               <?php
               $relation         = array();
@@ -434,19 +456,18 @@
               foreach($relations as $item) $relation[$item->id] = $item->title;
               foreach($relation as $id => $title)
               {
-                  echo "<li title='$title'>" . ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id&version=0&param=0&storyType=$relationType", '', true), "#$id $title", '', "class='iframe' data-width='80%'") : "#$id $title");
-                  echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID=$id&browseType=&queryID=0&storyType=$story->type"), '<i class="icon icon-close"></i>', 'hiddenwin', "class='hide removeButton'");
+                  echo "<li title='$title' class='legendStories'>" . ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id&version=0&param=0&storyType=$relationType", '', true), "#$id $title", '', "class='iframe' data-width='80%'") : "#$id $title");
+                  echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID=$id&browseType=&queryID=0&storyType=$story->type"), '<i class="icon icon-unlink btn-info"></i>', 'hiddenwin', "class='hide removeButton'");
               }
               ?>
               <?php $linkLang = ($story->type == 'story') ? $lang->story->requirement : $lang->story->story;?>
               <li><?php if(common::hasPriv($story->type, 'linkStory')) echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type", '', true), $lang->story->link . $linkLang, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'");?>
-              <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink, '', "class='btn btn-info' id='unlinkStory'");?></li>
             </ul>
           </div>
           <?php endif;?>
 
           <?php if($story->type == 'story'):?>
-          <div class="tab-pane <?php if(!$this->config->URAndSR || $hiddenURS) echo 'active';?>" id='legendProjectAndTask'>
+          <div class="tab-pane <?php if((!$this->config->URAndSR || $hiddenURS) and empty($twins)) echo 'active';?>" id='legendProjectAndTask'>
             <ul class="list-unstyled">
               <?php
               foreach($story->tasks as $executionTasks)
@@ -454,18 +475,19 @@
                   foreach($executionTasks as $task)
                   {
                       if(!isset($executions[$task->execution])) continue;
+                      $execution     = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
+                      $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "executionID=$task->project");
                       $executionName = $executions[$task->execution];
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
-                      $execution = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
-                      $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($this->createLink('execution', 'view', "executionID=$task->execution"), $executionName, '', "class='text-muted'");
+                      $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($executionLink, $executionName, '', "class='text-muted'");
                       echo "<li title='$task->name'>" . $execName . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'") . '</li>';
                   }
               }
               foreach($story->executions as $executionID => $execution)
               {
                   if(isset($story->tasks[$executionID])) continue;
-                  $execName = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
+                  $execName = ($execution->type == 'kanban' and isonlybody()) ? $executions[$executionID] : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $executions[$executionID], '', "class='text-muted'");
                   echo "<li title='$execution->name'>" . $execName . '</li>';
               }
               ?>
@@ -593,6 +615,29 @@
                     </ul>
                   </td>
                 </tr>
+                <tr>
+                  <th><?php echo $lang->story->linkCommit;?></th>
+                  <td class='pd-0'>
+                    <ul class='list-unstyled'>
+                    <?php
+                    $canViewRevision = common::hasPriv('repo', 'revision');
+                    foreach($linkedCommits as $commit)
+                    {
+                        $revision    = substr($commit->revision, 0, 10);
+                        $commitTitle = $revision . ' ' . $commit->comment;
+                        if($canViewRevision)
+                        {
+                            echo "<li class='link-commit' title='$commitTitle'>" . html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) . ' ' . $commit->comment . '</li>';
+                        }
+                        else
+                        {
+                            echo "<li class='link-commit' title='$commitTitle'>" . "$commitTitle" . '</li>';
+                        }
+                    }
+                    ?>
+                    </ul>
+                  </td>
+                </tr>
                 <?php endif;?>
               </tbody>
             </table>
@@ -657,7 +702,6 @@ js::set('unlink', $lang->story->unlink);
 js::set('cancel', $lang->cancel);
 js::set('rawModule', $this->app->rawModule);
 ?>
-<script>
-</script>
+
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

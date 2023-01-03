@@ -50,6 +50,16 @@ class testcaseModel extends model
             }
         }
 
+        if(!empty($_POST['auto']))
+        {
+            $_POST['auto'] = 'auto';
+            if($_POST['script']) $_POST['script'] = htmlentities($_POST['script']);
+        }
+        else
+        {
+            unset($_POST['script']);
+        }
+
         $now    = helper::now();
         $status = $this->getStatus('create');
         $case   = fixer::input('post')
@@ -61,7 +71,7 @@ class testcaseModel extends model
             ->setIF($this->app->tab == 'project', 'project', $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
-            ->remove('steps,expects,files,labels,stepType,forceNotReview')
+            ->remove('steps,expects,files,labels,stepType,forceNotReview,scriptFile,scriptName')
             ->setDefault('story', 0)
             ->cleanInt('story,product,branch,module')
             ->join('stage', ',')
@@ -81,6 +91,8 @@ class testcaseModel extends model
         if(!$this->dao->isError())
         {
             $caseID = $this->dao->lastInsertID();
+            $this->config->dangers = '';
+            $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
             $this->loadModel('file')->saveUpload('testcase', $caseID);
             $parentStepID = 0;
             $this->loadModel('score')->create('testcase', 'create', $caseID);
@@ -238,14 +250,15 @@ class testcaseModel extends model
      * @param  int         $productID
      * @param  int|string  $branch
      * @param  int         $moduleIdList
-     * @param  string      $orderBy
-     * @param  object      $pager
      * @param  string      $browseType
      * @param  string      $auto   no|unit
+     * @param  string      $caseType
+     * @param  string      $orderBy
+     * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $auto = 'no')
+    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
     {
         $stmt = $this->dao->select('t1.*, t2.title as storyTitle, t2.deleted as storyDeleted')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id');
@@ -259,6 +272,8 @@ class testcaseModel extends model
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->beginIF(!$this->cookie->showAutoCase)->andWhere('t1.auto')->ne('auto')->fi()
+            ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -271,14 +286,15 @@ class testcaseModel extends model
      * @param  int        $productID
      * @param  int|string $branch
      * @param  int        $moduleIdList
-     * @param  string     $orderBy
-     * @param  object     $pager
      * @param  string     $browseType
      * @param  string     $auto   no|unit
+     * @param  string     $caseType
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getModuleProjectCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $auto = 'no')
+    public function getModuleProjectCases($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
     {
         $executions = $this->loadModel('execution')->getIdList($this->session->project);
         array_push($executions, $this->session->project);
@@ -294,6 +310,8 @@ class testcaseModel extends model
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF(!$this->cookie->showAutoCase)->andWhere('t2.auto')->ne('auto')->fi()
+            ->beginIF($caseType)->andWhere('t2.type')->eq($caseType)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager, 't1.case')
@@ -346,7 +364,7 @@ class testcaseModel extends model
                 ->where('t1.project')->eq((int)$executionID)
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF(!empty($moduleID))->andWhere('t4.path')->like("%,$moduleID,%")->fi()
-                ->beginIF(!empty($productID))->andWhere('t2.branch')->eq($branchID)->fi()
+                ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t3.version > t2.storyVersion')
                 ->andWhere("t3.status")->eq('active')
@@ -362,7 +380,7 @@ class testcaseModel extends model
             ->beginIF($browseType != 'all' and $browseType != 'byModule')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF(!empty($moduleID))->andWhere('t3.path')->like("%,$moduleID,%")->fi()
-            ->beginIF(!empty($productID))->andWhere('t2.branch')->eq($branchID)->fi()
+            ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -396,6 +414,35 @@ class testcaseModel extends model
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
+    }
+
+    /**
+     * Get cases by type.
+     *
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $suiteID
+     * @param  array       $moduleIdList
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  string      $auto    no|unit
+     * @access public
+     * @return array
+     */
+    public function getByType($productID, $branch = 0, $type = '', $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    {
+        return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t1.product')->eq((int)$productID)
+            ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->beginIF($type)->andWhere('t1.type')->eq($type)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
+            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)->page($pager)
+            ->fetchAll('id');
     }
 
     /**
@@ -487,18 +534,20 @@ class testcaseModel extends model
      * @param  string     $browseType
      * @param  int        $queryID
      * @param  int        $moduleID
+     * @param  string     $caseType
      * @param  string     $sort
      * @param  object     $pager
      * @param  string     $auto   no|unit
      * @access public
      * @return array
      */
-    public function getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager, $auto = 'no')
+    public function getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType = '', $sort = 'id_desc', $pager = null, $auto = 'no')
     {
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType and $this->session->caseBrowseType != 'bysearch') ? $this->session->caseBrowseType : $browseType;
         $group      = $this->lang->navGroup->testcase;
+        $auto       = $this->cookie->showAutoCase ? 'auto' : $auto;
 
         /* By module or all cases. */
         $cases = array();
@@ -506,11 +555,11 @@ class testcaseModel extends model
         {
             if($this->app->tab == 'project')
             {
-                $cases = $this->getModuleProjectCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
+                $cases = $this->getModuleProjectCases($productID, $branch, $modules, $browseType, $auto, $caseType, $sort, $pager);
             }
             else
             {
-                $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
+                $cases = $this->getModuleCases($productID, $branch, $modules, $browseType, $auto, $caseType, $sort, $pager);
             }
         }
         /* Cases need confirmed. */
@@ -528,6 +577,8 @@ class testcaseModel extends model
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
                 ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
                 ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+                ->beginIF(!$this->cookie->showAutoCase)->andWhere('t1.auto')->ne('auto')->fi()
+                ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
                 ->orderBy($sort)
                 ->page($pager, 't1.id')
                 ->fetchAll();
@@ -791,6 +842,17 @@ class testcaseModel extends model
 
         $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
 
+        if(!empty($_POST['auto']))
+        {
+            $_POST['auto'] = 'auto';
+            if($_POST['script']) $_POST['script'] = htmlentities($_POST['script']);
+        }
+        else
+        {
+            $_POST['auto']   = 'no';
+            $_POST['script'] = '';
+        }
+
         $case = fixer::input('post')
             ->add('id', $caseID)
             ->add('version', $version)
@@ -806,7 +868,7 @@ class testcaseModel extends model
             ->setForce('status', $status)
             ->cleanInt('story,product,branch,module')
             ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
-            ->remove('comment,steps,expects,files,labels,linkBug,stepType')
+            ->remove('comment,steps,expects,files,labels,linkBug,stepType,scriptFile,scriptName')
             ->get();
 
         $requiredFields = $this->config->testcase->edit->requiredFields;
@@ -1564,9 +1626,9 @@ class testcaseModel extends model
                 {
                     $caseID       = $this->dao->lastInsertID();
                     $parentStepID = 0;
-                    if($this->post->desc)
+                    if($data->desc)
                     {
-                        foreach($this->post->desc[$key] as $id => $desc)
+                        foreach($data->desc[$key] as $id => $desc)
                         {
                             $desc = trim($desc);
                             if(empty($desc)) continue;
@@ -1576,7 +1638,7 @@ class testcaseModel extends model
                             $stepData->case    = $caseID;
                             $stepData->version = 1;
                             $stepData->desc    = htmlSpecialString($desc);
-                            $stepData->expect  = htmlSpecialString($this->post->expect[$key][$id]);
+                            $stepData->expect  = htmlSpecialString($data->expect[$key][$id]);
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                             if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                             if($stepData->type == 'step')  $parentStepID = 0;
@@ -2040,9 +2102,11 @@ class testcaseModel extends model
                 {
                     $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
                 }
+
+                $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-draft-edit'></i>" : '';
                 if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
-                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]", '', "data-app='{$this->app->tab}'") : html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")) : "<span style='color: $case->color'>$case->title</span>";
+                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]" . $autoIcon, '', "data-app='{$this->app->tab}'") : html::a($caseLink, $case->title . $autoIcon, null, "style='color: $case->color' data-app='{$this->app->tab}'")) : "<span style='color: $case->color'>$case->title</span>";
                 break;
             case 'branch':
                 echo $branches[$case->branch];
@@ -2452,13 +2516,13 @@ class testcaseModel extends model
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody', false, "data-width='95%'");
-                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
+                    if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'importToLib', $params,                $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 else
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody iframe', false, "data-width='95%'");
-                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
+                    if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'importToLib', $params,                $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 if($case->caseFails > 0)
                 {
@@ -2537,6 +2601,7 @@ class testcaseModel extends model
         }
         $menu .= $this->buildMenu('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'browse', 'bug', '', 'iframe', '', "data-width='90%'");
         $menu .= $this->buildMenu('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'browse', 'copy');
+        if($case->auto == 'auto') $menu .= $this->buildMenu('testcase', 'showScript', $params, $case, 'browse', 'file-code', '', 'runCase iframe', false);
 
         return $menu;
     }

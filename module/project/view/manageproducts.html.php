@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if(isonlybody()):?>
+<style> .body-modal #mainMenu.clearfix > .btn-toolbar {width: unset;}</style>
+<?php endif;?>
 <?php js::set('unmodifiableProducts', $unmodifiableProducts);?>
 <?php js::set('unmodifiableBranches', $unmodifiableBranches);?>
 <?php js::set('unmodifiableMainBranches', $unmodifiableMainBranches);?>
@@ -38,15 +41,18 @@
           <?php $i = 0;?>
           <?php foreach($linkedProducts as $productID => $linkedProduct):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
+          <?php $cannotUnlink = (in_array($productID, $unmodifiableProducts) and ($project->model == 'waterfall'));?>
+          <?php $disabled = $cannotUnlink ? "disabled='disabled'" : '';?>
           <div class='col-sm-4'>
             <div class='product checked <?php echo isset($allBranches[$productID]) ? ' has-branch' : ''?>'>
               <div class="checkbox-primary" title='<?php echo $linkedProduct->name;?>'>
-                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked id='products{$productID}'>";?>
+                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked $disabled id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $linkedProduct->name;?>'><?php echo $linkedProduct->name;?></label>
               </div>
               <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' data-drop_direction='down' disabled='disabled'");?>
             </div>
           </div>
+          <?php if($cannotUnlink) echo html::hidden("products[$i]", $productID);?>
           <?php echo html::hidden("branch[$i]", $branchID);?>
 
           <?php
@@ -134,35 +140,9 @@
   </div>
 </div>
 
-<?php if(!$project->division and count($linkedProducts) == 1):?>
+<?php $noticeSwitch = (!$project->division and count($linkedProducts) == 1 and empty($executions));?>
+<?php js::set('linkedProducts', array_keys($linkedProducts));?>
+<?php js::set('noticeSwitch', $noticeSwitch);?>
 <?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
 <?php js::set('divisionSwitchList', $lang->project->divisionSwitchList);?>
-<script>
-$('#submit').click(function()
-{
-    bootbox.confirm(
-      {
-          'message' : noticeDivsion,
-          'buttons':{
-              confirm:{
-                  label: divisionSwitchList['1'],
-                  className: 'btn'
-              },
-              cancel:{
-                  label: divisionSwitchList['0'],
-                  className: 'btn-primary'
-              },
-          },
-          callback: function(result)
-          {
-              if(result) $('div.form-actions').append("<input type='hidden' value='1' name='division'>");
-              $('form').submit();
-          }
-      }
-    );
-
-    return false;
-})
-</script>
-<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

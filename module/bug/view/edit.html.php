@@ -30,6 +30,8 @@ js::set('bugID'                  , $bug->id);
 js::set('bugBranch'              , $bug->branch);
 js::set('isClosedBug'            , $bug->status == 'closed');
 js::set('projectExecutionPairs'  , $projectExecutionPairs);
+js::set('productID'              , $product->id);
+js::set('released'               , $lang->build->released);
 if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
 if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
@@ -100,7 +102,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th class='w-80px'><?php echo $lang->bug->product;?></th>
                   <td>
                     <div class='input-group'>
-                      <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
+                      <?php echo html::select('product', $products, $product->id, "onchange='loadAll(this.value)' class='form-control chosen'");?>
                       <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $bug->branch, "onchange='loadBranch();' class='form-control'");?>
                     </div>
                   </td>
@@ -114,9 +116,9 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                     if(count($moduleOptionMenu) == 1)
                     {
                         echo "<span class='input-group-addon'>";
-                        echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$bug->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
+                        echo html::a($this->createLink('tree', 'browse', "rootID={$product->id}&view=bug&currentModuleID=0&branch=$bug->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                         echo '&nbsp; ';
-                        echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadProductModules($productID)'");
+                        echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadProductModules($product->id)'");
                         echo '</span>';
                     }
                     ?>
@@ -240,7 +242,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->openedBuild;?></th>
                   <td>
                     <div id='openedBuildBox' class='input-group'>
-                      <?php echo html::select('openedBuild[]', $openedBuilds, $bug->openedBuild, 'size=4 multiple=multiple class="chosen form-control"');?>
+                      <?php echo html::select('openedBuild[]', $openedBuilds, $bug->openedBuild, 'size=4 multiple=multiple class="picker-select form-control"');?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>
@@ -257,7 +259,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->resolvedBuild;?></th>
                   <td>
                     <div id='resolvedBuildBox' class='input-group'>
-                      <?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, "class='form-control chosen'");?>
+                      <?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, "class='form-control picker-select'");?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>

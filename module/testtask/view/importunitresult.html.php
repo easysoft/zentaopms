@@ -107,4 +107,5 @@ $(function()
     $('#subNavbar li[data-id="case"]').addClass('active');
 })
 </script>
+<?php js::set('projectID', $projectID);?>
 <?php include '../../common/view/footer.html.php';?>

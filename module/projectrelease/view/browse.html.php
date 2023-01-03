@@ -50,9 +50,12 @@
         <th class='c-id'><?php echo $lang->release->id;?></th>
         <th><?php echo $lang->release->name;?></th>
         <?php if($project->hasProduct):?>
-        <th class='c-product'><?php echo $lang->release->product;?></th>
+        <th class='c-product'><?php echo $lang->projectrelease->product;?></th>
         <?php endif;?>
-        <th class='c-build'><?php echo $lang->release->build;?></th>
+        <th class='c-build'><?php echo $lang->release->includedBuild;?></th>
+        <?php if($showBranch):?>
+        <th class='c-branch text-center'><?php echo $lang->release->branch;?></th>
+        <?php endif;?>
         <th class='c-status text-center'><?php echo $lang->release->status;?></th>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <?php
@@ -67,12 +70,13 @@
       <?php
       $i = 0;
       $buildCount = count($release->buildInfos);
+      $rowspan    = $buildCount > 1 ? "rowspan='$buildCount'" : '';
+      if($buildCount == 0) $release->buildInfos = array('');
       foreach($release->buildInfos as $buildID => $build):
       ?>
-      <?php if($i == 0):?>
-      <?php $rowspan = $buildCount > 1 ? "rowspan='$buildCount'" : '';?>
       <tr data-type='<?php echo $release->status;?>'>
-        <td <?php echo $rowspan?>><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
+        <?php if($i == 0):?>
+        <td class='c-id' <?php echo $rowspan?>><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td <?php echo $rowspan?>>
           <?php
           $flagIcon = $release->marker ? "<icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';
@@ -82,20 +86,29 @@
         <?php if($project->hasProduct):?>
         <td <?php echo $rowspan?> title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
         <?php endif;?>
-        <td class='c-build' title='<?php echo $build->name;?>'><?php echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project'");?></td>
+        <?php endif;?>
+        <td class='c-build'>
+          <?php
+          if($buildCount)
+          {
+              if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span> ";
+              echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project' title='{$build->name}'");
+          }
+          ?>
+        </td>
+        <?php if($i == 0):?>
         <?php $status = $this->processStatus('release', $release);?>
+        <?php if($showBranch):?>
+        <td <?php echo $rowspan?> class='c-branch text-center'><?php echo $release->branchName; ?></td>
+        <?php endif;?>
         <td <?php echo $rowspan?> class='c-status text-center' title='<?php echo $status;?>'>
           <span class="status-release status-<?php echo $release->status?>"><?php echo $status;?></span>
         </td>
         <td <?php echo $rowspan?> class='text-center'><?php echo $release->date;?></td>
         <?php foreach($extendFields as $extendField) echo "<td $rowspan>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
         <td <?php echo $rowspan?> class='c-actions'><?php echo $this->projectrelease->buildOperateMenu($release, 'browse');?></td>
+        <?php endif;?>
       </tr>
-      <?php else:?>
-      <tr>
-        <td class='c-build' title='<?php echo $build->name;?>'><?php echo html::a($this->createLink($build->execution ? 'build' : 'projectbuild', 'view', "buildID=$buildID"), $build->name, '', "data-app='project'");?></td>
-      </tr>
-      <?php endif;?>
       <?php $i++; ?>
       <?php endforeach;?>
       <?php endforeach;?>

@@ -21,6 +21,11 @@ $routes['/feedbacks/:id']        = 'feedback';
 $routes['/feedbacks/:id/assign'] = 'feedbackAssignto';
 $routes['/feedbacks/:id/close']  = 'feedbackClose';
 
+$routes['/tickets']              = 'tickets';
+$routes['/tickets/:id']          = 'ticket';
+$routes['/tickets/:id/assign']   = 'ticketAssignto';
+$routes['/tickets/:id/close']    = 'ticketClose';
+
 $routes['/options/:type'] = 'options';
 
 $routes['/configurations']       = 'configs';
@@ -160,6 +165,11 @@ $routes['/mr']          = 'mr';
 $routes['/modules'] = 'modules';
 
 $routes['/reports'] = 'reports';
+
+$routes['/host/heartbeat']    = 'hostHeartbeat';
+$routes['/host/submitResult'] = 'hostSubmit';
+
+$routes['/ztf/submitResult'] = 'ztfSubmit';
 
 $routes['/z/folders']           = 'zfolders';
 $routes['/z/folders/:id']       = 'zfolder';

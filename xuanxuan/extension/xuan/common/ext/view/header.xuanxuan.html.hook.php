@@ -22,6 +22,10 @@ body {scrollbar-gutter: stable both-edges;}
 <script>
 $(function()
 {
+    const logoutElement = $('#userNav .has-avatar .pull-right li > a[href*="logout"]');
+    logoutElement.parent().addClass('hide');
+    if(logoutElement.parent().prev().hasClass('divider')) logoutElement.parent().prev().addClass('hide');
+
     if(window.parent === window || window.parent.appHeaderStyleUpdated) return;
     const mainHeader = document.getElementById('mainHeader');
     if(!mainHeader) return;
@@ -31,5 +35,27 @@ $(function()
     window.parent.appHeaderStyleUpdated = true;
     window.open('xxc://setAppHeaderStyle/zentao-integrated/' + encodeURIComponent(JSON.stringify(clientHeaderStyle)), '_blank');
 });
+setTimeout(function() // Override confirm, prompt and alert methods.
+{
+    window.confirm = function() {
+        console.warn('\"window.confirm\" is disabled in webview.');
+        return true;
+    };
+    window.prompt = function() {
+        console.warn('\"window.prompt\" is disabled in webview.');
+    };
+    window.alert = function(msg) {
+        const win = window.parent ? window.parent : window;
+        win.open(`xxc://webview/alert/${encodeURIComponent(msg)}`, '_blank');
+    };
+});
 </script>
+<?php if($this->app->moduleName =='user' && $this->app->methodName == 'deny'): ?>
+<script>
+$(function()
+{
+    $('.m-user-deny .modal-footer').addClass('hide');
+});
+</script>
+<?php endif; ?>
 <?php endif; ?>
