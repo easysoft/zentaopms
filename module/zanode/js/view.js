@@ -24,7 +24,7 @@ $('#checkServiceStatus').click(function(){
                 if(resultData.data[key] == 'ready' || resultData.data[key] == 'not_available')
                 {
                     $('.ztf-status').text(zanodeLang.init[resultData.data[key]])
-                    $('.ztf-install').text(zanodeLang.reinstall);
+                    $('.ztf-install').text('');
                 }
                 else
                 {
