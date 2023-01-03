@@ -3,6 +3,10 @@ var intervalTimes = 0;
 
 $('#checkServiceStatus').click(function(){
     $('#serviceContent').addClass('loading');
+    checkServiceStatus();
+})
+
+function checkServiceStatus(){
     $.get(createLink('zanode', 'ajaxGetServiceStatus', 'nodeID=' + nodeID), function(response)
     {
         var resultData = JSON.parse(response);
@@ -97,7 +101,7 @@ $('#checkServiceStatus').click(function(){
         }, 500);
     });
     return
-})
+}
 
 $('.node-init-install').on('click', function(){
     $(this).addClass('load-indicator loading');
@@ -156,13 +160,13 @@ $('.btn-pwd-copy').live('click', function()
 })
 
 $(function(){
-    $('#checkServiceStatus').trigger("click")
+    checkServiceStatus();
     checkInterval = setInterval(() => {
         intervalTimes++;
         if(intervalTimes > 300)
         {
             clearInterval(checkInterval)
         }
-        $('#checkServiceStatus').trigger("click")
+        checkServiceStatus();
     }, 2000);
 })
