@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if(isonlybody()):?>
+<style> .body-modal #mainMenu.clearfix > .btn-toolbar {width: unset;}</style>
+<?php endif;?>
 <?php js::set('unmodifiableProducts', $unmodifiableProducts);?>
 <?php js::set('unmodifiableBranches', $unmodifiableBranches);?>
 <?php js::set('unmodifiableMainBranches', $unmodifiableMainBranches);?>
