@@ -164,20 +164,20 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
 
           $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
           $rebootAttr .= $zanode->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
-          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-desktop'></i> " . $lang->zanode->getVNC, '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
+          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-remote'></i> " . $lang->zanode->getVNC, '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
 
           if($zanode->status == "suspend")
           {
-              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-back'></i> " . $lang->zanode->resumeNode, '', $resumeAttr);
+              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-spinner'></i> " . $lang->zanode->resumeNode, '', $resumeAttr);
           }
           else
           {
-              common::printLink('zanode', 'suspend', "zanodeID={$zanode->id}", "<i class='icon icon-pause'></i> " . $lang->zanode->suspendNode, '', $suspendAttr);
+              common::printLink('zanode', 'suspend', "zanodeID={$zanode->id}", "<i class='icon icon-moon'></i> " . $lang->zanode->suspendNode, '', $suspendAttr);
           }
 
           if($zanode->status == "shutoff")
           {
-              common::printLink('zanode', 'start', "zanodeID={$zanode->id}", "<i class='icon icon-magic'></i> " . $lang->zanode->bootNode, '', "title='{$lang->zanode->boot}' class='btn '");
+              common::printLink('zanode', 'start', "zanodeID={$zanode->id}", "<i class='icon icon-play'></i> " . $lang->zanode->bootNode, '', "title='{$lang->zanode->boot}' class='btn '");
           }
           else
           {
