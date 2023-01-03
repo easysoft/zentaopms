@@ -99,6 +99,8 @@ function changeMoreBtn(type, label)
 
     var $moreBtn = $('#assigntomeBlock .moreBtn');
     var text     = $(label).html();
+
+    text += '<span class="caret"></span>';
     $moreBtn.html(text);
 
     setTimeout(function()

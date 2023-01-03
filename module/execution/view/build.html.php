@@ -69,7 +69,7 @@
           <?php if($showBranch):?>
           <td class="c-name text-left <?php echo $hidden;?>" title='<?php echo $build->branchName;?>'><?php echo $build->branchName;?></td>
           <?php endif;?>
-          <td class="c-name"><?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?></td>
+          <td class="c-name" title="<?php echo $build->name;?>"><?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?></td>
           <td class="c-url text-left">
             <?php
             if($build->scmPath)
