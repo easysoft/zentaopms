@@ -11,10 +11,11 @@ function createTab(filename, filepath)
     $('[data-path="' + decodeURIComponent(filepath) + '"]').closest('li').addClass('selected');
     var tabID = Base64.encode(filepath).replaceAll('=', '-');
     return {
-        title: filename,
-        id:    tabID,
-        type:  'iframe',
-        url:   createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', Base64.encode(encodeURIComponent(filepath))))
+        id:          tabID,
+        url:         createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', Base64.encode(encodeURIComponent(filepath)))),
+        type:        'iframe',
+        title:       filename,
+        forbidClose: isonlybody
     };
 }
 
@@ -23,6 +24,7 @@ $(function()
     $('.btn-left').click(function()  {arrowTabs('fileTabs', 1);});
     $('.btn-right').click(function() {arrowTabs('fileTabs', -2);});
     $('#fileTabs').tabs({tabs: [createTab(file['basename'], entry)]});
+    if(isonlybody) $('#fileTabs .tab-nav-item .tab-nav-close').hide();
 
     /**
      * Set pane height.

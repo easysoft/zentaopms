@@ -10,6 +10,7 @@ js::set('diffs', $diffs);
 js::set('file', $file);
 js::set('entry', $entry);
 js::set('openedFiles', array($entry));
+js::set('isonlybody', isonlybody());
 js::set('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
 ?>
 <?php if(!isonlybody()):?>
