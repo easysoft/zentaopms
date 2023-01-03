@@ -365,7 +365,16 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <?php $this->printExtendFields('', 'table');?>
           <tr>
             <th><?php echo $lang->bug->files;?></th>
-            <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?></td>
+            <td colspan='2'>
+            <?php
+            if($caseID)
+            {
+                echo $this->fetch('file', 'printFiles', array('files' => $caseFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit'));
+                echo html::hidden('caseFiles', implode(',', array_keys($caseFiles)));
+            }
+            ?>
+            <?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?>
+            </td>
           </tr>
         </tbody>
         <tfoot>

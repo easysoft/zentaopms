@@ -665,6 +665,7 @@ class bug extends control
         $this->view->storyID               = $storyID;
         $this->view->buildID               = $buildID;
         $this->view->caseID                = $caseID;
+        $this->view->caseFiles             = isset($caseFiles) ? $caseFiles : array();
         $this->view->runID                 = $runID;
         $this->view->version               = $version;
         $this->view->testtask              = $testtask;
