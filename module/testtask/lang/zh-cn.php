@@ -131,6 +131,7 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[3] = '3';
 $lang->testtask->priList[4] = '4';
 
+$lang->testcase->linkStory     = '关联需求';
 $lang->testtask->unlinkedCases = '未关联';
 $lang->testtask->linkByBuild   = '复制测试单';
 $lang->testtask->linkByStory   = "按{$lang->SRCommon}关联";

@@ -1059,6 +1059,11 @@ class testtask extends control
      * Link cases to a test task.
      *
      * @param  int    $taskID
+     * @param  string $type
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -1108,6 +1113,7 @@ class testtask extends control
         $this->config->testcase->search['style']     = 'simple';
 
         if($product->shadow) unset($this->config->testcase->search['fields']['product']);
+        if($type != 'bystory') unset($this->config->testcase->search['fields']['storyTitle']);
         if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);

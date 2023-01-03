@@ -346,6 +346,7 @@ class testtaskModel extends model
     {
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         $query = $this->session->testcaseQuery;
+        if(strpos($query, 'storyTitle') !== false and $type != 'bystory') $query = '1 = 1';
         $allProduct = "`product` = 'all'";
         if(strpos($query, '`product` =') === false && $type != 'bysuite') $query .= " AND `product` = $productID";
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
@@ -399,18 +400,21 @@ class testtaskModel extends model
     {
         $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
         $cases   = array();
+        $query   = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
+        if(strpos($query, '`storyTitle`') !== false) $query = str_replace('t1.`storyTitle`', 't2.`title`', $query);
         if($stories)
         {
-            $cases = $this->dao->select('*')->from(TABLE_CASE)
+            $cases = $this->dao->select('t1.*,t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where($query)
                 ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
-                ->andWhere('product')->eq($productID)
-                ->andWhere('status')->ne('wait')
-                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
-                ->beginIF($task->branch !== '')->andWhere('branch')->in("0,$task->branch")->fi()
-                ->andWhere('story')->in(trim($stories, ','))
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('id desc')
+                ->andWhere('t1.product')->eq($productID)
+                ->andWhere('t1.status')->ne('wait')
+                ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,$task->branch")->fi()
+                ->andWhere('t1.story')->in(trim($stories, ','))
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy('t1.id desc')
                 ->page($pager)
                 ->fetchAll();
         }
@@ -1500,7 +1504,7 @@ class testtaskModel extends model
 
             $failHtml = ': <span class="result-testcase fail">' . $this->lang->testtask->fail . '</span>';
             $passHtml = ': <span class="result-testcase pass">' . $this->lang->testtask->pass . '</span>';
-            
+
             $log = preg_replace(array("/:\x20失败/", "/:\x20fail/", "/:\x20成功/", "/:\x20pass/"), array($failHtml, $failHtml, $passHtml, $passHtml), $log);
 
             $logHtml .= "<li>" . $log . "</li>";
@@ -1524,11 +1528,11 @@ class testtaskModel extends model
             }
 
             $caseResult = $passCount ? 'pass':'fail';
-            $logHtml .= "<li class='result-testcase {$caseResult}'>" 
+            $logHtml .= "<li class='result-testcase {$caseResult}'>"
                         . sprintf($this->lang->testtask->stepSummary, $total, $passCount, $failCount)
                         . "</li>";
         }
-        
+
         return $logHtml;
     }
 
