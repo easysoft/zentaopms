@@ -1,6 +1,7 @@
 ajaxGetServiceStatus();
 function ajaxGetServiceStatus()
 {
+    $('#serviceContent').addClass('loading');
     $.get(createLink('zahost', 'ajaxGetServiceStatus', 'hostID=' + hostID), function(response)
     {
         var resultData = JSON.parse(response);
@@ -31,6 +32,10 @@ function ajaxGetServiceStatus()
             $('.result .init-fail').addClass('hide')
             $('.result .init-success').removeClass('hide')
         }
+
+        setTimeout(function() {
+            $('#serviceContent').removeClass('loading');
+        }, 500);
     });
     return
 
