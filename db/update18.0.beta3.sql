@@ -107,5 +107,5 @@ CREATE TABLE `zt_automation` (
 
 ALTER TABLE `zt_repofiles` ADD `oldPath` varchar(255) DEFAULT '' AFTER `path`;
 ALTER TABLE `zt_case` ADD `script` longtext NOT NULL AFTER `howRun`;
-ALTER TABLE `zt_testresult` ADD `ZTFResult` text NOT NULL;
-ALTER TABLE `zt_testresult` ADD `node` int(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_testresult` ADD `ZTFResult` text NOT NULL AFTER `stepResults`;
+ALTER TABLE `zt_testresult` ADD `node` int(8) unsigned NOT NULL DEFAULT '0' AFTER `stepResults`;
