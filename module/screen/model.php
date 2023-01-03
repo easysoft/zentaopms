@@ -374,7 +374,7 @@ class screenModel extends model
 
                     if($settings->value->type === 'value')
                     {
-                        $value = $results[0]->$field;
+                        $value = empty($results[0]) ? 0 : $results[0]->$field;
                     }
                     if($settings->value->agg === 'count')
                     {
