@@ -244,7 +244,7 @@ class productplan extends control
             if($this->post->comments)
             {
                 $allChanges = $this->productplan->batchChangeStatus($status);
-                return print(js::locate(inlink('browse', "product=$productID"), 'parent'));
+                return print(js::locate(inlink('browse', "product=$productID")));
             }
 
             $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIDList)->fetchAll('id');

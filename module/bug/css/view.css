@@ -10,3 +10,4 @@
 .resolution {white-space: nowrap; overflow: hidden;}
 .link-commit {overflow: hidden; white-space: nowrap; margin-right: 5px;}
 .main-actions .btn-toolbar{display: inline-flex; flex-wrap: wrap;}
+#legendBasicInfo td .label-severity {margin-left: -5px;}
