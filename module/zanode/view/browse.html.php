@@ -88,7 +88,7 @@
                 common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-remote'></i> ", '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($node->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
                 if($node->status == "suspend")
                 {
-                    common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-spinner'></i> ", '', $resumeAttr);
+                    common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-spinner-indicator'></i> ", '', $resumeAttr);
                 }
                 else
                 {

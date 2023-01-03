@@ -17,3 +17,4 @@
 .checkStatus{color: #313c52;}
 .btn-info {background-color: unset;}
 .icon-refresh {font-size: 15px;}
+.load-indicator:after {top: 33%;}
