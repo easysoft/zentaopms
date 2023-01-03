@@ -1,6 +1,21 @@
 <?php
 common::sortFeatureMenu();
 
+js::set('status', $status);
+js::set('orderBy', $orderBy);
+js::set('edit', $lang->edit);
+js::set('selectAll', $lang->selectAll);
+js::set('hasProject', $hasProject);
+js::set('checkedProjects', $lang->program->checkedProjects);
+js::set('programSummary', $summary);
+js::set('cilentLang', $this->app->getClientLang());
+js::set('editLang', $this->lang->edit);
+js::set('pagerLang', $this->lang->pager);
+js::set('recTotal', $pager->recTotal);
+js::set('recPerPage', $pager->recPerPage);
+js::set('pageID', $pager->pageID);
+js::set('pagerLink', $this->createLink('program', 'browse', "status=$status&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"));
+
 /* Set toolbar. */
 $toolbar = toolbar();
 foreach($this->lang->program->featureBar['browse'] as $key => $label)
@@ -59,18 +74,3 @@ $page = page('list');
 $page->top->menu      = $menu;
 $page->right->content = $content;
 $page->x();
-
-js::set('status', $status);
-js::set('orderBy', $orderBy);
-js::set('edit', $lang->edit);
-js::set('selectAll', $lang->selectAll);
-js::set('hasProject', $hasProject);
-js::set('checkedProjects', $lang->program->checkedProjects);
-js::set('programSummary', $summary);
-js::set('cilentLang', $this->app->getClientLang());
-js::set('editLang', $this->lang->edit);
-js::set('pagerLang', $this->lang->pager);
-js::set('recTotal', $pager->recTotal);
-js::set('recPerPage', $pager->recPerPage);
-js::set('pageID', $pager->pageID);
-js::set('pagerLink', $this->createLink('program', 'browse', "status=$status&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"));
