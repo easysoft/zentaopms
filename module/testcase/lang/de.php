@@ -152,6 +152,7 @@ $lang->testcase->stepChild               = 'Teilschritt';
 $lang->testcase->viewAll                 = 'Alle anziegen';
 $lang->testcase->importToLib             = "Import To Library";
 $lang->testcase->showScript              = 'Show Script';
+$lang->testcase->autoScript              = 'Script';
 
 $lang->testcase->new = 'Neu';
 
