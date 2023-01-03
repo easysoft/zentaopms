@@ -4322,8 +4322,9 @@ class taskModel extends model
     private function updateExecutionEsDateByGantt($objectID, $objectType, $postData)
     {
         $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
-        $parent     = $objectData->parent;
         $project    = $objectData->project;
+        $parent     = '';
+        if($objectData->project != $objectData->parent) $parent = $objectData->parent;
 
         if(empty($parent))
         {
