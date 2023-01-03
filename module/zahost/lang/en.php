@@ -4,7 +4,7 @@ $lang->zahost->common         = 'ZAhost';
 $lang->zahost->browse         = 'Host List';
 $lang->zahost->create         = 'Add Host';
 $lang->zahost->view           = 'Host View';
-$lang->zahost->init           = 'Init Host';
+$lang->zahost->initTitle      = 'Init Host';
 $lang->zahost->edit           = 'Edit';
 $lang->zahost->editAction     = 'Edit Host';
 $lang->zahost->delete         = 'Delete';
@@ -33,11 +33,12 @@ $lang->zahost->editedBy     = 'EditedBy';
 $lang->zahost->editedDate   = 'EditedDate';
 $lang->zahost->registerDate = 'RegisterDate';
 
-$lang->zahost->memorySize   = $lang->zahost->memory;
-$lang->zahost->cpuCoreNum   = $lang->zahost->cpuCores;
-$lang->zahost->os           = 'System';
-$lang->zahost->imageName    = 'Image File';
-$lang->zahost->browseImage  = 'Image List';
+$lang->zahost->memorySize    = $lang->zahost->memory;
+$lang->zahost->cpuCoreNum    = $lang->zahost->cpuCores;
+$lang->zahost->os            = 'System';
+$lang->zahost->imageName     = 'Image File';
+$lang->zahost->browseImage   = 'Image List';
+$lang->zahost->downloadImage = 'Download Image';
 
 $lang->zahost->createZanode        = 'Create Node';
 $lang->zahost->initNotice          = 'Save successfully, initialize the ZAhost or return list';
@@ -73,7 +74,7 @@ $lang->zahost->image = new stdclass;
 $lang->zahost->image->browseImage   = 'Image List';
 $lang->zahost->image->createImage   = 'Create Image';
 $lang->zahost->image->choseImage    = 'Select Image';
-$lang->zahost->image->downloadImage = 'Download Image';
+$lang->zahost->image->downloadImage = $lang->zahost->downloadImage;
 $lang->zahost->image->startDowload  = 'Start Download';
 
 $lang->zahost->image->common     = 'Image';

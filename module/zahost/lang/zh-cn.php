@@ -33,11 +33,12 @@ $lang->zahost->editedBy     = '由谁修改';
 $lang->zahost->editedDate   = '最后修改时间';
 $lang->zahost->registerDate = '最后注册时间';
 
-$lang->zahost->memorySize  = $lang->zahost->memory;
-$lang->zahost->cpuCoreNum  = $lang->zahost->cpuCores;
-$lang->zahost->os          = '操作系统';
-$lang->zahost->imageName   = '镜像文件';
-$lang->zahost->browseImage = '镜像列表';
+$lang->zahost->memorySize    = $lang->zahost->memory;
+$lang->zahost->cpuCoreNum    = $lang->zahost->cpuCores;
+$lang->zahost->os            = '操作系统';
+$lang->zahost->imageName     = '镜像文件';
+$lang->zahost->browseImage   = '镜像列表';
+$lang->zahost->downloadImage = '下载镜像';
 
 $lang->zahost->createZanode        = '创建执行节点';
 $lang->zahost->initNotice          = '保存成功，请您初始化宿主机或返回列表。';
@@ -73,7 +74,7 @@ $lang->zahost->image = new stdclass;
 $lang->zahost->image->browseImage   = '镜像列表';
 $lang->zahost->image->createImage   = '创建镜像';
 $lang->zahost->image->choseImage    = '选择镜像';
-$lang->zahost->image->downloadImage = '下载镜像';
+$lang->zahost->image->downloadImage = $lang->zahost->downloadImage;
 $lang->zahost->image->startDowload  = '开始下载';
 
 $lang->zahost->image->common     = '镜像';

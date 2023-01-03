@@ -34,8 +34,8 @@ $lang->zanode->cpuCores        = 'CPU';
 $lang->zanode->defaultUser     = 'Default Account Name';
 $lang->zanode->defaultPwd      = 'Default Password';
 $lang->zanode->memory          = 'Memory Size';
-$lang->zanode->desc            = 'Description';
 $lang->zanode->diskSize        = 'Disk Size';
+$lang->zanode->desc            = 'Description';
 $lang->zanode->status          = 'Status';
 $lang->zanode->mac             = 'MAC';
 $lang->zanode->vnc             = 'VNC Port';
@@ -67,8 +67,8 @@ $lang->automation->node       = $lang->zanode->common;
 $lang->zanode->notFoundAgent  = 'No Agent service is found';
 $lang->zanode->createVmFail   = 'Failed to create a ZenAgent Node';
 $lang->zanode->noVncPort      = 'Failed to get vnc port';
-$lang->zanode->nameValid      = "Name must be letters, numbers,'-'，'_'，'.', And cannot begin with a symbol";
-$lang->zanode->empty          = 'ZenAgent Node not found.';
+$lang->zanode->nameValid      = "The name can only be letters, numbers, '-', '_', '.', and cannot start with a symbol";
+$lang->zanode->empty          = 'No zanode is found';
 $lang->zanode->runCaseConfirm = 'The system detects the presence of an automation script. Whether to execute?';
 
 $lang->zanode->createImage        = 'Create Image';
@@ -95,7 +95,7 @@ $lang->zanode->statusList['suspend']      = 'Suspend';
 $lang->zanode->statusList['offline']      = 'Offline';
 $lang->zanode->statusList['destroy']      = 'Destroyed';
 $lang->zanode->statusList['shutoff']      = 'Shutoff';
-$lang->zanode->statusList['shutdown']     = 'shutdown';
+$lang->zanode->statusList['shutodown']    = 'shutdown';
 $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
 $lang->zanode->statusList['wait']         = 'Initializing';
 $lang->zanode->statusList['online']       = 'Online';
@@ -103,7 +103,7 @@ $lang->zanode->statusList['online']       = 'Online';
 $lang->zanode->initNotice = "Succeeded. Please initialize the execution node or return to the list.";
 $lang->zanode->initButton = "Initialize";
 
-$lang->zanode->init = new stdclass;
+$lang->zanode->init = new stdClass();
 $lang->zanode->init->statusTitle   = "Service Status";
 $lang->zanode->init->checkStatus   = "Check Service Status";
 $lang->zanode->init->not_install   = "Not installed";
@@ -121,7 +121,6 @@ $lang->zanode->init->serviceStatus = [
     "ZenAgent" => 'not_install',
     "ZTF"      => 'not_install',
 ];
-
 $lang->zanode->init->title          = "Initialize Node";
 $lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
 $lang->zanode->init->initDesc       = "Execute the init script on the node: %s %s   <br>- Click check service status button.";
