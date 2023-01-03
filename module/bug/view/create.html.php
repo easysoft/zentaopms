@@ -369,7 +369,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <?php
             if($caseID)
             {
-                echo $this->fetch('file', 'printFiles', array('files' => $caseFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit'));
+                echo $this->fetch('file', 'printFiles', array('files' => $caseFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
                 echo html::hidden('caseFiles', implode(',', array_keys($caseFiles)));
             }
             ?>
