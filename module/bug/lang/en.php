@@ -405,8 +405,8 @@ $lang->bug->action->linked2plan          = array('main' => '$date, linked by <st
 $lang->bug->action->unlinkedfromplan     = array('main' => '$date, deleted by <strong>$actor</strong> from Plan <strong>$extra</strong>.');
 $lang->bug->action->linked2build         = array('main' => '$date, linked by <strong>$actor</strong> to Build <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfrombuild    = array('main' => '$date, unlinked by <strong>$actor</strong> from Build <strong>$extra</strong>.');
-$lang->bug->action->linked2release       = array('main' => '$date, linked by <strong>$actor</strong> to Release <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfromrelease  = array('main' => '$date, unlinked by <strong>$actor</strong> from Release <strong>$extra</strong>.');
+$lang->bug->action->linked2release       = array('main' => '$date, linked by <strong>$actor</strong> to Release <strong>$extra</strong>.');
 $lang->bug->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
 $lang->bug->action->linkrelatedbug       = array('main' => '$date, linked by <strong>$actor</strong> to Bug <strong>$extra</strong>.');
