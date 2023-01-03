@@ -279,18 +279,18 @@ if($isCustomExport)
             </tr>
             <tr>
               <th><?php echo $lang->file->extension;?></th>
-              <td><?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control"');?></td>
+              <td><?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control chosen"');?></td>
             </tr>
             <tr>
               <th><?php echo $lang->file->encoding;?></th>
-              <td><?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='form-control'");?></td>
+              <td><?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control chosen'");?></td>
             </tr>
             <?php $hide = isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'kanban') !== false ? 'style="display:none"' : '';?>
             <tr <?php echo $hide;?>>
               <th><?php echo $lang->file->exportRange;?></th>
               <td>
                 <?php if(isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'calendar') !== false) unset($lang->exportTypeList['selected']);?>
-                <?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control'");?>
+                <?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control chosen'");?>
               </td>
               <td class='checkbox part hidden'>
                 <?php echo html::checkbox('part', array( 1 => $lang->file->batchExport), '', "onclick='setPart(this);'");?>
