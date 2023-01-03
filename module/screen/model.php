@@ -829,6 +829,9 @@ class screenModel extends model
         {
             $execution = $this->execution->getByID($executionID);
 
+            /* Splice project name for the execution name. */
+            $execution->name = $this->loadModel('project')->getByID($execution->project)->name . '--' . $execution->name;
+
             /* Get date list. */
             if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
                 or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
