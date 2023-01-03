@@ -27,7 +27,7 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
       if(defined('ZUI3'))
       {
           css::import('https://ztui.sh.oop.cc/assets/style.4d294030.css');
-          css::import('https://zui.cyy.oop.cc/dist/zui-custom/zui-custom.css');
+          css::import($jsRoot . 'zui3/min.css');
       }
       else
       {
@@ -44,7 +44,7 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
 
       if(defined('ZUI3'))
       {
-        js::import('https://zui.cyy.oop.cc/dist/zui-custom/zui-custom.umd.cjs');
+        js::import($jsRoot . 'zui3/min.cjs');
         js::import('https://unpkg.com/htmx.org@1.8.2');
       }
 
