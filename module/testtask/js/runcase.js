@@ -95,11 +95,15 @@ $(document).ready(function()
                         $("#submit").attr({"disabled":"disabled"});
                     });
                 }
+
+                if(typeof(window.parent.runCase) != 'undefined') window.parent.runCase = true;
             }
 
             return false;
         }
     });
+
+    window.parent.triggerHidden();
 
     $(document).on('click', ".step-group input[type='checkbox']", function()
     {

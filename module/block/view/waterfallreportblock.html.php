@@ -14,9 +14,30 @@
 .block-waterfallreport .progress {position: absolute; left: 45px; top: 90px; right: 40px;}
 .block-waterfallreport .progress-num {font-size: 20px; font-weight: 700;}
 .block-waterfallreport .col-right .tile-amount {font-size: 20px;}
-</style>
 
-<div class="panel-move-handler"><span class='stage text-muted'><?php echo $current;?></span></div>
+.block-waterfallreport #helpDropdown{display:inline-block; padding-left:5px; padding-right:10px;}
+.block-waterfallreport #helpDropdown .dropdown-menu{width:600px; text-align:left; height:300px; overflow:auto; background: #fff; padding-left:8px;font-weight: normal;}
+.block-waterfallreport #helpDropdown h2{font-size:14px; padding:0px; margin:0px; margin-top:10px;}
+.block-waterfallreport #helpDropdown p{padding:0px; margin:0px; margin-top:10px;}
+</style>
+<script>
+$(function()
+{
+    $('.block-waterfallreport').each(function()
+    {
+        $(this).find('.panel-heading .panel-title #helpDropdown').remove();
+        $(this).find('.panel-heading .panel-title').append($('#helpDropdown.hidden'));
+        $(this).find('.panel-heading .panel-title #helpDropdown').removeClass('hidden');
+    })
+})
+</script>
+
+<div id='helpDropdown' class="dropdown dropdown-hover hidden">
+  <a data-toggle="dropdown"><i class="icon-help"></i></a>
+  <div class="dropdown-menu">
+    <?php echo $lang->weekly->blockHelpNotice;?>
+  </div>
+</div>
 <div class="panel-body conatiner-fluid">
   <div class='table-row'>
     <div class="col col-left hide-in-sm">

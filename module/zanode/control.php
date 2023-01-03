@@ -285,7 +285,7 @@ class zanode extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->zanode->confirmDelete, inlink('delete', "zanodeID={$nodeID}&confirm=yes")));
+            return print(js::confirm($this->lang->zanode->confirmDelete, inlink('destroy', "zanodeID={$nodeID}&confirm=yes")));
         }
 
         $error = $this->zanode->destroy($nodeID);
