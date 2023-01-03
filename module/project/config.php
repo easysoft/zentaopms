@@ -125,14 +125,14 @@ $config->project->datatable->fieldList['consume']['pri']      = '7';
 
 $config->project->datatable->fieldList['progress']['title']    = 'progress';
 $config->project->datatable->fieldList['progress']['fixed']    = 'no';
-$config->project->datatable->fieldList['progress']['width']    = '60';
+$config->project->datatable->fieldList['progress']['width']    = '65';
 $config->project->datatable->fieldList['progress']['required'] = 'no';
 $config->project->datatable->fieldList['progress']['sort']     = 'no';
 $config->project->datatable->fieldList['progress']['pri']      = '6';
 
 $config->project->datatable->fieldList['actions']['title']    = 'actions';
 $config->project->datatable->fieldList['actions']['fixed']    = 'right';
-$config->project->datatable->fieldList['actions']['width']    = '180';
+$config->project->datatable->fieldList['actions']['width']    = '165';
 $config->project->datatable->fieldList['actions']['required'] = 'yes';
 $config->project->datatable->fieldList['actions']['pri']      = '1';
 
