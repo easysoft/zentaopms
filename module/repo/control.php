@@ -425,6 +425,11 @@ class repo extends control
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $this->repo->setBackSession('view', $withOtherModule = true);
         if($repoID == 0) $repoID = $this->session->repoID;
+        if($revision != 'HEAD')
+        {
+                setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+                $this->cookie->repoBranch = $revision;
+        }
 
         $this->commonAction($repoID, $objectID);
         if($browser['name'] != 'ie') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
