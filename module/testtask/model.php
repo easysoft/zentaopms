@@ -407,7 +407,7 @@ class testtaskModel extends model
             $cases = $this->dao->select('t1.*,t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where($query)
-                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
                 ->andWhere('t1.product')->eq($productID)
                 ->andWhere('t1.status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
