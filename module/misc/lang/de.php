@@ -103,6 +103,7 @@ $lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme
 $lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
 
+$lang->misc->releaseDate['18.0']        = '2023-01-03';
 $lang->misc->releaseDate['18.0.beta3']  = '2022-12-26';
 $lang->misc->releaseDate['18.0.beta2']  = '2022-12-14';
 $lang->misc->releaseDate['18.0.beta1']  = '2022-11-16';
@@ -195,6 +196,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['18.0'][]       = array('title' => "Automated test solutions are proposed. Work order related functions are added to the Operation Management Interface. Approval workflow support for adding all types of notifications. And at the same time, we have further improved the earned value calculation rules.", 'desc' => '');
 $lang->misc->feature->all['18.0.beta3'][] = array('title' => "The module Statistic is upgraded to BI, with 5 built-in large screens of macro management dimensions.", 'desc' => '');
 $lang->misc->feature->all['18.0.beta2'][] = array('title' => "We have optimized the product with multi-branches/multi-platforms. It's supported to create siblings stories. It's possible for Plan, Build, and Release to link requirements or bugs beyond their parent branch. ZenTao Client has implemented the robot chatting mechanism.", 'desc' => '');
 $lang->misc->feature->all['18.0.beta1'][] = array('title' => "Multiple core processes in ZenTao are improved: A project without any product linked in is able to be created, as well as creating projects without sprints/iterations linked in; projects are able to link products beyond the father program; switch easily between ZenTao Lite mode and Full Lifecycle Management mode.", 'desc' => '');
