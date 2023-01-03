@@ -1220,12 +1220,14 @@ $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 
 $lang->resource->zahost = new stdclass();
-$lang->resource->zahost->browse      = 'browse';
-$lang->resource->zahost->create      = 'create';
-$lang->resource->zahost->edit        = 'editAction';
-$lang->resource->zahost->delete      = 'deleteAction';
-$lang->resource->zahost->view        = 'view';
-$lang->resource->zahost->browseImage = 'browseImage';
+$lang->resource->zahost->browse         = 'browse';
+$lang->resource->zahost->create         = 'create';
+$lang->resource->zahost->edit           = 'editAction';
+$lang->resource->zahost->delete         = 'deleteAction';
+$lang->resource->zahost->view           = 'view';
+$lang->resource->zahost->browseImage    = 'browseImage';
+$lang->resource->zahost->downloadImage  = 'downloadImage';
+$lang->resource->zahost->cancelDownload = 'cancel';
 
 $lang->zahost->methodOrder[0]  = 'browse';
 $lang->zahost->methodOrder[5]  = 'create';
@@ -1233,6 +1235,8 @@ $lang->zahost->methodOrder[10] = 'edit';
 $lang->zahost->methodOrder[15] = 'delete';
 $lang->zahost->methodOrder[20] = 'view';
 $lang->zahost->methodOrder[25] = 'browseImage';
+$lang->zahost->methodOrder[30] = 'downloadImage';
+$lang->zahost->methodOrder[35] = 'cancelDownload';
 
 $lang->resource->zanode = new stdclass();
 $lang->resource->zanode->browse  = 'browse';
