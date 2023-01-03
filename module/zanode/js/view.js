@@ -2,6 +2,11 @@ var checkInterval;
 var intervalTimes = 0;
 
 $('#checkServiceStatus').click(function(){
+    $('#serviceContent').addClass('loading');
+    checkServiceStatus();
+})
+
+function checkServiceStatus(){
     $.get(createLink('zanode', 'ajaxGetServiceStatus', 'nodeID=' + nodeID), function(response)
     {
         var resultData = JSON.parse(response);
@@ -24,7 +29,7 @@ $('#checkServiceStatus').click(function(){
                 if(resultData.data[key] == 'ready' || resultData.data[key] == 'not_available')
                 {
                     $('.ztf-status').text(zanodeLang.init[resultData.data[key]])
-                    $('.ztf-install').text(zanodeLang.reinstall);
+                    $('.ztf-install').text('');
                 }
                 else
                 {
@@ -91,9 +96,12 @@ $('#checkServiceStatus').click(function(){
             $('.init-success').show();
             // $('.init-fail').hide();
         }
+        setTimeout(function() {
+            $('#serviceContent').removeClass('loading');
+        }, 500);
     });
     return
-})
+}
 
 $('.node-init-install').on('click', function(){
     $(this).addClass('load-indicator loading');
@@ -152,13 +160,13 @@ $('.btn-pwd-copy').live('click', function()
 })
 
 $(function(){
-    $('#checkServiceStatus').trigger("click")
+    checkServiceStatus();
     checkInterval = setInterval(() => {
         intervalTimes++;
         if(intervalTimes > 300)
         {
             clearInterval(checkInterval)
         }
-        $('#checkServiceStatus').trigger("click")
+        checkServiceStatus();
     }, 2000);
 })
