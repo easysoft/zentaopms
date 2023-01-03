@@ -405,8 +405,8 @@ $lang->bug->action->linked2plan          = array('main' => '$date, verknüpft vo
 $lang->bug->action->unlinkedfromplan     = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> von Plan <strong>$extra</strong>.');
 $lang->bug->action->linked2build         = array('main' => '$date, verknüpft von <strong>$actor</strong> zum Build <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfrombuild    = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> von Build <strong>$extra</strong>.');
-$lang->bug->action->linked2release       = array('main' => '$date, verknüpft von <strong>$actor</strong> zu Release <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfromrelease  = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> vom Release <strong>$extra</strong>.');
+$lang->bug->action->linked2release       = array('main' => '$date, verknüpft von <strong>$actor</strong> zu Release <strong>$extra</strong>.');
 $lang->bug->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
 $lang->bug->action->linkrelatedbug       = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Bug <strong>$extra</strong>.');

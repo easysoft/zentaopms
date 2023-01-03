@@ -574,7 +574,7 @@ $lang->block->flowchart['dev']     = array('Dev Team', 'Claim Tasks/Bugs', 'Desi
 $lang->block->flowchart['tester']  = array('Test Team', 'Write Cases', 'Run Cases', 'Report Bugs', 'Verify Bugs', 'Close Bugs');
 
 $lang->block->zentaoapp = new stdclass();
-$lang->block->zentaoapp->commom               = 'ZenTao App';
+$lang->block->zentaoapp->common               = 'ZenTao App';
 $lang->block->zentaoapp->thisYearInvestment   = 'Investment The Year';
 $lang->block->zentaoapp->sinceTotalInvestment = 'Total Investment';
 $lang->block->zentaoapp->myStory              = 'My Story';
