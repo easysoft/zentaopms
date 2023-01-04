@@ -427,8 +427,8 @@ class repo extends control
         if($repoID == 0) $repoID = $this->session->repoID;
         if($revision != 'HEAD')
         {
-                setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-                $this->cookie->repoBranch = $revision;
+            setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            $this->cookie->repoBranch = $revision;
         }
 
         $this->commonAction($repoID, $objectID);
