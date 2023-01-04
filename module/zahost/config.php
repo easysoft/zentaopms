@@ -50,6 +50,7 @@ $config->zahost->search['params']['editedDate']      = array('operator' => '=', 
 $config->zahost->editor = new stdclass();
 $config->zahost->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->zahost->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->zahost->editor->view   = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->zahost->automation = new stdclass();
 $config->zahost->automation->zenAgentURL   = 'https://github.com/easysoft/zenagent/blob/main/guide/deploy/index.md';
