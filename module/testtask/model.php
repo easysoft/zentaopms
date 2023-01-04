@@ -346,7 +346,7 @@ class testtaskModel extends model
     {
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         $query = $this->session->testcaseQuery;
-        if(strpos($query, 'storyTitle') !== false and $type != 'bystory') $query = '1 = 1';
+
         $allProduct = "`product` = 'all'";
         if(strpos($query, '`product` =') === false && $type != 'bysuite') $query .= " AND `product` = $productID";
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
@@ -401,7 +401,6 @@ class testtaskModel extends model
         $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
         $cases   = array();
         $query   = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
-        if(strpos($query, '`storyTitle`') !== false) $query = str_replace('t1.`storyTitle`', 't2.`title`', $query);
         if($stories)
         {
             $cases = $this->dao->select('t1.*,t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
