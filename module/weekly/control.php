@@ -82,6 +82,11 @@ class weekly extends control
            ->fetchPairs();
         $date = helper::today();
 
-        foreach($projects as $projectID => $project) $this->weekly->save($projectID, $date);
+        foreach($projects as $projectID => $project)
+        {
+            $weekStart = $this->weekly->getThisMonday($date);
+            $this->dao->delete()->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->andWhere('weekStart')->eq($weekStart)->exec();
+            $this->weekly->save($projectID, $date);
+        }
     }
 }
