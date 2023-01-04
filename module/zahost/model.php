@@ -544,7 +544,7 @@ class zahostModel extends model
         $menu   = '';
         $params = "hostID=$host->id";
 
-        $menu  .= $this->buildMenu('zahost', 'browseImage', $params, $host, 'view', 'snap-house', '', 'iframe', true, '', $this->lang->zahost->image->browseImage);
+        $menu  .= $this->buildMenu('zahost', 'browseImage', $params, $host, 'view', 'mirror', '', 'iframe', true, '', $this->lang->zahost->image->browseImage);
         $menu  .= "<div class='divider'></div>";
         $menu  .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
         $menu  .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin');

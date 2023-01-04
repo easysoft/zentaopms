@@ -73,7 +73,7 @@
           <td class='c-actions'>
             <?php $disabled = ($host->status == 'wait') ? 'disabled' : '';?>
             <?php $title    = ($host->status == 'wait') ? $lang->zahost->uninitNotice: $lang->zahost->image->browseImage;?>
-            <?php common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'snap-house', '', "iframe $disabled", true, "data-width='60%'", $title);?>
+            <?php common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'mirror', '', "iframe $disabled", true, "data-width='60%'", $title);?>
             <?php $disabled = !empty($nodeList[$host->hostID]) ? 'disabled' : '';?>
             <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->undeletedNotice : $lang->zahost->delete;?>
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
