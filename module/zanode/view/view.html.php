@@ -133,7 +133,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
               <span class='dot-symbol dot-ztf text-danger'>●</span>
               <span>&nbsp;&nbsp;ZTF &nbsp;
                 <span class="ztf-status"><?php echo $lang->zanode->initializing; ?></span>&nbsp;
-                <a class='node-init-install hide' target='hiddenwin' herf='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm"></i><span class="ztf-install"><?php echo $lang->zanode->install ?></span></a>
+                <a class='node-init-install hide' target='hiddenwin' href='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm"></i><span class="ztf-install"><?php echo $lang->zanode->install ?></span></a>
               </span>
             </div>
             <div class="status-notice">
@@ -164,7 +164,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
 
           $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
           $rebootAttr .= $zanode->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
-          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-remote'></i> " . $lang->zanode->getVNC, '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
+          common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-remote'></i> " . $lang->zanode->getVNC, in_array($zanode->status ,array('running', 'launch', 'wait')) ? '_blank' : '', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
 
           if($zanode->status == "suspend")
           {
