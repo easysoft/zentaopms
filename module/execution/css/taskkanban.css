@@ -31,7 +31,7 @@
 .kanban-header-col > .title > .text {max-width: 110px !important;}
 .kanban-header-col > .title > .storyColumn .text {font-weight: 700; color:rgb(51, 51, 51);}
 .kanban-header-col > .title > .storyColumn + .dropdown-menu {top: 45px; left: auto;}
-.kanban-header-sub-cols .kanban-header-col > .title .text {max-width: calc(100% - 120px) !important;}
+.kanban-header-sub-cols .kanban-header-col > .title .text {max-width: calc(100% - 130px) !important;}
 
 #kanbanContainer {margin: 0;}
 #kanbanContainer > .panel-body {overflow: auto;}
