@@ -57,7 +57,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
                 <div class="col-3 text-right"><?php echo $lang->zanode->sshAddress; ?>:</div>
                 <div class="col-8 node-not-wrap">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?> &nbsp; <?php echo "<button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?></div>
               </div>
-              <textarea style="display:none;" id="ssh-copy"><?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?></textarea>
+              <textarea style="display:none;" id="ssh-copy">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?></textarea>
             </div>
             <div class="col-4">
               <div class="main-row">
