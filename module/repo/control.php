@@ -428,7 +428,7 @@ class repo extends control
         if($revision != 'HEAD')
         {
             setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-            $this->cookie->repoBranch = $revision;
+            $this->cookie->set('repoBranch', $revision);
         }
 
         $this->commonAction($repoID, $objectID);
