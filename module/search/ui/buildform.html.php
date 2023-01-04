@@ -11,6 +11,10 @@ $(function()
     var actionURL     = '<?php echo $actionURL;?>';
 
     options = JSON.parse(options);
+    options.saveSearch.config = {
+        'data-toggle' : 'modal',
+        'data-url' : createLink('search', 'saveQuery', 'module=' + module)
+    };
     var searchObject = new zui.SearchForm(queryBox[0], options);
     var searchForm   = $(searchObject.element).find('.search-form');
     var $searchForm  = $(searchForm);

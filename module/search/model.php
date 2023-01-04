@@ -1475,6 +1475,9 @@ class searchModel extends model
         $options->formConfig->action = helper::createLink('search', 'buildQuery');
         $options->formConfig->target = 'hiddenwin';
 
+        $options->saveSearch = new stdclass();
+        $options->saveSearch->text = $this->lang->search->saveCondition;
+
         return $options;
     }
 }
