@@ -78,7 +78,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->join('os', ',')
             ->join('browser', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,caseFiles')
+            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
             ->get();
 
         /* Check repeat bug. */
@@ -98,14 +98,14 @@ class bugModel extends model
         {
             $bugID = $this->dao->lastInsertID();
 
-            if(isset($_POST['caseFiles']))
+            if(isset($_POST['resultFiles']))
             {
-                $caseFiles = $_POST['caseFiles'];
+                $resultFiles = $_POST['resultFiles'];
                 if(isset($_POST['deleteFiles']))
                 {
-                    foreach($_POST['deleteFiles'] as $deletedCaseFileID) $caseFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$caseFiles,"), ',');
+                    foreach($_POST['deleteFiles'] as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
                 }
-                $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($caseFiles)->fetchAll('id');
+                $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
                 foreach($files as $file)
                 {
                     unset($file->id);

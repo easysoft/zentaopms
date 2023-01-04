@@ -665,7 +665,7 @@ class bug extends control
         $this->view->storyID               = $storyID;
         $this->view->buildID               = $buildID;
         $this->view->caseID                = $caseID;
-        $this->view->caseFiles             = $caseID ? $this->loadModel('file')->getByObject('testcase', $caseID) : array();
+        $this->view->resultFiles           = $resultID ? $this->loadModel('file')->getByObject('stepResult', $resultID) : array();
         $this->view->runID                 = $runID;
         $this->view->version               = $version;
         $this->view->testtask              = $testtask;

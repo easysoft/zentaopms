@@ -369,8 +369,8 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               <?php
               if($caseID)
               {
-                  echo $this->fetch('file', 'printFiles', array('files' => $caseFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
-                  echo html::hidden('caseFiles', implode(',', array_keys($caseFiles)));
+                  echo $this->fetch('file', 'printFiles', array('files' => $resultFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
+                  echo html::hidden('resultFiles', implode(',', array_keys($resultFiles)));
               }
               echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');
               ?>
