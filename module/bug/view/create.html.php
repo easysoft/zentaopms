@@ -366,14 +366,14 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <tr>
             <th><?php echo $lang->bug->files;?></th>
             <td colspan='2'>
-            <?php
-            if($caseID)
-            {
-                echo $this->fetch('file', 'printFiles', array('files' => $caseFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
-                echo html::hidden('caseFiles', implode(',', array_keys($caseFiles)));
-            }
-            ?>
-            <?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?>
+              <?php
+              if($caseID)
+              {
+                  echo $this->fetch('file', 'printFiles', array('files' => $caseFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
+                  echo html::hidden('caseFiles', implode(',', array_keys($caseFiles)));
+              }
+              echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');
+              ?>
             </td>
           </tr>
         </tbody>
