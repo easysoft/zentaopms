@@ -1681,7 +1681,8 @@ class execution extends control
                     if(!$execution->hasProduct)
                     {
                         return print(js::locate(inlink('create', "projectID=$projectID&executionID=$executionID")));
-                    }else
+                    }
+                    else
                     {
                         return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
 
