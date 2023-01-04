@@ -52,8 +52,8 @@
           <th class='c-memory'>     <?php common::printOrderLink('memory',          $orderBy, $vars, $lang->zahost->memory);?></th>
           <th class='c-diskSize'>   <?php common::printOrderLink('diskSize',            $orderBy, $vars, $lang->zahost->diskSize);?></th>
           <th class='c-software'>   <?php common::printOrderLink('vsoft', $orderBy, $vars, $lang->zahost->vsoft);?></th>
-          <th class='c-status'>     <?php common::printOrderLink('t2.status',       $orderBy, $vars, $lang->zahost->status);?></th>
-          <th class='c-datetime'>   <?php common::printOrderLink('registerDate',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
+          <th class='c-status'>     <?php common::printOrderLink('status',       $orderBy, $vars, $lang->zahost->status);?></th>
+          <th class='c-datetime'>   <?php common::printOrderLink('heartbeat',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
           <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>

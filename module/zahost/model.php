@@ -20,7 +20,7 @@ class zahostModel extends model
     public function __construct()
     {
         parent::__construct();
-        $this->app->lang->host       = $this->lang->zahost;
+        $this->app->lang->host = $this->lang->zahost;
     }
 
     /**
