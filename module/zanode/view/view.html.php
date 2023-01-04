@@ -28,7 +28,8 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, "data-app='{$app->tab}'", 'btn btn-secondary'); ?>
+    <?php $browseLink = inLink('browse');?>
+    <?php echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $browseLink, 'self', "data-app='{$app->tab}'", 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $zanode->id; ?></span>
@@ -168,7 +169,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
 
           if($zanode->status == "suspend")
           {
-              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-spinner-indicator'></i> " . $lang->zanode->resumeNode, '', $resumeAttr);
+              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-resume'></i> " . $lang->zanode->resumeNode, '', $resumeAttr);
           }
           else
           {
