@@ -540,6 +540,10 @@ class zahostModel extends model
     public function buildOperateViewMenu($host)
     {
         if($host->deleted) return '';
+        $nodeList = $this->loadModel('zanode')->getListByHost($host->id);
+        $disabled = '';
+        $title    = !empty($nodeList) ? $this->lang->zahost->undeletedNotice : $this->lang->zahost->delete;
+        if($nodeList) $disabled = 'disabled';
 
         $menu   = '';
         $params = "hostID=$host->id";
@@ -547,7 +551,7 @@ class zahostModel extends model
         $menu  .= $this->buildMenu('zahost', 'browseImage', $params, $host, 'view', 'mirror', '', 'iframe', true, '', $this->lang->zahost->image->browseImage);
         $menu  .= "<div class='divider'></div>";
         $menu  .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
-        $menu  .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin');
+        $menu  .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin', $disabled, true, '', $title);
 
         return $menu;
     }
