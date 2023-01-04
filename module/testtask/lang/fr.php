@@ -131,7 +131,6 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[3] = '3';
 $lang->testtask->priList[4] = '4';
 
-$lang->testcase->linkStory     = 'linkStory';
 $lang->testtask->unlinkedCases = 'CasTests Non rattachés';
 $lang->testtask->linkByBuild   = 'Copier depuis build';
 $lang->testtask->linkByStory   = 'Lier par Story';

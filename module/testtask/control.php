@@ -1112,8 +1112,17 @@ class testtask extends control
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
         $this->config->testcase->search['style']     = 'simple';
 
+        $build   = $this->loadModel('build')->getByID($task->build);
+        $stories = array();
+        if($build)
+        {
+            $stories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchPairs();
+            $this->config->testcase->search['params']['story']['values'] = $stories;
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        }
+
         if($product->shadow) unset($this->config->testcase->search['fields']['product']);
-        if($type != 'bystory') unset($this->config->testcase->search['fields']['storyTitle']);
+        if($type != 'bystory') unset($this->config->testcase->search['fields']['story']);
         if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);

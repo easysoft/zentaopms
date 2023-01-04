@@ -13,6 +13,7 @@ $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
 $lang->testcase->project          = 'Project';
 $lang->testcase->execution        = 'Execution';
+$lang->testcase->linkStory        = 'linkStory';
 $lang->testcase->module           = 'Module';
 $lang->testcase->auto             = 'Test Automation Cases';
 $lang->testcase->frame            = 'Test Automation Cramework';
