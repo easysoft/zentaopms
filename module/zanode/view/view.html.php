@@ -168,7 +168,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
 
           if($zanode->status == "suspend")
           {
-              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-spinner'></i> " . $lang->zanode->resumeNode, '', $resumeAttr);
+              common::printLink('zanode', 'resume', "zanodeID={$zanode->id}", "<i class='icon icon-spinner-indicator'></i> " . $lang->zanode->resumeNode, '', $resumeAttr);
           }
           else
           {
