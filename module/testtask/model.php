@@ -346,7 +346,6 @@ class testtaskModel extends model
     {
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         $query = $this->session->testcaseQuery;
-
         $allProduct = "`product` = 'all'";
         if(strpos($query, '`product` =') === false && $type != 'bysuite') $query .= " AND `product` = $productID";
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
