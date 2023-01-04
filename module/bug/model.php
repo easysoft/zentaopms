@@ -78,7 +78,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->join('os', ',')
             ->join('browser', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket')
+            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,caseFiles')
             ->get();
 
         /* Check repeat bug. */
@@ -97,6 +97,23 @@ class bugModel extends model
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
+
+            if(isset($_POST['caseFiles']))
+            {
+                $caseFiles = $_POST['caseFiles'];
+                if(isset($_POST['deleteFiles']))
+                {
+                    foreach($_POST['deleteFiles'] as $deletedCaseFileID) $caseFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$caseFiles,"), ',');
+                }
+                $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($caseFiles)->fetchAll('id');
+                foreach($files as $file)
+                {
+                    unset($file->id);
+                    $file->objectType = 'bug';
+                    $file->objectID   = $bugID;
+                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                }
+            }
 
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
@@ -2279,7 +2296,9 @@ class bugModel extends model
         if(!$executionID and $caseID > 0) $executionID = isset($run->case->execution) ? $run->case->execution : 0; // Fix feedback #1043.
         if(!$executionID and $this->app->tab == 'execution') $executionID = $this->session->execution;
 
-        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
+        $caseFiles = $caseID ? $this->loadModel('file')->getByObject('testcase', $caseID) : array();
+
+        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID, 'caseFiles' => $caseFiles);
     }
 
     /**
