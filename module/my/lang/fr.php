@@ -139,14 +139,14 @@ $lang->my->productLinkList['product-browse']    = 'Demand list of the latest pro
 
 $lang->my->projectLinkList = array();
 $lang->my->projectLinkList['project-browse']    = 'Project List/Can view all items';
+$lang->my->projectLinkList['project-kanban']    = 'Project Kanban/The project board can visually view the progress of all projects';
 $lang->my->projectLinkList['project-execution'] = 'All execution lists under the project/View all execution information';
 $lang->my->projectLinkList['project-index']     = 'Recent Project Dashboard/You can view the current project overview';
-$lang->my->projectLinkList['project-kanban']    = 'Project Kanban/The project board can visually view the progress of all projects';
 
 $lang->my->executionLinkList = array();
 $lang->my->executionLinkList['execution-all']             = 'Execution list/You can view all executions';
-$lang->my->executionLinkList['execution-task']            = 'List of recently executed tasks/You can view the task information under the current iteration';
 $lang->my->executionLinkList['execution-executionkanban'] = 'Execute Kanban/You can view the implementation status of projects in progress';
+$lang->my->executionLinkList['execution-task']            = 'List of recently executed tasks/You can view the task information under the current iteration';
 
 $lang->my->confirmReview['pass'] = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT

@@ -1,3 +1,8 @@
 #mainContent td.projectName {white-space: nowrap; overflow-x: hidden;}
 #pageNav .angle-btn:first-child a.btn {max-width: 300px; overflow: hidden;}
 .totalCount {height: 36px !important; line-height: 30px; font-weight: bold; text-align: right !important; padding: 0px 50px 0px 8px !important; width: 100%;}
+
+#helpDropdown{display:inline-block; padding-left:5px; padding-right:10px;}
+#helpDropdown .dropdown-menu{width:600px; text-align:left; height:300px; overflow:auto; background: #fff; padding-left:8px;}
+#helpDropdown h2{font-size:14px; padding:0px; margin:0px; margin-top:10px;}
+#helpDropdown p{padding:0px; margin:0px; margin-top:10px;}

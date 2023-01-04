@@ -102,7 +102,7 @@
           <?php echo $lang->zahost->init->statusTitle;?>
           <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-refresh"></i> <span class='checkStatus'><?php echo $lang->zahost->init->checkStatus;?></span></button>
         </div>
-        <div class="detail-content article-content">
+        <div class="detail-content article-content load-indicator" id='serviceContent'>
           <div class="main-row">
             <div id="statusContainer">
               <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>KVM</span></div>
@@ -149,7 +149,7 @@
             <tbody>
               <?php foreach($nodeList as $node):?>
               <tr>
-                <td title="<?php echo $node->name;?>"><?php echo html::a($this->createLink('zanode', 'view', "id=$node->id"), $node->name, '', "");?></td>
+                <td title="<?php echo $node->name;?>"><?php echo html::a($this->createLink('zanode', 'view', "id=$node->id"), $node->name, '_target', "");?></td>
                 <td><?php echo zget($config->zanode->os->cpuCores, $node->cpuCores);?></td>
                 <td><?php echo $node->memory . $this->lang->zahost->unitList['GB'];?></td>
                 <td><?php echo $node->diskSize . $this->lang->zahost->unitList['GB'];?></td>

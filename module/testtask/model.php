@@ -1500,7 +1500,7 @@ class testtaskModel extends model
 
             $failHtml = ': <span class="result-testcase fail">' . $this->lang->testtask->fail . '</span>';
             $passHtml = ': <span class="result-testcase pass">' . $this->lang->testtask->pass . '</span>';
-            
+
             $log = preg_replace(array("/:\x20失败/", "/:\x20fail/", "/:\x20成功/", "/:\x20pass/"), array($failHtml, $failHtml, $passHtml, $passHtml), $log);
 
             $logHtml .= "<li>" . $log . "</li>";
@@ -1524,11 +1524,11 @@ class testtaskModel extends model
             }
 
             $caseResult = $passCount ? 'pass':'fail';
-            $logHtml .= "<li class='result-testcase {$caseResult}'>" 
+            $logHtml .= "<li class='result-testcase {$caseResult}'>"
                         . sprintf($this->lang->testtask->stepSummary, $total, $passCount, $failCount)
                         . "</li>";
         }
-        
+
         return $logHtml;
     }
 

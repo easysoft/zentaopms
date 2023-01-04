@@ -116,13 +116,9 @@ class weeklyModel extends model
     public function save($project, $date)
     {
         $weekStart = $this->getThisMonday($date);
-        $this->dao->delete()->from(TABLE_WEEKLYREPORT)
-            ->where('project')->eq($project)
-            ->andWhere('weekStart')->eq($weekStart)
-            ->exec();
+        $report    = new stdclass();
+        $PVEV      = $this->getPVEV($project, $date);
 
-        $report = new stdclass;
-        $PVEV   = $this->getPVEV($project, $date);
         $report->pv        = $PVEV['PV'];
         $report->ev        = $PVEV['EV'];
         $report->ac        = $this->getAC($project, $date);
@@ -385,61 +381,49 @@ class weeklyModel extends model
         if(!empty($report)) return array('PV' => $report->pv, 'EV' => $report->ev);
 
         if(!$date) $date = date('Y-m-d');
-        $monday     = $this->getThisMonday($date);
-        $sunday     = $this->getThisSunday($date);
-        $lastDay    = $this->getLastDay($date);
-        $nextMonday = date('Y-m-d', strtotime($sunday) + 24 * 3600);
-        $workdays   = $this->loadModel('holiday')->getActualWorkingDays($monday, $sunday);
-        $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $lastDay = $this->getLastDay($date);
+        $monday  = $this->getThisMonday($date);
+        if(empty($lastDay)) $lastDay = $monday;
 
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)
+        $executions = $this->dao->select('id,begin,end,realBegan,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $stmt       = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
             ->andWhere("parent")->ge(0)
             ->andWhere("deleted")->eq(0)
-            ->andWhere("((estStarted >= '$monday' AND estStarted < '$nextMonday') OR (deadline >= '$monday' AND deadline < '$nextMonday') OR (estStarted < '$monday' AND deadline > '$nextMonday'))")
-            ->fetchAll('id');
+            ->andWhere("status")->ne('cancel')
+            ->query();
 
         $PV = 0;
         $EV = 0;
         $this->loadModel('holiday');
-        foreach($tasks as $task)
+        while($task = $stmt->fetch())
         {
+            if(empty($task->execution)) continue;
             $execution = $executions[$task->execution];
-            if(helper::isZeroDate($task->estStarted)) $task->estStarted = helper::isZeroDate($task->openedDate) ? $execution->begin : date('Y-m-d', strtotime($task->openedDate));
-            if(helper::isZeroDate($task->deadline))
-            {
-                $task->deadline = helper::isZeroDate($execution->realEnd) ? $execution->end : $execution->realEnd;
-                if(!helper::isZeroDate($task->finishedDate)) $task->deadline = date('Y-m-d', strtotime($task->finishedDate));
-            }
+            if(helper::isZeroDate($task->estStarted)) $task->estStarted = $execution->begin;
+            if(helper::isZeroDate($task->deadline))   $task->deadline   = $execution->end;
 
-            $fullDays = $this->holiday->getActualWorkingDays($task->estStarted, $task->deadline);
-            if($task->estStarted < $monday and $task->deadline >= $nextMonday)
+            if($task->deadline <= $lastDay)
             {
-                $weekActualDays = $workdays;
+                $PV += $task->estimate;
             }
-            elseif($task->estStarted >= $monday and $task->estStarted < $nextMonday)
+            elseif($task->estStarted <= $lastDay)
             {
-                $weekActualDays = $this->holiday->getActualWorkingDays($task->estStarted, $task->deadline >= $nextMonday ? $sunday : $task->deadline);
+                $fullDays       = $this->holiday->getActualWorkingDays($task->estStarted, $task->deadline);
+                $weekActualDays = $this->holiday->getActualWorkingDays($task->estStarted, $lastDay);
+                if(!empty($fullDays) and !empty($weekActualDays)) $PV += round(count($weekActualDays) / count($fullDays) * $task->estimate, 2);
             }
-            elseif($task->deadline >= $monday and $task->deadline < $nextMonday)
-            {
-                $weekActualDays = $this->holiday->getActualWorkingDays($monday, $task->deadline);
-            }
-
-            if(empty($fullDays) or empty($weekActualDays) or empty($task->estimate)) continue;
-            $thisPV = round(count($weekActualDays) / count($fullDays) * $task->estimate, 2);
 
             if($task->status == 'done' or $task->closedReason == 'done')
             {
-                $EV += $thisPV;
+                $EV += $task->estimate;
             }
             else
             {
                 $task->progress = 0;
                 if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left) * 100, 2);
-                $EV += round($thisPV * $task->progress / 100, 2);
+                $EV += round($task->estimate * $task->progress / 100, 2);
             }
-            $PV += $thisPV;
         }
 
         return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV));
@@ -459,24 +443,55 @@ class weeklyModel extends model
         if(!empty($report)) return $report->ac;
 
         if(!$date) $date = date('Y-m-d');
-
-        $monday     = $this->getThisMonday($date);
-        $nextMonday = date('Y-m-d', strtotime($monday) + (7 * 24 * 3600));
-        $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($project)->fetchAll('id');
-        $taskIdList = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->fetchPairs();
+        $lastDay = $this->getLastDay($date);
+        if(empty($lastDay)) $lastDay = $this->getThisMonday($date);
 
         $AC = $this->dao->select('sum(consumed) as consumed')
             ->from(TABLE_EFFORT)
-            ->where('objectType')->eq('task')
-            ->andWhere('objectID')->in($taskIdList)
-            ->andWhere('date')->ge($monday)
-            ->andWhere('date')->lt($nextMonday)
-            ->andWhere('deleted')->eq('0')
+            ->where('project')->eq($project)
+            ->andWhere('date')->le($lastDay)
+            ->andWhere('deleted')->eq(0)
             ->fetch('consumed');
 
         if(is_null($AC)) $AC = 0;
 
         return sprintf("%.2f", $AC);
+    }
+
+    /**
+     * Get left.
+     *
+     * @param  int    $projectID
+     * @param  string $date
+     * @access public
+     * @return float
+     */
+    public function getLeft($projectID, $date = '')
+    {
+        if(!$date) $date = date('Y-m-d');
+        $lastDay = $this->getLastDay($date);
+        $monday  = $this->getThisMonday($date);
+        if(empty($lastDay)) $lastDay = $monday;
+
+        $executions = $this->dao->select('id,begin,end,realBegan,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $stmt       = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere("parent")->ge(0)
+            ->andWhere("deleted")->eq(0)
+            ->andWhere("status")->ne('cancel')
+            ->query();
+
+        $left = 0;
+        while($task = $stmt->fetch())
+        {
+            $execution = $executions[$task->execution];
+            if(helper::isZeroDate($task->estStarted)) $task->estStarted = $execution->begin;
+            if(helper::isZeroDate($task->deadline))   $task->deadline   = $execution->end;
+
+            if($task->deadline <= $lastDay or ($task->estStarted <= $lastDay and $task->deadline > $lastDay)) $left += $task->left;
+        }
+
+        return sprintf("%.2f", $left);
     }
 
     /**

@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php if(!common::checkNotCN()):?>
+<style> table.data-stats > tbody > tr.statsTr > td:first-child {width: 60px;}</style>
+<?php endif;?>
 <div id='mainContent' class="main-row">
   <div class="col-8 main-col">
     <div class="row">
@@ -195,7 +198,7 @@
             <div class="detail-content">
               <table class='table table-data data-stats'>
                 <tbody>
-                  <tr class='statsTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
+                  <tr class='statsTr'><td></td><td></td><td></td><td></td></tr>
                   <tr>
                     <td colspan="4">
                       <?php $progress = $project->model == 'waterfall' ? $this->project->getWaterfallProgress($project->id) : (($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0);?>

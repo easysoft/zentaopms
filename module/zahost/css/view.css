@@ -13,6 +13,7 @@
 .fail{color:red;}
 .dot-symbol{padding-right:10px;}
 #statusContainer{margin:0px 0px 10px 0px;}
-#checkServiceStatus{background-color:unset;}
+#checkServiceStatus{background-color: #ffffff;}
+#checkServiceStatus:hover{background-color: #f0fdfb;}
 .service-check{margin-top: 0px;}
 .checkStatus{color: #313c52;}
