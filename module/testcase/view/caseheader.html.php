@@ -69,7 +69,7 @@
         }
         else
         {
-            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type"), $typeName);
+            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=all&param=$param&caseType=$type"), $typeName);
         }
         echo "</li>";
     }

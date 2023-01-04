@@ -68,7 +68,6 @@ class zanode extends control
      */
     public function create($hostID = 0)
     {
-        $this->loadModel('zahost');
         if(!empty($_POST))
         {
             $nodeID = $this->zanode->create();

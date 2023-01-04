@@ -85,19 +85,19 @@
                 $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
                 $rebootAttr .= $node->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
-                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-desktop'></i> ", '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($node->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
+                common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-remote'></i> ", '_blank', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($node->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
                 if($node->status == "suspend")
                 {
-                    common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-back'></i> ", '', $resumeAttr);
+                    common::printLink('zanode', 'resume', "zanodeID={$node->id}", "<i class='icon icon-spinner-indicator'></i> ", '', $resumeAttr);
                 }
                 else
                 {
-                    common::printLink('zanode', 'suspend', "zanodeID={$node->id}", "<i class='icon icon-pause'></i> ", '', $suspendAttr);
+                    common::printLink('zanode', 'suspend', "zanodeID={$node->id}", "<i class='icon icon-moon'></i> ", '', $suspendAttr);
                 }
 
                 if($node->status == "shutoff")
                 {
-                    common::printLink('zanode', 'start', "zanodeID={$node->id}", "<i class='icon icon-magic'></i> ", '', "class='btn ' title='{$lang->zanode->boot}'");
+                    common::printLink('zanode', 'start', "zanodeID={$node->id}", "<i class='icon icon-play'></i> ", '', "class='btn ' title='{$lang->zanode->boot}'");
                 }
                 else
                 {
