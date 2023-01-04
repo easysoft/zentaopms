@@ -360,7 +360,7 @@ class sonarqube extends control
             if($search == true) $keyword = $this->session->sonarqubeIssueKeyword;
         }
 
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '1024M');
 
         $cacheFile = $this->sonarqube->getCacheFile($sonarqubeID, $projectKey);
         if(!$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->sonarqube->cacheTime)

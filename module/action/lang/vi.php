@@ -191,6 +191,7 @@ $lang->action->desc->suspend         = '$date, the ZenAgent Node is suspended by
 $lang->action->desc->resume          = '$date, the ZenAgent Node is resumed by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->reboot          = '$date, the ZenAgent Node is reboot by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->destroy         = '$date, the ZenAgent Node is destroyed by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->boot            = '$date, the ZenAgent Node is boot by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -318,6 +319,7 @@ $lang->action->label->submitreview          = 'submitted';
 $lang->action->label->suspend               = 'suspended';
 $lang->action->label->resume                = 'resumed';
 $lang->action->label->reboot                = 'reboot';
+$lang->action->label->boot                  = 'boot';
 $lang->action->label->destroy               = 'destroyed';
 $lang->action->label->synctwins             = 'synchronized changes';
 $lang->action->label->linkedrepo            = 'Linked Code Repo';
@@ -501,6 +503,7 @@ $lang->action->dynamicAction->zanode['created'] = 'Create Zagent Node';
 $lang->action->dynamicAction->zanode['suspend'] = 'Suspend Zagent Node';
 $lang->action->dynamicAction->zanode['resume']  = 'Resume Zagent Node';
 $lang->action->dynamicAction->zanode['reboot']  = 'Reboot Zagent Node';
+$lang->action->dynamicAction->zanode['boot']    = 'Boot Zagent Node';
 $lang->action->dynamicAction->zanode['destroy'] = 'Destory Zagent Node';
 
 $lang->action->dynamicAction->doclib['created'] = 'Tạo Doc thư viện';
