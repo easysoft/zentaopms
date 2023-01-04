@@ -101,4 +101,19 @@ class programTest
 
         return $this->program->getByID($programID);
     }
+
+    /**
+     * Get program by id.
+     *
+     * @param  mixed  $proguamID
+     * @access public
+     * @return object
+     */
+    public function getByIDTest($programID)
+    {
+        $program = $this->program->getByID($programID);
+        if(dao::isError()) return array('message' => dao::getError());
+
+        return $program;
+    }
 }
