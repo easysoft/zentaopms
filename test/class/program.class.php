@@ -55,6 +55,23 @@ class programTest
     }
 
     /**
+     * Get the product associated with the program.
+     *
+     * @param  int          $programID
+     * @param  string       $mode
+     * @param  string       $status
+     * @param  string|array $append
+     * @param  int|string   $shadow
+     * @param  bool         $withProgram
+     * @access public
+     * @return array
+     */
+    public function getProductPairsTest($programID = 0, $mode = 'assign', $status = 'all', $append = '', $shadow = 0, $withProgram = false)
+    {
+        return $this->program->getProductPairs($programID, $mode, $status, $append, $shadow, $withProgram);
+    }
+
+    /**
      * Test create program.
      *
      * @param  array $data
