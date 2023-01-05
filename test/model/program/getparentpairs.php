@@ -12,7 +12,7 @@ $program->name->setFields(array(
 ));
 $program->type->range('program{5},project{5}');
 $program->path->range('1-5,`1,6`,`2,7`,`3,8`,`4,9`,`5,10`')->prefix(',')->postfix(',');
-$program->grade->range('1{10},2{10}');
+$program->grade->range('1{5},2{5}');
 $program->parent->range('0{5},1-5');
 $program->status->range('wait,doing,suspended,closed');
 $program->model->range('[]{5},scrum{2},waterfall{2},kanban');
