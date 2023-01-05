@@ -80,8 +80,14 @@ class weekly extends control
            ->where('deleted')->eq(0)
            ->andWhere('type')->eq('project')
            ->fetchPairs();
-        $date = helper::today();
 
-        foreach($projects as $projectID => $project) $this->weekly->save($projectID, $date);
+        $date      = helper::today();
+        $weekStart = $this->weekly->getThisMonday($date);
+
+        foreach($projects as $projectID => $project)
+        {
+            $this->dao->delete()->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->andWhere('weekStart')->eq($weekStart)->exec();
+            $this->weekly->save($projectID, $date);
+        }
     }
 }

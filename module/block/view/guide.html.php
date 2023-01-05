@@ -120,6 +120,7 @@ $(function()
         <?php if(($tab == 'preference' or $tab == 'systemMode') and $this->config->vision == 'lite') continue;?>
         <?php if($tab == 'systemMode' and !common::hasPriv('custom', 'mode')) continue;?>
         <?php if($tab == 'preference' and !common::hasPriv('my', 'preference')) continue;?>
+        <?php if($tab == 'visionSwitch' and !strpos($app->user->visions, ',')) continue;?>
         <li id="<?php echo $tab;?>">
           <a href="###" title="<?php echo $tabName?>" data-target='<?php echo "#tab3{$blockNavId}Content{$tab}";?>' data-toggle="tab">
             <?php echo $tabName;?>

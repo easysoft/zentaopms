@@ -11,6 +11,7 @@
 #selectProgramModal .modal-header {border-bottom: 0;}
 #selectProgramModal .modal-header h4.modal-title {font-weight: 700;}
 #selectProgramModal .modal-dialog {width: 550px;}
+.modal-body {padding: 20px;}
 #selectProgramModal .modal-footer {border-top: 0px; text-align: center;}
 <?php if(common::checkNotCN()):?>
 .block-guide .tab-pane .mode-switch .mode-block:nth-child(1) {padding-bottom: 18px;}

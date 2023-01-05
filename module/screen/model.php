@@ -374,7 +374,7 @@ class screenModel extends model
 
                     if($settings->value->type === 'value')
                     {
-                        $value = $results[0]->$field;
+                        $value = empty($results[0]) ? 0 : $results[0]->$field;
                     }
                     if($settings->value->agg === 'count')
                     {
@@ -828,6 +828,9 @@ class screenModel extends model
         foreach($executions as $executionID => $execution)
         {
             $execution = $this->execution->getByID($executionID);
+
+            /* Splice project name for the execution name. */
+            $execution->name = $this->loadModel('project')->getByID($execution->project)->name . '--' . $execution->name;
 
             /* Get date list. */
             if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)

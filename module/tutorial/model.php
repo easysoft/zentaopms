@@ -166,6 +166,8 @@ class tutorialModel extends model
         $project->displayCards = 0;
         $project->fluidBoard   = 0;
         $project->deleted      = '0';
+        $project->hasProduct   = '';
+        $project->multiple     = '';
 
         return $project;
     }
@@ -202,6 +204,31 @@ class tutorialModel extends model
 
         $projectStat[$project->id] = $project;
         return $projectStat;
+    }
+
+    /**
+     * Get execution stats for tutorial.
+     *
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getExecutionStats($browseType = '')
+    {
+        $execution   = $this->getProject();
+        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        $execution->hours       = (object)$emptyHour;
+        $execution->leftTasks   = '—';
+        $execution->teamMembers = array_keys($this->getTeamMembers());
+        $execution->teamCount   = count($execution->teamMembers);
+        $execution->hasProduct  = '';
+        $execution->multiple    = '';
+
+        if($browseType and $browseType != 'all') $execution->name .= '-' . $browseType; // Fix bug #21096
+
+        $executionStat[$execution->id] = $execution;
+        return $executionStat;
     }
 
     /**
@@ -320,6 +347,8 @@ class tutorialModel extends model
         $execution->fluidBoard    = 0;
         $execution->hours         = $hours;
         $execution->burns         = array(35, 35);
+        $execution->hasProduct    = '';
+        $execution->multiple      = '';
         return $execution;
     }
 
