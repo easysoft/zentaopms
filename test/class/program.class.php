@@ -211,4 +211,15 @@ class programTest
     {
         return $this->program->getTreeMenu($programID);
     }
+
+    /**
+     * Get kanban group.
+     *
+     * @access public
+     * @return array
+     */
+    public function getKanbanGroupTest()
+    {
+        return $this->program->getKanbanGroup();
+    }
 }
