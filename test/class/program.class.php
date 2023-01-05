@@ -161,4 +161,17 @@ class programTest
     {
         return $this->program->getChildren($programID);
     }
+
+    /**
+     * Check clickable.
+     *
+     * @param  int    $programID
+     * @param  string $status
+     * @access public
+     * @return int
+     */
+    public function isClickableTest($programID, $status)
+    {
+        return $this->program->isClickable($programID, $status);
+    }
 }
