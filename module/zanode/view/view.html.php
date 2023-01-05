@@ -28,7 +28,6 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php $browseLink = inLink('browse');?>
     <?php echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $browseLink, 'self', "data-app='{$app->tab}'", 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
@@ -153,7 +152,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
     <?php $this->printExtendFields($zanode, 'div', "position=left&inForm=0&inCell=1"); ?>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary'); ?>
+        <?php echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $browseLink, 'self', "data-app='{$app->tab}'", 'btn btn-secondary');?>
         <div class='divider'></div>
         <?php
         if (empty($zanode->deleted)) {
