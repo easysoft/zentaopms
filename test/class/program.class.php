@@ -199,4 +199,16 @@ class programTest
     {
         return $this->program->getInvolvedPrograms($account);
     }
+
+    /*
+     * Get Tree menu.
+     *
+     * @param  string $programID
+     * @access public
+     * @return array
+     */
+    public function getTreeMenuTest($programID)
+    {
+        return $this->program->getTreeMenu($programID);
+    }
 }
