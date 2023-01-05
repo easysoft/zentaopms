@@ -15,9 +15,29 @@ class programTest
         $this->program = $tester->loadModel('program');
     }
 
+    /**
+     * Get pairs.
+     *
+     * @param  bool $isQueryAll
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
     public function getPairsTest($isQueryAll = false, $orderBy = 'id_desc')
     {
         return $this->program->getPairs($isQueryAll, $orderBy);
+    }
+
+    /**
+     * Get pairs by id list.
+     *
+     * @param  string $programIDList
+     * @access public
+     * @return array
+     */
+    public function getPairsByListTest($programIDList = '')
+    {
+        return $this->program->getPairsByList($programIDList);
     }
 
     /**
