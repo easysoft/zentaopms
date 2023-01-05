@@ -149,4 +149,16 @@ class programTest
 
         return $program;
     }
+
+    /**
+     * Get children.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return int
+     */
+    public function getChildrenTest($programID)
+    {
+        return $this->program->getChildren($programID);
+    }
 }
