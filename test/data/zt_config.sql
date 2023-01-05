@@ -4,7 +4,7 @@ INSERT INTO `zt_config` (`id`, `vision`, `owner`, `module`, `section`, `key`, `v
 (2,	'rnd',	'system',	'common',	'',	'CRProduct',	'1'),
 (3,	'rnd',	'system',	'common',	'',	'CRExecution',	'1'),
 (4,	'rnd',	'system',	'custom',	'',	'URSR',	'2'),
-(9,	'rnd',	'system',	'common',	'global',	'mode',	'new'),
+(9,	'rnd',	'system',	'common',	'global',	'mode',	'ALM'),
 (6,	'rnd',	'system',	'project',	'',	'unitList',	'CNY,USD'),
 (7,	'rnd',	'system',	'project',	'',	'defaultCurrency',	'CNY'),
 (8,	'rnd',	'system',	'story',	'',	'reviewRules',	'allpass'),
