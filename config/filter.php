@@ -124,6 +124,7 @@ $filter->project->story           = new stdclass();
 $filter->project->export          = new stdclass();
 $filter->project->task            = new stdclass();
 $filter->project->execution       = new stdclass();
+$filter->project->testcase        = new stdclass();
 $filter->projectstory->story      = new stdclass();
 $filter->qa->default              = new stdclass();
 $filter->story->create            = new stdclass();
