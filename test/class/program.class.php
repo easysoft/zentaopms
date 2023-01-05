@@ -134,4 +134,19 @@ class programTest
 
         return $budget;
     }
+
+    /**
+     * Set tree path.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function setTreePathTest($programID)
+    {
+        $this->program->setTreePath($programID);
+        $program = $this->program->getByID($programID);
+
+        return $program;
+    }
 }
