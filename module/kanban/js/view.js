@@ -1922,7 +1922,7 @@ function updateRegionTabAffixState()
         $regionTabs.addClass('affixed');
         $regionTabs.find('#region-tab-actions').addClass('hidden');
     }
-    else if($regionTabs.hasClass('affixed') && kanbanContainer.top >= 0)
+    else if($regionTabs.hasClass('affixed') && kanbanContainer.top > 0)
     {
         $regionTabs.removeClass('affixed');
         $regionTabs.find('#region-tab-actions').removeClass('hidden');
