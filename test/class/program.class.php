@@ -117,4 +117,21 @@ class programTest
 
         return $program;
     }
+
+    /**
+     * Get budget left.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return int
+     */
+    public function getBudgetLeftTest($programID)
+    {
+        $program = $this->program->getByID($programID);
+        $budget  = $this->program->getBudgetLeft($program);
+
+        if(dao::isError()) return array('message' => dao::getError());
+
+        return $budget;
+    }
 }
