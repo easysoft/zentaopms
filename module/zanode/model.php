@@ -793,6 +793,7 @@ class zanodemodel extends model
         $data = fixer::input('post')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', $now)
+            ->setDefault('node', 0)
             ->remove('uid')
             ->get();
 
