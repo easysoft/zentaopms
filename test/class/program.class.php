@@ -174,4 +174,17 @@ class programTest
     {
         return $this->program->isClickable($programID, $status);
     }
+
+    /**
+     * Has unfinished.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return int
+     */
+    public function hasUnfinishedTest($programID)
+    {
+        $program = $this->program->getByID($programID);
+        return $this->program->hasUnfinished($program);
+    }
 }
