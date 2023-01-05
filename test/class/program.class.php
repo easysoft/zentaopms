@@ -174,4 +174,16 @@ class programTest
     {
         return $this->program->isClickable($programID, $status);
     }
+
+    /**
+     * get involved programs.
+     *
+     * @param  string $account 
+     * @access public
+     * @return array
+     */
+    public function getInvolvedProgramsTest($account)
+    {
+        return $this->program->getInvolvedPrograms($account);
+    }
 }
