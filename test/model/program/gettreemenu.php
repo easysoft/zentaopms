@@ -21,10 +21,11 @@ title=测试 programModel::getTreeMenu();
 cid=1
 pid=1
 
-查看返回的字符个数 >> 396
+查看返回的字符个数 >> 项目集1项目集2
 
 */
 $programTester = new programTest();
-$programs1 = $programTester->getTreeMenuTest(1);
+$programs1     = $programTester->getTreeMenuTest(1);
+$programs1 = preg_replace('/\s*/', '', strip_tags($programs1));
 
-r(strlen($programs1)) && p() && e('396'); // 查看返回的字符个数
+r($programs1) && p() && e('项目集1项目集2'); // 查看返回的字符个数
