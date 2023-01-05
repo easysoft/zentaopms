@@ -3711,10 +3711,11 @@ class bugModel extends model
      *
      * @param  int    $object
      * @param  string $pairs
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function getRelatedObjects($object, $pairs = '')
+    public function getRelatedObjects($object, $pairs = '', $productID = 0)
     {
         /* Get bugs. */
         $bugs = $this->loadModel('transfer')->getQueryDatas('bug');
@@ -3732,7 +3733,6 @@ class bugModel extends model
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
         if($object == 'branch' and $this->session->currentProductType != 'normal')
         {
-            $productID      = current($bugs)->product;
             $relatedObjects = $this->dao->select($pairs)->from($table)->where('product')->eq($productID)->fetchPairs();
         }
 
