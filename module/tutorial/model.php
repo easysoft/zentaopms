@@ -167,6 +167,7 @@ class tutorialModel extends model
         $project->fluidBoard   = 0;
         $project->deleted      = '0';
         $project->hasProduct   = '';
+        $project->multiple     = '';
 
         return $project;
     }
