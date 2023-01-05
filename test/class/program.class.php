@@ -15,6 +15,11 @@ class programTest
         $this->program = $tester->loadModel('program');
     }
 
+    public function getPairsTest($isQueryAll = false, $orderBy = 'id_desc')
+    {
+        return $this->program->getPairs($isQueryAll, $orderBy);
+    }
+
     /**
      * Test create program.
      *
