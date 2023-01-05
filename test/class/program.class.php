@@ -22,7 +22,7 @@ class programTest
      * @access public
      * @return object
      */
-    public function create($data)
+    public function createTest($data)
     {
         $_POST = $data;
 
@@ -30,7 +30,7 @@ class programTest
 
         if(dao::isError()) return array('message' => dao::getError());
 
-        $program = $this->program->getById($programID);
+        $program = $this->program->getByID($programID);
 
         return $program;
     }
