@@ -225,6 +225,9 @@ class tutorialModel extends model
         $execution->teamCount   = count($execution->teamMembers);
         $execution->hasProduct  = '';
         $execution->multiple    = '';
+        $execution->order       = 1;
+        $execution->burns       = array(''); 
+        $execution->type        = 'sprint'; 
 
         if($browseType and $browseType != 'all') $execution->name .= '-' . $browseType; // Fix bug #21096
 
