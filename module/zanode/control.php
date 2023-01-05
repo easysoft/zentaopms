@@ -233,7 +233,9 @@ class zanode extends control
 
         if($error)
         {
-            return print(js::error($error));
+             $response['result']  = 'fail';
+             $response['message'] = $error;
+             return $this->send($response);
         }
         else
         {
