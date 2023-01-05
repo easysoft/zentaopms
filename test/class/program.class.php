@@ -36,15 +36,16 @@ class programTest
     }
 
     /**
-     * createStakeholder
+     * Create stakeholder.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
+     * @param  array  $accounts
      * @access public
      * @return void
      */
-    public function createStakeholder($programID)
+    public function createStakeholderTest($programID, $accounts = array())
     {
-        $_POST['accounts'] = array('dev1', 'dev2');
+        $_POST['accounts'] = $accounts;
         $stakeHolder = $this->program->createStakeholder($programID);
 
         return $this->program->getStakeholdersByPrograms($programID);
@@ -60,7 +61,7 @@ class programTest
     {
         $programID = $this->program->createDefaultProgram();
 
-        return $programID;
+        return $programID > 0;
     }
 
     /**
