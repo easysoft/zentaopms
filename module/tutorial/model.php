@@ -71,6 +71,7 @@ class tutorialModel extends model
         $product->type           = 'normal';
         $product->status         = 'normal';
         $product->desc           = '';
+        $product->shadow         = '0';
         $product->PO             = $this->app->user->account;
         $product->QD             = '';
         $product->RD             = '';
@@ -216,22 +217,24 @@ class tutorialModel extends model
      */
     public function getExecutionStats($browseType = '')
     {
-        $execution   = $this->getProject();
+        $execution = $this->getProject();
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
-        $execution->hours       = (object)$emptyHour;
-        $execution->leftTasks   = '—';
-        $execution->teamMembers = array_keys($this->getTeamMembers());
-        $execution->teamCount   = count($execution->teamMembers);
-        $execution->hasProduct  = '';
-        $execution->multiple    = '';
-        $execution->order       = 1;
-        $execution->burns       = array(''); 
-        $execution->type        = 'sprint'; 
+        $execution->hours        = (object)$emptyHour;
+        $execution->leftTasks    = '—';
+        $execution->teamMembers  = array_keys($this->getTeamMembers());
+        $execution->teamCount    = count($execution->teamMembers);
+        $execution->hasProduct   = '';
+        $execution->multiple     = '';
+        $execution->order        = 1;
+        $execution->burns        = array(''); 
+        $execution->type         = 'sprint'; 
+        $execution->projectName  = ''; 
+        $execution->projectModel = ''; 
 
         if($browseType and $browseType != 'all') $execution->name .= '-' . $browseType; // Fix bug #21096
 
-        $executionStat[$execution->id] = $execution;
+        $executionStat[0] = $execution;
         return $executionStat;
     }
 
