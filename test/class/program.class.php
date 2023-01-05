@@ -105,7 +105,7 @@ class programTest
     /**
      * Get program by id.
      *
-     * @param  mixed  $proguamID
+     * @param  int    $proguamID
      * @access public
      * @return object
      */

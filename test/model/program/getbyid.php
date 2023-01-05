@@ -1,6 +1,18 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
+
+$program = zdTable('project');
+$program->id->range('1-10');
+$program->type->range('program');
+$program->name->setFields(array(
+    array('field' => 'name1', 'range' => '项目集'),
+    array('field' => 'name2', 'range' => '1-10')
+));
+$program->gen(5);
+var_dump($program->fields);
 
 /**
 
@@ -13,10 +25,10 @@ pid=1
 
 */
 
-global $tester;
-$tester->loadModel('program');
-$program1 = $tester->program->getById(1);
-$program2 = $tester->program->getById(1000);
+$programTester = new programTest();
+
+$program1 = $programTester->getByIdTest(1);
+$program2 = $programTester->getByIdTest(1000);
 
 r($program1) && p('name') && e('项目集1'); // 通过id字段获取id=1的项目集并验证它的name。
 r($program2) && p()       && e('0');       // 通过id字段获取id=1000的项目集，返回空
