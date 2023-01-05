@@ -128,7 +128,7 @@ $lang->zahost->notice->registerCommand = 'Register command: ./zagent-host -t hos
 $lang->zahost->notice->loading         = 'loading...';
 $lang->zahost->notice->noImage         = 'No available image';
 
-$lang->zahost->tips = 'Host include physical host, k8s clusters, cloud servers, and cloud container instances. Host used to create VMS or container instances. The recommended host OS is ubuntu or CentOS LTS.';
+$lang->zahost->tips = 'Host include physical host, K8s clusters, cloud servers, and cloud container instances. Host used to create VMS or container instances. The recommended host OS is Ubuntu or CentOS LTS.';
 
 $lang->zahost->automation = new stdclass();
 $lang->zahost->automation->title = 'Test Automation Solutions';
@@ -138,7 +138,7 @@ $lang->zahost->automation->framework     = 'Framework';
 $lang->zahost->automation->frameworkSpec = 'The solution architecture based on the KVM virtualization software:';
 
 $lang->zahost->automation->feature1           = '1、Core concepts';
-$lang->zahost->automation->feature1Spec       = "Hosts include physical hosts, k8s clusters, cloud servers, and cloud container instances, which are mainly used to create virtual machines or container instances. The recommended operating system for the host is ubuntu or the LTS version of CentOS.<br/> An execution node is a virtual machine or container instance created by the host and is a test environment where test tasks are executed.";
+$lang->zahost->automation->feature1Spec       = "Hosts include physical hosts, K8s clusters, cloud servers, and cloud container instances, which are mainly used to create virtual machines or container instances. The recommended operating system for the host is Ubuntu or the LTS version of CentOS.<br/> An execution node is a virtual machine or container instance created by the host and is a test environment where test tasks are executed.";
 $lang->zahost->automation->feature2           = '2、Application introduction';
 $lang->zahost->automation->feature2ZenAgent   = 'ZenAgent is an open source software test automation and scheduling platform, which provides users with a distributed and centrally managed test environment with the help of virtualization technology.';
 $lang->zahost->automation->feature2ZTF        = 'ZTF is an open source automated test management framework of Zen Tao, which helps users to manage test scripts in a unified way. ZTF is deeply integrated with Zen Tao, each script can be associated with a use case in the test management system, and the step information in the script and the use case information in the management system can be synchronized with each other.';

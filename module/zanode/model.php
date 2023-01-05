@@ -28,6 +28,17 @@ class zanodemodel extends model
     const KVM_EXPORT_PATH = '/api/v1/kvm/exportVm';
     const KVM_STATUS_PATH = '/api/v1/task/getStatus';
 
+    /**
+     * Set lang;
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->app->lang->host = $this->lang->zanode;
+    }
 
     /**
      * Create an Node.
