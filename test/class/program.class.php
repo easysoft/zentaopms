@@ -273,4 +273,20 @@ class programTest
     {
         return $this->program->getTeamMemberPairs($programID);
     }
+
+    /**
+     * Get project stats.
+     *
+     * @param  int    $programID
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return void
+     */
+    public function getProjectStatsTest($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    {
+        return $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager);
+    }
 }
