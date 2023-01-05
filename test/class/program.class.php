@@ -41,6 +41,20 @@ class programTest
     }
 
     /**
+     * Get parent pairs.
+     *
+     * @param  string $model
+     * @param  string $mode
+     * @param  bool   $showRoot
+     * @access public
+     * @return array
+     */
+    public function getParentPairsTest($model = '', $mode = 'noclosed', $showRoot = true)
+    {
+        return $this->program->getParentPairs($model, $mode, $showRoot);
+    }
+
+    /**
      * Test create program.
      *
      * @param  array $data
