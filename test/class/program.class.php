@@ -87,14 +87,14 @@ class programTest
 
 
     /**
-     * update
+     * Test update program.
      *
      * @param  mixed  $proguamID
      * @param  mixed  $data
      * @access public
      * @return void
      */
-    public function update($programID, $data)
+    public function updateTest($programID, $data)
     {
         $_POST = $data;
         $this->program->update($programID);
