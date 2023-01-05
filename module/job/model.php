@@ -312,7 +312,7 @@ class jobModel extends model
                 $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, $this->post->reference);
                 if(!is_array($pipeline) or empty($pipeline))
                 {
-                    dao::$errors['repo'] = $this->lang->job->engineTips->error;
+                    dao::$errors['gitlabRepo'] = $this->lang->job->engineTips->error;
                     return false;
                 }
             }
