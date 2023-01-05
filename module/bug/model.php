@@ -863,7 +863,7 @@ class bugModel extends model
 
                 if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
                 if($bug->resolution != '') $bug->confirmed = 1;
-                if(($bug->resolvedBy != '' or $bug->resolution != '') and $oldBug->status != 'closed')
+                if(($bug->resolvedBy != '' or $bug->resolution != '') and strpos(',resolved,closed,', ",{$oldBug->status},") === false)
                 {
                     $bug->resolvedDate = $now;
                     $bug->status       = 'resolved';
