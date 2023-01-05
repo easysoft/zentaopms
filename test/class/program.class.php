@@ -236,4 +236,16 @@ class programTest
     {
         return $this->program->getKanbanGroup();
     }
+
+    /**
+     * Get team member pairs .
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function getTeamMemberPairsTest($programID)
+    {
+        return $this->program->getTeamMemberPairs($programID);
+    }
 }
