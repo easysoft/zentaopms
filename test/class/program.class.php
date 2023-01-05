@@ -16,6 +16,31 @@ class programTest
     }
 
     /**
+     * Get pairs.
+     *
+     * @param  bool $isQueryAll
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getPairsTest($isQueryAll = false, $orderBy = 'id_desc')
+    {
+        return $this->program->getPairs($isQueryAll, $orderBy);
+    }
+
+    /**
+     * Get pairs by id list.
+     *
+     * @param  string $programIDList
+     * @access public
+     * @return array
+     */
+    public function getPairsByListTest($programIDList = '')
+    {
+        return $this->program->getPairsByList($programIDList);
+    }
+
+    /**
      * Test create program.
      *
      * @param  array $data
@@ -75,7 +100,7 @@ class programTest
      * @access public
      * @return void
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
+    public function getListTest($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
     {
         $this->program->cookie->showClosed = 'ture';
         $programs = $this->program->getList($status, $orderBy, $pager, $type, $idList);
