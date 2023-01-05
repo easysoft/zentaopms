@@ -8,11 +8,9 @@ $program = zdTable('project');
 $program->id->range('1-3');
 $program->name->range('父项目集1,子项目集1,子项目集2');
 $program->parent->range('0,1,1');
+$program->grade->range('1,2,2');
 $program->type->range('program');
-$program->path->setFields(array(
-    array('field' => 'path1', 'range' => '1', 'prefix' => ',', 'postfix' => ','),
-    array('field' => 'path2', 'range' => '[],2,3', 'postfix' => ',')
-));
+$program->path->range('`,1,`,`,1,2,`,`,1,3,`');
 $program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->gen(3);

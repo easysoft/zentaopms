@@ -187,4 +187,16 @@ class programTest
         $program = $this->program->getByID($programID);
         return $this->program->hasUnfinished($program);
     }
+
+    /*
+     * get involved programs.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getInvolvedProgramsTest($account)
+    {
+        return $this->program->getInvolvedPrograms($account);
+    }
 }
