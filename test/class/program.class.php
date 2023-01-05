@@ -75,7 +75,7 @@ class programTest
      * @access public
      * @return void
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
+    public function getListTest($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
     {
         $this->program->cookie->showClosed = 'ture';
         $programs = $this->program->getList($status, $orderBy, $pager, $type, $idList);
