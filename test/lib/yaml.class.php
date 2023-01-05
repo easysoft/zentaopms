@@ -259,10 +259,11 @@ class yaml
      */
     public function gen($rows, $version = '')
     {
-        $runFileDir  = $_SERVER['PWD'];
+        $runFileDir  = dirname(getcwd() . DS . $_SERVER['SCRIPT_FILENAME']);
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
+        $runFileName = mb_substr($runFileName, strripos($runFileName, DS) + 1);
 
-        if(!is_dir("$runFileDir/data")) mkdir("$runFileDir/data", 0700);
+        if(!is_dir("$runFileDir/data")) mkdir("$runFileDir/data", 0777, true);
         $yamlFile = "{$runFileDir}/data/{$this->tableName}_{$runFileName}.yaml";
 
         $yamlDataArr = array();
