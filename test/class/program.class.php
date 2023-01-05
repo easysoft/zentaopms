@@ -211,4 +211,18 @@ class programTest
     {
         return $this->program->getTreeMenu($programID);
     }
+
+    /**
+     * Get top pairs.
+     *
+     * @param  string $model
+     * @param  string $mode
+     * @param  bool   $isQueryAll
+     * @access public
+     * @return void
+     */
+    public function getTopPairsTest($model = '', $mode = '', $isQueryAll = false)
+    {
+        return $this->program->getTopPairs($model, $mode, $isQueryAll);
+    }
 }
