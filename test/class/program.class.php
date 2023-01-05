@@ -75,6 +75,18 @@ class programTest
     }
 
     /**
+     * Get parent PM.
+     *
+     * @param  array  $programIdList
+     * @access public
+     * @return array
+     */
+    public function getParentPMTest($programIdList)
+    {
+        return $this->program->getParentPM($programIdList);
+    }
+
+    /**
      * Create stakeholder.
      *
      * @param  int    $programID
