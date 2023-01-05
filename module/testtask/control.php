@@ -1427,17 +1427,19 @@ class testtask extends control
      *
      * @param  int    $runID
      * @param  int    $caseID
+     * @param  int    $version
+     * @param  string $status  all|done
      * @access public
      * @return void
      */
-    public function results($runID, $caseID = 0, $version = 0)
+    public function results($runID, $caseID = 0, $version = 0, $status = 'done')
     {
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         if($runID)
         {
             $case    = $this->testtask->getRunById($runID)->case;
-            $results = $this->testtask->getResults($runID);
+            $results = $this->testtask->getResults($runID, 0, $status);
 
             $testtaskID = $this->dao->select('task')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('task');
             $testtask   = $this->dao->select('id, build, execution, product')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
@@ -1447,7 +1449,7 @@ class testtask extends control
         else
         {
             $case    = $this->loadModel('testcase')->getByID($caseID, $version);
-            $results = $this->testtask->getResults(0, $caseID);
+            $results = $this->testtask->getResults(0, $caseID, $status);
         }
 
         $this->view->case    = $case;
