@@ -225,4 +225,15 @@ class programTest
     {
         return $this->program->getTopPairs($model, $mode, $isQueryAll);
     }
+
+    /**
+     * Get kanban group.
+     *
+     * @access public
+     * @return array
+     */
+    public function getKanbanGroupTest()
+    {
+        return $this->program->getKanbanGroup();
+    }
 }
