@@ -49,14 +49,14 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-3 text-right"><?php echo $lang->zanode->osName; ?>:</div>
-                <div class="col-8"><?php echo $zanode->osName; ?></div>
+                <div class="col-4 text-right"><?php echo $lang->zanode->osName; ?>:</div>
+                <div class="col-7"><?php echo $zanode->osName; ?></div>
               </div>
             </div>
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->sshAddress; ?>:</div>
-                <div class="col-8 node-not-wrap">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?> &nbsp; <?php echo "<button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?></div>
+                <div class="col-8 node-not-wrap">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?><?php echo " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?></div>
               </div>
               <textarea style="display:none;" id="ssh-copy">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?></textarea>
             </div>
@@ -70,8 +70,8 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           <div class="main-row zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-3 text-right"><?php echo $lang->zanode->status; ?>:</div>
-                <div class="col-8"><?php echo zget($lang->zanode->statusList, $zanode->status); ?></div>
+                <div class="col-4 text-right"><?php echo $lang->zanode->status; ?>:</div>
+                <div class="col-7"><?php echo zget($lang->zanode->statusList, $zanode->status); ?></div>
               </div>
             </div>
             <div class="col-4">
@@ -90,8 +90,8 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           <div class="main-row main-row-last zanode-mt-8">
             <div class="col-4">
               <div class="main-row">
-                <div class="col-3 text-right"><?php echo $lang->zanode->hostName; ?>:</div>
-                <div class="col-8"><?php echo $zanode->hostName; ?></div>
+                <div class="col-4 text-right"><?php echo $lang->zanode->hostName; ?>:</div>
+                <div class="col-7"><?php echo $zanode->hostName; ?></div>
               </div>
             </div>
             <div class="col-4">

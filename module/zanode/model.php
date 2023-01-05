@@ -193,6 +193,8 @@ class zanodemodel extends model
         if($type != 'reboot')
         {
             $status = $type == 'suspend' ? 'suspend' : 'running';
+            if($type == 'destroy') $status = 'shutoff';
+
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq($status)->where('id')->eq($id)->exec();
         }
 
