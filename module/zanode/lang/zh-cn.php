@@ -129,3 +129,4 @@ $lang->zanode->tips = '执行节点是由宿主机创建的虚拟机或容器实
 $lang->zanode->scriptTips = '填写执行节点上自动化测试脚本所在的目录。';
 $lang->zanode->shellTips  = '在执行节点上运行自动化测试脚本前，可以执行自定义的shell命令。';
 $lang->zanode->automationTips = '在执行节点上执行测试任务前，需要设置产品对应的执行节点，自动化测试脚本的目录以及需要执行的自定义Shell命令。';
+$lang->zanode->nameUnique     = $lang->zanode->name . '已存在';
