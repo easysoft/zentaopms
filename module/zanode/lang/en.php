@@ -129,3 +129,4 @@ $lang->zanode->tips = "The execution node is a virtual machine or container inst
 $lang->zanode->scriptTips = 'Write the directory where the script is located on the execution node.';
 $lang->zanode->shellTips  = 'Before running the automated test script on the execution node, you can execute a custom shell command.';
 $lang->zanode->automationTips = 'Before executing the test task on the execution node, you need to set up the execution node corresponding to the product, the directory of the automated test script, and the custom Shell command to execute.';
+$lang->zanode->nameUnique     = $lang->zanode->name . 'already exist';
