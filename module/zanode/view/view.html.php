@@ -133,7 +133,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
               <span class='dot-symbol dot-ztf text-danger'>●</span>
               <span>&nbsp;&nbsp;ZTF &nbsp;
                 <span class="ztf-status"><?php echo $lang->zanode->initializing; ?></span>&nbsp;
-                <a class='node-init-install hide' target='hiddenwin' href='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm"></i><span class="ztf-install"><?php echo $lang->zanode->install ?></span></a>
+                <a class='node-init-install hide' target='hiddenwin' href='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm ztf-install-icon"></i><span class="ztf-install"><?php echo $lang->zanode->install ?></span></a>
               </span>
             </div>
             <div class="status-notice">
