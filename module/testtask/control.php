@@ -1122,7 +1122,11 @@ class testtask extends control
         }
 
         if($product->shadow) unset($this->config->testcase->search['fields']['product']);
-        if($type != 'bystory') unset($this->config->testcase->search['fields']['story']);
+        if($type != 'bystory')
+        {
+            unset($this->config->testcase->search['fields']['story']);
+            unset($this->config->testcase->search['params']['story']);
+        }
         if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);
