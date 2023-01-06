@@ -421,7 +421,7 @@ class programTest
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return string
      */
     public function buildOperateMenuTest($programID = 0)
     {
@@ -436,7 +436,7 @@ class programTest
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return string
      */
     public function setMenuTest($programID = 0)
     {
