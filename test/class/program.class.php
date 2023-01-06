@@ -430,4 +430,22 @@ class programTest
 
         return $this->program->buildOperateMenu($program);
     }
+
+    /**
+     * Test set menu.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function setMenuTest($programID = 0)
+    {
+        $program = $this->program->getByID($programID);
+        if(empty($program)) return '0';
+
+        $this->program->setMenu($programID);
+
+        global $lang;
+        return strip_tags($lang->switcherMenu);
+    }
 }
