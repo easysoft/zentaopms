@@ -257,7 +257,7 @@ class yaml
      * @access public
      * @return void
      */
-    public function gen($rows, $version = '')
+    public function gen($rows, $version = '1.0')
     {
         $runFileDir  = dirname(getcwd() . DS . $_SERVER['SCRIPT_FILENAME']);
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
@@ -268,9 +268,9 @@ class yaml
 
         $yamlDataArr = array();
 
-        $yamlDataArr['title']  = "zt_{$this->tableName}";
-        $yamlDataArr['author'] = "auto_{$runFileName}";
-        $version ? $yamlDataArr['version'] = $version : $yamlDataArr['version'] = '1.0';
+        $yamlDataArr['title']   = "zt_{$this->tableName}";
+        $yamlDataArr['author']  = "auto_{$runFileName}";
+        $yamlDataArr['version'] = $version;
 
         if(empty($this->fields->fieldArr))
         {

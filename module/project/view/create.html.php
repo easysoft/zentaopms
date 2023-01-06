@@ -222,9 +222,9 @@
                 </div>
               </div>
             </div>
-            <div class="input-group addProduct hidden <?php if($programID) echo 'required';?>">
+            <div class="input-group addProduct hidden">
               <?php echo html::input('productName', '', "class='form-control'");?>
-              <span class='input-group-addon'><?php echo html::checkBox('newProduct', $lang->project->addProduct, '', "onchange=addNewProduct(this);");?></span>
+              <span class='input-group-addon required'><?php echo html::checkBox('newProduct', $lang->project->addProduct, '', "onchange=addNewProduct(this);");?></span>
             </div>
           </td>
         </tr>

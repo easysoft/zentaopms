@@ -4,9 +4,17 @@ include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
 su('admin');
 
+$user = zdTable('user');
+$user->id->range('1001-1005');
+$user->account->range('1-5')->prefix("account");
+$user->realname->range('1-5')->prefix("用户名");
+$user->type->range('inside{3},outside{2}');
+$user->deleted->range('0-1');
+$user->gen(5);
+
 /**
 
-title=测试 userModel->getPairs();
+title=测试 userModel->getCommiters();
 cid=1
 pid=1
 

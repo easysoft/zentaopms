@@ -47,13 +47,30 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
-        $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $projects = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple, t2.project AS parentProject')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
-            ->where('t2.type')->in('sprint,stage,kanban')
+            ->where('t2.type')->in('sprint,stage,kanban,project')
             ->beginIF($story->twins)->andWhere('t1.story')->in(ltrim($story->twins, ',') . $story->id)
             ->beginIF(!$story->twins)->andWhere('t1.story')->in($story->id)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
+
+        $story->projects   = array();
+        $story->executions = array();
+        foreach($projects as $project)
+        {
+            if($project->type == 'project')
+            {
+                $story->projects[$project->project] = $project->project;
+            }
+            else
+            {
+                $story->executions[$project->project] = $project;
+
+                if(!$project->multiple) $story->projects[$project->parentProject] = $project->parentProject;
+            }
+        }
+
         $story->tasks  = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
