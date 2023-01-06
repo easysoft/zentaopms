@@ -476,7 +476,7 @@
                   {
                       if(!isset($executions[$task->execution])) continue;
                       $execution     = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
-                      $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "executionID=$task->project");
+                      $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "projectID=$task->project");
                       $executionName = $executions[$task->execution];
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
