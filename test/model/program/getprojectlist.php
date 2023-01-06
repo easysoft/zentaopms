@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
-su('admin');
 
 $program = zdTable('project');
 $program->id->range('1-5');
@@ -15,6 +14,21 @@ $program->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
 $program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->gen(5);
+
+$team = zdTable('team');
+$team->id->range('1-5');
+$team->root->range('3-5');
+$team->type->range('project');
+$team->account->range('admin');
+$team->account->setFields(array(
+    array('field' => 'account1', 'range' => 'admin,user{4}'),
+    array('field' => 'account2', 'range' => '[],1-4'),
+));
+$team->gen(5);
+
+zdTable('user')->gen(5);
+
+su('admin');
 
 /**
 
