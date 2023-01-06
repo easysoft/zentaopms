@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
-su('admin');
 
 $program = zdTable('project');
 $program->id->range('1-5');
@@ -22,10 +21,14 @@ $team->root->range('3-5');
 $team->type->range('project');
 $team->account->range('admin');
 $team->account->setFields(array(
-    array('field' => 'account1', 'range' => 'admin,test{4}'),
+    array('field' => 'account1', 'range' => 'admin,user{4}'),
     array('field' => 'account2', 'range' => '[],1-4'),
 ));
 $team->gen(5);
+
+zdTable('user')->gen(5);
+
+su('admin');
 
 /**
 
@@ -36,7 +39,7 @@ pid=1
 获取项目集1下所有团队成员数量     >> 5
 获取项目集2下所有团队成员数量     >> 2
 获取项目集1下所有团队成员真实姓名 >> A:admin
-获取项目集2下所有团队成员真实姓名 >> T:测试2
+获取项目集2下所有团队成员真实姓名 >> U:测试2
 
 */
 
@@ -47,4 +50,4 @@ $teams2 = $programTester->getTeamMemberPairsTest(2);
 r(count($teams1)) && p()        && e('5');           // 获取项目集1下所有团队成员数量
 r(count($teams2)) && p()        && e('2');           // 获取项目集2下所有团队成员数量
 r($teams1)        && p('admin') && e('A:admin');     // 获取项目集1下所有团队成员真实姓名
-r($teams2)        && p('test2') && e('T:测试2');     // 获取项目集2下所有团队成员真实姓名
+r($teams2)        && p('user2') && e('U:测试2');     // 获取项目集2下所有团队成员真实姓名

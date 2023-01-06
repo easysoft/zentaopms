@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
-su('admin');
 
 $program = zdTable('project');
 $program->id->range('1,2');
@@ -14,20 +13,21 @@ $program->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $program->gen(2);
 
+su('admin');
 /**
 
-title=测试 programModel::getBudgetLeft();
+title=测试 programModel::saveState();
 cid=1
 pid=1
 
-查看项目集1的所有父项目集的预算剩余 >> 900000
-查看项目集2的所有父项目集的预算剩余 >> 899900
+查看传入空项目集返回的下拉菜单 >> 所有项目集
+查看传入id=1的项目集返回的下拉菜单 >> 父项目集1
 
 */
 
 $programTester = new programTest();
-$result1       = $programTester->getBudgetLeftTest(1);
-$result2       = $programTester->getBudgetLeftTest(2);
+$switcher1     = $programTester->getSwitcherTest(0);
+$switcher2     = $programTester->getSwitcherTest(1);
 
-r($result1) && p() && e('900000');  // 查看项目集1的所有父项目集的预算剩余
-r($result2) && p() && e('899900');  // 查看项目集2的所有父项目集的预算剩余
+r(strip_tags($switcher1)) && p() && e('所有项目集'); // 查看传入空项目集返回的下拉菜单
+r(strip_tags($switcher2)) && p() && e('父项目集1');  // 查看传入id=1的项目集返回的下拉菜单

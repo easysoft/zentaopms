@@ -16,6 +16,34 @@ class programTest
     }
 
     /**
+     * Get switcher.
+     *
+     * @param  int   $programID
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest($programID = 0)
+    {
+        return $this->program->getSwitcher($programID);
+    }
+
+    /**
+     * Get list by search.
+     *
+     * @param  string $orderBy
+     * @param  int    $queryID
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getListBySearchTest($orderBy = 'id_asc', $queryID = 0, $sql = '')
+    {
+        if(!empty($sql)) $_SESSION['programQuery'] = $sql;
+
+        return $this->program->getListBySearch($orderBy, $queryID);
+    }
+
+    /**
      * Get pairs.
      *
      * @param  bool $isQueryAll
@@ -360,5 +388,64 @@ class programTest
     public function getProgressListTest()
     {
         return $this->program->getProgressList();
+    }
+
+    /**
+     * Get stakeholders.
+     *
+     * @param  int    $programID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getStakeholdersTest($programID, $orderBy = 'id_desc')
+    {
+        return $this->program->getStakeholders($programID, $orderBy);
+    }
+
+    /**
+     * Test save state.
+     *
+     * @param  int    $programID
+     * @param  array  $programs
+     * @access public
+     * @return array
+     */
+    public function saveStateTest($programID = 0, $programs = array())
+    {
+        return $this->program->saveState($programID, $programs);
+    }
+
+    /**
+     * Test build operate menu.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenuTest($programID = 0)
+    {
+        $program = $this->program->getByID($programID);
+        if(empty($program)) return '0';
+
+        return $this->program->buildOperateMenu($program);
+    }
+
+    /**
+     * Test set menu.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return string
+     */
+    public function setMenuTest($programID = 0)
+    {
+        $program = $this->program->getByID($programID);
+        if(empty($program)) return '0';
+
+        $this->program->setMenu($programID);
+
+        global $lang;
+        return strip_tags($lang->switcherMenu);
     }
 }
