@@ -1528,16 +1528,24 @@ class bugModel extends model
      */
     public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager = null, $excludeBugs = '')
     {
+        $bug       = $this->getById($bugID);
+        $bugIDList = $bug->id . ',' . $bug->linkBug . ',' . $excludeBugs;
+
         if($browseType == 'bySearch')
         {
-            $bug       = $this->getById($bugID);
-            $bugIDList = $bug->id . ',' . $bug->linkBug . ',' . $excludeBugs;
-            $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList, $pager);
-            return $bugs2Link;
+            return $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList, $pager);
         }
         else
         {
-            return array();
+            return $this->dao->select('*')->from(TABLE_BUG)
+                ->where('deleted')->eq('0')
+                ->andWhere('id')->notin($bugIDList)
+                ->andWhere('product')->eq($bug->product)
+                ->beginIF($bug->project)->andWhere('project')->eq($bug->project)->fi()
+                ->beginIF($bug->execution)->andWhere('execution')->eq($bug->execution)->fi()
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
         }
     }
 
