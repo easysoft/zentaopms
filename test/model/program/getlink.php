@@ -18,7 +18,6 @@ $tester->loadModel('program');
 $link1 = $tester->program->getLink('program', 'project', 1);
 $result = '';
 if(strpos($link1, 'project')) $result = 'project';
-
 r($result) && p() && e('project'); // 项目集页面跳转项目集项目列表
 
 $link2 = $tester->program->getLink('program', 'project', 1, '', 'product');

@@ -38,7 +38,7 @@ $program4 = $programTester->saveStateTest(3, array(2 => ''));
 $program5 = $programTester->saveStateTest(0, array(2 => ''));
 
 r(substr($program1, 1, 4)) && p() && e('html'); // 项目集存在且正常访问
-r($program2) && p() && e('0');                   // 项目集不存在
-r($program3) && p() && e('1');                   // 项目集存在，但不在可以查看的项目集列表
-r($program4) && p() && e('2');                   // 项目集存在，且在可以查看的项目集列表
-r($program5) && p() && e('2');                   // 项目集不存在，且有可以查看的项目集列表
+r($program2) && p() && e('0');                  // 项目集不存在
+r($program3) && p() && e('1');                  // 项目集存在，但不在可以查看的项目集列表
+r($program4) && p() && e('2');                  // 项目集存在，且在可以查看的项目集列表
+r($program5) && p() && e('2');                  // 项目集不存在，且有可以查看的项目集列表
