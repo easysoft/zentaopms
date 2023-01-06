@@ -16,6 +16,18 @@ class programTest
     }
 
     /**
+     * Get switcher.
+     *
+     * @param  int   $programID
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest($programID = 0)
+    {
+        return $this->program->getSwitcher($programID);
+    }
+
+    /**
      * Get list by search.
      *
      * @param  string $orderBy
