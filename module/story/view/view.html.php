@@ -486,7 +486,10 @@
               }
               foreach($story->executions as $executionID => $execution)
               {
+                  if(!$execution->multiple) continue;
+                  if(!isset($executions[$executionID])) continue;
                   if(isset($story->tasks[$executionID])) continue;
+
                   $execName = ($execution->type == 'kanban' and isonlybody()) ? $executions[$executionID] : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $executions[$executionID], '', "class='text-muted'");
                   echo "<li title='$execution->name'>" . $execName . '</li>';
               }
