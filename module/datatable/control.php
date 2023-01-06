@@ -90,6 +90,9 @@ class datatable extends control
         }
 
         $cols = $this->datatable->getFieldList($module);
+
+        if($module == 'story' && $extra != 'requirement') unset($cols['SRS']);
+
         if($extra == 'requirement')
         {
             unset($cols['plan']);
@@ -97,6 +100,8 @@ class datatable extends control
             unset($cols['taskCount']);
             unset($cols['bugCount']);
             unset($cols['caseCount']);
+            unset($cols['URS']);
+
             $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
         }
 
