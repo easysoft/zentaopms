@@ -403,4 +403,19 @@ class programTest
     {
         return $this->program->saveState($programID, $programs);
     }
+
+    /**
+     * Test build operate menu.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function buildOperateMenuTest($programID = 0)
+    {
+        $program = $this->program->getByID($programID);
+        if(empty($program)) return '0';
+
+        return $this->program->buildOperateMenu($program);
+    }
 }
