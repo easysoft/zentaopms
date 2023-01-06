@@ -374,4 +374,17 @@ class programTest
     {
         return $this->program->getStakeholders($programID, $orderBy);
     }
+
+    /**
+     * Test save state.
+     *
+     * @param  int    $programID
+     * @param  array  $programs
+     * @access public
+     * @return array
+     */
+    public function saveStateTest($programID = 0, $programs = array())
+    {
+        return $this->program->saveState($programID, $programs);
+    }
 }
