@@ -137,17 +137,17 @@
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
                 <?php if($canOrder):?>
-                <th class='w-70px'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
+                <th class='w-90px'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
                 <?php endif;?>
                 <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
-                <th class='w-150px text-left'><?php common::printOrderLink('module', $orderBy, $vars, $lang->story->module);?></th>
+                <th class='w-90px text-left'><?php common::printOrderLink('module', $orderBy, $vars, $lang->story->module);?></th>
                 <th class='w-70px' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='w-70px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
                 <th class='c-user'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-                <th class='w-70px text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+                <th class='w-110px text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                 <th class='w-80px'><?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
-                <th class='c-actions-1'><?php echo $lang->actions?></th>
+                <th class='c-actions-1 w-90px'><?php echo $lang->actions?></th>
                 <?php endif;?>
               </tr>
             </thead>
