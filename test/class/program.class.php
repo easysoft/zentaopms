@@ -16,6 +16,22 @@ class programTest
     }
 
     /**
+     * Get list by search.
+     *
+     * @param  string $orderBy
+     * @param  int    $queryID
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getListBySearchTest($orderBy = 'id_asc', $queryID = 0, $sql = '')
+    {
+        if(!empty($sql)) $_SESSION['programQuery'] = $sql;
+
+        return $this->program->getListBySearch($orderBy, $queryID);
+    }
+
+    /**
      * Get pairs.
      *
      * @param  bool $isQueryAll
