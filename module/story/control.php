@@ -1136,6 +1136,7 @@ class story extends control
         /* Append module when change product type. */
         $moduleList       = array(0 => '/');
         $productStoryList = array();
+        $storyPlans       = array();
         foreach($stories as $story)
         {
             if(isset($modules[$story->product][$story->branch]))
@@ -1153,6 +1154,18 @@ class story extends control
                 $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
                 if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
             }
+
+            if(isset($plans[$story->product][$story->branch]) and zget($plans[$story->product][$story->branch], $story->plan))
+            {
+                $storyPlans = $plans[$story->product][$story->branch];
+                $planInfo   = $this->dao->select('id,title,begin,end')->from(TABLE_PRODUCTPLAN)->where('id')->eq($story->plan)->fetchAll('id');
+
+                $storyPlans[$story->plan] = $planInfo[$story->plan]->title . ' [' . $planInfo[$story->plan]->begin . '~' . $planInfo[$story->plan]->end . ']';
+            }
+            else
+            {
+                $storyPlans = $plans;
+            }
         }
 
         $this->view->title             = $this->lang->story->batchEdit;
@@ -1166,7 +1179,7 @@ class story extends control
         $this->view->branchProduct     = $branchProduct;
         $this->view->storyIdList       = $storyIdList;
         $this->view->branch            = $branch;
-        $this->view->plans             = array('' => '') + $plans;
+        $this->view->plans             = array('' => '') + $storyPlans;
         $this->view->storyType         = $storyType;
         $this->view->stories           = $stories;
         $this->view->executionID       = $executionID;
@@ -3068,8 +3081,8 @@ class story extends control
 
     /**
      * Ajax get story pairs.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
