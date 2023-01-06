@@ -137,7 +137,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
               </span>
             </div>
             <div class="status-notice">
-              <span class='init-success show'><?php echo sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a href='https://www.zentao.net/book/zentaopms/configure-environment-974.html' target='_blank'>{$lang->zanode->manual}</a>", html::a(helper::createLink('testcase', 'automation', "", '', true), $lang->zanode->automation, '', "class='iframe' title='{$lang->zanode->automation}' data-width='50%'", '')); ?></span>
+              <span class='init-success hide'><?php echo sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a href='https://www.zentao.net/book/zentaopms/configure-environment-974.html' target='_blank'>{$lang->zanode->manual}</a>", html::a(helper::createLink('testcase', 'automation', "", '', true), $lang->zanode->automation, '', "class='iframe' title='{$lang->zanode->automation}' data-width='50%'", '')); ?></span>
               <span class='init-fail hide'><?php echo $lang->zanode->init->initFailNoticeTitle . '<br/>' . $lang->zanode->init->initFailNoticeDesc;?></span>
             </div>
           </div>
