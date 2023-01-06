@@ -26,8 +26,8 @@ pid=1
 */
 
 $programTester = new programTest();
-$result1  = $programTester->getBudgetLeftTest(1);
-$result2  = $programTester->getBudgetLeftTest(2);
+$result1       = $programTester->getBudgetLeftTest(1);
+$result2       = $programTester->getBudgetLeftTest(2);
 
 r($result1) && p() && e('900000');  // 查看项目集1的所有父项目集的预算剩余
 r($result2) && p() && e('899900');  // 查看项目集2的所有父项目集的预算剩余
