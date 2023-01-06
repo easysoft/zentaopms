@@ -31,7 +31,7 @@ pid=1
 
 获取干系人数量                     >> 2
 获取干系人数量                     >> 1
-id倒序排，获取第一个干系人真实姓名 >> 测试2
+id倒序排，获取第一个干系人真实姓名 >> 用户2
 id正序排，获取第一个干系人真实姓名 >> 用户1
 
 */
@@ -42,5 +42,5 @@ $stakeholders2 = $programTester->getStakeholdersTest(2, 'id_asc');
 
 r(count($stakeholders1)) && p()             && e('2');     // 获取干系人数量
 r(count($stakeholders2)) && p()             && e('1');     // 获取干系人数量
-r($stakeholders1)        && p('0:realname') && e('测试2'); // id倒序排，获取第一个干系人真实姓名
+r($stakeholders1)        && p('0:realname') && e('用户2'); // id倒序排，获取第一个干系人真实姓名
 r($stakeholders2)        && p('0:realname') && e('用户1'); // id正序排，获取第一个干系人真实姓名
