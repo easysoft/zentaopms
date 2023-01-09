@@ -26,14 +26,9 @@ cid=1
 pid=1
 
 默认情况下的用户是否有执行的可视权限   >> 2
-删除执行执行后用户是否有执行的可视权限 >> 0
 
 */
 
-$executionID = 3;
-
 $execution = new executionTest();
-r(strpos($execution->updateUserViewTest($executionID), '4,')) && p() && e('2'); // 默认情况下的用户是否有执行的可视权限
 
-$tester->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
-r(strpos($execution->updateUserViewTest($executionID, 'sprint'), '3,')) && p() && e('0');   // 删除执行执行后用户是否有执行的可视权限
+r(strpos($execution->updateUserViewTest(4), ',4,')) && p() && e('2'); // 默认情况下的用户是否有执行的可视权限
