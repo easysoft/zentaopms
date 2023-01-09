@@ -16,6 +16,9 @@ $execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD
 $execution->gen(5);
 
 zdTable('user')->gen(5);
+zdTable('team')->gen(0);
+zdTable('product')->gen(0);
+zdTable('userview')->gen(0);
 
 su('admin');
 
