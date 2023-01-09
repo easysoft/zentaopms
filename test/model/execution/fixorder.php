@@ -27,5 +27,5 @@ pid=1
 
 */
 
-$execution = new executionTest();
-r($execution->fixOrderTest()) && p('3:order') && e('15'); // 重置order
+$executionTester = new executionTest();
+r($executionTester->fixOrderTest()) && p('3:order') && e('15'); // 重置order

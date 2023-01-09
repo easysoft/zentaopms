@@ -808,7 +808,7 @@ class executionTest
         }
         elseif($count == "1")
         {
-            return count($object);
+            return isset($object[$productID]) ? count($object[$productID]) : 0;
         }
         else
         {
