@@ -58,7 +58,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function createObject($param = array(), $project = '', $dayNum = '', $days = '')
+    public function createTest($param = array(), $project = '', $dayNum = '', $days = '')
     {
         $products  = array('');
         $plans     = array('');
@@ -70,7 +70,7 @@ class executionTest
         $createFields = array('project' => $project, 'name' => '', 'code' => '', 'begin' => $beginData, 'end' => $endData,
             'lifetime' => 'short', 'status' => 'wait', 'products' => $products, 'delta' => $delta, 'days' => $days,
             'plans' => $plans, 'team' => '', 'teams' => '0', 'PO' => '', 'QD' => '', 'PM' => '', 'RD' => '', 'whitelist' => '',
-            'desc' => '', 'acl' => 'private');
+            'desc' => '', 'acl' => 'private', 'percent' => '0');
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
