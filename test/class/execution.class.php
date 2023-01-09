@@ -1651,14 +1651,7 @@ class executionTest
      */
     public function getBurnDataFlotTest($executionID = 0)
     {
-        $date   = date("Y-m-d");
         $object = $this->objectModel->getBurnDataFlot($executionID, $burnBy = 'left');
-
-        $todayData = array();
-        if(isset($object[$date]))
-        {
-            foreach($object[$date] as $key => $value) $todayData[$key] = $value;
-        }
 
         if(dao::isError())
         {
@@ -1667,7 +1660,7 @@ class executionTest
         }
         else
         {
-            return sizeof($todayData);
+            return $object;
         }
     }
 
