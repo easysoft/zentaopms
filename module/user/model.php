@@ -1957,7 +1957,11 @@ class userModel extends model
         /* Get product and project relation. */
         $projectProducts = array();
         $productProjects = array();
-        $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('product')->in(array_keys($allProducts))->query();
+        $stmt = $this->dao->select('t1.project, t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->in(array_keys($allProducts))
+            ->andWhere('t2.deleted')->eq('0')
+            ->query();
         while($projectProduct = $stmt->fetch())
         {
             $productProjects[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
