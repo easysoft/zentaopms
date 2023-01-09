@@ -6,7 +6,7 @@ include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
 $execution = zdTable('project');
 $execution->id->range('1-7');
 $execution->name->range('项目1,迭代1,迭代2,迭代3,迭代4,迭代5,迭代6');
-$execution->type->range('project{2},sprint{2},waterfall{2},kanban{2}');
+$execution->type->range('project,sprint{2},waterfall{2},kanban{2}');
 $execution->status->range('doing,wait');
 $execution->gen(7);
 
