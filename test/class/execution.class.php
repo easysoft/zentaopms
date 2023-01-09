@@ -1600,18 +1600,17 @@ class executionTest
     }
 
     /**
-     * function fixFirst test by execution
+     * Function fixFirst test by execution.
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  string $date
      * @access public
      * @return array
      */
-    public function fixFirstTest($executionID, $param = array())
+    public function fixFirstTest($executionID, $param = array(), $date)
     {
         global $tester;
-
-        $date = date('Y-m-d');
 
         $createFields = array('estimate' => '');
 
