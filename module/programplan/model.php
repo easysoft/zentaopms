@@ -52,12 +52,12 @@ class programplanModel extends model
      */
     public function getStage($executionID = 0, $productID = 0, $browseType = 'all', $orderBy = 'id_asc')
     {
-        if(empty($executionID) || empty($productID)) return array();
+        if(empty($executionID)) return array();
 
         $plans = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->eq('stage')
-            ->andWhere('t1.product')->eq($productID)
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($browseType == 'all')->andWhere('t2.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t2.parent')->eq($executionID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
@@ -243,11 +243,11 @@ class programplanModel extends model
             $oldTasks = $oldData->task;
             foreach($oldTasks as $id => $oldTask)
             {
-                if(!isset($tasks->$id)) continue;
-                $tasks->$id->version    = $oldTask->version;
-                $tasks->$id->name       = $oldTask->name;
-                $tasks->$id->estStarted = $oldTask->estStarted;
-                $tasks->$id->deadline   = $oldTask->deadline;
+                if(!isset($tasks[$id])) continue;
+                $tasks[$id]->version    = $oldTask->version;
+                $tasks[$id]->name       = $oldTask->name;
+                $tasks[$id]->estStarted = $oldTask->estStarted;
+                $tasks[$id]->deadline   = $oldTask->deadline;
             }
         }
 
@@ -1031,6 +1031,13 @@ class programplanModel extends model
         if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
         if(dao::isError()) return false;
 
+        if($plan->parent) $parentStage = $this->getByID($plan->parent);
+        if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
+        {
+            dao::$errors['message'][] = $this->lang->programplan->error->parentDuration;
+            return false;
+        }
+
         if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
         if(dao::isError()) return false;
 
@@ -1045,7 +1052,6 @@ class programplanModel extends model
 
         if($plan->parent > 0)
         {
-            $parentStage = $this->getByID($plan->parent);
             $plan->attribute = $parentStage->attribute;
             $plan->acl       = $parentStage->acl;
             $parentPercent   = $parentStage->percent;

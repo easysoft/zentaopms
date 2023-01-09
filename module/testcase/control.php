@@ -78,6 +78,7 @@ class testcase extends control
      * @param  int|string $branch
      * @param  string     $browseType
      * @param  int        $param
+     * @param  string     $caseType
      * @param  string     $orderBy
      * @param  int        $recTotal
      * @param  int        $recPerPage
@@ -86,9 +87,10 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $this->loadModel('datatable');
+        $this->app->loadLang('zanode');
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
@@ -144,11 +146,11 @@ class testcase extends control
         $sort  = common::appendOrder($orderBy);
 
         /* Get test cases. */
-        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
         if(empty($cases) and $pageID > 1)
         {
             $pager = pager::init(0, $recPerPage, 1);
-            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
         }
 
         /* save session .*/
@@ -219,6 +221,7 @@ class testcase extends control
         $this->view->orderBy         = $orderBy;
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
+        $this->view->caseType        = $caseType;
         $this->view->cases           = $cases;
         $this->view->branch          = (!empty($product) and $product->type != 'normal') ? $branch : 0;
         $this->view->branchOption    = $branchOption;
@@ -229,6 +232,7 @@ class testcase extends control
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
         $this->view->showBranch      = $showBranch;
         $this->view->libraries       = $this->loadModel('caselib')->getLibraries();
+        $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
 
         $this->display();
     }
@@ -237,14 +241,18 @@ class testcase extends control
      * Group case.
      *
      * @param  int    $productID
+     * @param  string $branch
      * @param  string $groupBy
+     * @param  int    $projectID
+     * @param  string $caseType
      * @access public
      * @return void
      */
-    public function groupCase($productID = 0, $branch = '', $groupBy = 'story', $projectID = 0)
+    public function groupCase($productID = 0, $branch = '', $groupBy = 'story', $projectID = 0, $caseType = '')
     {
         $groupBy   = empty($groupBy) ? 'story' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
+        $product   = $this->product->getByID($productID);
         if($branch === '') $branch = $this->cookie->preBranch;
 
         $this->app->loadLang('testtask');
@@ -253,12 +261,12 @@ class testcase extends control
         if($this->app->tab == 'project')
         {
             $products = array('0' => $this->lang->product->all) + $this->product->getProducts($this->session->project, 'all', '', false);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', "projectID=$projectID", $branch);
+            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', $projectID, $branch);
         }
 
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
 
-        $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
+        $cases = $this->testcase->getModuleCases($productID, $branch, 0, '', 'no', $caseType, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
@@ -294,7 +302,8 @@ class testcase extends control
         $this->view->suiteID     = 0;
         $this->view->moduleID    = 0;
         $this->view->branch      = $branch;
-        $this->view->product     = $this->product->getByID($productID);
+        $this->view->caseType    = $caseType;
+        $this->view->product     = $product;
         $this->display();
     }
 
@@ -323,12 +332,14 @@ class testcase extends control
             $this->loadModel('project')->setMenu($this->session->project);
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', "projectID=$projectID", $branchID);
+            $product   = $this->product->getByID($productID);
+            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', $projectID, $branchID);
         }
         else
         {
             $products  = $this->product->getPairs();
             $productID = $this->product->saveState($productID, $products);
+            $product   = $this->product->getByID($productID);
             $this->loadModel('qa');
             $this->app->rawModule = 'testcase';
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
@@ -355,7 +366,7 @@ class testcase extends control
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';
-        $this->view->product    = $this->product->getByID($productID);
+        $this->view->product    = $product;
         $this->view->pager      = $pager;
         $this->display();
     }
@@ -384,6 +395,7 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
+            if(!empty($_FILES['scriptFile'])) unset($_FILES['scriptFile']);
             $response['result'] = 'success';
 
             setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
@@ -422,7 +434,7 @@ class testcase extends control
 
             /* Use this session link, when the tab is not QA, a session of the case list exists, and the session is not from the Dynamic page. */
             $useSession         = ($this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false);
-            $locateLink         = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            $locateLink         = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}");
             $response['locate'] = $useSession ? $this->session->caseList : $locateLink;
             return $this->send($response);
         }
@@ -525,8 +537,6 @@ class testcase extends control
 
         $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         /* Get the status of stories are not closed. */
-        $storyStatus = $this->lang->story->statusList;
-        unset($storyStatus['closed']);
         $modules = array();
         if($currentModuleID)
         {
@@ -536,7 +546,7 @@ class testcase extends control
             $modules        = $this->tree->getAllChildID($modules);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
+        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, 'active', 'id_desc', 50, 'null', 'story', false);
         if($this->app->tab != 'qa' and $this->app->tab != 'product')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
@@ -616,7 +626,7 @@ class testcase extends control
             $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
             $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
             $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-            return print(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
+            return print(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&caseType=&orderBy=id_desc"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -836,7 +846,7 @@ class testcase extends control
         $this->view->caseModule = empty($case->module) ? '' : $this->tree->getById($case->module);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        $this->view->preAndNext = !isOnlybody() ? $this->loadModel('common')->getPreAndNextObject('testcase', $caseID) : '';
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
         $this->view->isLibCase  = $isLibCase;
         $this->view->caseFails  = $caseFails;
@@ -866,6 +876,8 @@ class testcase extends control
 
         if(!empty($_POST))
         {
+            if(!empty($_FILES['scriptFile'])) unset($_FILES['scriptFile']);
+
             $changes = array();
             if($comment == false or $comment == 'false')
             {
@@ -2343,6 +2355,58 @@ class testcase extends control
         $this->view->title = $this->lang->testcase->bugs;
         $this->view->bugs  = $this->loadModel('bug')->getCaseBugs($runID, $caseID, $version);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * Show script.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function showScript($caseID)
+    {
+        $case = $this->testcase->getByID($caseID);
+        if($case) $case->script = html_entity_decode($case->script);
+        $this->view->case = $case;
+        $this->display();
+    }
+
+    /**
+     * Automation test setting.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function automation($productID = 0)
+    {
+        $this->loadModel('zanode');
+        $nodeList   = $this->zanode->getPairs();
+        $automation = $this->dao->select('*')->from(TABLE_AUTOMATION)->where('product')->eq($productID)->fetch();
+
+        if($_POST)
+        {
+            $this->zanode->setAutomationSetting();
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            $nodeID = $_POST['node'];
+            $node   = $this->zanode->getNodeByID($_POST['node']);
+
+            $locatelink = $this->createLink('testcase', 'browse', "productID={$_POST['product']}");
+            $locatelink = str_replace(array('?onlybody=yes', '&onlybody=yes'), '', $locatelink);
+
+            return print(js::locate($locatelink, 'parent.parent'));
+        }
+
+        $this->view->title      = $this->lang->zanode->automation;
+        $this->view->automation = $automation;
+        $this->view->nodeList   = $nodeList;
+        $this->view->productID  = $productID;
+        $this->view->products   = $this->product->getPairs('', 0, '', 'all');
+
         $this->display();
     }
 

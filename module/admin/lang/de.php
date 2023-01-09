@@ -141,3 +141,4 @@ $lang->admin->safe->resetPWDList[0] = 'Off';
 $lang->admin->safe->noticeMode     = 'The password will be checked when creating and modifying user information, and changing passwords.';
 $lang->admin->safe->noticeWeakMode = 'The password will be checked when logging into the system, creating and modifying user information, and changing passwords.';
 $lang->admin->safe->noticeStrong   = 'The longer the password, the more letters, numbers, or special characters it contains, and the less repetitive the password, the more secure it is!';
+$lang->admin->safe->noticeGd       = 'Your server does not have GD module installed, you cannot use the Captcha function, Please use it after installation.';

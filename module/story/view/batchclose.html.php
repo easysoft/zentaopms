@@ -34,7 +34,12 @@
       <?php foreach($stories as $storyID => $story):?>
       <tr class='text-center'>
         <td><?php echo $storyID . html::hidden("storyIdList[$storyID]", $storyID);?></td>
-        <td class='text-left'><?php echo $story->title;?></td>
+        <td title='<?php echo $story->title;?>' class='text-left'>
+          <?php echo $story->title;?>
+          <?php if(!empty($story->twins)):?>
+          <span class='label label-outline label-badge'><?php echo "{$lang->story->twins}:"?> <span class='text-blue'><?php echo $twinsCount[$story->id]?></span></span>
+          <?php endif;?>
+        </td>
         <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
         <td class='reasons-td'>
           <?php if($story->status == 'draft') unset($reasonList['cancel']);?>
@@ -44,7 +49,7 @@
                 <?php echo html::select("closedReasons[$storyID]", $reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");?>
               </td>
               <td class='pd-0 w-p60 text-left' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
-                <?php echo html::select("duplicateStoryIDList[$storyID]", array('' => '') + $productStoryList[$story->product][$story->branch], $story->duplicateStory ? $story->duplicateStory : '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?>
+                <?php echo html::select("duplicateStoryIDList[$storyID]", '', '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?>
               </td>
               <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($story->closedReason != 'subdivided') echo "style='display:none'";?>>
               <?php echo html::input("childStoriesIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}'");?>

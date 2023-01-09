@@ -8,7 +8,6 @@
 <?php if($app->rawMethod != 'create'):?>
 <style>
 #modalTeam .modal-dialog {width: 855px;}
-#taskTeamEditor .hourBox {padding-bottom: 1px;}
 </style>
 <?php endif;?>
 <?php if($app->rawMethod == 'assignto'):?>
@@ -145,19 +144,17 @@ $(document).ready(function()
     showTeamMenu();
     <?php endif;?>
 
+    <?php if(isset($task->mode) and $task->mode == 'multi'):?>
     $('tr.teamTemplate').closest('tbody.sortable').sortable('destroy');
-
-    <?php if(empty($task->mode) or $task->mode != 'multi'):?>
-    var canSort = false;
+    <?php else:?>
     var options = {
-        trigger: '.icon-move',
-        selector: 'tr.teamTemplate',
+        selector: '.icon-move',
         dragCssClass: 'drag-row',
         reverse: true,
         finish: setLineNumber
     }
 
-    $('#taskTeamEditor > .sortable').sortable(options);
+    $('#taskTeamEditor tbody.sortable').sortable(options);
     <?php endif;?>
 
     /* Init task team manage dialog */
@@ -187,7 +184,7 @@ $(document).ready(function()
 
     var disableMembers = function()
     {
-        var mode = $('#mode').length > 0 ? $('#mode').val() : '<?php echo (!empty($task->mode) ? $task->mode : '')?>';
+        var mode = $('[name="mode"]').length > 0 ? $('[name="mode"]').val() : '<?php echo (!empty($task->mode) ? $task->mode : '')?>';
         if(mode == 'multi')
         {
             var members = [];
@@ -271,7 +268,7 @@ $(document).ready(function()
             $newRow.removeClass('highlight');
         }, 1600);
 
-        var taskMode = $('#mode').val();
+        var taskMode = $('[name="mode"]').val();
         if(taskMode == 'multi') $('#taskTeamEditor tr.member .icon-angle-down').addClass('hidden');
 
         disableMembers();
@@ -326,7 +323,7 @@ $(document).ready(function()
         $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
     });
 
-    $('#mode').change(function()
+    $('[name="mode"]').change(function()
     {
         if($(this).val() == 'multi')
         {
@@ -341,7 +338,7 @@ $(document).ready(function()
                 $(this).find('option:disabled').removeAttr('disabled').trigger("chosen:updated");
             })
         }
-        if($('#teamMember').val() != '') $taskTeamEditor.find('tfoot .btn').click();
+        if($('#teamMember').val() != '' && page != 'edit') $taskTeamEditor.find('tfoot .btn').click();
     })
 });
 

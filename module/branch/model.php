@@ -22,6 +22,7 @@ class branchModel extends model
      */
     public function getById($branchID, $productID = 0, $field = 'name')
     {
+        if($branchID == 'all') return false;
         if(empty($branchID))
         {
             if(empty($productID)) $productID = $this->session->product;
@@ -781,5 +782,19 @@ class branchModel extends model
         }
 
         return $targetBranch;
+    }
+
+    /**
+     * Judge an action is clickable or not..
+     *
+     * @param object $branch
+     * @param string $action
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($branch, $action)
+    {
+        return true;
     }
 }

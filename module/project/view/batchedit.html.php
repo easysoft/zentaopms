@@ -17,6 +17,7 @@
 <?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
 <?php js::set('LONG_TIME', LONG_TIME);?>
+<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('longTime', $lang->project->longTime);?>
 <?php js::set('ignore', $lang->project->ignore);?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
@@ -82,15 +83,11 @@
         </tr>
         <?php endforeach;?>
       </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="7" class="text-center form-actions">
-            <?php echo html::submitButton();?>
-            <?php echo html::backButton();?>
-          </td>
-        </tr>
-      </tfoot>
     </table>
+    <div class='table-footer text-center'>
+      <?php echo html::submitButton();?>
+      <?php echo html::backButton();?>
+    </div>
 </div>
 <div class="modal fade" id="promptBox">
   <div class="modal-dialog mw-600px">

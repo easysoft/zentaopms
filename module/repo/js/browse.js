@@ -61,7 +61,7 @@ $(function()
         content: getDownload(),
         html: true,
         placement: 'bottom',
-        template: '<div class="popover"><h3 class="popover-title strong repo-popover"></h3><div class="popover-content"></div></div',
+        template: '<div class="popover"><h3 class="popover-title strong repo-popover"></h3><div class="popover-content"></div></div>',
         tipClass: 'download-popover',
         trigger: 'manual'
     };
@@ -109,4 +109,11 @@ $(function()
         var link = createLink('repo', 'downloadCode', 'repoID=' + repoID + '&branch=' + branch);
         window.open(link);
     })
+
+    /* Sync rename record. */
+    if(!syncedRF)
+    {
+        var link = createLink('repo', 'ajaxSyncRenameRecord', 'repoID=' + repoID);
+        $.get(link);
+    }
 })

@@ -26,8 +26,17 @@
       <table class='table table-form'>
         <tr>
           <th class='thWidth'><?php echo $lang->story->closedReason;?></th>
-          <td class='w-p25-f'><?php echo html::select('closedReason', $reasonList, '', 'class="form-control" onchange="setStory(this.value)"');?></td><td></td>
-        </tr>
+          <td class='w-p25-f'><?php echo html::select('closedReason', $reasonList, '', 'class="form-control" onchange="setStory(this.value)"');?></td>
+          <td class='closeSyncBox'>
+            <div class="checkbox-primary c-future <?php echo !empty($story->twins) ? '' : 'hidden';?>" style="display: inline-block">
+              <input type='checkbox' id='closeSync' name='closeSync' value='1' />
+              <label for='closeSync'>
+                <?php echo $lang->story->relievedTwinsRelation;?>
+              </label>
+            </div>
+            <div class="<?php echo !empty($story->twins) ? '' : 'hidden';?>" style="display: inline-block"><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->story->relievedTwinsRelationTips;?>"></icon></div>   
+          </td>
+        </tr>  
         <tr id='duplicateStoryBox' style='display:none'>
           <th><?php echo $lang->story->duplicateStory;?></th>
           <td class='required'><?php echo html::select('duplicateStory', array('' => '') + $productStories, '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'"); ?></td><td></td>

@@ -24,7 +24,7 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $task->id?></span>
       <span class="text" title='<?php echo $task->name;?>' style='color: <?php echo $task->color; ?>'>
-        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->multipleAB . (common::checkNotCN() ? ' ' : '') . $lang->task->modeList[$task->mode] . '</span>';?>
+        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . (common::checkNotCN() ? ' ' : '') . $lang->task->modeList[$task->mode] . '</span>';?>
         <?php if($task->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->childrenAB . '</span>';?>
         <?php if($task->parent > 0) echo isset($task->parentName) ? html::a(inlink('view', "taskID={$task->parent}"), $task->parentName) . ' / ' : '';?><?php echo $task->name;?>
       </span>
@@ -339,9 +339,9 @@
               <thead>
               <tr>
                 <th><?php echo $lang->task->team?></th>
-                <th class='text-center c-hours'><?php echo $lang->task->estimate?></th>
-                <th class='text-center c-hours'><?php echo $lang->task->consumed?></th>
-                <th class='text-center c-hours'><?php echo $lang->task->left?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->estimateAB?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->consumedAB?></th>
+                <th class='text-center c-hours'><?php echo $lang->task->leftAB?></th>
                 <th class='text-center'><?php echo $lang->statusAB;?></th>
               </tr>
               </thead>
@@ -409,6 +409,20 @@
                   foreach($linkMRTitles as $MRID => $linkMRTitle)
                   {
                       echo ($canViewMR ? html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") : "#$MRID $linkMRTitle") . '<br />';
+                  }
+                  ?>
+                </td>
+              </tr>
+              <tr>
+                <th class='MRThWidth'><?php echo $lang->task->linkCommit;?></th>
+                <td>
+                  <?php
+                  $canViewRevision = common::hasPriv('repo', 'revision');
+                  foreach($linkCommits as $commit)
+                  {
+                      $revision    = substr($commit->revision, 0, 10);
+                      $commitTitle = $revision . ' ' . $commit->comment;
+                      echo "<div class='link-commit' title='$commitTitle'>" . ($canViewRevision ? html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), "$revision") . ' ' . $commit->comment : $commitTitle) . '<br />';
                   }
                   ?>
                 </td>

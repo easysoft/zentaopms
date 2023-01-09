@@ -121,6 +121,4 @@ $builder->oauth    = array('rows' => 100, 'extends' => array('oauth'));
 $builder->notify   = array('rows' => 10,  'extends' => array('notify'));
 
 $builder->vm         = array('rows' => 1,  'extends' => array('vm'));
-$builder->vmtemplate = array('rows' => 1,  'extends' => array('vmtemplate'));
 $builder->host       = array('rows' => 1,  'extends' => array('host'));
-$builder->asset      = array('rows' => 1,  'extends' => array('asset'));

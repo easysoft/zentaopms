@@ -108,7 +108,6 @@ class my extends control
         $this->loadModel('bug');
         $this->loadModel('testcase');
         $this->loadModel('testtask');
-        $this->loadModel('ticket');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -166,7 +165,7 @@ class my extends control
             $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
             $feedbackCount = $pager->recTotal;
 
-            $ticketList  = $this->ticket->getList('assignedtome', 'id_desc', $pager);
+            $ticketList  = $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
             $ticketCount = $pager->recTotal;
         }
 
@@ -956,13 +955,25 @@ EOF;
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $typeList = array();
         if($this->app->rawMethod == 'contribute')
         {
             $reviewList = $this->my->getReviewedList($browseType, $orderBy, $pager);
         }
         else
         {
+            $typeList = $this->my->getReviewingTypeList();
+            if(!isset($typeList->$browseType)) $browseType = 'all';
+
+            $this->lang->my->auditMenu->audit = $typeList;
             $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
+        }
+
+        $this->view->flows = array();
+        if($this->config->edition == 'max')
+        {
+            $this->app->loadLang('approval');
+            $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
         }
 
         $this->view->title       = $this->lang->review->common;

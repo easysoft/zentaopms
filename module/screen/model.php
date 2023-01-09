@@ -278,6 +278,9 @@ class screenModel extends model
             case 'bar':
                 return $this->buildBarChart($component, $chart);
                 break;
+            case 'piecircle':
+                return $this->buildPieCircleChart($component, $chart);
+                break;
             case 'pie':
                 return $this->buildPieChart($component, $chart);
                 break;
@@ -371,7 +374,7 @@ class screenModel extends model
 
                     if($settings->value->type === 'value')
                     {
-                        $value = $results[0]->$field;
+                        $value = empty($results[0]) ? 0 : $results[0]->$field;
                     }
                     if($settings->value->agg === 'count')
                     {
@@ -544,22 +547,38 @@ class screenModel extends model
 
                     $sql     = $this->setFilterSQL($chart);
                     $results = $this->dao->query($sql)->fetchAll();
+
                     foreach($results as $result)
                     {
                         $key   = $settings->xaxis[0]->name;
                         $field = $settings->xaxis[0]->field;
-                        $row   = array($key => $result->$field);
 
-                        foreach($settings->yaxis as $yaxis)
+                        if($settings->yaxis[0]->agg == 'sum')
                         {
-                            $field = $yaxis->field;
-                            $row[$yaxis->name] = $result->$field;
+                            if(!isset($sourceData[$result->$field])) $sourceData[$result->$field] = array($key => $result->$field);
+
+                            foreach($settings->yaxis as $yaxis)
+                            {
+                                $valueField = $yaxis->field;
+                                if(!isset($sourceData[$result->$field][$yaxis->name])) $sourceData[$result->$field][$yaxis->name] = 0;
+                                $sourceData[$result->$field][$yaxis->name] += $result->$valueField;
+                            }
                         }
-                        $sourceData[] = $row;
+                        else
+                        {
+                            $row = array($key => $result->$field);
+
+                            foreach($settings->yaxis as $yaxis)
+                            {
+                                $field = $yaxis->field;
+                                $row[$yaxis->name] = $result->$field;
+                            }
+                            $sourceData[] = $row;
+                        }
                     }
 
                     $component->option->dataset->dimensions = $dimensions;
-                    $component->option->dataset->source     = $sourceData;
+                    $component->option->dataset->source     = array_values($sourceData);
                 }
             }
 
@@ -610,15 +629,72 @@ class screenModel extends model
                             $groupCount[$result->$group]++;
                         }
                     }
+                    arsort($groupCount);
 
                     foreach($groupCount as $groupValue => $groupCount)
                     {
                         $sourceData[] = array($settings->group[0]->name => $groupValue, $settings->metric[0]->field => $groupCount);
                     }
                 }
+                if(empty($sourceData)) $dimensions = array();
 
                 $component->option->dataset->dimensions = $dimensions;
                 $component->option->dataset->source     = $sourceData;
+            }
+
+            return $this->setComponentDefaults($component);
+        }
+    }
+
+    /**
+     * Build piecircle chart.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function buildPieCircleChart($component, $chart)
+    {
+        if(!$chart->settings)
+        {
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "PieCircle";
+            $component->chartConfig = json_decode('{"key":"PieCircle","chartKey":"VPieCircle","conKey":"VCPieCircle","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-circle-258fcce7.png"}');
+            $component->option      = json_decode('{"type":"nomal","series":[{"type":"pie","radius":"70%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
+        }
+        else
+        {
+            if($chart->sql)
+            {
+                $settings = json_decode($chart->settings);
+                if($settings and isset($settings->metric))
+                {
+                    $sourceData = array();
+
+                    $sql     = $this->setFilterSQL($chart);
+                    $results = $this->dao->query($sql)->fetchAll();
+                    $group = $settings->group[0]->field;
+
+                    $groupCount = array();
+                    foreach($results as $result)
+                    {
+                        if($settings->metric[0]->agg == 'count')
+                        {
+                            if(!isset($groupCount[$result->$group])) $groupCount[$result->$group] = 0;
+                            $groupCount[$result->$group]++;
+                        }
+                    }
+
+                    foreach($groupCount as $groupValue => $groupCount) $sourceData[$groupValue] = $groupCount;
+                }
+                $doneData = round((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0, 4);
+                $component->option->dataset = $doneData;
+                $component->option->series[0]->data[0]->value  = array($doneData);
+                $component->option->series[0]->data[1]->value  = array(1 - $doneData);
             }
 
             return $this->setComponentDefaults($component);
@@ -664,16 +740,19 @@ class screenModel extends model
                         $metrics[$metric->key] = array('field' => $metric->field, 'name' => $metric->name, 'value' => 0);
                     }
 
-                    $max = 0;
+
                     foreach($results as $result)
                     {
                         if(isset($metrics[$result->$group]))
                         {
                             $field = $metrics[$result->$group]['field'];
-                            $metrics[$result->$group]['value'] = $result->$field;
-
-                            if($max < $result->$field) $max = $result->$field;
+                            $metrics[$result->$group]['value'] += $result->$field;
                         }
+                    }
+                    $max = 0;
+                    foreach($metrics as $data)
+                    {
+                        if($data['value'] > $max) $max = $data['value'];
                     }
 
                     $data  = array('name' => '', 'value' => array());
@@ -742,10 +821,11 @@ class screenModel extends model
     {
         $type = 'withdelay';
         $this->loadModel('execution');
-        $executions    = $this->execution->getPairs(0, 'sprint') + $this->execution->getPairs(0, 'stage');
+        $executions    = $this->execution->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
+
         $executionData = array();
 
-        foreach($executions as $executionID => $executionName)
+        foreach($executions as $executionID => $execution)
         {
             $execution = $this->execution->getByID($executionID);
 
@@ -767,7 +847,6 @@ class screenModel extends model
             $execution->chartData = $chartData;
             $executionData[$executionID] = $execution;
         }
-
         return $executionData;
     }
 }

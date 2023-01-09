@@ -21,7 +21,6 @@ js::set('productID',     $productID);
 js::set('branch',        $branch);
 $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($browseType, array_keys($lang->bug->mySelects)) ? $browseType : '';
 ?>
-<?php if($config->global->flow == 'full'):?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title">
@@ -154,7 +153,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <?php endif;?>
 </div>
-<?php endif;?>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div id="xx-title">
   <strong>
@@ -328,7 +326,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                           {
                               $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
                               echo "<li class='option' data-key='$key'>";
-                              echo html::a('javascript:;', $build, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\"");
+                              echo html::a('javascript:;', $build . (in_array($key, $releasedBuilds) ? " <span class='label label-primary label-outline'>{$lang->build->released}</span> " : ''), '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\"");
                               echo "</li>";
                           }
                           echo "</ul>";

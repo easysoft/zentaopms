@@ -1,2 +1,5 @@
 td.pass {background-color: unset !important; border-color: unset !important; border-bottom: 1px solid #eee !important; color: green;}
 td.fail {background-color: unset !important; border-color: unset !important; border-bottom: 1px solid #eee !important; color: red;}
+
+#subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
+#subHeader #dropMenu .col-left {padding-bottom: 0px;}

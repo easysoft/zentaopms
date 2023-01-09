@@ -2,3 +2,7 @@
 .group-header > a {line-height: 20px; display: block; max-height: 40px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;}
 .c-result {width: 80px;}
 .c-bugs, .c-results, .c-steps {width: 30px;}
+
+#subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
+#subHeader #dropMenu .col-left {padding-bottom: 0px;}
+#currentBranch + #dropMenu .col-left {padding-bottom: 30px;}

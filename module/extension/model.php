@@ -630,9 +630,17 @@ class extensionModel extends model
     public function cleanModelCache()
     {
         $modelCacheFiles = glob($this->app->getTmpRoot() . 'model/*');
+        $zfile = $this->app->loadClass('zfile');
         foreach($modelCacheFiles as $cacheFile)
         {
-            if(is_writable($cacheFile) and !is_dir($cacheFile)) @unlink($cacheFile);
+            if(is_dir($cacheFile))
+            {
+                $zfile->removeDir($cacheFile);
+            }
+            elseif(is_writable($cacheFile) and !is_dir($cacheFile))
+            {
+                @unlink($cacheFile);
+            }
         }
     }
 
@@ -780,11 +788,10 @@ class extensionModel extends model
     /**
      * Update an extension.
      *
-     * @param  string    $extension
-     * @param  string    $status
-     * @param  array     $files
+     * @param  string        $extension
+     * @param  array|object  $data
      * @access public
-     * @return void
+     * @return int
      */
     public function updateExtension($extension, $data)
     {

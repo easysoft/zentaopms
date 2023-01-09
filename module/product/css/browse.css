@@ -41,3 +41,4 @@ a.removeModule:hover {color: red;}
 #productStoryForm tbody tr td .label {max-width: 100px; text-overflow: unset;}
 .c-span {margin-left: 19px;}
 .btn-toolbar #query span.text{overflow: hidden; width: 52px; vertical-align: middle; margin-right: 1px;}
+#linkStoryByPlan .modal-header {padding: 20px 0 10px 0; border-bottom: 0px}

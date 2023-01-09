@@ -365,7 +365,38 @@ function renderKanbanItem(item, $item)
         if(privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox).attr('href', createLink(rawModule, 'view', 'cardID=' + item.id));
         if(!privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox);
     }
+    if(!$title.children('i').length)
+    {
+      $(function() {$title.prepend('<i class="icon icon-delay"></i>');})
+    }
     $title.text(item.title).attr('title', item.title);
+
+    var $info = $item.children('.productplanInfo');
+    if(!$info.length) $info = $(
+    [
+        '<div class="productplanInfo">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    /* Output plan desc information. */
+    var $descBox = $item.children('.productplanDesc');
+    if(!$descBox.length)
+    {
+        $descBox = $('<div class="productplanDesc c-name cardDesc" title="' + item.desc + '">' + item.desc + '</div>').appendTo($info);
+    }
+
+    var $statusBox = $item.children('.productplanStatus');
+    if(!$statusBox.length)
+    {
+        if(item.deleted == '0')
+        {
+            $statusBox = $('<span class="productplanStatus label label-' + item.status + '">' + productplanLang.statusList[item.status] + '</span>').appendTo($info);
+        }
+        else
+        {
+            $statusBox = $('<span class="productplanStatus label label-deleted">' + productplanLang.deleted + '</span>').appendTo($info);
+        }
+    }
 
     /* Determine whether to print an expired label. */
     var today = new Date();
@@ -392,54 +423,71 @@ function renderKanbanItem(item, $item)
         ].join('')).appendTo($header);
     }
 
-    /* Output plan date information. */
-    var $dateBox = $item.children('.dateBox');
-    if(!$dateBox.length) $dateBox = $(
-    [
-        '<div class="dateBox">',
-          '<span class="time label label-outline"></span>',
-        '</div>'
-    ].join('')).appendTo($item);
+    /* Display date of product plan. */
+    var $date      = $info.children('.date');
+    var begin      = $.zui.createDate(item.begin);
+    var end        = $.zui.createDate(item.end);
+    var today      = new Date();
+    var labelType  = (item.begin <= $.zui.formatDate(today, 'yyyy-MM-dd') && item.end >= $.zui.formatDate(today, 'yyyy-MM-dd')) ? 'danger' : 'wait';
+    var labelTitle = $.zui.formatDate(begin, 'MM-dd') + ' ' + productplanLang.to + ' ' + $.zui.formatDate(end, 'MM-dd');
 
-    var $time            = $dateBox.children('.time');
-    var beginTimeShort   = $.zui.formatDate(begin, 'MM-dd');
-    var beginTimeLong    = $.zui.formatDate(begin, 'yyyy-MM-dd');
-    var endTimeShort     = $.zui.formatDate(end, 'MM-dd');
-    var endTimeLong      = $.zui.formatDate(end, 'yyyy-MM-dd')
-    var to               = productplanLang.to;
-    var undetermined     = productplanLang.future;
-    var undetermindeDate = '2030-01-01';
-    if(item.begin != undetermindeDate && item.end != undetermindeDate)
+    if((item.begin == '2030-01-01' || item.end == '2030-01-01'))
     {
-        $time.text(beginTimeShort + ' ' + to + ' ' + endTimeShort).attr('title', beginTimeLong + to + endTimeLong).show();
+        labelType  = 'future';
+        labelTitle = productplanLang.future;
     }
-    else if(item.begin != undetermindeDate && item.end == undetermindeDate)
+    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+    $date.text(labelTitle).attr('title', labelTitle).show();
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.createdBy];
+    if(users[item.createdBy])
     {
-        $time.text(beginTimeShort +  ' ' + to  + ' ' + undetermined).attr('title', beginTimeLong + to).show();
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.createdBy]);
     }
-    else if(item.begin == undetermindeDate && item.end != undetermindeDate)
+}
+
+/**
+* Render avatars of user.
+* @param {String|{account: string, avatar: string}} user User account or user object
+* @returns {string}
+*/
+function renderUsersAvatar(users, itemID, size)
+{
+    var avatarSizeClass = 'avatar-' + (size || 'md');
+
+    if(users.length == 0 || (users.length == 1 && users[0] == ''))
     {
-        $time.text(undetermined +  ' ' + to  + ' ' + endTimeShort).attr('title', to + endTimeLong).show();
-    }
-    else if(item.begin != '2030-01-01' && item.end == '2030-01-01')
-    {
-        $time.text($.zui.formatDate(begin, 'MM-dd') +  ' ' + productplanLang.to  + ' ' + productplanLang.future).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + productplanLang.to).show();
-    }
-    else if(item.begin == '2030-01-01' && item.end != '2030-01-01')
-    {
-        $time.text(productplanLang.future +  ' ' + productplanLang.to  + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(end, 'yyyy-MM-dd') + productplanLang.to).show();
-    }
-    else
-    {
-        $time.text(undetermined).attr('title', undetermined).show();
+        return $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>');
     }
 
-    /* Output plan desc information. */
-    var $desc = $item.children('.desc');
-    if(!$desc.length)
+    var assignees = [];
+    for(var user of users)
     {
-        $("<div class='desc c-name'"+ " title='" + item.desc + "'>" + item.desc + '</div>').appendTo($item);
+        var $noPrivAndNoAssigned = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>');
+        if(!priv.canAssignCard && !user)
+        {
+            assignees.push($noPrivAndNoAssigned);
+            continue;
+        }
+        if(!user)
+        {
+            assignees.push($('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>'));
+            continue;
+        }
+
+        if(typeof user === 'string') user = {account: user};
+        if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
+        if(!user.name && window.users && window.users[user.account]) user.name = window.users[user.account];
+
+        assignees.push($('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe"></div>').avatar({user: user}));
     }
+
+    if(assignees.length > 3) assignees.splice(3, assignees.length - 3, '<span>...</span>');
+
+    return assignees;
 }
 
 /**

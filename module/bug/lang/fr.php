@@ -176,6 +176,7 @@ $lang->bug->labelPostponed = 'Postponed';
 $lang->bug->changed        = 'Changed';
 $lang->bug->storyChanged   = 'Story Changed';
 $lang->bug->linkMR         = 'Related MRs';
+$lang->bug->linkCommit     = 'Related Commits';
 $lang->bug->duplicateTip   = 'Please enter keyword search';
 
 /* Page tags. */
@@ -396,18 +397,20 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Etapes résolutio
 
 /* Operating record. */
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved            = array('main' => '$date, résolu par <strong>$actor</strong> et la résolution est <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
-$lang->bug->action->tostory             = array('main' => '$date, converti par <strong>$actor</strong> en <strong>Story</strong> avec ID <strong>$extra</strong>.');
-$lang->bug->action->totask              = array('main' => '$date, importé par <strong>$actor</strong> en tant que <strong>Task</strong> avec ID <strong>$extra</strong>.');
-$lang->bug->action->converttotask       = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong>，with ID <strong>$extra</strong>。');
-$lang->bug->action->linked2plan         = array('main' => '$date, lié par <strong>$actor</strong> au Plan <strong>$extra</strong>.');
-$lang->bug->action->unlinkedfromplan    = array('main' => '$date, supprimé par <strong>$actor</strong> du Plan <strong>$extra</strong>.');
-$lang->bug->action->linked2build        = array('main' => '$date, lié par <strong>$actor</strong> au Build <strong>$extra</strong>.');
-$lang->bug->action->unlinkedfrombuild   = array('main' => '$date, retiré par <strong>$actor</strong> du Build <strong>$extra</strong>.');
-$lang->bug->action->linked2release      = array('main' => '$date, ajouté par <strong>$actor</strong> à la Release <strong>$extra</strong>.');
-$lang->bug->action->unlinkedfromrelease = array('main' => '$date, retiré par <strong>$actor</strong> de la Release <strong>$extra</strong>.');
-$lang->bug->action->linkrelatedbug      = array('main' => '$date, associé par <strong>$actor</strong> au Bug <strong>$extra</strong>.');
-$lang->bug->action->unlinkrelatedbug    = array('main' => '$date, dissocié par <strong>$actor</strong> du Bug <strong>$extra</strong>.');
+$lang->bug->action->resolved             = array('main' => '$date, résolu par <strong>$actor</strong> et la résolution est <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
+$lang->bug->action->tostory              = array('main' => '$date, converti par <strong>$actor</strong> en <strong>Story</strong> avec ID <strong>$extra</strong>.');
+$lang->bug->action->totask               = array('main' => '$date, importé par <strong>$actor</strong> en tant que <strong>Task</strong> avec ID <strong>$extra</strong>.');
+$lang->bug->action->converttotask        = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong>，with ID <strong>$extra</strong>。');
+$lang->bug->action->linked2plan          = array('main' => '$date, lié par <strong>$actor</strong> au Plan <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromplan     = array('main' => '$date, supprimé par <strong>$actor</strong> du Plan <strong>$extra</strong>.');
+$lang->bug->action->linked2build         = array('main' => '$date, lié par <strong>$actor</strong> au Build <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfrombuild    = array('main' => '$date, retiré par <strong>$actor</strong> du Build <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromrelease  = array('main' => '$date, retiré par <strong>$actor</strong> de la Release <strong>$extra</strong>.');
+$lang->bug->action->linked2release       = array('main' => '$date, ajouté par <strong>$actor</strong> à la Release <strong>$extra</strong>.');
+$lang->bug->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->bug->action->linkrelatedbug       = array('main' => '$date, associé par <strong>$actor</strong> au Bug <strong>$extra</strong>.');
+$lang->bug->action->unlinkrelatedbug     = array('main' => '$date, dissocié par <strong>$actor</strong> du Bug <strong>$extra</strong>.');
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Sélect Build';

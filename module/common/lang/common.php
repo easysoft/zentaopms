@@ -85,6 +85,8 @@ $lang->acl         = new stdclass();
 $lang->curd        = new stdclass();
 $lang->sonarqube   = new stdclass();
 $lang->app         = new stdclass();
+$lang->zahost      = new stdclass();
+$lang->zanode      = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

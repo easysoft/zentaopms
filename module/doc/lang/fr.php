@@ -249,6 +249,7 @@ $lang->doc->errorEmptyLib        = 'No data in document library.';
 $lang->doc->confirmUpdateContent = 'You have a document that is not saved from last time. Do you want to continue editing it?';
 $lang->doc->selectLibType        = 'Please select a type of doc library.';
 $lang->doc->noLibreOffice        = 'You does not have access to office conversion settings!';
+$lang->doc->errorParentChapter   = 'The parent chapter cannot be its own chapter or sub chapter!';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = 'Les utilisateurs qui ont accès au Product peuvent y accéder.';
 $lang->doc->noticeAcl['lib']['product']['custom']    = 'Les utilisateurs qui ont accès au Product ou les utilisateurs de la Liste Blanche peuvent y accéder.';

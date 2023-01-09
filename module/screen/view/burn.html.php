@@ -4,17 +4,25 @@
 <?php js::set('executions', $executions);?>
 <div class='header'>
   <div class='img-header'>
-    <h2 class='title'>迭代燃尽图</h2>
+    <h2 class='title'>迭代燃尽图大屏</h2>
     <span class='time'><?php echo '更新时间:' . $date;?></span>
   </div>
 </div>
 <div class='content'>
+  <?php if(!empty($executions)):?>
   <div class='burn'>
     <?php foreach($executions as $executionID => $execution):?>
-      <div class="container" id= <?php echo 'burn' . $executionID;?>>
+      <div class="container" id="<?php echo 'burn' . $executionID;?>">
       </div>
     <?php endforeach;?>
   </div>
+  <?php else:?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->screen->noData;?></span>
+    </p>
+  </div>
+  <?php endif;?>
 </div>
 <script>
 function initBurnChar()
@@ -79,7 +87,7 @@ function initBurnChar()
                 width: 2,
                 type: 'solid'
               }
-            }
+            },
           },
           series: [
             {

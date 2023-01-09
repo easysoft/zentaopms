@@ -155,6 +155,7 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->loadModel('product')->saveState($productID, $this->products);
+        $product   = $this->product->getByID($productID);
         if($this->app->tab == 'project')
         {
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
@@ -167,7 +168,7 @@ class testtask extends control
             }
 
             $this->loadModel('project')->setMenu($projectID);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', 0, '', false);
+            if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', 0, '', false);
         }
         else
         {
@@ -194,7 +195,7 @@ class testtask extends control
         $this->view->tasks       = $this->testtask->getProductUnitTasks($productID, $browseType, $sort, $pager);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
-        $this->view->product     = $this->product->getByID($productID);
+        $this->view->product     = $product;
         $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
 
         $this->display();
@@ -249,7 +250,7 @@ class testtask extends control
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID, 'stagefilter');
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk,withexecution', $projectID, 'project', '', false);
 
         $execution = $this->loadModel('execution')->getByID($executionID);
         if(!empty($execution) and $execution->type == 'kanban') $this->lang->testtask->execution = str_replace($this->lang->execution->common, $this->lang->kanban->common, $this->lang->testtask->execution);
@@ -516,7 +517,7 @@ class testtask extends control
 
         /* Get execution type and set assignedToList. */
         $execution = $this->execution->getById($task->execution);
-        if($execution->acl == 'private')
+        if($execution and $execution->acl == 'private')
         {
             $assignedToList = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
         }
@@ -578,6 +579,7 @@ class testtask extends control
         $this->view->suites         = $this->loadModel('testsuite')->getSuitePairs($productID);
         $this->view->suiteName      = isset($suiteName) ? $suiteName : $this->lang->testtask->browseBySuite;
         $this->view->canBeChanged   = $canBeChanged;
+        $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
 
         $this->display();
     }
@@ -815,13 +817,18 @@ class testtask extends control
                     $executions[$executionID] = $project->name . "({$this->lang->project->disableExecution})";
                 }
             }
+            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $executionID, 'execution', $task->build, false);
+        }
+        else
+        {
+            $builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk,withexecution', $task->project, 'project', $task->build, false);
         }
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->task         = $task;
         $this->view->project      = $this->project->getByID($projectID);
         $this->view->executions   = $executions;
-        $this->view->builds       = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');
+        $this->view->builds       = empty($productID) ? array() : $builds;
         $this->view->testreports  = $this->loadModel('testreport')->getPairs($task->product, $task->testreport);
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted|noclosed', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
@@ -1203,11 +1210,13 @@ class testtask extends control
      * Run case.
      *
      * @param  int    $runID
-     * @param  String $extras   others params, forexample, caseID=10, version=3
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function runCase($runID, $caseID = 0, $version = 0)
+    public function runCase($runID, $caseID = 0, $version = 0, $confirm = '')
     {
         if($runID)
         {
@@ -1221,6 +1230,18 @@ class testtask extends control
 
         $caseID     = $caseID ? $caseID : $run->case->id;
         $preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        $automation = $this->loadModel('zanode')->getAutomationByProduct($run->case->product);
+        $confirmURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=yes");
+        $cancelURL  = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
+
+        if($automation and $confirm == '' and $run->case->auto == 'auto') return print(js::confirm($this->lang->zanode->runCaseConfirm, $confirmURL, $cancelURL));
+        if($confirm == 'yes')
+        {
+            $resultID = $this->testtask->initResult($runID, $caseID, $run->case->version, $automation->node);
+            if(!dao::isError()) $this->zanode->runZTFScript($automation->id, $caseID, $resultID);
+            if(dao::isError()) return print(js::error(dao::getError()) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+        }
+
         if(!empty($_POST))
         {
             $caseResult = $this->testtask->createResult($runID);
@@ -1283,6 +1304,7 @@ class testtask extends control
         $this->view->caseID   = $caseID;
         $this->view->version  = $version;
         $this->view->runID    = $runID;
+        $this->view->confirm  = $confirm;
 
         $this->display();
     }
@@ -1293,13 +1315,17 @@ class testtask extends control
      * @param  int    $productID
      * @param  string $orderBy
      * @param  string $from
+     * @param  int    $taskID
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase', $taskID = 0)
+    public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase', $taskID = 0, $confirm = '')
     {
         $this->loadModel('tree');
         $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
+        $automation = $this->loadModel('zanode')->getAutomationByProduct($productID);
+
         if($this->post->results)
         {
             $this->testtask->batchRun($from, $taskID);
@@ -1356,7 +1382,13 @@ class testtask extends control
 
         /* Set modules. */
         $moduleOptionMenu = array(0 => '/');
-        foreach($cases as $case) $moduleOptionMenu += $this->tree->getModulesName($case->module);
+        foreach($cases as $caseID => $case)
+        {
+            if($case->auto == 'auto' and $confirm == 'yes') unset($cases[$caseID]);
+            $moduleOptionMenu += $this->tree->getModulesName($case->module);
+        }
+        if(empty($cases)) return print(js::locate($url));
+
         $this->view->moduleOptionMenu = $moduleOptionMenu;
 
         /* If case has changed and not confirmed, remove it. */
@@ -1386,6 +1418,7 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->batchRun;
         $this->view->from       = $from;
+        $this->view->confirm    = $confirm;
         $this->display();
     }
 
@@ -1420,7 +1453,7 @@ class testtask extends control
         $this->view->case    = $case;
         $this->view->runID   = $runID;
         $this->view->results = $results;
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $case->branch, $params = '');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $case->branch);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         $this->display();
@@ -1490,7 +1523,7 @@ class testtask extends control
 
         $projectID  = $this->app->tab == 'qa' ? 0 : $this->session->project;
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk', 0, 'execution', '', false);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -1500,6 +1533,7 @@ class testtask extends control
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->view->productID  = $productID;
+        $this->view->projectID  = $projectID;
         $this->display();
     }
 
@@ -1582,5 +1616,19 @@ class testtask extends control
         $this->view->testtasksPinyin = common::convert2Pinyin($namePairs);
 
         $this->display();
+    }
+
+    /**
+     * Ajax get test result info.
+     *
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetResult($resultID)
+    {
+        $result = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq((int)$resultID)->fetch();
+        $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
     }
 }

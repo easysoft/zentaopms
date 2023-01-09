@@ -18,3 +18,4 @@ td.c-name > .project-type-label {flex: 0 0 36px; padding-right: 2px;}
 span.table-nest-icon.table-nest-toggle {min-width: 22px; max-width: 22px;}
 #projectForm .c-name, #executionTableList .c-name, #programTableList .c-name {padding-right:47px;}
 #mainMenu .pull-left > .btn-group > a > .text{overflow: hidden;display: block;}
+#mainMenu .pull-right .icon-list{padding-left: 7px;}

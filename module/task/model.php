@@ -153,7 +153,12 @@ class taskModel extends model
             $requiredFields = trim($requiredFields, ',');
 
             /* Fix Bug #2466 */
-            if($this->post->multiple) $task->assignedTo = '';
+            if($this->post->multiple)  $task->assignedTo = '';
+            if($task->mode == 'multi')
+            {
+                $task->assignedTo   = isset($_POST['team'][0]) ? $_POST['team'][0] : '';
+                $task->assignedDate = helper::now();
+            }
             if(!$this->post->multiple or count(array_filter($this->post->team)) < 1) $task->mode = '';
             $this->dao->insert(TABLE_TASK)->data($task, $skip = 'gitlab,gitlabProject')
                 ->autoCheck()
@@ -940,9 +945,10 @@ class taskModel extends model
             /* Insert or update team. */
             if($mode == 'multi' and isset($teams[$account]))
             {
-                $this->dao->update(TABLE_TASKTEAM)->set("estimate= estimate + {$member->estimate}")
-                    ->set("`left` = `left` + {$member->left}")
-                    ->set("`consumed` = `consumed` + {$member->consumed}")
+                $this->dao->update(TABLE_TASKTEAM)
+                    ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
+                    ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
+                    ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
                     ->where('task')->eq($member->task)
                     ->andWhere('account')->eq($member->account)
                     ->exec();
@@ -1066,6 +1072,7 @@ class taskModel extends model
 
         /* If a multiple task is assigned to a team member who is not the task, assign to the team member instead. */
         if(!$this->post->assignedTo and !empty($oldTask->team) and !empty($_POST['team'])) $_POST['assignedTo'] = $this->getAssignedTo4Multi($_POST['team'], $oldTask);
+        if(!$oldTask->mode and !$this->post->assignedTo and !empty($_POST['team'])) $_POST['assignedTo'] = $_POST['team'][0];
 
         /* When the selected parent task is a common task and has consumption, select other parent tasks. */
         if($this->post->parent > 0)
@@ -1094,6 +1101,7 @@ class taskModel extends model
             ->setIF(strpos($this->config->task->edit->requiredFields, 'story') !== false,    'story',    $this->post->story)
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
 
+            ->setIF($this->post->mode   == 'single', 'mode', '')
             ->setIF($this->post->status == 'done', 'left', 0)
             ->setIF($this->post->status == 'done'   and !$this->post->finishedBy,   'finishedBy',   $this->app->user->account)
             ->setIF($this->post->status == 'done'   and !$this->post->finishedDate, 'finishedDate', $now)
@@ -1191,6 +1199,11 @@ class taskModel extends model
             {
                 $design = $this->loadModel('design')->getByID($task->design);
                 $this->dao->update(TABLE_TASK)->set('designVersion')->eq($design->version)->where('id')->eq($taskID)->exec();
+            }
+
+            if($_POST['mode'] == 'single')
+            {
+                $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
             }
 
             /* Record task version. */
@@ -1827,9 +1840,18 @@ class taskModel extends model
         foreach($record->dates as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         if(dao::isError()) return false;
 
+        $task       = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();;
+        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
+
+        /* Check if the current user is in the team. */
+        $inTeam = empty($task->team) ? true : false;
+        foreach($task->team as $teamMember)
+        {
+            if($teamMember->account == $this->app->user->account) $inTeam = true;
+        }
+        if(!$inTeam) return false;
+
         $estimates    = array();
-        $task         = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();;
-        $task->team   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
         $earliestTime = '';
         foreach(array_keys($record->dates) as $id)
         {
@@ -2622,7 +2644,7 @@ class taskModel extends model
             ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel,pause')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
@@ -3204,6 +3226,16 @@ class taskModel extends model
         else
         {
             $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+        }
+
+        if($task->mode == 'multi')
+        {
+            $teamMembers = $this->dao->select('t1.realname')->from(TABLE_USER)->alias('t1')
+                ->leftJoin(TABLE_TASKTEAM)->alias('t2')
+                ->on('t1.account = t2.account')
+                ->where('t2.task')->eq($task->id)
+                ->fetchPairs();
+            $task->teamMembers= join(',', array_keys($teamMembers));
         }
 
         return $task;
@@ -3921,8 +3953,15 @@ class taskModel extends model
     public function getToAndCcList($task)
     {
         /* Set toList and ccList. */
-        $toList = $task->assignedTo;
-        $ccList = trim($task->mailto, ',');
+        $toList         = $task->assignedTo;
+        $ccList         = trim($task->mailto, ',');
+        $toTeamTaskList = '';
+        if($task->mode == 'multi')
+        {
+            $toTeamTaskList = $this->getTeamMembers($task->id);
+            $toTeamTaskList = implode(',', $toTeamTaskList);
+            $toList         = $toTeamTaskList;
+        }
 
         if(empty($toList))
         {
@@ -4283,8 +4322,9 @@ class taskModel extends model
     private function updateExecutionEsDateByGantt($objectID, $objectType, $postData)
     {
         $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
-        $parent     = $objectData->parent;
         $project    = $objectData->project;
+        $parent     = '';
+        if($objectData->project != $objectData->parent) $parent = $objectData->parent;
 
         if(empty($parent))
         {
@@ -4338,5 +4378,54 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
             $order ++;
         }
+    }
+
+    /**
+     * Get task list by conditions.
+     *
+     * @param  object           $conds
+     * @param  string           $orderBy
+     * @param  object           $pager
+     * @access public
+     * @return array
+     */
+    public function getListByConds($conds, $orderBy = 'id_desc', $pager = null)
+    {
+        foreach(array('priList' => array(), 'assignedToList' => array(), 'statusList' => array(), 'idList' => array(), 'taskName' => '') as $condKey => $defaultValue)
+        {
+            if(!isset($conds->$condKey))
+            {
+                $conds->$condKey = $defaultValue;
+                continue;
+            }
+            if(strripos($condKey, 'list') === strlen($condKey) - 4 && !is_array($conds->$condKey)) $conds->$condKey = array_filter(explode(',', $conds->$condKey));
+        }
+
+        return $this->dao->select('*')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->beginIF(!empty($conds->priList))->andWhere('pri')->in($conds->priList)->fi()
+            ->beginIF(!empty($conds->assignedToList))->andWhere('assignedTo')->in($conds->assignedToList)->fi()
+            ->beginIF(!empty($conds->statusList))->andWhere('status')->in($conds->statusList)->fi()
+            ->beginIF(!empty($conds->idList))->andWhere('id')->in($conds->idList)->fi()
+            ->beginIF(!empty($conds->taskName))->andWhere('name')->like("%{$conds->taskName}%")
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get teamTask members.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function getTeamMembers($taskID)
+    {
+        $taskType = $this->dao->select('mode')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('mode');
+        if($taskType != 'multi') return array();
+        $teamMembers = $this->dao->select('account')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchPairs();
+        return empty($teamMembers) ? $teamMembers : array_keys($teamMembers);
     }
 }

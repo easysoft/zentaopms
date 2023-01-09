@@ -751,6 +751,51 @@ class blockModel extends model
     }
 
     /**
+     * Get scrum issue params.
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function getScrumIssueParams($module = '')
+    {
+        $this->app->loadLang('issue');
+
+        $params = $this->appendCountParams();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get scrum risk params.
+     *
+     * @param  string $module▫
+     * @access public
+     * @return void
+     */
+    public function getScrumRiskParams($module = '')
+    {
+        $this->app->loadLang('risk');
+        $params = $this->appendCountParams();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->risk->featureBar['browse'];
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /**
      * Get execution params.
      *
      * @access public
@@ -847,10 +892,10 @@ class blockModel extends model
             if(empty($moduleName))
             {
                 if(isset($this->lang->block->$blockKey)) $blockPairs[$block] = $this->lang->block->$blockKey;
-                if($blockKey == 'html')      $blockPairs[$block] = 'HTML';
-                if($blockKey == 'flowchart') $blockPairs[$block] = $this->lang->block->lblFlowchart;
-                if($blockKey == 'dynamic')   $blockPairs[$block] = $this->lang->block->dynamic;
-                if($blockKey == 'welcome')   $blockPairs[$block] = $this->lang->block->welcome;
+                if($blockKey == 'html')    $blockPairs[$block] = 'HTML';
+                if($blockKey == 'guide')   $blockPairs[$block] = $this->lang->block->guide;
+                if($blockKey == 'dynamic') $blockPairs[$block] = $this->lang->block->dynamic;
+                if($blockKey == 'welcome') $blockPairs[$block] = $this->lang->block->welcome;
             }
             else
             {

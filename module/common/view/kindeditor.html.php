@@ -15,6 +15,11 @@ $editorLang   = isset($editorLangs[$app->getClientLang()]) ? $editorLangs[$app->
 /* set uid for upload. */
 $uid = uniqid('');
 ?>
+<style>
+<?php foreach($editor['id'] as $editorID):?>
+<?php echo "textarea#{$editorID} {display:none}";?>
+<?php endforeach?>
+</style>
 <?php js::import($jsRoot . 'kindeditor/kindeditor.min.js'); ?>
 <?php js::import($jsRoot . "kindeditor/lang/{$editorLang}.js");?>
 <script>

@@ -46,6 +46,7 @@ $lang->task->export              = "Exporter Données";
 $lang->task->exportAction        = "Exporter Tâche";
 $lang->task->reportChart         = "Rapport Graphique";
 $lang->task->fromBug             = 'à partir Bug';
+$lang->task->fromBugID           = 'From Bug ID';
 $lang->task->case                = 'Associée CasTest';
 $lang->task->process             = 'Process Task';
 $lang->task->confirmStoryChange  = "Confirmer Changement";
@@ -182,6 +183,7 @@ $lang->task->noClosed          = 'Non Fermées';
 $lang->task->yesterdayFinished = 'Tâche Terminée Hier';
 $lang->task->allTasks          = 'Tâche';
 $lang->task->linkMR            = 'Related MRs';
+$lang->task->linkCommit        = 'Related Commits';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'A Faire';
@@ -212,8 +214,12 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Fait';
 $lang->task->reasonList['cancel'] = 'Annulé';
 
-$lang->task->modeList['linear'] = 'Serial';
-$lang->task->modeList['multi']  = 'Parallel';
+$lang->task->modeList['linear'] = 'Multiple Person Serial';
+$lang->task->modeList['multi']  = 'Multiple Person Parallel';
+
+$lang->task->editModeList['single'] = 'Single';
+$lang->task->editModeList['linear'] = 'Serial';
+$lang->task->editModeList['multi']  = 'Parallel';
 
 $lang->task->afterChoices['continueAdding'] = ' Continuer Ajouter Tâches';
 $lang->task->afterChoices['toTaskList']     = 'Aller à la liste des Tâches';
@@ -225,6 +231,10 @@ $lang->task->legendLife   = 'Vie de la Tâche';
 $lang->task->legendDesc   = 'Description Tâche';
 $lang->task->legendDetail = 'Task Detail';
 $lang->task->legendMisc   = 'Misc.';
+
+$lang->task->action = new stdclass();
+$lang->task->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
 
 $lang->task->confirmDelete             = "Voulez-vous réellement supprimer cette tâche ?";
 $lang->task->confirmDeleteEstimate     = "Voulez-vous la supprimer ?";
@@ -241,6 +251,7 @@ $lang->task->confirmRecord             = '"Heures Restantes" à 0. Voulez-vous p
 $lang->task->confirmTransfer           = '"Left Hour" is 0，Do you want to assign to <strong>%s</strong> task?';
 $lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory           = "Aucune Story n'est associée. Vous pouvez %s pour ce projet, alors %s.";
+$lang->task->noticeLinkStoryNoProduct  = "No story has been linked.";
 $lang->task->noticeSaveRecord          = "Votre temps n'a pas été sauvé. Enregistrez-le d'abord.";
 $lang->task->noticeManageTeam          = 'Task status is %s, can not manage team.';
 $lang->task->commentActions            = '%s. %s, commenté par <strong>%s</strong>.';

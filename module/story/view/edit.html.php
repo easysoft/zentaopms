@@ -24,6 +24,8 @@
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php js::set('storyStatus', $story->status);?>
 <?php js::set('lastReviewer', explode(',', $lastReviewer))?>
+<?php js::set('twins', $story->twins)?>
+<?php js::Set('relievedTwinsTip', $lang->story->relievedTwinsTip)?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -98,6 +100,21 @@
           </div>
           <?php endif;?>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
+          <?php if(!empty($twins)):?>
+          <div class='detail' id='legendTwins'>
+            <div class='detail-title'>
+              <?php echo $lang->story->changeSyncTip;?>
+              <span data-toggle='tooltip' data-placement='right' title='<?php echo $lang->story->syncTip;?>'><i class='icon-help'></i></span>
+            </div>
+            <div class='form-group'>
+              <div>
+                <ul class='list-unstyled'>
+                  <?php include './blocktwins.html.php';?>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->comment;?></div>
             <div class='form-group'>
@@ -174,8 +191,9 @@
                 <th><?php echo $lang->story->plan;?></th>
                 <td>
                   <div class='input-group' id='planIdBox'>
-                  <?php $multiple = ($this->session->currentProductType != 'normal' and empty($story->branch)) ? true : false;?>
-                  <?php echo html::select($multiple ? 'plan[]' : 'plan', $plans, $story->plan, "class='form-control chosen'" . ($multiple ? ' multiple' : ''));
+                  <?php $planCount = !empty($story->planTitle) ? count($story->planTitle) : 0?>
+                  <?php $multiple  = ($this->session->currentProductType != 'normal' and empty($story->branch) and $planCount > 1) ? 'multiple' : '';?>
+                  <?php echo html::select(!empty($multiple) ? 'plan[]' : 'plan', $plans, $story->plan, "class='form-control chosen' " . $multiple);
                   if(count($plans) == 1)
                   {
                       echo "<span class='input-group-addon'>";
@@ -209,17 +227,21 @@
                 <th><?php echo $lang->story->stage;?></th>
                 <td>
                 <?php
+                $maxStage    = $story->stage;
+                $stageList   = join(',', array_keys($this->lang->story->stageList));
+                $maxStagePos = strpos($stageList, $maxStage);
                 if($story->stages and $branchTagOption)
                 {
                     foreach($story->stages as $branch => $stage)
                     {
-                        if(isset($branchTagOption[$branch])) echo '<p>' . $branchTagOption[$branch] . html::select("stages[$branch]", $lang->story->stageList, $stage, "class='form-control chosen'") . '</p>';
+                        if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) > $maxStagePos)
+                        {
+                            $maxStage    = $stage;
+                            $maxStagePos = strpos($stageList, $stage);
+                        }
                     }
                 }
-                else
-                {
-                    echo html::select('stage', $lang->story->stageList, $story->stage, "class='form-control chosen'");
-                }
+                echo html::select('stage', $lang->story->stageList, $maxStage, "class='form-control chosen'");
                 ?>
                 </td>
               </tr>

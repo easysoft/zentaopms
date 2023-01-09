@@ -375,7 +375,7 @@ class baseControl
 
     /**
      * 如果客户端是手机的话，视图文件增加m.前缀。
-     * If the clent is mobile, add m. as prefix for view file.
+     * If the client is mobile, add m. as prefix for view file.
      *
      * @access public
      * @return void
@@ -600,7 +600,6 @@ class baseControl
 
         if(!empty($jsExtPath))
         {
-            $realModulePath = realPath($modulePath);
             foreach($jsExtPath as $jsPath)
             {
                 if(empty($jsPath)) continue;
@@ -730,7 +729,7 @@ class baseControl
         chdir(dirname($viewFile));
 
         /**
-         * 使用extract安定ob方法渲染$viewFile里面的代码。
+         * 使用extract和ob方法渲染$viewFile里面的代码。
          * Use extract and ob functions to eval the codes in $viewFile.
          */
         extract((array)$this->view);

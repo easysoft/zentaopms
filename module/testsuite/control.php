@@ -89,7 +89,7 @@ class testsuite extends control
                 $privateNum++;
             }
         }
-        $suitesNum = !empty(count($suites, 0)) ? count($suites, 0) : 0;
+        $suitesNum = !empty($suites) ? count($suites) : 0;
         $publicNum = $suitesNum - $privateNum;
         $summary   = str_replace(array('%total%', '%public%', '%private%'), array($suitesNum, $publicNum, $privateNum), $this->lang->testsuite->summary);
 
@@ -205,6 +205,7 @@ class testsuite extends control
         $this->view->modules      = $this->loadModel('tree')->getOptionMenu($suite->product, 'case', 0, 'all');
         $this->view->branches     = $this->loadModel('branch')->getPairs($suite->product);
         $this->view->canBeChanged = common::canBeChanged('testsuite', $suite);
+        $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
 
         $this->display();
     }

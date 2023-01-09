@@ -7,6 +7,11 @@
  */
 function loadBranches(productID)
 {
+    if($('input[name=isIntegrated]:checked').val() == 'yes')
+    {
+        $('#branchBox').closest('tr').addClass('hidden');
+        return false;
+    }
     $('#branch').remove();
     $('#branch_chosen').remove();
     var oldBranch = 0;
@@ -15,13 +20,17 @@ function loadBranches(productID)
         oldBranch = productGroups[productID]['branches'];
     }
 
-    projectID = currentTab == 'execution' ? executionID : projectID;
-    $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + projectID), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + $('#execution').val() + '&withMainBranch=true&isSiblings=no&fieldID=0&multiple=multiple'), function(data)
     {
         if(data)
         {
-            $('#product').closest('.input-group').append(data);
+            $('#branchBox').append(data);
             $('#branch').chosen();
+            $('#branchBox').closest('tr').removeClass('hidden');
+        }
+        else
+        {
+            $('#branchBox').closest('tr').addClass('hidden');
         }
     });
 }

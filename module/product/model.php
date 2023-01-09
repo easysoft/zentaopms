@@ -85,6 +85,8 @@ class productModel extends model
 
         if(empty($products)) return;
 
+        if($this->app->tab == 'project' and strpos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
+
         $this->app->loadLang('product');
         if(!$isQaModule and !$productID and !$isFeedbackModel)
         {
@@ -99,7 +101,7 @@ class productModel extends model
 
         if($isQaModule and $this->app->tab == 'project')
         {
-            if($this->app->tab == 'project')   $extra = $currentMethod == 'testcase' ? $extra : $this->session->project;
+            if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : $this->session->project;
             if($this->app->tab == 'execution') $extra = $this->session->execution;
         }
 
@@ -380,16 +382,17 @@ class productModel extends model
      * @param  int          $projectID
      * @param  string       $status   all|noclosed
      * @param  string|array $append
+     * @param  bool         $noDeleted
      * @access public
      * @return array
      */
-    public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '')
+    public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '', $noDeleted = true)
     {
-        $products = empty($projectID) ? $this->getList(0, 'all', 0, 0, 'all') : $this->getProducts($projectID, $status, '', true, $append);
+        $products = empty($projectID) ? $this->getList(0, 'all', 0, 0, 'all') : $this->getProducts($projectID, $status, '', true, $append, $noDeleted);
         $pairs    = array();
         if(!empty($products))
         {
-            foreach($products as $product) $pairs[$product->id] = $product->name;
+            foreach($products as $product) $pairs[$product->id] = $product->deleted ? $product->name . "({$this->lang->product->deleted})" : $product->name;
         }
 
         return $pairs;
@@ -422,10 +425,11 @@ class productModel extends model
      * @param  string       $orderBy
      * @param  bool         $withBranch
      * @param  string|array $append
+     * @param  bool         $noDeleted
      * @access public
      * @return array
      */
-    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $withBranch = true, $append = '')
+    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $withBranch = true, $append = '', $noDeleted = true)
     {
         if(defined('TUTORIAL'))
         {
@@ -439,7 +443,8 @@ class productModel extends model
         $projectProducts = $this->dao->select("t1.branch, t1.plan, t2.*")
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('t2.deleted')->eq(0)
+            ->where('1=1')
+            ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
             ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
             ->andWhere('t2.vision')->eq($this->config->vision)
@@ -553,7 +558,7 @@ class productModel extends model
             {
                 if($product->line == $id)
                 {
-                    $product->name = $name . '/' . $product->name;
+                    if($this->config->systemMode == 'ALM') $product->name = $name . '/' . $product->name;
                     $productList[] = $product;
                     unset($products[$key]);
                 }
@@ -1312,7 +1317,7 @@ class productModel extends model
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        $programList = $this->loadModel('program')->getParentPairs('', 'noclosed');
+        $programList = $this->loadModel('program')->getParentPairs('', 'all');
         foreach($projectList as $id => $project)
         {
             $projectList[$id]->programName = $project->parent ? zget($programList, $project->parent, '') : '';
@@ -1576,10 +1581,16 @@ class productModel extends model
                 if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
 
                 $year = substr($plan->end, 0, 4);
-                $roadmap[$year][$plan->branch][] = $plan;
+                $branchIdList = explode(',', trim($plan->branch, ','));
+                $branchIdList = array_unique($branchIdList);
+                foreach($branchIdList as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $roadmap[$year][$branchID][] = $plan;
+                }
                 $total++;
 
-                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);
+                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap, $branch);
             }
         }
 
@@ -1593,14 +1604,20 @@ class productModel extends model
             foreach($releases as $release)
             {
                 $year = substr($release->date, 0, 4);
-                $roadmap[$year][$release->branch][] = $release;
+                $branchIdList = explode(',', trim($release->branch, ','));
+                $branchIdList = array_unique($branchIdList);
+                foreach($branchIdList as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $roadmap[$year][$branchID][] = $release;
+                }
                 $total++;
 
-                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap);
+                if($count > 0 and $total >= $count) return $this->processRoadmap($roadmap, $branch);
             }
         }
 
-        if($count > 0) return $this->processRoadmap($roadmap);
+        if($count > 0) return $this->processRoadmap($roadmap, $branch);
 
         $groupRoadmap = array();
         foreach($roadmap as $year => $branchRoadmaps)
@@ -1641,16 +1658,18 @@ class productModel extends model
      * Process roadmap.
      *
      * @param  array  $roadmap
+     * @param  int    $branch
      * @access public
      * @return array
      */
-    public function processRoadmap($roadmapGroups)
+    public function processRoadmap($roadmapGroups, $branch)
     {
         $newRoadmap = array();
         foreach($roadmapGroups as $year => $branchRoadmaps)
         {
-            foreach($branchRoadmaps as $branch => $roadmaps)
+            foreach($branchRoadmaps as $branchID => $roadmaps)
             {
+                if($branch != $branchID) continue;
                 foreach($roadmaps as $roadmap) $newRoadmap[] = $roadmap;
             }
         }
@@ -1852,6 +1871,21 @@ class productModel extends model
 
         if($storyType == 'requirement') $stories = $requirements;
 
+        $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('type')->eq('story')
+            ->andWhere('closedReason')->eq('done')
+            ->groupBy('product')
+            ->fetchPairs();
+
+        $unclosedStory = $this->dao->select('product, count(1) as unclosed')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('story')
+            ->andWhere('status')->ne('closed')
+            ->groupBy('product')
+            ->fetchPairs();
+
         $plans = $this->dao->select('product, count(*) AS count')
             ->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
@@ -1877,6 +1911,7 @@ class productModel extends model
         $unResolved = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('status')->eq('active')
+            ->orWhere('resolution')->eq('postponed')
             ->andWhere('product')->in($productKeys)
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
@@ -1935,7 +1970,10 @@ class productModel extends model
         $stats = array();
         foreach($products as $key => $product)
         {
-            $product->stories      = $stories[$product->id];
+            $product->stories                 = $stories[$product->id];
+            $product->stories['finishClosed'] = isset($finishClosedStory[$product->id]) ? $finishClosedStory[$product->id] : 0;
+            $product->stories['unclosed']     = isset($unclosedStory[$product->id]) ? $unclosedStory[$product->id] : 0;
+
             $product->requirements = $requirements[$product->id];
             $product->plans        = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
             $product->releases     = isset($releases[$product->id]) ? $releases[$product->id] : 0;
@@ -2344,9 +2382,13 @@ class productModel extends model
             }
             elseif($module == 'testcase' and in_array($method, array('groupCase', 'zeroCase')) and $this->app->tab == 'project')
             {
-                parse_str($extra, $output);
-                $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
-                $link      = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : 'all') . "&groupBy=&projectID=$projectID") . "#app=project";
+                $projectID = $extra;
+                if(strpos($extra, 'projecID') !== false)
+                {
+                    parse_str($extra, $output);
+                    $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
+                }
+                $link = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : 'all') . "&groupBy=&projectID=$projectID") . "#app=project";
             }
             elseif($module == 'testcase' and $method == 'browse')
             {

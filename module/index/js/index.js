@@ -1,11 +1,5 @@
 (function()
 {
-    if(showFeatures && vision == 'rnd')
-    {
-        /* Show features dialog. */
-        new $.zui.ModalTrigger({url: $.createLink('misc', 'features'), type: 'iframe', width: 900, className: 'showFeatures', showHeader: false, backdrop: 'static'}).show();
-    }
-
     /* Init variables */
     var openedApps      = {}; // Key-value to save appCode-app pairs
     var appsMap         = {}; // Key-value to save opened appCode-app pairs
@@ -268,10 +262,10 @@
         var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
         if (url && (!isSameUrl || forceReload !== false))
         {
-            app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
+            app.$app.toggleClass('open-from-hidden', app.zIndex < openedAppZIndex)
             reloadApp(appCode, url, true);
         }
-        app.zIndex = openedAppZIndex++;
+        app.zIndex = ++openedAppZIndex;
         app.$app.show().css('z-index', app.zIndex);
 
         /* Update task bar */
@@ -464,7 +458,7 @@
 
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
 
-        if(!isSameUrl) app.$app.addClass('loading');
+        if(!isSameUrl || app.zIndex < openedAppZIndex) app.$app.addClass('loading');
         if(app._loadTimer) clearTimeout(app._loadTimer);
         app._loadTimer = setTimeout(function()
         {

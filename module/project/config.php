@@ -125,14 +125,14 @@ $config->project->datatable->fieldList['consume']['pri']      = '7';
 
 $config->project->datatable->fieldList['progress']['title']    = 'progress';
 $config->project->datatable->fieldList['progress']['fixed']    = 'no';
-$config->project->datatable->fieldList['progress']['width']    = '60';
+$config->project->datatable->fieldList['progress']['width']    = '65';
 $config->project->datatable->fieldList['progress']['required'] = 'no';
 $config->project->datatable->fieldList['progress']['sort']     = 'no';
 $config->project->datatable->fieldList['progress']['pri']      = '6';
 
 $config->project->datatable->fieldList['actions']['title']    = 'actions';
 $config->project->datatable->fieldList['actions']['fixed']    = 'right';
-$config->project->datatable->fieldList['actions']['width']    = '180';
+$config->project->datatable->fieldList['actions']['width']    = '165';
 $config->project->datatable->fieldList['actions']['required'] = 'yes';
 $config->project->datatable->fieldList['actions']['pri']      = '1';
 
@@ -141,9 +141,11 @@ if(isset($config->setCode) and $config->setCode == 0) unset($config->project->da
 $config->project->checkList = new stdclass();
 $config->project->checkList->scrum     = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case');
 $config->project->checkList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask');
+$config->project->checkList->kanban    = array('execution', 'build');
 $config->project->maxCheckList = new stdclass();
 $config->project->maxCheckList->scrum     = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case', 'issue', 'risk', 'meeting');
 $config->project->maxCheckList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask', 'review', 'build', 'researchplan', 'issue', 'risk', 'opportunity', 'auditplan', 'gapanalysis', 'meeting');
+$config->project->maxCheckList->kanban    = array('execution', 'build');
 
 $config->project->search['module']                   = 'project';
 $config->project->search['fields']['name']           = $lang->project->name;
@@ -198,5 +200,13 @@ $config->project->noSprintPriv['auditplan']  = array('browse', 'create', 'edit',
 $config->project->includedPriv = $config->project->noSprintPriv;
 $config->project->includedPriv['project'][]  = 'execution';
 $config->project->includedPriv['task']       = array('create');
+$config->project->includedPriv['story']      = array('create', 'batchCreate', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'batchChangePlan', 'batchChangeStage', 'assignTo', 'batchAssignTo', 'activate', 'zeroCase', 'batchEdit', 'import', 'showImport', 'exportTemplate', 'importToLib', 'batchImportToLib', 'relation', 'browse');
+$config->project->includedPriv['bug']        = array('create', 'confirmBug', 'view', 'edit', 'assignTo', 'batchAssignTo', 'resolve', 'activate', 'close', 'export', 'confirmStoryChange', 'delete', 'linkBugs', 'import', 'showImport', 'exportTemplate');
+$config->project->includedPriv['testcase']   = array('groupCase', 'create', 'batchCreate', 'createBug', 'view', 'edit', 'delete', 'export', 'confirmChange', 'confirmStoryChange', 'batchEdit', 'batchDelete', 'linkCases', 'bugs', 'review', 'batchReview', 'batchConfirmStoryChange', 'importFromLib', 'batchCaseTypeChange', 'exportTemplate', 'import', 'showImport', 'confirmLibcaseChange', 'ignoreLibcaseChange', 'submit');
+$config->project->includedPriv['testtask']   = array('create', 'cases', 'groupCase', 'edit', 'delete', 'batchAssign', 'linkcase', 'unlinkcase', 'runcase', 'results', 'batchUnlinkCases', 'report', 'browseUnits', 'unitCases', 'importUnitResult', 'batchRun', 'runDeployCase', 'deployCaseResults');
+$config->project->includedPriv['doc']        = array('createLib', 'editLib', 'deleteLib', 'create', 'edit', 'delete', 'deleteFile', 'allLibs', 'objectLibs', 'collect', 'tableContents', 'showFiles', 'diff', 'manageBook', 'importToPracticeLib', 'importToComponentLib');
+$config->project->includedPriv['repo']       = array('create', 'showSyncCommit', 'browse', 'view', 'diff', 'log', 'revision', 'blame', 'download', 'apiGetRepoByUrl', 'review', 'addBug', 'deleteBug', 'addComment', 'editComment', 'deleteComment');
+$config->project->includedPriv['testreport'] = array('create', 'view', 'delete', 'edit', 'export');
+$config->project->includedPriv['auditplan']  = array('browse', 'create', 'edit', 'batchCreate', 'batchCheck', 'check', 'nc', 'result', 'assignTo');
 $config->project->includedPriv['execution']  = array('create', 'start', 'delete', 'calendar', 'effortCalendar', 'effort', 'taskEffort', 'computeTaskEffort', 'deleterelation', 'maintainrelation', 'relation', 'gantt');
 if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect');

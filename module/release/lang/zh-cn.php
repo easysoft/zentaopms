@@ -24,7 +24,7 @@ $lang->release->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->release->batchUnlinkBug   = "批量移除Bug";
 
 $lang->release->confirmDelete      = "您确认删除该发布吗？";
-$lang->release->confirmLink        = "是否将版本中完成的{$lang->SRCommon}和已解决的Bug关联到发布下？";
+$lang->release->syncFromBuilds     = "将版本中完成的{$lang->SRCommon}和已解决的Bug关联到发布下";
 $lang->release->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";
 $lang->release->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->release->existBuild         = '『版本』已经有『%s』这条记录了。您可以更改『发布名称』或者选择一个『版本』。';
@@ -34,7 +34,7 @@ $lang->release->errorDate          = '发布日期不能大于今天。';
 $lang->release->basicInfo = '基本信息';
 
 $lang->release->id             = 'ID';
-$lang->release->product        = $lang->productCommon;
+$lang->release->product        = '所属产品';
 $lang->release->branch         = '平台/分支';
 $lang->release->project        = '所属项目';
 $lang->release->build          = '版本';

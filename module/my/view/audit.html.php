@@ -53,13 +53,22 @@
       <?php foreach($reviewList as $review):?>
       <?php
       $type = $review->type;
-      if($type == 'project') $type = 'review';
+      if($type == 'projectreview') $type = 'review';
 
-      $typeName = $lang->{$review->type}->common;
+      $typeName = '';
+      if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
       if($type == 'story') $typeName = $lang->my->auditMenu->audit->story;
+      if($review->type == 'projectreview') $typeName = $lang->project->common;
+      if(isset($flows[$review->type])) $typeName = $flows[$review->type];
 
-      $statusList = $lang->$type->statusList;
+      $statusList = array();
+      if(isset($lang->$type->statusList)) $statusList = $lang->$type->statusList;
       if($type == 'attend') $statusList = $lang->attend->reviewStatusList;
+      if(!in_array($type, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$type,") === false)
+      {
+          if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
+          if(isset($flows[$review->type])) $statusList = $rawMethod == 'audit' ? $lang->approval->nodeList : $lang->approval->statusList;
+      }
       ?>
       <tr>
         <td class='c-id'><?php echo $review->id?></td>
@@ -83,7 +92,8 @@
         <td class='c-time text-left'><?php echo $review->time?></td>
         <?php if($rawMethod == 'contribute' and $browseType == 'reviewedbyme'):?>
         <?php
-        $reviewResultList = zget($lang->$type, 'reviewResultList', array());
+        $reviewResultList = array();
+        if(isset($lang->$type))$reviewResultList = zget($lang->$type, 'reviewResultList', array());
         if(strpos(",{$config->my->oaObjectType},", ",$type,") !== false) $reviewResultList = zget($lang->$type, 'reviewStatusList', array());
         ?>
         <td class='c-status'><?php echo zget($reviewResultList, $review->result);?></td>
@@ -113,6 +123,10 @@
           elseif(strpos(",{$config->my->oaObjectType},", ",$module,") !== false)
           {
               common::printLink($module, 'view', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
+          }
+          elseif(!in_array($module, array('story', 'testcase', 'feedback')))
+          {
+              common::printLink($module, 'approvalreview', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
           }
           else
           {

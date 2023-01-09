@@ -1,5 +1,6 @@
 $(function()
 {
+    $('[data-toggle="tooltip"]').tooltip();
     $('.main-side #branch').closest('td').find('#product_chosen .chosen-single').css('width', '153px');
 
     if(storyStatus == 'reviewing')
@@ -89,4 +90,9 @@ $(function()
             maxAutoDropWidth : document.body.scrollWidth + document.getElementById('duplicateStory').offsetWidth - document.getElementById('duplicateStoryBox').getBoundingClientRect().right
         });
     }
+
+    $('#planIdBox').click(function()
+    {
+        $('#planIdBox .chosen-container').find('div').css('width', '280px')
+    });
 })

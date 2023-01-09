@@ -31,7 +31,6 @@
     <div class='page-title'>
       <span class='label label-id'><?php echo $plan->id;?></span>
       <span title='<?php echo $plan->title;?>' class='text'><?php echo $plan->title;?></span>
-      <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branchOption[$branch] . '</span>';?>
       <span class='label label-info label-badge'>
         <?php echo ($plan->begin == $config->productplan->future || $plan->end == $config->productplan->future) ? $lang->productplan->future : $plan->begin . '~' . $plan->end;?>
       </span>
@@ -125,8 +124,8 @@
                 <th class='c-id text-left'>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='w-70px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
                 <?php else:?>
                 <th class='c-id text-left'>
@@ -140,15 +139,15 @@
                 <?php if($canOrder):?>
                 <th class='w-70px'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
                 <?php endif;?>
-                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-                <th class='w-150px text-left'><?php common::printOrderLink('module',     $orderBy, $vars, $lang->story->module);?></th>
-                <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-                <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-                <th class='w-70px text-right'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
-                <th class='w-70px'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
-                <th class='w-80px'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-                <th class='c-actions-1'> <?php echo $lang->actions?></th>
+                <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+                <th class='w-150px text-left'><?php common::printOrderLink('module', $orderBy, $vars, $lang->story->module);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+                <th class='c-user'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                <th class='c-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+                <th class='w-70px text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+                <th class='w-80px'><?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
+                <th class='c-actions-1'><?php echo $lang->actions?></th>
                 <?php endif;?>
               </tr>
             </thead>
@@ -166,13 +165,13 @@
                 <td class='c-id text-left'>
                 <?php printf('%03d', $story->id);?>
                 </td>
-                <td><span class="<?php echo $story->pri ? 'label-pri label-pri-' . $story->pri : "";?>" title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
                   echo $story->title;
                   ?>
                 </td>
+                <td><span class="<?php echo $story->pri ? 'label-pri label-pri-' . $story->pri : "";?>" title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri);?></span></td>
                 <td>
                   <span class='status-story status-<?php echo $story->status?>'>
                     <?php echo $this->processStatus('story', $story);?>
@@ -187,22 +186,20 @@
                   <?php endif;?>
                 </td>
                 <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
-                <td><span class="<?php echo $story->pri ? 'label-pri label-pri-' . $story->pri : "";?>" title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo zget($modulePairs, $story->module, '');?>'><?php echo zget($modulePairs, $story->module, '');?></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
                   echo html::a($viewLink , $story->title, '', "style='color: $story->color' data-app={$this->app->tab}");
                   ?>
                 </td>
+                <td class='text-left nobr' title='<?php echo zget($modulePairs, $story->module, '');?>'><?php echo zget($modulePairs, $story->module, '');?></td>
+                <td><span class="<?php echo $story->pri ? 'label-pri label-pri-' . $story->pri : "";?>" title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri);?></span></td>
+                <td>
+                  <span class='status-story status-<?php echo $story->status?>'><?php echo $this->processStatus('story', $story);?></span>
+                </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
                 <td><?php echo zget($users, $story->assignedTo);?></td>
                 <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-                <td>
-                  <span class='status-story status-<?php echo $story->status?>'>
-                    <?php echo $this->processStatus('story', $story);?>
-                  </span>
-                </td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
@@ -420,8 +417,8 @@
                 <th class='c-id text-left'>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
                 <th class='w-100px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
                 <?php else:?>
                 <th class='c-id text-left'>
@@ -432,12 +429,12 @@
                   <?php endif;?>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-                <th class='text-left'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+                <th class='c-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->bug->status);?></th>
                 <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedToAB);?></th>
-                <th class='w-100px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
-                <th class='w-50px'> <?php echo $lang->actions?></th>
+                <th class='c-actions'> <?php echo $lang->actions?></th>
                 <?php endif;?>
               </tr>
             </thead>
@@ -448,12 +445,10 @@
                 <td class='c-id text-left'>
                   <?php printf('%03d', $bug->id);?>
                 </td>
-                <td><span class='<?php echo $bug->pri ? "label-pri label-pri-{$bug->pri}" : "";?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
+                <td><span class='<?php echo $bug->pri ? "label-pri label-pri-{$bug->pri}" : "";?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri);?></span></td>
                 <td>
-                  <span class='status-bug status-<?php echo $bug->status?>'>
-                    <?php echo $this->processStatus('bug', $bug);?>
-                  </span>
+                  <span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span>
                 </td>
                 <?php else:?>
                 <td class='c-id text-left'>
@@ -463,15 +458,13 @@
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
                 </td>
-                <td><span class='<?php echo $bug->pri ? "label-pri label-pri-{$bug->pri}" : "";?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', "data-app={$this->app->tab}");?></td>
+                <td><span class='<?php echo $bug->pri ? "label-pri label-pri-{$bug->pri}" : "";?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri);?></span></td>
+                <td>
+                  <span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span>
+                </td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
-                <td>
-                  <span class='status-bug status-<?php echo $bug->status?>'>
-                    <?php echo $this->processStatus('bug', $bug);?>
-                  </span>
-                </td>
                 <td class='c-actions'>
                   <?php
                   if($canBeChanged and common::hasPriv('productplan', 'unlinkBug'))
@@ -559,7 +552,11 @@
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th><?php echo $lang->product->branch;?></th>
-                  <td><?php echo $branchOption[$plan->branch];?></td>
+                  <?php
+                  $branches = '';
+                  foreach(explode(',', $branch) as $branchID) $branches .= "{$branchOption[$branchID]},";
+                  ?>
+                  <td><?php echo trim($branches, ',');?></td>
                 </tr>
                 <?php endif;?>
                 <tr>

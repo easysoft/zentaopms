@@ -13,6 +13,7 @@
 <?php js::set('branch',   $branchID);?>
 <?php js::set('lang',     $lang->repo);?>
 <?php js::set('cloneUrl', $cloneUrl);?>
+<?php js::set('syncedRF', $syncedRF);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if(!empty($branchesAndTags)):?>
@@ -94,7 +95,7 @@
     <?php if(common::hasPriv('repo', 'downloadCode')): ?>
     <button type="button" class="btn btn-primary" data-toggle="popover" id="downloadCode" title="<?php echo $lang->repo->downloadCode;?>"><i class='icon icon-sm icon-download'></i> <?php echo $lang->repo->download;?> <i class='icon icon-sm icon-caret-down'></i></button>
     <?php endif;?>
-    <?php if(common::hasPriv('repo', 'create') and $currentProject and !$currentProject->hasProduct) echo html::a(helper::createLink('repo', 'create', "objectID=$objectID"), "<i class='icon icon-plus'></i> " . $this->lang->repo->createAction, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('repo', 'create') and $currentProject) echo html::a(helper::createLink('repo', 'create', "objectID=$objectID"), "<i class='icon icon-plus'></i> " . $this->lang->repo->createAction, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">

@@ -131,7 +131,7 @@ class file extends control
         {
             echo(js::alert($this->lang->file->accessDenied));
             if(isonlybody()) return print(js::reload('parent.parent'));
-            return print(js::locate(helper::createLink('my', 'index')));
+            return print(js::locate(helper::createLink('my', 'index'), 'parent.parent'));
         }
 
         /* Judge the mode, down or open. */
@@ -146,7 +146,7 @@ class file extends control
             $file->extension = $extension;
         }
 
-        if(file_exists($file->realPath))
+        if($this->file->fileExists($file))
         {
             /* If the mode is open, locate directly. */
             if($mode == 'open')
@@ -221,34 +221,20 @@ class file extends control
         $this->view->fields = $this->post->fields;
         $this->view->rows   = $this->post->rows;
         $this->host         = common::getSysURL();
+        $kind               = $this->post->kind;
 
-        switch($this->post->kind)
+        foreach($this->view->rows as $row)
         {
-            case 'task':
-            foreach($this->view->rows as $row)
+            foreach($row as &$field)
             {
-                $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
+                if(empty($field)) continue;
+                $field = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $this->host . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $field);
             }
-            break;
-            case 'story':
-            foreach($this->view->rows as $row)
-            {
-                $row->title= html::a($this->host . $this->createLink('story', 'view', "storyID=$row->id"), $row->title);
-            }
-            break;
-            case 'bug':
-            foreach($this->view->rows as $row)
-            {
-                $row->title= html::a($this->host . $this->createLink('bug', 'view', "bugID=$row->id"), $row->title);
-            }
-            break;
-            case 'testcase':
-            foreach($this->view->rows as $row)
-            {
-                $row->title= html::a($this->host . $this->createLink('testcase', 'view', "caseID=$row->id"), $row->title);
-            }
-            break;
+
+            if(in_array($kind, array('story', 'bug', 'testcase'))) $row->title = html::a($this->host . $this->createLink($kind, 'view', "{$kind}ID=$row->id"), $row->title);
+            if($kind == 'task') $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
         }
+
         $this->view->fileName = $this->post->fileName;
         $output = $this->parse('file', 'export2Html');
 
@@ -290,7 +276,7 @@ class file extends control
 
             /* Fix Bug #1518. */
             $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-            if(empty($fileRecord)) @unlink($file->realPath);
+            if(empty($fileRecord)) $this->file->unlinkFile($file);
 
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
@@ -500,7 +486,7 @@ class file extends control
     public function read($fileID)
     {
         $file = $this->file->getById($fileID);
-        if(empty($file) or !file_exists($file->realPath)) return false;
+        if(empty($file) or !$this->file->fileExists($file)) return false;
 
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();

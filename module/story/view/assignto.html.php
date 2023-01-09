@@ -28,7 +28,13 @@
         <tr>
           <th class='w-80px'><?php echo $lang->story->assign;?></th>
           <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $story->assignedTo, "class='form-control chosen'");?></td><td></td>
-        </tr>  
+        </tr>
+        <?php if(!empty($story->twins)):?>
+        <tr>
+          <th></th>
+          <td colspan='2'><i class='icon-exclamation-sign'></i> <?php echo $lang->story->assignSyncTip;?></td>
+        </tr>
+        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->story->status;?></th>
           <td><?php echo html::hidden('status', $story->status);?></td>

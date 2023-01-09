@@ -219,11 +219,11 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 
 .pri-text > .label-pri {padding: 1px 5px;}
 .pri-text > .label-pri, .pri-text > .label-severity {height: 20px;}
-.pri-text > .label-severity {background-size: 80%; background-position: 2px -130px;}
-.pri-text > .label-severity[data-severity="1"] {color: #FB2B2B; background-position: 2px 1px;}
-.pri-text > .label-severity[data-severity="2"] {color: #FF8058; background-position: 2px -31px;}
-.pri-text > .label-severity[data-severity="3"] {color: #FAAE1A; background-position: 2px -64px;}
-.pri-text > .label-severity[data-severity="4"] {color: #B89664; background-position: 2px -97px;}
+.pri-text > .label-severity {background-size: 85%; background-position: 1px -139px;}
+.pri-text > .label-severity[data-severity="1"] {color: #FB2B2B; background-position: 2px 0px;}
+.pri-text > .label-severity[data-severity="2"] {color: #FF8058; background-position: 2px -34px;}
+.pri-text > .label-severity[data-severity="3"] {color: #FAAE1A; background-position: 1px -69px;}
+.pri-text > .label-severity[data-severity="4"] {color: #B89664; background-position: 1px -104px;}
 
 .flow-block .footerbar span.label-success {background-color: #0DBB7D;}
 .flow-block .footerbar span.label-default {background-color: #9EA3B0;}
@@ -231,3 +231,6 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 
 .btn.disabled {pointer-events: auto;}
 .btn.disabled i {color: #313c52;}
+
+/* Unset style for qa qa-automation-menu. */
+.qa-automation-menu > a:focus, .qa-automation-menu > a:hover {background: unset!important; cursor: default;}

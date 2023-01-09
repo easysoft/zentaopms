@@ -23,6 +23,10 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
 js::set('productID',      $productID);
 js::set('branch',         $branch);
 js::set('suiteID',        $suiteID);
+js::set('automation',     !empty($automation) ? $automation->id : 0);
+js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);
+js::set('confirmURL',     $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy&from=testcase&taskID=0&confirm=yes"));
+js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy&from=testcase&taskID=0&confirm=no"));
 ?>
 <?php if($this->app->tab == 'project'):?>
 <style>
@@ -111,7 +115,7 @@ js::set('suiteID',        $suiteID);
         </thead>
         <tbody>
           <?php foreach($cases as $case):?>
-          <tr data-id='<?php echo $case->id?>'>
+          <tr data-id='<?php echo $case->id?>' data-auto='<?php echo $case->auto;?>'>
             <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
           </tr>
           <?php $caseProductIds[$case->product] = $case->product;?>
@@ -127,7 +131,7 @@ js::set('suiteID',        $suiteID);
           <div class='btn-group dropup'>
             <?php
             $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-            $misc = $canBatchRun ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
+            $misc = $canBatchRun ? "onclick=\"confirmAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->testtask->runCase, $misc);
 
             $caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
@@ -282,6 +286,55 @@ js::set('suiteID',        $suiteID);
 <script>
 $('#module' + moduleID).closest('li').addClass('active');
 $('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
+function runAutocase()
+{
+    var caseIDList = [];
+    $.each($('input[name^=caseIDList]:checked'),function(){
+        caseIDList.push($(this).val());
+    });
+
+    var url = createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation)
+
+    var postData = {'caseIDList' : caseIDList.join(',')};
+
+    var response = true;
+    $.post(url, postData, function(result)
+    {
+        if(result.result == 'fail')
+        {
+            alert(result.message);
+            response = false;
+        }
+    }, 'json');
+
+    return response;
+}
+
+function confirmAction(obj)
+{
+    var autoRun = 'no';
+    $.each($('input[name^=caseIDList]:checked'),function(){
+       var dataAuto = $(this).parents('tr').attr('data-auto');
+       if(dataAuto == 'auto') autoRun = dataAuto;
+    });
+
+    if(autoRun == 'no' || !automation)
+    {
+        setFormAction(cancelURL, '', '#caseList');
+        return false;
+    }
+
+    if(confirm(runCaseConfirm))
+    {
+        var result = runAutocase();
+        if(result) setFormAction(confirmURL, '', '#caseList');
+    }
+    else
+    {
+        setFormAction(cancelURL, '', '#caseList');
+    }
+    return false;
+}
 <?php if($useDatatable):?>
 $(function(){$('#caseForm').table();})
 <?php endif;?>

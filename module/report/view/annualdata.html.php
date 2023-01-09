@@ -292,31 +292,39 @@ $(function()
             timeline: {
                 show: yearsData.length && yearsData.length > 1,
                 axisType: 'category',
-                autoPlay: true,
-                loop: false,
+                autoPlay: false,
+                loop: true,
                 playInterval: 1000,
                 left: "1%",
                 bottom: "1%",
                 width: '90%',
                 data: yearsData,
-                symbolSize: [8, 4],
+                currentIndex: yearsData.length - 1,
+                symbolSize: [5, 5],
                 label: {
-                    normal: {
-                        color: '#fff',
-                        interval: 'auto',
-                        fontSize: 12,
-                        lineHeight: 20
-                    },
+                    fontSize: 10,
+                    lineHeight: 18,
                     interval: 'auto',
+                },
+                emphasis: {
+                    label: {
+                        fontSize: 10,
+                    },
+                },
+                progress: {
+                    label: {
+                        fontSize: 10,
+                    },
                 },
                 lineStyle: {
                     width: 5,
                 },
                 controlStyle: {
-                    itemSize: 18
+                    itemSize: 18,
                 },
-               
+
             },
+            tooltip: {},
             series: [{
                 name:'<?php echo $annualDataLang->radar;?>',
                 areaStyle:{color: 'rgb(45, 40, 33)'},
