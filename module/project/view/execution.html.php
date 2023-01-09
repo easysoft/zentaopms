@@ -45,8 +45,8 @@
   <div class='btn-toolbar pull-right'>
     <?php if($project->model == 'waterfall' and $this->config->edition == 'max'):?>
     <div class="btn-group">
-      <?php echo html::a('', "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->project->bylist}'");?>
       <?php echo html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"), "<i class='icon-gantt-alt'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->programplan->gantt}'");?>
+      <?php echo html::a('', "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->project->bylist}'");?>
     </div>
     <?php endif;?>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
