@@ -41,8 +41,8 @@ pid=1
 $executionIDList = array(3, 4, 5);
 $count           = array('0', '1');
 
-$execution = new executionTest();
-r($execution->buildBurnDataTest($executionIDList[0], $count[0])) && p('labels:0') && e('7/1');                                             // 敏捷执行燃尽图数据
-r($execution->buildBurnDataTest($executionIDList[1], $count[0])) && p('burnLine') && e('[0,0,0,0,0,0,0,0,0,3,95.3]');                      // 瀑布执行燃尽图数据
-r($execution->buildBurnDataTest($executionIDList[2], $count[0])) && p('baseLine') && e('[36,32.4,28.8,25.2,21.6,18,14.4,10.8,7.2,3.6,0]'); // 看板执行燃尽图数据
-r($execution->buildBurnDataTest($executionIDList[0], $count[1])) && p()           && e('4');                                               // 结果统计
+$executionTester = new executionTest();
+r($executionTester->buildBurnDataTest($executionIDList[0], $count[0])) && p('labels:0') && e('7/1');                                             // 敏捷执行燃尽图数据
+r($executionTester->buildBurnDataTest($executionIDList[1], $count[0])) && p('burnLine') && e('[0,0,0,0,0,0,0,0,0,3,95.3]');                      // 瀑布执行燃尽图数据
+r($executionTester->buildBurnDataTest($executionIDList[2], $count[0])) && p('baseLine') && e('[36,32.4,28.8,25.2,21.6,18,14.4,10.8,7.2,3.6,0]'); // 看板执行燃尽图数据
+r($executionTester->buildBurnDataTest($executionIDList[0], $count[1])) && p()           && e('4');                                               // 结果统计
