@@ -26,8 +26,8 @@ pid=1
 
 */
 
-$test = new executionTest();
+$executionTester = new executionTest();
 
-$result = $test->createDefaultSprintTest(2);
+$result = $executionTester->createDefaultSprintTest(2);
 
 r($result) && p('') && e('1'); // 创建默认迭代

@@ -26,7 +26,6 @@ $burn->consumed->range('20.1,33.4,41,56.55,59.55');
 $burn->storyPoint->range('0,16.5,16,11.5,9');
 $burn->gen(15);
 
-
 $task = zdTable('task');
 $task->id->range('1-10');
 $task->execution->range('3');
@@ -35,6 +34,7 @@ $task->estimate->range('1-10');
 $task->left->range('1-10');
 $task->consumed->range('1-10');
 $task->gen(10);
+
 /**
 
 title=测试executionModel->computeBurnTest();
