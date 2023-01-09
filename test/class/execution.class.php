@@ -2396,6 +2396,6 @@ class executionTest
 
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return $result > 0;
     }
 }
