@@ -25,6 +25,7 @@ $(function()
     });
 
     $('#casesResults table caption .result-tip').html($('#resultTip').html());
+    if($('tr:first').length == 0) return false;
 
     if($('tr:first').data('status') == 'ready')
     {
@@ -35,14 +36,14 @@ $(function()
         var times = 0;
         var id    = $('tr:first').data('id')
         var link  = createLink('testtask', 'ajaxGetResult', 'resultID=' + id);
-        
+
         var resultInterval = setInterval(() => {
             times++;
             if(times > 600)
             {
                 clearInterval(resultInterval);
             }
-            
+
             $.get(link, function(task)
             {
                 task = JSON.parse(task);

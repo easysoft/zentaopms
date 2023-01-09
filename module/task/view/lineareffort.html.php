@@ -158,6 +158,6 @@ ksort($myOrders);
   </div>
 </div>
 <?php endif;?>
-<?php if($i > 4):?>
+<?php if(!empty($myCountList) and $i > 4):?>
 <style>#legendMyEffort > .table {margin-bottom: 5px;}</style>
 <?php endif;?>

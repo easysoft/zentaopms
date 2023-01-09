@@ -395,6 +395,7 @@ $lang->kanbancard->beginAndEnd     = 'Begin & End';
 $lang->kanbancard->begin           = 'Begin';
 $lang->kanbancard->end             = 'End';
 $lang->kanbancard->pri             = 'Priority';
+$lang->kanbancard->status          = 'Status';
 $lang->kanbancard->progress        = 'Progress';
 $lang->kanbancard->desc            = 'Description';
 $lang->kanbancard->estimate        = 'Estimate';

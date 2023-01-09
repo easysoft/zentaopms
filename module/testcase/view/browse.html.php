@@ -78,7 +78,7 @@ js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$
         <nav class="btn-toolbar pull-right setting"></nav>
       </div>
       <?php
-      $vars = $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars = $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable)  include '../../common/view/datatable.html.php';
       else               include '../../common/view/tablesorter.html.php';

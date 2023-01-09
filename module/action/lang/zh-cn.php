@@ -410,6 +410,7 @@ $lang->action->label->submitreview          = '提交了评审';
 $lang->action->label->suspend               = '休眠了';
 $lang->action->label->resume                = '恢复了';
 $lang->action->label->reboot                = '重启了';
+$lang->action->label->boot                  = '启动了';
 $lang->action->label->destroy               = '关闭了';
 $lang->action->label->getvnc                = '远程操控';
 $lang->action->label->synctwins             = '同步修改了';

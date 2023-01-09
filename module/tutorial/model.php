@@ -71,6 +71,7 @@ class tutorialModel extends model
         $product->type           = 'normal';
         $product->status         = 'normal';
         $product->desc           = '';
+        $product->shadow         = '0';
         $product->PO             = $this->app->user->account;
         $product->QD             = '';
         $product->RD             = '';
@@ -166,6 +167,9 @@ class tutorialModel extends model
         $project->displayCards = 0;
         $project->fluidBoard   = 0;
         $project->deleted      = '0';
+        $project->hasProduct   = '1';
+        $project->multiple     = '';
+        $project->division     = 0;
 
         return $project;
     }
@@ -202,6 +206,36 @@ class tutorialModel extends model
 
         $projectStat[$project->id] = $project;
         return $projectStat;
+    }
+
+    /**
+     * Get execution stats for tutorial.
+     *
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getExecutionStats($browseType = '')
+    {
+        $execution = $this->getProject();
+        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        $execution->hours        = (object)$emptyHour;
+        $execution->leftTasks    = '—';
+        $execution->teamMembers  = array_keys($this->getTeamMembers());
+        $execution->teamCount    = count($execution->teamMembers);
+        $execution->hasProduct   = '';
+        $execution->multiple     = '';
+        $execution->order        = 1;
+        $execution->burns        = array(''); 
+        $execution->type         = 'sprint'; 
+        $execution->projectName  = ''; 
+        $execution->projectModel = ''; 
+
+        if($browseType and $browseType != 'all') $execution->name .= '-' . $browseType; // Fix bug #21096
+
+        $executionStat[0] = $execution;
+        return $executionStat;
     }
 
     /**
@@ -320,6 +354,8 @@ class tutorialModel extends model
         $execution->fluidBoard    = 0;
         $execution->hours         = $hours;
         $execution->burns         = array(35, 35);
+        $execution->hasProduct    = '';
+        $execution->multiple      = '';
         return $execution;
     }
 

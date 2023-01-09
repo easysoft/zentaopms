@@ -73,7 +73,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
             <td>
               <?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?>
               <div class="input-group-addon">
-              <?php echo html::checkbox('auto', array('auto' => $lang->testcase->showAutoCase), '', "id='autocase' title='{$lang->testcase->showAutoCase}'");?>
+              <?php echo html::checkbox('auto', array('auto' => $lang->testcase->showAutoCase), $auto, "id='autocase' title='{$lang->testcase->showAutoCase}'");?>
               </div>
             </td>
             <?php if(strpos(",$showFields,", 'stage') !== false):?>
@@ -278,14 +278,25 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
 </div>
 <?php js::set('caseModule', $lang->testcase->module)?>
 <script>
-$(":checkbox[name^='auto']").on('click', function(){
-    if($(this).attr('checked'))
+$(function()
+{
+    checkScript();
+})
+
+function checkScript()
+{
+    var autoScript = $(":checkbox[name^='auto']");
+    if(autoScript.attr('checked'))
     {
         $('.autoScript').removeClass('hide')
     }else
     {
         $('.autoScript').addClass('hide')
     }
+
+}
+$(":checkbox[name^='auto']").on('click', function(){
+    checkScript();
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

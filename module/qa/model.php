@@ -37,6 +37,7 @@ class qaModel extends model
 
         if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
         if($this->app->rawModule == 'product' and $this->app->rawMethod == 'showerrornone') $this->lang->switcherMenu = '';
+        if(!common::hasPriv('zahost', 'browse') and !common::hasPriv('zanode', 'browse')) unset($this->lang->qa->menu->automation);
         common::setMenuVars('qa', $productID);
     }
 

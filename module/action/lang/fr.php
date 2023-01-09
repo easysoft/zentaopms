@@ -410,6 +410,7 @@ $lang->action->label->submitreview          = 'submitted';
 $lang->action->label->suspend               = 'suspended';
 $lang->action->label->resume                = 'resumed';
 $lang->action->label->reboot                = 'reboot';
+$lang->action->label->boot                  = 'boot';
 $lang->action->label->destroy               = 'destroyed';
 $lang->action->label->getvnc                = 'remote control';
 $lang->action->label->synctwins             = 'synchronized changes';
@@ -652,7 +653,7 @@ $lang->action->dynamicAction->zanode['created'] = 'Create Zagent Node';
 $lang->action->dynamicAction->zanode['suspend'] = 'Suspend Zagent Node';
 $lang->action->dynamicAction->zanode['resume']  = 'Resume Zagent Node';
 $lang->action->dynamicAction->zanode['reboot']  = 'Reboot Zagent Node';
-$lang->action->dynamicAction->zanode['boot']    = 'Start Zagent Node';
+$lang->action->dynamicAction->zanode['boot']    = 'Boot Zagent Node';
 $lang->action->dynamicAction->zanode['destroy'] = 'Destory Zagent Node';
 
 $lang->action->dynamicAction->doclib['created'] = 'Créer Doc Library';

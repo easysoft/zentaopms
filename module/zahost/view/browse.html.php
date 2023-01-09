@@ -52,8 +52,8 @@
           <th class='c-memory'>     <?php common::printOrderLink('memory',          $orderBy, $vars, $lang->zahost->memory);?></th>
           <th class='c-diskSize'>   <?php common::printOrderLink('diskSize',            $orderBy, $vars, $lang->zahost->diskSize);?></th>
           <th class='c-software'>   <?php common::printOrderLink('vsoft', $orderBy, $vars, $lang->zahost->vsoft);?></th>
-          <th class='c-status'>     <?php common::printOrderLink('t2.status',       $orderBy, $vars, $lang->zahost->status);?></th>
-          <th class='c-datetime'>   <?php common::printOrderLink('registerDate',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
+          <th class='c-status'>     <?php common::printOrderLink('status',       $orderBy, $vars, $lang->zahost->status);?></th>
+          <th class='c-datetime'>   <?php common::printOrderLink('heartbeat',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
           <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -73,7 +73,7 @@
           <td class='c-actions'>
             <?php $disabled = ($host->status == 'wait') ? 'disabled' : '';?>
             <?php $title    = ($host->status == 'wait') ? $lang->zahost->uninitNotice: $lang->zahost->image->browseImage;?>
-            <?php common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'snap-house', '', "iframe $disabled", true, "data-width='60%'", $title);?>
+            <?php common::printIcon('zahost', 'browseImage', "hostID={$host->hostID}", $host, 'list', 'mirror', '', "iframe $disabled", true, "data-width='80%'", $title);?>
             <?php $disabled = !empty($nodeList[$host->hostID]) ? 'disabled' : '';?>
             <?php $title    = !empty($nodeList[$host->hostID]) ? $lang->zahost->undeletedNotice : $lang->zahost->delete;?>
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>

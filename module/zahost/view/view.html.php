@@ -18,7 +18,7 @@
 <?php $vars = "id={$zahost->hostID}&orderBy=%s";?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, "data-app='{$app->tab}'", 'btn btn-secondary');?>
+    <?php echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $browseLink, 'self', "data-app='{$app->tab}'", 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $zahost->id;?></span>
@@ -170,7 +170,7 @@
     <?php $this->printExtendFields($zahost, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
+        <?php echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $browseLink, 'self', "data-app='{$app->tab}'", 'btn btn-secondary');?>
         <div class='divider'></div>
         <?php echo $this->zahost->buildOperateMenu($zahost, 'view');?>
       </div>

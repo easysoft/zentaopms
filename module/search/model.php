@@ -1010,7 +1010,6 @@ class searchModel extends model
         $programs       = $this->app->user->view->programs;
         $projects       = $this->app->user->view->projects;
         $executions     = $this->app->user->view->sprints;
-        $grantProducts  = $this->loadModel('feedback')->getGrantProducts();
 
         $objectPairs = array();
         $total       = count($results);
@@ -1025,7 +1024,7 @@ class searchModel extends model
             $objectExecutions = array();
             if(!isset($this->config->objectTables[$objectType])) continue;
             $table = $this->config->objectTables[$objectType];
-            if(strpos(',bug,case,testcase,productplan,release,story,testtask,ticket,', ",$objectType,") !== false)
+            if(strpos(',bug,case,testcase,productplan,release,story,testtask,', ",$objectType,") !== false)
             {
                $objectProducts = $this->dao->select('id,product')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('product', 'id');
             }
@@ -1132,15 +1131,17 @@ class searchModel extends model
                     }
                 }
             }
-            elseif($objectType == 'feedback')
+            elseif(strpos(',feedback,ticket,', ",$objectType,") !== false)
             {
-                $objectFeedbacks = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll('id');
-                foreach($objectFeedbacks as $feedbackID => $feedback)
+                $grantProducts = $this->loadModel('feedback')->getGrantProducts();
+                $objects       = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll('id');
+                foreach($objects as $objectID => $object)
                 {
-                    if($feedback->openedBy == $this->app->user->account or isset($grantProducts[$feedback->product])) continue;
-                    if(isset($objectIdList[$feedbackID]))
+                    if($objectType == 'feedback' and $object->openedBy == $this->app->user->account) continue;
+                    if(isset($grantProducts[$object->product])) continue;
+                    if(isset($objectIdList[$objectID]))
                     {
-                        $recordID = $objectIdList[$feedbackID];
+                        $recordID = $objectIdList[$objectID];
                         unset($results[$recordID]);
                     }
                 }
@@ -1149,7 +1150,7 @@ class searchModel extends model
             foreach($objectProducts as $productID => $idList)
             {
                 if(empty($productID)) continue;
-                if(strpos(",$products,", ",$productID,") === false or ($objectType == 'ticket' and !isset($grantProducts[$productID])))
+                if(strpos(",$products,", ",$productID,") === false)
                 {
                     foreach($idList as $object)
                     {

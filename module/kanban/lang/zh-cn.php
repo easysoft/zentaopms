@@ -395,6 +395,7 @@ $lang->kanbancard->beginAndEnd     = '起止日期';
 $lang->kanbancard->begin           = '预计开始';
 $lang->kanbancard->end             = '截止日期';
 $lang->kanbancard->pri             = '优先级';
+$lang->kanbancard->status          = '状态';
 $lang->kanbancard->progress        = '进度';
 $lang->kanbancard->desc            = '描述';
 $lang->kanbancard->estimate        = '预计';

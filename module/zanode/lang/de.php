@@ -83,6 +83,7 @@ $lang->zanode->imageNameEmpty = 'Name can not be empty.';
 $lang->zanode->runTimeout = 'Network connection timeout, please check the host and execution node status.';
 
 $lang->zanode->apiError['-10100'] = 'ZenAgent Node not found.';
+$lang->zanode->apiError['fail']   = 'Connection timeout, Please check the host and execution node status.';
 
 $lang->zanode->publicList[0] = 'Private';
 $lang->zanode->publicList[1] = 'Public';
@@ -129,3 +130,4 @@ $lang->zanode->tips = "The execution node is a virtual machine or container inst
 $lang->zanode->scriptTips = 'Write the directory where the script is located on the execution node.';
 $lang->zanode->shellTips  = 'Before running the automated test script on the execution node, you can execute a custom shell command.';
 $lang->zanode->automationTips = 'Before executing the test task on the execution node, you need to set up the execution node corresponding to the product, the directory of the automated test script, and the custom Shell command to execute.';
+$lang->zanode->nameUnique     = $lang->zanode->name . 'already exist';

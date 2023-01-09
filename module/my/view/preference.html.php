@@ -10,32 +10,15 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if($preferenceSetted):?>
 <style>
 #submit{margin-top: 45px}
 .chosen-container-single .chosen-single div b {top: 7px !important;}
 </style>
 <?php include '../../common/view/header.html.php';?>
-<?php else:?>
-<?php include '../../common/view/header.lite.html.php';?>
-<style>
-html,body {height: 100%;}
-.table {width: 80%;}
-.container {height: 100%; display: flex; align-items: center;}
-</style>
-<?php endif;?>
-<?php if($preferenceSetted):?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><i class='icon-key'></i> <?php echo $lang->my->preference;?></h2>
   </div>
-<?php else:?>
-<div class='container'>
-  <div class='modal-dialog'>
-    <div class='modal-header'>
-      <strong><?php echo $lang->my->preference;?></strong>
-    </div>
-<?php endif;?>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table table-form w-320px'>
       <tr>
@@ -73,8 +56,4 @@ html,body {height: 100%;}
     </table>
   </form>
 </div>
-<?php if($preferenceSetted):?>
 <?php include '../../common/view/footer.html.php';?>
-<?php else:?>
-<?php include '../../common/view/footer.lite.html.php';?>
-<?php endif;?>

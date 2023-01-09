@@ -52,7 +52,7 @@
           <?php if(isset($execution->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->execution->delayed;?>'><?php echo $lang->execution->delayed;?></span>
           <?php else:?>
-          <?php $statusName = $this->processStatus('project', $execution);?>
+          <?php $statusName = $this->processStatus('execution', $execution);?>
           <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>

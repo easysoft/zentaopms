@@ -68,7 +68,6 @@ class zanode extends control
      */
     public function create($hostID = 0)
     {
-        $this->loadModel('zahost');
         if(!empty($_POST))
         {
             $nodeID = $this->zanode->create();
@@ -234,7 +233,9 @@ class zanode extends control
 
         if($error)
         {
-            return print(js::error($error));
+             $response['result']  = 'fail';
+             $response['message'] = $error;
+             return $this->send($response);
         }
         else
         {

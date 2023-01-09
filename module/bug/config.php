@@ -205,7 +205,7 @@ $config->bug->datatable->fieldList['branch']['fixed']      = 'left';
 $config->bug->datatable->fieldList['branch']['width']      = '100';
 $config->bug->datatable->fieldList['branch']['required']   = 'no';
 $config->bug->datatable->fieldList['branch']['control']    = 'select';
-$config->bug->datatable->fieldList['branch']['dataSource'] = array('module' => 'bug', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
+$config->bug->datatable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID');
 
 $config->bug->datatable->fieldList['type']['title']    = 'type';
 $config->bug->datatable->fieldList['type']['fixed']    = 'no';

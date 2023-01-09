@@ -28,6 +28,17 @@ class zanodemodel extends model
     const KVM_EXPORT_PATH = '/api/v1/kvm/exportVm';
     const KVM_STATUS_PATH = '/api/v1/task/getStatus';
 
+    /**
+     * Set lang;
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->app->lang->host = $this->lang->zanode;
+    }
 
     /**
      * Create an Node.
@@ -41,11 +52,10 @@ class zanodemodel extends model
         $data = fixer::input('post')->get();
 
         /* Batch check fields. */
-        $this->lang->vm = $this->lang->zanode;
         $data->type = 'node';
         $this->dao->update(TABLE_ZAHOST)->data($data)
-            ->batchCheck($this->config->zanode->create->requiredFields, 'notempty')
-            ->check('name', 'unique', "type='node'");
+            ->batchCheck($this->config->zanode->create->requiredFields, 'notempty');
+
         if(dao::isError()) return false;
 
         if(!preg_match("/^(?!_)(?!-)(?!\.)[a-zA-Z0-9\_\.\-]+$/", $data->name))
@@ -53,6 +63,10 @@ class zanodemodel extends model
             dao::$errors[] = $this->lang->zanode->nameValid;
             return false;
         }
+
+        /* If name already exists return error. */
+        $node = $this->dao->select('*')->from(TABLE_ZAHOST)->where('name')->eq($data->name)->andWhere('type')->eq('node')->fetch();
+        if($node) return dao::$errors[] = $this->lang->zanode->nameUnique;
 
         /* Get image. */
         $image = $this->getImageByID($data->image);
@@ -179,6 +193,8 @@ class zanodemodel extends model
         if($type != 'reboot')
         {
             $status = $type == 'suspend' ? 'suspend' : 'running';
+            if($type == 'destroy') $status = 'shutoff';
+
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq($status)->where('id')->eq($id)->exec();
         }
 
@@ -777,6 +793,7 @@ class zanodemodel extends model
         $data = fixer::input('post')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', $now)
+            ->setDefault('node', 0)
             ->remove('uid')
             ->get();
 
