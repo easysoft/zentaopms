@@ -598,9 +598,12 @@ class userTest
      */
     public function createContactListTest($listName = '', $userList = array())
     {
-        $listID = $this->objectModel->createContactList($listName, $userList);
+        ob_start();
+        $listID  = $this->objectModel->createContactList($listName, $userList);
+        $message = ob_get_clean();
 
-        if(dao::isError()) return dao::getError();
+        if($message) return array('message' => array('listName' => array(1)));
+        if(dao::isError()) return array('message' => dao::getError());
         return $this->objectModel->getContactListByID($listID);
     }
 
@@ -617,7 +620,7 @@ class userTest
     {
         $this->objectModel->updateContactList($listID, $listName, $userList);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return array('message' => dao::getError());
         return $this->objectModel->getContactListByID($listID);
     }
 
@@ -639,7 +642,7 @@ class userTest
     /**
      * Test delete a contact list.
      *
-     * @param  object $user
+     * @param  object $userID
      * @access public
      * @return void
      */
