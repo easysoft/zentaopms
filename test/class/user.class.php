@@ -640,9 +640,9 @@ class userTest
     }
 
     /**
-     * Test delete a contact list.
+     * Test get user data in json.
      *
-     * @param  object $userID
+     * @param  object $user
      * @access public
      * @return void
      */
