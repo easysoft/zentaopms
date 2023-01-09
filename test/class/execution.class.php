@@ -2379,7 +2379,7 @@ class executionTest
             if(count($users) > 0) su($users[0]);
 
             global $tester;
-            return $tester->app->user->view->sprints;
+            return ",{$tester->app->user->view->sprints},";
         }
     }
 
