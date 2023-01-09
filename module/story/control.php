@@ -1401,7 +1401,7 @@ class story extends control
         }
         elseif($from == 'project')
         {
-            $projectID = (isset($story->projects[$this->session->project]) || empty($story->projects)) ? $this->session->project : key($story->projects);
+            $projectID = $param ? $param : $this->session->project;
             $this->loadModel('project')->setMenu($projectID);
         }
         elseif($from == 'qa')
