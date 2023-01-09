@@ -600,7 +600,7 @@ class transferModel extends model
             $values = $valuePairs;
             if(reset($values))
             {
-                if(current($values) or (current($values) == 0)) $values[0] = '';
+                if(current($values) or (current($values) == 0)) array_unshift($values, '');
             }
         }
 
