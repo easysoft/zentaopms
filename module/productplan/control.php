@@ -766,7 +766,6 @@ class productplan extends control
             {
                 return print(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story"), 'parent'));
             }
-
         }
     }
 
