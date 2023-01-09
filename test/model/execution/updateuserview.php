@@ -17,7 +17,7 @@ $execution->gen(5);
 
 zdTable('user')->gen(5);
 
-su('user1');
+su('admin');
 
 /**
 
@@ -31,4 +31,4 @@ pid=1
 
 $execution = new executionTest();
 
-r(strpos($execution->updateUserViewTest(4), ',4,')) && p() && e('2'); // 默认情况下的用户是否有执行的可视权限
+r(strpos($execution->updateUserViewTest(5), ',5,')) && p() && e('2'); // 默认情况下的用户是否有执行的可视权限
