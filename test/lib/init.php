@@ -259,7 +259,7 @@ function zdImport($table, $yaml, $count = 10)
 function su($account)
 {
     $userModel = new userModel();
-    $user = $userModel->identify($account, '123qwe!@#');
+    $user = $userModel->identify($account, '123Qwe!@#');
     if($user) return $userModel->login($user);
     return false;
 }

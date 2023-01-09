@@ -1376,20 +1376,29 @@ class testtaskModel extends model
     /**
      * Get results by runID or caseID
      *
-     * @param  int   $runID
-     * @param  int   $caseID
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  string $status all|done
      * @access public
-     * @return array
+     * @return void
      */
-    public function getResults($runID, $caseID = 0)
+    public function getResults($runID, $caseID = 0, $status = 'all')
     {
         if($runID > 0)
         {
-            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->fetchAll('id');
+            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
+                ->where('run')->eq($runID)
+                ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
+                ->orderBy('id desc')
+                ->fetchAll('id');
         }
         else
         {
-            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('id desc')->fetchAll('id');
+            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
+                ->where('`case`')->eq($caseID)
+                ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
+                ->orderBy('id desc')
+                ->fetchAll('id');
         }
 
         if(!$results) return array();

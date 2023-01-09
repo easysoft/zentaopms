@@ -1760,10 +1760,13 @@ class execution extends control
             foreach($products as $productIndex => $product)
             {
                 $productPlans[$productIndex] = array();
-                foreach($branches[$productIndex] as $branchID => $branch)
+                if(isset($branches[$productIndex]))
                 {
-                    $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                    foreach($branches[$productIndex] as $branchID => $branch)
+                    {
+                        $linkedBranches[$productIndex][$branchID] = $branchID;
+                        $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                    }
                 }
             }
 

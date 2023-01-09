@@ -14,9 +14,9 @@ class userTest
      * @access public
      * @return void
      */
-    public function getListTest($count = false)
+    public function getListTest($params = 'nodeleted', $count = false)
     {
-        $objects = $this->objectModel->getList();
+        $objects = $this->objectModel->getList($params);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -32,13 +32,14 @@ class userTest
      * Test get user information by accounts.
      *
      * @param  array  $accounts
+     * @param  string $keyField
      * @param  bool   $count
      * @access public
      * @return void
      */
-    public function getListByAccountsTest($accounts = array(), $count = false)
+    public function getListByAccountsTest($accounts = array(), $keyField = 'id', $count = false)
     {
-        $objects = $this->objectModel->getListByAccounts($accounts);
+        $objects = $this->objectModel->getListByAccounts($accounts, $keyField);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -77,12 +78,13 @@ class userTest
     /**
      * Test get avatar pairs.
      *
+     * @param  string $params
      * @access public
-     * @return void
+     * @return array
      */
-    public function getAvatarPairsTest()
+    public function getAvatarPairsTest($param = 'nodeleted')
     {
-        $objects = $this->objectModel->getAvatarPairs();
+        $objects = $this->objectModel->getAvatarPairs($param);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -235,7 +237,7 @@ class userTest
     public function createUserTest($params = array())
     {
         $_POST  = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
 
         $userID = $this->objectModel->create();
         unset($_POST);
@@ -259,7 +261,11 @@ class userTest
     public function batchCreateUserTest($params = array())
     {
         $_POST  = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
+        $_POST['userType']       = 'inside';
+
+        global $tester;
+        $tester->config->user->batchCreate = count($_POST['account']);
 
         $userIDList = $this->objectModel->batchCreate();
         unset($_POST);
@@ -288,7 +294,7 @@ class userTest
     public function updateUserTest($userID, $params = array())
     {
         $_POST = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
 
         $this->objectModel->update($userID);
         unset($_POST);
@@ -313,9 +319,9 @@ class userTest
     public function batchEditUserTest($params = array())
     {
         $_POST = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
 
-        $this->objectModel->batchEdit($params);
+        $this->objectModel->batchEdit();
         unset($_POST);
 
         if(dao::isError())
@@ -954,5 +960,34 @@ class userTest
     public function processAccountSortTest($users = array())
     {
         return $this->objectModel->processAccountSort($users);
+    }
+
+    /**
+     * Set users list.
+     *
+     * @param  array    $users
+     * @param  string   $account
+     * @access public
+     * @return string
+     */
+    public function setUserListTest($users, $account)
+    {
+        $string = $this->objectModel->setUserList($users, $account);
+        return strpos($string, "<option value='$account' selected='selected'") !== false ? 1 : 0;
+    }
+
+    /**
+     * Update session random.
+     *
+     * @access public
+     * @return int
+     */
+    public function updateSessionRandomTest()
+    {
+        global $tester;
+        $oldRandom = $tester->session->rand;
+        $newRandom = $this->objectModel->updateSessionRandom();
+
+        return $oldRandom != $newRandom ? 1 : 0;
     }
 }

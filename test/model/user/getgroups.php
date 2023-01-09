@@ -4,6 +4,12 @@ include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
 su('admin');
 
+$user = zdTable('user');
+$user->gen(50);
+
+$userGroup = zdTable('usergroup');
+$userGroup->gen(500);
+
 /**
 
 title=测试 userModel::getGroups();

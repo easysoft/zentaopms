@@ -69,7 +69,7 @@
         }
         else
         {
-            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type"), $typeName);
+            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=all&param=$param&caseType=$type"), $typeName);
         }
         echo "</li>";
     }
@@ -93,6 +93,7 @@
     }
     elseif($hasBrowsePriv and $menuType == 'casetype')
     {
+        if($currentModule == 'project') continue;
         if($this->moduleName == 'testtask' and $this->methodName == 'browseunits') continue;
         if($this->moduleName == 'story' and $this->methodName == 'zerocase') continue;
         if($browseType == 'bysuite') continue;

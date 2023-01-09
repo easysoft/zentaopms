@@ -48,7 +48,19 @@ class custom extends control
         $currentLang = $this->app->getClientLang();
 
         $this->app->loadLang($module);
-        $fieldList = zget($this->lang->$module, $field, '');
+        if($lang == 'all')
+        {
+            $fieldList = array();
+            $items     = $this->custom->getItems("lang=all&module=$module&section=$field&vision={$this->config->vision}");
+            foreach($items as $key => $item)
+            {
+                $fieldList[$key] = $item->value;
+            }
+        }
+        else
+        {
+            $fieldList = zget($this->lang->$module, $field, '');
+        }
 
         if($module == 'project' and $field == 'unitList')
         {

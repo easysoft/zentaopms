@@ -46,6 +46,7 @@ $config->zanode->search['params']['memory']     = array('operator' => '=', 'cont
 $config->zanode->search['params']['diskSize']   = array('operator' => '=', 'control' => 'input',  'values' => '');
 
 $config->zanode->editor = new stdclass();
-$config->zanode->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->zanode->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->zanode->editor->create      = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->zanode->editor->edit        = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->zanode->editor->createimage = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->zanode->editor->view        = array('id' => 'comment', 'tools' => 'simpleTools');

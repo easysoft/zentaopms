@@ -35,7 +35,8 @@ function initBurnChar()
           title: {
             text: execution.name,
             textStyle: {
-              color: '#a1c4e9'
+              color: '#a1c4e9',
+              fontSize: 15
             }
           },
           tooltip: {

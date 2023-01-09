@@ -1364,7 +1364,7 @@ class story extends control
         $buildApp   = $tab == 'product' ?   'project' : $tab;
         $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
-        if(!isonlybody())$this->session->set('buildList', $uri, $buildApp);
+        if(!isonlybody()) $this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
 
         $storyID        = (int)$storyID;
@@ -1401,7 +1401,8 @@ class story extends control
         }
         elseif($from == 'project')
         {
-            $this->loadModel('project')->setMenu($this->session->project);
+            $projectID = $param ? $param : $this->session->project;
+            $this->loadModel('project')->setMenu($projectID);
         }
         elseif($from == 'qa')
         {

@@ -54,6 +54,7 @@ class storyModel extends model
             ->beginIF(!$story->twins)->andWhere('t1.story')->in($story->id)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
+
         $story->tasks  = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
@@ -4973,13 +4974,20 @@ class storyModel extends model
         $tab         = $this->app->tab;
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
         $account     = $this->app->user->account;
-        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=0&storyType=$story->type");
+        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=&storyType=$story->type");
         $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
 
-        if($tab == 'project' and $this->session->multiple)
+        if($tab == 'project')
         {
-            $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id&project={$this->session->project}");
-            $canView   = common::hasPriv('projectstory', 'view');
+            if($this->session->multiple)
+            {
+                $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id&project={$this->session->project}");
+                $canView   = common::hasPriv('projectstory', 'view');
+            }
+            else
+            {
+                $storyLink = helper::createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->project}&storyType=$story->type");
+            }
         }
         elseif($tab == 'execution')
         {
