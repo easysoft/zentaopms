@@ -24,7 +24,7 @@ $product->status->range('normal');
 $product->gen(3);
 
 zdTable('user')->gen(5);
-su('user1');
+su('admin');
 
 /**
 
