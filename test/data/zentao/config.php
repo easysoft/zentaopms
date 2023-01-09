@@ -119,6 +119,3 @@ $builder->job      = array('rows' => 2,   'extends' => array('job'));
 $builder->mr       = array('rows' => 1,   'extends' => array('mr'));
 $builder->oauth    = array('rows' => 100, 'extends' => array('oauth'));
 $builder->notify   = array('rows' => 10,  'extends' => array('notify'));
-
-$builder->vm         = array('rows' => 1,  'extends' => array('vm'));
-$builder->host       = array('rows' => 1,  'extends' => array('host'));

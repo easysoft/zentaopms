@@ -93,6 +93,7 @@
     }
     elseif($hasBrowsePriv and $menuType == 'casetype')
     {
+        if($currentModule == 'project') continue;
         if($this->moduleName == 'testtask' and $this->methodName == 'browseunits') continue;
         if($this->moduleName == 'story' and $this->methodName == 'zerocase') continue;
         if($browseType == 'bysuite') continue;

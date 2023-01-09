@@ -449,6 +449,7 @@ class testcase extends control
         $keywords     = '';
         $steps        = array();
         $color        = '';
+        $auto         = '';
 
         /* If testcaseID large than 0, use this testcase as template. */
         if($testcaseID > 0)
@@ -464,6 +465,7 @@ class testcase extends control
             $keywords     = $testcase->keywords;
             $steps        = $testcase->steps;
             $color        = $testcase->color;
+            $auto         = $testcase->auto;
         }
 
         /* If bugID large than 0, use this bug as template. */
@@ -586,6 +588,7 @@ class testcase extends control
         $this->view->branch           = $branch;
         $this->view->product          = $product;
         $this->view->branches         = $branches;
+        $this->view->auto             = $auto;
 
         $this->display();
     }

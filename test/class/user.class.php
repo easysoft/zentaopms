@@ -14,9 +14,9 @@ class userTest
      * @access public
      * @return void
      */
-    public function getListTest($count = false)
+    public function getListTest($params = 'nodeleted', $count = false)
     {
-        $objects = $this->objectModel->getList();
+        $objects = $this->objectModel->getList($params);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -32,13 +32,14 @@ class userTest
      * Test get user information by accounts.
      *
      * @param  array  $accounts
+     * @param  string $keyField
      * @param  bool   $count
      * @access public
      * @return void
      */
-    public function getListByAccountsTest($accounts = array(), $count = false)
+    public function getListByAccountsTest($accounts = array(), $keyField = 'id', $count = false)
     {
-        $objects = $this->objectModel->getListByAccounts($accounts);
+        $objects = $this->objectModel->getListByAccounts($accounts, $keyField);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -77,12 +78,13 @@ class userTest
     /**
      * Test get avatar pairs.
      *
+     * @param  string $params
      * @access public
-     * @return void
+     * @return array
      */
-    public function getAvatarPairsTest()
+    public function getAvatarPairsTest($param = 'nodeleted')
     {
-        $objects = $this->objectModel->getAvatarPairs();
+        $objects = $this->objectModel->getAvatarPairs($param);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -954,5 +956,19 @@ class userTest
     public function processAccountSortTest($users = array())
     {
         return $this->objectModel->processAccountSort($users);
+    }
+
+    /**
+     * Set users list.
+     *
+     * @param  array    $users
+     * @param  string   $account
+     * @access public
+     * @return string
+     */
+    public function setUserListTest($users, $account)
+    {
+        $string = $this->objectModel->setUserList($users, $account);
+        return strpos($string, "<option value='$account' selected='selected'") !== false ? 1 : 0;
     }
 }

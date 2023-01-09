@@ -12,7 +12,7 @@
 
 define('RUNTIME_ROOT', dirname(dirname(__FILE__)) . '/runtime/');
 define('LIB_ROOT', dirname(dirname(__FILE__)) . '/lib/');
-define('TEST_BASEHPATH', dirname(__FILE__, 2));
+define('TEST_BASEHPATH', dirname(dirname(__FILE__)));
 
 include LIB_ROOT . 'init.php';
 

@@ -485,7 +485,7 @@ class userModel extends model
                 }
 
                 $accounts[$i]     = $data[$i]->account;
-                $prev['company']  = $data[$i]->company;
+                if($users->userType == 'outside') $prev['company']  = $data[$i]->company;
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
                 $prev['group']    = $data[$i]->group;

@@ -125,7 +125,7 @@ $(function()
 });
 function loadResult()
 {
-    $('#resultsContainer').load("<?php echo $this->createLink('testtask', 'results', "runID={$runID}&caseID=$caseID&version=$version");?> #casesResults", function()
+    $('#resultsContainer').load("<?php echo $this->createLink('testtask', 'results', "runID={$runID}&caseID=$caseID&version=$version&status=all");?> #casesResults", function()
     {
         $('.result-item').click(function()
         {
@@ -147,14 +147,14 @@ function loadResult()
             var times = 0;
             var id    = $('.result-item:first').data('id')
             var link  = createLink('testtask', 'ajaxGetResult', 'resultID=' + id);
-            
+
             var resultInterval = setInterval(() => {
                 times++;
                 if(times > 600)
                 {
                     clearInterval(resultInterval);
                 }
-                
+
                 $.get(link, function(task)
                 {
                     task = JSON.parse(task);

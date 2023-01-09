@@ -30,6 +30,7 @@ function checkServiceStatus(){
                 {
                     $('.ztf-status').text(zanodeLang.init[resultData.data[key]])
                     $('.ztf-install').text('');
+                    $('.ztf-install-icon').hide();
                 }
                 else
                 {
@@ -79,7 +80,7 @@ function checkServiceStatus(){
                     }
                 }
             }
-            if(resultData.data[key] !== 'ready')
+            if(resultData.data[key] !== 'ready' && key != 'node')
             {
                 isSuccess = false
             }
