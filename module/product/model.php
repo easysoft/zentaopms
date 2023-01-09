@@ -1123,6 +1123,36 @@ class productModel extends model
     }
 
     /**
+     * Build form fields.
+     * 
+     * @param  array $fields 
+     * @access public
+     * @return void
+     */
+    public function buildFormFields($fields)
+    {
+        $this->loadModel('user');
+        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
+        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  '', $this->config->maxCount);
+        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
+        $users   = $this->user->getPairs('nodeleted|noclosed');
+
+        foreach($fields as $field => $attr)
+        {
+            if($attr['values'] == 'users') $fields[$field]['values'] = $users;
+            $fields[$field]['name']  = $field;
+            $fields[$field]['title'] = $this->lang->product->$field;
+        }
+
+        $fields['program']['values'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
+        $fields['PO']['values']      = $poUsers;
+        $fields['QD']['values']      = $qdUsers;
+        $fields['RD']['values']      = $rdUsers;
+
+        return $fields;
+    }
+
+    /**
      * Build search form.
      *
      * @param  int    $productID

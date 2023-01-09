@@ -73,4 +73,4 @@ $content->table = $table;
 $page = page('list');
 $page->top->menu      = $menu;
 $page->right->content = $content;
-$page->x();
+$page->x('list');

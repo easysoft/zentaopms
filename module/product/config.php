@@ -134,6 +134,18 @@ $config->product->edit   = new stdclass();
 $config->product->create->requiredFields = 'name,code';
 $config->product->edit->requiredFields   = 'name,code';
 
+$config->product->create->fields['program']   = array('control' => 'select',       'values' => '');
+$config->product->create->fields['name']      = array('control' => 'input',        'values' => '');
+$config->product->create->fields['code']      = array('control' => 'input',        'values' => '');
+$config->product->create->fields['PO']        = array('control' => 'select',       'values' => '');
+$config->product->create->fields['QD']        = array('control' => 'select',       'values' => '');
+$config->product->create->fields['RD']        = array('control' => 'select',       'values' => '');
+$config->product->create->fields['reviewer']  = array('control' => 'select',       'values' => 'users');
+$config->product->create->fields['type']      = array('control' => 'select',       'values' => $lang->product->typeList);
+$config->product->create->fields['desc']      = array('control' => 'textarea',     'values' => '');
+$config->product->create->fields['acl']       = array('control' => 'radio',        'values' => $lang->product->aclList);
+$config->product->create->fields['whitelist'] = array('control' => 'multi-select', 'values' => 'users');
+
 $config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');

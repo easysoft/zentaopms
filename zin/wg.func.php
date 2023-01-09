@@ -12,3 +12,4 @@ function tab($text = '', $v = 0) {return wgFactory('tab', $text);}
 function toolbar($text = '', $v = 0) {return wgFactory('toolbar', $text);}
 function actionbar($text = '', $v = 0) {return wgFactory('actionbar', $text);}
 function dtable($text = '', $v = 0) {return wgFactory('dtable', $text);}
+function form($text = '', $v = 0) {return wgFactory('form', $text);}

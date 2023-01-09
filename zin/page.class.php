@@ -57,7 +57,7 @@ class page
         return $this->app->control->loadModel($moduleName, $appName);
     }
 
-    public function x()
+    public function x($page = 'list')
     {
         extract((array)$this->app->control->view);
 
@@ -68,28 +68,42 @@ class page
         include $this->app->getModuleRoot() . 'common' . DS . 'view' . DS . 'header.html.php';
 
         /* Body. */
-        if(!empty($this->top->layout))
+        if($page == 'list')
         {
-            echo '<div id="mainMenu">';
-            foreach($this->top->layout as $key => $block) $block->x();
-            echo '</div>';
-        }
+            if(!empty($this->top->layout))
+            {
+                echo '<div id="mainMenu">';
+                foreach($this->top->layout as $key => $block) $block->x();
+                echo '</div>';
+            }
 
-        echo '<div id="mainContent" class="clearfix">';
-        if(!empty($this->left->layout))
-        {
-            echo '<div id="sidebar" class="side-col">';
-            foreach($this->left->layout as $key => $block) $block->x();
-            echo '</div>';
-        }
+            echo '<div id="mainContent" class="clearfix">';
+            if(!empty($this->left->layout))
+            {
+                echo '<div id="sidebar" class="side-col">';
+                foreach($this->left->layout as $key => $block) $block->x();
+                echo '</div>';
+            }
 
-        if(!empty($this->right->layout))
-        {
-            echo '<div class="main-col">';
-            foreach($this->right->layout as $key => $block) $block->x();
+            if(!empty($this->right->layout))
+            {
+                echo '<div class="main-col">';
+                foreach($this->right->layout as $key => $block) $block->x();
+                echo '</div>';
+            }
             echo '</div>';
         }
-        echo '</div>';
+        elseif($page == 'create')
+        {
+            echo '<div id="mainContent" class="main-content">';
+            if(!empty($this->right->layout))
+            {
+                echo '<div class="center-block">';
+                foreach($this->right->layout as $key => $block) $block->x();
+                echo '</div>';
+            }
+            echo '</div>';
+        }
 
         /* Footer. */
         include $this->app->getModuleRoot() . 'common' . DS . 'view' . DS . 'footer.html.php';
