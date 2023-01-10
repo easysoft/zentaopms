@@ -530,6 +530,21 @@ class userTest
         return $myObjects;
     }
 
+    public function cleanLockedTest($account)
+    {
+        global $tester;
+
+        $this->objectModel->cleanLocked($account);
+
+        if(dao::isError()) return dao::getError();
+
+        $locked = $tester->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch('locked');
+
+        $result = $locked === '0000-00-00 00:00:00' ? 'success' : 'fail';
+
+        return $result;
+    }
+
     /**
      * Test get contact list.
      *
