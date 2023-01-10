@@ -224,7 +224,7 @@ class tutorialModel extends model
         $execution->leftTasks    = '—';
         $execution->teamMembers  = array_keys($this->getTeamMembers());
         $execution->teamCount    = count($execution->teamMembers);
-        $execution->hasProduct   = '';
+        $execution->hasProduct   = '1';
         $execution->multiple     = '';
         $execution->order        = 1;
         $execution->burns        = array('');
@@ -354,7 +354,7 @@ class tutorialModel extends model
         $execution->fluidBoard    = 0;
         $execution->hours         = $hours;
         $execution->burns         = array(35, 35);
-        $execution->hasProduct    = 1;
+        $execution->hasProduct    = '1';
         $execution->multiple      = '';
         return $execution;
     }
