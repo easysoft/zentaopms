@@ -1,6 +1,4 @@
 <?php
-common::sortFeatureMenu();
-
 $form = form();
 $form->buildForm($fields, "<form class='main-form form-ajax'>");
 $form->buildFormAction();
