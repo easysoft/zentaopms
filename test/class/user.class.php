@@ -531,6 +531,50 @@ class userTest
     }
 
     /**
+     * Test clean user locked time.
+     *
+     * @param  string $account
+     * @access public
+     * @return string
+     */
+    public function cleanLockedTest($account)
+    {
+        global $tester;
+
+        $this->objectModel->cleanLocked($account);
+
+        if(dao::isError()) return dao::getError();
+
+        $locked = $tester->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch('locked');
+
+        $result = $locked === '0000-00-00 00:00:00' ? 'success' : 'fail';
+
+        return $result;
+    }
+
+    /**
+     * Test unbind Ranzhi.
+     *
+     * @param  string $account
+     * @access public
+     * @return string
+     */
+    public function unbindTest($account)
+    {
+        global $tester;
+
+        $this->objectModel->unbind($account);
+
+        if(dao::isError()) return dao::getError();
+
+        $ranzhi = $tester->dao->select('ranzhi')->from(TABLE_USER)->where('account')->eq($account)->fetch('ranzhi');
+
+        $result = empty($ranzhi) ? 'success' : 'fail';
+
+        return $result;
+    }
+
+    /**
      * Test get contact list.
      *
      * @param  string $account
