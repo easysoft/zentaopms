@@ -19,12 +19,12 @@ class form
     public $rows = array();
 
     /**
-     * Form.
+     * Form action btn.
      *
      * @var string
      * @access public
      */
-    public $form = '';
+    public $formActions = '';
 
     /**
      * Construct function, init dtable data.
@@ -35,11 +35,12 @@ class form
      */
     public function __construct($text = '')
     {
-        global $config, $lang;
+        global $config, $lang, $app;
 
-        $this->config = $config;
-        $this->lang   = $lang;
-        $this->text   = $text;
+        $this->config  = $config;
+        $this->lang    = $lang;
+        $this->text    = $text;
+        $this->control = $app->control;
     }
 
     /**
@@ -51,31 +52,37 @@ class form
      */
     public function row($field)
     {
+        $tdAttr = '';
+        if(isset($field['colspan'])) $tdAttr .= "colspan={$field['colspan']}";
+
         $row  = '<tr>';
         $row .= '<th>' . $field['title'] . '</th>';
-        $row .= '<td>';
+        $row .= "<td $tdAttr>";
+
         if($field['control'] == 'input')
         {
-            $row .= html::input($field['name'], '', "class='form-control'");
+            $row .= html::input($field['name'], isset($field['default']) ? $field['default'] : '', "class='form-control'");
         }
         elseif($field['control'] == 'select')
         {
-            $row .= html::select($field['name'], $field['values'], '', "class='form-control'");
+            $row .= html::select($field['name'], $field['values'], isset($field['default']) ? $field['default'] : '', "class='form-control'");
         }
         elseif($field['control'] == 'textarea')
         {
-            $row .= html::textarea($field['name'], '', "class='form-control'");
+            $row .= html::textarea($field['name'], isset($field['default']) ? $field['default'] : '', "class='form-control'");
         }
         elseif($field['control'] == 'radio')
         {
-            $row .= html::radio($field['name'], $field['values']);
+            $row .= html::radio($field['name'], $field['values'], isset($field['default']) ? $field['default'] : '');
         }
         elseif($field['control'] == 'multi-select')
         {
-            //$row .= html::select($field['name'], $field['values'], '', "class='form-control chosen' multiple");
+            //$row .= html::select($field['name'], $field['values'], isset($field['default']) ? $field['default'] : '', "class='form-control chosen' multiple");
         }
+
         $row .= '</td>';
         $row .= '</tr>';
+
         $this->rows[] = $row;
     }
 
@@ -86,13 +93,32 @@ class form
      * @access public
      * @return void
      */
-    public function buildForm($fieldList)
+    public function buildForm($fieldList, $form)
     {
         foreach($fieldList as $field) $this->row($field);
+        $this->form = $form;
     }
 
     /**
-     * Get datatable.
+     * Build form actions.
+     *
+     * @param  string $actions
+     * @access public
+     * @return void
+     */
+    public function buildFormAction($actions = '')
+    {
+        if(!$actions)
+        {
+            $actions .= html::submitButton(); 
+            $actions .= html::backButton(); 
+        }
+
+        $this->formActions = "<div class='table-footer text-center'>$actions</div>";
+    }
+
+    /**
+     * Form to string.
      *
      * @access public
      * @return string
@@ -101,13 +127,14 @@ class form
     {
         $html = '';
 
-        $html .= '<form class="form-ajax main-form">';
+        $html .= $this->form;
         $html .= '<table class="table table-form">';
-        foreach($this->rows as $row)
-        {
-            $html .= $row;
-        }
+
+        foreach($this->rows as $row) $html .= $row;
+        //$html .= $this->control->printExtendFields('', 'table');
+
         $html .= '</table>';
+        $html .= $this->formActions;
         $html .= '</form>';
 
         return $html;

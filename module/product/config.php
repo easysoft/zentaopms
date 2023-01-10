@@ -142,7 +142,7 @@ $config->product->create->fields['QD']        = array('control' => 'select',    
 $config->product->create->fields['RD']        = array('control' => 'select',       'values' => '');
 $config->product->create->fields['reviewer']  = array('control' => 'select',       'values' => 'users');
 $config->product->create->fields['type']      = array('control' => 'select',       'values' => $lang->product->typeList);
-$config->product->create->fields['desc']      = array('control' => 'textarea',     'values' => '');
+$config->product->create->fields['desc']      = array('control' => 'textarea',     'values' => '', 'colspan' => '2');
 $config->product->create->fields['acl']       = array('control' => 'radio',        'values' => $lang->product->aclList);
 $config->product->create->fields['whitelist'] = array('control' => 'multi-select', 'values' => 'users');
 
