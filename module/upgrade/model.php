@@ -584,7 +584,7 @@ class upgradeModel extends model
                     $this->execSQL($xuanxuanSql);
                 }
                 break;
-            case '18_0_beta2':
+            case '18_0_beta3':
                 $this->updateMyBlocks();
                 break;
         }
