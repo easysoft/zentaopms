@@ -237,7 +237,7 @@ class userTest
     public function createUserTest($params = array())
     {
         $_POST  = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
 
         $userID = $this->objectModel->create();
         unset($_POST);
@@ -261,7 +261,11 @@ class userTest
     public function batchCreateUserTest($params = array())
     {
         $_POST  = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
+        $_POST['userType']       = 'inside';
+
+        global $tester;
+        $tester->config->user->batchCreate = count($_POST['account']);
 
         $userIDList = $this->objectModel->batchCreate();
         unset($_POST);
@@ -290,7 +294,7 @@ class userTest
     public function updateUserTest($userID, $params = array())
     {
         $_POST = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
 
         $this->objectModel->update($userID);
         unset($_POST);
@@ -315,9 +319,9 @@ class userTest
     public function batchEditUserTest($params = array())
     {
         $_POST = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
 
-        $this->objectModel->batchEdit($params);
+        $this->objectModel->batchEdit();
         unset($_POST);
 
         if(dao::isError())
@@ -970,5 +974,20 @@ class userTest
     {
         $string = $this->objectModel->setUserList($users, $account);
         return strpos($string, "<option value='$account' selected='selected'") !== false ? 1 : 0;
+    }
+
+    /**
+     * Update session random.
+     *
+     * @access public
+     * @return int
+     */
+    public function updateSessionRandomTest()
+    {
+        global $tester;
+        $oldRandom = $tester->session->rand;
+        $newRandom = $this->objectModel->updateSessionRandom();
+
+        return $oldRandom != $newRandom ? 1 : 0;
     }
 }
