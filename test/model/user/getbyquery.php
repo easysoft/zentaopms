@@ -4,6 +4,8 @@ include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
 su('admin');
 
+zdTable('user')->gen(1000);
+
 /**
 
 title=测试 userModel::getById();
