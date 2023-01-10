@@ -3069,8 +3069,8 @@ class story extends control
 
     /**
      * Ajax get story pairs.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
