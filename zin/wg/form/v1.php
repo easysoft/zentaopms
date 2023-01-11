@@ -127,7 +127,7 @@ class form
     public function toString()
     {
         $html  = '';
-        $html .= "<form class='form'>";
+        $html .= "<form class='form form-ajax' method='post'>";
 
         foreach($this->rows as $row) $html .= $row;
         //$html .= $this->control->printExtendFields('', 'table');
