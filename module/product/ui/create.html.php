@@ -1,6 +1,8 @@
 <?php
+js::set('programID', $programID);
+
 $form = form();
-$form->buildForm($fields, "<form class='main-form form-ajax'>");
+$form->buildForm($fields);
 $form->buildFormAction();
 
 $content = block();

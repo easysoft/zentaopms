@@ -44,44 +44,46 @@ class form
     }
 
     /**
-     * Get row object.
+     * Append dom to rows.
      *
-     * @param  object $field
+     * @param  array $field
      * @access public
      * @return object
      */
-    public function row($field)
+    public function append($field = array(), $element = '')
     {
-        $tdAttr = '';
-        if(isset($field['colspan'])) $tdAttr .= "colspan={$field['colspan']}";
+        if($field)
+        {
+            $row  = '<div class="form-group">';
+            $row .= '<label class="form-label">' . $field['title'] . '</label>';
 
-        $row  = '<tr>';
-        $row .= '<th>' . $field['title'] . '</th>';
-        $row .= "<td $tdAttr>";
+            if($field['control'] == 'input')
+            {
+                $row .= html::input($field['name'], isset($field['default']) ? $field['default'] : '', "class='form-control'");
+            }
+            elseif($field['control'] == 'select')
+            {
+                $row .= html::select($field['name'], $field['options'], isset($field['default']) ? $field['default'] : '', "class='form-control'");
+            }
+            elseif($field['control'] == 'textarea')
+            {
+                $row .= html::textarea($field['name'], isset($field['default']) ? $field['default'] : '', "class='form-control'");
+            }
+            elseif($field['control'] == 'radio')
+            {
+                $row .= html::radio($field['name'], $field['options'], isset($field['default']) ? $field['default'] : '');
+            }
+            elseif($field['control'] == 'multi-select')
+            {
+                //$row .= html::select($field['name'], $field['options'], isset($field['default']) ? $field['default'] : '', "class='form-control chosen' multiple");
+            }
 
-        if($field['control'] == 'input')
-        {
-            $row .= html::input($field['name'], isset($field['default']) ? $field['default'] : '', "class='form-control'");
+            $row .= '</div>';
         }
-        elseif($field['control'] == 'select')
+        else
         {
-            $row .= html::select($field['name'], $field['values'], isset($field['default']) ? $field['default'] : '', "class='form-control'");
+            $row = $element;
         }
-        elseif($field['control'] == 'textarea')
-        {
-            $row .= html::textarea($field['name'], isset($field['default']) ? $field['default'] : '', "class='form-control'");
-        }
-        elseif($field['control'] == 'radio')
-        {
-            $row .= html::radio($field['name'], $field['values'], isset($field['default']) ? $field['default'] : '');
-        }
-        elseif($field['control'] == 'multi-select')
-        {
-            //$row .= html::select($field['name'], $field['values'], isset($field['default']) ? $field['default'] : '', "class='form-control chosen' multiple");
-        }
-
-        $row .= '</td>';
-        $row .= '</tr>';
 
         $this->rows[] = $row;
     }
@@ -93,10 +95,9 @@ class form
      * @access public
      * @return void
      */
-    public function buildForm($fieldList, $form)
+    public function buildForm($fieldList)
     {
-        foreach($fieldList as $field) $this->row($field);
-        $this->form = $form;
+        foreach($fieldList as $field) $this->append($field);
     }
 
     /**
@@ -114,7 +115,7 @@ class form
             $actions .= html::backButton(); 
         }
 
-        $this->formActions = "<div class='table-footer text-center'>$actions</div>";
+        $this->append('', $actions);
     }
 
     /**
@@ -125,16 +126,11 @@ class form
      */
     public function toString()
     {
-        $html = '';
-
-        $html .= $this->form;
-        $html .= '<table class="table table-form">';
+        $html  = '';
+        $html .= "<form class='form'>";
 
         foreach($this->rows as $row) $html .= $row;
         //$html .= $this->control->printExtendFields('', 'table');
-
-        $html .= '</table>';
-        $html .= $this->formActions;
         $html .= '</form>';
 
         return $html;

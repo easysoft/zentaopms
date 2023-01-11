@@ -1139,15 +1139,15 @@ class productModel extends model
 
         foreach($fields as $field => $attr)
         {
-            if($attr['values'] == 'users') $fields[$field]['values'] = $users;
+            if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
             $fields[$field]['name']  = $field;
             $fields[$field]['title'] = $this->lang->product->$field;
         }
 
-        $fields['program']['values'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        $fields['PO']['values']      = $poUsers;
-        $fields['QD']['values']      = $qdUsers;
-        $fields['RD']['values']      = $rdUsers;
+        $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
+        $fields['PO']['options']      = $poUsers;
+        $fields['QD']['options']      = $qdUsers;
+        $fields['RD']['options']      = $rdUsers;
 
         return $fields;
     }

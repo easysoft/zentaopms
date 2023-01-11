@@ -134,17 +134,17 @@ $config->product->edit   = new stdclass();
 $config->product->create->requiredFields = 'name,code';
 $config->product->edit->requiredFields   = 'name,code';
 
-$config->product->create->fields['program']   = array('control' => 'select',       'values' => '');
-$config->product->create->fields['name']      = array('control' => 'input',        'values' => '');
-$config->product->create->fields['code']      = array('control' => 'input',        'values' => '');
-$config->product->create->fields['PO']        = array('control' => 'select',       'values' => '');
-$config->product->create->fields['QD']        = array('control' => 'select',       'values' => '');
-$config->product->create->fields['RD']        = array('control' => 'select',       'values' => '');
-$config->product->create->fields['reviewer']  = array('control' => 'select',       'values' => 'users');
-$config->product->create->fields['type']      = array('control' => 'select',       'values' => $lang->product->typeList);
-$config->product->create->fields['desc']      = array('control' => 'textarea',     'values' => '', 'colspan' => '2');
-$config->product->create->fields['acl']       = array('control' => 'radio',        'values' => $lang->product->aclList);
-$config->product->create->fields['whitelist'] = array('control' => 'multi-select', 'values' => 'users');
+$config->product->create->fields['program']   = array('control' => 'select', 'options' => '');
+$config->product->create->fields['name']      = array('control' => 'input');
+$config->product->create->fields['code']      = array('control' => 'input');
+$config->product->create->fields['PO']        = array('control' => 'select', 'options' => '');
+$config->product->create->fields['QD']        = array('control' => 'select', 'options' => '');
+$config->product->create->fields['RD']        = array('control' => 'select', 'options' => '');
+$config->product->create->fields['reviewer']  = array('control' => 'select', 'options' => 'users');
+$config->product->create->fields['type']      = array('control' => 'select', 'options' => $lang->product->typeList);
+$config->product->create->fields['desc']      = array('control' => 'textarea');
+$config->product->create->fields['acl']       = array('control' => 'radio', 'options' => $lang->product->aclList);
+$config->product->create->fields['whitelist'] = array('control' => 'multi-select', 'options' => 'users');
 
 $config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
