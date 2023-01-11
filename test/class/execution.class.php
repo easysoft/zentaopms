@@ -14,6 +14,34 @@ class executionTest
     }
 
     /**
+     * Test save state.
+     *
+     * @param  int    $executionID
+     * @param  array  $executions
+     * @access public
+     * @return array
+     */
+    public function saveStateTest($executionID = 0, $executions = array())
+    {
+        return $this->objectModel->saveState($executionID, $executions);
+    }
+
+    /**
+     * Create the select code of executions.
+     *
+     * @param  int    $executionID
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @access public
+     * @return void
+     */
+    public function selectTest($executionID, $currentModule, $currentMethod)
+    {
+        $executions = $this->objectModel->getPairs();
+        return $this->objectModel->select($executions, $executionID, 0, $currentModule, $currentMethod);
+    }
+
+    /**
      * Check the privilege.
      *
      * @param mixed $executionID
@@ -371,7 +399,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function getPairsTest($projectID,$count)
+    public function getPairsTest($projectID, $count)
     {
         $object = $this->objectModel->getPairs($projectID);
 
@@ -2407,5 +2435,18 @@ class executionTest
 
         global $lang;
         return strip_tags($lang->switcherMenu);
+    }
+
+    /**
+     * Get switcher.
+     *
+     * @param  int    $executionID
+     * @param  string $method
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest($executionID = 0, $method = '')
+    {
+        return $this->objectModel->getSwitcher($executionID, 'execution', $method);
     }
 }
