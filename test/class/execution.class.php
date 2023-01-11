@@ -14,6 +14,19 @@ class executionTest
     }
 
     /**
+     * Test save state.
+     *
+     * @param  int    $executionID
+     * @param  array  $executions
+     * @access public
+     * @return array
+     */
+    public function saveStateTest($executionID = 0, $executions = array())
+    {
+        return $this->objectModel->saveState($executionID, $executions);
+    }
+
+    /**
      * Create the select code of executions.
      *
      * @param  int    $executionID
