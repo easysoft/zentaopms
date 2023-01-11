@@ -1037,4 +1037,26 @@ class userTest
 
         return $oldRandom != $newRandom ? 1 : 0;
     }
+
+    /**
+     * Identify user by PHP_AUTH_USER.
+     *
+     * @access public
+     * @return bool
+     */
+    public function identifyByPhpAuthTest()
+    {
+        return $this->objectModel->identifyByPhpAuth();
+    }
+
+    /**
+     * Identify user by cookie.
+     *
+     * @access public
+     * @return bool
+     */
+    public function identifyByCookieTest()
+    {
+        return $this->objectModel->identifyByCookie();
+    }
 }
