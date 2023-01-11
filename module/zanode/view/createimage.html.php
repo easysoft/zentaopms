@@ -31,8 +31,12 @@
       <div class="progress-bar progress-bar-success rate" role="progressbar" aria-valuenow="<?php echo $task->rate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $task->rate;?>%">
       </div>
     </div>
-    <?php  helper::createLink('zanode', 'create');?>
-    <h6 class='hide text-center success'><?php echo $lang->zanode->createImageSuccess . html::a(inLink('create'), $lang->zanode->createImageButton, "_parent");?></h6>
+    <?php 
+        $link = helper::createLink('zanode', 'create', "hostID={$node->parent}");
+        $link = str_replace('onlybody=yes', '', $link);
+        $link = trim($link, '?');
+    ?>
+    <h6 class='hide text-center success'><?php echo $lang->zanode->createImageSuccess . html::a($link, $lang->zanode->createImageButton, "_parent", "style='color:#2e7fff;'");?></h6>
     <h6 class='hide text-center fail'><?php echo $lang->zanode->createImageFail;?></h6>
     <?php else:?>
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
@@ -99,5 +103,5 @@ function updateStatus(data)
     }, 'json');
 }
 </script>
-<?php endif;;?>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
