@@ -218,13 +218,13 @@
                 <?php if(!$product->shadow):?>
                 <tr>
                   <th class='w-90px'><?php echo $lang->story->product;?></th>
-                  <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name);?></td>
+                  <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name, '', "data-app='product'");?></td>
                 </tr>
                 <?php endif;?>
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th class='w-90px'><?php echo $lang->product->branch;?></th>
-                  <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch]);?></td>
+                  <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch], '', "data-app='product'");?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
