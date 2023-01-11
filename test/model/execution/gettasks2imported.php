@@ -35,7 +35,6 @@ $product->type->range('normal');
 $product->status->range('normal');
 $product->gen(3);
 
-
 su('admin');
 
 /**
