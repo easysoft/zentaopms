@@ -2234,7 +2234,7 @@ class executionTest
         else
         {
             if(count((array)$object['closed']) == 0 and count((array)$object['nokey']) == 0) return 'empty';
-            return $object;
+            return count($object['nokey']->tasks);
         }
     }
 
@@ -2389,5 +2389,23 @@ class executionTest
         if(dao::isError()) return dao::getError();
 
         return $result > 0;
+    }
+
+    /**
+     * Test set menu.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function setMenuTest($executionID = 0)
+    {
+        $execution = $this->objectModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        $this->objectModel->setMenu($executionID);
+
+        global $lang;
+        return strip_tags($lang->switcherMenu);
     }
 }
