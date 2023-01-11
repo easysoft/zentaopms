@@ -1037,4 +1037,48 @@ class userTest
 
         return $oldRandom != $newRandom ? 1 : 0;
     }
+
+    /**
+     * Judge a user is logon or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isLogonTest()
+    {
+        return $this->objectModel->isLogon();
+    }
+
+    /**
+     * Plus the fail times.
+     *
+     * @param  string  $account
+     * @access public
+     * @return int
+     */
+    public function failPlusTest($account)
+    {
+        global $tester;
+        $this->objectModel->failPlus($account);
+        $failCounts = $tester->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch('fails');
+
+        return $failCounts;
+    }
+
+    /**
+     * Plus the fail times.
+     *
+     * @param  string  $account
+     * @access public
+     * @return string
+     */
+    public function checkLockedTest($account)
+    {
+        global $tester;
+        $result = $this->objectModel->checkLocked($account);
+
+        $result = $result ? 'locked' : 'unlocked';
+
+        return $result;
+    }
 }
