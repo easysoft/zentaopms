@@ -2234,7 +2234,7 @@ class executionTest
         else
         {
             if(count((array)$object['closed']) == 0 and count((array)$object['nokey']) == 0) return 'empty';
-            return $object;
+            return count($object['nokey']->tasks);
         }
     }
 
