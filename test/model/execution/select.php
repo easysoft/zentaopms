@@ -18,7 +18,7 @@ $execution->gen(5);
 
 /**
 
-title=测试 executionModel::accessDenied();
+title=测试 executionModel::select();
 cid=1
 pid=1
 
