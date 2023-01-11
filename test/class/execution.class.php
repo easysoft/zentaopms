@@ -14,6 +14,21 @@ class executionTest
     }
 
     /**
+     * Create the select code of executions.
+     *
+     * @param  int    $executionID
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @access public
+     * @return void
+     */
+    public function selectTest($executionID, $currentModule, $currentMethod)
+    {
+        $executions = $this->objectModel->getPairs();
+        return $this->objectModel->select($executions, $executionID, 0, $currentModule, $currentMethod);
+    }
+
+    /**
      * Check the privilege.
      *
      * @param mixed $executionID
@@ -371,7 +386,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function getPairsTest($projectID,$count)
+    public function getPairsTest($projectID, $count)
     {
         $object = $this->objectModel->getPairs($projectID);
 
