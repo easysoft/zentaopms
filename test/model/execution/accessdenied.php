@@ -4,7 +4,7 @@ include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
 /**
 
-title=测试 programModel::accessDenied();
+title=测试 executionModel::accessDenied();
 cid=1
 pid=1
 
@@ -13,9 +13,9 @@ pid=1
 */
 
 global $tester;
-$tester->loadModel('program');
+$tester->loadModel('execution');
 ob_start();
-$tester->program->accessDenied();
+$tester->execution->accessDenied();
 $result = ob_get_clean();
 
 r(substr($result, 1, 4)) && p() && e('html'); // 权限不足跳转
