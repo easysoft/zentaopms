@@ -9,7 +9,7 @@ $team = zdTable('team');
 $team->root->range('1');
 $team->type->range('execution');
 $team->account->range('user1,user2');
-$team->role->range('研发', '测试');
+$team->role->range('研发,测试');
 $team->days->range('5');
 $team->hours->range('7');
 $team->gen(2);
