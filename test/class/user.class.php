@@ -587,7 +587,8 @@ class userTest
         $contacts = $this->objectModel->getContactLists($account, $params);
 
         if(dao::isError()) return dao::getError();
-        return $contacts;
+
+        return $contacts ? $contacts : 0;
     }
 
     /**
@@ -1080,5 +1081,27 @@ class userTest
         $result = $result ? 'locked' : 'unlocked';
 
         return $result;
+    }
+
+    /**
+     * Identify user by PHP_AUTH_USER.
+     *
+     * @access public
+     * @return bool
+     */
+    public function identifyByPhpAuthTest()
+    {
+        return $this->objectModel->identifyByPhpAuth();
+    }
+
+    /**
+     * Identify user by cookie.
+     *
+     * @access public
+     * @return bool
+     */
+    public function identifyByCookieTest()
+    {
+        return $this->objectModel->identifyByCookie();
     }
 }
