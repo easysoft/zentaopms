@@ -2423,4 +2423,17 @@ class executionTest
         global $lang;
         return strip_tags($lang->switcherMenu);
     }
+
+    /**
+     * Get switcher.
+     *
+     * @param  int    $executionID
+     * @param  string $method
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest($executionID = 0, $method = '')
+    {
+        return $this->objectModel->getSwitcher($executionID, 'execution', $method);
+    }
 }
