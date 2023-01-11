@@ -587,7 +587,8 @@ class userTest
         $contacts = $this->objectModel->getContactLists($account, $params);
 
         if(dao::isError()) return dao::getError();
-        return $contacts;
+
+        return $contacts ? $contacts : 0;
     }
 
     /**
