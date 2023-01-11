@@ -2,6 +2,8 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+zdTable('user')->gen(5);
+su('admin');
 
 $execution = zdTable('project');
 $execution->id->range('1-5');
@@ -13,9 +15,6 @@ $execution->openedBy->range('admin,user1');
 $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
-
-zdTable('user')->gen(5);
-su('admin');
 
 /**
 
