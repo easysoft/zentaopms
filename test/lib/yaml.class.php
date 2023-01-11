@@ -300,7 +300,7 @@ class yaml
     {
         $tableSqlDir = "{$_SERVER['PWD']}/data/sql";
 
-        if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0700);
+        if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0777, true);
         $dumpCommand = "mysqldump -u%s -p%s -h%s -P%s %s %s > {$tableSqlDir}/{$tableName}.sql";
 
         $runtimeRoot = dirname(dirname(__FILE__)) . '/runtime/';
@@ -314,10 +314,13 @@ class yaml
         $dbUser    = $this->config->db->user;
         $dbPWD     = $this->config->db->password;
 
-        $command = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
+        $setModeSql = "mysql -u%s -p%s -h%s -P%s %s -e \"SET global sql_mode = '';\"";
+        $command    = "$zdPath -c %s -d %s -n %d -t %s -dns mysql://%s:%s@%s:%s/%s#utf8";
         if($isClear === true) $command .= ' --clear';
-        $execYaml = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
-        $execDump = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
+        $execYaml    = sprintf($command, $configYaml, $yamlFile, $rows, $tableName, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
+        $execDump    = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
+        $execSetMode = sprintf($setModeSql, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName);
+        system($execSetMode);
         system($execDump);
         system($execYaml);
     }
