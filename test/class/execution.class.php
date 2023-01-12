@@ -14,6 +14,29 @@ class executionTest
     }
 
     /**
+     * Check the workload format and total.
+     *
+     * @param  string $executionID
+     * @param  string $type
+     * @param  int    $percent 
+     * @access public
+     * @return object
+     */
+    public function checkWorkloadTest($executionID, $type = '', $percent = 0)
+    {
+        global $tester;
+        $tester->loadModel('programplan');
+
+        $_POST['percent'] = $percent;
+        $oldExecution = empty($executionID) ? '' : $this->objectModel->getByID($executionID);
+        $this->objectModel->checkWorkload($type, $percent, $oldExecution);
+        unset($_POST);
+
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
+
+    /**
      * Set Kanban.
      *
      * @param  int    $executionID
