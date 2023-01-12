@@ -4044,7 +4044,7 @@ class executionModel extends model
         $builds  = array('' => '', 'trunk' => $this->lang->trunk);
         foreach($products as $product)
         {
-            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
+            $productModules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
             $productBuilds  = $this->loadModel('build')->getBuildPairs($product->id, 'all', $params = 'noempty|notrunk|withbranch');
             foreach($productModules as $moduleID => $moduleName)
             {
