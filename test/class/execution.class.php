@@ -14,6 +14,18 @@ class executionTest
     }
 
     /**
+     * Get no multiple execution id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return int
+     */
+    public function getNoMultipleIDTest($projectID)
+    {
+        return $this->objectModel->getNoMultipleID($projectID);
+    }
+
+    /**
      * Check begin and end date.
      *
      * @param  int    $projectID
