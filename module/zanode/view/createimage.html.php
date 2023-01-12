@@ -108,8 +108,15 @@ function updateStatus(data)
 
     $.post(url, postData, function(result)
     {
-        if(data.status == 'completed') $('.success').removeClass('hide');
-        else $('.status-title').text(zanodeLang.createImageFail)
+        if(data.status == 'completed') 
+        {
+            $('.success').removeClass('hide');
+            $('.status-title').text('')
+        }
+        else 
+        {
+            $('.status-title').text(zanodeLang.createImageFail)
+        }
     }, 'json');
 }
 </script>
