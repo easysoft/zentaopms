@@ -18,7 +18,7 @@ class executionTest
      *
      * @param  string $executionID
      * @param  string $type
-     * @param  int    $percent 
+     * @param  int    $percent
      * @access public
      * @return object
      */
@@ -2531,5 +2531,42 @@ class executionTest
     public function syncNoMultipleSprintTest($projectID)
     {
         return $this->objectModel->syncNoMultipleSprint($projectID);
+    }
+
+    /**
+     * Test build search from.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildSearchFromTest($queryID)
+    {
+        $this->objectModel->buildSearchFrom($queryID, 'searchUrl');
+
+        return $_SESSION['executionsearchParams']['queryID'];
+    }
+
+    public function printCellTest($executionID)
+    {
+        $col = new stdClass();
+        $col->order = 1;
+        $col->id    = 'id';
+        $col->show  = 1;
+        $col->width = 70;
+        $col->fixed = 'left';
+        $col->title = 'ID';
+        $col->sort  = 'yes';
+        $col->name  = '';
+
+        $execution = $this->objectModel->getByID($executionID);
+
+        ob_start();
+        $this->objectModel->printCell($col, $execution, array());
+        $objects = ob_get_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return strip_tags($objects);
     }
 }
