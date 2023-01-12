@@ -555,13 +555,15 @@ class product extends control
         $this->view->poUsers              = $poUsers;
         $this->view->qdUsers              = $qdUsers;
         $this->view->rdUsers              = $rdUsers;
+        $this->view->fields               = $this->product->buildFormFields($this->config->product->edit->fields, $product);
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs             = array('') + $programs;
         $this->view->lines                = $lines;
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
-        $this->display();
+        //$this->display();
+        $this->render();
     }
 
     /**

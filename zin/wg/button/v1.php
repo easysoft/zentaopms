@@ -24,7 +24,7 @@ class button extends wg
      * @var    string
      * @access public
      */
-    public $target = '';
+    public $target = 'self';
 
     /**
      * Class.

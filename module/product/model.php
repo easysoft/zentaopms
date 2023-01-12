@@ -1126,10 +1126,11 @@ class productModel extends model
      * Build form fields.
      *
      * @param  array $fields
+     * @param  object $project
      * @access public
      * @return void
      */
-    public function buildFormFields($fields)
+    public function buildFormFields($fields, $product = null)
     {
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
@@ -1142,12 +1143,16 @@ class productModel extends model
             if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
             $fields[$field]['name']  = $field;
             $fields[$field]['title'] = $this->lang->product->$field;
+            if($product and isset($product->$field)) $fields[$field]['default'] = $product->$field;
         }
 
         $fields['program']['options'] = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
         $fields['PO']['options']      = $poUsers;
         $fields['QD']['options']      = $qdUsers;
         $fields['RD']['options']      = $rdUsers;
+
+        if($product and $product->program)$fields['line']['options'] = array('') + $this->getLinePairs($product->program);
+        if(empty($product->program) or $this->config->systemMode != 'ALM') unset($fields['line']);
 
         return $fields;
     }
