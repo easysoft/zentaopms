@@ -49,4 +49,4 @@ $config->zanode->editor = new stdclass();
 $config->zanode->editor->create      = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->zanode->editor->edit        = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->zanode->editor->createimage = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->zanode->editor->view        = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->zanode->editor->view        = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
