@@ -25,6 +25,8 @@ $query->form->range('`a:44:{s:9:"fieldname";s:0:"";s:7:"fieldid";s:0:"";s:11:"fi
 $query->sql->range("`(( 1   AND `name`  LIKE '%迭代%' ) AND ( 1  ))`");
 $query->gen(1);
 
+su('admin');
+
 /**
 
 title=测试executionModel->buildSearchFrom();

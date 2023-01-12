@@ -2620,4 +2620,38 @@ class executionTest
 
         return $this->objectModel->buildOperateMenu($execution);
     }
+
+    /**
+     * Test print nested list.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string
+     */
+    public function printNestedListTest($projectID = 0)
+    {
+        $executions = $this->objectModel->getStatData($projectID);
+
+        global $app;
+        $app->moduleName = 'execution';
+        ob_start();
+        $this->objectModel->printNestedList($executions[0], false, array(), 1);
+        $result = ob_get_clean();
+        return mb_substr(strip_tags($result), 0, 2);
+    }
+
+    /**
+     * Test print nested list.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function printTreeTest($executionID)
+    {
+        global $app;
+        $app->moduleName = 'task';
+        $trees = $this->objectModel->getTree($executionID);
+        return str_replace(' ', '', strip_tags($this->objectModel->printTree($trees, false)));
+    }
 }
