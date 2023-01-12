@@ -2651,7 +2651,22 @@ class executionTest
     {
         global $app;
         $app->moduleName = 'task';
-        $trees = $this->objectModel->getTree($executionID);
-        return str_replace(' ', '', strip_tags($this->objectModel->printTree($trees, false)));
+        $tree = $this->objectModel->getTree($executionID);
+        return str_replace(' ', '', strip_tags($this->objectModel->printTree($tree, false)));
+    }
+
+    /**
+     * Test format tasks for tree.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function formatTasksForTreeTest($executionID)
+    {
+        global $app;
+        $app->moduleName = 'task';
+        $tasks = $this->objectModel->getSearchTasks("execution = $executionID", null, 'id_desc');
+        return $this->objectModel->formatTasksForTree($tasks);
     }
 }
