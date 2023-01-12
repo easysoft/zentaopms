@@ -146,6 +146,93 @@ $config->product->create->fields['desc']      = array('control' => 'textarea');
 $config->product->create->fields['acl']       = array('control' => 'radio', 'options' => $lang->product->aclList);
 $config->product->create->fields['whitelist'] = array('control' => 'multi-select', 'options' => 'users');
 
+$config->product->all->dtable = new stdclass();
+$config->product->all->dtable->fieldList['name']['name']         = 'name';
+$config->product->all->dtable->fieldList['name']['title']        = $lang->product->name;
+$config->product->all->dtable->fieldList['name']['width']        = 400;
+$config->product->all->dtable->fieldList['name']['type']         = 'html';
+$config->product->all->dtable->fieldList['name']['flex']         = 1;
+$config->product->all->dtable->fieldList['name']['nestedToggle'] = true;
+$config->product->all->dtable->fieldList['name']['checkbox']     = true;
+$config->product->all->dtable->fieldList['name']['iconRender']   = true;
+$config->product->all->dtable->fieldList['name']['sortType']     = true;
+
+$config->product->all->dtable->fieldList['PO']['name']     = 'PO';
+$config->product->all->dtable->fieldList['PO']['title']    = $lang->product->manager;
+$config->product->all->dtable->fieldList['PO']['minWidth'] = 60;
+$config->product->all->dtable->fieldList['PO']['type']     = 'avatarBtn';
+$config->product->all->dtable->fieldList['PO']['sortType'] = true;
+
+$config->product->all->dtable->fieldList['draftStories']['name']     = 'draftStories';
+$config->product->all->dtable->fieldList['draftStories']['title']    = $lang->product->draftStory;
+$config->product->all->dtable->fieldList['draftStories']['width']    = 60;
+$config->product->all->dtable->fieldList['draftStories']['type']     = 'format';
+$config->product->all->dtable->fieldList['draftStories']['sortType'] = false;
+$config->product->all->dtable->fieldList['draftStories']['group']    = $lang->SRCommon;
+
+$config->product->all->dtable->fieldList['activeStories']['name']     = 'activeStories';
+$config->product->all->dtable->fieldList['activeStories']['title']    = $lang->product->activeStory;
+$config->product->all->dtable->fieldList['activeStories']['width']    = 60;
+$config->product->all->dtable->fieldList['activeStories']['type']     = 'format';
+$config->product->all->dtable->fieldList['activeStories']['sortType'] = false;
+$config->product->all->dtable->fieldList['activeStories']['group']    = $lang->SRCommon;
+
+$config->product->all->dtable->fieldList['changingStories']['name']     = 'changingStories';
+$config->product->all->dtable->fieldList['changingStories']['title']    = $lang->product->changingStory;
+$config->product->all->dtable->fieldList['changingStories']['width']    = 60;
+$config->product->all->dtable->fieldList['changingStories']['type']     = 'format';
+$config->product->all->dtable->fieldList['changingStories']['sortType'] = false;
+$config->product->all->dtable->fieldList['changingStories']['group']    = $lang->SRCommon;
+
+$config->product->all->dtable->fieldList['reviewingStories']['name']     = 'reviewingStories';
+$config->product->all->dtable->fieldList['reviewingStories']['title']    = $lang->product->reviewingStory;
+$config->product->all->dtable->fieldList['reviewingStories']['width']    = 60;
+$config->product->all->dtable->fieldList['reviewingStories']['type']     = 'format';
+$config->product->all->dtable->fieldList['reviewingStories']['sortType'] = false;
+$config->product->all->dtable->fieldList['reviewingStories']['group']    = $lang->SRCommon;
+
+$config->product->all->dtable->fieldList['storyCompleteRate']['name']     = 'storyCompleteRate';
+$config->product->all->dtable->fieldList['storyCompleteRate']['title']    = $lang->product->storyCompleteRate;
+$config->product->all->dtable->fieldList['storyCompleteRate']['width']    = 60;
+$config->product->all->dtable->fieldList['storyCompleteRate']['type']     = 'format';
+$config->product->all->dtable->fieldList['storyCompleteRate']['sortType'] = false;
+$config->product->all->dtable->fieldList['storyCompleteRate']['group']    = $lang->SRCommon;
+
+$config->product->all->dtable->fieldList['unResolvedBugs']['name']     = 'unResolvedBugs';
+$config->product->all->dtable->fieldList['unResolvedBugs']['title']    = $lang->product->activeStory;
+$config->product->all->dtable->fieldList['unResolvedBugs']['width']    = 60;
+$config->product->all->dtable->fieldList['unResolvedBugs']['type']     = 'format';
+$config->product->all->dtable->fieldList['unResolvedBugs']['sortType'] = false;
+$config->product->all->dtable->fieldList['unResolvedBugs']['group']    = 'Bug';
+
+$config->product->all->dtable->fieldList['bugFixedRate']['name']     = 'bugFixedRate';
+$config->product->all->dtable->fieldList['bugFixedRate']['title']    = $lang->product->bugFixedRate;
+$config->product->all->dtable->fieldList['bugFixedRate']['width']    = 60;
+$config->product->all->dtable->fieldList['bugFixedRate']['type']     = 'format';
+$config->product->all->dtable->fieldList['bugFixedRate']['sortType'] = false;
+$config->product->all->dtable->fieldList['bugFixedRate']['group']    = 'Bug';
+
+$config->product->all->dtable->fieldList['plans']['name']     = 'plans';
+$config->product->all->dtable->fieldList['plans']['title']    = $lang->product->plan;
+$config->product->all->dtable->fieldList['plans']['width']    = 60;
+$config->product->all->dtable->fieldList['plans']['type']     = 'format';
+$config->product->all->dtable->fieldList['plans']['sortType'] = false;
+
+$config->product->all->dtable->fieldList['releases']['name']     = 'releases';
+$config->product->all->dtable->fieldList['releases']['title']    = $lang->product->release;
+$config->product->all->dtable->fieldList['releases']['width']    = 60;
+$config->product->all->dtable->fieldList['releases']['type']     = 'format';
+$config->product->all->dtable->fieldList['releases']['sortType'] = false;
+
+$config->product->all->dtable->fieldList['actions']['name']   = 'actions';
+$config->product->all->dtable->fieldList['actions']['title']  = $lang->actions;
+$config->product->all->dtable->fieldList['actions']['width']  = 70;
+$config->product->all->dtable->fieldList['actions']['type']   = 'html';
+$config->product->all->dtable->fieldList['actions']['fixed']  = 'right';
+$config->product->all->dtable->fieldList['actions']['module'] = 'product';
+
+$config->product->actionsMap['normal'] = array('edit');
+
 $config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');

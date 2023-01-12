@@ -1321,7 +1321,8 @@ class product extends control
         $this->view->pager            = $pager;
         $this->view->showBatchEdit    = $this->cookie->showProductBatchEdit;
 
-        $this->display();
+        //$this->display();
+        $this->render();
     }
 
     /**

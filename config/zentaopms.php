@@ -427,7 +427,7 @@ $config->maxPriValue  = '256';
 $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
 
 $config->dtable = new stdclass();
-$config->dtable->colVars = array('width', 'minWidth', 'type', 'flex', 'fixed', 'sortType', 'checkbox', 'nestedToggle', 'statusMap', 'actionsMap');
+$config->dtable->colVars = array('width', 'minWidth', 'type', 'flex', 'fixed', 'sortType', 'checkbox', 'nestedToggle', 'statusMap', 'actionsMap', 'group');
 
 $config->featureGroup = new stdclass();
 $config->featureGroup->product   = array('roadmap', 'track', 'UR');

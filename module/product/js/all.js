@@ -1,29 +1,3 @@
-$("#" + browseType + "Tab").addClass('btn-active-text');
-
-/**
- * Set batch edit checkbox.
- *
- * @access public
- * @return void
- */
-function setCheckbox()
-{
-    $('#productListForm .c-checkbox, #productListForm .check-all').hide();
-    $('.c-name').css('border-left', 'none');
-    $(":checkbox[name^='productIDList']").prop('checked', false);
-    $('.check-all, .program-checkbox, .row-product').removeClass('checked');
-    if($.cookie('showProductBatchEdit') == 1)
-    {
-        $('#productListForm .c-checkbox, #productListForm .check-all').show();
-        $('.c-name').css('border-left', '1px solid #ddd');
-    }
-    else
-    {
-        $('.table-actions').hide();
-        $('#productsCount').show();
-    }
-}
-
 /**
  * Update prarent checkbox.
  *
@@ -87,43 +61,25 @@ function addStatistic()
     }
 }
 
-/**
- * Anti shake operation for jquery.
- *
- * @param  fn $fn
- * @param  delay $delay
- * @access public
- * @return void
- */
-function debounce(fn, delay)
-{
-    var timer = null;
-    return function()
-    {
-        if(timer) clearTimeout(timer);
-        timer = setTimeout(fn, delay)
-    }
-}
-
-/**
- * Update statistics.
- *
- * @access public
- * @return void
- */
-function updateStatistic()
-{
-    debounce(addStatistic(), 200)
-}
-
 $(function()
 {
     $('input[name^="showEdit"]').click(function()
     {
-        $.cookie('showProductBatchEdit', $(this).is(':checked') ? 1 : 0, {expires: config.cookieLife, path: config.webRoot});
-        setCheckbox();
+        var editProduct = $(this).is(':checked') ? 1 : 0;
+        $.cookie('showProductBatchEdit', editProduct, {expires: config.cookieLife, path: config.webRoot});
+        dtableWithZentao.render({checkable: editProduct,
+          footer() {
+              const statistic = () => {
+                  const checkedCount = this.getChecks().length;
+                  const text = editProduct && checkedCount ? checkedProjects.replace('%s', checkedCount) : productSummary;
+
+                  return [{children: text, className: 'text-dark'}];
+              };
+              if(editProduct) return ['checkbox', 'toolbar', statistic, 'flex', 'pager'];
+              return [statistic, 'flex', 'pager'];
+          },
+        });
     });
-    setCheckbox();
 
     /* Init table sort. */
     $('#productTableList').addClass('sortable').sortable(
@@ -212,5 +168,20 @@ $(function()
             $(":checkbox[name^='productIDList']").prop('checked', true);
         }
         updateStatistic()
+    });
+
+    var isEditMode = $('input#showEdit1').is(':checked');
+    dtableWithZentao.render({
+        checkable: isEditMode,
+        footer() {
+            const statistic = () => {
+                const checkedCount = this.getChecks().length;
+                const text = isEditMode && checkedCount ? checkedProjects.replace('%s', checkedCount) : productSummary;
+
+                return [{children: text, className: 'text-dark'}];
+            };
+            if(isEditMode) return ['checkbox', 'toolbar', statistic, 'flex', 'pager'];
+            return [statistic, 'flex', 'pager'];
+        },
     });
 });

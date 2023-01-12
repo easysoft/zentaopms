@@ -39,6 +39,19 @@ class column extends wg
     }
 
     /**
+     * Set column group.
+     *
+     * @param  string $group
+     * @access public
+     * @return object
+     */
+    public function group($group)
+    {
+        $this->group = $group;
+        return $this;
+    }
+
+    /**
      * Set column min width.
      *
      * @param  int    $width
@@ -336,6 +349,31 @@ class dtable
         return $this;
     }
 
+    public function appendFootToolBar($bar)
+    {
+        $this->footToolBar[] = $bar;
+    }
+
+    public function setPager($pager, $pagerLink)
+    {
+        global $lang;
+
+        $items = array();
+        $items[] = array('type' => 'info', 'text' => $lang->pager->totalCountAB);
+        $items[] = array('type' => 'size-menu', 'text' => $lang->pager->pageSizeAB);
+        $items[] = array('type' => 'link', 'page' => 'first', 'icon' => 'icon-first-page', 'hint' => $lang->pager->firstPage);
+        $items[] = array('type' => 'link', 'page' => 'priv', 'icon' => 'icon-angle-left', 'hint' => $lang->pager->previousPage);
+        $items[] = array('type' => 'info', 'text' => '{page}/{pageTotal}');
+        $items[] = array('type' => 'link', 'page' => 'next', 'icon' => 'icon-angle-right', 'hint' => $lang->pager->nextPage);
+        $items[] = array('type' => 'link', 'page' => 'last', 'icon' => 'icon-last-page', 'hint' => $lang->pager->lastPage);
+
+        $this->footPager['items']       = $items;
+        $this->footPager['page']        = $pager->pageID;
+        $this->footPager['recTotal']    = $pager->recTotal;
+        $this->footPager['recPerPage']  = $pager->recPerPage;
+        $this->footPager['linkCreator'] = $pagerLink;
+    }
+
     /**
      * Get datatable.
      *
@@ -362,7 +400,12 @@ EOF;
 
         if(isset($this->iconRender)) $html .= $this->setIconRender();
 
-        $html .= 'dtableWithZentao = new zui.DTable(".dtable", {cols: columns, data: ' . json_encode($this->data) . ', nested: true, checkable: true, sortLink: createSortLink}); var datas = ' . json_encode($this->data) . ';console.log(datas);';
+        $dtableParams = "{cols: columns, data: " . json_encode($this->data) . ", nested: true, checkable: true, sortLink: createSortLink";
+        if(!empty($this->footToolBar)) $dtableParams .= ", footToolbar: {items:" . json_encode($this->footToolBar) . "}";
+        if(!empty($this->footPager)) $dtableParams .= ", footPager:" . json_encode($this->footPager);
+        $dtableParams .= "}";
+
+        $html .= 'dtableWithZentao = new zui.DTable(".dtable", ' . $dtableParams . '); var datas = ' . json_encode($this->data) . ';console.log(datas);';
         $html .= '</script>';
 
         return $html;
