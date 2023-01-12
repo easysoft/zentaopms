@@ -2472,13 +2472,14 @@ class executionModel extends model
     {
         $this->loadModel('task');
 
-        $execution = $this->getByID($executionID);
-        $tasks     = $this->dao->select('id,execution,assignedTo,story,consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $taskStories = array();
+        $execution   = $this->getByID($executionID);
+        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to execution. */
             $assignedToes[$task->assignedTo] = $task->execution;
-            $stories[$task->story]           = $task->story;
+            $taskStories[$task->story]       = $task->story;
 
             $data = new stdclass();
             $data->project   = $execution->project;
@@ -2500,7 +2501,7 @@ class executionModel extends model
         }
 
         /* Remove empty story. */
-        unset($stories[0]);
+        unset($taskStories[0]);
 
         /* Add members to execution team. */
         $teamMembers = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
@@ -2523,8 +2524,8 @@ class executionModel extends model
         /* Link stories. */
         $executionStories = $this->loadModel('story')->getExecutionStoryPairs($executionID);
         $lastOrder        = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
-        $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($executionStories))->fetchAll('story');
-        foreach($stories as $storyID)
+        $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($taskStories))->fetchAll('story');
+        foreach($taskStories as $storyID)
         {
             if(!isset($executionStories[$storyID]))
             {
@@ -4044,7 +4045,7 @@ class executionModel extends model
         $builds  = array('' => '', 'trunk' => $this->lang->trunk);
         foreach($products as $product)
         {
-            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
+            $productModules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
             $productBuilds  = $this->loadModel('build')->getBuildPairs($product->id, 'all', $params = 'noempty|notrunk|withbranch');
             foreach($productModules as $moduleID => $moduleName)
             {
