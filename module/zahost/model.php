@@ -323,16 +323,25 @@ class zahostModel extends model
         }
 
         $currentTask = null;
+        $is_finish   = false;
         foreach($result->data as $status => $group)
         {
+            if($is_finish) break;
             foreach($group as $task)
             {
+                if($is_finish) break;
                 if($task->task == $image->id)
                 {
                     $task->endDate = substr($task->endDate, 0, 19);
                     if(empty($currentTask) || strtotime($task->endDate) > strtotime($currentTask->endDate))
                     {
                         $currentTask = $task;
+                    }
+                    if($task->status == 'inprogress')
+                    {
+                        $currentTask = $task;
+                        $is_finish   = true;
+                        break;
                     }
                 }
             }
@@ -342,6 +351,8 @@ class zahostModel extends model
         {
             $image->rate   = $currentTask->rate;
             $image->status = $currentTask->status;
+
+            if(!empty($result->data->inprogress) && $currentTask->task != $result->data->inprogress[0]->task && $currentTask->status == 'created') $image->status = 'pending';
 
             $this->dao->update(TABLE_IMAGE)
                 ->set('status')->eq($image->status)
@@ -372,7 +383,6 @@ class zahostModel extends model
 
         $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$host->tokenSN"), 'json'));
 
-        a($response);
         if($response->code == 200) return true;
 
         dao::$errors[] = $response->msg;
