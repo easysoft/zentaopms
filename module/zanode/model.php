@@ -675,6 +675,7 @@ class zanodemodel extends model
 
             foreach($tasks as $task)
             {
+                if(!empty($tasks['inprogress']) && $task->task != $tasks['inprogress'][0]->task && $task->status == 'created') $task->status = 'pending';
                 if($type == $task->type and $taskID == $task->task) return $task;
             }
         }
