@@ -237,7 +237,7 @@ class userTest
     public function createUserTest($params = array())
     {
         $_POST  = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
 
         $userID = $this->objectModel->create();
         unset($_POST);
@@ -261,7 +261,11 @@ class userTest
     public function batchCreateUserTest($params = array())
     {
         $_POST  = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
+        $_POST['userType']       = 'inside';
+
+        global $tester;
+        $tester->config->user->batchCreate = count($_POST['account']);
 
         $userIDList = $this->objectModel->batchCreate();
         unset($_POST);
@@ -290,7 +294,7 @@ class userTest
     public function updateUserTest($userID, $params = array())
     {
         $_POST = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
 
         $this->objectModel->update($userID);
         unset($_POST);
@@ -315,9 +319,9 @@ class userTest
     public function batchEditUserTest($params = array())
     {
         $_POST = $params;
-        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
 
-        $this->objectModel->batchEdit($params);
+        $this->objectModel->batchEdit();
         unset($_POST);
 
         if(dao::isError())
@@ -527,6 +531,50 @@ class userTest
     }
 
     /**
+     * Test clean user locked time.
+     *
+     * @param  string $account
+     * @access public
+     * @return string
+     */
+    public function cleanLockedTest($account)
+    {
+        global $tester;
+
+        $this->objectModel->cleanLocked($account);
+
+        if(dao::isError()) return dao::getError();
+
+        $locked = $tester->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch('locked');
+
+        $result = $locked === '0000-00-00 00:00:00' ? 'success' : 'fail';
+
+        return $result;
+    }
+
+    /**
+     * Test unbind Ranzhi.
+     *
+     * @param  string $account
+     * @access public
+     * @return string
+     */
+    public function unbindTest($account)
+    {
+        global $tester;
+
+        $this->objectModel->unbind($account);
+
+        if(dao::isError()) return dao::getError();
+
+        $ranzhi = $tester->dao->select('ranzhi')->from(TABLE_USER)->where('account')->eq($account)->fetch('ranzhi');
+
+        $result = empty($ranzhi) ? 'success' : 'fail';
+
+        return $result;
+    }
+
+    /**
      * Test get contact list.
      *
      * @param  string $account
@@ -539,7 +587,8 @@ class userTest
         $contacts = $this->objectModel->getContactLists($account, $params);
 
         if(dao::isError()) return dao::getError();
-        return $contacts;
+
+        return $contacts ? $contacts : 0;
     }
 
     /**
@@ -600,9 +649,12 @@ class userTest
      */
     public function createContactListTest($listName = '', $userList = array())
     {
-        $listID = $this->objectModel->createContactList($listName, $userList);
+        ob_start();
+        $listID  = $this->objectModel->createContactList($listName, $userList);
+        $message = ob_get_clean();
 
-        if(dao::isError()) return dao::getError();
+        if($message) return array('message' => array('listName' => array(1)));
+        if(dao::isError()) return array('message' => dao::getError());
         return $this->objectModel->getContactListByID($listID);
     }
 
@@ -619,7 +671,7 @@ class userTest
     {
         $this->objectModel->updateContactList($listID, $listName, $userList);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return array('message' => dao::getError());
         return $this->objectModel->getContactListByID($listID);
     }
 
@@ -639,7 +691,7 @@ class userTest
     }
 
     /**
-     * Test delete a contact list.
+     * Test get user data in json.
      *
      * @param  object $user
      * @access public
@@ -970,5 +1022,86 @@ class userTest
     {
         $string = $this->objectModel->setUserList($users, $account);
         return strpos($string, "<option value='$account' selected='selected'") !== false ? 1 : 0;
+    }
+
+    /**
+     * Update session random.
+     *
+     * @access public
+     * @return int
+     */
+    public function updateSessionRandomTest()
+    {
+        global $tester;
+        $oldRandom = $tester->session->rand;
+        $newRandom = $this->objectModel->updateSessionRandom();
+
+        return $oldRandom != $newRandom ? 1 : 0;
+    }
+
+    /**
+     * Judge a user is logon or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isLogonTest()
+    {
+        return $this->objectModel->isLogon();
+    }
+
+    /**
+     * Plus the fail times.
+     *
+     * @param  string  $account
+     * @access public
+     * @return int
+     */
+    public function failPlusTest($account)
+    {
+        global $tester;
+        $this->objectModel->failPlus($account);
+        $failCounts = $tester->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch('fails');
+
+        return $failCounts;
+    }
+
+    /**
+     * Plus the fail times.
+     *
+     * @param  string  $account
+     * @access public
+     * @return string
+     */
+    public function checkLockedTest($account)
+    {
+        global $tester;
+        $result = $this->objectModel->checkLocked($account);
+
+        $result = $result ? 'locked' : 'unlocked';
+
+        return $result;
+    }
+
+    /**
+     * Identify user by PHP_AUTH_USER.
+     *
+     * @access public
+     * @return bool
+     */
+    public function identifyByPhpAuthTest()
+    {
+        return $this->objectModel->identifyByPhpAuth();
+    }
+
+    /**
+     * Identify user by cookie.
+     *
+     * @access public
+     * @return bool
+     */
+    public function identifyByCookieTest()
+    {
+        return $this->objectModel->identifyByCookie();
     }
 }

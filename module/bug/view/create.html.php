@@ -385,7 +385,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
     </form>
   </div>
 </div>
-<?php js::set('bugModule', $lang->bug->module);?>
+<?php if(empty($product->shadow)) js::set('bugModule', $lang->bug->module);?>
 <?php js::set('bugExecution', $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
