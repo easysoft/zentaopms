@@ -253,6 +253,7 @@ class repoModel extends model
     public function update($id)
     {
         $repo = $this->getRepoByID($id);
+        if($repo->client != $this->post->client and !$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
         $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
@@ -289,9 +290,6 @@ class repoModel extends model
             $data->prefix = '';
         }
 
-        if($data->client != $repo->client and !$this->checkClient()) return false;
-        if(!$this->checkConnection()) return false;
-
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
@@ -314,6 +312,7 @@ class repoModel extends model
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
             return false;
         }
+
         return true;
     }
 
@@ -1391,10 +1390,10 @@ class repoModel extends model
         if($clientVersionFile)
         {
             session_start();
-            $this->session->set('clientVersionFile', $clientVersionFile);
+            $this->session->set('clientVersionFile', '');
             session_write_close();
 
-            if(file_exists($clientVersionFile)) unlink($clientVersionFile);
+            if(file_exists($clientVersionFile)) @unlink($clientVersionFile);
         }
     }
 

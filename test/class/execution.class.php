@@ -14,6 +14,34 @@ class executionTest
     }
 
     /**
+     * Test save state.
+     *
+     * @param  int    $executionID
+     * @param  array  $executions
+     * @access public
+     * @return array
+     */
+    public function saveStateTest($executionID = 0, $executions = array())
+    {
+        return $this->objectModel->saveState($executionID, $executions);
+    }
+
+    /**
+     * Create the select code of executions.
+     *
+     * @param  int    $executionID
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @access public
+     * @return void
+     */
+    public function selectTest($executionID, $currentModule, $currentMethod)
+    {
+        $executions = $this->objectModel->getPairs();
+        return $this->objectModel->select($executions, $executionID, 0, $currentModule, $currentMethod);
+    }
+
+    /**
      * Check the privilege.
      *
      * @param mixed $executionID
@@ -58,7 +86,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function createObject($param = array(), $project = '', $dayNum = '', $days = '')
+    public function createTest($param = array(), $project = '', $dayNum = '', $days = '')
     {
         $products  = array('');
         $plans     = array('');
@@ -70,7 +98,7 @@ class executionTest
         $createFields = array('project' => $project, 'name' => '', 'code' => '', 'begin' => $beginData, 'end' => $endData,
             'lifetime' => 'short', 'status' => 'wait', 'products' => $products, 'delta' => $delta, 'days' => $days,
             'plans' => $plans, 'team' => '', 'teams' => '0', 'PO' => '', 'QD' => '', 'PM' => '', 'RD' => '', 'whitelist' => '',
-            'desc' => '', 'acl' => 'private');
+            'desc' => '', 'acl' => 'private', 'percent' => '0');
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
@@ -371,7 +399,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function getPairsTest($projectID,$count)
+    public function getPairsTest($projectID, $count)
     {
         $object = $this->objectModel->getPairs($projectID);
 
@@ -808,7 +836,7 @@ class executionTest
         }
         elseif($count == "1")
         {
-            return count($object);
+            return isset($object[$productID]) ? count($object[$productID]) : 0;
         }
         else
         {
@@ -1600,18 +1628,17 @@ class executionTest
     }
 
     /**
-     * function fixFirst test by execution
+     * Function fixFirst test by execution.
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  string $date
      * @access public
      * @return array
      */
-    public function fixFirstTest($executionID, $param = array())
+    public function fixFirstTest($executionID, $param = array(), $date)
     {
         global $tester;
-
-        $date = date('Y-m-d');
 
         $createFields = array('estimate' => '');
 
@@ -1652,14 +1679,7 @@ class executionTest
      */
     public function getBurnDataFlotTest($executionID = 0)
     {
-        $date   = date("Y-m-d");
         $object = $this->objectModel->getBurnDataFlot($executionID, $burnBy = 'left');
-
-        $todayData = array();
-        if(isset($object[$date]))
-        {
-            foreach($object[$date] as $key => $value) $todayData[$key] = $value;
-        }
 
         if(dao::isError())
         {
@@ -1668,7 +1688,7 @@ class executionTest
         }
         else
         {
-            return sizeof($todayData);
+            return $object;
         }
     }
 
@@ -2242,7 +2262,7 @@ class executionTest
         else
         {
             if(count((array)$object['closed']) == 0 and count((array)$object['nokey']) == 0) return 'empty';
-            return $object;
+            return count($object['nokey']->tasks);
         }
     }
 
@@ -2379,7 +2399,7 @@ class executionTest
             if(count($users) > 0) su($users[0]);
 
             global $tester;
-            return $tester->app->user->view->sprints;
+            return ",{$tester->app->user->view->sprints},";
         }
     }
 
@@ -2396,6 +2416,37 @@ class executionTest
 
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return $result > 0;
+    }
+
+    /**
+     * Test set menu.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function setMenuTest($executionID = 0)
+    {
+        $execution = $this->objectModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        $this->objectModel->setMenu($executionID);
+
+        global $lang;
+        return strip_tags($lang->switcherMenu);
+    }
+
+    /**
+     * Get switcher.
+     *
+     * @param  int    $executionID
+     * @param  string $method
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest($executionID = 0, $method = '')
+    {
+        return $this->objectModel->getSwitcher($executionID, 'execution', $method);
     }
 }

@@ -218,13 +218,13 @@
                 <?php if(!$product->shadow):?>
                 <tr>
                   <th class='w-90px'><?php echo $lang->story->product;?></th>
-                  <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name);?></td>
+                  <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name, '', "data-app='product'");?></td>
                 </tr>
                 <?php endif;?>
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th class='w-90px'><?php echo $lang->product->branch;?></th>
-                  <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch]);?></td>
+                  <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch], '', "data-app='product'");?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
@@ -476,7 +476,7 @@
                   {
                       if(!isset($executions[$task->execution])) continue;
                       $execution     = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
-                      $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "executionID=$task->project");
+                      $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "projectID=$task->project");
                       $executionName = $executions[$task->execution];
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
@@ -486,7 +486,10 @@
               }
               foreach($story->executions as $executionID => $execution)
               {
-                  if(!isset($executions[$executionID]) or isset($story->tasks[$executionID])) continue;
+                  if(!$execution->multiple) continue;
+                  if(!isset($executions[$executionID])) continue;
+                  if(isset($story->tasks[$executionID])) continue;
+
                   $execName = ($execution->type == 'kanban' and isonlybody()) ? $executions[$executionID] : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $executions[$executionID], '', "class='text-muted'");
                   echo "<li title='$execution->name'>" . $execName . '</li>';
               }

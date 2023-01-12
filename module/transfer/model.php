@@ -509,6 +509,8 @@ class transferModel extends model
 
         $modelData = $this->processDate($modelData);
         if(isset($fields['id'])) unset($fields['id']);
+        $this->session->set($model . 'TemplateFields',  implode(',', array_keys($fields)));
+
         return $modelData;
     }
 
@@ -600,7 +602,7 @@ class transferModel extends model
             $values = $valuePairs;
             if(reset($values))
             {
-                if(current($values) or (current($values) == 0)) $values[0] = '';
+                if(current($values) or (current($values) == 0)) $values = [0 => ''] + $values;
             }
         }
 

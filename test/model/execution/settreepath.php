@@ -2,6 +2,15 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+
+$execution = zdTable('project');
+$execution->id->range('1-6');
+$execution->name->range('项目1,迭代1,迭代2,迭代3,迭代4,迭代5');
+$execution->type->range('project,stage,sprint,stage{2},sprint');
+$execution->parent->range('0,1{3},2{2}');
+$execution->status->range('wait');
+$execution->gen(6);
+
 su('admin');
 
 /**
@@ -10,15 +19,15 @@ title=测试executionModel->setTreePathTest();
 cid=1
 pid=1
 
-子阶段设置path >> 41,131,,41,131,701,
-子阶段设置path >> 11,11,,11,101,
-子阶段设置path >> 41,41,,41,131,
+子阶段设置path >> 0,1,,1,2,
+子阶段设置path >> 0,1,,1,4,
+子阶段设置path >> 0,2,,1,2,5,
 
 */
 
-$executionIDList  = array('701', '101', '131');
+$executionIDList  = array('2', '4', '5');
 
 $execution = new executionTest();
-r($execution->setTreePathTest($executionIDList[0])) && p('701:project,parent,path') && e('41,131,,41,131,701,'); // 子阶段设置path
-r($execution->setTreePathTest($executionIDList[1])) && p('101:project,parent,path') && e('11,11,,11,101,'); // 子阶段设置path
-r($execution->setTreePathTest($executionIDList[2])) && p('131:project,parent,path') && e('41,41,,41,131,'); // 子阶段设置path
+r($execution->setTreePathTest($executionIDList[0])) && p('2:project,parent,path') && e('0,1,,1,2,');   // 子阶段设置path
+r($execution->setTreePathTest($executionIDList[1])) && p('4:project,parent,path') && e('0,1,,1,4,');   // 子阶段设置path
+r($execution->setTreePathTest($executionIDList[2])) && p('5:project,parent,path') && e('0,2,,1,2,5,'); // 子阶段设置path

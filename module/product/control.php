@@ -300,7 +300,7 @@ class product extends control
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($queryCondition, 'story', ($browseType != 'bysearch' and $browseType != 'reviewbyme' and !$isProjectStory));
+        $this->loadModel('common')->saveQueryCondition($queryCondition, 'story', (strpos('bysearch,reviewbyme,bymodule', $browseType) === false and !$isProjectStory));
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 

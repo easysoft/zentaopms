@@ -276,7 +276,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
     </div>
   </div>
 </div>
-<?php js::set('caseModule', $lang->testcase->module)?>
+<?php if(!$hiddenProduct) js::set('caseModule', $lang->testcase->module)?>
 <script>
 $(function()
 {
