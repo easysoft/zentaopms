@@ -2497,4 +2497,16 @@ class executionTest
     {
         return $this->objectModel->getSwitcher($executionID, 'execution', $method);
     }
+
+    /**
+     * Test sync no multiple sprint.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function syncNoMultipleSprintTest($projectID)
+    {
+        return $this->objectModel->syncNoMultipleSprint($projectID);
+    }
 }

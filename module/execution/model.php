@@ -5251,6 +5251,8 @@ class executionModel extends model
     public function syncNoMultipleSprint($projectID)
     {
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        if(empty($project)) return 0;
+
         $post    = $_POST;
 
         $_POST = array();
