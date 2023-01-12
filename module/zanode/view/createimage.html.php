@@ -53,7 +53,7 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center'>
-            <?php echo html::submitButton('', "onclick='if(confirm(\"{$lang->zanode->createImageNotice}\")==false) return false;'");?>
+            <?php echo in_array($node->status, array('shutdown', 'shutoff')) ? html::submitButton('', "") : html::submitButton('', "onclick='if(confirm(\"{$lang->zanode->createImageNotice}\")==false) return false;'");?>
           </td>
         </tr>
       </table>
