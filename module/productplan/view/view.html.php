@@ -66,7 +66,7 @@
             <?php endif;?>
           </a>
         </li>
-        <li>
+        <li class='<?php if($type == 'planInfo') echo 'active'?>'>
           <a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->productplan->view;?></a>
         </li>
     </ul>
@@ -533,7 +533,7 @@
           <?php endif;?>
         </form>
       </div>
-      <div id='planInfo' class='tab-pane'>
+      <div id='planInfo' class='tab-pane <?php if($type == 'planInfo') echo 'active';?>'>
         <div class='cell'>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->productplan->basicInfo;?></div>
