@@ -14,6 +14,40 @@ class executionTest
     }
 
     /**
+     * Set Kanban.
+     *
+     * @param  int    $executionID
+     * @param  array  $param
+     * @access public
+     * @return object
+     */
+    public function setKanbanTest($executionID, $param = array())
+    {
+        global $tester;
+        $tester->loadModel('kanban');
+
+        $object = $tester->dbh->query("SELECT `displayCards`,`fluidBoard`,`colWidth`,`minColWidth`,`maxColWidth` FROM zt_project WHERE id = $executionID ")->fetch();
+
+        $_POST['heightType'] = 'auto';
+        foreach($object as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $this->objectModel->setKanban($executionID);
+        $execution = $this->objectModel->getByID($executionID);
+
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $execution;
+        }
+    }
+
+    /**
      * Set project into session.
      *
      * @param  int    $executionID
