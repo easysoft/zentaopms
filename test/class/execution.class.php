@@ -2547,6 +2547,13 @@ class executionTest
         return $_SESSION['executionsearchParams']['queryID'];
     }
 
+    /**
+     * Test print cell.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
     public function printCellTest($executionID)
     {
         $col = new stdClass();
@@ -2568,5 +2575,20 @@ class executionTest
         if(dao::isError()) return dao::getError();
 
         return strip_tags($objects);
+    }
+
+    /**
+     * Test build operate menu.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenuTest($executionID = 0)
+    {
+        $execution = $this->objectModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        return $this->objectModel->buildOperateMenu($execution);
     }
 }
