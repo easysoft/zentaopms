@@ -14,6 +14,23 @@ class executionTest
     }
 
     /**
+     * Check begin and end date.
+     *
+     * @param  int    $projectID
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return bool|array
+     */
+    public function checkBeginAndEndDateTest($projectID, $begin, $end)
+    {
+        $this->objectModel->checkBeginAndEndDate($projectID, $begin, $end);
+
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
+
+    /**
      * Check the workload format and total.
      *
      * @param  string $executionID
