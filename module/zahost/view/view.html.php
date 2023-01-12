@@ -134,8 +134,9 @@
       <?php if(!empty($nodeList)): ?>
       <div class="detail">
         <div class="detail-title"><?php echo $lang->zahost->browseNode;?></div>
-        <div class="detail-content article-content" style="padding: 0px; max-height: 789px; overflow: visible; height: 306px;">
-          <table class='table has-sort-head table-fixed' id='nodeList'>
+        <div class="detail-content article-content">
+        <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'list', "hostID=$zahost->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' onload='setIframeHeight(this)' style='min-height:300px;'></iframe>";?>
+          <!-- <table class='table has-sort-head table-fixed' id='nodeList'>
             <thead>
               <tr>
                 <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->zahost->name);?></th>
@@ -158,7 +159,7 @@
               </tr>
               <?php endforeach;?>
             </tbody>
-          </table>
+          </table> -->
         </div>
       </div>
       <?php endif; ?>

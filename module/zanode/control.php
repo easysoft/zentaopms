@@ -60,6 +60,29 @@ class zanode extends control
     }
 
     /**
+     * Browse ZenAgent Node list in zahost view.
+     *
+     * @param  string   $browseType
+     * @param  string   $param
+     * @param  string   $orderBy
+     * @param  int      $recTotal
+     * @param  int      $recPerPage
+     * @param  int      $pageID
+     * @access public
+     * @return void
+     */
+    public function list($hostID, $orderBy = 'id_desc')
+    {
+
+        $this->view->title       = $this->lang->zanode->common;
+        $this->view->nodeList    = $this->loadModel("zanode")->getListByHost($hostID, $orderBy);
+        $this->view->orderBy     = $orderBy;
+        $this->view->hostID      = $hostID;
+
+        $this->display();
+    }
+
+    /**
      * Create node.
      *
      * @param  int    $hostID
