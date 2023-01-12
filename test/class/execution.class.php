@@ -14,6 +14,20 @@ class executionTest
     }
 
     /**
+     * Set project into session.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return int
+     */
+    public function setProjectSessionTest($executionID)
+    {
+        unset($_SESSION['project']);
+        $this->objectModel->setProjectSession($executionID);
+        return empty($_SESSION['project']) ? 0 : $_SESSION['project'];
+    }
+
+    /**
      * Test save state.
      *
      * @param  int    $executionID
