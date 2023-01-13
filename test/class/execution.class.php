@@ -11,6 +11,7 @@ class executionTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('execution');
+        $this->treeModel   = $tester->loadModel('tree');
     }
 
     /**
@@ -2668,5 +2669,20 @@ class executionTest
         $app->moduleName = 'task';
         $tasks = $this->objectModel->getSearchTasks("execution = $executionID", null, 'id_desc');
         return $this->objectModel->formatTasksForTree($tasks);
+    }
+
+    /**
+     * Test fill tasks in tree.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
+    public function fillTasksInTreeTest($executionID)
+    {
+        $fullTrees = $this->treeModel->getTaskStructure($executionID, 0);
+        if(empty($fullTrees)) return '0';
+
+        return $this->objectModel->fillTasksInTree((object)$fullTrees[0], $executionID);
     }
 }
