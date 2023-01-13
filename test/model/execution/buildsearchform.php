@@ -29,7 +29,7 @@ su('admin');
 
 /**
 
-title=测试executionModel->buildSearchFrom();
+title=测试executionModel->buildSearchForm();
 cid=1
 pid=1
 
@@ -41,5 +41,5 @@ pid=1
 $queryIDList = array('0', '1');
 
 $execution = new executionTest();
-r($execution->buildSearchFromTest($queryIDList[1])) && p() && e('1'); // 正确的queryID
-r($execution->buildSearchFromTest($queryIDList[0])) && p() && e('0'); // 错误的queryID
+r($execution->buildSearchFormTest($queryIDList[1])) && p() && e('1'); // 正确的queryID
+r($execution->buildSearchFormTest($queryIDList[0])) && p() && e('0'); // 错误的queryID

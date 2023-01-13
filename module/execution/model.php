@@ -5181,7 +5181,7 @@ class executionModel extends model
      * @param string  $actionURL
      * @return void
      * */
-    public function buildSearchFrom($queryID, $actionURL)
+    public function buildSearchForm($queryID, $actionURL)
     {
         $this->config->execution->all->search['queryID']   = $queryID;
         $this->config->execution->all->search['actionURL'] = $actionURL;
