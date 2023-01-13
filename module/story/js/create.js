@@ -59,6 +59,12 @@ $(function()
         return false;
     });
 
+    $('#product').on('change', function(){
+        var productID      = $('#product').val();
+        var viewLink       = createLink('story', 'create', 'productID=' + productID + '&branch=all');
+        self.location.href = viewLink;
+    });
+
     $('#module').on('change', function(){
         loadURS();
     });
