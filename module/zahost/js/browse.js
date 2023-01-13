@@ -6,12 +6,12 @@ $('#hostList tr[data-status="wait"]').hover(function(){
 
 if(showFeature)
 {
-    /* Show features dialog. */
-    new $.zui.ModalTrigger({url: $.createLink('zahost', 'introduction'), type: 'iframe', width: 900, className: 'showFeatures', showHeader: false, backdrop: 'static'}).show();
+    $.apps.close('help');
+    $.apps.open('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao', 'help');
 }
 
 $('#helpTab').click(function()
 {
-    /* Show features dialog. */
-    new $.zui.ModalTrigger({url: $.createLink('zahost', 'introduction'), type: 'iframe', width: 900, className: 'showFeatures', showHeader: false, backdrop: 'static'}).show();
+    $.apps.close('help');
+    $.apps.open('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao', 'help');
 })
