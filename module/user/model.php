@@ -1199,7 +1199,8 @@ class userModel extends model
      */
     public function isLogon()
     {
-        return ($this->session->user and $this->session->user->account != 'guest');
+        $user = $this->session->user;
+        return ($user and !empty($user->account) and $user->account != 'guest');
     }
 
     /**
