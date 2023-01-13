@@ -507,6 +507,7 @@ class transferModel extends model
             $modelData = $this->getDatasByFile($tmpFile);
         }
 
+        $this->mergeConfig($model);
         $modelData = $this->processDate($modelData);
         if(isset($fields['id'])) unset($fields['id']);
         $this->session->set($model . 'TemplateFields',  implode(',', array_keys($fields)));
