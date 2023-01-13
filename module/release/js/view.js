@@ -10,9 +10,9 @@ function showLink(releaseID, type, param)
 
 /**
  * Load URL.
- * 
- * @param  string $url 
- * @param  string$type 
+ *
+ * @param  string $url
+ * @param  string$type
  * @access public
  * @return void
  */
@@ -67,6 +67,27 @@ $(function()
             });
 
             infoShowed = true;
+        }
+        if(href !== '')
+        {
+            switch(href)
+            {
+                case '#stories':
+                  type = 'story';
+                  break;
+                case '#bugs':
+                  type = 'bug';
+                  break;
+                case '#leftBugs':
+                  type = 'leftBug';
+                  break;
+                case '#releaseInfo':
+                  type = 'releaseInfo';
+                  break;
+            }
+            var viewLink = createLink('release', 'view', 'releaseID=' + releaseID + '&type=' + type  + '&link=' + link  + (typeof(param) == 'undefined' ? '' : param) + (typeof(orderBy) == 'undefined' ? '' : "&orderBy=" + orderBy));
+            if(type == 'releaseInfo') viewLink = createLink('release', 'view', 'releaseID=' + releaseID + '&type=' + type);
+            self.location.href = viewLink;
         }
     });
 })
