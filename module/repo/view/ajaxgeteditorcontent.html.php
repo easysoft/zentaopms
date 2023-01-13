@@ -47,7 +47,7 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
     <div class="history"></div>
     <div class="action-btn pull-right">
      <div class="btn btn-close pull-right"><i class="icon icon-close"></i></div>
-     <?php if($canLinkStory or $canLinkBug or $canLinkTask or $canUnlinkObject):?>
+     <?php if($canLinkStory or $canLinkBug or $canLinkTask):?>
      <div class="dropdown pull-right">
        <button class="btn" type="button" data-toggle="context-dropdown"><i class="icon icon-ellipsis-v icon-rotate-90"></i></button>
        <ul class="dropdown-menu">
@@ -55,7 +55,6 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
          if($canLinkStory) echo '<li id="linkStory">' . html::a('javascript:;', '<i class="icon icon-lightbulb"></i> ' . $lang->repo->linkStory) . '</li>';
          if($canLinkBug) echo '<li id="linkBug">' . html::a('javascript:;', '<i class="icon icon-bug"></i> ' . $lang->repo->linkBug) . '</li>';
          if($canLinkTask) echo '<li id="linkTask">' . html::a('javascript:;', '<i class="icon icon-todo"></i> ' . $lang->repo->linkTask) . '</li>';
-         if($canUnlinkObject) echo '<li id="unlink">' . html::a('javascript:;', '<i class="icon icon-unlink"></i> ' . $lang->repo->unlink) . '</li>';
          ?>
        </ul>
      </div>
@@ -135,12 +134,10 @@ function getRelation(commit)
             }
 
             $('.table-empty-tip').hide();
-            $('#unlink').show();
             $('#related button').show();
         }
         else
         {
-            $('#unlink').hide();
             if(!canLinkStory && !canLinkBug && !canLinkTask) $('#related button').hide();
         }
 
@@ -156,6 +153,17 @@ function getRelation(commit)
     $('#linkTask a').attr('data-link', linkTask);
     $('#related').show();
 }
+
+
+<?php if($canUnlinkObject):?>
+$('#relationTabs').on('onLoad', function(event, tab) {
+    var objectInfo = tab.id.split('-');
+    objectID       = objectInfo[0];
+    objectType     = objectInfo[1];
+    unlink = createLink('repo', 'unlink',  'repoID=' + repoID + '&commit=' + globalCommit + '&objectID=' + objectID + '&objectType=' + objectType);
+    $('#relationTabs ul li[data-id=' + tab.id + '] span.title').after('<a title="<?php echo $lang->repo->unlink;?>" class="unlinks" data-link="' + unlink + '"><i class="icon-unlink"></i></a>');
+});
+<?php endif;?>
 
 /**
  * Set tab data.
@@ -331,7 +339,7 @@ $(function()
         parent.loadLinkPage(link);
     });
 
-    $('#unlink a').on('click', function()
+    $('#relationTabs').on('click', '.unlinks',function()
     {
         var link = $(this).attr('data-link');
         $.post(link, function(data)
@@ -351,11 +359,6 @@ $(function()
     $('#relationTabs').on('onOpen', function(event, tab)
     {
         $('#tab-nav-item-' + tab.id).attr('title', tab.title);
-
-        var objectInfo = tab.id.split('-');
-        objectID       = objectInfo[0];
-        objectType     = objectInfo[1];
-        $('#unlink a').attr('data-link', createLink('repo', 'unlink',  'repoID=' + repoID + '&commit=' + globalCommit + '&objectID=' + objectID + '&objectType=' + objectType));
 
         var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 45;
         $('#relationTabs iframe').css('height', relatedHeight);
