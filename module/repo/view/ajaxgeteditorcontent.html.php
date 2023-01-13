@@ -154,7 +154,6 @@ function getRelation(commit)
     $('#related').show();
 }
 
-
 <?php if($canUnlinkObject):?>
 $('#relationTabs').on('onLoad', function(event, tab) {
     var objectInfo = tab.id.split('-');
