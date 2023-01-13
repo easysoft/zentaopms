@@ -44,6 +44,14 @@ $query->form->range('`a:59:{s:9:"fieldname";s:0:"";s:11:"fieldstatus";s:0:"";s:9
 $query->sql->range("`(( 1   AND `name`  LIKE '%任务%' ) AND ( 1  )) AND deleted = '0'`");
 $query->gen(1);
 
+$product = zdTable('module');
+$product->id->range('1-10');
+$product->name->range('1-10')->prefix('模块');
+$product->root->range('1-3');
+$product->parent->range('0,1{9}');
+$product->type->range('task');
+$product->gen(10);
+
 su('admin');
 
 /**
@@ -87,7 +95,7 @@ $executionIDList = array('0', '3', '4', '5');
 $productIDList   = array('0', '1');
 $browseType      = array('all', 'unclosed', 'wait', 'doing', 'undone', 'done', 'closed', 'bysearch');
 $queryID         = array('0', '1');
-$moduleID        = array('0', '21', '22');
+$moduleID        = array('0', '10');
 $sort            = array('status,id_desc', 'name_asc,id_asc', 'id_asc', 'pri_desc,id_desc');
 $count           = array('0', '1');
 
