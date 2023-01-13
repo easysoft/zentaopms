@@ -174,8 +174,8 @@ $(function()
             <div class='col'><h4><?php echo $lang->block->zentaoapp->common;?></h4></div>
             <div class="col dataTitle"><?php echo $lang->block->zentaoapp->desc;?></div>
             <div class='col pull-left col-md-12'>
-              <div class="pull-left col-md-8">
-                <div class="col-md-4 os-and-desc"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_index.png');?></div>
+              <div class="pull-left col-md-8 os-and-desc">
+                <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_index.png');?></div>
                 <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_execution.png');?></div>
                 <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_statistic.png');?></div>
               </div>
