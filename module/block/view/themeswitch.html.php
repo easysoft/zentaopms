@@ -7,7 +7,7 @@
 .theme:hover {box-shadow: 0 0 14px rgba(0, 0, 0, 0.4);}
 .theme-text {width: 100%;position: absolute; bottom: 6%; left: 50%; transform: translateX(-50%);}
 .theme-text .icon {padding-right: 10px;}
-.theme-text.active {left: 42%;}
+.theme-text.active {left: 45%;}
 div.theme-default {background: #3785ff;}
 div.theme-blue {background: #2b80ff;}
 div.theme-green {background: #248f83;}

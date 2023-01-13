@@ -17,7 +17,7 @@ $execution->gen(5);
 su('admin');
 /**
 
-title=测试 executionModel::saveState();
+title=测试 executionModel::getSwitcher();
 cid=1
 pid=1
 

@@ -994,14 +994,14 @@ class projectModel extends model
     }
 
     /*
-     * Build search form
+     * Build search form.
      *
      * @param int     $queryID
      * @param string  $actionURL
      *
      * @return 0
      * */
-    public function buildSearchFrom($queryID, $actionURL)
+    public function buildSearchForm($queryID, $actionURL)
     {
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['actionURL'] = $actionURL;

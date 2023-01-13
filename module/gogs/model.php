@@ -342,7 +342,7 @@ class gogsModel extends model
             $project->name_with_namespace = $project->full_name;
 
             $gogs  = $this->getByID($gogsID);
-            $oauth = "oauth2:{$gogs->token}@";
+            $oauth = "{$gogs->token}@";
             $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', "\$1$oauth", $project->html_url);
         }
 
