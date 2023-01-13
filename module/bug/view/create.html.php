@@ -84,40 +84,13 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           </tr>
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
           <tr class='bug-type'>
-            <th><?php echo $showExecution ? $lang->bug->project : $lang->bug->type;?></th>
-
-            <?php if(!$showExecution):?>
-            <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
-            <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
-            <td>
-              <div class='input-group' id='bugTypeInputGroup'>
-                <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");?>
-                <?php if($showOS):?>
-                <div class='table-col'>
-                  <div class='input-group'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-                    <?php echo html::select('os[]', $lang->bug->osList, $os, "class='form-control chosen' multiple");?>
-                  </div>
-                </div>
-                <?php endif;?>
-                <?php if($showBrowser):?>
-                <div class='table-col'>
-                  <div class='input-group'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-                    <?php echo html::select('browser[]', $lang->bug->browserList, $browser, "class='form-control chosen' multiple");?>
-                  </div>
-                </div>
-                <?php endif;?>
-              </div>
-            </td>
-            <?php endif;?>
-            <?php if($showExecution):?>
+            <th><?php echo $lang->bug->project?></th>
             <td>
               <div class='table-row'>
                 <div class='table-col' id='projectBox'>
                   <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>
                 </div>
-                <?php $executionClass = ($execution and !$execution->multiple) ? 'hidden' : '';?>
+                  <?php $executionClass = $showExecution ? '' : 'hidden';?>
                 <div class="table-col executionBox <?php echo $executionClass;?>">
                   <div class='input-group' id='executionIdBox'>
                     <span class='input-group-addon fix-border' id='executionBox'><?php echo $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution;?></span>
@@ -126,7 +99,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 </div>
               </div>
             </td>
-            <?php endif;?>
             <td>
               <div class='input-group' id='buildBox'>
                 <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
@@ -177,7 +149,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
           </tr>
           <?php endif;?>
-          <?php if($showExecution):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
           <tr class='bug-type'>
@@ -206,7 +177,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               </div>
             </td>
           </tr>
-          <?php endif;?>
           <?php if(isset($executionType) and $executionType == 'kanban'):?>
           <tr>
             <th><?php echo $lang->kanbancard->region;?></th>
