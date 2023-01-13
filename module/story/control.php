@@ -389,7 +389,7 @@ class story extends control
 
             foreach($this->config->story->fromObjects[$fromObjectIDKey]['fields'] as $storyField => $fromObjectField)
             {
-                $$storyField = $fromObject->{$fromObjectField};
+                $storyField = $fromObject->{$fromObjectField};
             }
         }
 
