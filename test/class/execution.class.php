@@ -11,7 +11,8 @@ class executionTest
     {
         global $tester;
         $this->executionModel = $tester->loadModel('execution');
-        $this->treeModel   = $tester->loadModel('tree');
+        $this->treeModel      = $tester->loadModel('tree');
+        $this->productModel   = $tester->loadModel('product');
     }
 
     /**
@@ -2699,5 +2700,24 @@ class executionTest
         $this->executionModel->buildTaskSearchForm($executionID, array($executionID => 'yes'), $queryID, 'searchTask');
 
         return $_SESSION['tasksearchParams']['queryID'];
+    }
+
+    /**
+     * Test build bug search form.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildBugSearchFormTest($productID, $queryID)
+    {
+        $product = $this->productModel->getByID($productID);
+        if(empty($product)) return '0';
+
+        $this->executionModel->loadModel('bug');
+        $this->executionModel->buildBugSearchForm(array($productID => $product), $queryID, 'searchBug');
+
+        return $_SESSION['executionBugsearchParams']['queryID'];
     }
 }
