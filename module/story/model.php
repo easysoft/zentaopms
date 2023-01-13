@@ -6044,7 +6044,7 @@ class storyModel extends model
         if($result == 'reject')
         {
             $now    = helper::now();
-            $reason = (empty($reason) and isset($story->closedReason)) ? $story->closedReason : $reason;
+            $reason = (!empty($story->closedReason)) ? $story->closedReason : $reason;
 
             $story->status       = 'closed';
             $story->closedBy     = $this->app->user->account;
