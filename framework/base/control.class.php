@@ -933,10 +933,7 @@ class baseControl
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
 
-        include $this->app->getBasePath() . 'zin' . DS . 'wg.class.php';
-        include $this->app->getBasePath() . 'zin' . DS . 'wg.func.php';
-        include $this->app->getBasePath() . 'zin' . DS . 'block.class.php';
-        include $this->app->getBasePath() . 'zin' . DS . 'page.class.php';
+        include $this->app->getBasePath() . 'zin' . DS . 'zin.php';
 
         define('ZUI3', 'zui3');
 
