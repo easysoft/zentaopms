@@ -894,6 +894,24 @@ class userTest
     }
 
     /**
+     * getSprintAuthedUsersTest
+     *
+     * @param  int    $sprintID
+     * @param  array  $stakeholders
+     * @param  array  $teams
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return void
+     */
+    public function getSprintAuthedUsersTest($sprintID, $stakeholders, $teams, $whiteList, $admins)
+    {
+        global $tester;
+        $sprint = $tester->loadModel('execution')->getByID($sprintID);
+        return $this->objectModel->getSprintAuthedUsers($sprint, $stakeholders, $teams, $whiteList, $admins);
+    }
+
+    /**
      * Test get product view list users.
      *
      * @param  int    $productID
@@ -903,11 +921,11 @@ class userTest
      * @access public
      * @return void
      */
-    public function getProductViewListUsersTest($productID, $teams, $stakeholders, $whiteList)
+    public function getProductViewListUsersTest($productID, $teams, $stakeholders, $whiteList, $admins)
     {
         global $tester;
         $product = $tester->loadModel('product')->getByID($productID);
-        return $this->objectModel->getProductViewListUsers($product, $teams, $stakeholders, $whiteList);
+        return $this->objectModel->getProductViewListUsers($product, $teams, $stakeholders, $whiteList, $admins);
     }
 
     /**
@@ -920,7 +938,7 @@ class userTest
      * @access public
      * @return void
      */
-    public function getTeamMemberPairsTest($objectID, $type, $params, $usersToAppended)
+    public function getTeamMemberPairsTest($objectID, $type, $params = '', $usersToAppended = array())
     {
         return $this->objectModel->getTeamMemberPairs($objectID, $type, $params, $usersToAppended);
     }
@@ -946,9 +964,9 @@ class userTest
      *
      * @param  string $type
      * @access public
-     * @return void
+     * @return array
      */
-    public function getUserTemplates($type)
+    public function getUserTemplatesTest($type)
     {
         return $this->objectModel->getUserTemplates($type);
     }
@@ -1104,5 +1122,23 @@ class userTest
     public function identifyByCookieTest()
     {
         return $this->objectModel->identifyByCookie();
+    }
+
+    /**
+     * test of isClickable.
+     *
+     * @param  int    $userID
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest($userID, $action = '')
+    {
+        global $tester;
+
+        $user = $tester->loadModel('user')->getById($userID, 'id');
+        if($userID == 10) $user->ranzhi = '';
+
+        return $this->objectModel->isClickable($user, $action);
     }
 }
