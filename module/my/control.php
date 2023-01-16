@@ -1154,18 +1154,20 @@ EOF;
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'workFeedback');
 
-        $storyIdList = $bugIdList = $todoIdList = $taskIdList = array();
+        $storyIdList = $bugIdList = $todoIdList = $taskIdList = $ticketIdList = array();
         foreach($feedbacks as $feedback)
         {
-            if($feedback->solution == 'tobug')   $bugIdList[]   = $feedback->result;
-            if($feedback->solution == 'tostory') $storyIdList[] = $feedback->result;
-            if($feedback->solution == 'totodo')  $todoIdList[]  = $feedback->result;
-            if($feedback->solution == 'totask')  $taskIdList[]  = $feedback->result;
+            if($feedback->solution == 'tobug')   $bugIdList[]    = $feedback->result;
+            if($feedback->solution == 'tostory') $storyIdList[]  = $feedback->result;
+            if($feedback->solution == 'totodo')  $todoIdList[]   = $feedback->result;
+            if($feedback->solution == 'totask')  $taskIdList[]   = $feedback->result;
+            if($feedback->solution == 'ticket')  $ticketIdList[] = $feedback->result;
         }
-        $bugs    = $bugIdList   ? $this->loadModel('bug')->getByList($bugIdList) : array();
-        $stories = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
-        $todos   = $todoIdList  ? $this->loadModel('todo')->getByList($todoIdList) : array();
-        $tasks   = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList) : array();
+        $bugs    = $bugIdList    ? $this->loadModel('bug')->getByList($bugIdList) : array();
+        $stories = $storyIdList  ? $this->loadModel('story')->getByList($storyIdList) : array();
+        $todos   = $todoIdList   ? $this->loadModel('todo')->getByList($todoIdList) : array();
+        $tasks   = $taskIdList   ? $this->loadModel('task')->getByList($taskIdList) : array();
+        $tickets = $ticketIdList ? $this->loadModel('ticket')->getByList($ticketIdList) : array();
 
         $products = $this->loadModel('product')->getPairs();
 
@@ -1199,6 +1201,7 @@ EOF;
         $this->view->todos       = $todos;
         $this->view->stories     = $stories;
         $this->view->tasks       = $tasks;
+        $this->view->tickets     = $tickets;
         $this->view->depts       = $this->loadModel('dept')->getOptionMenu();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->view->projects    = $this->loadModel('project')->getPairsByProgram(0, 'noclosed');
