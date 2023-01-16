@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+su('admin');
 
 $execution = zdTable('project');
 $execution->id->range('1-5');
@@ -44,25 +45,15 @@ $product->parent->range('0,1{9}');
 $product->type->range('task');
 $product->gen(10);
 
-su('admin');
-
 /**
 
-title=测试executionModel->fillTasksInTree();
+title=测试 executionModel::getTree();
 cid=1
 pid=1
 
-敏捷执行查询 >> 产品1
-瀑布执行查询 >> 产品1
-看板执行查询 >> 产品1
-错误执行查询 >> 0
+查看返回子任务数 >> 4
 
 */
+$executionTester = new executionTest();
 
-$executionIDList = array('0', '3', '4', '5');
-
-$execution = new executionTest();
-r($execution->fillTasksInTreeTest($executionIDList[1])) && p('name') && e('产品1'); // 敏捷执行查询
-r($execution->fillTasksInTreeTest($executionIDList[2])) && p('name') && e('产品1'); // 瀑布执行查询
-r($execution->fillTasksInTreeTest($executionIDList[3])) && p('name') && e('产品1'); // 看板执行查询
-r($execution->fillTasksInTreeTest($executionIDList[0])) && p()       && e('0');     // 错误执行查询
+r($executionTester->getTreeTest(3)) && p() && e('4'); // 查看返回子任务数

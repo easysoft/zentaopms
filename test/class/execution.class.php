@@ -731,12 +731,13 @@ class executionTest
      * function getTree test execution
      *
      * @param  string $executionID
-     * @param  string $count
      * @access public
      * @return array
      */
-    public function getTreeTest($executionID, $count)
+    public function getTreeTest($executionID)
     {
+        global $app;
+        $app->moduleName = 'task';
         $object = $this->executionModel->getTree($executionID);
 
         if(dao::isError())
@@ -744,13 +745,9 @@ class executionTest
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
         else
         {
-            return $object;
+            return $object[0] ? count($object[0]->children) : 0;
         }
     }
 
@@ -2717,6 +2714,25 @@ class executionTest
 
         $this->executionModel->loadModel('bug');
         $this->executionModel->buildBugSearchForm(array($productID => $product), $queryID, 'searchBug');
+
+        return $_SESSION['executionBugsearchParams']['queryID'];
+    }
+
+    /**
+     * Test build story search form.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildStorySearchFormTest($productID, $queryID)
+    {
+        $product = $this->productModel->getByID($productID);
+        if(empty($product)) return '0';
+
+        $this->executionModel->loadModel('bug');
+        $this->executionModel->buildStorySearchForm(array($productID => $product), $queryID, 'searchBug');
 
         return $_SESSION['executionBugsearchParams']['queryID'];
     }
