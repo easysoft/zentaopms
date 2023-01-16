@@ -15,9 +15,7 @@ class wg extends ele
 {
     public static $tag = __CLASS__;
 
-    public static $jsSources = array();
-
-    public static $cssSources = array();
+    public static $imports = NULL;
 
     public $slots = array();
 

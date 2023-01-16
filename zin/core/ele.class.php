@@ -60,8 +60,6 @@ class ele
         /* Use all args */
         list($tagName, $props, $children) = static::parseArgs(func_get_args());
 
-        a('ele.__construct' . json_encode(array($tagName, $props, $children)));
-
         $this->tagName = $tagName;
         $this->props   = new props($props, static::$customProps);
         $this->class   = $this->props->class;
@@ -474,7 +472,6 @@ class ele
 
     static protected function parseArgs($args)
     {
-        a('parseArgs:$args: ' . json_encode($args));
         $tagName  = '';
         $props    = array();
         $children = array();
@@ -507,7 +504,7 @@ class ele
                         }
                         else
                         {
-                            $children[] = array_merge($props, $a);
+                            $children[] = $a;
                         }
                     }
                 }
