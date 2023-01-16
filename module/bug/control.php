@@ -1822,11 +1822,6 @@ class bug extends control
         if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
         unset($this->lang->bug->resolutionList['tostory']);
 
-        $product     = $this->loadModel('product')->getById($productID);
-        $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-        $productBugs = $this->bug->getProductBugPairs($productID, $branch);
-        unset($productBugs[$bugID]);
-
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
@@ -1834,7 +1829,6 @@ class bug extends control
         $this->view->bug            = $bug;
         $this->view->users          = $users;
         $this->view->assignedTo     = $assignedTo;
-        $this->view->productBugs    = $productBugs;
         $this->view->executions     = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID, 'stagefilter');
         $this->view->builds         = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch,noreleased');
         $this->view->actions        = $this->action->getList('bug', $bugID);
@@ -2474,6 +2468,24 @@ class bug extends control
         if(empty($productMembers)) $productMembers = $this->loadModel('user')->getPairs('devfirst|noclosed');
 
         return print(html::select('assignedTo', $productMembers, $selectedUser, 'class="form-control"'));
+    }
+
+    /**
+     * Ajax get product bugs.
+     *
+     * @param  int    $productID
+     * @param  int     $bugID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProductBugs($productID, $bugID)
+    {
+        $product     = $this->loadModel('product')->getById($productID);
+        $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        unset($productBugs[$bugID]);
+
+        return print(html::select('duplicateBug', $productBugs, '', "class='form-control' placeholder='{$this->lang->bug->duplicateTip}'"));
     }
 
     /**
