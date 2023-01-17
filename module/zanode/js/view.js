@@ -47,7 +47,7 @@ function checkServiceStatus(){
             }
             else if(key == "node")
             {
-                if(nodeStatus != resultData.data[key])
+                if(nodeStatus != resultData.data[key] && resultData.data[key])
                 {
                     window.location.reload();
                 }

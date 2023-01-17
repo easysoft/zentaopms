@@ -36,7 +36,7 @@
         <tbody>
           <?php foreach ($nodeList as $node) : ?>
             <tr>
-              <td title='<?php echo $node->name ?>'><?php echo html::a($this->inlink('view', "id=$node->id"), $node->name, '', ""); ?></td>
+              <td title='<?php echo $node->name ?>'><?php echo html::a($this->inlink('view', "id=$node->id"), $node->name, '_blank', ""); ?></td>
               <td><?php echo zget($config->zanode->os->cpuCores, $node->cpuCores); ?></td>
               <td><?php echo $node->memory . $this->lang->zahost->unitList['GB']; ?></td>
               <td><?php echo $node->diskSize . $this->lang->zahost->unitList['GB']; ?></td>
