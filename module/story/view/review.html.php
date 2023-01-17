@@ -35,7 +35,7 @@
           <th><?php echo $lang->story->assignedTo;?></th>
           <td><?php echo html::select('assignedTo', $users, $story->assignedTo, "class='form-control picker-select'");?></td><td></td>
         </tr>
-        <tr id='rejectedReasonBox' class='hide'>
+        <tr id='rejectedReasonBox' style="display:none">
           <th><?php echo $lang->story->rejectedReason;?></th>
           <td class='required'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=form-control onchange="setStory(this.value)"');?></td><td></td>
         </tr>

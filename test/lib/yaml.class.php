@@ -253,11 +253,12 @@ class yaml
      * Build yaml file and insert table.
      *
      * @param  int     $rows
+     * @param  string  $dataDirYaml The yaml file names in the data directory
      * @param  string  $version
      * @access public
      * @return void
      */
-    public function gen($rows, $version = '1.0')
+    public function gen($rows, $dataDirYaml = '')
     {
         $runFileDir  = dirname(getcwd() . DS . $_SERVER['SCRIPT_FILENAME']);
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
@@ -270,11 +271,12 @@ class yaml
 
         $yamlDataArr['title']   = "zt_{$this->tableName}";
         $yamlDataArr['author']  = "auto_{$runFileName}";
-        $yamlDataArr['version'] = $version;
+        $yamlDataArr['version'] = '1.0';
 
         if(empty($this->fields->fieldArr))
         {
             $yamlFile = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+            if($dataDirYaml) $yamlFile = dirname(dirname(__FILE__)) . "/data/{$dataDirYaml}.yaml";
         }
         else
         {

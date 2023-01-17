@@ -3907,7 +3907,7 @@ class execution extends control
 
         $queryID   = ($status == 'bySearch') ? (int)$param : 0;
         $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
-        $this->execution->buildSearchFrom($queryID, $actionURL);
+        $this->execution->buildSearchForm($queryID, $actionURL);
 
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;

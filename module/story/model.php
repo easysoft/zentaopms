@@ -603,6 +603,11 @@ class storyModel extends model
                 if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
 
                 $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
+                if(empty($story->{$extendField->field}))
+                {
+                    dao::$errors[] = sprintf($this->lang->error->notempty, $extendField->name);
+                    return false;
+                }
             }
 
             foreach(explode(',', $this->config->story->create->requiredFields) as $field)
@@ -6039,7 +6044,7 @@ class storyModel extends model
         if($result == 'reject')
         {
             $now    = helper::now();
-            $reason = (empty($reason) and isset($story->closedReason)) ? $story->closedReason : $reason;
+            $reason = (!empty($story->closedReason)) ? $story->closedReason : $reason;
 
             $story->status       = 'closed';
             $story->closedBy     = $this->app->user->account;
