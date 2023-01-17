@@ -548,7 +548,7 @@ class testcase extends control
             $modules        = $this->tree->getAllChildID($modules);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, 'active', 'id_desc', 50, 'null', 'story', false);
+        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, 'active', 'id_desc', 50, 'full', 'story', false);
         if($this->app->tab != 'qa' and $this->app->tab != 'product')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
