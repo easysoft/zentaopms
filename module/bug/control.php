@@ -2473,7 +2473,7 @@ class bug extends control
     /**
      * Ajax get product bugs.
      *
-     * @param  int    $productID
+     * @param  int     $productID
      * @param  int     $bugID
      * @access public
      * @return string
