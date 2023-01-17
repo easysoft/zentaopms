@@ -28,6 +28,8 @@ class builder
 
     public $selfClosing;
 
+    public $inTag = false;
+
     public function __construct($tag = '')
     {
         $this->tag         = $tag;
@@ -110,9 +112,17 @@ class builder
         return $this;
     }
 
+    public function renderInTag($inTag = false)
+    {
+        $this->inTag = $inTag;
+        return $this;
+    }
+
     public function build()
     {
         $html = array();
+
+        if(!$this->selfClosing && $this->inTag && !empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr>";
 
         if(!empty($this->cssImports))
         {
@@ -136,15 +146,15 @@ class builder
 
         if($this->selfClosing)
         {
-            if(!empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr>";
+            if(!empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr />";
         }
         else
         {
-            if(!empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr>";
+            if(!empty($this->tag) && !$this->inTag) $html[] = "<$this->tag" . "$this->propsStr>";
 
-            if(!empty($this->children)) array_merge($html, $this->children);
+            if(!empty($this->children)) $html = array_merge($html, $this->children);
 
-            if(!empty($this->tag)) $html[] = "</$this->tag>";
+            if(!empty($this->tag) && !$this->inTag) $html[] = "</$this->tag>";
         }
 
         if(!empty($this->suffix)) $html = array_merge($html, $this->suffix);
@@ -174,6 +184,8 @@ class builder
             }
         }
         if(!empty($jsCode)) $html[] = "<script>(function(){$jsCode}</script>";
+
+        if(!$this->selfClosing && $this->inTag && !empty($this->tag)) $html[] = "</$this->tag>";
 
         return implode("\n", $html);
     }

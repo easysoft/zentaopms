@@ -1,12 +1,12 @@
 <?php
-button('BUTTON')->x();
 
-h('h1', 'hello')->x();
-
-btn('哈哈')->primary()->x();
-
-div(
-    h2('Headings2'),
-    h3('Headings3'),
-    h5::p('lorem', h5::strong('bold'))
-)->x();
+$page = page(
+    button('BUTTON'),
+    h('h1', 'hello'),
+    btn('哈哈')->primary(),
+    div(
+        h2('Headings2'),
+        h3('Headings3'),
+        p('lorem', h5::strong('bold'))
+    )
+)->title('哈哈哈')->x();

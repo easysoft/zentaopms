@@ -33,3 +33,4 @@ function iframe() {return call_user_func_array('h5::iframe', func_get_args());}
 function img()    {return call_user_func_array('h5::img', func_get_args());}
 function input()  {return call_user_func_array('h5::input', func_get_args());}
 function label()  {return call_user_func_array('h5::label', func_get_args());}
+function p()      {return call_user_func_array('h5::p', func_get_args());}

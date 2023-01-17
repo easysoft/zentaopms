@@ -27,18 +27,6 @@ class wg extends ele
 
     public $cssImports = array();
 
-    protected function getCssCode()
-    {
-        if(empty($this->cssList)) return '';
-        return implode('', $this->cssList);
-    }
-
-    protected function getJsCode()
-    {
-        if(empty($this->jsList)) return '';
-        return '(function(){'. implode('', $this->jsList) . '}());';
-    }
-
     /**
      * @return builder
      */
@@ -48,10 +36,11 @@ class wg extends ele
             ->js($this->jsList)
             ->css($this->cssList);
 
-        if(is_array(static::$imports))
+        if(is_array(static::$imports) && (!$isPrint || isset(static::$imports['imported'])))
         {
             if(isset(static::$imports['css'])) $builder->importCss(static::$imports['css']);
             if(isset(static::$imports['js'])) $builder->importJs(static::$imports['js']);
+            static::$imports['imported'] = true;
         }
 
         $builder->importJs($this->jsImports)
@@ -60,39 +49,26 @@ class wg extends ele
         return $builder;
     }
 
-    /**
-     * @param mixed $children
-     */
-    public function append($children, $slot = NULL)
+    public function appendToSlot()
     {
-        if(!empty($slot)) return $this->appendToSlot($slot, $children);
+        $args = func_get_args();
+        $slot = array_shift($args);
 
-        return parent::append($children);
-    }
-
-    public function appendToSlot($slot, $children)
-    {
         if(!isset($this->slots[$slot])) $this->slots[$slot] = array();
 
-        if(is_array($children)) $this->slots[$slot]   = array_merge($this->slots[$slot], $children);
-        else                    $this->slots[$slot][] = $children;
+        $this->slots[$slot]= array_merge($this->slots[$slot], $args);
 
         return $this;
     }
 
-    public function prepend($children, $slot = NULL)
+    public function prependToSlot()
     {
-        if(!empty($slot)) return $this->prependToSlot($slot, $children);
+        $args = func_get_args();
+        $slot = array_shift($args);
 
-        return parent::prepend($children);
-    }
-
-    public function prependToSlot($slot, $children)
-    {
         if(!isset($this->slots[$slot])) $this->slots[$slot] = array();
 
-        if(is_array($children)) $this->slots[$slot]   = array_merge($children, $this->slots[$slot]);
-        else                    array_unshift($this->slots[$slot], $children);
+        $this->slots[$slot]   = array_merge($args, $this->slots[$slot]);
 
         return $this;
     }

@@ -72,6 +72,8 @@ class ele
         if(!empty($children)) $this->append($children);
 
         if(is_array(static::$defaultProps)) $this->setDefaultProps(static::$defaultProps);
+
+        if(method_exists($this, 'init')) $this->init();
     }
 
     /**
@@ -180,21 +182,29 @@ class ele
         return $this->print($callback);
     }
 
-    protected function buildHtml($isPrint = false, $parent = NULL)
+    protected function buildInnerHtml($isPrint = false, $parent = NULL)
+    {
+        return $this->buildChildren($this->children, $isPrint, $parent);
+    }
+
+    protected function buildChildren($children, $isPrint, $parent = NULL)
     {
         $html = array();
 
-        if(!empty($this->children))
+        if(!empty($children))
         {
-            foreach($this->children as $child)
+            if(!is_array($children)) $children = array($children);
+
+            foreach($children as $child)
             {
                 if(is_object($child) && method_exists($child, 'render'))
                 {
                     $html[] = $child->render($isPrint, $this);
                 }
-                else if(is_array($child) && isset($child['html']))
+                else if(is_array($child))
                 {
-                    $html[] = $child['html'];
+                    if(isset($child['html'])) $html[] = $child['html'];
+                    else $html[] = implode('', $child);
                 }
                 else
                 {
@@ -214,7 +224,7 @@ class ele
         $builder = builder::new($this->tagName)->props($this->props);
 
         if(static::$selfClosing === true) $builder->selfClose(true);
-        else $builder->append($this->buildHtml($isPrint, $parent));
+        else $builder->append($this->buildInnerHtml($isPrint, $parent));
 
         return $builder;
     }
@@ -244,14 +254,24 @@ class ele
         return $this;
     }
 
-    public function append($children, $strAsHtml = false)
+    public function append()
     {
-        return $this->add($children, false, $strAsHtml);
+        return $this->add(func_get_args(), false);
     }
 
-    public function prepend($children, $strAsHtml = false)
+    public function prepend()
     {
-        return $this->add($children, true, $strAsHtml);
+        return $this->add(func_get_args(), true);
+    }
+
+    public function appendHtml()
+    {
+        return $this->add(func_get_args(), false, true);
+    }
+
+    public function prependHtml()
+    {
+        return $this->add(func_get_args(), true, true);
     }
 
     /**
@@ -319,7 +339,7 @@ class ele
      */
     public function html($html = NULL, $reset = true)
     {
-        if($html === NULL) return implode('\n', $this->buildHtml(false));
+        if($html === NULL) return implode('\n', $this->buildInnerHtml(false));
 
         return $this->add($html, false, true, $reset);
     }
@@ -339,7 +359,7 @@ class ele
         return $this;
     }
 
-    public function attr($name, $value = NULL)
+    public function prop($name, $value = NULL)
     {
         if($value === NULL) return $this->props->get($name);
 
@@ -354,17 +374,6 @@ class ele
             if($this->props->has($name)) continue;
             $this->props->set($name, $value);
         }
-        return $this;
-    }
-
-    public function a($name, $value = NULL)
-    {
-        return $this->attr($name, $value);
-    }
-
-    public function c($className, $reset = false)
-    {
-        $this->class->set($className, $reset);
         return $this;
     }
 
@@ -531,5 +540,37 @@ class ele
         }
 
         return array($tagName, $props, $children);
+    }
+
+    /**
+     * @return builder
+     */
+    static public function createBuilder($tag = '')
+    {
+        return new builder($tag);
+    }
+
+    /**
+     * @return props
+     */
+    static public function createProps($data = NULL)
+    {
+        return new props($data);
+    }
+
+    /**
+     * @return classlist
+     */
+    static public function createClass($data = NULL)
+    {
+        return new classlist($data);
+    }
+
+    /**
+     * @return style
+     */
+    static public function createStyle($data = NULL)
+    {
+        return new style($data);
     }
 }
