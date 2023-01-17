@@ -26,9 +26,12 @@ class builder
 
     public $jsVars = array();
 
+    public $selfClosing;
+
     public function __construct($tag = '')
     {
-        $this->tag = $tag;
+        $this->tag         = $tag;
+        $this->selfClosing = in_array($tag, array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'));
     }
 
     public function before($content)
@@ -94,6 +97,19 @@ class builder
         return $this;
     }
 
+    public function importCss($cssFile)
+    {
+        if(is_array($cssFile)) $this->cssImports = array_merge($this->cssImports, $cssFile);
+        else $this->cssImports[] = $cssFile;
+        return $this;
+    }
+
+    public function selfClose($selfClosing = true)
+    {
+        $this->selfClosing = $selfClosing;
+        return $this;
+    }
+
     public function build()
     {
         $html = array();
@@ -118,11 +134,18 @@ class builder
 
         if(!empty($this->prefix)) $html = array_merge($html, $this->prefix);
 
-        if(!empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr>";
+        if($this->selfClosing)
+        {
+            if(!empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr>";
+        }
+        else
+        {
+            if(!empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr>";
 
-        if(!empty($this->children)) array_merge($html, $this->children);
+            if(!empty($this->children)) array_merge($html, $this->children);
 
-        if(!empty($this->tag)) $html[] = "</$this->tag>";
+            if(!empty($this->tag)) $html[] = "</$this->tag>";
+        }
 
         if(!empty($this->suffix)) $html = array_merge($html, $this->suffix);
 

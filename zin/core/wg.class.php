@@ -23,6 +23,10 @@ class wg extends ele
 
     public $cssList = array();
 
+    public $jsImports = array();
+
+    public $cssImports = array();
+
     protected function getCssCode()
     {
         if(empty($this->cssList)) return '';
@@ -35,23 +39,23 @@ class wg extends ele
         return '(function(){'. implode('', $this->jsList) . '}());';
     }
 
+    /**
+     * @return builder
+     */
     protected function build($isPrint = false, $parent = NULL)
     {
-        $builder = parent::build($isPrint, $parent);
+        $builder = parent::build($isPrint, $parent)
+            ->js($this->jsList)
+            ->css($this->cssList);
 
-        $cssCode = $this->getCssCode();
-        $jsCode  = $this->getJsCode();
-        $suffix  = array();
-
-        if(!empty($cssCode)) $suffix[] = "<style>$cssCode</style>";
-        if(!empty($jsCode))  $suffix[] = "<script>$jsCode</script>";
-
-        if(!empty($suffix))
+        if(is_array(static::$imports))
         {
-            $suffix = implode('\n', $suffix);
-            if(isset($builder->suffixCode)) $builder->suffixCode .= $suffix;
-            else $builder->suffixCode = $suffix;
+            if(isset(static::$imports['css'])) $builder->importCss(static::$imports['css']);
+            if(isset(static::$imports['js'])) $builder->importJs(static::$imports['js']);
         }
+
+        $builder->importJs($this->jsImports)
+            ->importCss($this->cssImports);
 
         return $builder;
     }
@@ -124,6 +128,20 @@ class wg extends ele
         if($reset) $this->jsList = array($js);
         else       $this->jsList = array_merge($this->jsList, $js);
 
+        return $this;
+    }
+
+    public function importJs($jsFile)
+    {
+        if(is_array($jsFile)) $this->jsImports = array_merge($this->jsImports, $jsFile);
+        else $this->jsImports[] = $jsFile;
+        return $this;
+    }
+
+    public function importCss($cssFile)
+    {
+        if(is_array($cssFile)) $this->cssImports = array_merge($this->cssImports, $cssFile);
+        else $this->cssImports[] = $cssFile;
         return $this;
     }
 

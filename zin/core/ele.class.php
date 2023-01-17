@@ -1,6 +1,6 @@
 <?php
 /**
- * The ele class file of zin of ZenTaoPMS.
+ * The base element class file of zin of ZenTaoPMS.
  *
  * @copyright   Copyright 2023 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @author      Hao Sun <sunhao@easycorp.ltd>
@@ -10,6 +10,7 @@
  */
 
 require_once 'props.class.php';
+require_once 'builder.class.php';
 
 class ele
 {
@@ -18,6 +19,8 @@ class ele
     protected static $defaultProps = NULL;
 
     protected static $customProps = NULL;
+
+    protected static $selfClosing = NULL;
 
     public $props;
 
@@ -133,45 +136,15 @@ class ele
     {
         if($parent === NULL) $parent = $this->parent;
 
+        $builder = $this->build($isPrint, $parent);
+
         if(is_callable($this->beforeRenderCallback))
         {
-            call_user_func($this->beforeRenderCallback, $this);
+            call_user_func($this->beforeRenderCallback, $builder, $this);
         }
 
-        $builder = $this->build($isPrint, $parent);
-        $html    = array();
+        $htmlCode = $builder->build();
 
-        if(isset($builder->prefixCode) && !empty($builder->prefixCode)) $html[] = $builder->prefixCode;
-        if(isset($builder->beginTag)) $html[] = $builder->beginTag;
-
-        if(isset($builder->code))
-        {
-            if($builder->code !== false) $html[] = $builder->code;
-        }
-        else
-        {
-            $children = isset($builder->children) ? $builder->children : $this->children;
-            if(!empty($children))
-            {
-                if(!is_array($children)) $children = array($children);
-                foreach($children as $child)
-                {
-                    if(is_object($child) && method_exists($child, 'render'))
-                    {
-                        $html[] = $child->render($isPrint, $this);
-                    }
-                    else
-                    {
-                        $html[] = strval($child);
-                    }
-                }
-            }
-        }
-
-        if(isset($builder->endTag)) $html[] = $builder->endTag;
-        if(isset($builder->suffixCode) && !empty($builder->suffixCode)) $html[] = $builder->suffixCode;
-
-        $htmlCode = implode("\n", $html);
         if(is_callable($this->afterRenderCallback))
         {
             $htmlCode = call_user_func($this->afterRenderCallback, $htmlCode, $this);
@@ -207,25 +180,54 @@ class ele
         return $this->print($callback);
     }
 
+    protected function buildHtml($isPrint = false, $parent = NULL)
+    {
+        $html = array();
+
+        if(!empty($this->children))
+        {
+            foreach($this->children as $child)
+            {
+                if(is_object($child) && method_exists($child, 'render'))
+                {
+                    $html[] = $child->render($isPrint, $this);
+                }
+                else if(is_array($child) && isset($child['html']))
+                {
+                    $html[] = $child['html'];
+                }
+                else
+                {
+                    $html[] = htmlspecialchars(strval($child));
+                }
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * @return builder
+     */
     protected function build($isPrint = false, $parent = NULL)
     {
-        $builder = new stdclass();
-        $props   = $this->props->toStr();
+        $builder = builder::new($this->tagName)->props($this->props);
 
-        if(!empty($this->tagName))
-        {
-            $builder->beginTag = "<$this->tagName $props>";
-            $builder->endTag   = "</$this->tagName>";
-        }
+        if(static::$selfClosing === true) $builder->selfClose(true);
+        else $builder->append($this->buildHtml($isPrint, $parent));
 
         return $builder;
     }
 
     /**
+     * Add children to element
+     *
      * @param mixed $children
      */
-    public function add($children, $prepend = false)
+    public function add($children, $prepend = false, $strAsHtml = false, $reset = false)
     {
+        if($reset) $this->children = array();
+
         if(empty($children)) return $this;
 
         if(!is_array($children)) $children = array($children);
@@ -233,6 +235,8 @@ class ele
         foreach($children as $child)
         {
             if($child instanceof ele) $child->parent = $this;
+            else if($strAsHtml && is_string($child)) $child = array('html' => $child);
+
             if($prepend) array_unshift($this->children, $child);
             else $this->children[] = $child;
         }
@@ -240,14 +244,14 @@ class ele
         return $this;
     }
 
-    public function append($children)
+    public function append($children, $strAsHtml = false)
     {
-        return $this->add($children);
+        return $this->add($children, false, $strAsHtml);
     }
 
-    public function prepend($children)
+    public function prepend($children, $strAsHtml = false)
     {
-        return $this->add($children, true);
+        return $this->add($children, true, $strAsHtml);
     }
 
     /**
@@ -256,9 +260,9 @@ class ele
      * @param object $parent
      * @return wg Return self for chain calls.
      */
-    public function appendTo($parent)
+    public function appendTo($parent, $strAsHtml = false)
     {
-        $parent->append($this);
+        $parent->append($this, $strAsHtml);
         return $this;
     }
 
@@ -268,9 +272,9 @@ class ele
      * @param object $parent
      * @return wg Return self for chain calls.
      */
-    public function prependTo($parent)
+    public function prependTo($parent, $strAsHtml = false)
     {
-        $parent->prepend($this);
+        $parent->prepend($this, $strAsHtml);
         return $this;
     }
 
@@ -280,23 +284,31 @@ class ele
      * @param string $text
      * @return wg Return self for chain calls.
      */
-    public function text($text = NULL)
+    public function text($text = NULL, $reset = true)
     {
         if($text === NULL)
         {
             $textList = array();
             foreach($this->children as $child)
             {
-                if(is_object($child) && method_exists($child, 'text')) $textList[] = $child->text();
-                else $textList[] = strval($child);
+                if(is_object($child) && method_exists($child, 'text'))
+                {
+                    $textList[] = $child->text();
+                }
+                elseif(is_array($child) && isset($child['html']))
+                {
+                    $textList[] = htmlentities($child['html']);
+                }
+                else
+                {
+                    $textList[] = strval($child);
+                }
             }
 
             return implode('\n', $textList);
         }
 
-        $this->children = array(htmlspecialchars($text));
-
-        return $this;
+        return $this->add($text, false, false, $reset);
     }
 
     /**
@@ -305,23 +317,11 @@ class ele
      * @param string $html
      * @return wg Return self for chain calls.
      */
-    public function html($html = NULL)
+    public function html($html = NULL, $reset = true)
     {
-        if($html === NULL)
-        {
-            $htmlList = array();
-            foreach($this->children as $child)
-            {
-                if(is_object($child) && method_exists($child, 'html')) $htmlList[] = $child->html();
-                else $htmlList[] = strval($child);
-            }
+        if($html === NULL) return implode('\n', $this->buildHtml(false));
 
-            return implode('\n', $htmlList);
-        }
-
-        $this->children = array($html);
-
-        return $this;
+        return $this->add($html, false, true, $reset);
     }
 
     /**
