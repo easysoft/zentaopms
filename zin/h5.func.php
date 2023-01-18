@@ -17,11 +17,12 @@ function custom($name, $data)               {$info = new \stdClass();$info->$nam
 function hx($prop, $value = NULL)           {return (new core\hx())->set($prop, $value);}
 function style($prop, $value = NULL)        {return (new core\style())->set($prop, $value);}
 function cssvar($name = '', $value = NULL)  {return (new core\style())->var($name, $value);}
-function prop($prop, $value = NULL)         {return (new core\props())->set($prop, $value);}
+function set($prop, $value = NULL)          {return (new core\props())->set($prop, $value);}
 function setClass()                         {return (new core\classlist())->set(func_get_args());}
 function toggleClass($name, $toggle = NULL) {return (new core\classlist())->toggle($name, $toggle);}
 function removeClass($name)                 {return (new core\classlist())->remove($name);}
 function html()                             {return custom('html', implode("\n", func_get_args()));}
+function id($id)                            {return set('id', $id);}
 
 function h()        {return new core\h5(func_get_args());}
 function button()   {return call_user_func_array('\zin\core\h5::button', func_get_args());}

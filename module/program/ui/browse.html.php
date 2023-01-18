@@ -3,7 +3,7 @@ namespace zin;
 
 page
 (
-    prop('title', $title),
+    set('title', $title),
     h('h1', 'hello'),
     button('BUTTON'),
     btn('Primary')->primary()->rounded(),

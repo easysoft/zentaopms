@@ -81,10 +81,10 @@ class wg extends ele
                 $this->js($child->js);
                 unset($child->js);
             }
-            if(isset($child->imports))
+            if(isset($child->import))
             {
-                $this->import($child->imports);
-                unset($child->imports);
+                $this->import($child->import);
+                unset($child->import);
             }
         }
         return $child;
@@ -160,13 +160,13 @@ class wg extends ele
 
     public function import($file, $type = '')
     {
-        if(empty($type)) $type = substr($file, -strlen('.css')) === '.css' ? 'css' : 'js';
-
         if(is_array($file))
         {
             foreach($file as $f) $this->import($f, $type);
             return $this;
         }
+
+        if(empty($type)) $type = substr($file, -strlen('.css')) === '.css' ? 'css' : 'js';
 
         if($type === 'css') return $this->importCss($file);
         return $this->importJs($file);
