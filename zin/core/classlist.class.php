@@ -136,8 +136,7 @@ class classlist
                     $index = trim($index);
                     if(strlen($index) === 0) continue;
 
-                    if($value)                         $this->list[$index] = true;
-                    elseif(isset($this->list[$index])) unset($this->list[$index]);
+                    $this->list[$index] = boolval($value);
                 }
                 $expectedKey++;
             }
@@ -191,7 +190,7 @@ class classlist
             $name = trim($name);
             if(!strlen($name)) continue;
 
-            if(isset($this->list[$name])) unset($this->list[$name]);
+            $this->list[$name] = false;
         }
         return $this;
     }
@@ -216,9 +215,8 @@ class classlist
         $name = trim($name);
         if(strlen($name))
         {
-            if($toggle === NULL)              $toggle = !$this->has($name);
-            if($toggle)                       $this->list[$name] = true;
-            elseif(isset($this->list[$name])) unset($this->list[$name]);
+            if($toggle === NULL) $toggle = !$this->has($name);
+            $this->list[$name] = $toggle;
         }
         return $this;
     }

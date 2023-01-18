@@ -57,10 +57,7 @@ class wg extends ele
         {
             if(isset($child->slots))
             {
-                foreach($child->slots as $slot => $children)
-                {
-                    $this->appendTo($slot, $children);
-                }
+                call_user_func_array('appendTo', $child->slots);
                 unset($child->slots);
             }
             if(isset($child->css))
@@ -99,7 +96,11 @@ class wg extends ele
 
         if(!isset($this->slots[$slot])) $this->slots[$slot] = array();
 
-        $this->slots[$slot]= array_merge($this->slots[$slot], $args);
+        foreach($args as $child)
+        {
+            if(is_array($child)) $this->slots[$slot] = array_merge($this->slots[$slot], $child);
+            else $this->slots[$slot][] = $child;
+        }
 
         return $this;
     }
@@ -111,7 +112,11 @@ class wg extends ele
 
         if(!isset($this->slots[$slot])) $this->slots[$slot] = array();
 
-        $this->slots[$slot]   = array_merge($args, $this->slots[$slot]);
+        foreach($args as $child)
+        {
+            if(is_array($child)) $this->slots[$slot] = array_merge($child, $this->slots[$slot]);
+            else array_unshift($this->slots[$slot], $child);
+        }
 
         return $this;
     }
@@ -127,8 +132,9 @@ class wg extends ele
     {
         if($css === NULL) return $this->getCssCode();
 
-        if($reset) $this->cssList = array($css);
-        else       $this->cssList = array_merge($this->cssList, $css);
+        if($reset)             $this->cssList   = array($css);
+        elseif(is_array($css)) $this->cssList   = array_merge($this->cssList, $css);
+        else                   $this->cssList[] = $css;
 
         return $this;
     }
@@ -144,8 +150,9 @@ class wg extends ele
     {
         if($js === NULL) return implode("\n", $this->jsList);
 
-        if($reset) $this->jsList = array($js);
-        else       $this->jsList = array_merge($this->jsList, $js);
+        if($reset)            $this->jsList   = array($js);
+        elseif(is_array($js)) $this->jsList   = array_merge($this->jsList, $js);
+        else                  $this->jsList[] = $js;
 
         return $this;
     }

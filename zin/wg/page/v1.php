@@ -56,7 +56,7 @@ class page extends \zin\core\wg
         return $this;
     }
 
-    protected function buildHeader($isPrint = false, $parent = NULL)
+    protected function buildHead($isPrint = false, $parent = NULL)
     {
         global $lang;
 
@@ -90,7 +90,7 @@ class page extends \zin\core\wg
         return \zin\core\wg::createBuilder('html')
             ->props($this->props)
             ->before('<!DOCTYPE html>')
-            ->append($this->buildHeader()->build())
+            ->append($this->buildHead()->build())
             ->append($this->buildBody()->build());
     }
 }
