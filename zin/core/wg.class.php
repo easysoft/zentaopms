@@ -49,6 +49,47 @@ class wg extends ele
         return $builder;
     }
 
+    protected function acceptChild($child, $strAsHtml = false)
+    {
+        if(is_object($child) && isset($child->custom) && $child->custom)
+        {
+            if(isset($child->slots))
+            {
+                foreach($child->slots as $slot => $children)
+                {
+                    $this->appendTo($slot, $children);
+                }
+                unset($child->slots);
+            }
+            if(isset($child->css))
+            {
+                $this->css($child->css);
+                unset($child->css);
+            }
+            if(isset($child->js))
+            {
+                $this->js($child->js);
+                unset($child->js);
+            }
+            if(isset($child->js))
+            {
+                $this->js($child->js);
+                unset($child->js);
+            }
+            if(isset($child->js))
+            {
+                $this->js($child->js);
+                unset($child->js);
+            }
+            if(isset($child->imports))
+            {
+                $this->import($child->imports);
+                unset($child->imports);
+            }
+        }
+        return $child;
+    }
+
     public function appendTo()
     {
         $args = func_get_args();
@@ -105,6 +146,20 @@ class wg extends ele
         else       $this->jsList = array_merge($this->jsList, $js);
 
         return $this;
+    }
+
+    public function import($file, $type = '')
+    {
+        if(empty($type)) $type = substr($file, -strlen('.css')) === '.css' ? 'css' : 'js';
+
+        if(is_array($file))
+        {
+            foreach($file as $f) $this->import($f, $type);
+            return $this;
+        }
+
+        if($type === 'css') return $this->importCss($file);
+        return $this->importJs($file);
     }
 
     public function importJs($jsFile)

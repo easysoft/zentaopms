@@ -277,4 +277,10 @@ class dataset
     {
         return new dataset($this->data);
     }
+
+    public function merge($data)
+    {
+        if(is_object($data) && isset($data->data)) return $this->set($data->data);
+        return $this->set($data);
+    }
 }

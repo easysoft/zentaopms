@@ -199,14 +199,14 @@ class ele
 
             foreach($children as $child)
             {
-                if(is_object($child) && method_exists($child, 'render'))
+                if(is_object($child))
                 {
-                    $html[] = $child->render($isPrint, $this);
+                    if(method_exists($child, 'render')) $html[] = $child->render($isPrint, $this);
+                    else if(isset($child->html)) $html[] = $child->html;
                 }
                 else if(is_array($child))
                 {
-                    if(isset($child['html'])) $html[] = $child['html'];
-                    else $html[] = implode('', $child);
+                    $html[] = implode('', $child);
                 }
                 else
                 {
@@ -231,6 +231,68 @@ class ele
         return $builder;
     }
 
+    protected function acceptChild($child, $strAsHtml = false)
+    {
+        if($child instanceof ele)
+        {
+            $child->parent = $this;
+            return $child;
+        }
+        if($child instanceof props)
+        {
+            $this->props->merge($child);
+            return NULL;
+        }
+        if($child instanceof style)
+        {
+            $this->style->merge($child);
+            return NULL;
+        }
+        if($child instanceof classlist)
+        {
+            $this->class->set($child->list);
+            return NULL;
+        }
+        if($child instanceof hx)
+        {
+            $this->hx->merge($child);
+            return NULL;
+        }
+
+        if(is_object($child))
+        {
+            if(isset($child->props))
+            {
+                $this->prop($child->props);
+                unset($child->props);
+            }
+            if(isset($child->class))
+            {
+                $this->addClass($child->class);
+                unset($child->class);
+            }
+            if(isset($child->style))
+            {
+                $this->setStyle($child->style);
+                unset($child->style);
+            }
+            if(isset($child->hx))
+            {
+                $this->hxSet($child->hx);
+                unset($child->hx);
+            }
+            $child->custom = true;
+        }
+        if($strAsHtml && is_string($child))
+        {
+            $htmlInfo = new stdClass();
+            $htmlInfo->type = 'html';
+            $htmlInfo->html = $child;
+            return $htmlInfo;
+        }
+        return $child;
+    }
+
     /**
      * Add children to element
      *
@@ -252,8 +314,9 @@ class ele
                 continue;
             }
 
-            if($child instanceof ele) $child->parent = $this;
-            else if($strAsHtml && is_string($child)) $child = array('html' => $child);
+            $child = $this->acceptChild($child, $strAsHtml);
+
+            if(empty($child) || (is_object($child) && isset($child->custom) && $child->custom && !isset($child->html))) continue;
 
             if($prepend) array_unshift($this->children, $child);
             else $this->children[] = $child;
@@ -410,6 +473,12 @@ class ele
         if($toggle) $this->addClass($className);
         else        $this->removeClass($className);
 
+        return $this;
+    }
+
+    public function hxSet($prop, $value = NULL, $removeEmpty = false)
+    {
+        $this->hx->set($prop, $value, $removeEmpty);
         return $this;
     }
 
