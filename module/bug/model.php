@@ -1023,6 +1023,7 @@ class bugModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
+            ->setDefault('mailto', '')
             ->stripTags($this->config->bug->editor->assignto['id'], $this->config->allowedTags)
             ->remove('comment,showModule')
             ->join('mailto', ',')
