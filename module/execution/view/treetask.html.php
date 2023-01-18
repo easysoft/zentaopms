@@ -45,7 +45,7 @@
     <?php echo !empty($task->desc) ? $task->desc : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
-<?php if($execution->type != 'ops'):?>
+<?php if($execution->lifetime != 'ops'):?>
 <?php if($task->fromBug != 0):?>
 <div class="detail" open>
   <div class="detail-title"><?php echo $lang->bug->steps;?></div>
