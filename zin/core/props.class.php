@@ -9,6 +9,8 @@
  * @link        https://www.zentao.net
  */
 
+namespace zin\core;
+
 require_once 'dataset.class.php';
 require_once 'classlist.class.php';
 require_once 'style.class.php';

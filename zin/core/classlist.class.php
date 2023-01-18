@@ -9,6 +9,7 @@
  * @link        https://www.zentao.net
  */
 
+namespace zin\core;
 
 /**
  * Manage classname list for html element and widgets

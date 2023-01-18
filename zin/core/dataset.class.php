@@ -9,6 +9,8 @@
  * @link        https://www.zentao.net
  */
 
+namespace zin\core;
+
 /**
  * Manage dataset properties for html element and widgets
  */

@@ -9,6 +9,8 @@
  * @link        https://www.zentao.net
  */
 
+namespace zin\core;
+
 require_once 'props.class.php';
 require_once 'builder.class.php';
 
@@ -285,7 +287,7 @@ class ele
         }
         if($strAsHtml && is_string($child))
         {
-            $htmlInfo = new stdClass();
+            $htmlInfo = new \stdClass();
             $htmlInfo->type = 'html';
             $htmlInfo->html = $child;
             return $htmlInfo;

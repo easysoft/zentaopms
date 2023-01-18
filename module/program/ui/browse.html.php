@@ -1,5 +1,7 @@
 <?php
 
+namespace zin;
+
 page
 (
     h('h1', 'hello'),
@@ -9,6 +11,6 @@ page
     (
         h2('Headings2'),
         h3('Headings3'),
-        p('lorem', h5::strong('bold'))
+        p('lorem', strong('bold'))
     )
 )->title($title)->x();
