@@ -22,6 +22,8 @@ class ele
 
     protected static $selfClosing = NULL;
 
+    protected static $asBlock = NULL;
+
     public $props;
 
     public $tagName;
@@ -244,6 +246,12 @@ class ele
 
         foreach($children as $child)
         {
+            if(is_array($child))
+            {
+                $this->add($child, $prepend, $strAsHtml, $reset);
+                continue;
+            }
+
             if($child instanceof ele) $child->parent = $this;
             else if($strAsHtml && is_string($child)) $child = array('html' => $child);
 
@@ -272,30 +280,6 @@ class ele
     public function prependHtml()
     {
         return $this->add(func_get_args(), true, true);
-    }
-
-    /**
-     * Append current widget to the given parent
-     *
-     * @param object $parent
-     * @return wg Return self for chain calls.
-     */
-    public function appendTo($parent, $strAsHtml = false)
-    {
-        $parent->append($this, $strAsHtml);
-        return $this;
-    }
-
-    /**
-     * Prepend current widget to the given parent
-     *
-     * @param object $parent
-     * @return wg Return self for chain calls.
-     */
-    public function prependTo($parent, $strAsHtml = false)
-    {
-        $parent->prepend($this, $strAsHtml);
-        return $this;
     }
 
     /**
@@ -540,6 +524,14 @@ class ele
         }
 
         return array($tagName, $props, $children);
+    }
+
+    static protected function isBlockTag($tag = '')
+    {
+        $isAsBlock = static::$asBlock;
+        if(is_bool($isAsBlock)) return $isAsBlock;
+
+        return !in_array($tag, array('a', 'span', 'strong', 'small', 'i', 'em', 'code'));
     }
 
     /**

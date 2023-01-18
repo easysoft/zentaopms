@@ -34,5 +34,6 @@ function createWg($name, $args)
     $wgVer = getWgVer($name);
 
     include_once $app->getBasePath() . 'zin' . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
-    return new $name($args);
+
+    return class_exists($name) ? (new $name($args)) : $name($args);
 }

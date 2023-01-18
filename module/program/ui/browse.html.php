@@ -1,12 +1,14 @@
 <?php
 
-$page = page(
-    button('BUTTON'),
+page
+(
     h('h1', 'hello'),
-    btn('哈哈')->primary(),
-    div(
+    button('BUTTON'),
+    btn('Primary')->primary()->rounded(),
+    div
+    (
         h2('Headings2'),
         h3('Headings3'),
         p('lorem', h5::strong('bold'))
     )
-)->title('哈哈哈')->x();
+)->title($title)->x();

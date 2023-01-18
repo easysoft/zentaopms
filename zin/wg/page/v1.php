@@ -18,7 +18,7 @@ class page extends wg
 
         $this->setDefaultProps(array('lang' => $clientLang));
 
-        if($this->props('zui') !== false && isset($config->zin->zuiPath))
+        if($this->prop('zui') && isset($config->zin->zuiPath))
         {
             $this->importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs')
                 ->importCss($config->zin->zuiPath . 'zui.zentao.css');
@@ -59,8 +59,8 @@ class page extends wg
         global $lang;
 
         $headBuilder = wg::createBuilder('head')
-            ->append($this->prop('metas'))
-            ->append('<title>' . htmlspecialchars($this->props->get('title', '')) . " - $lang->zentaoPMS</title>")
+            ->before($this->prop('metas'))
+            ->before('<title>' . htmlspecialchars($this->props->get('title', '')) . " - $lang->zentaoPMS</title>")
             ->css($this->cssList)
             ->importCss($this->cssImports)
             ->renderInTag();

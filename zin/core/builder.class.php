@@ -32,8 +32,8 @@ class builder
 
     public function __construct($tag = '')
     {
-        $this->tag         = $tag;
-        $this->selfClosing = in_array($tag, array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'));
+        $this->tag          = $tag;
+        $this->selfClosing  = in_array($tag, array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'));
     }
 
     public function before($content)
@@ -60,6 +60,7 @@ class builder
     {
         if(is_array($content)) $this->children = array_merge($this->children, $content);
         else $this->children[] = $content;
+
         return $this;
     }
 
@@ -67,6 +68,7 @@ class builder
     {
         if(is_array($content)) $this->children = array_merge($content, $this->children);
         else array_unshift($this->children, $content);
+
         return $this;
     }
 
@@ -74,7 +76,8 @@ class builder
     {
         if($reset) $this->propsStr = '';
 
-        $this->propsStr .= ' ' . strval($props);
+        $propsStr = trim(strval($props));
+        if(!empty($propsStr)) $this->propsStr .= ' ' . $propsStr;
         return $this;
     }
 
@@ -124,6 +127,8 @@ class builder
 
         if(!$this->selfClosing && $this->inTag && !empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr>";
 
+        if(!empty($this->prefix)) $html = array_merge($html, $this->prefix);
+
         if(!empty($this->cssImports))
         {
             foreach($this->cssImports as $href)
@@ -142,19 +147,17 @@ class builder
             if(!empty($cssCode)) $html[] = "<style>$cssCode</style>";
         }
 
-        if(!empty($this->prefix)) $html = array_merge($html, $this->prefix);
-
         if($this->selfClosing)
         {
             if(!empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr />";
         }
         else
         {
-            if(!empty($this->tag) && !$this->inTag) $html[] = "<$this->tag" . "$this->propsStr>";
-
-            if(!empty($this->children)) $html = array_merge($html, $this->children);
-
-            if(!empty($this->tag) && !$this->inTag) $html[] = "</$this->tag>";
+            $innerHtml = '';
+            if(!empty($this->tag) && !$this->inTag) $innerHtml .= "<$this->tag" . "$this->propsStr>";
+            if(!empty($this->children)) $innerHtml .= implode("\n", $this->children);
+            if(!empty($this->tag) && !$this->inTag) $innerHtml .= "</$this->tag>";
+            if(!empty($innerHtml)) $html[] = $innerHtml;
         }
 
         if(!empty($this->suffix)) $html = array_merge($html, $this->suffix);
@@ -187,7 +190,7 @@ class builder
 
         if(!$this->selfClosing && $this->inTag && !empty($this->tag)) $html[] = "</$this->tag>";
 
-        return implode("\n", $html);
+        return implode('', $html);
     }
 
     /**

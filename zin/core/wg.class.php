@@ -49,7 +49,7 @@ class wg extends ele
         return $builder;
     }
 
-    public function appendToSlot()
+    public function appendTo()
     {
         $args = func_get_args();
         $slot = array_shift($args);
@@ -61,7 +61,7 @@ class wg extends ele
         return $this;
     }
 
-    public function prependToSlot()
+    public function prependTo()
     {
         $args = func_get_args();
         $slot = array_shift($args);
