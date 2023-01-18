@@ -1381,9 +1381,29 @@ class repo extends control
             {
                 $content  = file($logFile);
                 $lastLine = $content[count($content) - 1];
+
                 if(!strpos($lastLine, 'done'))
                 {
-                    return print(1);
+                    if(strpos($lastLine, 'empty repository') !== false)
+                    {
+                        @unlink($logFile);
+                    }
+                    elseif(strpos($lastLine, 'Total') !== false)
+                    {
+                        $logContent = file_get_contents($logFile);
+                        if(strpos($logContent, 'Counting objects: 100%') !== false and strpos($logContent, 'Compressing objects: 100%') !== false)
+                        {
+                            @unlink($logFile);
+                        }
+                        else
+                        {
+                            return print(1);
+                        }
+                    }
+                    else
+                    {
+                        return print(1);
+                    }
                 }
                 elseif(strpos($lastLine, 'fatal') !== false)
                 {
