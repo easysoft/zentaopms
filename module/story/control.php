@@ -2458,6 +2458,7 @@ class story extends control
         $this->view->type         = $type;
         $this->view->stories2Link = $stories2Link;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyType    = $storyType;
 
         $this->display();
     }
