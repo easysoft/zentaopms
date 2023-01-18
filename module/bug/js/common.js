@@ -298,7 +298,7 @@ function loadProductModules(productID)
     if(typeof(branch) == 'undefined') branch = 0;
     if(typeof(moduleID) == 'undefined') moduleID = 0;
     if(config.currentMethod == 'edit') moduleID = $('#module').val();
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + moduleID);
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
     $('#moduleIdBox').load(link, function()
     {
         $(this).find('select').chosen()
