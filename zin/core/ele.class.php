@@ -563,8 +563,8 @@ class ele
                         }
                         elseif($i === 1)
                         {
-                            if($a !== NULL && !is_array($a)) $children[] = $a;
-                            else $props = array_merge($props, $a);
+                            if(is_array($a)) $props = array_merge($props, $a);
+                            else if(!empty($a)) $children[] = $a;
                         }
                         else
                         {
@@ -580,8 +580,8 @@ class ele
             elseif($argIdx === 1)
             {
                 /* Make $props optional */
-                if($arg !== NULL && !is_array($arg)) $children[] = $arg;
-                else $props = array_merge($props, $arg);
+                if(is_array($arg)) $props = array_merge($props, $arg);
+                else if(!empty($arg)) $children[] = $arg;
             }
             else
             {

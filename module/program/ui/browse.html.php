@@ -9,7 +9,7 @@ page
     btn('Primary')->primary()->rounded(),
     div
     (
-        setclass('primary-pale'),
+        setClass('primary-pale'),
         h2('Headings2'),
         h3('Headings3'),
         html('<div>test</div>'),

@@ -53,6 +53,7 @@ class wg extends ele
 
     protected function acceptChild($child, $strAsHtml = false)
     {
+        $child = parent::acceptChild($child, $strAsHtml);
         if(is_object($child) && isset($child->custom) && $child->custom)
         {
             if(isset($child->slots))
