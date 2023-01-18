@@ -9,7 +9,7 @@
  * @link        https://www.zentao.net
  */
 
-require_once 'h5.class.php';
+require_once 'core/h5.class.php';
 
 function h()      {return new h5(func_get_args());}
 function button() {return call_user_func_array('h5::button', func_get_args());}
