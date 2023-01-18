@@ -2,95 +2,22 @@
 namespace zin\wg;
 
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
+require_once dirname(__DIR__) . DS . 'pagebase' . DS . 'v1.php';
 
-class page extends \zin\core\wg
+class page extends pagebase
 {
-    static $tag = 'html';
-
-    static $customProps = 'metas,title,bodyProps';
-
-    public $bodyProps;
+    static $customProps = 'metas,title,bodyProps,zui';
 
     public function init()
     {
-        global $app, $config;
-        $clientLang = $app->getClientLang();
+        parent::init();
 
-        $this->bodyProps = \zin\core\wg::createClass($this->prop('bodyProps'));
-
-        $this->setDefaultProps(array('lang' => $clientLang));
-
+        global $config;
+        $this->setDefaultProps(array('zui' => true));
         if($this->prop('zui') && isset($config->zin->zuiPath))
         {
             $this->importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs')
                 ->importCss($config->zin->zuiPath . 'zui.zentao.css');
         }
-
-        $this->addMeta('<meta charset="utf-8">')
-            ->addMeta('<meta http-equiv="X-UA-Compatible" content="IE=edge">')
-            ->addMeta('<meta name="viewport" content="width=device-width, initial-scale=1">')
-            ->addMeta('<meta name="renderer" content="webkit">');
-    }
-
-    public function title($title)
-    {
-        return $this->prop('title', $title);
-    }
-
-    public function addMeta($meta)
-    {
-        $metas = $this->props->get('metas', array());
-        $metas[] = $meta;
-        $this->prop('metas', $metas);
-        return $this;
-    }
-
-    public function bodyClass($className, $reset = false)
-    {
-        $this->bodyProps->class->set($className, $reset);
-    }
-
-    public function bodyStyle($prop, $value = NULL, $removeEmpty = false)
-    {
-        $this->bodyProps->style->set($prop, $value, $removeEmpty);
-        return $this;
-    }
-
-    protected function buildHead($isPrint = false, $parent = NULL)
-    {
-        global $lang;
-
-        $headBuilder = \zin\core\wg::createBuilder('head')
-            ->before($this->prop('metas'))
-            ->before('<title>' . htmlspecialchars($this->props->get('title', '')) . " - $lang->zentaoPMS</title>")
-            ->css($this->cssList)
-            ->importCss($this->cssImports)
-            ->renderInTag();
-
-        if(isset($this->slots['head']))
-        {
-            $headBuilder->append($this->buildChildren($this->slots['head'], $isPrint, $parent));
-        }
-
-        return $headBuilder;
-    }
-
-    protected function buildBody($isPrint = false, $parent = NULL)
-    {
-        return \zin\core\wg::createBuilder('body')
-            ->props($this->bodyProps)
-            ->importJs($this->jsImports)
-            ->js($this->jsList)
-            ->append($this->buildInnerHtml($isPrint, $parent))
-            ->renderInTag();
-    }
-
-    public function build($isPrint = false, $parent = NULL)
-    {
-        return \zin\core\wg::createBuilder('html')
-            ->props($this->props)
-            ->before('<!DOCTYPE html>')
-            ->append($this->buildHead()->build())
-            ->append($this->buildBody()->build());
     }
 }

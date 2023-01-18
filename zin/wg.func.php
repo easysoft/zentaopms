@@ -18,5 +18,6 @@ function js()                               {return custom('js', func_get_args()
 function css()                              {return custom('css', func_get_args());}
 function to()                               {return custom('slots', func_get_args());}
 
-function btn()  {return createWg('btn', func_get_args());}
-function page() {return createWg('page', func_get_args());}
+function btn()      {return createWg('btn', func_get_args());}
+function pagebase() {return createWg('pagebase', func_get_args());}
+function page()     {return createWg('page', func_get_args());}
