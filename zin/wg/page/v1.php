@@ -1,7 +1,9 @@
 <?php
+namespace zin\wg;
+
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
 
-class page extends wg
+class page extends \zin\core\wg
 {
     static $tag = 'html';
 
@@ -14,7 +16,7 @@ class page extends wg
         global $app, $config;
         $clientLang = $app->getClientLang();
 
-        $this->bodyProps = wg::createClass($this->prop('bodyProps'));
+        $this->bodyProps = \zin\core\wg::createClass($this->prop('bodyProps'));
 
         $this->setDefaultProps(array('lang' => $clientLang));
 
@@ -58,7 +60,7 @@ class page extends wg
     {
         global $lang;
 
-        $headBuilder = wg::createBuilder('head')
+        $headBuilder = \zin\core\wg::createBuilder('head')
             ->before($this->prop('metas'))
             ->before('<title>' . htmlspecialchars($this->props->get('title', '')) . " - $lang->zentaoPMS</title>")
             ->css($this->cssList)
@@ -75,7 +77,7 @@ class page extends wg
 
     protected function buildBody($isPrint = false, $parent = NULL)
     {
-        return wg::createBuilder('body')
+        return \zin\core\wg::createBuilder('body')
             ->props($this->bodyProps)
             ->importJs($this->jsImports)
             ->js($this->jsList)
@@ -85,7 +87,7 @@ class page extends wg
 
     public function build($isPrint = false, $parent = NULL)
     {
-        return wg::createBuilder('html')
+        return \zin\core\wg::createBuilder('html')
             ->props($this->props)
             ->before('<!DOCTYPE html>')
             ->append($this->buildHeader()->build())
