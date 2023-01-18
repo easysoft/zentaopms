@@ -1052,6 +1052,7 @@ class story extends control
             unset($stories[$id]);
         }
         if(!empty($twins)) echo js::alert(sprintf($this->lang->story->batchEditTip, $twins));
+        if(empty($stories)) return print(js::locate($this->session->storyList));
 
         $this->loadModel('branch');
         if($productID and !$executionID)
