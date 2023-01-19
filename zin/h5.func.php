@@ -28,6 +28,7 @@ function setClass()                         {return (new core\classlist(func_get
 function html()                             {return custom('html', implode("\n", func_get_args()));}
 function id($id)                            {return set('id', $id);}
 function tag($tag)                          {return custom('tag', $tag);}
+function setData($data)                     {return custom('data', $data);}
 
 function h()
 {

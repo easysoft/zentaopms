@@ -143,8 +143,11 @@ class dataset
      */
     protected function setVal($prop, $value, $removeEmpty = false)
     {
-
-        if($value === NULL || ($removeEmpty && empty($value))) return $this->remove($prop);
+        if($value === NULL || ($removeEmpty && empty($value)))
+        {
+            if(isset($this->data[$prop])) unset($this->data[$prop]);
+            return $this;
+        }
 
         $this->data[$prop] = $value;
         return $this;
@@ -244,8 +247,7 @@ class dataset
      */
     public function remove($prop)
     {
-        if(isset($this->data[$prop])) unset($this->data[$prop]);
-        return $this;
+        return $this->setVal($prop, NULL);
     }
 
     /**

@@ -13,6 +13,7 @@ namespace zin\core;
 
 require_once 'props.class.php';
 require_once 'builder.class.php';
+require_once 'data.class.php';
 
 class ele
 {
@@ -40,6 +41,8 @@ class ele
 
     public $hx;
 
+    public $data;
+
     /**
      * Whether the HTML has been printed to the page
      *
@@ -64,6 +67,7 @@ class ele
         $this->class   = $this->props->class;
         $this->style   = $this->props->style;
         $this->hx      = $this->props->hx;
+        $this->data    = new data();
 
         if(is_array(static::$defaultProps)) $this->setDefaultProps(static::$defaultProps);
 
@@ -277,6 +281,11 @@ class ele
                 $this->setTag($child->tag);
                 unset($child->tag);
             }
+            if(isset($child->data))
+            {
+                $this->setData($child->data);
+                unset($child->data);
+            }
             $child->custom = true;
         }
         if($strAsHtml && is_string($child))
@@ -485,6 +494,17 @@ class ele
     {
         $this->hx->set($prop, $value, $removeEmpty);
         return $this;
+    }
+
+    public function setData()
+    {
+        $this->data->set(func_get_args());
+        return $this;
+    }
+
+    public function getData($name, $defaultValue = NULL)
+    {
+        return $this->data->get($name, $defaultValue);
     }
 
     public function toStr()
