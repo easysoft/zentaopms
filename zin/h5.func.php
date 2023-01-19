@@ -27,8 +27,16 @@ function cssVar($name = '', $value = NULL)  {return (new core\style())->var($nam
 function setClass()                         {return (new core\classlist(func_get_args()));}
 function html()                             {return custom('html', implode("\n", func_get_args()));}
 function id($id)                            {return set('id', $id);}
+function tag($tag)                          {return custom('tag', $tag);}
 
-function h()        {return new core\h5(func_get_args());}
+function h()
+{
+    $args = func_get_args();
+    $tagName = array_shift($args);
+
+    return core\h5::create($tagName, $args);
+}
+
 function button()   {return call_user_func_array('\zin\core\h5::button', func_get_args());}
 function div()      {return call_user_func_array('\zin\core\h5::div', func_get_args());}
 function span()     {return call_user_func_array('\zin\core\h5::span', func_get_args());}

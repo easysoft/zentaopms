@@ -15,8 +15,6 @@ require_once 'ele.class.php';
 
 class wg extends ele
 {
-    public static $tag = __CLASS__;
-
     public static $imports = NULL;
 
     public $slots = array();
@@ -58,7 +56,7 @@ class wg extends ele
         {
             if(isset($child->slots))
             {
-                call_user_func_array('appendTo', $child->slots);
+                call_user_func_array(array($this, 'appendTo'), $child->slots);
                 unset($child->slots);
             }
             if(isset($child->css))
@@ -202,8 +200,8 @@ class wg extends ele
      * @access public
      * @return string
      */
-    static public function str($tagName, $props = NULL, $children = NULL)
+    static public function str()
     {
-        return (new wg($tagName, $props, $children))->toStr();
+        return (new wg(func_get_args()))->toStr();
     }
 }

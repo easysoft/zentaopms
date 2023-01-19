@@ -41,20 +41,6 @@ class ele
     public $hx;
 
     /**
-     * Callback for before render
-     * @var string
-     * @access protected
-     */
-    protected $beforeRenderCallback;
-
-    /**
-     * Callback for after render
-     * @var string
-     * @access protected
-     */
-    protected $afterRenderCallback;
-
-    /**
      * Whether the HTML has been printed to the page
      *
      * @access protected
@@ -64,18 +50,24 @@ class ele
 
     public function __construct(/* $tagName, $props = NULL, ...$children = NULL */)
     {
-        /* Use all args */
-        list($tagName, $props, $children) = static::parseArgs(func_get_args());
+        if(static::$tag)
+        {
+            $this->tagName = static::$tag;
+        }
+        else
+        {
+            $className = get_called_class();
+            $this->tagName = ($className !== 'ele' && $className !== 'wg') ? $className : '';
+        }
 
-        $this->tagName = $tagName;
-        $this->props   = new props($props, static::$customProps);
+        $this->props   = new props(NULL, static::$customProps);
         $this->class   = $this->props->class;
         $this->style   = $this->props->style;
         $this->hx      = $this->props->hx;
 
-        if(!empty($children)) $this->append($children);
-
         if(is_array(static::$defaultProps)) $this->setDefaultProps(static::$defaultProps);
+
+        $this->append(func_get_args());
 
         if(method_exists($this, 'init'))      $this->init();
         if(method_exists($this, 'onCreated')) $this->onCreated();
@@ -141,21 +133,16 @@ class ele
 
     public function render($isPrint = false, $parent = NULL)
     {
-        if($parent === NULL) $parent = &$this->parent;
+        $builder = $this->build($isPrint, $parent || $this->parent);
 
-        $builder = $this->build($isPrint, $parent);
-
-        if(is_callable($this->beforeRenderCallback))
+        if(method_exists($this, 'onBuild'))
         {
-            call_user_func($this->beforeRenderCallback, $builder, $this);
+            $newBuilder = $this->onBuild($builder);
+            if($newBuilder) $builder = $newBuilder;
         }
 
         $htmlCode = $builder->build();
 
-        if(is_callable($this->afterRenderCallback))
-        {
-            $htmlCode = call_user_func($this->afterRenderCallback, $htmlCode, $this);
-        }
         return $htmlCode;
     }
 
@@ -166,13 +153,14 @@ class ele
      * @param callable $callback Callback before print
      * @return wg
      */
-    public function print($callback = NULL)
+    public function print()
     {
-        $html = $this->render(NULL, true);
+        $html = $this->render(true, NULL);
 
-        if(is_callable($callback))
+        if(method_exists($this, 'onPrint'))
         {
-            $html = call_user_func($callback, $html);
+            $newHtml = $this->onPrint($html);
+            if(is_string($newHtml)) $html = $newHtml;
         }
 
         echo $html;
@@ -182,9 +170,9 @@ class ele
         return $this;
     }
 
-    public function x($callback = NULL)
+    public function x()
     {
-        return $this->print($callback);
+        return $this->print();
     }
 
     protected function buildInnerHtml($isPrint = false, $parent = NULL)
@@ -284,6 +272,11 @@ class ele
                 $this->hxSet($child->hx);
                 unset($child->hx);
             }
+            if(isset($child->tag))
+            {
+                $this->setTag($child->tag);
+                unset($child->tag);
+            }
             $child->custom = true;
         }
         if($strAsHtml && is_string($child))
@@ -294,6 +287,12 @@ class ele
             return $htmlInfo;
         }
         return $child;
+    }
+
+    public function setTag($tagName)
+    {
+        $this->tagName = $tagName;
+        return $this;
     }
 
     /**
@@ -411,7 +410,7 @@ class ele
 
     public function prop($name, $value = NULL)
     {
-        if($value === NULL) return $this->props->get($name);
+        if($value === NULL && is_string($name)) return $this->props->get($name);
 
         $this->props->set($name, $value);
         return $this;
@@ -419,10 +418,13 @@ class ele
 
     public function setDefaultProps($props)
     {
-        foreach($props as $name => $value)
+        if(is_array($props))
         {
-            if($this->props->has($name)) continue;
-            $this->props->set($name, $value);
+            foreach($props as $name => $value)
+            {
+                if($this->props->has($name)) continue;
+                $this->props->set($name, $value);
+            }
         }
         return $this;
     }
@@ -485,30 +487,6 @@ class ele
         return $this;
     }
 
-    /**
-     * Set callback for before render
-     *
-     * @param callable $callback
-     * @return wg Return self for chain calls.
-     */
-    public function beforeRender($callback)
-    {
-        $this->beforeRenderCallback = $callback;
-        return $this;
-    }
-
-    /**
-     * Set callback for after render
-     *
-     * @param callable $callback
-     * @return wg Return self for chain calls.
-     */
-    public function afterRender($callback)
-    {
-        $this->afterRenderCallback = $callback;
-        return $this;
-    }
-
     public function toStr()
     {
         return $this->render();
@@ -530,72 +508,9 @@ class ele
      * @access public
      * @return string
      */
-    static public function str($tagName, $props = NULL, $children = NULL)
+    static public function str()
     {
-        return (new ele($tagName, $props, $children))->toStr();
-    }
-
-    static protected function parseArgs($args)
-    {
-        $tagName  = '';
-        $props    = array();
-        $children = array();
-
-        if(is_string(static::$tag))
-        {
-            if(count($args))
-            {
-                if(is_array($args[0])) array_unshift($args[0], static::$tag);
-                else array_unshift($args, static::$tag);
-            }
-        }
-
-        foreach($args as $argIdx => $arg)
-        {
-            if($argIdx === 0)
-            {
-                if(is_array($arg))
-                {
-                    foreach($arg as $i => $a)
-                    {
-                        if($i === 0)
-                        {
-                            $tagName = $a;
-                        }
-                        elseif($i === 1)
-                        {
-                            if(is_array($a)) $props = array_merge($props, $a);
-                            else if(!empty($a)) $children[] = $a;
-                        }
-                        else
-                        {
-                            $children[] = $a;
-                        }
-                    }
-                }
-                else
-                {
-                    $tagName = $arg;
-                }
-            }
-            elseif($argIdx === 1)
-            {
-                /* Make $props optional */
-                if(is_array($arg)) $props = array_merge($props, $arg);
-                else if(!empty($arg)) $children[] = $arg;
-            }
-            else
-            {
-                $children[] = $arg;
-            }
-        }
-
-        if($tagName[0] === '<')
-        {
-            /* TODO: @sunhao parse name, props and children from string */
-        }
-
-        return array($tagName, $props, $children);
+        return (new ele(func_get_args()))->toStr();
     }
 
     static protected function isBlockTag($tag = '')

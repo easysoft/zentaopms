@@ -11,6 +11,8 @@
 
  namespace zin\core;
 
+use stdClass;
+
 require_once 'ele.class.php';
 
 /**
@@ -18,14 +20,26 @@ require_once 'ele.class.php';
  */
 class h5 extends ele
 {
-    public static function __callStatic($name, $args)
+    public function __construct()
     {
-        return self::create($name, $args);
+        $args = func_get_args();
+        if(isset($args[0]) && is_string($args[0]))
+        {
+            $tag = new stdClass();
+            $tag->tag = $args[0];
+            $args[0] = $tag;
+        }
+        parent::__construct($args);
     }
 
-    public static function create($name, $args, $defaultProps = NULL)
+    public static function __callStatic($tagName, $args)
     {
-        $ele = new h5(array_merge(array($name), $args));
+        return h5::create($tagName, $args);
+    }
+
+    public static function create($tagName, $args, $defaultProps = NULL)
+    {
+        $ele = (new h5($args))->setTag($tagName);
         if(is_array($defaultProps)) $ele->setDefaultProps($defaultProps);
         return $ele;
     }
