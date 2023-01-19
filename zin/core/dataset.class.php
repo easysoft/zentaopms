@@ -69,7 +69,7 @@ class dataset
      */
     public function __isset($name)
     {
-        return isset($this->data[$name]);
+        return $this->has($name);
     }
 
     /**
@@ -81,7 +81,7 @@ class dataset
      */
     public function __unset($name)
     {
-        unset($this->data[$name]);
+        $this->remove($name);
     }
 
     /**
@@ -148,6 +148,11 @@ class dataset
 
         $this->data[$prop] = $value;
         return $this;
+    }
+
+    protected function getVal($prop)
+    {
+        return isset($this->data[$prop]) ? $this->data[$prop] : NULL;
     }
 
     /**
@@ -226,8 +231,8 @@ class dataset
      */
     public function get($prop, $defaultValue = NULL)
     {
-        $value = isset($this->data[$prop]) ? $this->data[$prop] : NULL;
-        return $value === NULL ? $defaultValue : $value;
+        $val = $this->getVal($prop);
+        return $val === NULL ? $defaultValue : $val;
     }
 
     /**
@@ -266,7 +271,7 @@ class dataset
      */
     public function has($prop)
     {
-        return isset($this->data[$prop]) && $this->data[$prop] !== NULL;
+        return $this->getVal($prop) !== NULL;
     }
 
     /**
@@ -277,12 +282,18 @@ class dataset
      */
     public function clone()
     {
-        return new dataset($this->data);
+        $className = get_called_class();
+        return new $className($this->data);
     }
 
     public function merge($data)
     {
         if(is_object($data) && isset($data->data)) return $this->set($data->data);
         return $this->set($data);
+    }
+
+    public function toJSON()
+    {
+        return $this->data;
     }
 }

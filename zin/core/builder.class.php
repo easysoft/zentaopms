@@ -114,6 +114,12 @@ class builder
         return $this;
     }
 
+    public function jsVar($name, $value = NULL)
+    {
+        if(is_array($name)) $this->jsVars = array_merge($this->jsVars, $name);
+        $this->jsVars[$name] = $value;
+    }
+
     public function importCss($cssFile)
     {
         if(is_array($cssFile)) $this->cssImports = array_merge($this->cssImports, $cssFile);
@@ -198,7 +204,7 @@ class builder
                 if(!empty($js)) $jsCode .= $js;
             }
         }
-        if(!empty($jsCode)) $html[] = "<script>(function(){$jsCode}</script>";
+        if(!empty($jsCode)) $html[] = "<script>(function(){ $jsCode }())</script>";
 
         if(!$this->selfClosing && $this->inTag && !empty($this->tag)) $html[] = "</$this->tag>";
 

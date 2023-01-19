@@ -7,23 +7,37 @@ class pagebase extends \zin\core\wg
 {
     static $tag = 'html';
 
-    static $customProps = 'metas,title,bodyProps';
+    static $customProps = 'metas,title,bodyProps,zui,print';
 
     public $bodyProps;
 
     public function init()
     {
-        global $app;
+        global $app, $config;
         $clientLang = $app->getClientLang();
 
         $this->bodyProps = \zin\core\wg::createClass($this->prop('bodyProps'));
 
-        $this->setDefaultProps(array('lang' => $clientLang));
+        $this->setDefaultProps(array('lang' => $clientLang, 'print' => true));
 
         $this->addMeta('<meta charset="utf-8">')
             ->addMeta('<meta http-equiv="X-UA-Compatible" content="IE=edge">')
             ->addMeta('<meta name="viewport" content="width=device-width, initial-scale=1">')
             ->addMeta('<meta name="renderer" content="webkit">');
+
+        if($this->prop('zui') && isset($config->zin->zuiPath))
+        {
+            $this->importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs')
+                ->importCss($config->zin->zuiPath . 'zui.zentao.css');
+        }
+    }
+
+    public function onCreated()
+    {
+        if($this->prop('print'))
+        {
+            $this->print();
+        }
     }
 
     public function title($title)
@@ -71,12 +85,21 @@ class pagebase extends \zin\core\wg
 
     protected function buildBody($isPrint = false, $parent = NULL)
     {
-        return \zin\core\wg::createBuilder('body')
+        $builder = \zin\core\wg::createBuilder('body')
             ->props($this->bodyProps)
             ->importJs($this->jsImports)
             ->js($this->jsList)
             ->append($this->buildInnerHtml($isPrint, $parent))
             ->renderInTag();
+
+        global $config;
+        if($config->debug)
+        {
+            $builder->jsVar('window.zin', array('page' => $this));
+            $builder->js('console.table("zin.page", window.zin.page)');
+        }
+
+        return $builder;
     }
 
     public function build($isPrint = false, $parent = NULL)

@@ -32,7 +32,7 @@ class ele
 
     public $children = array();
 
-    public $parent;
+    protected $parent;
 
     public $class;
 
@@ -77,7 +77,8 @@ class ele
 
         if(is_array(static::$defaultProps)) $this->setDefaultProps(static::$defaultProps);
 
-        if(method_exists($this, 'init')) $this->init();
+        if(method_exists($this, 'init'))      $this->init();
+        if(method_exists($this, 'onCreated')) $this->onCreated();
     }
 
     /**
@@ -140,7 +141,7 @@ class ele
 
     public function render($isPrint = false, $parent = NULL)
     {
-        if($parent === NULL) $parent = $this->parent;
+        if($parent === NULL) $parent = &$this->parent;
 
         $builder = $this->build($isPrint, $parent);
 
@@ -237,7 +238,7 @@ class ele
     {
         if($child instanceof ele)
         {
-            $child->parent = $this;
+            $child->parent = &$this;
             return $child;
         }
         if($child instanceof props)
@@ -263,10 +264,10 @@ class ele
 
         if(is_object($child))
         {
-            if(isset($child->props))
+            if(isset($child->set))
             {
-                $this->prop($child->props);
-                unset($child->props);
+                $this->prop($child->set);
+                unset($child->set);
             }
             if(isset($child->class))
             {

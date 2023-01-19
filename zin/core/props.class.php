@@ -74,10 +74,15 @@ class props extends dataset
      */
     protected function setVal($prop, $value, $removeEmpty = false)
     {
-        if($prop === 'style')          return $this->style->set($value);
-        if($prop === 'class')          return $this->class->set($value);
-        if($prop === 'hx')             return $this->hx->set($value);
-        if(strpos($prop, 'hx-') === 0) return $this->hx->set($prop, $value);
+        if($prop === 'class' || $prop === '.') return $this->class->set($value);
+        if($prop === 'style')                  return $this->style->set($value);
+        if($prop === 'hx')                     return $this->hx->set($value);
+        if($prop === '!')                      return $this->hx->set(substr($prop, 1), $value);
+        if(strpos($prop, 'hx-') === 0)         return $this->hx->set($prop, $value);
+        if(strpos($prop, '@') === 0)           return $this->style->set(substr($prop, 1), $value);
+        if(strpos($prop, ':') === 0)           return $this->setData(substr($prop, 1), $value);
+
+        if($prop === '#') $prop = 'id';
 
         return parent::setVal($prop, $value);
     }
@@ -85,7 +90,12 @@ class props extends dataset
     public function setCustom($props)
     {
         if(is_string($props)) $props = explode(',', $props);
-
+        if(!is_array($props))
+        {
+            return $this;
+        }
+        $this->customProps = array_merge($this->customProps, $props);
+        return $this;
     }
 
     /**

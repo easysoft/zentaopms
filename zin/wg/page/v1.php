@@ -10,14 +10,8 @@ class page extends pagebase
 
     public function init()
     {
-        parent::init();
-
-        global $config;
         $this->setDefaultProps(array('zui' => true));
-        if($this->prop('zui') && isset($config->zin->zuiPath))
-        {
-            $this->importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs')
-                ->importCss($config->zin->zuiPath . 'zui.zentao.css');
-        }
+
+        parent::init();
     }
 }

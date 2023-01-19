@@ -300,4 +300,9 @@ class classlist
     {
         return (new classlist($names))->toStr();
     }
+
+    public function toJSON()
+    {
+        return $this->list;
+    }
 }
