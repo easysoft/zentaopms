@@ -24,7 +24,7 @@ if($('#openedBuild').length || $('#resolvedBuild').length || $('[name^=openedBui
 {
     $.get(createLink('bug', 'ajaxGetReleasedBuilds', 'productID=' + productID), function(data){releasedBuilds = data;}, 'json');
 
-    $('#openedBuild, #resolvedBuild, [name^=openedBuilds]').picker({optionRender: markReleasedBuilds});
+    $('#openedBuild, #resolvedBuild, form [name^=openedBuilds]').picker({optionRender: markReleasedBuilds});
 }
 
 /**
