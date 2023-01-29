@@ -191,7 +191,7 @@ function loadProductModules(productID, branch)
         currentModule = $('#module').val();
     }
 
-    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + currentModule);
+    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + currentModule);
     var $moduleIDBox = $('#moduleIdBox');
     $moduleIDBox.load(moduleLink, function()
     {

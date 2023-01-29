@@ -54,14 +54,14 @@ class programplanModel extends model
     {
         if(empty($executionID)) return array();
 
-        $plans = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t2.type')->eq('stage')
-            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
-            ->beginIF($browseType == 'all')->andWhere('t2.project')->eq($executionID)->fi()
-            ->beginIF($browseType == 'parent')->andWhere('t2.parent')->eq($executionID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t2.deleted')->eq('0')
+        $plans = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('t1.type')->eq('stage')
+            ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($browseType == 'all')->andWhere('t1.project')->eq($executionID)->fi()
+            ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');
 

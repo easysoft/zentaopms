@@ -2118,7 +2118,7 @@ class task extends control
     {
         $execution       = $this->execution->getById($executionID);
         $allExportFields = $this->config->task->exportFields;
-        if($execution->type == 'ops') $allExportFields = str_replace(' story,', '', $allExportFields);
+        if($execution->lifetime == 'ops') $allExportFields = str_replace(' story,', '', $allExportFields);
 
         if($_POST)
         {

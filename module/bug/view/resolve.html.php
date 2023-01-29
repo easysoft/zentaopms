@@ -16,6 +16,7 @@
 <?php
 js::set('page', 'resolve');
 js::set('productID', $bug->product);
+js::set('bugID', $bug->id);
 js::set('released', $lang->build->released);
 ?>
 <div id='mainContent' class='main-content'>
@@ -39,7 +40,7 @@ js::set('released', $lang->build->released);
         </tr>
         <tr id='duplicateBugBox' class='hide'>
           <th><?php echo $lang->bug->duplicateBug;?></th>
-          <td class='required'><?php echo html::select('duplicateBug', $productBugs, '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?></td>
+          <td class='required'><?php echo html::select('duplicateBug', '', '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->bug->resolvedBuild;?></th>

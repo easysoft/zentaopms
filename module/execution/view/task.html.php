@@ -62,7 +62,7 @@ body {margin-bottom: 25px;}
     common::sortFeatureMenu();
     foreach(customModel::getFeatureMenu('execution', 'task') as $menuItem)
     {
-        if($execution->type == 'ops' && $menuItem->name == 'needconfirm') continue;
+        if($execution->lifetime == 'ops' && $menuItem->name == 'needconfirm') continue;
         if(isset($menuItem->hidden)) continue;
         $menuType = $menuItem->name;
         if($menuType == 'QUERY')
@@ -215,7 +215,7 @@ body {margin-bottom: 25px;}
       if($useDatatable) include '../../common/view/datatable.html.php';
 
       $customFields = $this->datatable->getSetting('execution');
-      if($execution->type == 'ops')
+      if($execution->lifetime == 'ops')
       {
           foreach($customFields as $id => $customField)
           {
