@@ -73,6 +73,7 @@ $lang->zanode->runCaseConfirm = 'The system detects the presence of an automatio
 
 $lang->zanode->createImage        = 'Create Image';
 $lang->zanode->createImaging      = 'Creating';
+$lang->zanode->pending            = 'Waiting for create';
 $lang->zanode->createImageNotice  = 'The system will be created based on the current node，This process requires the ZenAgent Node to be shut down. Do you want to continue?';
 $lang->zanode->createImageSuccess = 'Successed, You can use this image to create node.';
 $lang->zanode->createImageFail    = 'Failed to create';

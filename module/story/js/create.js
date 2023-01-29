@@ -59,6 +59,12 @@ $(function()
         return false;
     });
 
+    $('#product').on('change', function(){
+        var productID      = $('#product').val();
+        var viewLink       = createLink('story', 'create', 'productID=' + productID + '&branch=all');
+        self.location.href = viewLink;
+    });
+
     $('#module').on('change', function(){
         loadURS();
     });
@@ -287,7 +293,7 @@ function loadModuleForTwins(productID, branch, branchIndex)
 {
     /* Load module */
     var currentModule = 0;
-    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + branchIndex + '&needManage=false&extra=&currentModuleID=' + currentModule);
+    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + branchIndex + '&needManage=false&extra=nodeleted&currentModuleID=' + currentModule);
     if(branchIndex > 0)
     {
         var $moduleIDBox = $('.addBranchesBox'+ branchIndex +' #moduleIdBox');

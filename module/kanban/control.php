@@ -1197,6 +1197,7 @@ class kanban extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $productPairs      = $this->product->getPairs('', 0, '', 'all');
+        $productPairs      = array($this->lang->kanban->allProducts) + $productPairs;
         $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
 
         /* Waterfall project has no plan. */

@@ -332,9 +332,13 @@ class repoModel extends model
         if($type == 'bug')   $links = $this->post->bugs;
         if($type == 'task')  $links = $this->post->tasks;
 
-        $revisionID = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch('id');
+        $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+        $committer    = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
+        if(empty($committer)) $committer = $revisionInfo->committer;
         foreach($links as $linkID)
         {
+            $revisionID = $revisionInfo->id;
+
             $relation           = new stdclass;
             $relation->AType    = 'revision';
             $relation->AID      = $revisionID;
@@ -344,9 +348,9 @@ class repoModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID);
-            if($type == 'bug')   $this->action->create('bug', $linkID, 'linked2revision', '', $revisionID);
-            if($type == 'task')  $this->action->create('task', $linkID, 'linked2revision', '', $revisionID);
+            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID, $committer);
+            if($type == 'bug')   $this->action->create('bug', $linkID, 'linked2revision', '', $revisionID, $committer);
+            if($type == 'task')  $this->action->create('task', $linkID, 'linked2revision', '', $revisionID, $committer);
         }
     }
 

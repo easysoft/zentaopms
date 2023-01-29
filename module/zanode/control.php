@@ -60,6 +60,29 @@ class zanode extends control
     }
 
     /**
+     * Browse ZenAgent Node list in zahost view.
+     *
+     * @param  string   $browseType
+     * @param  string   $param
+     * @param  string   $orderBy
+     * @param  int      $recTotal
+     * @param  int      $recPerPage
+     * @param  int      $pageID
+     * @access public
+     * @return void
+     */
+    public function list($hostID, $orderBy = 'id_desc')
+    {
+
+        $this->view->title       = $this->lang->zanode->common;
+        $this->view->nodeList    = $this->loadModel("zanode")->getListByHost($hostID, $orderBy);
+        $this->view->orderBy     = $orderBy;
+        $this->view->hostID      = $hostID;
+
+        $this->display();
+    }
+
+    /**
      * Create node.
      *
      * @param  int    $hostID
@@ -135,28 +158,6 @@ class zanode extends control
         $this->view->zanode      = $node;
         $this->view->actions     = $this->loadModel('action')->getList('zanode', $id);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->display();
-    }
-
-    /*
-     * Init node.
-     *
-     * @param  int      $hostID
-     * @return void
-     */
-    public function init($nodeID)
-    {
-        $this->view->title      = $this->lang->zanode->initTitle;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->nodeID     = $nodeID;
-        $this->view->node       = $this->zanode->getNodeById($nodeID);
-        $this->view->initBash   = sprintf($this->config->zanode->initBash, getWebRoot(true));
-        $this->view->notice     = $this->lang->zanode->init->initSuccessNoticeTitle;
-        $this->view->buttonName = $this->lang->zanode->init->button;
-        $this->view->modalLink  = $this->createLink('testcase', 'automation', 0, '', true);
-        $this->view->modalClass = 'iframe';
-        $this->view->closeLink  = $this->createLink('zanode', 'browse');
-
         $this->display();
     }
 

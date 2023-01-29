@@ -103,7 +103,7 @@
               <?php foreach($lang->execution->groups as $key => $value):?>
               <?php
               if(empty($key)) continue;
-              if($execution->type == 'ops' && $key == 'story') continue;
+              if($execution->lifetime == 'ops' && $key == 'story') continue;
               $active = $key == $groupBy ? "class='active'" : '';
               echo "<li $active>"; common::printLink('execution', 'groupTask', "execution=$executionID&groupBy=$key", $value); echo '</li>';
               ?>

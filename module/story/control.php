@@ -389,7 +389,7 @@ class story extends control
 
             foreach($this->config->story->fromObjects[$fromObjectIDKey]['fields'] as $storyField => $fromObjectField)
             {
-                $$storyField = $fromObject->{$fromObjectField};
+                $storyField = $fromObject->{$fromObjectField};
             }
         }
 
@@ -1052,6 +1052,7 @@ class story extends control
             unset($stories[$id]);
         }
         if(!empty($twins)) echo js::alert(sprintf($this->lang->story->batchEditTip, $twins));
+        if(empty($stories)) return print(js::locate($this->session->storyList));
 
         $this->loadModel('branch');
         if($productID and !$executionID)
@@ -2457,6 +2458,7 @@ class story extends control
         $this->view->type         = $type;
         $this->view->stories2Link = $stories2Link;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyType    = $storyType;
 
         $this->display();
     }

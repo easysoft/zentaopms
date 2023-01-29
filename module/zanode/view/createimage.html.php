@@ -15,6 +15,7 @@
 <?php if($task):?>
 <?php js::set('taskID', $task->task);?>
 <?php js::set('nodeID', $node->id);?>
+<?php js::set('zanodeLang', $lang->zanode); ?>
 <style>.body-modal #mainContent{width:90%}
 </style>
 <?php endif;?>
@@ -26,13 +27,17 @@
       </h2>
     </div>
     <?php if($task):?>
-    <h5 class='text-center'><?php echo $lang->zanode->createImaging;?></h5>
+    <h5 class='text-center status-title'><?php echo $lang->zanode->pending;?></h5>
     <div class="progress progress-striped">
       <div class="progress-bar progress-bar-success rate" role="progressbar" aria-valuenow="<?php echo $task->rate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $task->rate;?>%">
       </div>
     </div>
-    <?php  helper::createLink('zanode', 'create');?>
-    <h6 class='hide text-center success'><?php echo $lang->zanode->createImageSuccess . html::a(inLink('create'), $lang->zanode->createImageButton, "_parent");?></h6>
+    <?php 
+        $link = helper::createLink('zanode', 'create', "hostID={$node->parent}");
+        $link = str_replace('onlybody=yes', '', $link);
+        $link = trim($link, '?');
+    ?>
+    <h6 class='hide text-center success'><?php echo $lang->zanode->createImageSuccess . html::a($link, $lang->zanode->createImageButton, "_parent", "style='color:#2e7fff;'");?></h6>
     <h6 class='hide text-center fail'><?php echo $lang->zanode->createImageFail;?></h6>
     <?php else:?>
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
@@ -48,7 +53,7 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center'>
-            <?php echo html::submitButton('', "onclick='if(confirm(\"{$lang->zanode->createImageNotice}\")==false) return false;'");?>
+            <?php echo in_array($node->status, array('shutdown', 'shutoff')) ? html::submitButton('', "") : html::submitButton('', "onclick='if(confirm(\"{$lang->zanode->createImageNotice}\")==false) return false;'");?>
           </td>
         </tr>
       </table>
@@ -78,8 +83,17 @@ function getTaskProgress()
         if(rate == 1 || status == 'completed') rate = 1;
         if(status == 'inprogress' && rate >= 1) rate = 0.97;
 
+        if(status == 'pending')
+        {
+            $('.status-title').text(zanodeLang.pending)
+        }
+        else
+        {
+            $('.status-title').text(zanodeLang.createImaging)
+        }
+
         $('.rate').css('width', rate*100 + '%');
-        if(rate == 1 || (status != 'inprogress' && status != 'created'))
+        if(rate == 1 || (status != 'inprogress' && status != 'created' && status != 'pending'))
         {
             updateStatus(data);
             clearInterval(setProgress);
@@ -94,10 +108,17 @@ function updateStatus(data)
 
     $.post(url, postData, function(result)
     {
-        if(data.status == 'completed') $('.success').removeClass('hide');
-        else $('.fail').removeClass('hide');
+        if(data.status == 'completed') 
+        {
+            $('.success').removeClass('hide');
+            $('.status-title').text('')
+        }
+        else 
+        {
+            $('.status-title').text(zanodeLang.createImageFail)
+        }
     }, 'json');
 }
 </script>
-<?php endif;;?>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
