@@ -1169,7 +1169,10 @@ class productModel extends model
                     if(isset($branchGroup[$productID]))
                     {
                         $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
-                        foreach($branchModuleList as $branchID => $branchModules) $moduleList += $branchModules;
+                        foreach($branchModuleList as $branchID => $branchModules)
+                        {
+                            if(is_array($branchModules)) $moduleList += $branchModules;
+                        }
                     }
                     else
                     {
