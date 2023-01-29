@@ -36,7 +36,7 @@
     <?php foreach($apis as $api):?>
     <div class='detail'>
       <?php
-      $methodName = $api['name'];
+      $methodName = zget($api, 'name', '');
       $params = array();
       if(isset($api['param']))
       {
@@ -46,12 +46,12 @@
       ?>
       <div class='detail-title'>
         <?php
-        echo $api['post'] ? 'GET/POST' : 'GET';
-        echo '&nbsp;&nbsp;' . $this->createLink($selectedModule, $api['name'], $params, 'json');
+        echo !empty($api['post']) ? 'GET/POST' : 'GET';
+        echo '&nbsp;&nbsp;' . $this->createLink($selectedModule, $methodName, $params, 'json');
         ?>
       </div>
       <div class='detail-content'>
-        <?php echo $api['desc'];?>
+        <?php echo zget($api, 'desc', '');?>
         <table class='table table-bordered'>
           <tr>
             <th><?php echo $lang->dev->params?></th>
