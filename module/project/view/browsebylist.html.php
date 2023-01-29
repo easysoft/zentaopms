@@ -112,7 +112,6 @@ $closedCount    = 0;
             foreach($setting as $value)
             {
               if($value->id == 'status' and strpos(',all,bysearch,undone,', ",$browseType,") === false) $value->show = false;
-              if($value->id == 'teamCount' and $browseType == 'all') $value->show = false;
               if(commonModel::isTutorialMode() && ($value->id == 'PM' || $value->id == 'budget' || $value->id == 'teamCount')) $value->show = false;
               if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
             }
