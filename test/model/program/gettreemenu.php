@@ -26,6 +26,6 @@ pid=1
 */
 $programTester = new programTest();
 $programs1     = $programTester->getTreeMenuTest(1);
-$programs1 = preg_replace('/\s*/', '', strip_tags($programs1));
+$programs1     = preg_replace('/\s*/', '', strip_tags($programs1));
 
 r($programs1) && p() && e('项目集1项目集2'); // 查看返回的字符个数
