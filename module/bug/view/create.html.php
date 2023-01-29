@@ -83,7 +83,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
           </tr>
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
-          <tr class='bug-type'>
+          <tr>
             <th><?php echo $lang->bug->project?></th>
             <td>
               <div class='table-row'>
