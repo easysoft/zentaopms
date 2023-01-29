@@ -44,6 +44,7 @@ $product->parent->range('0,1{9}');
 $product->type->range('task');
 $product->gen(10);
 
+zdTable('team')->gen(0);
 su('admin');
 
 /**
