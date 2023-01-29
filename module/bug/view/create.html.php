@@ -90,7 +90,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 <div class='table-col' id='projectBox'>
                   <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>
                 </div>
-                  <?php $executionClass = $showExecution ? '' : 'hidden';?>
+                <?php $executionClass = !$showExecution ? 'hidden' : '';?>
                 <div class="table-col executionBox <?php echo $executionClass;?>">
                   <div class='input-group' id='executionIdBox'>
                     <span class='input-group-addon fix-border' id='executionBox'><?php echo $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution;?></span>
