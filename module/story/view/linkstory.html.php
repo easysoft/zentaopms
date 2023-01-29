@@ -24,6 +24,13 @@
     </h2>
   </div>
   <div id='queryBox' data-module='story' class='show divider'></div>
+  <?php if(empty($stories2Link)):?>
+  <div class='table-empty-tip'>
+    <p>
+      <span class='text-muted'><?php echo $storyType == 'story' ? $lang->story->noRequirement : $lang->story->noStory;?></span>
+    </p>
+  </div>
+  <?php else:?>
   <form method='post' target='hiddenwin' id='linkStoryForm' class='main-table table-story'>
     <?php if($stories2Link):?>
     <table class='table tablesorter table-bordered' id='storyList'>
@@ -83,6 +90,7 @@
     </div>
     <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <script>
 $(function()
