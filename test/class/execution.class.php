@@ -2739,19 +2739,21 @@ class executionTest
     /**
      * Test build story search form.
      *
-     * @param  int    $productID
+     * @param  int    $executionID
      * @param  int    $queryID
      * @access public
      * @return void
      */
-    public function buildStorySearchFormTest($productID, $queryID)
+    public function buildStorySearchFormTest($executionID, $queryID)
     {
-        $product = $this->productModel->getByID($productID);
-        if(empty($product)) return '0';
+        $execution = $this->executionModel->getByID($executionID);
+        if(empty($execution)) return '0';
 
-        $this->executionModel->loadModel('bug');
-        $this->executionModel->buildStorySearchForm(array($productID => $product), $queryID, 'searchBug');
+        $this->executionModel->loadModel('story');
+        $products     = $this->productModel->getProducts($executionID);
+        $branchGroups = $this->executionModel->loadModel('branch')->getByProducts(array_keys($products));
+        $this->executionModel->buildStorySearchForm($products, $branchGroups, array(), $queryID, 'searchStory', 'executionStory', $execution);
 
-        return $_SESSION['executionBugsearchParams']['queryID'];
+        return $_SESSION['executionStorysearchParams']['queryID'];
     }
 }

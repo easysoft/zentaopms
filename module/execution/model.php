@@ -2283,7 +2283,7 @@ class executionModel extends model
         $productType  = 'normal';
         $productNum   = count($products);
         $productPairs = array(0 => '');
-        $branches     = $this->loadModel('project')->getBranchesByProject($execution->id);
+        $branches     = empty($execution) ? array() : $this->loadModel('project')->getBranchesByProject($execution->id);
 
         foreach($products as $product)
         {
