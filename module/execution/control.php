@@ -3068,6 +3068,7 @@ class execution extends control
             /* Delete execution. */
             $execution = $this->execution->getByID($executionID);
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
+            $this->dao->update(TABLE_BUG)->set('execution')->eq(0)->where('execution')->eq($executionID)->exec();
             $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->execution->updateUserView($executionID);
             $this->loadModel('common')->syncPPEStatus($executionID);
