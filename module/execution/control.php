@@ -1531,8 +1531,6 @@ class execution extends control
         }
         $dateList = date::getDateList($begin, $end, 'Y-m-d', $withWeekend == 'false'? 'noweekend' : '');
 
-        //list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
-
         $chartData = $this->execution->buildCFDData($executionID, $dateList, $type);
         if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
 

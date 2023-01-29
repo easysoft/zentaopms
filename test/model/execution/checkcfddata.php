@@ -32,23 +32,27 @@ $kanbanColumn->type->range('1-9')->prefix('column');
 $kanbanColumn->gen(9);
 
 $CFD = zdTable('cfd');
-$CFD->id->range('1');
-$CFD->gen(0);
+$CFD->id->range('1-5');
+$CFD->execution->range('3');
+$CFD->count->range('1');
+$CFD->type->range('task,bug,story');
+$CFD->date->range('20220122 000000:0')->type('timestamp')->format('YY/MM/DD');
+$CFD->name->range('1-5')->prefix('看板列');
+$CFD->gen(5);
 
 /**
 
-title=测试executionModel->computeCFD();
+title=测试executionModel->checkCFDData();
 cid=1
 pid=1
 
-获取所有看板执行的累计卡片个数 >> 6
-获取看板1的累计流图信息        >> 3,task
+已有日期的情况 >> 5
+未来日期的情况 >> 0
 
 */
 
 $executionTester = new executionTest();
-$allExecutionCFDList    = $executionTester->computeCFDTest();
-$singleExecutionCFDList = $executionTester->computeCFDTest(3);
+$dateList        = array('2022-01-22', '2099-01-01');
 
-r(count($allExecutionCFDList))      && p() && e('6');                      // 获取所有看板执行的累计卡片个数
-r(current($singleExecutionCFDList)) && p('execution,type') && e('3,task'); // 获取看板1的累计流图信息
+r(count($executionTester->checkCFDDataTest(3, $dateList[0]))) && p() && e('5'); // 已有日期的情况
+r(count($executionTester->checkCFDDataTest(3, $dateList[1]))) && p() && e('0'); // 未来日期的情况

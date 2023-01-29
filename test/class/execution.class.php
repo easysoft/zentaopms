@@ -1810,6 +1810,31 @@ class executionTest
     }
 
     /**
+     * Function getBurnData test by execution.
+     *
+     * @param  int   $executionID
+     * @access public
+     * @return int
+     */
+    public function getBurnDataTest($executionID = 0)
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        $object = $this->executionModel->getBurnData(array($executionID => $execution));
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
      * function processBurnData test by execution
      *
      * @param  string $executionID
@@ -2708,7 +2733,7 @@ class executionTest
      * @param  int    $executionID
      * @param  int    $queryID
      * @access public
-     * @return void
+     * @return int
      */
     public function buildTaskSearchFormTest($executionID, $queryID)
     {
@@ -2723,7 +2748,7 @@ class executionTest
      * @param  int    $productID
      * @param  int    $queryID
      * @access public
-     * @return void
+     * @return int
      */
     public function buildBugSearchFormTest($productID, $queryID)
     {
@@ -2742,7 +2767,7 @@ class executionTest
      * @param  int    $executionID
      * @param  int    $queryID
      * @access public
-     * @return void
+     * @return int
      */
     public function buildStorySearchFormTest($executionID, $queryID)
     {
@@ -2755,5 +2780,58 @@ class executionTest
         $this->executionModel->buildStorySearchForm($products, $branchGroups, array(), $queryID, 'searchStory', 'executionStory', $execution);
 
         return $_SESSION['executionStorysearchParams']['queryID'];
+    }
+
+    /**
+     * Test get CFD data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getCFDDataTest($executionID = 0)
+    {
+        $begin = strtotime('2022-01-12');
+        $end   = strtotime('2022-02-12');
+
+        $dateList = array();
+        for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
+
+        return $this->executionModel->getCFDData($executionID, $dateList);
+    }
+
+    /**
+     * Test build CFD data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function buildCFDDataTest($executionID = 0)
+    {
+        $begin = strtotime('2022-01-12');
+        $end   = strtotime('2022-02-12');
+
+        $dateList = array();
+        for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
+
+        return $this->executionModel->buildCFDData($executionID, $dateList, 'task');
+    }
+
+    /**
+     * Test check CFD data.
+     *
+     * @param  int    $executionID
+     * @param  string $date
+     * @access public
+     * @return array
+     */
+    public function checkCFDDataTest($executionID, $date)
+    {
+        $this->executionModel->checkCFDData($executionID, $date);
+        return $this->executionModel->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('date')->eq($date)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
     }
 }
