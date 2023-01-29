@@ -1184,6 +1184,8 @@ class bugModel extends model
             $buildData->builder     = $this->app->user->account;
             $buildData->createdBy   = $this->app->user->account;
             $buildData->createdDate = helper::now();
+
+            $this->lang->build->name = $this->lang->bug->placeholder->newBuildName;
             $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
                 ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
                 ->exec();
