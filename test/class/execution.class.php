@@ -1810,6 +1810,31 @@ class executionTest
     }
 
     /**
+     * Function getBurnData test by execution.
+     *
+     * @param  int   $executionID
+     * @access public
+     * @return int
+     */
+    public function getBurnDataTest($executionID = 0)
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        $object = $this->executionModel->getBurnData(array($executionID => $execution));
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
      * function processBurnData test by execution
      *
      * @param  string $executionID
