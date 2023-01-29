@@ -659,13 +659,20 @@
 
         /* Redirect or open default app after document load */
         var defaultOpenUrl = window.defaultOpen;
+        var codeApp = '';
         if(location.hash.indexOf('#app=') === 0)
         {
-            codeApp = decodeURIComponent(location.hash.substr(5));
-            defaultOpenUrl = !defaultOpenUrl ? codeApp : defaultOpenUrl + '#app=' + codeApp;
+            var hashParams = new URLSearchParams(location.hash.substring(1));
+            codeApp = hashParams.get('app');
+            if(hashParams.has('url')) defaultOpenUrl = hashParams.get('url');
+            if(!defaultOpenUrl)
+            {
+                defaultOpenUrl = codeApp;
+                codeApp = '';
+            }
         }
 
-        openTab(defaultOpenUrl ? defaultOpenUrl : defaultApp);
+        openTab(defaultOpenUrl || defaultApp, codeApp);
 
         /* Refresh more menu on window resize */
         $(window).on('resize', refreshMoreMenu);
