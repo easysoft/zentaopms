@@ -31,13 +31,17 @@ $kanbanColumn->name->range('1-9')->prefix('看板列');
 $kanbanColumn->type->range('1-9')->prefix('column');
 $kanbanColumn->gen(9);
 
+$CFD = zdTable('cfd');
+$CFD->id->range('1');
+$CFD->gen(0);
+
 /**
 
 title=测试executionModel->computeCFD();
 cid=1
 pid=1
 
-获取所有看板执行的累计卡片个数 >> 12
+获取所有看板执行的累计卡片个数 >> 6
 获取看板1的累计流图信息 >> 3,task
 
 */
@@ -46,5 +50,5 @@ $executionTester = new executionTest();
 $allExecutionCFDList    = $executionTester->computeCFDTest();
 $singleExecutionCFDList = $executionTester->computeCFDTest(3);
 
-r(count($allExecutionCFDList))      && p() && e('12');                     // 获取所有看板执行的累计卡片个数
+r(count($allExecutionCFDList))      && p() && e('6');                      // 获取所有看板执行的累计卡片个数
 r(current($singleExecutionCFDList)) && p('execution,type') && e('3,task'); // 获取看板1的累计流图信息
