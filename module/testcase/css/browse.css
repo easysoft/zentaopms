@@ -6,7 +6,7 @@ body {margin-bottom: 25px;}
 #caseForm table tbody tr td {overflow: hidden; white-space: nowrap;}
 #caseForm .setting {height: 25px;}
 #caseForm table tbody .c-name {overflow: hidden; padding-right: 65px;}
-#caseForm table tbody .c-name a:first-child {overflow: hidden; display: inline-block; width: 100%;}
+#caseForm table tbody .c-name a:first-child {overflow: hidden; display: inline-block; max-width: 100%;}
 
 .dropdown-menu.with-search {padding: 0; min-width: 150px; overflow: hidden; max-height: 302px;}
 .dropdown-menu > .menu-search .input-group {width: 100%;}

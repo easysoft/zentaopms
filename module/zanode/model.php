@@ -212,11 +212,10 @@ class zanodemodel extends model
     public function destroy($id)
     {
         $node = $this->getNodeByID($id);
-
-        $req = array( 'name' => $node->name );
-
+        
         if($node)
         {
+            $req = array( 'name' => $node->name );
             $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
             $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req), array(), array("Authorization:$node->tokenSN"));
 
