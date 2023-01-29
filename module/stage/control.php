@@ -142,24 +142,52 @@ class stage extends control
     public function setType($lang2Set = '')
     {
         $this->loadModel('custom');
-        $lang = $this->app->getClientLang();
+        if(empty($lang2Set)) $lang2Set = $this->app->getClientLang();
+        $currentLang = $this->app->getClientLang();
+
+        $fieldList = zget($this->lang->stage, 'typeList', '');
+        if($lang2Set == 'all')
+        {
+            $fieldList = array();
+            $items     = $this->custom->getItems("lang=all&module=stage&section=typeList&vision={$this->config->vision}");
+            foreach($items as $key => $item) $fieldList[$key] = $item->value;
+        }
+
+        /* Check whether the current language has been customized. */
+        $dbFields = $this->custom->getItems("lang=$lang2Set&module=stage&section=typeList&vision={$this->config->vision}");
+        if(empty($dbFields)) $dbFields = $this->custom->getItems("lang=" . ($lang2Set == $currentLang ? 'all' : $currentLang) . "&module=stage&section=typeList");
+        if($dbFields)
+        {
+            $dbField = reset($dbFields);
+            if($lang2Set != $dbField->lang)
+            {
+                $lang2Set = $dbField->lang;
+                foreach($fieldList as $key => $value)
+                {
+                    if(isset($dbFields[$key]) and $value != $dbFields[$key]->value) $fieldList[$key] = $dbFields[$key]->value;
+                }
+            }
+        }
+
         if($_POST)
         {
             $data = fixer::input('post')->get();
             $this->custom->deleteItems("lang={$data->lang}&module=stage&section=typeList");
+            if($data->lang == 'all') $this->custom->deleteItems("lang=$currentLang&module=stage&section=typeList");
 
             foreach($data->keys as $index => $key)
             {
                 $value = $data->values[$index];
                 if(!$value or !$key) continue;
-                $this->custom->setItem("all.stage.typeList.{$key}", $value);
+                $this->custom->setItem("{$data->lang}.stage.typeList.{$key}", $value);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('stage', 'settype', "lang2Set=$data->lang")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('stage', 'settype', "lang2Set=" . ($data->lang == 'all' ? 'all' : ''))));
         }
 
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->setType;
-        $this->view->currentLang = $lang;
+        $this->view->currentLang = $currentLang;
         $this->view->lang2Set    = !empty($lang2Set) ? $lang2Set : $lang;
+        $this->view->fieldList   = $fieldList;
         $this->display();
     }
 

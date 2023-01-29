@@ -1,11 +1,13 @@
 if(showFeature)
 {
-    $.apps.close('help');
-    $.apps.open('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao', 'help');
+    var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao');
+    var urlForNewTab = window.location.origin + '#app=help&url=' + encodedHelpPageUrl;
+    window.open(urlForNewTab)
 }
 
 $('#helpTab').click(function()
 {
-    $.apps.close('help');
-    $.apps.open('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao', 'help');
+    var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao');
+    var urlForNewTab = window.location.origin + '#app=help&url=' + encodedHelpPageUrl;
+    window.open(urlForNewTab)
 })

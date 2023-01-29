@@ -2044,6 +2044,7 @@ class project extends control
 
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getPairs($projectID);
+            $this->dao->update(TABLE_BUG)->set('execution')->eq(0)->where('execution')->in(array_keys($executionIdList))->exec();
 
             /* Delete shadow product.*/
             $project = $this->project->getByID($projectID);

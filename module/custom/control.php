@@ -251,6 +251,8 @@ class custom extends control
                 }
 
                 $this->custom->deleteItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
+                if($lang == 'all') $this->custom->deleteItems("lang=$currentLang&module=$module&section=$field&vision={$this->config->vision}");
+
                 $data     = fixer::input('post')->get();
                 $emptyKey = false;
                 foreach($data->keys as $index => $key)

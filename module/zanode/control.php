@@ -73,7 +73,6 @@ class zanode extends control
      */
     public function list($hostID, $orderBy = 'id_desc')
     {
-
         $this->view->title       = $this->lang->zanode->common;
         $this->view->nodeList    = $this->loadModel("zanode")->getListByHost($hostID, $orderBy);
         $this->view->orderBy     = $orderBy;
@@ -292,14 +291,14 @@ class zanode extends control
 
         $error = $this->zanode->destroy($nodeID);
 
-        if($error)
+        if(!empty($error))
         {
             return print(js::alert($error));
         }
         else
         {
             if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
-            return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
         }
     }
 
