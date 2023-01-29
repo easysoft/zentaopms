@@ -50,7 +50,7 @@ EOT;
           </tr>
         </thead>
         <tbody>
-          <?php foreach($lang->stage->typeList as $key => $value):?>
+          <?php foreach($fieldList as $key => $value):?>
           <tr class='text-center'>
             <td class='w-70px'>
             <?php echo $key;?>
