@@ -16,6 +16,24 @@ class executionTest
     }
 
     /**
+     * Compute cfd of a execution.
+     *
+     * @param  int|string|array $executionID
+     * @access public
+     * @return array
+     */
+    public function computeCFDTest($executionID = 0)
+    {
+        $this->executionModel->computeCFD($executionID);
+
+        $today = helper::today();
+        return $this->executionModel->dao->select('*')->from(TABLE_CFD)
+            ->where('date')->eq($today)
+            ->beginIF(!empty($executionID))->andWhere('execution')->in($executionID)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * Get no multiple execution id.
      *
      * @param  int    $projectID
