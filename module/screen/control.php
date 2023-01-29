@@ -37,8 +37,10 @@ class screen extends control
      * @access public
      * @return void
      */
-    public function view($screenID, $year = 2022, $dept = 0, $account = '')
+    public function view($screenID, $year = 0, $dept = 0, $account = '')
     {
+        if(empty($year)) $year = date('Y');
+
         if($screenID == 3) $this->locate($this->createLink('report', 'annualData'));
 
         $screen = $this->screen->getByID($screenID, $year, $dept, $account);
