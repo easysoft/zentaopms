@@ -55,7 +55,7 @@ $config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto
 global $lang, $app;
 $config->story->datatable = new stdclass();
 
-$config->story->datatable->defaultField = array('id', 'title', 'pri', 'plan', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
+$config->story->datatable->defaultField = array('id', 'title', 'pri', 'plan', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'actions');
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
@@ -254,5 +254,5 @@ $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->ca
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
-$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '250' : '230';
+$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '220' : '215';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';
