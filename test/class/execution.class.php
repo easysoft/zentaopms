@@ -2817,4 +2817,21 @@ class executionTest
 
         return $this->executionModel->buildCFDData($executionID, $dateList, 'task');
     }
+
+    /**
+     * Test check CFD data.
+     *
+     * @param  int    $executionID
+     * @param  string $date
+     * @access public
+     * @return array
+     */
+    public function checkCFDDataTest($executionID, $date)
+    {
+        $this->executionModel->checkCFDData($executionID, $date);
+        return $this->executionModel->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('date')->eq($date)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+    }
 }

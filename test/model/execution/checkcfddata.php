@@ -42,16 +42,17 @@ $CFD->gen(5);
 
 /**
 
-title=测试executionModel->getCFDData();
+title=测试executionModel->checkCFDData();
 cid=1
 pid=1
 
-不存在执行的累计流图信息 >> 0
-存在的执行的累计流图信息 >> 看板列3
+已有日期的情况 >> 5
+未来日期的情况 >> 0
 
 */
 
 $executionTester = new executionTest();
+$dateList        = array('2022-01-22', '2099-01-01');
 
-r(count($executionTester->getCFDDataTest()))    && p()                  && e('0');       // 不存在执行的累计流图信息
-r(current($executionTester->getCFDDataTest(3))) && p('2022-01-22:name') && e('看板列3'); // 存在的执行的累计流图信息
+r(count($executionTester->checkCFDDataTest(3, $dateList[0]))) && p() && e('5'); // 已有日期的情况
+r(count($executionTester->checkCFDDataTest(3, $dateList[1]))) && p() && e('0'); // 未来日期的情况
