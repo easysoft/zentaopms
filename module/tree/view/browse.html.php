@@ -114,12 +114,13 @@ if($viewType == 'doc' or $viewType == 'api')
           <?php $manageChild = 'manage' . ucfirst($viewType) . 'Child';?>
           <?php if(strpos($viewType, 'trainskill') === false and strpos($viewType, 'trainpost') === false) echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?>
         </div>
+        <?php $parent = isonlybody() ? 'onlybody' : '';?>
         <?php if($viewType == 'story' and $allProduct and $canBeChanged):?>
         <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm btn-primary'")?></div>
         <?php elseif($viewType == 'feedback' and common::hasPriv('feedback', 'syncProduct') and !isset($syncConfig[$rootID])):?>
-        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', "productID=$rootID", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', "productID=$rootID&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
         <?php elseif($viewType == 'ticket' and common::hasPriv('ticket', 'syncProduct') and !isset($syncConfig[$rootID])):?>
-        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('ticket', 'syncProduct', "productID=$rootID", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('ticket', 'syncProduct', "productID=$rootID&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
         <?php endif;?>
       </div>
       <div class="panel-body">
