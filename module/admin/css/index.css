@@ -6,13 +6,15 @@
 .admin > .side {flex: 1 1 40%; padding-left: 10px;}
 .panel-title {padding: 10px 0px;}
 .flex {display: flex;}
-.panel {padding: 0 16px;}
+.panel {padding: 0 0 0 16px;}
 
 .settings-list {display: flex; flex-wrap: wrap; padding: 12px 4px 16px 4px;}
 .settings-list > .setting-box {flex: 0 0 20%; padding: 18px 0;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
-.plugin-list > .plugin-item {flex: 1 1 33%; padding: 16px 4px;}
+.plugin-list > .plugin-item {flex: 1 1 30%; padding: 16px 4px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 16px; padding: 0 10px; margin-bottom: 16px;}
+.plugin-list > .plugin-item .ext-download {float: right; padding: 6px 0px;}
+.plugin-list > .plugin-item .extension-desc {width: 175px; white-space: nowrap; overflow: hidden;}
 
 .bottom.flex > .official {flex: 1 1 30%;}
 .bottom.flex > .openClass {flex: 1 1 60%; margin-left: 20px;}

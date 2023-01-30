@@ -31,12 +31,13 @@
     <div class="plug panel">
       <div class="panel-title"><?php echo $lang->admin->pluginRecommendation?></div>
       <div class="plugin-list">
-        <div class="plugin-item">1</div>
-        <div class="plugin-item">2</div>
-        <div class="plugin-item">3</div>
-        <div class="plugin-item">4</div>
-        <div class="plugin-item">5</div>
-        <div class="plugin-item">6</div>
+        <?php foreach($extensions as $extension):?>
+        <div class="plugin-item">
+          <a href="<?php echo $extension->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-import'></i></a>
+          <h4><?php echo $extension->name;?></h4>
+          <p class='extension-desc'><?php echo strip_tags($extension->desc);?></p>
+        </div>
+        <?php endforeach;?>
       </div>
     </div>
     <div class="flex bottom">
