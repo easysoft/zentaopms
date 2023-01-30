@@ -85,8 +85,7 @@ class pagebase extends \zin\core\wg
 
     protected function buildBody($isPrint = false, $parent = NULL)
     {
-        $builder = \zin\core\wg::createBuilder('body')
-            ->props($this->bodyProps)
+        $builder = \zin\core\wg::createBuilder('body', $this->bodyProps)
             ->importJs($this->jsImports)
             ->js($this->jsList)
             ->append($this->buildInnerHtml($isPrint, $parent))
@@ -104,8 +103,7 @@ class pagebase extends \zin\core\wg
 
     public function build($isPrint = false, $parent = NULL)
     {
-        return \zin\core\wg::createBuilder('html')
-            ->props($this->props)
+        return \zin\core\wg::createBuilder('html', $this->props)
             ->before('<!DOCTYPE html>')
             ->append($this->buildHead()->build())
             ->append($this->buildBody()->build());
