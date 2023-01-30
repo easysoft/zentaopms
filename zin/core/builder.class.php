@@ -22,7 +22,7 @@ class builder
 
     public $children = array();
 
-    public $propsStr = '';
+    public $props;
 
     public $prefix = array();
 
@@ -42,10 +42,17 @@ class builder
 
     public $inTag = false;
 
-    public function __construct($tag = '')
+    public function __construct($tag = '', $props = NULL)
     {
         $this->tag          = $tag;
+        $this->props        = $props ? $props->clone() : new props();
         $this->selfClosing  = in_array($tag, array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'));
+    }
+
+    public function setTag($tag)
+    {
+        $this->tag = $tag;
+        return $this;
     }
 
     public function before($content)
@@ -84,12 +91,11 @@ class builder
         return $this;
     }
 
-    public function props($props, $reset = false)
+    public function prop($name, $value = NULL)
     {
-        if($reset) $this->propsStr = '';
+        if($value === NULL && is_string($name)) return $this->props->get($name);
 
-        $propsStr = trim(strval($props));
-        if(!empty($propsStr)) $this->propsStr .= ' ' . $propsStr;
+        $this->props->set($name, $value);
         return $this;
     }
 
@@ -133,7 +139,7 @@ class builder
         return $this;
     }
 
-    public function renderInTag($inTag = false)
+    public function renderInTag($inTag = true)
     {
         $this->inTag = $inTag;
         return $this;
@@ -143,7 +149,10 @@ class builder
     {
         $html = array();
 
-        if(!$this->selfClosing && $this->inTag && !empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr>";
+        $propsStr = $this->props->toStr();
+        if(!empty($propsStr)) $propsStr = " $propsStr";
+
+        if(!$this->selfClosing && $this->inTag && !empty($this->tag)) $html[] = "<$this->tag" . "$propsStr>";
 
         if(!empty($this->prefix)) $html = array_merge($html, $this->prefix);
 
@@ -167,12 +176,12 @@ class builder
 
         if($this->selfClosing)
         {
-            if(!empty($this->tag)) $html[] = "<$this->tag" . "$this->propsStr />";
+            if(!empty($this->tag)) $html[] = "<$this->tag" . "$propsStr />";
         }
         else
         {
             $innerHtml = '';
-            if(!empty($this->tag) && !$this->inTag) $innerHtml .= "<$this->tag" . "$this->propsStr>";
+            if(!empty($this->tag) && !$this->inTag) $innerHtml .= "<$this->tag" . "$propsStr>";
             if(!empty($this->children)) $innerHtml .= implode("\n", $this->children);
             if(!empty($this->tag) && !$this->inTag) $innerHtml .= "</$this->tag>";
             if(!empty($innerHtml)) $html[] = $innerHtml;
@@ -217,8 +226,8 @@ class builder
      * @param array $tag - Element tag name
      * @return builder
      */
-    static public function new($tag = '')
+    static public function new($tag = '', $props = NULL)
     {
-        return new builder($tag);
+        return new builder($tag, $props);
     }
 }

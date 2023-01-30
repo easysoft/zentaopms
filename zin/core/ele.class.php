@@ -198,6 +198,7 @@ class ele
                 {
                     if(method_exists($child, 'render')) $html[] = $child->render($isPrint, $this);
                     else if(isset($child->html)) $html[] = $child->html;
+                    else if(isset($child->text)) $html[] = htmlspecialchars($child->text);
                 }
                 else if(is_array($child))
                 {
@@ -218,7 +219,7 @@ class ele
      */
     protected function build($isPrint = false, $parent = NULL)
     {
-        $builder = builder::new($this->tagName)->props($this->props);
+        $builder = builder::new($this->tagName, $this->props);
 
         if(static::$selfClosing === true) $builder->selfClose(true);
         else $builder->append($this->buildInnerHtml($isPrint, $parent));
@@ -425,6 +426,11 @@ class ele
         return $this;
     }
 
+    public function hasProp($name)
+    {
+        return $this->props->has($name);
+    }
+
     public function setDefaultProps($props)
     {
         if(is_array($props))
@@ -435,6 +441,12 @@ class ele
                 $this->props->set($name, $value);
             }
         }
+        return $this;
+    }
+
+    public function setClass($list, $reset = false)
+    {
+        $this->class->set($list, $reset);
         return $this;
     }
 
