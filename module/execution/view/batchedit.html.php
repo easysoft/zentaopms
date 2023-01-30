@@ -51,6 +51,9 @@
             <?php if(isset($project) and $project->model == 'scrum'):?>
             <th class='c-project required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->projectName;?></th>
             <?php endif;?>
+            <?php if($app->tab == 'project' and isset($project) and $project->model == 'agileplus'):?>
+            <th class='c-method'><?php echo $lang->execution->method;?></th>
+            <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
             <?php if(!isset($config->setCode) or $config->setCode == 1):?>
             <th class='c-code required'><?php echo $lang->execution->$code;?></th>
@@ -84,6 +87,9 @@
             <td><?php echo sprintf('%03d', $executionID) . html::hidden("executionIDList[$executionID]", $executionID);?></td>
             <?php if(isset($project) and $project->model == 'scrum'):?>
             <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$executionID]", $allProjects, $executions[$executionID]->project, "class='form-control picker-select' data-lastselected='{$executions[$executionID]->project}' onchange='changeProject(this, $executionID, {$executions[$executionID]->project})'");?></td>
+            <?php endif;?>
+            <?php if($app->tab == 'project' and isset($project)):?>
+            <td title='<?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?>'><?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?></td>
             <?php endif;?>
             <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control'");?></td>
             <?php if(!isset($config->setCode) or $config->setCode == 1):?>

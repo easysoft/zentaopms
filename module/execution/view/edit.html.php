@@ -34,6 +34,11 @@
         </tr>
         <?php elseif($project->model == 'kanban'):?>
         <?php echo html::hidden('project', $project->id);?>
+        <?php elseif($app->tab == 'project' and $project->model == 'agileplus'):?>
+        <tr>
+          <th><?php echo $lang->execution->method;?></th>
+          <td><?php echo zget($lang->execution->typeList, $execution->type);?></td><td></td>
+        </tr>
         <?php endif;?>
         <?php endif;?>
         <tr>
@@ -153,7 +158,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span> 
+                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
                       <?php $disabled = ($execution->type == 'stage' and !$execution->division) ? "disabled='disabled'" : '';?>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                       <?php if($execution->type == 'stage' and !$execution->division) echo html::hidden("products[$i]", $product->id);?>
