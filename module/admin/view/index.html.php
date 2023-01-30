@@ -42,6 +42,11 @@
     <div class="flex bottom">
       <div class="panel official">
         <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
+	<div class="flex main-panel">
+	  <div class="official-img"></div>
+	  <div class="official-content">
+          </div>
+        </div>
       </div>
       <div class="panel openClass">
         <div class="panel-title"><?php echo $lang->admin->openClass?></div>

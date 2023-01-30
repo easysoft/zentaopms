@@ -14,5 +14,9 @@
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
 .plugin-list > .plugin-item {flex: 1 1 33%; padding: 16px 4px;}
 
-.bottom.flex > .official {flex: 1 1 30%;}
-.bottom.flex > .openClass {flex: 1 1 60%; margin-left: 20px;}
+.bottom.flex > .official {flex: 1 1 30%; margin-right: 20px;}
+.bottom.flex > .openClass {flex: 1 1 60%;}
+
+.official.panel > .main-panel {min-height: 200px;}
+.official-img {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; background-position: center;}
+.official-content {flex: 0 0 50%;}
