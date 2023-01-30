@@ -34,8 +34,11 @@ class admin extends control
 
         $this->loadModel('misc');
 
+        $extensions = $this->loadModel('extension')->getExtensionsByAPI('byUpdatedTime', '', 0, 6);
+
         $this->view->title      = $this->lang->admin->common;
         $this->view->position[] = $this->lang->admin->index;
+        $this->view->extensions = isset($extensions->extensions) ? (array)$extensions->extensions : array();
         $this->display();
     }
 
@@ -235,7 +238,7 @@ class admin extends control
 
     /**
      * Set closed features config.
-     * 
+     *
      * @access public
      * @return void
      */
