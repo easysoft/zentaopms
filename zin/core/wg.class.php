@@ -17,6 +17,10 @@ class wg extends ele
 {
     public static $imports = NULL;
 
+    public static $blockNames = NULL;
+
+    public static $wgToBlocks = NULL;
+
     public $blocks = array();
 
     public $jsList = array();
@@ -52,6 +56,26 @@ class wg extends ele
     protected function acceptChild($child, $strAsHtml = false)
     {
         $child = parent::acceptChild($child, $strAsHtml);
+
+        if($child instanceof ele && is_array(static::$wgToBlocks))
+        {
+            $blockName = NULL;
+            if(!empty($child->tagName) && isset(static::$wgToBlocks[$child->tagName]))
+            {
+                $blockName = static::$wgToBlocks[$child->tagName];
+            }
+            elseif(!empty($child->prop('id')) && isset(static::$wgToBlocks['#' . $child->prop('id')]))
+            {
+                $blockName = static::$wgToBlocks['#' . $child->prop('id')];
+            }
+            if(!empty($blockName))
+            {
+                $blockChild = new \stdClass();
+                $blockChild->blocks = array($blockName, $child);
+                $child = $blockChild;
+            }
+        }
+
         if(is_object($child) && isset($child->custom) && $child->custom)
         {
             if(isset($child->blocks))
