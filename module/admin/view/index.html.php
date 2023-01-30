@@ -11,25 +11,45 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-content'>
-  <?php if(!$bind and !$ignore and common::hasPriv('admin', 'register')):?>
-  <div id="notice" class='alert alert-success'>
-    <?php echo html::a(inlink('ignore'), '<i class="icon-close icon-sm"></i> ' . $lang->admin->notice->ignore, 'hiddenwin', 'class="close" data-dismiss="alert" style="font-size: 12px"');?>
-    <div class="content"><i class='icon-exclamation-sign'></i> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->registerNotice->click, '', 'class="alert-link"'));?></div>
+<div id='mainContent' class='main-content admin'>
+  <div class="main">
+    <div class="settings panel">
+      <div class="panel-title"><?php echo $lang->admin->setting?></div>
+      <div class="settings-list">
+        <div class="setting-box">1</div>
+        <div class="setting-box">2</div>
+        <div class="setting-box">3</div>
+        <div class="setting-box">4</div>
+        <div class="setting-box">5</div>
+        <div class="setting-box">6</div>
+        <div class="setting-box">7</div>
+        <div class="setting-box">8</div>
+        <div class="setting-box">9</div>
+        <div class="setting-box">10</div>
+      </div>
+    </div>
+    <div class="plug panel">
+      <div class="panel-title"><?php echo $lang->admin->pluginRecommendation?></div>
+      <div class="plugin-list">
+        <div class="plugin-item">1</div>
+        <div class="plugin-item">2</div>
+        <div class="plugin-item">3</div>
+        <div class="plugin-item">4</div>
+        <div class="plugin-item">5</div>
+        <div class="plugin-item">6</div>
+      </div>
+    </div>
+    <div class="flex bottom">
+      <div class="panel official">
+        <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
+      </div>
+      <div class="panel openClass">
+        <div class="panel-title"><?php echo $lang->admin->openClass?></div>
+      </div>
+    </div>
   </div>
-  <?php endif;?>
-
-  <div class='main-header'>
-    <h2>
-      <?php
-      $versionName = $config->version;
-      if(trim($config->visions, ',') == 'lite') $versionName = $lang->liteName . $config->liteVersion;
-      printf($lang->admin->info->version, $versionName);
-      if($bind) echo sprintf($lang->admin->info->account, '<span class="red">' . $account . '</span>');
-      echo $lang->admin->info->links;
-      ?>
-    </h2>
+  <div class="side panel">
+    <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
   </div>
-  <?php include '../../misc/view/links.html.php';?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
