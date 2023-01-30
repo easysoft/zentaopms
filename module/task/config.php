@@ -82,12 +82,10 @@ $config->task->datatable->fieldList['assignedDate']['fixed']    = 'no';
 $config->task->datatable->fieldList['assignedDate']['width']    = '110';
 $config->task->datatable->fieldList['assignedDate']['required'] = 'no';
 
-$config->task->datatable->fieldList['type']['title']      = 'typeAB';
-$config->task->datatable->fieldList['type']['fixed']      = 'no';
-$config->task->datatable->fieldList['type']['width']      = '80';
-$config->task->datatable->fieldList['type']['required']   = 'no';
-$config->task->datatable->fieldList['type']['control']    = 'select';
-$config->task->datatable->fieldList['type']['dataSource'] = array('lang' => 'typeList');
+$config->task->datatable->fieldList['type']['title']    = 'typeAB';
+$config->task->datatable->fieldList['type']['fixed']    = 'no';
+$config->task->datatable->fieldList['type']['width']    = '80';
+$config->task->datatable->fieldList['type']['required'] = 'no';
 
 $config->task->datatable->fieldList['status']['title']    = 'statusAB';
 $config->task->datatable->fieldList['status']['fixed']    = 'no';
