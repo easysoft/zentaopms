@@ -31,6 +31,29 @@ class wg extends ele
 
     public $cssImports = array();
 
+    protected function buildItem($item)
+    {
+        return $item;
+    }
+
+    protected function buildItems(&$builder)
+    {
+        if(!$this->props->has('items')) return;
+
+        $items = $this->props->get('items');
+        if(is_array($items))
+        {
+            foreach($items as $item)
+            {
+                $builder->append($this->buildItem($item));
+            }
+        }
+        else
+        {
+            $builder->append($items);
+        }
+    }
+
     /**
      * @return builder
      */
@@ -46,6 +69,8 @@ class wg extends ele
             if(isset(static::$imports['js'])) $builder->importJs(static::$imports['js']);
             static::$imports['imported'] = true;
         }
+
+        $this->buildItems($builder);
 
         $builder->importJs($this->jsImports)
             ->importCss($this->cssImports);
@@ -82,6 +107,11 @@ class wg extends ele
             {
                 call_user_func_array(array($this, 'appendTo'), $child->blocks);
                 unset($child->blocks);
+            }
+            if(isset($child->item))
+            {
+                call_user_func(array($this, 'addItem'), $child->item);
+                unset($child->item);
             }
             if(isset($child->css))
             {
@@ -141,6 +171,17 @@ class wg extends ele
             else array_unshift($this->blocks[$block], $child);
         }
 
+        return $this;
+    }
+
+
+    public function addItem()
+    {
+        $args = func_get_args();
+        foreach($args as $item)
+        {
+            $this->props->addToList('items', $item);
+        }
         return $this;
     }
 

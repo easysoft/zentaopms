@@ -144,6 +144,16 @@ class props extends dataset
         return $this;
     }
 
+    public function addToList()
+    {
+        $args = func_get_args();
+        $name = array_shift($args);
+        if(!$this->has($name)) $this->set($name, $args);
+        else $this->set($name, array_merge($this->get($name), $args));
+
+        return $this;
+    }
+
     /**
      * Convert props to html string
      *
