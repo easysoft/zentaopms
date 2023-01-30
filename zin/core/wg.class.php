@@ -123,16 +123,6 @@ class wg extends ele
                 $this->js($child->js);
                 unset($child->js);
             }
-            if(isset($child->js))
-            {
-                $this->js($child->js);
-                unset($child->js);
-            }
-            if(isset($child->js))
-            {
-                $this->js($child->js);
-                unset($child->js);
-            }
             if(isset($child->import))
             {
                 $this->import($child->import);
