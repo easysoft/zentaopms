@@ -1822,6 +1822,8 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq((int)$storyID)->exec();
+
             $this->executeHooks($storyID);
 
             if(isonlybody())
@@ -1968,6 +1970,8 @@ class story extends control
 
                     if(!empty($stories[$storyID]->twins)) $this->story->syncTwins($storyID, $stories[$storyID]->twins, $changes, 'Closed');
                 }
+
+                $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->in(array_keys($allChanges))->exec();
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');

@@ -1955,6 +1955,8 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
+            $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq((int)$bugID)->exec();
+
             $this->executeHooks($bugID);
 
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -2093,6 +2095,7 @@ class bug extends control
             /* Reset $_POST. Do not unset that because the function of close need that in model. */
             $_POST = array();
 
+            $closedBugs = array();
             $bugs = $this->bug->getByList($bugIDList);
             foreach($bugs as $bugID => $bug)
             {
@@ -2106,7 +2109,11 @@ class bug extends control
 
                 $actionID = $this->action->create('bug', $bugID, 'Closed');
                 $this->action->logHistory($actionID, $changes);
+                $closedBugs[] = $bugID;
             }
+
+            $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->in($closedBugs)->exec();
+
             $this->loadModel('score')->create('ajax', 'batchOther');
             if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, join(',', $skipBugs)));
             if($viewType)
