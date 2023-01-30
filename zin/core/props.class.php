@@ -196,6 +196,21 @@ class props extends dataset
     }
 
     /**
+     * Clone a new instance
+     *
+     * @access public
+     * @return object
+     */
+    public function clone()
+    {
+        $props = new props($this->data, $this->customProps);
+        $props->style = $this->style->clone();
+        $props->class = $this->class->clone();
+        $props->hx    = $this->hx->clone();
+        return $props;
+    }
+
+    /**
      * Create an properties instance
      *
      * @param array $props - Properties list array
