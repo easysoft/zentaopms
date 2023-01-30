@@ -176,6 +176,18 @@ function refreshPage(projectID)
 }
 
 /**
+ * Refresh page.
+ *
+ * @param  object $projectID
+ * @access public
+ * @return void
+ */
+function setType(type)
+{
+    location.href = createLink('execution', 'create', 'projectID=' + projectID + '&executionID=0&copyExecutionID=&planID=0&confirm=no&productID=0&extra=type=' + type);
+}
+
+/**
  * Cut a string of letters and characters with the same length.
  *
  * @param  string $title

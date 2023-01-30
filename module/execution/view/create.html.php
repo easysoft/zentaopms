@@ -61,6 +61,14 @@
           <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
           <td colspan='2'></td>
         </tr>
+        <?php if(!empty($project->model) and $project->model == 'agileplus'):?>
+        <?php unset($lang->execution->typeList['stage'], $lang->execution->typeList['']);?>
+        <tr>
+          <th><?php echo $lang->execution->method;?></th>
+          <td class="col-main"><?php echo html::select("type", $lang->execution->typeList, $type, "class='form-control chosen' required onchange='setType(this.value)'");?></td>
+          <td colspan='2'></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th class='w-120px'><?php echo $showExecutionExec ? $lang->execution->execName : $lang->execution->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
@@ -92,7 +100,7 @@
             </div>
           </td><td></td><td></td>
         </tr>
-        <?php if(empty($project) or $project->model != 'kanban'):?>
+        <?php if((empty($project) or $project->model != 'kanban') and $type != 'kanban'):?>
         <tr>
           <th><?php echo $showExecutionExec ? $lang->execution->execType : $lang->execution->type;?></th>
           <td>
@@ -142,7 +150,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span> 
+                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
                       <?php $disabled = ($project->model == 'waterfall' and !$project->division) ? "disabled='disabled'" : '';?>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                       <?php if($project->model == 'waterfall' and !$project->division) echo html::hidden("products[$i]", $product->id);?>

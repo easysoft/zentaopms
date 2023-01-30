@@ -1630,8 +1630,52 @@ class execution extends control
         if($this->app->tab == 'doc')     unset($this->lang->doc->menu->execution['subMenu']);
         if($this->app->tab == 'project') $this->project->setMenu($projectID);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        $type         = !empty($output['type']) ? $output['type'] : 'sprint';
+        $name         = '';
+        $code         = '';
+        $team         = '';
+        $products     = array();
+        $whitelist    = '';
+        $acl          = 'private';
+        $plan         = new stdClass();
+        $productPlan  = array();
+        $productPlans = array();
+        if($copyExecutionID)
+        {
+            $copyExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch();
+            $type          = $copyExecution->type;
+            $name          = $copyExecution->name;
+            $code          = $copyExecution->code;
+            $team          = $copyExecution->team;
+            $acl           = $copyExecution->acl;
+            $whitelist     = $copyExecution->whitelist;
+            $projectID     = $copyExecution->project;
+            $project       = $this->project->getByID($projectID);
+            $products      = $this->loadModel('product')->getProducts($copyExecutionID);
+            $branches      = $this->project->getBranchesByProject($copyExecutionID);
+            $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
+            $branchGroups  = $this->execution->getBranchByProduct(array_keys($products), $projectID);
+
+            $linkedBranches = array();
+            foreach($products as $productIndex => $product)
+            {
+                $productPlans[$productIndex] = array();
+                foreach($branches[$productIndex] as $branchID => $branch)
+                {
+                    $linkedBranches[$productIndex][$branchID] = $branchID;
+                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                }
+            }
+
+            $this->view->branches       = $branches;
+            $this->view->linkedBranches = $linkedBranches;
+        }
+
         $project = $this->project->getByID($projectID);
-        if(!empty($project) and $project->model == 'kanban')
+        if(!empty($project) and ($project->model == 'kanban' or ($project->model == 'agileplus' and $type == 'kanban')))
         {
             global $lang;
             $executionLang           = $lang->execution->common;
@@ -1639,6 +1683,8 @@ class execution extends control
             $lang->execution->common = $lang->execution->kanban;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             $lang->execution->common = $executionLang;
+
+            $lang->execution->typeList['sprint'] = $lang->execution->common;
         }
         elseif(!empty($project) and $project->model == 'waterfall')
         {
@@ -1646,9 +1692,6 @@ class execution extends control
             $lang->executionCommon = $lang->execution->stage;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
 
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
@@ -1692,45 +1735,6 @@ class execution extends control
             $this->view->projectID   = $projectID;
             $this->view->project     = $project;
             return $this->display();
-        }
-
-        $name         = '';
-        $code         = '';
-        $team         = '';
-        $products     = array();
-        $whitelist    = '';
-        $acl          = 'private';
-        $plan         = new stdClass();
-        $productPlan  = array();
-        $productPlans = array();
-        if($copyExecutionID)
-        {
-            $copyExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch();
-            $name          = $copyExecution->name;
-            $code          = $copyExecution->code;
-            $team          = $copyExecution->team;
-            $acl           = $copyExecution->acl;
-            $whitelist     = $copyExecution->whitelist;
-            $projectID     = $copyExecution->project;
-            $project       = $this->project->getByID($projectID);
-            $products      = $this->loadModel('product')->getProducts($copyExecutionID);
-            $branches      = $this->project->getBranchesByProject($copyExecutionID);
-            $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
-            $branchGroups  = $this->execution->getBranchByProduct(array_keys($products), $projectID);
-
-            $linkedBranches = array();
-            foreach($products as $productIndex => $product)
-            {
-                $productPlans[$productIndex] = array();
-                foreach($branches[$productIndex] as $branchID => $branch)
-                {
-                    $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
-                }
-            }
-
-            $this->view->branches       = $branches;
-            $this->view->linkedBranches = $linkedBranches;
         }
 
         if(!empty($planID))
@@ -1894,6 +1898,7 @@ class execution extends control
         $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->view->project             = $project;
         $this->view->division            = !empty($project) ? $project->division : 1;
+        $this->view->type                = $type;
         $this->display();
     }
 
@@ -4014,18 +4019,20 @@ class execution extends control
             $executionConfig = $this->config->execution;
 
             $projectID = $from == 'project' ? $this->session->project : 0;
+            $project   = $this->project->getByID($projectID);
             if($projectID) $this->project->setMenu($projectID);
 
             /* Create field lists. */
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $executionConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
+                if($fieldName == 'name' and $this->app->tab == 'project' and $project->model == 'agileplus') $fields['method'] = $executionLang->method;
+
                 $fieldName = trim($fieldName);
                 $fields[$fieldName] = zget($executionLang, $fieldName);
                 unset($fields[$key]);
             }
 
-            $project        = $this->project->getByID($projectID);
             $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, '', 'id_asc');
             if(isset($project->model) and $project->model == 'waterfall')
             {
@@ -4052,6 +4059,7 @@ class execution extends control
                 $execution->totalConsumed = $execution->hours->totalConsumed;
                 $execution->totalLeft     = $execution->hours->totalLeft;
                 $execution->progress      = $execution->hours->progress . '%';
+                if($this->app->tab == 'project' and $project->model == 'agileplus') $execution->method = zget($executionLang->typeList, $execution->type);
 
                 if($this->post->exportType == 'selected')
                 {
