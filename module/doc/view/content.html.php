@@ -51,7 +51,7 @@
 
             if($canImportToPracticeLib or $canImportToComponentLib)
             {
-                echo "<div class='btn-group' id='more'>";
+                echo "<div class='btn-group' id='more' title='{$lang->import}'>";
                 echo html::a('javascript:;', "<i class='icon icon-diamond'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
                 echo "<ul class='dropdown-menu pull-right'>";
                 if($canImportToPracticeLib) echo '<li>' . html::a('#importToPracticeLib', $lang->doc->importToPracticeLib, '', 'data-toggle="modal"') . '</li>';
