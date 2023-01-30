@@ -1817,10 +1817,10 @@ class execution extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));
             }
 
-            if(!empty($projectID) and $project->model == 'kanban')
+            if(!empty($projectID) and strpos(',kanban,agileplus,', ",$project->model,") !== false)
             {
                 $execution = $this->execution->getById($executionID);
-                $this->loadModel('kanban')->createRDKanban($execution);
+                if($execution->type == 'kanban') $this->loadModel('kanban')->createRDKanban($execution);
             }
 
             if(!empty($_POST['plans']))
