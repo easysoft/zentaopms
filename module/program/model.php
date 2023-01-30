@@ -1459,25 +1459,13 @@ class programModel extends model
                 ->fetchAll('project');
         }
 
-        /* Get the number of project teams. */
-        $teams = $this->dao->select('t1.root,count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
+        /* Get the members of project teams. */
+        $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
             ->where('t1.root')->in($projectKeys)
             ->andWhere('t1.type')->eq('project')
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.root')
-            ->fetchAll('root');
-
-        /* Get the members of project teams. */
-        if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
-        {
-            $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-                ->where('t1.root')->in($projectKeys)
-                ->andWhere('t1.type')->eq('project')
-                ->andWhere('t2.deleted')->eq(0)
-                ->fetchGroup('root', 'account');
-        }
+            ->fetchGroup('root', 'account');
 
         /* Process projects. */
         foreach($projects as $key => $project)
@@ -1494,7 +1482,7 @@ class programModel extends model
             /* Process the hours. */
             $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
 
-            $project->teamCount   = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
+            $project->teamCount   = isset($teamMembers[$project->id]) ? count($teamMembers[$project->id]) : 0;
             $project->leftTasks   = isset($leftTasks[$project->id]) ? $leftTasks[$project->id]->tasks : '—';
             $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
 
