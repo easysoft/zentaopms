@@ -177,6 +177,7 @@ class blockModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t1.status')->notin('closed,cancel,pause')
+            ->andWhere("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t1.status != 'done') )")
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($this->config->vision)->andWhere('t3.vision')->eq($this->config->vision)->fi()
