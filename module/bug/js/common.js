@@ -868,7 +868,6 @@ function notice()
         {
             var branch    = $('#branch').val();
             var projectID = $('#project').val();
-            console.log(projectID);
 
             if(typeof(branch) == 'undefined') branch = 0;
             if(typeof(projectID) == 'undefined') projectID = 0;
