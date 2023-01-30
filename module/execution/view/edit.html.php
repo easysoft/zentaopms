@@ -34,7 +34,7 @@
         </tr>
         <?php elseif($project->model == 'kanban'):?>
         <?php echo html::hidden('project', $project->id);?>
-        <?php elseif($app->tab == 'project' and $project->model == 'agileplus'):?>
+        <?php elseif($project->model == 'agileplus'):?>
         <tr>
           <th><?php echo $lang->execution->method;?></th>
           <td><?php echo zget($lang->execution->typeList, $execution->type);?></td><td></td>
