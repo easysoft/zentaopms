@@ -247,4 +247,63 @@ class adminModel extends model
         if($user->birthday and $user->password == md5($user->birthday)) return true;
         return false;
     }
+
+    public function setMenu()
+    {
+        $this->lang->switcherMenu = $this->getSwitcher();
+    }
+
+    /**
+     * Get switcher.
+     *
+     * @access public
+     * @return string
+     */
+    public function getSwitcher()
+    {
+        $moduleName      = $this->app->rawModule;
+        $methodName      = $this->app->rawMethod;
+        $paramName       = current($this->app->rawParams);
+        $currentMenu     = 'setting';
+        $currentMenuName = '';
+        $link            = $paramName ? helper::createLink($moduleName, $methodName, "param=$paramName") : helper::createLink($moduleName, $methodName);
+
+        foreach($this->config->admin->menuGroup as $menuKey => $menuGroup)
+        {
+            if(in_array($moduleName, $menuGroup))
+            {
+                $currentMenu = $menuKey;
+                break;
+            }
+            elseif(in_array("$moduleName|$methodName", $menuGroup))
+            {
+                if($moduleName == 'custom' and ($methodName == 'required' or $methodName == 'set'))
+                {
+                    if(in_array($paramName, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"]))
+                    {
+
+                        $currentMenu = $menuKey;
+                        break;
+                    }
+                }
+                else
+                {
+                    $currentMenu = $menuKey;
+                    break;
+                }
+            }
+        }
+
+        $currentMenuName = $this->lang->admin->menuList->$currentMenu['name'];
+
+        $output  = "<div class='btn-group header-btn'><button class='btn pull-right btn-link' data-toggle='dropdown'> <span class='text'>$currentMenuName</span> <span class='caret'></span></button><ul class='dropdown-menu' id='adminMenu'>";
+        foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
+        {
+            $class = $menuKey == $currentMenu ? "class='active'" : '';
+            $output .= "<li $class>" . html::a($link, $menuGroup['name']) . "</li>";
+        }
+        $output .= "</ul></div>";
+
+        return $output;
+    }
 }
