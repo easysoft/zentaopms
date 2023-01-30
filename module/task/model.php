@@ -865,7 +865,7 @@ class taskModel extends model
                     }
                     elseif(strpos('wait,doing,pause', $oldTask->status) !== false)
                     {
-                        $currentTask->status = 'done';
+                        $currentTask->status       = 'done';
                         $currentTask->assignedTo   = $oldTask->openedBy;
                         $currentTask->assignedDate = $now;
                         $currentTask->finishedBy   = $this->app->user->account;
@@ -3909,7 +3909,7 @@ class taskModel extends model
         $btnTextClass   = '';
         $btnClass       = '';
         $assignedToText = $assignedToTitle = zget($users, $task->assignedTo);
-        if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
+        if(!empty($task->team) and $task->mode == 'multi' and strpos('done,closed', $task->status) === false)
         {
             $assignedToText = $this->lang->task->team;
 
