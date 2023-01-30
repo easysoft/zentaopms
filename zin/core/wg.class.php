@@ -17,7 +17,7 @@ class wg extends ele
 {
     public static $imports = NULL;
 
-    public $slots = array();
+    public $blocks = array();
 
     public $jsList = array();
 
@@ -54,10 +54,10 @@ class wg extends ele
         $child = parent::acceptChild($child, $strAsHtml);
         if(is_object($child) && isset($child->custom) && $child->custom)
         {
-            if(isset($child->slots))
+            if(isset($child->blocks))
             {
-                call_user_func_array(array($this, 'appendTo'), $child->slots);
-                unset($child->slots);
+                call_user_func_array(array($this, 'appendTo'), $child->blocks);
+                unset($child->blocks);
             }
             if(isset($child->css))
             {
@@ -91,14 +91,14 @@ class wg extends ele
     public function appendTo()
     {
         $args = func_get_args();
-        $slot = array_shift($args);
+        $block = array_shift($args);
 
-        if(!isset($this->slots[$slot])) $this->slots[$slot] = array();
+        if(!isset($this->blocks[$block])) $this->blocks[$block] = array();
 
         foreach($args as $child)
         {
-            if(is_array($child)) $this->slots[$slot] = array_merge($this->slots[$slot], $child);
-            else $this->slots[$slot][] = $child;
+            if(is_array($child)) $this->blocks[$block] = array_merge($this->blocks[$block], $child);
+            else $this->blocks[$block][] = $child;
         }
 
         return $this;
@@ -107,14 +107,14 @@ class wg extends ele
     public function prependTo()
     {
         $args = func_get_args();
-        $slot = array_shift($args);
+        $block = array_shift($args);
 
-        if(!isset($this->slots[$slot])) $this->slots[$slot] = array();
+        if(!isset($this->blocks[$block])) $this->blocks[$block] = array();
 
         foreach($args as $child)
         {
-            if(is_array($child)) $this->slots[$slot] = array_merge($child, $this->slots[$slot]);
-            else array_unshift($this->slots[$slot], $child);
+            if(is_array($child)) $this->blocks[$block] = array_merge($child, $this->blocks[$block]);
+            else array_unshift($this->blocks[$block], $child);
         }
 
         return $this;

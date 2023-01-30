@@ -75,9 +75,9 @@ class pagebase extends \zin\core\wg
             ->importCss($this->cssImports)
             ->renderInTag();
 
-        if(isset($this->slots['head']))
+        if(isset($this->blocks['head']))
         {
-            $headBuilder->append($this->buildChildren($this->slots['head'], $isPrint, $parent));
+            $headBuilder->append($this->buildChildren($this->blocks['head'], $isPrint, $parent));
         }
 
         return $headBuilder;

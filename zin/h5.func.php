@@ -13,22 +13,26 @@ namespace zin;
 
 require_once 'core/h5.class.php';
 
-function custom($name, $data)
+function setCustom($name, $data)
 {
     $info = new \stdClass();
     $info->$name = $data;
     return $info;
 }
 
-function set($prop, $value = NULL)          {return custom('set', is_array($prop) ? $prop : array($prop => $value));}
-function hx($prop, $value = NULL)           {return (new core\hx())->set($prop, $value);}
-function style($prop, $value = NULL)        {return (new core\style())->set($prop, $value);}
-function cssVar($name = '', $value = NULL)  {return (new core\style())->var($name, $value);}
-function setClass()                         {return (new core\classlist(func_get_args()));}
-function html()                             {return custom('html', implode("\n", func_get_args()));}
-function id($id)                            {return set('id', $id);}
-function tag($tag)                          {return custom('tag', $tag);}
-function setData($data)                     {return custom('data', $data);}
+function set($prop, $value = NULL)            {return setCustom('set', is_array($prop) ? $prop : array($prop => $value));}
+function setHx($prop, $value = NULL)          {return (new core\hx())->set($prop, $value);}
+function setStyle($prop, $value = NULL)       {return (new core\style())->set($prop, $value);}
+function setCssVar($name = '', $value = NULL) {return (new core\style())->var($name, $value);}
+function setClass()                           {return (new core\classlist(func_get_args()));}
+function setId($id)                           {return set('id', $id);}
+function setTag($tag)                         {return setCustom('tag', $tag);}
+function setData($data)                       {return setCustom('data', $data);}
+
+function html()
+{
+    return setCustom('html', implode("\n", func_get_args()));
+}
 
 function h()
 {
