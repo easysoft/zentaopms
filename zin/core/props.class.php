@@ -79,7 +79,8 @@ class props extends dataset
         if($prop === 'hx')                     return $this->hx->set($value);
         if($prop === '!')                      return $this->hx->set(substr($prop, 1), $value);
         if(strpos($prop, 'hx-') === 0)         return $this->hx->set($prop, $value);
-        if(strpos($prop, '@') === 0)           return $this->style->set(substr($prop, 1), $value);
+        if(strpos($prop, '~') === 0)           return $this->style->set(substr($prop, 1), $value);
+        if(strpos($prop, '--') === 0)          return $this->style->setVal(substr($prop, 2), $value);
         if(strpos($prop, ':') === 0)           return $this->setData(substr($prop, 1), $value);
 
         if($prop === '#') $prop = 'id';
