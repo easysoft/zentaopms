@@ -1,3 +1,18 @@
 #notice {margin: -20px -20px 20px; padding: 20px;}
 #zentaoLinks {margin-top: 20px;}
 #zentaoLinks .panel .panel-heading {padding: 6px 10px;}
+.admin {display: flex; background: unset;}
+.admin > .main {flex: 1 1 60%; padding-right: 10px;}
+.admin > .side {flex: 1 1 40%; padding-left: 10px;}
+.panel-title {padding: 10px 0px;}
+.flex {display: flex;}
+.panel {padding: 0 16px;}
+
+.settings-list {display: flex; flex-wrap: wrap; padding: 12px 4px 16px 4px;}
+.settings-list > .setting-box {flex: 0 0 20%; padding: 18px 0;}
+
+.plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
+.plugin-list > .plugin-item {flex: 1 1 33%; padding: 16px 4px;}
+
+.bottom.flex > .official {flex: 1 1 30%;}
+.bottom.flex > .openClass {flex: 1 1 60%; margin-left: 20px;}

@@ -25,11 +25,15 @@ $lang->admin->resetPWDSetting = '重置密码设置';
 $lang->admin->tableEngine     = '表引擎';
 $lang->admin->setModuleIndex  = '系统功能配置';
 
-$lang->admin->api            = '接口';
-$lang->admin->log            = '日志';
-$lang->admin->setting        = '设置';
-$lang->admin->days           = '日志保存天数';
-$lang->admin->resetPWDByMail = '通过邮箱重置密码';
+$lang->admin->api                  = '接口';
+$lang->admin->log                  = '日志';
+$lang->admin->setting              = '设置';
+$lang->admin->pluginRecommendation = '插件推荐';
+$lang->admin->zentaoInfo           = '禅道信息';
+$lang->admin->officialAccount      = '官方公众号';
+$lang->admin->openClass            = '公开课';
+$lang->admin->days                 = '日志保存天数';
+$lang->admin->resetPWDByMail       = '通过邮箱重置密码';
 
 $lang->admin->changeEngine   = "更换到InnoDB";
 $lang->admin->changingTable  = '正在更换数据表%s引擎...';
