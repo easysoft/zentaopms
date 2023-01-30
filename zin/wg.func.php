@@ -13,10 +13,11 @@ namespace zin;
 
 require_once 'helper.php';
 
-function import()   {return setCustom('import', func_get_args());}
-function js()       {return setCustom('js', func_get_args());}
-function css()      {return setCustom('css', func_get_args());}
-function to()       {return setCustom('blocks', func_get_args());}
+function import()    {return setCustom('import', func_get_args());}
+function js()        {return setCustom('js',     func_get_args());}
+function css()       {return setCustom('css',    func_get_args());}
+function to()        {return setCustom('blocks', func_get_args());}
+function item($item) {return setCustom('item',   $item);}
 
 function data()
 {
@@ -29,6 +30,6 @@ function data()
     return core\data::$global;
 }
 
-function btn()      {return createWg('btn', func_get_args());}
+function btn()      {return createWg('btn',      func_get_args());}
 function pagebase() {return createWg('pagebase', func_get_args());}
-function page()     {return createWg('page', func_get_args());}
+function page()     {return createWg('page',     func_get_args());}
