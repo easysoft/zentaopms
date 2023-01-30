@@ -1493,7 +1493,6 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
             ->add('id', $bugID)
-            ->add('assignedTo', 'closed')
             ->add('status',     'closed')
             ->add('confirmed',  1)
             ->setDefault('assignedDate',   $now)

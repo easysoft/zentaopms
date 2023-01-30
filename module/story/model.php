@@ -1986,7 +1986,6 @@ class storyModel extends model
         $now      = helper::now();
         $story = fixer::input('post')
             ->add('id', $storyID)
-            ->add('assignedTo', 'closed')
             ->add('status', 'closed')
             ->add('stage', 'closed')
             ->setDefault('lastEditedBy',   $this->app->user->account)
@@ -2077,7 +2076,6 @@ class storyModel extends model
             $story->lastEditedDate = $now;
             $story->closedBy       = $this->app->user->account;
             $story->closedDate     = $now;
-            $story->assignedTo     = 'closed';
             $story->assignedDate   = $now;
             $story->status         = 'closed';
             $story->stage          = 'closed';
