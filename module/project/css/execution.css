@@ -19,3 +19,5 @@ span.table-nest-icon.table-nest-toggle {min-width: 22px; max-width: 22px;}
 #projectForm .c-name, #executionTableList .c-name, #programTableList .c-name {padding-right:47px;}
 #mainMenu .pull-left > .btn-group > a > .text{overflow: hidden;display: block;}
 #mainMenu .pull-right .icon-list{padding-left: 7px;}
+#mainMenu .btn-group.dropdown > .create-execution-btn {border-right: 1px solid rgba(255,255,255,0.2);}
+#mainMenu .btn-group.dropdown > button.btn-primary {padding: 6px;}
