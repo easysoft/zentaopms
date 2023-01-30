@@ -277,7 +277,7 @@ class block extends control
 
                 /* The list assigned to me jumps to the work page when click more button. */
                 $block->moreLink = $this->createLink($moduleName, $method, $vars);
-                if($moduleName == 'my' and strpos($this->config->block->workMethods, $method))
+                if($moduleName == 'my' and strpos($this->config->block->workMethods, $method) !== false)
                 {
                     $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
                 }
