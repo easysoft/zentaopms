@@ -134,7 +134,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 <th><?php echo $lang->task->mode;?></th>
                 <td>
                   <?php
-                  if($task->status == 'wait')
+                  if($task->status == 'wait' and $task->parent == 0)
                   {
                       echo html::select('mode', $lang->task->editModeList, $task->mode, "class='form-control chosen'");
                   }
