@@ -13,7 +13,7 @@ namespace zin;
 
 require_once 'config.php';
 
-function useWgVer($ver, $names = NULL)
+function setWgVer($ver, $names = NULL)
 {
     global $config;
     $zinConfig = $config->zin;
