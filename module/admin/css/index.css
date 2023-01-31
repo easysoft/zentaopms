@@ -17,14 +17,18 @@
 .plugin-list > .plugin-item > .plug-title {height: 16px; overflow: hidden;}
 .plugin-list > .plugin-item .extension-desc {overflow: hidden; height: 16px;}
 
-.bottom.flex > .official {flex: 1 1 30%; margin-right: 20px;}
+.bottom.flex > .official {flex: 1 1 30%; margin-right: 20px; display: flex; flex-direction: column; position: relative;}
 .bottom.flex > .publicClass {flex: 1 1 60%;}
 
+.official {justify-content: center;}
+.official > .panel-title {position: absolute; top: 0px;}
 .official-img {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; background-position: center;}
 .official-content {flex: 0 0 50%; display: flex; flex-direction: column; justify-content: center;}
 .official-content > .content {color: #838A9D; font-size: 12px;}
 .official-content > .title {color: #313C52; font-size: 13px;}
 
-.classList > .classItem {flex: 0 0 50%;}
-.classItem > .classImg {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; }
-.classItem > .classContent {flex: 1 1 50%;}
+.classList > .classItem {flex: 1 1 30%;}
+.classItem {margin: 5px;}
+.classItem > .imgBack {flex: 1 1 50%; background: #C8EDFF;}
+.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 1 / 1; background-position: center; margin:5px;}
+.classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18;}
