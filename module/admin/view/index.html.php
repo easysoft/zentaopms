@@ -73,7 +73,7 @@
       <?php endif;?>
     </div>
   </div>
-  <?php if($hasInternet and strpos($clientLang, 'zh') === 0):?>
+  <?php if($hasInternet and !$langNotCN):?>
   <div class="side panel">
     <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
   </div>

@@ -34,25 +34,17 @@ class admin extends control
 
         $this->loadModel('misc');
 
-        /* Check internet. */
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, 'https://api.zentao.net/extension-apiGetExtensions.json');
-        curl_setopt($curl, CURLOPT_TIMEOUT_MS, 1000);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-        $connected = (bool)curl_exec($curl);
-        curl_close($curl);
-
-        $clientLang = $this->app->getClientLang();
+        $hasInternet = $this->admin->checkInternet();
+        $clientLang  = $this->app->getClientLang();
+        $langNotCN   = common::checkNotCN();
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->position[]  = $this->lang->admin->index;
-        $this->view->extensions  = $this->admin->getExtensionsByAPI('extension', 6, $connected);
-        $this->view->hasInternet = $connected;
-        $this->view->publicClass = ($connected and strpos($clientLang, 'zh') === 0) ? $this->admin->getPublicClassByAPI() : array();
-        $this->view->clientLang  = $clientLang;
+        $this->view->extensions  = $this->admin->getExtensionsByAPI('extension', $langNotCN ? 5 : 6, $hasInternet);
+        $this->view->patches     = $this->admin->getExtensionsByAPI('patch', 3, $hasInternet);
+        $this->view->hasInternet = $hasInternet;
+        $this->view->publicClass = ($hasInternet and !$langNotCN) ? $this->admin->getPublicClassByAPI() : array();
+        $this->view->langNotCN   = $langNotCN;
         $this->display();
     }
 
