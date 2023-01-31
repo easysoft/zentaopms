@@ -3597,9 +3597,9 @@ class bugModel extends model
                 $ccList = substr($ccList, $commaPos + 1);
             }
         }
-        elseif(strtolower($toList) == 'closed')
+        elseif($bug->status == 'closed')
         {
-            $toList = $bug->resolvedBy;
+            $ccList .= ',' . $bug->resolvedBy;
         }
 
         return array($toList, $ccList);
