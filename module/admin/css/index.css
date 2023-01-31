@@ -18,8 +18,12 @@
 .plugin-list > .plugin-item .extension-desc {overflow: hidden; height: 16px;}
 
 .bottom.flex > .official {flex: 1 1 30%; margin-right: 20px;}
-.bottom.flex > .openClass {flex: 1 1 60%;}
+.bottom.flex > .publicClass {flex: 1 1 60%;}
 
 .official-img {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; background-position: center;}
 .official-content {flex: 0 0 50%; display: flex; flex-direction: column; justify-content: center;}
 .official-content > .content {color: #838A9D;}
+
+.classList > .classItem {flex: 0 0 50%;}
+.classItem > .classImg {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; }
+.classItem > .classContent {flex: 1 1 50%;}

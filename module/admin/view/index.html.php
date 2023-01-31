@@ -51,9 +51,17 @@
           </div>
         </div>
       </div>
-      <div class="panel openClass">
+      <div class="panel publicClass">
         <div class="panel-title"><?php echo $lang->admin->publicClass?></div>
-	<div class="classList">
+	<div class="classList flex">
+	  <div class="classItem flex">
+            <div class="classImg"></div>
+            <div class="classContent"></div>
+          </div>
+	  <div class="classItem flex">
+            <div class="classImg"></div>
+            <div class="classContent"></div>
+          </div>
         </div>
       </div>
     </div>
