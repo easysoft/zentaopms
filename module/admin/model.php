@@ -14,6 +14,11 @@
 class adminModel extends model
 {
     /**
+     * The extension manager version. Don't change it.
+     */
+    const EXT_MANAGER_VERSION = '1.3';
+
+    /**
      * The api root.
      *
      * @var string
@@ -305,5 +310,93 @@ class adminModel extends model
         $output .= "</ul></div>";
 
         return $output;
+    }
+
+    /**
+     * Get extensions from zentao.net.
+     *
+     * @param  string $type extension|patch
+     * @param  int    $limit
+     * @param  bool   $hasInternet
+     * @access public
+     * @return array
+     */
+    public function getExtensionsByAPI($type = 'extension', $limit = 6, $hasInternet = true)
+    {
+        if($hasInternet)
+        {
+            $searchType = $type == 'extension' ? 'byUpdatedTime' : 'byModule';
+            $param      = $type == 'extension' ? '' : 'MTIxOA==';
+            $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
+            $extensions = isset($extensions->extensions) ? (array)$extensions->extensions : array();
+        }
+        else
+        {
+            if($this->config->edition == 'open')
+            {
+                $extensions = array(
+                    $this->config->admin->plugIns[27],
+                    $this->config->admin->plugIns[26],
+                    $this->config->admin->plugIns[30]
+                );
+            }
+            else
+            {
+                $extensions = array(
+                    $this->config->admin->plugIns[198],
+                    $this->config->admin->plugIns[203]
+                );
+            }
+        }
+
+        return $extensions;
+    }
+
+    /**
+     * Fetch data from an api.
+     *
+     * @param  string    $url
+     * @access public
+     * @return mixed
+     */
+    public function fetchAPI($url)
+    {
+        $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $version = str_replace('_', '.', $version);
+
+        $url   .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version;
+        $result = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($url)));
+
+        if(!isset($result->status)) return false;
+        if($result->status != 'success') return false;
+        if(isset($result->data)) return json_decode($result->data);
+    }
+
+    /**
+     * Get public class from zentao.net.
+     *
+     * @param  int    $limit
+     * @access public
+     * @return void
+     */
+    public function getPublicClassByAPI($limit = 2)
+    {
+        $apiURL  = $this->config->admin->apiRoot . "publicclass.json";
+        $data    = $this->fetchAPI($apiURL);
+        $courses = $data->videos;
+
+        $index       = 1;
+        $publicClass = array();
+        foreach($courses as $course)
+        {
+            if($index > $limit) return $publicClass;
+
+            $publicClass[$index] = new stdClass();
+            $publicClass[$index]->name = $course->title;
+            $publicClass[$index]->image = $this->config->admin->apiRoot . $course->image->list[0]->smallURL;
+            $publicClass[$index]->viewLink = $this->config->admin->apiRoot . "{$course->alias}-{$course->id}.html";
+            $index++;
+        }
+        return $publicClass;
     }
 }

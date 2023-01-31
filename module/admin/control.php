@@ -34,11 +34,25 @@ class admin extends control
 
         $this->loadModel('misc');
 
-        $extensions = $this->loadModel('extension')->getExtensionsByAPI('byUpdatedTime', '', 0, 6);
+        /* Check internet. */
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, 'https://api.zentao.net/extension-apiGetExtensions.json');
+        curl_setopt($curl, CURLOPT_TIMEOUT_MS, 1000);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        $connected = (bool)curl_exec($curl);
+        curl_close($curl);
 
-        $this->view->title      = $this->lang->admin->common;
-        $this->view->position[] = $this->lang->admin->index;
-        $this->view->extensions = isset($extensions->extensions) ? (array)$extensions->extensions : array();
+        $clientLang = $this->app->getClientLang();
+
+        $this->view->title       = $this->lang->admin->common;
+        $this->view->position[]  = $this->lang->admin->index;
+        $this->view->extensions  = $this->admin->getExtensionsByAPI('extension', 6, $connected);
+        $this->view->hasInternet = $connected;
+        $this->view->publicClass = ($connected and strpos($clientLang, 'zh') === 0) ? $this->admin->getPublicClassByAPI() : array();
+        $this->view->clientLang  = $clientLang;
         $this->display();
     }
 

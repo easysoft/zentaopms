@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('hasInternet', $hasInternet);?>
 <div id='mainContent' class='main-content admin'>
   <div class="main">
     <div class="settings panel">
@@ -28,6 +29,8 @@
         <div class="setting-box">10</div>
       </div>
     </div>
+
+    <?php if($extensions):?>
     <div class="plug panel">
       <div class="panel-title"><?php echo $lang->admin->pluginRecommendation?></div>
       <div class="plugin-list">
@@ -40,34 +43,38 @@
         <?php endforeach;?>
       </div>
     </div>
+    <?php endif;?>
+
     <div class="flex bottom">
       <div class="panel official">
         <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
-	<div class="flex main-panel">
-	  <div class="official-img"></div>
-	  <div class="official-content">
-	    <div class="title"><?php echo $lang->admin->followUs?></div>
+	    <div class="flex main-panel">
+	      <div class="official-img"></div>
+	      <div class="official-content">
+	        <div class="title"><?php echo $lang->admin->followUs?></div>
             <div class="content"> <?php echo $lang->admin->followUsContent?></div>
           </div>
         </div>
       </div>
+      <?php if($publicClass):?>
       <div class="panel publicClass">
         <div class="panel-title"><?php echo $lang->admin->publicClass?></div>
-	<div class="classList flex">
-	  <div class="classItem flex">
-            <div class="classImg"></div>
-            <div class="classContent"></div>
+        <div class="classList flex">
+          <?php foreach($publicClass as $class):?>
+	      <div class="classItem flex">
+            <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>
+            <div class="classContent"><?php echo $class->name;?></div>
           </div>
-	  <div class="classItem flex">
-            <div class="classImg"></div>
-            <div class="classContent"></div>
-          </div>
+          <?php endforeach;?>
         </div>
       </div>
+      <?php endif;?>
     </div>
   </div>
+  <?php if($hasInternet and strpos($clientLang, 'zh') === 0):?>
   <div class="side panel">
     <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
   </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
