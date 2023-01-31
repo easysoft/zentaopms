@@ -8,11 +8,12 @@ page
     btn
     (
         'Primary',
-        set('.', 'primary'),
+        set('.', array('text-danger' => true)),
         set('active', true),
         set('icon', 'flag'),
     ),
     icon('project'),
+    icon(set('name', 'project')),
     div
     (
         icon('star'),
@@ -25,5 +26,47 @@ page
             'lorem',
             strong('bold'),
         )
-    )
+    ),
+    to
+    (
+        'body',
+        html('<style>body{color:red}</style>'),
+    ),
+    $listChildren
 );
+
+/*
+page
+(
+  set('title', $title),
+  pageheader
+  (
+    to('header', pageheading()),
+    pageheading(set()),
+    pagenavbar(),
+    pagetoolbar()
+  ),
+  pagemain
+  (
+    mainmenu
+    (
+      set($mainMenuOptions),
+      to
+      (
+        'toolbar',
+        toolbar
+        (
+          $mainMenuToolbar,
+          set('items', array(array('text' => 'copy'), array('type' => 'divider'))),
+          item(array('text' => 'copy')),
+          item(array('type' => 'divider'))
+        )
+      )
+    ),
+    dtable
+    (
+      set($dtableOptions)
+    )
+  )
+); */
+
