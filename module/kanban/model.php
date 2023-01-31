@@ -64,14 +64,16 @@ class kanbanModel extends model
      *
      * @param  object $kanban
      * @param  int    $copyKanbanID
+     * @param  string $from kanban|execution
+     * @param  string $param
      * @access public
      * @return void
      */
-    public function copyRegions($kanban, $copyKanbanID)
+    public function copyRegions($kanban, $copyKanbanID, $from = 'kanban', $param = 'withArchived')
     {
         if(empty($kanban) or empty($copyKanbanID)) return;
 
-        $regions = $this->getRegionPairs($copyKanbanID);
+        $regions = $this->getRegionPairs($copyKanbanID, 0, $from);
         $order   = 1;
         foreach($regions as $copyID => $copyName)
         {
@@ -83,7 +85,7 @@ class kanbanModel extends model
             $region->createdDate = helper::now();
             $region->order       = $order;
 
-            $this->createRegion($kanban, $region, $copyID, 'kanban', 'withArchived');
+            $this->createRegion($kanban, $region, $copyID, $from, $param);
             $order ++;
         }
     }
@@ -150,14 +152,16 @@ class kanbanModel extends model
                 $copyLanes     = isset($copyLaneGroup[$copyGroupID]) ? $copyLaneGroup[$copyGroupID] : array();
                 $copyColumns   = isset($copyColumnGroup[$copyGroupID]) ? $copyColumnGroup[$copyGroupID] : array();
                 $parentColumns = array();
+                $lanePairs     = array();
                 foreach($copyLanes as $copyLane)
                 {
+                    $laneID = $copyLane->id;
                     unset($copyLane->id);
                     unset($copyLane->actions);
                     $copyLane->region         = $regionID;
                     $copyLane->group          = $newGroupID;
                     $copyLane->lastEditedTime = helper::now();
-                    $this->createLane($kanban->id, $regionID, $copyLane);
+                    $lanePairs[$laneID] = $this->createLane($kanban->id, $regionID, $copyLane);
                     if(dao::isError()) return false;
                 }
 
@@ -182,6 +186,22 @@ class kanbanModel extends model
                     if($copyColumn->parent < 0) $parentColumns[$copyColumnID] = $parentColumnID;
                     if(dao::isError()) return false;
                 }
+
+                if($param == 'updateTaskCell')
+                {
+                    foreach($lanePairs as $oldLaneID => $newLaneID)
+                    {
+                        $cards = $this->dao->select('id,cards')->from(TABLE_KANBANCELL)->where('lane')->eq($oldLaneID)->andWhere('type')->eq('task')->fetchPairs();
+                        $cards = implode(',', $cards);
+                        $cards = preg_replace('/[,]+/', ',',$cards);
+                        $cards = trim($cards, ',');
+
+                        $group      = $this->dao->select('`group`')->from(TABLE_KANBANLANE)->where('id')->eq($newLaneID)->fetch();
+                        $waitColumn = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('type')->eq('wait')->andWhere('`group`')->eq($group->group)->fetch();
+
+                        if(!empty($waitColumn)) $this->addKanbanCell($kanban->id, $newLaneID, $waitColumn->id, 'task', $cards);
+                    }
+                }
             }
         }
         elseif($from == 'kanban')
@@ -195,7 +215,6 @@ class kanbanModel extends model
             $this->createDefaultColumns($kanban, $regionID, $groupID);
             if(dao::isError()) return false;
         }
-
 
         return $regionID;
     }
