@@ -873,7 +873,7 @@ class project extends control
             $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
         }
 
-        if(empty($project) || strpos('scrum,waterfall,kanban', $project->model) === false)
+        if(empty($project) || strpos('scrum,waterfall,kanban,agileplus', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
