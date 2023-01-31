@@ -20,8 +20,8 @@
 <?php js::set('automation',     !empty($automation) ? $automation->id : 0);?>
 <?php $this->app->loadLang('zanode');?>
 <?php js::set('runCaseConfirm', $lang->zanode->runCaseConfirm);?>
-<?php js::set('confirmURL',     $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=id_desc&from=testcase&taskID=$taskID&confirm=yes"));?>
-<?php js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=id_desc&from=testcase&taskID=$taskID&confirm=no"));?>
+<?php js::set('confirmURL',     $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$taskID&confirm=yes"));?>
+<?php js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$taskID&confirm=no"));?>
 <div id='mainContent' class='main-row fade'>
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
