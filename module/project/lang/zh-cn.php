@@ -267,10 +267,11 @@ $lang->project->currencySymbol['NZD'] = 'NZ$';
 $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
-$lang->project->modelList['']       = "";
-$lang->project->modelList['scrum']  = "Scrum";
+$lang->project->modelList['']            = "";
+$lang->project->modelList['scrum']       = "Scrum";
 if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "瀑布";
-$lang->project->modelList['kanban'] = "看板";
+$lang->project->modelList['kanban']      = "看板";
+$lang->project->modelList['agileplus']   = "融合敏捷";
 
 $lang->project->featureBar['browse']['all']       = '全部';
 $lang->project->featureBar['browse']['undone']    = '未完成';
@@ -324,9 +325,10 @@ $lang->project->endList[186] = '半年';
 $lang->project->endList[365] = '一年';
 $lang->project->endList[999] = '长期';
 
-$lang->project->scrumTitle     = '敏捷开发全流程项目管理';
-$lang->project->waterfallTitle = '瀑布式项目管理';
-$lang->project->kanbanTitle    = '专业研发看板项目管理';
+$lang->project->scrumTitle       = '敏捷开发全流程项目管理';
+$lang->project->waterfallTitle   = '瀑布式项目管理';
+$lang->project->kanbanTitle      = '专业研发看板项目管理';
+$lang->project->agileplusTitle   = '融合敏捷开发与看板项目管理';
 
 $lang->project->empty                  = '暂时没有项目';
 $lang->project->nextStep               = '下一步';
@@ -337,6 +339,7 @@ $lang->project->lastKanban             = '近期看板';
 $lang->project->ongoingStage           = '进行中的阶段';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = '瀑布';
+$lang->project->agileplus              = '融合敏捷';
 $lang->project->cannotCreateChild      = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
 $lang->project->emptyPM                = '暂无';
 $lang->project->emptyBranch            = '分支不能为空！';

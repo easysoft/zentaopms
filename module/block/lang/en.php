@@ -169,7 +169,8 @@ $lang->block->default['scrum']['project']['4']['grid']  = 4;
 $lang->block->default['scrum']['project']['5']['title'] = 'Dynamic';
 $lang->block->default['scrum']['project']['5']['block'] = 'projectdynamic';
 $lang->block->default['scrum']['project']['5']['grid']  = 4;
-$lang->block->default['kanban'] = $lang->block->default['scrum'];
+$lang->block->default['kanban']    = $lang->block->default['scrum'];
+$lang->block->default['agileplus'] = $lang->block->default['scrum'];
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Report';
 $lang->block->default['product']['1']['block'] = 'statistic';
@@ -374,6 +375,8 @@ $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->executionCommon . ' Overview';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = 'Test Version';
 $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dynamics';
+
+$lang->block->modules['agileplus']['index'] = $lang->block->modules['scrum']['index'];
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();

@@ -79,7 +79,7 @@
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
-        <?php if($model != 'waterfall'):?>
+        <?php if($model != 'waterfall' and $model != 'agileplus'):?>
         <tr>
           <th><?php echo $lang->project->multiple;?></th>
           <td colspan='3'>

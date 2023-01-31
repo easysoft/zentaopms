@@ -267,10 +267,11 @@ $lang->project->currencySymbol['NZD'] = 'NZ$';
 $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
-$lang->project->modelList['']       = '';
-$lang->project->modelList['scrum']  = "Scrum";
+$lang->project->modelList['']          = '';
+$lang->project->modelList['scrum']     = "Scrum";
 if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "CMMI";
-$lang->project->modelList['kanban'] = "Kanban";
+$lang->project->modelList['kanban']    = "Kanban";
+$lang->project->modelList['agileplus'] = "Agile +";
 
 $lang->project->featureBar['browse']['all']       = 'All';
 $lang->project->featureBar['browse']['undone']    = 'Non Terminées';
@@ -327,6 +328,7 @@ $lang->project->endList[999] = 'Longtime';
 $lang->project->scrumTitle     = 'Agile Development Management';
 $lang->project->waterfallTitle = 'Waterfall Project Management';
 $lang->project->kanbanTitle    = 'Kanban Project Management';
+$lang->project->agileplusTitle = 'Integrating Agile and Kanban Project Management';
 
 $lang->project->empty                  = 'No project.';
 $lang->project->nextStep               = 'Next step';
@@ -337,6 +339,7 @@ $lang->project->lastKanban             = 'Recent Kanban';
 $lang->project->ongoingStage           = 'Ongoing stage';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = 'CMMI';
+$lang->project->agileplus              = 'Agile +';
 $lang->project->cannotCreateChild      = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
 $lang->project->emptyPM                = 'No manager';
 $lang->project->emptyBranch            = 'Branch can not be empty!';
