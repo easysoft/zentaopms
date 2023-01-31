@@ -571,6 +571,12 @@ class myModel extends model
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
         $query = str_replace('t1.`project`', 't2.`project`', $query);
 
+        if(strpos($query, '`assignedTo`') !== false)
+        {
+            preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $query, $matches);
+            $query = str_replace("t1.$matches[0]", "(t1.$matches[0] or (t1.mode = 'multi' and t5.`account` $matches[1] and t1.status != 'closed' and t5.status != 'done') )", $query);
+        }
+
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         $tasks   = $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t2.multiple as executionMultiple, t4.name as projectName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
             ->from(TABLE_TASK)->alias('t1')
@@ -582,7 +588,7 @@ class myModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('(t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)
-            ->beginIF($moduleName == 'workTask')->andWhere("t1.assignedTo")->eq($account)
+            ->beginIF($moduleName == 'workTask')->andWhere("(t1.$matches[0] or (t1.mode = 'multi' and t5.`account` $matches[1] and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($moduleName == 'contributeTask')
             ->andWhere('t1.openedBy', 1)->eq($account)
             ->orWhere('t1.closedBy')->eq($account)
@@ -597,7 +603,7 @@ class myModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);

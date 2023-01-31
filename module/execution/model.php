@@ -3774,12 +3774,23 @@ class executionModel extends model
      */
     public function getSearchTasks($condition, $pager, $orderBy)
     {
-        $taskIdList = $this->dao->select('id')
-            ->from(TABLE_TASK)
-            ->where($condition)
+        if(strpos($condition, '`assignedTo`') !== false)
+        {
+            preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $condition, $matches);
+            $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
+            $condition = str_replace("t1.$matches[0]", "(t1.$matches[0] or (t1.mode = 'multi' and t2.`account` $matches[1] and t1.status != 'closed' and t2.status != 'done') )", $condition);
+        }
+
+        $sql = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1');
+        if(strpos($condition, '`assignedTo`') !== false) $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and t2.account $matches[1]");
+
+        $orderBy = array_map(function($value){return 't1.' . $value;}, explode(',', $orderBy));
+        $orderBy = implode(',', $orderBy);
+
+        $taskIdList = $sql->where($condition)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
