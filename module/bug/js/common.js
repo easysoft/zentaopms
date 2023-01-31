@@ -866,9 +866,15 @@ function notice()
         var html = '';
         if($('#execution').length == 0 || $('#execution').val() == 0)
         {
-            var branch = $('#branch').val();
+            var branch    = $('#branch').val();
+            var projectID = $('#project').val();
+
             if(typeof(branch) == 'undefined') branch = 0;
+            if(typeof(projectID) == 'undefined') projectID = 0;
+
             var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch);
+            if(projectID > 0) link = createLink('projectrelease', 'create', 'projectID=' + projectID);
+
             if(config.onlybody != 'yes') link += link.indexOf('?') >= 0 ? '&onlybody=yes' : '?onlybody=yes';
             html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createRelease + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';

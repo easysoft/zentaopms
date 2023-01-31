@@ -1493,7 +1493,6 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
             ->add('id', $bugID)
-            ->add('assignedTo', 'closed')
             ->add('status',     'closed')
             ->add('confirmed',  1)
             ->setDefault('assignedDate',   $now)
@@ -3598,9 +3597,9 @@ class bugModel extends model
                 $ccList = substr($ccList, $commaPos + 1);
             }
         }
-        elseif(strtolower($toList) == 'closed')
+        elseif($bug->status == 'closed')
         {
-            $toList = $bug->resolvedBy;
+            $ccList .= ',' . $bug->resolvedBy;
         }
 
         return array($toList, $ccList);
