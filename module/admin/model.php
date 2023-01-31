@@ -253,59 +253,149 @@ class adminModel extends model
         return false;
     }
 
+    /**
+     * Set admin menu.
+     *
+     * @access public
+     * @return void
+     */
     public function setMenu()
     {
-        $this->lang->switcherMenu = $this->getSwitcher();
+        $this->sortMenu();
+
+        $menuKey = $this->getMenuKey();
+        if(empty($menuKey)) return;
+
+        $this->lang->switcherMenu = $this->getSwitcher($menuKey);
+        if(isset($this->lang->admin->menuList->$menuKey))
+        {
+            if(isset($this->lang->admin->menuList->$menuKey['subMenu']))     $this->lang->admin->menu        = $this->lang->admin->menuList->$menuKey['subMenu'];
+            if(isset($this->lang->admin->menuList->$menuKey['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->$menuKey['menuOrder'];
+            if(isset($this->lang->admin->menuList->$menuKey['dividerMenu'])) $this->lang->admin->dividerMenu = $this->lang->admin->menuList->$menuKey['dividerMenu'];
+        }
     }
 
     /**
-     * Get switcher.
+     * sort menu.
+     *
+     * @access public
+     * @return void
+     */
+    public function sortMenu()
+    {
+        $orders   = array();
+        $disabled = array();
+        foreach($this->lang->admin->menuList as $menuKey => $menu)
+        {
+            $menu['disabled'] = false;
+            if(isset($menu['link']))
+            {
+                list($module, $method) = explode('|', $menu['link']);
+                $menu['link'] = helper::createLink($module, $method);
+                if(!common::hasPriv($module, $method)) $menu['disabled'] = true;
+            }
+
+            if(isset($menu['menuOrder']))
+            {
+                $menuOrder = $menu['menuOrder'];
+                ksort($menuOrder);
+                /* Check sub menu priv. */
+                foreach($menuOrder as $subOrder => $subMenuKey)
+                {
+                    list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
+                    if(!common::hasPriv($module, $method)) unset($menuOrder[$subOrder]);
+                }
+                /* Set link. */
+                if(!empty($menuOrder))
+                {
+                    $subMenuKey = reset($menuOrder);
+                    list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
+                    $menu['link'] = helper::createLink($module, $method, $params);
+                }
+                if(empty($menuOrder)) $menu['disabled'] = true;
+            }
+
+            $order = $menu['order'];
+            $orders[$order] = $menuKey;
+            if($menu['disabled'])
+            {
+                unset($orders[$order]);
+                $disabled[$menuKey] = $menu;
+            }
+
+            $this->lang->admin->menuList->$menuKey = $menu;
+        }
+
+        ksort($orders);
+        $menuList = new stdclass();
+        $index    = 1;
+        foreach($orders as $menuKey)
+        {
+            $menuList->$menuKey = $this->lang->admin->menuList->$menuKey;
+            $menuList->$menuKey['order'] = $index;
+            $index++;
+        }
+        foreach($disabled as $menuKey => $menu)
+        {
+            $menuList->$menuKey = $menu;
+            $menuList->$menuKey['order'] = $index;
+            $index++;
+        }
+
+        $this->lang->admin->menuList = $menuList;
+    }
+
+    /**
+     * Get menu key
      *
      * @access public
      * @return string
      */
-    public function getSwitcher()
+    public function getMenuKey()
     {
-        $moduleName      = $this->app->rawModule;
-        $methodName      = $this->app->rawMethod;
-        $paramName       = current($this->app->rawParams);
-        $currentMenu     = 'setting';
-        $currentMenuName = '';
-        $link            = $paramName ? helper::createLink($moduleName, $methodName, "param=$paramName") : helper::createLink($moduleName, $methodName);
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
+        $paramName  = $this->app->rawParams ? reset($this->app->rawParams) : '';
 
         foreach($this->config->admin->menuGroup as $menuKey => $menuGroup)
         {
             if(in_array($moduleName, $menuGroup))
             {
-                $currentMenu = $menuKey;
-                break;
+                return $menuKey;
             }
             elseif(in_array("$moduleName|$methodName", $menuGroup))
             {
                 if($moduleName == 'custom' and ($methodName == 'required' or $methodName == 'set'))
                 {
-                    if(in_array($paramName, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"]))
-                    {
-
-                        $currentMenu = $menuKey;
-                        break;
-                    }
+                    if(in_array($paramName, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"])) return $menuKey;
                 }
                 else
                 {
-                    $currentMenu = $menuKey;
-                    break;
+                    return $menuKey;
                 }
             }
         }
+        return null;
+    }
 
-        $currentMenuName = $this->lang->admin->menuList->$currentMenu['name'];
+    /**
+     * Get switcher.
+     *
+     * @param  string $currentMenuKey
+     * @access public
+     * @return string
+     */
+    public function getSwitcher($currentMenuKey = 'setting')
+    {
+        if(empty($currentMenuKey)) return null;
 
-        $output  = "<div class='btn-group header-btn'><button class='btn pull-right btn-link' data-toggle='dropdown'> <span class='text'>$currentMenuName</span> <span class='caret'></span></button><ul class='dropdown-menu' id='adminMenu'>";
+        $currentMenu = $this->lang->admin->menuList->$currentMenuKey;
+        $output      = "<div class='btn-group header-btn'><button class='btn pull-right btn-link' data-toggle='dropdown'> <span class='text'>{$currentMenu['name']}</span> <span class='caret'></span></button><ul class='dropdown-menu' id='adminMenu'>";
         foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
         {
-            $class = $menuKey == $currentMenu ? "class='active'" : '';
-            $output .= "<li $class>" . html::a($link, $menuGroup['name']) . "</li>";
+            $class = $menuKey == $currentMenuKey ? "class='active'" : '';
+            if($menuGroup['disabled']) $class .= ' disabled';
+            $output .= "<li $class>" . html::a($menuGroup['link'], $menuGroup['name']) . "</li>";
         }
         $output .= "</ul></div>";
 

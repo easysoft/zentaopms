@@ -1,11 +1,5 @@
 <?php
 $lang->xuanxuan = new stdclass();
-//if($config->vision != 'lite')
-//{
-//    $lang->admin->menu->xuanxuan = array('link' => '聊天|admin|xuanxuan', 'subModule' => 'client,setting');
-//    $lang->admin->menuOrder[6]   = 'xuanxuan';
-//}
-//
 //$lang->admin->menu->xuanxuan['subMenu'] = new stdclass();
 //$lang->admin->menu->xuanxuan['subMenu']->index   = array('link' => '首页|admin|xuanxuan');
 //$lang->admin->menu->xuanxuan['subMenu']->setting = array('link' => '参数|setting|xuanxuan');
