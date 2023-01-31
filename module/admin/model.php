@@ -377,7 +377,7 @@ class adminModel extends model
      *
      * @param  int    $limit
      * @access public
-     * @return void
+     * @return array
      */
     public function getPublicClassByAPI($limit = 2)
     {
@@ -398,5 +398,26 @@ class adminModel extends model
             $index++;
         }
         return $publicClass;
+    }
+
+    /**
+     * Check internet.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkInternet()
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, 'https://api.zentao.net/extension-apiGetExtensions.json');
+        curl_setopt($curl, CURLOPT_TIMEOUT_MS, 1000);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        $connected = curl_exec($curl);
+        curl_close($curl);
+
+        return (bool)$connected;
     }
 }
