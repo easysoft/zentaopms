@@ -34,7 +34,7 @@
         <?php foreach($extensions as $extension):?>
         <div class="plugin-item">
           <a href="<?php echo $extension->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-import'></i></a>
-          <h4><?php echo $extension->name;?></h4>
+          <h4 class="plug-title"><?php echo $extension->name;?></h4>
           <p class='extension-desc'><?php echo strip_tags($extension->desc);?></p>
         </div>
         <?php endforeach;?>
@@ -43,6 +43,11 @@
     <div class="flex bottom">
       <div class="panel official">
         <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
+	<div class="flex main-panel">
+	  <div class="official-img"></div>
+	  <div class="official-content">
+          </div>
+        </div>
       </div>
       <div class="panel openClass">
         <div class="panel-title"><?php echo $lang->admin->openClass?></div>
