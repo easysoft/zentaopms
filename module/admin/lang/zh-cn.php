@@ -31,17 +31,19 @@ $lang->admin->setting              = '设置';
 $lang->admin->pluginRecommendation = '插件推荐';
 $lang->admin->zentaoInfo           = '禅道信息';
 $lang->admin->officialAccount      = '官方公众号';
-$lang->admin->openClass            = '公开课';
+$lang->admin->publicClass          = '公开课';
 $lang->admin->days                 = '日志保存天数';
 $lang->admin->resetPWDByMail       = '通过邮箱重置密码';
+$lang->admin->followUs             = '扫码关注公众号';
+$lang->admin->followUsContent      = '随时查看禅道动态、活动信息、也可获取帮助支持';
 
-$lang->admin->changeEngine   = "更换到InnoDB";
-$lang->admin->changingTable  = '正在更换数据表%s引擎...';
-$lang->admin->changeSuccess  = '已经更换数据表%s引擎为InnoDB。';
-$lang->admin->changeFail     = "更换数据表%s引擎失败，原因：<span class='text-red'>%s</span>。";
-$lang->admin->errorInnodb    = '您当前的数据库不支持使用InnoDB数据表引擎。';
-$lang->admin->changeFinished = "更换数据库引擎完毕。";
-$lang->admin->engineInfo     = "表<strong>%s</strong>的引擎是<strong>%s</strong>。";
+$lang->admin->changeEngine               = "更换到InnoDB";
+$lang->admin->changingTable              = '正在更换数据表%s引擎...';
+$lang->admin->changeSuccess              = '已经更换数据表%s引擎为InnoDB。';
+$lang->admin->changeFail                 = "更换数据表%s引擎失败，原因：<span class='text-red'>%s</span>。";
+$lang->admin->errorInnodb                = '您当前的数据库不支持使用InnoDB数据表引擎。';
+$lang->admin->changeFinished             = "更换数据库引擎完毕。";
+$lang->admin->engineInfo                 = "表<strong>%s</strong>的引擎是<strong>%s</strong>。";
 $lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
 $lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";
 

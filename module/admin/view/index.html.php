@@ -46,11 +46,23 @@
 	<div class="flex main-panel">
 	  <div class="official-img"></div>
 	  <div class="official-content">
+	    <div class="title"><?php echo $lang->admin->followUs?></div>
+            <div class="content"> <?php echo $lang->admin->followUsContent?></div>
           </div>
         </div>
       </div>
-      <div class="panel openClass">
-        <div class="panel-title"><?php echo $lang->admin->openClass?></div>
+      <div class="panel publicClass">
+        <div class="panel-title"><?php echo $lang->admin->publicClass?></div>
+	<div class="classList flex">
+	  <div class="classItem flex">
+            <div class="classImg"></div>
+            <div class="classContent"></div>
+          </div>
+	  <div class="classItem flex">
+            <div class="classImg"></div>
+            <div class="classContent"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
