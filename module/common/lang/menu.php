@@ -572,82 +572,82 @@ $lang->company->menuOrder[30] = 'addUser';
 
 /* Admin menu. */
 $lang->admin->menu            = new stdclass();
-$lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
-$lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'class' => 'dropdown dropdown-hover', 'exclude' => 'custom-index,custom-set,custom-product,custom-execution,custom-kanban,custom-required,custom-flow,custom-score,custom-feedback,custom-timezone,custom-mode');
-$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate,custom-code,custom-mode');
-$lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
-$lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
-$lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|custom|mode", 'subModule' => 'cron,backup,action,admin,search,convert', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
-
-$lang->admin->menu->model['dropMenu'] = new stdclass();
-$lang->admin->menu->model['dropMenu']->allModel = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
-
-if($config->edition == 'max') $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
-$lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
-
-$lang->admin->menu->allModel['subMenu'] = new stdclass();
-$lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
-$lang->admin->menu->allModel['subMenu']->code         = array('link' => "{$lang->code}|custom|code|");
-
-$lang->admin->menu->allModel['menuOrder'][5]  = 'storyConcept';
-$lang->admin->menu->allModel['menuOrder'][30] = 'code';
-
-$lang->admin->menu->waterfall['subMenu'] = new stdclass();
-$lang->admin->menu->waterfall['subMenu']->stage = array('link' => "{$lang->stage->common}|stage|setType|", 'subModule' => 'stage');
-
-/* Admin menu order. */
-$lang->admin->menuOrder[5]  = 'index';
-$lang->admin->menuOrder[10] = 'company';
-$lang->admin->menuOrder[15] = 'model';
-$lang->admin->menuOrder[20] = 'custom';
-$lang->admin->menuOrder[25] = 'message';
-$lang->admin->menuOrder[30] = 'extension';
-$lang->admin->menuOrder[35] = 'dev';
-$lang->admin->menuOrder[40] = 'system';
-
-$lang->admin->menu->message['subMenu']          = new stdclass();
-$lang->admin->menu->message['subMenu']->message = array();
-$lang->admin->menu->message['subMenu']->mail    = array('link' => "{$lang->mail->common}|mail|index", 'subModule' => 'mail');
-$lang->admin->menu->message['subMenu']->webhook = array('link' => "Webhook|webhook|browse", 'subModule' => 'webhook');
-$lang->admin->menu->message['subMenu']->browser = array('link' => "$lang->browser|message|browser");
-$lang->admin->menu->message['subMenu']->setting = array('link' => "$lang->settings|message|setting");
-
-$lang->admin->menu->message['menuOrder'][5]  = 'mail';
-$lang->admin->menu->message['menuOrder'][10] = 'webhook';
-$lang->admin->menu->message['menuOrder'][15] = 'browser';
-$lang->admin->menu->message['menuOrder'][20] = 'setting';
-
-$lang->admin->menu->company['subMenu']              = new stdclass();
-$lang->admin->menu->company['subMenu']->browseUser  = array('link' => "{$lang->user->common}|company|browse", 'subModule' => 'user');
-$lang->admin->menu->company['subMenu']->dept        = array('link' => "{$lang->dept->common}|dept|browse", 'subModule' => 'dept');
-$lang->admin->menu->company['subMenu']->browseGroup = array('link' => "{$lang->priv}|group|browse", 'subModule' => 'group');
-
-$lang->admin->menu->dev['subMenu']         = new stdclass();
-$lang->admin->menu->dev['subMenu']->api    = array('link' => "API|dev|api");
-$lang->admin->menu->dev['subMenu']->db     = array('link' => "$lang->db|dev|db");
-$lang->admin->menu->dev['subMenu']->editor = array('link' => "$lang->editor|dev|editor");
-$lang->admin->menu->dev['subMenu']->entry  = array('link' => "{$lang->admin->entry}|entry|browse", 'subModule' => 'entry');
-
-$lang->admin->menu->dev['menuOrder'][5]  = 'api';
-$lang->admin->menu->dev['menuOrder'][10] = 'db';
-$lang->admin->menu->dev['menuOrder'][15] = 'editor';
-$lang->admin->menu->dev['menuOrder'][20] = 'entry';
-
-$lang->admin->menu->system['subMenu']              = new stdclass();
-$lang->admin->menu->system['subMenu']->mode        = array('link' => "{$lang->custom->mode}|custom|mode");
-$lang->admin->menu->system['subMenu']->setModule   = array('link' => "{$lang->admin->module}|admin|setmodule");
-$lang->admin->menu->system['subMenu']->backup      = array('link' => "{$lang->backup->common}|backup|index");
-$lang->admin->menu->system['subMenu']->trash       = array('link' => "{$lang->action->trash}|action|trash");
-$lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak,resetpwdsetting');
-$lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
-$lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
-$lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
-$lang->admin->menu->system['subMenu']->tableEngine = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
-if(version_compare(phpversion(), 5.6) > 0) $lang->admin->menu->system['subMenu']->convertJira = array('link' => "{$lang->convert->importJira}|convert|convertjira|", 'subModule' => 'convert');
-
-$lang->admin->dividerMenu = ',company,message,system,';
+//$lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+//$lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
+//$lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'class' => 'dropdown dropdown-hover', 'exclude' => 'custom-index,custom-set,custom-product,custom-execution,custom-kanban,custom-required,custom-flow,custom-score,custom-feedback,custom-timezone,custom-mode');
+//$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate,custom-code,custom-mode');
+//$lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
+//$lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
+//$lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
+//$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|custom|mode", 'subModule' => 'cron,backup,action,admin,search,convert', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
+//
+//$lang->admin->menu->model['dropMenu'] = new stdclass();
+//$lang->admin->menu->model['dropMenu']->allModel = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
+//
+//if($config->edition == 'max') $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
+//$lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
+//
+//$lang->admin->menu->allModel['subMenu'] = new stdclass();
+//$lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
+//$lang->admin->menu->allModel['subMenu']->code         = array('link' => "{$lang->code}|custom|code|");
+//
+//$lang->admin->menu->allModel['menuOrder'][5]  = 'storyConcept';
+//$lang->admin->menu->allModel['menuOrder'][30] = 'code';
+//
+//$lang->admin->menu->waterfall['subMenu'] = new stdclass();
+//$lang->admin->menu->waterfall['subMenu']->stage = array('link' => "{$lang->stage->common}|stage|setType|", 'subModule' => 'stage');
+//
+///* Admin menu order. */
+//$lang->admin->menuOrder[5]  = 'index';
+//$lang->admin->menuOrder[10] = 'company';
+//$lang->admin->menuOrder[15] = 'model';
+//$lang->admin->menuOrder[20] = 'custom';
+//$lang->admin->menuOrder[25] = 'message';
+//$lang->admin->menuOrder[30] = 'extension';
+//$lang->admin->menuOrder[35] = 'dev';
+//$lang->admin->menuOrder[40] = 'system';
+//
+//$lang->admin->menu->message['subMenu']          = new stdclass();
+//$lang->admin->menu->message['subMenu']->message = array();
+//$lang->admin->menu->message['subMenu']->mail    = array('link' => "{$lang->mail->common}|mail|index", 'subModule' => 'mail');
+//$lang->admin->menu->message['subMenu']->webhook = array('link' => "Webhook|webhook|browse", 'subModule' => 'webhook');
+//$lang->admin->menu->message['subMenu']->browser = array('link' => "$lang->browser|message|browser");
+//$lang->admin->menu->message['subMenu']->setting = array('link' => "$lang->settings|message|setting");
+//
+//$lang->admin->menu->message['menuOrder'][5]  = 'mail';
+//$lang->admin->menu->message['menuOrder'][10] = 'webhook';
+//$lang->admin->menu->message['menuOrder'][15] = 'browser';
+//$lang->admin->menu->message['menuOrder'][20] = 'setting';
+//
+//$lang->admin->menu->company['subMenu']              = new stdclass();
+//$lang->admin->menu->company['subMenu']->browseUser  = array('link' => "{$lang->user->common}|company|browse", 'subModule' => 'user');
+//$lang->admin->menu->company['subMenu']->dept        = array('link' => "{$lang->dept->common}|dept|browse", 'subModule' => 'dept');
+//$lang->admin->menu->company['subMenu']->browseGroup = array('link' => "{$lang->priv}|group|browse", 'subModule' => 'group');
+//
+//$lang->admin->menu->dev['subMenu']         = new stdclass();
+//$lang->admin->menu->dev['subMenu']->api    = array('link' => "API|dev|api");
+//$lang->admin->menu->dev['subMenu']->db     = array('link' => "$lang->db|dev|db");
+//$lang->admin->menu->dev['subMenu']->editor = array('link' => "$lang->editor|dev|editor");
+//$lang->admin->menu->dev['subMenu']->entry  = array('link' => "{$lang->admin->entry}|entry|browse", 'subModule' => 'entry');
+//
+//$lang->admin->menu->dev['menuOrder'][5]  = 'api';
+//$lang->admin->menu->dev['menuOrder'][10] = 'db';
+//$lang->admin->menu->dev['menuOrder'][15] = 'editor';
+//$lang->admin->menu->dev['menuOrder'][20] = 'entry';
+//
+//$lang->admin->menu->system['subMenu']              = new stdclass();
+//$lang->admin->menu->system['subMenu']->mode        = array('link' => "{$lang->custom->mode}|custom|mode");
+//$lang->admin->menu->system['subMenu']->setModule   = array('link' => "{$lang->admin->module}|admin|setmodule");
+//$lang->admin->menu->system['subMenu']->backup      = array('link' => "{$lang->backup->common}|backup|index");
+//$lang->admin->menu->system['subMenu']->trash       = array('link' => "{$lang->action->trash}|action|trash");
+//$lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak,resetpwdsetting');
+//$lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
+//$lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
+//$lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
+//$lang->admin->menu->system['subMenu']->tableEngine = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
+//if(version_compare(phpversion(), 5.6) > 0) $lang->admin->menu->system['subMenu']->convertJira = array('link' => "{$lang->convert->importJira}|convert|convertjira|", 'subModule' => 'convert');
+//
+//$lang->admin->dividerMenu = ',company,message,system,';
 
 $lang->subject->menu               = new stdclass();
 $lang->subject->menu->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");

@@ -913,9 +913,9 @@ class commonModel extends model
      */
     public static function printHomeButton($tab)
     {
-        global $lang;
-        global $config;
+        global $lang, $config, $app;
 
+        if($tab == 'admin') $app->control->loadModel('admin')->setMenu();
         if(!$tab) return;
         $icon = zget($lang->navIcons, $tab, '');
 
