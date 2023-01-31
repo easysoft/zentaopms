@@ -43,8 +43,13 @@ class zahost extends control
         $this->loadModel('search')->setSearchParams($this->config->zahost->search);
 
         $showFeature = false;
-        $skipAutomation = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
-        if(strpos(",$skipAutomation,", $this->app->user->account) === false) $showFeature = true;
+        $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
+        if(strpos(",$accounts,", $this->app->user->account) === false) 
+        {
+            $showFeature = true;
+            $accounts .= ',' . $this->app->user->account;
+            $this->loadModel('setting')->setItem('system.common.global.skipAutomation', $accounts);
+        }
 
         $this->view->title       = $this->lang->zahost->common;
         $this->view->hostList    = $hostList;

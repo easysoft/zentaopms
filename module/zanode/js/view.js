@@ -160,6 +160,14 @@ $('.btn-pwd-copy').live('click', function()
     }, 2000)
 })
 
+$('#jumpManual').click(function()
+{
+    var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/974.html?fullScreen=zentao');
+    var urlForNewTab = window.location.origin + '#app=help&url=' + encodedHelpPageUrl;
+    window.open(urlForNewTab)
+})
+
+
 $(function(){
     checkServiceStatus();
     checkInterval = setInterval(() => {

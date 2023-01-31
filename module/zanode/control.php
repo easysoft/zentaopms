@@ -44,8 +44,13 @@ class zanode extends control
         $this->loadModel('search')->setSearchParams($this->config->zanode->search);
 
         $showFeature = false;
-        $skipAutomation = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
-        if(strpos(",$skipAutomation,", $this->app->user->account) === false) $showFeature = true;
+        $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
+        if(strpos(",$accounts,", $this->app->user->account) === false) 
+        {
+            $showFeature = true;
+            $accounts .= ',' . $this->app->user->account;
+            $this->loadModel('setting')->setItem('system.common.global.skipAutomation', $accounts);
+        }
 
         $this->view->title       = $this->lang->zanode->common;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
@@ -73,6 +78,10 @@ class zanode extends control
      */
     public function list($hostID, $orderBy = 'id_desc')
     {
+        if(!commonModel::hasPriv('zahost', 'view'))
+        {
+            $this->loadModel('common')->deny('zahost', 'view');
+        }
         $this->view->title       = $this->lang->zanode->common;
         $this->view->nodeList    = $this->loadModel("zanode")->getListByHost($hostID, $orderBy);
         $this->view->orderBy     = $orderBy;
