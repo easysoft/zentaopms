@@ -178,6 +178,7 @@ $lang->admin->menuList->message['order'] = 7;
 
 $lang->admin->menuList->extension['name']  = '插件管理';
 $lang->admin->menuList->extension['desc']  = '';
+$lang->admin->menuList->extension['link']  = 'extension|browse';
 $lang->admin->menuList->extension['order'] = 8;
 
 $lang->admin->menuList->dev['name']  = '二次开发';
@@ -186,43 +187,70 @@ $lang->admin->menuList->dev['order'] = 9;
 
 $lang->admin->menuList->convert['name']  = '数据导入';
 $lang->admin->menuList->convert['desc']  = '';
+$lang->admin->menuList->convert['link']  = 'convert|convertjira';
 $lang->admin->menuList->convert['order'] = 10;
 
-$lang->admin->menuList->setting['subMenu']['mode']        = array('link' => "模式|custom|mode|", 'subModule' => 'custom');
+$lang->admin->menuList->setting['subMenu']['mode']        = array('link' => "模式|custom|mode|");
 $lang->admin->menuList->setting['subMenu']['backup']      = array('link' => "备份|backup|index|", 'subModule' => 'backup');
 $lang->admin->menuList->setting['subMenu']['trash']       = array('link' => "回收站|action|trash|", 'subModule' => 'action');
-$lang->admin->menuList->setting['subMenu']['xuanxuan']    = array('link' => "聊天|admin|xuanxuan|");
-$lang->admin->menuList->setting['subMenu']['license']     = array('link' => "授权信息|admin|license|");
-$lang->admin->menuList->setting['subMenu']['safe']        = array('link' => "安全|admin|safe|");
-$lang->admin->menuList->setting['subMenu']['timezone']    = array('link' => "时区|custom|timezone|", 'subModule' => 'custom');
+$lang->admin->menuList->setting['subMenu']['safe']        = array('link' => "安全|admin|safe|", 'alias' => 'checkweak,resetpwdsetting');
+$lang->admin->menuList->setting['subMenu']['timezone']    = array('link' => "时区|custom|timezone|");
 $lang->admin->menuList->setting['subMenu']['buildindex']  = array('link' => "重建索引|search|buildindex|", 'subModule' => 'search');
 $lang->admin->menuList->setting['subMenu']['tableengine'] = array('link' => "表引擎|admin|tableengine|");
-$lang->admin->menuList->setting['subMenu']['ldap']        = array('link' => "LDAP|ldap|set|", 'subModule' => 'ldap');
-$lang->admin->menuList->setting['subMenu']['libreoffice'] = array('link' => "Office|custom|libreoffice|", 'subModule' => 'custom');
 
-$lang->admin->menuList->setting['dividerMenu'] = ',license,ldap,';
+$lang->admin->menuList->setting['menuOrder']['5']  = 'mode';
+$lang->admin->menuList->setting['menuOrder']['10'] = 'backup';
+$lang->admin->menuList->setting['menuOrder']['15'] = 'trash';
+$lang->admin->menuList->setting['menuOrder']['30'] = 'safe';
+$lang->admin->menuList->setting['menuOrder']['35'] = 'timezone';
+$lang->admin->menuList->setting['menuOrder']['40'] = 'buildindex';
+$lang->admin->menuList->setting['menuOrder']['45'] = 'tableengine';
+
+$lang->admin->menuList->setting['dividerMenu'] = ',safe,';
 
 $lang->admin->menuList->user['subMenu']['dept']  = array('link' => "部门|dept|browse|", 'subModule' => 'dept');
 $lang->admin->menuList->user['subMenu']['user']  = array('link' => "用户|company|browse|", 'subModule' => 'company');
 $lang->admin->menuList->user['subMenu']['group'] = array('link' => "权限|group|browse|", 'subModule' => 'group');
 
+$lang->admin->menuList->user['menuOrder']['5']  = 'dept';
+$lang->admin->menuList->user['menuOrder']['10'] = 'user';
+$lang->admin->menuList->user['menuOrder']['15'] = 'group';
+
 $lang->admin->menuList->switch['subMenu']['setmodule'] = array('link' => "功能设置|admin|setmodule|");
+
+$lang->admin->menuList->switch['menuOrder']['5'] = 'setmodule';
 
 $lang->admin->menuList->model['subMenu']['common']    = array('link' => "通用|custom|required|module=project", 'subModule' => 'custom');
 $lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "敏捷模型|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
 $lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "瀑布模型|stage|settype|", 'subModule' => 'stage');
 
-$lang->admin->menuList->feature['subMenu']['my']          = array('link' => "地盘|custom|set|module=todo", 'subModule' => 'custom');
-$lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|product|", 'subModule' => 'custom');
-$lang->admin->menuList->feature['subMenu']['execution']   = array('link' => "{$lang->execution->common}|custom|execution|", 'subModule' => 'custom');
-$lang->admin->menuList->feature['subMenu']['qa']          = array('link' => "测试|custom|required|module=bug", 'subModule' => 'custom');
-$lang->admin->menuList->feature['subMenu']['kanban']      = array('link' => "看板|custom|kanban|", 'subModule' => 'custom');
-$lang->admin->menuList->feature['subMenu']['doc']         = array('link' => "文档|custom|required|module=doc", 'subModule' => 'custom');
-$lang->admin->menuList->feature['subMenu']['feedback']    = array('link' => "反馈|custom|set|module=feedback", 'subModule' => 'custom');
+$lang->admin->menuList->model['menuOrder']['5']  = 'common';
+$lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
+$lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
+
+$lang->admin->menuList->feature['subMenu']['my']          = array('link' => "地盘|custom|set|module=todo");
+$lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|product|");
+$lang->admin->menuList->feature['subMenu']['execution']   = array('link' => "{$lang->execution->common}|custom|execution|");
+$lang->admin->menuList->feature['subMenu']['qa']          = array('link' => "测试|custom|required|module=bug");
+$lang->admin->menuList->feature['subMenu']['kanban']      = array('link' => "看板|custom|kanban|");
+$lang->admin->menuList->feature['subMenu']['doc']         = array('link' => "文档|custom|required|module=doc");
+$lang->admin->menuList->feature['subMenu']['feedback']    = array('link' => "反馈|custom|set|module=feedback");
 $lang->admin->menuList->feature['subMenu']['approval']    = array('link' => "审批|approvalflow|browse|", 'subModule' => 'approvalflow');
 $lang->admin->menuList->feature['subMenu']['measure']     = array('link' => "度量|measurement|settips|", 'subModule' => 'measurement');
-$lang->admin->menuList->feature['subMenu']['user']        = array('link' => "用户|custom|set|module=user", 'subModule' => 'custom');
+$lang->admin->menuList->feature['subMenu']['user']        = array('link' => "用户|custom|set|module=user");
 $lang->admin->menuList->feature['subMenu']['meetingroom'] = array('link' => "会议室|meetingroom|browse|", 'subModule' => 'meetingroom');
+
+$lang->admin->menuList->feature['menuOrder']['5']  = 'my';
+$lang->admin->menuList->feature['menuOrder']['10'] = 'product';
+$lang->admin->menuList->feature['menuOrder']['15'] = 'execution';
+$lang->admin->menuList->feature['menuOrder']['20'] = 'qa';
+$lang->admin->menuList->feature['menuOrder']['25'] = 'kanban';
+$lang->admin->menuList->feature['menuOrder']['30'] = 'doc';
+$lang->admin->menuList->feature['menuOrder']['35'] = 'feedback';
+$lang->admin->menuList->feature['menuOrder']['40'] = 'approval';
+$lang->admin->menuList->feature['menuOrder']['45'] = 'measure';
+$lang->admin->menuList->feature['menuOrder']['50'] = 'user';
+$lang->admin->menuList->feature['menuOrder']['55'] = 'meetingroom';
 
 $lang->admin->menuList->feature['dividerMenu'] = ',user,';
 
@@ -230,13 +258,28 @@ $lang->admin->menuList->template['subMenu']['type']     = array('link' => "模�
 $lang->admin->menuList->template['subMenu']['template'] = array('link' => "文档模版|baseline|template|", 'subModule' => 'baseline');
 $lang->admin->menuList->template['subMenu']['catalog']  = array('link' => "文档目录|baseline|catalog|", 'subModule' => 'baseline');
 
+$lang->admin->menuList->template['menuOrder']['5']  = 'type';
+$lang->admin->menuList->template['menuOrder']['10'] = 'template';
+$lang->admin->menuList->template['menuOrder']['15'] = 'catalog';
+
 $lang->admin->menuList->message['subMenu']['mail']    = array('link' => "邮件|mail|edit|", 'subModule' => 'mail');
 $lang->admin->menuList->message['subMenu']['webhook'] = array('link' => "Webhook|webhook|browse|", 'subModule' => 'webhook');
 $lang->admin->menuList->message['subMenu']['sms']     = array('link' => "短信|sms|index|", 'subModule' => 'sms');
-$lang->admin->menuList->message['subMenu']['message'] = array('link' => "浏览器|message|browser|", 'subModule' => 'message');
-$lang->admin->menuList->message['subMenu']['setting'] = array('link' => "设置|message|setting|", 'subModule' => 'message');
+$lang->admin->menuList->message['subMenu']['message'] = array('link' => "浏览器|message|browser|");
+$lang->admin->menuList->message['subMenu']['setting'] = array('link' => "设置|message|setting|");
 
-$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "API|dev|api|", 'subModule' => 'dev');
-$lang->admin->menuList->dev['subMenu']['db']     = array('link' => "数据库|dev|db|", 'subModule' => 'dev');
-$lang->admin->menuList->dev['subMenu']['editor'] = array('link' => "编辑器|dev|editor|", 'subModule' => 'dev');
+$lang->admin->menuList->message['menuOrder']['5']  = 'mail';
+$lang->admin->menuList->message['menuOrder']['10'] = 'webhook';
+$lang->admin->menuList->message['menuOrder']['15'] = 'sms';
+$lang->admin->menuList->message['menuOrder']['20'] = 'message';
+$lang->admin->menuList->message['menuOrder']['25'] = 'setting';
+
+$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "API|dev|api|");
+$lang->admin->menuList->dev['subMenu']['db']     = array('link' => "数据库|dev|db|");
+$lang->admin->menuList->dev['subMenu']['editor'] = array('link' => "编辑器|dev|editor|");
 $lang->admin->menuList->dev['subMenu']['entry']  = array('link' => "应用|entry|browse|", 'subModule' => 'entry');
+
+$lang->admin->menuList->dev['menuOrder']['5']  = 'api';
+$lang->admin->menuList->dev['menuOrder']['10'] = 'db';
+$lang->admin->menuList->dev['menuOrder']['15'] = 'editor';
+$lang->admin->menuList->dev['menuOrder']['20'] = 'entry';

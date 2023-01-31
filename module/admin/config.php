@@ -7,7 +7,7 @@ $config->admin->log->saveDays = 30;
 if(!isset($config->safe))       $config->safe = new stdclass();
 if(!isset($config->safe->weak)) $config->safe->weak = '123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123';
 
-$config->admin->menuGroup['setting']   = array('backup', 'action|trash', 'admin|xuanxuan', 'admin|license', 'admin|safe', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice');
+$config->admin->menuGroup['setting']   = array('custom|mode', 'backup', 'action|trash', 'admin|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice');
 $config->admin->menuGroup['user']      = array('dept', 'company', 'user', 'group');
 $config->admin->menuGroup['switch']    = array('admin|setmodule');
 $config->admin->menuGroup['model']     = array('auditcl', 'stage', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|estimate', 'subject', 'process');

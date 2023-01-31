@@ -22,6 +22,7 @@ class extension extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+        $this->loadModel('admin')->setMenu();
 
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
