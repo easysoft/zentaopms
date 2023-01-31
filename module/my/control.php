@@ -88,8 +88,7 @@ class my extends control
     {
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$mode];
         echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
-
-        $this->showWorkCount($recTotal, $recPerPage, $pageID);
+        //$this->showWorkCount($recTotal, $recPerPage, $pageID);
     }
 
     /**
@@ -434,6 +433,8 @@ EOF;
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=requirement&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildRequirementSearchForm($queryID, $actionURL, $currentMethod);
+
+        foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;

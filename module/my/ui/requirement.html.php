@@ -13,7 +13,8 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams("type={key}&param=$param"),
+    set::linkParams("mode=requirement&type={key}&param=$param"),
+    li(searchToggle())
 );
 
 $stories = initTableData($stories, $config->my->requirement->dtable->fieldList, $this->story);

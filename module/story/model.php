@@ -3834,12 +3834,13 @@ class storyModel extends model
 
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
-        if($action == 'change')     return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
-        if($action == 'review')     return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
-        if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
-        if($action == 'close')      return $story->status != 'closed';
-        if($action == 'activate')   return $story->status == 'closed';
-        if($action == 'assignto')   return $story->status != 'closed';
+        if($action == 'change')       return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
+        if($action == 'submitReview') return strpos('draft,changing', $story->status) !== false;
+        if($action == 'review')       return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
+        if($action == 'recall')       return strpos('reviewing,changing', $story->status) !== false;
+        if($action == 'close')        return $story->status != 'closed';
+        if($action == 'activate')     return $story->status == 'closed';
+        if($action == 'assignto')     return $story->status != 'closed';
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and !empty($story->twins)) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
