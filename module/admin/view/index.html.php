@@ -33,7 +33,7 @@
     <?php if($extensions):?>
     <div class="plug panel">
       <div class="panel-title"><?php echo $lang->admin->pluginRecommendation?></div>
-      <div class="plugin-list">
+      <div class="plugin-list" <?php if(strpos($clientLang, 'zh') === false) echo 'style="flex-wrap: nowrap"';?>>
         <?php foreach($extensions as $extension):?>
         <div class="plugin-item">
           <a href="<?php echo $extension->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-import'></i></a>
@@ -45,14 +45,15 @@
     </div>
     <?php endif;?>
 
+    <?php if(strpos($clientLang, 'zh') === 0):?>
     <div class="flex bottom">
       <div class="panel official">
         <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
 	    <div class="flex main-panel">
 	      <div class="official-img"></div>
 	      <div class="official-content">
-	        <div class="title"><?php echo $lang->admin->followUs?></div>
-            <div class="content"> <?php echo $lang->admin->followUsContent?></div>
+              <div class="title"><?php echo $lang->admin->followUs?></div>
+              <div class="content"> <?php echo $lang->admin->followUsContent?></div>
           </div>
         </div>
       </div>
@@ -61,13 +62,14 @@
         <div class="panel-title"><?php echo $lang->admin->publicClass?></div>
         <div class="classList flex">
           <?php foreach($publicClass as $class):?>
-	      <div class="classItem flex">
+            <div class="classItem flex">
             <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>
             <div class="classContent"><?php echo $class->name;?></div>
           </div>
           <?php endforeach;?>
         </div>
       </div>
+      <?php endif;?>
       <?php endif;?>
     </div>
   </div>
