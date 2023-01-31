@@ -438,6 +438,7 @@ class ele
             foreach($props as $name => $value)
             {
                 if($this->props->has($name)) continue;
+                if($name === 'id' && $value === '$GID') $value = 'zin-' . uniqid();
                 $this->props->set($name, $value);
             }
         }
