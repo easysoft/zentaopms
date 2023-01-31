@@ -78,6 +78,9 @@ class hostHeartbeatEntry extends baseEntry
                     'status'    => $vm->status,
                     'extranet'  => $vm->ip,
                 );
+                
+                if(!$vm->sshPortOnHost) unset($vmData['ssh']);
+
                 if($heartbeat > 0) $vmData['heartbeat'] = date("Y-m-d H:i:s", $heartbeat);
                 
                 $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('mac')->eq($vm->macAddress)->exec();

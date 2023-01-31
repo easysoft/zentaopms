@@ -131,9 +131,15 @@
         <div class="detail-title"><?php echo $lang->zahost->desc;?></div>
         <div class="detail-content article-content"><?php echo !empty($zahost->desc) ? htmlspecialchars_decode($zahost->desc) : $lang->noData;?></div>
       </div>
-      <?php if(!empty($nodeList)): ?>
+      <?php
+      $canBeChanged = common::canBeChanged('zahost', $zahost);
+      if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=zahost&objectID=$zahost->hostID");
+      ?>
+    </div>
+    <div class="cell">
       <div class="detail">
         <div class="detail-title"><?php echo $lang->zahost->browseNode;?></div>
+        <?php if(!empty($nodeList)): ?>
         <div class="detail-content article-content">
         <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'list', "hostID=$zahost->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' onload='setIframeHeight(this)' style='min-height:300px;'></iframe>";?>
           <!-- <table class='table has-sort-head table-fixed' id='nodeList'>
@@ -161,6 +167,8 @@
             </tbody>
           </table> -->
         </div>
+        <?php else: ?>
+        <div class="detail-content article-content"><?php echo $lang->noData;?></div>
       </div>
       <?php endif; ?>
       <?php

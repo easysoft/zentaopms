@@ -16,3 +16,4 @@
 .checkStatus{color: #313c52;}
 .node-not-wrap{white-space: nowrap;}
 .btn-info {background-color: unset;}
+.btn.disabled i {color: #fff;}

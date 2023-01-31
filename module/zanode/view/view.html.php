@@ -55,7 +55,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->sshAddress; ?>:</div>
-                <div class="col-8 node-not-wrap">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?><?php echo " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?></div>
+                <div class="col-8 node-not-wrap"><?php echo $zanode->ssh ? 'ssh ' . $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh : ''; ?><?php echo $zanode->ssh ? " <button type='button' class='btn btn-info btn-mini btn-ssh-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>" : ''; ?></div>
               </div>
               <textarea style="display:none;" id="ssh-copy">ssh <?php echo $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh; ?></textarea>
             </div>
@@ -96,7 +96,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->defaultPwd; ?>:</div>
-                <div class="col-8"><?php echo $config->zanode->defaultPwd . ' ' . "<button type='button' class='btn btn-info btn-mini btn-pwd-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?></div>
+                <div class="col-8"><?php echo str_repeat('*', strlen($config->zanode->defaultPwd)) . ' ' . "<button type='button' class='btn btn-info btn-mini btn-pwd-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?></div>
                 <textarea style="display:none;" id="pwd-copy"><?php echo $config->zanode->defaultPwd; ?></textarea>
               </div>
             </div>
