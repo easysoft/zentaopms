@@ -80,6 +80,8 @@ class pagebase extends \zin\core\wg
             $headBuilder->append($this->buildChildren($this->blocks['head'], $isPrint, $parent));
         }
 
+        $headBuilder->js('window.domReady = function(fn){if (document.readyState !== \'loading\') {fn();} else {document.addEventListener(\'DOMContentLoaded\', fn);}}');
+
         return $headBuilder;
     }
 
@@ -95,7 +97,7 @@ class pagebase extends \zin\core\wg
         if($config->debug)
         {
             $builder->jsVar('window.zin', array('page' => $this));
-            $builder->js('console.table("zin.page", window.zin.page)');
+            $builder->js('console.log("zin.page", window.zin.page)');
         }
 
         return $builder;
