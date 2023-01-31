@@ -25,11 +25,17 @@ $lang->admin->resetPWDSetting = 'Reset password Setting';
 $lang->admin->tableEngine     = 'Table Engine';
 $lang->admin->setModuleIndex  = 'Set Module';
 
-$lang->admin->api            = 'API';
-$lang->admin->log            = 'Log';
-$lang->admin->setting        = 'Paramétrage';
-$lang->admin->days           = 'Durée de conservation';
-$lang->admin->resetPWDByMail = 'Reset the password via the email';
+$lang->admin->api                  = 'API';
+$lang->admin->log                  = 'Log';
+$lang->admin->setting              = 'Paramétrage';
+$lang->admin->pluginRecommendation = 'Recommended plug-ins';
+$lang->admin->zentaoInfo           = 'ZenTao information';
+$lang->admin->officialAccount      = 'WeChat Official Account';
+$lang->admin->publicClass          = 'Public class';
+$lang->admin->days                 = 'Durée de conservation';
+$lang->admin->resetPWDByMail       = 'Reset the password via the email';
+$lang->admin->followUs             = 'Follow Us';
+$lang->admin->followUsContent      = 'Check out ZenTao news, events, and support at any time';
 
 $lang->admin->changeEngine   = "Change to InnoDB";
 $lang->admin->changingTable  = 'Replacing data table %s engine...';
