@@ -2,7 +2,7 @@
 #zentaoLinks {margin-top: 20px;}
 #zentaoLinks .panel .panel-heading {padding: 6px 10px;}
 .admin {display: flex; background: unset;}
-.admin > .main {flex: 1 1 60%; padding-right: 10px;}
+.admin > .main {flex: 1 1 60%; padding-right: 20px;}
 .admin > .side {flex: 1 1 40%; padding-left: 10px;}
 .panel-title {padding: 10px 0px;}
 .flex {display: flex;}
@@ -12,14 +12,19 @@
 .settings-list > .setting-box {flex: 0 0 20%; padding: 18px 0;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
-.plugin-list > .plugin-item {flex: 1 1 30%; padding: 16px 4px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 16px; margin-bottom: 16px;}
+.plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 4px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 16px; margin-bottom: 16px; width: 0px;}
 .plugin-list > .plugin-item .ext-download {float: right; padding: 6px 0px;}
 .plugin-list > .plugin-item > .plug-title {height: 16px; overflow: hidden;}
 .plugin-list > .plugin-item .extension-desc {overflow: hidden; height: 16px;}
 
 .bottom.flex > .official {flex: 1 1 30%; margin-right: 20px;}
-.bottom.flex > .openClass {flex: 1 1 60%;}
+.bottom.flex > .publicClass {flex: 1 1 60%;}
 
-.official.panel > .main-panel {min-height: 200px;}
 .official-img {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; background-position: center;}
-.official-content {flex: 0 0 50%;}
+.official-content {flex: 0 0 50%; display: flex; flex-direction: column; justify-content: center;}
+.official-content > .content {color: #838A9D; font-size: 12px;}
+.official-content > .title {color: #313C52; font-size: 13px;}
+
+.classList > .classItem {flex: 0 0 50%;}
+.classItem > .classImg {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; }
+.classItem > .classContent {flex: 1 1 50%;}

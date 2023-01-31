@@ -34,11 +34,17 @@ class admin extends control
 
         $this->loadModel('misc');
 
-        $extensions = $this->loadModel('extension')->getExtensionsByAPI('byUpdatedTime', '', 0, 6);
+        $hasInternet = $this->admin->checkInternet();
+        $clientLang  = $this->app->getClientLang();
+        $langNotCN   = common::checkNotCN();
 
-        $this->view->title      = $this->lang->admin->common;
-        $this->view->position[] = $this->lang->admin->index;
-        $this->view->extensions = isset($extensions->extensions) ? (array)$extensions->extensions : array();
+        $this->view->title       = $this->lang->admin->common;
+        $this->view->position[]  = $this->lang->admin->index;
+        $this->view->extensions  = $this->admin->getExtensionsByAPI('extension', $langNotCN ? 5 : 6, $hasInternet);
+        $this->view->patches     = $this->admin->getExtensionsByAPI('patch', 3, $hasInternet);
+        $this->view->hasInternet = $hasInternet;
+        $this->view->publicClass = ($hasInternet and !$langNotCN) ? $this->admin->getPublicClassByAPI() : array();
+        $this->view->langNotCN   = $langNotCN;
         $this->display();
     }
 
