@@ -83,6 +83,7 @@ $lang->whitelist      = 'Liste blanche';
 $lang->globalSetting  = 'Global Setting';
 $lang->waterfallModel = 'Waterfall';
 $lang->scrumModel     = 'Scrum';
+$lang->agilePlusModel = 'Agile Plus';
 $lang->all            = 'All';
 $lang->viewDetails    = 'View Details';
 
