@@ -4445,9 +4445,9 @@ class storyModel extends model
                 $ccList   = substr($ccList, $commaPos + 1);
             }
         }
-        elseif($toList == 'closed')
+        elseif($story->status == 'closed')
         {
-            $toList = $story->openedBy;
+            $ccList .= ',' . $story->openedBy;
         }
 
         return array($toList, $ccList);
