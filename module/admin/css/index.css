@@ -22,7 +22,8 @@
 
 .official-img {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; background-position: center;}
 .official-content {flex: 0 0 50%; display: flex; flex-direction: column; justify-content: center;}
-.official-content > .content {color: #838A9D;}
+.official-content > .content {color: #838A9D; font-size: 12px;}
+.official-content > .title {color: #313C52; font-size: 13px;}
 
 .classList > .classItem {flex: 0 0 50%;}
 .classItem > .classImg {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; }

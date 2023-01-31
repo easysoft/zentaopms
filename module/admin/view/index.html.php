@@ -46,7 +46,7 @@
 	<div class="flex main-panel">
 	  <div class="official-img"></div>
 	  <div class="official-content">
-	    <h4><?php echo $lang->admin->followUs?></h4>
+	    <div class="title"><?php echo $lang->admin->followUs?></div>
             <div class="content"> <?php echo $lang->admin->followUsContent?></div>
           </div>
         </div>
