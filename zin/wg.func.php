@@ -31,6 +31,8 @@ function data()
 }
 
 function btn()      {return createWg('btn',      func_get_args());}
-function icon()     {return createWg('icon',      func_get_args());}
+function icon()     {return createWg('icon',    func_get_args());}
 function pagebase() {return createWg('pagebase', func_get_args());}
 function page()     {return createWg('page',     func_get_args());}
+function dtable()   {return createWg('dtable',   func_get_args());}
+
