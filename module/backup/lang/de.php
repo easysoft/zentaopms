@@ -48,3 +48,4 @@ $lang->backup->error->restoreSQL  = "Datenbankwiederherstellung fehlgeschlagen. 
 $lang->backup->error->restoreFile = "Dateiwiederherstellung fehlgeschlagen. Error: %s.";
 $lang->backup->error->backupFile  = "Dateibackup fehlgeschlagen. Error: %s.";
 $lang->backup->error->backupCode  = "Codebackup fehlgeschlagen. Error: %s.";
+$lang->backup->error->timeout     = "Backup timeout.";

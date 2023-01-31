@@ -48,3 +48,4 @@ $lang->backup->error->restoreSQL  = "Echec pour restaurer la database library. E
 $lang->backup->error->restoreFile = "Echec pour restaurer le fichier. Erreur %s.";
 $lang->backup->error->backupFile  = "Echec pour sauvegarder le fichier. Erreur %s.";
 $lang->backup->error->backupCode  = "Echec pour sauvegarder le code. Erreur %s.";
+$lang->backup->error->timeout     = "Backup timeout.";
