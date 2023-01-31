@@ -154,11 +154,6 @@ class taskModel extends model
 
             /* Fix Bug #2466 */
             if($this->post->multiple)  $task->assignedTo = '';
-            if($task->mode == 'multi')
-            {
-                $task->assignedTo   = isset($_POST['team'][0]) ? $_POST['team'][0] : '';
-                $task->assignedDate = helper::now();
-            }
             if(!$this->post->multiple or count(array_filter($this->post->team)) < 1) $task->mode = '';
             $this->dao->insert(TABLE_TASK)->data($task, $skip = 'gitlab,gitlabProject')
                 ->autoCheck()
