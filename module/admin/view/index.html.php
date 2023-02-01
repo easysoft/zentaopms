@@ -17,11 +17,11 @@
     <div class="settings panel">
       <div class="panel-title"><?php echo $lang->admin->setting?></div>
       <div class="settings-list">
-        <?php foreach($lang->admin->menuList as $menu):?>
-        <div class="setting-box">
-          <h4><?php echo $menu['name'];?></h4>
+        <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
+        <div class="setting-box" data-link='<?php echo $menu['link'];?>'>
+	  <h4><img src="/static/svg/admin-<?php echo $menuKey;?>.svg"/><?php echo $menu['name'];?></h4>
           <p class="text-muted setting-desc"><?php echo $menu['desc'];?></p>
-          <?php echo html::a('', "<i class='icon icon-help'></i> {$lang->help}", '_blank', 'class="text-muted setting-help"');?>
+          <?php echo html::a($config->admin->helpURL[$menuKey], "<i class='icon icon-help'></i> {$lang->help}", '_blank', 'class="text-muted setting-help"');?>
         </div>
         <?php endforeach;?>
       </div>
@@ -29,8 +29,11 @@
 
     <?php if($extensions):?>
     <div class="plug panel">
-      <div class="panel-title"><?php echo $lang->admin->pluginRecommendation?></div>
-      <div class="plugin-list">
+      <div class="panel-title">
+        <?php echo $lang->admin->pluginRecommendation;?>
+        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted"');?>
+      </div>
+      <div class="plugin-list" <?php if($langNotCN) echo 'style="flex-wrap: nowrap"';?>>
         <?php foreach($extensions as $extension):?>
         <div class="plugin-item">
           <a href="<?php echo $extension->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-import'></i></a>
@@ -42,36 +45,45 @@
     </div>
     <?php endif;?>
 
+    <?php if(!$langNotCN):?>
     <div class="flex bottom">
       <div class="panel official">
         <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
 	    <div class="flex main-panel">
 	      <div class="official-img"></div>
 	      <div class="official-content">
-	        <div class="title"><?php echo $lang->admin->followUs?></div>
-            <div class="content"> <?php echo $lang->admin->followUsContent?></div>
+              <div class="title"><?php echo $lang->admin->followUs?></div>
+              <div class="content"> <?php echo $lang->admin->followUsContent?></div>
           </div>
         </div>
       </div>
       <?php if($publicClass):?>
       <div class="panel publicClass">
-        <div class="panel-title"><?php echo $lang->admin->publicClass?></div>
+        <div class="panel-title">
+          <?php echo $lang->admin->publicClass;?>
+          <?php echo html::a($config->admin->classURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted"');?>
+        </div>
         <div class="classList flex">
           <?php foreach($publicClass as $class):?>
-	      <div class="classItem flex">
-            <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>
+          <a class="classItem" href='<?php echo $class->viewLink;?>' target='_blank'>
+	    <div class="imgBack">
+              <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>
+            </div>
             <div class="classContent"><?php echo $class->name;?></div>
-          </div>
+          </a>
           <?php endforeach;?>
         </div>
       </div>
       <?php endif;?>
+      <?php endif;?>
     </div>
   </div>
+
   <?php if($hasInternet and !$langNotCN):?>
   <div class="side panel">
     <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
   </div>
   <?php endif;?>
+
 </div>
 <?php include '../../common/view/footer.html.php';?>
