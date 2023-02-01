@@ -734,7 +734,7 @@ $(function()
     gantt.showDate(new Date());
 
     // Show task in modal on click task
-    var taskModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%'});
+    var taskModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%'});
     gantt.attachEvent('onTaskClick', function(id, e)
     {
         if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
