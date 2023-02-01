@@ -234,3 +234,5 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 
 /* Unset style for qa qa-automation-menu. */
 .qa-automation-menu > a:focus, .qa-automation-menu > a:hover {background: unset!important; cursor: default;}
+
+#adminMenu.dropdown-menu {min-width: max-content;}
