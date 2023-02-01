@@ -39,6 +39,8 @@
 .more {float: right; padding-right: 12px; font-weight: normal;}
 .panel.publicClass {padding: 0 10px;}
 
+.icon.follow-us {font-size: 20px;}
+
 /* css for without internet */
 .main.without-internet {display: flex; flex-wrap: wrap;}
 .main.without-internet > .plug.panel {flex: 1 1 60%; margin-bottom: unset; margin-right: 16px;}
