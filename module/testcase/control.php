@@ -998,7 +998,14 @@ class testcase extends control
             if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
 
             $moduleIdList = (!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) ? 0 : $moduleIdList;
-            $stories = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
+            if($this->app->tab == 'execution')
+            {
+                $stories = $this->story->getExecutionStoryPairs($case->execution, $productID, $case->branch, $moduleIdList);
+            }
+            else
+            {
+                $stories = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
+            }
 
             $this->view->productID        = $productID;
             $this->view->product          = $product;
