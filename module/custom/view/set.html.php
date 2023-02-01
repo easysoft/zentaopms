@@ -28,14 +28,21 @@ $itemRow = <<<EOT
   </tr>
 EOT;
 ?>
+<style>
+.checkbox-primary {width: 170px; margin: 0 10px 10px 0; display: inline-block;}
+</style>
 <?php js::set('itemRow', $itemRow)?>
 <?php js::set('module',  $module)?>
 <?php js::set('field',   $field)?>
 <?php js::set('confirmReviewCase', $lang->custom->notice->confirmReviewCase)?>
 <?php js::set('stopSubmit', true)?>
-<style>
-.checkbox-primary {width: 170px; margin: 0 10px 10px 0; display: inline-block;}
-</style>
+<script>
+$('#navbar ul.nav li').removeClass('active');
+$('#navbar ul.nav li[data-id=<?php echo $module?>]').addClass('active');
+<?php if($module == 'todo'):?>
+$('#navbar ul.nav li[data-id=my]').addClass('active');
+<?php endif;?>
+</script>
 <?php if($module == 'story' and $field == 'review'):?>
 <style>
 .table-form>tbody>tr>th {width: 120px !important}

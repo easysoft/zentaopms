@@ -65,7 +65,7 @@ $lang->admin->menuList->system['dividerMenu'] = ',safe,';
 
 $lang->admin->menuList->user['subMenu']['dept']  = array('link' => "{$lang->dept->common}|dept|browse|", 'subModule' => 'dept');
 $lang->admin->menuList->user['subMenu']['user']  = array('link' => "{$lang->user->common}|company|browse|", 'subModule' => 'user');
-$lang->admin->menuList->user['subMenu']['group'] = array('link' => "{$lang->priv}}|group|browse|", 'subModule' => 'group');
+$lang->admin->menuList->user['subMenu']['group'] = array('link' => "{$lang->priv}|group|browse|", 'subModule' => 'group');
 
 $lang->admin->menuList->user['menuOrder']['5']  = 'dept';
 $lang->admin->menuList->user['menuOrder']['10'] = 'user';
@@ -77,13 +77,10 @@ $lang->admin->menuList->switch['menuOrder']['5'] = 'setmodule';
 
 $lang->admin->menuList->model['subMenu']['common']    = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom');
 $lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
-$lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "$lang->waterfallModel|stage|settype|", 'subModule' => 'stage');
+$lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "{$lang->waterfallModel}|stage|settype|", 'subModule' => 'stage');
 
 $lang->admin->menuList->model['menuOrder']['5']  = 'common';
 $lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
-
-if($config->edition != 'max') unset($lang->admin->menuList->model['subMenu']['scrum']);
-if($config->edition == 'max') $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
 
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo");
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|product|");
@@ -122,3 +119,31 @@ $lang->admin->menuList->dev['menuOrder']['5']  = 'api';
 $lang->admin->menuList->dev['menuOrder']['10'] = 'db';
 $lang->admin->menuList->dev['menuOrder']['15'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['20'] = 'entry';
+
+if($config->vision == 'lite')
+{
+    unset($lang->admin->menuList->system['subMenu']['mode']);
+    unset($lang->admin->menuList->system['subMenu']['buildindex']);
+    unset($lang->admin->menuList->system['subMenu']['tableengine']);
+    unset($lang->admin->menuList->system['menuOrder']['5']);
+    unset($lang->admin->menuList->system['menuOrder']['45']);
+    unset($lang->admin->menuList->system['menuOrder']['50']);
+}
+
+if($config->edition != 'max') unset($lang->admin->menuList->model['subMenu']['scrum']);
+if(!helper::hasFeature('waterfall'))
+{
+    unset($lang->admin->menuList->model['subMenu']['waterfall']);
+    unset($lang->admin->menuList->model['menuOrder']['15']);
+}
+if($config->edition == 'max' and !helper::hasFeature('scrum_auditplan'))
+{
+    if(!helper::hasFeature('scrum_process'))
+    {
+        $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
+    }
+    else
+    {
+        unset($lang->admin->menuList->model['subMenu']['scrum']);
+    }
+}
