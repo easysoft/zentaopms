@@ -17,6 +17,7 @@ $('#navbar ul.nav li[data-id=<?php echo $moduleName?>]').addClass('active');
 <?php if($moduleName == 'bug'):?>
 $('#navbar ul.nav li[data-id=qa]').addClass('active');
 <?php endif;?>
+if($('#navbar ul.nav li[data-id=common]').length > 0) $('#navbar ul.nav li[data-id=common]').addClass('active');
 </script>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>

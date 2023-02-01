@@ -82,9 +82,6 @@ $lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "{$lang-
 $lang->admin->menuList->model['menuOrder']['5']  = 'common';
 $lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
 
-if($config->edition != 'max') unset($lang->admin->menuList->model['subMenu']['scrum']);
-if($config->edition == 'max') $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
-
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo");
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|product|");
 $lang->admin->menuList->feature['subMenu']['execution']   = array('link' => "{$lang->execution->common}|custom|execution|");
@@ -131,4 +128,22 @@ if($config->vision == 'lite')
     unset($lang->admin->menuList->system['menuOrder']['5']);
     unset($lang->admin->menuList->system['menuOrder']['45']);
     unset($lang->admin->menuList->system['menuOrder']['50']);
+}
+
+if($config->edition != 'max') unset($lang->admin->menuList->model['subMenu']['scrum']);
+if(!helper::hasFeature('waterfall'))
+{
+    unset($lang->admin->menuList->model['subMenu']['waterfall']);
+    unset($lang->admin->menuList->model['menuOrder']['15']);
+}
+if($config->edition == 'max' and !helper::hasFeature('scrum_auditplan'))
+{
+    if(!helper::hasFeature('scrum_process'))
+    {
+        $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
+    }
+    else
+    {
+        unset($lang->admin->menuList->model['subMenu']['scrum']);
+    }
 }
