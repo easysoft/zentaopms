@@ -712,7 +712,6 @@ if(!helper::hasFeature('product_track'))
     unset($lang->product->menu->track, $lang->product->menuOrder[40]);
     $lang->product->dividerMenu = str_replace(',track,', ',doc,', $lang->product->dividerMenu);
 }
-if(!helper::hasFeature('waterfall')) unset($lang->admin->menu->model['dropMenu']->waterfall);
 
 if(!helper::hasFeature('devops'))
 {
@@ -728,16 +727,4 @@ if(!helper::hasFeature('kanban'))
 {
     unset($lang->mainNav->kanban, $lang->mainNav->menuOrder[40]);
     $lang->dividerMenu = str_replace(',kanban,' , ',doc,', $lang->dividerMenu);
-}
-
-if($config->edition == 'max' and !helper::hasFeature('scrum_auditplan'))
-{
-    if(!helper::hasFeature('scrum_process'))
-    {
-        $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|process|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
-    }
-    else
-    {
-        unset($lang->admin->menu->model['dropMenu']->scrum);
-    }
 }

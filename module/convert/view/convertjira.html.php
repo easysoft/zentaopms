@@ -20,11 +20,6 @@
 </style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <div class='main-header'>
-      <div class='heading'>
-        <h4><?php echo $lang->convert->jira->method;?></h4>
-      </div>
-    </div>
     <div class='row text-center'>
       <div class='col-xs-6'>
         <div class='text-center importMethod' data-url="<?php echo $this->createLink("convert", "importNotice", "type=db");?>">

@@ -11,7 +11,7 @@
 .settings.panel, .plug.panel {margin-bottom: 16px;}
 
 .settings-list {display: flex; flex-wrap: wrap; padding: 0 4px 16px 4px;}
-.settings-list > .setting-box.btn {flex: 1 1 18%; padding: 8px; border: 1px solid #E3E4E9; margin-right: 10px; margin-top: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset;}
+.settings-list > .setting-box.btn {flex: 1 1 18%; padding: 8px; border: 1px solid rgba(227, 228, 233, 0.6); margin-right: 10px; margin-top: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset;}
 .settings-list > .setting-box.btn[disabled] {cursor: not-allowed; pointer-events: unset;}
 .settings-list > .setting-box.btn[disabled] > a {pointer-events: none;}
 .settings-list > .setting-box > h4 > img {padding-right: 10px; padding-bottom: 3px;}
@@ -34,17 +34,19 @@
 .official-content > .content {color: #838A9D; font-size: 12px;}
 .official-content > .title {color: #313C52; font-size: 13px; line-height: 14px;}
 
-.classList > .classItem {flex: 1 1 30%; margin: 5px; border: 1px solid #E3E4E9; border-radius: 4px; margin-bottom: 16px; align-items: center;}
+.classList > .classItem {flex: 1 1 30%; margin: 5px; border: 1px solid rgba(227, 228, 233, 0.6); border-radius: 4px; margin-bottom: 16px; align-items: center;}
 .classItem > .imgBack {flex: 1 1 50%;}
-.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 16 / 9; background-position: center; margin: 5px;}
-.classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 30px; line-height: 22px; font-weight: 700;}
+.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 16 / 9; background-position: center; margin: 0px; border-top-left-radius: 4px; border-top-right-radius: 4px;}
+.classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 24px; margin-bottom: 6px; font-weight: 700;}
 .more {float: right; padding-right: 12px; font-weight: normal;}
 .panel.publicClass {padding: 0 10px;}
-
 .icon.follow-us {font-size: 20px; padding-left: 10px;}
+
+.setting-help {width: 45px;}
 
 /* css for without internet */
 .main.without-internet {display: flex; flex-wrap: wrap;}
 .main.without-internet > .plug.panel {flex: 1 1 60%; margin-bottom: unset; margin-right: 16px;}
 .main.without-internet > .bottom > .official.panel {margin-right: unset;}
 .main.without-internet > .bottom > .official.panel > .main-panel {flex-direction: row-reverse;}
+
