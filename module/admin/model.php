@@ -386,9 +386,9 @@ class adminModel extends model
         $output     .= "<ul class='dropdown-menu' id='adminMenu'>";
         foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
         {
-            $class = $menuKey == $currentMenuKey ? "class='active'" : '';
+            $class = $menuKey == $currentMenuKey ? "active" : '';
             if($menuGroup['disabled']) $class .= ' disabled';
-            $output .= "<li $class>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg' style='padding-right:10px;' />" . $menuGroup['name']) . "</li>";
+            $output .= "<li class='$class'>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg' style='padding-right:10px;' />" . $menuGroup['name']) . "</li>";
         }
         $output .= "</ul></div>";
 
