@@ -15,7 +15,7 @@
 .settings-list > .setting-box > .setting-desc {padding-bottom: 16px;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
-.plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 16px; margin-bottom: 16px; width: 0px;}
+.plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 10px; margin-bottom: 16px; width: 0px;}
 .plugin-list > .plugin-item .ext-download {float: right; padding: 6px 0px;}
 .plugin-list > .plugin-item > .plug-title {height: 16px; overflow: hidden;}
 .plugin-list > .plugin-item .extension-desc {overflow: hidden; height: 16px;}
@@ -35,5 +35,4 @@
 .classItem > .imgBack {flex: 1 1 50%; background: #C8EDFF;}
 .classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 1 / 1; background-position: center; margin: 0 20px;}
 .classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 24px; font-weight: 700;}
-.more {float: right; padding-right: 15px; color: #838A9D}
-.more::after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 5px 0 5px 8px; border-color: transparent transparent transparent #9EA3B0; position: absolute; right: 3px; top: 15px;}
+.more {float: right; padding-right: 12px; font-weight: normal;}

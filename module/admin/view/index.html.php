@@ -29,7 +29,10 @@
 
     <?php if($extensions):?>
     <div class="plug panel">
-      <div class="panel-title"><?php echo $lang->admin->pluginRecommendation?><a href=<?php echo $config->admin->extensionURL?> class="more"><?php echo $lang->more?></a></div>
+      <div class="panel-title">
+        <?php echo $lang->admin->pluginRecommendation;?>
+        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted"');?>
+      </div>
       <div class="plugin-list" <?php if($langNotCN) echo 'style="flex-wrap: nowrap"';?>>
         <?php foreach($extensions as $extension):?>
         <div class="plugin-item">
@@ -56,7 +59,10 @@
       </div>
       <?php if($publicClass):?>
       <div class="panel publicClass">
-      <div class="panel-title"><?php echo $lang->admin->publicClass?><a href=<?php echo $config->admin->classURL?> class="more"><?php echo $lang->more?></a></div>
+        <div class="panel-title">
+          <?php echo $lang->admin->publicClass;?>
+          <?php echo html::a($config->admin->classURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted"');?>
+        </div>
         <div class="classList flex">
           <?php foreach($publicClass as $class):?>
           <a class="classItem">
