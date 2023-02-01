@@ -419,6 +419,7 @@ class adminModel extends model
             $param      = $type == 'extension' ? '' : 'MTIxOA==';
             $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
             $extensions = isset($extensions->extensions) ? (array)$extensions->extensions : array();
+            foreach($extensions as $extension) $extension->viewLink = str_replace(array('info', 'client'), '', $extension->viewLink);
         }
         else
         {

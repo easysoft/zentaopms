@@ -1,23 +1,27 @@
 #notice {margin: -20px -20px 20px; padding: 20px;}
 #zentaoLinks {margin-top: 20px;}
 #zentaoLinks .panel .panel-heading {padding: 6px 10px;}
-.admin {display: flex; background: unset;}
-.admin > .main {flex: 1 1 60%; padding-right: 20px;}
-.admin > .side {flex: 1 1 40%; padding-left: 10px;}
+.main-content.admin {padding: 0;}
+.admin {display: flex; background: unset; box-shadow: none;}
+.admin > .main {flex: 1 1 70%; padding-right: 16px;}
+.admin > .side {flex: 1 1 30%; padding-left: 10px;}
 .panel-title {padding: 10px 0px;}
 .flex {display: flex;}
 .panel {padding: 0 0 0 16px;}
+.settings.panel, .plug.panel {margin-bottom: 16px;}
 
-.settings-list {display: flex; flex-wrap: wrap; padding: 12px 4px 16px 4px;}
-.settings-list > .setting-box {flex: 0 0 20%; padding: 18px 0;}
+.settings-list {display: flex; flex-wrap: wrap; padding: 0 4px 16px 4px;}
+.settings-list > .setting-box {flex: 0 0 18%; padding: 8px; border: 1px solid #E3E4E9; margin-right: 10px; margin-top: 16px;}
+.settings-list > .setting-box > .setting-desc {padding-bottom: 16px;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
-.plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 4px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 16px; margin-bottom: 16px; width: 0px;}
+.plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 16px; margin-bottom: 16px; width: 0px;}
 .plugin-list > .plugin-item .ext-download {float: right; padding: 6px 0px;}
 .plugin-list > .plugin-item > .plug-title {height: 16px; overflow: hidden;}
 .plugin-list > .plugin-item .extension-desc {overflow: hidden; height: 16px;}
 
-.bottom.flex > .official {flex: 1 1 30%; margin-right: 20px;}
+.bottom.flex > .panel, .side.panel {margin-bottom: 0;}
+.bottom.flex > .official {flex: 1 1 30%; margin-right: 16px; padding: 0 16px 16px 16px;}
 .bottom.flex > .publicClass {flex: 1 1 60%;}
 
 .official-img {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 50%; aspect-ratio: 1 / 1; background-position: center;}
