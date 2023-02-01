@@ -301,9 +301,9 @@ class adminModel extends model
                 ksort($menuOrder);
 
                 /* Check sub menu priv. */
-                list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
                 foreach($menuOrder as $subOrder => $subMenuKey)
                 {
+                    list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
                     if(!common::hasPriv($module, $method)) unset($menuOrder[$subOrder]);
                 }
 
@@ -311,6 +311,7 @@ class adminModel extends model
                 if(!empty($menuOrder))
                 {
                     $subMenuKey = reset($menuOrder);
+                    list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
                     $menu['link'] = helper::createLink($module, $method, $params);
                 }
             }
