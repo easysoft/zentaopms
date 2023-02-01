@@ -45,7 +45,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->release->includedBuild;?></th>
-            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
+            <td id='buildBox'><?php echo html::select('build[]', $builds, '', "class='form-control picker-select' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
             <td>
               <div class="checkbox-primary">
                 <input type="checkbox" name="sync" value="1" id="sync" checked>
