@@ -32,7 +32,7 @@
 
     <?php if($extensions):?>
     <div class="plug panel">
-      <div class="panel-title"><?php echo $lang->admin->pluginRecommendation?></div>
+      <div class="panel-title"><?php echo $lang->admin->pluginRecommendation?><a class="more"><?php echo $lang->more?></a></div>
       <div class="plugin-list" <?php if($langNotCN) echo 'style="flex-wrap: nowrap"';?>>
         <?php foreach($extensions as $extension):?>
         <div class="plugin-item">
@@ -59,7 +59,7 @@
       </div>
       <?php if($publicClass):?>
       <div class="panel publicClass">
-        <div class="panel-title"><?php echo $lang->admin->publicClass?></div>
+      <div class="panel-title"><?php echo $lang->admin->publicClass?><a class="more"><?php echo $lang->more?></a></div>
         <div class="classList flex">
           <?php foreach($publicClass as $class):?>
           <a class="classItem">
