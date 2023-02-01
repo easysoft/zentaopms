@@ -17,11 +17,11 @@
     <div class="settings panel">
       <div class="panel-title"><?php echo $lang->admin->setting?></div>
       <div class="settings-list">
-        <?php foreach($lang->admin->menuList as $menu):?>
+        <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <div class="setting-box">
           <h4><?php echo $menu['name'];?></h4>
           <p class="text-muted setting-desc"><?php echo $menu['desc'];?></p>
-          <?php echo html::a('', "<i class='icon icon-help'></i> {$lang->help}", '_blank', 'class="text-muted setting-help"');?>
+          <?php echo html::a($config->admin->helpURL[$menuKey], "<i class='icon icon-help'></i> {$lang->help}", '_blank', 'class="text-muted setting-help"');?>
         </div>
         <?php endforeach;?>
       </div>
@@ -65,7 +65,7 @@
         </div>
         <div class="classList flex">
           <?php foreach($publicClass as $class):?>
-          <a class="classItem">
+          <a class="classItem" href='<?php echo $class->viewLink;?>' target='_blank'>
 	    <div class="imgBack">
               <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>
             </div>
