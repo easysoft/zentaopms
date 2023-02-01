@@ -34,7 +34,7 @@
 
 .classList > .classItem {flex: 1 1 30%; margin: 5px; border: 1px solid #E3E4E9; border-radius: 4px; margin-bottom: 16px; align-items: center;}
 .classItem > .imgBack {flex: 1 1 50%;}
-.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 16 / 9; background-position: center; margin: 5px;}
-.classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 30px; line-height: 22px; font-weight: 700;}
+.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 16 / 9; background-position: center; margin: 0px; border-radius: 4px;}
+.classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 24px; margin-bottom: 6px; font-weight: 700;}
 .more {float: right; padding-right: 12px; font-weight: normal;}
 .panel.publicClass {padding: 0 10px;}
