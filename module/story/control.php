@@ -2284,7 +2284,7 @@ class story extends control
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
+                    return print(js::reload('parent.parent'));
                 }
             }
             return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
