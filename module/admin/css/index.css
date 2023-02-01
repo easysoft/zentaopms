@@ -21,7 +21,7 @@
 .plugin-list > .plugin-item .extension-desc {overflow: hidden; height: 16px;}
 
 .bottom.flex > .panel, .side.panel {margin-bottom: 0;}
-.bottom.flex > .official {flex: 1 1 30%; margin-right: 16px; padding: 0 16px 16px 16px; display: flex; flex-direction: column; position: relative;}
+.bottom.flex > .official {flex: 1 1 30%; margin-right: 16px; padding: 40px 16px 16px 16px; display: flex; flex-direction: column; position: relative;}
 .bottom.flex > .publicClass {flex: 1 1 60%;}
 
 .official {justify-content: center;}
