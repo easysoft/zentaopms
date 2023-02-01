@@ -151,44 +151,44 @@ $lang->admin->safe->noticeGd       = '系统检测到您的服务器未安装GD�
 
 $lang->admin->menuList = new stdclass();
 $lang->admin->menuList->setting['name']  = '系统设置';
-$lang->admin->menuList->setting['desc']  = '';
+$lang->admin->menuList->setting['desc']  = '备份、聊天、安全等系统各要素配置。';
 $lang->admin->menuList->setting['order'] = 1;
 
 $lang->admin->menuList->user['name']  = '人员管理';
-$lang->admin->menuList->user['desc']  = '';
+$lang->admin->menuList->user['desc']  = '维护部门、添加人员、分组配置权限。';
 $lang->admin->menuList->user['order'] = 2;
 
 $lang->admin->menuList->switch['name']  = '功能开关';
-$lang->admin->menuList->switch['desc']  = '';
+$lang->admin->menuList->switch['desc']  = '打开、关闭系统部分功能。';
 $lang->admin->menuList->switch['order'] = 3;
 
 $lang->admin->menuList->model['name']  = '模型配置';
-$lang->admin->menuList->model['desc']  = '';
+$lang->admin->menuList->model['desc']  = '不同项目管理模型和项目通用要素配置。';
 $lang->admin->menuList->model['order'] = 4;
 
 $lang->admin->menuList->feature['name']  = '功能配置';
-$lang->admin->menuList->feature['desc']  = '';
+$lang->admin->menuList->feature['desc']  = '按照功能菜单进行系统的要素配置。';
 $lang->admin->menuList->feature['order'] = 5;
 
 $lang->admin->menuList->template['name']  = '文档模板';
-$lang->admin->menuList->template['desc']  = '';
+$lang->admin->menuList->template['desc']  = '配置文档的模板类型和模板内容。';
 $lang->admin->menuList->template['order'] = 6;
 
 $lang->admin->menuList->message['name']  = '通知设置';
-$lang->admin->menuList->message['desc']  = '';
+$lang->admin->menuList->message['desc']  = '配置通知路径，自定义需要通知的动作。';
 $lang->admin->menuList->message['order'] = 7;
 
 $lang->admin->menuList->extension['name']  = '插件管理';
-$lang->admin->menuList->extension['desc']  = '';
+$lang->admin->menuList->extension['desc']  = '浏览、安装插件。';
 $lang->admin->menuList->extension['link']  = 'extension|browse';
 $lang->admin->menuList->extension['order'] = 8;
 
 $lang->admin->menuList->dev['name']  = '二次开发';
-$lang->admin->menuList->dev['desc']  = '';
+$lang->admin->menuList->dev['desc']  = '支持对系统进行二次开发。';
 $lang->admin->menuList->dev['order'] = 9;
 
 $lang->admin->menuList->convert['name']  = '数据导入';
-$lang->admin->menuList->convert['desc']  = '';
+$lang->admin->menuList->convert['desc']  = '第三方系统的数据导入。';
 $lang->admin->menuList->convert['link']  = 'convert|convertjira';
 $lang->admin->menuList->convert['order'] = 10;
 

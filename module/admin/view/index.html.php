@@ -17,16 +17,13 @@
     <div class="settings panel">
       <div class="panel-title"><?php echo $lang->admin->setting?></div>
       <div class="settings-list">
-        <div class="setting-box">1</div>
-        <div class="setting-box">2</div>
-        <div class="setting-box">3</div>
-        <div class="setting-box">4</div>
-        <div class="setting-box">5</div>
-        <div class="setting-box">6</div>
-        <div class="setting-box">7</div>
-        <div class="setting-box">8</div>
-        <div class="setting-box">9</div>
-        <div class="setting-box">10</div>
+        <?php foreach($lang->admin->menuList as $menu):?>
+        <div class="setting-box">
+          <h4><?php echo $menu['name'];?></h4>
+          <p class="text-muted setting-desc"><?php echo $menu['desc'];?></p>
+          <?php echo html::a('', "<i class='icon icon-help'></i> {$lang->help}", '_blank', 'class="text-muted setting-help"');?>
+        </div>
+        <?php endforeach;?>
       </div>
     </div>
 
