@@ -79,6 +79,14 @@ $lang->zanode->createImageSuccess = '镜像导出成功，您可以使用此镜�
 $lang->zanode->createImageFail    = '镜像导出失败';
 $lang->zanode->createImageButton  = '去创建';
 
+$lang->zanode->snapshotName = '快照名称';
+$lang->zanode->browseSnapshot = '快照列表';
+$lang->zanode->createSnapshot = '创建快照';
+$lang->zanode->editSnapshot = '编辑快照';
+$lang->zanode->restoreSnapshot = '还原快照';
+$lang->zanode->deleteSnapshot = '删除快照';
+$lang->zanode->snapshotEmpty  = '无快照';
+
 $lang->zanode->imageNameEmpty = '名称不能为空';
 
 $lang->zanode->runTimeout = '自动执行失败，请检查宿主机和执行节点状态';
@@ -89,6 +97,7 @@ $lang->zanode->apiError['fail']   = '执行失败，请检查宿主机和执行�
 $lang->zanode->publicList[0] = '不共享';
 $lang->zanode->publicList[1] = '共享';
 
+$lang->zanode->statusList['creating']     = '创建中';
 $lang->zanode->statusList['created']      = '已创建';
 $lang->zanode->statusList['launch']       = '运行中';
 $lang->zanode->statusList['ready']        = '运行中';

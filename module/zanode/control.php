@@ -45,7 +45,7 @@ class zanode extends control
 
         $showFeature = false;
         $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
-        if(strpos(",$accounts,", $this->app->user->account) === false) 
+        if(strpos(",$accounts,", $this->app->user->account) === false)
         {
             $showFeature = true;
             $accounts .= ',' . $this->app->user->account;
@@ -164,6 +164,7 @@ class zanode extends control
         $this->view->token       = !empty($vnc->token) ? $vnc->token:'';
         $this->view->title       = $this->lang->zanode->view;
         $this->view->zanode      = $node;
+        $this->view->snapshotList = $this->zanode->getSnapshotList($id);
         $this->view->actions     = $this->loadModel('action')->getList('zanode', $id);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->display();
@@ -286,6 +287,37 @@ class zanode extends control
     }
 
     /**
+     * Create snapshot.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return void
+     */
+    public function createSnapshot($nodeID = 0)
+    {
+        $task = '';
+        $node = $this->zanode->getNodeByID($nodeID);
+
+        if($_POST)
+        {
+            $this->zanode->createSnapshot($nodeID);
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->task = $task;
+        $this->view->node = $node;
+        $this->view->rate = !empty($task->rate) ? $task->rate : 0;
+        $this->display();
+    }
+
+    /**
      * Desctroy node.
      *
      * @param  int  $nodeID
@@ -330,6 +362,26 @@ class zanode extends control
         $this->view->url   = $node->ip . ":" . $node->hzap;
         $this->view->host  = !empty($vnc->hostIP) ? $vnc->hostIP:'';
         $this->view->token = !empty($vnc->token) ? $vnc->token:'';
+        $this->display();
+    }
+
+    public function browseSnapshot($nodeID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->loadLang('zahost');
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $snapshotList = $this->zanode->getSnapshotList($nodeID, $browseType, $param, $orderBy, $pager);
+
+        $this->view->title      = $this->lang->zanode->browseSnapshot;
+        $this->view->nodeID     = $nodeID;
+        $this->view->snapshotList  = $snapshotList;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->browseType = $browseType;
+
         $this->display();
     }
 

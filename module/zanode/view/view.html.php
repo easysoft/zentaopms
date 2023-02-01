@@ -147,6 +147,14 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
         <div class="detail zanode-detail">
           <div class="detail-title"><?php echo $lang->zanode->desc; ?></div>
           <div class="detail-content article-content"><?php echo !empty($zanode->desc) ? htmlspecialchars_decode($zanode->desc) : $lang->noData; ?></div>
+          <?php if(!empty($snapshotList)): ?>
+          <div class="detail">
+            <div class="detail-title"><?php echo $lang->zanode->browseSnapshot;?></div>
+            <div class="detail-content article-content">
+            <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'browseSnapshot', "nodeID=$zanode->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' onload='setIframeHeight(this)' style='min-height:300px;'></iframe>";?>
+            </div>
+          </div>
+          <?php endif; ?>
         </div>
       </div>
     <?php $this->printExtendFields($zanode, 'div', "position=left&inForm=0&inCell=1"); ?>
@@ -164,6 +172,9 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
 
           $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
           $rebootAttr .= $zanode->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+
+          $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
+          $snapshotAttr .= $zanode->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
           common::printLink('zanode', 'getVNC', "id={$zanode->id}", "<i class='icon icon-remote'></i> " . $lang->zanode->getVNC, in_array($zanode->status ,array('running', 'launch', 'wait')) ? '_blank' : '', "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($zanode->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
 
           if($zanode->status == "suspend")
@@ -185,6 +196,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           }
 
           common::printLink('zanode', 'reboot', "zanodeID={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->rebootNode, '', $rebootAttr);
+          common::printLink('zanode', 'createSnapshot', "zanodeID={$zanode->id}", "<i class='icon icon-plus'></i> " . $lang->zanode->createSnapshot, '', $snapshotAttr, true, true);
 
         }
         ?>
