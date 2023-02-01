@@ -407,6 +407,7 @@ class adminModel extends model
             $param      = $type == 'extension' ? '' : 'MTIxOA==';
             $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
             $extensions = isset($extensions->extensions) ? (array)$extensions->extensions : array();
+            foreach($extensions as $extension) $extension->viewLink = str_replace(array('info', 'client'), '', $extension->viewLink);
         }
         else
         {
@@ -470,10 +471,10 @@ class adminModel extends model
             if($index > $limit) return $publicClass;
 
             $publicClass[$index] = new stdClass();
-            $publicClass[$index]->name = $course->title;
-            $publicClass[$index]->image = $this->config->admin->apiRoot . $course->image->list[0]->smallURL;
+            $publicClass[$index]->name     = $course->title;
+            $publicClass[$index]->image    = $this->config->admin->apiRoot . $course->image->list[0]->smallURL;
             $publicClass[$index]->viewLink = $this->config->admin->apiRoot . "{$course->alias}-{$course->id}.html";
-            $index++;
+            $index ++;
         }
         return $publicClass;
     }
