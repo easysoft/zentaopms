@@ -483,10 +483,10 @@ class adminModel extends model
             if($index > $limit) return $publicClass;
 
             $publicClass[$index] = new stdClass();
-            $publicClass[$index]->name = $course->title;
-            $publicClass[$index]->image = $this->config->admin->apiRoot . $course->image->list[0]->smallURL;
+            $publicClass[$index]->name     = $course->title;
+            $publicClass[$index]->image    = $this->config->admin->apiRoot . $course->image->list[0]->smallURL;
             $publicClass[$index]->viewLink = $this->config->admin->apiRoot . "{$course->alias}-{$course->id}.html";
-            $index++;
+            $index ++;
         }
         return $publicClass;
     }
