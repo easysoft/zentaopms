@@ -33,7 +33,7 @@
 
 .classList > .classItem {flex: 1 1 30%; margin: 5px;}
 .classItem > .imgBack {flex: 1 1 50%; background: #C8EDFF;}
-.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 1 / 1; background-position: center; margin:5px;}
+.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 1 / 1; background-position: center; margin: 0 20px;}
 .classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 24px; font-weight: 700;}
 .more {float: right; padding-right: 15px; color: #838A9D}
 .more::after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 5px 0 5px 8px; border-color: transparent transparent transparent #9EA3B0; position: absolute; right: 3px; top: 15px;}
