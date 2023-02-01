@@ -54,4 +54,7 @@ $config->admin->plugIns[30]->viewLink = 'https://www.zentao.net/extension-viewEx
 //$config->admin->plugIns[]->desc     = '';
 //$config->admin->plugIns[]->viewLink = 'https://www.zentao.net/extension-viewExt-203.html';
 
-$config->admin->apiRoot = 'https://www.zentao.net/';
+$config->admin->apiRoot      = 'https://www.zentao.net/';
+$config->admin->classURL     = 'https://www.zentao.net/publicclass.html';
+$config->admin->extensionURL = 'https://www.zentao.net/extension-browse.html';
+
