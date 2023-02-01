@@ -11,7 +11,8 @@
 .settings.panel, .plug.panel {margin-bottom: 16px;}
 
 .settings-list {display: flex; flex-wrap: wrap; padding: 0 4px 16px 4px;}
-.settings-list > .setting-box {flex: 1 1 18%; padding: 8px; border: 1px solid #E3E4E9; margin-right: 10px; margin-top: 16px;}
+.settings-list > .setting-box {flex: 1 1 18%; padding: 8px; border: 1px solid #E3E4E9; margin-right: 10px; margin-top: 16px; display: flex; flex-direction: column; justify-content: space-between}
+.settings-list > .setting-box > h4 > img {padding-right: 16px;}
 .settings-list > .setting-box > .setting-desc {padding-bottom: 16px;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}

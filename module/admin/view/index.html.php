@@ -19,7 +19,7 @@
       <div class="settings-list">
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <div class="setting-box">
-          <h4><?php echo $menu['name'];?></h4>
+	  <h4><img src="/static/svg/admin-<?php echo $menuKey;?>.svg"/><?php echo $menu['name'];?></h4>
           <p class="text-muted setting-desc"><?php echo $menu['desc'];?></p>
           <?php echo html::a($config->admin->helpURL[$menuKey], "<i class='icon icon-help'></i> {$lang->help}", '_blank', 'class="text-muted setting-help"');?>
         </div>
