@@ -30,7 +30,7 @@
 .official-img {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 30%; aspect-ratio: 1 / 1; background-position: center;}
 .official-content {flex: 0 0 60%; display: flex; flex-direction: column; justify-content: center; padding-left: 10px;}
 .official-content > .content {color: #838A9D; font-size: 12px;}
-.official-content > .title {color: #313C52; font-size: 13px;}
+.official-content > .title {color: #313C52; font-size: 13px; line-height: 14px;}
 
 .classList > .classItem {flex: 1 1 30%; margin: 5px; border: 1px solid #E3E4E9; border-radius: 4px; margin-bottom: 16px; align-items: center;}
 .classItem > .imgBack {flex: 1 1 50%;}
@@ -38,3 +38,9 @@
 .classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 30px; line-height: 22px; font-weight: 700;}
 .more {float: right; padding-right: 12px; font-weight: normal;}
 .panel.publicClass {padding: 0 10px;}
+
+/* css for without internet */
+.main.without-internet {display: flex; flex-wrap: wrap;}
+.main.without-internet > .plug.panel {flex: 1 1 60%; margin-bottom: unset; margin-right: 16px;}
+.main.without-internet > .bottom > .official.panel {margin-right: unset;}
+.main.without-internet > .bottom > .official.panel > .main-panel {flex-direction: row-reverse;}

@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('hasInternet', $hasInternet);?>
 <div id='mainContent' class='main-content admin'>
-  <div class="main">
+  <div class="main <?php if(!$hasInternet) echo 'without-internet';?>">
     <div class="settings panel">
       <div class="panel-title"><?php echo $lang->admin->setting?></div>
       <div class="settings-list">
@@ -46,14 +46,14 @@
     <?php endif;?>
 
     <?php if(!$langNotCN):?>
-    <div class="flex bottom">
-      <div class="panel official">
-        <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
-	    <div class="flex main-panel">
-	      <div class="official-img"></div>
-	      <div class="official-content">
-              <div class="title"><?php echo $lang->admin->followUs?></div>
-              <div class="content"> <?php echo $lang->admin->followUsContent?></div>
+      <div class="flex bottom">
+        <div class="panel official">
+          <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
+	  <div class="flex main-panel">
+	    <div class="official-img"></div>
+	    <div class="official-content">
+            <div class="title"><?php echo $lang->admin->followUs?><i class="icon icon-arrow-right"></i></div>
+            <div class="content"> <?php echo $lang->admin->followUsContent?></div>
           </div>
         </div>
       </div>
