@@ -11,6 +11,13 @@
  */
 ?>
 <?php include 'header.html.php';?>
+<script>
+$('#navbar ul.nav li').removeClass('active');
+$('#navbar ul.nav li[data-id=<?php echo $moduleName?>]').addClass('active');
+<?php if($moduleName == 'bug'):?>
+$('#navbar ul.nav li[data-id=qa]').addClass('active');
+<?php endif;?>
+</script>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
     <div class='cell'>
