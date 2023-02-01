@@ -148,3 +148,26 @@ $lang->admin->safe->noticeMode     = "Le mot de passe sera vérifié lors de la 
 $lang->admin->safe->noticeWeakMode = "Le mot de passe sera vérifié lors de la connexion au système, de la création et de la modification des coordonnées de l'utilisateur, et du changement de mot de passe.";
 $lang->admin->safe->noticeStrong   = "Le mot de passe est d'autant plus sécurisé qu'il est long, qu'il contient plus de lettres, de chiffres ou de caractères spéciaux, et que les lettres du mot de passe sont peu répétitives !";
 $lang->admin->safe->noticeGd       = 'Your server does not have GD module installed, you cannot use the Captcha function, Please use it after installation.';
+
+$lang->admin->menuSetting['system']['name'] = 'System';
+$lang->admin->menuSetting['system']['desc'] = '';
+$lang->admin->menuSetting['user']['name'] = 'User';
+$lang->admin->menuSetting['user']['desc'] = '';
+$lang->admin->menuSetting['switch']['name'] = 'Switch';
+$lang->admin->menuSetting['switch']['desc'] = '';
+$lang->admin->menuSetting['model']['name'] = 'Model';
+$lang->admin->menuSetting['model']['desc'] = '';
+$lang->admin->menuSetting['feature']['name'] = 'Feature';
+$lang->admin->menuSetting['feature']['desc'] = '';
+$lang->admin->menuSetting['template']['name'] = 'Template';
+$lang->admin->menuSetting['template']['desc'] = '';
+$lang->admin->menuSetting['message']['name'] = 'Message';
+$lang->admin->menuSetting['message']['desc'] = '';
+$lang->admin->menuSetting['extension']['name'] = 'Extension';
+$lang->admin->menuSetting['extension']['desc'] = '';
+$lang->admin->menuSetting['dev']['name'] = 'Develop';
+$lang->admin->menuSetting['dev']['desc'] = '';
+$lang->admin->menuSetting['convert']['name'] = 'Data Import';
+$lang->admin->menuSetting['convert']['desc'] = '';
+
+include dirname(__FILE__) . '/menu.php';

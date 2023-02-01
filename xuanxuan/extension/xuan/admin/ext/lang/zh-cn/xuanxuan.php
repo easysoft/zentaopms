@@ -25,6 +25,6 @@ $lang->admin->sizeType['G'] = 1024 * 1024 * 1024;
 global $config;
 if($config->vision != 'lite')
 {
-    $lang->admin->menuList->setting['subMenu']['xuanxuan'] = array('link' => '聊天|admin|xuanxuan|', 'subModule' => 'client,setting');
-    $lang->admin->menuList->setting['menuOrder']['20'] = 'xuanxuan';
+    $lang->admin->menuList->system['subMenu']['xuanxuan'] = array('link' => '聊天|admin|xuanxuan|', 'subModule' => 'client,setting');
+    $lang->admin->menuList->system['menuOrder']['20'] = 'xuanxuan';
 }

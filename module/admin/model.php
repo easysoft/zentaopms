@@ -261,7 +261,7 @@ class adminModel extends model
      */
     public function setMenu()
     {
-        $this->sortMenu();
+        $this->checkPrivMenu();
 
         $menuKey = $this->getMenuKey();
         if(empty($menuKey)) return;
@@ -276,70 +276,58 @@ class adminModel extends model
     }
 
     /**
-     * sort menu.
+     * Check priv menu.
      *
      * @access public
      * @return void
      */
-    public function sortMenu()
+    public function checkPrivMenu()
     {
-        $orders   = array();
-        $disabled = array();
+        $orders = array();
         foreach($this->lang->admin->menuList as $menuKey => $menu)
         {
             $menu['disabled'] = false;
-            if(isset($menu['link']))
+            if(!isset($menu['link'])) $menu['link'] = '';
+            if(!empty($menu['link']) and strpos($menu['link'], '|') !== false)
             {
                 list($module, $method) = explode('|', $menu['link']);
                 $menu['link'] = helper::createLink($module, $method);
                 if(!common::hasPriv($module, $method)) $menu['disabled'] = true;
             }
 
-            if(isset($menu['menuOrder']))
+            $menuOrder = isset($menu['menuOrder']) ? $menu['menuOrder'] : array();
+            if($menuOrder)
             {
-                $menuOrder = $menu['menuOrder'];
                 ksort($menuOrder);
+
                 /* Check sub menu priv. */
+                list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
                 foreach($menuOrder as $subOrder => $subMenuKey)
                 {
-                    list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
                     if(!common::hasPriv($module, $method)) unset($menuOrder[$subOrder]);
                 }
+
                 /* Set link. */
                 if(!empty($menuOrder))
                 {
                     $subMenuKey = reset($menuOrder);
-                    list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
                     $menu['link'] = helper::createLink($module, $method, $params);
                 }
-                if(empty($menuOrder)) $menu['disabled'] = true;
             }
+            if(empty($menuOrder) and empty($menu['link'])) $menu['disabled'] = true;
 
             $order = $menu['order'];
             $orders[$order] = $menuKey;
-            if($menu['disabled'])
-            {
-                unset($orders[$order]);
-                $disabled[$menuKey] = $menu;
-            }
 
             $this->lang->admin->menuList->$menuKey = $menu;
         }
 
         ksort($orders);
         $menuList = new stdclass();
-        $index    = 1;
-        foreach($orders as $menuKey)
+        foreach($orders as $index => $menuKey)
         {
             $menuList->$menuKey = $this->lang->admin->menuList->$menuKey;
             $menuList->$menuKey['order'] = $index;
-            $index++;
-        }
-        foreach($disabled as $menuKey => $menu)
-        {
-            $menuList->$menuKey = $menu;
-            $menuList->$menuKey['order'] = $index;
-            $index++;
         }
 
         $this->lang->admin->menuList = $menuList;
@@ -385,7 +373,7 @@ class adminModel extends model
      * @access public
      * @return string
      */
-    public function getSwitcher($currentMenuKey = 'setting')
+    public function getSwitcher($currentMenuKey = 'system')
     {
         if(empty($currentMenuKey)) return null;
 
@@ -395,7 +383,7 @@ class adminModel extends model
         {
             $class = $menuKey == $currentMenuKey ? "class='active'" : '';
             if($menuGroup['disabled']) $class .= ' disabled';
-            $output .= "<li $class>" . html::a($menuGroup['link'], $menuGroup['name']) . "</li>";
+            $output .= "<li $class>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], $menuGroup['name']) . "</li>";
         }
         $output .= "</ul></div>";
 

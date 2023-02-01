@@ -197,8 +197,6 @@ class search extends control
         }
 
         $this->lang->navGroup->search  = 'admin';
-        $this->lang->search->menu      = $this->lang->admin->menu;
-        $this->lang->search->menuOrder = $this->lang->admin->menuOrder;
 
         $this->view->title = $this->lang->search->buildIndex;
         $this->display();

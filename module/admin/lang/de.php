@@ -148,3 +148,26 @@ $lang->admin->safe->noticeMode     = 'The password will be checked when creating
 $lang->admin->safe->noticeWeakMode = 'The password will be checked when logging into the system, creating and modifying user information, and changing passwords.';
 $lang->admin->safe->noticeStrong   = 'The longer the password, the more letters, numbers, or special characters it contains, and the less repetitive the password, the more secure it is!';
 $lang->admin->safe->noticeGd       = 'Your server does not have GD module installed, you cannot use the Captcha function, Please use it after installation.';
+
+$lang->admin->menuSetting['system']['name'] = 'System';
+$lang->admin->menuSetting['system']['desc'] = '';
+$lang->admin->menuSetting['user']['name'] = 'User';
+$lang->admin->menuSetting['user']['desc'] = '';
+$lang->admin->menuSetting['switch']['name'] = 'Switch';
+$lang->admin->menuSetting['switch']['desc'] = '';
+$lang->admin->menuSetting['model']['name'] = 'Model';
+$lang->admin->menuSetting['model']['desc'] = '';
+$lang->admin->menuSetting['feature']['name'] = 'Feature';
+$lang->admin->menuSetting['feature']['desc'] = '';
+$lang->admin->menuSetting['template']['name'] = 'Template';
+$lang->admin->menuSetting['template']['desc'] = '';
+$lang->admin->menuSetting['message']['name'] = 'Message';
+$lang->admin->menuSetting['message']['desc'] = '';
+$lang->admin->menuSetting['extension']['name'] = 'Extension';
+$lang->admin->menuSetting['extension']['desc'] = '';
+$lang->admin->menuSetting['dev']['name'] = 'Develop';
+$lang->admin->menuSetting['dev']['desc'] = '';
+$lang->admin->menuSetting['convert']['name'] = 'Data Import';
+$lang->admin->menuSetting['convert']['desc'] = '';
+
+include dirname(__FILE__) . '/menu.php';
