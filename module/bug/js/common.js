@@ -695,7 +695,7 @@ function loadExecutionBuilds(executionID, num)
     else
     {
         link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=false&type=normal&number=' + num);
-        $('#openedBuildBox' + num).load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleaseBuilds})});
+        $('#openedBuildBox' + num).load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleasedBuilds})});
 
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
