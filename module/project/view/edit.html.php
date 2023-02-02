@@ -40,6 +40,7 @@
 <?php js::set('allProducts', $allProducts);?>
 <?php js::set('branchGroups', $branchGroups);?>
 <?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>
+<?php js::set('model', $project->model);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
