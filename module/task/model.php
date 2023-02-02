@@ -579,7 +579,11 @@ class taskModel extends model
         if(!$taskID) return true;
 
         $tasks = $this->dao->select('`id`,`estimate`,`consumed`,`left`, status')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll('id');
-        if(empty($tasks)) return true;
+        if(empty($tasks))
+        {
+            $this->dao->update(TABLE_TASK)->set('consumed')->eq(0)->where('id')->eq($taskID)->exec();
+            return true;
+        }
 
         $estimate = 0;
         $consumed = 0;
