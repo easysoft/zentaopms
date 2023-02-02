@@ -2522,6 +2522,7 @@ EOD;
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
           ($module == 'report' && $method == 'annualdata') or
           ($module == 'misc' && $method == 'captcha') or
+          ($module == 'bug' && $method == 'create') or
           ($module == 'execution' and $method == 'printkanban') or
           ($module == 'traincourse' and $method == 'ajaxuploadlargefile') or
           ($module == 'traincourse' and $method == 'playvideo'))
