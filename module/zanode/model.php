@@ -28,9 +28,9 @@ class zanodemodel extends model
     const KVM_EXPORT_PATH = '/api/v1/kvm/exportVm';
     const KVM_STATUS_PATH = '/api/v1/task/getStatus';
 
-    const SNAPSHOT_CREATE_PATH = '/api/v1/snaps/addCreateSnap';
-    const SNAPSHOT_REVERT_PATH = '/api/v1/snaps/addRevertSnap';
-    const SNAPSHOT_REMOVE_PATH = '/api/v1/snaps/removeSnap';
+    const SNAPSHOT_CREATE_PATH = '/api/v1/kvm/addCreateSnap';
+    const SNAPSHOT_REVERT_PATH = '/api/v1/kvm/addRevertSnap';
+    const SNAPSHOT_REMOVE_PATH = '/api/v1/kvm/removeSnap';
 
     /**
      * Set lang;
@@ -208,12 +208,12 @@ class zanodemodel extends model
 
         /* Prepare create params. */
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
-        $param    = array(
+        $param    = array(array(
             'name'    => $data->name,
             'task'    => $newID,
             'type'    => 'createSnap',
             'vm'      => $node->name
-        );
+        ));
 
         $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
 
