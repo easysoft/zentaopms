@@ -40,6 +40,8 @@ class wg extends ele
     {
         if(!$this->props->has('items')) return;
 
+        if(!$this->props->has('itemsByPHP')) return;
+
         $items = $this->props->get('items');
         if(is_array($items))
         {
