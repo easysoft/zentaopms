@@ -2766,7 +2766,7 @@ class projectModel extends model
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
             $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-            if(isset($project->model) and $project->model == 'scrum')
+            if(isset($project->model) and ($project->model == 'scrum' or $project->model == 'agileplus'))
             {
                 $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
             }

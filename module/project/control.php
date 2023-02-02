@@ -764,6 +764,8 @@ class project extends control
 
         $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
+        unset($this->lang->project->modelList['']);
+
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
 
