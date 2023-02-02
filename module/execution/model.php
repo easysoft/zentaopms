@@ -593,7 +593,7 @@ class executionModel extends model
         }
 
         $relatedExecutionsID = $this->getRelatedExecutions($executionID);
-        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '';
+        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '0';
 
         /* Update data. */
         $this->lang->error->unique = $this->lang->error->repeat;

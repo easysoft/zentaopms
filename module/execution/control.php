@@ -1679,12 +1679,14 @@ class execution extends control
         {
             global $lang;
             $executionLang           = $lang->execution->common;
+            $executionCommonLang     = $lang->executionCommon;
             $lang->executionCommon   = $lang->execution->kanban;
             $lang->execution->common = $lang->execution->kanban;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             $lang->execution->common = $executionLang;
+            $lang->executionCommon   = $executionCommonLang;
 
-            $lang->execution->typeList['sprint'] = $lang->execution->common;
+            $lang->execution->typeList['sprint'] = $executionCommonLang;
         }
         elseif(!empty($project) and $project->model == 'waterfall')
         {
