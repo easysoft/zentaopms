@@ -3,8 +3,8 @@
 #zentaoLinks .panel .panel-heading {padding: 6px 10px;}
 .main-content.admin {padding: 0;}
 .admin {display: flex; background: unset; box-shadow: none;}
-.admin > .main {flex: 1 1 70%; padding-right: 16px;}
-.admin > .side {flex: 1 1 30%; padding-left: 10px;}
+.admin > .main {flex: 1 1 70%;}
+.admin > .side {flex: 1 1 30%; padding-left: 10px; margin-left: 16px;}
 .panel-title {padding: 10px 0px;}
 .flex {display: flex;}
 .panel {padding: 0 0 0 16px;}
