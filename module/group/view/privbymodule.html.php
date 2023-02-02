@@ -18,7 +18,7 @@
     </h2>
   </div>
 
-  <form class='table-bymodule pdb-20' method='post' target='hiddenwin'>
+  <form class='table-bymodule pdb-20 form-ajax' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr class='text-center'>
         <td class='strong'><?php echo $lang->group->module;?></td>
