@@ -906,11 +906,12 @@ class storyModel extends model
             return false;
         }
 
-        $storyPlan = !empty($_POST['plan']) ? array_filter($_POST['plan']) : array();
+        $storyPlan = array();
+        if(!empty($_POST['plan'])) $storyPlan = is_array($_POST['plan']) ? array_filter($_POST['plan']) : array($_POST['plan']);
         if(count($storyPlan) > 1)
         {
             $oldStoryPlan = !empty($oldStory->planTitle) ? array_keys($oldStory->planTitle) : array();
-            if(!empty(array_diff($storyPlan,$oldStoryPlan)) or !empty(array_diff($oldStoryPlan,$storyPlan)))
+            if(!empty(array_diff($storyPlan, $oldStoryPlan)) or !empty(array_diff($oldStoryPlan, $storyPlan)))
             {
                 dao::$errors[] = $this->lang->story->notice->changePlan;
                 return false;
