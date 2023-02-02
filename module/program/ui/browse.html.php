@@ -1,10 +1,35 @@
 <?php
 namespace zin;
 
+\commonModel::setMainMenu();
+
+$mainMenus = array();
+foreach(\customModel::getMainMenu() as $menuItem)
+{
+    $mainMenus[] = btn(
+        $menuItem->text,
+        set('url', \commonModel::createMenuLink($menuItem, $app->tab)),
+        setClass('primary'),
+    );
+}
+
 page
 (
-    set    ('title', $title),
-    h      ('h1', 'hello2')->setClass('text-danger'),
+    set       ('title', $title),
+    pageheader
+    (
+        pageheading
+        (
+            $lang->{$app->tab}->common,
+            set('icon', $app->tab),
+            set('url', \helper::createLink($app->tab, 'browse')),
+        ),
+        pagenavbar
+        (
+            set('menus', $mainMenus)
+        ),
+    ),
+    h         ('h1', 'hello2')->setClass('text-danger'),
     btn
     (
         'Primary',
@@ -32,7 +57,7 @@ page
         'body',
         html('<style>body{color:red}</style>'),
     ),
-    $listChildren
+    //$listChildren
 );
 
 /*

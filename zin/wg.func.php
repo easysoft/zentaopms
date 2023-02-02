@@ -36,3 +36,6 @@ function pagebase() {return createWg('pagebase', func_get_args());}
 function page()     {return createWg('page',     func_get_args());}
 function dtable()   {return createWg('dtable',   func_get_args());}
 
+function pageheader()  {return createWg('pageheader',  func_get_args());}
+function pageheading() {return createWg('pageheading', func_get_args());}
+function pagenavbar()  {return createWg('pagenavbar',  func_get_args());}
