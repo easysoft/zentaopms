@@ -219,7 +219,7 @@ class zanodemodel extends model
 
         if(!empty($result) and $result->code == 'success')
         {
-            $this->loadModel('action')->create('zanodesnapshot', $id, 'created');
+            $this->loadModel('action')->create('zanode', $id, 'createdSnapshot', '', $data->name);
             return $newID;
         }
 

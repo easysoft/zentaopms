@@ -79,6 +79,14 @@ $lang->zanode->createImageSuccess = 'Successed, You can use this image to create
 $lang->zanode->createImageFail    = 'Failed to create';
 $lang->zanode->createImageButton  = 'Create image';
 
+$lang->zanode->snapshotName    = 'Snapshot Name';
+$lang->zanode->browseSnapshot  = 'Snapshot List';
+$lang->zanode->createSnapshot  = 'Create Snapshot';
+$lang->zanode->editSnapshot    = 'Edit Snapshot';
+$lang->zanode->restoreSnapshot = 'Revert Snapshot';
+$lang->zanode->deleteSnapshot  = 'Delete Snapshot';
+$lang->zanode->snapshotEmpty   = 'No snapshots';
+
 $lang->zanode->imageNameEmpty = 'Name can not be empty.';
 
 $lang->zanode->runTimeout = 'Network connection timeout, please check the host and execution node status.';
