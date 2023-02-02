@@ -41,7 +41,7 @@ class pageheader extends \zin\core\wg
             return NULL;
         }
 
-        if(class_exists('\zin\wg\pagetoolbar') and $child instanceof \zin\wg\pagetoolbar)
+        if(class_exists('\zin\wg\toolbar') and $child instanceof \zin\wg\toolbar)
         {
             $this->toolbar = $child;
             return NULL;
@@ -71,7 +71,7 @@ class pageheader extends \zin\core\wg
     {
         $builder = parent::build($isPrint, $parent);
 
-        $container = h5::div()->addClass('container');
+        $container = h5::div()->addClass('container main-header');
 
         /* Heading. */
         $container->append($this->heading);

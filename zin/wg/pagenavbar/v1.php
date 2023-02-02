@@ -13,44 +13,44 @@ class pagenavbar extends \zin\core\wg
 
     static $customProps = 'text,menus';
 
-    /**
-     * Accept child node.
-     *
-     * @param  object    $child
-     * @param  bool      $strAsHtml
-     * @access protected
-     * @return mixed     object|string
-     */
-    protected function acceptChild($child, $strAsHtml = false)
-    {
-        /* Invoke parent method; */
-        $child = parent::acceptChild($child, $strAsHtml);
+    // /**
+    //  * Accept child node.
+    //  *
+    //  * @param  object    $child
+    //  * @param  bool      $strAsHtml
+    //  * @access protected
+    //  * @return mixed     object|string
+    //  */
+    // protected function acceptChild($child, $strAsHtml = false)
+    // {
+    //     /* Invoke parent method; */
+    //     $child = parent::acceptChild($child, $strAsHtml);
 
-        if(!$strAsHtml && is_string($child) && !$this->props->has('text'))
-        {
-            $this->prop('text', $child);
-            return NULL;
-        }
+    //     if(!$strAsHtml && is_string($child) && !$this->props->has('text'))
+    //     {
+    //         $this->prop('text', $child);
+    //         return NULL;
+    //     }
 
-        return $child;
-    }
+    //     return $child;
+    // }
 
-    /**
-     * Build builder.
-     *
-     * @param  bool      $isPrint
-     * @param  object    $parent
-     * @access protected
-     * @return object
-     */
-    protected function build($isPrint = false, $parent = NULL)
-    {
-        $builder = parent::build($isPrint, $this);
+    // /**
+    //  * Build builder.
+    //  *
+    //  * @param  bool      $isPrint
+    //  * @param  object    $parent
+    //  * @access protected
+    //  * @return object
+    //  */
+    // protected function build($isPrint = false, $parent = NULL)
+    // {
+    //     $builder = parent::build($isPrint, $this);
 
-        $menu = h5::menu(\zin\setClass('nav'));
-        foreach($this->prop('menus') as $item) $menu->append(h5::li(\zin\setClass('nav-item'), $item));
-        $builder->append($menu);
+    //     $menu = h5::menu(\zin\setClass('nav'));
+    //     foreach($this->prop('menus') as $item) $menu->append(h5::li(\zin\setClass('nav-item'), $item));
+    //     $builder->append($menu);
 
-        return $builder;
-    }
+    //     return $builder;
+    // }
 }
