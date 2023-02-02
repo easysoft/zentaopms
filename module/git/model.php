@@ -236,7 +236,7 @@ class gitModel extends model
      */
     public function setRepos()
     {
-        $repos    = $this->loadModel('repo')->getListBySCM('Git,Gitlab');
+        $repos    = $this->loadModel('repo')->getListBySCM('Git,Gitlab,Gogs,Gitea');
         $gitRepos = array();
         $paths    = array();
         foreach($repos as $repo)
