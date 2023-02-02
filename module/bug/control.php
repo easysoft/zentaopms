@@ -580,7 +580,7 @@ class bug extends control
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Get products and projects. */
-        $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc');
+        $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc', 'all');
         $projects = array(0 => '');
         if($executionID)
         {
