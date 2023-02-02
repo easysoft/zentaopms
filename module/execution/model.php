@@ -280,11 +280,11 @@ class executionModel extends model
         if($executionID == 0 and $this->session->execution) $executionID = $this->session->execution;
         if($executionID == 0) $executionID = key($executions);
 
-        $this->session->set('execution', (int)$executionID, $this->app->tab);
+        $this->session->set('execution', key($executions), $this->app->tab);
 
         if(!isset($executions[$executionID]))
         {
-            $this->session->set('execution', key($executions), $this->app->tab);
+            $this->session->set('execution', (int)$executionID, $this->app->tab);
 
             if($executionID)
             {
@@ -1287,6 +1287,7 @@ class executionModel extends model
         $currentExecutionName = $this->lang->execution->common;
         if($executionID)
         {
+            $executionID          = $executionID == $this->get->executionID ? $executionID : $this->get->executionID;
             $currentExecution     = $this->getById($executionID);
             $currentExecutionName = $currentExecution->name;
 
