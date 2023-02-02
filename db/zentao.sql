@@ -7216,7 +7216,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `finishedDate` datetime NOT NULL,
   `resolvedBy` varchar(30) NOT NULL,
   `resolvedDate` datetime NOT NULL,
-  `resolution` varchar(1000) NOT NULL,
+  `resolution` text NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
   `keywords` varchar(255) NOT NULL,
