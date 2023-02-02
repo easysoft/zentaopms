@@ -17,7 +17,7 @@ namespace zin\core;
 class classlist
 {
     /**
-     * Store classname list
+     * Store classname list, key => value
      *
      * @access public
      * @var    array
