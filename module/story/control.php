@@ -270,7 +270,7 @@ class story extends control
                     else
                     {
                         $sessionStoryList = $this->session->storyList;
-                        if(count($_POST['branches']) > 1) $sessionStoryList = preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
+                        if(!empty($_POST['branches']) and count($_POST['branches']) > 1) $sessionStoryList = preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
                         $response['locate'] = $sessionStoryList;
                     }
                 }
