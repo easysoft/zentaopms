@@ -2853,6 +2853,22 @@ class taskModel extends model
     }
 
     /**
+     * Get taskList date record.
+     *
+     * @param  int|array $taskID
+     * @access public
+     * @return array
+     */
+    public function getTaskDateRecord($taskID)
+    {
+        return $this->dao->select('id,date')->from(TABLE_EFFORT)->where('objectID')->in($taskID)
+            ->andWhere('objectType')->eq('task')
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('date')
+            ->fetchAll('id');
+    }
+
+    /**
      * Get estimate by id.
      *
      * @param  int    $effortID
