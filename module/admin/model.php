@@ -266,7 +266,7 @@ class adminModel extends model
         $menuKey = $this->getMenuKey();
         if(empty($menuKey)) return;
 
-        $this->lang->switcherMenu = $this->getSwitcher($menuKey);
+        $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
             if(isset($this->lang->admin->menuList->$menuKey['subMenu']))     $this->lang->admin->menu        = $this->lang->admin->menuList->$menuKey['subMenu'];
@@ -368,13 +368,13 @@ class adminModel extends model
     }
 
     /**
-     * Get switcher.
+     * Set switcher.
      *
      * @param  string $currentMenuKey
      * @access public
      * @return string
      */
-    public function getSwitcher($currentMenuKey = 'system')
+    public function setSwitcher($currentMenuKey = 'system')
     {
         if(empty($currentMenuKey)) return null;
 
@@ -393,7 +393,7 @@ class adminModel extends model
         }
         $output .= "</ul></div>";
 
-        return $output;
+        $this->lang->switcherMenu = $output;
     }
 
     /**
