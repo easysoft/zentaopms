@@ -14,7 +14,7 @@
 .settings-list > .setting-box.btn {flex: 1 1 18%; padding: 8px; border: 1px solid rgba(227, 228, 233, 0.6); margin-right: 10px; margin-top: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset;}
 .settings-list > .setting-box.btn[disabled] {cursor: not-allowed; pointer-events: unset;}
 .settings-list > .setting-box.btn[disabled] > a {pointer-events: none;}
-.settings-list > .setting-box > h4 > img {padding-right: 10px; padding-bottom: 3px;}
+.settings-list > .setting-box > h4 > img {padding-right: 8px; padding-bottom: 3px;}
 .settings-list > .setting-box > .setting-desc {padding-bottom: 16px;}
 .settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
 
