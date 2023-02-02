@@ -483,8 +483,8 @@ class actionModel extends model
             }
             elseif($action->objectType != 'feedback' and $actionName == 'tostory')
             {
-                $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
-                if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+                $story = $this->dao->select('title,vision')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch();
+                if($story) $action->extra = (common::hasPriv('story', 'view') and $story->vision == $this->config->vision) ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $story->title) : "#$action->extra " . $story->title;
             }
             elseif($actionName == 'importedcard')
             {
