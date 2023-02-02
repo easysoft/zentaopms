@@ -324,14 +324,14 @@ class programplanModel extends model
                 if($stage['planID'] == $task->execution)
                 {
                     $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
-                    $stageIndex[$index]['progress']['totalConsumed'] += $task->consumed;
+                    $stageIndex[$index]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
                     $stageIndex[$index]['progress']['totalReal']     += ($task->left + $task->consumed);
 
                     $parent = $stage['parent'];
                     if(isset($stageIndex[$parent]))
                     {
                         $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
-                        $stageIndex[$parent]['progress']['totalConsumed'] += $task->consumed;
+                        $stageIndex[$parent]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
                         $stageIndex[$parent]['progress']['totalReal']     += ($task->left + $task->consumed);
                     }
                 }
