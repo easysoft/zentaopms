@@ -19,7 +19,7 @@
       <div class="settings-list <?php if($config->vision == 'lite') echo 'lite-setting';?>">
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
-	<button class="setting-box btn" <?php if($menu['disabled']) echo 'disabled';?> data-link='<?php echo $menu['link'];?>'>
+	<button class="setting-box btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?> data-link='<?php echo $menu['link'];?>'>
 	  <h4><img src="/static/svg/admin-<?php echo $menuKey;?>.svg"/><?php echo $menu['name'];?></h4>
           <p class="text-muted setting-desc"><?php echo $menu['desc'];?></p>
           <?php echo html::a($config->admin->helpURL[$menuKey], "<i class='icon icon-help'></i> {$lang->help}", '_blank', 'class="text-muted setting-help"');?>
@@ -36,7 +36,7 @@
       </div>
       <div class="plugin-list" <?php if($langNotCN) echo 'style="flex-wrap: nowrap"';?>>
         <?php foreach($extensions as $extension):?>
-        <div class="plugin-item">
+        <div class="plugin-item shadow-primary-hover">
           <a href="<?php echo $extension->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-import'></i></a>
           <h4 class="plug-title"><?php echo $extension->name;?></h4>
           <p class='extension-desc'><?php echo strip_tags($extension->desc);?></p>
@@ -66,7 +66,7 @@
         </div>
         <div class="classList flex">
           <?php foreach($publicClass as $class):?>
-          <a class="classItem" href='<?php echo $class->viewLink;?>' target='_blank'>
+          <a class="classItem shadow-primary-hover" href='<?php echo $class->viewLink;?>' target='_blank'>
 	    <div class="imgBack">
               <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>
             </div>
