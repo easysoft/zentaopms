@@ -280,12 +280,10 @@ class executionModel extends model
         if($executionID == 0 and $this->session->execution) $executionID = $this->session->execution;
         if($executionID == 0) $executionID = key($executions);
 
-        $this->session->set('execution', key($executions), $this->app->tab);
+        $this->session->set('execution', (int)$executionID, $this->app->tab);
 
         if(!isset($executions[$executionID]))
         {
-            $this->session->set('execution', (int)$executionID, $this->app->tab);
-
             if($executionID)
             {
                 $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->fetch();
