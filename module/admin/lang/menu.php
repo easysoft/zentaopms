@@ -80,6 +80,7 @@ $lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "{$lang-
 $lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "{$lang->waterfallModel}|stage|settype|", 'subModule' => 'stage');
 
 $lang->admin->menuList->model['menuOrder']['5']  = 'common';
+$lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
 $lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
 
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo");
@@ -102,12 +103,12 @@ $lang->admin->menuList->feature['dividerMenu'] = ',user,';
 
 $lang->admin->menuList->message['subMenu']['mail']    = array('link' => "{$lang->mail->common}|mail|edit|", 'subModule' => 'mail');
 $lang->admin->menuList->message['subMenu']['webhook'] = array('link' => "Webhook|webhook|browse|", 'subModule' => 'webhook');
-$lang->admin->menuList->message['subMenu']['message'] = array('link' => "{$lang->browser}|message|browser|");
+$lang->admin->menuList->message['subMenu']['browser'] = array('link' => "{$lang->browser}|message|browser|");
 $lang->admin->menuList->message['subMenu']['setting'] = array('link' => "{$lang->settings}|message|setting|");
 
 $lang->admin->menuList->message['menuOrder']['5']  = 'mail';
 $lang->admin->menuList->message['menuOrder']['10'] = 'webhook';
-$lang->admin->menuList->message['menuOrder']['20'] = 'message';
+$lang->admin->menuList->message['menuOrder']['20'] = 'browser';
 $lang->admin->menuList->message['menuOrder']['25'] = 'setting';
 
 $lang->admin->menuList->dev['subMenu']['api']    = array('link' => "API|dev|api|");
@@ -120,7 +121,7 @@ $lang->admin->menuList->dev['menuOrder']['10'] = 'db';
 $lang->admin->menuList->dev['menuOrder']['15'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['20'] = 'entry';
 
-if($config->edition != 'max') unset($lang->admin->menuList->model['subMenu']['scrum']);
+if($config->edition != 'max') unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
 if(!helper::hasFeature('waterfall'))
 {
     unset($lang->admin->menuList->model['subMenu']['waterfall']);
@@ -128,14 +129,7 @@ if(!helper::hasFeature('waterfall'))
 }
 if($config->edition == 'max' and !helper::hasFeature('scrum_auditplan'))
 {
-    if(!helper::hasFeature('scrum_process'))
-    {
-        $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
-    }
-    else
-    {
-        unset($lang->admin->menuList->model['subMenu']['scrum']);
-    }
+    if(helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
 }
 
 if($config->vision == 'lite')

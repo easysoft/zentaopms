@@ -42,6 +42,9 @@ $('#navbar ul.nav li[data-id=<?php echo $module?>]').addClass('active');
 <?php if($module == 'todo'):?>
 $('#navbar ul.nav li[data-id=my]').addClass('active');
 <?php endif;?>
+<?php if($module == 'baseline'):?>
+$('#navbar ul.nav li[data-id=type]').addClass('active');
+<?php endif;?>
 </script>
 <?php if($module == 'story' and $field == 'review'):?>
 <style>
