@@ -476,7 +476,7 @@ class story extends control
         $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement') : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
-        $this->view->category         = $category ? $category : 'feature';
+        $this->view->category         = !empty($category) ? $category : 'feature';
 
         $this->display();
     }
