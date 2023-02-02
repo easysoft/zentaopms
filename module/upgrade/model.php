@@ -7576,7 +7576,12 @@ class upgradeModel extends model
             $project->lastEditedDate = $now;
             $project->grade          = 2;
             $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
-            if($fromMode == 'classic') $project->multiple = '0';
+            if($fromMode == 'classic')
+            {
+                $project->multiple = '0';
+                $project->code     = $sprint->code;
+                $project->team     = $sprint->team;
+            }
 
             $this->dao->insert(TABLE_PROJECT)->data($project)->exec();
             if(dao::isError()) return false;
