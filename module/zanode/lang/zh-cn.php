@@ -48,6 +48,7 @@ $lang->zanode->confirmReboot   = "您确定重启执行节点吗？";
 $lang->zanode->confirmShutdown = "您确定关闭执行节点吗？";
 $lang->zanode->confirmSuspend  = "您确定休眠执行节点吗？";
 $lang->zanode->confirmResume   = "您确定恢复执行节点吗？";
+$lang->zanode->confirmRestore  = "您确定还原执行节点吗？";
 $lang->zanode->actionSuccess   = '操作成功';
 $lang->zanode->deleted         = "已删除";
 $lang->zanode->scriptPath      = "脚本目录";
@@ -87,10 +88,16 @@ $lang->zanode->restoreSnapshot = '还原快照';
 $lang->zanode->deleteSnapshot  = '删除快照';
 $lang->zanode->snapshotEmpty   = '无快照';
 
-$lang->zanode->snapshot->statusList['creating']  = '创建中';
-$lang->zanode->snapshot->statusList['completed'] = '已完成';
+$lang->zanode->snapshot->statusList['creating']          = '创建中';
+$lang->zanode->snapshot->statusList['completed']         = '创建完成';
+$lang->zanode->snapshot->statusList['restoring']         = '还原中';
+$lang->zanode->snapshot->statusList['restore_failed']    = '还原失败';
+$lang->zanode->snapshot->statusList['restore_completed'] = '还原成功';
 
 $lang->zanode->imageNameEmpty = '名称不能为空';
+$lang->zanode->imageNameEmpty  = '名称不能为空';
+$lang->zanode->snapStatusError = '快照不可用';
+$lang->zanode->snapRestoring   = '快照正在还原中';
 
 $lang->zanode->runTimeout = '自动执行失败，请检查宿主机和执行节点状态';
 

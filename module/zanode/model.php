@@ -255,6 +255,52 @@ class zanodemodel extends model
     }
 
     /**
+     * Restore Snapshot to zanode.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return void
+     */
+    public function restoreSnapshot($zanodeID = 0, $snapshotID = 0)
+    {
+        $node = $this->getNodeByID($zanodeID);
+        $snap = $this->getImageByID($snapshotID);
+
+        $snap->status = ($snap->status == 'restoring' && time() - strtotime($snap->restoreDate) > 600) ? 'restore_failed' : $snap->status;
+        if(!in_array($snap->status, array('completed', 'restoring', 'restore_failed', 'restore_completed'))) dao::$errors = $this->lang->zanode->snapStatusError;
+        if($snap->status == 'restoring') dao::$errors = $this->lang->zanode->snapRestoring;
+        if(dao::isError()) return false;
+
+        //update snapshot status
+        $this->dao->update(TABLE_IMAGE)
+        ->set('status')->eq('restoring')
+        ->set('restoreDate')->eq(helper::now())
+        ->where('id')->eq($snapshotID)->exec();
+
+        /* Prepare create params. */
+        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
+        $param    = array(array(
+            'name'    => $snap->name,
+            'task'    => $snapshotID,
+            'type'    => 'revertSnap',
+            'vm'      => $node->name
+        ));
+
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
+
+        if(!empty($result) and $result->code == 'success')
+        {
+            $this->loadModel('action')->create('zanode', $zanodeID, 'restoredsnapshot', '', $snap->name);
+            return true;
+        }
+
+        $this->dao->update(TABLE_IMAGE)->set('status')->eq('completed')->where('id')->eq($snapshotID)->exec();
+        dao::$errors[] = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->lang->zanode->apiError['fail'];
+        return false;
+    }
+
+
+    /**
      * Action Node.
      *
      * @param  int $id

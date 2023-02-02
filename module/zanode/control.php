@@ -424,6 +424,32 @@ class zanode extends control
     }
 
     /**
+     * Restore node.
+     *
+     * @param  int  $nodeID
+     * @return void
+     */
+    public function restoreSnapshot($nodeID, $snapshotID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->zanode->confirmRestore, inlink('restoreSnapshot', "nodeID={$nodeID}&snapshotID={$snapshotID}&confirm=yes")));
+        }
+
+        $this->zanode->restoreSnapshot($nodeID, $snapshotID);
+
+        if(dao::isError())
+        {
+            return print(js::alert(dao::getError()) . js::reload('parent'));
+        }
+        else
+        {
+            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+        }
+    }
+
+    /**
      * Ajax get template pairs by api.
      *
      * @param  int    $hostID

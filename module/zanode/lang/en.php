@@ -42,12 +42,13 @@ $lang->zanode->vnc             = 'VNC Port';
 $lang->zanode->destroyAt       = 'Destroy Time';
 $lang->zanode->creater         = 'Creator';
 $lang->zanode->createdDate     = 'Create Date';
-$lang->zanode->confirmDelete   = "Are you sure about destroying the ZenAgent Node？";
-$lang->zanode->confirmBoot     = "Are you sure to start the ZenAgent Node？";
-$lang->zanode->confirmReboot   = "Are you sure to restart the ZenAgent Node？";
-$lang->zanode->confirmShutdown = "Are you sure to shutdown the ZenAgent Node？";
-$lang->zanode->confirmSuspend  = "Are you sure to suspend the ZenAgent Node？";
-$lang->zanode->confirmResume   = "Are you sure to resume the ZenAgent Node？";
+$lang->zanode->confirmDelete   = "Are you sure about destroying the ZenAgent Node?";
+$lang->zanode->confirmBoot     = "Are you sure to start the ZenAgent Node?";
+$lang->zanode->confirmReboot   = "Are you sure to restart the ZenAgent Node?";
+$lang->zanode->confirmShutdown = "Are you sure to shutdown the ZenAgent Node?";
+$lang->zanode->confirmSuspend  = "Are you sure to suspend the ZenAgent Node?";
+$lang->zanode->confirmResume   = "Are you sure to resume the ZenAgent Node?";
+$lang->zanode->confirmRestore  = "Are you sure to restore the ZenAgent Node?";
 $lang->zanode->actionSuccess   = 'Success';
 $lang->zanode->deleted         = "Deleted";
 $lang->zanode->scriptPath      = "Script path";
@@ -87,7 +88,15 @@ $lang->zanode->restoreSnapshot = 'Revert Snapshot';
 $lang->zanode->deleteSnapshot  = 'Delete Snapshot';
 $lang->zanode->snapshotEmpty   = 'No snapshots';
 
-$lang->zanode->imageNameEmpty = 'Name can not be empty.';
+$lang->zanode->snapshot->statusList['creating']          = 'Creating';
+$lang->zanode->snapshot->statusList['completed']         = 'Create Completed';
+$lang->zanode->snapshot->statusList['restoring']         = 'Restoring';
+$lang->zanode->snapshot->statusList['restore_failed']    = 'Restore Failed';
+$lang->zanode->snapshot->statusList['restore_completed'] = 'Restore Completed';
+
+$lang->zanode->imageNameEmpty  = 'Name can not be empty.';
+$lang->zanode->snapStatusError = 'Snapshot is not ready.';
+$lang->zanode->snapRestoring   = 'Snapshot is restoring.';
 
 $lang->zanode->runTimeout = 'Network connection timeout, please check the host and execution node status.';
 

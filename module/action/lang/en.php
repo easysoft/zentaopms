@@ -238,6 +238,7 @@ $lang->action->desc->switchtolight        = '$date, Switch from ALM mode to ligh
 $lang->action->desc->getvnc               = '$date, Remote control <strong>$extra</strong> by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the ' . $lang->executionCommon . 's of the project from the $extra.' . "\n";
 $lang->action->desc->createdsnapshot      = '$date, <strong>$actor</strong> creates a snapshot <strong>$extra</strong>。' . "\n";
+$lang->action->desc->restoredsnapshot       = '$date, <strong>$actor</strong> restored a snapshot <strong>$extra</strong>。' . "\n";
 $lang->action->desc->editsnapshot         = '$date, <strong>$actor</strong> edited the snapshot <strong>$extra</strong>。' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
@@ -422,6 +423,7 @@ $lang->action->label->linkedrepo            = 'Linked Code Repo';
 $lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
 $lang->action->label->unlinkproduct         = 'Unlinked Product';
 $lang->action->label->createdsnapshot       = 'create snapshot';
+$lang->action->label->restoredsnapshot        = 'create snapshot';
 $lang->action->label->editsnapshot          = 'edit snapshot';
 
 /* Dynamic information is grouped by object. */
