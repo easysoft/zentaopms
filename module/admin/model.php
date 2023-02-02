@@ -429,6 +429,7 @@ class adminModel extends model
             {
                 $extensions = array(
                     $this->config->admin->plugIns[198],
+                    $this->config->admin->plugIns[194],
                     $this->config->admin->plugIns[203]
                 );
             }

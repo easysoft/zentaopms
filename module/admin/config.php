@@ -49,10 +49,10 @@ $config->admin->plugIns[30]->name     = '日志日历';
 $config->admin->plugIns[30]->desc     = '运用此插件可以实现工作日志的添加、编辑、查看、删除、导出等功能，方便用户管理工作日志。';
 $config->admin->plugIns[30]->viewLink = 'https://www.zentao.net/extension-viewExt-30.html';
 
-//$config->admin->plugIns[] = new stdClass();
-//$config->admin->plugIns[]->name     = '';
-//$config->admin->plugIns[]->desc     = '';
-//$config->admin->plugIns[]->viewLink = 'https://www.zentao.net/extension-viewExt-203.html';
+$config->admin->plugIns[194] = new stdClass();
+$config->admin->plugIns[194]->name     = '应用巡检报告';
+$config->admin->plugIns[194]->desc     = '每日生成公司级禅道应用巡检报告，促进项目管理持续改进。';
+$config->admin->plugIns[194]->viewLink = 'https://www.zentao.net/extension-viewExt-194.html';
 
 $config->admin->apiRoot      = 'https://www.zentao.net/';
 $config->admin->classURL     = 'https://www.zentao.net/publicclass.html';
