@@ -179,3 +179,15 @@ $(function(){
         checkServiceStatus();
     }, 2000);
 })
+
+/**
+ * Edit Snapshot.
+ *
+ * @param string $link
+ * @access public
+ * @return void
+ */
+function editSnapshot(link)
+{
+    $('#editSnapshot').attr('href', link).click();
+}

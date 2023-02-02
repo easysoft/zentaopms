@@ -295,7 +295,6 @@ class zanode extends control
      */
     public function createSnapshot($nodeID = 0)
     {
-        $task = '';
         $node = $this->zanode->getNodeByID($nodeID);
 
         if($_POST)
@@ -308,12 +307,38 @@ class zanode extends control
                 $response['message'] = dao::getError();
                 return $this->send($response);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->task = $task;
         $this->view->node = $node;
-        $this->view->rate = !empty($task->rate) ? $task->rate : 0;
+        $this->display();
+    }
+
+    /**
+     * Edit Snapshot.
+     *
+     * @param int $snapshotID
+     * @access public
+     * @return void
+     */
+    public function editSnapshot($snapshotID)
+    {
+        $snapshot = $this->zanode->getImageByID($snapshotID);
+        if($_POST)
+        {
+            $this->zanode->editSnapshot($snapshotID);
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+            $this->loadModel('action')->create('zanode', $snapshot->host, 'editSnapshot', '', $snapshot->localName ? $snapshot->localName : $snapshot->name);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->snapshot = $snapshot;
         $this->display();
     }
 
@@ -365,6 +390,19 @@ class zanode extends control
         $this->display();
     }
 
+    /**
+     * Browse snapshot.
+     *
+     * @param int    $nodeID
+     * @param string $browseType
+     * @param int    $param
+     * @param string $orderBy
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
+     * @access public
+     * @return void
+     */
     public function browseSnapshot($nodeID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadLang('zahost');

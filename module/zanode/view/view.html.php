@@ -202,6 +202,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
         ?>
         <div class='divider'></div>
         <?php echo $this->zanode->buildOperateMenu($zanode, 'view'); ?>
+        <a id='editSnapshot' href='' class='iframe'></a>
       </div>
     </div>
   </div>

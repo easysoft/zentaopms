@@ -219,7 +219,7 @@ class zanodemodel extends model
 
         if(!empty($result) and $result->code == 'success')
         {
-            $this->loadModel('action')->create('zanode', $id, 'createdSnapshot', '', $data->name);
+            $this->loadModel('action')->create('zanode', $zanodeID, 'createdSnapshot', '', $data->name);
             return $newID;
         }
 
@@ -228,6 +228,31 @@ class zanodemodel extends model
         return false;
     }
 
+    /**
+     * Edit Snapshot.
+     *
+     * @param int $snapshotID
+     * @access public
+     * @return bool
+     */
+    public function editSnapshot($snapshotID)
+    {
+        $data = fixer::input('post')->get();
+
+        if(empty($data->name)) dao::$errors['name'] = $this->lang->zanode->imageNameEmpty;
+        if(dao::isError()) return false;
+
+        $newSnapshot = new stdClass();
+        $newSnapshot->localName = $data->name;
+        $newSnapshot->desc       = $data->desc;
+
+        $this->dao->update(TABLE_IMAGE)
+            ->data($newSnapshot)
+            ->where('id')->eq($snapshotID)
+            ->autoCheck()
+            ->exec();
+        return true;
+    }
 
     /**
      * Action Node.

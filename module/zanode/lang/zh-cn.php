@@ -87,6 +87,9 @@ $lang->zanode->restoreSnapshot = '还原快照';
 $lang->zanode->deleteSnapshot  = '删除快照';
 $lang->zanode->snapshotEmpty   = '无快照';
 
+$lang->zanode->snapshot->statusList['creating']  = '创建中';
+$lang->zanode->snapshot->statusList['completed'] = '已完成';
+
 $lang->zanode->imageNameEmpty = '名称不能为空';
 
 $lang->zanode->runTimeout = '自动执行失败，请检查宿主机和执行节点状态';
@@ -97,7 +100,6 @@ $lang->zanode->apiError['fail']   = '执行失败，请检查宿主机和执行�
 $lang->zanode->publicList[0] = '不共享';
 $lang->zanode->publicList[1] = '共享';
 
-$lang->zanode->statusList['creating']     = '创建中';
 $lang->zanode->statusList['created']      = '已创建';
 $lang->zanode->statusList['launch']       = '运行中';
 $lang->zanode->statusList['ready']        = '运行中';

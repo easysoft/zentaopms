@@ -237,6 +237,8 @@ $lang->action->desc->relieved             = '$date, relieved by <strong>$actor</
 $lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
 $lang->action->desc->getvnc               = '$date, Remote control <strong>$extra</strong> by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the ' . $lang->executionCommon . 's of the project from the $extra.' . "\n";
+$lang->action->desc->createdsnapshot      = '$date, <strong>$actor</strong> creates a snapshot <strong>$extra</strong>。' . "\n";
+$lang->action->desc->editsnapshot         = '$date, <strong>$actor</strong> edited the snapshot <strong>$extra</strong>。' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -419,6 +421,8 @@ $lang->action->label->switchtolight         = 'switch from ALM mode to light mod
 $lang->action->label->linkedrepo            = 'Linked Code Repo';
 $lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
 $lang->action->label->unlinkproduct         = 'Unlinked Product';
+$lang->action->label->createdsnapshot       = 'create snapshot';
+$lang->action->label->editsnapshot          = 'edit snapshot';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
