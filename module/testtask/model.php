@@ -1082,7 +1082,7 @@ class testtaskModel extends model
             }
 
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
-            $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`', 't2.`status`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`', 't1.`status`'), $caseQuery);
+            $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`'), $caseQuery);
 
             /* Select the table for these special fields. */
             $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';

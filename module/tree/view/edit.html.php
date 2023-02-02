@@ -58,7 +58,11 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
           <th class='thWidth'><?php echo ($type == 'doc') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
-          <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?></td>
+          <td>
+            <div class='input-group' id='moduleIdBox'>
+              <?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?>
+            </div>
+          </td>
         </tr>
         <?php endif;?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
@@ -184,13 +188,12 @@ function loadModules(branch)
     var productID = $('#root').val();
     var branchID  = $(branch).val();
     var moduleID  = $('#parent').val();
-    var moduleBox = $('#parent').closest('tr').children('td');
 
     if(typeof(branchID) == 'undefined') branchID = 0;
     if(typeof(moduleID) == 'undefined') moduleID = 0;
 
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=' + type + '&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=excludeModuleID=' + <?php echo $module->id;?> + ',noMainBranch,nodeleted&currentModuleID=' + moduleID);
-    $(moduleBox).load(link, function()
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=' + type + '&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=false&extra=excludeModuleID=' + <?php echo $module->id;?> + ',noMainBranch,nodeleted&currentModuleID=' + moduleID);
+    $('#moduleIdBox').load(link, function()
     {
         $(this).children('select').attr('id', 'parent').attr('name', 'parent');
         $(this).find('select').chosen()

@@ -16,6 +16,7 @@
 .settings-list > .setting-box.btn[disabled] > a {pointer-events: none;}
 .settings-list > .setting-box > h4 > img {padding-right: 10px; padding-bottom: 3px;}
 .settings-list > .setting-box > .setting-desc {padding-bottom: 16px;}
+.settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
 .plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 10px; margin-bottom: 16px; width: 0px;}
