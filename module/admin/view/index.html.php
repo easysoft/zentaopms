@@ -16,8 +16,9 @@
   <div class="main">
     <div class="settings panel">
       <div class="panel-title"><?php echo $lang->admin->setting?></div>
-      <div class="settings-list">
+      <div class="settings-list <?php if($config->vision == 'lite') echo 'lite-setting';?>">
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
+        <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
         <div class="setting-box" data-link='<?php echo $menu['link'];?>'>
 	  <h4><img src="/static/svg/admin-<?php echo $menuKey;?>.svg"/><?php echo $menu['name'];?></h4>
           <p class="text-muted setting-desc"><?php echo $menu['desc'];?></p>
@@ -80,7 +81,7 @@
   </div>
 
   <?php if($hasInternet and !$langNotCN):?>
-  <div class="side panel">
+  <div class="side panel hidden">
     <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
   </div>
   <?php endif;?>
