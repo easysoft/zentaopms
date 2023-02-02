@@ -13,17 +13,17 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('hasInternet', $hasInternet);?>
 <div id='mainContent' class='main-content admin'>
-  <div class="main">
+  <div class="main <?php if(!$hasInternet) echo 'without-internet';?>">
     <div class="settings panel">
       <div class="panel-title"><?php echo $lang->admin->setting?></div>
       <div class="settings-list <?php if($config->vision == 'lite') echo 'lite-setting';?>">
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
-        <div class="setting-box" data-link='<?php echo $menu['link'];?>'>
+	<button class="setting-box btn" <?php if($menu['disabled']) echo 'disabled';?> data-link='<?php echo $menu['link'];?>'>
 	  <h4><img src="/static/svg/admin-<?php echo $menuKey;?>.svg"/><?php echo $menu['name'];?></h4>
           <p class="text-muted setting-desc"><?php echo $menu['desc'];?></p>
           <?php echo html::a($config->admin->helpURL[$menuKey], "<i class='icon icon-help'></i> {$lang->help}", '_blank', 'class="text-muted setting-help"');?>
-        </div>
+        </button>
         <?php endforeach;?>
       </div>
     </div>
@@ -47,14 +47,14 @@
     <?php endif;?>
 
     <?php if(!$langNotCN):?>
-    <div class="flex bottom">
-      <div class="panel official">
-        <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
-	    <div class="flex main-panel">
-	      <div class="official-img"></div>
-	      <div class="official-content">
-              <div class="title"><?php echo $lang->admin->followUs?></div>
-              <div class="content"> <?php echo $lang->admin->followUsContent?></div>
+      <div class="flex bottom">
+        <div class="panel official">
+          <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
+	  <div class="flex main-panel">
+	    <div class="official-img"></div>
+	    <div class="official-content">
+            <div class="title"><?php echo $lang->admin->followUs?><i class="icon follow-us icon-arrow-right text-primary"></i></div>
+            <div class="content"> <?php echo $lang->admin->followUsContent?></div>
           </div>
         </div>
       </div>
