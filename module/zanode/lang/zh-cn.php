@@ -80,16 +80,18 @@ $lang->zanode->createImageSuccess = '镜像导出成功，您可以使用此镜�
 $lang->zanode->createImageFail    = '镜像导出失败';
 $lang->zanode->createImageButton  = '去创建';
 
-$lang->zanode->snapshotName    = '快照名称';
-$lang->zanode->browseSnapshot  = '快照列表';
-$lang->zanode->createSnapshot  = '创建快照';
-$lang->zanode->editSnapshot    = '编辑快照';
-$lang->zanode->restoreSnapshot = '还原快照';
-$lang->zanode->deleteSnapshot  = '删除快照';
-$lang->zanode->snapshotEmpty   = '无快照';
+$lang->zanode->snapshotName          = '快照名称';
+$lang->zanode->browseSnapshot        = '快照列表';
+$lang->zanode->createSnapshot        = '创建快照';
+$lang->zanode->editSnapshot          = '编辑快照';
+$lang->zanode->restoreSnapshot       = '还原快照';
+$lang->zanode->deleteSnapshot        = '删除快照';
+$lang->zanode->snapshotEmpty         = '无快照';
+$lang->zanode->confirmDeleteSnapshot = "快照被删除后无法从回收站中还原，您确定继续么？";
 
 $lang->zanode->snapshot->statusList['creating']          = '创建中';
 $lang->zanode->snapshot->statusList['completed']         = '创建完成';
+$lang->zanode->snapshot->statusList['failed']            = '创建失败';
 $lang->zanode->snapshot->statusList['restoring']         = '还原中';
 $lang->zanode->snapshot->statusList['restore_failed']    = '还原失败';
 $lang->zanode->snapshot->statusList['restore_completed'] = '还原成功';

@@ -299,6 +299,42 @@ class zanodemodel extends model
         return false;
     }
 
+    /**
+     * Delete Snapshot.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function deleteSnapshot($snapshotID)
+    {
+        $snapshot = $this->getImageByID($snapshotID);
+        $node = $this->getNodeByID($snapshot->host);
+
+        if($node)
+        {
+            $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
+            $param    = (object)array(
+                'name'    => $snapshot->name,
+                'task'    => $snapshotID,
+                'vm'      => $node->name
+            );
+
+            $result = commonModel::http($agnetUrl . static::SNAPSHOT_REMOVE_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"));
+            $result = json_decode($result);
+
+            if(!empty($result) and $result->code == 'success')
+            {
+                $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->exec();
+                $this->loadModel('action')->create('zanode', $node->id, 'deletesnapshot', '', $snapshot->name);
+                return true;
+            }
+
+            $error = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->lang->zanode->apiError['fail'];
+            return $error;
+        }
+    }
+
 
     /**
      * Action Node.
@@ -661,6 +697,15 @@ class zanodemodel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('name');
+
+        foreach($snapshotList as $name => $snapshot)
+        {
+            if($snapshot->status == 'creating' and (time() - strtotime($snapshot->createdDate)) > 1800)
+            {
+                $this->dao->update(TABLE_IMAGE)->set('status')->eq('failed')->where('id')->eq($snapshot->id)->exec();
+                $snapshotList[$name]->status = 'failed';
+            }
+        }
 
         return $snapshotList;
     }
