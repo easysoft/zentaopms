@@ -490,7 +490,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2672,7 +2672,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2699,7 +2699,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2726,7 +2726,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2754,7 +2754,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2777,7 +2777,7 @@ class bugModel extends model
     {
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('confirmed')->eq(0)
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
@@ -2805,7 +2805,7 @@ class bugModel extends model
     {
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
@@ -2835,7 +2835,7 @@ class bugModel extends model
     {
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
@@ -2867,7 +2867,7 @@ class bugModel extends model
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('lastEditedDate')->lt($lastEditedDate)
             ->andWhere('product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
@@ -2898,7 +2898,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2956,7 +2956,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('closed')
             ->andWhere('id')->in($actionIDList)
