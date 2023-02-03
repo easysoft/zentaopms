@@ -16,6 +16,7 @@ class toolbar extends \zin\core\wg
         $builder = parent::build($isPrint, $parent);
 
         $id = $this->prop('id');
+        $this->props->remove('id');
         $builder->jsVar('options', $this->props->data);
         $builder->js(<<<END
             domReady(() => {
