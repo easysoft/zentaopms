@@ -3,6 +3,7 @@
 #zentaoLinks .panel .panel-heading {padding: 6px 10px;}
 .main-content.admin {padding: 0;}
 .admin {display: flex; background: unset; box-shadow: none;}
+.admin h4 {color: #0B0F18;}
 .admin > .main {flex: 1 1 70%;}
 .admin > .side {flex: 1 1 30%; padding-left: 10px; margin-left: 16px;}
 .panel-title {padding: 10px 0px;}
@@ -15,7 +16,6 @@
 .settings-list > .setting-box.btn:hover {background: unset;}
 .settings-list > .setting-box.btn[disabled] {cursor: not-allowed; pointer-events: unset;}
 .settings-list > .setting-box.btn[disabled] > a {pointer-events: none;}
-.settings-list > .setting-box > h4 {color: #0B0F18;}
 .settings-list > .setting-box > h4 > img {padding-right: 8px; padding-bottom: 3px;}
 .settings-list > .setting-box > .setting-desc {padding-bottom: 16px;}
 .settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
