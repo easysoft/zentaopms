@@ -1,38 +1,53 @@
 <?php
 namespace zin;
 
+\commonModel::setMainMenu();
+
+$navItems = array();
+foreach(\customModel::getMainMenu() as $menuItem)
+{
+    $navItems[] = array
+    (
+        'text'   => $menuItem->text,
+        'url'    => \commonModel::createMenuLink($menuItem, $app->tab),
+        'active' => $menuItem->order === 1,
+    );
+}
+
 page
 (
-    set    ('title', $title),
-    h      ('h1', 'hello2')->setClass('text-danger'),
-    btn
+    set       ('title', $title),
+    pageheader
     (
-        'Primary',
-        set('.', array('text-danger' => true)),
-        set('active', true),
-        set('icon', 'flag'),
-    ),
-    icon('project'),
-    icon(set('name', 'project')),
-    div
-    (
-        icon('star'),
-        setClass ('primary-pale'),
-        h2       ('Headings2'),
-        h3       ('Headings3'),
-        html     ('<div>test</div>'),
-        p
+        pageheading
         (
-            'lorem',
-            strong('bold'),
-        )
+            $lang->{$app->tab}->common,
+            set('icon', $app->tab),
+            set('url', \helper::createLink($app->tab, 'browse')),
+        ),
+        pagenavbar
+        (
+            zuinav
+            (
+                set('items', $navItems),
+            ),
+        ),
+        toolbar
+        (
+            setId('toolbar'),
+            set('items', array
+                (
+                    array('icon' => 'icon-plus'),
+                    array('icon' => 'icon-group'),
+                    array('text' => '研发综合界面'),
+                )
+            ),
+        ),
     ),
-    to
-    (
-        'body',
-        html('<style>body{color:red}</style>'),
+
+    pagemain(
+
     ),
-    $listChildren
 );
 
 /*
