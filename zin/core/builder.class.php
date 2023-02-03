@@ -30,6 +30,7 @@ class builder
 
     /**
      * props of element
+     * @var props
      */
     public $props;
 

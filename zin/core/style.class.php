@@ -130,10 +130,10 @@ class style extends dataset
             /* Skip any empty value */
             if(empty($value)) continue;
 
-            $pairs[] = $prop . '="' . strval($value) . '"';
+            $pairs[] = $prop . ': ' . strval($value) . ';';
         }
 
-        return implode(';', $pairs);
+        return implode(' ', $pairs);
     }
 
     /**
