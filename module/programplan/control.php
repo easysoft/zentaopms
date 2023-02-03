@@ -234,6 +234,7 @@ class programplan extends control
         $this->app->loadLang('stage');
         $this->view->title        = $this->lang->programplan->edit;
         $this->view->position[]   = $this->lang->programplan->edit;
+        $this->view->PMUsers      = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst', $plan->PM);
         $this->view->parentStage  = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
         $this->view->isCreateTask = $this->programplan->isCreateTask($planID);
         $this->view->plan         = $plan;
