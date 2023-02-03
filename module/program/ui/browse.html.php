@@ -29,12 +29,14 @@ page
         (
             zuinav
             (
+                set('js-render', true),
                 set('items', $navItems),
             ),
         ),
         toolbar
         (
             setId('toolbar'),
+            set('js-render', true),
             set('items', array
                 (
                     array('icon' => 'icon-plus'),

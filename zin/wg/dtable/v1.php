@@ -22,9 +22,14 @@ class dtable extends \zin\core\wg
     {
         $builder = parent::build($isPrint, $parent);
 
-        $builder->jsVar('options', $this->props->data);
-        $id = $this->prop('id');
-        $builder->js("domReady(() => {const dtable = new zui.DTable('#$id', options);});");
+        $jsRender = $this->prop('js-render');
+        if ($jsRender)
+        {
+            $id = $this->prop('id');
+            $this->props->remove('id');
+            $builder->jsVar('options', $this->props->data);
+            $builder->js("domReady(() => {const dtable = new zui.DTable('#$id', options);});");
+        }
         return $builder;
     }
 }

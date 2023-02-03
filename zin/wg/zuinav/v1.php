@@ -22,14 +22,18 @@ class zuinav extends \zin\core\wg
     {
         $builder = parent::build($isPrint, $parent);
 
-        $id = $this->prop('id');
-        $this->props->remove('id');
-        $builder->jsVar('options', $this->props->data);
-        $builder->js(<<<END
+        $jsRender = $this->prop('js-render');
+        if ($jsRender)
+        {
+            $id = $this->prop('id');
+            $this->props->remove('id');
+            $builder->jsVar('options', $this->props->data);
+            $builder->js(<<<END
             domReady(() => {
                 const nav = new zui.Nav('#$id', options);
             });
-        END);
+            END);
+        }
         return $builder;
     }
 }
