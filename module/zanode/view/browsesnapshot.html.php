@@ -40,7 +40,7 @@
         $editAttr = $snapshot->status == 'failed' ? 'class="btn disabled"' : "title={$lang->zanode->editSnapshot} onclick='window.parent.editSnapshot(\"" . $this->createLink('zanode', 'editSnapshot', "snapshotID={$snapshot->id}") . "\")' class='btn'";
 
         $restoreAttr  = "title='{$lang->zanode->restoreSnapshot}' target='hiddenwin'";
-        $restoreAttr .= ($snapshot->status == 'restoring' or $snapshot->status == 'failed') ? ' class="btn disabled"' :  'class="btn"';
+        $restoreAttr .= ($node->status !='running' or $snapshot->status == 'restoring' or $snapshot->status == 'failed') ? ' class="btn disabled"' :  'class="btn"';
 
         $deleteAttr  = "title='{$lang->zanode->deleteSnapshot}' target='hiddenwin'";
         $deleteAttr .= (($snapshot->status == 'restoring' and (time() - strtotime($snapshot->restoreDate)) <= 600) or $snapshot->status == 'failed') ? ' class="btn disabled"' :  'class="btn"';

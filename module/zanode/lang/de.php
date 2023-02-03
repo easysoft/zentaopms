@@ -117,6 +117,7 @@ $lang->zanode->statusList['shutodown']    = 'shutdown';
 $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
 $lang->zanode->statusList['wait']         = 'Initializing';
 $lang->zanode->statusList['online']       = 'Online';
+$lang->zanode->statusList['restoring']    = 'Restoring';
 
 $lang->zanode->initNotice = "Succeeded. Please initialize the execution node or return to the list.";
 $lang->zanode->initButton = "Initialize";

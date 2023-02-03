@@ -277,6 +277,7 @@ class zanodemodel extends model
         ->set('restoreDate')->eq(helper::now())
         ->where('id')->eq($snapshotID)->exec();
 
+
         /* Prepare create params. */
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
         $param    = array(array(
@@ -290,6 +291,7 @@ class zanodemodel extends model
 
         if(!empty($result) and $result->code == 'success')
         {
+            $this->dao->update(TABLE_HOST)->set('status')->eq('restoring')->where('id')->eq($node->id)->exec();
             $this->loadModel('action')->create('zanode', $zanodeID, 'restoredsnapshot', '', $snap->name);
             return true;
         }

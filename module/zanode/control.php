@@ -439,14 +439,15 @@ class zanode extends control
 
         $snapshotList = $this->zanode->getSnapshotList($nodeID, $browseType, $param, $orderBy, $pager);
 
-        $this->view->title      = $this->lang->zanode->browseSnapshot;
-        $this->view->nodeID     = $nodeID;
-        $this->view->snapshotList  = $snapshotList;
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager      = $pager;
-        $this->view->param      = $param;
-        $this->view->orderBy    = $orderBy;
-        $this->view->browseType = $browseType;
+        $this->view->title        = $this->lang->zanode->browseSnapshot;
+        $this->view->nodeID       = $nodeID;
+        $this->view->node         = $this->zanode->getNodeByID($nodeID);
+        $this->view->snapshotList = $snapshotList;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->browseType   = $browseType;
 
         $this->display();
     }
@@ -472,7 +473,7 @@ class zanode extends control
         }
         else
         {
-            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
+            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
             return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
         }
     }

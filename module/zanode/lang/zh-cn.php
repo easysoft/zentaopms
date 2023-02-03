@@ -121,6 +121,7 @@ $lang->zanode->statusList['shutodown']    = '已关机';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
 $lang->zanode->statusList['wait']         = '初始化中';
 $lang->zanode->statusList['online']       = '已上架';
+$lang->zanode->statusList['restoring']    = '还原中';
 
 $lang->zanode->initNotice = "保存成功，请初始化执行节点或返回列表。";
 $lang->zanode->initButton = "去初始化";
