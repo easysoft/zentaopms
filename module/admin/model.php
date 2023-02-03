@@ -388,7 +388,7 @@ class adminModel extends model
         {
             if($this->config->vision == 'lite' and !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
             $class = $menuKey == $currentMenuKey ? "active" : '';
-            if($menuGroup['disabled']) $class .= ' disabled';
+            if($menuGroup['disabled']) $class .= ' disabled not-clear-menu';
             $output .= "<li class='$class'>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/>" . $menuGroup['name']) . "</li>";
         }
         $output .= "</ul></div>";
