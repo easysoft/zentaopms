@@ -13,6 +13,8 @@ class zuinav extends \zin\core\wg
 
     static $customProps = 'className,items,hasIcons,onRenderItem,afterRender';
 
+    public $cssList = array(':root{--nav-active-color: white;}');
+
     /**
      * @return builder
      */
