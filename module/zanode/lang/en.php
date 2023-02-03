@@ -49,6 +49,7 @@ $lang->zanode->confirmShutdown = "Are you sure to shutdown the ZenAgent Node?";
 $lang->zanode->confirmSuspend  = "Are you sure to suspend the ZenAgent Node?";
 $lang->zanode->confirmResume   = "Are you sure to resume the ZenAgent Node?";
 $lang->zanode->confirmRestore  = "Are you sure to restore the ZenAgent Node?";
+$lang->zanode->confirmRestore  = "The ZenAgent Node will be restored to this snapshot state, are you sure you want to continue?";
 $lang->zanode->actionSuccess   = 'Success';
 $lang->zanode->deleted         = "Deleted";
 $lang->zanode->scriptPath      = "Script path";

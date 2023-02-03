@@ -78,9 +78,9 @@ class zanode extends control
      */
     public function list($hostID, $orderBy = 'id_desc')
     {
-        if(!commonModel::hasPriv('zahost', 'view'))
+        if(!commonModel::hasPriv('zanode', 'browse'))
         {
-            $this->loadModel('common')->deny('zahost', 'view');
+            $this->loadModel('common')->deny('zanode', 'browse');
         }
         $this->view->title       = $this->lang->zanode->common;
         $this->view->nodeList    = $this->loadModel("zanode")->getListByHost($hostID, $orderBy);
