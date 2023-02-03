@@ -285,7 +285,7 @@
                 <?php if(!empty($project->multiple)):?>
                 <tr>
                   <th class='w-70px'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></th>
-                  <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'view', "executionID=$bug->execution"), $bug->executionName);?></td>
+                  <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionID=$bug->execution"), $bug->executionName);?></td>
                 </tr>
                 <?php endif;?>
                 <tr class='nofixed'>

@@ -286,6 +286,8 @@ class executionModel extends model
         {
             if($executionID)
             {
+                $this->session->set('execution', key($executions), $this->app->tab);
+
                 $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->fetch();
                 if(empty($execution)) return js::error($this->lang->notFound);
                 if(strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
@@ -1285,7 +1287,6 @@ class executionModel extends model
         $currentExecutionName = $this->lang->execution->common;
         if($executionID)
         {
-            $executionID          = $executionID == $this->get->executionID ? $executionID : $this->get->executionID;
             $currentExecution     = $this->getById($executionID);
             $currentExecutionName = $currentExecution->name;
 

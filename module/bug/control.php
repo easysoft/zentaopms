@@ -1175,7 +1175,7 @@ class bug extends control
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->currentModuleID       = $currentModuleID;
-        $this->view->executions            = array(0 => '', $execution->id => $execution->name) + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
+        $this->view->executions            = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
         $this->view->stories               = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
         $this->view->branchOption          = $branchOption;
         $this->view->branchTagOption       = $branchTagOption;
