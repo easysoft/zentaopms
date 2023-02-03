@@ -169,7 +169,6 @@ class zahost extends control
         }
 
         $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($hostID)->exec();
-        $this->loadModel('action')->create('zahost', $hostID, 'deleted');
         $this->loadModel('action')->create('zahost', $hostID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
 
         /* if ajax request, send result. */
