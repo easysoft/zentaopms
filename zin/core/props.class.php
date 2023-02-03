@@ -204,9 +204,9 @@ class props extends dataset
     public function clone()
     {
         $props = new props($this->data, $this->customProps);
-        $props->style = $this->style->clone();
-        $props->class = $this->class->clone();
-        $props->hx    = $this->hx->clone();
+        $props->style = clone $this->style;
+        $props->class = clone $this->class;
+        $props->hx    = clone $this->hx;
         return $props;
     }
 
