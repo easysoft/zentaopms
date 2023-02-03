@@ -19,57 +19,72 @@ require_once 'props.class.php';
 class builder
 {
     /**
-     * tagName
+     * TagName
+     * @var string
      */
     public $tag = '';
 
     /**
-     * children of element
+     * Children of element
+     * @var array
      */
     public $children = array();
 
     /**
-     * props of element
+     * Props of element
      * @var props
      */
     public $props;
 
+    /**
+     * @var array
+     */
     public $prefix = array();
 
+    /**
+     * @var array
+     */
     public $suffix = array();
 
     /**
-     * js code
+     * Js code
+     * @var array
      */
     public $jsCode = array();
 
     /**
-     * css code
+     * Css code
+     * @var array
      */
     public $cssCode = array();
 
     /**
-     * js files
+     * Js files
+     * @var array
      */
     public $jsImports = array();
 
     /**
-     * css files
+     * Css files
+     * @var array
      */
     public $cssImports = array();
 
     /**
-     * js vars
+     * Js vars
+     * @var array
      */
     public $jsVars = array();
 
     /**
-     * whether it is a self-closing tag
+     * Whether it is a self-closing tag
+     * @var bool
      */
     public $selfClosing;
 
     /**
-     * whether to use tag rendering
+     * Whether to use tag rendering
+     * @var bool
      */
     public $inTag = false;
 
@@ -81,7 +96,10 @@ class builder
     }
 
     /**
-     * set element tag
+     * Set element tag
+     *
+     * @param string $tag
+     * @return builder
      */
     public function setTag($tag)
     {
@@ -90,7 +108,10 @@ class builder
     }
 
     /**
-     * set prefix
+     * Set prefix
+     *
+     * @param string|array $content
+     * @return builder
      */
     public function before($content)
     {
@@ -100,7 +121,10 @@ class builder
     }
 
     /**
-     * set suffix
+     * Set suffix
+     *
+     * @param string|array $content
+     * @return builder
      */
     public function after($content)
     {
@@ -110,7 +134,9 @@ class builder
     }
 
     /**
-     * clear children
+     * Clear children
+     *
+     * @return builder
      */
     public function empty()
     {
@@ -119,7 +145,10 @@ class builder
     }
 
     /**
-     * append children
+     * Append children
+     *
+     * @param string|array $content
+     * @return builder
      */
     public function append($content)
     {
@@ -130,7 +159,10 @@ class builder
     }
 
     /**
-     * prepend children
+     * Prepend children
+     *
+     * @param string|array $content
+     * @return builder
      */
     public function prepend($content)
     {
@@ -141,7 +173,11 @@ class builder
     }
 
     /**
-     * get or set prop
+     * Get or set prop
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return builder
      */
     public function prop($name, $value = NULL)
     {
@@ -152,7 +188,10 @@ class builder
     }
 
     /**
-     * inject js code
+     * Inject js code
+     *
+     * @param string|array
+     * @return builder
      */
     public function js($code)
     {
@@ -162,7 +201,10 @@ class builder
     }
 
     /**
-     * inject css code
+     * Inject css code
+     *
+     * @param string|array
+     * @return builder
      */
     public function css($code)
     {
@@ -172,7 +214,10 @@ class builder
     }
 
     /**
-     * import js file
+     * Import js file
+     *
+     * @param string|array $jsFile
+     * @return builder
      */
     public function importJs($jsFile)
     {
@@ -182,7 +227,11 @@ class builder
     }
 
     /**
-     * append js var
+     * Append js var
+     *
+     * @param string|array $name
+     * @param mixed $value
+     * @return void
      */
     public function jsVar($name, $value = NULL)
     {
@@ -191,7 +240,10 @@ class builder
     }
 
     /**
-     * import css file
+     * Import css file
+     *
+     * @param string|array $cssFile
+     * @return builder
      */
     public function importCss($cssFile)
     {
@@ -201,7 +253,10 @@ class builder
     }
 
     /**
-     * whether it is a self-closing tag
+     * Whether it is a self-closing tag
+     *
+     * @param bool $selfClosing
+     * @return builder
      */
     public function selfClose($selfClosing = true)
     {
@@ -210,7 +265,10 @@ class builder
     }
 
     /**
-     * whether to use tag rendering
+     * Whether to use tag rendering
+     *
+     * @param bool $inTag
+     * @return builder
      */
     public function renderInTag($inTag = true)
     {
@@ -219,23 +277,23 @@ class builder
     }
 
     /**
-     * build element
+     * Build element
      */
     public function build()
     {
         $html = array();
 
-        // get props string
+        /** Get props string */
         $propsStr = $this->props->toStr();
         if(!empty($propsStr)) $propsStr = " $propsStr";
 
-        // reander tag
+        /** Reander tag */
         if(!$this->selfClosing && $this->inTag && !empty($this->tag)) $html[] = "<$this->tag" . "$propsStr>";
 
-        // handle prefix
+        /** Handle prefix */
         if(!empty($this->prefix)) $html = array_merge($html, $this->prefix);
 
-        // use link to import css file
+        /** Use link to import css file */
         if(!empty($this->cssImports))
         {
             foreach($this->cssImports as $href)
@@ -244,7 +302,7 @@ class builder
             }
         }
 
-        // use <style> to add css code
+        /** Use <style> to add css code */
         if(!empty($this->cssCode))
         {
             $cssCode = '';
@@ -255,7 +313,7 @@ class builder
             if(!empty($cssCode)) $html[] = "<style>$cssCode</style>";
         }
 
-        // handle self-closing tag
+        /** Handle self-closing tag */
         if($this->selfClosing)
         {
             if(!empty($this->tag)) $html[] = "<$this->tag" . "$propsStr />";
@@ -269,10 +327,10 @@ class builder
             if(!empty($innerHtml)) $html[] = $innerHtml;
         }
 
-        // handle suffix
+        /** Handle suffix */
         if(!empty($this->suffix)) $html = array_merge($html, $this->suffix);
 
-        // inject js var
+        /** Inject js var */
         $jsCode = '';
         if(!empty($this->jsVars))
         {
@@ -284,7 +342,7 @@ class builder
             }
         }
 
-        // use <script src> to import js file
+        /** Use <script src> to import js file */
         if(!empty($this->jsImports))
         {
             foreach($this->jsImports as $src)
@@ -293,7 +351,7 @@ class builder
             }
         }
 
-        // use IIFE to inject js code
+        /** Use IIFE to inject js code */
         if(!empty($this->jsCode))
         {
             foreach($this->jsCode as $js)
