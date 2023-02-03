@@ -54,7 +54,12 @@
 	  <div class="flex main-panel">
 	    <div class="official-img"></div>
 	    <div class="official-content">
-            <div class="title"><?php echo $lang->admin->followUs?><i class="icon follow-us icon-arrow-right text-primary"></i></div>
+            <div class="title">
+              <?php echo $lang->admin->followUs?>
+              <?php if(!$hasInternet):?>
+              <i class="icon follow-us icon-arrow-right text-primary"></i>
+              <?php endif;?>
+              </div>
             <div class="content"> <?php echo $lang->admin->followUsContent?></div>
           </div>
         </div>
@@ -86,6 +91,5 @@
     <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
   </div>
   <?php endif;?>
-
 </div>
 <?php include '../../common/view/footer.html.php';?>
