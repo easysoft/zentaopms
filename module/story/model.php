@@ -6436,8 +6436,10 @@ class storyModel extends model
      */
     public function getStoriesReviewer($productID = 0)
     {
+        $this->loadModel('user');
         $product   = $this->loadModel('product')->getByID($productID);
-        $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        $reviewers = $product->reviewer;
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product, '', '', '', '');
         return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
     }
 
