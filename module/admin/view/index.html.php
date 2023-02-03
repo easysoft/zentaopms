@@ -28,18 +28,19 @@
       </div>
     </div>
 
-    <?php if($extensions):?>
+    <?php if($plugins):?>
     <div class="plug panel">
       <div class="panel-title">
         <?php echo $lang->admin->pluginRecommendation;?>
         <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted"');?>
       </div>
       <div class="plugin-list" <?php if($langNotCN) echo 'style="flex-wrap: nowrap"';?>>
-        <?php foreach($extensions as $extension):?>
-        <div class="plugin-item shadow-primary-hover">
-          <a href="<?php echo $extension->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
-          <h4 class="plug-title"><?php echo $extension->name;?></h4>
-          <p class='extension-desc'><?php echo strip_tags($extension->desc);?></p>
+        <?php foreach($plugins as $plugin):?>
+        <?php $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->desc));?>
+        <div class="plugin-item shadow-primary-hover" data-link='<?php echo $plugin->viewLink;?>'>
+          <a href="<?php echo $plugin->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
+          <h4 class="plug-title" title="<?php echo $plugin->name;?>"><?php echo $plugin->name;?></h4>
+          <p class='extension-desc' title="<?php echo $pluginDesc;?>"><?php echo $pluginDesc;?></p>
         </div>
         <?php endforeach;?>
       </div>
