@@ -37,7 +37,7 @@
       <div class="plugin-list" <?php if($langNotCN) echo 'style="flex-wrap: nowrap"';?>>
         <?php foreach($extensions as $extension):?>
         <div class="plugin-item shadow-primary-hover">
-          <a href="<?php echo $extension->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-import'></i></a>
+          <a href="<?php echo $extension->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
           <h4 class="plug-title"><?php echo $extension->name;?></h4>
           <p class='extension-desc'><?php echo strip_tags($extension->desc);?></p>
         </div>
