@@ -168,8 +168,9 @@ class zahost extends control
             return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "hostID=$hostID&confirm=yes")));
         }
 
-        $this->zahost->delete(TABLE_ZAHOST, $hostID);
+        $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($hostID)->exec();
         $this->loadModel('action')->create('zahost', $hostID, 'deleted');
+        $this->loadModel('action')->create('zahost', $hostID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
 
         /* if ajax request, send result. */
         if($this->server->ajax)

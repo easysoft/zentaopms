@@ -132,6 +132,7 @@
         <div class="detail-content article-content"><?php echo !empty($zahost->desc) ? htmlspecialchars_decode($zahost->desc) : $lang->noData;?></div>
       </div>
     </div>
+    <?php if(commonModel::hasPriv('zanode', 'browse')):?>
     <div class="cell">
       <div class="detail">
         <div class="detail-title"><?php echo $lang->zahost->browseNode;?></div>
@@ -148,6 +149,7 @@
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=zahost&objectID=$zahost->hostID");
       ?>
     </div>
+    <?php endif; ?>
     <?php $this->printExtendFields($zahost, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='main-actions'>
       <div class="btn-toolbar">
