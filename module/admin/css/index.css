@@ -17,7 +17,7 @@
 .settings-list > .setting-box.btn[disabled] {cursor: not-allowed; pointer-events: unset;}
 .settings-list > .setting-box.btn[disabled] > a {pointer-events: none;}
 .settings-list > .setting-box > h4 > img {padding-right: 8px; padding-bottom: 3px;}
-.settings-list > .setting-box > .setting-desc {padding-bottom: 16px;}
+.settings-list > .setting-box > .setting-desc {padding-bottom: 16px; color: #5E626D;}
 .settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
@@ -45,7 +45,7 @@
 .panel.publicClass {padding: 0 10px;}
 .icon.follow-us {font-size: 20px; padding-left: 10px;}
 
-.setting-help {width: 45px;}
+.setting-help {width: 45px; color: #9EA3B0;}
 .pointer-none {pointer-events: none;}
 .pd-3 {padding: 3px;}
 
