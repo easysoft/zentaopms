@@ -2456,7 +2456,13 @@ class productModel extends model
         }
         elseif($module == 'ticket')
         {
-            return helper::createLink('ticket', 'browse', "browseType=byProduct&productID=%s");
+            $params = "productID=%s";
+            if(strpos('browse,view,edit', $method) !== false)
+            {
+                $method = 'browse';
+                $params = "browseType=byProduct&productID=%s";
+            }
+            return helper::createLink('ticket', $method, $params);
         }
 
         return $link;

@@ -3369,6 +3369,10 @@ class bugModel extends model
                     $class .= ' text-ellipsis';
                     $title  = "title='" . $os . "'";
                     break;
+                case 'keywords':
+                    $class .= ' text-left';
+                    $title  = "title='{$bug->keywords}'";
+                    break;
                 case 'browser':
                     $class .= ' text-ellipsis';
                     $title  = "title='" . $browser . "'";
