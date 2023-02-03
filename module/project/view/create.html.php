@@ -155,7 +155,7 @@
                 <div class='table-row'>
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
-                    <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
+                    <div class='input-group required <?php if($hasBranch) echo ' has-branch';?>'>
                       <span class='input-group-addon'><?php echo $lang->product->common;?></span>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                     </div>
@@ -192,7 +192,7 @@
               <div class="col-sm-6">
                 <div class='table-row'>
                   <div class='table-col'>
-                    <div class='input-group'>
+                    <div class='input-group required'>
                       <span class='input-group-addon'><?php echo $lang->product->common;?></span>
                       <?php echo html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                       <?php if(common::hasPriv('product', 'create')):?>
