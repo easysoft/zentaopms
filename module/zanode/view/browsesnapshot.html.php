@@ -34,19 +34,25 @@
     <tbody>
       <?php foreach($snapshotList as $snapshot):?>
       <tr>
-        <?php 
+        <?php
         $snapshot->status = ($snapshot->status == 'restoring' && time() - strtotime($snapshot->restoreDate) > 600) ? 'restore_failed' : $snapshot->status;
+
+        $editAttr = $snapshot->status == 'failed' ? 'class="btn disabled"' : "title={$lang->zanode->editSnapshot} onclick='window.parent.editSnapshot(\"" . $this->createLink('zanode', 'editSnapshot', "snapshotID={$snapshot->id}") . "\")' class='btn'";
+
         $restoreAttr  = "title='{$lang->zanode->restoreSnapshot}' target='hiddenwin'";
-        $restoreAttr .= $snapshot->status == 'restoring' ? ' class="btn disabled"' :  'class="btn"';
+        $restoreAttr .= ($snapshot->status == 'restoring' or $snapshot->status == 'failed') ? ' class="btn disabled"' :  'class="btn"';
+
+        $deleteAttr  = "title='{$lang->zanode->deleteSnapshot}' target='hiddenwin'";
+        $deleteAttr .= (($snapshot->status == 'restoring' and (time() - strtotime($snapshot->restoreDate)) <= 600) or $snapshot->status == 'failed') ? ' class="btn disabled"' :  'class="btn"';
         ?>
         <td title="<?php echo $snapshot->name;?>"><?php echo $snapshot->localName ? $snapshot->localName : $snapshot->name;?></td>
-        <td class='snapshot-status-<?php echo zget($snapshot, 'id', 0);?>'><?php echo zget($lang->zanode->snapshot->statusList, $snapshot->status, '');?></td>
+        <td class='<?php echo $snapshot->status;?>'><?php echo zget($lang->zanode->snapshot->statusList, $snapshot->status, '');?></td>
         <td class="c-createdBy"><?php echo zget($users, $snapshot->createdBy, '')?></td>
         <td class='c-datetime'><?php echo $snapshot->createdDate;?></td>
         <td class='c-actions'>
-          <?php if(common::hasPriv('zanode', 'editSnapshot')) echo html::a('###', '<i class="icon-edit"></i>', 'hiddenwin', "title={$lang->zanode->editSnapshot} onclick='window.parent.editSnapshot(\"" . $this->createLink('zanode', 'editSnapshot', "snapshotID={$snapshot->id}") . "\")' class='btn'");?>
+          <?php if(common::hasPriv('zanode', 'editSnapshot')) echo html::a('###', '<i class="icon-edit"></i>', 'hiddenwin', $editAttr);?>
           <?php if(common::hasPriv('zanode', 'restoreSnapshot')) echo html::a($this->createLink('zanode', 'restoreSnapshot', "nodeID={$nodeID}&snapshotID={$snapshot->id}"), '<i class="icon-restart"></i>', 'hiddenwin', $restoreAttr);?>
-          <?php if(common::hasPriv('zanode', 'deleteSnapshot')) echo html::a($this->createLink('zanode', 'deleteSnapshot', "snapshotID={$snapshot->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title={$lang->zanode->deleteSnapshot} class='btn'");?>
+          <?php if(common::hasPriv('zanode', 'deleteSnapshot')) echo html::a($this->createLink('zanode', 'deleteSnapshot', "snapshotID={$snapshot->id}"), '<i class="icon-trash"></i>', 'hiddenwin', $deleteAttr);?>
         </td>
       </tr>
       <?php endforeach;?>

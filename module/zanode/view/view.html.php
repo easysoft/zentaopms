@@ -152,7 +152,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
       <div class="cell">
         <div class="detail zanode-detail">
           <div class="detail-title"><?php echo $lang->zanode->browseSnapshot;?></div>
-          <?php if(!empty($snapshotList)): ?>
+          <?php if(!empty($snapshotList) and common::hasPriv('zanode', 'browseSnapshot')): ?>
           <div class="detail-content article-content">
           <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'browseSnapshot', "nodeID=$zanode->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' onload='setIframeHeight(this)' style='min-height:300px;'></iframe>";?>
           </div>

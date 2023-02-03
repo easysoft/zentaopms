@@ -343,6 +343,34 @@ class zanode extends control
     }
 
     /**
+     * Delete Snapshot.
+     *
+     * @param  int    $snapshotID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteSnapshot($snapshotID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->zanode->confirmDeleteSnapshot, inlink('deleteSnapshot', "snapshotID={$snapshotID}&confirm=yes")));
+        }
+
+        $result = $this->zanode->deleteSnapshot($snapshotID);
+
+        if($result !== true)
+        {
+            return print(js::alert($result));
+        }
+        else
+        {
+            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+        }
+    }
+
+    /**
      * Desctroy node.
      *
      * @param  int  $nodeID
