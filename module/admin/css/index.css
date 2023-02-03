@@ -46,6 +46,8 @@
 .icon.follow-us {font-size: 20px; padding-left: 10px;}
 
 .setting-help {width: 45px;}
+.pointer-none {pointer-events: none;}
+.pd-3 {padding: 3px;}
 
 /* css for without internet */
 .main.without-internet {display: flex; flex-wrap: wrap;}
