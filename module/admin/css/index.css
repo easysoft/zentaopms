@@ -16,7 +16,7 @@
 .settings-list > .setting-box.btn:hover {background: unset;}
 .settings-list > .setting-box.btn[disabled] {cursor: not-allowed; pointer-events: unset;}
 .settings-list > .setting-box.btn[disabled] > a {pointer-events: none;}
-.settings-list > .setting-box > h4 > img {padding-right: 8px; padding-bottom: 3px;}
+.settings-list > .setting-box > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
 .settings-list > .setting-box > .setting-desc {padding-bottom: 16px; color: #5E626D;}
 .settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
 
