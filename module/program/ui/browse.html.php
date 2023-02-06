@@ -16,7 +16,7 @@ foreach(\customModel::getMainMenu() as $menuItem)
 
 page
 (
-    set       ('title', $title),
+    set('title', $title),
     pageheader
     (
         pageheading
@@ -29,21 +29,18 @@ page
         (
             zuinav
             (
-                set('js-render', true),
+                set('js-render', false),
                 set('items', $navItems),
+                item(array('text' => 'text')),
             ),
         ),
         toolbar
         (
             setId('toolbar'),
             set('js-render', true),
-            set('items', array
-                (
-                    array('icon' => 'icon-plus'),
-                    array('icon' => 'icon-group'),
-                    array('text' => '研发综合界面'),
-                )
-            ),
+            item(array('icon' => 'icon-plus')),
+            item(array('icon' => 'icon-group')),
+            item(array('text' => '研发综合界面')),
         ),
     ),
 
