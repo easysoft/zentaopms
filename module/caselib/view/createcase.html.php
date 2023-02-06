@@ -55,7 +55,7 @@
             <th><?php echo $lang->testcase->type;?></th>
             <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
             <?php if(strpos(",$showFields,", 'stage') !== false):?>
-            <td style='padding-left:15px'>
+            <td style='padding-left:15px'<?php echo strpos($config->testcase->create->requiredFields, 'stage') ? ' class="required"' : '';?>>
               <div class='input-group'>
                 <span class='input-group-addon w-80px'><?php echo $lang->testcase->stage?></span>
                 <?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?>
@@ -101,11 +101,12 @@
                 <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
                 <?php else: ?>
                 <?php ksort($priList);?>
+                <?php $priClass = strpos($config->testcase->create->requiredFields, 'pri') ? 'required' : '';?>
                 <div class="input-group-btn pri-selector" data-type="pri">
                   <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                     <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
                   </button>
-                  <div class='dropdown-menu pull-right'>
+                  <div class='dropdown-menu pull-right <?php echo $priClass?>'>
                     <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
                   </div>
                 </div>
@@ -116,7 +117,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->testcase->precondition;?></th>
-            <td colspan='2'><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
+            <td colspan='2' <?php echo strpos($config->testcase->create->requiredFields, 'precondition') ? ' class="required"' : '';?>><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->steps;?></th>
@@ -189,7 +190,7 @@
           <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
           <tr>
             <th><?php echo $lang->testcase->keywords;?></th>
-            <td colspan='2'><?php echo html::input('keywords', '', "class='form-control'");?></td>
+            <td colspan='2' <?php echo strpos($config->testcase->create->requiredFields, 'keywords') ? ' class="required"' : '';?>><?php echo html::input('keywords', '', "class='form-control'");?></td>
           </tr>
           <?php endif;?>
           <tr>
