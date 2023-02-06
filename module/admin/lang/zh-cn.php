@@ -170,4 +170,10 @@ $lang->admin->menuSetting['dev']['desc']       = '支持对系统进行二次开
 $lang->admin->menuSetting['convert']['name']   = '数据导入';
 $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入。';
 
+$lang->admin->mon              = '月';
+$lang->admin->day              = '日';
+$lang->admin->updateDynamics   = '更新动态';
+$lang->admin->updatePatch      = '补丁更新';
+$lang->admin->upgradeRecommend = '推荐升级';
+
 include dirname(__FILE__) . '/menu.php';
