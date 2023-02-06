@@ -38,6 +38,7 @@ function dtable()      {return createWg('dtable',   func_get_args());}
 function pageheader()  {return createWg('pageheader',  func_get_args());}
 function pageheading() {return createWg('pageheading', func_get_args());}
 function pagenavbar()  {return createWg('pagenavbar',  func_get_args());}
-function zuinav()      {return createWg('zuinav', func_get_args());}
-function toolbar()     {return createWg('toolbar', func_get_args());}
-function pagemain()    {return createWg('pagemain', func_get_args());}
+function zuinav()      {return createWg('zuinav',      func_get_args());}
+function toolbar()     {return createWg('toolbar',     func_get_args());}
+function pagemain()    {return createWg('pagemain',    func_get_args());}
+function dropdown()    {return createWg('dropdown',    func_get_args());}
