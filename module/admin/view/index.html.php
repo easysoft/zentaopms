@@ -135,7 +135,7 @@
       <div class="upgrade-block">
 	<div class="title text-primary flex justify-between">
           <div>禅道企业版</div>
-          <div>查看详情<i class="icon icon-caret-right text-primary"></i></div>
+          <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary"></i></div>
         </div>
         <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
         <div class="upgrade-content color-gray">40+内置统计报表、自定义报表功能</div>
@@ -144,7 +144,7 @@
       <div class="upgrade-block">
 	<div class="title text-primary flex justify-between">
           <div>禅道旗舰版</div>
-          <div>查看详情<i class="icon icon-caret-right text-primary"></i></div>
+          <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary"></i></div>
         </div>
         <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
         <div class="upgrade-content color-gray">40+内置统计报表、自定义报表功能</div>
