@@ -154,6 +154,8 @@ class programplan extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $programPlan = $this->project->getById($planID, 'stage');
+
         $productList = array();
         $this->app->loadLang('stage');
         $project = $this->loadModel('project')->getById($projectID);
@@ -181,20 +183,21 @@ class programplan extends control
             }
         }
 
-        $this->view->productList    = $productList;
-        $this->view->project        = $project;
-        $this->view->productID      = $productID ? $productID : key($productList);
-        $this->view->stages         = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
-        $this->view->programPlan    = $this->project->getById($planID, 'stage');
-        $this->view->plans          = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
-        $this->view->planID         = $planID;
-        $this->view->type           = 'lists';
-        $this->view->PMUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->customFields   = $customFields;
-        $this->view->showFields     = $showFields;
-        $this->view->visibleFields  = $visibleFields;
-        $this->view->requiredFields = $requiredFields;
-        $this->view->colspan        = count($visibleFields) + 3;
+        $this->view->productList        = $productList;
+        $this->view->project            = $project;
+        $this->view->productID          = $productID ? $productID : key($productList);
+        $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
+        $this->view->programPlan        = $programPlan;
+        $this->view->plans              = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
+        $this->view->planID             = $planID;
+        $this->view->type               = 'lists';
+        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->customFields       = $customFields;
+        $this->view->showFields         = $showFields;
+        $this->view->visibleFields      = $visibleFields;
+        $this->view->requiredFields     = $requiredFields;
+        $this->view->colspan            = count($visibleFields) + 3;
+        $this->view->enableOptionalAttr = (empty($programPlan) or (!empty($programPlan) and $programPlan->attribute == 'mix'));
 
         $this->display();
     }
