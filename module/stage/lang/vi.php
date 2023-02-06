@@ -25,6 +25,7 @@ $lang->stage->type    = 'Type';
 $lang->stage->percent = 'Workload %';
 $lang->stage->setType = 'Set Type';
 
+$lang->stage->typeList['mix']     = 'Mix';
 $lang->stage->typeList['request'] = 'Story';
 $lang->stage->typeList['design']  = 'Design';
 $lang->stage->typeList['dev']     = 'Development';
