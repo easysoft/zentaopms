@@ -199,7 +199,12 @@ class group extends control
      */
     public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
-        if($type == 'byGroup') $groupID = $param;
+        if($type == 'byGroup')
+        {
+            $groupID = $param;
+            $this->lang->custom->common = $this->lang->group->config;
+        }
+
         $this->view->type = $type;
         foreach($this->lang->resource as $moduleName => $action)
         {
