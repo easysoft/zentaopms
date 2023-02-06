@@ -1915,6 +1915,19 @@ $lang->message->methodOrder[5]  = 'index';
 $lang->message->methodOrder[10] = 'browser';
 $lang->message->methodOrder[15] = 'setting';
 
+/* Holiday. */
+$lang->resource->holiday = new stdclass();
+$lang->resource->holiday->create = 'createAction';
+$lang->resource->holiday->edit   = 'editAction';
+$lang->resource->holiday->delete = 'deleteAction';
+$lang->resource->holiday->browse = 'browse';
+
+$lang->holiday->methodOrder[0]  = 'browse';
+$lang->holiday->methodOrder[5]  = 'create';
+$lang->holiday->methodOrder[10] = 'edit';
+$lang->holiday->methodOrder[15] = 'delete';
+
+/* Action. */
 $lang->resource->action = new stdclass();
 $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undeleteAction';
