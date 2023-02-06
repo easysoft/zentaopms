@@ -71,7 +71,8 @@ $(function(){$('#exportreport').modalTrigger();});
         <td><?php echo $lang->weekly->cv;?></td>
         <td><?php echo $cv ? $cv . '%' : '';?></td>
         <td><?php echo $lang->weekly->cost;?></td>
-        <td><?php echo empty($projectCost) ? 0 : $ac * $projectCost;?></td>
+        <?php $projectCost = zget($this->config->custom, 'cost', 1);?>
+        <td class='projectCost'><?php echo empty($projectCost) ? 0 : $ac * $projectCost;?></td>
       </tr>
     </table>
     <div class='page-title'><h4><?php echo $lang->weekly->finished;?></h4></div>
