@@ -61,9 +61,9 @@ class weekly extends control
         $data = $this->weekly->getReportData($projectID, $date);
         foreach($data as $key => $val) $this->view->$key = $val;
 
-        $this->view->title = $this->lang->weekly->common;
-        $this->view->date  = $date;
-
+        $this->view->title         = $this->lang->weekly->common;
+        $this->view->date          = $date;
+        $this->view->projectCost   = zget($this->config->custom, 'cost', 1);
         $this->lang->modulePageNav = $this->weekly->getPageNav($this->view->project, $date);
         $this->display();
     }
