@@ -4818,9 +4818,9 @@ class executionModel extends model
         if($execution->type == 'stage')
         {
             $isCreateTask = $this->loadModel('programplan')->isCreateTask($execution->id);
-            $disabled     = ($execution->grade == 1 && $isCreateTask) ? '' : ' disabled';
+            $disabled     = $isCreateTask ? '' : ' disabled';
             $title        = !$isCreateTask ? $this->lang->programplan->error->createdTask : $this->lang->programplan->createSubPlan;
-            common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', $disabled, '', '', $title);
+            common::printIcon('programplan', 'create', "program={$execution->project}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', $disabled, '', '', $title);
         }
 
         if($execution->type == 'stage')

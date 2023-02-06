@@ -19,7 +19,7 @@ $lang->programplan->edit          = '编辑';
 $lang->programplan->delete        = '删除阶段';
 $lang->programplan->close         = '关闭阶段';
 $lang->programplan->activate      = '激活阶段';
-$lang->programplan->createSubPlan = '创建二级阶段';
+$lang->programplan->createSubPlan = '创建子阶段';
 
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';

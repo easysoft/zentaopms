@@ -1261,7 +1261,12 @@ class programplanModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'create' and $plan->grade > 1) return false;
+        if($action == 'create')
+        {
+            global $dao;
+            $task = !empty($plan->id) ? $dao->select('*')->from(TABLE_TASK)->where('execution')->eq($plan->id)->andWhere('deleted')->eq('0')->limit(1)->fetch() : '';
+            return empty($task) ? true : false;
+        }
 
         return true;
     }
