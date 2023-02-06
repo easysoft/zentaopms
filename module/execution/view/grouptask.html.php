@@ -47,7 +47,7 @@
       <ul class="dropdown-menu">
         <?php
         $class = common::hasPriv('task', 'export') ? '' : "class=disabled";
-        $misc  = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
+        $misc  = common::hasPriv('task', 'export') ? "class='export' data-width=620" : "class=disabled";
         $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=$browseType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>

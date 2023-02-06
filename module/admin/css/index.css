@@ -3,6 +3,7 @@
 #zentaoLinks .panel .panel-heading {padding: 6px 10px;}
 .main-content.admin {padding: 0;}
 .admin {display: flex; background: unset; box-shadow: none;}
+.admin h4 {color: #0B0F18;}
 .admin > .main {flex: 1 1 70%;}
 .admin > .side {flex: 1 1 30%; padding-left: 10px; margin-left: 16px;}
 .panel-title {padding: 10px 0px;}
@@ -15,13 +16,13 @@
 .settings-list > .setting-box.btn:hover {background: unset;}
 .settings-list > .setting-box.btn[disabled] {cursor: not-allowed; pointer-events: unset;}
 .settings-list > .setting-box.btn[disabled] > a {pointer-events: none;}
-.settings-list > .setting-box > h4 {color: #0B0F18;}
-.settings-list > .setting-box > h4 > img {padding-right: 8px; padding-bottom: 3px;}
-.settings-list > .setting-box > .setting-desc {padding-bottom: 16px;}
+.settings-list > .setting-box > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
+.settings-list > .setting-box > .setting-desc {padding-bottom: 16px; color: #5E626D;}
 .settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
+.panel-title > a {display: flex; align-items: center;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
-.plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 10px; margin-bottom: 16px; width: 0px;}
+.plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 10px; margin-bottom: 16px; width: 0px; cursor: pointer;}
 .plugin-list > .plugin-item .ext-download {float: right; padding: 6px 0px;}
 .plugin-list > .plugin-item > .plug-title {height: 16px; overflow: hidden;}
 .plugin-list > .plugin-item .extension-desc {overflow: hidden; height: 16px;}
@@ -45,7 +46,7 @@
 .panel.publicClass {padding: 0 10px;}
 .icon.follow-us {font-size: 20px; padding-left: 10px;}
 
-.setting-help {width: 45px;}
+.setting-help {width: 45px; color: #9EA3B0;}
 .pointer-none {pointer-events: none;}
 .pd-3 {padding: 3px;}
 

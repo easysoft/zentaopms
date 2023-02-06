@@ -388,7 +388,7 @@ class adminModel extends model
         {
             if($this->config->vision == 'lite' and !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
             $class = $menuKey == $currentMenuKey ? "active" : '';
-            if($menuGroup['disabled']) $class .= ' disabled';
+            if($menuGroup['disabled']) $class .= ' disabled not-clear-menu';
             $output .= "<li class='$class'>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/>" . $menuGroup['name']) . "</li>";
         }
         $output .= "</ul></div>";
@@ -399,43 +399,43 @@ class adminModel extends model
     /**
      * Get extensions from zentao.net.
      *
-     * @param  string $type extension|patch
+     * @param  string $type plugin|patch
      * @param  int    $limit
      * @param  bool   $hasInternet
      * @access public
      * @return array
      */
-    public function getExtensionsByAPI($type = 'extension', $limit = 6, $hasInternet = true)
+    public function getExtensionsByAPI($type = 'plugin', $limit = 6, $hasInternet = true)
     {
         if($hasInternet)
         {
-            $searchType = $type == 'extension' ? 'byUpdatedTime' : 'byModule';
-            $param      = $type == 'extension' ? '' : 'MTIxOA==';
+            $searchType = $type == 'plugin' ? 'byUpdatedTime' : 'byModule';
+            $param      = $type == 'plugin' ? '' : 'MTIxOA==';
             $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
-            $extensions = isset($extensions->extensions) ? (array)$extensions->extensions : array();
-            foreach($extensions as $extension) $extension->viewLink = str_replace(array('info', 'client'), '', $extension->viewLink);
+            $plugins    = isset($extensions->extensions) ? (array)$extensions->extensions : array();
+            foreach($plugins as $plugin) $plugin->viewLink = str_replace(array('info', 'client'), '', $plugin->viewLink);
         }
         else
         {
             if($this->config->edition == 'open')
             {
-                $extensions = array(
-                    $this->config->admin->plugIns[27],
-                    $this->config->admin->plugIns[26],
-                    $this->config->admin->plugIns[30]
+                $plugins = array(
+                    $this->config->admin->plugins[27],
+                    $this->config->admin->plugins[26],
+                    $this->config->admin->plugins[30]
                 );
             }
             else
             {
-                $extensions = array(
-                    $this->config->admin->plugIns[198],
-                    $this->config->admin->plugIns[194],
-                    $this->config->admin->plugIns[203]
+                $plugins = array(
+                    $this->config->admin->plugins[198],
+                    $this->config->admin->plugins[194],
+                    $this->config->admin->plugins[203]
                 );
             }
         }
 
-        return $extensions;
+        return $plugins;
     }
 
     /**

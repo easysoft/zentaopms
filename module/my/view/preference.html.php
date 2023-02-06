@@ -22,7 +22,7 @@
   <form method='post' target='hiddenwin'>
     <table align='center' class='table table-form w-320px'>
       <tr>
-        <th class='w-120px'><?php echo $lang->my->storyConcept;?></th>
+        <th class='w-140px'><?php echo $lang->my->storyConcept;?></th>
         <td><?php echo html::select('URSR', $URSRList, $URSR, "class='form-control picker URSR'");?></td>
       </tr>
       <?php if($this->config->systemMode == 'ALM'):?>
