@@ -199,11 +199,7 @@ class group extends control
      */
     public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
-        if($type == 'byGroup')
-        {
-            $groupID = $param;
-            $this->lang->custom->common = $this->lang->group->config;
-        }
+        if($type == 'byGroup') $groupID = $param;
 
         $this->view->type = $type;
         foreach($this->lang->resource as $moduleName => $action)
@@ -238,6 +234,9 @@ class group extends control
             {
                 if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join(',', $currentChangeLog);
             }
+
+            $this->lang->custom->common = $this->lang->group->config;
+            if($this->config->edition == 'max') $this->lang->baseline->common = $this->lang->group->docTemplate;
 
             $this->view->group      = $group;
             $this->view->changelogs = ',' . join(',', $changelog) . ',';
