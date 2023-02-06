@@ -289,16 +289,17 @@ class adminModel extends model
             $menu['disabled'] = true;
             if(!isset($menu['link'])) $menu['link'] = '';
 
-            /* Check sub menu priv. */
+            /* Set links to authorized navigation. */
             if(isset($menu['subMenu']))
             {
+                /* Check sub menu priv. */
                 foreach($menu['subMenu'] as $subMenuKey => $subMenu)
                 {
-                    /* Check tab menu priv. */
                     $link      = '';
                     $linkLabel = '';
                     if(isset($menu['tabMenu'][$subMenuKey]))
                     {
+                        /* Check tab menu priv. */
                         foreach($menu['tabMenu'][$subMenuKey] as $tabMenuKey => $tabMenu)
                         {
                             list($linkLabel, $link) = $this->getMenuLink($tabMenu);
@@ -312,7 +313,11 @@ class adminModel extends model
 
                     if(!empty($link))
                     {
-                        $menu['subMenu'][$subMenuKey]['link'] = $linkLabel;
+                        /* Updated secondary navigation link. */
+                        $subMenuLabel = $menu['subMenu'][$subMenuKey]['link'];
+                        $menu['subMenu'][$subMenuKey]['link'] = substr($subMenuLabel, 0, strpos($subMenuLabel, '|') + 1) . $linkLabel;
+
+                        /* Update the level 1 navigation link. */
                         if(empty($menu['link']))
                         {
                             $menu['link']     = $link;
@@ -368,7 +373,7 @@ class adminModel extends model
             list($label, $module, $method, $params) = explode('|', $menu['link']);
             if(common::hasPriv($module, $method))
             {
-                $linkLabel = $menu['link'];
+                $linkLabel = $module . '|' . $method . '|' . $params;
                 $link      = helper::createLink($module, $method, $params);
             }
             elseif(!empty($menu['links']))
@@ -378,7 +383,7 @@ class adminModel extends model
                     list($module, $method, $params) = explode('|', $menuLink);
                     if(common::hasPriv($module, $method))
                     {
-                        $linkLabel = $label . '|' . $menuLink;
+                        $linkLabel = $menuLink;
                         $link      = helper::createLink($module, $method);
                         break;
                     }
