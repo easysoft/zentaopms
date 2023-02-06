@@ -34,7 +34,8 @@
           if(strpos(",{$config->execution->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
-  $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
+  $maxCount = strpos($this->app->getClientLang(), 'zh-') !== false ? 5 : 3;
+  $minWidth = (count($visibleFields) > $maxCount) ? 'w-150px' : '';
   $name     = $from == 'execution' ? 'execName' : 'name';
   $code     = $from == 'execution' ? 'execCode' : 'code';
   $PM       = $from == 'execution' ? 'execPM'   : 'PM';
