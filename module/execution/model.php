@@ -1620,6 +1620,14 @@ class executionModel extends model
             ->groupBy('t1.root')
             ->fetchAll('root');
 
+        $productNameList = $this->dao->select('t1.id,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+            ->leftjoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.type')->in('kanban,sprint,stage')
+            ->groupBy('t1.id')
+            ->fetchPairs();
+
         if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
 
         /* Process executions. */
@@ -1627,8 +1635,11 @@ class executionModel extends model
 
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
         $today     = helper::today();
+        $childList = array();
         foreach($executions as $key => $execution)
         {
+            $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
+
             /* Process the end time. */
             $execution->end = date(DT_DATE1, strtotime($execution->end));
 
@@ -1665,7 +1676,7 @@ class executionModel extends model
                 if(isset($executions[$execution->parent]) and $execution->type == 'stage')
                 {
                     $executions[$execution->parent]->children[$key] = $execution;
-                    unset($executions[$key]);
+                    $childList[$key] = $key;
                 }
             }
 
@@ -1675,6 +1686,9 @@ class executionModel extends model
                 $execution->product = $projectProductIdList[$execution->id];
             }
         }
+
+        foreach($childList as $id) unset($executions[$id]);
+
         return array_values($executions);
     }
 
