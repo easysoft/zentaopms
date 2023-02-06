@@ -295,49 +295,42 @@ class adminModel extends model
                 /* Check sub menu priv. */
                 foreach($menu['subMenu'] as $subMenuKey => $subMenu)
                 {
-                    $link      = '';
-                    $linkLabel = '';
+                    $link = array();
                     if(isset($menu['tabMenu'][$subMenuKey]))
                     {
                         /* Check tab menu priv. */
                         foreach($menu['tabMenu'][$subMenuKey] as $tabMenuKey => $tabMenu)
                         {
-                            list($linkLabel, $link) = $this->getMenuLink($tabMenu);
+                            $link = $this->getHasPrivLink($tabMenu);
                             if(!empty($link)) break;
                         }
                     }
                     else
                     {
-                        list($linkLabel, $link) = $this->getMenuLink($subMenu);
+                        $link = $this->getHasPrivLink($subMenu);
                     }
 
                     if(!empty($link))
                     {
                         /* Updated secondary navigation link. */
+                        list($module, $method, $params) = $link;
                         $subMenuLabel = $menu['subMenu'][$subMenuKey]['link'];
-                        $menu['subMenu'][$subMenuKey]['link'] = substr($subMenuLabel, 0, strpos($subMenuLabel, '|') + 1) . $linkLabel;
+                        $menu['subMenu'][$subMenuKey]['link'] = substr($subMenuLabel, 0, strpos($subMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
 
                         /* Update the level 1 navigation link. */
                         if(empty($menu['link']))
                         {
-                            $menu['link']     = $link;
+                            $menu['link']     = helper::createLink($module, $method, $params);
                             $menu['disabled'] = false;
                         }
                     }
-                    else
-                    {
-                        unset($this->lang->admin->menuList->feature['subMenu'][$subMenuKey]);
-                    }
                 }
             }
-            else
+            elseif(!empty($menu['link']) and strpos($menu['link'], '|') !== false)
             {
-                if(!empty($menu['link']) and strpos($menu['link'], '|') !== false)
-                {
-                    list($module, $method) = explode('|', $menu['link']);
-                    $menu['link'] = helper::createLink($module, $method);
-                    if(common::hasPriv($module, $method)) $menu['disabled'] = false;
-                }
+                list($module, $method) = explode('|', $menu['link']);
+                $menu['link'] = helper::createLink($module, $method);
+                if(common::hasPriv($module, $method)) $menu['disabled'] = false;
             }
 
             $order = $menu['order'];
@@ -358,23 +351,21 @@ class adminModel extends model
     }
 
     /**
-     * Get menu link.
+     * Get the authorized link.
      *
      * @param  array  $menu
      * @access public
      * @return array
      */
-    public function getMenuLink($menu)
+    public function getHasPrivLink($menu)
     {
-        $link      = '';
-        $linkLabel = '';
+        $link = array();
         if(!empty($menu['link']))
         {
             list($label, $module, $method, $params) = explode('|', $menu['link']);
             if(common::hasPriv($module, $method))
             {
-                $linkLabel = $module . '|' . $method . '|' . $params;
-                $link      = helper::createLink($module, $method, $params);
+                $link = array($module, $method, $params);
             }
             elseif(!empty($menu['links']))
             {
@@ -383,15 +374,14 @@ class adminModel extends model
                     list($module, $method, $params) = explode('|', $menuLink);
                     if(common::hasPriv($module, $method))
                     {
-                        $linkLabel = $menuLink;
-                        $link      = helper::createLink($module, $method);
+                        $link = array($module, $method, $params);
                         break;
                     }
                 }
             }
         }
 
-        return array($linkLabel, $link);
+        return $link;
     }
 
     /**
