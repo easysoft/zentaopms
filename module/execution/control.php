@@ -4073,7 +4073,7 @@ class execution extends control
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $executionStats);
-            $this->post->set('kind', 'execution');
+            $this->post->set('kind', $this->lang->execution->common);
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
