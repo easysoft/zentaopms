@@ -9,6 +9,7 @@
         <div class='modulegroup'><?php echo $groupName?></div>
         <?php foreach($modules[$group] as $module):?>
         <?php
+        if($config->disableFeature and in_array($module, $config->disableFeature)) continue;
         $active     = ($module == $selectedModule) ? 'active' : '';
         $moduleName = zget($lang->dev->tableList, $module, $module);
         ?>
