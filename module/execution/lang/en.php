@@ -13,7 +13,7 @@
 $lang->execution->allExecutions       = 'All ' . $lang->execution->common . 's';
 $lang->execution->allExecutionAB      = 'Execution List';
 $lang->execution->id                  = $lang->executionCommon . ' ID';
-$lang->execution->type                = $lang->executionCommon . 'Type';
+$lang->execution->type                = $lang->executionCommon . ' Type';
 $lang->execution->name                = "{$lang->executionCommon} Name";
 $lang->execution->code                = "{$lang->executionCommon} Code";
 $lang->execution->projectName         = 'Project';
@@ -64,7 +64,7 @@ $lang->execution->workHour            = ' Hours';
 $lang->execution->workHourUnit        = 'H';
 $lang->execution->totalHours          = ' Hours';
 $lang->execution->totalDays           = ' Days';
-$lang->execution->status              = $lang->executionCommon . 'Status';
+$lang->execution->status              = $lang->executionCommon . ' Status';
 $lang->execution->execStatus          = 'Status';
 $lang->execution->subStatus           = 'Sub Status';
 $lang->execution->desc                = "{$lang->executionCommon} Description";
