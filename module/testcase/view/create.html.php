@@ -111,7 +111,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
             <th><?php echo $lang->testcase->title;?></th>
             <td colspan='2'>
               <div class="input-group title-group">
-                <div class="input-control has-icon-right">
+                <div id='titleBox' class="input-control has-icon-right">
                   <?php echo html::input('title', $caseTitle, "class='form-control'");?>
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
@@ -145,7 +145,8 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
                 <?php echo html::select('pri', (array)$priList, $pri, "class='form-control priBox $hiddenPri'");?>
                 <?php else: ?>
                 <?php ksort($priList);?>
-                <div class="input-group-btn pri-selector priBox <?php echo $hiddenPri;?>" data-type="pri">
+                <?php $hasPri = strpos($config->testcase->create->requiredFields, 'pri') ? True : False;?>
+                <div <?php echo $hasPri ? "id='priBox'" : '';?> class="input-group-btn pri-selector <?php echo $hiddenPri; echo $hasPri ? 'required' : '';?>" data-type="pri">
                   <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                     <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
                   </button>
