@@ -24,28 +24,27 @@ class zuinav extends \zin\core\wg
 
     protected function buildItem($item)
     {
-        if ($item['type'] === 'divider') return h5::li()->addClass('nav-divider');
+        if (isset($item['type']) and $item['type'] === 'divider') return h5::li()->addClass('nav-divider');
 
-        $li = h5::li()->addClass('nav-item');
         $a = h5::a();
-        if ($item['active'])
-        {
-            $a->addClass('active');
-        }
-        $url = $item['url'];
-        if (!empty($url))
-        {
-            $a->prop('href', "$url");
-        }
-        $li->append($a);
-        $icon = $item['icon'];
+        if (isset($item['active'])) $a->addClass('active');
+
+        $url = isset($item['url']) ? $item['url'] : NULL;
+        if (!empty($url)) $a->prop('href', "$url");
+
+        $icon = isset($item['icon']) ? $item['icon'] : NULL;
         if (!empty($icon))
         {
             $i = h5::i()->addClass("icon icon-$icon");
             $a->append($i);
         }
+
         $span = h5::span($item['text'])->addClass('text');
         $a->append($span);
+
+        $li = h5::li()->addClass('nav-item');
+        $li->append($a);
+
         return $li;
     }
 
