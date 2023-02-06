@@ -3,6 +3,7 @@ $lang->common      = new stdclass();
 $lang->index       = new stdclass();
 $lang->my          = new stdclass();
 $lang->todo        = new stdclass();
+$lang->block       = new stdclass();
 $lang->program     = new stdclass();
 $lang->programplan = new stdclass();
 $lang->product     = new stdclass();
