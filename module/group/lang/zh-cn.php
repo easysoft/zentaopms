@@ -64,6 +64,7 @@ $lang->group->outside  = '组外用户';
 $lang->group->limited  = '受限用户组';
 $lang->group->other    = '其他模块';
 $lang->group->all      = '所有权限';
+$lang->group->config   = '配置';
 
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
