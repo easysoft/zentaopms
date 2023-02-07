@@ -158,6 +158,12 @@ class doc extends control
         {
             if($execution->multiple)
             {
+                if($execution->type == 'stage' and $execution->grade > 1)
+                {
+                    $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                    $execution->name  = implode('/', $parentExecutions);
+                }
+
                 $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
                 $executions[$executionID] = $executionPrefix . $execution->name;
             }
