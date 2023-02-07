@@ -27,7 +27,8 @@ function setCssVar($name = '', $value = NULL) {return (new core\style())->var($n
 function setClass()                           {return (new core\classlist(func_get_args()));}
 function setId($id)                           {return set('id', $id);}
 function setTag($tag)                         {return setCustom('tag', $tag);}
-function setData($data)                       {return setCustom('data', $data);}
+
+function useData($data)                       {return setCustom('data', $data);}
 
 function html()
 {
