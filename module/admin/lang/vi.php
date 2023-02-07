@@ -93,4 +93,10 @@ $lang->admin->safe->noticeMode   = 'Mật khẩu sẽ được kiểm tra khi ng
 $lang->admin->safe->noticeStrong = '';
 $lang->admin->safe->noticeGd     = 'Your server does not have GD module installed, you cannot use the Captcha function, Please use it after installation.';
 
+$lang->admin->mon              = 'month';
+$lang->admin->day              = 'day';
+$lang->admin->updateDynamics   = 'updateDynamics';
+$lang->admin->updatePatch      = 'updatePatch';
+$lang->admin->upgradeRecommend = 'upgradeRecommend';
+
 include dirname(__FILE__) . '/menu.php';
