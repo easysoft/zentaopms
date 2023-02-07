@@ -1438,7 +1438,7 @@ class productModel extends model
         }
         $orderBy = $hasWaterfall ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
-        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
             ->where('t1.product')->eq($productID)
@@ -1452,38 +1452,35 @@ class productModel extends model
             ->orderBy($orderBy)
             ->fetchAll('id');
 
-        /* The waterfall project needs to show the hierarchy and remove the parent stage. */
-        $executionPairs = array('0' => '');
-        if($hasWaterfall)
+        /* Only show leaf executions. */
+        $allExecutions = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)->where('type')->notin(array('program', 'project'))->fetchAll('id');
+        $parents = array();
+        foreach($allExecutions as $exec)
         {
-            foreach($executions as $id => $execution)
-            {
-                if($execution->grade == 2 and isset($executions[$execution->parent]))
-                {
-                    $execution->name = $executions[$execution->parent]->name . '/' . $execution->name;
-                    $executions[$execution->parent]->children[$id] = $execution->name;
-                    unset($executions[$id]);
-                }
-            }
-
-            foreach($executions as $execution)
-            {
-                if(isset($execution->children))
-                {
-                    $executionPairs = $executionPairs + $execution->children;
-                    continue;
-                }
-                if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
-                $executionPairs[$execution->id] = $execution->name;
-            }
+            $parents[$exec->parent] = true;
         }
-        else
+
+        $executionPairs = array('0' => '');
+        foreach($executions as $execID=> $execution)
         {
-            $this->app->loadLang('project');
-            foreach($executions as $execution)
+            if(isset($parents[$execID])) continue; // Only show leaf.
+            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
+
+            if(empty($execution->multiple))
             {
-                $executionPairs[$execution->id] = $execution->name;
-                if(empty($execution->multiple)) $executionPairs[$execution->id] = $execution->projectName . "({$this->lang->project->disableExecution})";
+                $this->app->loadLang('project');
+                $executionPairs[$execution->id] = $execution->projectName . "({$this->lang->project->disableExecution})";
+            }
+            else
+            {
+                $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
+                $executionName = $execution->projectName;
+                foreach($paths as $path)
+                {
+                    $executionName .= '/' . $allExecutions[$path]->name;
+                }
+
+                $executionPairs[$execID] = $executionName;
             }
         }
 
