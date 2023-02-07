@@ -102,7 +102,7 @@
                 <?php else: ?>
                 <?php ksort($priList);?>
                 <?php $hasPri = strpos($config->testcase->create->requiredFields, 'pri') ? True : False;?>
-                <div <?php echo $hasPri ? "id='priBox'" : '';?> class="input-group-btn pri-selector <?php echo $hasPri ? 'required' : '';?>" data-type="pri">
+                <div <?php echo $hasPri ? "id='priRequiredBox'" : '';?> class="input-group-btn pri-selector <?php echo $hasPri ? 'required' : '';?>" data-type="pri">
                   <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                     <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
                   </button>
