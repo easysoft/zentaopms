@@ -212,8 +212,9 @@ class programplan extends control
      */
     public function edit($planID = 0, $projectID = 0)
     {
-        $this->app->loadLang('project');
+        $this->loadModel('project');
         $this->app->loadLang('execution');
+        $this->app->loadLang('stage');
         $plan = $this->programplan->getByID($planID);
 
         global $lang;
@@ -234,12 +235,14 @@ class programplan extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $this->app->loadLang('stage');
-        $this->view->title        = $this->lang->programplan->edit;
-        $this->view->position[]   = $this->lang->programplan->edit;
-        $this->view->parentStage  = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
-        $this->view->isCreateTask = $this->programplan->isCreateTask($planID);
-        $this->view->plan         = $plan;
+        $parentStage = $this->project->getByID($plan->parent, 'stage');
+
+        $this->view->title              = $this->lang->programplan->edit;
+        $this->view->position[]         = $this->lang->programplan->edit;
+        $this->view->isCreateTask       = $this->programplan->isCreateTask($planID);
+        $this->view->plan               = $plan;
+        $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
+        $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
 
         $this->display();
     }
@@ -326,6 +329,21 @@ class programplan extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('task', $taskID, 'ganttMove');
             return $this->send(array('result' => 'success'));
+        }
+    }
+
+    public function ajaxGetAttribute($stageID)
+    {
+        $this->app->loadLang('stage');
+
+        $attribute = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
+        if(empty($attribute) or $attribute == 'mix')
+        {
+            return print(html::select('attribute', $this->lang->stage->typeList, $attribute, "class='form-control chosen'"));
+        }
+        else
+        {
+            return print(zget($this->lang->stage->typeList, $attribute));
         }
     }
 }
