@@ -2283,7 +2283,7 @@ class executionModel extends model
         $productType  = 'normal';
         $productNum   = count($products);
         $productPairs = array(0 => '');
-        $branches     = $this->loadModel('project')->getBranchesByProject($execution->id);
+        $branches     = empty($execution) ? array() : $this->loadModel('project')->getBranchesByProject($execution->id);
 
         foreach($products as $product)
         {
@@ -3761,44 +3761,6 @@ class executionModel extends model
         }
 
         return $data;
-    }
-
-    /**
-     * Get CFD statistics.
-     *
-     * @param int $executionID
-     * @param array $dateList
-     * @param string $type
-     * @access public
-     * @return void
-     */
-    public function getCFDStatistics($executionID, $dateList, $type)
-    {
-        $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $type);
-        $kanbanData = array_shift($kanbanData);
-
-        $cycleTime = array();
-        foreach($kanbanData->groups as $group)
-        {
-            foreach($group->lanes as $lane)
-            {
-                if(!isset($lane->items['closed'])) continue;
-
-                foreach($lane->items['closed'] as $item)
-                {
-                    $diffTime = $type == 'story' ? strtotime($item['lastEditedDate']) - strtotime($item['openedDate']) : strtotime($item['closedDate']) - strtotime($item['openedDate']);
-                    $day      = round($diffTime / (3600 * 24), 1);
-                    if($day > 0) $cycleTime[$item['id']] = $day;
-                }
-            }
-        }
-
-        $itemCount    = count($cycleTime);
-        if(!$itemCount) return array('', '');
-        $cycleTimeAvg = round(array_sum($cycleTime) / $itemCount, 1);
-        $throughput   = round(($itemCount * 7) / $cycleTimeAvg, 1) . "{$this->lang->execution->kanbanCardsUnit}/" . $this->lang->execution->week;
-
-        return array($cycleTimeAvg, $throughput);
     }
 
     /**

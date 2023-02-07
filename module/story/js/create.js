@@ -293,7 +293,7 @@ function loadModuleForTwins(productID, branch, branchIndex)
 {
     /* Load module */
     var currentModule = 0;
-    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + branchIndex + '&needManage=false&extra=&currentModuleID=' + currentModule);
+    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + branchIndex + '&needManage=false&extra=nodeleted&currentModuleID=' + currentModule);
     if(branchIndex > 0)
     {
         var $moduleIDBox = $('.addBranchesBox'+ branchIndex +' #moduleIdBox');

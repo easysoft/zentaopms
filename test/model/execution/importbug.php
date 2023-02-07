@@ -25,7 +25,6 @@ $task->left->range('3');
 $task->consumed->range('3');
 $task->gen(10);
 
-
 $bug = zdTable('bug');
 $bug->id->range('1-3,273');
 $bug->title->range('1-4')->prefix('Bug');

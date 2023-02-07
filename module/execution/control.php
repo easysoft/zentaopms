@@ -282,7 +282,7 @@ class execution extends control
 
         /* Get tasks and group them. */
         if(empty($groupBy))$groupBy = 'story';
-        if(($groupBy == 'story') and ($execution->type == 'ops'))$groupBy = 'status';
+        if(($groupBy == 'story') and ($execution->lifetime == 'ops')) $groupBy = 'status';
         $sort        = common::appendOrder($groupBy);
         $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, $productID = 0, $status = 'all', $modules = 0, $sort);
         $groupBy     = str_replace('`', '', $groupBy);
@@ -1531,8 +1531,6 @@ class execution extends control
         }
         $dateList = date::getDateList($begin, $end, 'Y-m-d', $withWeekend == 'false'? 'noweekend' : '');
 
-        //list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
-
         $chartData = $this->execution->buildCFDData($executionID, $dateList, $type);
         if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
 
@@ -2657,6 +2655,7 @@ class execution extends control
             unset($this->lang->kanban->type['story']);
             unset($this->lang->kanban->type['bug']);
             unset($this->lang->kanban->type['all']);
+            unset($this->lang->kanban->group->task['story']);
         }
 
         if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';

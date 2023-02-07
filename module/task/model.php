@@ -579,7 +579,11 @@ class taskModel extends model
         if(!$taskID) return true;
 
         $tasks = $this->dao->select('`id`,`estimate`,`consumed`,`left`, status')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll('id');
-        if(empty($tasks)) return true;
+        if(empty($tasks))
+        {
+            $this->dao->update(TABLE_TASK)->set('consumed')->eq(0)->where('id')->eq($taskID)->exec();
+            return true;
+        }
 
         $estimate = 0;
         $consumed = 0;
@@ -1478,9 +1482,6 @@ class taskModel extends model
                 dao::$errors[] = 'Task#' . $taskID . $this->lang->task->error->deadlineSmall;
                 return false;
             }
-
-            $project = $this->loadModel('project')->getByID($oldTask->project);
-            if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
 
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
@@ -2853,6 +2854,22 @@ class taskModel extends model
             ->beginIF($append)->orWhere('id')->eq($append)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
+    }
+
+    /**
+     * Get taskList date record.
+     *
+     * @param  int|array $taskID
+     * @access public
+     * @return array
+     */
+    public function getTaskDateRecord($taskID)
+    {
+        return $this->dao->select('id,date')->from(TABLE_EFFORT)->where('objectID')->in($taskID)
+            ->andWhere('objectType')->eq('task')
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('date')
+            ->fetchAll('id');
     }
 
     /**

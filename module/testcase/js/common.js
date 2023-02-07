@@ -89,7 +89,7 @@ function loadProductModules(productID, branch)
     if(typeof(branch) == 'undefined') branch = $('#branch').val();
     if(!branch) branch = 0;
     var currentModuleID = config.currentMethod == 'edit' ? $('#module').val() : 0;
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + currentModuleID);
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + currentModuleID);
     $('#moduleIdBox').load(link, function()
     {
         var $inputGroup = $(this);

@@ -9,6 +9,7 @@
         <div class='modulegroup'><?php echo $groupName?></div>
         <?php foreach($modules[$group] as $module):?>
         <?php
+        if($config->disableFeature and in_array($module, $config->disableFeature)) continue;
         $active     = ($module == $selectedModule) ? 'active' : '';
         $moduleName = zget($lang->dev->tableList, $module, $module);
         ?>
@@ -36,7 +37,7 @@
     <?php foreach($apis as $api):?>
     <div class='detail'>
       <?php
-      $methodName = $api['name'];
+      $methodName = zget($api, 'name', '');
       $params = array();
       if(isset($api['param']))
       {
@@ -46,12 +47,12 @@
       ?>
       <div class='detail-title'>
         <?php
-        echo $api['post'] ? 'GET/POST' : 'GET';
-        echo '&nbsp;&nbsp;' . $this->createLink($selectedModule, $api['name'], $params, 'json');
+        echo !empty($api['post']) ? 'GET/POST' : 'GET';
+        echo '&nbsp;&nbsp;' . $this->createLink($selectedModule, $methodName, $params, 'json');
         ?>
       </div>
       <div class='detail-content'>
-        <?php echo $api['desc'];?>
+        <?php echo zget($api, 'desc', '');?>
         <table class='table table-bordered'>
           <tr>
             <th><?php echo $lang->dev->params?></th>

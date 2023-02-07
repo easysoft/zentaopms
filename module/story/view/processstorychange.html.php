@@ -24,15 +24,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <?php foreach($changedStories as $story):?>
-          <td><?php echo $story->id;?></td>
-          <td><?php echo $story->title;?></td>
-          <td style='color: red'><?php echo $lang->story->changed;?></td>
-          <td><?php echo $story->version;?></td>
-          <td><?php echo zget($users, $story->openedBy);?></td>
-          <?php endforeach;?>
-        </tr>
+        <?php foreach($changedStories as $story):?>
+          <tr>
+            <td><?php echo $story->id;?></td>
+            <td><?php echo $story->title;?></td>
+            <td style='color: red'><?php echo $lang->story->changed;?></td>
+            <td><?php echo $story->version;?></td>
+            <td><?php echo zget($users, $story->openedBy);?></td>
+         </tr>
+        <?php endforeach;?>
       </tbody>
     </table>
     <div class="alert alert-info mg-0">

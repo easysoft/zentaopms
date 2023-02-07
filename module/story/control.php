@@ -73,7 +73,11 @@ class story extends control
             if(empty($objectID)) $objectID = $this->session->project;
 
             $projectID = $objectID;
-            if(!$this->session->multiple) $projectID = $this->session->project;
+            if(!$this->session->multiple)
+            {
+                $projectID = $this->session->project;
+                $objectID  = $this->execution->getNoMultipleID($projectID);
+            }
             $projectID = isset($objects[$projectID]) ? $projectID : $this->session->project;
             $projectID = $this->project->saveState($projectID, $objects);
             $this->project->setMenu($projectID);
@@ -270,7 +274,7 @@ class story extends control
                     else
                     {
                         $sessionStoryList = $this->session->storyList;
-                        if(count($_POST['branches']) > 1) $sessionStoryList = preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
+                        if(!empty($_POST['branches']) and count($_POST['branches']) > 1) $sessionStoryList = preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
                         $response['locate'] = $sessionStoryList;
                     }
                 }
@@ -341,6 +345,7 @@ class story extends control
             $verify     = htmlSpecialString($story->verify);
             $keywords   = $story->keywords;
             $mailto     = $story->mailto;
+            $category   = $story->category;
         }
 
         if($bugID > 0)
@@ -475,6 +480,7 @@ class story extends control
         $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement') : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
+        $this->view->category         = !empty($category) ? $category : 'feature';
 
         $this->display();
     }
@@ -1052,6 +1058,7 @@ class story extends control
             unset($stories[$id]);
         }
         if(!empty($twins)) echo js::alert(sprintf($this->lang->story->batchEditTip, $twins));
+        if(empty($stories)) return print(js::locate($this->session->storyList));
 
         $this->loadModel('branch');
         if($productID and !$executionID)
@@ -1821,6 +1828,8 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq((int)$storyID)->exec();
+
             $this->executeHooks($storyID);
 
             if(isonlybody())
@@ -1967,6 +1976,8 @@ class story extends control
 
                     if(!empty($stories[$storyID]->twins)) $this->story->syncTwins($storyID, $stories[$storyID]->twins, $changes, 'Closed');
                 }
+
+                $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->in(array_keys($allChanges))->exec();
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -2277,7 +2288,7 @@ class story extends control
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
+                    return print(js::reload('parent.parent'));
                 }
             }
             return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
@@ -2457,6 +2468,7 @@ class story extends control
         $this->view->type         = $type;
         $this->view->stories2Link = $stories2Link;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyType    = $storyType;
 
         $this->display();
     }

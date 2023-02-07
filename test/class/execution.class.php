@@ -11,7 +11,26 @@ class executionTest
     {
         global $tester;
         $this->executionModel = $tester->loadModel('execution');
-        $this->treeModel   = $tester->loadModel('tree');
+        $this->treeModel      = $tester->loadModel('tree');
+        $this->productModel   = $tester->loadModel('product');
+    }
+
+    /**
+     * Compute cfd of a execution.
+     *
+     * @param  int|string|array $executionID
+     * @access public
+     * @return array
+     */
+    public function computeCFDTest($executionID = 0)
+    {
+        $this->executionModel->computeCFD($executionID);
+
+        $today = helper::today();
+        return $this->executionModel->dao->select('*')->from(TABLE_CFD)
+            ->where('date')->eq($today)
+            ->beginIF(!empty($executionID))->andWhere('execution')->in($executionID)->fi()
+            ->fetchAll('id');
     }
 
     /**
@@ -730,12 +749,13 @@ class executionTest
      * function getTree test execution
      *
      * @param  string $executionID
-     * @param  string $count
      * @access public
      * @return array
      */
-    public function getTreeTest($executionID, $count)
+    public function getTreeTest($executionID)
     {
+        global $app;
+        $app->moduleName = 'task';
         $object = $this->executionModel->getTree($executionID);
 
         if(dao::isError())
@@ -743,13 +763,9 @@ class executionTest
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
         else
         {
-            return $object;
+            return $object[0] ? count($object[0]->children) : 0;
         }
     }
 
@@ -1794,6 +1810,31 @@ class executionTest
     }
 
     /**
+     * Function getBurnData test by execution.
+     *
+     * @param  int   $executionID
+     * @access public
+     * @return int
+     */
+    public function getBurnDataTest($executionID = 0)
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        $object = $this->executionModel->getBurnData(array($executionID => $execution));
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
      * function processBurnData test by execution
      *
      * @param  string $executionID
@@ -2692,12 +2733,105 @@ class executionTest
      * @param  int    $executionID
      * @param  int    $queryID
      * @access public
-     * @return void
+     * @return int
      */
     public function buildTaskSearchFormTest($executionID, $queryID)
     {
         $this->executionModel->buildTaskSearchForm($executionID, array($executionID => 'yes'), $queryID, 'searchTask');
 
         return $_SESSION['tasksearchParams']['queryID'];
+    }
+
+    /**
+     * Test build bug search form.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @access public
+     * @return int
+     */
+    public function buildBugSearchFormTest($productID, $queryID)
+    {
+        $product = $this->productModel->getByID($productID);
+        if(empty($product)) return '0';
+
+        $this->executionModel->loadModel('bug');
+        $this->executionModel->buildBugSearchForm(array($productID => $product), $queryID, 'searchBug');
+
+        return $_SESSION['executionBugsearchParams']['queryID'];
+    }
+
+    /**
+     * Test build story search form.
+     *
+     * @param  int    $executionID
+     * @param  int    $queryID
+     * @access public
+     * @return int
+     */
+    public function buildStorySearchFormTest($executionID, $queryID)
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        $this->executionModel->loadModel('story');
+        $products     = $this->productModel->getProducts($executionID);
+        $branchGroups = $this->executionModel->loadModel('branch')->getByProducts(array_keys($products));
+        $this->executionModel->buildStorySearchForm($products, $branchGroups, array(), $queryID, 'searchStory', 'executionStory', $execution);
+
+        return $_SESSION['executionStorysearchParams']['queryID'];
+    }
+
+    /**
+     * Test get CFD data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getCFDDataTest($executionID = 0)
+    {
+        $begin = strtotime('2022-01-12');
+        $end   = strtotime('2022-02-12');
+
+        $dateList = array();
+        for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
+
+        return $this->executionModel->getCFDData($executionID, $dateList);
+    }
+
+    /**
+     * Test build CFD data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function buildCFDDataTest($executionID = 0)
+    {
+        $begin = strtotime('2022-01-12');
+        $end   = strtotime('2022-02-12');
+
+        $dateList = array();
+        for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
+
+        return $this->executionModel->buildCFDData($executionID, $dateList, 'task');
+    }
+
+    /**
+     * Test check CFD data.
+     *
+     * @param  int    $executionID
+     * @param  string $date
+     * @access public
+     * @return array
+     */
+    public function checkCFDDataTest($executionID, $date)
+    {
+        $this->executionModel->checkCFDData($executionID, $date);
+        return $this->executionModel->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('date')->eq($date)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
     }
 }

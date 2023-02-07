@@ -827,7 +827,8 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($programID !== '')->andWhere('path')->like("%,$programID,%")->fi()
+            ->beginIF(!empty($programID))->andWhere('path')->like("%,$programID,%")->fi()
+            ->beginIF($programID === 0)->andWhere('parent')->eq(0)->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
@@ -2273,13 +2274,15 @@ class projectModel extends model
                     }
                     break;
                 case 'name':
-                    $prefix = '';
-                    $suffix = '';
+                    $prefix      = '';
+                    $suffix      = '';
+                    $projectIcon = '';
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;
                     if(!empty($suffix) or !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
-                    echo html::a($projectLink, "<i class='text-muted icon icon-{$projectType}'></i> " . $project->name, '', "class='text-ellipsis text-primary'");
+                    if($this->config->vision == 'rnd') $projectIcon = "<i class='text-muted icon icon-{$projectType}'></i> ";
+                    echo html::a($projectLink, $projectIcon . $project->name, '', "class='text-ellipsis text-primary'");
                     if(!empty($suffix)) echo $suffix;
                     if(!empty($suffix) or !empty($prefix)) echo '</div>';
                     break;

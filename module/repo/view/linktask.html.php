@@ -15,6 +15,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <style>
 #queryBox {padding-top: 25px;}
+#queryBox.show {min-height: 66px;}
 .search-form #task-search .form-actions {width: 115px !important;}
 </style>
 <div class='main-content' id='mainContent'>

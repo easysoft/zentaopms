@@ -117,11 +117,11 @@ class weeklyModel extends model
     {
         $weekStart = $this->getThisMonday($date);
         $report    = new stdclass();
-        $PVEV      = $this->getPVEV($project, $date);
+        $PVEV      = $this->getPVEV($project, $date, $mode = 'new');
 
         $report->pv        = $PVEV['PV'];
         $report->ev        = $PVEV['EV'];
-        $report->ac        = $this->getAC($project, $date);
+        $report->ac        = $this->getAC($project, $date, $mode = 'new');
         $report->sv        = $this->getSV($report->ev, $report->pv);
         $report->cv        = $this->getCV($report->ev, $report->ac);
         $report->project   = $project;
@@ -372,13 +372,14 @@ class weeklyModel extends model
      *
      * @param  int    $project
      * @param  string $date
+     * @param  string $mode
      * @access public
      * @return array
      */
-    public function getPVEV($projectID, $date = '')
+    public function getPVEV($projectID, $date = '', $mode = 'old')
     {
         $report = $this->getFromDB($projectID, $date);
-        if(!empty($report)) return array('PV' => $report->pv, 'EV' => $report->ev);
+        if(!empty($report) && $mode == 'old') return array('PV' => $report->pv, 'EV' => $report->ev);
 
         if(!$date) $date = date('Y-m-d');
         $lastDay = $this->getLastDay($date);
@@ -434,13 +435,14 @@ class weeklyModel extends model
      *
      * @param  int    $project
      * @param  string $date
+     * @param  string $mode
      * @access public
      * @return int
      */
-    public function getAC($project, $date = '')
+    public function getAC($project, $date = '', $mode = 'old')
     {
         $report = $this->getFromDB($project, $date);
-        if(!empty($report)) return $report->ac;
+        if(!empty($report) && $mode == 'old') return $report->ac;
 
         if(!$date) $date = date('Y-m-d');
         $lastDay = $this->getLastDay($date);
