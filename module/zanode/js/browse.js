@@ -1,11 +1,13 @@
 if(showFeature)
 {
-    /* Show features dialog. */
-    new $.zui.ModalTrigger({url: $.createLink('zahost', 'introduction'), type: 'iframe', width: 900, className: 'showFeatures', showHeader: false, backdrop: 'static'}).show();
+    var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao');
+    var urlForNewTab = window.location.origin + '#app=help&url=' + encodedHelpPageUrl;
+    window.open(urlForNewTab)
 }
 
 $('#helpTab').click(function()
 {
-    /* Show features dialog. */
-    new $.zui.ModalTrigger({url: $.createLink('zahost', 'introduction'), type: 'iframe', width: 900, className: 'showFeatures', showHeader: false, backdrop: 'static'}).show();
+    var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao');
+    var urlForNewTab = window.location.origin + '#app=help&url=' + encodedHelpPageUrl;
+    window.open(urlForNewTab)
 })

@@ -91,6 +91,7 @@ $lang->zahost->image->statusList['notDownloaded'] = '可下载';
 $lang->zahost->image->statusList['created']       = '下载中';
 $lang->zahost->image->statusList['canceled']      = '可下载';
 $lang->zahost->image->statusList['inprogress']    = '下载中';
+$lang->zahost->image->statusList['pending']       = '排队下载中';
 $lang->zahost->image->statusList['completed']     = '可使用';
 $lang->zahost->image->statusList['failed']        = '下载失败';
 

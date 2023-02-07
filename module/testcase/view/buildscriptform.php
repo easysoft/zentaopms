@@ -3,7 +3,7 @@ $this->loadModel('file');
 $filesName     = 'scriptFile';
 $labelsName    = 'scriptName';
 $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
-$dangerFiles   = 'zip';
+$dangerFiles   = 'php,py,js,go,sh,bat,lua,rb,tcl,pl';
 
 js::set('scriptDangerExtensions', ',' . $dangerFiles . ',');
 js::set('maxUploadSize', $maxUploadSize);
@@ -74,7 +74,7 @@ function checkDangerExtensions(file)
     if(index >= 0)
     {
         extension = fileName.substr(index + 1);
-        if(scriptDangerExtensions.lastIndexOf(',' + extension + ',') >= 0)
+        if(scriptDangerExtensions.lastIndexOf(',' + extension + ',') < 0)
         {
             alert(<?php echo json_encode($this->lang->file->dangerFile);?>);
             $(file).val('');

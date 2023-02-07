@@ -395,7 +395,7 @@ class project extends control
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
-        $this->project->buildSearchFrom($queryID, $actionURL);
+        $this->project->buildSearchForm($queryID, $actionURL);
 
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
         $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
@@ -2171,7 +2171,8 @@ class project extends control
         $this->loadModel('program');
         $this->loadModel('execution');
 
-        $project = $this->project->getById($projectID);
+        $project    = $this->project->getById($projectID);
+        $executions = $this->execution->getPairs($projectID);
 
         if(!empty($_POST))
         {
@@ -2182,11 +2183,7 @@ class project extends control
             }
 
             $oldProducts = $this->product->getProducts($projectID);
-            if($project->multiple and $project->model != 'waterfall')
-            {
-                $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id');
-                $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->fetchGroup('project', 'product');
-            }
+            if($project->multiple and $project->model != 'waterfall') $oldExecutionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchGroup('project', 'product');
 
             $this->project->updateProducts($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -2202,6 +2199,15 @@ class project extends control
             $newProductIDs = array_keys($newProducts);
             $diffProducts  = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
+
+            if(empty($project->division))
+            {
+                foreach(array_keys($executions) as $executionID)
+                {
+                    $this->execution->updateProducts($executionID);
+                    if($diffProducts) $this->loadModel('action')->create('execution', $executionID, 'Managed', '', implode(',', array_keys($newProducts)));
+                }
+            }
 
             if($project->multiple and $project->model != 'waterfall')
             {
@@ -2317,7 +2323,7 @@ class project extends control
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->branchGroups             = $branchGroups;
-        $this->view->executions               = $this->execution->getPairs($projectID);
+        $this->view->executions               = $executions;
         $this->view->allBranches              = $this->branch->getByProducts(array_keys($allProducts), 'ignoreNormal');
         $this->view->allProducts              = $allProducts;
 

@@ -862,7 +862,7 @@ class userModel extends model
         $_POST['password1'] = trim($_POST['password1']);
         $_POST['password2'] = trim($_POST['password2']);
         if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password) . '<br/>';
-        if($this->post->password1 != false)
+        if(!empty($_POST['password1']))
         {
             if(isset($this->config->safe->mode) and ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword) . '<br/>';
 
@@ -1199,7 +1199,8 @@ class userModel extends model
      */
     public function isLogon()
     {
-        return ($this->session->user and $this->session->user->account != 'guest');
+        $user = $this->session->user;
+        return ($user and !empty($user->account) and $user->account != 'guest');
     }
 
     /**
@@ -1957,7 +1958,11 @@ class userModel extends model
         /* Get product and project relation. */
         $projectProducts = array();
         $productProjects = array();
-        $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('product')->in(array_keys($allProducts))->query();
+        $stmt = $this->dao->select('t1.project, t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->in(array_keys($allProducts))
+            ->andWhere('t2.deleted')->eq('0')
+            ->query();
         while($projectProduct = $stmt->fetch())
         {
             $productProjects[$projectProduct->product][$projectProduct->project] = $projectProduct->project;

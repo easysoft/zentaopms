@@ -83,7 +83,7 @@ js::set('cancelURL',      $this->createLink('testtask', 'batchRun', "productID=$
       if($useDatatable)  include '../../common/view/datatable.html.php';
       else               include '../../common/view/tablesorter.html.php';
 
-      if($config->testcase->needReview or !empty($config->testcase->forceReview)) $config->testcase->datatable->fieldList['actions']['width'] = '180';
+      if($config->testcase->needReview or !empty($config->testcase->forceReview)) $config->testcase->datatable->fieldList['actions']['width'] = '190';
       $setting = $this->datatable->getSetting('testcase');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;

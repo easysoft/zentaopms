@@ -481,7 +481,7 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "taskID=$action->extra"), $name) : $name;
             }
-            elseif($action->objectType != 'feedback' and $actionName == 'tostory')
+            elseif(strpos('feedback,ticket', $action->objectType) === false and $actionName == 'tostory')
             {
                 $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;

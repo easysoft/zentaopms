@@ -6,8 +6,9 @@
 .c-os {width: 200px;}
 .c-memory, .c-diskSize, .c-status, .c-software, .c-instanceNum {width: 90px;}
 .c-datetime {width: 150px;}
-.status-wait {color: #f00;}
 .c-actions {overflow: visible!important;}
+.c-number {width: 120px;}
+.status-wait {color: #f00;}
 .zanode-mt-8{margin-top: 8px;}
 .zahost-init{padding:15px;background: #f4f5f7;margin:10px 0;}
 .fail{color:red;}
@@ -19,4 +20,3 @@
 .btn-info {background-color: unset;}
 .icon-refresh {font-size: 15px;}
 .load-indicator:after {top: 33%;}
-.c-number {width: 120px;}

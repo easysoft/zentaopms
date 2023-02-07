@@ -352,7 +352,7 @@ class storyModel extends model
                 if($executionID != 0)
                 {
                     $this->linkStory($executionID, $this->post->product, $storyID);
-                    if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+                    if($this->config->systemMode == 'ALM' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
 
                     $this->loadModel('kanban');
 
@@ -603,6 +603,11 @@ class storyModel extends model
                 if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
 
                 $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
+                if(empty($story->{$extendField->field}))
+                {
+                    dao::$errors[] = sprintf($this->lang->error->notempty, $extendField->name);
+                    return false;
+                }
             }
 
             foreach(explode(',', $this->config->story->create->requiredFields) as $field)
@@ -901,11 +906,14 @@ class storyModel extends model
             return false;
         }
 
-        $storyPlan = !empty($_POST['plan']) ? array_filter($_POST['plan']) : array();
+        $storyPlan = array();
+        if(!empty($_POST['plan'])) $storyPlan = is_array($_POST['plan']) ? array_filter($_POST['plan']) : array($_POST['plan']);
         if(count($storyPlan) > 1)
         {
-            $oldStoryPlan = !empty($oldStory->planTitle) ? array_keys($oldStory->planTitle) : array();
-            if(!empty(array_diff($storyPlan,$oldStoryPlan)) or !empty(array_diff($oldStoryPlan,$storyPlan)))
+            $oldStoryPlan  = !empty($oldStory->planTitle) ? array_keys($oldStory->planTitle) : array();
+            $oldPlanDiff   = array_diff($storyPlan, $oldStoryPlan);
+            $storyPlanDiff = array_diff($oldStoryPlan, $storyPlan);
+            if(!empty($oldPlanDiff) or !empty($storyPlanDiff))
             {
                 dao::$errors[] = $this->lang->story->notice->changePlan;
                 return false;
@@ -1981,7 +1989,6 @@ class storyModel extends model
         $now      = helper::now();
         $story = fixer::input('post')
             ->add('id', $storyID)
-            ->add('assignedTo', 'closed')
             ->add('status', 'closed')
             ->add('stage', 'closed')
             ->setDefault('lastEditedBy',   $this->app->user->account)
@@ -2072,7 +2079,6 @@ class storyModel extends model
             $story->lastEditedDate = $now;
             $story->closedBy       = $this->app->user->account;
             $story->closedDate     = $now;
-            $story->assignedTo     = 'closed';
             $story->assignedDate   = $now;
             $story->status         = 'closed';
             $story->stage          = 'closed';
@@ -4442,9 +4448,9 @@ class storyModel extends model
                 $ccList   = substr($ccList, $commaPos + 1);
             }
         }
-        elseif($toList == 'closed')
+        elseif($story->status == 'closed')
         {
-            $toList = $story->openedBy;
+            $ccList .= ',' . $story->openedBy;
         }
 
         return array($toList, $ccList);
@@ -5505,7 +5511,7 @@ class storyModel extends model
                 $stories[$id]->title  = $story->title;
                 $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
-                $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
+                $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id, 0, $projectID);
                 if($this->config->edition == 'max')
                 {
                     $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
@@ -6039,7 +6045,7 @@ class storyModel extends model
         if($result == 'reject')
         {
             $now    = helper::now();
-            $reason = (empty($reason) and isset($story->closedReason)) ? $story->closedReason : $reason;
+            $reason = (!empty($story->closedReason)) ? $story->closedReason : $reason;
 
             $story->status       = 'closed';
             $story->closedBy     = $this->app->user->account;
@@ -6432,8 +6438,10 @@ class storyModel extends model
      */
     public function getStoriesReviewer($productID = 0)
     {
+        $this->loadModel('user');
         $product   = $this->loadModel('product')->getByID($productID);
-        $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        $reviewers = $product->reviewer;
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product, '', '', '', '');
         return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
     }
 

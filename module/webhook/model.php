@@ -122,6 +122,10 @@ class webhookModel extends model
             {
                 $text = substr($data->markdown->content, 0, strpos($data->markdown->content, '(http'));
             }
+            elseif(isset($data->text->content))
+            {
+                $text = substr($data->text->content, 0, strpos($data->text->content, '(http'));
+            }
             elseif(isset($data->content))
             {
                 $text = $data->content->text;
@@ -627,7 +631,7 @@ class webhookModel extends model
         if(empty($table)) return false;
 
         $object = $this->dao->select('*')->from($table)->where('id')->eq($action->objectID)->fetch();
-        $toList = $this->loadModel('message')->getToList($object, $action->objectType);
+        $toList = $this->loadModel('message')->getToList($object, $action->objectType, $actionID);
         if(!empty($object->mailto)) $toList .= ',' . $object->mailto;
         if(empty($toList)) return false;
 

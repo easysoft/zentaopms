@@ -333,29 +333,6 @@ class zahost extends control
         return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage))));
     }
 
-    /*
-     * Init host.
-     *
-     * @param  int      $hostID
-     * @return void
-     */
-    public function init($hostID)
-    {
-        $imageList = $this->zahost->getImagePairs($hostID);
-
-        $this->view->title      = $this->lang->zahost->init->title;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->hostID     = $hostID;
-        $this->view->host       = $this->zahost->getById($hostID);
-        $this->view->initBash   = sprintf($this->config->zahost->initBash, $this->view->host->secret, getWebRoot(true));
-        $this->view->notice     = $imageList ? $this->lang->zahost->createZanodeNotice : $this->lang->zahost->downloadImageNotice;
-        $this->view->buttonName = $imageList ? $this->lang->zahost->createZanode : $this->lang->zahost->image->downloadImage;
-        $this->view->modalLink  = $imageList ? $this->createLink('zanode', 'create', "hostID=$hostID") : $this->createLink('zahost', 'browseImage', "hostID=$hostID");
-        $this->view->closeLink  = $this->createLink('zahost', 'browse');
-
-        $this->display();
-    }
-
     /**
      * Introduction.
      *

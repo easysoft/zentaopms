@@ -17,8 +17,10 @@
 .block-guide .nav-secondary > li.switch-icon {display: none;}
 .block-guide .tab-pane h4 {color: #0B0F18;}
 .block-guide .tab-pane .dataTitle {font-size: 12px; color: #5E626D;}
+.block-guide .tab-pane .app-client .col,
+.block-guide .tab-pane .app-qrcode .col {width: 100%;}
 .block-guide .tab-pane .app-client .menu {margin-top: 10px;}
-.block-guide .tab-pane .app-client .menu,
+.block-guide .tab-pane .os-and-desc {padding-left: 0;}
 .block-guide .tab-pane .app-client .tree-menu li {line-height: 56px; border: 1px solid #EDEEF2; padding-left: 0; white-space: nowrap}
 .block-guide .tab-pane .app-client .tree-menu li:nth-child(2) {border-top: none; border-bottom: none;}
 .block-guide .tab-pane .app-client .tree-menu li a.iframe {display: flex;}
@@ -151,7 +153,7 @@ $(function()
           <div class="col-4">
             <div class='col'><h4><?php echo $lang->block->zentaoclient->common;?></h4></div>
             <div class="col dataTitle"><?php echo $lang->block->zentaoclient->desc;?></div>
-            <div class='col pull-left col-md-12'>
+            <div class='col pull-left col-md-12 os-and-desc'>
               <nav class="menu pull-left col-md-3" data-ride="menu">
                 <ul class="tree tree-menu" data-ride="tree">
                   <?php foreach($lang->block->zentaoclient->edition as $edition => $editionName):?>
@@ -159,7 +161,7 @@ $(function()
                   <?php endforeach;?>
                 </ul>
               </nav>
-              <div class="pull-left col-md-9 text-center client-desc">
+              <div class="pull-left col-md-9 client-desc">
                 <?php echo html::image($config->webRoot . 'theme/default/images/guide/' . (common::checkNotCN() ? 'client_en.png' : 'client_cn.png'));?>
               </div>
             </div>
@@ -172,7 +174,7 @@ $(function()
             <div class='col'><h4><?php echo $lang->block->zentaoapp->common;?></h4></div>
             <div class="col dataTitle"><?php echo $lang->block->zentaoapp->desc;?></div>
             <div class='col pull-left col-md-12'>
-              <div class="pull-left col-md-8">
+              <div class="pull-left col-md-8 os-and-desc">
                 <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_index.png');?></div>
                 <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_execution.png');?></div>
                 <div class="col-md-4"><?php echo html::image($config->webRoot . 'theme/default/images/guide/app_statistic.png');?></div>

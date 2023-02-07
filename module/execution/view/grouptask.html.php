@@ -47,7 +47,7 @@
       <ul class="dropdown-menu">
         <?php
         $class = common::hasPriv('task', 'export') ? '' : "class=disabled";
-        $misc  = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
+        $misc  = common::hasPriv('task', 'export') ? "class='export' data-width=620" : "class=disabled";
         $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=$browseType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
@@ -103,7 +103,7 @@
               <?php foreach($lang->execution->groups as $key => $value):?>
               <?php
               if(empty($key)) continue;
-              if($execution->type == 'ops' && $key == 'story') continue;
+              if($execution->lifetime == 'ops' && $key == 'story') continue;
               $active = $key == $groupBy ? "class='active'" : '';
               echo "<li $active>"; common::printLink('execution', 'groupTask', "execution=$executionID&groupBy=$key", $value); echo '</li>';
               ?>

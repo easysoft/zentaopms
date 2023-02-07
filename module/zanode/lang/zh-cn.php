@@ -73,6 +73,7 @@ $lang->zanode->runCaseConfirm = '系统检测到选择的用例存在自动化�
 
 $lang->zanode->createImage        = '导出镜像';
 $lang->zanode->createImaging      = '正在导出镜像';
+$lang->zanode->pending            = '等待导出镜像';
 $lang->zanode->createImageNotice  = '系统将基于当前执行节点导出镜像，该过程需要关闭该执行节点，确定要继续么？';
 $lang->zanode->createImageSuccess = '镜像导出成功，您可以使用此镜像创建执行节点。';
 $lang->zanode->createImageFail    = '镜像导出失败';

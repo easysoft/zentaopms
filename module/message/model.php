@@ -144,7 +144,7 @@ class messageModel extends model
         $table  = $this->config->objectTables[$objectType];
         $field  = $this->config->action->objectNameFields[$objectType];
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
-        $toList = $this->getToList($object, $objectType);
+        $toList = $this->getToList($object, $objectType, $actionID);
         if(empty($toList)) return false;
         if($toList == $actor) return false;
 
@@ -181,10 +181,11 @@ class messageModel extends model
      *
      * @param  object    $object
      * @param  string    $objectType
+     * @param  int       $actionID
      * @access public
      * @return string
      */
-    public function getToList($object, $objectType)
+    public function getToList($object, $objectType, $actionID = 0)
     {
         $toList = '';
         if(!empty($object->assignedTo)) $toList = $object->assignedTo;
@@ -211,6 +212,13 @@ class messageModel extends model
 
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' and $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
+        if($objectType == 'story' and $actionID)
+        {
+            $action = $this->loadModel('action')->getById($actionID);
+            list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
+            $toList = $toList . $ccList;
+        }
+
         return $toList;
     }
 

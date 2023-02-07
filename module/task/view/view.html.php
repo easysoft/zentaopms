@@ -60,7 +60,7 @@
           <?php echo !empty($task->desc) ? $task->desc : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
         </div>
       </div>
-      <?php if($execution->type != 'ops'):?>
+      <?php if($execution->lifetime != 'ops'):?>
       <?php if($task->fromBug != 0):?>
       <div class="detail">
         <div class="detail-title"><?php echo $lang->bug->steps;?></div>
@@ -227,7 +227,7 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
-                <?php if($execution->type != 'ops'):?>
+                <?php if($execution->lifetime != 'ops'):?>
                 <tr class='nofixed'>
                   <th><?php echo $lang->task->story;?></th>
                   <td>

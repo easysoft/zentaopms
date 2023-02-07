@@ -1631,13 +1631,13 @@ $(function()
         return false;
     });
 
-    /* Mofidy dafault color's border color. */
+    /* Modify default color's border color. */
     $(document).on('mouseout', '.color0', function()
     {
         $('.color0 .cardcolor').css('border', '1px solid #b0b0b0');
     });
 
-    /* Mofidy dafault color's border color. */
+    /* Modify default color's border color. */
     $(document).on('mouseover', '.color0', function()
     {
         $('.color0 .cardcolor').css('border', '1px solid #fff');

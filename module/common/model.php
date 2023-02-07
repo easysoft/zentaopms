@@ -535,6 +535,7 @@ class commonModel extends model
             echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
             echo html::avatar($app->user);
             echo '</a>';
+            echo '<script>$("#userDropDownMenu").on("click", function(){$(this).removeClass("dropdown-hover");});$("#userDropDownMenu").on("hover", function(){$(this).next().removeClass("open");$(this).addClass("dropdown-hover");});</script>';
         }
     }
 
@@ -2521,6 +2522,7 @@ EOD;
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
           ($module == 'report' && $method == 'annualdata') or
           ($module == 'misc' && $method == 'captcha') or
+          ($module == 'bug' && $method == 'create') or
           ($module == 'execution' and $method == 'printkanban') or
           ($module == 'traincourse' and $method == 'ajaxuploadlargefile') or
           ($module == 'traincourse' and $method == 'playvideo'))

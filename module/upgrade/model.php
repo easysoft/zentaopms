@@ -584,7 +584,7 @@ class upgradeModel extends model
                     $this->execSQL($xuanxuanSql);
                 }
                 break;
-            case '18_0_beta2':
+            case '18_0_beta3':
                 $this->updateMyBlocks();
                 break;
         }
@@ -1080,7 +1080,7 @@ class upgradeModel extends model
             case '18_0_beta2':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta2'));
             case '18_0_beta3':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta3'));
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta3')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -7576,7 +7576,12 @@ class upgradeModel extends model
             $project->lastEditedDate = $now;
             $project->grade          = 2;
             $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
-            if($fromMode == 'classic') $project->multiple = '0';
+            if($fromMode == 'classic')
+            {
+                $project->multiple = '0';
+                $project->code     = $sprint->code;
+                $project->team     = $sprint->team;
+            }
 
             $this->dao->insert(TABLE_PROJECT)->data($project)->exec();
             if(dao::isError()) return false;

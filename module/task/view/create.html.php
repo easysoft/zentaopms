@@ -127,7 +127,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             </div>
           </td>
         </tr>
-        <?php if($execution->type != 'ops'):?>
+        <?php if($execution->lifetime != 'ops'):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>

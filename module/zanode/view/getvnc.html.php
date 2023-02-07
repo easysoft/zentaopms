@@ -12,7 +12,7 @@
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <div class='clearfix'>
-  <?php echo "<iframe width='100%' id='urlIframe' src='http://$url/novnc?port=6080&path=websockify/?token=$token&password=pass'></iframe>";?>
+  <?php echo "<iframe width='100%' id='urlIframe' src='http://$url/novnc/vnc.html?resize=scale&autoconnect=true&port=6080&path=websockify/?token=$token&password=pass&resize=scale&autoconnect=true'></iframe>";?>
 </div>
 <script>
 $(function()

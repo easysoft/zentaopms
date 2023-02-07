@@ -2,7 +2,8 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
-$db->switchDB();
+zdTable('usertpl')->gen(10);
+zdTable('user')->gen(500);
 su('admin');
 
 /**
@@ -43,5 +44,3 @@ r(count($tpls1)) && p()            && e('1');                       //插入一�
 r(count($tpls3)) && p()            && e('2');                       //插入两条任务类型的用户模板，查看数量
 r($tpls2)        && p('0:title')   && e('Admin的模板二');           //查看插入的模板二的名字
 r($tpls2)        && p('0:content') && e('<p>这是一段模板内容</p>'); //查看插入的模板二的内容
-
-$db->restoreDB();

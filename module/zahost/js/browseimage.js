@@ -21,7 +21,7 @@ function updateProgress() {
         var hasInprogress = false;
         for (var imageID in statusList) {
             if (statusList[imageID].statusCode) {
-                if (statusList[imageID].statusCode == 'inprogress' || statusList[imageID].statusCode == 'created')
+                if (statusList[imageID].statusCode == 'inprogress' || statusList[imageID].statusCode == 'created' || statusList[imageID].statusCode == 'pending')
                 {
                     hasInprogress = true;
                     $('.image-download-' + imageID).addClass('disabled');

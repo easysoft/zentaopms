@@ -10,7 +10,155 @@ class executionTest
     public function __construct()
     {
         global $tester;
-        $this->objectModel = $tester->loadModel('execution');
+        $this->executionModel = $tester->loadModel('execution');
+        $this->treeModel      = $tester->loadModel('tree');
+        $this->productModel   = $tester->loadModel('product');
+    }
+
+    /**
+     * Compute cfd of a execution.
+     *
+     * @param  int|string|array $executionID
+     * @access public
+     * @return array
+     */
+    public function computeCFDTest($executionID = 0)
+    {
+        $this->executionModel->computeCFD($executionID);
+
+        $today = helper::today();
+        return $this->executionModel->dao->select('*')->from(TABLE_CFD)
+            ->where('date')->eq($today)
+            ->beginIF(!empty($executionID))->andWhere('execution')->in($executionID)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get no multiple execution id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return int
+     */
+    public function getNoMultipleIDTest($projectID)
+    {
+        return $this->executionModel->getNoMultipleID($projectID);
+    }
+
+    /**
+     * Check begin and end date.
+     *
+     * @param  int    $projectID
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return bool|array
+     */
+    public function checkBeginAndEndDateTest($projectID, $begin, $end)
+    {
+        $this->executionModel->checkBeginAndEndDate($projectID, $begin, $end);
+
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
+
+    /**
+     * Check the workload format and total.
+     *
+     * @param  string $executionID
+     * @param  string $type
+     * @param  int    $percent
+     * @access public
+     * @return object
+     */
+    public function checkWorkloadTest($executionID, $type = '', $percent = 0)
+    {
+        global $tester;
+        $tester->loadModel('programplan');
+
+        $_POST['percent'] = $percent;
+        $oldExecution = empty($executionID) ? '' : $this->executionModel->getByID($executionID);
+        $this->executionModel->checkWorkload($type, $percent, $oldExecution);
+        unset($_POST);
+
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
+
+    /**
+     * Set Kanban.
+     *
+     * @param  int    $executionID
+     * @param  array  $param
+     * @access public
+     * @return object
+     */
+    public function setKanbanTest($executionID, $param = array())
+    {
+        global $tester;
+        $tester->loadModel('kanban');
+
+        $object = $tester->dbh->query("SELECT `displayCards`,`fluidBoard`,`colWidth`,`minColWidth`,`maxColWidth` FROM zt_project WHERE id = $executionID ")->fetch();
+
+        $_POST['heightType'] = 'auto';
+        foreach($object as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $this->executionModel->setKanban($executionID);
+        $execution = $this->executionModel->getByID($executionID);
+
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $execution;
+        }
+    }
+
+    /**
+     * Set project into session.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return int
+     */
+    public function setProjectSessionTest($executionID)
+    {
+        unset($_SESSION['project']);
+        $this->executionModel->setProjectSession($executionID);
+        return empty($_SESSION['project']) ? 0 : $_SESSION['project'];
+    }
+
+    /**
+     * Test save state.
+     *
+     * @param  int    $executionID
+     * @param  array  $executions
+     * @access public
+     * @return array
+     */
+    public function saveStateTest($executionID = 0, $executions = array())
+    {
+        return $this->executionModel->saveState($executionID, $executions);
+    }
+
+    /**
+     * Create the select code of executions.
+     *
+     * @param  int    $executionID
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @access public
+     * @return void
+     */
+    public function selectTest($executionID, $currentModule, $currentMethod)
+    {
+        $executions = $this->executionModel->getPairs();
+        return $this->executionModel->select($executions, $executionID, 0, $currentModule, $currentMethod);
     }
 
     /**
@@ -22,7 +170,7 @@ class executionTest
      */
     public function checkPrivTest($executionID)
     {
-        return $this->objectModel->checkPriv($executionID);
+        return $this->executionModel->checkPriv($executionID);
     }
 
     /**
@@ -58,7 +206,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function createObject($param = array(), $project = '', $dayNum = '', $days = '')
+    public function createTest($param = array(), $project = '', $dayNum = '', $days = '')
     {
         $products  = array('');
         $plans     = array('');
@@ -70,12 +218,12 @@ class executionTest
         $createFields = array('project' => $project, 'name' => '', 'code' => '', 'begin' => $beginData, 'end' => $endData,
             'lifetime' => 'short', 'status' => 'wait', 'products' => $products, 'delta' => $delta, 'days' => $days,
             'plans' => $plans, 'team' => '', 'teams' => '0', 'PO' => '', 'QD' => '', 'PM' => '', 'RD' => '', 'whitelist' => '',
-            'desc' => '', 'acl' => 'private');
+            'desc' => '', 'acl' => 'private', 'percent' => '0');
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $objectID = $this->objectModel->create();
+        $objectID = $this->executionModel->create();
 
         unset($_POST);
 
@@ -85,7 +233,7 @@ class executionTest
         }
         else
         {
-            $object = $this->objectModel->getByID($objectID);
+            $object = $this->executionModel->getByID($objectID);
             return $object;
         }
     }
@@ -110,7 +258,7 @@ class executionTest
         foreach($object as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $change = $this->objectModel->update($objectID);
+        $change = $this->executionModel->update($objectID);
 
         if($change == array()) $change = '没有数据更新';
 
@@ -158,7 +306,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $object = $this->objectModel->batchUpdate();
+        $object = $this->executionModel->batchUpdate();
 
         unset($_POST);
 
@@ -191,7 +339,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $obj = $this->objectModel->start($executionID);
+        $obj = $this->executionModel->start($executionID);
 
         unset($_POST);
 
@@ -211,8 +359,8 @@ class executionTest
         {
             if($testParent)
             {
-                $execution       = $this->objectModel->getByID($executionID);
-                $executionParent = $this->objectModel->getByID($execution->parent);
+                $execution       = $this->executionModel->getByID($executionID);
+                $executionParent = $this->executionModel->getByID($execution->parent);
                 return $executionParent;
             }
             return $obj;
@@ -237,7 +385,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $obj = $this->objectModel->putoff($executionID);
+        $obj = $this->executionModel->putoff($executionID);
 
         unset($_POST);
 
@@ -267,7 +415,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $obj = $this->objectModel->suspend($executionID);
+        $obj = $this->executionModel->suspend($executionID);
 
         unset($_POST);
 
@@ -303,7 +451,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $obj = $this->objectModel->activate($executionID);
+        $obj = $this->executionModel->activate($executionID);
 
         unset($_POST);
 
@@ -316,8 +464,8 @@ class executionTest
         {
             if($testParent)
             {
-                $execution       = $this->objectModel->getByID($executionID);
-                $executionParent = $this->objectModel->getByID($execution->parent);
+                $execution       = $this->executionModel->getByID($executionID);
+                $executionParent = $this->executionModel->getByID($execution->parent);
                 return $executionParent;
             }
             return $obj;
@@ -342,7 +490,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $obj = $this->objectModel->close($executionID);
+        $obj = $this->executionModel->close($executionID);
 
         unset($_POST);
 
@@ -355,8 +503,8 @@ class executionTest
         {
             if($testParent)
             {
-                $execution       = $this->objectModel->getByID($executionID);
-                $executionParent = $this->objectModel->getByID($execution->parent);
+                $execution       = $this->executionModel->getByID($executionID);
+                $executionParent = $this->executionModel->getByID($execution->parent);
                 return $executionParent;
             }
             return $obj;
@@ -371,9 +519,9 @@ class executionTest
      * @access public
      * @return array
      */
-    public function getPairsTest($projectID,$count)
+    public function getPairsTest($projectID, $count)
     {
-        $object = $this->objectModel->getPairs($projectID);
+        $object = $this->executionModel->getPairs($projectID);
 
         if(dao::isError())
         {
@@ -399,7 +547,7 @@ class executionTest
      */
     public function getByIDTest($executionID)
     {
-        $object = $this->objectModel->getByID($executionID);
+        $object = $this->executionModel->getByID($executionID);
 
         if(dao::isError())
         {
@@ -421,7 +569,7 @@ class executionTest
      */
     public function getByIdListTest($executionIdList)
     {
-        $object = $this->objectModel->getByIdList($executionIdList);
+        $object = $this->executionModel->getByIdList($executionIdList);
 
         if(dao::isError())
         {
@@ -448,7 +596,7 @@ class executionTest
      */
     public function getListTest($projectID, $type, $status, $limit, $productID, $count)
     {
-        $object = $this->objectModel->getList($projectID, $type, $status, $limit, $productID);
+        $object = $this->executionModel->getList($projectID, $type, $status, $limit, $productID);
 
         if(dao::isError())
         {
@@ -477,7 +625,7 @@ class executionTest
      */
     public function getInvolvedExecutionListTest($projectID, $limit, $productID, $count)
     {
-        $object = $this->objectModel->getInvolvedExecutionList($projectID,$status = 'involved',$limit, $productID);
+        $object = $this->executionModel->getInvolvedExecutionList($projectID,$status = 'involved',$limit, $productID);
 
         if(dao::isError())
         {
@@ -506,7 +654,7 @@ class executionTest
      */
     public function getByProjectTest($projectID, $status, $limit, $count)
     {
-        $object = $this->objectModel->getByProject($projectID, $status, $limit);
+        $object = $this->executionModel->getByProject($projectID, $status, $limit);
 
         if(dao::isError())
         {
@@ -533,7 +681,7 @@ class executionTest
      */
     public function getIdListTest($projectID, $count)
     {
-        $object = $this->objectModel->getIdList($projectID);
+        $object = $this->executionModel->getIdList($projectID);
 
         if(dao::isError())
         {
@@ -566,7 +714,7 @@ class executionTest
      */
     public function getStatDataTest($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
     {
-        $objects = $this->objectModel->getStatData($projectID);
+        $objects = $this->executionModel->getStatData($projectID);
         return count($objects);
     }
 
@@ -580,7 +728,7 @@ class executionTest
      */
     public function getBranchesTest($executionID, $count)
     {
-        $object = $this->objectModel->getBranches($executionID);
+        $object = $this->executionModel->getBranches($executionID);
 
         if(dao::isError())
         {
@@ -601,26 +749,23 @@ class executionTest
      * function getTree test execution
      *
      * @param  string $executionID
-     * @param  string $count
      * @access public
      * @return array
      */
-    public function getTreeTest($executionID, $count)
+    public function getTreeTest($executionID)
     {
-        $object = $this->objectModel->getTree($executionID);
+        global $app;
+        $app->moduleName = 'task';
+        $object = $this->executionModel->getTree($executionID);
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
         else
         {
-            return $object;
+            return $object[0] ? count($object[0]->children) : 0;
         }
     }
 
@@ -634,7 +779,7 @@ class executionTest
      */
     public function getRelatedExecutionsTest($executionID, $count)
     {
-        $object = $this->objectModel->getRelatedExecutions($executionID);
+        $object = $this->executionModel->getRelatedExecutions($executionID);
 
         if(dao::isError())
         {
@@ -661,7 +806,7 @@ class executionTest
      */
     public function getChildExecutionsTest($executionID, $count)
     {
-        $object = $this->objectModel->getChildExecutions($executionID);
+        $object = $this->executionModel->getChildExecutions($executionID);
 
         if(dao::isError())
         {
@@ -686,7 +831,7 @@ class executionTest
      */
     public function getLimitedExecutionTest()
     {
-        $this->objectModel->getProductGroupList();
+        $this->executionModel->getProductGroupList();
         return isset($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : true;
     }
 
@@ -699,7 +844,7 @@ class executionTest
      */
     public function getProductGroupListTest($count)
     {
-        $object = $this->objectModel->getProductGroupList();
+        $object = $this->executionModel->getProductGroupList();
 
         if(dao::isError())
         {
@@ -737,7 +882,7 @@ class executionTest
         $executions = array($executionID => $execution->name);
         $page       = 'NULL';
 
-        $object = $this->objectModel->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort, $page);
+        $object = $this->executionModel->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort, $page);
 
         if(dao::isError())
         {
@@ -763,7 +908,7 @@ class executionTest
      */
     public function getTaskGroupByExecutionTest($executionIdList = array())
     {
-        $objects = $this->objectModel->getTaskGroupByExecution($executionIdList);
+        $objects = $this->executionModel->getTaskGroupByExecution($executionIdList);
         return count($objects);
     }
 
@@ -776,7 +921,7 @@ class executionTest
      */
     public function getDefaultManagersTest($executionID)
     {
-        $object = $this->objectModel->getDefaultManagers($executionID);
+        $object = $this->executionModel->getDefaultManagers($executionID);
 
         if(dao::isError())
         {
@@ -799,7 +944,7 @@ class executionTest
      */
     public function getBranchByProductTest($productID, $count)
     {
-        $object = $this->objectModel->getBranchByProduct($productID);
+        $object = $this->executionModel->getBranchByProduct($productID);
 
         if(dao::isError())
         {
@@ -808,7 +953,7 @@ class executionTest
         }
         elseif($count == "1")
         {
-            return count($object);
+            return isset($object[$productID]) ? count($object[$productID]) : 0;
         }
         else
         {
@@ -827,7 +972,7 @@ class executionTest
      */
     public function getOrderedExecutionsTest($projectID, $status, $count)
     {
-        $object = $this->objectModel->getOrderedExecutions($projectID,$status);
+        $object = $this->executionModel->getOrderedExecutions($projectID,$status);
 
         if(dao::isError())
         {
@@ -855,7 +1000,7 @@ class executionTest
      */
     public function getToImportTest($executionIds, $type, $count)
     {
-        $object = $this->objectModel->getToImport($executionIds, $type);
+        $object = $this->executionModel->getToImport($executionIds, $type);
 
         if(dao::isError())
         {
@@ -892,7 +1037,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $this->objectModel->updateProducts($executionID);
+        $this->executionModel->updateProducts($executionID);
 
         unset($_POST);
 
@@ -919,9 +1064,9 @@ class executionTest
      */
     public function getTasks2ImportedTest($toExecution, $count)
     {
-        $branches = $this->objectModel->getBranches($toExecution);
+        $branches = $this->executionModel->getBranches($toExecution);
 
-        $object = $this->objectModel->getTasks2Imported($toExecution, $branches);
+        $object = $this->executionModel->getTasks2Imported($toExecution, $branches);
 
         if(dao::isError())
         {
@@ -957,7 +1102,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $this->objectModel->importTask($executionID);
+        $this->executionModel->importTask($executionID);
 
         unset($_POST);
 
@@ -987,7 +1132,7 @@ class executionTest
      */
     public function statRelatedDataTest($executionID)
     {
-        $object = $this->objectModel->statRelatedData($executionID);
+        $object = $this->executionModel->statRelatedData($executionID);
 
         if(dao::isError())
         {
@@ -1024,7 +1169,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $object = $this->objectModel->importBug($executionID);
+        $object = $this->executionModel->importBug($executionID);
 
         unset($_POST);
 
@@ -1062,7 +1207,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $object = $this->objectModel->updateChilds($executionID);
+        $object = $this->executionModel->updateChilds($executionID);
 
         unset($_POST);
 
@@ -1097,7 +1242,7 @@ class executionTest
     {
         global $tester;
 
-        $this->objectModel->changeProject($newProject, $oldProject, $executionID, $syncStories);
+        $this->executionModel->changeProject($newProject, $oldProject, $executionID, $syncStories);
 
         if(dao::isError())
         {
@@ -1134,7 +1279,7 @@ class executionTest
 
         $tester->dbh->query("delete from zt_projectstory where project = $executionID");
 
-        $this->objectModel->linkStory($executionID);
+        $this->executionModel->linkStory($executionID);
 
         unset($_POST);
 
@@ -1169,7 +1314,7 @@ class executionTest
         global $tester;
         if($planID) $tester->dao->update(TABLE_PROJECTPRODUCT)->set('plan')->eq($planID)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->exec();
 
-        $this->objectModel->linkStories($executionID);
+        $this->executionModel->linkStories($executionID);
         $objects = $tester->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
         return count($objects);
     }
@@ -1190,7 +1335,7 @@ class executionTest
 
         $tester->dbh->query("delete from zt_projectcase where project = $executionID");
 
-        $this->objectModel->linkCases($executionID, $productID, $storyID);
+        $this->executionModel->linkCases($executionID, $productID, $storyID);
 
         if(dao::isError())
         {
@@ -1233,11 +1378,11 @@ class executionTest
 
         $tester->dbh->query("delete from zt_projectstory where project = $executionID");
 
-        $this->objectModel->linkStory($executionID);
+        $this->executionModel->linkStory($executionID);
 
         unset($_POST);
 
-        $this->objectModel->unlinkStory($executionID, $storyID);
+        $this->executionModel->unlinkStory($executionID, $storyID);
 
         if(dao::isError())
         {
@@ -1278,8 +1423,8 @@ class executionTest
 
         $tester->dbh->query("delete from zt_projectcase where project = $executionID");
 
-        $this->objectModel->linkCases($executionID, $productID, $storyID);
-        $this->objectModel->unlinkCases($executionID, $storyID);
+        $this->executionModel->linkCases($executionID, $productID, $storyID);
+        $this->executionModel->unlinkCases($executionID, $storyID);
 
         if(dao::isError())
         {
@@ -1303,7 +1448,7 @@ class executionTest
      */
     public function getTeamMembersTest($executionID, $count)
     {
-        $object = $this->objectModel->getTeamMembers($executionID);
+        $object = $this->executionModel->getTeamMembers($executionID);
 
         if(dao::isError())
         {
@@ -1330,7 +1475,7 @@ class executionTest
      */
     public function getMembersByIdListTest($executionIdList, $count)
     {
-        $object = $this->objectModel->getMembersByIdList($executionIdList);
+        $object = $this->executionModel->getMembersByIdList($executionIdList);
 
         if(dao::isError())
         {
@@ -1358,7 +1503,7 @@ class executionTest
      */
     public function getTeams2ImportTest($account, $currentExecution, $count)
     {
-        $object = $this->objectModel->getTeams2Import($account, $currentExecution);
+        $object = $this->executionModel->getTeams2Import($account, $currentExecution);
 
         if(dao::isError())
         {
@@ -1393,7 +1538,7 @@ class executionTest
      */
     public function getMembers2ImportTest($execution, $currentMembers, $count)
     {
-        $object = $this->objectModel->getMembers2Import($execution, $currentMembers);
+        $object = $this->executionModel->getMembers2Import($execution, $currentMembers);
 
         if(dao::isError())
         {
@@ -1427,7 +1572,7 @@ class executionTest
      */
     public function getCanCopyObjectsTest($projectID = 0, $count = 0)
     {
-        $object = $this->objectModel->getCanCopyObjects($projectID);
+        $object = $this->executionModel->getCanCopyObjects($projectID);
 
         if(dao::isError())
         {
@@ -1478,7 +1623,7 @@ class executionTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $object = $this->objectModel->manageMembers($executionID);
+        $object = $this->executionModel->manageMembers($executionID);
 
         unset($_POST);
 
@@ -1521,7 +1666,7 @@ class executionTest
         $tester->dbh->query("delete from zt_team where root = $projectID");
         $executionMembers = $tester->dao->select('`root`,`account`,`join`,`role`,`days`,`type`,`hours`')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll('account');
 
-        $this->objectModel->addProjectMembers($projectID, $executionMembers);
+        $this->executionModel->addProjectMembers($projectID, $executionMembers);
 
         $object = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($projectID)->fetchAll();
 
@@ -1554,7 +1699,7 @@ class executionTest
         global $tester;
         $oldObject = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($sprintID)->fetchAll();
 
-        $this->objectModel->unlinkMember($sprintID, $account);
+        $this->executionModel->unlinkMember($sprintID, $account);
 
         $object = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($sprintID)->fetchAll();
 
@@ -1582,7 +1727,7 @@ class executionTest
      */
     public function computeBurnTest($count)
     {
-        $object = $this->objectModel->computeBurn();
+        $object = $this->executionModel->computeBurn();
 
         if(dao::isError())
         {
@@ -1600,26 +1745,25 @@ class executionTest
     }
 
     /**
-     * function fixFirst test by execution
+     * Function fixFirst test by execution.
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  string $date
      * @access public
      * @return array
      */
-    public function fixFirstTest($executionID, $param = array())
+    public function fixFirstTest($executionID, $param = array(), $date)
     {
         global $tester;
-
-        $date = date('Y-m-d');
 
         $createFields = array('estimate' => '');
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $this->objectModel->computeBurn();
-        $this->objectModel->fixFirst($executionID);
+        $this->executionModel->computeBurn();
+        $this->executionModel->fixFirst($executionID);
 
         unset($_POST);
 
@@ -1652,14 +1796,7 @@ class executionTest
      */
     public function getBurnDataFlotTest($executionID = 0)
     {
-        $date   = date("Y-m-d");
-        $object = $this->objectModel->getBurnDataFlot($executionID, $burnBy = 'left');
-
-        $todayData = array();
-        if(isset($object[$date]))
-        {
-            foreach($object[$date] as $key => $value) $todayData[$key] = $value;
-        }
+        $object = $this->executionModel->getBurnDataFlot($executionID, $burnBy = 'left');
 
         if(dao::isError())
         {
@@ -1668,7 +1805,32 @@ class executionTest
         }
         else
         {
-            return sizeof($todayData);
+            return $object;
+        }
+    }
+
+    /**
+     * Function getBurnData test by execution.
+     *
+     * @param  int   $executionID
+     * @access public
+     * @return int
+     */
+    public function getBurnDataTest($executionID = 0)
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        $object = $this->executionModel->getBurnData(array($executionID => $execution));
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $object;
         }
     }
 
@@ -1688,7 +1850,7 @@ class executionTest
         global $tester;
         $sets = $tester->dao->select('execution, `date` as name, `left` as value')->from(TABLE_BURN)->where('execution')->eq($executionID)->fetchAll('name');
 
-        $object = $this->objectModel->processBurnData($sets, $itemCounts, $begin, $end);
+        $object = $this->executionModel->processBurnData($sets, $itemCounts, $begin, $end);
 
         if(dao::isError())
         {
@@ -1718,9 +1880,9 @@ class executionTest
         $execution  = $tester->dbh->query("select * from zt_project where id = $executionID")->fetch();
         $executions = array($executionID => $execution->name);
         $page       = 'NULL';
-        $tasks      = $this->objectModel->getTasks('0', $executionID, $executions,'all', '0', '0', 'status,id_desc', $page);
+        $tasks      = $this->executionModel->getTasks('0', $executionID, $executions,'all', '0', '0', 'status,id_desc', $page);
 
-        $object = $this->objectModel->summary($tasks);
+        $object = $this->executionModel->summary($tasks);
 
         if(dao::isError())
         {
@@ -1743,7 +1905,7 @@ class executionTest
      */
     public function isClickableTest($execution, $action)
     {
-        $object = $this->objectModel->isClickable($execution, $action);
+        $object = $this->executionModel->isClickable($execution, $action);
 
         if(dao::isError())
         {
@@ -1776,7 +1938,7 @@ class executionTest
      */
     public function getDateListTest($begin, $end, $type, $count, $interval = 0)
     {
-        $object = $this->objectModel->getDateList($begin, $end, $type, $interval);
+        $object = $this->executionModel->getDateList($begin, $end, $type, $interval);
 
         if(dao::isError())
         {
@@ -1809,7 +1971,7 @@ class executionTest
      */
     public function getTotalEstimateTest($executionID)
     {
-        $object = $this->objectModel->getTotalEstimate($executionID);
+        $object = $this->executionModel->getTotalEstimate($executionID);
 
         if(dao::isError())
         {
@@ -1832,7 +1994,7 @@ class executionTest
     {
         global $tester;
 
-        $this->objectModel->fixOrder();
+        $this->executionModel->fixOrder();
 
         $object = $tester->dao->select('id,`order`')->from(TABLE_EXECUTION)->fetchAll('id');
 
@@ -1857,7 +2019,7 @@ class executionTest
      */
     public function getKanbanTasksTest($executionID, $count)
     {
-        $object = $this->objectModel->getKanbanTasks($executionID);
+        $object = $this->executionModel->getKanbanTasks($executionID);
 
         if(dao::isError())
         {
@@ -1883,7 +2045,7 @@ class executionTest
      */
     public function getKanbanSettingTest($count)
     {
-        $object = $this->objectModel->getKanbanSetting();
+        $object = $this->executionModel->getKanbanSetting();
 
         if(dao::isError())
         {
@@ -1909,8 +2071,8 @@ class executionTest
      */
     public function getKanbanColumnsTest($count)
     {
-        $kanbanSetting = $this->objectModel->getKanbanSetting();
-        $object        = $this->objectModel->getKanbanColumns($kanbanSetting);
+        $kanbanSetting = $this->executionModel->getKanbanSetting();
+        $object        = $this->executionModel->getKanbanColumns($kanbanSetting);
 
         if(dao::isError())
         {
@@ -1936,8 +2098,8 @@ class executionTest
      */
     public function getKanbanStatusMapTest($count)
     {
-        $kanbanSetting = $this->objectModel->getKanbanSetting();
-        $object        = $this->objectModel->getKanbanStatusMap($kanbanSetting);
+        $kanbanSetting = $this->executionModel->getKanbanSetting();
+        $object        = $this->executionModel->getKanbanStatusMap($kanbanSetting);
 
         if(dao::isError())
         {
@@ -1963,8 +2125,8 @@ class executionTest
      */
     public function getKanbanStatusListTest($count)
     {
-        $kanbanSetting = $this->objectModel->getKanbanSetting();
-        $object        = $this->objectModel->getKanbanStatusList($kanbanSetting);
+        $kanbanSetting = $this->executionModel->getKanbanSetting();
+        $object        = $this->executionModel->getKanbanStatusList($kanbanSetting);
 
         if(dao::isError())
         {
@@ -1990,8 +2152,8 @@ class executionTest
      */
     public function getKanbanColorListTest($count)
     {
-        $kanbanSetting = $this->objectModel->getKanbanSetting();
-        $object        = $this->objectModel->getKanbanColorList($kanbanSetting);
+        $kanbanSetting = $this->executionModel->getKanbanSetting();
+        $object        = $this->executionModel->getKanbanColorList($kanbanSetting);
 
         if(dao::isError())
         {
@@ -2022,9 +2184,9 @@ class executionTest
         $begin = '2022-01-07';
         $end   = '2022-01-17';
 
-        $dateList = $this->objectModel->getDateList($begin, $end, $type, 0, $format = 'Y-m-d');
+        $dateList = $this->executionModel->getDateList($begin, $end, $type, 0, $format = 'Y-m-d');
 
-        $object = $this->objectModel->buildBurnData($executionID, $dateList[0], $type);
+        $object = $this->executionModel->buildBurnData($executionID, $dateList[0], $type);
 
         if(dao::isError())
         {
@@ -2052,7 +2214,7 @@ class executionTest
      */
     public function getPlansTest($products, $executionID, $count)
     {
-        $object = $this->objectModel->getPlans($products,'', $executionID);
+        $object = $this->executionModel->getPlans($products,'', $executionID);
 
         if(dao::isError())
         {
@@ -2079,7 +2241,7 @@ class executionTest
      */
     public function getStageLinkProductPairsTest($projects, $count)
     {
-        $object = $this->objectModel->getStageLinkProductPairs($projects);
+        $object = $this->executionModel->getStageLinkProductPairs($projects);
 
         if(dao::isError())
         {
@@ -2107,7 +2269,7 @@ class executionTest
     {
         global $tester;
 
-        $this->objectModel->setTreePath($executionID);
+        $this->executionModel->setTreePath($executionID);
 
         $object = $tester->dao->select('id,project,parent,path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetchAll('id');
 
@@ -2133,8 +2295,8 @@ class executionTest
     {
         global $tester;
 
-        $execution = $this->objectModel->getByID($executionID);
-        $object    = $this->objectModel->getBeginEnd4CFD($execution);
+        $execution = $this->executionModel->getByID($executionID);
+        $object    = $this->executionModel->getBeginEnd4CFD($execution);
 
         $object[0] = $object[0] == date('Y-m-d', strtotime('-13 days', time())) ? 1 : 0;
         $object[1] = $object[1] == helper::today() ? 1 : 0;
@@ -2167,7 +2329,7 @@ class executionTest
         $tester->app->loadClass('pager', $static = true);
         $pager = new pager(0, $recPerPage, 1);
 
-        $objects = $this->objectModel->getSearchTasks($condition, $pager, $orderBy);
+        $objects = $this->executionModel->getSearchTasks($condition, $pager, $orderBy);
 
         $returns = '';
         foreach($objects as $object)
@@ -2207,7 +2369,7 @@ class executionTest
      */
     public function getSearchBugsTest($products, $executionID, $sql, $pager = null, $orderBy = 'id_desc')
     {
-        $object = $this->objectModel->getSearchBugs($products, $executionID, $sql, $pager, $orderBy);
+        $object = $this->executionModel->getSearchBugs($products, $executionID, $sql, $pager, $orderBy);
 
         if(dao::isError())
         {
@@ -2232,7 +2394,7 @@ class executionTest
      */
     public function getKanbanGroupDataTest($stories, $tasks, $bugs, $type = 'story')
     {
-        $object = $this->objectModel->getKanbanGroupData($stories, $tasks, $bugs, $type);
+        $object = $this->executionModel->getKanbanGroupData($stories, $tasks, $bugs, $type);
 
         if(dao::isError())
         {
@@ -2242,7 +2404,7 @@ class executionTest
         else
         {
             if(count((array)$object['closed']) == 0 and count((array)$object['nokey']) == 0) return 'empty';
-            return $object;
+            return count($object['nokey']->tasks);
         }
     }
 
@@ -2255,7 +2417,7 @@ class executionTest
      */
     public function getPrevKanbanTest($executionID)
     {
-        $result = $this->objectModel->getPrevKanban($executionID);
+        $result = $this->executionModel->getPrevKanban($executionID);
 
         if(dao::isError())
         {
@@ -2283,7 +2445,7 @@ class executionTest
             global $tester;
             $contents    = array('story', 'wait', 'doing', 'done', 'cancel');
             $stories     = $tester->loadModel('story')->getExecutionStories($executionID, 0, 0, 'id_asc');
-            $kanbanTasks = $this->objectModel->getKanbanTasks($executionID, "id");
+            $kanbanTasks = $this->executionModel->getKanbanTasks($executionID, "id");
             $kanbanBugs  = $tester->loadModel('bug')->getExecutionBugs($executionID);
             $users       = array();
             $taskAndBugs = array();
@@ -2314,7 +2476,7 @@ class executionTest
             $kanbanDatas = $datas;
         }
 
-        $object = $this->objectModel->saveKanbanData($executionID, $kanbanDatas);
+        $object = $this->executionModel->saveKanbanData($executionID, $kanbanDatas);
 
         if(dao::isError())
         {
@@ -2323,7 +2485,7 @@ class executionTest
         }
         else
         {
-            $result = $this->objectModel->getPrevKanban($executionID);
+            $result = $this->executionModel->getPrevKanban($executionID);
             return !$result ? 'empty' : $result;
         }
     }
@@ -2337,7 +2499,7 @@ class executionTest
      */
     public function getLifetimeByIdListTest($idList = '')
     {
-        $result = $this->objectModel->getLifetimeByIdList($idList);
+        $result = $this->executionModel->getLifetimeByIdList($idList);
 
         if(dao::isError())
         {
@@ -2367,7 +2529,7 @@ class executionTest
      */
     public function updateUserViewTest($executionID, $objectType = 'sprint', $users = array())
     {
-        $this->objectModel->updateUserView($executionID, $objectType, $users);
+        $this->executionModel->updateUserView($executionID, $objectType, $users);
 
         if(dao::isError())
         {
@@ -2379,7 +2541,7 @@ class executionTest
             if(count($users) > 0) su($users[0]);
 
             global $tester;
-            return $tester->app->user->view->sprints;
+            return ",{$tester->app->user->view->sprints},";
         }
     }
 
@@ -2392,10 +2554,284 @@ class executionTest
      */
     public function createDefaultSprintTest($projectID)
     {
-        $result = $this->objectModel->createDefaultSprint($projectID);
+        $result = $this->executionModel->createDefaultSprint($projectID);
 
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return $result > 0;
+    }
+
+    /**
+     * Test set menu.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function setMenuTest($executionID = 0)
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        $this->executionModel->setMenu($executionID);
+
+        global $lang;
+        return strip_tags($lang->switcherMenu);
+    }
+
+    /**
+     * Get switcher.
+     *
+     * @param  int    $executionID
+     * @param  string $method
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest($executionID = 0, $method = '')
+    {
+        return $this->executionModel->getSwitcher($executionID, 'execution', $method);
+    }
+
+    /**
+     * Test sync no multiple sprint.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function syncNoMultipleSprintTest($projectID)
+    {
+        return $this->executionModel->syncNoMultipleSprint($projectID);
+    }
+
+    /**
+     * Test build search form.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildSearchFormTest($queryID)
+    {
+        $this->executionModel->buildSearchForm($queryID, 'searchUrl');
+
+        return $_SESSION['executionsearchParams']['queryID'];
+    }
+
+    /**
+     * Test print cell.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function printCellTest($executionID)
+    {
+        $col = new stdClass();
+        $col->order = 1;
+        $col->id    = 'id';
+        $col->show  = 1;
+        $col->width = 70;
+        $col->fixed = 'left';
+        $col->title = 'ID';
+        $col->sort  = 'yes';
+        $col->name  = '';
+
+        $execution = $this->executionModel->getByID($executionID);
+
+        ob_start();
+        $this->executionModel->printCell($col, $execution, array());
+        $objects = ob_get_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return strip_tags($objects);
+    }
+
+    /**
+     * Test build operate menu.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenuTest($executionID = 0)
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        return $this->executionModel->buildOperateMenu($execution);
+    }
+
+    /**
+     * Test print nested list.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string
+     */
+    public function printNestedListTest($projectID = 0)
+    {
+        $executions = $this->executionModel->getStatData($projectID);
+
+        global $app;
+        $app->moduleName = 'execution';
+        ob_start();
+        $this->executionModel->printNestedList($executions[0], false, array(), 1);
+        $result = ob_get_clean();
+        return mb_substr(strip_tags($result), 0, 2);
+    }
+
+    /**
+     * Test print nested list.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function printTreeTest($executionID)
+    {
+        global $app;
+        $app->moduleName = 'task';
+        $tree = $this->executionModel->getTree($executionID);
+        return str_replace(' ', '', strip_tags($this->executionModel->printTree($tree, false)));
+    }
+
+    /**
+     * Test format tasks for tree.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function formatTasksForTreeTest($executionID)
+    {
+        global $app;
+        $app->moduleName = 'task';
+        $tasks = $this->executionModel->getSearchTasks("execution = $executionID", null, 'id_desc');
+        return $this->executionModel->formatTasksForTree($tasks);
+    }
+
+    /**
+     * Test fill tasks in tree.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
+    public function fillTasksInTreeTest($executionID)
+    {
+        $fullTrees = $this->treeModel->getTaskStructure($executionID, 0);
+        if(empty($fullTrees)) return '0';
+
+        return $this->executionModel->fillTasksInTree((object)$fullTrees[0], $executionID);
+    }
+
+    /**
+     * Test build task search form.
+     *
+     * @param  int    $executionID
+     * @param  int    $queryID
+     * @access public
+     * @return int
+     */
+    public function buildTaskSearchFormTest($executionID, $queryID)
+    {
+        $this->executionModel->buildTaskSearchForm($executionID, array($executionID => 'yes'), $queryID, 'searchTask');
+
+        return $_SESSION['tasksearchParams']['queryID'];
+    }
+
+    /**
+     * Test build bug search form.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @access public
+     * @return int
+     */
+    public function buildBugSearchFormTest($productID, $queryID)
+    {
+        $product = $this->productModel->getByID($productID);
+        if(empty($product)) return '0';
+
+        $this->executionModel->loadModel('bug');
+        $this->executionModel->buildBugSearchForm(array($productID => $product), $queryID, 'searchBug');
+
+        return $_SESSION['executionBugsearchParams']['queryID'];
+    }
+
+    /**
+     * Test build story search form.
+     *
+     * @param  int    $executionID
+     * @param  int    $queryID
+     * @access public
+     * @return int
+     */
+    public function buildStorySearchFormTest($executionID, $queryID)
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        if(empty($execution)) return '0';
+
+        $this->executionModel->loadModel('story');
+        $products     = $this->productModel->getProducts($executionID);
+        $branchGroups = $this->executionModel->loadModel('branch')->getByProducts(array_keys($products));
+        $this->executionModel->buildStorySearchForm($products, $branchGroups, array(), $queryID, 'searchStory', 'executionStory', $execution);
+
+        return $_SESSION['executionStorysearchParams']['queryID'];
+    }
+
+    /**
+     * Test get CFD data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getCFDDataTest($executionID = 0)
+    {
+        $begin = strtotime('2022-01-12');
+        $end   = strtotime('2022-02-12');
+
+        $dateList = array();
+        for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
+
+        return $this->executionModel->getCFDData($executionID, $dateList);
+    }
+
+    /**
+     * Test build CFD data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function buildCFDDataTest($executionID = 0)
+    {
+        $begin = strtotime('2022-01-12');
+        $end   = strtotime('2022-02-12');
+
+        $dateList = array();
+        for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
+
+        return $this->executionModel->buildCFDData($executionID, $dateList, 'task');
+    }
+
+    /**
+     * Test check CFD data.
+     *
+     * @param  int    $executionID
+     * @param  string $date
+     * @access public
+     * @return array
+     */
+    public function checkCFDDataTest($executionID, $date)
+    {
+        $this->executionModel->checkCFDData($executionID, $date);
+        return $this->executionModel->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('date')->eq($date)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
     }
 }

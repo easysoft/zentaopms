@@ -2,6 +2,8 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
+zdTable('product')->gen(10);
+zdTable('user')->gen(200);
 su('admin');
 
 /**

@@ -827,7 +827,8 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($programID !== '')->andWhere('path')->like("%,$programID,%")->fi()
+            ->beginIF(!empty($programID))->andWhere('path')->like("%,$programID,%")->fi()
+            ->beginIF($programID === 0)->andWhere('parent')->eq(0)->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
@@ -994,14 +995,14 @@ class projectModel extends model
     }
 
     /*
-     * Build search form
+     * Build search form.
      *
      * @param int     $queryID
      * @param string  $actionURL
      *
      * @return 0
      * */
-    public function buildSearchFrom($queryID, $actionURL)
+    public function buildSearchForm($queryID, $actionURL)
     {
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['actionURL'] = $actionURL;
@@ -1633,6 +1634,12 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->updateProducts($projectID, $_POST['products']);
+            if(empty($oldProject->division))
+            {
+                $executions = $this->loadModel('execution')->getPairs($projectID);
+                foreach(array_keys($executions) as $executionID) $this->execution->updateProducts($executionID);
+            }
+
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
             $whitelist = explode(',', $project->whitelist);
@@ -2273,13 +2280,15 @@ class projectModel extends model
                     }
                     break;
                 case 'name':
-                    $prefix = '';
-                    $suffix = '';
+                    $prefix      = '';
+                    $suffix      = '';
+                    $projectIcon = '';
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;
                     if(!empty($suffix) or !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
-                    echo html::a($projectLink, "<i class='text-muted icon icon-{$projectType}'></i> " . $project->name, '', "class='text-ellipsis text-primary'");
+                    if($this->config->vision == 'rnd') $projectIcon = "<i class='text-muted icon icon-{$projectType}'></i> ";
+                    echo html::a($projectLink, $projectIcon . $project->name, '', "class='text-ellipsis text-primary'");
                     if(!empty($suffix)) echo $suffix;
                     if(!empty($suffix) or !empty($prefix)) echo '</div>';
                     break;

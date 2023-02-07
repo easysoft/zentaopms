@@ -28,7 +28,7 @@
 
     foreach(customModel::getFeatureMenu('execution', 'task') as $menuItem)
     {
-        if($execution->type == 'ops' && $menuItem->name == 'needconfirm') continue;
+        if($execution->lifetime == 'ops' && $menuItem->name == 'needconfirm') continue;
         if(isset($menuItem->hidden)) continue;
         $menuType = $menuItem->name;
         if(strpos($menuType, 'QUERY') === 0)
@@ -74,7 +74,7 @@
     foreach ($lang->execution->groups as $key => $value)
     {
         if($key == '') continue;
-        if($execution->type == 'ops' && $key == 'story') continue;
+        if($execution->lifetime == 'ops' && $key == 'story') continue;
         echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
         common::printLink('execution', 'groupTask', "execution=$executionID&groupBy=$key", $value);
     }

@@ -2283,7 +2283,7 @@ class executionModel extends model
         $productType  = 'normal';
         $productNum   = count($products);
         $productPairs = array(0 => '');
-        $branches     = $this->loadModel('project')->getBranchesByProject($execution->id);
+        $branches     = empty($execution) ? array() : $this->loadModel('project')->getBranchesByProject($execution->id);
 
         foreach($products as $product)
         {
@@ -2472,13 +2472,14 @@ class executionModel extends model
     {
         $this->loadModel('task');
 
-        $execution = $this->getByID($executionID);
-        $tasks     = $this->dao->select('id,execution,assignedTo,story,consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $taskStories = array();
+        $execution   = $this->getByID($executionID);
+        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to execution. */
             $assignedToes[$task->assignedTo] = $task->execution;
-            $stories[$task->story]           = $task->story;
+            $taskStories[$task->story]       = $task->story;
 
             $data = new stdclass();
             $data->project   = $execution->project;
@@ -2500,7 +2501,7 @@ class executionModel extends model
         }
 
         /* Remove empty story. */
-        unset($stories[0]);
+        unset($taskStories[0]);
 
         /* Add members to execution team. */
         $teamMembers = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
@@ -2523,8 +2524,8 @@ class executionModel extends model
         /* Link stories. */
         $executionStories = $this->loadModel('story')->getExecutionStoryPairs($executionID);
         $lastOrder        = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
-        $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($executionStories))->fetchAll('story');
-        foreach($stories as $storyID)
+        $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($taskStories))->fetchAll('story');
+        foreach($taskStories as $storyID)
         {
             if(!isset($executionStories[$storyID]))
             {
@@ -3763,44 +3764,6 @@ class executionModel extends model
     }
 
     /**
-     * Get CFD statistics.
-     *
-     * @param int $executionID
-     * @param array $dateList
-     * @param string $type
-     * @access public
-     * @return void
-     */
-    public function getCFDStatistics($executionID, $dateList, $type)
-    {
-        $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $type);
-        $kanbanData = array_shift($kanbanData);
-
-        $cycleTime = array();
-        foreach($kanbanData->groups as $group)
-        {
-            foreach($group->lanes as $lane)
-            {
-                if(!isset($lane->items['closed'])) continue;
-
-                foreach($lane->items['closed'] as $item)
-                {
-                    $diffTime = $type == 'story' ? strtotime($item['lastEditedDate']) - strtotime($item['openedDate']) : strtotime($item['closedDate']) - strtotime($item['openedDate']);
-                    $day      = round($diffTime / (3600 * 24), 1);
-                    if($day > 0) $cycleTime[$item['id']] = $day;
-                }
-            }
-        }
-
-        $itemCount    = count($cycleTime);
-        if(!$itemCount) return array('', '');
-        $cycleTimeAvg = round(array_sum($cycleTime) / $itemCount, 1);
-        $throughput   = round(($itemCount * 7) / $cycleTimeAvg, 1) . "{$this->lang->execution->kanbanCardsUnit}/" . $this->lang->execution->week;
-
-        return array($cycleTimeAvg, $throughput);
-    }
-
-    /**
      * Get taskes by search.
      *
      * @param  string $condition
@@ -4044,7 +4007,7 @@ class executionModel extends model
         $builds  = array('' => '', 'trunk' => $this->lang->trunk);
         foreach($products as $product)
         {
-            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
+            $productModules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
             $productBuilds  = $this->loadModel('build')->getBuildPairs($product->id, 'all', $params = 'noempty|notrunk|withbranch');
             foreach($productModules as $moduleID => $moduleName)
             {
@@ -5180,7 +5143,7 @@ class executionModel extends model
      * @param string  $actionURL
      * @return void
      * */
-    public function buildSearchFrom($queryID, $actionURL)
+    public function buildSearchForm($queryID, $actionURL)
     {
         $this->config->execution->all->search['queryID']   = $queryID;
         $this->config->execution->all->search['actionURL'] = $actionURL;
@@ -5251,6 +5214,8 @@ class executionModel extends model
     public function syncNoMultipleSprint($projectID)
     {
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        if(empty($project)) return 0;
+
         $post    = $_POST;
 
         $_POST = array();

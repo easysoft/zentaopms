@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
+zdTable('user')->gen(500);
 su('admin');
 
 /**
@@ -20,5 +21,4 @@ $admin = array(
     'role'     => 'qa',
     'realname' => 'admin'
 );
-a($user->processAccountSortTest(array('admin'=>$admin)));exit;
 r($user->processAccountSortTest(array('admin'=>$admin))) && p('admin:account,role') && e('admin,qa'); //获取当前用户信息

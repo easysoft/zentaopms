@@ -90,6 +90,7 @@ $lang->zahost->image->statusList['notDownloaded'] = 'Not Downloaded';
 $lang->zahost->image->statusList['created']       = 'Inprogress';
 $lang->zahost->image->statusList['canceled']      = 'Not Downloaded';
 $lang->zahost->image->statusList['inprogress']    = 'Inprogress';
+$lang->zahost->image->statusList['pending']       = 'Waiting for download';
 $lang->zahost->image->statusList['completed']     = 'Completed';
 $lang->zahost->image->statusList['failed']        = 'Failed';
 

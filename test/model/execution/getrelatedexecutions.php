@@ -2,6 +2,36 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+
+$execution = zdTable('project');
+$execution->id->range('1-10');
+$execution->name->range('项目集1,项目1,项目2,项目3,迭代1,迭代2,阶段1,阶段2,看板1,看板2');
+$execution->type->range('program,project{3},sprint{2},stage{2},kanban{2}');
+$execution->model->range('[],scrum,waterfall,kanban,[]{6}');
+$execution->parent->range('0,1{3},2{2},3{2},4{2}');
+$execution->project->range('0{4},2{2},3{2},4{2}');
+$execution->status->range('doing');
+$execution->vision->range('rnd');
+$execution->openedBy->range('admin,user1');
+$execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->gen(10);
+
+$product = zdTable('product');
+$product->id->range('1-3');
+$product->name->range('正常产品1,多分支产品1,多平台产品1');
+$product->type->range('normal,branch,platform');
+$product->status->range('closed{2},normal');
+$product->createdBy->range('admin,user1');
+$product->gen(3);
+
+$projectproduct = zdTable('projectproduct');
+$projectproduct->project->range('1-10');
+$projectproduct->product->range('1-3');
+$projectproduct->plan->range('1-3');
+$projectproduct->gen(10);
+
+zdTable('user')->gen(5);
 su('admin');
 
 /**
@@ -11,22 +41,21 @@ cid=1
 pid=1
 
 查询敏捷执行关联查询 >> 项目1
-查询瀑布执行关联查询 >> 项目36
-查询看板执行关联查询 >> 项目57
-查询敏捷执行关联统计 >> 22
-查询瀑布执行关联统计 >> 26
-查询看板执行关联统计 >> 22
+查询瀑布执行关联查询 >> 项目3
+查询看板执行关联查询 >> 项目2
+查询敏捷执行关联统计 >> 2
+查询瀑布执行关联统计 >> 3
+查询看板执行关联统计 >> 2
 
 */
 
-$executionIDList = array('101','146', '617');
+$executionIDList = array('5','7', '9');
 $count           = array('0','1');
 
 $execution = new executionTest();
-//var_dump($execution->getRelatedExecutionsTest($executionIDList[2],$count[0]));die;
-r($execution->getRelatedExecutionsTest($executionIDList[0],$count[0])) && p('11')  && e('项目1');  // 查询敏捷执行关联查询
-r($execution->getRelatedExecutionsTest($executionIDList[1],$count[0])) && p('46')  && e('项目36'); // 查询瀑布执行关联查询
-r($execution->getRelatedExecutionsTest($executionIDList[2],$count[0])) && p('67')  && e('项目57'); // 查询看板执行关联查询
-r($execution->getRelatedExecutionsTest($executionIDList[0],$count[1])) && p()      && e('22');     // 查询敏捷执行关联统计
-r($execution->getRelatedExecutionsTest($executionIDList[1],$count[1])) && p()      && e('26');     // 查询瀑布执行关联统计
-r($execution->getRelatedExecutionsTest($executionIDList[2],$count[1])) && p()      && e('22');     // 查询看板执行关联统计
+r($execution->getRelatedExecutionsTest($executionIDList[0],$count[0])) && p('2')  && e('项目1');  // 查询敏捷执行关联查询
+r($execution->getRelatedExecutionsTest($executionIDList[1],$count[0])) && p('4')  && e('项目3');  // 查询瀑布执行关联查询
+r($execution->getRelatedExecutionsTest($executionIDList[2],$count[0])) && p('3')  && e('项目2');  // 查询看板执行关联查询
+r($execution->getRelatedExecutionsTest($executionIDList[0],$count[1])) && p()      && e('2');     // 查询敏捷执行关联统计
+r($execution->getRelatedExecutionsTest($executionIDList[1],$count[1])) && p()      && e('3');     // 查询瀑布执行关联统计
+r($execution->getRelatedExecutionsTest($executionIDList[2],$count[1])) && p()      && e('2');     // 查询看板执行关联统计

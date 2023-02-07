@@ -65,3 +65,18 @@ $('.btn-init-copy').live('click', function()
         $(that).tooltip('hide')
     }, 2000)
 })
+
+
+function setIframeHeight(iframe) 
+{
+    if (iframe) 
+    {
+        var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+        if (iframeWin.document.body) 
+        {
+            var height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight
+            iframe.height = height+10;
+            console.log(1111, iframe.height)
+        }
+    }
+}

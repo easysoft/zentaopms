@@ -471,9 +471,6 @@ class task extends control
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Set Custom*/
-        $project = $this->project->getByID($execution->project);
-        if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
-
         foreach(explode(',', $this->config->task->customBatchCreateFields) as $field)
         {
             if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
@@ -780,9 +777,6 @@ class task extends control
         /* Set Custom*/
         if(isset($execution))
         {
-            $project = $this->project->getByID($execution->project);
-            if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
-
             foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
             {
                 if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
@@ -2118,7 +2112,7 @@ class task extends control
     {
         $execution       = $this->execution->getById($executionID);
         $allExportFields = $this->config->task->exportFields;
-        if($execution->type == 'ops') $allExportFields = str_replace(' story,', '', $allExportFields);
+        if($execution->lifetime == 'ops') $allExportFields = str_replace(' story,', '', $allExportFields);
 
         if($_POST)
         {

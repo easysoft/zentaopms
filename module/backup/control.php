@@ -93,12 +93,12 @@ class backup extends control
         $backFileName = "{$this->backupPath}{$fileName}.sql";
         if(!$nosafe) $backFileName .= '.php';
         $result = $this->backup->backSQL($backFileName);
+
         if(!$result->result)
         {
             if($reload == 'yes')
             {
-                echo js::alert(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
-                return print(js::reload('parent'));
+                return print(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
             }
             else
             {
@@ -112,12 +112,12 @@ class backup extends control
             $backFileName = "{$this->backupPath}{$fileName}.file";
 
             $result = $this->backup->backFile($backFileName);
+
             if(!$result->result)
             {
                 if($reload == 'yes')
                 {
-                    echo js::alert(sprintf($this->lang->backup->error->backupFile, $result->error));
-                    return print(js::reload('parent'));
+                    return print(sprintf($this->lang->backup->error->backupFile, $result->error));
                 }
                 else
                 {
@@ -132,8 +132,7 @@ class backup extends control
             {
                 if($reload == 'yes')
                 {
-                    echo js::alert(sprintf($this->lang->backup->error->backupCode, $result->error));
-                    return print(js::reload('parent'));
+                    return print(sprintf($this->lang->backup->error->backupCode, $result->error));
                 }
                 else
                 {
@@ -164,7 +163,7 @@ class backup extends control
             }
         }
 
-        if($reload == 'yes') return print(js::reload('parent'));
+        if($reload == 'yes') return print($this->lang->backup->success->backup);
         echo $this->lang->backup->success->backup . "\n";
     }
 

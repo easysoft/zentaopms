@@ -531,6 +531,50 @@ class userTest
     }
 
     /**
+     * Test clean user locked time.
+     *
+     * @param  string $account
+     * @access public
+     * @return string
+     */
+    public function cleanLockedTest($account)
+    {
+        global $tester;
+
+        $this->objectModel->cleanLocked($account);
+
+        if(dao::isError()) return dao::getError();
+
+        $locked = $tester->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch('locked');
+
+        $result = $locked === '0000-00-00 00:00:00' ? 'success' : 'fail';
+
+        return $result;
+    }
+
+    /**
+     * Test unbind Ranzhi.
+     *
+     * @param  string $account
+     * @access public
+     * @return string
+     */
+    public function unbindTest($account)
+    {
+        global $tester;
+
+        $this->objectModel->unbind($account);
+
+        if(dao::isError()) return dao::getError();
+
+        $ranzhi = $tester->dao->select('ranzhi')->from(TABLE_USER)->where('account')->eq($account)->fetch('ranzhi');
+
+        $result = empty($ranzhi) ? 'success' : 'fail';
+
+        return $result;
+    }
+
+    /**
      * Test get contact list.
      *
      * @param  string $account
@@ -543,7 +587,8 @@ class userTest
         $contacts = $this->objectModel->getContactLists($account, $params);
 
         if(dao::isError()) return dao::getError();
-        return $contacts;
+
+        return $contacts ? $contacts : 0;
     }
 
     /**
@@ -604,9 +649,12 @@ class userTest
      */
     public function createContactListTest($listName = '', $userList = array())
     {
-        $listID = $this->objectModel->createContactList($listName, $userList);
+        ob_start();
+        $listID  = $this->objectModel->createContactList($listName, $userList);
+        $message = ob_get_clean();
 
-        if(dao::isError()) return dao::getError();
+        if($message) return array('message' => array('listName' => array(1)));
+        if(dao::isError()) return array('message' => dao::getError());
         return $this->objectModel->getContactListByID($listID);
     }
 
@@ -623,7 +671,7 @@ class userTest
     {
         $this->objectModel->updateContactList($listID, $listName, $userList);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return array('message' => dao::getError());
         return $this->objectModel->getContactListByID($listID);
     }
 
@@ -643,7 +691,7 @@ class userTest
     }
 
     /**
-     * Test delete a contact list.
+     * Test get user data in json.
      *
      * @param  object $user
      * @access public
@@ -806,7 +854,7 @@ class userTest
      * @access public
      * @return void
      */
-    public function checkProductPrivTest($product, $account, $groups, $teams, $stakeholders, $whiteList)
+    public function checkProductPrivTest($product, $account, $groups = '', $teams = '', $stakeholders = '', $whiteList = '')
     {
         return $this->objectModel->checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList);
     }
@@ -834,14 +882,33 @@ class userTest
      * @param  int    $projectID
      * @param  array  $stakeholders
      * @param  array  $whiteList
+     * @param  array  $admins
      * @access public
      * @return void
      */
-    public function getProgramAuthedUsersTest($programID, $stakeholders, $whiteList)
+    public function getProgramAuthedUsersTest($programID, $stakeholders, $whiteList, $admins)
     {
         global $tester;
         $program = $tester->loadModel('program')->getByID($programID);
-        return $this->objectModel->getProgramAuthedUsers($program, $stakeholders, $whiteList);
+        return $this->objectModel->getProgramAuthedUsers($program, $stakeholders, $whiteList, $admins);
+    }
+
+    /**
+     * getSprintAuthedUsersTest
+     *
+     * @param  int    $sprintID
+     * @param  array  $stakeholders
+     * @param  array  $teams
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return void
+     */
+    public function getSprintAuthedUsersTest($sprintID, $stakeholders, $teams, $whiteList, $admins)
+    {
+        global $tester;
+        $sprint = $tester->loadModel('execution')->getByID($sprintID);
+        return $this->objectModel->getSprintAuthedUsers($sprint, $stakeholders, $teams, $whiteList, $admins);
     }
 
     /**
@@ -854,11 +921,11 @@ class userTest
      * @access public
      * @return void
      */
-    public function getProductViewListUsersTest($productID, $teams, $stakeholders, $whiteList)
+    public function getProductViewListUsersTest($productID, $teams, $stakeholders, $whiteList, $admins)
     {
         global $tester;
         $product = $tester->loadModel('product')->getByID($productID);
-        return $this->objectModel->getProductViewListUsers($product, $teams, $stakeholders, $whiteList);
+        return $this->objectModel->getProductViewListUsers($product, $teams, $stakeholders, $whiteList, $admins);
     }
 
     /**
@@ -871,7 +938,7 @@ class userTest
      * @access public
      * @return void
      */
-    public function getTeamMemberPairsTest($objectID, $type, $params, $usersToAppended)
+    public function getTeamMemberPairsTest($objectID, $type, $params = '', $usersToAppended = array())
     {
         return $this->objectModel->getTeamMemberPairs($objectID, $type, $params, $usersToAppended);
     }
@@ -897,9 +964,9 @@ class userTest
      *
      * @param  string $type
      * @access public
-     * @return void
+     * @return array
      */
-    public function getUserTemplates($type)
+    public function getUserTemplatesTest($type)
     {
         return $this->objectModel->getUserTemplates($type);
     }
@@ -989,5 +1056,89 @@ class userTest
         $newRandom = $this->objectModel->updateSessionRandom();
 
         return $oldRandom != $newRandom ? 1 : 0;
+    }
+
+    /**
+     * Judge a user is logon or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isLogonTest()
+    {
+        return $this->objectModel->isLogon();
+    }
+
+    /**
+     * Plus the fail times.
+     *
+     * @param  string  $account
+     * @access public
+     * @return int
+     */
+    public function failPlusTest($account)
+    {
+        global $tester;
+        $this->objectModel->failPlus($account);
+        $failCounts = $tester->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch('fails');
+
+        return $failCounts;
+    }
+
+    /**
+     * Plus the fail times.
+     *
+     * @param  string  $account
+     * @access public
+     * @return string
+     */
+    public function checkLockedTest($account)
+    {
+        global $tester;
+        $result = $this->objectModel->checkLocked($account);
+
+        $result = $result ? 'locked' : 'unlocked';
+
+        return $result;
+    }
+
+    /**
+     * Identify user by PHP_AUTH_USER.
+     *
+     * @access public
+     * @return bool
+     */
+    public function identifyByPhpAuthTest()
+    {
+        return $this->objectModel->identifyByPhpAuth();
+    }
+
+    /**
+     * Identify user by cookie.
+     *
+     * @access public
+     * @return bool
+     */
+    public function identifyByCookieTest()
+    {
+        return $this->objectModel->identifyByCookie();
+    }
+
+    /**
+     * test of isClickable.
+     *
+     * @param  int    $userID
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest($userID, $action = '')
+    {
+        global $tester;
+
+        $user = $tester->loadModel('user')->getById($userID, 'id');
+        if($userID == 10) $user->ranzhi = '';
+
+        return $this->objectModel->isClickable($user, $action);
     }
 }

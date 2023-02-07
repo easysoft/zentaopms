@@ -2106,7 +2106,12 @@ class testcaseModel extends model
                 $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-draft-edit'></i>" : '';
                 if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
-                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]" . $autoIcon, '', "data-app='{$this->app->tab}'") : html::a($caseLink, $case->title . $autoIcon, null, "style='color: $case->color' data-app='{$this->app->tab}'")) : "<span style='color: $case->color'>$case->title</span>";
+                echo $canView ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")
+                    : "<span style='color: $case->color'>$case->title</span>";
+
+                $fromLink = ($fromCaseID and $canView) ? helper::createLink('testcase', 'view', "caseID=$fromCaseID") : '#';
+                $title    = $fromCaseID ? "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]$autoIcon" : $autoIcon;
+                if($case->auto == 'auto') echo html::a($fromLink, $title, '', "data-app='{$this->app->tab}'");
                 break;
             case 'branch':
                 echo $branches[$case->branch];

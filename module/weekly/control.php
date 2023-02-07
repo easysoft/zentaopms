@@ -79,6 +79,7 @@ class weekly extends control
         $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
            ->where('deleted')->eq(0)
            ->andWhere('type')->eq('project')
+           ->andWhere('status')->ne('closed')
            ->fetchPairs();
 
         $date      = helper::today();

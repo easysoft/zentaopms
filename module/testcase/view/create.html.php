@@ -111,7 +111,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
             <th><?php echo $lang->testcase->title;?></th>
             <td colspan='2'>
               <div class="input-group title-group">
-                <div class="input-control has-icon-right">
+                <div id='titleBox' class="input-control has-icon-right">
                   <?php echo html::input('title', $caseTitle, "class='form-control'");?>
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
@@ -145,11 +145,12 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
                 <?php echo html::select('pri', (array)$priList, $pri, "class='form-control priBox $hiddenPri'");?>
                 <?php else: ?>
                 <?php ksort($priList);?>
-                <div class="input-group-btn pri-selector priBox <?php echo $hiddenPri;?>" data-type="pri">
-                  <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+                <?php $hasPri = strpos($config->testcase->create->requiredFields, 'pri') !== false ? True : False;?>
+                <div class="input-group-btn pri-selector <?php echo $hiddenPri;?>" data-type="pri">
+                  <button <?php echo $hasPri ? "id='priRequiredBox'" : '';?> type="button" class="btn dropdown-toggle br-0 <?php echo $hasPri ? 'required' : '';?>" data-toggle="dropdown">
                     <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
                   </button>
-                  <div class='dropdown-menu pull-right'>
+                  <div class='dropdown-menu pull-right' id="priSelect">
                     <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
                   </div>
                 </div>
@@ -276,7 +277,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
     </div>
   </div>
 </div>
-<?php js::set('caseModule', $lang->testcase->module)?>
+<?php if(!$hiddenProduct) js::set('caseModule', $lang->testcase->module)?>
 <script>
 $(function()
 {

@@ -4,7 +4,7 @@ include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
 /**
 
-title=测试 programModel::getStakeholdersByPrograms();
+title=测试 programModel::accessDenied();
 cid=1
 pid=1
 

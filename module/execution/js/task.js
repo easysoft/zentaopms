@@ -41,3 +41,29 @@ function adjustTableFooter()
         $('.table-footer').css({'left': 0, 'bottom': 0, 'width': 'unset'});
     }
 }
+
+/**
+ * Ajax refresh.
+ *
+ * @access public
+ * @return void
+ */
+function ajaxRefresh()
+{
+    var $table = $('#executionTaskForm').closest('[data-ride="table"]');
+    if($table.length)
+    {
+        var table = $table.data('zui.table');
+        if(table)
+        {
+            table.options.replaceId = 'executionTaskForm';
+            table.reload();
+        }
+    }
+    $.get(location.href, function(data)
+    {
+        var $data = $(data);
+        $('#mainMenu > div.btn-toolbar.pull-left').html($data.find('#mainMenu > div.btn-toolbar.pull-left').html());
+        if($data.find('#mainContent .main-col .table-empty-tip').length) $('#mainContent .main-col').html($data.find('#mainContent .main-col'));
+    });
+}

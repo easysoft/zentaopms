@@ -36,9 +36,15 @@ $(function()
             $searchInput.focus();
         });
     };
+
     $(document).on('change', '#story', function()
     {
         if($(this).val() === 'showmore') showSearchModal();
+    });
+
+    $(document).on('click', '#priRequiredBox', function()
+    {
+        $('#priSelect').removeClass('required');
     });
 
     $(document).on('click', '#story_chosen .chosen-results > li.no-results', showSearchModal);

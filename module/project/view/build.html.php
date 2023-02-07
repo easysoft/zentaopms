@@ -71,10 +71,12 @@
         <tr data-id="<?php echo $productID;?>">
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink($module, 'view', "buildID=$build->id"), sprintf('%03d', $build->id), '', "data-app='project'");?></td>
           <td class="c-name" title='<?php echo $build->name;?>'>
-            <?php echo html::a($this->createLink($module, 'view', "buildID=$build->id"), $build->name, '', "data-app='project'");?>
-            <?php if(!$build->execution):?>
-              <span class='icon icon-code-fork text-muted' title='<?php echo $lang->build->integrated;?>'></span>
-            <?php endif;?>
+            <span class='build'>
+              <?php echo html::a($this->createLink($module, 'view', "buildID=$build->id"), $build->name, '', "data-app='project' class='buildName'");?>
+              <?php if(!$build->execution):?>
+                <span class='icon icon-code-fork text-muted' title='<?php echo $lang->build->integrated;?>'></span>
+              <?php endif;?>
+            </span>
           </td>
           <?php if($project->hasProduct):?>
           <td class="c-name text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>

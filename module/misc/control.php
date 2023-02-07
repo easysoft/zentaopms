@@ -230,6 +230,7 @@ class misc extends control
      */
     public function captcha($sessionVar = 'captcha', $uuid = '')
     {
+        if($sessionVar == 'user') die('The string user is not allowed to be defined as a session field.');
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 

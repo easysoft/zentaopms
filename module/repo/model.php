@@ -253,6 +253,7 @@ class repoModel extends model
     public function update($id)
     {
         $repo = $this->getRepoByID($id);
+        if($repo->client != $this->post->client and !$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
         $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
@@ -289,9 +290,6 @@ class repoModel extends model
             $data->prefix = '';
         }
 
-        if($data->client != $repo->client and !$this->checkClient()) return false;
-        if(!$this->checkConnection()) return false;
-
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
@@ -314,6 +312,7 @@ class repoModel extends model
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
             return false;
         }
+
         return true;
     }
 
@@ -333,9 +332,13 @@ class repoModel extends model
         if($type == 'bug')   $links = $this->post->bugs;
         if($type == 'task')  $links = $this->post->tasks;
 
-        $revisionID = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch('id');
+        $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+        $committer    = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
+        if(empty($committer)) $committer = $revisionInfo->committer;
         foreach($links as $linkID)
         {
+            $revisionID = $revisionInfo->id;
+
             $relation           = new stdclass;
             $relation->AType    = 'revision';
             $relation->AID      = $revisionID;
@@ -345,9 +348,9 @@ class repoModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID);
-            if($type == 'bug')   $this->action->create('bug', $linkID, 'linked2revision', '', $revisionID);
-            if($type == 'task')  $this->action->create('task', $linkID, 'linked2revision', '', $revisionID);
+            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID, $committer);
+            if($type == 'bug')   $this->action->create('bug', $linkID, 'linked2revision', '', $revisionID, $committer);
+            if($type == 'task')  $this->action->create('task', $linkID, 'linked2revision', '', $revisionID, $committer);
         }
     }
 
@@ -1391,10 +1394,10 @@ class repoModel extends model
         if($clientVersionFile)
         {
             session_start();
-            $this->session->set('clientVersionFile', $clientVersionFile);
+            $this->session->set('clientVersionFile', '');
             session_write_close();
 
-            if(file_exists($clientVersionFile)) unlink($clientVersionFile);
+            if(file_exists($clientVersionFile)) @unlink($clientVersionFile);
         }
     }
 

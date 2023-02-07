@@ -1,0 +1,8 @@
+.c-cpu,.c-memory,.c-diskSize,.c-status {width: 90px;}
+.c-os {width: 150px;}
+.c-number {width: 120px;}
+.desktop, .createImage{margin-right: 4px;}
+#helpTab .icon-help {line-height: unset;}
+#bysearchTab {margin-right: 0px;}
+#main{min-width: 0!important;padding:0!important;}
+body{background-color: #fff!important;}

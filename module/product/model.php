@@ -1169,7 +1169,10 @@ class productModel extends model
                     if(isset($branchGroup[$productID]))
                     {
                         $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
-                        foreach($branchModuleList as $branchID => $branchModules) $moduleList += $branchModules;
+                        foreach($branchModuleList as $branchID => $branchModules)
+                        {
+                            if(is_array($branchModules)) $moduleList += $branchModules;
+                        }
                     }
                     else
                     {
@@ -2453,7 +2456,13 @@ class productModel extends model
         }
         elseif($module == 'ticket')
         {
-            return helper::createLink('ticket', 'browse', "browseType=byProduct&productID=%s");
+            $params = "productID=%s";
+            if(strpos('browse,view,edit', $method) !== false)
+            {
+                $method = 'browse';
+                $params = "browseType=byProduct&productID=%s";
+            }
+            return helper::createLink('ticket', $method, $params);
         }
 
         return $link;
