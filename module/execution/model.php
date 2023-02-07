@@ -1657,6 +1657,11 @@ class executionModel extends model
                 if($execution->parent < 0 and $execution->type == 'stage') unset($executions[$key]);
                 if($execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
             }
+            elseif($param === 'hasParentName')
+            {
+                $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                $executions[$execution->id]->name  = implode('/', $parentExecutions);
+            }
             else
             {
                 if(isset($executions[$execution->parent]) and $execution->type == 'stage')
