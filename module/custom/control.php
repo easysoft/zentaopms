@@ -382,7 +382,7 @@ class custom extends control
         $this->view->position[] = $this->lang->custom->required;
 
         $this->view->requiredFields = $requiredFields;
-        $this->view->moduleName     = $moduleName;
+        $this->view->module         = $moduleName;
         $this->display();
     }
 
@@ -439,6 +439,7 @@ class custom extends control
         $this->view->title      = $this->lang->custom->browseStoryConcept;
         $this->view->position[] = $this->lang->custom->browseStoryConcept;
         $this->view->URSRList   = $this->custom->getURSRList();
+        $this->view->module     = 'product';
 
         $this->display();
     }
@@ -576,9 +577,10 @@ class custom extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
-        $this->view->title      = $this->lang->custom->product;
+        $this->view->title      = $this->lang->custom->productName;
         $this->view->position[] = $this->lang->custom->common;
         $this->view->position[] = $this->view->title;
+        $this->view->module     = 'product';
 
         $this->display();
     }

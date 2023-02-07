@@ -22,7 +22,7 @@ $lang->custom->score                = '积分';
 $lang->custom->timezone             = '时区';
 $lang->custom->scoreReset           = '重置积分';
 $lang->custom->scoreTitle           = '积分功能';
-$lang->custom->product              = $lang->productCommon;
+$lang->custom->productName          = $lang->productCommon;
 $lang->custom->convertFactor        = '换算系数';
 $lang->custom->region               = '区间';
 $lang->custom->tips                 = '提示语';
@@ -130,6 +130,11 @@ $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = '货币设置';
 $lang->custom->project->defaultCurrency    = '默认货币';
 $lang->custom->project->fields['unitList'] = '预算单位';
+
+$lang->custom->product = new stdClass();
+$lang->custom->product->fields['required']           = $lang->custom->required;
+$lang->custom->product->fields['browsestoryconcept'] = '需求概念';
+$lang->custom->product->fields['product']            = '关闭设置';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['categoryList']     = '类型';

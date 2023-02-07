@@ -22,7 +22,7 @@ $lang->custom->score                = 'Point';
 $lang->custom->timezone             = 'Timezone';
 $lang->custom->scoreReset           = 'Reset Points';
 $lang->custom->scoreTitle           = 'Point Feature';
-$lang->custom->product              = $lang->productCommon;
+$lang->custom->productName          = $lang->productCommon;
 $lang->custom->convertFactor        = 'Convert factor';
 $lang->custom->region               = 'Interval';
 $lang->custom->tips                 = 'Tips';
@@ -130,6 +130,11 @@ $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = 'Currency Setting';
 $lang->custom->project->defaultCurrency    = 'Default Currency';
 $lang->custom->project->fields['unitList'] = 'Unit List';
+
+$lang->custom->product = new stdClass();
+$lang->custom->product->fields['required']           = $lang->custom->required;
+$lang->custom->product->fields['browsestoryconcept'] = 'Story Concpet';
+$lang->custom->product->fields['product']            = 'Close Setting';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['categoryList']     = 'Category';

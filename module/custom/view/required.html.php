@@ -12,26 +12,12 @@
 ?>
 <?php include 'header.html.php';?>
 <div id='mainContent' class='main-row'>
-  <div class='side-col' id='sidebar'>
-    <div class='cell'>
-      <div class='list-group'>
-        <?php
-        foreach($lang->custom->{$moduleName}->fields as $key => $value)
-        {
-            $method = $key == 'required' ? 'required' : 'set';
-            $params = $key == 'required' ? "module=$moduleName" : "module=$moduleName&field=$key";
-            $active = $key == 'required' ? 'active' : '';
-            if(common::hasPriv('custom', $method)) echo html::a(inlink($method, $params), $value, '', "class='$active'");
-        }
-        ?>
-      </div>
-    </div>
-  </div>
+  <?php include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
-          <strong><?php echo $lang->custom->object[$moduleName] . $lang->arrow . $lang->custom->$moduleName->fields['required']?></strong>
+          <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields['required']?></strong>
         </div>
       </div>
       <table class='table table-form mw-800px'>
@@ -40,18 +26,18 @@
         <tr>
           <th class='thWidth'>
           <?php
-          $fields = $this->custom->getFormFields($moduleName, $method);
+          $fields = $this->custom->getFormFields($module, $method);
           if(empty($fields)) continue;
-          if($moduleName == 'caselib' and $method == 'createcase') continue;
+          if($module == 'caselib' and $method == 'createcase') continue;
 
           $actionKey = $method . 'Action';
-          if(isset($lang->$moduleName->$actionKey))
+          if(isset($lang->$module->$actionKey))
           {
-              echo $lang->$moduleName->$actionKey . $lang->custom->page;
+              echo $lang->$module->$actionKey . $lang->custom->page;
           }
           else
           {
-              echo $lang->$moduleName->$method . $lang->custom->page;
+              echo $lang->$module->$method . $lang->custom->page;
           }
           ?>
           </th>
@@ -64,7 +50,7 @@
           <th></th>
           <td colspan='2' class='form-actions'>
           <?php echo html::submitButton();?>
-          <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
+          <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$module"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>
         </tr>
       </table>

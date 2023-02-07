@@ -48,23 +48,7 @@ EOT;
 </style>
 <?php endif;?>
 <div id='mainContent' class='main-row'>
-  <?php if(!in_array($module, array('block'))):?>
-  <div class='side-col' id='sidebar'>
-    <div class='cell'>
-      <div class='list-group tab-menu'>
-        <?php
-        foreach($lang->custom->{$module}->fields as $key => $value)
-        {
-            $method = $key == 'required' ? 'required' : 'set';
-            $params = $key == 'required' ? "module=$module" : "module=$module&field=$key";
-            $active = $field == $key ? 'active' : '';
-            if(common::hasPriv('custom', $method)) echo html::a(inlink($method, $params), $value, '', "class='$active'");
-        }
-        ?>
-      </div>
-    </div>
-  </div>
-  <?php endif;?>
+  <?php if(!in_array($module, array('block'))) include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
