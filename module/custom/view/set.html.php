@@ -36,16 +36,6 @@ EOT;
 <?php js::set('field',   $field)?>
 <?php js::set('confirmReviewCase', $lang->custom->notice->confirmReviewCase)?>
 <?php js::set('stopSubmit', true)?>
-<script>
-$('#navbar ul.nav li').removeClass('active');
-$('#navbar ul.nav li[data-id=<?php echo $module?>]').addClass('active');
-<?php if($module == 'todo'):?>
-$('#navbar ul.nav li[data-id=my]').addClass('active');
-<?php endif;?>
-<?php if($module == 'baseline'):?>
-$('#navbar ul.nav li[data-id=type]').addClass('active');
-<?php endif;?>
-</script>
 <?php if($module == 'story' and $field == 'review'):?>
 <style>
 .table-form>tbody>tr>th {width: 120px !important}
@@ -58,6 +48,7 @@ $('#navbar ul.nav li[data-id=type]').addClass('active');
 </style>
 <?php endif;?>
 <div id='mainContent' class='main-row'>
+  <?php if(!in_array($module, array('block'))):?>
   <div class='side-col' id='sidebar'>
     <div class='cell'>
       <div class='list-group'>
@@ -70,6 +61,7 @@ $('#navbar ul.nav li[data-id=type]').addClass('active');
       </div>
     </div>
   </div>
+  <?php endif;?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>

@@ -269,9 +269,23 @@ class adminModel extends model
         $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
-            if(isset($this->lang->admin->menuList->$menuKey['subMenu']))     $this->lang->admin->menu        = $this->lang->admin->menuList->$menuKey['subMenu'];
+            if(isset($this->lang->admin->menuList->$menuKey['subMenu']))
+            {
+                $moduleName = $this->app->rawModule;
+                $methodName = $this->app->rawMethod;
+                $paramName  = $this->app->rawParams ? reset($this->app->rawParams) : '';
+                if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
+                {
+                    if(strpos(',todo,block,', $paramName) !== false) $subMenuKey = 'my';
+                    if(isset($subMenuKey)) $this->lang->admin->menuList->$menuKey['subMenu'][$subMenuKey]['subModule'] = $moduleName;
+                }
+
+                $this->lang->admin->menu = $this->lang->admin->menuList->$menuKey['subMenu'];
+            }
+
             if(isset($this->lang->admin->menuList->$menuKey['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->$menuKey['menuOrder'];
             if(isset($this->lang->admin->menuList->$menuKey['dividerMenu'])) $this->lang->admin->dividerMenu = $this->lang->admin->menuList->$menuKey['dividerMenu'];
+            if(isset($this->lang->admin->menuList->$menuKey['tabMenu']))     $this->lang->admin->tabMenu     = $this->lang->admin->menuList->$menuKey['tabMenu'];
         }
     }
 
