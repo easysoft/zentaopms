@@ -1580,6 +1580,11 @@ class docModel extends model
             $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
+                if($execution->type == 'stage' and $execution->grade != 1)
+                {
+                    $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                    $execution->name  = implode('/', $parentExecutions);
+                }
                 $execution->name = zget($projectPairs, $execution->project) . ' / ' . $execution->name;
 
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
