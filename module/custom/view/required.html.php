@@ -21,7 +21,7 @@
             $method = $key == 'required' ? 'required' : 'set';
             $params = $key == 'required' ? "module=$moduleName" : "module=$moduleName&field=$key";
             $active = $key == 'required' ? 'active' : '';
-            echo html::a(inlink($method, $params), $value, '', "class='$active'");
+            if(common::hasPriv('custom', $method)) echo html::a(inlink($method, $params), $value, '', "class='$active'");
         }
         ?>
       </div>
