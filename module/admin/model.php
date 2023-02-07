@@ -277,7 +277,7 @@ class adminModel extends model
                 if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
                 {
                     if(strpos(',todo,block,', $paramName) !== false) $subMenuKey = 'my';
-                    if(strpos(',product,', $paramName) !== false) $subMenuKey = 'product';
+                    if(strpos(',product,story,productplan,release,', $paramName) !== false) $subMenuKey = 'product';
                     if($this->config->vision == 'lite' and $paramName == 'task') $subMenuKey = 'my';
                     if(isset($subMenuKey)) $this->lang->admin->menuList->$menuKey['subMenu'][$subMenuKey]['subModule'] = $moduleName;
                 }
