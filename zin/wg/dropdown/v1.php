@@ -26,12 +26,28 @@ class dropdown extends \zin\core\wg
             return $li;
         }
 
+        $li = h5::li()->addClass('menu-item');
+
+        /* Divider. */
+        if(isset($item['text']) and ($item['text'] === '|' or $item['text'] === 'divider'))
+        {
+            $li->addClass('menu-divider');
+            return $li;
+        }
+
         $a = h5::a();
-        if(isset($item['url'])) $a->prop('href', $item['url']);
+
+        /* Avatar item. */
+        if(isset($item['avatar']))
+        {
+            $div = h5::div()->addClass('avatar')->addClass('avatar circle primary');
+            $div->append(h5::img(\zin\set('src', $item['avatar'])));
+            $a->append($div);
+        }
+        if(isset($item['url']))  $a->prop('href', $item['url']);
         if(isset($item['icon'])) $a->append(h5::i()->addClass("icon icon-{$item['icon']}"));
         if(isset($item['text'])) $a->append($item['text']);
 
-        $li = h5::li()->addClass('menu-item');
         $li->append($a);
 
         return $li;

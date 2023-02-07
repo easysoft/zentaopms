@@ -14,6 +14,13 @@ foreach(\customModel::getMainMenu() as $menuItem)
     );
 }
 
+/* Generate dropdown menu. */
+$shotcutAddMenu = dropdown(setId('shortcutAdd'));
+foreach(\commonModel::printCreateListZin() as $item) $shotcutAddMenu->append(item($item));
+
+$userMenu = dropdown(setId('userMenu'));
+foreach(\commonModel::printUserBarZin() as $item) $userMenu->append(item($item));
+
 page
 (
     set('title', $title),
@@ -27,12 +34,9 @@ page
         ),
         pagenavbar
         (
-            zuinav
-            (
-                set('js-render', false),
-                set('items', $navItems),
-                item(array('text' => 'text')),
-            ),
+            set('js-render', false),
+            set('items', $navItems),
+            item(array('text' => 'text')),
         ),
         toolbar
         (
@@ -41,12 +45,28 @@ page
             item(array('icon' => 'icon-plus')),
             item(array('icon' => 'icon-group')),
             item(array('text' => '研发综合界面')),
+            btn
+            (
+                icon('plus'),
+                setClass('rounded-sm btn square size-sm secondary'),
+                set('data-toggle',  'dropdown'),
+                set('data-trigger', 'hover'),
+                set('data-arrow',   'true'),
+                set('href',         '#shortcutAdd'),
+            ),
+            avatar
+            (
+                set('role',   '研发'),
+                set('avatar', '/data/upload/1/202302/07134647027036pb'),
+                set('href',   '#userMenu'),
+            ),
         ),
     ),
-
     pagemain(
 
     ),
+    $shotcutAddMenu,
+    $userMenu,
 );
 
 /*
