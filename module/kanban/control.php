@@ -1379,10 +1379,17 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $executions = $this->execution->getStatData($selectedProjectID, 'undone', 0, 0, false, 'importKanban', 'id_asc', $pager);
+        foreach($executions as $execution)
+        {
+            $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+            $execution->name  = implode('/', $parentExecutions);
+        }
+
         $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram('', 'all', false, '', '', '', 'multiple');
         $this->view->selectedProjectID   = $selectedProjectID;
         $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->executions2Imported = $this->execution->getStatData($selectedProjectID, 'undone', 0, 0, false, '', 'id_asc', $pager);
+        $this->view->executions2Imported = $executions;
         $this->view->users               = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->pager               = $pager;
         $this->view->kanbanID            = $kanbanID;

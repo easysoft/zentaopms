@@ -1639,7 +1639,7 @@ class executionModel extends model
                 if($execution->parent < 0 and $execution->type == 'stage') unset($executions[$key]);
                 if($execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
             }
-            else
+            elseif($param != 'importKanban')
             {
                 if(isset($executions[$execution->parent]) and $execution->type == 'stage')
                 {
