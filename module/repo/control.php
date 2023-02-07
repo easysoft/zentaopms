@@ -641,7 +641,7 @@ class repo extends control
         $this->view->path            = urldecode($path);
         $this->view->logType         = $logType;
         $this->view->cloneUrl        = $this->repo->getCloneUrl($repo);
-        $this->view->cacheTime       = date('m-d H:i', strtotime($lastRevision->time));
+        $this->view->cacheTime       = isset($lastRevision->time) ? date('m-d H:i', strtotime($lastRevision->time)) : date('m-d H:i');
         $this->view->branchOrTag     = $branchOrTag;
         $this->view->syncedRF        = strpos(",{$this->config->repo->synced},", ",$repoID,") !== false; //Check has synced rename files.
 

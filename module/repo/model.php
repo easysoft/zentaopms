@@ -2281,7 +2281,7 @@ class repoModel extends model
             ->where('t1.repo')->eq($repo->id)
             ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
-            ->andWhere('t1.parent')->like("$parent%")->fi()
+            ->andWhere('t1.parent')->eq("$parent")
             ->orderBy('t2.`time` asc')
             ->fetchAll('path');
 
@@ -2360,9 +2360,29 @@ class repoModel extends model
                 ->orderBy('t2.`time` asc')
                 ->fetchPairs();
 
+            $removedDirs = array();
+            if($repo->SCM == 'Subversion')
+            {
+                $removedDirs = $this->dao->select('id, path')->from(TABLE_REPOFILES)
+                    ->where('repo')->eq($repo->id)
+                    ->andWhere('type')->eq('dir')
+                    ->andWhere('action')->eq('D')
+                    ->fetchPairs();
+            }
             foreach($files as $file => $action)
             {
-                if($action != 'D') $allFiles[] = $file;
+                foreach($removedDirs as $dir)
+                {
+                    if(strpos($file, $dir) === 0)
+                    {
+                        $action = 'D';
+                        break;
+                    }
+                }
+                if($action != 'D')
+                {
+                    $allFiles[] = $file;
+                }
             }
         }
         else
