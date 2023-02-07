@@ -15,7 +15,7 @@
 <div id='mainContent' class='main-content admin'>
   <div class="main <?php if(!$hasInternet) echo 'without-internet';?>">
     <div class="settings panel">
-      <div class="panel-title"><?php echo $lang->admin->setting?></div>
+      <div class="panel-title mt-6"><?php echo $lang->admin->setting?></div>
       <div class="settings-list <?php if($config->vision == 'lite') echo 'lite-setting';?>">
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
@@ -90,9 +90,9 @@
   <div class="side panel" style="background: #FCFDFE">
     <div class="h-56 flex align-center justify-between">
       <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
-      <div class="time-count color-gray">您已使用禅道<span class="time-block">05</span><?php echo $lang->year?><span class="time-block">09</span><?php echo $lang->admin->day?><span class="time-block">19</span>日</div>
+      <div class="time-count color-gray">您已使用禅道<span class="time-block">5</span><?php echo $lang->year?><span class="time-block">9</span><?php echo $lang->admin->mon?><span class="time-block">19</span><?php echo $lang->admin->day?></div>
     </div>
-    <div class="border-gray mb-16">
+    <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->updateDynamics?></div>
         <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
@@ -110,7 +110,7 @@
         <div class="dynamic-time">2022-03-12</div>
       </div>
     </div>
-    <div class="border-gray mb-16">
+    <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->updatePatch?></div>
         <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
@@ -127,7 +127,7 @@
       </div>
       <?php endforeach;?>
     </div>
-    <div class="border-gray mb-16">
+    <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->upgradeRecommend?></div>
         <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>

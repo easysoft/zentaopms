@@ -16,9 +16,11 @@
 .pd-3 {padding: 3px;}
 .pb-3 {padding-bottom: 3px;}
 .pr-4 {padding-right: 4px;}
+.mt-6 {margin-top: 6px;}
 .font-18 {font-size: 18px;}
 .font-20 {font-size: 20px;}
 .font-24 {font-size: 24px;}
+.radius-4 {border-radius: 4px;}
 
 #notice {margin: -20px -20px 20px; padding: 20px;}
 #zentaoLinks {margin-top: 20px;}
