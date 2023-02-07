@@ -1809,6 +1809,8 @@ class execution extends control
             $comment = $project->hasProduct ? join(',', $_POST['products']) : '';
             $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $comment);
 
+            $this->loadModel('programplan')->computeProgress($executionID, 'create');
+
             $message = $this->executeHooks($executionID);
             if($message) $this->lang->saveSuccess = $message;
 
@@ -2233,6 +2235,8 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'start');
+
             $this->loadModel('common')->syncPPEStatus($executionID);
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
@@ -2322,6 +2326,9 @@ class execution extends control
                 $actionID = $this->action->create($this->objectType, $executionID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'suspend');
+
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
             {
@@ -2359,6 +2366,8 @@ class execution extends control
         {
             $this->execution->activate($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
+
+            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'activate');
 
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
@@ -2405,6 +2414,8 @@ class execution extends control
             $this->execution->computeBurn($executionID);
             $this->execution->close($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
+
+            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'close');
 
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
@@ -3077,6 +3088,8 @@ class execution extends control
             $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->execution->updateUserView($executionID);
             $this->loadModel('common')->syncPPEStatus($executionID);
+
+            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID);
 
             $this->session->set('execution', '');
             $message = $this->executeHooks($executionID);

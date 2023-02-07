@@ -2203,7 +2203,18 @@ class repoModel extends model
     {
         $pairs      = array();
         $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
-        foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
+        $parents    = $this->dao->select('distinct parent,parent')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('grade')->gt(1)->andWhere('deleted')->eq(0)->fetchPairs();
+        foreach($executions as $execution)
+        {
+            if(!empty($parents[$execution->id])) continue;
+
+            if($execution->type == 'stage' and $execution->grade > 1)
+            {
+                $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                $execution->name  = implode('/', $parentExecutions);
+            }
+            $pairs[$execution->id] = $execution->name;
+        }
         return $pairs;
     }
 

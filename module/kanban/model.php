@@ -1281,6 +1281,9 @@ class kanbanModel extends model
                         }
                         $objectCard->execType = $object->type;
                         $objectCard->progress = isset($executionProgress[$objectID]->progress) ? $executionProgress[$objectID]->progress : 0;
+
+                        $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($object->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                        $objectCard->name = implode('/', $parentExecutions);
                     }
 
                     $objectCard->desc         = strip_tags(htmlspecialchars_decode($object->desc));

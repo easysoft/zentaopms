@@ -726,7 +726,7 @@ class programplanModel extends model
             $plan->name       = $names[$key];
             if($setCode) $plan->code = $codes[$key];
             $plan->percent    = $percents[$key];
-            $plan->attribute  = empty($parentID) ? $attributes[$key] : $parentAttribute;
+            $plan->attribute  = (empty($parentID) or $parentAttribute == 'mix') ? $attributes[$key] : $parentAttribute;
             $plan->milestone  = $milestone[$key];
             $plan->begin      = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
             $plan->end        = empty($end[$key]) ? '0000-00-00' : $end[$key];
@@ -971,6 +971,8 @@ class programplanModel extends model
                     {
                         $this->action->create('execution', $stageID, 'opened');
                     }
+
+                    $this->computeProgress($stageID, 'create');
                 }
             }
 
@@ -1361,7 +1363,6 @@ class programplanModel extends model
             ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.project')->eq($executionID)
-            ->andWhere('t2.grade')->eq(1)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->orderBy('t2.id desc')
@@ -1380,5 +1381,74 @@ class programplanModel extends model
         ksort($parentStage);
 
         return $parentStage;
+    }
+
+    /**
+     * Compute stage status.
+     *
+     * @param  int    $stage
+     * @param  strihg $action
+     * @access public
+     * @return void
+     */
+    public function computeProgress($stageID, $action = '')
+    {
+        $stage = $this->loadModel('execution')->getByID($stageID);
+        if(empty($stage) or empty($stage->path) or $stage->type != 'stage') return false;
+
+        $this->loadModel('execution');
+        $this->loadModel('action');
+        $action       = strtolower($action);
+        $parentIdList = explode(',', trim($stage->path, ','));
+        $parentIdList = array_reverse($parentIdList);
+        foreach($parentIdList as $id)
+        {
+            $parent = $this->execution->getByID($id);
+            if($parent->type != 'stage' or $id == $stageID) continue;
+
+            $statusCount = array();
+            $children    = $this->execution->getChildExecutions($parent->id);
+            foreach($children as $childID => $childExecution) $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $statusCount[$childExecution->status] ++;
+
+            if(isset($statusCount['wait']) and count($statusCount) == 1)
+            {
+                if($parent->status != 'wait')
+                {
+                    $parentStatus = 'wait';
+                    $parentAction = 'waitbychild';
+                }
+            }
+            elseif(isset($statusCount['suspended']) and count($statusCount) == 1)
+            {
+                if($parent->status != 'suspended')
+                {
+                    $parentStatus = 'suspended';
+                    $parentAction = 'suspendedbychild';
+                }
+            }
+            elseif(isset($statusCount['closed']) and count($statusCount) == 1)
+            {
+                if($parent->status != 'closed')
+                {
+                    $parentStatus = 'closed';
+                    $parentAction = 'closedbychild';
+                }
+            }
+            else
+            {
+                if($parent->status != 'doing')
+                {
+                    $parentStatus = 'doing';
+                    $parentAction = 'startbychild' . $action;
+                }
+            }
+
+            if(isset($parentStatus))
+            {
+                $this->dao->update(TABLE_EXECUTION)->set('status')->eq($parentStatus)->where('id')->eq($id)->exec();
+                $this->action->create('execution', $id, $parentAction, '', $parentAction);
+            }
+            unset($parentStatus, $parentAction);
+        }
     }
 }

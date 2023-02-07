@@ -1078,17 +1078,6 @@ class executionModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
-        /* Update the status of the parent stage. */
-        if($oldExecution->type == 'stage')
-        {
-            $parent = $this->getByID($oldExecution->parent);
-            if($parent->type == 'stage' and in_array($parent->status, array('closed', 'wait')))
-            {
-                $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($parent->id)->exec();
-                $this->loadModel('action')->create('execution', $parent->id, 'startbychildactivate');
-            }
-        }
-
         return $changes;
     }
 
@@ -1139,27 +1128,6 @@ class executionModel extends model
                 $this->loadModel('action');
                 $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-            }
-
-            /* Update the status of the parent stage. */
-            if($oldExecution->type == 'stage')
-            {
-                $parent = $this->getByID($oldExecution->parent);
-                if($parent->type == 'stage')
-                {
-                    $isClosed = true;
-                    $children = $this->getChildExecutions($oldExecution->parent);
-                    foreach($children as $childID => $childExecution)
-                    {
-                        if($childExecution->status != 'closed') $isClosed = false;
-                    }
-
-                    if($isClosed)
-                    {
-                        $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parent->id)->exec();
-                        $this->loadModel('action')->create('execution', $parent->id, 'closebychildclose');
-                    }
-                }
             }
 
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
@@ -1319,7 +1287,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple or empty
+     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf or empty
      * @access public
      * @return array
      */
@@ -1356,16 +1324,34 @@ class executionModel extends model
             ->orderBy($orderBy)
             ->fetchAll();
 
+        /* If mode == leaf, only show leaf executions. */
+        $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
+            ->where('type')->notin(array('program', 'project'))
+            ->beginIf($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->fetchAll('id');
+
+        $parents = array();
+        foreach($allExecutions as $exec)
+        {
+            $parents[$exec->parent] = true;
+        }
+
         $pairs       = array();
         $noMultiples = array();
         foreach($executions as $execution)
         {
+            if(strpos($mode, 'leaf') !== false and isset($parents[$execution->id])) continue; // Only show leaf.
             if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
             if(strpos($mode, 'stagefilter') !== false and isset($executionModel) and $executionModel == 'waterfall' and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
 
             if(empty($execution->multiple)) $noMultiples[$execution->id] = $execution->project;
 
-            $pairs[$execution->id] = $execution->name;
+            /* Set execution name. */
+            $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
+            $executionName = '';
+            foreach($paths as $path) $executionName .= '/' . $allExecutions[$path]->name;
+
+            $pairs[$execution->id] = $executionName;
         }
 
         if($noMultiples)
@@ -1670,6 +1656,11 @@ class executionModel extends model
             {
                 if($execution->parent < 0 and $execution->type == 'stage') unset($executions[$key]);
                 if($execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
+            }
+            elseif($param === 'hasParentName')
+            {
+                $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                $executions[$execution->id]->name  = implode('/', $parentExecutions);
             }
             else
             {
