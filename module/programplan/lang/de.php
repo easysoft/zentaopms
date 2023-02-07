@@ -79,11 +79,12 @@ $lang->programplan->delayList = array();
 $lang->programplan->delayList[1] = 'Yes';
 $lang->programplan->delayList[0] = 'No';
 
-$lang->programplan->noData        = 'No Data';
-$lang->programplan->children      = 'Sub Plan';
-$lang->programplan->childrenAB    = 'Child';
-$lang->programplan->confirmDelete = 'Do you want to delete the current plan?';
-$lang->programplan->workloadTips  = 'The proportion of the sub stage workload is divided by 100%.';
+$lang->programplan->noData            = 'No Data';
+$lang->programplan->children          = 'Sub Plan';
+$lang->programplan->childrenAB        = 'Child';
+$lang->programplan->confirmDelete     = 'Do you want to delete the current plan?';
+$lang->programplan->confirmChangeAttr = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification. Do you want to save?';
+$lang->programplan->workloadTips      = 'The proportion of the sub stage workload is divided by 100%.';
 
 $lang->programplan->stageCustom = new stdClass();
 $lang->programplan->stageCustom->date = 'Show Date';

@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('plan', $plan);?>
+<?php js::set('stageTypeList', $lang->stage->typeList);?>
+<?php js::set('changeAttrLang', $lang->programplan->confirmChangeAttr);?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -99,21 +102,4 @@
     </form>
   </div>
 </div>
-<script>
-$("#parent").change(function()
-{
-    var parent = $(this).children("option:selected").val();
-
-    if(parent == 0)
-    {
-        $("#acl").attr('disabled', false);
-    }
-    else
-    {
-        $("#acl").attr('disabled', true);
-    }
-
-    changeParentStage(parent);
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>
