@@ -726,7 +726,7 @@ class programplanModel extends model
             $plan->name       = $names[$key];
             if($setCode) $plan->code = $codes[$key];
             $plan->percent    = $percents[$key];
-            $plan->attribute  = empty($parentID) ? $attributes[$key] : $parentAttribute;
+            $plan->attribute  = (empty($parentID) or $parentAttribute == 'mix') ? $attributes[$key] : $parentAttribute;
             $plan->milestone  = $milestone[$key];
             $plan->begin      = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
             $plan->end        = empty($end[$key]) ? '0000-00-00' : $end[$key];
@@ -1361,7 +1361,6 @@ class programplanModel extends model
             ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.project')->eq($executionID)
-            ->andWhere('t2.grade')->eq(1)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->orderBy('t2.id desc')
