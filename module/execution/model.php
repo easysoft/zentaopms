@@ -1287,7 +1287,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple or empty
+     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf or empty
      * @access public
      * @return array
      */
@@ -1324,16 +1324,34 @@ class executionModel extends model
             ->orderBy($orderBy)
             ->fetchAll();
 
+        /* If mode == leaf, only show leaf executions. */
+        $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
+            ->where('type')->notin(array('program', 'project'))
+            ->beginIf($projectId)->andWhere('project')->eq($projectID)->fi()
+            ->fetchAll('id');
+
+        $parents = array();
+        foreach($allExecutions as $exec)
+        {
+            $parents[$exec->parent] = true;
+        }
+
         $pairs       = array();
         $noMultiples = array();
         foreach($executions as $execution)
         {
+            if(strpos($mode, 'leaf') !== false and isset($parents[$execution->id])) continue; // Only show leaf.
             if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
             if(strpos($mode, 'stagefilter') !== false and isset($executionModel) and $executionModel == 'waterfall' and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
 
             if(empty($execution->multiple)) $noMultiples[$execution->id] = $execution->project;
 
-            $pairs[$execution->id] = $execution->name;
+            /* Set execution name. */
+            $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
+            $executionName = '';
+            foreach($paths as $path) $executionName .= '/' . $allExecutions[$path]->name;
+
+            $pairs[$execution->id] = $executionName;
         }
 
         if($noMultiples)

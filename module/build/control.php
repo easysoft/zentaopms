@@ -72,7 +72,7 @@ class build extends control
         if($this->app->tab == 'project')
         {
             $this->project->setMenu($projectID);
-            $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter');
+            $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter|leaf');
             $executionID   = empty($executionID) ? key($executions) : $executionID;
             $productGroups = $executionID ? $this->product->getProducts($executionID) : array();
             $branchGroups  = $executionID ? $this->project->getBranchesByProject($executionID) : array();
@@ -81,7 +81,7 @@ class build extends control
         elseif($this->app->tab == 'execution')
         {
             $execution     = $this->execution->getByID($executionID);
-            $executions    = $this->execution->getPairs($execution->project);
+            $executions    = $this->execution->getPairs($execution->project, 'all', 'leaf');
             $projectID     = $execution->project;
             $productGroups = $this->product->getProducts($executionID);
             $branchGroups  = $this->project->getBranchesByProject($executionID);
@@ -92,7 +92,7 @@ class build extends control
         {
             $execution     = $this->execution->getByID($executionID);
             $projectID     = $execution ? $execution->project : 0;
-            $executions    = $this->execution->getPairs($projectID);
+            $executions    = $this->execution->getPairs($projectID, 'all', 'leaf');
             $productGroups = $this->product->getProducts($executionID);
             $branchGroups  = $this->project->getBranchesByProject($executionID);
         }
