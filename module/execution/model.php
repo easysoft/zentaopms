@@ -1725,44 +1725,31 @@ class executionModel extends model
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
-        if(isset($project->model) and $project->model == 'waterfall' and $project->hasProduct and $project->division)
+        if(isset($project->model) and $project->model == 'waterfall')
         {
-            $executionList = array();
-            $executionProducts = $this->dao->select('t1.project,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-                ->where('project')->in(array_keys($executions))
-                ->andWhere('t2.deleted')->eq(0)
-                ->fetchPairs();
+            $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
+                ->where('type')->eq('stage')
+                ->andWhere('deleted')->eq('0')
+                ->beginIf($projectID)->andWhere('project')->eq($projectID)->fi()
+                ->fetchAll('id');
 
-            $products = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', $executionProducts);
+            $parents = array();
+            foreach($allExecutions as $id => $execution) $parents[$execution->parent] = $execution->parent;
 
             foreach($executions as $id => $execution)
             {
-                if($execution->grade == 2 and isset($executions[$execution->parent]))
+                if(isset($parents[$execution->id]))
                 {
-                    $execution->name = $executions[$execution->parent]->name . '/' . $execution->name;
-                    $executions[$execution->parent]->children[$id] = $execution;
                     unset($executions[$id]);
+                    continue;
                 }
-            }
 
-            foreach($executions as $id => $execution)
-            {
-                if(isset($execution->children))
-                {
-                    foreach($execution->children as $id => $execution)
-                    {
-                        $execution->name = (isset($executionProducts[$id]) ? $products[$executionProducts[$id]] . '/' : '') . $execution->name;
-                        $executionList[$id] = $execution;
-                    }
-                }
-                else
-                {
-                    $execution->name = (isset($executionProducts[$id]) ? $products[$executionProducts[$id]] . '/' : '') . $execution->name;
-                    $executionList[$id] = $execution;
-                }
+                $executionName = '';
+                $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
+                foreach($paths as $path) $executionName .= '/' . $allExecutions[$path]->name;
+
+                if($executionName) $execution->name = ltrim($executionName, '/');
             }
-            $executions = $executionList;
         }
 
         $projects = array();
@@ -1785,7 +1772,7 @@ class executionModel extends model
             foreach($executions as $execution)
             {
                 $executionPairs[$execution->id]  = '';
-                $executionPairs[$execution->id] .= isset($projects[$execution->project]) ? ($projects[$execution->project] . ' / ') : '';
+                $executionPairs[$execution->id] .= isset($projects[$execution->project]) ? ($projects[$execution->project] . '/') : '';
                 $executionPairs[$execution->id] .= $execution->name;
 
                 if(empty($execution->multiple)) $executionPairs[$execution->id] = $projects[$execution->project] . "({$this->lang->project->disableExecution})";
