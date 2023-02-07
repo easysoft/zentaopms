@@ -22,6 +22,7 @@ $lang->custom->menuOrder[30] = 'user';
 $lang->custom->menuOrder[35] = 'block';
 
 $lang->custom->task = new stdClass();
+$lang->custom->task->fields['required'] = 'Required Field';
 $lang->custom->task->fields['priList']  = 'Priority';
 $lang->custom->task->fields['typeList'] = 'Type';
 

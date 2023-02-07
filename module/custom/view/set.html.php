@@ -55,7 +55,10 @@ EOT;
         <?php
         foreach($lang->custom->{$module}->fields as $key => $value)
         {
-            echo html::a(inlink('set', "module=$module&field=$key"), $value, '', " id='{$key}Tab'");
+            $method = $key == 'required' ? 'required' : 'set';
+            $params = $key == 'required' ? "module=$module" : "module=$module&field=$key";
+            $active = $field == $key ? 'active' : '';
+            echo html::a(inlink($method, $params), $value, '', "class='$active'");
         }
         ?>
       </div>

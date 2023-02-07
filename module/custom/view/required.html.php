@@ -11,24 +11,17 @@
  */
 ?>
 <?php include 'header.html.php';?>
-<script>
-$('#navbar ul.nav li').removeClass('active');
-$('#navbar ul.nav li[data-id=<?php echo $moduleName?>]').addClass('active');
-<?php if($moduleName == 'bug'):?>
-$('#navbar ul.nav li[data-id=qa]').addClass('active');
-<?php endif;?>
-if($('#navbar ul.nav li[data-id=common]').length > 0) $('#navbar ul.nav li[data-id=common]').addClass('active');
-</script>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
     <div class='cell'>
       <div class='list-group'>
         <?php
-        ksort($config->custom->requiredModules);
-        foreach($config->custom->requiredModules as $requiredModule)
+        foreach($lang->custom->{$moduleName}->fields as $key => $value)
         {
-            $requiredModuleName = zget($lang->custom->moduleName, $requiredModule, $lang->$requiredModule->common);
-            echo html::a(inlink('required', "module=$requiredModule"), $requiredModuleName, '', "id='{$requiredModule}Tab'");
+            $method = $key == 'required' ? 'required' : 'set';
+            $params = $key == 'required' ? "module=$moduleName" : "module=$moduleName&field=$key";
+            $active = $key == 'required' ? 'active' : '';
+            echo html::a(inlink($method, $params), $value, '', "class='$active'");
         }
         ?>
       </div>
@@ -38,7 +31,7 @@ if($('#navbar ul.nav li[data-id=common]').length > 0) $('#navbar ul.nav li[data-
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
-          <strong><?php echo $lang->$moduleName->common?></strong>
+          <strong><?php echo $lang->custom->object[$moduleName] . $lang->arrow . $lang->custom->$moduleName->fields['required']?></strong>
         </div>
       </div>
       <table class='table table-form mw-800px'>
@@ -78,11 +71,4 @@ if($('#navbar ul.nav li[data-id=common]').length > 0) $('#navbar ul.nav li[data-
     </form>
   </div>
 </div>
-<script>
-$(function()
-{
-    $('#mainMenu #requiredTab').addClass('btn-active-text');
-    $('#sidebar #<?php echo $moduleName?>Tab').addClass('active');
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>
