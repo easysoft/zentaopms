@@ -31,11 +31,6 @@ class wg extends ele
 
     public $cssImports = array();
 
-    protected function itemsWrapper()
-    {
-        return null;
-    }
-
     protected function buildItem($item)
     {
         return $item;
@@ -77,16 +72,7 @@ class wg extends ele
             static::$imports['imported'] = true;
         }
 
-        $wrapper = $this->itemsWrapper();
-        if (empty($wrapper))
-        {
-            $this->buildItems($builder);
-        }
-        else
-        {
-            $this->buildItems($wrapper);
-            $builder->append($wrapper);
-        }
+        $this->buildItems($builder);
 
         $builder->importJs($this->jsImports)
             ->importCss($this->cssImports);
