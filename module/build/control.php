@@ -81,7 +81,7 @@ class build extends control
         elseif($this->app->tab == 'execution')
         {
             $execution     = $this->execution->getByID($executionID);
-            $executions    = $this->execution->getPairs($execution->project, 'all', 'leaf');
+            $executions    = $this->execution->getPairs($execution->project, 'all', 'stagefilter|leaf');
             $projectID     = $execution->project;
             $productGroups = $this->product->getProducts($executionID);
             $branchGroups  = $this->project->getBranchesByProject($executionID);
@@ -92,7 +92,7 @@ class build extends control
         {
             $execution     = $this->execution->getByID($executionID);
             $projectID     = $execution ? $execution->project : 0;
-            $executions    = $this->execution->getPairs($projectID, 'all', 'leaf');
+            $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter|leaf');
             $productGroups = $this->product->getProducts($executionID);
             $branchGroups  = $this->project->getBranchesByProject($executionID);
         }

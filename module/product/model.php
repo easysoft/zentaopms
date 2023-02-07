@@ -1474,7 +1474,7 @@ class productModel extends model
             else
             {
                 $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
-                $executionName = $execution->projectName;
+                $executionName = $projectID != 0 ? '' : $execution->projectName;
                 foreach($paths as $path)
                 {
                     $executionName .= '/' . $allExecutions[$path]->name;
