@@ -145,7 +145,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
                 <?php echo html::select('pri', (array)$priList, $pri, "class='form-control priBox $hiddenPri'");?>
                 <?php else: ?>
                 <?php ksort($priList);?>
-                <?php $hasPri = strpos($config->testcase->create->requiredFields, 'pri') ? True : False;?>
+                <?php $hasPri = strpos($config->testcase->create->requiredFields, 'pri') !== false ? True : False;?>
                 <div class="input-group-btn pri-selector <?php echo $hiddenPri;?>" data-type="pri">
                   <button <?php echo $hasPri ? "id='priRequiredBox'" : '';?> type="button" class="btn dropdown-toggle br-0 <?php echo $hasPri ? 'required' : '';?>" data-toggle="dropdown">
                     <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>

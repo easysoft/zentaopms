@@ -33,7 +33,7 @@
                 <?php echo html::select('lib', $libraries, $libID, "onchange='loadLibModules(this.value);' class='form-control chosen'");?>
               </div>
             </td>
-            <td style='padding-left:15px;'<?php echo strpos($config->testcase->create->requiredFields, 'module') ? ' class="required"' : '';?>>
+            <td style='padding-left:15px;'<?php echo strpos($config->testcase->create->requiredFields, 'module') !== false ? ' class="required"' : '';?>>
               <div class='input-group' id='moduleIdBox'>
               <span class="input-group-addon w-80px"><?php echo $lang->testcase->module?></span>
               <?php
@@ -55,7 +55,7 @@
             <th><?php echo $lang->testcase->type;?></th>
             <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
             <?php if(strpos(",$showFields,", 'stage') !== false):?>
-            <td style='padding-left:15px'<?php echo strpos($config->testcase->create->requiredFields, 'stage') ? ' class="required"' : '';?>>
+            <td style='padding-left:15px'<?php echo strpos($config->testcase->create->requiredFields, 'stage') !== false ? ' class="required"' : '';?>>
               <div class='input-group'>
                 <span class='input-group-addon w-80px'><?php echo $lang->testcase->stage?></span>
                 <?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?>
@@ -101,7 +101,7 @@
                 <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
                 <?php else: ?>
                 <?php ksort($priList);?>
-                <?php $hasPri = strpos($config->testcase->create->requiredFields, 'pri') ? True : False;?>
+                <?php $hasPri = strpos($config->testcase->create->requiredFields, 'pri') !== false ? True : False;?>
                 <div <?php echo $hasPri ? "id='priRequiredBox'" : '';?> class="input-group-btn pri-selector <?php echo $hasPri ? 'required' : '';?>" data-type="pri">
                   <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                     <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
@@ -117,7 +117,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->testcase->precondition;?></th>
-            <td colspan='2' <?php echo strpos($config->testcase->create->requiredFields, 'precondition') ? ' class="required"' : '';?>><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
+            <td colspan='2' <?php echo strpos($config->testcase->create->requiredFields, 'precondition') !== false ? ' class="required"' : '';?>><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->steps;?></th>
@@ -190,7 +190,7 @@
           <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
           <tr>
             <th><?php echo $lang->testcase->keywords;?></th>
-            <td colspan='2' <?php echo strpos($config->testcase->create->requiredFields, 'keywords') ? ' class="required"' : '';?>><?php echo html::input('keywords', '', "class='form-control'");?></td>
+            <td colspan='2' <?php echo strpos($config->testcase->create->requiredFields, 'keywords') !== false ? ' class="required"' : '';?>><?php echo html::input('keywords', '', "class='form-control'");?></td>
           </tr>
           <?php endif;?>
           <tr>
