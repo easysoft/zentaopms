@@ -1349,7 +1349,10 @@ class executionModel extends model
             /* Set execution name. */
             $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
             $executionName = '';
-            foreach($paths as $path) $executionName .= '/' . $allExecutions[$path]->name;
+            foreach($paths as $path)
+            {
+                if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
+            }
 
             $pairs[$execution->id] = $executionName;
         }
