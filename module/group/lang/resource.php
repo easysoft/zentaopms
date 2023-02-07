@@ -1418,7 +1418,6 @@ $lang->resource->custom->execution          = 'execution';
 $lang->resource->custom->required           = 'required';
 $lang->resource->custom->restore            = 'restore';
 $lang->resource->custom->flow               = 'flow';
-$lang->resource->custom->working            = 'working';
 $lang->resource->custom->setPublic          = 'setPublic';
 $lang->resource->custom->timezone           = 'timezone';
 $lang->resource->custom->setStoryConcept    = 'setStoryConcept';
@@ -1436,16 +1435,15 @@ $lang->custom->methodOrder[20] = 'execution';
 $lang->custom->methodOrder[25] = 'required';
 $lang->custom->methodOrder[30] = 'restore';
 $lang->custom->methodOrder[35] = 'flow';
-$lang->custom->methodOrder[40] = 'working';
-$lang->custom->methodOrder[45] = 'setPublic';
-$lang->custom->methodOrder[50] = 'timezone';
-$lang->custom->methodOrder[55] = 'setStoryConcept';
-$lang->custom->methodOrder[60] = 'editStoryConcept';
-$lang->custom->methodOrder[65] = 'browseStoryConcept';
-$lang->custom->methodOrder[70] = 'setDefaultConcept';
-$lang->custom->methodOrder[75] = 'deleteStoryConcept';
-$lang->custom->methodOrder[80] = 'kanban';
-$lang->custom->methodOrder[85] = 'code';
+$lang->custom->methodOrder[40] = 'setPublic';
+$lang->custom->methodOrder[45] = 'timezone';
+$lang->custom->methodOrder[50] = 'setStoryConcept';
+$lang->custom->methodOrder[55] = 'editStoryConcept';
+$lang->custom->methodOrder[60] = 'browseStoryConcept';
+$lang->custom->methodOrder[65] = 'setDefaultConcept';
+$lang->custom->methodOrder[70] = 'deleteStoryConcept';
+$lang->custom->methodOrder[75] = 'kanban';
+$lang->custom->methodOrder[80] = 'code';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
@@ -1917,6 +1915,19 @@ $lang->message->methodOrder[5]  = 'index';
 $lang->message->methodOrder[10] = 'browser';
 $lang->message->methodOrder[15] = 'setting';
 
+/* Holiday. */
+$lang->resource->holiday = new stdclass();
+$lang->resource->holiday->create = 'createAction';
+$lang->resource->holiday->edit   = 'editAction';
+$lang->resource->holiday->delete = 'deleteAction';
+$lang->resource->holiday->browse = 'browse';
+
+$lang->holiday->methodOrder[0]  = 'browse';
+$lang->holiday->methodOrder[5]  = 'create';
+$lang->holiday->methodOrder[10] = 'edit';
+$lang->holiday->methodOrder[15] = 'delete';
+
+/* Action. */
 $lang->resource->action = new stdclass();
 $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undeleteAction';

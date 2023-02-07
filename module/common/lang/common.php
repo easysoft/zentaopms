@@ -88,6 +88,7 @@ $lang->sonarqube   = new stdclass();
 $lang->app         = new stdclass();
 $lang->zahost      = new stdclass();
 $lang->zanode      = new stdclass();
+$lang->holiday     = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
