@@ -14,6 +14,10 @@ foreach(\customModel::getMainMenu() as $menuItem)
   );
 }
 
+/* Generate dropdown menus. */
+$userMenu = dropdown(setId('userMenu'));
+foreach(\commonModel::printUserBarZin() as $item) $userMenu->append(item($item));
+
 Page(
   set('title', $title),
   Pageheader(
@@ -63,6 +67,7 @@ Page(
       ),
     ),
   ),
+  $userMenu,
 );
 
 /*
