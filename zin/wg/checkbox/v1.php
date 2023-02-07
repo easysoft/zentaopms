@@ -12,7 +12,7 @@ class checkbox extends \zin\core\wg
 {
     static $tag = 'label';
 
-    static $defaultProps = array('class' => 'checkbox w-28');
+    static $defaultProps = array('class' => 'checkbox');
 
     static $customProps = 'text,checked';
 

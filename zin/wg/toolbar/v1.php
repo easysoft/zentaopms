@@ -23,7 +23,7 @@ class toolbar extends \zin\core\wg
 
     protected function buildItem($item)
     {
-        if (is_array($item) && $item['type'] === 'divider') return h5::div()->addClass('toolbar-divider');
+        if (isset($item['type']) && $item['type'] === 'divider') return h5::div()->addClass('toolbar-divider');
 
         return btn::create($item)->addClass('toolbar-item ghost');
     }
