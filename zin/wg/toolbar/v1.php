@@ -2,6 +2,7 @@
 namespace zin\wg;
 
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
+require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 use \zin\core\h5;
 
@@ -9,40 +10,22 @@ class toolbar extends \zin\core\wg
 {
     static $tag = 'div';
 
-    static $defaultProps = array('id' => 'toolbar');
+    static $defaultProps = array('class' => 'toolbar');
 
     static $customProps = 'wrap,gap,items,btnProps,itemRender,beforeRender,afterRender,firstRender';
 
-    protected function itemsWrapper()
+    static function create($props)
     {
-        return h5::nav()->addClass('toolbar');
+        $toolbar = new toolbar();
+        foreach($props as $key => $value) $toolbar->prop($key, $value);
+        return $toolbar;
     }
 
     protected function buildItem($item)
     {
-        if ($item['type'] === 'divider') return h5::div()->addClass('toolbar-divider');
+        if (is_array($item) && $item['type'] === 'divider') return h5::div()->addClass('toolbar-divider');
 
-        $button = h5::button()->addClass('btn toolbar-item ghost');
-        $a = h5::a();
-        if ($item['active'])
-        {
-            $a->addClass('active');
-        }
-        $url = $item['url'];
-        if (!empty($url))
-        {
-            $a->prop('href', "$url");
-        }
-        $button->append($a);
-        $icon = $item['icon'];
-        if (!empty($icon))
-        {
-            $i = h5::i()->addClass("icon icon-$icon");
-            $a->append($i);
-        }
-        $span = h5::span($item['text'])->addClass('text');
-        $a->append($span);
-        return $button;
+        return btn::create($item)->addClass('toolbar-item ghost');
     }
 
     protected function build($isPrint = false, $parent = null)

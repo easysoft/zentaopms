@@ -11,20 +11,15 @@ class zuinav extends \zin\core\wg
 {
     static $tag = 'div';
 
-    static $defaultProps = array('id' => 'nav');
+    static $defaultProps = array('class' => 'nav');
 
     static $customProps = 'className,items,hasIcons,onRenderItem,afterRender';
 
     public $cssList = array(':root{--nav-active-color: white;}');
 
-    protected function itemsWrapper()
-    {
-        return h5::menu()->addClass('nav');
-    }
-
     protected function buildItem($item)
     {
-        if (isset($item['type']) and $item['type'] === 'divider') return h5::li()->addClass('nav-divider');
+        if (is_array($item) && $item['type'] === 'divider') return h5::li()->addClass('nav-divider');
 
         $a = h5::a();
         if (isset($item['active'])) $a->addClass('active');
