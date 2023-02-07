@@ -215,6 +215,7 @@ class programplan extends control
         $this->loadModel('project');
         $this->app->loadLang('execution');
         $this->app->loadLang('stage');
+
         $plan = $this->programplan->getByID($planID);
 
         global $lang;
@@ -332,6 +333,13 @@ class programplan extends control
         }
     }
 
+    /**
+     * AJAX: Get attributes.
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return int
+     */
     public function ajaxGetAttribute($stageID)
     {
         $this->app->loadLang('stage');
@@ -345,5 +353,18 @@ class programplan extends control
         {
             return print(zget($this->lang->stage->typeList, $attribute));
         }
+    }
+
+    /**
+     * AJAX: Get stage's attribute.
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return int
+     */
+    public function ajaxGetStageAttr($stageID)
+    {
+        $stage = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
+        return print($stage);
     }
 }
