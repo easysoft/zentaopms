@@ -1,4 +1,4 @@
-<div id="mainMenu" class="clearfix">
+<div id="mainMenu" class="clearfix menu-secondary">
   <div class="btn-toolbar pull-left">
   <?php
   $tabMenuList = isset($lang->admin->tabMenu[$activeMenu]) ? $lang->admin->tabMenu[$activeMenu] : array();

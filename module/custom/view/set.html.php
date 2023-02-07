@@ -51,7 +51,7 @@ EOT;
   <?php if(!in_array($module, array('block'))):?>
   <div class='side-col' id='sidebar'>
     <div class='cell'>
-      <div class='list-group'>
+      <div class='list-group tab-menu'>
         <?php
         foreach($lang->custom->{$module}->fields as $key => $value)
         {
