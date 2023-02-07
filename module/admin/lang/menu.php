@@ -93,7 +93,7 @@ $lang->admin->menuList->feature['subMenu']['user']        = array('link' => "{$l
 
 $lang->admin->menuList->feature['tabMenu']['my']['todo']  = array('link' => "{$lang->todo->common}|custom|set|module=todo&field=priList");
 $lang->admin->menuList->feature['tabMenu']['my']['block'] = array('link' => "{$lang->block->common}|custom|set|module=block&field=closed");
-if($config->vision == 'lite') $lang->admin->menuList->feature['tabMenu']['my']['task'] = array('link' => "{$lang->task->common}|custom|required|module=task");
+$lang->admin->menuList->feature['tabMenu']['my']['task'] = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList'));
 
 $lang->admin->menuList->feature['tabMenu']['product']['product'] = array('link' => "{$lang->productCommon}|custom|required|module=product", 'links' => array("custom|browsestoryconcept|", 'custom|product|'));
 
