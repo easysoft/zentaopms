@@ -8,12 +8,6 @@ function delItem(clickedButton)
     $(clickedButton).parent().parent().remove();
 }
 
-$(function()
-{
-    $('#' + module + 'Tab').addClass('btn-active-text');
-    $('#' + field + 'Tab').addClass('active');
-})
-
 $('[name*=unitList]').change(function()
 {
     var defaultCurrency = $('#defaultCurrency').val();
