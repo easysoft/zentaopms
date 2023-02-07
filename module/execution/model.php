@@ -1327,7 +1327,7 @@ class executionModel extends model
         /* If mode == leaf, only show leaf executions. */
         $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
             ->where('type')->notin(array('program', 'project'))
-            ->beginIf($projectId)->andWhere('project')->eq($projectID)->fi()
+            ->beginIf($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
 
         $parents = array();
