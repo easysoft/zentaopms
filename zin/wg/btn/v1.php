@@ -15,6 +15,13 @@ class btn extends \zin\core\wg
 
     static $customProps = 'type,icon,text,square,disabled,active,url,target,size,trailingIcon,caret,hint,btnType';
 
+    static function create($props)
+    {
+        $btn = new btn();
+        foreach($props as $key => $value) $btn->prop($key, $value);
+        return $btn;
+    }
+
     protected function acceptChild($child, $strAsHtml = false)
     {
         $child = parent::acceptChild($child, $strAsHtml);
