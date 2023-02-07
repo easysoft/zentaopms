@@ -971,6 +971,8 @@ class programplanModel extends model
                     {
                         $this->action->create('execution', $stageID, 'opened');
                     }
+
+                    $this->computeProgress($stageID, 'create');
                 }
             }
 
@@ -1379,5 +1381,74 @@ class programplanModel extends model
         ksort($parentStage);
 
         return $parentStage;
+    }
+
+    /**
+     * Compute stage status.
+     *
+     * @param  int    $stage
+     * @param  strihg $action
+     * @access public
+     * @return void
+     */
+    public function computeProgress($stageID, $action = '')
+    {
+        $stage = $this->loadModel('execution')->getByID($stageID);
+        if(empty($stage) or empty($stage->path) or $stage->type != 'stage') return false;
+
+        $this->loadModel('execution');
+        $this->loadModel('action');
+        $action       = strtolower($action);
+        $parentIdList = explode(',', trim($stage->path, ','));
+        $parentIdList = array_reverse($parentIdList);
+        foreach($parentIdList as $id)
+        {
+            $parent = $this->execution->getByID($id);
+            if($parent->type != 'stage' or $id == $stageID) continue;
+
+            $statusCount = array();
+            $children    = $this->execution->getChildExecutions($parent->id);
+            foreach($children as $childID => $childExecution) $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $statusCount[$childExecution->status] ++;
+
+            if(isset($statusCount['wait']) and count($statusCount) == 1)
+            {
+                if($parent->status != 'wait')
+                {
+                    $parentStatus = 'wait';
+                    $parentAction = 'waitbychild';
+                }
+            }
+            elseif(isset($statusCount['suspended']) and count($statusCount) == 1)
+            {
+                if($parent->status != 'suspended')
+                {
+                    $parentStatus = 'suspended';
+                    $parentAction = 'suspendedbychild';
+                }
+            }
+            elseif(isset($statusCount['closed']) and count($statusCount) == 1)
+            {
+                if($parent->status != 'closed')
+                {
+                    $parentStatus = 'closed';
+                    $parentAction = 'closedbychild';
+                }
+            }
+            else
+            {
+                if($parent->status != 'doing')
+                {
+                    $parentStatus = 'doing';
+                    $parentAction = 'startbychild' . $action;
+                }
+            }
+
+            if(isset($parentStatus))
+            {
+                $this->dao->update(TABLE_EXECUTION)->set('status')->eq($parentStatus)->where('id')->eq($id)->exec();
+                $this->action->create('execution', $id, $parentAction, '', $parentAction);
+            }
+            unset($parentStatus, $parentAction);
+        }
     }
 }

@@ -547,11 +547,30 @@ $lang->execution->action->startbychildactivate = '$date, 系统判断由于子�
 $lang->execution->action->waitbychilddelete    = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为未开始。' . "\n";
 $lang->execution->action->closebychilddelete   = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为已关闭。' . "\n";
 $lang->execution->action->closebychildclose    = '$date, 系统判断由于子阶段关闭，将' . $lang->executionCommon . '状态置为已关闭。' . "\n";
+$lang->execution->action->waitbychild          = '$date, 系统判断由于子阶段 <strong>全部为未开始</strong> ，将阶段状态置为 <strong>未开始</strong> 。';
+$lang->execution->action->suspendedbychild     = '$date, 系统判断由于子阶段 <strong>全部挂起</strong> ，将阶段状态置为 <strong>已挂起</strong> 。';
+$lang->execution->action->closedbychild        = '$date, 系统判断由于子阶段 <strong>全部关闭</strong> ，将阶段状态置为 <strong>已关闭</strong> 。';
+$lang->execution->action->startbychildstart    = '$date, 系统判断由于子阶段 <strong>开始</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildactivate = '$date, 系统判断由于子阶段 <strong>激活</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildsuspend  = '$date, 系统判断由于子阶段 <strong>挂起</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildclose    = '$date, 系统判断由于子阶段 <strong>关闭</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildcreate   = '$date, 系统判断由于 <strong>创建</strong> 子阶段 ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychild         = '$date, 系统判断由于子阶段 <strong>激活</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+
 
 $lang->execution->startbychildactivate = '激活了';
 $lang->execution->waitbychilddelete    = '停止了';
 $lang->execution->closebychilddelete   = '关闭了';
 $lang->execution->closebychildclose    = '关闭了';
+$lang->execution->waitbychild          = '激活了';
+$lang->execution->suspendedbychild     = '挂起了';
+$lang->execution->closedbychild        = '关闭了';
+$lang->execution->startbychildstart    = '开始了';
+$lang->execution->startbychildactivate = '激活了';
+$lang->execution->startbychildsuspend  = '激活了';
+$lang->execution->startbychildclose    = '激活了';
+$lang->execution->startbychildcreate   = '激活了';
+$lang->execution->startbychild         = '激活了';
 
 $lang->execution->statusColorList = array();
 $lang->execution->statusColorList['wait']      = '#0991FF';

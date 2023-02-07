@@ -1078,17 +1078,6 @@ class executionModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
-        /* Update the status of the parent stage. */
-        if($oldExecution->type == 'stage')
-        {
-            $parent = $this->getByID($oldExecution->parent);
-            if($parent->type == 'stage' and in_array($parent->status, array('closed', 'wait')))
-            {
-                $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($parent->id)->exec();
-                $this->loadModel('action')->create('execution', $parent->id, 'startbychildactivate');
-            }
-        }
-
         return $changes;
     }
 
@@ -1139,27 +1128,6 @@ class executionModel extends model
                 $this->loadModel('action');
                 $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-            }
-
-            /* Update the status of the parent stage. */
-            if($oldExecution->type == 'stage')
-            {
-                $parent = $this->getByID($oldExecution->parent);
-                if($parent->type == 'stage')
-                {
-                    $isClosed = true;
-                    $children = $this->getChildExecutions($oldExecution->parent);
-                    foreach($children as $childID => $childExecution)
-                    {
-                        if($childExecution->status != 'closed') $isClosed = false;
-                    }
-
-                    if($isClosed)
-                    {
-                        $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parent->id)->exec();
-                        $this->loadModel('action')->create('execution', $parent->id, 'closebychildclose');
-                    }
-                }
             }
 
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
