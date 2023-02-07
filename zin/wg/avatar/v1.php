@@ -27,6 +27,13 @@ class avatar extends \zin\core\wg
 
     static $customProps = 'text,theme,radius,size,outline,name,role';
 
+    static function create($props)
+    {
+        $avatar = new avatar();
+        foreach($props as $key => $value) $avatar->prop($key, $value);
+        return $avatar;
+    }
+
     protected function acceptChild($child, $strAsHtml = false)
     {
         $child = parent::acceptChild($child, $strAsHtml);

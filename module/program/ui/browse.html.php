@@ -1,4 +1,5 @@
 <?php
+
 namespace zin;
 
 \commonModel::setMainMenu();
@@ -6,67 +7,62 @@ namespace zin;
 $navItems = array();
 foreach(\customModel::getMainMenu() as $menuItem)
 {
-    $navItems[] = array
-    (
-        'text'   => $menuItem->text,
-        'url'    => \commonModel::createMenuLink($menuItem, $app->tab),
-        'active' => $menuItem->order === 1,
-    );
+  $navItems[] = array(
+    'text'   => $menuItem->text,
+    'url'    => \commonModel::createMenuLink($menuItem, $app->tab),
+    'active' => $menuItem->order === 1,
+  );
 }
 
-/* Generate dropdown menu. */
-$shotcutAddMenu = dropdown(setId('shortcutAdd'));
-foreach(\commonModel::printCreateListZin() as $item) $shotcutAddMenu->append(item($item));
-
-$userMenu = dropdown(setId('userMenu'));
-foreach(\commonModel::printUserBarZin() as $item) $userMenu->append(item($item));
-
-page
-(
-    set('title', $title),
-    pageheader
-    (
-        pageheading
-        (
-            $lang->{$app->tab}->common,
-            set('icon', $app->tab),
-            set('url', \helper::createLink($app->tab, 'browse')),
-        ),
-        pagenavbar
-        (
-            set('js-render', false),
-            set('items', $navItems),
-            item(array('text' => 'text')),
-        ),
-        toolbar
-        (
-            setId('toolbar'),
-            set('js-render', true),
-            item(array('icon' => 'icon-plus')),
-            item(array('icon' => 'icon-group')),
-            item(array('text' => '研发综合界面')),
-            btn
-            (
-                icon('plus'),
-                setClass('rounded-sm btn square size-sm secondary'),
-                set('data-toggle',  'dropdown'),
-                set('data-trigger', 'hover'),
-                set('data-arrow',   'true'),
-                set('href',         '#shortcutAdd'),
-            ),
-            avatar
-            (
-                set('role',   '研发'),
-                set('avatar', '/data/upload/1/202302/07134647027036pb'),
-                set('href',   '#userMenu'),
-            ),
-        ),
+Page(
+  set('title', $title),
+  Pageheader(
+    Pageheading(
+      $lang->{$app->tab}->common,
+      set('icon', $app->tab),
+      set('url', \helper::createLink($app->tab, 'browse')),
     ),
-    pagemain(
-
+    Pagenavbar(
+      Zuinav(
+        set('js-render', false),
+        set('items', $navItems),
+      ),
     ),
-    $shotcutAddMenu,
-    $userMenu,
+    PageToolbar(
+      set('avatar', array(
+        'avatar' => $app->user->avatar,
+        'href' => '#userMenu'
+      )),
+      set('switcher', array(
+        'text' => '研发管理界面'
+      ))
+    ),
+  ),
+
+  Pagemain(
+    Mainmenu(
+      set('statuses', array('items' => array(
+        array('text' => '全部'),
+        array('text' => '未关闭'),
+        array('text' => '未开始'),
+        array('text' => '进行中'),
+        array('text' => '已挂起'),
+        array('text' => '已关闭'),
+      ))),
+      set('others', array(
+        array('type' => 'checkbox', 'text' => '编辑项目'),
+        array('type' => 'button', 'icon' => 'search', 'text' => '搜索', 'class' => 'ghost'),
+        array('type' => 'button', 'icon' => 'unfold-all', 'text' => '排序', 'class' => 'ghost'),
+      )),
+      set(
+        'btnGroup',
+        array(
+          array('icon' => 'plus', 'text' => '创建项目', 'class' => 'secondary'),
+          array('icon' => 'plus', 'text' => '添加项目集', 'class' => 'primary'),
+        ),
+      ),
+    ),
+  ),
 );
 
 /*

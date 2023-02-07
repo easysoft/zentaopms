@@ -41,7 +41,7 @@ class pageheader extends \zin\core\wg
             return NULL;
         }
 
-        if(class_exists('\zin\wg\toolbar') and $child instanceof \zin\wg\toolbar)
+        if(class_exists('\zin\wg\pagetoolbar') and $child instanceof \zin\wg\pagetoolbar)
         {
             $this->toolbar = $child;
             return NULL;

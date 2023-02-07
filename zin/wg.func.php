@@ -30,16 +30,19 @@ function data()
     return core\data::$global;
 }
 
-function btn()         {return createWg('btn',         func_get_args());}
-function icon()        {return createWg('icon',        func_get_args());}
-function pagebase()    {return createWg('pagebase',    func_get_args());}
-function page()        {return createWg('page',        func_get_args());}
-function dtable()      {return createWg('dtable',      func_get_args());}
+function btn()         {return createWg('btn',      func_get_args());}
+function btnGroup()    {return createWg('btngroup', func_get_args());}
+function icon()        {return createWg('icon',    func_get_args());}
+function pagebase()    {return createWg('pagebase', func_get_args());}
+function page()        {return createWg('page',     func_get_args());}
+function dtable()      {return createWg('dtable',   func_get_args());}
 function pageheader()  {return createWg('pageheader',  func_get_args());}
 function pageheading() {return createWg('pageheading', func_get_args());}
 function pagenavbar()  {return createWg('pagenavbar',  func_get_args());}
-function zuinav()      {return createWg('zuinav',      func_get_args());}
-function toolbar()     {return createWg('toolbar',     func_get_args());}
-function pagemain()    {return createWg('pagemain',    func_get_args());}
+function pagetoolbar() {return createWg('pagetoolbar', func_get_args());}
+function zuinav()      {return createWg('zuinav', func_get_args());}
+function toolbar()     {return createWg('toolbar', func_get_args());}
+function pagemain()    {return createWg('pagemain', func_get_args());}
+function mainmenu()    {return createWg('mainmenu', func_get_args());}
 function dropdown()    {return createWg('dropdown',    func_get_args());}
 function avatar()      {return createWg('avatar',      func_get_args());}
