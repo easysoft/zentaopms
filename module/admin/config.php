@@ -23,6 +23,13 @@ $config->admin->menuModuleGroup['model']['custom|required']   = array('project',
 $config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'feedback', 'user', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user');
 $config->admin->menuModuleGroup['feature']['custom|required'] = array('bug', 'doc', 'product', 'story', 'productplan', 'release', 'task', 'bug', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user');
 $config->admin->menuModuleGroup['template']['custom|set']     = array('baseline');
+if($config->vision == 'lite')
+{
+    $config->admin->menuModuleGroup['model']['custom|set']        = array('issue', 'risk', 'opportunity', 'nc');
+    $config->admin->menuModuleGroup['model']['custom|required']   = array('build');
+    $config->admin->menuModuleGroup['feature']['custom|set']      = array('project', 'todo', 'feedback', 'user', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user');
+    $config->admin->menuModuleGroup['feature']['custom|required'] = array('project', 'task', 'story');
+}
 
 $config->admin->plugins[203] = new stdClass();
 $config->admin->plugins[203]->name     = '人力资源日历';

@@ -279,21 +279,23 @@ class adminModel extends model
                     $subModule = '';
                     if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
                     {
-                        if(strpos(',todo,block,', $paramName) !== false and $subMenuKey == 'my') $subModule = 'custom';
-                        if(strpos(',product,story,productplan,release,', $paramName) !== false and $subMenuKey == 'product') $subModule = 'custom';
+                        if(strpos(',todo,block,', ",$paramName,") !== false and $subMenuKey == 'my') $subModule = 'custom';
+                        if(strpos(',product,story,productplan,release,', ",$paramName,") !== false and $subMenuKey == 'product') $subModule = 'custom';
+                        if(strpos(',task,', ",$paramName,") !== false and $subMenuKey == 'execution') $subModule = 'custom';
+                        if(strpos(',project,story,', ",$paramName,") !== false and $subMenuKey == 'project') $subModule = 'custom';
+                        if(strpos(',bug,testcase,testsuite,testtask,testreport,caselib,', ",$paramName,") !== false and $subMenuKey == 'qa') $subModule = 'custom';
                         if($this->config->vision == 'lite' and $paramName == 'task' and $subMenuKey == 'my') $subModule = 'custom';
                     }
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
                     if(isset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey]))
                     {
-                        $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$paramName]['subModule'] = $subModule;
+                        if(!empty($subModule)) $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$paramName]['subModule'] = $subModule;
                         $subMenu['subMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey];
                     }
 
                     $this->lang->admin->menu->$subMenuKey = $subMenu;
                 }
-
             }
 
             if(isset($this->lang->admin->menuList->$menuKey['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->$menuKey['menuOrder'];

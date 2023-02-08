@@ -106,6 +106,9 @@ $lang->custom->object['score']       = 'Score';
 $lang->custom->object['mode']        = 'Mode';
 $lang->custom->object['productplan'] = 'Plan';
 $lang->custom->object['release']     = 'Release';
+$lang->custom->object['testsuite']   = 'Test Suite';
+$lang->custom->object['testreport']  = 'Test Report';
+$lang->custom->object['caselib']     = 'Case Library';
 
 $lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
@@ -131,6 +134,7 @@ $lang->custom->block->fields['closed'] = 'Bloc Fermé';
 $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = 'Currency Setting';
 $lang->custom->project->defaultCurrency    = 'Default Currency';
+$lang->custom->project->fields['required'] = $lang->custom->required;
 $lang->custom->project->fields['unitList'] = 'Unit List';
 
 $lang->custom->product = new stdClass();
@@ -151,13 +155,14 @@ $lang->custom->story->fields['reviewResultList'] = 'Valider Résultats';
 $lang->custom->story->fields['review']           = 'Validation Requise';
 
 $lang->custom->task = new stdClass();
+$lang->custom->task->fields['required']   = $lang->custom->required;
 $lang->custom->task->fields['priList']    = 'Priorité';
 $lang->custom->task->fields['typeList']   = 'Type';
 $lang->custom->task->fields['reasonList'] = 'Raison Fermeture';
 $lang->custom->task->fields['statusList'] = 'Statut';
-$lang->custom->task->fields['hours']      = 'Effort';
 
 $lang->custom->bug = new stdClass();
+$lang->custom->bug->fields['required']       = $lang->custom->required;
 $lang->custom->bug->fields['priList']        = 'Priorité';
 $lang->custom->bug->fields['severityList']   = 'Sévérité';
 $lang->custom->bug->fields['osList']         = 'OS';
@@ -168,6 +173,7 @@ $lang->custom->bug->fields['statusList']     = 'Statut';
 $lang->custom->bug->fields['longlife']       = 'Jours Calage';
 
 $lang->custom->testcase = new stdClass();
+$lang->custom->testcase->fields['required']   = $lang->custom->required;
 $lang->custom->testcase->fields['priList']    = 'Priorité';
 $lang->custom->testcase->fields['typeList']   = 'Type';
 $lang->custom->testcase->fields['stageList']  = 'Phase';
@@ -176,9 +182,16 @@ $lang->custom->testcase->fields['statusList'] = 'Statut';
 $lang->custom->testcase->fields['review']     = 'Validation Requise';
 
 $lang->custom->testtask = new stdClass();
+$lang->custom->testtask->fields['required']   = $lang->custom->required;
 $lang->custom->testtask->fields['statusList'] = 'Statut';
 $lang->custom->testtask->fields['typeList']   = 'Type de test';
 $lang->custom->testtask->fields['priList']    = 'Priorité';
+
+$lang->custom->testreport = new stdClass();
+$lang->custom->testreport->fields['required'] = $lang->custom->required;
+
+$lang->custom->caselib = new stdClass();
+$lang->custom->caselib->fields['required'] = $lang->custom->required;
 
 $lang->custom->todo = new stdClass();
 $lang->custom->todo->fields['priList']    = 'Priorité';
