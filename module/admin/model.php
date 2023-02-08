@@ -293,7 +293,6 @@ class adminModel extends model
 
                     $this->lang->admin->menu->$subMenuKey = $subMenu;
                 }
-
             }
 
             if(isset($this->lang->admin->menuList->$menuKey['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->$menuKey['menuOrder'];
