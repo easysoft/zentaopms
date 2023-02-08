@@ -368,7 +368,7 @@ $filter->doc->showfiles->get['recPerPage'] = 'int';
 $filter->doc->showfiles->get['recTotal']   = 'int';
 $filter->doc->showfiles->get['title']      = 'reg::any';
 
-$filter->file->download->get['charset'] = 'reg::lang';
+$filter->file->download->get['charset'] = 'reg::any';
 
 $filter->mail->batchdelete->get['idList'] = 'reg::idList';
 

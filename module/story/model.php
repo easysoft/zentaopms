@@ -910,8 +910,10 @@ class storyModel extends model
         if(!empty($_POST['plan'])) $storyPlan = is_array($_POST['plan']) ? array_filter($_POST['plan']) : array($_POST['plan']);
         if(count($storyPlan) > 1)
         {
-            $oldStoryPlan = !empty($oldStory->planTitle) ? array_keys($oldStory->planTitle) : array();
-            if(!empty(array_diff($storyPlan, $oldStoryPlan)) or !empty(array_diff($oldStoryPlan, $storyPlan)))
+            $oldStoryPlan  = !empty($oldStory->planTitle) ? array_keys($oldStory->planTitle) : array();
+            $oldPlanDiff   = array_diff($storyPlan, $oldStoryPlan);
+            $storyPlanDiff = array_diff($oldStoryPlan, $storyPlan);
+            if(!empty($oldPlanDiff) or !empty($storyPlanDiff))
             {
                 dao::$errors[] = $this->lang->story->notice->changePlan;
                 return false;
@@ -3020,6 +3022,11 @@ class storyModel extends model
      */
     public function getProductStoryPairs($productID = 0, $branch = 'all', $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full', $storyType = 'story', $hasParent = true)
     {
+        if($moduleIdList)
+        {
+            $moduleInfo   = $this->loadModel('tree')->getByID($moduleIdList);
+            $moduleIdList = $moduleInfo->type == 'bug' ? 0 : $moduleIdList;
+        }
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('1=1')
@@ -5509,7 +5516,7 @@ class storyModel extends model
                 $stories[$id]->title  = $story->title;
                 $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
-                $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
+                $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id, 0, $projectID);
                 if($this->config->edition == 'max')
                 {
                     $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)

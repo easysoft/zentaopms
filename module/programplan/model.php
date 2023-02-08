@@ -740,8 +740,6 @@ class programplanModel extends model
             $datas[] = $plan;
         }
 
-        $project     = $this->loadModel('project')->getByID($projectID);
-        $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         $totalPercent = 0;
         $totalDevType = 0;
@@ -949,10 +947,6 @@ class programplanModel extends model
                     $this->setTreePath($stageID);
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
-                    $linkProducts = $project->division ? array(0 => $productID) : array_keys($productList);
-                    $this->post->set('products', $linkProducts);
-                    $this->execution->updateProducts($stageID);
-
                     /* Record version change information. */
                     $spec = new stdclass();
                     $spec->project   = $stageID;
@@ -973,6 +967,23 @@ class programplanModel extends model
                     }
                 }
             }
+
+            $linkProducts = array();
+            $linkBranches = array();
+            $productList  = $this->loadModel('product')->getProducts($projectID);
+            if($project->division)
+            {
+                $linkProducts = array(0 => $productID);
+                $linkBranches = array(0 => $productList[$productID]->branches);
+            }
+            else
+            {
+                $linkProducts = array_keys($productList);
+                foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
+            }
+            $this->post->set('products', $linkProducts);
+            $this->post->set('branch', $linkBranches);
+            $this->execution->updateProducts($stageID);
 
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();

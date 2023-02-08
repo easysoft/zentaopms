@@ -6,9 +6,16 @@ class prepareUpdate
     public $internalZT;
     public $mysqlConfig;
 
+    /**
+     * Construct.
+     *
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         $this->initZT();
+        $this->initMysql();
         $this->addChangelog();
         $this->changeVersion();
         $this->addReleaseDetail();
@@ -21,6 +28,12 @@ class prepareUpdate
         $this->checkLang();
     }
 
+    /**
+     * Init mysql config.
+     *
+     * @access public
+     * @return void
+     */
     public function initMysql()
     {
         $this->mysqlConfig = new stdclass();
@@ -29,6 +42,12 @@ class prepareUpdate
         $this->mysqlConfig->databaseName = 'zentaostandard';
     }
 
+    /**
+     * Init zentao config.
+     *
+     * @access public
+     * @return void
+     */
     public function initZT()
     {
         $this->internalZT = new stdclass();
@@ -44,6 +63,12 @@ class prepareUpdate
         $this->getLatestVersion();
     }
 
+    /**
+     * Get zentao token.
+     *
+     * @access public
+     * @return void
+     */
     public function getZTToken()
     {
         $tokenUrl = "{$this->internalZT->apiRoot}/tokens";
@@ -55,6 +80,12 @@ class prepareUpdate
         return $response->token;
     }
 
+    /**
+     * Add the changelog of the newest release.
+     *
+     * @access public
+     * @return void
+     */
     public function addChangelog()
     {
         $relatedStoriesAndBugs = $this->getRelatedStoriesAndBugs();
@@ -62,6 +93,12 @@ class prepareUpdate
         file_put_contents('../doc/CHANGELOG', $relatedStoriesAndBugs . "\n" . $oldChangelog);
     }
 
+    /**
+     * Get stories and bugs of the releases for changelog.
+     *
+     * @access public
+     * @return string
+     */
     public function getRelatedStoriesAndBugs()
     {
         $latestReleases = $this->getLatestRelease();
@@ -92,6 +129,12 @@ class prepareUpdate
         return $releaseHeader . $doneStories . $fixedBugs;
     }
 
+    /**
+     * Get the title of story or bug.
+     *
+     * @access public
+     * @return string
+     */
     public function getStoryOrBugTitle($objectType, $objectID)
     {
         $type      = $objectType == 'story' ? 'stories' : 'bugs';
@@ -104,6 +147,12 @@ class prepareUpdate
         return $response ? $response->title : '';
     }
 
+    /**
+     * Get pms, biz and max latest version.
+     *
+     * @access public
+     * @return void
+     */
     public function getLatestVersion()
     {
         $releases = $this->getLatestRelease();
@@ -115,6 +164,13 @@ class prepareUpdate
         }
     }
 
+    /**
+     * Get last max version.
+     *
+     * @param  object  $lastMaxRelease
+     * @access public
+     * @return array
+     */
     public function getLastMaxVersion($lastMaxRelease)
     {
         $releaseParse = explode(' ', $lastMaxRelease->name);
@@ -122,6 +178,12 @@ class prepareUpdate
         $this->internalZT->lastMaxVersionAB = str_replace('.', '_', $this->internalZT->lastMaxVersion);
     }
 
+    /**
+     * Get pms, biz and max latest release.
+     *
+     * @access public
+     * @return array
+     */
     public function getLatestRelease()
     {
         $pmsReleases      = $this->getReleases($this->internalZT->pmsProductID);
@@ -137,6 +199,13 @@ class prepareUpdate
         return array('pms' => $pmsLatestRelease, 'biz' => $bizLatestRelease, 'max' => $maxLatestRelease);
     }
 
+    /**
+     * Get releases by api.
+     *
+     * @param  int  $productID
+     * @access public
+     * @return array
+     */
     public function getReleases($productID)
     {
         $releaseUrl = "{$this->internalZT->apiRoot}/products/{$productID}/releases";
@@ -148,6 +217,12 @@ class prepareUpdate
         return $response->releases;
     }
 
+    /**
+     * Update the newest version.
+     *
+     * @access public
+     * @return void
+     */
     public function changeVersion()
     {
         $lastVersion = file_get_contents('../VERSION');
@@ -160,6 +235,12 @@ class prepareUpdate
         `sed -i "s/\$config->version       = '$lastVersion'/\$config->version       = '{$this->internalZT->pmsVersion}'/" ../config/config.php`;
     }
 
+    /**
+     * Add the release's detail.
+     *
+     * @access public
+     * @return void
+     */
     public function addReleaseDetail()
     {
         $date     = date('Y-m-d');
@@ -174,6 +255,12 @@ class prepareUpdate
         /* Other lang. */
     }
 
+    /**
+     * Add the last version for update.
+     *
+     * @access public
+     * @return void
+     */
     public function addLastVersion()
     {
         `sed -i "s/ \/\/ pms insert position\.$/\\n\\\$lang->upgrade->fromVersions['{$this->internalZT->pmsVersionAB}']       = '{$this->internalZT->pmsVersion}'; \/\/ pms insert position\./" ../module/upgrade/lang/version.php`;
@@ -181,17 +268,35 @@ class prepareUpdate
         `sed -i "s/ \/\/ max insert position\.$/\\n\\\$lang->upgrade->fromVersions['max{$this->internalZT->lastMaxVersionAB}']   = 'Max{$this->internalZT->lastMaxVersion}'; \/\/ max insert position\./" ../module/upgrade/lang/version.php`;
     }
 
+    /**
+     * Add the version correspondence between open source and business.
+     *
+     * @access public
+     * @return void
+     */
     public function addVersionCorrespondence()
     {
         `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$config->upgrade->bizVersion['biz{$this->internalZT->bizVersionAB}']       = '{$this->internalZT->pmsVersionAB}'; \/\/ biz insert position\./" ../module/upgrade/config.php`;
         `sed -i "s/ \/\/ max insert position\.$/\\n\\\$config->upgrade->maxVersion['max{$this->internalZT->maxVersionAB}']       = '{$this->internalZT->pmsVersionAB}'; \/\/ max insert position\./" ../module/upgrade/config.php`;
     }
 
+    /**
+     * Add the confirm sql for update.
+     *
+     * @access public
+     * @return void
+     */
     public function addConfirmedSql()
     {
         `sed -i "s/ \/\/ confirm insert position\.$/\\n             case '{$this->internalZT->lastPmsVersionAB}':\\n                \\\$confirmContent .= file_get_contents(\\\$this->getUpgradeFile('{$this->internalZT->lastPmsVersion}')); \/\/ confirm insert position\./" ../module/upgrade/model.php`;
     }
 
+    /**
+     * Export standard sql.
+     *
+     * @access public
+     * @return void
+     */
     public function exportStandardSql()
     {
         $lastStandardSql = file_get_contents("../db/standard/zentao{$this->internalZT->lastPmsVersion}.sql");
@@ -209,6 +314,12 @@ class prepareUpdate
         file_put_contents("../db/standard/zentao{$this->internalZT->pmsVersion}.sql", $content);
     }
 
+    /**
+     * Check whether update sql and install sql are consistent.
+     *
+     * @access public
+     * @return void
+     */
     public function checkInstallSql()
     {
         $updateSql = file_get_contents("../db/update{$this->internalZT->lastPmsVersion}.sql");
@@ -259,6 +370,12 @@ class prepareUpdate
         echo $errorSql;
     }
 
+    /**
+     * Check lang.
+     *
+     * @access public
+     * @return void
+     */
     public function checkLang()
     {
         `php check.php`;
