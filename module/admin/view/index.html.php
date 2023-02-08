@@ -90,14 +90,15 @@
   <div class="side panel" style="background: #FCFDFE">
     <div class="h-56 flex align-center justify-between">
       <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
-      <div class="time-count">您已使用禅道
-        <?php if($this->view->dateUsed->format('%y') != 0) :?>
-	<span class="time-block"><?php echo $this->view->dateUsed->format('%y')?></span><?php echo $lang->year?>
+      <div class="time-count">
+        <?php echo $lang->admin->zentaoUsed;?>
+        <?php if($dateUsed->year):?>
+        <span class="time-block"><?php echo $dateUsed->year;?></span><?php echo $lang->year;?>
         <?php endif;?>
-        <?php if($this->view->dateUsed->format('%m') != 0) :?>
-	<span class="time-block"><?php echo $this->view->dateUsed->format('%m')?></span><?php echo $lang->admin->mon?>
+        <?php if($dateUsed->month):?>
+        <span class="time-block"><?php echo $dateUsed->month;?></span><?php echo $lang->admin->mon;?>
         <?php endif;?>
-	<span class="time-block"><?php echo $this->view->dateUsed->format('%d') + 1?></span><?php echo $lang->admin->day?>
+        <span class="time-block"><?php echo $dateUsed->day;?></span><?php echo $lang->admin->day;?>
       </div>
     </div>
     <div class="border-gray mb-16 radius-4">

@@ -603,14 +603,15 @@ class adminModel extends model
     public function genDateUsed()
     {
         $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
-	    ->where('date')->gt('0000-00-00')
+            ->where('date')->gt('0000-00-00')
             ->andWhere('actor')->eq($this->app->user->account)
-	    ->orderBy('date_asc')
-	    ->fetch('date');
-	$firstUseDate = date_create($firstUseDate);
-	$dateNow = date("Y-m-d H:i", time());
-	$dateNow = date_create($dateNow);
-	$interval = date_diff($dateNow, $firstUseDate);
-	return $interval;
+            ->orderBy('date_asc')
+            ->fetch('date');
+
+        $firstUseDate = date_create($firstUseDate);
+        $dateNow      = date("Y-m-d H:i");
+        $dateNow      = date_create($dateNow);
+        $interval     = date_diff($dateNow, $firstUseDate);
+        return $interval;
     }
 }

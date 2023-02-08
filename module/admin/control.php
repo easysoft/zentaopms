@@ -37,12 +37,19 @@ class admin extends control
         $hasInternet = $this->admin->checkInternet();
         $clientLang  = $this->app->getClientLang();
         $langNotCN   = common::checkNotCN();
+        $usedTime    = $this->admin->genDateUsed();
+
+        $dateUsed = new stdclass();
+        $dateUsed->year  = $usedTime->format('%y');
+        $dateUsed->month = $usedTime->format('%m');
+        $dateUsed->day   = $usedTime->format('%d');
+
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->position[]  = $this->lang->admin->index;
         $this->view->plugins     = $this->admin->getExtensionsByAPI('plugin', $langNotCN ? 5 : 6, $hasInternet);
         $this->view->patches     = $this->admin->getExtensionsByAPI('patch', 3, $hasInternet);
-	$this->view->dateUsed    = $this->admin->genDateUsed();
+        $this->view->dateUsed    = $dateUsed;
         $this->view->hasInternet = $hasInternet;
         $this->view->publicClass = ($hasInternet and !$langNotCN) ? $this->admin->getPublicClassByAPI(3) : array();
         $this->view->langNotCN   = $langNotCN;
