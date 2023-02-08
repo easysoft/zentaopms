@@ -89,7 +89,7 @@
           }
           else
           {
-              echo html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='chosen form-control'");
+              echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute);
           }
           ?>
           </td>

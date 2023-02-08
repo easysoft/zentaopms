@@ -2084,6 +2084,13 @@ class execution extends control
         $project = $this->project->getById($execution->project);
         if(!$project->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
+        if($execution->type == 'stage')
+        {
+            $parentStage = $this->project->getByID($execution->parent, 'stage');
+
+            $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
+        }
+
         $this->view->title                = $title;
         $this->view->position             = $position;
         $this->view->executions           = $executions;
