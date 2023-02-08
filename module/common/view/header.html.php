@@ -29,7 +29,8 @@ include 'chosen.html.php';
     </div>
   </div>
   <?php if(isset($lang->{$app->tab}->menu->$activeMenu) and is_array($lang->{$app->tab}->menu->$activeMenu) and isset($lang->{$app->tab}->menu->{$activeMenu}['subMenu'])):?>
-  <div id='subHeader'>
+  <?php $subMenuClass = $app->tab == 'admin' ? 'admin-tab-menu' : '';?>
+  <div id='subHeader' class="<?php echo $subMenuClass;?>">
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
       <nav id='subNavbar'><?php common::printModuleMenu($activeMenu);?></nav>

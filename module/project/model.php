@@ -1634,6 +1634,12 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->updateProducts($projectID, $_POST['products']);
+            if(empty($oldProject->division))
+            {
+                $executions = $this->loadModel('execution')->getPairs($projectID);
+                foreach(array_keys($executions) as $executionID) $this->execution->updateProducts($executionID);
+            }
+
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
             $whitelist = explode(',', $project->whitelist);

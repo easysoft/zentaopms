@@ -15,7 +15,7 @@
 <div id='mainContent' class='main-content admin'>
   <div class="main <?php if(!$hasInternet) echo 'without-internet';?>">
     <div class="settings panel">
-      <div class="panel-title"><?php echo $lang->admin->setting?></div>
+      <div class="panel-title mt-6"><?php echo $lang->admin->setting?></div>
       <div class="settings-list <?php if($config->vision == 'lite') echo 'lite-setting';?>">
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
@@ -87,67 +87,69 @@
   </div>
 
   <?php if($hasInternet and !$langNotCN):?>
-  <div class="side panel">
+  <div class="side panel" style="background: #FCFDFE">
     <div class="h-56 flex align-center justify-between">
       <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
-      <div class="time-count color-gray">
-        <?php echo $lang->admin->usedTime;?>
-        <?php if($usedTime['year'])  echo "<span class='time-block'>{$usedTime['year']}</span>{$lang->year}";?>
-        <?php if($usedTime['month']) echo "<span class='time-block'>{$usedTime['month']}</span>{$lang->admin->mon}";?>
-        <?php if($usedTime['day'])   echo "<span class='time-block'>{$usedTime['day']}</span>{$lang->admin->day}";?>
+      <div class="time-count">
+        <?php echo $lang->admin->zentaoUsed;?>
+        <?php if($dateUsed->year):?>
+        <span class="time-block"><?php echo $dateUsed->year;?></span><?php echo $lang->year;?>
+        <?php endif;?>
+        <?php if($dateUsed->month):?>
+        <span class="time-block"><?php echo $dateUsed->month;?></span><?php echo $lang->admin->mon;?>
+        <?php endif;?>
+        <span class="time-block"><?php echo $dateUsed->day;?></span><?php echo $lang->admin->day;?>
       </div>
     </div>
-    <div class="border-gray mb-16">
+    <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->updateDynamics?></div>
-        <?php echo html::a($config->admin->dynamicURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
+        <?php echo html::a($config->admin->dynamicURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
       <?php foreach($dynamics as $dynamic):?>
       <div class="dynamic-block">
-        <div class="dynamic-content"><i class="icon icon-horn text-primary"></i><?php echo html::a($dynamic->link, $dynamic->title, '_blank');?></div>
+        <div class="dynamic-content"><i class="icon icon-horn text-primary pr-4 font-20"></i><?php echo html::a($dynamic->link, $dynamic->title, '_blank');?></div>
         <div class="dynamic-time"><?php echo substr($dynamic->addedDate, 0, 10);?></div>
       </div>
       <?php endforeach;?>
     </div>
-    <div class="border-gray mb-16">
+    <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->updatePatch?></div>
-        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
+        <?php echo html::a($config->admin->patchURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
       <?php foreach($patches as $patch):?>
       <div class="patch-block">
-	<div class="title flex justify-between">
-	  <div class="panel-title"><?php echo $patch->name?></div>
+	    <div class="title flex justify-between">
+	      <div class="panel-title"><?php echo $patch->name?></div>
           <a href="<?php echo $patch->viewLink;?>" class='ext-download flex align-center' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
         </div>
-	<div class="patch-content color-gray">
-           <?php echo $patch->desc?>
-        </div>
+	    <div class="patch-content"><?php echo $patch->desc?></div>
       </div>
       <?php endforeach;?>
     </div>
     <?php if($config->edition != 'max'):?>
-    <div class="border-gray mb-16">
+    <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->upgradeRecommend?></div>
-        <?php echo html::a($config->admin->apiRoot, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
+        <?php echo html::a($config->admin->apiRoot, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
       <?php if($config->edition != 'biz'):?>
       <div class="upgrade-block">
-      	<div class="title text-primary flex justify-between">
-          <div><?php echo $lang->admin->bizTag?></div>
-          <div class="flex align-center"><div><?php echo html::a($lang->admin->bizInfoURL, $lang->admin->productDetail, '_blank', "class='text-primary'");?></div><i class="icon icon-caret-right text-primary"></i></div>
-        </div>
+        <a class="title text-primary flex justify-between" href="<?php echo $lang->admin->bizInfoURL;?>" target="_blank">
+          <div class="panel-title"><i class="icon icon-zentao text-primary pr-4 font-18"></i><?php echo $lang->admin->bizTag?></div>
+          <div class="flex align-center"><div><?php echo $lang->admin->productDetail?></div><i class="icon icon-caret-right text-primary pb-3"></i></div>
+        </a>
         <?php foreach($lang->admin->productFeature['biz'] as $feature):?>
         <div class="upgrade-content color-gray"><?php echo $feature;?></div>
         <?php endforeach;?>
       </div>
       <?php endif;?>
       <div class="upgrade-block">
-    	<div class="title text-primary flex justify-between">
-          <div><?php echo $lang->admin->maxTag?></div>
-          <div class="flex align-center"><div><?php echo html::a($lang->admin->maxInfoURL, $lang->admin->productDetail, '_blank', "class='text-primary'");?></div><i class="icon icon-caret-right text-primary"></i></div>
-        </div>
+        <a class="title text-primary flex justify-between" href='<?php echo $lang->admin->maxInfoURL;?>' target="_blank">
+          <div class="panel-title"><i class="icon icon-zentao text-primary pr-4 font-18"></i><?php echo $lang->admin->maxTag?></div>
+          <div class="flex align-center"><div><?php echo $lang->admin->productDetail?></div><i class="icon icon-caret-right text-primary pb-3"></i></div>
+        </a>
         <?php foreach($lang->admin->productFeature['max'] as $feature):?>
         <div class="upgrade-content color-gray"><?php echo $feature;?></div>
         <?php endforeach;?>

@@ -75,6 +75,7 @@ $lang->moduleOrder[225] = 'mr';
 $lang->moduleOrder[230] = 'app';
 $lang->moduleOrder[235] = 'gogs';
 $lang->moduleOrder[240] = 'gitea';
+$lang->moduleOrder[245] = 'holiday';
 
 $lang->resource = new stdclass();
 
@@ -1239,18 +1240,23 @@ $lang->zahost->methodOrder[30] = 'downloadImage';
 $lang->zahost->methodOrder[35] = 'cancelDownload';
 
 $lang->resource->zanode = new stdclass();
-$lang->resource->zanode->browse  = 'browse';
-$lang->resource->zanode->create  = 'create';
-$lang->resource->zanode->edit    = 'edit';
-$lang->resource->zanode->destroy = 'destroy';
-$lang->resource->zanode->reboot  = 'reboot';
-$lang->resource->zanode->suspend = 'suspend';
-$lang->resource->zanode->resume  = 'resume';
-$lang->resource->zanode->getVNC  = 'getVNC';
-$lang->resource->zanode->start   = 'boot';
-$lang->resource->zanode->close   = 'shutdown';
-$lang->resource->zanode->view    = 'view';
-$lang->resource->zanode->createImage = 'createImage';
+$lang->resource->zanode->browse          = 'browse';
+$lang->resource->zanode->create          = 'create';
+$lang->resource->zanode->edit            = 'edit';
+$lang->resource->zanode->destroy         = 'destroy';
+$lang->resource->zanode->reboot          = 'reboot';
+$lang->resource->zanode->suspend         = 'suspend';
+$lang->resource->zanode->resume          = 'resume';
+$lang->resource->zanode->getVNC          = 'getVNC';
+$lang->resource->zanode->start           = 'boot';
+$lang->resource->zanode->close           = 'shutdown';
+$lang->resource->zanode->view            = 'view';
+$lang->resource->zanode->createImage     = 'createImage';
+$lang->resource->zanode->browseSnapshot  = 'browseSnapshot';
+$lang->resource->zanode->createSnapshot  = 'createSnapshot';
+$lang->resource->zanode->editSnapshot    = 'editSnapshot';
+$lang->resource->zanode->restoreSnapshot = 'restoreSnapshot';
+$lang->resource->zanode->deleteSnapshot  = 'deleteSnapshot';
 
 $lang->zanode->methodOrder[0]  = 'browse';
 $lang->zanode->methodOrder[5]  = 'create';
@@ -1264,6 +1270,11 @@ $lang->zanode->methodOrder[40] = 'start';
 $lang->zanode->methodOrder[45] = 'close';
 $lang->zanode->methodOrder[50] = 'view';
 $lang->zanode->methodOrder[55] = 'createImage';
+$lang->zanode->methodOrder[60] = 'browseSnapshot';
+$lang->zanode->methodOrder[65] = 'createSnapshot';
+$lang->zanode->methodOrder[70] = 'editSnapshot';
+$lang->zanode->methodOrder[75] = 'restoreSnapshot';
+$lang->zanode->methodOrder[80] = 'deleteSnapshot';
 
 $lang->resource->repo                  = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';
@@ -1413,7 +1424,7 @@ $lang->mail->methodOrder[50] = 'resend';
 $lang->resource->custom = new stdclass();
 $lang->resource->custom->index              = 'index';
 $lang->resource->custom->set                = 'set';
-$lang->resource->custom->product            = 'product';
+$lang->resource->custom->product            = 'productName';
 $lang->resource->custom->execution          = 'execution';
 $lang->resource->custom->required           = 'required';
 $lang->resource->custom->restore            = 'restore';
@@ -1921,11 +1932,13 @@ $lang->resource->holiday->create = 'createAction';
 $lang->resource->holiday->edit   = 'editAction';
 $lang->resource->holiday->delete = 'deleteAction';
 $lang->resource->holiday->browse = 'browse';
+$lang->resource->holiday->import = 'importAction';
 
 $lang->holiday->methodOrder[0]  = 'browse';
 $lang->holiday->methodOrder[5]  = 'create';
 $lang->holiday->methodOrder[10] = 'edit';
 $lang->holiday->methodOrder[15] = 'delete';
+$lang->holiday->methodOrder[20] = 'import';
 
 /* Action. */
 $lang->resource->action = new stdclass();

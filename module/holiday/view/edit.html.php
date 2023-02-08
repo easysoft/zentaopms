@@ -45,8 +45,8 @@
           <th><?php echo $lang->holiday->desc?></th>
           <td><?php echo html::textarea('desc', $holiday->desc, "class='form-control'")?></td>
           <td></td>
-        </tr> 
-        <tr><th></th><td clospan='2'><?php echo baseHTML::submitButton();?></td></tr>
+        </tr>
+        <tr><th></th><td colspan='2'><?php echo baseHTML::submitButton();?></td></tr>
       </table>
     </form>
   </div>

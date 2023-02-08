@@ -10,35 +10,14 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php';?>
-<script>
-$('#navbar ul.nav li').removeClass('active');
-$('#navbar ul.nav li[data-id=<?php echo $moduleName?>]').addClass('active');
-<?php if($moduleName == 'bug'):?>
-$('#navbar ul.nav li[data-id=qa]').addClass('active');
-<?php endif;?>
-if($('#navbar ul.nav li[data-id=common]').length > 0) $('#navbar ul.nav li[data-id=common]').addClass('active');
-</script>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-row'>
-  <div class='side-col' id='sidebar'>
-    <div class='cell'>
-      <div class='list-group'>
-        <?php
-        ksort($config->custom->requiredModules);
-        foreach($config->custom->requiredModules as $requiredModule)
-        {
-            $requiredModuleName = zget($lang->custom->moduleName, $requiredModule, $lang->$requiredModule->common);
-            echo html::a(inlink('required', "module=$requiredModule"), $requiredModuleName, '', "id='{$requiredModule}Tab'");
-        }
-        ?>
-      </div>
-    </div>
-  </div>
+  <?php if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib')) and ($module != 'project' or ($module == 'project' and $config->vision == 'rnd'))) include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
-          <strong><?php echo $lang->$moduleName->common?></strong>
+          <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->required;?></strong>
         </div>
       </div>
       <table class='table table-form mw-800px'>
@@ -47,18 +26,18 @@ if($('#navbar ul.nav li[data-id=common]').length > 0) $('#navbar ul.nav li[data-
         <tr>
           <th class='thWidth'>
           <?php
-          $fields = $this->custom->getFormFields($moduleName, $method);
+          $fields = $this->custom->getFormFields($module, $method);
           if(empty($fields)) continue;
-          if($moduleName == 'caselib' and $method == 'createcase') continue;
+          if($module == 'caselib' and $method == 'createcase') continue;
 
           $actionKey = $method . 'Action';
-          if(isset($lang->$moduleName->$actionKey))
+          if(isset($lang->$module->$actionKey))
           {
-              echo $lang->$moduleName->$actionKey . $lang->custom->page;
+              echo $lang->$module->$actionKey . $lang->custom->page;
           }
           else
           {
-              echo $lang->$moduleName->$method . $lang->custom->page;
+              echo $lang->$module->$method . $lang->custom->page;
           }
           ?>
           </th>
@@ -71,18 +50,11 @@ if($('#navbar ul.nav li[data-id=common]').length > 0) $('#navbar ul.nav li[data-
           <th></th>
           <td colspan='2' class='form-actions'>
           <?php echo html::submitButton();?>
-          <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
+          <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$module"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>
         </tr>
       </table>
     </form>
   </div>
 </div>
-<script>
-$(function()
-{
-    $('#mainMenu #requiredTab').addClass('btn-active-text');
-    $('#sidebar #<?php echo $moduleName?>Tab').addClass('active');
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>

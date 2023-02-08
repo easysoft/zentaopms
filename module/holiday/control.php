@@ -31,8 +31,17 @@ class holiday extends control
      */
     public function browse($year = '')
     {
+        if(empty($year)) $year = date('Y');
+
         $holidays = $this->holiday->getList($year);
         $yearList = $this->holiday->getYearPairs();
+
+        $yearAndNext = array(date('Y'), date('Y') + 1);
+        foreach($yearAndNext as $date)
+        {
+            if(!in_array($date, $yearList)) $yearList[$date] = $date;
+        }
+        krsort($yearList);
 
         $this->view->title       = $this->lang->holiday->browse;
         $this->view->holidays    = $holidays;
@@ -113,5 +122,29 @@ class holiday extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return print(js::reload('parent'));
         }
+    }
+
+    /**
+     * Import holiday.
+     *
+     * @param  string $year
+     * @access public
+     * @return void
+     */
+    public function import($year = '')
+    {
+        if(empty($year)) $year = date('Y');
+
+        $holidays = $this->holiday->getHolidayByAPI($year);
+        if(helper::isAjaxRequest())
+        {
+            $this->holiday->batchCreate($holidays);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->holidays = $holidays;
+        $this->display();
     }
 }

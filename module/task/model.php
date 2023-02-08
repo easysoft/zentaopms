@@ -2722,16 +2722,18 @@ class taskModel extends model
      *
      * @param  int    $storyID
      * @param  int    $executionID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getStoryTasks($storyID, $executionID = 0)
+    public function getStoryTasks($storyID, $executionID = 0, $projectID = 0)
     {
         $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
 
         $parents = array();

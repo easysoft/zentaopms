@@ -4,13 +4,22 @@
 .justify-between {justify-content: space-between;}
 .title-color {color: #313C52}
 .font-13 {font-size: 13px;}
-.color-gray {color: #5E626D;}
 .border-gray {border: 1px solid #E3E4E9;}
 .h-56 {height: 56px;}
 .h-40 {height: 40px;}
 .pl-16 {padding-left: 16px;}
 .px-16 {padding: 0 16px;}
 .mb-16 {margin-bottom: 16px;}
+.mr-16 {margin-right: 16px;}
+.mx-16 {margin: 0 16px;}
+.pd-3 {padding: 3px;}
+.pb-3 {padding-bottom: 3px;}
+.pr-4 {padding-right: 4px;}
+.mt-6 {margin-top: 6px;}
+.font-18 {font-size: 18px;}
+.font-20 {font-size: 20px;}
+.font-24 {font-size: 24px;}
+.radius-4 {border-radius: 4px;}
 
 #notice {margin: -20px -20px 20px; padding: 20px;}
 #zentaoLinks {margin-top: 20px;}
@@ -19,7 +28,7 @@
 .admin {display: flex; background: unset; box-shadow: none;}
 .admin h4 {color: #0B0F18;}
 .admin > .main {flex: 1 1 70%;}
-.admin > .side {flex: 1 1 30%; padding-left: 10px; margin-left: 16px;}
+.admin > .side {flex: 1 1 30%; margin-left: 16px; padding-right: 16px;}
 .panel-title {padding: 10px 0px;}
 .panel {padding: 0 0 0 16px;}
 .settings.panel, .plug.panel {margin-bottom: 16px;}
@@ -51,7 +60,7 @@
 .official-content > .title {color: #313C52; font-size: 13px; line-height: 14px;}
 
 .classList {aspect-ratio: 4/1;}
-.classList > .classItem {flex: 1 1 30%; margin: 5px; border: 1px solid rgba(227, 228, 233, 0.6); border-radius: 4px; margin-bottom: 16px; align-items: center;}
+.classList > .classItem {flex: 1 1 30%; margin: 5px; border: 1px solid rgba(227, 228, 233, 0.6); border-radius: 4px; padding-bottom: 16px; align-items: center;}
 .classItem > .imgBack {flex: 1 1 50%;}
 .classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 16 / 9; background-position: center; margin: 0px; border-top-left-radius: 4px; border-top-right-radius: 4px;}
 .classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 24px; margin-bottom: 6px; font-weight: 700;}
@@ -61,7 +70,6 @@
 
 .setting-help {width: 45px; color: #9EA3B0;}
 .pointer-none {pointer-events: none;}
-.pd-3 {padding: 3px;}
 
 /* css for without internet */
 .main.without-internet {display: flex; flex-wrap: wrap;}
@@ -70,14 +78,15 @@
 .main.without-internet > .bottom > .official.panel > .main-panel {flex-direction: row-reverse;}
 
 /* css in side */
-.time-block {background: #EDEEF2; padding: 4px; border-radius: 4px; color: #0B0F18; font-size: 15px;}
-.dynamic-block {height: 64px; padding: 12px 16px; display: flex; justify-content: space-between; position: relative; line-height: 20px; border-top: 1px solid #E3E4E9;}
-.dynamic-content {height: 40px; overflow: hidden;}
-.dynamic-time {white-space: nowrap; position: absolute; right: 20px; bottom: 10px; padding-right: 12px; background: white;}
+.time-block {background: #EDEEF2; padding:2px 4px; border-radius: 4px; color: #0B0F18; font-size: 15px; margin: 0 4px;}
+.dynamic-block {height: 74px; padding: 12px 16px; display: flex; justify-content: space-between; position: relative; line-height: 20px; border-top: 1px solid #E3E4E9;}
+.dynamic-content {height: 50px; line-height: 25px; overflow: hidden;}
+.dynamic-time {white-space: nowrap; position: absolute; right: 12px; bottom: 10px; padding-right: 12px; background: white;}
+.time-count {letter-spacing: 1px;}
 
-.patch-block {padding: 12px 16px; line-height: 20px; border-top: 1px solid #E3E4E9;}
+.patch-block {padding: 10px 16px 12px; line-height: 20px; border-top: 1px solid #E3E4E9;}
 .patch-content {height: 40px; overflow: hidden;}
 
-.upgrade-block {padding: 16px 16px; line-height: 20px; border-top: 1px solid #E3E4E9;}
+.upgrade-block {padding: 6px 16px; line-height: 20px; border-top: 1px solid #E3E4E9;}
 .upgrade-content {height: 20px; padding-left: 20px; position: relative; margin: 5px 0;}
-.upgrade-content:before {content: ' '; width: 10px; height: 10px; background: #E3E4E9; border-radius: 50%; position: absolute; left: 0px; top: 5px;}
+.upgrade-content:before {content: ' '; width: 8px; height: 8px; background: #E3E4E9; border-radius: 50%; position: absolute; left: 0px; top: 5px;}

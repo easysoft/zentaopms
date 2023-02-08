@@ -9,7 +9,6 @@
  * @version     $Id: en.php 4676 2013-04-26 06:08:23Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->todo->common       = 'Agenda';
 $lang->todo->index        = "Accueil";
 $lang->todo->create       = "Ajout Entrée";
 $lang->todo->createCycle  = "Ajout Tâche récurrente";

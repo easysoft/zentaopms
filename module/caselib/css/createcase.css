@@ -46,6 +46,8 @@
 .minw-80px {min-width: 80px;}
 .title-group.required:after {display: none;}
 .title-group.required > .required:after {display: block; right: 29px; top: 5px;}
+#titleBox.required:after{display: block; right: 29px; top: 5px;}
+#priRequiredBox.required:after{display: block; right: -12px; top: 5px;}
 .pri-selector > .btn {padding: 5px 8px !important; width: 100%;}
 .pri-selector > .dropdown-menu {padding: 10px;}
 

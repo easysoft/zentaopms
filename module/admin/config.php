@@ -23,6 +23,13 @@ $config->admin->menuModuleGroup['model']['custom|required']   = array('project',
 $config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'feedback', 'user', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user');
 $config->admin->menuModuleGroup['feature']['custom|required'] = array('bug', 'doc', 'product', 'story', 'productplan', 'release', 'task', 'bug', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user');
 $config->admin->menuModuleGroup['template']['custom|set']     = array('baseline');
+if($config->vision == 'lite')
+{
+    $config->admin->menuModuleGroup['model']['custom|set']        = array('issue', 'risk', 'opportunity', 'nc');
+    $config->admin->menuModuleGroup['model']['custom|required']   = array('build');
+    $config->admin->menuModuleGroup['feature']['custom|set']      = array('project', 'todo', 'feedback', 'user', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user');
+    $config->admin->menuModuleGroup['feature']['custom|required'] = array('project', 'task', 'story');
+}
 
 $config->admin->plugins[203] = new stdClass();
 $config->admin->plugins[203]->name     = '人力资源日历';
@@ -59,7 +66,9 @@ $config->admin->cdnRoot        = 'https://cdn.easycorp.cn/web';
 $config->admin->classURL       = 'https://www.zentao.net/publicclass.html';
 $config->admin->dynamicURL     = 'https://www.zentao.net/download.html';
 $config->admin->extensionURL   = 'https://www.zentao.net/extension-browse.html';
+$config->admin->patchURL       = 'https://www.zentao.net/extension-browse-byModule-1218.html';
 $config->admin->apiSite        = 'https://api.zentao.net/';
+$config->admin->apiSite        = 'http://api.wyd.oop.cc/';
 $config->admin->extAPIURL      = $config->admin->apiSite . 'extension-apiGetExtensions-';
 $config->admin->patchAPIURL    = $config->admin->apiSite . 'extension-apiGetExtensions-bymodule-MTIxOA==-0-100-1.json';
 $config->admin->downloadAPIURL = $config->admin->apiSite . 'download.json';
