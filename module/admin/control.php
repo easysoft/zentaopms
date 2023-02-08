@@ -42,6 +42,7 @@ class admin extends control
         $this->view->position[]  = $this->lang->admin->index;
         $this->view->plugins     = $this->admin->getExtensionsByAPI('plugin', $langNotCN ? 5 : 6, $hasInternet);
         $this->view->patches     = $this->admin->getExtensionsByAPI('patch', 3, $hasInternet);
+	$this->view->dateUsed    = $this->admin->genDateUsed();
         $this->view->hasInternet = $hasInternet;
         $this->view->publicClass = ($hasInternet and !$langNotCN) ? $this->admin->getPublicClassByAPI(3) : array();
         $this->view->langNotCN   = $langNotCN;
