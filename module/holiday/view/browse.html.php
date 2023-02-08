@@ -58,7 +58,7 @@
     <?php if(!common::checkNotCN() and common::hasPriv('holiday', 'import') and $currentYear >= date('Y')):?>
     <div class="table-footer">
       <div class="table-import">
-        <?php echo sprintf($lang->holiday->importTip, html::a(helper::createLink('holiday', 'import', "year=$currentYear", '', true), $lang->import, '', "class='text-primary iframe' data-width='40%'"));?>
+        <?php echo sprintf($lang->holiday->importTip, html::a(helper::createLink('holiday', 'import', "year=$currentYear", '', true), $lang->import, '', "class='text-primary iframe' data-width='400px'"));?>
       </div>
     </div>
     <?php endif;?>

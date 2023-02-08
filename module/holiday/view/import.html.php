@@ -12,36 +12,41 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <style>
-.body-modal #mainContent {padding-top: 28px;}
-#mainContent td.text-center {border: none;}
-#mainContent td.text-center .btn-cancel {margin-left: 20px;}
+#main > .container {padding: 0;}
+.body-modal #mainContent {padding: 0;}
+.modal-iframe .modal-header {display: none;}
+#mainContent .table {margin-bottom: 0;}
+#mainContent .table thead th {padding-top: 20px;}
+#mainContent .table tr {height: 40px;}
+#mainContent .table .c-name {padding-left: 40px;}
+#mainContent .table .c-time-limit {padding-right: 40px;}
+.body-modal .table-footer {margin-top: 20px;}
+#mainContent .table-footer .btn-cancel {margin-left: 16px;}
 </style>
 <div id='mainContent' class='main-content'>
-  <div class='center-block'>
+  <div class='center-block main-table'>
     <?php if(!empty($holidays)):?>
     <form class='form-ajax' method='post'>
-      <table class='table'>
+      <table class='table table-fixed'>
         <thead>
           <tr>
-            <th><?php echo $lang->holiday->name;?></th>
-            <th><?php echo $lang->holiday->holiday;?></th>
+            <th class="c-name"><?php echo $lang->holiday->name;?></th>
+            <th class="c-time-limit"><?php echo $lang->holiday->holiday;?></th>
           </tr>
         </thead>
         <tbody>
           <?php foreach($holidays as $holiday):?>
           <tr>
-            <td><?php echo $holiday->name;?></td>
-            <td><?php echo formatTime($holiday->begin, DT_DATE1) . ' ~ ' . formatTime($holiday->end, DT_DATE1);?></td>
+            <td class="c-name"><?php echo $holiday->name;?></td>
+            <td class="c-time-limit"><?php echo formatTime($holiday->begin, DT_DATE1) . ' ~ ' . formatTime($holiday->end, DT_DATE1);?></td>
           </tr>
           <?php endforeach;?>
-        <tr>
-          <td colspan='2' class='text-center'>
-            <?php echo html::submitButton($lang->import);?>
-            <?php echo html::commonButton($lang->cancel, 'data-dismiss="modal"', 'btn btn-wide btn-cancel');?>
-          </td>
-        </tr>
         </tbody>
       </table>
+      <div class="table-footer text-center">
+        <?php echo html::submitButton($lang->import, '', 'btn btn-primary');?>
+        <?php echo html::commonButton($lang->cancel, 'data-dismiss="modal"', 'btn btn-cancel');?>
+    </div>
     </form>
     <?php else:?>
     <div class="table-empty-tip">
