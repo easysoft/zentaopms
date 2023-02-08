@@ -1247,7 +1247,7 @@ class storyModel extends model
         if(empty($childrenStatus)) return $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
 
         $status = $oldParentStory->status;
-        if(count($childrenStatus) == 1 and $oldParentStory->status != 'reviewing')
+        if(count($childrenStatus) == 1)
         {
             $status = current($childrenStatus);
             if($status == 'draft' or $status == 'changing') $status = 'active';
