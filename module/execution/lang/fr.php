@@ -555,6 +555,7 @@ $lang->execution->action->startbychildactivate = '$date, the stage status is <st
 $lang->execution->action->startbychildsuspend  = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Suspended</strong>.';
 $lang->execution->action->startbychildclose    = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Closed</strong>.';
 $lang->execution->action->startbychildcreate   = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Created</strong>. ';
+$lang->execution->action->startbychildedit     = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Edited</strong>';
 $lang->execution->action->startbychild         = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Activated</strong>.';
 
 $lang->execution->startbychildactivate = 'activated';
@@ -569,6 +570,7 @@ $lang->execution->startbychildactivate = 'activated';
 $lang->execution->startbychildsuspend  = 'activated';
 $lang->execution->startbychildclose    = 'activated';
 $lang->execution->startbychildcreate   = 'activated';
+$lang->execution->startbychildedit     = 'activated';
 $lang->execution->startbychild         = 'activated';
 
 $lang->execution->statusColorList = array();

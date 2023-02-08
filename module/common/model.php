@@ -156,30 +156,9 @@ class commonModel extends model
             $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
         }
 
-        if($parentExecution->type == 'stage')
+        if($execution->type == 'stage')
         {
-            $childExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($parentExecutionID)->andWhere('deleted')->eq('0')->fetchAll('id');
-            if($execution->deleted == '1' and count($childExecutions) > 0)
-            {
-                $childWait   = true;
-                $childClosed = true;
-                foreach($childExecutions as $childExecution)
-                {
-                    if($childExecution->status != 'wait')   $childWait = false;
-                    if($childExecution->status != 'closed') $childClosed = false;
-                }
-
-                if($childWait and $parentExecution->status != 'wait')
-                {
-                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('wait')->where('id')->eq($parentExecutionID)->exec();
-                    $this->loadModel('action')->create('execution', $parentExecutionID, 'waitbychilddelete');
-                }
-                if($childClosed and $parentExecution->status != 'closed')
-                {
-                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parentExecutionID)->exec();
-                    $this->loadModel('action')->create('execution', $parentExecutionID, 'closebychilddelete');
-                }
-            }
+            $this->loadModel('programplan')->computeProgress($execution->id);
         }
 
         return $parentExecution;

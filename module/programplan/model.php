@@ -1418,11 +1418,12 @@ class programplanModel extends model
      * Compute stage status.
      *
      * @param  int    $stage
-     * @param  strihg $action
+     * @param  string $action
+     * @param  bool   $isParent
      * @access public
      * @return void
      */
-    public function computeProgress($stageID, $action = '')
+    public function computeProgress($stageID, $action = '', $isParent = false)
     {
         $stage = $this->loadModel('execution')->getByID($stageID);
         if(empty($stage) or empty($stage->path) or $stage->type != 'stage') return false;
@@ -1435,7 +1436,7 @@ class programplanModel extends model
         foreach($parentIdList as $id)
         {
             $parent = $this->execution->getByID($id);
-            if($parent->type != 'stage' or $id == $stageID) continue;
+            if($parent->type != 'stage' or (!$isParent and $id == $stageID)) continue;
 
             $statusCount = array();
             $children    = $this->execution->getChildExecutions($parent->id);
@@ -1470,7 +1471,7 @@ class programplanModel extends model
                 if($parent->status != 'doing')
                 {
                     $parentStatus = 'doing';
-                    $parentAction = 'startbychild' . $action;
+                    $parentAction = $parent->status == 'wait' ?'startbychildstart' : 'startbychild' . $action;
                 }
             }
 

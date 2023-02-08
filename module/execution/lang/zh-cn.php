@@ -555,6 +555,7 @@ $lang->execution->action->startbychildactivate = '$date, 系统判断由于子�
 $lang->execution->action->startbychildsuspend  = '$date, 系统判断由于子阶段 <strong>挂起</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
 $lang->execution->action->startbychildclose    = '$date, 系统判断由于子阶段 <strong>关闭</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
 $lang->execution->action->startbychildcreate   = '$date, 系统判断由于 <strong>创建</strong> 子阶段 ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildedit     = '$date, 系统判断由于子阶段 <strong>状态修改</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
 $lang->execution->action->startbychild         = '$date, 系统判断由于子阶段 <strong>激活</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
 
 
@@ -570,6 +571,7 @@ $lang->execution->startbychildactivate = '激活了';
 $lang->execution->startbychildsuspend  = '激活了';
 $lang->execution->startbychildclose    = '激活了';
 $lang->execution->startbychildcreate   = '激活了';
+$lang->execution->startbychildedit     = '激活了';
 $lang->execution->startbychild         = '激活了';
 
 $lang->execution->statusColorList = array();

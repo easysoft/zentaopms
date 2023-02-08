@@ -231,6 +231,14 @@ class programplan extends control
             {
                 $actionID = $this->loadModel('action')->create('execution', $planID, 'edited');
                 $this->action->logHistory($actionID, $changes);
+
+                $newPlan = $this->programplan->getByID($planID);
+
+                if($plan->parent != $newPlan->parent)
+                {
+                    $this->programplan->computeProgress($planID, 'edit');
+                    $this->programplan->computeProgress($plan->parent, 'edit', true);
+                }
             }
             $locate = isonlybody() ? 'parent' : inlink('browse', "program=$plan->program&type=lists");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));

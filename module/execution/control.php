@@ -1986,6 +1986,8 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'edit');
+
             /* Link the plan stories. */
             $oldPlans = explode(',', implode(',' ,$oldPlans));
             $newPlans = array();
