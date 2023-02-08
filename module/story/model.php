@@ -1257,6 +1257,11 @@ class storyModel extends model
             $status = 'active';
         }
 
+        if(count($childrenStatus) == 1 and ($oldParentStory->status = 'changing' or $oldParentStory->status = 'reviewing'))
+        {
+            $status = 'closed';
+        }
+
         if($status and $oldParentStory->status != $status)
         {
             $now  = helper::now();
