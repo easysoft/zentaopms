@@ -152,7 +152,7 @@ class transfer extends control
         $this->loadModel($model);
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
 
-        if($model == 'testcase' and !empty($_SESSION[$model . 'TemplateFields'])) $this->config->$model->templateFields = implode(',', $importFields);
+        if($model == 'testcase' and !empty($_SESSION[$model . 'TemplateFields']) and is_array($importFields)) $this->config->$model->templateFields = implode(',', $importFields);
         $fields       = $this->transfer->initFieldList($model, $importFields, false);
         $formatDatas  = $this->transfer->format($model, $filter);
         $datas        = $this->transfer->getPageDatas($formatDatas, $pagerID);
