@@ -27,7 +27,7 @@ $(function()
         changeParentStage(parent);
     });
 
-    $('#submit').click(function(event)
+    $('#submit').click(function()
     {
         if(plan.parent != $('#parent').val() && $('#parent').val() != 0)
         {
@@ -42,6 +42,17 @@ $(function()
                 }
             })
             $.ajaxSettings.async = true;
+
+            if(!result) return false;
+        }
+
+        var currentAttribute    = $('#attribute').val();
+        var currentParent       = $('#parent').val();
+        var hasChangedAttribute = (currentAttribute && currentAttribute != 'mix' && plan.attribute != currentAttribute);
+        var hasChangedParent    = ((isTopStage && $('#parent').val() != 0) || (!isTopStage && plan.parent != $('#parent').val()));
+        if(hasChangedAttribute && !hasChangedParent)
+        {
+            var result = confirm(changeAttrLang.replace('%s', stageTypeList[currentAttribute]));
 
             if(!result) return false;
         }

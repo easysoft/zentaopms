@@ -1499,6 +1499,21 @@ class programplanModel extends model
     }
 
     /**
+     * Change whether it is the top stage.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return bool
+     */
+    public function checkTopStage($planID)
+    {
+        $parentID   = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($planID)->fetch('parent');
+        $parentType = $this->dao->select('type')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch('type');
+
+        return $parentType == 'project';
+    }
+
+    /**
      * Update sub-stage attribute.
      *
      * @param  int    $planID
