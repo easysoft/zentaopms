@@ -260,17 +260,20 @@ class admin extends control
             {
                 foreach($this->post->module as $module => $options)
                 {
+                    if($module == 'myScore') continue;
                     $checked = reset($options);
                     if(!$checked) $closedFeatures .= "$module,";
                 }
             }
             $closedFeatures = rtrim($closedFeatures, ',');
             $this->loadModel('setting')->setItem('system.common.closedFeatures', $closedFeatures);
+            $this->loadModel('setting')->setItem('system.common.global.scoreStatus', $this->post->module['myScore'][0]);
             $this->loadModel('custom')->processMeasrecordCron();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
         $this->view->title            = $this->lang->admin->setModuleIndex;
         $this->view->closedFeatures   = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=closedFeatures');
+        $this->view->useScore         = $this->loadModel('setting')->getItem('system.common.global.scoreStatus');
         $this->view->disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
         $this->display();
     }

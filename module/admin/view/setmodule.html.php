@@ -47,7 +47,16 @@
               <?php foreach($features as $feature):?>
               <?php $code = $group. ucfirst($feature);?>
               <?php if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;?>
-              <?php $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';?>
+              <?php
+              if($code == 'myScore')
+              {
+                  $value = $useScore;
+              }
+              else
+              {
+                  $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';
+              }
+              ?>
               <div class='group-item'>
               <?php echo html::checkbox("module[{$code}]", array('1' => $lang->admin->setModule->{$feature}), $value, "data-code='{$code}'", 'inline');?>
               <?php echo html::hidden("module[{$code}][]", $value, $value ? 'disabled' : '');?>
