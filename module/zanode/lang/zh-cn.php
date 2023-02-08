@@ -91,6 +91,7 @@ $lang->zanode->deleteSnapshot        = '删除快照';
 $lang->zanode->snapshotEmpty         = '无快照';
 $lang->zanode->confirmDeleteSnapshot = "快照被删除后无法从回收站中还原，您确定继续么？";
 
+$lang->zanode->snapshot = new stdClass();
 $lang->zanode->snapshot->statusList['creating']          = '创建中';
 $lang->zanode->snapshot->statusList['completed']         = '创建完成';
 $lang->zanode->snapshot->statusList['failed']            = '创建失败';
