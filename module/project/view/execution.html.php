@@ -27,7 +27,7 @@
           foreach($productList as $key => $productName)
           {
               $class = $productID == $key ? 'class="active"' : '';
-              echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy&productID=$key"), $productName) . "</li>";
+              echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy&productID=$key"), $productName, '', "title='{$productName}' class='text-ellipsis'") . "</li>";
           }
         ?>
       </ul>
