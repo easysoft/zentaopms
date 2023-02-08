@@ -106,6 +106,9 @@ $lang->custom->object['score']       = 'Score';
 $lang->custom->object['mode']        = 'Mode';
 $lang->custom->object['productplan'] = 'Plan';
 $lang->custom->object['release']     = 'Release';
+$lang->custom->object['testsuite']   = 'Test Suite';
+$lang->custom->object['testreport']  = 'Test Report';
+$lang->custom->object['caselib']     = 'Case Library';
 
 $lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
@@ -159,6 +162,7 @@ $lang->custom->task->fields['reasonList'] = 'Raison Fermeture';
 $lang->custom->task->fields['statusList'] = 'Statut';
 
 $lang->custom->bug = new stdClass();
+$lang->custom->bug->fields['required']       = $lang->custom->required;
 $lang->custom->bug->fields['priList']        = 'Priorité';
 $lang->custom->bug->fields['severityList']   = 'Sévérité';
 $lang->custom->bug->fields['osList']         = 'OS';
@@ -169,6 +173,7 @@ $lang->custom->bug->fields['statusList']     = 'Statut';
 $lang->custom->bug->fields['longlife']       = 'Jours Calage';
 
 $lang->custom->testcase = new stdClass();
+$lang->custom->testcase->fields['required']   = $lang->custom->required;
 $lang->custom->testcase->fields['priList']    = 'Priorité';
 $lang->custom->testcase->fields['typeList']   = 'Type';
 $lang->custom->testcase->fields['stageList']  = 'Phase';
@@ -177,9 +182,16 @@ $lang->custom->testcase->fields['statusList'] = 'Statut';
 $lang->custom->testcase->fields['review']     = 'Validation Requise';
 
 $lang->custom->testtask = new stdClass();
+$lang->custom->testtask->fields['required']   = $lang->custom->required;
 $lang->custom->testtask->fields['statusList'] = 'Statut';
 $lang->custom->testtask->fields['typeList']   = 'Type de test';
 $lang->custom->testtask->fields['priList']    = 'Priorité';
+
+$lang->custom->testreport = new stdClass();
+$lang->custom->testreport->fields['required'] = $lang->custom->required;
+
+$lang->custom->caselib = new stdClass();
+$lang->custom->caselib->fields['required'] = $lang->custom->required;
 
 $lang->custom->todo = new stdClass();
 $lang->custom->todo->fields['priList']    = 'Priorité';

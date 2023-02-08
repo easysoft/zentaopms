@@ -283,6 +283,7 @@ class adminModel extends model
                         if(strpos(',product,story,productplan,release,', ",$paramName,") !== false and $subMenuKey == 'product') $subModule = 'custom';
                         if(strpos(',task,', ",$paramName,") !== false and $subMenuKey == 'execution') $subModule = 'custom';
                         if(strpos(',project,story,', ",$paramName,") !== false and $subMenuKey == 'project') $subModule = 'custom';
+                        if(strpos(',bug,testcase,testsuite,testtask,testreport,caselib,', ",$paramName,") !== false and $subMenuKey == 'qa') $subModule = 'custom';
                         if($this->config->vision == 'lite' and $paramName == 'task' and $subMenuKey == 'my') $subModule = 'custom';
                     }
 
