@@ -570,7 +570,7 @@ class adminModel extends model
 
             $publicClass[$index] = new stdClass();
             $publicClass[$index]->name     = $course->title;
-            $publicClass[$index]->image    = $this->config->admin->cdnRoot . $course->image->list[0]->middleURL . '.' . $course->image->list[0]->extension;
+            $publicClass[$index]->image    = $this->config->admin->cdnRoot . $course->image->list[0]->middleURL;
             $publicClass[$index]->viewLink = $this->config->admin->apiRoot . '/publicclass/' . ($course->alias ? "{$course->alias}-" : '') . "{$course->id}.html";
             $index ++;
         }
