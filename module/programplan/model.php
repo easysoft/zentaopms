@@ -1318,13 +1318,14 @@ class programplanModel extends model
      */
     public function getMilestones($projectID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+        $milestones = $this->dao->select('id, path')->from(TABLE_PROJECT)
             ->where('project')->eq($projectID)
             ->andWhere('type')->eq('stage')
             ->andWhere('milestone')->eq(1)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id_desc')
+            ->orderBy('begin_desc,path')
             ->fetchPairs();
+        return $this->formatMilestones($milestones, $projectID);
     }
 
     /**
@@ -1333,19 +1334,48 @@ class programplanModel extends model
      * @param  int    $productID
      * @param  int    $projectID
      * @access public
-     * @return object
+     * @return array
      */
     public function getMilestoneByProduct($productID, $projectID)
     {
-        return $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+        $milestones = $this->dao->select('t1.id, t1.path')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t2.product')->eq($productID)
             ->andWhere('t1.project')->eq($projectID)
             ->andWhere('t1.type')->eq('stage')
             ->andWhere('t1.milestone')->eq(1)
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.begin asc')
+            ->orderBy('t1.begin asc,path')
             ->fetchPairs();
+        return $this->formatMilestones($milestones, $projectID);
+    }
+
+    /**
+     * Format milestones use '/'.
+     *
+     * @param  array  $milestones
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    private function formatMilestones($milestones, $projectID)
+    {
+        $allStages = $this->dao->select('id,name')->from(TABLE_EXECUTION)
+            ->where('project')->eq($projectID)
+            ->andWhere('type')->notin('program,project')
+            ->fetchPairs();
+        foreach($milestones as $id => $path)
+        {
+            $paths = explode(',', trim($path, ','));
+            $stageName = '';
+            foreach($paths as $stage)
+            {
+                if(isset($allStages[$stage])) $stageName .= '/' . $allStages[$stage];
+            }
+            $milestones[$id] = trim($stageName, '/');
+        }
+
+        return $milestones;
     }
 
     /**
