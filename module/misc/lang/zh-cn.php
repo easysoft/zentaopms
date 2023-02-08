@@ -199,7 +199,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['18.1'][]       = array('title' => '修复Bug。', 'desc' => '');
+$lang->misc->feature->all['18.1'][]       = array('title' => '自动化测试解决方案交互优化、新增快照管理功能。禅道客户端实现了 PPT文档在线协作。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['18.0'][]       = array('title' => '推出自动化测试解决方案；运营管理界面增加工单功能；审批流支持增加所有类型的通知以及挣值计算规则完善。', 'desc' => '');
 $lang->misc->feature->all['18.0.beta3'][] = array('title' => '统计模块升级为BI，内置5张宏观管理维度大屏。', 'desc' => '');
 $lang->misc->feature->all['18.0.beta2'][] = array('title' => '优化多分支/多平台产品，支持创建孪生需求，计划、版本、发布支持跨分支关联需求和bug，并且禅道客户端实现了机器人会话机制。', 'desc' => '');
