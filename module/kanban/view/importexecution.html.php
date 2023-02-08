@@ -62,11 +62,11 @@
             <?php printf('%03d', $execution->id);?>
           </td>
           <?php if(common::hasPriv('execution', 'view')):?>
-          <td title='<?php echo $execution->name;?>'>
+          <td title='<?php echo $execution->title;?>'>
             <a href='javascript:void(0);' onclick="locateView('execution', <?php echo $execution->id;?>)"><?php echo $execution->name;?></a>
           </td>
           <?php else:?>
-          <td title='<?php echo $execution->name;?>'><?php echo $execution->name;?></td>
+          <td title='<?php echo $execution->title;?>'><?php echo $execution->name;?></td>
           <?php endif;?>
           <td title='<?php echo zget($lang->execution->statusList, $execution->status);?>'><?php echo zget($lang->execution->statusList, $execution->status);?></td>
           <td title='<?php echo zget($users, $execution->PM);?>'><?php echo zget($users, $execution->PM);?></td>

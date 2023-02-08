@@ -1664,7 +1664,7 @@ class executionModel extends model
             elseif($param === 'hasParentName')
             {
                 $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
-                $executions[$execution->id]->name  = implode('/', $parentExecutions);
+                $executions[$execution->id]->title = implode('/', $parentExecutions);
             }
             else
             {
