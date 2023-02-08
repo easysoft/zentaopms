@@ -96,9 +96,9 @@ $lang->admin->menuList->feature['tabMenu']['my']['block'] = array('link' => "{$l
 if($config->vision == 'lite') $lang->admin->menuList->feature['tabMenu']['my']['task'] = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList'));
 
 $lang->admin->menuList->feature['tabMenu']['product']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'links' => array("custom|browsestoryconcept|", 'custom|product|'), 'alias' => 'browsestoryconcept');
-$lang->admin->menuList->feature['tabMenu']['product']['story']       = array('link' => "{$lang->productCommon}|custom|required|module=story", 'links' => array("custom|set|module=story&field=categoryList"));
-$lang->admin->menuList->feature['tabMenu']['product']['productplan'] = array('link' => "{$lang->productCommon}|custom|required|module=productplan");
-$lang->admin->menuList->feature['tabMenu']['product']['release']     = array('link' => "{$lang->productCommon}|custom|required|module=release");
+$lang->admin->menuList->feature['tabMenu']['product']['story']       = array('link' => "{$lang->SRCommon}|custom|required|module=story", 'links' => array("custom|set|module=story&field=categoryList"));
+$lang->admin->menuList->feature['tabMenu']['product']['productplan'] = array('link' => "{$lang->productplan->shortCommon}|custom|required|module=productplan");
+$lang->admin->menuList->feature['tabMenu']['product']['release']     = array('link' => "{$lang->release->common}|custom|required|module=release");
 
 $lang->admin->menuList->feature['menuOrder']['5']  = 'my';
 $lang->admin->menuList->feature['menuOrder']['10'] = 'product';

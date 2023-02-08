@@ -274,15 +274,22 @@ class adminModel extends model
                 $moduleName = $this->app->rawModule;
                 $methodName = $this->app->rawMethod;
                 $paramName  = $this->app->rawParams ? reset($this->app->rawParams) : '';
-                if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
+                foreach($this->lang->admin->menuList->$menuKey['subMenu'] as $subMenuKey => $subMenu)
                 {
-                    if(strpos(',todo,block,', $paramName) !== false) $subMenuKey = 'my';
-                    if(strpos(',product,story,productplan,release,', $paramName) !== false) $subMenuKey = 'product';
-                    if($this->config->vision == 'lite' and $paramName == 'task') $subMenuKey = 'my';
-                    if(isset($subMenuKey)) $this->lang->admin->menuList->$menuKey['subMenu'][$subMenuKey]['subModule'] = $moduleName;
+                    $subModule = '';
+                    if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
+                    {
+                        if(strpos(',todo,block,', $paramName) !== false and $subMenuKey == 'my') $subModule = 'custom';
+                        if(strpos(',product,story,productplan,release,', $paramName) !== false and $subMenuKey == 'product') $subModule = 'custom';
+                        if($this->config->vision == 'lite' and $paramName == 'task' and $subMenuKey == 'my') $subModule = 'custom';
+                    }
+
+                    if(!empty($subModule)) $subMenu['subModule'] = $subModule;
+                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey])) $subMenu['subMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey];
+
+                    $this->lang->admin->menu->$subMenuKey = $subMenu;
                 }
 
-                $this->lang->admin->menu = $this->lang->admin->menuList->$menuKey['subMenu'];
             }
 
             if(isset($this->lang->admin->menuList->$menuKey['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->$menuKey['menuOrder'];
@@ -317,8 +324,16 @@ class adminModel extends model
                         /* Check tab menu priv. */
                         foreach($menu['tabMenu'][$subMenuKey] as $tabMenuKey => $tabMenu)
                         {
-                            $link = $this->getHasPrivLink($tabMenu);
-                            if(!empty($link)) break;
+                            $tabMenuLink = $this->getHasPrivLink($tabMenu);
+                            if(!empty($tabMenuLink))
+                            {
+                                /* Updated tertiary navigation links. */
+                                list($module, $method, $params) = $tabMenuLink;
+                                $tabMenuLabel = $tabMenu['link'];
+                                $menu['tabMenu'][$subMenuKey][$tabMenuKey]['link'] = substr($tabMenuLabel, 0, strpos($tabMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
+
+                                if(empty($link)) $link = $tabMenuLink;
+                            }
                         }
                     }
                     else
@@ -330,7 +345,7 @@ class adminModel extends model
                     {
                         /* Updated secondary navigation link. */
                         list($module, $method, $params) = $link;
-                        $subMenuLabel = $menu['subMenu'][$subMenuKey]['link'];
+                        $subMenuLabel = $subMenu['link'];
                         $menu['subMenu'][$subMenuKey]['link'] = substr($subMenuLabel, 0, strpos($subMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
 
                         /* Update the level 1 navigation link. */

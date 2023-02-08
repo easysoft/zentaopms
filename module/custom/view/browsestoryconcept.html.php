@@ -9,7 +9,7 @@
  * @version     $Id: browsestoryconcept.html.php 4129 2020-09-01 01:58:14Z sgm $
  */
 ?>
-<?php include 'header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-row'>
   <?php include 'sidebar.html.php';?>
   <div class='main-col main-content main-table'>
