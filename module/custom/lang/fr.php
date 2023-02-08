@@ -109,6 +109,7 @@ $lang->custom->object['release']     = 'Release';
 $lang->custom->object['testsuite']   = 'Test Suite';
 $lang->custom->object['testreport']  = 'Test Report';
 $lang->custom->object['caselib']     = 'Case Library';
+$lang->custom->object['doc']         = 'Document';
 
 $lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';

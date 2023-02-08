@@ -109,6 +109,7 @@ $lang->custom->object['release']     = '发布';
 $lang->custom->object['testsuite']   = '套件';
 $lang->custom->object['testreport']  = '测试报告';
 $lang->custom->object['caselib']     = '用例库';
+$lang->custom->object['doc']         = '文档';
 
 $lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
