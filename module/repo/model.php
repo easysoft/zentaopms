@@ -2206,7 +2206,7 @@ class repoModel extends model
         $parents    = $this->dao->select('distinct parent,parent')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('grade')->gt(1)->andWhere('deleted')->eq(0)->fetchPairs();
         foreach($executions as $execution)
         {
-            if(!empty($parents[$execution->id])) continue;
+            if(!empty($parents[$execution->id]) or ($execution->type == 'stage' and in_array($execution->attribute, array('request', 'design', 'review')) !== 'false')) continue;
 
             if($execution->type == 'stage' and $execution->grade > 1)
             {
