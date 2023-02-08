@@ -625,7 +625,7 @@ class task extends control
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
         $executions = array();
-        if(!empty($task->project)) $executions = $this->execution->getByProject($projectID, 'all', 0, true);
+        if(!empty($task->project)) $executions = $this->execution->getByProject($task->project, 'all', 0, true);
 
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;
