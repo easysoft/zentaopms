@@ -9,7 +9,7 @@
  * @version     $Id: deny.html.php 4129 2013-01-18 01:58:14Z wwccss $
  */
 ?>
-<?php include 'header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php if(isset($this->config->conceptSetted)):?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
