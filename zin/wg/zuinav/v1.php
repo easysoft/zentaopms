@@ -19,10 +19,10 @@ class zuinav extends \zin\core\wg
 
     protected function buildItem($item)
     {
-        if (is_array($item) && isset($item['type']) && $item['type'] === 'divider') return h5::li()->addClass('nav-divider');
+        if (isset($item['type']) && $item['type'] === 'divider') return h5::li()->addClass('nav-divider');
 
         $a = h5::a();
-        if (isset($item['active'])) $a->addClass('active');
+        if (isset($item['active']) && $item['active'] === true) $a->addClass('active');
 
         $url = isset($item['url']) ? $item['url'] : NULL;
         if (!empty($url)) $a->prop('href', "$url");
