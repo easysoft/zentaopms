@@ -25,6 +25,13 @@ $lang->admin->resetPWDSetting = 'Reset password Setting';
 $lang->admin->tableEngine     = 'Table Engine';
 $lang->admin->setModuleIndex  = 'Set Module';
 
+$lang->admin->mon              = 'month';
+$lang->admin->day              = 'day';
+$lang->admin->updateDynamics   = 'updateDynamics';
+$lang->admin->updatePatch      = 'updatePatch';
+$lang->admin->upgradeRecommend = 'upgradeRecommend';
+$lang->admin->zentaoUsed       = '';
+
 $lang->admin->api                  = 'API';
 $lang->admin->log                  = 'Log';
 $lang->admin->setting              = 'Setting';
@@ -169,11 +176,5 @@ $lang->admin->menuSetting['dev']['name']       = 'Develop';
 $lang->admin->menuSetting['dev']['desc']       = 'Support for secondary development of the system.';
 $lang->admin->menuSetting['convert']['name']   = 'Data Import';
 $lang->admin->menuSetting['convert']['desc']   = 'Data import from third-party systems.';
-
-$lang->admin->mon              = 'month';
-$lang->admin->day              = 'day';
-$lang->admin->updateDynamics   = 'updateDynamics';
-$lang->admin->updatePatch      = 'updatePatch';
-$lang->admin->upgradeRecommend = 'upgradeRecommend';
 
 include dirname(__FILE__) . '/menu.php';

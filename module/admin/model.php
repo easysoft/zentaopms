@@ -593,4 +593,21 @@ class adminModel extends model
 
         return (bool)$connected;
     }
+
+    /**
+     * Get date used object.
+     *
+     * @access public
+     * @return object
+     */
+    public function genDateUsed()
+    {
+        $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
+            ->where('date')->gt('0000-00-00')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->orderBy('date_asc')
+            ->fetch('date');
+
+        return helper::getDateInterval($firstUseDate);
+    }
 }

@@ -25,6 +25,13 @@ $lang->admin->resetPWDSetting = '重置密码设置';
 $lang->admin->tableEngine     = '表引擎';
 $lang->admin->setModuleIndex  = '系统功能配置';
 
+$lang->admin->mon              = '月';
+$lang->admin->day              = '天';
+$lang->admin->updateDynamics   = '更新动态';
+$lang->admin->updatePatch      = '补丁更新';
+$lang->admin->upgradeRecommend = '推荐升级';
+$lang->admin->zentaoUsed       = '您已使用禅道';
+
 $lang->admin->api                  = '接口';
 $lang->admin->log                  = '日志';
 $lang->admin->setting              = '设置';
@@ -169,11 +176,5 @@ $lang->admin->menuSetting['dev']['name']       = '二次开发';
 $lang->admin->menuSetting['dev']['desc']       = '支持对系统进行二次开发。';
 $lang->admin->menuSetting['convert']['name']   = '数据导入';
 $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入。';
-
-$lang->admin->mon              = '月';
-$lang->admin->day              = '天';
-$lang->admin->updateDynamics   = '更新动态';
-$lang->admin->updatePatch      = '补丁更新';
-$lang->admin->upgradeRecommend = '推荐升级';
 
 include dirname(__FILE__) . '/menu.php';
