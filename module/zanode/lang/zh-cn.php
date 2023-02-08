@@ -60,6 +60,8 @@ $lang->zanode->copy            = '复制';
 $lang->zanode->copied          = '复制成功';
 $lang->zanode->manual          = '手册';
 $lang->zanode->initializing    = '初始化中';
+$lang->zanode->showPwd         = '显示密码';
+$lang->zanode->hidePwd         = '隐藏密码';
 
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;

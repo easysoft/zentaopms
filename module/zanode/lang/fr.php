@@ -59,6 +59,8 @@ $lang->zanode->copy            = 'Click to copy';
 $lang->zanode->copied          = 'Copy successful';
 $lang->zanode->manual          = 'Manual';
 $lang->zanode->initializing    = 'Initializing';
+$lang->zanode->showPwd         = 'Show Password';
+$lang->zanode->hidePwd         = 'Hide Password';
 
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
