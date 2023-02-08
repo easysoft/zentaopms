@@ -13,13 +13,15 @@ class pagetoolbar extends \zin\core\wg
 
     static $defaultProps = array('id' => 'toolbar');
 
-    static $customProps = 'globalGreate,avatar,switcher';
+    static $customProps = 'globalCreate,avatar,switcher';
 
-    private function buildGlobarCreate()
+    private function buildGlobalCreate($props)
     {
-        return h5::div(
-            h5::div(Icon('plus'))->addClass('rounded-sm btn square size-sm secondary')
-        )->addClass('globalGreate');
+        $div = h5::create('div', NULL, $props);
+        $div->append(h5::div(Icon('plus'))->addClass('rounded-sm btn square size-sm secondary'));
+        $div->addClass('globalGreate');
+
+        return $div;
     }
 
     private function buildAvatar($props)
@@ -29,7 +31,6 @@ class pagetoolbar extends \zin\core\wg
 
     private function buildSwitcher($props)
     {
-
         return h5::div(
             h5::div($props['text'])->addClass('switcher-text')
         )->addClass('vision-switcher');
@@ -38,7 +39,7 @@ class pagetoolbar extends \zin\core\wg
     protected function build($isPrint = false, $parent = null)
     {
         $builder = parent::build($isPrint, $parent);
-        $builder->append($this->buildGlobarCreate());
+        $builder->append($this->buildGlobalCreate($this->prop('globalCreate')));
         $builder->append($this->buildAvatar($this->prop('avatar')));
         $builder->append($this->buildSwitcher($this->prop('switcher')));
         return $builder;

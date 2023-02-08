@@ -18,6 +18,9 @@ foreach(\customModel::getMainMenu() as $menuItem)
 $userMenu = dropdown(setId('userMenu'));
 foreach(\commonModel::printUserBarZin() as $item) $userMenu->append(item($item));
 
+$globalCreateMenu = dropdown(setId('globalCreateMenu'));
+foreach(\commonModel::printCreateListZin() as $item) $globalCreateMenu->append(item($item));
+
 Page(
   set('title', $title),
   Pageheader(
@@ -33,6 +36,13 @@ Page(
       ),
     ),
     PageToolbar(
+      set('globalCreate', array(
+        'data-arrow'     => true,
+        'data-toggle'    => 'dropdown',
+        'data-trigger'   => 'hover',
+        'data-placement' => 'bottom',
+        'href'           => '#globalCreateMenu',
+      )),
       set('avatar', array(
         'avatar' => $app->user->avatar,
         'href' => '#userMenu'
@@ -68,6 +78,7 @@ Page(
     ),
   ),
   $userMenu,
+  $globalCreateMenu,
 );
 
 /*
