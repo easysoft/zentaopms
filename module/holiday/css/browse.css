@@ -3,3 +3,6 @@
 .with-side .main {padding-left: 145px; float: left;}
 .side-col {width: 160px;}
 .panel-sm .panel-body {padding: 10px;}
+#mainMenu .input-control {display: flex; width: 200px;}
+#mainMenu .input-control .form-name {margin: 8px 10px; white-space: pre;}
+.table-import {padding-top: 6px;}
