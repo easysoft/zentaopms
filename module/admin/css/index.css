@@ -78,15 +78,15 @@
 .main.without-internet > .bottom > .official.panel > .main-panel {flex-direction: row-reverse;}
 
 /* css in side */
-.time-block {background: #EDEEF2; padding:2px 4px; border-radius: 4px; color: #0B0F18; font-size: 15px;}
+.time-block {background: #EDEEF2; padding:2px 4px; border-radius: 4px; color: #0B0F18; font-size: 15px; margin: 0 4px;}
 .dynamic-block {height: 74px; padding: 12px 16px; display: flex; justify-content: space-between; position: relative; line-height: 20px; border-top: 1px solid #E3E4E9;}
 .dynamic-content {height: 50px; line-height: 25px; overflow: hidden;}
 .dynamic-time {white-space: nowrap; position: absolute; right: 12px; bottom: 10px; padding-right: 12px; background: white;}
-.time-count {letter-spacing: 2px;}
+.time-count {letter-spacing: 1px;}
 
-.patch-block {padding: 12px 16px; line-height: 20px; border-top: 1px solid #E3E4E9;}
+.patch-block {padding: 10px 16px 12px; line-height: 20px; border-top: 1px solid #E3E4E9;}
 .patch-content {height: 40px; overflow: hidden;}
 
-.upgrade-block {padding: 16px 16px; line-height: 20px; border-top: 1px solid #E3E4E9;}
+.upgrade-block {padding: 6px 16px; line-height: 20px; border-top: 1px solid #E3E4E9;}
 .upgrade-content {height: 20px; padding-left: 20px; position: relative; margin: 5px 0;}
 .upgrade-content:before {content: ' '; width: 8px; height: 8px; background: #E3E4E9; border-radius: 50%; position: absolute; left: 0px; top: 5px;}
