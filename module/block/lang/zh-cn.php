@@ -10,8 +10,6 @@
  * @link        http://www.zentao.net
  */
 global $config;
-$lang->block = new stdclass();
-$lang->block->common     = '区块';
 $lang->block->id         = '编号';
 $lang->block->params     = '参数';
 $lang->block->name       = '区块名称';

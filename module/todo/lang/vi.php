@@ -9,7 +9,6 @@
  * @version  $Id: vi.php 4676 2020-04-06 06:08:23Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->todo->common       = 'Việc làm';
 $lang->todo->index        = "Home";
 $lang->todo->create       = "Thêm việc";
 $lang->todo->createCycle  = "Thêm việc lặp lại";

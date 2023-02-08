@@ -269,9 +269,36 @@ class adminModel extends model
         $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
-            if(isset($this->lang->admin->menuList->$menuKey['subMenu']))     $this->lang->admin->menu        = $this->lang->admin->menuList->$menuKey['subMenu'];
+            if(isset($this->lang->admin->menuList->$menuKey['subMenu']))
+            {
+                $moduleName = $this->app->rawModule;
+                $methodName = $this->app->rawMethod;
+                $paramName  = $this->app->rawParams ? reset($this->app->rawParams) : '';
+                foreach($this->lang->admin->menuList->$menuKey['subMenu'] as $subMenuKey => $subMenu)
+                {
+                    $subModule = '';
+                    if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
+                    {
+                        if(strpos(',todo,block,', $paramName) !== false and $subMenuKey == 'my') $subModule = 'custom';
+                        if(strpos(',product,story,productplan,release,', $paramName) !== false and $subMenuKey == 'product') $subModule = 'custom';
+                        if($this->config->vision == 'lite' and $paramName == 'task' and $subMenuKey == 'my') $subModule = 'custom';
+                    }
+
+                    if(!empty($subModule)) $subMenu['subModule'] = $subModule;
+                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey]))
+                    {
+                        $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$paramName]['subModule'] = $subModule;
+                        $subMenu['subMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey];
+                    }
+
+                    $this->lang->admin->menu->$subMenuKey = $subMenu;
+                }
+
+            }
+
             if(isset($this->lang->admin->menuList->$menuKey['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->$menuKey['menuOrder'];
             if(isset($this->lang->admin->menuList->$menuKey['dividerMenu'])) $this->lang->admin->dividerMenu = $this->lang->admin->menuList->$menuKey['dividerMenu'];
+            if(isset($this->lang->admin->menuList->$menuKey['tabMenu']))     $this->lang->admin->tabMenu     = $this->lang->admin->menuList->$menuKey['tabMenu'];
         }
     }
 
@@ -286,36 +313,60 @@ class adminModel extends model
         $orders = array();
         foreach($this->lang->admin->menuList as $menuKey => $menu)
         {
-            $menu['disabled'] = false;
+            $menu['disabled'] = true;
             if(!isset($menu['link'])) $menu['link'] = '';
-            if(!empty($menu['link']) and strpos($menu['link'], '|') !== false)
+
+            /* Set links to authorized navigation. */
+            if(isset($menu['subMenu']))
+            {
+                /* Check sub menu priv. */
+                foreach($menu['subMenu'] as $subMenuKey => $subMenu)
+                {
+                    $link = array();
+                    if(isset($menu['tabMenu'][$subMenuKey]))
+                    {
+                        /* Check tab menu priv. */
+                        foreach($menu['tabMenu'][$subMenuKey] as $tabMenuKey => $tabMenu)
+                        {
+                            $tabMenuLink = $this->getHasPrivLink($tabMenu);
+                            if(!empty($tabMenuLink))
+                            {
+                                /* Updated tertiary navigation links. */
+                                list($module, $method, $params) = $tabMenuLink;
+                                $tabMenuLabel = $tabMenu['link'];
+                                $menu['tabMenu'][$subMenuKey][$tabMenuKey]['link'] = substr($tabMenuLabel, 0, strpos($tabMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
+
+                                if(empty($link)) $link = $tabMenuLink;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $link = $this->getHasPrivLink($subMenu);
+                    }
+
+                    if(!empty($link))
+                    {
+                        /* Updated secondary navigation link. */
+                        list($module, $method, $params) = $link;
+                        $subMenuLabel = $subMenu['link'];
+                        $menu['subMenu'][$subMenuKey]['link'] = substr($subMenuLabel, 0, strpos($subMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
+
+                        /* Update the level 1 navigation link. */
+                        if(empty($menu['link']))
+                        {
+                            $menu['link']     = helper::createLink($module, $method, $params);
+                            $menu['disabled'] = false;
+                        }
+                    }
+                }
+            }
+            elseif(!empty($menu['link']) and strpos($menu['link'], '|') !== false)
             {
                 list($module, $method) = explode('|', $menu['link']);
                 $menu['link'] = helper::createLink($module, $method);
-                if(!common::hasPriv($module, $method)) $menu['disabled'] = true;
+                if(common::hasPriv($module, $method)) $menu['disabled'] = false;
             }
-
-            $menuOrder = isset($menu['menuOrder']) ? $menu['menuOrder'] : array();
-            if($menuOrder)
-            {
-                ksort($menuOrder);
-
-                /* Check sub menu priv. */
-                foreach($menuOrder as $subOrder => $subMenuKey)
-                {
-                    list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
-                    if(!common::hasPriv($module, $method)) unset($menuOrder[$subOrder]);
-                }
-
-                /* Set link. */
-                if(!empty($menuOrder))
-                {
-                    $subMenuKey = reset($menuOrder);
-                    list($label, $module, $method, $params) = explode('|', $menu['subMenu'][$subMenuKey]['link']);
-                    $menu['link'] = helper::createLink($module, $method, $params);
-                }
-            }
-            if(empty($menuOrder) and empty($menu['link'])) $menu['disabled'] = true;
 
             $order = $menu['order'];
             $orders[$order] = $menuKey;
@@ -332,6 +383,40 @@ class adminModel extends model
         }
 
         $this->lang->admin->menuList = $menuList;
+    }
+
+    /**
+     * Get the authorized link.
+     *
+     * @param  array  $menu
+     * @access public
+     * @return array
+     */
+    public function getHasPrivLink($menu)
+    {
+        $link = array();
+        if(!empty($menu['link']))
+        {
+            list($label, $module, $method, $params) = explode('|', $menu['link']);
+            if(common::hasPriv($module, $method))
+            {
+                $link = array($module, $method, $params);
+            }
+            elseif(!empty($menu['links']))
+            {
+                foreach($menu['links'] as $menuLink)
+                {
+                    list($module, $method, $params) = explode('|', $menuLink);
+                    if(common::hasPriv($module, $method))
+                    {
+                        $link = array($module, $method, $params);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $link;
     }
 
     /**
