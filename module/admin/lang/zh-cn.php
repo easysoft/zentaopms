@@ -172,8 +172,23 @@ $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入
 
 $lang->admin->mon              = '月';
 $lang->admin->day              = '日';
+$lang->admin->usedTime         = '您已使用禅道';
 $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';
 $lang->admin->upgradeRecommend = '推荐升级';
+
+$lang->admin->openTag = '禅道';
+$lang->admin->bizTag  = '禅道企业版';
+$lang->admin->maxTag  = '禅道旗舰版';
+
+$lang->admin->bizInfoURL    = 'https://www.zentao.net/page/enterprise.html';
+$lang->admin->maxInfoURL    = 'https://www.zentao.net/page/max.html';
+$lang->admin->productDetail = '查看详情';
+$lang->admin->productFeature['biz'][] = '工时管理、甘特图、导入导出';
+$lang->admin->productFeature['biz'][] = '40+内置统计报表、自定义报表功能';
+$lang->admin->productFeature['biz'][] = '强大的自定义工作流、反馈管理功能';
+$lang->admin->productFeature['max'][] = '瀑布模型功能更全面';
+$lang->admin->productFeature['max'][] = '完整CMMI流程';
+$lang->admin->productFeature['max'][] = '资产库管理';
 
 include dirname(__FILE__) . '/menu.php';

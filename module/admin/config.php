@@ -54,10 +54,17 @@ $config->admin->plugins[194]->name     = '应用巡检报告';
 $config->admin->plugins[194]->desc     = '每日生成公司级禅道应用巡检报告，促进项目管理持续改进。';
 $config->admin->plugins[194]->viewLink = 'https://www.zentao.net/extension-viewExt-194.html';
 
-$config->admin->apiRoot      = 'https://www.zentao.net/';
-$config->admin->classURL     = 'https://www.zentao.net/publicclass.html';
-$config->admin->extensionURL = 'https://www.zentao.net/extension-browse.html';
-$config->admin->liteMenuList = array('system', 'user', 'feature', 'message', 'extension', 'dev');
+$config->admin->apiRoot        = 'https://www.zentao.net';
+$config->admin->cdnRoot        = 'https://cdn.easycorp.cn/web';
+$config->admin->classURL       = 'https://www.zentao.net/publicclass.html';
+$config->admin->dynamicURL     = 'https://www.zentao.net/download.html';
+$config->admin->extensionURL   = 'https://www.zentao.net/extension-browse.html';
+$config->admin->apiSite        = 'https://api.zentao.net/';
+$config->admin->extAPIURL      = $config->admin->apiSite . 'extension-apiGetExtensions-';
+$config->admin->patchAPIURL    = $config->admin->apiSite . 'extension-apiGetExtensions-bymodule-MTIxOA==-0-100-1.json';
+$config->admin->downloadAPIURL = $config->admin->apiSite . 'download.json';
+$config->admin->videoAPIURL    = $config->admin->apiSite . 'publicclass.json';
+$config->admin->liteMenuList   = array('system', 'user', 'feature', 'message', 'extension', 'dev');
 
 $config->admin->helpURL['system']    = 'https://www.zentao.net/book/zentaopms/538.html';
 $config->admin->helpURL['user']      = 'https://www.zentao.net/book/zentaopms/538.html';

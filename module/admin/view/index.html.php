@@ -90,32 +90,31 @@
   <div class="side panel">
     <div class="h-56 flex align-center justify-between">
       <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
-      <div class="time-count color-gray">您已使用禅道<span class="time-block">05</span><?php echo $lang->year?><span class="time-block">09</span><?php echo $lang->admin->day?><span class="time-block">19</span>日</div>
+      <div class="time-count color-gray">
+        <?php echo $lang->admin->usedTime;?>
+        <?php if($usedTime['year'])  echo "<span class='time-block'>{$usedTime['year']}</span>{$lang->year}";?>
+        <?php if($usedTime['month']) echo "<span class='time-block'>{$usedTime['month']}</span>{$lang->admin->mon}";?>
+        <?php if($usedTime['day'])   echo "<span class='time-block'>{$usedTime['day']}</span>{$lang->admin->day}";?>
+      </div>
     </div>
     <div class="border-gray mb-16">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->updateDynamics?></div>
-        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
+        <?php echo html::a($config->admin->dynamicURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
+      <?php foreach($dynamics as $dynamic):?>
       <div class="dynamic-block">
-        <div class="dynamic-content"><i class="icon icon-horn text-primary"></i>禅道18.0发布,新增自动化测试方案、使用帮助及全新IDE风格</div>
-        <div class="dynamic-time">2022-03-12</div>
+        <div class="dynamic-content"><i class="icon icon-horn text-primary"></i><?php echo html::a($dynamic->link, $dynamic->title, '_blank');?></div>
+        <div class="dynamic-time"><?php echo substr($dynamic->addedDate, 0, 10);?></div>
       </div>
-      <div class="dynamic-block">
-        <div class="dynamic-content"><i class="icon icon-horn text-primary"></i>禅道18.0发布,新增自动化测试方案、使用帮助及全新IDE风格</div>
-        <div class="dynamic-time">2022-03-12</div>
-      </div>
-      <div class="dynamic-block">
-        <div class="dynamic-content"><i class="icon icon-horn text-primary"></i>禅道18.0发布,新增自动化测试方案、使用帮助及全新IDE风格</div>
-        <div class="dynamic-time">2022-03-12</div>
-      </div>
+      <?php endforeach;?>
     </div>
     <div class="border-gray mb-16">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->updatePatch?></div>
         <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
-      <?php foreach($this->view->patches as $patch):?>
+      <?php foreach($patches as $patch):?>
       <div class="patch-block">
 	<div class="title flex justify-between">
 	  <div class="panel-title"><?php echo $patch->name?></div>
@@ -127,31 +126,34 @@
       </div>
       <?php endforeach;?>
     </div>
+    <?php if($config->edition != 'max'):?>
     <div class="border-gray mb-16">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->upgradeRecommend?></div>
-        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
+        <?php echo html::a($config->admin->apiRoot, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
+      <?php if($config->edition != 'biz'):?>
       <div class="upgrade-block">
-	<div class="title text-primary flex justify-between">
-          <div>禅道企业版</div>
-          <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary"></i></div>
+      	<div class="title text-primary flex justify-between">
+          <div><?php echo $lang->admin->bizTag?></div>
+          <div class="flex align-center"><div><?php echo html::a($lang->admin->bizInfoURL, $lang->admin->productDetail, '_blank', "class='text-primary'");?></div><i class="icon icon-caret-right text-primary"></i></div>
         </div>
-        <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
-        <div class="upgrade-content color-gray">40+内置统计报表、自定义报表功能</div>
-        <div class="upgrade-content color-gray">强大的自定义工作流、反馈管理功能</div>
+        <?php foreach($lang->admin->productFeature['biz'] as $feature):?>
+        <div class="upgrade-content color-gray"><?php echo $feature;?></div>
+        <?php endforeach;?>
       </div>
+      <?php endif;?>
       <div class="upgrade-block">
-	<div class="title text-primary flex justify-between">
-          <div>禅道旗舰版</div>
-          <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary"></i></div>
+    	<div class="title text-primary flex justify-between">
+          <div><?php echo $lang->admin->maxTag?></div>
+          <div class="flex align-center"><div><?php echo html::a($lang->admin->maxInfoURL, $lang->admin->productDetail, '_blank', "class='text-primary'");?></div><i class="icon icon-caret-right text-primary"></i></div>
         </div>
-        <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
-        <div class="upgrade-content color-gray">40+内置统计报表、自定义报表功能</div>
-        <div class="upgrade-content color-gray">强大的自定义工作流、反馈管理功能</div>
-        <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
+        <?php foreach($lang->admin->productFeature['max'] as $feature):?>
+        <div class="upgrade-content color-gray"><?php echo $feature;?></div>
+        <?php endforeach;?>
       </div>
     </div>
+    <?php endif;?>
   </div>
   <?php endif;?>
 </div>

@@ -153,6 +153,6 @@ if($config->vision == 'lite')
     unset($lang->admin->menuList->feature['menuOrder']['15']);
     unset($lang->admin->menuList->feature['menuOrder']['20']);
 
-    $lang->admin->menuList->feature['subMenu']['project']   = array('link' => "{$lang->project->common}|custom|execution|");
-    $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
+    $lang->admin->menuList->feature['subMenu']['project'] = array('link' => "{$lang->project->common}|custom|execution|");
+    $lang->admin->menuList->feature['menuOrder']['15']    = 'project';
 }
