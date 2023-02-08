@@ -1720,6 +1720,47 @@ class executionModel extends model
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
+        /* Add product name and parent stage name to stage name. */
+        if(isset($project->model) and $project->model == 'waterfall')
+        {
+            $executionProducts = array();
+            if($project->hasProduct and $project->division)
+            {
+                $executionList = array();
+                $executionProducts = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+                    ->where('project')->in(array_keys($executions))
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetchPairs();
+            }
+
+            $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
+                ->where('type')->eq('stage')
+                ->andWhere('deleted')->eq('0')
+                ->beginIf($projectID)->andWhere('project')->eq($projectID)->fi()
+                ->fetchAll('id');
+
+            $parents = array();
+            foreach($allExecutions as $id => $execution) $parents[$execution->parent] = $execution->parent;
+
+            foreach($executions as $id => $execution)
+            {
+                if(isset($parents[$execution->id]))
+                {
+                    unset($executions[$id]);
+                    continue;
+                }
+
+                $executionName = '';
+                $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
+                foreach($paths as $path) $executionName .= '/' . $allExecutions[$path]->name;
+
+                if($executionName) $execution->name = ltrim($executionName, '/');
+                if(isset($executionProducts[$id])) $execution->name = $executionProducts[$id] . '/' . $execution->name;
+            }
+
+        }
+
         $projects = array();
         if(empty($projectID))
         {
