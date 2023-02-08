@@ -76,7 +76,6 @@ function setIframeHeight(iframe)
         {
             var height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight
             iframe.height = height+10;
-            console.log(1111, iframe.height)
         }
     }
 }
