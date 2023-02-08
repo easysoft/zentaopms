@@ -1503,10 +1503,12 @@ class programplanModel extends model
      * @param  int    $planID
      * @param  string $attribute
      * @access public
-     * @return void
+     * @return bool
      */
     public function updateSubStageAttr($planID, $attribute)
     {
+        if($attribute == 'mix') return true;
+
         $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in(array_keys($subStageList))->exec();
 
