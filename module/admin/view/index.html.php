@@ -15,7 +15,7 @@
 <div id='mainContent' class='main-content admin'>
   <div class="main <?php if(!$hasInternet) echo 'without-internet';?>">
     <div class="settings panel">
-      <div class="panel-title"><?php echo $lang->admin->setting?></div>
+      <div class="panel-title mt-6"><?php echo $lang->admin->setting?></div>
       <div class="settings-list <?php if($config->vision == 'lite') echo 'lite-setting';?>">
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
@@ -87,33 +87,33 @@
   </div>
 
   <?php if($hasInternet and !$langNotCN):?>
-  <div class="side panel">
+  <div class="side panel" style="background: #FCFDFE">
     <div class="h-56 flex align-center justify-between">
       <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
-      <div class="time-count color-gray">您已使用禅道<span class="time-block">05</span><?php echo $lang->year?><span class="time-block">09</span><?php echo $lang->admin->day?><span class="time-block">19</span>日</div>
+      <div class="time-count">您已使用禅道<span class="time-block">5</span><?php echo $lang->year?><span class="time-block">9</span><?php echo $lang->admin->mon?><span class="time-block">19</span><?php echo $lang->admin->day?></div>
     </div>
-    <div class="border-gray mb-16">
+    <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->updateDynamics?></div>
-        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
+        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
       <div class="dynamic-block">
-        <div class="dynamic-content"><i class="icon icon-horn text-primary"></i>禅道18.0发布,新增自动化测试方案、使用帮助及全新IDE风格</div>
+        <div class="dynamic-content"><i class="icon icon-horn text-primary pr-4 font-20"></i>禅道18.0发布,新增自动化测试方案、使用帮助及全新IDE风格</div>
         <div class="dynamic-time">2022-03-12</div>
       </div>
       <div class="dynamic-block">
-        <div class="dynamic-content"><i class="icon icon-horn text-primary"></i>禅道18.0发布,新增自动化测试方案、使用帮助及全新IDE风格</div>
+        <div class="dynamic-content"><i class="icon icon-horn text-primary pr-4 font-20"></i>禅道18.0发布,新增自动化测试方案、使用帮助及全新IDE风格</div>
         <div class="dynamic-time">2022-03-12</div>
       </div>
       <div class="dynamic-block">
-        <div class="dynamic-content"><i class="icon icon-horn text-primary"></i>禅道18.0发布,新增自动化测试方案、使用帮助及全新IDE风格</div>
+        <div class="dynamic-content"><i class="icon icon-horn text-primary pr-4 font-20"></i>禅道18.0发布,新增自动化测试方案、使用帮助及全新IDE风格</div>
         <div class="dynamic-time">2022-03-12</div>
       </div>
     </div>
-    <div class="border-gray mb-16">
+    <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->updatePatch?></div>
-        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
+        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
       <?php foreach($this->view->patches as $patch):?>
       <div class="patch-block">
@@ -121,35 +121,35 @@
 	  <div class="panel-title"><?php echo $patch->name?></div>
           <a href="<?php echo $patch->viewLink;?>" class='ext-download flex align-center' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
         </div>
-	<div class="patch-content color-gray">
+	<div class="patch-content">
            <?php echo $patch->desc?>
         </div>
       </div>
       <?php endforeach;?>
     </div>
-    <div class="border-gray mb-16">
+    <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->upgradeRecommend?></div>
-        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
+        <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
       <div class="upgrade-block">
 	<div class="title text-primary flex justify-between">
-          <div>禅道企业版</div>
-          <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary"></i></div>
+          <div class="panel-title"><i class="icon icon-zentao text-primary pr-4 font-18"></i>禅道企业版</div>
+          <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary pb-3"></i></div>
         </div>
-        <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
-        <div class="upgrade-content color-gray">40+内置统计报表、自定义报表功能</div>
-        <div class="upgrade-content color-gray">强大的自定义工作流、反馈管理功能</div>
+        <div class="upgrade-content">工时管理、甘特图、导入导出</div>
+        <div class="upgrade-content">40+内置统计报表、自定义报表功能</div>
+        <div class="upgrade-content">强大的自定义工作流、反馈管理功能</div>
       </div>
       <div class="upgrade-block">
 	<div class="title text-primary flex justify-between">
-          <div>禅道旗舰版</div>
-          <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary"></i></div>
+          <div class="panel-title"><i class="icon icon-zentao text-primary pr-4 font-18"></i>禅道旗舰版</div>
+          <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary pb-3"></i></div>
         </div>
-        <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
-        <div class="upgrade-content color-gray">40+内置统计报表、自定义报表功能</div>
-        <div class="upgrade-content color-gray">强大的自定义工作流、反馈管理功能</div>
-        <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
+        <div class="upgrade-content">工时管理、甘特图、导入导出</div>
+        <div class="upgrade-content">40+内置统计报表、自定义报表功能</div>
+        <div class="upgrade-content">强大的自定义工作流、反馈管理功能</div>
+        <div class="upgrade-content">工时管理、甘特图、导入导出</div>
       </div>
     </div>
   </div>
