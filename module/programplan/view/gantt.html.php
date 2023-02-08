@@ -96,7 +96,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
           foreach($productList as $key => $productName)
           {
               $class = $productID == $key ? 'class="active"' : '';
-              echo "<li $class>" . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), $productName) . "</li>";
+              echo "<li $class>" . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), $productName, '', "title='$productName' class='text-ellipsis'") . "</li>";
           }
         ?>
       </ul>
