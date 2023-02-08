@@ -3025,7 +3025,7 @@ class storyModel extends model
         if($moduleIdList)
         {
             $moduleInfo   = $this->loadModel('tree')->getByID($moduleIdList);
-            $moduleIdList = $moduleInfo->type == bug ? 0 : $moduleIdList;
+            $moduleIdList = $moduleInfo->type == 'bug' ? 0 : $moduleIdList;
         }
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
