@@ -64,6 +64,8 @@ $config->admin->plugins[194]->viewLink = 'https://www.zentao.net/extension-viewE
 $config->admin->apiRoot      = 'https://www.zentao.net/';
 $config->admin->classURL     = 'https://www.zentao.net/publicclass.html';
 $config->admin->extensionURL = 'https://www.zentao.net/extension-browse.html';
+$config->admin->patchURL     = 'https://www.zentao.net/extension-browse-byModule-1218.html';
+$config->admin->downloadURL  = 'https://www.zentao.net/download.html';
 $config->admin->liteMenuList = array('system', 'user', 'feature', 'message', 'extension', 'dev');
 
 $config->admin->helpURL['system']    = 'https://www.zentao.net/book/zentaopms/538.html';

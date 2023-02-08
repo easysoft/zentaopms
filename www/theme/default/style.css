@@ -68,7 +68,7 @@ th.c-confirmed, th.c-confirm {text-align: center;}
 .c-object-type {width: 130px;}
 .c-full-date, .c-mobile, .c-email, .c-text, .c-subject, .c-assigned-box, .c-user-box {width: 150px;}
 .c-module, .c-date-box {width: 180px;}
-.c-ip {width: 200px;}
+.c-ip, .c-time-limit {width: 200px;}
 .c-object {width: 250px;}
 .c-case-step {width: 300px;}
 .c-actions-8 {width: 240px;}

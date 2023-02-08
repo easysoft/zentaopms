@@ -408,4 +408,80 @@ class holidayModel extends model
             $this->dao->update(TABLE_TASK)->set('realDuration')->eq($realDuration)->where('id')->eq($task->id)->exec();
         }
     }
+
+    /**
+     * Get holidays by api.
+     *
+     * @param  string $year
+     * @access public
+     * @return array
+     */
+    public function getHolidayByAPI($year = '')
+    {
+        if(empty($year)) $year = date('Y');
+        $apiRoot = sprintf($this->config->holiday->apiRoot, $year);
+        $data    = json_decode(common::http($apiRoot));
+        $days    = isset($data->days) ? (array)$data->days : array();
+
+        $holidays   = array();
+        $privDay    = 0;
+        $prevDayOff = true;
+        $daysIndex  = count($days) - 1;
+        foreach($days as $index => $day)
+        {
+            if($index < $daysIndex and (strtotime($day->date) - $privDay > 86400 or $day->isOffDay != $prevDayOff))
+            {
+                $holiday = new stdClass();
+                $holiday->type  = $day->isOffDay ? 'holiday' : 'working';
+                $holiday->name  = $day->name . zget($this->lang->holiday->typeList, $holiday->type);
+                $holiday->begin = $day->date;
+                $holiday->end   = '';
+                $holidays[] = $holiday;
+            }
+
+            if(isset($holiday) or $index == $daysIndex)
+            {
+                $holidayNum = count($holidays);
+                if($holidayNum > 1)
+                {
+                    if(isset($holiday))
+                    {
+                        $holidays[$holidayNum - 2]->end = date('Y-m-d', $privDay);
+                    }
+                    else
+                    {
+                        $holidays[$holidayNum - 1]->end = $day->date;
+                    }
+                }
+                if(isset($holiday)) unset($holiday);
+            }
+
+            $privDay    = strtotime($day->date);
+            $prevDayOff = $day->isOffDay;
+        }
+        return $holidays;
+    }
+
+    /**
+     * Batch create holiday.
+     *
+     * @param  array  $holidays
+     * @access public
+     * @return int|bool
+     */
+    public function batchCreate($holidays)
+    {
+        foreach($holidays as $holiday)
+        {
+            $this->dao->insert(TABLE_HOLIDAY)->data($holiday)
+                ->autoCheck()
+                ->batchCheck($this->config->holiday->require->create, 'notempty')
+                ->check('end', 'ge', $holiday->begin)
+                ->exec();
+        }
+        if(dao::isError()) return false;
+
+        $lastInsertID = $this->dao->lastInsertID();
+        return $lastInsertID;
+    }
 }
