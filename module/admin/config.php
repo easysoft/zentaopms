@@ -68,7 +68,6 @@ $config->admin->dynamicURL     = 'https://www.zentao.net/download.html';
 $config->admin->extensionURL   = 'https://www.zentao.net/extension-browse.html';
 $config->admin->patchURL       = 'https://www.zentao.net/extension-browse-byModule-1218.html';
 $config->admin->apiSite        = 'https://api.zentao.net/';
-$config->admin->apiSite        = 'http://api.wyd.oop.cc/';
 $config->admin->extAPIURL      = $config->admin->apiSite . 'extension-apiGetExtensions-';
 $config->admin->patchAPIURL    = $config->admin->apiSite . 'extension-apiGetExtensions-bymodule-MTIxOA==-0-100-1.json';
 $config->admin->downloadAPIURL = $config->admin->apiSite . 'download.json';
