@@ -39,10 +39,7 @@ class holiday extends control
         $yearAndNext = array(date('Y'), date('Y') + 1);
         foreach($yearAndNext as $date)
         {
-            if(!in_array($date, $yearList))
-            {
-                $yearList[$date] = $date;
-            }
+            if(!in_array($date, $yearList)) $yearList[$date] = $date;
         }
         krsort($yearList);
 
