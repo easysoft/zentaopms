@@ -151,6 +151,7 @@ $lang->custom->story->fields['reviewResultList'] = 'Valider Résultats';
 $lang->custom->story->fields['review']           = 'Validation Requise';
 
 $lang->custom->task = new stdClass();
+$lang->custom->task->fields['required']   = $lang->custom->required;
 $lang->custom->task->fields['priList']    = 'Priorité';
 $lang->custom->task->fields['typeList']   = 'Type';
 $lang->custom->task->fields['reasonList'] = 'Raison Fermeture';

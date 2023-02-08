@@ -281,6 +281,7 @@ class adminModel extends model
                     {
                         if(strpos(',todo,block,', $paramName) !== false and $subMenuKey == 'my') $subModule = 'custom';
                         if(strpos(',product,story,productplan,release,', $paramName) !== false and $subMenuKey == 'product') $subModule = 'custom';
+                        if(strpos(',task,', $paramName) !== false and $subMenuKey == 'execution') $subModule = 'custom';
                         if($this->config->vision == 'lite' and $paramName == 'task' and $subMenuKey == 'my') $subModule = 'custom';
                     }
 

@@ -100,6 +100,9 @@ $lang->admin->menuList->feature['tabMenu']['product']['story']       = array('li
 $lang->admin->menuList->feature['tabMenu']['product']['productplan'] = array('link' => "{$lang->productplan->shortCommon}|custom|required|module=productplan", 'exclude' => 'custom-required');
 $lang->admin->menuList->feature['tabMenu']['product']['release']     = array('link' => "{$lang->release->common}|custom|required|module=release", 'exclude' => 'custom-required');
 
+$lang->admin->menuList->feature['tabMenu']['execution']['execution'] = array('link' => "{$lang->execution->common}|custom|execution|");
+$lang->admin->menuList->feature['tabMenu']['execution']['task']      = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList'));
+
 $lang->admin->menuList->feature['menuOrder']['5']  = 'my';
 $lang->admin->menuList->feature['menuOrder']['10'] = 'product';
 $lang->admin->menuList->feature['menuOrder']['15'] = 'execution';
@@ -162,6 +165,8 @@ if($config->vision == 'lite')
     unset($lang->admin->menuList->feature['menuOrder']['15']);
     unset($lang->admin->menuList->feature['menuOrder']['20']);
 
-    $lang->admin->menuList->feature['subMenu']['project']   = array('link' => "{$lang->project->common}|custom|execution|");
-    $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
+    $lang->admin->menuList->feature['subMenu']['project'] = array('link' => "{$lang->project->common}|custom|execution|");
+    $lang->admin->menuList->feature['tabMenu']['project']['project']   = array('link' => "{$lang->project->common}|custom|required|module=project");
+    $lang->admin->menuList->feature['tabMenu']['project']['execution'] = array('link' => "{$lang->execution->common}|custom|execution|");
+    $lang->admin->menuList->feature['menuOrder']['15']    = 'project';
 }
