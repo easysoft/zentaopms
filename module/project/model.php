@@ -2702,18 +2702,21 @@ class projectModel extends model
             }
             $hours[$executionID] = $hour;
 
-            if(isset($executions[$executionID]) and $executions[$executionID]->type == 'stage' and $executions[$executionID]->grade == 2)
+            if(isset($executions[$executionID]) and $executions[$executionID]->type == 'stage' and $executions[$executionID]->grade > 1)
             {
-                $stageParent = $executions[$executionID]->parent;
-                if(!isset($hours[$stageParent]))
+                $stageParents = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in(trim($executions[$executionID]->path, ','))->andWhere('type')->eq('stage')->andWhere('id')->ne($executions[$executionID]->id)->orderBy('grade')->fetchPairs();
+                foreach($stageParents as $stageParent)
                 {
-                    $hours[$stageParent] = clone $hour;
-                    continue;
-                }
+                    if(!isset($hours[$stageParent]))
+                    {
+                        $hours[$stageParent] = clone $hour;
+                        continue;
+                    }
 
-                $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
-                $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
-                $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+                    $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
+                    $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
+                    $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+                }
             }
         }
 
