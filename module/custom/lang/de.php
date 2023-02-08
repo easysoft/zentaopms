@@ -157,7 +157,6 @@ $lang->custom->task->fields['priList']    = 'Priority';
 $lang->custom->task->fields['typeList']   = 'Type';
 $lang->custom->task->fields['reasonList'] = 'Close Reason';
 $lang->custom->task->fields['statusList'] = 'Status';
-$lang->custom->task->fields['hours']      = 'Mannstunden';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['priList']        = 'Priority';

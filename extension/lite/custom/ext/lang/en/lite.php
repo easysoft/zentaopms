@@ -12,6 +12,7 @@ $lang->custom->object['task']      = 'Task';
 $lang->custom->object['todo']      = 'Todo';
 $lang->custom->object['user']      = 'User';
 $lang->custom->object['block']     = 'Block';
+$lang->custom->object['project']   = $lang->projectCommon;
 
 $lang->custom->menuOrder = array();
 $lang->custom->menuOrder[10] = 'execution';
@@ -27,6 +28,7 @@ $lang->custom->task->fields['priList']  = 'Priority';
 $lang->custom->task->fields['typeList'] = 'Type';
 
 $lang->custom->story = new stdClass();
+$lang->custom->story->fields['required']         = $lang->custom->required;
 $lang->custom->story->fields['priList']          = 'Priority';
 $lang->custom->story->fields['reasonList']       = 'Close Reason';
 $lang->custom->story->fields['statusList']       = 'Status';

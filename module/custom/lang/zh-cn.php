@@ -157,7 +157,6 @@ $lang->custom->task->fields['priList']    = '优先级';
 $lang->custom->task->fields['typeList']   = '类型';
 $lang->custom->task->fields['reasonList'] = '关闭原因';
 $lang->custom->task->fields['statusList'] = '状态';
-$lang->custom->task->fields['hours']      = '工时';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['priList']        = '优先级';

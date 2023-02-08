@@ -93,7 +93,7 @@ $lang->admin->menuList->feature['subMenu']['user']        = array('link' => "{$l
 
 $lang->admin->menuList->feature['tabMenu']['my']['todo']  = array('link' => "{$lang->todo->common}|custom|set|module=todo&field=priList", 'exclude' => 'custom-set');
 $lang->admin->menuList->feature['tabMenu']['my']['block'] = array('link' => "{$lang->block->common}|custom|set|module=block&field=closed", 'exclude' => 'custom-set');
-if($config->vision == 'lite') $lang->admin->menuList->feature['tabMenu']['my']['task'] = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList'));
+if($config->vision == 'lite') $lang->admin->menuList->feature['tabMenu']['my']['task'] = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList'), 'exclude' => 'custom-required');
 
 $lang->admin->menuList->feature['tabMenu']['product']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'links' => array("custom|browsestoryconcept|", 'custom|product|'), 'alias' => 'browsestoryconcept,product', 'exclude' => 'custom-required');
 $lang->admin->menuList->feature['tabMenu']['product']['story']       = array('link' => "{$lang->SRCommon}|custom|required|module=story", 'links' => array("custom|set|module=story&field=categoryList"), 'exclude' => 'custom-required');
@@ -167,8 +167,9 @@ if($config->vision == 'lite')
     unset($lang->admin->menuList->feature['menuOrder']['20']);
     unset($lang->admin->menuList->feature['menuOrder']['25']);
 
-    $lang->admin->menuList->feature['subMenu']['project'] = array('link' => "{$lang->project->common}|custom|execution|");
-    $lang->admin->menuList->feature['tabMenu']['project']['project']   = array('link' => "{$lang->project->common}|custom|required|module=project");
+    $lang->admin->menuList->feature['subMenu']['project'] = array('link' => "{$lang->projectCommon}|custom|execution|", 'exclude' => 'set,required', 'alias' => 'execution');
+    $lang->admin->menuList->feature['tabMenu']['project']['project']   = array('link' => "{$lang->projectCommon}|custom|required|module=project", 'exclude' => 'custom-required');
     $lang->admin->menuList->feature['tabMenu']['project']['execution'] = array('link' => "{$lang->execution->common}|custom|execution|");
-    $lang->admin->menuList->feature['menuOrder']['15']    = 'project';
+    $lang->admin->menuList->feature['tabMenu']['project']['story']     = array('link' => "{$lang->SRCommon}|custom|required|module=story", 'links' => array("custom|set|module=story&field=priList"), 'exclude' => 'custom-required');
+    $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
 }
