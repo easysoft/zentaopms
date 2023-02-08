@@ -11,6 +11,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php js::set('showFeature', false);?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php'; ?>
 <div id='mainContent' class='main-table'>
   <?php $vars = "id={$hostID}&orderBy=%s"; ?>
