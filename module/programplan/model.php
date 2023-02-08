@@ -741,7 +741,7 @@ class programplanModel extends model
         }
 
         $project     = $this->loadModel('project')->getByID($projectID);
-        $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $productList = $this->loadModel('product')->getProducts($projectID);
 
         $totalPercent = 0;
         $totalDevType = 0;
@@ -873,6 +873,22 @@ class programplanModel extends model
 
                 if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
+                $linkProducts = array();
+                $linkBranches = array();
+                if($project->division)
+                {
+                    $linkProducts = array(0 => $productID);
+                    $linkBranches = array(0 => $productList[$productID]->branches);
+                }
+                else
+                {
+                    $linkProducts = array_keys($productList);
+                    foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
+                }
+                $this->post->set('products', $linkProducts);
+                $this->post->set('branch', $linkBranches);
+                $this->execution->updateProducts($stageID);
+
                 /* Record version change information. */
                 if($planChanged)
                 {
@@ -949,8 +965,20 @@ class programplanModel extends model
                     $this->setTreePath($stageID);
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
-                    $linkProducts = $project->division ? array(0 => $productID) : array_keys($productList);
+                    $linkProducts = array();
+                    $linkBranches = array();
+                    if($project->division)
+                    {
+                        $linkProducts = array(0 => $productID);
+                        $linkBranches = array(0 => $productList[$productID]->branches);
+                    }
+                    else
+                    {
+                        $linkProducts = array_keys($productList);
+                        foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
+                    }
                     $this->post->set('products', $linkProducts);
+                    $this->post->set('branch', $linkBranches);
                     $this->execution->updateProducts($stageID);
 
                     /* Record version change information. */
