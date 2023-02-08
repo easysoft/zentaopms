@@ -14,14 +14,14 @@
 <style>
 #main > .container {padding: 0;}
 .body-modal #mainContent {padding: 0;}
-.modal-iframe .modal-header {display: none;}
 #mainContent .table {margin-bottom: 0;}
 #mainContent .table thead th {padding-top: 20px;}
 #mainContent .table tr {height: 40px;}
 #mainContent .table .c-name {padding-left: 40px;}
 #mainContent .table .c-time-limit {padding-right: 40px;}
-.body-modal .table-footer {margin-top: 20px;}
+.body-modal .table-footer {margin-top: 16px;}
 #mainContent .table-footer .btn-cancel {margin-left: 16px;}
+.body-modal .table-footer .btn {padding: 6px 12px;}
 </style>
 <div id='mainContent' class='main-content'>
   <div class='center-block main-table'>
@@ -57,4 +57,7 @@
     <?php endif;?>
   </div>
 </div>
+<script>
+$(function(){parent.$('#triggerModal .modal-content .modal-header .close').hide();});
+</script>
 <?php include '../../common/view/footer.html.php';?>
