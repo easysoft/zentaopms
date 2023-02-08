@@ -421,6 +421,7 @@ class repo extends control
      */
     public function view($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
     {
+        set_time_limit(0);
         $browser = helper::getBrowser();
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $this->repo->setBackSession('view', $withOtherModule = true);
