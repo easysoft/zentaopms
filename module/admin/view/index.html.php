@@ -90,7 +90,7 @@
   <div class="side panel" style="background: #FCFDFE">
     <div class="h-56 flex align-center justify-between">
       <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
-      <div class="time-count color-gray">您已使用禅道<span class="time-block">5</span><?php echo $lang->year?><span class="time-block">9</span><?php echo $lang->admin->mon?><span class="time-block">19</span><?php echo $lang->admin->day?></div>
+      <div class="time-count">您已使用禅道<span class="time-block">5</span><?php echo $lang->year?><span class="time-block">9</span><?php echo $lang->admin->mon?><span class="time-block">19</span><?php echo $lang->admin->day?></div>
     </div>
     <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
@@ -121,7 +121,7 @@
 	  <div class="panel-title"><?php echo $patch->name?></div>
           <a href="<?php echo $patch->viewLink;?>" class='ext-download flex align-center' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
         </div>
-	<div class="patch-content color-gray">
+	<div class="patch-content">
            <?php echo $patch->desc?>
         </div>
       </div>
@@ -134,22 +134,22 @@
       </div>
       <div class="upgrade-block">
 	<div class="title text-primary flex justify-between">
-          <div><i class="icon icon-zentao text-primary pr-4 font-18"></i>禅道企业版</div>
+          <div class="panel-title"><i class="icon icon-zentao text-primary pr-4 font-18"></i>禅道企业版</div>
           <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary pb-3"></i></div>
         </div>
-        <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
-        <div class="upgrade-content color-gray">40+内置统计报表、自定义报表功能</div>
-        <div class="upgrade-content color-gray">强大的自定义工作流、反馈管理功能</div>
+        <div class="upgrade-content">工时管理、甘特图、导入导出</div>
+        <div class="upgrade-content">40+内置统计报表、自定义报表功能</div>
+        <div class="upgrade-content">强大的自定义工作流、反馈管理功能</div>
       </div>
       <div class="upgrade-block">
 	<div class="title text-primary flex justify-between">
-          <div><i class="icon icon-zentao text-primary pr-4 font-18"></i>禅道旗舰版</div>
+          <div class="panel-title"><i class="icon icon-zentao text-primary pr-4 font-18"></i>禅道旗舰版</div>
           <div class="flex align-center"><div>查看详情</div><i class="icon icon-caret-right text-primary pb-3"></i></div>
         </div>
-        <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
-        <div class="upgrade-content color-gray">40+内置统计报表、自定义报表功能</div>
-        <div class="upgrade-content color-gray">强大的自定义工作流、反馈管理功能</div>
-        <div class="upgrade-content color-gray">工时管理、甘特图、导入导出</div>
+        <div class="upgrade-content">工时管理、甘特图、导入导出</div>
+        <div class="upgrade-content">40+内置统计报表、自定义报表功能</div>
+        <div class="upgrade-content">强大的自定义工作流、反馈管理功能</div>
+        <div class="upgrade-content">工时管理、甘特图、导入导出</div>
       </div>
     </div>
   </div>
