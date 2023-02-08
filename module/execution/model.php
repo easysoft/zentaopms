@@ -1720,33 +1720,6 @@ class executionModel extends model
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
-        if(isset($project->model) and $project->model == 'waterfall')
-        {
-            $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
-                ->where('type')->eq('stage')
-                ->andWhere('deleted')->eq('0')
-                ->beginIf($projectID)->andWhere('project')->eq($projectID)->fi()
-                ->fetchAll('id');
-
-            $parents = array();
-            foreach($allExecutions as $id => $execution) $parents[$execution->parent] = $execution->parent;
-
-            foreach($executions as $id => $execution)
-            {
-                if(isset($parents[$execution->id]))
-                {
-                    unset($executions[$id]);
-                    continue;
-                }
-
-                $executionName = '';
-                $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
-                foreach($paths as $path) $executionName .= '/' . $allExecutions[$path]->name;
-
-                if($executionName) $execution->name = ltrim($executionName, '/');
-            }
-        }
-
         $projects = array();
         if(empty($projectID))
         {

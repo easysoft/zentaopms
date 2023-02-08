@@ -300,7 +300,7 @@ class task extends control
 
         if(!empty($projectID))
         {
-            $executions = $this->execution->getByProject($projectID, 'all', 0, true);
+            $executions = $this->execution->getPairs($projectID, 'all', 'leaf');
 
             $executionKey = 0;
             $executionModifyList = $this->execution->getByIdList(array_keys($executions));
@@ -625,7 +625,7 @@ class task extends control
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
         $executions = array();
-        if(!empty($task->project)) $executions = $this->execution->getByProject($task->project, 'all', 0, true);
+        if(!empty($task->project)) $executions = $this->execution->getPairs($task->project, 'all', 'leaf');
 
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;
