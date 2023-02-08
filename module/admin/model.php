@@ -285,7 +285,11 @@ class adminModel extends model
                     }
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
-                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey])) $subMenu['subMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey];
+                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey]))
+                    {
+                        $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$paramName]['subModule'] = $subModule;
+                        $subMenu['subMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey];
+                    }
 
                     $this->lang->admin->menu->$subMenuKey = $subMenu;
                 }
