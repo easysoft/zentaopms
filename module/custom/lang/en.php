@@ -131,6 +131,7 @@ $lang->custom->block->fields['closed'] = 'Closed Block';
 $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = 'Currency Setting';
 $lang->custom->project->defaultCurrency    = 'Default Currency';
+$lang->custom->project->fields['required'] = $lang->custom->required;
 $lang->custom->project->fields['unitList'] = 'Unit List';
 
 $lang->custom->product = new stdClass();

@@ -131,6 +131,7 @@ $lang->custom->block->fields['closed'] = '关闭的区块';
 $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = '货币设置';
 $lang->custom->project->defaultCurrency    = '默认货币';
+$lang->custom->project->fields['required'] = $lang->custom->required;
 $lang->custom->project->fields['unitList'] = '预算单位';
 
 $lang->custom->product = new stdClass();
