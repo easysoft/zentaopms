@@ -7560,6 +7560,7 @@ class upgradeModel extends model
         {
             $project = new stdclass();
             $project->name           = $sprint->name;
+            $project->desc           = $sprint->desc;
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;
