@@ -79,6 +79,22 @@ $lang->zanode->createImageSuccess = 'Successed, You can use this image to create
 $lang->zanode->createImageFail    = 'Failed to create';
 $lang->zanode->createImageButton  = 'Create image';
 
+$lang->zanode->snapshotName          = 'Snapshot Name';
+$lang->zanode->browseSnapshot        = 'Snapshot List';
+$lang->zanode->createSnapshot        = 'Create Snapshot';
+$lang->zanode->editSnapshot          = 'Edit Snapshot';
+$lang->zanode->restoreSnapshot       = 'Revert Snapshot';
+$lang->zanode->deleteSnapshot        = 'Delete Snapshot';
+$lang->zanode->snapshotEmpty         = 'No snapshots';
+$lang->zanode->confirmDeleteSnapshot = "The snapshot cannot be restored from the recycle bin after being deleted. Are you sure to continue?";
+
+$lang->zanode->snapshot->statusList['creating']          = 'Creating';
+$lang->zanode->snapshot->statusList['completed']         = 'Create Completed';
+$lang->zanode->snapshot->statusList['failed']            = 'Create Failed';
+$lang->zanode->snapshot->statusList['restoring']         = 'Restoring';
+$lang->zanode->snapshot->statusList['restore_failed']    = 'Restore Failed';
+$lang->zanode->snapshot->statusList['restore_completed'] = 'Restore Completed';
+
 $lang->zanode->imageNameEmpty = 'Name can not be empty.';
 
 $lang->zanode->runTimeout = 'Network connection timeout, please check the host and execution node status.';
@@ -101,6 +117,7 @@ $lang->zanode->statusList['shutodown']    = 'shutdown';
 $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
 $lang->zanode->statusList['wait']         = 'Initializing';
 $lang->zanode->statusList['online']       = 'Online';
+$lang->zanode->statusList['restoring']    = 'Restoring';
 
 $lang->zanode->initNotice = "Succeeded. Please initialize the execution node or return to the list.";
 $lang->zanode->initButton = "Initialize";

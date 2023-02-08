@@ -1,3 +1,9 @@
+ALTER TABLE `zt_host` ADD `type` varchar(30) NOT NULL DEFAULT 'normal' AFTER `admin`;
+ALTER TABLE `zt_host` ADD `secret` varchar(50) NOT NULL DEFAULT '' AFTER `type`;
+ALTER TABLE `zt_host` ADD `token` varchar(50) NOT NULL DEFAULT '' AFTER `secret`;
+ALTER TABLE `zt_host` ADD `expiredDate` datetime NOT NULL AFTER `token`;
+ALTER TABLE `zt_host` ADD `virtualSoftware` varchar(30) NOT NULL DEFAULT '' AFTER `expiredDate`;
+
 ALTER TABLE `zt_host`
 DROP COLUMN `cabinet`,
 DROP COLUMN `cpuRate`,
@@ -58,7 +64,6 @@ h.`createdDate` = a.`createdDate`,
 h.`editedBy` = a.`editedBy`,
 h.`editedDate` = a.`editedDate`,
 h.`group` = a.`group`,
-h.`type` = a.`type`,
 h.`deleted` = a.`deleted`
 WHERE
 h.`assetID` = a.`id`;

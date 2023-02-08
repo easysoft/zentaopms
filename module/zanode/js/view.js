@@ -160,6 +160,14 @@ $('.btn-pwd-copy').live('click', function()
     }, 2000)
 })
 
+$('#jumpManual').click(function()
+{
+    var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/974.html?fullScreen=zentao');
+    var urlForNewTab = window.location.origin + '#app=help&url=' + encodedHelpPageUrl;
+    window.open(urlForNewTab)
+})
+
+
 $(function(){
     checkServiceStatus();
     checkInterval = setInterval(() => {
@@ -171,3 +179,15 @@ $(function(){
         checkServiceStatus();
     }, 2000);
 })
+
+/**
+ * Edit Snapshot.
+ *
+ * @param string $link
+ * @access public
+ * @return void
+ */
+function editSnapshot(link)
+{
+    $('#editSnapshot').attr('href', link).click();
+}
