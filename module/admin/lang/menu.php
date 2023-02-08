@@ -161,9 +161,11 @@ if($config->vision == 'lite')
     unset($lang->admin->menuList->feature['subMenu']['product']);
     unset($lang->admin->menuList->feature['subMenu']['execution']);
     unset($lang->admin->menuList->feature['subMenu']['qa']);
+    unset($lang->admin->menuList->feature['subMenu']['kanban']);
     unset($lang->admin->menuList->feature['menuOrder']['10']);
     unset($lang->admin->menuList->feature['menuOrder']['15']);
     unset($lang->admin->menuList->feature['menuOrder']['20']);
+    unset($lang->admin->menuList->feature['menuOrder']['25']);
 
     $lang->admin->menuList->feature['subMenu']['project'] = array('link' => "{$lang->project->common}|custom|execution|");
     $lang->admin->menuList->feature['tabMenu']['project']['project']   = array('link' => "{$lang->project->common}|custom|required|module=project");
