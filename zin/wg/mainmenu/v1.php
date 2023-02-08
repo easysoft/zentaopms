@@ -33,7 +33,7 @@ class mainmenu extends \zin\core\wg
 
         if ($props['type'] === 'button')
         {
-            unset($prop['type']);
+            unset($props['type']);
             return btn::create($props);
         }
     }

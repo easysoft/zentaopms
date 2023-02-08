@@ -718,6 +718,57 @@ class commonModel extends model
     }
 
     /**
+     * Print vision switcher for ZIN demo.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printVisionSwitcherZin()
+    {
+        global $lang, $app, $config;
+
+        if(!isset($app->user)) return array();
+
+        if(!isset($app->user->visions)) $app->user->visions = trim($config->visions, ',');
+        $currentVision = $app->config->vision;
+        $userVisions   = array_filter(explode(',', $app->user->visions));
+        $configVisions = array_filter(explode(',', trim($config->visions, ',')));
+
+        /* The standalone lite version removes the lite interface button */
+        if(trim($config->visions, ',') == 'lite') return array();
+
+        $items = array();
+
+        if(count($userVisions) < 2 or count($configVisions) < 2)
+        {
+            $items[] = array('text' => $lang->visionList[$currentVision]);
+            return $items;
+        }
+
+        $items[] = array(
+            'text' => $lang->switchTo,
+            'attr' => array(
+                'class' => 'text-gray switchTo',
+            ),
+        );
+
+        foreach($userVisions as $vision)
+        {
+            $item = array(
+                'text' => $lang->visionList[$vision],
+                'url'  => helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"),
+            );
+
+            if($currentVision == $vision) $item['attr'] = array('class' => 'active');
+
+            $items[] = $item;
+        }
+
+        return $items;
+    }
+
+    /**
      * Print create button list for Zin Demo.
      *
      * @static

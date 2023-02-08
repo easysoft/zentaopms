@@ -50,16 +50,23 @@ class avatar extends \zin\core\wg
     {
         $builder = parent::build($isPrint, $parent);
 
+        $name   = $this->prop('name');
+        $avatar = $this->prop('avatar');
+
+        if(empty($name) and empty($avatar)) return $builder;
+
         /* Strig avatar. */
-        if($this->hasProp('name'))
+        if(!empty($avatar))
         {
-            $div = h5::div($this->prop('name'))->addClass('avatar');
+            /* Image avatar. */
+            $div = h5::div(h5::img(\zin\set('src', $this->prop('avatar'))))->addClass('avatar');
             if(!empty($this->prop('radius')))  $div->addClass($this->prop('radius'));
             if(!empty($this->prop('theme')))   $div->addClass($this->prop('theme'));
             if(!empty($this->prop('outline'))) $div->addClass($this->prop('outline') . '-outline');
             if(!empty($this->prop('size')))    $div->addClass($this->prop('size'));
             $builder->append($div);
 
+            /* Show name and role. */
             if(!empty($this->prop('showName')))
             {
                 $builder->append(h5::span($this->prop('name')));
@@ -69,17 +76,13 @@ class avatar extends \zin\core\wg
             return $builder;
         }
 
-        if(!$this->hasProp('avatar')) return $builder;
-
-        /* Image avatar. */
-        $div = h5::div(h5::img(\zin\set('src', $this->prop('avatar'))))->addClass('avatar');
+        $div = h5::div($this->prop('name'))->addClass('avatar');
         if(!empty($this->prop('radius')))  $div->addClass($this->prop('radius'));
         if(!empty($this->prop('theme')))   $div->addClass($this->prop('theme'));
         if(!empty($this->prop('outline'))) $div->addClass($this->prop('outline') . '-outline');
         if(!empty($this->prop('size')))    $div->addClass($this->prop('size'));
         $builder->append($div);
 
-        /* Show name and role. */
         if(!empty($this->prop('showName')))
         {
             $builder->append(h5::span($this->prop('name')));

@@ -31,9 +31,11 @@ class pagetoolbar extends \zin\core\wg
 
     private function buildSwitcher($props)
     {
-        return h5::div(
-            h5::div($props['text'])->addClass('switcher-text')
-        )->addClass('vision-switcher');
+        $div = h5::create('div', NULL, $props);
+        $div->append(h5::div($props['text'])->addClass('switcher-text'));
+        $div->addClass('vision-switcher');
+
+        return $div;
     }
 
     protected function build($isPrint = false, $parent = null)

@@ -21,6 +21,9 @@ foreach(\commonModel::printUserBarZin() as $item) $userMenu->append(item($item))
 $globalCreateMenu = dropdown(setId('globalCreateMenu'));
 foreach(\commonModel::printCreateListZin() as $item) $globalCreateMenu->append(item($item));
 
+$switcherMenu = dropdown(setId('switcherMenu'));
+foreach(\commonModel::printVisionSwitcherZin() as $item) $switcherMenu->append(item($item));
+
 Page(
   set('title', $title),
   Pageheader(
@@ -40,15 +43,19 @@ Page(
         'data-arrow'     => true,
         'data-toggle'    => 'dropdown',
         'data-trigger'   => 'hover',
-        'data-placement' => 'bottom',
         'href'           => '#globalCreateMenu',
       )),
       set('avatar', array(
+        'name'   => $app->user->account,
         'avatar' => $app->user->avatar,
-        'href' => '#userMenu'
+        'href'   => '#userMenu'
       )),
       set('switcher', array(
-        'text' => '研发管理界面'
+        'text' => '研发管理界面',
+        'data-arrow'     => true,
+        'data-toggle'    => 'dropdown',
+        'data-trigger'   => 'hover',
+        'href'           => '#switcherMenu',
       ))
     ),
   ),
@@ -79,6 +86,7 @@ Page(
   ),
   $userMenu,
   $globalCreateMenu,
+  $switcherMenu,
 );
 
 /*

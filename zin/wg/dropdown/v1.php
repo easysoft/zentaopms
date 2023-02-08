@@ -47,6 +47,25 @@ class dropdown extends \zin\core\wg
         if(isset($item['url']))  $a->prop('href', $item['url']);
         if(isset($item['icon'])) $a->append(h5::i()->addClass("icon icon-{$item['icon']}"));
         if(isset($item['text'])) $a->append($item['text']);
+        if(isset($item['attr']))
+        {
+            $attr = $item['attr'];
+            foreach($attr as $key => $val)
+            {
+                if($key != 'class')
+                {
+                    $a->prop($key, $val);
+                    continue;
+                }
+
+                if(strpos($val, 'switchTo') !== false)
+                {
+                    $li->addClass($val);
+                    $a = $item['text'];
+                }
+                else $a->addClass($val);
+            }
+        }
 
         $li->append($a);
 
