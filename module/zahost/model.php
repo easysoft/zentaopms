@@ -85,7 +85,10 @@ class zahostModel extends model
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float');
+            ->batchCheck('diskSize,memory', 'float')
+            ->check('name', 'unique', "id != $hostID and type in ('vhost', 'zahost')")
+            ->autoCheck();
+
         if(dao::isError()) return false;
 
         $ping = $this->checkAddress($hostInfo->extranet);
