@@ -1109,6 +1109,7 @@ class programplanModel extends model
 
         if(dao::isError()) return false;
         $this->setTreePath($planID);
+        $this->updateSubStageAttr($planID, $plan->attribute);
         if($plan->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprint');
 
         if($planChanged)
@@ -1479,6 +1480,39 @@ class programplanModel extends model
                 $this->action->create('execution', $id, $parentAction, '', $parentAction);
             }
             unset($parentStatus, $parentAction);
+        }
+    }
+
+    /**
+     * Check if the stage is a leaf stage.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return bool
+     */
+    public function checkLeafStage($planID)
+    {
+        $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
+
+        return $subStageList ? false : true;
+    }
+
+    /**
+     * Update sub-stage attribute.
+     *
+     * @param  int    $planID
+     * @param  string $attribute
+     * @access public
+     * @return void
+     */
+    public function updateSubStageAttr($planID, $attribute)
+    {
+        $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in(array_keys($subStageList))->exec();
+
+        foreach($subStageList as $childID => $subStage)
+        {
+            $this->updateSubStageAttr($childID, $attribute);
         }
     }
 }
