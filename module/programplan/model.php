@@ -1054,7 +1054,7 @@ class programplanModel extends model
 
         if($plan->parent > 0)
         {
-            $plan->attribute = $parentStage->attribute;
+            $plan->attribute = $parentStage->attribute == 'mix' ? $plan->attribute : $parentStage->attribute;
             $plan->acl       = $parentStage->acl;
             $parentPercent   = $parentStage->percent;
 
