@@ -75,6 +75,7 @@ $lang->moduleOrder[225] = 'mr';
 $lang->moduleOrder[230] = 'app';
 $lang->moduleOrder[235] = 'gogs';
 $lang->moduleOrder[240] = 'gitea';
+$lang->moduleOrder[245] = 'holiday';
 
 $lang->resource = new stdclass();
 
@@ -1931,11 +1932,13 @@ $lang->resource->holiday->create = 'createAction';
 $lang->resource->holiday->edit   = 'editAction';
 $lang->resource->holiday->delete = 'deleteAction';
 $lang->resource->holiday->browse = 'browse';
+$lang->resource->holiday->import = 'importAction';
 
 $lang->holiday->methodOrder[0]  = 'browse';
 $lang->holiday->methodOrder[5]  = 'create';
 $lang->holiday->methodOrder[10] = 'edit';
 $lang->holiday->methodOrder[15] = 'delete';
+$lang->holiday->methodOrder[20] = 'import';
 
 /* Action. */
 $lang->resource->action = new stdclass();

@@ -23,6 +23,13 @@ $config->admin->menuModuleGroup['model']['custom|required']   = array('project',
 $config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'feedback', 'user', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user');
 $config->admin->menuModuleGroup['feature']['custom|required'] = array('bug', 'doc', 'product', 'story', 'productplan', 'release', 'task', 'bug', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user');
 $config->admin->menuModuleGroup['template']['custom|set']     = array('baseline');
+if($config->vision == 'lite')
+{
+    $config->admin->menuModuleGroup['model']['custom|set']        = array('issue', 'risk', 'opportunity', 'nc');
+    $config->admin->menuModuleGroup['model']['custom|required']   = array('build');
+    $config->admin->menuModuleGroup['feature']['custom|set']      = array('project', 'todo', 'feedback', 'user', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user');
+    $config->admin->menuModuleGroup['feature']['custom|required'] = array('project', 'task', 'story');
+}
 
 $config->admin->plugins[203] = new stdClass();
 $config->admin->plugins[203]->name     = '人力资源日历';
@@ -57,6 +64,8 @@ $config->admin->plugins[194]->viewLink = 'https://www.zentao.net/extension-viewE
 $config->admin->apiRoot      = 'https://www.zentao.net/';
 $config->admin->classURL     = 'https://www.zentao.net/publicclass.html';
 $config->admin->extensionURL = 'https://www.zentao.net/extension-browse.html';
+$config->admin->patchURL     = 'https://www.zentao.net/extension-browse-byModule-1218.html';
+$config->admin->downloadURL  = 'https://www.zentao.net/download.html';
 $config->admin->liteMenuList = array('system', 'user', 'feature', 'message', 'extension', 'dev');
 
 $config->admin->helpURL['system']    = 'https://www.zentao.net/book/zentaopms/538.html';

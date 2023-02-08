@@ -106,6 +106,9 @@ $lang->custom->object['score']       = '积分';
 $lang->custom->object['mode']        = '模式';
 $lang->custom->object['productplan'] = '计划';
 $lang->custom->object['release']     = '发布';
+$lang->custom->object['testsuite']   = '套件';
+$lang->custom->object['testreport']  = '测试报告';
+$lang->custom->object['caselib']     = '用例库';
 
 $lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
@@ -131,6 +134,7 @@ $lang->custom->block->fields['closed'] = '关闭的区块';
 $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = '货币设置';
 $lang->custom->project->defaultCurrency    = '默认货币';
+$lang->custom->project->fields['required'] = $lang->custom->required;
 $lang->custom->project->fields['unitList'] = '预算单位';
 
 $lang->custom->product = new stdClass();
@@ -151,13 +155,14 @@ $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
 
 $lang->custom->task = new stdClass();
+$lang->custom->task->fields['required']   = $lang->custom->required;
 $lang->custom->task->fields['priList']    = '优先级';
 $lang->custom->task->fields['typeList']   = '类型';
 $lang->custom->task->fields['reasonList'] = '关闭原因';
 $lang->custom->task->fields['statusList'] = '状态';
-$lang->custom->task->fields['hours']      = '工时';
 
 $lang->custom->bug = new stdClass();
+$lang->custom->bug->fields['required']       = $lang->custom->required;
 $lang->custom->bug->fields['priList']        = '优先级';
 $lang->custom->bug->fields['severityList']   = '严重程度';
 $lang->custom->bug->fields['osList']         = '操作系统';
@@ -168,6 +173,7 @@ $lang->custom->bug->fields['statusList']     = '状态';
 $lang->custom->bug->fields['longlife']       = '久未处理天数';
 
 $lang->custom->testcase = new stdClass();
+$lang->custom->testcase->fields['required']   = $lang->custom->required;
 $lang->custom->testcase->fields['priList']    = '优先级';
 $lang->custom->testcase->fields['typeList']   = '类型';
 $lang->custom->testcase->fields['stageList']  = '阶段';
@@ -176,9 +182,16 @@ $lang->custom->testcase->fields['statusList'] = '状态';
 $lang->custom->testcase->fields['review']     = '评审流程';
 
 $lang->custom->testtask = new stdClass();
+$lang->custom->testtask->fields['required']   = $lang->custom->required;
 $lang->custom->testtask->fields['statusList'] = '状态';
 $lang->custom->testtask->fields['typeList']   = '测试类型';
 $lang->custom->testtask->fields['priList']    = '优先级';
+
+$lang->custom->testreport = new stdClass();
+$lang->custom->testreport->fields['required'] = $lang->custom->required;
+
+$lang->custom->caselib = new stdClass();
+$lang->custom->caselib->fields['required'] = $lang->custom->required;
 
 $lang->custom->todo = new stdClass();
 $lang->custom->todo->fields['priList']    = '优先级';
