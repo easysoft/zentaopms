@@ -37,12 +37,7 @@ class admin extends control
         $hasInternet = $this->admin->checkInternet();
         $clientLang  = $this->app->getClientLang();
         $langNotCN   = common::checkNotCN();
-        $usedTime    = $this->admin->genDateUsed();
-
-        $dateUsed = new stdclass();
-        $dateUsed->year  = $usedTime->format('%y');
-        $dateUsed->month = $usedTime->format('%m');
-        $dateUsed->day   = $usedTime->format('%d');
+        $dateUsed    = $this->admin->genDateUsed();
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->position[]  = $this->lang->admin->index;

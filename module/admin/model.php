@@ -595,10 +595,10 @@ class adminModel extends model
     }
 
     /**
-     * get date used.
+     * Get date used object.
      *
      * @access public
-     * @return $interval
+     * @return object
      */
     public function genDateUsed()
     {
@@ -608,10 +608,6 @@ class adminModel extends model
             ->orderBy('date_asc')
             ->fetch('date');
 
-        $firstUseDate = date_create($firstUseDate);
-        $dateNow      = date("Y-m-d H:i");
-        $dateNow      = date_create($dateNow);
-        $interval     = date_diff($dateNow, $firstUseDate);
-        return $interval;
+        return helper::getDateInterval($firstUseDate);
     }
 }
