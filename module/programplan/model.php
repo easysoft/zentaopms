@@ -115,7 +115,7 @@ class programplanModel extends model
      *
      * @param  int    $executionID
      * @param  int    $productID
-     * @param  string $type
+     * @param  string $type all|leaf
      * @access public
      * @return array
      */
@@ -125,11 +125,16 @@ class programplanModel extends model
 
         $pairs = array(0 => '');
 
-        $parents  = array();
-        foreach($plans as $planID => $plan) $parents[$plan->parent] = true;
+        if(strpos($type, 'leaf') !== false)
+        {
+            $parents = array();
+            foreach($plans as $planID => $plan) $parents[$plan->parent] = true;
+        }
 
         foreach($plans as $planID => $plan)
         {
+            if(strpos($type, 'leaf') !== false and isset($parents[$plan->id])) continue;
+
             $paths = array_slice(explode(',', trim($plan->path, ',')), 1);
             $planName = '';
             foreach($paths as $path)
