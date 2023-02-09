@@ -116,13 +116,14 @@ class docModel extends model
             {
                 if(strpos($extra, 'withObject') !== false)
                 {
-                    if($lib->product != 0) $lib->name = zget($products, $lib->product, '') . ' / ' . $lib->name;
-                    if($lib->project != 0) $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
                     if($lib->execution != 0)
                     {
                         $lib->name = zget($executions, $lib->execution, '') . ' / ' . $lib->name;
                         if(!empty($waterfalls[$lib->execution])) $lib->name = $waterfalls[$lib->execution] . ' / ' . $lib->name;
+                        $lib->name = trim($lib->name, '/');
                     }
+                    if($lib->product != 0) $lib->name = zget($products, $lib->product, '') . ' / ' . $lib->name;
+                    if($lib->project != 0) $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
                 }
 
                 $libPairs[$lib->id] = $lib->name;
