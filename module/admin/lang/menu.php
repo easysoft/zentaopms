@@ -76,12 +76,14 @@ $lang->admin->menuList->switch['subMenu']['setmodule'] = array('link' => "{$lang
 $lang->admin->menuList->switch['menuOrder']['5'] = 'setmodule';
 
 $lang->admin->menuList->model['subMenu']['common']    = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom');
-$lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
+$lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|");
 $lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "{$lang->waterfallModel}|stage|settype|", 'subModule' => 'stage');
 
 $lang->admin->menuList->model['menuOrder']['5']  = 'common';
 $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
 $lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
+
+$lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage');
 
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product|", 'exclude' => 'set,required', 'alias' => 'browsestoryconcept,product');

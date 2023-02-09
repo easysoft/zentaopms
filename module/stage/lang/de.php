@@ -18,7 +18,6 @@ $lang->stage->delete      = 'Delete';
 $lang->stage->view        = 'Details';
 
 /* Fields. */
-$lang->stage->common  = 'Stage';
 $lang->stage->id      = 'ID';
 $lang->stage->name    = 'Name';
 $lang->stage->type    = 'Type';

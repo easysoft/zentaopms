@@ -196,8 +196,10 @@ $lang->admin->productDetail = '查看详情';
 $lang->admin->productFeature['biz'][] = '工时管理、甘特图、导入导出';
 $lang->admin->productFeature['biz'][] = '40+内置统计报表、自定义报表功能';
 $lang->admin->productFeature['biz'][] = '强大的自定义工作流、反馈管理功能';
-$lang->admin->productFeature['max'][] = '瀑布模型功能更全面';
-$lang->admin->productFeature['max'][] = '完整CMMI流程';
-$lang->admin->productFeature['max'][] = '资产库管理';
+$lang->admin->productFeature['biz'][] = '价格厚道，专属技术支持服务';
+$lang->admin->productFeature['max'][] = '120+概念，全面覆盖瀑布管理模型';
+$lang->admin->productFeature['max'][] = '项目管理可视化，精准掌控项目进度';
+$lang->admin->productFeature['max'][] = '资产库管理，为项目提供数据支撑';
+$lang->admin->productFeature['max'][] = '严格权限控制，方式灵活安全';
 
 include dirname(__FILE__) . '/menu.php';

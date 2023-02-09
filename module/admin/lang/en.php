@@ -177,4 +177,27 @@ $lang->admin->menuSetting['dev']['desc']       = 'Support for secondary developm
 $lang->admin->menuSetting['convert']['name']   = 'Data Import';
 $lang->admin->menuSetting['convert']['desc']   = 'Data import from third-party systems.';
 
+$lang->admin->mon              = 'Month';
+$lang->admin->day              = 'Day';
+$lang->admin->updateDynamics   = 'Dynamics';
+$lang->admin->updatePatch      = 'Patch';
+$lang->admin->upgradeRecommend = 'Recommend Upgrade';
+$lang->admin->zentaoUsed       = 'You have used ZenTao';
+
+$lang->admin->openTag = 'ZenTao Opensource ';
+$lang->admin->bizTag  = 'ZenTao Biz ';
+$lang->admin->maxTag  = 'ZenTao Max ';
+
+$lang->admin->bizInfoURL    = 'https://www.zentao.net/page/enterprise.html';
+$lang->admin->maxInfoURL    = 'https://www.zentao.net/page/max.html';
+$lang->admin->productDetail = 'Detail';
+$lang->admin->productFeature['biz'][] = 'Feedback Management';
+$lang->admin->productFeature['biz'][] = 'Task Gantt Charts/Calendar/Effort';
+$lang->admin->productFeature['biz'][] = 'MS Word/Excel Import & Export';
+$lang->admin->productFeature['biz'][] = 'LDAP Support';
+$lang->admin->productFeature['max'][] = 'Project Metrics';
+$lang->admin->productFeature['max'][] = 'Asset Library';
+$lang->admin->productFeature['max'][] = 'QA Plan';
+$lang->admin->productFeature['max'][] = 'Opportunity/Risk/Issues Management';
+
 include dirname(__FILE__) . '/menu.php';
