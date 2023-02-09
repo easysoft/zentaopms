@@ -78,7 +78,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->join('os', ',')
             ->join('browser', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket')
+            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
             ->get();
 
         /* Check repeat bug. */
@@ -97,6 +97,23 @@ class bugModel extends model
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
+
+            if(isset($_POST['resultFiles']))
+            {
+                $resultFiles = $_POST['resultFiles'];
+                if(isset($_POST['deleteFiles']))
+                {
+                    foreach($_POST['deleteFiles'] as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
+                }
+                $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
+                foreach($files as $file)
+                {
+                    unset($file->id);
+                    $file->objectType = 'bug';
+                    $file->objectID   = $bugID;
+                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                }
+            }
 
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
@@ -3728,13 +3745,8 @@ class bugModel extends model
         /* Get related objects title or names. */
         $table = $this->config->objectTables[$object];
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
-        if($object == 'branch' and $this->session->currentProductType != 'normal')
-        {
-            $productID      = current($bugs)->product;
-            $relatedObjects = $this->dao->select($pairs)->from($table)->where('product')->eq($productID)->fetchPairs();
-        }
 
-        if(in_array($object, array('build','resolvedBuild','branch'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
+        if(in_array($object, array('build','resolvedBuild'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
         return array('' => '', 0 => '') + $relatedObjects;
     }
 

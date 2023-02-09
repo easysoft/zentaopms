@@ -7,7 +7,7 @@ $config->admin->log->saveDays = 30;
 if(!isset($config->safe))       $config->safe = new stdclass();
 if(!isset($config->safe->weak)) $config->safe->weak = '123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123';
 
-$config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice');
+$config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice', 'conference', 'client');
 $config->admin->menuGroup['user']      = array('dept', 'company', 'user', 'group');
 $config->admin->menuGroup['switch']    = array('admin|setmodule');
 $config->admin->menuGroup['model']     = array('auditcl', 'stage', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|estimate', 'subject', 'process');
@@ -61,12 +61,18 @@ $config->admin->plugins[194]->name     = '应用巡检报告';
 $config->admin->plugins[194]->desc     = '每日生成公司级禅道应用巡检报告，促进项目管理持续改进。';
 $config->admin->plugins[194]->viewLink = 'https://www.zentao.net/extension-viewExt-194.html';
 
-$config->admin->apiRoot      = 'https://www.zentao.net/';
-$config->admin->classURL     = 'https://www.zentao.net/publicclass.html';
-$config->admin->extensionURL = 'https://www.zentao.net/extension-browse.html';
-$config->admin->patchURL     = 'https://www.zentao.net/extension-browse-byModule-1218.html';
-$config->admin->downloadURL  = 'https://www.zentao.net/download.html';
-$config->admin->liteMenuList = array('system', 'user', 'feature', 'message', 'extension', 'dev');
+$config->admin->apiRoot        = 'https://www.zentao.net';
+$config->admin->cdnRoot        = 'https://cdn.easycorp.cn/web';
+$config->admin->classURL       = 'https://www.zentao.net/publicclass.html';
+$config->admin->dynamicURL     = 'https://www.zentao.net/download.html';
+$config->admin->extensionURL   = 'https://www.zentao.net/extension-browse.html';
+$config->admin->patchURL       = 'https://www.zentao.net/extension-browse-byModule-1218.html';
+$config->admin->apiSite        = 'https://api.zentao.net/';
+$config->admin->extAPIURL      = $config->admin->apiSite . 'extension-apiGetExtensions-';
+$config->admin->patchAPIURL    = $config->admin->apiSite . 'extension-apiGetExtensions-bymodule-MTIxOA==-0-100-1.json';
+$config->admin->downloadAPIURL = $config->admin->apiSite . 'download.json';
+$config->admin->videoAPIURL    = $config->admin->apiSite . 'publicclass.json';
+$config->admin->liteMenuList   = array('system', 'user', 'feature', 'message', 'extension', 'dev');
 
 $config->admin->helpURL['system']    = 'https://www.zentao.net/book/zentaopms/538.html';
 $config->admin->helpURL['user']      = 'https://www.zentao.net/book/zentaopms/538.html';

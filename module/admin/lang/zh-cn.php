@@ -25,6 +25,13 @@ $lang->admin->resetPWDSetting = '重置密码设置';
 $lang->admin->tableEngine     = '表引擎';
 $lang->admin->setModuleIndex  = '系统功能配置';
 
+$lang->admin->mon              = '月';
+$lang->admin->day              = '天';
+$lang->admin->updateDynamics   = '更新动态';
+$lang->admin->updatePatch      = '补丁更新';
+$lang->admin->upgradeRecommend = '推荐升级';
+$lang->admin->zentaoUsed       = '您已使用禅道';
+
 $lang->admin->api                  = '接口';
 $lang->admin->log                  = '日志';
 $lang->admin->setting              = '设置';
@@ -78,12 +85,14 @@ $lang->admin->setModule->optional       = '可选功能';
 $lang->admin->setModule->opened         = '已开启';
 $lang->admin->setModule->closed         = '已关闭';
 
+$lang->admin->setModule->my             = '地盘';
 $lang->admin->setModule->product        = '产品';
 $lang->admin->setModule->scrum          = '敏捷项目';
 $lang->admin->setModule->waterfall      = '瀑布项目';
 $lang->admin->setModule->assetlib       = '资产库';
 $lang->admin->setModule->other          = '通用功能';
 
+$lang->admin->setModule->score          = '积分';
 $lang->admin->setModule->repo           = '代码';
 $lang->admin->setModule->issue          = '问题';
 $lang->admin->setModule->risk           = '风险';
@@ -171,9 +180,24 @@ $lang->admin->menuSetting['convert']['name']   = '数据导入';
 $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入。';
 
 $lang->admin->mon              = '月';
-$lang->admin->day              = '天';
+$lang->admin->day              = '日';
 $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';
 $lang->admin->upgradeRecommend = '推荐升级';
+$lang->admin->zentaoUsed       = '您已使用禅道';
+
+$lang->admin->openTag = '禅道';
+$lang->admin->bizTag  = '禅道企业版';
+$lang->admin->maxTag  = '禅道旗舰版';
+
+$lang->admin->bizInfoURL    = 'https://www.zentao.net/page/enterprise.html';
+$lang->admin->maxInfoURL    = 'https://www.zentao.net/page/max.html';
+$lang->admin->productDetail = '查看详情';
+$lang->admin->productFeature['biz'][] = '工时管理、甘特图、导入导出';
+$lang->admin->productFeature['biz'][] = '40+内置统计报表、自定义报表功能';
+$lang->admin->productFeature['biz'][] = '强大的自定义工作流、反馈管理功能';
+$lang->admin->productFeature['max'][] = '瀑布模型功能更全面';
+$lang->admin->productFeature['max'][] = '完整CMMI流程';
+$lang->admin->productFeature['max'][] = '资产库管理';
 
 include dirname(__FILE__) . '/menu.php';

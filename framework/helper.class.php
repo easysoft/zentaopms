@@ -305,6 +305,43 @@ class helper extends baseHelper
     {
         throw EndResponseException::create($content);
     }
+
+    /**
+     * Get date interval.
+     *
+     * @param  string|int $begin
+     * @param  string|int $end
+     * @param  string     $format  %Y-%m-%d %H:%i:%s
+     * @static
+     * @access public
+     * @return object|string
+     */
+    public static function getDateInterval($begin, $end = '', $format = '')
+    {
+        if(empty($end))    $end   = time();
+        if(is_int($begin)) $begin = date('Y-m-d H:i:s', $begin);
+        if(is_int($end))   $end   = date('Y-m-d H:i:s', $end);
+
+        $begin    = date_create($begin);
+        $end      = date_create($end);
+        $interval = date_diff($begin, $end);
+
+        if($format)
+        {
+            $dateInterval = $interval->format($format);
+        }
+        else
+        {
+            $dateInterval = new stdClass();
+            $dateInterval->year    = $interval->format('%Y');
+            $dateInterval->month   = $interval->format('%m');
+            $dateInterval->day     = $interval->format('%d');
+            $dateInterval->hour    = $interval->format('%H');
+            $dateInterval->minute  = $interval->format('%i');
+            $dateInterval->secound = $interval->format('%s');
+        }
+        return $dateInterval;
+    }
 }
 
 /**

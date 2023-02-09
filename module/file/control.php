@@ -293,16 +293,18 @@ class file extends control
      * @param  object $object
      * @param  string $method
      * @param  bool   $showDelete
+     * @param  bool   $showEdit
      * @access public
      * @return void
      */
-    public function printFiles($files, $fieldset, $object = null, $method = 'view', $showDelete = true)
+    public function printFiles($files, $fieldset, $object = null, $method = 'view', $showDelete = true, $showEdit = true)
     {
         $this->view->files      = $files;
         $this->view->fieldset   = $fieldset;
         $this->view->object     = $object;
         $this->view->method     = $method;
         $this->view->showDelete = $showDelete;
+        $this->view->showEdit   = $showEdit;
 
         if(strpos('view,edit', $method) !== false and $this->app->clientDevice != 'mobile') return $this->display('file', 'viewfiles');
         $this->display();
