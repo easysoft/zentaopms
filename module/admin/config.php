@@ -87,7 +87,7 @@ $config->admin->helpURL['convert']   = 'https://www.zentao.net/book/zentaopms/65
 
 $config->admin->navsGroup['my']        = ',todo,block,';
 $config->admin->navsGroup['product']   = ',product,story,productplan,release,';
-$config->admin->navsGroup['execution'] = ',execution,';
+$config->admin->navsGroup['execution'] = ',execution,task,';
 $config->admin->navsGroup['project']   = ',project,story,';
 $config->admin->navsGroup['qa']        = ',bug,testcase,testsuite,testtask,testreport,caselib,';
 if($config->vision == 'lite') $config->admin->navsGroup['my'] .= 'task,';
