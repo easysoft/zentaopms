@@ -216,8 +216,9 @@ class xuanxuanIm extends imModel
                 }
                 if ($contentData->objectType == 'story' && $contentData->action == 'reviewed')
                 {
-                    $extra = explode(',', $contentDataOuter->extra)[0];
-                    $messageGroups["$contentData->objectType-$contentData->parentType-$contentData->action-$contentData->actor-$extra"][] = $message;
+                    $extra = explode(',', $contentDataOuter->extra);
+                    $actor = $extra[0];
+                    $messageGroups["$contentData->objectType-$contentData->parentType-$contentData->action-$contentData->actor-$actor"][] = $message;
                 }
                 else
                 {
