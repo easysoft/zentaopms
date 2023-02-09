@@ -34,12 +34,13 @@
 .settings.panel, .plug.panel {margin-bottom: 16px;}
 
 .settings-list {display: flex; flex-wrap: wrap; padding: 0 4px 16px 4px;}
-.settings-list > .setting-box.btn {flex: 1 1 18%; padding: 8px; border: 1px solid rgba(227, 228, 233, 0.6); margin-right: 10px; margin-top: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset;}
-.settings-list > .setting-box.btn:hover {background: unset;}
-.settings-list > .setting-box.btn[disabled] {cursor: not-allowed; pointer-events: unset;}
-.settings-list > .setting-box.btn[disabled] > a {pointer-events: none;}
-.settings-list > .setting-box > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
-.settings-list > .setting-box > .setting-desc {padding-bottom: 16px; color: #5E626D;}
+.settings-list > .setting-box {border: unset; flex: 0 1 20%; padding: 8px;}
+.settings-list > .setting-box > button.btn {padding: 16px 10px; height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset; border: 1px solid rgba(227, 228, 233, 0.6)}
+.settings-list > .setting-box > .btn:hover {background: unset;}
+.settings-list > .setting-box > .btn[disabled] {cursor: not-allowed; pointer-events: unset;}
+.settings-list > .setting-box > .btn[disabled] > a {pointer-events: none;}
+.settings-list > .setting-box > .btn > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
+.settings-list > .setting-box > .btn > .setting-desc {padding-bottom: 16px; color: #5E626D;}
 .settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
