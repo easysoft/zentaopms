@@ -152,7 +152,7 @@ class programplanModel extends model
         $this->loadModel('stage');
         $this->loadModel('execution');
 
-        $plans = $this->getStage($executionID, $productID);
+        $plans = $this->getStage($executionID, $productID, 'all', 'order');
         if($baselineID)
         {
             $baseline = $this->loadModel('cm')->getByID($baselineID);
