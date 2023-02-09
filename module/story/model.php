@@ -1247,7 +1247,7 @@ class storyModel extends model
         if(empty($childrenStatus)) return $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
 
         $status = $oldParentStory->status;
-        if(count($childrenStatus) == 1 and $oldParentStory->status != 'changing' and $oldParentStory->status != 'reviewing')
+        if(count($childrenStatus) == 1)
         {
             $status = current($childrenStatus);
             if($status == 'draft' or $status == 'changing') $status = 'active';
@@ -3022,6 +3022,11 @@ class storyModel extends model
      */
     public function getProductStoryPairs($productID = 0, $branch = 'all', $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full', $storyType = 'story', $hasParent = true)
     {
+        if($moduleIdList)
+        {
+            $moduleInfo   = $this->loadModel('tree')->getByID($moduleIdList);
+            $moduleIdList = $moduleInfo->type == 'bug' ? 0 : $moduleIdList;
+        }
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('1=1')
