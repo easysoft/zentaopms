@@ -24,6 +24,58 @@ foreach(\commonModel::printCreateListZin() as $item) $globalCreateMenu->append(i
 $switcherMenu = dropdown(setId('switcherMenu'));
 foreach(\commonModel::printVisionSwitcherZin() as $item) $switcherMenu->append(item($item));
 
+$cols  = array_values($config->program->dtable->fieldList);
+$fields = array_keys($config->program->dtable->fieldList);
+$data  = array_values($programs);
+
+foreach($data as $row)
+{
+  foreach($row as $k => $v)
+  {
+    if (!in_array($k, $fields)) unset($row->$k);
+  }
+
+  if(!property_exists($row, 'progress'))
+  {
+    $row->progress = '';
+  }
+
+  if(!property_exists($row, 'actions'))
+  {
+    $row->actions = array();
+  }
+}
+
+$statuses = array();
+foreach($lang->program->featureBar['browse'] as $key => $text) $statuses[] = array('text' => $text, 'active' => $key === $status);
+
+$others = array();
+if(\common::hasPriv('project', 'batchEdit') and $programType != 'bygrid' and $hasProject === true)
+{
+  $others[] = array(
+    'text'    => $lang->project->edit,
+    'checked' => $this->cookie->editProject,
+    'type'    => 'checkbox'
+  );
+}
+
+$others[] = array(
+  'type'  => 'button',
+  'icon'  => 'search',
+  'text'  => $lang->user->search,
+  'class' => 'ghost'
+);
+
+$btnGroup = array();
+if(\common::hasPriv('project', 'create'))
+{
+  $btnGroup[] = array(
+    'text'  => $lang->project->create,
+    'icon'  => 'plus',
+    'class' => 'btn btn-secondary'
+  );
+}
+
 Page(
   set('title', $title),
   Pageheader(
@@ -62,64 +114,20 @@ Page(
 
   Pagemain(
     Mainmenu(
-      set('statuses', array('items' => array(
-        array('text' => '全部'),
-        array('text' => '未关闭'),
-        array('text' => '未开始'),
-        array('text' => '进行中'),
-        array('text' => '已挂起'),
-        array('text' => '已关闭'),
-      ))),
-      set('others', array(
-        array('type' => 'checkbox', 'text' => '编辑项目'),
-        array('type' => 'button', 'icon' => 'search', 'text' => '搜索', 'class' => 'ghost'),
-        array('type' => 'button', 'icon' => 'unfold-all', 'text' => '排序', 'class' => 'ghost'),
-      )),
-      set(
-        'btnGroup',
-        array(
-          array('icon' => 'plus', 'text' => '创建项目', 'class' => 'secondary'),
-          array('icon' => 'plus', 'text' => '添加项目集', 'class' => 'primary'),
-        ),
-      ),
+      set('statuses', array('items' => $statuses)),
+      set('others', $others),
+      set('btnGroup', $btnGroup),
     ),
+
+    Dtable(
+      set('js-render', true),
+      set('cols', $cols),
+      set('width', '100%'),
+      set('height', 400),
+      set('data', $data),
+    )
   ),
   $userMenu,
   $globalCreateMenu,
   $switcherMenu,
 );
-
-/*
-page
-(
-  set('title', $title),
-  pageheader
-  (
-    to('header', pageheading()),
-    pageheading(set()),
-    pagenavbar(),
-    pagetoolbar()
-  ),
-  pagemain
-  (
-    mainmenu
-    (
-      set($mainMenuOptions),
-      to
-      (
-        'toolbar',
-        toolbar
-        (
-          $mainMenuToolbar,
-          set('items', array(array('text' => 'copy'), array('type' => 'divider'))),
-          item(array('text' => 'copy')),
-          item(array('type' => 'divider'))
-        )
-      )
-    ),
-    dtable
-    (
-      set($dtableOptions)
-    )
-  )
-); */

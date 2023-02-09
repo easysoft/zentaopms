@@ -48,22 +48,26 @@ class mainmenu extends \zin\core\wg
         $others = $this->prop('others');
         $this->props->remove('others');
 
+        $btnGroup = $this->prop('btnGroup');
+
         $flexDom = h5::div(
             h5::div(toolbar::create($this->prop('statuses'))),
         )->addClass('flex');
 
-        foreach($others as $props) $flexDom->append($this->buildOther($props));
-
-        $this->buildOthers(($others));
+        if(!empty($others)) foreach($others as $props) $flexDom->append($this->buildOther($props));
 
         $builder->append($flexDom);
 
-        $builder->append(
-            h5::div(
-                setId('featureBarBtns'),
-                toolbar(btngroup::create($this->prop('btnGroup'))->addClass('toolbar-btn-group')->setStyle('gap', '0.625rem'))
-            )
-        );
+        if(!empty($btnGroup))
+        {
+
+            $builder->append(
+                h5::div(
+                    setId('featureBarBtns'),
+                    toolbar(btngroup::create($btnGroup)->addClass('toolbar-btn-group')->setStyle('gap', '0.625rem'))
+                    )
+                );
+        }
         $this->props->remove('btnGroup');
 
         return $builder;

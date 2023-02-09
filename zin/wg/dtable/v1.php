@@ -5,8 +5,6 @@ require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h5.class.php';
 require_once dirname(__DIR__) . DS . 'icon' . DS . 'v1.php';
 
-use \zin\core\h5;
-
 class dtable extends \zin\core\wg
 {
     static $tag = 'div';
@@ -28,6 +26,7 @@ class dtable extends \zin\core\wg
             $id = $this->prop('id');
             $this->props->remove('id');
             $builder->jsVar('options', $this->props->data);
+            $builder->js("console.log(options);");
             $builder->js("domReady(() => {const dtable = new zui.DTable('#$id', options);});");
         }
         return $builder;
