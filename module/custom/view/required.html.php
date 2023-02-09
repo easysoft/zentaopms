@@ -17,7 +17,7 @@
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
-          <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->required;?></strong>
+          <strong><?php echo $lang->custom->required;?></strong>
         </div>
       </div>
       <table class='table table-form mw-800px'>

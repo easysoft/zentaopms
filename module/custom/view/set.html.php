@@ -53,7 +53,7 @@ EOT;
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
-          <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
+          <strong><?php echo $lang->custom->$module->fields[$field]?></strong>
         </div>
       </div>
       <?php if($module == 'project' and $field == 'unitList'):?>

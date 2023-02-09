@@ -89,46 +89,6 @@ $lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
-$lang->custom->object['project']     = '项目';
-$lang->custom->object['product']     = $lang->productCommon;
-$lang->custom->object['execution']   = $lang->custom->execution;
-$lang->custom->object['kanban']      = $lang->custom->kanban;
-$lang->custom->object['story']       = $lang->SRCommon;
-$lang->custom->object['task']        = '任务';
-$lang->custom->object['bug']         = 'Bug';
-$lang->custom->object['testcase']    = '用例';
-$lang->custom->object['testtask']    = '测试单';
-$lang->custom->object['todo']        = '待办';
-$lang->custom->object['user']        = '用户';
-$lang->custom->object['block']       = '区块';
-$lang->custom->object['flow']        = '流程';
-$lang->custom->object['score']       = '积分';
-$lang->custom->object['mode']        = '模式';
-$lang->custom->object['productplan'] = '计划';
-$lang->custom->object['release']     = '发布';
-$lang->custom->object['testsuite']   = '套件';
-$lang->custom->object['testreport']  = '测试报告';
-$lang->custom->object['caselib']     = '用例库';
-$lang->custom->object['doc']         = '文档';
-
-$lang->custom->menuOrder[5]  = 'project';
-$lang->custom->menuOrder[10] = 'product';
-$lang->custom->menuOrder[15] = 'execution';
-$lang->custom->menuOrder[20] = 'kanban';
-$lang->custom->menuOrder[25] = 'story';
-$lang->custom->menuOrder[30] = 'task';
-$lang->custom->menuOrder[35] = 'bug';
-$lang->custom->menuOrder[40] = 'testcase';
-$lang->custom->menuOrder[45] = 'testtask';
-$lang->custom->menuOrder[50] = 'todo';
-$lang->custom->menuOrder[55] = 'user';
-$lang->custom->menuOrder[60] = 'block';
-$lang->custom->menuOrder[65] = 'flow';
-$lang->custom->menuOrder[70] = 'score';
-
-$lang->custom->dividerMenu  = ',story,todo,block,';
-$lang->custom->separatePage = ',execution,product,kanban,flow,score';
-
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = '关闭的区块';
 

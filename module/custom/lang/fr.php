@@ -89,46 +89,6 @@ $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
-$lang->custom->object['project']     = 'Project';
-$lang->custom->object['product']     = $lang->productCommon;
-$lang->custom->object['execution']   = $lang->custom->execution;
-$lang->custom->object['kanban']      = $lang->custom->kanban;
-$lang->custom->object['story']       = 'Story';
-$lang->custom->object['task']        = 'Tâche';
-$lang->custom->object['bug']         = 'Bug';
-$lang->custom->object['testcase']    = 'CasTest';
-$lang->custom->object['testtask']    = 'Build';
-$lang->custom->object['todo']        = 'Agenda';
-$lang->custom->object['user']        = 'Utilisateur';
-$lang->custom->object['block']       = 'Bloc';
-$lang->custom->object['flow']        = 'Flow';
-$lang->custom->object['score']       = 'Score';
-$lang->custom->object['mode']        = 'Mode';
-$lang->custom->object['productplan'] = 'Plan';
-$lang->custom->object['release']     = 'Release';
-$lang->custom->object['testsuite']   = 'Test Suite';
-$lang->custom->object['testreport']  = 'Test Report';
-$lang->custom->object['caselib']     = 'Case Library';
-$lang->custom->object['doc']         = 'Document';
-
-$lang->custom->menuOrder[5]  = 'project';
-$lang->custom->menuOrder[10] = 'product';
-$lang->custom->menuOrder[15] = 'execution';
-$lang->custom->menuOrder[20] = 'kanban';
-$lang->custom->menuOrder[25] = 'story';
-$lang->custom->menuOrder[30] = 'task';
-$lang->custom->menuOrder[35] = 'bug';
-$lang->custom->menuOrder[40] = 'testcase';
-$lang->custom->menuOrder[45] = 'testtask';
-$lang->custom->menuOrder[50] = 'todo';
-$lang->custom->menuOrder[55] = 'user';
-$lang->custom->menuOrder[60] = 'block';
-$lang->custom->menuOrder[65] = 'flow';
-$lang->custom->menuOrder[70] = 'score';
-
-$lang->custom->dividerMenu  = ',story,todo,block,';
-$lang->custom->separatePage = ',execution,product,kanban,flow,score,';
-
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Bloc Fermé';
 
