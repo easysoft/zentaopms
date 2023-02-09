@@ -5158,6 +5158,84 @@ class executionModel extends model
         }
     }
 
+    public function generateCol()
+    {
+        $this->loadModel('datatable');
+
+        $setting = '';
+        if(isset($this->config->datatable->executionAll->cols)) $setting = json_decode($this->config->datatable->executionAll->cols);
+
+        $fieldList = $this->config->execution->datatable->fieldList;
+
+        foreach($fieldList as $field => $items)
+        {   
+            $title = zget($this->lang->execution, $items['title'], zget($this->lang, $items['title'], $items['title']));
+            $fieldList[$field]['title'] = $title;
+        }
+
+        if(empty($setting))
+        {
+            $setting = $this->config->execution->datatable->defaultField;
+            $order   = 1;
+            foreach($setting as $key => $value)
+            {
+                $id  = $value;
+                $set = new stdclass();;
+                $set->order = $order++;
+                $set->show  = true;
+                $set->name  = $value;
+                $set->title = $fieldList[$id]['title'];
+
+                if(isset($fieldList[$id]['checkbox']))     $set->nestedToggle = $fieldList[$id]['checkbox'];
+                if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle = $fieldList[$id]['nestedToggle'];
+                if(isset($fieldList[$id]['fixed']))        $set->fixed        = $fieldList[$id]['fixed'];
+                if(isset($fieldList[$id]['width']))        $set->width        = $fieldList[$id]['width'];
+                if(isset($fieldList[$id]['type']))         $set->type         = $fieldList[$id]['type'];
+                if(isset($fieldList[$id]['sortType']))     $set->sortType     = $fieldList[$id]['sortType'];
+                if(isset($fieldList[$id]['flex']))         $set->flex         = $fieldList[$id]['flex'];
+                if(isset($fieldList[$id]['minWidth']))     $set->minWidth     = $fieldList[$id]['minWidth'];
+                if(isset($fieldList[$id]['maxWidth']))     $set->maxWidth     = $fieldList[$id]['maxWidth'];
+                if(isset($fieldList[$id]['pri']))          $set->pri          = $fieldList[$id]['pri'];
+
+                $setting[$key] = $set;
+            }
+        }
+        else
+        {
+            foreach($setting as $key => $set)
+            {
+                if($set->id == 'actions') $set->width = $fieldList[$set->id]['width'];
+                $set->title = $fieldList[$set->id]['title'];
+                if(isset($fieldList[$id]['sortType'])) $set->sortType = $fieldList[$id]['sortType'];
+            }
+        }
+
+        usort($setting, array('datatableModel', 'sortCols'));
+
+        return $setting;
+    }
+
+    public function generateRow($executions, $users, $productID)
+    {
+        $canBatchEdit = common::hasPriv('execution', 'batchEdit');
+
+        foreach($executions as $id => $execution)
+        {
+            $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
+            $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
+            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . html::a($link, $execution->name);
+            $execution->project  = $execution->projectName;
+            $execution->status   = zget($this->lang->execution->statusList, $execution->status);
+            $execution->PM       = zget($users, $execution->PM);
+            $execution->progress = $execution->hours->progress;
+            $execution->estimate = $execution->hours->totalEstimate;
+            $execution->consumed = $execution->hours->totalConsumed;
+            $execution->left     = $execution->hours->totalLeft;
+        }
+
+        return $executions;
+    }
+
     /*
      * Build search form
      *

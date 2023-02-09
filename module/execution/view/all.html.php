@@ -1,47 +1,98 @@
 <?php include '../../common/view/header.html.php';?>
-<?php js::import($jsRoot . 'dtable/min.js'); ?>
-<?php css::import($jsRoot . 'dtable/min.css'); ?>
 <?php
-    $setting = $this->datatable->getSetting('execution');
-    $widths  = $this->datatable->setFixedFieldWidth($setting);
+js::import($jsRoot . 'dtable/min.js');
+css::import($jsRoot . 'dtable/min.css');
+
+$cols       = $this->execution->generateCol();
+$executions = $this->execution->generateRow($executionStats, $users, $productID);
+
+js::set('cols', json_encode($cols));
+js::set('data', json_encode($executions));
+
+js::set('orderBy', $orderBy);
+js::set('status', $status);
+js::set('unfoldExecutions', array());
+js::set('from', $from);
+
+/* Replace Iteration to Execution. */
+js::set('checkedSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->checkedExecSummary));
+js::set('pageSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->pageExecSummary));
+js::set('executionSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->executionSummary));
+js::set('checkedExecutions', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->checkedExecutions));
+/* Set unfold parent executionID. */
+js::set('unfoldAll', $lang->execution->treeLevel['all']);
+js::set('foldAll', $lang->execution->treeLevel['root']);
+js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
 ?>
-<div id="myTable"></div>
 
-<script>
-// 定义一个方法用于渲染操作列单元格内的操作按钮
-//const renderActions = (result, rowID, col, rowData) => {
-//    return [{
-//        html: rowData[col.name].map(action => {
-//            const actionNames = {start: '开始', close: '关闭', edit: '编辑'};
-//            return `<a href="#action=${action}">${actionNames[action] || action}</a>`;
-//        }).join(' '),
-//    }];
-//};
+<?php $canBatchEdit = common::hasPriv('execution', 'batchEdit');?>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolBar pull-left'>
+    <?php if($from == 'project'):?>
+    <div class='btn-group'>
+      <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
+      <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+        <?php
+          $class = '';
+          if($productID == 0) $class = 'class="active"';
+          echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&orderby=$orderBy"), $lang->product->allProduct) . "</li>";
+          foreach($productList as $key => $product)
+          {
+              $class = $productID == $key ? 'class="active"' : '';
+              echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&orderby=$orderBy&productID=$key"), $product) . "</li>";
+          }
+        ?>
+      </ul>
+    </div>
+    <?php endif;?>
+    <?php common::sortFeatureMenu();?>
+    <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
+    <?php $label = "<span class='text'>$label</span>";?>
+    <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
+    <?php endforeach;?>
+    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->execution->editAction), $showBatchEdit);?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
+  </div>
+  <div class='btn-toolbar pull-right'>
+    <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
+    <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . ($from == 'execution' ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
+  </div>
+</div>
 
-// 定义数据表格初始化选项
-const options = {
-    height: 400,
-    width: '100%',
-    striped: true,
-    cols: [
-        {name: 'id', title: 'ID', width: 60, fixed: 'left', sortType: true},
-        {name: 'project', title: '项目名称', width: 600, fixed: 'left'},
-        {name: 'manager', title: '负责人', width: 60},
-        {name: 'storyPoints', title: '需求规模', width: 80, align: 'center'},
-        {name: 'executionCounts', title: '执行数', width: 70, align: 'center'},
-        {name: 'investedDays', title: '已投入', width: 70, align: 'center'},
-        {name: 'startDate', title: '开始日期', width: 90, align: 'center'},
-        {name: 'finishDate', title: '完成日期', width: 90, align: 'center'},
-        {name: 'progress', title: '进度', width: 65, align: 'center'},
-    ],
-    data: [
-        {id: 1, project: '禅道开源版', manager: '李明', storyPoints: 1024, executionCounts: 42, investedDays: 32, startDate: '2022-05-03', finishDate: '2022-09-20', progress: 55},
-        {id: 2, project: '禅道企业版', manager: 'Zhang Giao', storyPoints: 1024, executionCounts: 42, investedDays: 32, startDate: '2022-05-03', finishDate: '2022-09-20', progress: 55},
-        {id: 2, project: '禅道旗舰版', manager: 'HAHAHA', storyPoints: 1024, executionCounts: 42, investedDays: 32, startDate: '2022-05-03', finishDate: '2022-09-20', progress: 55},
-    ],
-};
-
-// 初始化数据表格
-$('#myTable').dtable(options);
-</script>
+<div id='mainContent' class="main-row fade">
+  <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='execution'></div>
+  <?php if(empty($executionStats)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $from == 'execution' ? $lang->execution->noExecutions : $lang->execution->noExecution;?></span>
+      <?php if(empty($allExecutionsNum)):?>
+        <?php if(common::hasPriv('execution', 'create')):?>
+        <?php echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-plus'></i> " . ($from == 'execution' ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-info' data-app='execution'");?>
+        <?php endif;?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
+  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>'>
+    <div id="myTable"></div>
+    <div class='table-footer'>
+    <?php $pager->show('right', 'pagerjs');?>
+    </div>
+  </form>
+  <script>
+  cols = JSON.parse(cols);
+  data = JSON.parse(data);
+  const options = {
+      height: 'auto',
+      striped: true,
+      cols: cols,
+      data: data,
+  };
+  
+  $('#myTable').dtable(options);
+  </script>
+  <?php endif;?>
+</div>
 <?php include '../../common/view/footer.html.php';?>
