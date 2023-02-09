@@ -138,7 +138,7 @@
         <div class="detail-title"><?php echo $lang->zahost->browseNode;?></div>
         <?php if(!empty($nodeList)): ?>
         <div class="detail-content article-content">
-        <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'list', "hostID=$zahost->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' onload='setIframeHeight(this)' style='min-height:300px;'></iframe>";?>
+        <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'nodeList', "hostID=$zahost->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' onload='setIframeHeight(this)' style='min-height:300px;'></iframe>";?>
         </div>
         <?php else: ?>
         <div class="detail-content article-content"><?php echo $lang->noData;?></div>
