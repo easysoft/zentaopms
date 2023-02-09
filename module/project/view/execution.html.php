@@ -18,7 +18,7 @@
     <?php if($project->division and $project->hasProduct):?>
     <div class='btn-group'>
       <?php $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;?>
-      <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
           $class = '';
@@ -27,7 +27,7 @@
           foreach($productList as $key => $productName)
           {
               $class = $productID == $key ? 'class="active"' : '';
-              echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy&productID=$key"), $productName) . "</li>";
+              echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy&productID=$key"), $productName, '', "title='{$productName}' class='text-ellipsis'") . "</li>";
           }
         ?>
       </ul>
@@ -45,8 +45,8 @@
   <div class='btn-toolbar pull-right'>
     <?php if($project->model == 'waterfall' and $this->config->edition == 'max'):?>
     <div class="btn-group">
-      <?php echo html::a('', "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->project->bylist}'");?>
       <?php echo html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"), "<i class='icon-gantt-alt'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->programplan->gantt}'");?>
+      <?php echo html::a('', "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->project->bylist}'");?>
     </div>
     <?php endif;?>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
