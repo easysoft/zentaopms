@@ -1284,6 +1284,9 @@ class kanbanModel extends model
 
                         $parentExecutions  = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($object->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
                         $objectCard->title = implode('/', $parentExecutions);
+
+                        $children             = $this->dao->select('count(1) as children')->from(TABLE_EXECUTION)->where('parent')->eq($object->id)->andWhere('type')->in('stage,kanban,sprint')->andWhere('deleted')->eq(0)->fetch('children');
+                        $objectCard->children = !empty($children) ? $children : 0;
                     }
 
                     $objectCard->desc         = strip_tags(htmlspecialchars_decode($object->desc));
