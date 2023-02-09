@@ -131,7 +131,7 @@ $lang->admin->menuList->message['menuOrder']['20'] = 'browser';
 $lang->admin->menuList->message['menuOrder']['25'] = 'setting';
 
 $lang->admin->menuList->dev['subMenu']['api']    = array('link' => "API|dev|api|module=index");
-$lang->admin->menuList->dev['subMenu']['db']     = array('link' => "{$lang->database}|dev|db|table={$config->db->prefix}effort");
+$lang->admin->menuList->dev['subMenu']['db']     = array('link' => "{$lang->database}|dev|db|table=" . trim(TABLE_EFFORT, '`'));
 $lang->admin->menuList->dev['subMenu']['editor'] = array('link' => "{$lang->editor}|dev|editor|");
 $lang->admin->menuList->dev['subMenu']['entry']  = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');
 
