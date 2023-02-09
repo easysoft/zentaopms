@@ -30,8 +30,9 @@
 .admin > .main {flex: 1 1 70%;}
 .admin > .side {flex: 1 1 30%; margin-left: 16px; padding-right: 16px;}
 .panel-title {padding: 10px 0px;}
-.panel {padding: 0 0 0 16px;}
+.panel {padding-left: 16px;}
 .settings.panel, .plug.panel {margin-bottom: 16px;}
+.main > .panel {padding-right: 8px;}
 
 .settings-list {display: flex; flex-wrap: wrap; padding: 0 4px 16px 4px;}
 .settings-list > .setting-box {border: unset; flex: 0 1 20%; padding: 8px;}
