@@ -2439,7 +2439,7 @@ class repoModel extends model
      */
     public function buildTree($files = array(), $parent = 0)
     {
-        $treeList = [];
+        $treeList = array();
         $key      = 0;
         $pathName = array();
         $fileName = array();
