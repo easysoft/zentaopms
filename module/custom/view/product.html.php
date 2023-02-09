@@ -14,6 +14,11 @@
   <?php include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
+      <div class='main-header'>
+        <div class='heading'>
+          <strong><?php echo $lang->custom->$module->fields['product'];?></strong>
+        </div>
+      </div>
       <table class='table table-form'>
         <tr>
           <th class='w-150px'><?php echo $lang->custom->closedProduct;?></th>
