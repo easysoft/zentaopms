@@ -1,8 +1,8 @@
 $(function()
 {
-    $(document).on('click', '.setting-box', function()
+    $(document).on('click', '.setting-box > button', function()
     {
-        location.href = $(this).data('link');
+        location.href = $(this).attr('data-link');
     }).on('click', '.setting-box a', function(e)
     {
         e.stopPropagation();
