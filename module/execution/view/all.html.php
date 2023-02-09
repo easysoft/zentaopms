@@ -87,6 +87,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
   const options = {
       height: 'auto',
       striped: true,
+      plugins: ['nested'],
       cols: cols,
       data: data,
   };

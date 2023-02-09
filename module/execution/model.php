@@ -1682,7 +1682,10 @@ class executionModel extends model
             }
         }
 
-        foreach($childList as $id) unset($executions[$id]);
+        if($this->app->moduleName != 'execution' and $this->app->methodName != 'all')
+        {
+            foreach($childList as $id) unset($executions[$id]);
+        }
 
         return array_values($executions);
     }
@@ -5225,6 +5228,8 @@ class executionModel extends model
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
             $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . html::a($link, $execution->name);
             $execution->project  = $execution->projectName;
+            $execution->parent   = $execution->parent ? $execution->parent : '';
+            $execution->asParent = !empty($execution->children);
             $execution->status   = zget($this->lang->execution->statusList, $execution->status);
             $execution->PM       = zget($users, $execution->PM);
             $execution->progress = $execution->hours->progress;
