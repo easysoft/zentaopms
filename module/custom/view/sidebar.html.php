@@ -14,6 +14,13 @@
               $active = (isset($field) and $field == $key) ? 'active' : $active;
           }
 
+          if($module == 'approvalflow' and in_array($key, array('project', 'workflow')))
+          {
+              $method = 'browse';
+              $params = "type=$key";
+              $active = (isset($type) and $type == $key) ? 'active' : $active;
+          }
+
           if(common::hasPriv('custom', $method)) echo html::a(inlink($method, $params), $value, '', "class='$active'");
       }
       ?>

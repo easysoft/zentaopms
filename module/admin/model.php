@@ -279,12 +279,8 @@ class adminModel extends model
                     $subModule = '';
                     if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
                     {
-                        if(strpos(',todo,block,', ",$paramName,") !== false and $subMenuKey == 'my') $subModule = 'custom';
-                        if(strpos(',product,story,productplan,release,', ",$paramName,") !== false and $subMenuKey == 'product') $subModule = 'custom';
-                        if(strpos(',task,', ",$paramName,") !== false and $subMenuKey == 'execution') $subModule = 'custom';
-                        if(strpos(',project,story,', ",$paramName,") !== false and $subMenuKey == 'project') $subModule = 'custom';
-                        if(strpos(',bug,testcase,testsuite,testtask,testreport,caselib,', ",$paramName,") !== false and $subMenuKey == 'qa') $subModule = 'custom';
-                        if($this->config->vision == 'lite' and $paramName == 'task' and $subMenuKey == 'my') $subModule = 'custom';
+                        if(isset($this->config->admin->navsGroup[$subMenuKey]) and strpos($this->config->admin->navsGroup[$subMenuKey], ",$paramName,") !== false) $subModule = 'custom';
+                        if($paramName == $subMenuKey) $subModule = 'custom';
                     }
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;

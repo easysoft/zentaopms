@@ -12,12 +12,12 @@
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-row'>
-  <?php if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib')) and ($module != 'project' or ($module == 'project' and $config->vision == 'rnd'))) include 'sidebar.html.php';?>
+  <?php if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib', 'doc')) and ($module != 'project' or ($module == 'project' and $config->vision == 'rnd'))) include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
-          <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->required;?></strong>
+          <strong><?php echo $lang->custom->required;?></strong>
         </div>
       </div>
       <table class='table table-form mw-800px'>
