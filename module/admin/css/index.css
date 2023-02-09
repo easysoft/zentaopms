@@ -30,16 +30,18 @@
 .admin > .main {flex: 1 1 70%;}
 .admin > .side {flex: 1 1 30%; margin-left: 16px; padding-right: 16px;}
 .panel-title {padding: 10px 0px;}
-.panel {padding: 0 0 0 16px;}
+.panel {padding-left: 16px;}
 .settings.panel, .plug.panel {margin-bottom: 16px;}
+.main > .panel {padding-right: 8px;}
 
 .settings-list {display: flex; flex-wrap: wrap; padding: 0 4px 16px 4px;}
-.settings-list > .setting-box.btn {flex: 1 1 18%; padding: 8px; border: 1px solid rgba(227, 228, 233, 0.6); margin-right: 10px; margin-top: 16px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset;}
-.settings-list > .setting-box.btn:hover {background: unset;}
-.settings-list > .setting-box.btn[disabled] {cursor: not-allowed; pointer-events: unset;}
-.settings-list > .setting-box.btn[disabled] > a {pointer-events: none;}
-.settings-list > .setting-box > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
-.settings-list > .setting-box > .setting-desc {padding-bottom: 16px; color: #5E626D;}
+.settings-list > .setting-box {border: unset; flex: 0 1 20%; padding: 8px;}
+.settings-list > .setting-box > button.btn {padding: 16px 10px; height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset; border: 1px solid rgba(227, 228, 233, 0.6)}
+.settings-list > .setting-box > .btn:hover {background: unset;}
+.settings-list > .setting-box > .btn[disabled] {cursor: not-allowed; pointer-events: unset;}
+.settings-list > .setting-box > .btn[disabled] > a {pointer-events: none;}
+.settings-list > .setting-box > .btn > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
+.settings-list > .setting-box > .btn > .setting-desc {padding-bottom: 16px; color: #5E626D;}
 .settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
@@ -59,10 +61,9 @@
 .official-content > .content {color: #838A9D; font-size: 12px; line-height: 22px; padding-top: 6px;}
 .official-content > .title {color: #313C52; font-size: 13px; line-height: 14px;}
 
-.classList {aspect-ratio: 4/1;}
-.classList > .classItem {flex: 1 1 30%; margin: 5px; border: 1px solid rgba(227, 228, 233, 0.6); border-radius: 4px; padding-bottom: 16px; align-items: center;}
+.classList > .classItem {flex: 1 1 30%; margin: 5px 5px 16px 5px; border: 1px solid rgba(227, 228, 233, 0.6); border-radius: 4px; padding-bottom: 5px; align-items: center;}
 .classItem > .imgBack {flex: 1 1 50%;}
-.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 16 / 9; background-position: center; margin: 0px; border-top-left-radius: 4px; border-top-right-radius: 4px;}
+.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 16 / 9; background-position: center; margin: 0; border-top-left-radius: 4px; border-top-right-radius: 4px;}
 .classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 24px; margin-bottom: 6px; font-weight: 700;}
 .more {float: right; padding-right: 12px; font-weight: normal;}
 .panel.publicClass {padding: 0 10px;}
@@ -78,6 +79,7 @@
 .main.without-internet > .bottom > .official.panel > .main-panel {flex-direction: row-reverse;}
 
 /* css in side */
+#mainContent > .side.panel {height: 100%;}
 .time-block {background: #EDEEF2; padding:2px 4px; border-radius: 4px; color: #0B0F18; font-size: 15px; margin: 0 4px;}
 .dynamic-block {height: 74px; padding: 12px 16px; display: flex; justify-content: space-between; position: relative; line-height: 20px; border-top: 1px solid #E3E4E9;}
 .dynamic-content {height: 50px; line-height: 25px; overflow: hidden;}

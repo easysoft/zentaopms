@@ -60,7 +60,7 @@ class extensionModel extends model
         $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
         $version = str_replace('_', '.', $version);
 
-        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version;
+        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version . '&edition=' . $this->config->edition;
         $result = json_decode(common::http($url));
 
         if(!isset($result->status)) return false;

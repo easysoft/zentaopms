@@ -492,11 +492,15 @@ class adminModel extends model
     {
         if($hasInternet)
         {
-            $searchType = $type == 'plugin' ? 'byUpdatedTime' : 'byModule';
+            $searchType = $type == 'plugin' ? 'byUpdatedTime,offcial' : 'byModule';
             $param      = $type == 'plugin' ? '' : 'MTIxOA==';
             $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
             $plugins    = isset($extensions->extensions) ? (array)$extensions->extensions : array();
-            foreach($plugins as $plugin) $plugin->viewLink = str_replace(array('info', 'client'), '', $plugin->viewLink);
+            foreach($plugins as $id => $plugin)
+            {
+                $plugin->viewLink = str_replace(array('info', 'client'), '', $plugin->viewLink);
+                if($type == 'patch' and !isset($plugin->compatibleRelease)) unset($plugins[$id]);
+            }
         }
         else
         {
@@ -533,7 +537,7 @@ class adminModel extends model
         $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
         $version = str_replace('_', '.', $version);
 
-        $url   .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version;
+        $url   .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version . '&edition=' . $this->config->edition;
         $result = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($url)));
 
         if(!isset($result->status)) return false;
@@ -550,7 +554,7 @@ class adminModel extends model
      */
     public function getPublicClassByAPI($limit = 2)
     {
-        $apiURL  = $this->config->admin->apiRoot . "publicclass.json";
+        $apiURL  = $this->config->admin->videoAPIURL;
         $data    = $this->fetchAPI($apiURL);
         $courses = $data->videos;
 
@@ -558,15 +562,48 @@ class adminModel extends model
         $publicClass = array();
         foreach($courses as $course)
         {
-            if($index > $limit) return $publicClass;
+            if($index > $limit) break;
 
             $publicClass[$index] = new stdClass();
             $publicClass[$index]->name     = $course->title;
-            $publicClass[$index]->image    = $this->config->admin->apiRoot . $course->image->list[0]->largeURL;
-            $publicClass[$index]->viewLink = $this->config->admin->apiRoot . 'publicclass/' . ($course->alias ? "{$course->alias}-" : '') . "{$course->id}.html";
+            $publicClass[$index]->image    = $this->config->admin->cdnRoot . $course->image->list[0]->middleURL;
+            $publicClass[$index]->viewLink = $this->config->admin->apiRoot . '/publicclass/' . ($course->alias ? "{$course->alias}-" : '') . "{$course->id}.html";
             $index ++;
         }
         return $publicClass;
+    }
+
+    /**
+     * Get dynamics by API.
+     *
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getDynamicsByAPI($limit = 2)
+    {
+        $apiURL   = $this->config->admin->downloadAPIURL;
+        $data     = $this->fetchAPI($apiURL);
+        $articles = $data->articles;
+
+        $index     = 1;
+        $downloads = array();
+        foreach($articles as $article)
+        {
+            if($index > $limit) break;
+
+            $tagKey = $this->config->edition . 'Tag';
+            if(!isset($this->lang->admin->$tagKey)) break;
+            if(!preg_match("/{$this->lang->admin->$tagKey}\d/", $article->title)) continue;
+
+            $downloads[$index] = new stdClass();
+            $downloads[$index]->id        = $article->id;
+            $downloads[$index]->title     = $article->title;
+            $downloads[$index]->addedDate = $article->addedDate;
+            $downloads[$index]->link      = $this->config->admin->apiRoot . "/download/{$article->alias}-{$article->id}.html";
+            $index ++;
+        }
+        return $downloads;
     }
 
     /**
@@ -578,7 +615,7 @@ class adminModel extends model
     public function checkInternet()
     {
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, 'https://api.zentao.net/extension-apiGetExtensions.json');
+        curl_setopt($curl, CURLOPT_URL, $this->config->admin->apiSite);
         curl_setopt($curl, CURLOPT_TIMEOUT_MS, 1000);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -588,5 +625,23 @@ class adminModel extends model
         curl_close($curl);
 
         return (bool)$connected;
+    }
+
+    /**
+     * Get date used object.
+     *
+     * @access public
+     * @return object
+     */
+    public function genDateUsed()
+    {
+        $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
+            ->where('date')->gt('0000-00-00')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->orderBy('date_asc')
+            ->limit('1')
+            ->fetch('date');
+
+        return helper::getDateInterval($firstUseDate);
     }
 }
