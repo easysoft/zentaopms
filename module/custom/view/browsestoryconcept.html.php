@@ -12,16 +12,16 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-row'>
   <?php include 'sidebar.html.php';?>
-  <div class='main-col main-content main-table'>
-    <div>
-      <div class='pull-left'>
+  <div class='main-col main-content main-table px-0'>
+    <div class="main-header">
+      <div class='pull-left pl-20 pt-5'>
         <strong><?php echo $lang->custom->product->fields['browsestoryconcept']?></strong>
       </div>
       <div class='pull-right setBtn'>
         <?php if(common::hasPriv('custom', 'setstoryconcept')) echo html::a($this->createLink('custom', 'setstoryconcept', '', '', true), $lang->custom->setStoryConcept, '', "class='btn btn-primary iframe' data-width=" . ($this->config->URAndSR ? "590px" : "405px"));?>
       </div>
     </div>
-    <table class='table table-form'>
+    <table class='table table-form box-shadow-none'>
       <thead>
         <tr>
           <?php if(common::hasPriv('custom', 'setDefaultConcept')):?>
