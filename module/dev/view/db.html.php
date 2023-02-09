@@ -9,7 +9,7 @@
         <div class='modulegroup'><?php echo $groupName?></div>
         <?php foreach($tables[$group] as $subTable => $table):?>
         <?php
-        $active    = ($table == $selectedTable) ? 'active' : '';
+        $active    = ($table == $selectedTable) ? 'text-primary' : '';
         $tableName = zget($lang->dev->tableList, $subTable, '');
         ?>
         <?php if(!empty($tableName)) echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
@@ -21,7 +21,7 @@
         <div class='modulegroup'><?php echo $groupName?></div>
         <?php foreach($tables[$group] as $subTable => $table):?>
         <?php
-        $active    = ($table == $selectedTable) ? 'active' : '';
+        $active    = ($table == $selectedTable) ? 'text-primary' : '';
         $tableName = zget($lang->dev->tableList, $subTable, '');
         ?>
         <?php if(!empty($tableName)) echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
