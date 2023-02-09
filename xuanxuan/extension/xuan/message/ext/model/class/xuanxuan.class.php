@@ -53,7 +53,8 @@ class xuanxuanMessage extends messageModel
                 $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyTitle, $this->app->user->realname, $this->lang->action->label->$actionType, 1, $this->lang->action->objectTypes[$objectType]);
                 if($objectType == 'story' && $actionType == 'reviewed' && !empty($extra))
                 {
-                    $notifyType = strtolower(explode(',', $extra)[0]);
+                    $notifyExtra = explode(',', $extra);
+                    $notifyType  = strtolower($notifyExtra[0]);
                     if($notifyType == 'pass')
                     {
                         $title = sprintf($this->lang->message->notifyPassTitle, $this->app->user->realname, 1);
