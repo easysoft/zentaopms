@@ -76,7 +76,7 @@ class zanode extends control
      * @access public
      * @return void
      */
-    public function list($hostID, $orderBy = 'id_desc')
+    public function nodeList($hostID, $orderBy = 'id_desc')
     {
         if(!commonModel::hasPriv('zanode', 'browse'))
         {
