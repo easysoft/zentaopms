@@ -96,7 +96,12 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->defaultPwd; ?>:</div>
-                <div class="col-8"><?php echo str_repeat('*', strlen($config->zanode->defaultPwd)) . ' ' . "<button type='button' class='btn btn-info btn-mini btn-pwd-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"; ?></div>
+                <div class="col-8 default-pwd"><?php 
+                echo '<span id="pwd-text">' . str_repeat('*', strlen($config->zanode->defaultPwd)) . '</span>'
+                 . ' '
+                 . "<button type='button' class='btn btn-info btn-mini btn-pwd-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"
+                 . "<button type='button' class='btn btn-info btn-mini btn-pwd-show'><i class='icon-common-eye icon-eye' title='" . $lang->zanode->showPwd .  "'></i></button>"; 
+                ?></div>
                 <textarea style="display:none;" id="pwd-copy"><?php echo $config->zanode->defaultPwd; ?></textarea>
               </div>
             </div>
@@ -155,7 +160,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
           <div class="detail-title"><?php echo $lang->zanode->browseSnapshot;?></div>
           <?php if(!empty($snapshotList)): ?>
           <div class="detail-content article-content">
-          <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'browseSnapshot', "nodeID=$zanode->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' onload='setIframeHeight(this)' style='min-height:300px;'></iframe>";?>
+          <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'browseSnapshot', "nodeID=$zanode->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' style='min-height:300px;'></iframe>";?>
           </div>
           <?php else: ?>
           <div class="detail-content article-content"><?php echo $lang->noData; ?></div>

@@ -46,7 +46,7 @@ class fileModel extends model
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->andWhere('extra')->ne('editor')
-            ->beginIF($extra)->andWhere('extra')->eq($extra)
+            ->beginIF($extra)->andWhere('extra')->in($extra)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('id')
             ->fetchAll('id');

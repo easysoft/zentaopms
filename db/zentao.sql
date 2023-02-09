@@ -7372,6 +7372,7 @@ CREATE TABLE `zt_image` (
   `desc` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
+  `restoreDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

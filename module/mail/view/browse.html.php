@@ -54,7 +54,7 @@
           <td><?php echo $queue->createdDate?></td>
           <td><?php echo $queue->sendTime?></td>
           <td><?php echo zget($lang->mail->statusList, $queue->status)?></td>
-          <td class='text-left'><?php echo $queue->failReason?></td>
+          <td class='text-left' title="<?php echo strip_tags($queue->failReason);?>"><?php echo $queue->failReason?></td>
           <td class='c-actions'>
             <?php
             if(common::hasPriv('mail', 'delete')) echo html::a(inlink('delete', "id=$queue->id"), $lang->delete, 'hiddenwin');

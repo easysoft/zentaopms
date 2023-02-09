@@ -15,6 +15,7 @@ class prepareUpdate
     public function __construct()
     {
         $this->initZT();
+        $this->initMysql();
         $this->addChangelog();
         $this->changeVersion();
         $this->addReleaseDetail();

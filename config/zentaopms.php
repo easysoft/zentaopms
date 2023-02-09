@@ -404,8 +404,9 @@ $config->objectTables['stage']        = TABLE_STAGE;
 $config->objectTables['apistruct']    = TABLE_APISTRUCT;
 $config->objectTables['repo']         = TABLE_REPO;
 $config->objectTables['dataview']     = TABLE_DATAVIEW;
-$config->objectTables['zahost']        = TABLE_ZAHOST;
-$config->objectTables['automation']    = TABLE_AUTOMATION;
+$config->objectTables['zahost']       = TABLE_ZAHOST;
+$config->objectTables['automation']   = TABLE_AUTOMATION;
+$config->objectTables['stepResult']   = TABLE_TESTRUN;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';
