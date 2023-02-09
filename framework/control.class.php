@@ -72,6 +72,14 @@ class control extends baseControl
                     foreach($exportFields as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
                 }
 
+                if(isset($this->config->excel->editor[$this->moduleName]))
+                {
+                    foreach($exportFields as $field)
+                    {
+                        if($field->control == 'richtext') $this->config->excel->editor[$this->moduleName][] = $field->field;
+                    }
+                }
+
                 foreach($exportFields as $flowField => $exportField)
                 {
                     if(!isset($this->lang->{$this->moduleName}->$flowField)) $this->lang->{$this->moduleName}->$flowField = $exportField->name;
