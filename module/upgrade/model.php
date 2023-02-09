@@ -1080,7 +1080,9 @@ class upgradeModel extends model
             case '18_0_beta2':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta2'));
             case '18_0_beta3':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta3')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta3'));
+             case '18_0':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -7558,6 +7560,7 @@ class upgradeModel extends model
         {
             $project = new stdclass();
             $project->name           = $sprint->name;
+            $project->desc           = $sprint->desc;
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;
