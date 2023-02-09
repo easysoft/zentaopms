@@ -203,4 +203,24 @@ class adminTest
         $menuKey = $this->objectModel->getMenuKey();
         return empty($menuKey) ? 'null' : $menuKey;
     }
+
+    /**
+     * Get the authorized link
+     *
+     * @param mixed $menuKey
+     * @access public
+     * @return array
+     */
+    public function getHasPrivLinkTest($menuKey)
+    {
+        global $lang;
+        $subMenuList = $lang->admin->menuList->$menuKey['subMenu'];
+        $link        = array();
+        foreach($subMenuList as $subMenu)
+        {
+            $link = $this->objectModel->getHasPrivLink($subMenu);
+            if(!empty($link)) return $link;
+        }
+        return $link;
+    }
 }
