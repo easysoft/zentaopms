@@ -195,7 +195,11 @@ class projectrelease extends control
 
         /* Get release and build. */
         $release = $this->projectrelease->getById((int)$releaseID);
-        if(!$this->session->project) $this->session->set('project', explode(',', $release->project)[0], 'project');
+        if(!$this->session->project)
+        {
+            $releaseProject = explode(',', $release->project);
+            $this->session->set('project', $releaseProject[0], 'project');
+        }
 
         $this->commonAction($this->session->project, $release->product, $release->branch);
         $bindBuilds = $this->build->getByList($release->build);
@@ -554,7 +558,11 @@ class projectrelease extends control
         $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
 
         $release = $this->projectrelease->getByID($releaseID);
-        if(!$this->session->project) $this->session->set('project', explode(',', $release->project)[0], 'project');
+        if(!$this->session->project)
+        {
+            $releaseProject = explode(',', $release->project);
+            $this->session->set('project', $releaseProject[0], 'project');
+        }
 
         $builds  = $this->loadModel('build')->getByList($release->build);
         $project = $this->loadModel('project')->getByID($this->session->project);
@@ -690,7 +698,11 @@ class projectrelease extends control
         $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
         /* Set menu. */
         $release = $this->projectrelease->getByID($releaseID);
-        if(!$this->session->project) $this->session->set('project', explode(',', $release->project)[0], 'project');
+        if(!$this->session->project)
+        {
+            $releaseProject = explode(',', $release->project);
+            $this->session->set('project', $releaseProject[0], 'project');
+        }
 
         $builds  = $this->loadModel('build')->getByList($release->build);
         $project = $this->loadModel('project')->getByID($this->session->project);

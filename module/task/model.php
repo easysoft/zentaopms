@@ -3643,6 +3643,7 @@ class taskModel extends model
         if(!empty($task->team))
         {
             global $app;
+            $myself = new self();
             if($task->mode == 'linear')
             {
                 if($action == 'assignto' and strpos('done,cencel,closed', $task->status) === false) return false;
@@ -3650,14 +3651,14 @@ class taskModel extends model
                 {
                     if($task->assignedTo != $app->user->account) return false;
 
-                    $currentTeam = (new self())->getTeamByAccount($task->team, $app->user->account);
+                    $currentTeam = $myself->getTeamByAccount($task->team, $app->user->account);
                     if($currentTeam and $currentTeam->status == 'wait') return true;
                 }
                 if($action == 'finish' and $task->assignedTo != $app->user->account) return false;
             }
             elseif($task->mode == 'multi')
             {
-                $currentTeam = (new self())->getTeamByAccount($task->team, $app->user->account);
+                $currentTeam = $myself->getTeamByAccount($task->team, $app->user->account);
                 if($action == 'start' and strpos('wait,doing', $task->status) !== false and $currentTeam and $currentTeam->status == 'wait') return true;
                 if($action == 'finish' and (empty($currentTeam) or $currentTeam->status == 'done')) return false;
             }
