@@ -48,7 +48,7 @@ EOT;
 </style>
 <?php endif;?>
 <div id='mainContent' class='main-row'>
-  <?php if(!in_array($module, array('block'))) include 'sidebar.html.php';?>
+  <?php if(!in_array($module, array('block', 'baseline'))) include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
