@@ -121,16 +121,22 @@ class programplanModel extends model
      */
     public function getPairs($executionID, $productID = 0, $type = 'all')
     {
-        $plans = $this->getPlans($executionID, $productID);
+        $plans = $this->getStage($executionID, $productID, 'all', $orderBy);
 
         $pairs = array(0 => '');
-        foreach($plans as $plan)
+
+        $parents  = array();
+        foreach($plans as $planID => $plan) $parents[$plan->parent] = true;
+
+        foreach($plans as $planID => $plan)
         {
-            $pairs[$plan->id] = $plan->name;
-            if(!empty($plan->children))
+            $paths = array_slice(explode(',', trim($plan->path, ',')), 1);
+            $planName = '';
+            foreach($paths as $path)
             {
-                foreach($plan->children as $child) $pairs[$child->id] = $plan->name . '/' . $child->name;
+                if(isset($plans[$path])) $planName .= '/' . $plans[$path]->name;
             }
+            $pairs[$planID] = $planName;
         }
 
         return $pairs;
