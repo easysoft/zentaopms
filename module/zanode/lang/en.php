@@ -142,10 +142,10 @@ $lang->zanode->init->initSuccessNoticeTitle = "The service is ready, and it take
 $lang->zanode->init->initFailNoticeTitle    = "Initialization failed, check the init script execution log and try the following two solutions:";
 $lang->zanode->init->initFailNoticeDesc     = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
-$lang->zanode->init->serviceStatus = [
+$lang->zanode->init->serviceStatus = array(
     "ZenAgent" => 'not_install',
     "ZTF"      => 'not_install',
-];
+);
 $lang->zanode->init->title          = "Initialize Node";
 $lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
 $lang->zanode->init->initDesc       = "Execute the init script on the node: %s %s   <br>- Click check service status button.";

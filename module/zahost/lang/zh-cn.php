@@ -59,12 +59,12 @@ $lang->zahost->init->next = "下一步";
 $lang->zahost->init->initFailNotice    = "服务未就绪，在宿主机上执行安装服务命令或<a href='https://github.com/easysoft/zenagent/' target='_blank'>查看帮助</a>.";
 $lang->zahost->init->initSuccessNotice = "服务已就绪，您可以在%s后%s。";
 
-$lang->zahost->init->serviceStatus = [
+$lang->zahost->init->serviceStatus = array(
     "kvm"        => 'not_install',
     "nginx"      => 'not_install',
     "novnc"      => 'not_install',
     "websockify" => 'not_install',
-];
+);
 $lang->zahost->init->title          = "初始化宿主机";
 $lang->zahost->init->descTitle      = "请根据引导完成宿主机上的初始化: ";
 $lang->zahost->init->initDesc       = "- 在宿主机上执行命令：%s %s <br>- 点击检测服务状态。";
