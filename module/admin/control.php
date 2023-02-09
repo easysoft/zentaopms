@@ -273,7 +273,7 @@ class admin extends control
         }
         $this->view->title            = $this->lang->admin->setModuleIndex;
         $this->view->closedFeatures   = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=closedFeatures');
-        $this->view->useScore         = $this->loadModel('setting')->getItem('system.common.global.scoreStatus');
+        $this->view->useScore         = $this->setting->getItem('owner=system&module=common&global&key=scoreStatus');
         $this->view->disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
         $this->display();
     }
