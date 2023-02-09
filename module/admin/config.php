@@ -20,14 +20,14 @@ $config->admin->menuGroup['convert']   = array('convert');
 
 $config->admin->menuModuleGroup['model']['custom|set']        = array('project', 'issue', 'risk', 'opportunity', 'nc');
 $config->admin->menuModuleGroup['model']['custom|required']   = array('project', 'build');
-$config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'feedback', 'user', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user');
-$config->admin->menuModuleGroup['feature']['custom|required'] = array('bug', 'doc', 'product', 'story', 'productplan', 'release', 'task', 'bug', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user');
+$config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user', 'ticket');
+$config->admin->menuModuleGroup['feature']['custom|required'] = array('bug', 'doc', 'product', 'story', 'productplan', 'release', 'task', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user');
 $config->admin->menuModuleGroup['template']['custom|set']     = array('baseline');
 if($config->vision == 'lite')
 {
-    $config->admin->menuModuleGroup['model']['custom|set']        = array('issue', 'risk', 'opportunity', 'nc');
+    $config->admin->menuModuleGroup['model']['custom|set']        = array();
     $config->admin->menuModuleGroup['model']['custom|required']   = array('build');
-    $config->admin->menuModuleGroup['feature']['custom|set']      = array('project', 'todo', 'feedback', 'user', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user');
+    $config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'block', 'task', 'story', 'user');
     $config->admin->menuModuleGroup['feature']['custom|required'] = array('project', 'task', 'story', 'doc');
 }
 
@@ -78,3 +78,10 @@ $config->admin->helpURL['message']   = 'https://www.zentao.net/book/zentaopms/em
 $config->admin->helpURL['extension'] = 'https://www.zentao.net/book/zentaopms/536.html';
 $config->admin->helpURL['dev']       = 'https://www.zentao.net/book/zentaopms/537.html';
 $config->admin->helpURL['convert']   = 'https://www.zentao.net/book/zentaopms/656.html';
+
+$config->admin->navsGroup['my']        = ',todo,block,';
+$config->admin->navsGroup['product']   = ',product,story,productplan,release,';
+$config->admin->navsGroup['execution'] = ',execution,';
+$config->admin->navsGroup['project']   = ',project,story,';
+$config->admin->navsGroup['qa']        = ',bug,testcase,testsuite,testtask,testreport,caselib,';
+if($config->vision == 'lite') $config->admin->navsGroup['my'] .= 'task,';
