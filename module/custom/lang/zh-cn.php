@@ -160,6 +160,7 @@ $lang->custom->todo->fields['typeList']   = '类型';
 $lang->custom->todo->fields['statusList'] = '状态';
 
 $lang->custom->user = new stdClass();
+$lang->custom->user->fields['required']     = $lang->custom->required;
 $lang->custom->user->fields['roleList']     = '职位';
 $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';

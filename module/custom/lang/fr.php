@@ -160,6 +160,7 @@ $lang->custom->todo->fields['typeList']   = 'Type';
 $lang->custom->todo->fields['statusList'] = 'Statut';
 
 $lang->custom->user = new stdClass();
+$lang->custom->user->fields['required']     = $lang->custom->required;
 $lang->custom->user->fields['roleList']     = 'Rôle';
 $lang->custom->user->fields['statusList']   = 'Statut';
 $lang->custom->user->fields['contactField'] = 'Contact';
