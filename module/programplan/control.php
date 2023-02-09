@@ -346,21 +346,22 @@ class programplan extends control
      * AJAX: Get attributes.
      *
      * @param  int    $stageID
+     * @param  string $attribute
      * @access public
      * @return int
      */
-    public function ajaxGetAttribute($stageID)
+    public function ajaxGetAttribute($stageID, $attribute)
     {
         $this->app->loadLang('stage');
 
-        $attribute = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
-        if(empty($attribute) or $attribute == 'mix')
+        $parentAttribute = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
+        if(empty($parentAttribute) or $parentAttribute == 'mix')
         {
             return print(html::select('attribute', $this->lang->stage->typeList, $attribute, "class='form-control chosen'"));
         }
         else
         {
-            return print(zget($this->lang->stage->typeList, $attribute));
+            return print(zget($this->lang->stage->typeList, $parentAttribute));
         }
     }
 
