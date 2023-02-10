@@ -88,10 +88,8 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
   <script>
   cols = JSON.parse(cols);
   data = JSON.parse(data);
-  var width = $('.table-footer').width() + parseFloat($('.table-footer').css('padding-right')) + 5;
   const options = {
       height: 'auto',
-      width: width,
       striped: true,
       plugins: ['nested'],
       cols: cols,
