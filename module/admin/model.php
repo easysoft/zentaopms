@@ -317,8 +317,14 @@ class adminModel extends model
             /* Set links to authorized navigation. */
             if(isset($menu['subMenu']))
             {
+                /* Reorder secondary navigation. */
+                $subMenuList   = array();
+                $subMenuOrders = $menu['menuOrder'];
+                ksort($subMenuOrders);
+                foreach($subMenuOrders as $value) $subMenuList[$value] = $menu['subMenu'][$value];
+
                 /* Check sub menu priv. */
-                foreach($menu['subMenu'] as $subMenuKey => $subMenu)
+                foreach($subMenuList as $subMenuKey => $subMenu)
                 {
                     $link = array();
                     if(isset($menu['tabMenu'][$subMenuKey]))
