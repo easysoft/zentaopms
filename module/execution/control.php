@@ -2124,7 +2124,7 @@ class execution extends control
         if($this->post->names)
         {
             $allChanges = $this->execution->batchUpdate();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($allChanges))
             {
@@ -2147,7 +2147,7 @@ class execution extends control
                     $this->loadModel('common')->syncPPEStatus($syncExecution);
                 }
             }
-            return print(js::locate($this->session->executionList, 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         if($this->app->tab == 'project')
