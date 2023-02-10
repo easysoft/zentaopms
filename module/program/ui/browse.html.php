@@ -123,7 +123,6 @@ Page(
       set('js-render', true),
       set('cols', $cols),
       set('width', '100%'),
-      set('height', 400),
       set('data', $data),
     )
   ),
