@@ -12,7 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-800px'>
+  <div class='mw-800px'>
     <div class='main-header'>
       <h2>
         <?php echo $lang->message->browser;?>
