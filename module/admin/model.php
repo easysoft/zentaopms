@@ -364,11 +364,8 @@ class adminModel extends model
                         $menu['subMenu'][$subMenuKey]['link'] = substr($subMenuLabel, 0, strpos($subMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
 
                         /* Update the level 1 navigation link. */
-                        if(empty($menu['link']))
-                        {
-                            $menu['link']     = helper::createLink($module, $method, $params);
-                            $menu['disabled'] = false;
-                        }
+                        if(empty($menu['link'])) $menu['link'] = helper::createLink($module, $method, $params);
+                        $menu['disabled'] = false;
                     }
                 }
             }
