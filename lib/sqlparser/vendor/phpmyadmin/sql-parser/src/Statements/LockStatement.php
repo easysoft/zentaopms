@@ -1,9 +1,8 @@
 <?php
+
 /**
  * `LOCK` statement.
  */
-
-declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
@@ -13,10 +12,12 @@ use PhpMyAdmin\SqlParser\Statement;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
 
-use function trim;
-
 /**
  * `LOCK` statement.
+ *
+ * @category   Statements
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class LockStatement extends Statement
 {
@@ -25,13 +26,11 @@ class LockStatement extends Statement
      *
      * @var LockExpression[]
      */
-    public $locked = [];
+    public $locked = array();
 
     /**
      * Whether it's a LOCK statement
      * if false, it's an UNLOCK statement
-     *
-     * @var bool
      */
     public $isLock = true;
 
@@ -45,7 +44,6 @@ class LockStatement extends Statement
             // this is in fact an UNLOCK statement
             $this->isLock = false;
         }
-
         ++$list->idx; // Skipping `LOCK`.
 
         /**
@@ -90,22 +88,18 @@ class LockStatement extends Statement
                         $parser->error('Unexpected keyword.', $token);
                         break;
                     }
-
                     $state = 1;
                     continue;
+                } else {
+                    $parser->error('Unexpected token.', $token);
+                    break;
                 }
-
-                $parser->error('Unexpected token.', $token);
-                break;
-            }
-
-            if ($state === 1) {
+            } elseif ($state === 1) {
                 if (! $this->isLock) {
                     // UNLOCK statement should not have any more tokens
                     $parser->error('Unexpected token.', $token);
                     break;
                 }
-
                 $this->locked[] = LockExpression::parse($parser, $list);
                 $state = 2;
             } elseif ($state === 2) {
@@ -118,11 +112,9 @@ class LockStatement extends Statement
             $prevToken = $token;
         }
 
-        if ($state === 2 || $prevToken === null) {
-            return;
+        if ($state !== 2 && $prevToken != null) {
+            $parser->error('Unexpected end of LOCK statement.', $prevToken);
         }
-
-        $parser->error('Unexpected end of LOCK statement.', $prevToken);
     }
 
     /**
