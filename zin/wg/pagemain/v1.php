@@ -11,10 +11,16 @@ class pagemain extends \zin\core\wg
 
     static $defaultProps = array('id' => 'main');
 
-    function build($isPrint = false, $parent = null)
+    protected function acceptChild($child, $strAsHtml = false)
+    {
+        $child = parent::acceptChild($child, $strAsHtml);
+        $this->appendTo('inner', $child);
+    }
+
+    protected function build($isPrint = false, $parent = null)
     {
         $builder = parent::build($isPrint, $parent);
-        $builder->append(h5::div()->addClass('container'));
+        $builder->append(h5::div($this->blocks['inner'])->addClass('container'));
         return $builder;
     }
 }
