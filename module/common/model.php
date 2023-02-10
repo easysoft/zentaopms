@@ -1038,7 +1038,8 @@ class commonModel extends model
             {
                 foreach($lang->my->$moduleLinkList as $key => $linkList)
                 {
-                    $method = explode('-', $key)[1];
+                    $moduleMethodList = explode('-', $key);
+                    $method           = $moduleMethodList[1];
                     if(common::hasPriv($currentModule, $method))
                     {
                         $display       = true;

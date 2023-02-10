@@ -19,6 +19,7 @@ class svn extends control
      */
     public function run()
     {
+        set_time_limit(0);
         $this->svn->run();
     }
 

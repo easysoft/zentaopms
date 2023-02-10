@@ -1595,7 +1595,7 @@ class bugModel extends model
             if($day == $days -1) $startDate = date('Y-m-d', $time) . ' 00:00:00';
         }
 
-        $dateFields = ['openedDate', 'resolvedDate', 'closedDate'];
+        $dateFields = array('openedDate', 'resolvedDate', 'closedDate');
         $staticData = array();
         foreach($dateFields as $field)
         {

@@ -143,10 +143,10 @@ $lang->zanode->init->initSuccessNoticeTitle = "服务已就绪，还需两步即
 $lang->zanode->init->initFailNoticeTitle    = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
 $lang->zanode->init->initFailNoticeDesc     = "1、 重新执行脚本 <br/>2、 查看初始化常见问题";
 
-$lang->zanode->init->serviceStatus = [
+$lang->zanode->init->serviceStatus = array(
     "ZenAgent" => 'not_install',
     "ZTF"      => 'not_install',
-];
+);
 $lang->zanode->init->title          = "初始化执行节点";
 $lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
 $lang->zanode->init->initDesc       = "- 在执行节点上执行命令：%s %s  <br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "服务状态";

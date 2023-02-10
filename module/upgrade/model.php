@@ -6332,7 +6332,8 @@ class upgradeModel extends model
         {
             $dirPath    = dirname($filePath);
             $dir        = str_replace($this->app->appRoot . 'extension' . DS . 'custom' .DS , '', $dirPath);
-            $moduleName = explode(DS,  $dir)[0];
+            $dirList    = explode(DS,  $dir);
+            $moduleName = $dirList[0];
 
             $content = str_replace("include '../../control.php';", "helper::importControl('$moduleName');", $content);
             $content = str_replace("helper::import('../../control.php');", "helper::importControl('$moduleName');", $content);

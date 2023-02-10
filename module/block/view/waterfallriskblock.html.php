@@ -41,7 +41,7 @@
         <?php if($longBlock):?>
         <td class='c-strategy'><?php echo zget($lang->risk->strategyList, $risk->strategy, $risk->strategy)?></td>
         <?php endif;?>
-        <td class='c-status'>
+        <td class='c-status' data-text="<?php echo $risk->status;?>">
           <span class="status-risk status-<?php echo $risk->status?>"><?php echo zget($lang->risk->statusList, $risk->status);?></span>
         </td>
         <?php if($longBlock):?>

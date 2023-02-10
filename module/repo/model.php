@@ -333,11 +333,11 @@ class repoModel extends model
         if($type == 'task')  $links = $this->post->tasks;
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+        $revisionID   = $revisionInfo->id;
         $committer    = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
         if(empty($committer)) $committer = $revisionInfo->committer;
         foreach($links as $linkID)
         {
-            $revisionID = $revisionInfo->id;
 
             $relation           = new stdclass;
             $relation->AType    = 'revision';
@@ -1106,6 +1106,7 @@ class repoModel extends model
             $log->files = array();
             foreach($log->change as $file => $info) $log->files[$info['action']][] = $file;
         }
+
         return $logs;
     }
 
@@ -2275,13 +2276,13 @@ class repoModel extends model
 
         /* Get file commits by repo. */
         if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
-        $fileCommits = $this->dao->select('t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
+        $fileCommits = $this->dao->select('t1.id,t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
             ->where('t1.repo')->eq($repo->id)
             ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
-            ->andWhere('t1.parent')->like("$parent%")->fi()
+            ->andWhere('t1.parent')->eq("$parent")
             ->orderBy('t2.`time` asc')
             ->fetchAll('path');
 
@@ -2346,11 +2347,12 @@ class repoModel extends model
      */
     public function getFileTree($repo, $branch = '', $diffs = null)
     {
+        set_time_limit(0);
         $allFiles = array();
         if(is_null($diffs))
         {
             if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
-            $files = $this->dao->select('t1.path,t1.action')->from(TABLE_REPOFILES)->alias('t1')
+            $files = $this->dao->select('t1.path,t2.time,t1.action')->from(TABLE_REPOFILES)->alias('t1')
                 ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
                 ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                 ->where('t1.repo')->eq($repo->id)
@@ -2358,11 +2360,33 @@ class repoModel extends model
                 ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
                 ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
                 ->orderBy('t2.`time` asc')
-                ->fetchPairs();
+                ->fetchAll('path');
 
-            foreach($files as $file => $action)
+            $removeDirs = array();
+            if($repo->SCM == 'Subversion')
             {
-                if($action != 'D') $allFiles[] = $file;
+                $removeDirs = $this->dao->select('t2.time,t1.path')->from(TABLE_REPOFILES)->alias('t1')
+                    ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                    ->where('t1.repo')->eq($repo->id)
+                    ->andWhere('t1.type')->eq('dir')
+                    ->andWhere('t1.action')->eq('D')
+                    ->fetchPairs();
+
+            }
+            foreach($files as $file)
+            {
+                foreach($removeDirs as $removeTime => $dir)
+                {
+                    if(strpos($file->path, $dir . '/') === 0 and $file->time <= $removeTime)
+                    {
+                        $file->action = 'D';
+                        break;
+                    }
+                }
+                if($file->action != 'D')
+                {
+                    $allFiles[] = $file->path;
+                }
             }
         }
         else
@@ -2426,6 +2450,7 @@ class repoModel extends model
             $html .= '</li>';
         }
         $html .= '</ul>';
+
         return $html;
     }
 
@@ -2443,6 +2468,7 @@ class repoModel extends model
         $key      = 0;
         $pathName = array();
         $fileName = array();
+
         foreach($files as $key => $file)
         {
             if ($file['parent'] == $parent)
@@ -2453,6 +2479,7 @@ class repoModel extends model
                 $pathName[$key] = '~';
 
                 $children = $this->buildTree($files, $file['id']);
+
                 if($children)
                 {
                     $treeList[$key]['children'] = $children;
