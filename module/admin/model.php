@@ -346,6 +346,12 @@ class adminModel extends model
                     }
                     else
                     {
+                        if($menuKey == 'message' and $subMenuKey == 'mail')
+                        {
+                            $this->loadModel('mail');
+                            if(!$this->config->mail->turnon and !$this->session->mailConfig) $subMenu['link'] = $this->lang->mail->common . '|mail|detect|';
+                        }
+
                         $link = $this->getHasPrivLink($subMenu);
                     }
 
