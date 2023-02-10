@@ -85,12 +85,14 @@ $lang->admin->setModule->optional       = 'Optional';
 $lang->admin->setModule->opened         = 'Opened';
 $lang->admin->setModule->closed         = 'Closed';
 
+$lang->admin->setModule->my             = 'My';
 $lang->admin->setModule->product        = 'Product';
 $lang->admin->setModule->scrum          = 'Scrum Project';
 $lang->admin->setModule->waterfall      = 'Waterfall Project';
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
+$lang->admin->setModule->score          = 'Score';
 $lang->admin->setModule->repo           = 'Repo';
 $lang->admin->setModule->issue          = 'Issue';
 $lang->admin->setModule->risk           = 'Risk';
