@@ -927,20 +927,20 @@ class programplanModel extends model
                     $members     = array($this->app->user->account, $data->PM);
                     $roles       = $this->user->getUserRoles(array_values($members));
                     $team        = $this->user->getTeamMemberPairs($stageID, 'execution');
-                    foreach($members as $account)
+                    foreach($members as $teamMember)
                     {
-                        if(empty($account) or isset($team[$account]) or isset($teamMembers[$account])) continue;
+                        if(empty($teamMember) or isset($team[$teamMember]) or isset($teamMembers[$teamMember])) continue;
 
                         $member = new stdclass();
                         $member->root    = $stageID;
-                        $member->account = $account;
-                        $member->role    = zget($roles, $account, '');
+                        $member->account = $teamMember;
+                        $member->role    = zget($roles, $teamMember, '');
                         $member->join    = $now;
                         $member->type    = 'execution';
                         $member->days    = $data->days;
                         $member->hours   = $this->config->execution->defaultWorkhours;
                         $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                        $teamMembers[$account] = $member;
+                        $teamMembers[$teamMember] = $member;
                     }
                     $this->execution->addProjectMembers($data->project, $teamMembers);
 
@@ -1077,8 +1077,8 @@ class programplanModel extends model
         else
         {
             /* Synchronously update sub-phase permissions. */
-            $childrenIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetch('id');
-            if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in($childrenIDList)->exec();
+            $childrenIDList = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetchAll('id');
+            if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in(array_keys($childrenIDList))->exec();
 
             /* The workload of the parent plan cannot exceed 100%. */
             $oldPlan->parent = $plan->parent;
