@@ -76,7 +76,7 @@ $lang->admin->menuList->switch['subMenu']['setmodule'] = array('link' => "{$lang
 $lang->admin->menuList->switch['menuOrder']['5'] = 'setmodule';
 
 $lang->admin->menuList->model['subMenu']['common']    = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom');
-$lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|");
+$lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
 $lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "{$lang->waterfallModel}|stage|settype|", 'subModule' => 'stage');
 
 $lang->admin->menuList->model['menuOrder']['5']  = 'common';
