@@ -1624,7 +1624,9 @@ class testtask extends control
     {
         $scope     = empty($objectType) ? 'local' : 'all';
         $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, array($scope, 'totalStatus'));
-        $namePairs = array_column($testtasks, 'name');
+
+        $namePairs = array();
+        foreach($testtasks as $testtaskID => $testtask) $namePairs[$testtaskID] = $testtask->name;
 
         $this->view->currentTaskID   = $taskID;
         $this->view->testtasks       = $testtasks;
