@@ -1219,8 +1219,9 @@ class commonModel extends model
                             }
                             else
                             {
-                                $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
-                                if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                                $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                                $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
+                                if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
                             }
 
                             if($activeMainMenu)
