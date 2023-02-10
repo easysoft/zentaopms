@@ -981,6 +981,11 @@ if(!function_exists('array_column'))
                 $valueSet = true;
                 $value    = $row[$columnKey];
             }
+            elseif(\is_object($row) && \property_exists($row, $columnKey))
+            {
+                $valueSet = true;
+                $value    = $row->$columnKey;
+            }
 
             if($valueSet)
             {
