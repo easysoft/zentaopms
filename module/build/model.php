@@ -321,7 +321,7 @@ class buildModel extends model
             $builds[$build->date][$id] = $buildName;
         }
 
-        if(empty($builds)) return $sysBuilds + $selectedBuilds;
+        if(empty($builds) and empty($shadows)) return $sysBuilds + $selectedBuilds;
 
         /* if the build has been released and replace is true, replace build name with release name. */
         if($replace)
@@ -335,6 +335,17 @@ class buildModel extends model
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t1.shadow')->ne(0)
                 ->fetchAll('id');
+            if($shadows)
+            {
+                /* Append releases of only shadow and not link build. */
+                $releases += $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
+                    ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
+                    ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+                    ->where('t1.shadow')->in($shadows)
+                    ->andWhere('t1.build')->eq(0)
+                    ->andWhere('t1.deleted')->eq(0)
+                    ->fetchAll('id');
+            }
             foreach($releases as $release)
             {
                 if($branch !== 'all')
