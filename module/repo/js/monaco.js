@@ -9,6 +9,7 @@
 function createTab(filename, filepath)
 {
     $('[data-path="' + decodeURIComponent(filepath) + '"]').closest('li').addClass('selected');
+    /* encode twice for resolving chinese character. */
     var tabID = Base64.encode(Base64.encode(filepath).replaceAll('=', '-')).replaceAll('=', '-');
     return {
         id:          tabID,
@@ -56,6 +57,7 @@ $(function()
 
     /* Remove file path for opened files. */
     $('#fileTabs').on('onClose', function(event, tab) {
+        /* encode twice for resolving chinese character. */
         var filepath = decodeURIComponent(Base64.decode(Base64.decode(tab.id.replaceAll('-', '=')).replaceAll('-', '=')));
         var index    = openedFiles.indexOf(filepath);
         if(index > -1)
