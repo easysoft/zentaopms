@@ -63,7 +63,7 @@
         <?php foreach ($cols as $key => $col):?>
         <?php
         $required = $col['required'] == 'yes';
-        $fixed = $col['fixed'];
+        $fixed = !empty($col['fixed']) ? $col['fixed'] : 'no';
         $autoWidth = $col['width'] == 'auto';
         ?>
         <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $col['width']?>'>

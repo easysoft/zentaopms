@@ -1,4 +1,5 @@
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datatable.fix.html.php';?>
 <?php
 js::import($jsRoot . 'dtable/min.js');
 css::import($jsRoot . 'dtable/min.css');
@@ -76,6 +77,9 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
   </div>
   <?php else:?>
   <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>'>
+    <div class="table-header fixed-right">
+      <nav class="btn-toolbar pull-right setting"></nav>
+    </div>
     <div id="myTable"></div>
     <div class='table-footer'>
     <?php $pager->show('right', 'pagerjs');?>
@@ -84,14 +88,16 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
   <script>
   cols = JSON.parse(cols);
   data = JSON.parse(data);
+  var width = $('.table-footer').width() + parseFloat($('.table-footer').css('padding-right')) + 5;
   const options = {
       height: 'auto',
+      width: width,
       striped: true,
       plugins: ['nested'],
       cols: cols,
       data: data,
   };
-  
+
   $('#myTable').dtable(options);
   </script>
   <?php endif;?>

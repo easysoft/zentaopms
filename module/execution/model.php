@@ -5165,13 +5165,12 @@ class executionModel extends model
     {
         $this->loadModel('datatable');
 
-        $setting = '';
-        if(isset($this->config->datatable->executionAll->cols)) $setting = json_decode($this->config->datatable->executionAll->cols);
+        $setting = $this->datatable->getSetting('execution');
 
         $fieldList = $this->config->execution->datatable->fieldList;
 
         foreach($fieldList as $field => $items)
-        {   
+        {
             $title = zget($this->lang->execution, $items['title'], zget($this->lang, $items['title'], $items['title']));
             $fieldList[$field]['title'] = $title;
         }
@@ -5207,9 +5206,30 @@ class executionModel extends model
         {
             foreach($setting as $key => $set)
             {
+                if(empty($set->show))
+                {
+                    unset($setting[$key]);
+                    continue;
+                }
+
                 if($set->id == 'actions') $set->width = $fieldList[$set->id]['width'];
+
+                $set->name  = $set->id;
                 $set->title = $fieldList[$set->id]['title'];
-                if(isset($fieldList[$id]['sortType'])) $set->sortType = $fieldList[$id]['sortType'];
+
+                if(isset($fieldList[$set->id]['checkbox']))     $set->nestedToggle = $fieldList[$set->id]['checkbox'];
+                if(isset($fieldList[$set->id]['nestedToggle'])) $set->nestedToggle = $fieldList[$set->id]['nestedToggle'];
+                if(isset($fieldList[$set->id]['fixed']))        $set->fixed        = $fieldList[$set->id]['fixed'];
+                if(isset($fieldList[$set->id]['width']))        $set->width        = $fieldList[$set->id]['width'];
+                if(isset($fieldList[$set->id]['type']))         $set->type         = $fieldList[$set->id]['type'];
+                if(isset($fieldList[$set->id]['sortType']))     $set->sortType     = $fieldList[$set->id]['sortType'];
+                if(isset($fieldList[$set->id]['flex']))         $set->flex         = $fieldList[$set->id]['flex'];
+                if(isset($fieldList[$set->id]['minWidth']))     $set->minWidth     = $fieldList[$set->id]['minWidth'];
+                if(isset($fieldList[$set->id]['maxWidth']))     $set->maxWidth     = $fieldList[$set->id]['maxWidth'];
+                if(isset($fieldList[$set->id]['pri']))          $set->pri          = $fieldList[$set->id]['pri'];
+
+                unset($set->id);
+
             }
         }
 
