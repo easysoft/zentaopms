@@ -45,4 +45,4 @@ canvas {height: 28px;}
 #executionsForm td.c-name {padding-right: 5px;}
 #executionsForm td.c-name.delay {padding-right: 55px;}
 #myTable .dtable-header, #executionsForm .dtable-rows {z-index: 4;}
-#executionsForm .table-header .btn-toolbar {background: rgb(241, 245, 249);}
+#executionsForm .table-header .btn-toolbar {background: rgb(241, 245, 249); right: -3px;}
