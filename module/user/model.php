@@ -2417,14 +2417,6 @@ class userModel extends model
         $parentIdList = array();
         foreach($sprints as $sprint) $parentIdList[$sprint->project] = $sprint->project;
 
-        $childList = array();
-        foreach($sprints as $sprint)
-        {
-            $children  = $this->dao->select('id, project, PM, PO, QD, RD, openedBy, acl, parent, path, grade, type')->from(TABLE_EXECUTION)->where('path')->like("%,$sprint->id,%")->fetchAll('id');
-            $childList = $childList + $children;
-        }
-        $sprints = $sprints + $childList;
-
         /* Get team group. */
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)

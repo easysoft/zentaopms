@@ -1118,7 +1118,11 @@ class programplanModel extends model
 
         if(dao::isError()) return false;
         $this->setTreePath($planID);
-        if($plan->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprint');
+        if($plan->acl != 'open')
+        {
+            $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->eq('stage')->fetchAll('id');
+            $this->loadModel('user')->updateUserView(array_keys($planIdList), 'sprint');
+        }
 
         if($planChanged)
         {
