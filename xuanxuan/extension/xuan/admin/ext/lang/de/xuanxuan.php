@@ -25,7 +25,7 @@ $lang->admin->sizeType['G'] = 1024 * 1024 * 1024;
 global $config;
 if($config->vision != 'lite')
 {
-    $lang->admin->menuList->system['subMenu']['xuanxuan'] = array('link' => 'Desktop|admin|xuanxuan|', 'subModule' => 'client,setting');
+    $lang->admin->menuList->system['subMenu']['xuanxuan'] = array('link' => 'Desktop|admin|xuanxuan|', 'subModule' => 'client,setting,conference');
     $lang->admin->menuList->system['menuOrder']['20'] = 'xuanxuan';
 
     $lang->admin->menuList->system['tabMenu']['xuanxuan']['index']   = array('link' => 'Home|admin|xuanxuan|');
