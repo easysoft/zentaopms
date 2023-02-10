@@ -280,16 +280,22 @@ class adminModel extends model
                     $subModule = '';
                     if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
                     {
-                        if(isset($this->config->admin->navsGroup[$subMenuKey]) and strpos($this->config->admin->navsGroup[$subMenuKey], ",$firstParam,") !== false) $subModule = 'custom';
+                        if(isset($this->config->admin->navsGroup[$menuKey][$subMenuKey]) and strpos($this->config->admin->navsGroup[$menuKey][$subMenuKey], ",$firstParam,") !== false) $subModule = 'custom';
                         if($firstParam == $subMenuKey) $subModule = 'custom';
                     }
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
                     if(isset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey]))
                     {
-                        if(!empty($subModule)) $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$firstParam]['subModule'] = $subModule;
+                        if(!empty($subModule))
+                        {
+                            $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$firstParam]['subModule'] = $subModule;
+                            unset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$firstParam]['exclude']);
+                        }
                         $subMenu['subMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey];
                     }
+                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu']['menuOrder'][$subMenuKey]))   $subMenu['menuOrder']   = $this->lang->admin->menuList->$menuKey['tabMenu']['menuOrder'][$subMenuKey];
+                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu']['dividerMenu'][$subMenuKey])) $subMenu['dividerMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu']['dividerMenu'][$subMenuKey];
 
                     $this->lang->admin->menu->$subMenuKey = $subMenu;
                 }
@@ -435,9 +441,10 @@ class adminModel extends model
      */
     public function getMenuKey()
     {
-        $moduleName = $this->app->rawModule;
-        $methodName = $this->app->rawMethod;
-        $paramName  = $this->app->rawParams ? reset($this->app->rawParams) : '';
+        $moduleName  = $this->app->rawModule;
+        $methodName  = $this->app->rawMethod;
+        $firstParam  = $this->app->rawParams ? reset($this->app->rawParams) : '';
+        $secondParam = $this->app->rawParams ? next($this->app->rawParams)  : '';
 
         foreach($this->config->admin->menuGroup as $menuKey => $menuGroup)
         {
@@ -449,7 +456,7 @@ class adminModel extends model
             {
                 if($moduleName == 'custom' and ($methodName == 'required' or $methodName == 'set'))
                 {
-                    if(in_array($paramName, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"])) return $menuKey;
+                    if(in_array($firstParam, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"])) return $menuKey;
                 }
                 else
                 {

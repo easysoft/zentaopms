@@ -22,11 +22,11 @@ class extension extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->loadModel('admin')->setMenu();
 
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
+            $this->loadModel('admin')->setMenu();
             $this->view->title      = $this->lang->extension->browse;
             $this->view->position[] = $this->lang->extension->browse;
 

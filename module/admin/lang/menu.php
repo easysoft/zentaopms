@@ -75,7 +75,7 @@ $lang->admin->menuList->switch['subMenu']['setmodule'] = array('link' => "{$lang
 
 $lang->admin->menuList->switch['menuOrder']['5'] = 'setmodule';
 
-$lang->admin->menuList->model['subMenu']['common']    = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom');
+$lang->admin->menuList->model['subMenu']['common']    = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject');
 $lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
 $lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "{$lang->waterfallModel}|stage|settype|", 'subModule' => 'stage');
 
@@ -83,7 +83,18 @@ $lang->admin->menuList->model['menuOrder']['5']  = 'common';
 $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
 $lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
 
+$lang->admin->menuList->model['tabMenu']['common']['project']  = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set', 'exclude' => 'custom');
+$lang->admin->menuList->model['tabMenu']['common']['build']    = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
+$lang->admin->menuList->model['tabMenu']['common']['flow']     = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
+$lang->admin->menuList->model['tabMenu']['common']['code']     = array('link' => "{$lang->code}|custom|code|");
+$lang->admin->menuList->model['tabMenu']['common']['hours']    = array('link' => "{$lang->workingHour}|custom|hours|");
 $lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage');
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']    = 'project';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']   = 'build';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']   = 'flow';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']   = 'code';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']   = 'hours';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5'] = 'stage';
 
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo&field=priList", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'exclude' => 'set,required', 'alias' => 'browsestoryconcept,product');
@@ -95,7 +106,6 @@ $lang->admin->menuList->feature['subMenu']['user']        = array('link' => "{$l
 
 $lang->admin->menuList->feature['tabMenu']['my']['todo']  = array('link' => "{$lang->todo->common}|custom|set|module=todo&field=priList", 'exclude' => 'custom-set');
 $lang->admin->menuList->feature['tabMenu']['my']['block'] = array('link' => "{$lang->block->common}|custom|set|module=block&field=closed", 'exclude' => 'custom-set');
-if($config->vision == 'lite') $lang->admin->menuList->feature['tabMenu']['my']['task'] = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList'), 'exclude' => 'custom-required,custom-set');
 
 $lang->admin->menuList->feature['tabMenu']['product']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'links' => array("custom|browsestoryconcept|", 'custom|product|'), 'alias' => 'browsestoryconcept,product', 'exclude' => 'custom-required');
 $lang->admin->menuList->feature['tabMenu']['product']['story']       = array('link' => "{$lang->SRCommon}|custom|required|module=story", 'links' => array("custom|set|module=story&field=categoryList"), 'exclude' => 'custom-required,custom-set');
@@ -111,6 +121,21 @@ $lang->admin->menuList->feature['tabMenu']['qa']['testsuite']  = array('link' =>
 $lang->admin->menuList->feature['tabMenu']['qa']['testtask']   = array('link' => "{$lang->testtask->common}|custom|required|module=testtask", 'links' => array('custom|set|module=testtask&field=statusList'), 'exclude' => 'custom-required,custom-set');
 $lang->admin->menuList->feature['tabMenu']['qa']['testreport'] = array('link' => "{$lang->testreport->common}|custom|required|module=testreport", 'exclude' => 'custom-required');
 $lang->admin->menuList->feature['tabMenu']['qa']['caselib']    = array('link' => "{$lang->testcase->caselib}|custom|required|module=caselib", 'exclude' => 'custom-required');
+
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['my']['5']         = 'todo';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['my']['10']        = 'block';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['5']    = 'product';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['10']   = 'story';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['15']   = 'productplan';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['20']   = 'release';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['execution']['5']  = 'extension';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['execution']['10'] = 'task';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['5']         = 'bug';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['10']        = 'testcase';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['15']        = 'testsuite';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['20']        = 'testtask';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['25']        = 'testreport';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['30']        = 'caselib';
 
 $lang->admin->menuList->feature['menuOrder']['5']  = 'my';
 $lang->admin->menuList->feature['menuOrder']['10'] = 'product';
@@ -177,8 +202,13 @@ if($config->vision == 'lite')
     unset($lang->admin->menuList->feature['menuOrder']['25']);
 
     $lang->admin->menuList->feature['subMenu']['project'] = array('link' => "{$lang->projectCommon}|custom|execution|", 'exclude' => 'set,required', 'alias' => 'execution');
+    $lang->admin->menuList->feature['tabMenu']['my']['task']           = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList'), 'exclude' => 'custom-required,custom-set');
     $lang->admin->menuList->feature['tabMenu']['project']['project']   = array('link' => "{$lang->projectCommon}|custom|required|module=project", 'exclude' => 'custom-required');
     $lang->admin->menuList->feature['tabMenu']['project']['execution'] = array('link' => "{$lang->execution->common}|custom|execution|");
     $lang->admin->menuList->feature['tabMenu']['project']['story']     = array('link' => "{$lang->SRCommon}|custom|required|module=story", 'links' => array("custom|set|module=story&field=priList"), 'exclude' => 'custom-required,custom-set');
+    $lang->admin->menuList->feature['tabMenu']['menuOrder']['my']['15']      = 'task';
+    $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['5']  = 'project';
+    $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['10'] = 'execution';
+    $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['15'] = 'story';
     $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
 }

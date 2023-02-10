@@ -215,6 +215,9 @@ $lang->custom->reviewList[0]  = 'Off';
 $lang->custom->deletedList[1] = 'Show';
 $lang->custom->deletedList[0] = 'Hide';
 
+$lang->custom->setHours       = 'Setting Hours';
+$lang->custom->setWeekend     = 'Setting Weekend';
+$lang->custom->setHoliday     = 'Setting Holiday';
 $lang->custom->workingHours   = 'Hours/Day';
 $lang->custom->weekend        = 'Weekend';
 $lang->custom->weekendList[2] = '2-Day Off';

@@ -1348,7 +1348,6 @@ class commonModel extends model
             $active    = '';
 
             if($subModule and in_array($currentModule, $subModule)) $active = 'active';
-            // if($alias and $moduleName == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
             if($menuItem->link)
             {
                 $target = '';
@@ -1362,7 +1361,9 @@ class commonModel extends model
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
 
-                if($module == $currentModule and (($method == $currentMethod and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
+                if($module == $currentModule and $method == $currentMethod) $active = 'active';
+                if($module == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
+                if(strpos(",$exclude,", ",$currentModule-$currentMethod,") !== false or strpos(",$exclude,", ",$currentModule,") !== false) $active = '';
 
                 $label    = $menuItem->text;
                 $dropMenu = '';

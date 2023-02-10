@@ -141,21 +141,6 @@ EOT;
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
-      <?php elseif($module == 'task' and $field == 'hours'):?>
-      <table class='table table-form mw-600px'>
-        <tr>
-          <th class='w-150px'><?php echo $lang->custom->workingHours;?></th>
-          <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px'");?></td>
-          <td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->custom->weekend;?></th>
-          <td><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
-        </tr>
-        <tr>
-          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
-        </tr>
-      </table>
       <?php elseif($module == 'bug' and $field == 'longlife'):?>
       <table class='table table-form mw-600px'>
         <tr>

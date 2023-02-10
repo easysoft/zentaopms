@@ -99,12 +99,6 @@ class custom extends control
             $this->view->forceReview    = zget($this->config->$module, 'forceReview', '');
             $this->view->forceNotReview = zget($this->config->$module, 'forceNotReview', '');
         }
-        if($module == 'task' and $field == 'hours')
-        {
-            $this->app->loadConfig('execution');
-            $this->view->weekend   = $this->config->execution->weekend;
-            $this->view->workhours = $this->config->execution->defaultWorkhours;
-        }
         if($module == 'bug' and $field == 'longlife')
         {
             $this->app->loadConfig('bug');
@@ -189,10 +183,6 @@ class custom extends control
                     $waitCases = $this->loadModel('testcase')->getByStatus(0, 0, 'all', 'wait');
                     $this->testcase->batchReview(array_keys($waitCases), 'pass');
                 }
-            }
-            elseif($module == 'task' and $field == 'hours')
-            {
-                $this->loadModel('setting')->setItems('system.execution', fixer::input('post')->get());
             }
             elseif($module == 'bug' and $field == 'longlife')
             {
@@ -617,7 +607,6 @@ class custom extends control
         if($_POST)
         {
             $this->custom->setConcept();
-            $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->post->URAndSR);
             if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
@@ -871,6 +860,20 @@ class custom extends control
 
         $this->view->title = $this->lang->custom->code;
 
+        $this->display();
+    }
+
+    public function hours()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItems('system.execution', fixer::input('post')->get());
+        }
+
+        $this->app->loadConfig('execution');
+        $this->view->title     = $this->lang->workingHour;
+        $this->view->weekend   = $this->config->execution->weekend;
+        $this->view->workhours = $this->config->execution->defaultWorkhours;
         $this->display();
     }
 }

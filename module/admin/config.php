@@ -10,7 +10,7 @@ if(!isset($config->safe->weak)) $config->safe->weak = '123456,password,12345,123
 $config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice', 'conference', 'client');
 $config->admin->menuGroup['user']      = array('dept', 'company', 'user', 'group');
 $config->admin->menuGroup['switch']    = array('admin|setmodule');
-$config->admin->menuGroup['model']     = array('auditcl', 'stage', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|estimate', 'subject', 'process', 'activity', 'zoutput', 'classify');
+$config->admin->menuGroup['model']     = array('auditcl', 'stage', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify');
 $config->admin->menuGroup['feature']   = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'approvalflow', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report');
 $config->admin->menuGroup['template']  = array('custom|set', 'baseline');
 $config->admin->menuGroup['message']   = array('mail', 'webhook', 'sms', 'message');
@@ -84,9 +84,11 @@ $config->admin->helpURL['extension'] = 'https://www.zentao.net/book/zentaopms/53
 $config->admin->helpURL['dev']       = 'https://www.zentao.net/book/zentaopms/537.html';
 $config->admin->helpURL['convert']   = 'https://www.zentao.net/book/zentaopms/656.html';
 
-$config->admin->navsGroup['my']        = ',todo,block,';
-$config->admin->navsGroup['product']   = ',product,story,productplan,release,';
-$config->admin->navsGroup['execution'] = ',execution,task,';
-$config->admin->navsGroup['project']   = ',project,story,';
-$config->admin->navsGroup['qa']        = ',bug,testcase,testsuite,testtask,testreport,caselib,';
+$config->admin->navsGroup['feature']['my']        = ',todo,block,';
+$config->admin->navsGroup['feature']['product']   = ',product,story,productplan,release,';
+$config->admin->navsGroup['feature']['project']   = ',project,';
+$config->admin->navsGroup['feature']['execution'] = ',execution,task,';
+$config->admin->navsGroup['feature']['project']   = ',project,story,';
+$config->admin->navsGroup['feature']['qa']        = ',bug,testcase,testsuite,testtask,testreport,caselib,';
+$config->admin->navsGroup['model']['common']      = ',project,build,issue,risk,opportunity,nc,';
 if($config->vision == 'lite') $config->admin->navsGroup['my'] .= 'task,';

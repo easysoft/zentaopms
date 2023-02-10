@@ -1,3 +1,4 @@
+<?php if(!empty($lang->custom->{$module}->fields)):?>
 <div class='side-col' id='sidebar'>
   <div class='cell'>
     <div class='list-group tab-menu'>
@@ -27,3 +28,4 @@
     </div>
   </div>
 </div>
+<?php endif;?>
