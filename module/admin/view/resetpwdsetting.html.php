@@ -32,13 +32,11 @@
     </div>
   </div>
   <div id='mainContent' class='main-col main-content'>
+    <div class='main-header'>
+      <h2><?php echo $lang->admin->resetPWDSetting;?></h2>
+    </div>
     <div class='center-block'>
       <form class="load-indicator main-form form-ajax" method='post'>
-        <div class='main-header'>
-          <div class='heading'>
-            <strong><?php echo $lang->admin->resetPWDSetting;?></strong>
-          </div>
-        </div>
         <table class='table table-form'>
           <tr>
             <th class='mailBox'><?php echo $lang->admin->resetPWDByMail;?></th>
