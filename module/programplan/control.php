@@ -253,6 +253,7 @@ class programplan extends control
         $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
         $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
         $this->view->isTopStage         = $this->programplan->checkTopStage($planID);
+        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
 
         $this->display();
     }
