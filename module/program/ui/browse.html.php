@@ -72,7 +72,18 @@ if(\common::hasPriv('project', 'create'))
   $btnGroup[] = array(
     'text'  => $lang->project->create,
     'icon'  => 'plus',
-    'class' => 'btn btn-secondary'
+    'class' => 'btn secondary',
+    'url'   => \helper::createLink('project', 'createGuide', "programID=0&from=PGM"),
+  );
+}
+
+if(\common::hasPriv('program', 'create'))
+{
+  $btnGroup[] = array(
+    'text' => $lang->program->create,
+    'icon'  => 'plus',
+    'class' => 'btn primary',
+    'url' => \helper::createLink('program', 'create')
   );
 }
 
