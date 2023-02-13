@@ -106,8 +106,9 @@ $lang->zanode->snapRestoring   = '快照正在还原中';
 
 $lang->zanode->runTimeout = '自动执行失败，请检查宿主机和执行节点状态';
 
-$lang->zanode->apiError['-10100'] = '执行节点不存在';
-$lang->zanode->apiError['fail']   = '执行失败，请检查宿主机和执行节点状态';
+$lang->zanode->apiError['-10100']     = '执行节点不存在';
+$lang->zanode->apiError['fail']       = '执行失败，请检查宿主机和执行节点状态';
+$lang->zanode->apiError['notRunning'] = '请检查执行节点状态';
 
 $lang->zanode->publicList[0] = '不共享';
 $lang->zanode->publicList[1] = '共享';

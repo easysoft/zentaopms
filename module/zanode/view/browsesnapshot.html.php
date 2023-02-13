@@ -40,10 +40,10 @@
         $editAttr = $snapshot->status == 'failed' ? 'class="btn disabled"' : "title={$lang->zanode->editSnapshot} onclick='window.parent.editSnapshot(\"" . $this->createLink('zanode', 'editSnapshot', "snapshotID={$snapshot->id}") . "\")' class='btn'";
 
         $restoreAttr  = "title='{$lang->zanode->restoreSnapshot}' target='hiddenwin'";
-        $restoreAttr .= ($node->status !='running' or $snapshot->status == 'restoring' or $snapshot->status == 'failed') ? ' class="btn disabled"' :  'class="btn"';
+        $restoreAttr .= ($node->status !='running' or in_array($snapshot->status, array('creating', 'failed', 'restoring'))) ? ' class="btn disabled"' : 'class="btn"';
 
         $deleteAttr  = "title='{$lang->zanode->deleteSnapshot}' target='hiddenwin'";
-        $deleteAttr .= (($snapshot->status == 'restoring' and (time() - strtotime($snapshot->restoreDate)) <= 600) or $snapshot->status == 'failed') ? ' class="btn disabled"' :  'class="btn"';
+        $deleteAttr .= ($snapshot->status == 'restoring' or $snapshot->status == 'creating') ? ' class="btn disabled"' :  'class="btn"';
         ?>
         <td title="<?php echo $snapshot->name;?>"><?php echo $snapshot->localName ? $snapshot->localName : $snapshot->name;?></td>
         <td class='<?php echo $snapshot->status;?>'><?php echo zget($lang->zanode->snapshot->statusList, $snapshot->status, '');?></td>
