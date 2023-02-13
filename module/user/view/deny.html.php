@@ -21,7 +21,7 @@ include '../../common/view/header.lite.html.php';
         if($denyType == 'nopriv')
         {
             $this->app->loadLang('group');
-            $groupPriv  = isset($lang->resource->$module->$method) ? $$lang->resource->$module->$method : $method;
+            $groupPriv  = isset($lang->resource->$module->$method) ? $lang->resource->$module->$method : $method;
             $moduleName = isset($lang->$module->common)  ? $lang->$module->common  : $module;
             $methodName = isset($lang->$module->$groupPriv) ? $lang->$module->$groupPriv : $method;
 
