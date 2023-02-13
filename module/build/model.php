@@ -65,7 +65,7 @@ class buildModel extends model
     {
         return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t2.deleted as executionDeleted, t3.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = 0 or t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.project')->ne(0)
