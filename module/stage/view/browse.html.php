@@ -11,12 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-right">
-    <?php common::printLink('stage', 'batchCreate', "", "<i class='icon icon-plus'></i>" . $lang->stage->batchCreate, '', "class='btn btn-primary'");?>
-    <?php common::printLink('stage', 'create', "", "<i class='icon icon-plus'></i>" . $lang->stage->create, '', "class='btn btn-primary'");?>
-  </div>
-</div>
 <div id="mainContent" class='main-row'>
   <?php if(empty($stages)):?>
   <div class="table-empty-tip">
@@ -38,7 +32,16 @@
       </div>
     </div>
   </div>
-  <div class='main-col main-table'>
+  <div class='main-col main-content main-table' style='padding: 0;padding-top: 20px;'>
+    <div id="mainMenu" class="clearfix" style='padding:0px 10px'>
+      <div class="pull-left" style='padding-top:5px'>
+        <strong><?php echo $lang->stage->browse;?></strong>
+      </div>
+      <div class="btn-toolbar pull-right">
+        <?php common::printLink('stage', 'batchCreate', "", "<i class='icon icon-plus'></i>" . $lang->stage->batchCreate, '', "class='btn btn-primary'");?>
+        <?php common::printLink('stage', 'create', "", "<i class='icon icon-plus'></i>" . $lang->stage->create, '', "class='btn btn-primary'");?>
+      </div>
+    </div>
     <table class="table has-sort-head" id='stageList'>
       <?php $vars = "orderBy=%s";?>
       <thead>
