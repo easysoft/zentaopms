@@ -5161,6 +5161,12 @@ class executionModel extends model
         }
     }
 
+    /**
+     * Generate col for dtable.
+     * 
+     * @access public
+     * @return void
+     */
     public function generateCol()
     {
         $this->loadModel('datatable');
@@ -5188,7 +5194,7 @@ class executionModel extends model
                 $set->name  = $value;
                 $set->title = $fieldList[$id]['title'];
 
-                if(isset($fieldList[$id]['checkbox']))     $set->nestedToggle = $fieldList[$id]['checkbox'];
+                if(isset($fieldList[$id]['checkbox']))     $set->checkbox     = $fieldList[$id]['checkbox'];
                 if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle = $fieldList[$id]['nestedToggle'];
                 if(isset($fieldList[$id]['fixed']))        $set->fixed        = $fieldList[$id]['fixed'];
                 if(isset($fieldList[$id]['width']))        $set->width        = $fieldList[$id]['width'];
@@ -5217,7 +5223,7 @@ class executionModel extends model
                 $set->name  = $set->id;
                 $set->title = $fieldList[$set->id]['title'];
 
-                if(isset($fieldList[$set->id]['checkbox']))     $set->nestedToggle = $fieldList[$set->id]['checkbox'];
+                if(isset($fieldList[$set->id]['checkbox']))     $set->checkbox     = $fieldList[$set->id]['checkbox'];
                 if(isset($fieldList[$set->id]['nestedToggle'])) $set->nestedToggle = $fieldList[$set->id]['nestedToggle'];
                 if(isset($fieldList[$set->id]['fixed']))        $set->fixed        = $fieldList[$set->id]['fixed'];
                 if(isset($fieldList[$set->id]['width']))        $set->width        = $fieldList[$set->id]['width'];
@@ -5238,6 +5244,15 @@ class executionModel extends model
         return $setting;
     }
 
+    /**
+     * Generate row for dtable.
+     * 
+     * @param  array  $executions 
+     * @param  array  $users 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function generateRow($executions, $users, $productID)
     {
         $canBatchEdit = common::hasPriv('execution', 'batchEdit');
