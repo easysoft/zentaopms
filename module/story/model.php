@@ -1250,7 +1250,6 @@ class storyModel extends model
         if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed') $status = current($childrenStatus); // Close parent story.
         if($oldParentStory->status == 'closed') $status = $this->getActivateStatus($parentID); // Activate parent story.
 
-
         if($status and $oldParentStory->status != $status)
         {
             $now  = helper::now();
