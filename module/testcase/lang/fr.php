@@ -110,7 +110,6 @@ $lang->testcase->stepDesc    = 'Etape';
 $lang->testcase->stepExpect  = 'Résultat Attendu';
 $lang->testcase->stepVersion = 'Version';
 
-$lang->testcase->common                  = 'CasTest';
 $lang->testcase->index                   = "Accueil CasTest";
 $lang->testcase->create                  = "Ajout CasTest";
 $lang->testcase->batchCreate             = "Ajouter par Lot";

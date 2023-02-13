@@ -110,7 +110,6 @@ $lang->testcase->stepDesc    = '步骤';
 $lang->testcase->stepExpect  = '预期';
 $lang->testcase->stepVersion = '版本';
 
-$lang->testcase->common                  = '用例';
 $lang->testcase->index                   = "用例管理首页";
 $lang->testcase->create                  = "建用例";
 $lang->testcase->batchCreate             = "批量建用例";

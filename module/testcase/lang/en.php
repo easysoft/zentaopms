@@ -110,7 +110,6 @@ $lang->testcase->stepDesc    = 'Step';
 $lang->testcase->stepExpect  = 'Expectation';
 $lang->testcase->stepVersion = 'Version';
 
-$lang->testcase->common                  = 'Case';
 $lang->testcase->index                   = "Case Home";
 $lang->testcase->create                  = "Add Case";
 $lang->testcase->batchCreate             = "Batch Add";
