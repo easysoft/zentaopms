@@ -5,16 +5,18 @@
 <?php endif;?>
 <div class='modal-dialog' id='guideDialog'>
   <style>
-  #guideDialog {width: 780px}
-  #guideDialog h2 {margin: 10px 0 30px 0; font-size: 16px; font-weight: normal}
-  #guideDialog h3 {margin: 5px 0; font-size: 20px;}
+  #guideDialog {width: 600px}
+  #guideDialog .row {margin-left: 0px;margin-right: 0px;}
+  #guideDialog h2 {margin: 0px 0 20px 0; font-size: 16px; font-weight: normal}
+  #guideDialog h3 {margin: 5px 0; font-size: 15px;}
+  #guideDialog p {font-size: 13px;}
   #guideDialog .modal-footer {border-top: none; text-align: center; padding-top: 10px; padding-bottom: 40px;}
   #guideDialog .modal-footer .btn + .btn {margin-left: 20px}
-  #guideDialog .project-type {padding: 0 40px}
-  #guideDialog .project-type-img {width: 280px; border: 1px solid #CBD0DB; border-radius: 2px; margin-bottom: 10px; cursor: pointer; margin-top: 1px}
+  #guideDialog .project-type {padding: 0 5px}
+  #guideDialog .project-type-img {width: 280px; border: 1px solid #CBD0DB; border-radius: 4px; margin-bottom: 10px; cursor: pointer; margin-top: 1px}
   #guideDialog .project-type-img:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,0,.25);}
   #guideDialog .project-type.active img {border-color: #006AF1; border-width: 2px; margin-top: 0}
-  .col {width: 50%}
+  #guideDialog .col:nth-child(-n+3) {margin-bottom: 15px;}
   </style>
   <div class='modal-content'>
     <div class='modal-body'>
@@ -51,9 +53,16 @@
         </div>
         <div class='col col-xs-4'>
           <div class='project-type text-center'>
-            <?php echo html::a($this->createLink("project", "create", "model=agileplus&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='kanban' src='{$config->webRoot}theme/default/images/main/kanban.png'>", '', "data-app='{$tab}' class='createButton'")?>
+            <?php echo html::a($this->createLink("project", "create", "model=agileplus&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='kanban' src='{$config->webRoot}theme/default/images/main/agileplus.png'>", '', "data-app='{$tab}' class='createButton'")?>
             <h3><?php echo $lang->project->agileplus;?></h3>
             <p><?php echo $lang->project->agileplusTitle;?></p>
+          </div>
+        </div>
+        <div class='col col-xs-4'>
+          <div class='project-type text-center'>
+            <?php echo html::a($this->createLink("project", "create", "model=waterfallplus&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='kanban' src='{$config->webRoot}theme/default/images/main/waterfallplus.png'>", '', "data-app='{$tab}' class='createButton'")?>
+            <h3><?php echo $lang->project->waterfallplus;?></h3>
+            <p><?php echo $lang->project->waterfallplusTitle;?></p>
           </div>
         </div>
       </div>
