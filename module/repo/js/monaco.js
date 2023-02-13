@@ -9,7 +9,8 @@
 function createTab(filename, filepath)
 {
     $('[data-path="' + decodeURIComponent(filepath) + '"]').closest('li').addClass('selected');
-    var tabID = Base64.encode(filepath).replaceAll('=', '-');
+    /* encode twice for resolving chinese character. */
+    var tabID = Base64.encode(Base64.encode(filepath).replaceAll('=', '-')).replaceAll('=', '-');
     return {
         id:          tabID,
         url:         createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', Base64.encode(encodeURIComponent(filepath)))),
@@ -56,7 +57,8 @@ $(function()
 
     /* Remove file path for opened files. */
     $('#fileTabs').on('onClose', function(event, tab) {
-        var filepath = decodeURIComponent(Base64.decode(tab.id.replaceAll('-', '=')));
+        /* encode twice for resolving chinese character. */
+        var filepath = decodeURIComponent(Base64.decode(Base64.decode(tab.id.replaceAll('-', '=')).replaceAll('-', '=')));
         var index    = openedFiles.indexOf(filepath);
         if(index > -1)
         {

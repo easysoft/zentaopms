@@ -58,12 +58,12 @@ $lang->zahost->init->initSuccessNotice   = "The initialization was successful, c
 $lang->zahost->init->initDesc       = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k %s<br>- Click check service status button.";
 $lang->zahost->init->initFailNoticeDesc  = "1. Re-execute the script <br/>2. Review the initialization FAQ";
 
-$lang->zahost->init->serviceStatus = [
+$lang->zahost->init->serviceStatus = array(
     "kvm"        => 'not_install',
     "nginx"      => 'not_install',
     "novnc"      => 'not_install',
     "websockify" => 'not_install',
-];
+);
 $lang->zahost->init->title       = "Initialize Host";
 $lang->zahost->init->descTitle   = "Follow these steps to complete the initialization on the host:";
 $lang->zahost->init->initDesc    = "Execute the init script on the host: bash <(curl -s -S -L https://pkg.qucheng.com/zenagent/zagent.sh) -k ";

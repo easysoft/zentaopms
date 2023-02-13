@@ -399,18 +399,20 @@ class testtaskModel extends model
     {
         $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
         $cases   = array();
+        $query   = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
         if($stories)
         {
-            $cases = $this->dao->select('*')->from(TABLE_CASE)
+            $cases = $this->dao->select('t1.*,t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where($query)
-                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
-                ->andWhere('product')->eq($productID)
-                ->andWhere('status')->ne('wait')
-                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
-                ->beginIF($task->branch !== '')->andWhere('branch')->in("0,$task->branch")->fi()
-                ->andWhere('story')->in(trim($stories, ','))
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('id desc')
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+                ->andWhere('t1.product')->eq($productID)
+                ->andWhere('t1.status')->ne('wait')
+                ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,$task->branch")->fi()
+                ->andWhere('t1.story')->in(trim($stories, ','))
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy('t1.id desc')
                 ->page($pager)
                 ->fetchAll();
         }
@@ -1082,7 +1084,7 @@ class testtaskModel extends model
             }
 
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
-            $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`', 't2.`status`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`', 't1.`status`'), $caseQuery);
+            $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`'), $caseQuery);
 
             /* Select the table for these special fields. */
             $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';

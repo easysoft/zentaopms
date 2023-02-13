@@ -1081,6 +1081,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta2'));
             case '18_0_beta3':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta3'));
+             case '18_0':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -6330,7 +6332,8 @@ class upgradeModel extends model
         {
             $dirPath    = dirname($filePath);
             $dir        = str_replace($this->app->appRoot . 'extension' . DS . 'custom' .DS , '', $dirPath);
-            $moduleName = explode(DS,  $dir)[0];
+            $dirList    = explode(DS,  $dir);
+            $moduleName = $dirList[0];
 
             $content = str_replace("include '../../control.php';", "helper::importControl('$moduleName');", $content);
             $content = str_replace("helper::import('../../control.php');", "helper::importControl('$moduleName');", $content);
@@ -7558,6 +7561,7 @@ class upgradeModel extends model
         {
             $project = new stdclass();
             $project->name           = $sprint->name;
+            $project->desc           = $sprint->desc;
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;
@@ -7576,7 +7580,12 @@ class upgradeModel extends model
             $project->lastEditedDate = $now;
             $project->grade          = 2;
             $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
-            if($fromMode == 'classic') $project->multiple = '0';
+            if($fromMode == 'classic')
+            {
+                $project->multiple = '0';
+                $project->code     = $sprint->code;
+                $project->team     = $sprint->team;
+            }
 
             $this->dao->insert(TABLE_PROJECT)->data($project)->exec();
             if(dao::isError()) return false;

@@ -88,7 +88,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
     <div class='btn-group'>
       <?php if(!empty($project->division)):?>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
-      <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
           $class = '';
@@ -96,7 +96,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
           foreach($productList as $key => $productName)
           {
               $class = $productID == $key ? 'class="active"' : '';
-              echo "<li $class>" . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), $productName) . "</li>";
+              echo "<li $class>" . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), $productName, '', "title='{$productName}' class='text-ellipsis'") . "</li>";
           }
         ?>
       </ul>
@@ -107,8 +107,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   </div>
   <div class="pull-right btn-toolbar flax">
     <div class="btn-group">
-      <?php echo html::a($this->createLink('project', 'execution', "status=all&projectID=$projectID"),"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->project->bylist}'");?>
       <?php echo html::a('',"<i class='icon-gantt-alt'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->programplan->gantt}'");?>
+      <?php echo html::a($this->createLink('project', 'execution', "status=all&projectID=$projectID"),"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->project->bylist}'");?>
     </div>
     <a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> <?php echo $lang->programplan->full;?></a>
     <div class='button-group'>
@@ -734,7 +734,7 @@ $(function()
     gantt.showDate(new Date());
 
     // Show task in modal on click task
-    var taskModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%'});
+    var taskModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%'});
     gantt.attachEvent('onTaskClick', function(id, e)
     {
         if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;

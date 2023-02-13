@@ -695,7 +695,7 @@ function loadExecutionBuilds(executionID, num)
     else
     {
         link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=false&type=normal&number=' + num);
-        $('#openedBuildBox' + num).load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleaseBuilds})});
+        $('#openedBuildBox' + num).load(link, function(){$(this).find('select').val(oldOpenedBuild).picker({optionRender: markReleasedBuilds})});
 
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
@@ -866,9 +866,15 @@ function notice()
         var html = '';
         if($('#execution').length == 0 || $('#execution').val() == 0)
         {
-            var branch = $('#branch').val();
+            var branch    = $('#branch').val();
+            var projectID = $('#project').val();
+
             if(typeof(branch) == 'undefined') branch = 0;
+            if(typeof(projectID) == 'undefined') projectID = 0;
+
             var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch);
+            if(projectID > 0) link = createLink('projectrelease', 'create', 'projectID=' + projectID);
+
             if(config.onlybody != 'yes') link += link.indexOf('?') >= 0 ? '&onlybody=yes' : '?onlybody=yes';
             html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createRelease + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';

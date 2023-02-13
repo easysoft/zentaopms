@@ -48,6 +48,7 @@ $lang->zanode->confirmReboot   = "您确定重启执行节点吗？";
 $lang->zanode->confirmShutdown = "您确定关闭执行节点吗？";
 $lang->zanode->confirmSuspend  = "您确定休眠执行节点吗？";
 $lang->zanode->confirmResume   = "您确定恢复执行节点吗？";
+$lang->zanode->confirmRestore  = "执行节点将会还原至此快照状态，您确定要继续么？";
 $lang->zanode->actionSuccess   = '操作成功';
 $lang->zanode->deleted         = "已删除";
 $lang->zanode->scriptPath      = "脚本目录";
@@ -59,6 +60,8 @@ $lang->zanode->copy            = '复制';
 $lang->zanode->copied          = '复制成功';
 $lang->zanode->manual          = '手册';
 $lang->zanode->initializing    = '初始化中';
+$lang->zanode->showPwd         = '显示密码';
+$lang->zanode->hidePwd         = '隐藏密码';
 
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
@@ -79,7 +82,27 @@ $lang->zanode->createImageSuccess = '镜像导出成功，您可以使用此镜�
 $lang->zanode->createImageFail    = '镜像导出失败';
 $lang->zanode->createImageButton  = '去创建';
 
+$lang->zanode->snapshotName          = '快照名称';
+$lang->zanode->browseSnapshot        = '快照列表';
+$lang->zanode->createSnapshot        = '创建快照';
+$lang->zanode->editSnapshot          = '编辑快照';
+$lang->zanode->restoreSnapshot       = '还原快照';
+$lang->zanode->deleteSnapshot        = '删除快照';
+$lang->zanode->snapshotEmpty         = '无快照';
+$lang->zanode->confirmDeleteSnapshot = "快照被删除后无法从回收站中还原，您确定继续么？";
+
+$lang->zanode->snapshot = new stdClass();
+$lang->zanode->snapshot->statusList['creating']          = '创建中';
+$lang->zanode->snapshot->statusList['completed']         = '创建完成';
+$lang->zanode->snapshot->statusList['failed']            = '创建失败';
+$lang->zanode->snapshot->statusList['restoring']         = '还原中';
+$lang->zanode->snapshot->statusList['restore_failed']    = '还原失败';
+$lang->zanode->snapshot->statusList['restore_completed'] = '还原成功';
+
 $lang->zanode->imageNameEmpty = '名称不能为空';
+$lang->zanode->imageNameEmpty  = '名称不能为空';
+$lang->zanode->snapStatusError = '快照不可用';
+$lang->zanode->snapRestoring   = '快照正在还原中';
 
 $lang->zanode->runTimeout = '自动执行失败，请检查宿主机和执行节点状态';
 
@@ -101,6 +124,7 @@ $lang->zanode->statusList['shutodown']    = '已关机';
 $lang->zanode->statusList['destroy_fail'] = '销毁失败';
 $lang->zanode->statusList['wait']         = '初始化中';
 $lang->zanode->statusList['online']       = '已上架';
+$lang->zanode->statusList['restoring']    = '还原中';
 
 $lang->zanode->initNotice = "保存成功，请初始化执行节点或返回列表。";
 $lang->zanode->initButton = "去初始化";
@@ -119,10 +143,10 @@ $lang->zanode->init->initSuccessNoticeTitle = "服务已就绪，还需两步即
 $lang->zanode->init->initFailNoticeTitle    = "初始化失败，请查看初始化脚本执行日志并尝试以下两种解决方案：";
 $lang->zanode->init->initFailNoticeDesc     = "1、 重新执行脚本 <br/>2、 查看初始化常见问题";
 
-$lang->zanode->init->serviceStatus = [
+$lang->zanode->init->serviceStatus = array(
     "ZenAgent" => 'not_install',
     "ZTF"      => 'not_install',
-];
+);
 $lang->zanode->init->title          = "初始化执行节点";
 $lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
 $lang->zanode->init->initDesc       = "- 在执行节点上执行命令：%s %s  <br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "服务状态";

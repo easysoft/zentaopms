@@ -155,6 +155,7 @@ $filter->testsuite->default       = new stdclass();
 $filter->testsuite->library       = new stdclass();
 $filter->testtask->default        = new stdclass();
 $filter->testtask->browse         = new stdclass();
+$filter->testtask->create         = new stdclass();
 $filter->testtask->cases          = new stdclass();
 $filter->todo->export             = new stdclass();
 $filter->upgrade->license         = new stdclass();
@@ -343,6 +344,7 @@ $filter->testsuite->library->cookie['libCaseModule'] = 'int';
 $filter->testsuite->library->cookie['preCaseLibID']  = 'int';
 
 $filter->testtask->browse->cookie['preBranch']     = 'reg::word';
+$filter->testtask->create->cookie['preBranch']     = 'reg::word';
 $filter->testtask->cases->cookie['preTaskID']      = 'int';
 $filter->testtask->cases->cookie['taskCaseModule'] = 'int';
 $filter->testtask->default->cookie['lastProduct']  = 'int';
@@ -368,7 +370,7 @@ $filter->doc->showfiles->get['recPerPage'] = 'int';
 $filter->doc->showfiles->get['recTotal']   = 'int';
 $filter->doc->showfiles->get['title']      = 'reg::any';
 
-$filter->file->download->get['charset'] = 'reg::lang';
+$filter->file->download->get['charset'] = 'reg::any';
 
 $filter->mail->batchdelete->get['idList'] = 'reg::idList';
 

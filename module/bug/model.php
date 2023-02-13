@@ -78,7 +78,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->join('os', ',')
             ->join('browser', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket')
+            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
             ->get();
 
         /* Check repeat bug. */
@@ -97,6 +97,23 @@ class bugModel extends model
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
+
+            if(isset($_POST['resultFiles']))
+            {
+                $resultFiles = $_POST['resultFiles'];
+                if(isset($_POST['deleteFiles']))
+                {
+                    foreach($_POST['deleteFiles'] as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
+                }
+                $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
+                foreach($files as $file)
+                {
+                    unset($file->id);
+                    $file->objectType = 'bug';
+                    $file->objectID   = $bugID;
+                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                }
+            }
 
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
@@ -490,7 +507,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -1493,7 +1510,6 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
             ->add('id', $bugID)
-            ->add('assignedTo', 'closed')
             ->add('status',     'closed')
             ->add('confirmed',  1)
             ->setDefault('assignedDate',   $now)
@@ -1579,7 +1595,7 @@ class bugModel extends model
             if($day == $days -1) $startDate = date('Y-m-d', $time) . ' 00:00:00';
         }
 
-        $dateFields = ['openedDate', 'resolvedDate', 'closedDate'];
+        $dateFields = array('openedDate', 'resolvedDate', 'closedDate');
         $staticData = array();
         foreach($dateFields as $field)
         {
@@ -2639,7 +2655,7 @@ class bugModel extends model
         $bugs = $this->dao->select("t1.*, t2.title as planTitle, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productIDList)
-            ->andWhere('t1.execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
@@ -2673,7 +2689,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2700,7 +2716,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2727,7 +2743,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2755,7 +2771,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2778,7 +2794,7 @@ class bugModel extends model
     {
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('product')->in($productIDList)
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('confirmed')->eq(0)
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
@@ -2806,7 +2822,7 @@ class bugModel extends model
     {
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('product')->in($productIDList)
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
@@ -2836,7 +2852,7 @@ class bugModel extends model
     {
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('product')->in($productIDList)
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
@@ -2868,7 +2884,7 @@ class bugModel extends model
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
             ->where('lastEditedDate')->lt($lastEditedDate)
             ->andWhere('product')->in($productIDList)
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
@@ -2899,7 +2915,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2927,8 +2943,8 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
+            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
             ->andWhere('t2.version > t1.storyVersion')
-            ->andWhere('t1.execution')->in(array_keys($executions))
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
@@ -2957,7 +2973,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in(array_keys($executions))->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('closed')
             ->andWhere('id')->in($actionIDList)
@@ -3075,7 +3091,7 @@ class bugModel extends model
         $bugs = $this->dao->select("t1.*, t2.title as planTitle, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productIDList)
-            ->andWhere('t1.execution')->in(array_keys($executions))
+            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
@@ -3370,6 +3386,10 @@ class bugModel extends model
                     $class .= ' text-ellipsis';
                     $title  = "title='" . $os . "'";
                     break;
+                case 'keywords':
+                    $class .= ' text-left';
+                    $title  = "title='{$bug->keywords}'";
+                    break;
                 case 'browser':
                     $class .= ' text-ellipsis';
                     $title  = "title='" . $browser . "'";
@@ -3598,9 +3618,9 @@ class bugModel extends model
                 $ccList = substr($ccList, $commaPos + 1);
             }
         }
-        elseif(strtolower($toList) == 'closed')
+        elseif($bug->status == 'closed')
         {
-            $toList = $bug->resolvedBy;
+            $ccList .= ',' . $bug->resolvedBy;
         }
 
         return array($toList, $ccList);
@@ -3725,13 +3745,8 @@ class bugModel extends model
         /* Get related objects title or names. */
         $table = $this->config->objectTables[$object];
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
-        if($object == 'branch' and $this->session->currentProductType != 'normal')
-        {
-            $productID      = current($bugs)->product;
-            $relatedObjects = $this->dao->select($pairs)->from($table)->where('product')->eq($productID)->fetchPairs();
-        }
 
-        if(in_array($object, array('build','resolvedBuild','branch'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
+        if(in_array($object, array('build','resolvedBuild'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
         return array('' => '', 0 => '') + $relatedObjects;
     }
 

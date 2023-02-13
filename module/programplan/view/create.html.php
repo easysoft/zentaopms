@@ -40,6 +40,7 @@
     <?php endif;?>
   </div>
 </div>
+<?php $hideAttribute = $planID == 0 ? '' : ' hidden'?>
 <?php $attrAlign = $enableOptionalAttr ? '' : 'text-center';?>
 <?php $class = $planID == 0 ? '' : "disabled='disabled'"?>
 <?php $name = $planID == 0 ? $lang->programplan->name : $lang->programplan->subStageName;?>
@@ -161,8 +162,8 @@
                 <span class='input-group-addon'>%</span>
               </div>
             </td>
-            <td class='<?php echo zget($visibleFields, 'attribute', ' hidden') . zget($requiredFields, 'attribute', '', ' required');?> <?php echo $attrAlign;?>'><?php echo $enableOptionalAttr ? html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'") : zget($lang->stage->typeList, $programPlan->attribute);?></td>
-            <td <?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>><?php echo html::select("acl[$i]", $lang->execution->aclList, 'open', "class='form-control' $class");?></td>
+            <td class='<?php echo $hideAttribute?> <?php echo zget($visibleFields, 'attribute', ' hidden') . zget($requiredFields, 'attribute', '', ' required');?> <?php echo $attrAlign;?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
+            <td <?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>><?php echo html::select("acl[$i]", $lang->execution->aclList, empty($programPlan) ? 'open' : $programPlan->acl, "class='form-control' $class");?></td>
             <td class='text-center' <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
             <td><input type='text' name='begin[<?php echo $i;?>] ' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
@@ -206,8 +207,13 @@
           <span class='input-group-addon'>%</span>
         </div>
       </td>
+<<<<<<< HEAD
       <td class='<?php echo zget($visibleFields, 'attribute', ' hidden') . zget($requiredFields, 'attribute', '', ' required');?> <?php echo $attrAlign;?>'><?php echo $enableOptionalAttr ? html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'") : zget($lang->stage->typeList, $programPlan->attribute);?></td>
       <td <?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>><?php echo html::select("acl[$i]", $lang->execution->aclList, 'open', "class='form-control' $class");?></td>
+=======
+      <td class='<?php echo $hideAttribute?> <?php echo zget($visibleFields, 'attribute', ' hidden') . zget($requiredFields, 'attribute', '', ' required');?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
+      <td <?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>><?php echo html::select("acl[$i]", $lang->execution->aclList, empty($programPlan) ? 'open' : $programPlan->acl, "class='form-control' $class");?></td>
+>>>>>>> 780b9c26b7bc23ea6b64598b9d653b7df64036a6
       <td class='text-center' <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
       <td><input type='text' name='<?php echo "begin[$i]";?>' id='begin<?php echo $i;?>' class='form-control form-date' /></td>
       <td><input type='text' name='<?php echo "end[$i]";?>' id='end<?php echo $i;?>' class='form-control form-date' /></td>

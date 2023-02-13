@@ -10,7 +10,7 @@ $config->zahost->edit->requiredFields = 'name,hostType,cpuCores,memory,diskSize,
 
 $config->zahost->imageListUrl = 'https://pkg.qucheng.com/zenagent/list.json';
 
-$config->zahost->cpuCoreList = [1 => 1, 2 => 2, 4 => 4, 6 => 6, 8 => 8, 10 => 10, 12 => 12, 16 => 16, 24 => 24, 32 => 32, 64 => 64];
+$config->zahost->cpuCoreList = array(1 => 1, 2 => 2, 4 => 4, 6 => 6, 8 => 8, 10 => 10, 12 => 12, 16 => 16, 24 => 24, 32 => 32, 64 => 64);
 
 $config->zahost->initBash = 'curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -k %s -z %s';
 

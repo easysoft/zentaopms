@@ -73,7 +73,11 @@ class story extends control
             if(empty($objectID)) $objectID = $this->session->project;
 
             $projectID = $objectID;
-            if(!$this->session->multiple) $projectID = $this->session->project;
+            if(!$this->session->multiple)
+            {
+                $projectID = $this->session->project;
+                $objectID  = $this->execution->getNoMultipleID($projectID);
+            }
             $projectID = isset($objects[$projectID]) ? $projectID : $this->session->project;
             $projectID = $this->project->saveState($projectID, $objects);
             $this->project->setMenu($projectID);
@@ -270,7 +274,7 @@ class story extends control
                     else
                     {
                         $sessionStoryList = $this->session->storyList;
-                        if(count($_POST['branches']) > 1) $sessionStoryList = preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
+                        if(!empty($_POST['branches']) and count($_POST['branches']) > 1) $sessionStoryList = preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
                         $response['locate'] = $sessionStoryList;
                     }
                 }
@@ -341,6 +345,7 @@ class story extends control
             $verify     = htmlSpecialString($story->verify);
             $keywords   = $story->keywords;
             $mailto     = $story->mailto;
+            $category   = $story->category;
         }
 
         if($bugID > 0)
@@ -475,6 +480,7 @@ class story extends control
         $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement') : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
+        $this->view->category         = !empty($category) ? $category : 'feature';
 
         $this->display();
     }
@@ -1154,6 +1160,12 @@ class story extends control
                 $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
                 if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
             }
+
+            if(!empty($story->plan) and !isset($plans[$story->product][$story->branch][$story->plan]))
+            {
+                $plan = $this->dao->select('id,title,begin,end')->from(TABLE_PRODUCTPLAN)->where('id')->eq($story->plan)->fetch();
+                $plans[$story->product][$story->branch][$story->plan] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
+            }
         }
 
         $this->view->title             = $this->lang->story->batchEdit;
@@ -1167,7 +1179,7 @@ class story extends control
         $this->view->branchProduct     = $branchProduct;
         $this->view->storyIdList       = $storyIdList;
         $this->view->branch            = $branch;
-        $this->view->plans             = array('' => '') + $plans;
+        $this->view->plans             = $plans;
         $this->view->storyType         = $storyType;
         $this->view->stories           = $stories;
         $this->view->executionID       = $executionID;
@@ -1600,9 +1612,19 @@ class story extends control
             }
             elseif($from == 'execution')
             {
-                $module = 'execution';
-                $method = 'storyView';
-                $params = "storyID=$storyID";
+                $execution = $this->execution->getByID($this->session->execution);
+                if($execution->multiple)
+                {
+                    $module = 'execution';
+                    $method = 'storyView';
+                    $params = "storyID=$storyID";
+                }
+                else
+                {
+                    $module = 'story';
+                    $method = 'view';
+                    $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+                }
             }
             else
             {
@@ -1822,6 +1844,8 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq((int)$storyID)->exec();
+
             $this->executeHooks($storyID);
 
             if(isonlybody())
@@ -1968,6 +1992,8 @@ class story extends control
 
                     if(!empty($stories[$storyID]->twins)) $this->story->syncTwins($storyID, $stories[$storyID]->twins, $changes, 'Closed');
                 }
+
+                $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->in(array_keys($allChanges))->exec();
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -2278,7 +2304,7 @@ class story extends control
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
+                    return print(js::reload('parent.parent'));
                 }
             }
             return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));

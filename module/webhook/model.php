@@ -122,6 +122,10 @@ class webhookModel extends model
             {
                 $text = substr($data->markdown->content, 0, strpos($data->markdown->content, '(http'));
             }
+            elseif(isset($data->text->content))
+            {
+                $text = substr($data->text->content, 0, strpos($data->text->content, '(http'));
+            }
             elseif(isset($data->content))
             {
                 $text = $data->content->text;
