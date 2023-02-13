@@ -1464,47 +1464,76 @@ class programplanModel extends model
 
             $statusCount = array();
             $children    = $this->execution->getChildExecutions($parent->id);
+            $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->andWhere('id')->ne($id)->fetchPairs();
+            $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
             foreach($children as $childID => $childExecution) $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $statusCount[$childExecution->status] ++;
 
-            if(isset($statusCount['wait']) and count($statusCount) == 1)
+            if(isset($statusCount['wait']) and count($statusCount) == 1 and helper::isZeroDate($parent->realBegan) and $startTasks == 0)
             {
                 if($parent->status != 'wait')
                 {
-                    $parentStatus = 'wait';
+                    $newParent = new stdclass();
+                    $newParent->status         = 'wait';
+                    $newParent->realBegan      = '';
+                    $newParent->closedDate     = '';
+                    $newParent->closedBy       = '';
+                    $newParent->canceledDate   = '';
+                    $newParent->canceledBy     = '';
+                    $newParent->suspendedDate  = '';
+                    $newParent->lastEditedBy   = $this->app->user->account;
+                    $newParent->lastEditedDate = helper::now();
                     $parentAction = 'waitbychild';
-                }
-            }
-            elseif(isset($statusCount['suspended']) and count($statusCount) == 1)
-            {
-                if($parent->status != 'suspended')
-                {
-                    $parentStatus = 'suspended';
-                    $parentAction = 'suspendedbychild';
                 }
             }
             elseif(isset($statusCount['closed']) and count($statusCount) == 1)
             {
                 if($parent->status != 'closed')
                 {
-                    $parentStatus = 'closed';
+                    $newParent = new stdclass();
+                    $newParent->status         = 'closed';
+                    $newParent->closedDate     = helper::now();
+                    $newParent->closedBy       = $this->app->user->account;
+                    $newParent->lastEditedBy   = $this->app->user->account;
+                    $newParent->lastEditedDate = helper::now();
                     $parentAction = 'closedbychild';
+                }
+            }
+            elseif(isset($statusCount['suspended']) and (count($statusCount) == 1 or (isset($statusCount['closed']) and count($statusCount) == 2)))
+            {
+                if($parent->status != 'suspended')
+                {
+                    $newParent = new stdclass();
+                    $newParent->status         = 'suspended';
+                    $newParent->suspendedDate  = helper::now();
+                    $newParent->lastEditedBy   = $this->app->user->account;
+                    $newParent->lastEditedDate = helper::now();
+                    $parentAction = 'suspendedbychild';
                 }
             }
             else
             {
                 if($parent->status != 'doing')
                 {
-                    $parentStatus = 'doing';
+                    $newParent = new stdclass();
+                    $newParent->status         = 'doing';
+                    $newParent->realBegan      = helper::today();
+                    $newParent->closedDate     = '';
+                    $newParent->closedBy       = '';
+                    $newParent->canceledDate   = '';
+                    $newParent->canceledBy     = '';
+                    $newParent->suspendedDate  = '';
+                    $newParent->lastEditedBy   = $this->app->user->account;
+                    $newParent->lastEditedDate = helper::now();
                     $parentAction = $parent->status == 'wait' ?'startbychildstart' : 'startbychild' . $action;
                 }
             }
 
-            if(isset($parentStatus))
+            if(isset($newParent))
             {
-                $this->dao->update(TABLE_EXECUTION)->set('status')->eq($parentStatus)->where('id')->eq($id)->exec();
+                $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($id)->exec();
                 $this->action->create('execution', $id, $parentAction, '', $parentAction);
             }
-            unset($parentStatus, $parentAction);
+            unset($newParent, $parentAction);
         }
     }
 
