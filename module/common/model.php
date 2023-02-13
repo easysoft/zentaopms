@@ -3203,11 +3203,13 @@ EOD;
      * @param  array        $headers   Set request headers.
      * @param  string       $dataType
      * @param  string       $method    POST|PATCH|PUT
+     * @param  int          $timeout
+     * @param  bool         $httpCode
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30)
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false)
     {
         global $lang, $app;
         if(!extension_loaded('curl'))
@@ -3254,6 +3256,7 @@ EOD;
         $response = curl_exec($curl);
         $errors   = curl_error($curl);
 
+        if($httpCode) $httpCode = curl_getinfo($curl,CURLINFO_HTTP_CODE);
         curl_close($curl);
 
         $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
@@ -3272,7 +3275,7 @@ EOD;
 
         if($errors) commonModel::$requestErrors[] = $errors;
 
-        return $response;
+        return $httpCode ? array($response, $httpCode) : $response;
     }
 
     /**
