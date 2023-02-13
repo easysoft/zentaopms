@@ -1612,9 +1612,19 @@ class story extends control
             }
             elseif($from == 'execution')
             {
-                $module = 'execution';
-                $method = 'storyView';
-                $params = "storyID=$storyID";
+                $execution = $this->execution->getByID($this->session->execution);
+                if($execution->multiple)
+                {
+                    $module = 'execution';
+                    $method = 'storyView';
+                    $params = "storyID=$storyID";
+                }
+                else
+                {
+                    $module = 'story';
+                    $method = 'view';
+                    $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+                }
             }
             else
             {

@@ -69,6 +69,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.project')->ne(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->beginIF($projectID)->andWhere('t1.project')->eq((int)$projectID)->fi()
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
