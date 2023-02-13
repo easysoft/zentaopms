@@ -195,9 +195,6 @@
   <div class='btn-toolbar pull-right'>
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
-      <?php common::printLink('testcase', 'automation', "productID=$productID", "<i class='icon-wrench muted'> </i>" . $lang->testcase->automation, '', "class='btn btn-link iframe' data-width='50%'", true, true)?>
-    </div>
-    <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
         <i class='icon icon-export muted'></i> 
         <span class='caret'></span>
@@ -231,6 +228,12 @@
       </ul>
     </div>
     <?php endif;?>
+    <?php if(!empty($productID)): ?>
+    <div class='btn-group'>
+      <?php common::printLink('testcase', 'automation', "productID=$productID", "<i class='icon-wrench muted'> </i>" . $lang->testcase->automation, '', "class='btn btn-link iframe' data-width='50%'", true, true)?>
+    </div>
+    <?php endif;?>
+
     <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
     <div class='btn-group dropdown'>
       <?php
