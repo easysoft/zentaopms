@@ -34,6 +34,7 @@ function updateProgress() {
                     $('.image-download-' + imageID).addClass('disabled');
                     $('.image-cancel-' + imageID).addClass('disabled');
                     $('.image-cancel-' + imageID).attr('href', '#');
+                    $('.image-progress-' + imageID).text("100%");
                 }
                 else
                 {
