@@ -175,7 +175,7 @@ if(!helper::hasFeature('waterfall'))
 }
 if($config->edition == 'max' and !helper::hasFeature('scrum_auditplan'))
 {
-    if(helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
+    if(!helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
 }
 
 if($config->vision == 'lite')
