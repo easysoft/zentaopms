@@ -331,6 +331,7 @@ $lang->project->waterfallTitle     = 'CMMI';
 $lang->project->kanbanTitle        = 'Kanban Project Management';
 $lang->project->agileplusTitle     = 'Agile + Kanban Project Management';
 $lang->project->waterfallplusTitle = 'Waterfall + Agile + Kanban Project Management';
+$lang->project->moreModelTitle     = 'Please look forward to more models...';
 
 $lang->project->empty                  = 'No project.';
 $lang->project->nextStep               = 'Next step';

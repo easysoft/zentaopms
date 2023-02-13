@@ -331,6 +331,7 @@ $lang->project->waterfallTitle     = '瀑布式项目管理';
 $lang->project->kanbanTitle        = '专业研发看板项目管理';
 $lang->project->agileplusTitle     = '敏捷+看板项目管理';
 $lang->project->waterfallplusTitle = '瀑布+敏捷+看板项目管理';
+$lang->project->moreModelTitle     = '更多模型敬请期待...';
 
 $lang->project->empty                  = '暂时没有项目';
 $lang->project->nextStep               = '下一步';
