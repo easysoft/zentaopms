@@ -15,35 +15,53 @@
   <div class='side-col' id='sidebar'>
     <div class='cell'>
       <div class='nav list-group tab-menu'>
-        <a href="#hoursContent" data-toggle="tab" class="active"><?php echo $lang->custom->setHours;?></a>
-        <a href="#weekendContent" data-toggle="tab" class=""><?php echo $lang->custom->setWeekend;?></a>
+        <a href="#hoursContent" data-toggle="tab" class="hours <?php if($type == 'hours') echo 'active'?>"><?php echo $lang->custom->setHours;?></a>
+        <a href="#weekendContent" data-toggle="tab" class="weekend <?php if($type == 'weekend') echo 'active'?>"><?php echo $lang->custom->setWeekend;?></a>
         <?php echo html::a($this->createLink('holiday', 'browse'), $lang->custom->setHoliday);?>
       </div>
     </div>
   </div>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
-      <div class='main-header'>
-        <div class='heading'>
-          <strong><?php echo $lang->workingHour?></strong>
+      <div class='tab-content'>
+        <div class='tab-pane <?php if($type == 'hours') echo 'active'?>' id='hoursContent'>
+          <div class='main-header'>
+            <div class='heading'>
+              <strong><?php echo $lang->custom->setHours?></strong>
+            </div>
+          </div>
+          <table class='table table-form mw-600px'>
+            <tr>
+              <th class='w-150px'><?php echo $lang->custom->workingHours;?></th>
+              <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px'");?></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+        <div class='tab-pane <?php if($type == 'weekend') echo 'active'?>' id='weekendContent'>
+          <div class='main-header'>
+            <div class='heading'>
+              <strong><?php echo $lang->custom->setWeekend?></strong>
+            </div>
+          </div>
+          <table class='table table-form mw-600px'>
+            <tr>
+              <th class='w-150px'><?php echo $lang->custom->weekendRole;?></th>
+              <td class='w-200px'><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
+              <td></td>
+            </tr>
+            <tr id='restDayBox' class='hidden'>
+              <th><?php echo $lang->custom->setWeekend;?></th>
+              <td><?php echo html::select('restDay', $lang->custom->restDayList, $restDay, "class='form-control chosen'");?></td>
+            </tr>
+          </table>
         </div>
       </div>
-      <table class='table table-form mw-600px'>
-        <tr>
-          <th class='w-150px'><?php echo $lang->custom->workingHours;?></th>
-          <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px'");?></td>
-          <td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->custom->weekend;?></th>
-          <td><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
-        </tr>
-        <tr>
-          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
-        </tr>
-      </table>
+      <div class='table-footer text-center'>
+        <?php echo html::submitButton();?>
+        <?php echo html::hidden('type', $type);?>
+      </div>
     </form>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
-

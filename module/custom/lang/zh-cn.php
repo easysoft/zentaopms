@@ -219,9 +219,11 @@ $lang->custom->setHours       = '工时设置';
 $lang->custom->setWeekend     = '休息日设置';
 $lang->custom->setHoliday     = '节假日设置';
 $lang->custom->workingHours   = '每天可用工时';
-$lang->custom->weekend        = '休息日';
-$lang->custom->weekendList[2] = '双休';
+$lang->custom->weekendRole    = '规则设置';
 $lang->custom->weekendList[1] = '单休';
+$lang->custom->weekendList[2] = '双休';
+$lang->custom->restDayList[6] = '周六休息';
+$lang->custom->restDayList[0] = '周天休息';
 
 global $config;
 $lang->custom->sprintConceptList[0] = '项目 产品 迭代';

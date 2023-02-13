@@ -219,9 +219,11 @@ $lang->custom->setHours       = 'Setting Hours';
 $lang->custom->setWeekend     = 'Setting Weekend';
 $lang->custom->setHoliday     = 'Setting Holiday';
 $lang->custom->workingHours   = 'hours/day';
-$lang->custom->weekend        = 'Weekend';
-$lang->custom->weekendList[2] = '2-Day Off';
+$lang->custom->weekendRole    = 'Role';
 $lang->custom->weekendList[1] = '1-Day Off';
+$lang->custom->weekendList[2] = '2-Day Off';
+$lang->custom->restDayList[6] = 'Saturday rest';
+$lang->custom->restDayList[0] = 'Sunday rest';
 
 global $config;
 $lang->custom->sprintConceptList[0] = 'Program Product Iteration';

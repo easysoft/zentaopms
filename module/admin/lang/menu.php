@@ -75,7 +75,7 @@ $lang->admin->menuList->switch['subMenu']['setmodule'] = array('link' => "{$lang
 
 $lang->admin->menuList->switch['menuOrder']['5'] = 'setmodule';
 
-$lang->admin->menuList->model['subMenu']['common']    = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject');
+$lang->admin->menuList->model['subMenu']['common']    = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday');
 $lang->admin->menuList->model['subMenu']['scrum']     = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
 $lang->admin->menuList->model['subMenu']['waterfall'] = array('link' => "{$lang->waterfallModel}|stage|settype|", 'subModule' => 'stage');
 
@@ -87,7 +87,7 @@ $lang->admin->menuList->model['tabMenu']['common']['project']  = array('link' =>
 $lang->admin->menuList->model['tabMenu']['common']['build']    = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']     = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 $lang->admin->menuList->model['tabMenu']['common']['code']     = array('link' => "{$lang->code}|custom|code|");
-$lang->admin->menuList->model['tabMenu']['common']['hours']    = array('link' => "{$lang->workingHour}|custom|hours|");
+$lang->admin->menuList->model['tabMenu']['common']['hours']    = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday');
 $lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage');
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']    = 'project';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']   = 'build';

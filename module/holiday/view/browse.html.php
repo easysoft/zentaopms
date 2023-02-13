@@ -11,19 +11,28 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainMenu' class='clearfix'>
-  <div class='pull-left btn-toolbar'>
-    <div class='input-control'>
-      <span class="form-name"><strong><?php echo $lang->holiday->checkYear;?></strong></span>
-      <?php echo html::select('year', $yearList, $currentYear, "class='form-control chosen'");?>
+<div id='mainContent' class='main-row'>
+  <div class='side-col' id='sidebar'>
+    <div class='cell'>
+      <div class='nav list-group tab-menu'>
+        <a href="<?php echo $this->createLink('custom', 'hours', 'type=hours')?>"><?php echo $lang->custom->setHours;?></a>
+        <a href="<?php echo $this->createLink('custom', 'hours', 'type=weekend')?>"><?php echo $lang->custom->setWeekend;?></a>
+        <?php echo html::a($this->createLink('holiday', 'browse'), $lang->custom->setHoliday, '', "class='active'");?>
+      </div>
     </div>
   </div>
-  <div class='pull-right'>
-    <?php common::printLink('holiday', 'create', "", "<i class='icon icon-plus'> </i>" . $lang->holiday->create, '', "class='btn btn-primary iframe'", '', true)?>
-  </div>
-</div>
-<div id='mainContent' class='main-row fade in'>
-  <div class='main-col main-table'>
+  <div class='main-col main-content'>
+    <div id='mainMenu' class='clearfix'>
+      <div class='pull-left btn-toolbar'>
+        <div class='input-control'>
+          <span class="form-name"><strong><?php echo $lang->holiday->checkYear;?></strong></span>
+          <?php echo html::select('year', $yearList, $currentYear, "class='form-control chosen'");?>
+        </div>
+      </div>
+      <div class='pull-right'>
+        <?php common::printLink('holiday', 'create', "", "<i class='icon icon-plus'> </i>" . $lang->holiday->create, '', "class='btn btn-primary iframe'", '', true)?>
+      </div>
+    </div>
     <?php if(!empty($holidays)):?>
     <table class='table has-sort-head'>
       <thead>

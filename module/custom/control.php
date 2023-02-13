@@ -863,17 +863,37 @@ class custom extends control
         $this->display();
     }
 
-    public function hours()
+    /**
+     * Set hours and weekend
+     *
+     * @access public
+     * @return void
+     */
+    public function hours($type = 'hours')
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItems('system.execution', fixer::input('post')->get());
+            $data = fixer::input('post')->get();
+            $type = $data->type;
+
+            unset($data->type);
+            if($data->weekend != 1) unset($data->restDay);
+
+            $this->loadModel('setting')->setItems('system.execution', $data);
+
+            $response = new stdclass();
+            $response->result  = 'success';
+            $response->locate  = inLink('hours', "type=$type");
+            $response->message = $this->lang->saveSuccess;
+            return $this->send($response);
         }
 
         $this->app->loadConfig('execution');
         $this->view->title     = $this->lang->workingHour;
+        $this->view->type      = $type;
         $this->view->weekend   = $this->config->execution->weekend;
         $this->view->workhours = $this->config->execution->defaultWorkhours;
+        $this->view->restDay   = zget($this->config->execution, 'restDay', 0);
         $this->display();
     }
 }

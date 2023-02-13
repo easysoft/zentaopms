@@ -199,6 +199,7 @@ class holidayModel extends model
         if(empty($begin) or empty($end) or $begin == '0000-00-00' or $end == '0000-00-00') return array();
 
         $this->app->loadConfig('execution');
+
         $actualDays = array();
         $currentDay = $begin;
 
@@ -262,7 +263,7 @@ class holidayModel extends model
         $days      = ($endTime - $beginTime) / 86400;
 
         $dateList  = array();
-        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', $beginTime + ($i *24 *3600));
+        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', $beginTime + ($i * 24 * 3600));
 
         return $dateList;
     }
@@ -313,10 +314,13 @@ class holidayModel extends model
     {
         $updateProjectList = $this->dao->select('id, begin, end')
             ->from(TABLE_PROJECT)
-            ->where('begin')->between($beginDate, $endDate)
+            ->where('status')->ne('done')
+            ->andWhere('type')->ne('program')
+            ->andWhere('end')->ne(LONG_TIME)
+            ->andWhere('begin', true)->between($beginDate, $endDate)
             ->orWhere('end')->between($beginDate, $endDate)
             ->orWhere("(begin < '$beginDate' AND end > '$endDate')")
-            ->andWhere('status')->ne('done')
+            ->markRight(1)
             ->fetchAll();
 
         foreach($updateProjectList as $project)
@@ -340,10 +344,12 @@ class holidayModel extends model
     {
         $updateProjectList = $this->dao->select('id, realBegan, realEnd')
             ->from(TABLE_PROJECT)
-            ->where('realBegan')->between($beginDate, $endDate)
+            ->where('status')->ne('done')
+            ->andWhere('type')->ne('program')
+            ->andwhere('realBegan', true)->between($beginDate, $endDate)
             ->orWhere('realEnd')->between($beginDate, $endDate)
             ->orWhere("(realBegan < '$beginDate' AND realEnd > '$endDate')")
-            ->andWhere('status')->ne('done')
+            ->markRight(1)
             ->fetchAll();
 
         foreach($updateProjectList as $project)
