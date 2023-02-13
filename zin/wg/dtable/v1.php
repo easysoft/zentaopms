@@ -21,6 +21,7 @@ class dtable extends \zin\core\wg
         $builder = parent::build($isPrint, $parent);
 
         $jsRender = $this->prop('js-render');
+        $this->props->remove('js-render');
         if ($jsRender)
         {
             $id = $this->prop('id');
