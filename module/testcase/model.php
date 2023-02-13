@@ -1840,7 +1840,8 @@ class testcaseModel extends model
             }
             else
             {
-                $libCaseID = array_keys($libCases[$caseID])[0];
+                $libCaseList = array_keys($libCases[$caseID]);
+                $libCaseID   = $libCaseList[0];
 
                 $libCase->lastEditedBy   = $this->app->user->account;
                 $libCase->lastEditedDate = helper::now();

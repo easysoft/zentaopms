@@ -42,6 +42,10 @@
           </tr>
           <?php endif;?>
           <tr>
+            <th><?php echo $lang->programplan->PM;?> </th>
+            <td colspan='2'><?php echo html::select('PM', $PMUsers, '', "class='form-control picker-select'");?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->programplan->percent;?> </th>
             <td colspan='2'>
               <div class='input-group'>

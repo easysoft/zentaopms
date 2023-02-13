@@ -163,7 +163,7 @@ class programplanModel extends model
         $this->loadModel('stage');
         $this->loadModel('execution');
 
-        $plans = $this->getStage($executionID, $productID);
+        $plans = $this->getStage($executionID, $productID, 'all', 'order');
         if($baselineID)
         {
             $baseline = $this->loadModel('cm')->getByID($baselineID);
@@ -335,14 +335,14 @@ class programplanModel extends model
                 if($stage['planID'] == $task->execution)
                 {
                     $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
-                    $stageIndex[$index]['progress']['totalConsumed'] += $task->consumed;
+                    $stageIndex[$index]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
                     $stageIndex[$index]['progress']['totalReal']     += ($task->left + $task->consumed);
 
                     $parent = $stage['parent'];
                     if(isset($stageIndex[$parent]))
                     {
                         $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
-                        $stageIndex[$parent]['progress']['totalConsumed'] += $task->consumed;
+                        $stageIndex[$parent]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
                         $stageIndex[$parent]['progress']['totalReal']     += ($task->left + $task->consumed);
                     }
                 }
@@ -751,8 +751,6 @@ class programplanModel extends model
             $datas[] = $plan;
         }
 
-        $project     = $this->loadModel('project')->getByID($projectID);
-        $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         $totalPercent = 0;
         $totalDevType = 0;
@@ -940,29 +938,25 @@ class programplanModel extends model
                     $members     = array($this->app->user->account, $data->PM);
                     $roles       = $this->user->getUserRoles(array_values($members));
                     $team        = $this->user->getTeamMemberPairs($stageID, 'execution');
-                    foreach($members as $account)
+                    foreach($members as $teamMember)
                     {
-                        if(empty($account) or isset($team[$account]) or isset($teamMembers[$account])) continue;
+                        if(empty($teamMember) or isset($team[$teamMember]) or isset($teamMembers[$teamMember])) continue;
 
                         $member = new stdclass();
                         $member->root    = $stageID;
-                        $member->account = $account;
-                        $member->role    = zget($roles, $account, '');
+                        $member->account = $teamMember;
+                        $member->role    = zget($roles, $teamMember, '');
                         $member->join    = $now;
                         $member->type    = 'execution';
                         $member->days    = $data->days;
                         $member->hours   = $this->config->execution->defaultWorkhours;
                         $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                        $teamMembers[$account] = $member;
+                        $teamMembers[$teamMember] = $member;
                     }
                     $this->execution->addProjectMembers($data->project, $teamMembers);
 
                     $this->setTreePath($stageID);
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
-
-                    $linkProducts = $project->division ? array(0 => $productID) : array_keys($productList);
-                    $this->post->set('products', $linkProducts);
-                    $this->execution->updateProducts($stageID);
 
                     /* Record version change information. */
                     $spec = new stdclass();
@@ -986,6 +980,23 @@ class programplanModel extends model
                     $this->computeProgress($stageID, 'create');
                 }
             }
+
+            $linkProducts = array();
+            $linkBranches = array();
+            $productList  = $this->loadModel('product')->getProducts($projectID);
+            if($project->division)
+            {
+                $linkProducts = array(0 => $productID);
+                $linkBranches = array(0 => $productList[$productID]->branches);
+            }
+            else
+            {
+                $linkProducts = array_keys($productList);
+                foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
+            }
+            $this->post->set('products', $linkProducts);
+            $this->post->set('branch', $linkBranches);
+            $this->execution->updateProducts($stageID);
 
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
@@ -1079,8 +1090,8 @@ class programplanModel extends model
         else
         {
             /* Synchronously update sub-phase permissions. */
-            $childrenIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetch('id');
-            if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in($childrenIDList)->exec();
+            $childrenIDList = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetchAll('id');
+            if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in(array_keys($childrenIDList))->exec();
 
             /* The workload of the parent plan cannot exceed 100%. */
             $oldPlan->parent = $plan->parent;
@@ -1121,7 +1132,11 @@ class programplanModel extends model
         if(dao::isError()) return false;
         $this->setTreePath($planID);
         $this->updateSubStageAttr($planID, $plan->attribute);
-        if($plan->acl != 'open') $this->loadModel('user')->updateUserView($planID, 'sprint');
+        if($plan->acl != 'open')
+        {
+            $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->eq('stage')->fetchAll('id');
+            $this->loadModel('user')->updateUserView(array_keys($planIdList), 'sprint');
+        }
 
         if($planChanged)
         {

@@ -1382,6 +1382,7 @@ $(function()
         $('.kanban-header-col>.title>span:not(.text)').hide();
         $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
     }
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 $('#type').change(function()

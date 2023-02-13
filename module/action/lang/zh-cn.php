@@ -237,6 +237,10 @@ $lang->action->desc->relieved             = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->switchtolight        = '$date, 由于 <strong>'. $lang->admin->system .'</strong> 从全生命周期管理模式切换为轻量管理模式，项目访问控制由项目集内公开调整为私有。' . "\n";
 $lang->action->desc->getvnc               = '$date, <strong>$actor</strong>对执行节点 <strong>$extra</strong> 进行了远程操控。' . "\n";
 $lang->action->desc->unlinkproduct        = '$date, 系统判断由于' . $lang->executionCommon . '所属项目与$extra取消关联，同步将' . $lang->executionCommon . '与$extra取消关联。' . "\n";
+$lang->action->desc->createdsnapshot      = '$date, <strong>$actor</strong> 创建了快照 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->restoredsnapshot     = '$date, <strong>$actor</strong> 还原了快照 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->editsnapshot         = '$date, <strong>$actor</strong> 编辑了快照 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->deletesnapshot       = '$date, <strong>$actor</strong> 删除了快照 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -412,13 +416,17 @@ $lang->action->label->resume                = '恢复了';
 $lang->action->label->reboot                = '重启了';
 $lang->action->label->boot                  = '启动了';
 $lang->action->label->destroy               = '关闭了';
-$lang->action->label->getvnc                = '远程操控';
+$lang->action->label->getvnc                = '远程操控了';
 $lang->action->label->synctwins             = '同步修改了';
 $lang->action->label->relieved              = '解除了';
 $lang->action->label->switchtolight         = '从全生命周期管理模式切换为轻量管理模式';
 $lang->action->label->linkedrepo            = '关联代码库到';
 $lang->action->label->unlinkedrepo          = '取消了项目与代码库的关联';
 $lang->action->label->unlinkproduct         = '取消了与产品的关联';
+$lang->action->label->createdsnapshot       = '创建了快照';
+$lang->action->label->restoredsnapshot      = '还原了快照';
+$lang->action->label->editsnapshot          = '编辑了快照';
+$lang->action->label->deletesnapshot        = '编辑了快照';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

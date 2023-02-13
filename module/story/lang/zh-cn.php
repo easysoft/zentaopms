@@ -449,7 +449,7 @@ $lang->story->chosen->reviewedBy = '选择评审人...';
 
 $lang->story->notice = new stdClass();
 $lang->story->notice->closed           = "您选择的{$lang->SRCommon}已经被关闭了！";
-$lang->story->notice->reviewerNotEmpty = '该需求需要评审，评审人员不能为空。';
+$lang->story->notice->reviewerNotEmpty = "该{$lang->SRCommon}需要评审，评审人员不能为空。";
 $lang->story->notice->changePlan       = '所属计划只能改为一条，修改后才能保存成功。';
 
 $lang->story->convertToTask = new stdClass();
@@ -468,20 +468,20 @@ $lang->story->categoryList['experience']  = '体验';
 $lang->story->categoryList['improve']     = '改进';
 $lang->story->categoryList['other']       = '其他';
 
-$lang->story->changeTip = '只有激活状态的需求，才能进行变更';
+$lang->story->changeTip = "只有激活状态的{$lang->SRCommon}，才能进行变更";
 
 $lang->story->reviewTip = array();
-$lang->story->reviewTip['active']      = '该需求已是激活状态，无需评审';
-$lang->story->reviewTip['notReviewer'] = '您不是该需求的评审人员，无法进行评审操作';
+$lang->story->reviewTip['active']      = "该{$lang->SRCommon}已是激活状态，无需评审";
+$lang->story->reviewTip['notReviewer'] = "您不是该{$lang->SRCommon}的评审人员，无法进行评审操作";
 $lang->story->reviewTip['reviewed']    = '您已评审';
 
 $lang->story->recallTip = array();
-$lang->story->recallTip['actived'] = '该需求未发起评审流程，无需撤销操作';
+$lang->story->recallTip['actived'] = "该{$lang->SRCommon}未发起评审流程，无需撤销操作";
 
 $lang->story->subDivideTip = array();
-$lang->story->subDivideTip['subStory']   = '子需求无法细分';
-$lang->story->subDivideTip['notWait']    = '该需求%s，无法进行细分操作';
-$lang->story->subDivideTip['notActive']  = '需求不是激活状态，无法进行细分操作';
+$lang->story->subDivideTip['subStory']   = "子{$lang->SRCommon}无法细分";
+$lang->story->subDivideTip['notWait']    = "该{$lang->SRCommon}%s，无法进行细分操作";
+$lang->story->subDivideTip['notActive']  = "{$lang->SRCommon}不是激活状态，无法进行细分操作";
 $lang->story->subDivideTip['twinsSplit'] = '孪生需求不可细分';
 
 $lang->story->featureBar['browse']['all']       = '全部';

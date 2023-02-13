@@ -1016,6 +1016,7 @@ EOF;
         $auditplans = $this->auditplan->getList(0, $browseType, $param, $orderBy, $pager);
 
         $this->view->executions      = $this->loadModel('execution')->getPairs();
+        $this->view->projects        = $this->loadModel('project')->getPairs();
         $this->view->processTypeList = $this->lang->process->classify;
         $this->view->processes       = $this->pssp->getProcesses();
         $this->view->activities      = $this->pssp->getActivityPairs();

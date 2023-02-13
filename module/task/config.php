@@ -198,7 +198,7 @@ $config->task->datatable->fieldList['story']['width']      = '80';
 $config->task->datatable->fieldList['story']['required']   = 'no';
 $config->task->datatable->fieldList['story']['name']       = $lang->task->story;
 $config->task->datatable->fieldList['story']['control']    = 'select';
-$config->task->datatable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStories', 'params' => '$executionID', 'pairs' => array('id', 'title'));
+$config->task->datatable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => '$executionID&0&all&&&active');
 
 $config->task->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->task->datatable->fieldList['mailto']['fixed']    = 'no';

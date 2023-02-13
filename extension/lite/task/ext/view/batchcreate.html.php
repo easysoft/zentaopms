@@ -14,6 +14,7 @@
 <?php include $this->app->getModuleRoot() . '/common/view/datepicker.html.php';?>
 <?php js::set('taskConsumed', $taskConsumed);?>
 <?php js::set('addChildTask', $lang->task->addChildTask);?>
+<?php js::set('isonlybody', isonlybody())?>
 <?php js::set('regionID', $regionID);?>
 <style>.c-lane,.c-region{width:150px;}</style>
 <div id="mainContent" class="main-content fade">

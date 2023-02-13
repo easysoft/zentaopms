@@ -28,6 +28,10 @@ class zanodemodel extends model
     const KVM_EXPORT_PATH = '/api/v1/kvm/exportVm';
     const KVM_STATUS_PATH = '/api/v1/task/getStatus';
 
+    const SNAPSHOT_CREATE_PATH = '/api/v1/kvm/addCreateSnap';
+    const SNAPSHOT_REVERT_PATH = '/api/v1/kvm/addRevertSnap';
+    const SNAPSHOT_REMOVE_PATH = '/api/v1/kvm/removeSnap';
+
     /**
      * Set lang;
      *
@@ -168,6 +172,173 @@ class zanodemodel extends model
     }
 
     /**
+     * Create Snapshot by zanode.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return void
+     */
+    public function createSnapshot($zanodeID = 0)
+    {
+        $data = fixer::input('post')->get();
+
+        if(empty($data->name)) dao::$errors['name'] = $this->lang->zanode->imageNameEmpty;
+        if(dao::isError()) return false;
+
+        $node  = $this->getNodeByID($zanodeID);
+
+        $newSnapshot = new stdClass();
+        $newSnapshot->host        = $node->id;
+        $newSnapshot->name        = $data->name;
+        $newSnapshot->desc        = $data->desc;
+        $newSnapshot->status      = 'creating';
+        $newSnapshot->osName      = $node->osName;
+        $newSnapshot->from        = 'snapshot';
+        $newSnapshot->createdBy   = $this->app->user->account;
+        $newSnapshot->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_IMAGE)
+            ->data($newSnapshot)
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        $newID = $this->dao->lastInsertID();
+
+        /* Prepare create params. */
+        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
+        $param    = array(array(
+            'name'    => $data->name,
+            'task'    => $newID,
+            'type'    => 'createSnap',
+            'vm'      => $node->name
+        ));
+
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
+
+        if(!empty($result) and $result->code == 'success')
+        {
+            $this->loadModel('action')->create('zanode', $zanodeID, 'createdSnapshot', '', $data->name);
+            return $newID;
+        }
+
+        $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($newID)->exec();
+        dao::$errors[] = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->app->lang->fail;
+        return false;
+    }
+
+    /**
+     * Edit Snapshot.
+     *
+     * @param int $snapshotID
+     * @access public
+     * @return bool
+     */
+    public function editSnapshot($snapshotID)
+    {
+        $data = fixer::input('post')->get();
+
+        if(empty($data->name)) dao::$errors['name'] = $this->lang->zanode->imageNameEmpty;
+        if(dao::isError()) return false;
+
+        $newSnapshot = new stdClass();
+        $newSnapshot->localName = $data->name;
+        $newSnapshot->desc       = $data->desc;
+
+        $this->dao->update(TABLE_IMAGE)
+            ->data($newSnapshot)
+            ->where('id')->eq($snapshotID)
+            ->autoCheck()
+            ->exec();
+        return true;
+    }
+
+    /**
+     * Restore Snapshot to zanode.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return void
+     */
+    public function restoreSnapshot($zanodeID = 0, $snapshotID = 0)
+    {
+        $node = $this->getNodeByID($zanodeID);
+        $snap = $this->getImageByID($snapshotID);
+
+        $snap->status = ($snap->status == 'restoring' && time() - strtotime($snap->restoreDate) > 600) ? 'restore_failed' : $snap->status;
+        if(!in_array($snap->status, array('completed', 'restoring', 'restore_failed', 'restore_completed'))) dao::$errors = $this->lang->zanode->snapStatusError;
+        if($snap->status == 'restoring') dao::$errors = $this->lang->zanode->snapRestoring;
+        if(dao::isError()) return false;
+
+        //update snapshot status
+        $this->dao->update(TABLE_IMAGE)
+        ->set('status')->eq('restoring')
+        ->set('restoreDate')->eq(helper::now())
+        ->where('id')->eq($snapshotID)->exec();
+
+
+        /* Prepare create params. */
+        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
+        $param    = array(array(
+            'name'    => $snap->name,
+            'task'    => $snapshotID,
+            'type'    => 'revertSnap',
+            'vm'      => $node->name
+        ));
+
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
+
+        if(!empty($result) and $result->code == 'success')
+        {
+            $this->dao->update(TABLE_HOST)->set('status')->eq('restoring')->where('id')->eq($node->id)->exec();
+            $this->loadModel('action')->create('zanode', $zanodeID, 'restoredsnapshot', '', $snap->name);
+            return true;
+        }
+
+        $this->dao->update(TABLE_IMAGE)->set('status')->eq('completed')->where('id')->eq($snapshotID)->exec();
+        dao::$errors[] = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->lang->zanode->apiError['fail'];
+        return false;
+    }
+
+    /**
+     * Delete Snapshot.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function deleteSnapshot($snapshotID)
+    {
+        $snapshot = $this->getImageByID($snapshotID);
+        $node = $this->getNodeByID($snapshot->host);
+
+        if($node)
+        {
+            $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
+            $param    = (object)array(
+                'name'    => $snapshot->name,
+                'task'    => $snapshotID,
+                'vm'      => $node->name
+            );
+
+            $result = commonModel::http($agnetUrl . static::SNAPSHOT_REMOVE_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"));
+            $result = json_decode($result);
+
+            if(!empty($result) and $result->code == 'success')
+            {
+                $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->exec();
+                $this->loadModel('action')->create('zanode', $node->id, 'deletesnapshot', '', $snapshot->name);
+                return true;
+            }
+
+            $error = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->lang->zanode->apiError['fail'];
+            return $error;
+        }
+    }
+
+
+    /**
      * Action Node.
      *
      * @param  int $id
@@ -212,7 +383,7 @@ class zanodemodel extends model
     public function destroy($id)
     {
         $node = $this->getNodeByID($id);
-        
+
         if($node)
         {
             $req = array( 'name' => $node->name );
@@ -518,6 +689,27 @@ class zanodemodel extends model
             ->beginIF($status)->andWhere('status')->in($status)->fi()
             ->orderBy($orderBy)
             ->fetch();
+    }
+
+    public function getSnapshotList($nodeID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
+    {
+        $snapshotList = $this->dao->select('*')->from(TABLE_IMAGE)
+            ->where('host')->eq($nodeID)
+            ->andWhere('`from`')->eq('snapshot')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('name');
+
+        foreach($snapshotList as $name => $snapshot)
+        {
+            if($snapshot->status == 'creating' and (time() - strtotime($snapshot->createdDate)) > 1800)
+            {
+                $this->dao->update(TABLE_IMAGE)->set('status')->eq('failed')->where('id')->eq($snapshot->id)->exec();
+                $snapshotList[$name]->status = 'failed';
+            }
+        }
+
+        return $snapshotList;
     }
 
     /**

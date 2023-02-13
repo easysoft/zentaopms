@@ -565,8 +565,9 @@ class bug extends control
         }
         else
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
-            $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'all','id_desc', 0, 'full', 'story', false);
+            $moduleID = $moduleID ? $moduleID : 0;
+            $builds   = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all','id_desc', 0, 'full', 'story', false);
         }
 
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
@@ -580,7 +581,7 @@ class bug extends control
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Get products and projects. */
-        $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc');
+        $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc', 'all');
         $projects = array(0 => '');
         if($executionID)
         {
@@ -665,6 +666,7 @@ class bug extends control
         $this->view->storyID               = $storyID;
         $this->view->buildID               = $buildID;
         $this->view->caseID                = $caseID;
+        $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->runID                 = $runID;
         $this->view->version               = $version;
         $this->view->testtask              = $testtask;
@@ -1955,6 +1957,8 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
+            $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq((int)$bugID)->exec();
+
             $this->executeHooks($bugID);
 
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -2093,6 +2097,7 @@ class bug extends control
             /* Reset $_POST. Do not unset that because the function of close need that in model. */
             $_POST = array();
 
+            $closedBugs = array();
             $bugs = $this->bug->getByList($bugIDList);
             foreach($bugs as $bugID => $bug)
             {
@@ -2106,7 +2111,11 @@ class bug extends control
 
                 $actionID = $this->action->create('bug', $bugID, 'Closed');
                 $this->action->logHistory($actionID, $changes);
+                $closedBugs[] = $bugID;
             }
+
+            $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->in($closedBugs)->exec();
+
             $this->loadModel('score')->create('ajax', 'batchOther');
             if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, join(',', $skipBugs)));
             if($viewType)

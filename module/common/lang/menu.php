@@ -809,9 +809,9 @@ if(!helper::hasFeature('kanban'))
 
 if($config->edition == 'max' and !helper::hasFeature('scrum_auditplan'))
 {
-    if(!helper::hasFeature('scrum_process'))
+    if(helper::hasFeature('scrum_process'))
     {
-        $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|process|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
+        $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|process|scrumbrowse|browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
     }
     else
     {
