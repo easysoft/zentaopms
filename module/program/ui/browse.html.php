@@ -30,14 +30,10 @@ $data  = array_values($programs);
 
 foreach($data as $row)
 {
-  foreach($row as $k => $v)
-  {
-    if (!in_array($k, $fields)) unset($row->$k);
-  }
-
   if(!property_exists($row, 'progress'))
   {
-    $row->progress = '';
+    if(isset($progressList[$row->id])) $row->progress = $progressList[$row->id];
+    else $row->progress = '';
   }
 
   if(!property_exists($row, 'actions'))
@@ -46,8 +42,16 @@ foreach($data as $row)
   }
 }
 
+\common::sortFeatureMenu();
 $statuses = array();
-foreach($lang->program->featureBar['browse'] as $key => $text) $statuses[] = array('text' => $text, 'active' => $key === $status);
+foreach($lang->program->featureBar['browse'] as $key => $text)
+{
+  $statuses[] = array(
+    'text' => $text,
+    'active' => $key === $status,
+    'url' => \helper::createLink('browse', "status=$key&orderBy=$orderBy"),
+  );
+}
 
 $others = array();
 if(\common::hasPriv('project', 'batchEdit') and $programType != 'bygrid' and $hasProject === true)
