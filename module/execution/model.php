@@ -66,8 +66,6 @@ class executionModel extends model
         $execution = $this->getByID($executionID);
         if(!$execution) return;
 
-        if($execution->type == 'stage') unset($this->lang->execution->menu->settings['subMenu']->products);
-
         if($execution and $execution->type == 'kanban')
         {
             global $lang;
@@ -87,6 +85,10 @@ class executionModel extends model
             $this->lang->execution->menu->settings['subMenu']->team      = array('link' => "{$this->lang->team->common}|execution|team|executionID=%s", 'alias' => 'managemembers');
             $this->lang->execution->menu->settings['subMenu']->whitelist = array('link' => "{$this->lang->whitelist}|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
         }
+
+        $project = $this->loadModel('project')->getByID($execution->project);
+
+        if($execution->type == 'stage' or (!empty($project) and $project->model == 'waterfallplus')) unset($this->lang->execution->menu->settings['subMenu']->products);
 
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 

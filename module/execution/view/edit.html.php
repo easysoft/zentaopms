@@ -143,8 +143,9 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
+        <?php if($execution->type != 'stage' or ($execution->type == 'stage' and !in_array($execution->attribute, array('request', 'design', 'review')))): ?>
         <?php $hidden = 'hide'?>
+        <?php $attr   = ($project->model == 'waterfall' or $project->model == 'waterfallplus') ? 'disabled="disabled"' : '';?>
         <?php if(!empty($project->hasProduct)) $hidden = ''?>
         <?php if($linkedProducts):?>
         <?php $i = 0;?>
@@ -160,7 +161,7 @@
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
                       <span class='input-group-addon'><?php echo $lang->product->common;?></span>
                       <?php $disabled = ($execution->type == 'stage' and !$execution->division) ? "disabled='disabled'" : '';?>
-                      <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
+                      <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled $attr onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                       <?php if($execution->type == 'stage' and !$execution->division) echo html::hidden("products[$i]", $product->id);?>
                     </div>
                   </div>
@@ -168,7 +169,7 @@
                     <div class='input-group required'>
                       <span class='input-group-addon fix-border'><?php echo $lang->product->branchName['branch'];?></span>
                       <?php $branchIdList = join(',', $product->branches);?>
-                      <?php echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
+                      <?php echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' $attr multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
                     </div>
                   </div>
                 </div>
@@ -176,8 +177,8 @@
               <div class="col-sm-6">
                 <div class='input-group' <?php echo "id='plan$i'";?>>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
-                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), $product->plans, "class='form-control chosen' multiple");?>
-                  <?php if(!($execution->type == 'stage' and !$execution->division)):?>
+                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), $product->plans, "class='form-control chosen' $attr multiple");?>
+                  <?php if(!($execution->type == 'stage' and !$execution->division) and $project->model != 'waterfall' and $project->model != 'waterfallplus'):?>
                   <div class='input-group-btn'>
                     <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>
                     <a href='javascript:;' onclick='removeLine(this)' class='btn btn-link removeLine' <?php if($i == 0) echo "style='visibility: hidden'";?>><i class='icon-close'></i></a>
