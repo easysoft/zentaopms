@@ -83,15 +83,16 @@ class dev extends control
     }
 
     /**
-     * LangItem.
+     * Lang item.
      *
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function langItem()
+    public function langItem($type = 'common')
     {
-        $this->view->title      = $this->lang->langItem;
-
+        $this->view->title = $this->lang->langItem;
+        $this->view->type  = $type;
         $this->display();
     }
 }

@@ -627,7 +627,7 @@ $lang->admin->menu->company['subMenu']->browseGroup = array('link' => "{$lang->p
 $lang->admin->menu->dev['subMenu']           = new stdclass();
 $lang->admin->menu->dev['subMenu']->api      = array('link' => "API|dev|api");
 $lang->admin->menu->dev['subMenu']->db       = array('link' => "$lang->db|dev|db");
-$lang->admin->menu->dev['subMenu']->langItem = array('link' => "{$lang->langItem}|dev|langItem");
+$lang->admin->menu->dev['subMenu']->langItem = array('link' => "{$lang->langItem}|dev|langitem");
 $lang->admin->menu->dev['subMenu']->editor   = array('link' => "$lang->editor|dev|editor");
 $lang->admin->menu->dev['subMenu']->entry    = array('link' => "{$lang->admin->entry}|entry|browse", 'subModule' => 'entry');
 

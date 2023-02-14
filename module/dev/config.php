@@ -243,3 +243,6 @@ $config->dev->postParams['testcase']['create']['keywords']     = 'string';
 
 $config->disableFeature = array();
 if(!helper::hasFeature('waterfall')) $config->disableFeature = array('design', 'stage', 'programplan', 'weekly', 'researchplan', 'researchreport', 'gapanalysis');
+
+$config->dev->disableMainMenu = array();
+if($config->systemMode == 'light') $config->dev->disableMainMenu = array('project');

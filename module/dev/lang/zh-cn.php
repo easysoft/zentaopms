@@ -177,3 +177,9 @@ if($config->systemMode != 'ALM') unset($lang->dev->groupList['program']);
 $lang->dev->endGroupList['admin']  = '后台';
 $lang->dev->endGroupList['system'] = '系统';
 $lang->dev->endGroupList['other']  = '其他';
+
+$lang->dev->featureBar['langItem']['common']  = '公共';
+$lang->dev->featureBar['langItem']['first']   = '一级菜单';
+$lang->dev->featureBar['langItem']['second']  = '二级菜单';
+$lang->dev->featureBar['langItem']['third']   = '三级菜单';
+$lang->dev->featureBar['langItem']['feature'] = '检索标签';

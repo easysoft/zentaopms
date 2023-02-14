@@ -177,3 +177,9 @@ if($config->systemMode != 'ALM') unset($lang->dev->groupList['program']);
 $lang->dev->endGroupList['admin']  = 'Admin';
 $lang->dev->endGroupList['system'] = 'System';
 $lang->dev->endGroupList['other']  = 'Andere';
+
+$lang->dev->featureBar['langItem']['common']  = 'Common';
+$lang->dev->featureBar['langItem']['first']   = 'First Menu';
+$lang->dev->featureBar['langItem']['second']  = 'Second Menu';
+$lang->dev->featureBar['langItem']['third']   = 'Third Menu';
+$lang->dev->featureBar['langItem']['feature'] = 'Search Tab';

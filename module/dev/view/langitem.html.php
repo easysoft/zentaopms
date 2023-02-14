@@ -11,6 +11,15 @@
  *          */
 ?>
 <?php include 'header.html.php';?>
+<div id='mainMenu' class='clearfix'>
+  <div class="btn-toolBar pull-left">
+    <?php foreach($lang->dev->featureBar['langItem'] as $key => $label):?>
+    <?php $active = $type == $key ? 'btn-active-text' : '';?>
+    <?php $label = "<span class='text'>$label</span>";?>
+    <?php echo html::a(inlink('langItem', "type=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php endforeach;?>
+  </div>
+</div>
 <div id='mainContent' class='main-content flex'>
   <div class="side-left">
     <div class="title">默认值</div>
