@@ -120,8 +120,8 @@ $lang->admin->safe->modeList[0] = "Contrôle Modéré";
 $lang->admin->safe->modeList[1] = 'Contrôle Moyen';
 $lang->admin->safe->modeList[2] = 'Contrôle Fort';
 
-$lang->admin->safe->modeRuleList[1] = ' >= 6 Majuscules, minuscules et chiffres.';
-$lang->admin->safe->modeRuleList[2] = ' >= 10 Majuscules, minuscules, chiffres et caractères spéciaux.';
+$lang->admin->safe->modeRuleList[1] = ' ≥ 6 Majuscules, minuscules et chiffres.';
+$lang->admin->safe->modeRuleList[2] = ' ≥ 10 letters, combination of uppercase, lowercase letters, numbers, and special symbols.';
 
 $lang->admin->safe->reasonList['weak']     = 'Mots de passe faibles courants';
 $lang->admin->safe->reasonList['account']  = 'Identique au compte';

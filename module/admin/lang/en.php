@@ -120,8 +120,8 @@ $lang->admin->safe->modeList[0] = 'I don\'t care.';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Strong';
 
-$lang->admin->safe->modeRuleList[1] = ' >= 6 upper and lower case, and numbers.';
-$lang->admin->safe->modeRuleList[2] = ' >= 10 upper and lower case, numbers and special characters.';
+$lang->admin->safe->modeRuleList[1] = ' ≥ 6 upper and lower case, and numbers.';
+$lang->admin->safe->modeRuleList[2] = ' ≥ 10 letters, combination of uppercase, lowercase letters, numbers, and special symbols.';
 
 $lang->admin->safe->reasonList['weak']     = 'Common Weak Password';
 $lang->admin->safe->reasonList['account']  = 'Same as account';
