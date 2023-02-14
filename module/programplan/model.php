@@ -751,7 +751,6 @@ class programplanModel extends model
             $datas[] = $plan;
         }
 
-
         $totalPercent = 0;
         $totalDevType = 0;
         $milestone    = 0;
@@ -834,6 +833,20 @@ class programplanModel extends model
         $this->app->loadLang('doc');
         $account = $this->app->user->account;
         $now     = helper::now();
+
+        if(!isset($orders)) $orders = array();
+        asort($orders);
+        if(count($orders) < count($datas))
+        {
+            $orderIndex = empty($orders) ? 0 : count($orders);
+            $lastID     = $this->dao->select('id')->from(TABLE_EXECUTION)->orderBy('id_desc')->fetch('id');
+            for($i = $orderIndex; $i < count($datas); $i ++)
+            {
+                $lastID ++;
+                $orders[$i] = $lastID * 5;
+            }
+        }
+
         foreach($datas as $data)
         {
             /* Set planDuration and realDuration. */
@@ -845,6 +858,8 @@ class programplanModel extends model
 
             $projectChanged = false;
             $data->days     = helper::diffDate($data->end, $data->begin) + 1;
+            $data->order    = current($orders);
+
             if($data->id)
             {
                 $stageID = $data->id;
@@ -922,7 +937,6 @@ class programplanModel extends model
                     $stageID = $this->dao->lastInsertID();
 
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
-                    $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($stageID * 5)->where('id')->eq($stageID)->exec();
 
                     /* Create doc lib. */
                     $lib = new stdclass();
@@ -1002,6 +1016,8 @@ class programplanModel extends model
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
 
             if(dao::isError()) return print(js::error(dao::getError()));
+
+            next($orders);
         }
     }
 
