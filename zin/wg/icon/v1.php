@@ -1,8 +1,6 @@
 <?php
 namespace zin;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.func.php';
-
 class icon extends wg
 {
     protected static $defineProps = 'name:string';

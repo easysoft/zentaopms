@@ -1,8 +1,6 @@
 <?php
 namespace zin;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.func.php';
-
 class btn extends wg
 {
     static $defineProps = 'type,icon,text,square,disabled,active,url,target,size,trailingIcon,caret,hint,btnType';

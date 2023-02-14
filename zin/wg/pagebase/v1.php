@@ -1,8 +1,6 @@
 <?php
 namespace zin;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.func.php';
-
 class pagebase extends wg
 {
     static $tag = 'html';

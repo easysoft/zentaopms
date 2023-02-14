@@ -11,9 +11,6 @@
 
 namespace zin;
 
-require_once __DIR__ . DS . 'core' . DS . 'directive.func.php';
-require_once __DIR__ . DS . 'core' . DS . 'wg.class.php';
-require_once __DIR__ . DS . 'core' . DS . 'h.class.php';
 require_once __DIR__ . DS . 'core' . DS . 'h.func.php';
 
 function icon()      {return createWg('icon',    func_get_args());}
