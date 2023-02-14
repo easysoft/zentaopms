@@ -57,7 +57,10 @@
     <?php endif;?>
   </div>
 </div>
+
+<?php if(!empty($holidays)):?>
 <script>
 $(function(){parent.$('#triggerModal .modal-content .modal-header .close').hide();});
 </script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
