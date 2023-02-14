@@ -3546,6 +3546,7 @@ EOD;
     public static function replaceMenuLang()
     {
         global $lang;
+        if(empty($lang->db->custom)) return;
         foreach($lang->db->custom as $moduleName => $sectionMenus)
         {
             if(strpos($moduleName, 'Menu') === false) continue;
