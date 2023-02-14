@@ -1,9 +1,7 @@
 <?php
 namespace zin;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.class.php';
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'directive.func.php';
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.func.php';
+require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.func.php';
 
 class btn extends wg
 {
