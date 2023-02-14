@@ -372,7 +372,7 @@ class action extends control
         /* Check parent stage isCreateTask. */
         $execution      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
         $hasCreatedTask = $this->loadModel('programplan')->isCreateTask($execution->parent);
-        if(!$hasCreatedTask) return print(js::alert($this->lang->action->hasCreatedTask));
+        if(!$hasCreatedTask) die(js::alert($this->lang->action->hasCreatedTask));
 
         /* If parent stage is not exists, you should recover its parent stages, refresh status. */
         $stagePathList    = explode(',', trim($execution->path, ','));
@@ -407,7 +407,8 @@ class action extends control
         {
             $this->app->loadLang('stage');
 
-            $confirmLang = sprintf($this->lang->action->hasDeletedParent, trim($deletedTitle, ',')) . $this->lang->action->whetherToRestore;
+            $deletedTitle = trim($deletedTitle, ',');
+            $confirmLang  = sprintf($this->lang->action->hasDeletedParent, $deletedTitle) . $this->lang->action->whetherToRestore;
             if($needChangeAttr) $confirmLang = sprintf($this->lang->action->hasChangedAttr, zget($this->lang->stage->typeList, $parentAttr)) . $this->lang->action->whetherToRestore;
             if(!empty($deletedTitle) and $needChangeAttr) $confirmLang = sprintf($this->lang->action->hasDeletedParent, $deletedTitle) . sprintf($this->lang->action->hasChangedAttr, zget($this->lang->stage->typeList, $parentAttr)) . $this->lang->action->whetherToRestore;
 
@@ -418,7 +419,12 @@ class action extends control
             else
             {
                 if(!empty($deletedTitle)) $this->action->restoreStages($deletedParents);
-                if($needChangeAttr) $this->programplan->updateSubStageAttr($startChangedStage->parent, $parentAttr, true);
+                if($needChangeAttr)
+                {
+                    $needChangedStages = substr($execution->path, strpos($execution->path, ",{$startChangedStage->id},"));
+                    $needChangedStages = explode(',', trim($needChangedStages, ','));
+                    $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($parentAttr)->where('id')->in($needChangedStages)->exec();
+                }
             }
         }
 

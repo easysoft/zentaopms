@@ -50,7 +50,7 @@ $(function()
         var currentParent       = $('#parent').val();
         var hasChangedAttribute = (currentAttribute && currentAttribute != 'mix' && plan.attribute != currentAttribute);
         var hasChangedParent    = ((isTopStage && $('#parent').val() != 0) || (!isTopStage && plan.parent != $('#parent').val()));
-        if(hasChangedAttribute && !hasChangedParent)
+        if(hasChangedAttribute && !hasChangedParent && !isLeafStage)
         {
             var result = confirm(changeAttrLang.replace('%s', stageTypeList[currentAttribute]));
 
