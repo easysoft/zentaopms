@@ -1247,15 +1247,8 @@ class storyModel extends model
         if(empty($childrenStatus)) return $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
 
         $status = $oldParentStory->status;
-        if(count($childrenStatus) == 1)
-        {
-            $status = current($childrenStatus);
-            if($status == 'draft' or $status == 'changing') $status = 'active';
-        }
-        elseif(count($childrenStatus) != 1 and $oldParentStory->status == 'closed')
-        {
-            $status = 'active';
-        }
+        if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed') $status = current($childrenStatus); // Close parent story.
+        if($oldParentStory->status == 'closed') $status = $this->getActivateStatus($parentID); // Activate parent story.
 
         if($status and $oldParentStory->status != $status)
         {
@@ -1263,7 +1256,7 @@ class storyModel extends model
             $story = new stdclass();
             $story->status = $status;
             $story->stage  = 'wait';
-            if($status == 'active')
+            if(strpos('active,changing,draft', $status) !== false)
             {
                 $story->assignedTo   = $oldParentStory->openedBy;
                 $story->assignedDate = $now;
@@ -1293,13 +1286,21 @@ class storyModel extends model
                 if(!$createAction) return $story;
 
                 $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->fetch();
-                $changes = common::createChanges($oldParentStory, $newParentStory);
-                $action  = '';
-                if($status == 'active') $action = 'Activated';
-                if($status == 'closed') $action = 'closedbysystem';
+                $changes   = common::createChanges($oldParentStory, $newParentStory);
+                $action    = '';
+                $preStatus = '';
+                if(strpos('active,draft,changing', $status) !== false) $action = 'Activated';
+                if($status == 'closed')
+                {
+                    /* Record the status before closed. */
+                    $action    = 'closedbysystem';
+                    $preStatus = $oldParentStory->status;
+                    $isChanged = $oldParentStory->changedBy ? true : false;
+                    if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
+                }
                 if($action)
                 {
-                    $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', '', '', false);
+                    $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', $preStatus, '', false);
                     $this->action->logHistory($actionID, $changes);
                 }
 
@@ -6410,7 +6411,8 @@ class storyModel extends model
     public function getActivateStatus($storyID, $hasTwins = true)
     {
         $status     = 'active';
-        $action     = $hasTwins ? 'closed,reviewrejected,synctwins' : 'closed,reviewrejected';
+        $action     = 'closed,reviewrejected,closedbysystem';
+        $action     = $hasTwins ? $action . ',synctwins' : $action;
         $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
@@ -6419,9 +6421,25 @@ class storyModel extends model
             ->fetch();
 
         $lastAction = $lastRecord->action;
-        if(strpos('closed,reviewrejected', $lastAction) !== false)
+        if(strpos(',closed,reviewrejected,', ",$lastAction,") !== false)
         {
             $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
+        }
+
+        /* Activate parent story. */
+        if($lastAction == 'closedbysystem')
+        {
+            $status = $lastRecord->extra ? $lastRecord->extra : 'active';
+            if($status == 'active')
+            {
+                /* If the parent story is not reviewed before closing, it will be activated to the status in changing. */
+                $hasNotReviewed = $this->dao->select('t1.*')->from(TABLE_STORYREVIEW)->alias('t1')
+                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id and t2.version = t1.version')
+                    ->where('t1.story')->eq($storyID)
+                    ->andWhere('t1.result')->eq('')
+                    ->fetchAll();
+                if(!empty($hasNotReviewed)) $status = 'changing';
+            }
         }
 
         /* When activating twin story, you need to check the status of the twin story selected when closing. */

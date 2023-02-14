@@ -114,10 +114,12 @@ class productplanModel extends model
 
         $productplanQuery = $this->session->productplanQuery;
 
-        $date  = date('Y-m-d');
-        $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
+        $date     = date('Y-m-d');
+        $products = (strpos($param, 'noproduct') !== false and empty($product)) ? $this->loadModel('product')->getList() : array(0);
+        $plans    = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->beginIF(strpos($param, 'noproduct') === false or !empty($product))->andWhere('product')->eq($product)->fi()
+            ->beginIF(strpos($param, 'noproduct') !== false and empty($product))->andWhere('product')->in(array_keys($products))->fi()
             ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF(strpos(',all,undone,bySearch,review,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()

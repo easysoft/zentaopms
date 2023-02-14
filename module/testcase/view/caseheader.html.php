@@ -195,14 +195,8 @@
   <div class='btn-toolbar pull-right'>
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
-      <?php common::printLink('testcase', 'automation', "productID=$productID", "<i class='icon-wrench muted'> </i>" . $lang->testcase->automation, '', "class='btn btn-link iframe' data-width='50%'", true, true)?>
-      <?php if(common::hasPriv('testcase', 'automation')):?>
-      <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='bottom' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->zanode->automationTips;?>"></icon>
-      <?php endif;?>
-    </div>
-    <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
-        <i class='icon icon-export muted'></i> <?php echo $lang->export ?>
+        <i class='icon icon-export muted'></i> 
         <span class='caret'></span>
       </button>
       <ul class='dropdown-menu pull-right' id='exportActionMenu'>
@@ -223,7 +217,7 @@
     <?php if(empty($productID) or common::canModify('product', $product)):?>
     <?php if(!empty($productID) and (common::hasPriv('testcase', 'import') or common::hasPriv('testcase', 'importFromLib'))): ?>
     <div class='btn-group'>
-      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
+      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right' id='importActionMenu'>
       <?php
       if(common::hasPriv('testcase', 'import')) echo "<li>" . html::a($this->createlink('testcase', 'import', "productID=$productID&branch=$branch"), $lang->testcase->fileImport, '', "class='export' data-app={$app->tab}") . "</li>";
@@ -234,6 +228,12 @@
       </ul>
     </div>
     <?php endif;?>
+    <?php if(!empty($productID)): ?>
+    <div class='btn-group'>
+      <?php common::printLink('testcase', 'automation', "productID=$productID", "<i class='icon-wrench muted'> </i>" . $lang->testcase->automation, '', "class='btn btn-link iframe' data-width='50%'", true, true)?>
+    </div>
+    <?php endif;?>
+
     <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
     <div class='btn-group dropdown'>
       <?php

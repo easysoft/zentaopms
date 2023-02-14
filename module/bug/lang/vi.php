@@ -194,6 +194,7 @@ $lang->bug->tplResult = "<p>[Kết quả]</p><br/>";
 $lang->bug->tplExpect = "<p>[Kỳ vọng]</p><br/>";
 
 /* Value list for each field. */
+$lang->bug->severityList[0] = '';
 $lang->bug->severityList[1] = '1';
 $lang->bug->severityList[2] = '2';
 $lang->bug->severityList[3] = '3';
