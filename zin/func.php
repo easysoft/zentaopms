@@ -17,7 +17,6 @@ require_once __DIR__ . DS . 'core' . DS . 'h.class.php';
 require_once __DIR__ . DS . 'core' . DS . 'h.func.php';
 
 class h  extends \zin\core\h {}
-class wg extends \zin\core\wg {}
 
 function prop()      {return call_user_func_array('\zin\core\prop', func_get_args());}
 function set()       {return call_user_func_array('\zin\core\set', func_get_args());}

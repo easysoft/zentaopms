@@ -37,22 +37,6 @@ class props extends dataset
     public $class;
 
     /**
-     * Hx properties
-     *
-     * @access public
-     * @var    hx
-     */
-    public $hx;
-
-    /**
-     * Events properties
-     *
-     * @access public
-     * @var    events
-     */
-    public $events;
-
-    /**
      * Create properties instance
      *
      * @access public

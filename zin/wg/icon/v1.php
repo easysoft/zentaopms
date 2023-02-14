@@ -12,10 +12,7 @@ class icon extends \zin\core\wg
 {
     protected static $defineProps = 'name:string';
 
-    /**
-     * @return builder
-     */
-    protected function build($isPrint = false, $parent = NULL)
+    protected function build($isPrint = false)
     {
         $iconName = $this->props->get('name', '');
         return h::i

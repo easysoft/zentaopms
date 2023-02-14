@@ -52,7 +52,6 @@ class pagebase extends \zin\core\wg
             h::body
             (
                 set($this->prop('bodyProps')),
-                $this->block('body'),
                 parent::build($isPrinted),
                 $config->debug ? h::js('window.zin = ' . json_encode($this) . ';console.log("page", window.zin.page)') : null
             )
