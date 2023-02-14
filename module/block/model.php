@@ -166,7 +166,7 @@ class blockModel extends model
     {
         $data = array();
 
-        $tasks = $this->dao->select("count(t1.id) as tasks, count(if(t1.status = 'done', 1, null)) as doneTasks")->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select("count(distinct t1.id) as tasks, count(distinct if(t1.status = 'done', 1, null)) as doneTasks")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
             ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t4.task = t1.id and t4.account = '{$this->app->user->account}'")
