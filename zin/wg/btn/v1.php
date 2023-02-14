@@ -1,82 +1,77 @@
 <?php
 namespace zin\wg;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h5.class.php';
-require_once dirname(__DIR__) . DS . 'icon' . DS . 'v1.php';
+require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.class.php';
+require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'directive.func.php';
+require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.func.php';
 
-use \zin\core\h5;
+use zin\core\h;
+use function zin\core\setClass;
+use function zin\core\set;
 
 class btn extends \zin\core\wg
 {
-    static $tag = 'button';
+    static $defineProps = 'type,icon,text,square,disabled,active,url,target,size,trailingIcon,caret,hint,btnType';
 
-    static $defaultProps = array('class' => 'btn', 'btnType' => 'button');
-
-    static $customProps = 'type,icon,text,square,disabled,active,url,target,size,trailingIcon,caret,hint,btnType';
-
-    static function create($props)
+    public function addChild($child)
     {
-        $btn = new btn();
-        foreach($props as $key => $value) $btn->prop($key, $value);
-        return $btn;
-    }
-
-    protected function acceptChild($child, $strAsHtml = false)
-    {
-        $child = parent::acceptChild($child, $strAsHtml);
-
-        if(!$strAsHtml && is_string($child) && !$this->props->has('text'))
-        {
-            $this->prop('text', $child);
-            return NULL;
-        }
-        return $child;
+        if(is_string($child) && !$this->props->has('text')) $this->props->set('text', $child);
+        else parent::addChild($child);
     }
 
     /**
      * @return builder
      */
-    protected function build($isPrint = false, $parent = NULL)
+    protected function build($isPrint = false)
     {
-        $builder = parent::build($isPrint, $parent);
-        if($this->hasProp('url'))
+        $props = $this->props->skip(array_keys(static::getDefinedProps()));
+
+        $url           = $this->prop('url');
+        $target        = $this->prop('target');
+
+        if(empty($url))
         {
-            $builder->setTag('a');
-            $builder->props->set('href',   $this->prop('url'));
-            $builder->props->set('target', $this->prop('target'));
+            $props['type']        = $this->prop('btnType');
+            $props['data-url']    = $url;
+            $props['data-target'] = $target;
         }
         else
         {
-            $builder->props->set('type',        $this->prop('btnType'));
-            $builder->props->set('data-url',    $this->prop('url'));
-            $builder->props->set('data-target', $this->prop('target'));
+            $props['tagName'] = 'a';
+            $props['href'] = $url;
+            $props['target'] = $target;
         }
-
-        $builder->props->set('title', $this->prop('hint'));
+        $props['title'] = $this->prop('hint');
 
         $caret         = $this->prop('caret');
         $text          = $this->prop('text');
         $icon          = $this->prop('icon');
-        $size          = $this->prop('size');
         $trailingIcon  = $this->prop('trailingIcon');
         $square        = $this->prop('square');
         $isEmptyText   = empty($text);
         $onlyCaret     = $isEmptyText && empty($icon) && empty($trailingIcon);
 
-        if($square === NULL) $square = $isEmptyText && !$onlyCaret;
-
-        $classList = array($this->prop('type'), 'disabled' => $this->prop('disabled'), 'active' => $this->prop('active'), 'btn-caret' => $onlyCaret, 'square' => $square);
-
+        $classList = array
+        (
+            'btn',
+            $this->prop('type'),
+            'disabled' => $this->prop('disabled'),
+            'active' => $this->prop('active'),
+            'btn-caret' => $onlyCaret,
+            'square' => $square
+        );
+        $size = $this->prop('size');
         if(!empty($size)) $classList[] = "size-$size";
 
-        $builder->props->set('class', $classList);
+        $children      = array();
+        if(!empty($icon))         $children[] = new icon($icon);
+        if(!empty($text))         $children[] = h::span($text, setClass('text'));
 
-        if(!empty($icon))         $builder->append(new icon($icon));
-        if(!empty($text))         $builder->append(h5::span($text)->addClass('text'));
-        if(!empty($trailingIcon)) $builder->append(new icon($trailingIcon));
-        if(!empty($caret))        $builder->append(h5::span()->addClass(is_string($caret) ? "caret-$caret" : 'caret'));
+        $children[] = parent::build($isPrint);
 
-        return $builder;
+        if(!empty($trailingIcon)) $children[] = new icon($trailingIcon);
+        if(!empty($caret))        $children[] = h::span(setClass(is_string($caret) ? "caret-$caret" : 'caret'));
+
+        return h::button(set($props), setClass($classList), $children);
     }
 }
