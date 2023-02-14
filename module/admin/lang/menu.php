@@ -83,12 +83,12 @@ $lang->admin->menuList->model['menuOrder']['5']  = 'common';
 $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
 $lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
 
-$lang->admin->menuList->model['tabMenu']['common']['project']  = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set', 'exclude' => 'custom');
+$lang->admin->menuList->model['tabMenu']['common']['project']  = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set', 'exclude' => 'custom', 'links' => array('custom|set|'));
 $lang->admin->menuList->model['tabMenu']['common']['build']    = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']     = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 $lang->admin->menuList->model['tabMenu']['common']['code']     = array('link' => "{$lang->code}|custom|code|");
-$lang->admin->menuList->model['tabMenu']['common']['hours']    = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday');
-$lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage');
+$lang->admin->menuList->model['tabMenu']['common']['hours']    = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|'));
+$lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage', 'links' => array('stage|browse|'));
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']    = 'project';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']   = 'build';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']   = 'flow';
