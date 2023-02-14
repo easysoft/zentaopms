@@ -44,3 +44,4 @@ function css()       {return call_user_func_array('\zin\core\css', func_get_args
 function import()    {return call_user_func_array('\zin\core\import', func_get_args());}
 
 function icon()      {return createWg('icon',    func_get_args());}
+function btn()       {return createWg('btn',    func_get_args());}

@@ -1,40 +1,34 @@
 <?php
 namespace zin\wg;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
+require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.class.php';
+require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'directive.func.php';
+
+use zin\core\h;
+use function zin\core\setClass;
+use function zin\core\set;
 
 class icon extends \zin\core\wg
 {
-    static $tag = 'i';
-
-    static $defaultProps = array('class' => 'icon');
-
-    static $customProps = 'name';
-
-    protected function acceptChild($child, $strAsHtml = false)
-    {
-        $child = parent::acceptChild($child, $strAsHtml);
-
-        if(!$strAsHtml && is_string($child) && !$this->props->has('name'))
-        {
-            $this->prop('name', $child);
-            return NULL;
-        }
-        return $child;
-    }
+    protected static $defineProps = 'name:string';
 
     /**
      * @return builder
      */
     protected function build($isPrint = false, $parent = NULL)
     {
-        $builder = parent::build($isPrint, $parent);
+        $iconName = $this->props->get('name', '');
+        return h::i
+        (
+            setClass("icon icon-$iconName"),
+            set($this->props->skip('name')),
+            parent::build()
+        );
+    }
 
-        if($this->props->has('name'))
-        {
-            $builder->props->set('class', 'icon-' . $this->props->get('name'));
-        }
-
-        return $builder;
+    public function addChild($child)
+    {
+        if(is_string($child) && !$this->props->has('name')) $this->props->set('name', $child);
+        else parent::addChild($child);
     }
 }
