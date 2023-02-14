@@ -19,7 +19,7 @@ use function \zin\utils\flat;
 
 class h extends wg
 {
-    protected static $defineProps = array('tagName' => array('type' => 'string', 'required' => true), 'selfClose' => array('type' => 'bool', 'default' => false), 'customProps' => array('type' => 'string|array'));
+    protected static $defineProps = 'tagName, selfClose?:bool=false, customProps?:string|array';
 
     public function getTagName()
     {
@@ -43,7 +43,7 @@ class h extends wg
 
     protected function getPropsStr()
     {
-        $skipProps   = array_keys(static::$defineProps);
+        $skipProps   = array_keys(static::getDefinedProps());
         $customProps = $this->props->get('customProps');
 
         if($customProps) $skipProps = array_merge($skipProps, is_string($customProps) ? explode(',', $customProps) : $customProps);
@@ -72,7 +72,7 @@ class h extends wg
         return "</$tagName>";
     }
 
-    public function create($tagName, $args, $defaultProps = NULL)
+    public static function create($tagName, $args, $defaultProps = NULL)
     {
         $ele = new h(prop('tagName', $tagName), $args);
         if(is_array($defaultProps)) $ele->setDefaultProps($defaultProps);
@@ -86,38 +86,38 @@ class h extends wg
 
     public static function button()
     {
-        return self::create('button', func_get_args(), array('type' => 'button'));
+        return static::create('button', func_get_args(), array('type' => 'button'));
     }
 
     public static function input()
     {
-        return self::create('input', func_get_args(), array('type' => 'text'));
+        return static::create('input', func_get_args(), array('type' => 'text'));
     }
 
     public static function checkbox()
     {
-        return self::create('input', func_get_args(), array('type' => 'checkbox'));
+        return static::create('input', func_get_args(), array('type' => 'checkbox'));
     }
 
     public static function radio()
     {
-        return self::create('input', func_get_args(), array('type' => 'radio'));
+        return static::create('input', func_get_args(), array('type' => 'radio'));
     }
 
     public static function textarea()
     {
         $children = h::convertStrToRawHtml(func_get_args());
-        return self::create('textarea', $children, array('type' => 'radio'));
+        return static::create('textarea', $children, array('type' => 'radio'));
     }
 
     public static function importJs($src)
     {
-        return self::create('script', prop('src', $src));
+        return static::create('script', prop('src', $src));
     }
 
     public static function importCss($src)
     {
-        return self::create('link', prop('rel', 'stylesheet'), prop('href', $src));
+        return static::create('link', prop('rel', 'stylesheet'), prop('href', $src));
     }
 
     public static function import($file, $type = NULL)
@@ -127,26 +127,26 @@ class h extends wg
             $children = array();
             foreach($file as $file)
             {
-                $children[] = self::import($file, $type);
+                $children[] = static::import($file, $type);
             }
             return $children;
         }
         if($type === NULL) $type = pathinfo($file, PATHINFO_EXTENSION);
-        if($type == 'js') return self::importJs($file);
-        if($type == 'css') return self::importCss($file);
+        if($type == 'js') return static::importJs($file);
+        if($type == 'css') return static::importCss($file);
         return null;
     }
 
     public static function css()
     {
         $children = h::convertStrToRawHtml(func_get_args());
-        return self::create('style', $children);
+        return static::create('style', $children);
     }
 
     public static function js()
     {
         $children = h::convertStrToRawHtml(func_get_args());
-        return self::create('script', $children);
+        return static::create('script', $children);
     }
 
     protected static function convertStrToRawHtml($children)

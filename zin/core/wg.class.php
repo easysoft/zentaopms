@@ -12,6 +12,7 @@
 namespace zin\core;
 
 require_once 'props.class.php';
+require_once 'wg.func.php';
 require_once 'directive.func.php';
 
 use zin\utils\props;
@@ -27,6 +28,8 @@ class wg
     protected static $defineProps = NULL;
 
     protected static $defineBlocks = NULL;
+
+    private static $definedPropsMap = array();
 
     /**
      * The props of the element
@@ -199,6 +202,32 @@ class wg
         }
     }
 
+    /**
+     * Set property, an array can be passed to set multiple properties
+     *
+     * @access public
+     * @param array|string   $prop        - Property name or properties list
+     * @param mixed          $value       - Property value
+     * @param bool           $removeEmpty - Whether to remove empty value
+     * @return dataset
+     */
+    public function prop($prop, $value = '%%%NULL%%%')
+    {
+        if(is_array($prop))
+        {
+            $this->props->set($prop);
+            return $this;
+        }
+
+        if(is_string($prop) && $value === '%%%NULL%%%')
+        {
+            return $this->props->get($prop);
+        }
+
+        $this->props->set($prop, $value);
+        return $this;
+    }
+
     public function setDefaultProps($props)
     {
         if(!is_array($props) || empty($props)) return;
@@ -218,15 +247,29 @@ class wg
     protected static function getDefaultProps()
     {
         $defaultProps = array();
-        if(is_array(static::$defineProps))
+        foreach(static::getDefinedProps() as $name => $definition)
         {
-            foreach(static::$defineProps as $name => $definition)
-            {
-                if(!isset($definition['default'])) continue;
-                $defaultProps[$name] = $definition['default'];
-            }
+            if(!isset($definition['default'])) continue;
+            $defaultProps[$name] = $definition['default'];
         }
         return $defaultProps;
+    }
+
+    protected static function getDefinedProps()
+    {
+        $name = get_called_class();
+        if(!isset(self::$definedPropsMap[$name]))
+        {
+            if(is_string(static::$defineProps) || is_array(static::$defineProps))
+            {
+                self::$definedPropsMap[$name] = defineProps(static::$defineProps);
+            }
+            else
+            {
+                self::$definedPropsMap[$name] = array();
+            }
+        }
+        return self::$definedPropsMap[$name];
     }
 
     /**
