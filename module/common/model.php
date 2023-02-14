@@ -2659,11 +2659,7 @@ EOD;
 
         if($this->app->user->account == $program->openedBy or $this->app->user->account == $program->PM) $program->auth = 'extend';
 
-        if($program->auth == 'extend')
-        {
-            $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
-            $this->session->set('user', $this->app->user);
-        }
+        if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
