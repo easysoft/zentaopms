@@ -108,6 +108,17 @@ class router extends baseRouter
 
         parent::loadLang($moduleName, $appName);
 
+        /* Replace main nav lang. */
+        if($moduleName == 'common' and $this->dbh and !empty($this->config->db->name))
+        {
+            $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}' AND `systemMode`='{$this->config->systemMode}'")->fetchAll();
+            foreach($customMenus as $menu)
+            {
+                $menuKey = $menu->key;
+                if(isset($lang->mainNav->$menuKey)) $lang->mainNav->$menuKey = zget($lang->navIcons, $menuKey, '') . " {$menu->value}" . substr($lang->mainNav->$menuKey, strpos($lang->mainNav->$menuKey, '|'));
+            }
+        }
+
         /* Merge from the db lang. */
         if($moduleName != 'common' and isset($lang->db->custom[$moduleName]))
         {
@@ -284,6 +295,10 @@ class router extends baseRouter
                 $lang->URCommon = isset($URPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($URPairs);
                 $lang->SRCommon = isset($SRPairs[$config->URSR]) ? $SRPairs[$config->URSR] : reset($SRPairs);
             }
+
+            /* Replace common lang. */
+            $customMenus = $this->dbh->query('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}' AND `systemMode`='{$config->systemMode}'")->fetchAll();
+            foreach($customMenus as $menu) if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
         }
     }
 

@@ -23,7 +23,7 @@ class customModel extends model
 
         try
         {
-            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->eq($this->config->vision)->orderBy('lang,id')->get();
+            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->eq($this->config->vision)->andWhere('systemMode')->eq($this->config->systemMode)->orderBy('lang,id')->get();
             $stmt = $this->dbh->query($sql);
 
             $allCustomLang = array();
