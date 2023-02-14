@@ -1109,7 +1109,7 @@ class userModel extends model
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
-                ->andWhere('t1.project')->eq(0)
+                ->beginIF($group->project != 0)->andWhere('t1.project')->eq($group->project)
                 ->andWhere('t1.vision')->eq($this->config->vision);
         }
 
