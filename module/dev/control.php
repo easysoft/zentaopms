@@ -91,9 +91,6 @@ class dev extends control
     public function langItem()
     {
         $this->view->title      = $this->lang->langItem;
-        $this->view->position[] = $this->lang->langItem;
-
-	$this->view->tab = 'langItem';
 
         $this->display();
     }
