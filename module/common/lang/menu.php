@@ -633,8 +633,9 @@ $lang->admin->menu->dev['subMenu']->entry    = array('link' => "{$lang->admin->e
 
 $lang->admin->menu->dev['menuOrder'][5]  = 'api';
 $lang->admin->menu->dev['menuOrder'][10] = 'db';
-$lang->admin->menu->dev['menuOrder'][15] = 'editor';
-$lang->admin->menu->dev['menuOrder'][20] = 'entry';
+$lang->admin->menu->dev['menuOrder'][15] = 'langItem';
+$lang->admin->menu->dev['menuOrder'][20] = 'editor';
+$lang->admin->menu->dev['menuOrder'][25] = 'entry';
 
 $lang->admin->menu->system['subMenu']              = new stdclass();
 $lang->admin->menu->system['subMenu']->mode        = array('link' => "{$lang->custom->mode}|custom|mode");
