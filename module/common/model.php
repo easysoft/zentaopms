@@ -3558,7 +3558,6 @@ EOD;
             {
                 foreach($menus as $key => $value)
                 {
-                    $settingMenu = null;
                     /* Get second menu. */
                     if($isSecondMenu)
                     {
@@ -3590,6 +3589,7 @@ EOD;
                     {
                         if(is_string($settingMenu)) $settingMenu = $value . substr($settingMenu, strpos($settingMenu, '|'));
                         if(is_array($settingMenu) and isset($settingMenu['link'])) $settingMenu['link'] = $value . substr($settingMenu['link'], strpos($settingMenu['link'], '|'));
+                        unset($settingMenu);
                     }
                 }
             }
