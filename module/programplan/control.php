@@ -138,6 +138,7 @@ class programplan extends control
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $planID
+     * @param  string $executionType
      * @access public
      * @return void
      */
