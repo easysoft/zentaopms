@@ -74,9 +74,9 @@ class h extends wg
 
     public static function create($tagName, $args, $defaultProps = NULL)
     {
-        $ele = new h(prop('tagName', $tagName), $args);
-        if(is_array($defaultProps)) $ele->setDefaultProps($defaultProps);
-        return $ele;
+        $args = func_get_args();
+        $tagName = array_shift($args);
+        return new h(is_string($tagName) ? prop('tagName', $tagName) : $tagName, $args);
     }
 
     public static function __callStatic($tagName, $args)
@@ -86,28 +86,28 @@ class h extends wg
 
     public static function button()
     {
-        return static::create('button', func_get_args(), array('type' => 'button'));
+        return static::create('button', prop('type', 'button'), func_get_args());
     }
 
     public static function input()
     {
-        return static::create('input', func_get_args(), array('type' => 'text'));
+        return static::create('input', prop('type', 'text'), func_get_args());
     }
 
     public static function checkbox()
     {
-        return static::create('input', func_get_args(), array('type' => 'checkbox'));
+        return static::create('input', prop('type', 'checkbox'), func_get_args());
     }
 
     public static function radio()
     {
-        return static::create('input', func_get_args(), array('type' => 'radio'));
+        return static::create('input', prop('type', 'radio'), func_get_args());
     }
 
     public static function textarea()
     {
         $children = h::convertStrToRawHtml(func_get_args());
-        return static::create('textarea', $children, array('type' => 'radio'));
+        return static::create('textarea', $children);
     }
 
     public static function importJs($src)
