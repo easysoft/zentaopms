@@ -99,6 +99,9 @@ $lang->zanode->snapshot->statusList['restoring']         = '还原中';
 $lang->zanode->snapshot->statusList['restore_failed']    = '还原失败';
 $lang->zanode->snapshot->statusList['restore_completed'] = '还原成功';
 
+$lang->zanode->snapshot->defaultSnapName = '初始快照';
+$lang->zanode->snapshot->defaultSnapUser = '系统';
+
 $lang->zanode->imageNameEmpty = '名称不能为空';
 $lang->zanode->imageNameEmpty  = '名称不能为空';
 $lang->zanode->snapStatusError = '快照不可用';
