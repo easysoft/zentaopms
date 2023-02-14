@@ -64,6 +64,7 @@ $lang->programplan->delay            = 'Delay';
 $lang->programplan->delayDays        = 'Delay days';
 $lang->programplan->settingGantt     = 'Gantt Setting';
 $lang->programplan->viewSetting      = 'Setting';
+$lang->programplan->desc             = 'Description';
 
 $lang->programplan->errorBegin       = "Project begin date: %s, begin date should be >= project begin date.";
 $lang->programplan->errorEnd         = "Project end date: %s, end date should be <= project end date.";
@@ -78,6 +79,10 @@ $lang->programplan->milestoneList[0] = 'No';
 $lang->programplan->delayList = array();
 $lang->programplan->delayList[1] = 'Yes';
 $lang->programplan->delayList[0] = 'No';
+
+$lang->programplan->typeList = array();
+$lang->programplan->typeList['stage']     = 'Stage';
+$lang->programplan->typeList['agileplus'] = 'Sprint/Kanban';
 
 $lang->programplan->noData            = 'No Data';
 $lang->programplan->children          = 'Sub Plan';
@@ -113,6 +118,7 @@ $lang->programplan->error->sameName        = 'Stage name cannot be the same!';
 $lang->programplan->error->sameCode        = 'Stage code cannot be the same!';
 $lang->programplan->error->taskDrag        = 'The %s task cannot be dragged';
 $lang->programplan->error->planDrag        = 'The %s stage cannot be dragged';
+$lang->programplan->error->notStage        = 'Sprint/Kanban cannot create a sub stage.';
 
 $lang->programplan->ganttBrowseType['gantt']       = 'Group by Stage';
 $lang->programplan->ganttBrowseType['assignedTo']  = 'Group by AssignedTo';

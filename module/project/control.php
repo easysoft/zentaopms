@@ -531,7 +531,7 @@ class project extends control
             }
             else
             {
-                if($model == 'waterfall')
+                if($model == 'waterfall' or $model == 'waterfallplus')
                 {
                     $productID = $this->product->getProductIDByProject($projectID, true);
                     $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
@@ -875,7 +875,7 @@ class project extends control
             $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
         }
 
-        if(empty($project) || strpos('scrum,waterfall,kanban,agileplus', $project->model) === false)
+        if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
@@ -1115,7 +1115,7 @@ class project extends control
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
-        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->isStage        = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
 
         $this->display();
     }
@@ -1586,7 +1586,7 @@ class project extends control
                 unset($this->lang->resource->tree->fix);
             }
 
-            if($project->model == 'waterfall')
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus')
             {
                 unset($this->lang->resource->productplan);
                 unset($this->lang->resource->projectplan);

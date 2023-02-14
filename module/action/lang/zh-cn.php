@@ -58,6 +58,10 @@ $lang->action->noDynamic          = '暂时没有动态。';
 $lang->action->undeletedTips      = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
 $lang->action->executionNoProject = '该执行没有所属的项目，请先还原项目再还原执行';
 $lang->action->repoNoServer       = '该代码库没有所属的服务器，请先还原服务器再还原代码库';
+$lang->action->hasCreatedTask     = '该父阶段已创建任务，无法恢复！';
+$lang->action->hasDeletedParent   = '恢复该阶段需要同时恢复已删除的父阶段%s，';
+$lang->action->hasChangedAttr     = '恢复后阶段类型将根据父阶段类型均调整为“%s”，';
+$lang->action->whetherToRestore   = '是否恢复？';
 
 $lang->action->repeatChange     = '系统内已有同名、同代号的%s，恢复后名称为\"%s\"、代号为\"%s\"。';
 $lang->action->nameRepeatChange = '系统内已有同名的%s，恢复后名称为\"%s\"。';

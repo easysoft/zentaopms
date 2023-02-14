@@ -710,7 +710,8 @@ class programplanModel extends model
 
         if(!$this->checkNameUnique($names))
         {
-            dao::$errors['message'][] = $this->lang->programplan->error->sameName;
+            $this->app->loadLang('execution');
+            dao::$errors['message'][] = empty($type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);;
             return false;
         }
 
@@ -731,7 +732,7 @@ class programplanModel extends model
 
             $plan = new stdclass();
             $plan->id         = isset($planIDList[$key]) ? $planIDList[$key] : '';
-            $plan->type       = 'stage';
+            $plan->type       = empty($type[$key]) ? 'stage' : $type[$key];
             $plan->project    = $projectID;
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->name       = $names[$key];
@@ -746,6 +747,7 @@ class programplanModel extends model
             $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
+            $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
             $plan->hasProduct = $project->hasProduct;
 
             $datas[] = $plan;
@@ -1587,19 +1589,23 @@ class programplanModel extends model
      *
      * @param  int    $planID
      * @param  string $attribute
+     * @param  bool   $withDeleted
      * @access public
      * @return bool
      */
-    public function updateSubStageAttr($planID, $attribute)
+    public function updateSubStageAttr($planID, $attribute, $withDeleted = false)
     {
         if($attribute == 'mix') return true;
 
-        $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('parent')->eq($planID)
+            ->beginIF(!$withDeleted)->andWhere('deleted')->eq(0)->fi()
+            ->fetchAll('id');
         $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in(array_keys($subStageList))->exec();
 
         foreach($subStageList as $childID => $subStage)
         {
-            $this->updateSubStageAttr($childID, $attribute);
+            $this->updateSubStageAttr($childID, $attribute, $withDeleted);
         }
     }
 }

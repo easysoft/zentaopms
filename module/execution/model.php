@@ -1669,7 +1669,7 @@ class executionModel extends model
             }
             else
             {
-                if(isset($executions[$execution->parent]) and $execution->type == 'stage')
+                if(isset($executions[$execution->parent]))
                 {
                     $executions[$execution->parent]->children[$key] = $execution;
                     $childList[$key] = $key;
@@ -1970,7 +1970,7 @@ class executionModel extends model
      */
     public function getChildExecutions($executionID)
     {
-        return $this->dao->select('id, name, status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq((int)$executionID)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq((int)$executionID)->fetchAll('id');
     }
 
     /**
@@ -4827,11 +4827,12 @@ class executionModel extends model
         $class = !empty($execution->children) ? 'disabled' : '';
         common::printIcon('task', 'create', "executionID={$execution->id}", '', 'list', '', '', $class, false, "data-app='execution'");
 
-        if($execution->type == 'stage')
+        if($execution->type == 'stage' or $this->app->tab == 'project')
         {
             $isCreateTask = $this->loadModel('programplan')->isCreateTask($execution->id);
-            $disabled     = $isCreateTask ? '' : ' disabled';
+            $disabled     = ($isCreateTask and $execution->type == 'stage') ? '' : ' disabled';
             $title        = !$isCreateTask ? $this->lang->programplan->error->createdTask : $this->lang->programplan->createSubPlan;
+            $title        = (!empty($disabled) and $execution->type != 'stage') ? $this->lang->programplan->error->notStage : $title;
             common::printIcon('programplan', 'create', "program={$execution->project}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', $disabled, '', '', $title);
         }
 

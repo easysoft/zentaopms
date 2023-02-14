@@ -13,6 +13,8 @@ function addItem(obj)
     newItem.find('.form-date').datepicker();
     $("#output" + itemIndex).picker();
     $("#PM" + itemIndex).picker();
+    $("#type" + itemIndex).chosen();
+    $("#type_i__chosen").remove();
     itemIndex ++;
 }
 
