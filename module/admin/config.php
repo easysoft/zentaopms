@@ -91,4 +91,4 @@ $config->admin->navsGroup['feature']['execution'] = ',execution,task,';
 $config->admin->navsGroup['feature']['project']   = ',project,story,';
 $config->admin->navsGroup['feature']['qa']        = ',bug,testcase,testsuite,testtask,testreport,caselib,';
 $config->admin->navsGroup['model']['common']      = ',project,build,issue,risk,opportunity,nc,';
-if($config->vision == 'lite') $config->admin->navsGroup['my'] .= 'task,';
+if($config->vision == 'lite') $config->admin->navsGroup['feature']['my'] .= 'task,';
