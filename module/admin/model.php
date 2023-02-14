@@ -336,8 +336,17 @@ class adminModel extends model
                     $link = array();
                     if(isset($menu['tabMenu'][$subMenuKey]))
                     {
+                        /* Reorder tertiary navigation. */
+                        $tabMenuList   = $menu['tabMenu'][$subMenuKey];
+                        if(isset($menu['tabMenu']['menuOrder'][$subMenuKey]))
+                        {
+                            $tabMenuOrders = $menu['tabMenu']['menuOrder'][$subMenuKey];
+                            ksort($tabMenuOrders);
+                            foreach($tabMenuOrders as $value) $tabMenuList[$value] = $menu['tabMenu'][$subMenuKey][$value];
+                        }
+
                         /* Check tab menu priv. */
-                        foreach($menu['tabMenu'][$subMenuKey] as $tabMenuKey => $tabMenu)
+                        foreach($tabMenuList as $tabMenuKey => $tabMenu)
                         {
                             $tabMenuLink = $this->getHasPrivLink($tabMenu);
                             if(!empty($tabMenuLink))
