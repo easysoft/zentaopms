@@ -1,5 +1,5 @@
 <?php
-namespace zin\core;
+namespace zin;
 
 /**
  * @param $definition

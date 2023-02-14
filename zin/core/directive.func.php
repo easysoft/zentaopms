@@ -9,12 +9,11 @@
  * @link        https://www.zentao.net
  */
 
-namespace zin\core;
+namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 
 use stdClass;
-use function \zin\utils\flat;
 
 /**
  * Create directive object
@@ -82,12 +81,12 @@ function setId($id)
 
 function html(/* string ...$lines */)
 {
-    return directive('html', implode("\n", flat(func_get_args())));
+    return directive('html', implode("\n", \zin\utils\flat(func_get_args())));
 }
 
 function text(/* string ...$lines */)
 {
-    return directive('text', implode("\n", flat(func_get_args())));
+    return directive('text', implode("\n", \zin\utils\flat(func_get_args())));
 }
 
 function block($name, $value = NULL)

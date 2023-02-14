@@ -1,14 +1,10 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.class.php';
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'directive.func.php';
 
-use zin\core\h;
-use function zin\core\setClass;
-use function zin\core\set;
-
-class icon extends \zin\core\wg
+class icon extends wg
 {
     protected static $defineProps = 'name:string';
 

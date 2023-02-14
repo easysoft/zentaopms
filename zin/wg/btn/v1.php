@@ -1,15 +1,11 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.class.php';
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'directive.func.php';
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.func.php';
 
-use zin\core\h;
-use function zin\core\setClass;
-use function zin\core\set;
-
-class btn extends \zin\core\wg
+class btn extends wg
 {
     static $defineProps = 'type,icon,text,square,disabled,active,url,target,size,trailingIcon,caret,hint,btnType';
 

@@ -9,7 +9,7 @@
  * @link        https://www.zentao.net
  */
 
-namespace zin\utils;
+namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'classlist.class.php';
@@ -18,7 +18,7 @@ require_once dirname(__DIR__) . DS . 'utils' . DS . 'style.class.php';
 /**
  * Manage properties for html element and widgets
  */
-class props extends dataset
+class props extends \zin\utils\dataset
 {
     /**
      * Style property
@@ -44,8 +44,8 @@ class props extends dataset
      */
     public function __construct($props = NULL)
     {
-        $this->style       = new style();
-        $this->class       = new classlist();
+        $this->style       = new \zin\utils\style();
+        $this->class       = new \zin\utils\classlist();
 
         parent::__construct($props);
     }

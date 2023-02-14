@@ -9,13 +9,11 @@
  * @link        https://www.zentao.net
  */
 
-namespace zin\core;
+namespace zin;
 
 require_once 'props.class.php';
 require_once 'wg.func.php';
 require_once 'directive.func.php';
-
-use zin\utils\props;
 
 class wg
 {

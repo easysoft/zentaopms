@@ -9,13 +9,11 @@
  * @link        https://www.zentao.net
  */
 
-namespace zin\core;
+namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once 'wg.class.php';
 require_once 'directive.func.php';
-
-use function \zin\utils\flat;
 
 class h extends wg
 {
@@ -151,7 +149,7 @@ class h extends wg
 
     protected static function convertStrToRawHtml($children)
     {
-        $children = flat($children);
+        $children = \zin\utils\flat($children);
         foreach($children as $key => $child)
         {
             if(is_string($child)) $children[$key] = html($child);

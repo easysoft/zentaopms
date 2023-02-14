@@ -1,18 +1,11 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.class.php';
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'directive.func.php';
 
-use zin\core\h;
-use function zin\core\html;
-use function zin\core\set;
-use function zin\core\before;
-use function zin\core\import;
-use function zin\core\js;
-
-class pagebase extends \zin\core\wg
+class pagebase extends wg
 {
     static $tag = 'html';
 
