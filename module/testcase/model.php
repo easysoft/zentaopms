@@ -176,7 +176,7 @@ class testcaseModel extends model
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
             if($this->app->tab == 'project') $data[$i]->project = $this->session->project;
-            $data[$i]->branch       = $cases->branch[$i];
+            $data[$i]->branch       = isset($cases->branch[$i]) ? $cases->branch[$i] : '0';
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
             $data[$i]->pri          = $cases->pri[$i];

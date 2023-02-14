@@ -18,7 +18,7 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <span title='<?php echo $lang->zanode->automation;?>'><?php echo $lang->zanode->automation;?></span>
+        <span title='<?php echo $lang->zanode->automation;?>'><?php echo $lang->zanode->automation;?>&nbsp;<icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='bottom' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->zanode->automationTips;?>"></icon></span>
       </h2>
     </div>
     <form method='post' target='hiddenwin'>

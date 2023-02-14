@@ -209,6 +209,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 $hasCustomSeverity = false;
                 foreach($lang->bug->severityList as $severityKey => $severityValue)
                 {
+                    if(empty($severityValue)) unset($lang->bug->severityList[$severityKey]);
                     if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
                     {
                         $hasCustomSeverity = true;
