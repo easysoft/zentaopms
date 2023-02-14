@@ -1117,8 +1117,9 @@ class commonModel extends model
         global $app, $lang, $config;
 
         /* Set main menu by app tab and module. */
-        self::setMainMenu();
-        self::checkMenuVarsReplaced();
+        static::replaceMenuLang();
+        static::setMainMenu();
+        static::checkMenuVarsReplaced();
 
         $activeMenu = '';
         $tab = $app->tab;
@@ -3533,6 +3534,65 @@ EOD;
         }
 
         return true;
+    }
+
+    /**
+     * Replace menu lang.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function replaceMenuLang()
+    {
+        global $lang;
+        foreach($lang->db->custom as $moduleName => $sectionMenus)
+        {
+            if(strpos($moduleName, 'Menu') === false) continue;
+
+            $isSecondMenu = strpos($moduleName, 'subMenu') === false;
+            $moduleName   = str_replace($isSecondMenu ? 'Menu' : 'subMenu', '', $moduleName);
+
+            foreach($sectionMenus as $section => $menus)
+            {
+                foreach($menus as $key => $value)
+                {
+                    $settingMenu = null;
+                    /* Get second menu. */
+                    if($isSecondMenu)
+                    {
+                        $isDropMenu = strpos($section, 'dropMenu') !== false;
+                        if(!$isDropMenu)
+                        {
+                            if(!isset($lang->{$moduleName}->{$section})) break;
+                            if(is_object($lang->{$moduleName}->{$section}) and isset($lang->{$moduleName}->{$section}->{$key})) $settingMenu = &$lang->{$moduleName}->{$section}->{$key};
+                            if(is_array($lang->{$moduleName}->{$section})  and isset($lang->{$moduleName}->{$section}[$key]))   $settingMenu = &$lang->{$moduleName}->{$section}[$key];
+                        }
+                        else
+                        {
+                            /* Get drop menu in second menu. */
+                            $dropMenuKey = str_replace('dropMenu', '', $section);
+                            if(!isset($lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key})) break;
+                            $settingMenu = &$lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key};
+                        }
+                    }
+                    /* Get third menu. */
+                    elseif(isset($lang->{$moduleName}->menu->{$section}['subMenu']))
+                    {
+                        $subMenu = $lang->{$moduleName}->menu->{$section}['subMenu'];
+                        if(is_object($subMenu) and isset($subMenu->{$key})) $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu']->{$key};
+                        if(is_array($subMenu)  and isset($subMenu[$key]))   $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu'][$key];
+                    }
+
+                    /* Set custom menu lang. */
+                    if(!empty($settingMenu))
+                    {
+                        if(is_string($settingMenu)) $settingMenu = $value . substr($settingMenu, strpos($settingMenu, '|'));
+                        if(is_array($settingMenu) and isset($settingMenu['link'])) $settingMenu['link'] = $value . substr($settingMenu['link'], strpos($settingMenu['link'], '|'));
+                    }
+                }
+            }
+        }
     }
 
     /**
