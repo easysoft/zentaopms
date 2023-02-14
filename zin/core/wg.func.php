@@ -42,9 +42,9 @@ function defineProps($definition)
 
         if(is_array($value))
         {
-            $type    = isset($value['type'])    ? $value['type']    : $type;
-            $default = isset($value['default']) ? $value['default'] : $default;
-            $optional= isset($value['optional'])? $value['optional']: $optional;
+            $type     = isset($value['type'])    ? $value['type']    : $type;
+            $default  = isset($value['default']) ? $value['default'] : $default;
+            $optional = isset($value['optional'])? $value['optional']: $optional;
         }
         else if(is_string($value))
         {
@@ -61,7 +61,7 @@ function defineProps($definition)
 
             if(is_string($default)) $default = json_decode(trim($default));
         }
-        $props[$name] = array('type' => explode('|', $type), 'default' => $default, 'optional' => $optional);
+        $props[$name] = array('type' => explode('|', $type), 'default' => $default, 'optional' => $default !== NULL || $optional);
     }
     return $props;
 }

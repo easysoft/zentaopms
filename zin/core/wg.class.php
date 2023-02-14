@@ -85,6 +85,11 @@ class wg
         return $this->props->getChildren();
     }
 
+    public function block($name)
+    {
+        return $this->props->getBlock($name);
+    }
+
     public function append($items)
     {
         if(empty($items)) return;
@@ -240,7 +245,7 @@ class wg
         }
     }
 
-    public function created()
+    protected function created()
     {
     }
 

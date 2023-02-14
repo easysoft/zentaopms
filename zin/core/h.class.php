@@ -132,7 +132,7 @@ class h extends wg
             return $children;
         }
         if($type === NULL) $type = pathinfo($file, PATHINFO_EXTENSION);
-        if($type == 'js') return static::importJs($file);
+        if($type == 'js' || $type == 'cjs') return static::importJs($file);
         if($type == 'css') return static::importCss($file);
         return null;
     }

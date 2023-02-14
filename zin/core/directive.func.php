@@ -94,3 +94,13 @@ function block($name, $value = NULL)
 {
     return directive('block', is_array($name) ? $name : array($name => $value));
 }
+
+function before()
+{
+    return directive('block', array('before' => func_get_args()));
+}
+
+function after()
+{
+    return directive('block', array('after' => func_get_args()));
+}
