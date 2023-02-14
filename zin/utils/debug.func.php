@@ -9,7 +9,7 @@
  * @link        https://www.zentao.net
  */
 
-namespace zin\core;
+namespace zin\utils;
 
 $logs = array();
 

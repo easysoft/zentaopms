@@ -9,7 +9,7 @@
  * @link        https://www.zentao.net
  */
 
-namespace zin\core;
+namespace zin\utils;
 
 /**
  * Manage classname list for html element and widgets
@@ -245,6 +245,11 @@ class classlist
             if(!isset($this->list[$name]) || !$this->list[$name]) return false;
         }
         return true;
+    }
+
+    public function clear()
+    {
+        $this->list = array();
     }
 
     /**

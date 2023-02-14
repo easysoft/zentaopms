@@ -9,7 +9,7 @@
  * @link        https://www.zentao.net
  */
 
-namespace zin\core;
+namespace zin\utils;
 
 /**
  * Manage dataset properties for html element and widgets
@@ -138,17 +138,10 @@ class dataset
      * @access public
      * @param array|string   $prop        - Property name or properties list
      * @param mixed          $value       - Property value
-     * @param bool           $removeEmpty - Whether to remove empty value
      * @return dataset
      */
-    protected function setVal($prop, $value, $removeEmpty = false)
+    protected function setVal($prop, $value)
     {
-        if($value === NULL || ($removeEmpty && empty($value)))
-        {
-            if(isset($this->data[$prop])) unset($this->data[$prop]);
-            return $this;
-        }
-
         $this->data[$prop] = $value;
         return $this;
     }
@@ -185,7 +178,11 @@ class dataset
      */
     public function toStr()
     {
-        return json_encode($this->data);
+        return json_encode($this->toJsonData());
+    }
+
+    public function toJsonData() {
+        return $this->data;
     }
 
     /**
@@ -197,30 +194,15 @@ class dataset
      * @param bool           $removeEmpty - Whether to remove empty value
      * @return dataset
      */
-    public function set($prop, $value = NULL, $removeEmpty = false)
+    public function set($prop, $value = NULL)
     {
         if(is_array($prop))
         {
-            foreach($prop as $name => $value) $this->set($name, $value, $removeEmpty);
+            foreach($prop as $name => $val) $this->set($name, $val);
             return $this;
         }
 
-        $value = $this->setVal($prop, $value, $removeEmpty);
-        return $this;
-    }
-
-    /**
-     * Set property by condition
-     *
-     * @access public
-     * @param mixed          $condition - Condition value
-     * @param array|string   $prop      - Property name or properties list
-     * @param mixed          $value     - Property value
-     * @return dataset
-     */
-    public function setIf($condition, $prop, $value)
-    {
-        if($condition) $this->set($prop, $value);
+        $value = $this->setVal($prop, $value);
         return $this;
     }
 
@@ -250,18 +232,9 @@ class dataset
         return $this->setVal($prop, NULL);
     }
 
-    /**
-     * Delete property by name
-     *
-     * @access public
-     * @param mixed  $condition - Condition value
-     * @param string $prop      - Property name
-     * @return dataset
-     */
-    public function removeIf($condition, $prop)
+    public function clear()
     {
-        if($condition) $this->remove($prop);
-        return $this;
+        $this->data = array();
     }
 
     /**
@@ -292,10 +265,5 @@ class dataset
     {
         if(is_object($data) && isset($data->data)) return $this->set($data->data);
         return $this->set($data);
-    }
-
-    public function toJSON()
-    {
-        return $this->data;
     }
 }

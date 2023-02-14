@@ -9,12 +9,11 @@
  * @link        https://www.zentao.net
  */
 
-namespace zin\core;
+namespace zin\utils;
 
-require_once 'dataset.class.php';
-require_once 'classlist.class.php';
-require_once 'style.class.php';
-require_once 'hx.class.php';
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'classlist.class.php';
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'style.class.php';
 
 /**
  * Manage properties for html element and widgets
@@ -38,14 +37,20 @@ class props extends dataset
     public $class;
 
     /**
-     * Hx property
+     * Hx properties
      *
      * @access public
      * @var    hx
      */
     public $hx;
 
-    public $customProps;
+    /**
+     * Events properties
+     *
+     * @access public
+     * @var    events
+     */
+    public $events;
 
     /**
      * Create properties instance
@@ -53,12 +58,10 @@ class props extends dataset
      * @access public
      * @param array $props - Properties list array
      */
-    public function __construct($props = NULL, $customProps = NULL)
+    public function __construct($props = NULL)
     {
         $this->style       = new style();
         $this->class       = new classlist();
-        $this->hx          = new hx();
-        $this->customProps = is_string($customProps) ? explode(',', $customProps) : $customProps;
 
         parent::__construct($props);
     }
@@ -69,82 +72,72 @@ class props extends dataset
      * @access public
      * @param array|string   $prop        - Property name or properties list
      * @param mixed          $value       - Property value
-     * @param bool           $removeEmpty - Whether to remove empty value
-     * @return hx
      */
-    protected function setVal($prop, $value, $removeEmpty = false)
+    protected function setVal($prop, $value)
     {
         if($prop === 'class' || $prop === '.') return $this->class->set($value);
-        if($prop === 'style')                  return $this->style->set($value);
-        if($prop === 'hx')                     return $this->hx->set($value);
-        if($prop === '!')                      return $this->hx->set(substr($prop, 1), $value);
-        if(strpos($prop, 'hx-') === 0)         return $this->hx->set($prop, $value);
+        if($prop === 'style' || $prop === '~') return $this->style->set($value);
         if(strpos($prop, '~') === 0)           return $this->style->set(substr($prop, 1), $value);
-        if(strpos($prop, '--') === 0)          return $this->style->setVal(substr($prop, 2), $value);
-        if(strpos($prop, ':') === 0)           return $this->setData(substr($prop, 1), $value);
-
-        if($prop === '#') $prop = 'id';
+        if($prop === '--')                     return $this->style->var($value);
+        if(strpos($prop, '--') === 0)          return $this->style->var(substr($prop, 2), $value);
+        if($prop === '!')                      return $this->hx($value);
+        if(strpos($prop, '!') === 0)           return $this->hx(substr($prop, 1), $value);
+        if(strpos($prop, ':') === 0)           return $this->set('data-' . substr($prop, 1), $value);
+        if($prop === '#')                      return $this->addChildren($value);
+        if(strpos($prop, '#') === 0)           return $this->addBlock(substr($prop, 1), $value);
+        if($prop === '@')                      return $this->onEvent($value);
+        if(strpos($prop, '@') === 0)           return $this->onEvent(substr($prop, 1), $value);
 
         return parent::setVal($prop, $value);
     }
 
-    public function setCustom($props)
-    {
-        if(is_string($props)) $props = explode(',', $props);
-        if(!is_array($props))
-        {
-            return $this;
-        }
-        $this->customProps = array_merge($this->customProps, $props);
-        return $this;
-    }
-
-    /**
-     * Get data properties name
-     *
-     * @access public
-     * @param array|string $name - Data properties name, a string or an list
-     * @return mixed
-     */
-    public function getData($name = NULL)
-    {
-        if($name === NULL)
-        {
-            $data = array();
-            foreach($this->data as $prop => $value)
-            {
-                if(strpos($prop, 'data-') !== 0) continue;
-                $data[substr($prop, 5)] = $value;
-            }
-            return $data;
-        }
-        return $this->get("data-$name");
-    }
-
-    /**
-     * Set data properties
-     *
-     * @access public
-     * @param array|string   $name  - Data properties name, a string or an list
-     * @param mixed          $value - Data property value
-     * @return props
-     */
-    public function setData($name, $value = NULL)
+    public function reset($name, $value = NULL)
     {
         if(is_array($name))
         {
-            foreach($name as $n => $v)
-            {
-                if(strpos($n, 'data-') !== 0) $n = "data-$n";
-                $this->set($n, $v);
-            }
-            return $this;
+            foreach($name as $n) $this->reset($n);
+            return;
         }
-        if(strpos($name, 'data-') !== 0) $name = "data-$name";
-        $this->set($name, $value);
-        return $this;
+        if($name === 'class') return $this->class->clear();
+        if($name === 'style') return $this->style->clear();
+
+        $this->remove($name);
+        if($value) $this->setVal($name, $value);
     }
 
+    public function addBlock($name, $items)
+    {
+        if(is_array($name))
+        {
+            foreach($name as $key => $value) $this->addBlock($key, $value);
+            return;
+        }
+
+        if(!is_array($items)) $items = array($items);
+
+        $name = "#$name";
+        parent::setVal($name, $this->has($name) ? array_merge($this->get($name), $items) : $items);
+    }
+
+    public function addChildren($items)
+    {
+        $this->addBlock('default', $items);
+    }
+
+    public function getBlock($name)
+    {
+        $name = "#$name";
+        return $this->get($name);
+    }
+
+    public function getChildren()
+    {
+        return $this->getBlock('default');
+    }
+
+    /**
+     * @deprecated
+     */
     public function addToList()
     {
         $args = func_get_args();
@@ -153,6 +146,28 @@ class props extends dataset
         else $this->set($name, array_merge($this->get($name), $args));
 
         return $this;
+    }
+
+    public function onEvent($name, $callback = NULL)
+    {
+        if(is_array($name))
+        {
+            foreach($name as $key => $value) $this->set("@$key", $value);
+            return;
+        }
+
+        $this->set("@$name", $callback);
+    }
+
+    public function hx($name, $value = NULL)
+    {
+        if(is_array($name))
+        {
+            foreach($name as $key => $val) $this->set("hx-$key", $val);
+            return;
+        }
+
+        $this->set("hx-$name", $value);
     }
 
     /**
@@ -171,20 +186,19 @@ class props extends dataset
      *
      * @access public
      */
-    public function toStr($skipProps = true)
+    public function toStr($skipProps = array())
     {
-        if($skipProps === true) $skipProps = $this->customProps;
+        if(is_string($skipProps)) $skipProps = explode(',', $skipProps);
 
         $pairs = array();
 
         if($this->class->count())     $pairs[] = 'class="' . $this->class->toStr() . '"';
         if($this->style->count(true)) $pairs[] = 'style="' . $this->style->toStr() . '"';
-        if($this->hx->count(true))    $pairs[] = $this->hx->toStr();
 
         foreach($this->data as $name => $value)
         {
-            /* Skip any null value */
-            if($value === NULL || (is_array($skipProps) && in_array($name, $skipProps))) continue;
+            /* Skip any null value or events and blocks setting */
+            if($value === NULL || in_array($name, $skipProps) || $name[0] === '#' || $name[0] === '@') continue;
 
             /* Convert non-string to json */
             if(!is_string($value)) $value = json_encode($value);
@@ -195,6 +209,40 @@ class props extends dataset
         return implode(' ', $pairs);
     }
 
+    public function toJsonData()
+    {
+        $data = $this->data;
+        $data['style'] = $this->style->data;
+        $data['class'] = $this->class->list;
+        return $data;
+    }
+
+    public function skip($skipProps = array())
+    {
+        if(is_string($skipProps)) $skipProps = explode(',', $skipProps);
+
+        $data = $this->toJsonData();
+        foreach($data as $name => $value)
+        {
+            if($value === NULL || in_array($name, $skipProps)) unset($data[$name]);
+        }
+
+        return $data;
+    }
+
+    public function pick($pickProps = array())
+    {
+        if(is_string($pickProps)) $pickProps = explode(',', $pickProps);
+
+        $data = $this->toJsonData();
+        foreach($data as $name => $value)
+        {
+            if($value === NULL || !in_array($name, $pickProps)) unset($data[$name]);
+        }
+
+        return $data;
+    }
+
     /**
      * Clone a new instance
      *
@@ -203,33 +251,11 @@ class props extends dataset
      */
     public function clone()
     {
-        $props = new props($this->data, $this->customProps);
-        $props->style = clone $this->style;
-        $props->class = clone $this->class;
-        $props->hx    = clone $this->hx;
+        $props = new props($this->data);
+        $props->style  = clone $this->style;
+        $props->class  = clone $this->class;
+        $props->events = clone $this->events;
+        $props->hx     = clone $this->hx;
         return $props;
-    }
-
-    /**
-     * Create an properties instance
-     *
-     * @param array $props - Properties list array
-     * @return props
-     */
-    static public function new($props)
-    {
-        return new props($props);
-    }
-
-    /**
-     * Stringify properties
-     *
-     * @access public
-     * @param array $props - Properties list array
-     * @return string
-     */
-    static public function str($props, $skipCustomProps = NULL)
-    {
-        return (new props($props))->toStr($skipCustomProps);
     }
 }
