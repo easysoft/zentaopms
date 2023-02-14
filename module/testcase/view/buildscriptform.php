@@ -78,6 +78,7 @@ function checkDangerExtensions(file)
         {
             alert(<?php echo json_encode($this->lang->file->dangerFile);?>);
             $(file).val('');
+            $('.file-input-normal').last().remove()
             return false;
         }
 
@@ -92,6 +93,7 @@ function checkDangerExtensions(file)
         {
             alert(<?php echo json_encode(sprintf($lang->file->errorFileSize, $maxUploadSize));?>);
             totalSize -= fileSize;
+            console.log($(file), file)
             $(file).val('');
             return false;
         }
