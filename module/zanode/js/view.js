@@ -180,7 +180,7 @@ $('.btn-pwd-show').live('click', function()
 $('#jumpManual').click(function()
 {
     var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/974.html?fullScreen=zentao');
-    var urlForNewTab = window.location.origin + '#app=help&url=' + encodedHelpPageUrl;
+    var urlForNewTab = webRoot + '#app=help&url=' + encodedHelpPageUrl;
     window.open(urlForNewTab)
 })
 
