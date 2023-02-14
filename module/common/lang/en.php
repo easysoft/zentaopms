@@ -249,6 +249,7 @@ $lang->model           = 'Model';
 $lang->redev           = 'Develop';
 $lang->browser         = 'Browser';
 $lang->db              = 'Database';
+$lang->langItem        = 'Lang Item';
 $lang->editor          = 'Editor';
 $lang->timezone        = 'Timezone';
 $lang->security        = 'Security';

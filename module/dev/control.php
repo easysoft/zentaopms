@@ -81,4 +81,17 @@ class dev extends control
 
         $this->display();
     }
+
+    /**
+     * LangItem.
+     *
+     * @access public
+     * @return void
+     */
+    public function langItem()
+    {
+        $this->view->title      = $this->lang->langItem;
+
+        $this->display();
+    }
 }

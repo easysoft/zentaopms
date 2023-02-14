@@ -249,6 +249,7 @@ $lang->model           = '模型';
 $lang->redev           = '二次开发';
 $lang->browser         = '浏览器';
 $lang->db              = '数据库';
+$lang->langItem        = '语言项';
 $lang->editor          = '编辑器';
 $lang->timezone        = '时区';
 $lang->security        = '安全';

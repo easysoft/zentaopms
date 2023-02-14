@@ -27,6 +27,7 @@ $lang->welcome         = "%s";
 $lang->logout          = 'Thoát';
 $lang->login           = 'Đăng nhập';
 $lang->help            = 'Trợ giúp';
+$lang->langItem        = 'Lang Item';
 $lang->aboutZenTao     = 'Giới thiệu';
 $lang->profile         = 'Hồ sơ';
 $lang->changePassword  = 'Mật khẩu';
