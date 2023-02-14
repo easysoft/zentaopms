@@ -2,37 +2,30 @@
 namespace zin\wg;
 
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
+require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h.class.php';
+require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'directive.func.php';
+
+use zin\core\h;
+use function zin\core\html;
+use function zin\core\set;
+use function zin\core\before;
+use function zin\core\import;
+use function zin\core\js;
 
 class pagebase extends \zin\core\wg
 {
     static $tag = 'html';
 
-    static $customProps = 'metas,title,bodyProps,zui,print';
+    static $defineProps = array
+    (
+        'metas' => array('type' => 'string|array', 'default' => array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')),
+        'title' => array('type' => 'string', 'default' => ''),
+        'bodyProps' => array('type' => 'array', 'optional' => true),
+        'zui' => array('type' => 'bool', 'default' => false),
+        'print' => array('type' => 'bool', 'default' => false)
+    );
 
-    public $bodyProps;
-
-    public function init()
-    {
-        global $app, $config;
-        $clientLang = $app->getClientLang();
-
-        $this->bodyProps = \zin\core\wg::createClass($this->prop('bodyProps'));
-
-        $this->setDefaultProps(array('lang' => $clientLang, 'print' => true));
-
-        $this->addMeta('<meta charset="utf-8">')
-            ->addMeta('<meta http-equiv="X-UA-Compatible" content="IE=edge">')
-            ->addMeta('<meta name="viewport" content="width=device-width, initial-scale=1">')
-            ->addMeta('<meta name="renderer" content="webkit">');
-
-        if($this->prop('zui') && isset($config->zin->zuiPath))
-        {
-            $this->importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs')
-                ->importCss($config->zin->zuiPath . 'zui.zentao.css');
-        }
-    }
-
-    public function onCreated()
+    protected function created()
     {
         if($this->prop('print'))
         {
@@ -40,74 +33,29 @@ class pagebase extends \zin\core\wg
         }
     }
 
-    public function title($title)
+    protected function build($isPrinted = false)
     {
-        return $this->prop('title', $title);
-    }
+        global $lang, $config;
 
-    public function addMeta($meta)
-    {
-        $metas = $this->props->get('metas', array());
-        $metas[] = $meta;
-        $this->prop('metas', $metas);
-        return $this;
-    }
-
-    public function bodyClass($className, $reset = false)
-    {
-        $this->bodyProps->class->set($className, $reset);
-    }
-
-    public function bodyStyle($prop, $value = NULL, $removeEmpty = false)
-    {
-        $this->bodyProps->style->set($prop, $value, $removeEmpty);
-        return $this;
-    }
-
-    protected function buildHead($isPrint = false, $parent = NULL)
-    {
-        global $lang;
-
-        $headBuilder = \zin\core\wg::createBuilder('head')
-            ->before($this->prop('metas'))
-            ->before('<title>' . htmlspecialchars($this->props->get('title', '')) . " - $lang->zentaoPMS</title>")
-            ->css($this->cssList)
-            ->importCss($this->cssImports)
-            ->renderInTag();
-
-        if(isset($this->blocks['head']))
-        {
-            $headBuilder->append($this->buildChildren($this->blocks['head'], $isPrint, $parent));
-        }
-
-        $headBuilder->js('window.domReady = function(fn){if (document.readyState !== \'loading\') {fn();} else {document.addEventListener(\'DOMContentLoaded\', fn);}}');
-
-        return $headBuilder;
-    }
-
-    protected function buildBody($isPrint = false, $parent = NULL)
-    {
-        $builder = \zin\core\wg::createBuilder('body', $this->bodyProps)
-            ->importJs($this->jsImports)
-            ->js($this->jsList)
-            ->append($this->buildInnerHtml($isPrint, $parent))
-            ->renderInTag();
-
-        global $config;
-        if($config->debug)
-        {
-            $builder->jsVar('window.zin', array('page' => $this));
-            $builder->js('console.log("zin.page", window.zin.page)');
-        }
-
-        return $builder;
-    }
-
-    public function build($isPrint = false, $parent = NULL)
-    {
-        return \zin\core\wg::createBuilder('html', $this->props)
-            ->before('<!DOCTYPE html>')
-            ->append($this->buildHead()->build())
-            ->append($this->buildBody()->build());
+        $zui = $this->prop('zui');
+        return h::html
+        (
+            before(html('<!DOCTYPE html>')),
+            h::head
+            (
+                html($this->prop('metas')),
+                h::title($this->props->get('title', '') . " - $lang->zentaoPMS"),
+                $zui ? h::import(array($config->zin->zuiPath . 'zui.zentao.umd.cjs', $config->zin->zuiPath . 'zui.zentao.css')) : null,
+                h::js('window.domReady = function(fn){if (document.readyState !== \'loading\') {fn();} else {document.addEventListener(\'DOMContentLoaded\', fn);}}'),
+                $this->block('head'),
+            ),
+            h::body
+            (
+                set($this->prop('bodyProps')),
+                $this->block('body'),
+                parent::build($isPrinted),
+                $config->debug ? h::js('window.zin = ' . json_encode($this) . ';console.log("page", window.zin.page)') : null
+            )
+        );
     }
 }
