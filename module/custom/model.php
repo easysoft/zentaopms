@@ -44,7 +44,13 @@ class customModel extends model
         foreach($allCustomLang as $id => $customLang)
         {
             if(isset($sectionLang[$customLang->module][$customLang->section]['all']) && isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) && $customLang->lang == 'all') continue;
-            $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
+
+            $sections     = explode('.', $customLang->section);
+            $sectionIndex = count($sections) - 1;
+            $sectionArr   = array($customLang->key => $customLang->value);
+            for($index = $sectionIndex; $index >= 0; $index --) $sectionArr = array($sections[$index] => $sectionArr);
+
+            $processedLang[$customLang->module] = $sectionArr;
         }
 
         return $processedLang;
