@@ -1484,7 +1484,7 @@ class projectModel extends model
 
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->createDefaultSprint($projectID);
+            if(empty($project->multiple) and $project->model != 'waterfall' and $project->model != 'waterfallplus') $this->loadModel('execution')->createDefaultSprint($projectID);
 
             return $projectID;
         }
@@ -2757,6 +2757,7 @@ class projectModel extends model
         $project  = $this->getByID($objectID);
 
         if($project and $project->model == 'waterfall') $model = $project->model;
+        if($project and $project->model == 'waterfallplus') $model = 'waterfall';
         if($project and $project->model == 'kanban')
         {
             $model = $project->model . 'Project';
@@ -2816,15 +2817,18 @@ class projectModel extends model
         $this->loadModel('common')->resetProjectPriv($objectID);
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
-        if(isset($project->model) and $project->model == 'waterfall')
+        if(isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))
         {
             $lang->project->createExecution = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
             $lang->project->lastIteration   = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
 
             $this->loadModel('execution');
+            $executionCommonLang   = $lang->executionCommon;
             $lang->executionCommon = $lang->project->stage;
 
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
+            $lang->execution->typeList['sprint'] = $executionCommonLang;
         }
 
         $lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);

@@ -64,6 +64,7 @@ $lang->programplan->delay            = '是否延期';
 $lang->programplan->delayDays        = '延期天数';
 $lang->programplan->settingGantt     = '设置甘特图';
 $lang->programplan->viewSetting      = '显示设置';
+$lang->programplan->desc             = '描述';
 
 $lang->programplan->errorBegin       = '阶段的开始时间不能小于所属项目的开始时间%s';
 $lang->programplan->errorEnd         = '阶段的结束时间不能大于所属项目的结束时间%s';
@@ -78,6 +79,10 @@ $lang->programplan->milestoneList[0] = '否';
 $lang->programplan->delayList = array();
 $lang->programplan->delayList[1] = '是';
 $lang->programplan->delayList[0] = '否';
+
+$lang->programplan->typeList = array();
+$lang->programplan->typeList['stage']     = '阶段';
+$lang->programplan->typeList['agileplus'] = '迭代/看板';
 
 $lang->programplan->noData            = '暂无数据。';
 $lang->programplan->children          = '二级计划';
@@ -113,6 +118,7 @@ $lang->programplan->error->sameName        = '阶段名称不能相同！';
 $lang->programplan->error->sameCode        = '阶段代号不能相同！';
 $lang->programplan->error->taskDrag        = '%s的任务不可以拖动';
 $lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
+$lang->programplan->error->notStage        = '迭代/看板不支持创建子阶段';
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
 $lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';

@@ -4056,7 +4056,7 @@ class execution extends control
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $executionConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
-                if($fieldName == 'name' and $this->app->tab == 'project' and $project->model == 'agileplus') $fields['method'] = $executionLang->method;
+                if($fieldName == 'name' and $this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $fields['method'] = $executionLang->method;
 
                 $fieldName = trim($fieldName);
                 $fields[$fieldName] = zget($executionLang, $fieldName);
@@ -4089,7 +4089,7 @@ class execution extends control
                 $execution->totalConsumed = $execution->hours->totalConsumed;
                 $execution->totalLeft     = $execution->hours->totalLeft;
                 $execution->progress      = $execution->hours->progress . '%';
-                if($this->app->tab == 'project' and $project->model == 'agileplus') $execution->method = zget($executionLang->typeList, $execution->type);
+                if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 if($this->post->exportType == 'selected')
                 {

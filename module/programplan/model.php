@@ -710,7 +710,8 @@ class programplanModel extends model
 
         if(!$this->checkNameUnique($names))
         {
-            dao::$errors['message'][] = $this->lang->programplan->error->sameName;
+            $this->app->loadLang('execution');
+            dao::$errors['message'][] = empty($type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);;
             return false;
         }
 
@@ -731,7 +732,7 @@ class programplanModel extends model
 
             $plan = new stdclass();
             $plan->id         = isset($planIDList[$key]) ? $planIDList[$key] : '';
-            $plan->type       = 'stage';
+            $plan->type       = empty($type[$key]) ? 'stage' : $type[$key];
             $plan->project    = $projectID;
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->name       = $names[$key];
@@ -746,6 +747,7 @@ class programplanModel extends model
             $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
+            $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
             $plan->hasProduct = $project->hasProduct;
 
             $datas[] = $plan;

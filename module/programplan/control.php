@@ -141,7 +141,7 @@ class programplan extends control
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $productID = 0, $planID = 0)
+    public function create($projectID = 0, $productID = 0, $planID = 0, $executionType = 'stage')
     {
         $this->commonAction($projectID, $productID);
         $this->app->loadLang('project');
@@ -165,10 +165,27 @@ class programplan extends control
         $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->programplan->create;
 
-        $visibleFields  = array();
-        $requiredFields = array();
-        foreach(explode(',', $this->config->programplan->customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
-        $showFields = $this->config->programplan->custom->createFields;
+        $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID) : array();
+        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
+        if(!empty($planID) and !empty($plans))
+        {
+            $executionType = 'stage';
+            unset($this->lang->programplan->typeList['agileplus']);
+        }
+
+        if(!empty($planID) and !empty($executions) and empty($plans))
+        {
+            $executionType = 'agileplus';
+            unset($this->lang->programplan->typeList['stage']);
+        }
+
+
+        $visibleFields      = array();
+        $requiredFields     = array();
+        $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
+        $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
+        foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
+        $showFields = $this->config->programplan->$custom->createFields;
         foreach(explode(',', $showFields) as $field)
         {
             if($field) $visibleFields[$field] = '';
@@ -179,19 +196,23 @@ class programplan extends control
             if($field)
             {
                 $requiredFields[$field] = '';
-                if(strpos(",{$this->config->programplan->customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+                if(strpos(",{$this->config->programplan->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
             }
         }
+
+        if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
         $this->view->productList        = $productList;
         $this->view->project            = $project;
         $this->view->productID          = $productID ? $productID : key($productList);
         $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
         $this->view->programPlan        = $programPlan;
-        $this->view->plans              = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
+        $this->view->plans              = empty($executions) ? $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent') : $executions;
         $this->view->planID             = $planID;
         $this->view->type               = 'lists';
+        $this->view->executionType      = $executionType;
         $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->custom             = $custom;
         $this->view->customFields       = $customFields;
         $this->view->showFields         = $showFields;
         $this->view->visibleFields      = $visibleFields;
