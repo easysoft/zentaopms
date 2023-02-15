@@ -2298,19 +2298,28 @@ class executionModel extends model
      * @param  int    $executionID
      * @param  string $status
      * @param  int    $num
+     * @param  string $param
      * @access public
      * @return array
      */
-    public function getOrderedExecutions($executionID, $status, $num = 0)
+    public function getOrderedExecutions($executionID, $status, $num = 0, $param = '')
     {
         $executionList = $this->getList($executionID, 'all', $status);
         if(empty($executionList)) return $executionList;
 
-        $executions = $mineExecutions = $otherExecutions = $closedExecutions = array();
+        $executions       = $mineExecutions = $otherExecutions = $closedExecutions = array();
+        $param            = strtolower($param);
+        if($param == 'skipparent')
+        {
+            $parentExecutions = array();
+            foreach($executionList as $execution) $parentExecutions[$execution->parent] = $execution->parent;
+        }
+
         foreach($executionList as $execution)
         {
             if(empty($execution->multiple)) continue;
             if(!$this->app->user->admin and !$this->checkPriv($execution->id)) continue;
+            if($param == 'skipparent' and isset($parentExecutions[$execution->id])) continue;
 
             if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
             {

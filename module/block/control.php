@@ -1101,7 +1101,7 @@ class block extends control
 
         /* Get projects. */
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
-        $executions = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count);
+        $executions = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
         if(empty($executions))
         {
             $this->view->executions = $executions;
