@@ -3779,35 +3779,22 @@ class execution extends control
             $projectPairs[$project->id] = $project->name;
         }
 
+        $nameList = $this->execution->getFullNameList($orderedExecutions);
+
         $projectExecutions = array();
-        $parentIdList = array();
-        $childrenIdList = array();
         foreach($orderedExecutions as $execution)
         {
-            if($execution->type != 'stage') continue;
-            if($execution->grade == 2 and $execution->project != $execution->parent)
-            {
-                $parentIdList[$execution->parent] = $execution->parent;
-                $childrenIdList[$execution->parent][] = $execution->id;
-            }
-        }
-        foreach($orderedExecutions as $id => $execution)
-        {
-            $execution->children = isset($childrenIdList[$execution->id]) ? $childrenIdList[$execution->id] : array();
+            $execution->name = $nameList[$execution->id];
             $projectExecutions[$execution->project][] = $execution;
         }
 
-        $parents = array();
-        if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
-
-        $this->view->link        = $this->execution->getLink($module, $method, $extra);
-        $this->view->module      = $module;
-        $this->view->method      = $method;
-        $this->view->executionID = $executionID;
-        $this->view->extra       = $extra;
-        $this->view->projects    = $projectPairs;
-        $this->view->executions  = $projectExecutions;
-        $this->view->parents     = $parents;
+        $this->view->link               = $this->execution->getLink($module, $method, $extra);
+        $this->view->module             = $module;
+        $this->view->method             = $method;
+        $this->view->executionID        = $executionID;
+        $this->view->extra              = $extra;
+        $this->view->projects           = $projectPairs;
+        $this->view->projectExecutions  = $projectExecutions;
         $this->display();
     }
 

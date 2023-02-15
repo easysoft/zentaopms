@@ -1941,6 +1941,61 @@ class executionModel extends model
     }
 
     /**
+     * Get full name by path.
+     * @param  string $executionPath
+     * @access public
+     * @return string
+     */
+    public function getFullNameByPath($executionPath)
+    {
+        $paths         = explode(',', trim($executionPath, ','));
+        $executions    = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($paths)->andWhere('type')->notin('program,project')->fetchPairs();
+        $executionName = array();
+        foreach($paths as $path)
+        {
+            if(isset($executions[$path])) $executionName[] = $executions[$path];
+        }
+
+        return implode('/', $executionName);
+    }
+
+    /**
+     * Get full name of executons.
+     * @param  array $executions
+     * @access public
+     * @return array
+     */
+    public function getFullNameList($executions)
+    {
+        $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
+            ->where('type')->notin(array('program', 'project'))
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
+
+        $nameList = array();
+        foreach($executions as $executionID => $execution)
+        {
+            if($execution->grade <= 1)
+            {
+                $nameList[$executionID] = $execution->name;
+                continue;
+            }
+
+            /* Set execution name. */
+            $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
+            $executionName = array();
+            foreach($paths as $path)
+            {
+                if(isset($allExecutions[$path])) $executionName[] = $allExecutions[$path]->name;
+            }
+
+            $nameList[$executionID] = implode('/', $executionName);
+        }
+
+        return $nameList;
+    }
+
+    /**
      * Get related executions
      *
      * @param  int    $executionID
