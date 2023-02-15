@@ -75,13 +75,12 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
     </div>
     <div id="myTable"></div>
     <div class='table-footer'>
-      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
         <?php
         if($canBatchEdit)
         {
             $actionLink = $this->createLink('project', 'batchEdit');
-            $misc       = "data-form-action='$actionLink'";
+            $misc       = "id='batchEditBtn'";
             echo html::commonButton($lang->edit, $misc); 
         }
         ?>
@@ -101,6 +100,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
       sortLink: createSortLink,
       cols: cols,
       data: data,
+      onCheckChange: toggleActions,
   };
 
   function createSortLink(col)
@@ -110,12 +110,40 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
       return sortLink.replace('{orderBy}', sort);
   }
 
+  function toggleActions(changes)
+  {
+      checkItems = this.getChecks();
+      $.cookie('checkedItem', checkItems.join(','), {expires: config.cookieLife, path: config.webRoot});
+
+      if(checkItems.length > 0)
+      {
+          $('.table-footer .table-actions').show();
+      }
+      else
+      {
+          $('.table-footer .table-actions').hide();
+      }
+  }
+
   $('#myTable').dtable(options);
+
+  $('#batchEditBtn').click(function()
+  {
+      var batchEditLink = createLink('execution', 'batchEdit');
+      var tempform      = document.createElement("form");
+      tempform.action   = batchEditLink;
+      tempform.method   = "post";
+      tempform.style.display = "none";
+
+      var opt   = document.createElement("input");
+      opt.name  = 'executionIDList';
+      opt.value = checkItems;
+
+      tempform.appendChild(opt);
+      document.body.appendChild(tempform);
+      tempform.submit();
+  })
   </script>
   <?php endif;?>
 </div>
-<style>
-.dtable-hover-row .dtable-rows > .dtable-row:hover .dtable-cells {background: var(--dtable-hover-bg) !important;}
-.dtable-hover-row .dtable-rows>.dtable-row:hover .dtable-cell {background: unset;}
-</style>
 <?php include '../../common/view/footer.html.php';?>

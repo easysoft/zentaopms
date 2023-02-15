@@ -6,13 +6,13 @@ $(function()
         if($(this).hasClass('checked'))
         {
             $(this).removeClass('checked');
-            $('.dtable-row').removeClass('is-checked');
+            $('.dtable-row').click().removeClass('is-checked');
             $('.has-checkbox input[type="checkbox"]').prop('checked', false);
         }
         else
         {
             $(this).addClass('checked');
-            $('.dtable-row').addClass('is-checked');
+            $('.dtable-row').click().addClass('is-checked');
             $('.has-checkbox input[type="checkbox"]').prop('checked', true);
         }
     })

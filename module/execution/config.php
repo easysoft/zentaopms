@@ -216,6 +216,7 @@ $config->execution->datatable->fieldList['project']['required'] = 'no';
 
 $config->execution->datatable->fieldList['status']['title']    = 'execStatus';
 $config->execution->datatable->fieldList['status']['type']     = 'status';
+$config->execution->datatable->fieldList['status']['sortType'] = 'true';
 $config->execution->datatable->fieldList['status']['width']    = '100';
 $config->execution->datatable->fieldList['status']['required'] = 'no';
 $config->execution->datatable->fieldList['status']['fixed']    = 'no';
@@ -227,29 +228,32 @@ $config->execution->datatable->fieldList['PM']['fixed']    = 'no';
 
 $config->execution->datatable->fieldList['openedDate']['title']    = 'openedDate';
 $config->execution->datatable->fieldList['openedDate']['width']    = '85';
+$config->execution->datatable->fieldList['openedDate']['sortType'] = 'true';
 $config->execution->datatable->fieldList['openedDate']['required'] = 'no';
 $config->execution->datatable->fieldList['openedDate']['fixed']    = 'no';
 
 $config->execution->datatable->fieldList['begin']['title']    = 'begin';
 $config->execution->datatable->fieldList['begin']['width']    = '100';
+$config->execution->datatable->fieldList['begin']['sortType'] = 'true';
 $config->execution->datatable->fieldList['begin']['required'] = 'no';
 $config->execution->datatable->fieldList['begin']['fixed']    = 'no';
 
 $config->execution->datatable->fieldList['end']['title']    = 'end';
 $config->execution->datatable->fieldList['end']['width']    = '90';
 $config->execution->datatable->fieldList['end']['required'] = 'no';
+$config->execution->datatable->fieldList['end']['sortType'] = 'true';
 $config->execution->datatable->fieldList['end']['fixed']    = 'no';
 
 $config->execution->datatable->fieldList['realBegan']['title']    = 'realBegan';
-$config->execution->datatable->fieldList['realBegan']['width']    = '90';
+$config->execution->datatable->fieldList['realBegan']['width']    = '100';
 $config->execution->datatable->fieldList['realBegan']['required'] = 'no';
-$config->execution->datatable->fieldList['realBegan']['sort']     = 'no';
+$config->execution->datatable->fieldList['realBegan']['sortType'] = 'true';
 $config->execution->datatable->fieldList['realBegan']['fixed']    = 'no';
 
 $config->execution->datatable->fieldList['realEnd']['title']    = 'realEnd';
-$config->execution->datatable->fieldList['realEnd']['width']    = '90';
+$config->execution->datatable->fieldList['realEnd']['width']    = '100';
 $config->execution->datatable->fieldList['realEnd']['required'] = 'no';
-$config->execution->datatable->fieldList['realEnd']['sort']     = 'no';
+$config->execution->datatable->fieldList['realEnd']['sortType'] = 'true';
 $config->execution->datatable->fieldList['realEnd']['fixed']    = 'no';
 
 $config->execution->datatable->fieldList['estimate']['title']    = 'estimate';
