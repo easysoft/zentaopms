@@ -400,7 +400,7 @@ class caselibModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) helper::end(js::error(dao::getError()));
 
         $forceNotReview = $this->testcase->forceNotReview();
         foreach($cases as $key => $caseData)
