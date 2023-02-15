@@ -37,6 +37,8 @@ class wg
      */
     public $props;
 
+    public $blocks = array();
+
     public $parent = NULL;
 
     public function __construct(/* string|element|object|array|null ...$args */)
@@ -44,12 +46,12 @@ class wg
         $this->props = new props();
 
         $this->setDefaultProps(static::getDefaultProps());
-        $this->append(func_get_args());
+        $this->add(func_get_args());
         $this->created();
     }
 
     /**
-     * Render element to html
+     * Render widget to html
      * @return string
      */
     public function render()
@@ -70,67 +72,48 @@ class wg
 
     protected function buildBefore()
     {
-        return $this->props->getBlock('before');
+        return $this->block('before');
     }
 
     protected function buildAfter()
     {
-        return $this->props->getBlock('after');
+        return $this->block('after');
     }
 
     protected function build()
     {
-        return $this->props->getChildren();
+        return $this->children();
     }
 
-    public function block($name)
+    public function add($item)
     {
-        return $this->props->getBlock($name);
-    }
+        if($item === NULL) return $this;
 
-    public function append($items)
-    {
-        if(empty($items)) return;
-
-        foreach($items as $item)
+        if(is_array($item))
         {
-            if($item === NULL) continue;
-
-            if(($item instanceof wg))
-            {
-                $this->addChild($item);
-                continue;
-            }
-            if(is_string($item))
-            {
-                $this->addChild(htmlentities($item));
-                continue;
-            }
-            if(is_array($item))
-            {
-                $this->append($item);
-                continue;
-            }
-            if(isDirective($item))
-            {
-                $this->directive($item);
-                continue;
-            }
+            foreach($item as $child) $this->add($child);
+            return $this;
         }
+
+        if($item instanceof wg)    $this->addChild($item);
+        elseif(is_string($item))   $this->addChild(htmlentities($item));
+        elseif(isDirective($item)) $this->directive($item);
+        else                       $this->addChild(htmlentities(strval($item)));
+
+        return $this;
     }
 
     public function addChild($child)
     {
-        if($child instanceof wg) $child->parent = $this;
-        $this->props->addChildren($child);
+        return $this->addToBlock('children', $child);
     }
 
-    public function before($child)
+    public function addBefore($child)
     {
         $this->addToBlock('before', $child);
     }
 
-    public function after($child)
+    public function addAfter($child)
     {
         $this->addToBlock('after', $child);
     }
@@ -156,7 +139,18 @@ class wg
 
         if($child instanceof wg) $child->parent = $this;
 
-        $this->props->addToBlock($name, $child);
+        if(isset($this->blocks[$name])) $this->blocks[$name][] = $child;
+        else $this->blocks[$name] = array($child);
+    }
+
+    public function children()
+    {
+        return $this->block('children');
+    }
+
+    public function block($name)
+    {
+        return isset($this->blocks[$name]) ? $this->blocks[$name] : array();
     }
 
     /**
@@ -238,7 +232,6 @@ class wg
         foreach($props as $name => $value)
         {
             if($this->props->has($name)) continue;
-            if($name === 'id' && $value === '$GID') $value = 'zin-' . uniqid();
             $this->props->set($name, $value);
         }
     }
@@ -247,10 +240,15 @@ class wg
 
     protected function toJsonData()
     {
-        $data = $this->props->toJsonData();
-        foreach($data as $key => $value)
+        $data = array();
+        $data['props'] = $this->props->toJsonData();
+
+        $data['type'] = get_called_class();
+        if(strpos($data['$type'], 'zin\\') === 0) $data['$type'] = substr($data['$type'], 4);
+
+        $data['blocks'] = array();
+        foreach($this->blocks as $key => $value)
         {
-            if($key[0] !== '#') continue;
             foreach($value as $index => $child)
             {
                 if($child instanceof wg || (is_object($child) && method_exists($child, 'toJsonData')))
@@ -258,10 +256,9 @@ class wg
                     $value[$index] = $child->toJsonData();
                 }
             }
-            $data[$key] = $value;
+            $data['blocks'][$key] = $value;
         }
-        $data['$type'] = get_called_class();
-        if(strpos($data['$type'], 'zin\\') === 0) $data['$type'] = substr($data['$type'], 4);
+
         return $data;
     }
 

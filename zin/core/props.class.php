@@ -67,10 +67,10 @@ class props extends \zin\utils\dataset
         if($prop === '!')                      return $this->hx($value);
         if(strpos($prop, '!') === 0)           return $this->hx(substr($prop, 1), $value);
         if(strpos($prop, ':') === 0)           return $this->set('data-' . substr($prop, 1), $value);
-        if($prop === '#')                      return $this->addChildren($value);
-        if(strpos($prop, '#') === 0)           return $this->addBlock(substr($prop, 1), $value);
         if($prop === '@')                      return $this->onEvent($value);
         if(strpos($prop, '@') === 0)           return $this->onEvent(substr($prop, 1), $value);
+
+        if($prop === 'id' && $value === '$GID') $value = 'zin-' . uniqid();
 
         return parent::setVal($prop, $value);
     }
@@ -87,36 +87,6 @@ class props extends \zin\utils\dataset
 
         $this->remove($name);
         if($value) $this->setVal($name, $value);
-    }
-
-    public function addBlock($name, $items)
-    {
-        if(is_array($name))
-        {
-            foreach($name as $key => $value) $this->addBlock($key, $value);
-            return;
-        }
-
-        if(!is_array($items)) $items = array($items);
-
-        $name = "#$name";
-        parent::setVal($name, $this->has($name) ? array_merge($this->get($name), $items) : $items);
-    }
-
-    public function addChildren($items)
-    {
-        $this->addBlock('children', $items);
-    }
-
-    public function getBlock($name)
-    {
-        $name = "#$name";
-        return $this->get($name);
-    }
-
-    public function getChildren()
-    {
-        return $this->getBlock('children');
     }
 
     /**
@@ -181,8 +151,8 @@ class props extends \zin\utils\dataset
 
         foreach($this->data as $name => $value)
         {
-            /* Skip any null value or events and blocks setting */
-            if($value === NULL || in_array($name, $skipProps) || $name[0] === '#' || $name[0] === '@') continue;
+            /* Skip any null value or events setting */
+            if($value === NULL || in_array($name, $skipProps) || $name[0] === '@') continue;
 
             /* Convert non-string to json */
             if(!is_string($value)) $value = json_encode($value);
@@ -238,8 +208,6 @@ class props extends \zin\utils\dataset
         $props = new props($this->data);
         $props->style  = clone $this->style;
         $props->class  = clone $this->class;
-        $props->events = clone $this->events;
-        $props->hx     = clone $this->hx;
         return $props;
     }
 }
