@@ -8,6 +8,9 @@ stages:
  
 program-static-analysis:
   stage: sonarqube
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
@@ -16,7 +19,7 @@ program-static-analysis:
     paths:
       - .sonar/cache
   script:
-      - sonar-scanner -Dsonar.inclusions=$(git diff --name-only HEAD~1|tr '\n' ',')
+      - sonar-scanner -Dsonar.inclusions=$(git diff --name-only HEAD~1|tr '\n' ',') -Dsonar.analysis.user=${GITLAB_USER_LOGIN}
   allow_failure: true
   only:
     - master # or the name of your main branch
