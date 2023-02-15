@@ -32,5 +32,6 @@ $(function()
     {
         $('[labelid=' + id + ']').removeClass('text-primary');
         $('[iconid=' + id + ']').addClass('hidden');
+        $('#' + id).blur();
     }
 })
