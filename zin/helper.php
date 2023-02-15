@@ -47,7 +47,12 @@ function createWg($name, $args)
 
     include_once $app->getBasePath() . 'zin' . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
 
-    $className = "\\zin\\$name";
+    $wgName = "\\zin\\$name";
 
-    return class_exists($className) ? (new $className($args)) : $className($args);
+    if(method_exists($wgName, 'create'))
+    {
+        return call_user_func_array($wgName, $args);
+    }
+
+    return class_exists($wgName) ? (new $wgName($args)) : $apiName($args);
 }
