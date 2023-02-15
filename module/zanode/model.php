@@ -804,7 +804,6 @@ class zanodemodel extends model
     {
         $node = $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('mac')->eq($mac)
-            ->andWhere("type")->eq('node')
             ->fetch();
 
         $host = $this->loadModel("zahost")->getByID($node->parent);
