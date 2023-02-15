@@ -177,13 +177,19 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
         <?php
         if (empty($zanode->deleted)) {
           $suspendAttr  = "title='{$lang->zanode->suspend}' target='hiddenwin'";
-          $suspendAttr .= $zanode->status != 'running' && $zanode->status != 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
+          $suspendAttr .= $zanode->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
 
           $resumeAttr  = "title='{$lang->zanode->resume}' target='hiddenwin'";
-          $resumeAttr .= $zanode->status == 'running' || $zanode->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
+          $resumeAttr .= $zanode->status == 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
 
           $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
-          $rebootAttr .= $zanode->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+          $rebootAttr .= $zanode->status == 'shutoff' || $zanode->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+
+          $closeAttr = "title='{$lang->zanode->shutdown}'";
+          $closeAttr .= $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+
+          $startAttr = "title='{$lang->zanode->boot}'";
+          $startAttr .= $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
 
           $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
           $snapshotAttr .= $zanode->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
@@ -200,11 +206,11 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
 
           if($zanode->status == "shutoff")
           {
-              common::printLink('zanode', 'start', "zanodeID={$zanode->id}", "<i class='icon icon-play'></i> " . $lang->zanode->bootNode, '', "title='{$lang->zanode->boot}' class='btn '");
+              common::printLink('zanode', 'start', "zanodeID={$zanode->id}", "<i class='icon icon-play'></i> " . $lang->zanode->bootNode, '', $startAttr);
           }
           else
           {
-              common::printLink('zanode', 'close', "zanodeID={$zanode->id}", "<i class='icon icon-off'></i> " . $lang->zanode->shutdownNode, '', "title='{$lang->zanode->shutdown}' class='btn '");
+              common::printLink('zanode', 'close', "zanodeID={$zanode->id}", "<i class='icon icon-off'></i> " . $lang->zanode->shutdownNode, '', $closeAttr);
           }
 
           common::printLink('zanode', 'reboot', "zanodeID={$zanode->id}", "<i class='icon icon-restart'></i> " . $lang->zanode->rebootNode, '', $rebootAttr);

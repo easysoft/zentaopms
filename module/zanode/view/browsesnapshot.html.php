@@ -47,8 +47,15 @@
 
         $isDefalut = $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system';
         if($isDefalut) $editAttr = $restoreAttr = $deleteAttr = 'class="btn disabled"';
+        $name  = $snapshot->localName ? $snapshot->localName : $snapshot->name;
+        $title = $snapshot->name;
+        if($snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system')
+        {
+            $name  = $lang->zanode->snapshot->defaultSnapName;
+            $title = $name;
+        }
         ?>
-        <td title="<?php echo $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system' ? $lang->zanode->snapshot->defaultSnapName: $snapshot->name;?>"><?php echo $snapshot->localName ? $snapshot->localName : $snapshot->name;?></td>
+        <td title="<?php echo $title;?>"><?php echo $name;?></td>
         <td class='<?php echo $snapshot->status;?>'><?php echo zget($lang->zanode->snapshot->statusList, $snapshot->status, '');?></td>
         <td class="c-createdBy"><?php echo $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system' ? $lang->zanode->snapshot->defaultSnapUser : zget($users, $snapshot->createdBy, '')?></td>
         <td class='c-datetime'><?php echo $snapshot->createdDate;?></td>
