@@ -1025,6 +1025,8 @@ class executionModel extends model
             ->remove('comment,readjustTime,readjustTask')
             ->get();
 
+        if(empty($oldExecution->totalConsumed) and helper::isZeroDate($oldExecution->realBegan)) $execution->status = 'wait';
+
         if(!$this->post->readjustTime)
         {
             unset($execution->begin);
@@ -5219,7 +5221,7 @@ class executionModel extends model
 
     /**
      * Generate col for dtable.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -5301,10 +5303,10 @@ class executionModel extends model
 
     /**
      * Generate row for dtable.
-     * 
-     * @param  array  $executions 
-     * @param  array  $users 
-     * @param  int    $productID 
+     *
+     * @param  array  $executions
+     * @param  array  $users
+     * @param  int    $productID
      * @access public
      * @return void
      */
