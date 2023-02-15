@@ -166,8 +166,8 @@ class props extends \zin\utils\dataset
     public function toJsonData()
     {
         $data = $this->data;
-        $data['style'] = $this->style->data;
-        $data['class'] = $this->class->toStr();
+        if(!empty($this->style->data)) $data['style'] = $this->style->data;
+        if(!empty($this->class->list)) $data['class'] = $this->class->toStr();
         return $data;
     }
 

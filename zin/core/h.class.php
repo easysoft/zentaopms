@@ -39,6 +39,13 @@ class h extends wg
         return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
     }
 
+    protected function toJsonData()
+    {
+        $data = parent::toJsonData();
+        $data['type'] = 'h:' . $this->getTagName();
+        return $data;
+    }
+
     protected function getPropsStr()
     {
         $skipProps   = array_keys(static::getDefinedProps());

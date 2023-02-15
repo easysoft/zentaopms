@@ -27,8 +27,6 @@ class wg
 
     protected static $defineBlocks = NULL;
 
-    private static $definedPropsMap = array();
-
     /**
      * The props of the element
      *
@@ -270,8 +268,18 @@ class wg
                     $value[$index] = $child->toJsonData();
                 }
             }
-            $data['blocks'][$key] = $value;
+            if($key === 'children')
+            {
+                unset($data['blocks'][$key]);
+                $data['children'] = $value;
+            }
+            else
+            {
+                $data['blocks'][$key] = $value;
+            }
         }
+
+        if(empty($data['blocks'])) unset($data['blocks']);
 
         return $data;
     }
@@ -286,6 +294,8 @@ class wg
         }
         return $defaultProps;
     }
+
+    private static $definedPropsMap = array();
 
     protected static function getDefinedProps()
     {
