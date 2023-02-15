@@ -93,7 +93,6 @@ function checkDangerExtensions(file)
         {
             alert(<?php echo json_encode(sprintf($lang->file->errorFileSize, $maxUploadSize));?>);
             totalSize -= fileSize;
-            console.log($(file), file)
             $(file).val('');
             return false;
         }
