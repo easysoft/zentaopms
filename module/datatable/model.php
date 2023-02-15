@@ -90,7 +90,7 @@ class datatableModel extends model
                 $set->id    = $id;
                 $set->show  = true;
                 $set->width = $fieldList[$id]['width'];
-                $set->fixed = isset($fieldList[$id]['fixed']) ? $fieldList[$id]['fixed'] : 'no';
+                $set->fixed = $fieldList[$id]['fixed'];
                 $set->title = $fieldList[$id]['title'];
                 $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
                 $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';

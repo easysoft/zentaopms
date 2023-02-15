@@ -62,8 +62,8 @@
       <div class='cols-list template' id="originCols">
         <?php foreach ($cols as $key => $col):?>
         <?php
-        $required = $col['required'] == 'yes';
-        $fixed = !empty($col['fixed']) ? $col['fixed'] : 'no';
+        $required  = $col['required'] == 'yes';
+        $fixed     = $col['fixed'];
         $autoWidth = $col['width'] == 'auto';
         ?>
         <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $col['width']?>'>
