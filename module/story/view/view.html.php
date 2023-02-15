@@ -481,7 +481,7 @@
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
                       $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($executionLink, $executionName, '', "class='text-muted'");
-                      echo "<li title='$task->name'>" . $execName . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'") . '</li>';
+                      echo "<li title='$task->name'>" . $execName . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='90%'") . '</li>';
                   }
               }
               foreach($story->executions as $executionID => $execution)
