@@ -1,6 +1,8 @@
 <?php
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'icon' . DS . 'v1.php';
+
 class btn extends wg
 {
     static $defineProps = 'type,icon,text,square,disabled,active,url,target,size,trailingIcon,caret,hint,btnType';
