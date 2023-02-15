@@ -1220,8 +1220,9 @@ class commonModel extends model
                             }
                             else
                             {
-                                $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
-                                if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                                $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                                $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
+                                if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
                             }
 
                             if($activeMainMenu)
@@ -2659,7 +2660,11 @@ EOD;
 
         if($this->app->user->account == $program->openedBy or $this->app->user->account == $program->PM) $program->auth = 'extend';
 
-        if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
+        if($program->auth == 'extend')
+        {
+            $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
+            $this->session->set('user', $this->app->user);
+        }
         if($program->auth == 'reset')
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
