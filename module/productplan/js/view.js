@@ -69,13 +69,6 @@ $(function()
 
             infoShowed = true;
         }
-        if(href !== '')
-        {
-            type = href == '#stories' ? 'story' : (href == '#bugs' ? 'bug' : 'planInfo');
-            var viewLink = createLink('productplan', 'view', 'planID=' + planID + '&type=' + type  + (typeof(param) == 'undefined' ? '' : param) + (typeof(orderBy) == 'undefined' ? '' : "&orderBy=" + orderBy));
-            if(type == 'planInfo') viewLink = createLink('productplan', 'view', 'planID=' + planID + '&type=' + type);
-            self.location.href = viewLink;
-        }
     });
 
     $('#storyList').on('sort.sortable', function(e, data)
