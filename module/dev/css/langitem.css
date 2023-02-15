@@ -1,14 +1,16 @@
 .flex {display: flex;}
 .h-32 {height: 32px;}
 .py-6 {padding: 6px 0;}
-.my-6 {margin: 6px 0;}
+.my-12 {margin: 12px 0;}
 .title {font-size: 13px; color: #313C52; font-weight: 700; height: 40px; text-align: center;}
 
 /* side-left */
 .main-content > .side-left {flex: 0 0 160px; margin-left: 64px; width: 160px;}
-.label-list > .input-label {display: flex; align-items: center; justify-content: center;}
+.label-list {background: #F8F8F8; padding: 5px 0;}
+.label-list > .input-label {display: flex; align-items: center; cursor: pointer; padding-left: 40px;}
 
 /* side-right */
 .main-content > .side-right {margin-left: 50px;}
+.main-content > .side-right > .input-list {padding: 5px 0;}
 .main-content > .side-right > .input-list > .input-control {position: relative;}
-.main-content > .side-right > .input-list > .input-control > i.icon {position: absolute; font-size: 25px; left: -60px; top: 8px;}
+.main-content > .side-right > .input-list > .input-control > i.icon {position: absolute; font-size: 25px; left: -40px; top: 3px;}
