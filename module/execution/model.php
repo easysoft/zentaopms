@@ -1025,6 +1025,8 @@ class executionModel extends model
             ->remove('comment,readjustTime,readjustTask')
             ->get();
 
+        if(empty($oldExecution->totalConsumed) and helper::isZeroDate($oldExecution->realBegan)) $execution->status = 'wait';
+
         if(!$this->post->readjustTime)
         {
             unset($execution->begin);
@@ -5224,6 +5226,129 @@ class executionModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Generate col for dtable.
+     *
+     * @access public
+     * @return void
+     */
+    public function generateCol()
+    {
+        $this->loadModel('datatable');
+
+        $setting = $this->datatable->getSetting('execution');
+
+        $fieldList = $this->config->execution->datatable->fieldList;
+
+        foreach($fieldList as $field => $items)
+        {
+            $title = zget($this->lang->execution, $items['title'], zget($this->lang, $items['title'], $items['title']));
+            $fieldList[$field]['title'] = $title;
+        }
+
+        if(empty($setting))
+        {
+            $setting = $this->config->execution->datatable->defaultField;
+            $order   = 1;
+            foreach($setting as $key => $value)
+            {
+                $id  = $value;
+                $set = new stdclass();;
+                $set->order = $order++;
+                $set->show  = true;
+                $set->name  = $value;
+                $set->title = $fieldList[$id]['title'];
+
+                if(isset($fieldList[$id]['checkbox']))     $set->checkbox     = $fieldList[$id]['checkbox'];
+                if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle = $fieldList[$id]['nestedToggle'];
+                if(isset($fieldList[$id]['fixed']))        $set->fixed        = $fieldList[$id]['fixed'];
+                if(isset($fieldList[$id]['width']))        $set->width        = $fieldList[$id]['width'];
+                if(isset($fieldList[$id]['type']))         $set->type         = $fieldList[$id]['type'];
+                if(isset($fieldList[$id]['sortType']))     $set->sortType     = $fieldList[$id]['sortType'];
+                if(isset($fieldList[$id]['flex']))         $set->flex         = $fieldList[$id]['flex'];
+                if(isset($fieldList[$id]['minWidth']))     $set->minWidth     = $fieldList[$id]['minWidth'];
+                if(isset($fieldList[$id]['maxWidth']))     $set->maxWidth     = $fieldList[$id]['maxWidth'];
+                if(isset($fieldList[$id]['pri']))          $set->pri          = $fieldList[$id]['pri'];
+
+                $setting[$key] = $set;
+            }
+        }
+        else
+        {
+            foreach($setting as $key => $set)
+            {
+                if(empty($set->show))
+                {
+                    unset($setting[$key]);
+                    continue;
+                }
+
+                $set->name  = $set->id;
+                $set->title = $fieldList[$set->id]['title'];
+
+                if(isset($fieldList[$set->id]['checkbox']))     $set->checkbox     = $fieldList[$set->id]['checkbox'];
+                if(isset($fieldList[$set->id]['nestedToggle'])) $set->nestedToggle = $fieldList[$set->id]['nestedToggle'];
+                if(isset($fieldList[$set->id]['fixed']))        $set->fixed        = $fieldList[$set->id]['fixed'];
+                if(isset($fieldList[$set->id]['type']))         $set->type         = $fieldList[$set->id]['type'];
+                if(isset($fieldList[$set->id]['sortType']))     $set->sortType     = $fieldList[$set->id]['sortType'];
+                if(isset($fieldList[$set->id]['flex']))         $set->flex         = $fieldList[$set->id]['flex'];
+                if(isset($fieldList[$set->id]['minWidth']))     $set->minWidth     = $fieldList[$set->id]['minWidth'];
+                if(isset($fieldList[$set->id]['maxWidth']))     $set->maxWidth     = $fieldList[$set->id]['maxWidth'];
+                if(isset($fieldList[$set->id]['pri']))          $set->pri          = $fieldList[$set->id]['pri'];
+
+                $set->width = str_replace('px', '', $set->width);
+
+                unset($set->id);
+
+            }
+        }
+
+        usort($setting, array('datatableModel', 'sortCols'));
+
+        return $setting;
+    }
+
+    /**
+     * Generate row for dtable.
+     *
+     * @param  array  $executions
+     * @param  array  $users
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function generateRow($executions, $users, $productID)
+    {
+        $rows = array();
+        foreach($executions as $id => $execution)
+        {
+            $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
+            $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
+            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . html::a($link, $execution->name);
+            $execution->project  = $execution->projectName;
+            $execution->parent   = ($execution->parent and $execution->grade > 1) ? $execution->parent : '';
+            $execution->asParent = !empty($execution->children);
+            $execution->status   = zget($this->lang->execution->statusList, $execution->status);
+            $execution->PM       = zget($users, $execution->PM);
+            $execution->progress = $execution->hours->progress;
+            $execution->estimate = $execution->hours->totalEstimate;
+            $execution->consumed = $execution->hours->totalConsumed;
+            $execution->left     = $execution->hours->totalLeft;
+
+            $children = isset($execution->children) ? $execution->children : array();
+            unset($execution->children);
+
+            $rows[] = $execution;
+
+            if(!empty($children))
+            {
+                $rows = array_merge($rows, $this->generateRow($children, $users, $productID));
+            }
+        }
+
+        return $rows;
     }
 
     /*

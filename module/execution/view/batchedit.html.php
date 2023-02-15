@@ -77,7 +77,7 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach($executionIDList as $executionID):?>
+          <?php foreach($executions as $executionID => $execution):?>
           <?php
           if(!empty($this->config->moreLinks["PM"])) $this->config->moreLinks["PMs[$executionID]"] = $this->config->moreLinks["PM"];
           if(!empty($this->config->moreLinks["PO"])) $this->config->moreLinks["POs[$executionID]"] = $this->config->moreLinks["PO"];

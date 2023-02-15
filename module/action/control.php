@@ -374,6 +374,11 @@ class action extends control
         $hasCreatedTask = $this->loadModel('programplan')->isCreateTask($execution->parent);
         if(!$hasCreatedTask) die(js::alert($this->lang->action->hasCreatedTask));
 
+        /* Check type of siblings. */
+        $siblings = $this->dao->select('DISTINCT type')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq($execution->parent)->fetchPairs('type');
+        if($execution->type == 'stage' and (isset($bsiblings['sprint']) or isset($siblings['kanban']))) die(js::alert($this->lang->action->hasOtherType[$execution->type]));
+        if(($execution->type == 'sprint' or $execution->type == 'kanban') and isset($siblings['stage'])) die(js::alert($this->lang->action->hasOtherType[$execution->type]));
+
         /* If parent stage is not exists, you should recover its parent stages, refresh status. */
         $stagePathList    = explode(',', trim($execution->path, ','));
         $deletedStageList = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($stagePathList)->andWhere('deleted')->eq(1)->andWhere('type')->eq('stage')->orderBy('id_asc')->fetchAll('id');
