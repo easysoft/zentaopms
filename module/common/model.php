@@ -2466,8 +2466,8 @@ EOD;
             {
                 if($this->app->tab == 'project')
                 {
-                    $projectPrivs = $this->loadModel('project')->processProjectPrivs();
-                    if(isset($projectPrivs->$module->$method)) return true;
+                    $this->resetProjectPriv();
+                    if(commonModel::hasPriv($module, $method)) return true;
                 }
 
                 $this->app->user = $this->session->user;
@@ -2689,7 +2689,6 @@ EOD;
             if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
 
             $this->app->user->rights['rights'] = $recomputedRights;
-            $this->session->set('user', $this->app->user);
         }
     }
 
