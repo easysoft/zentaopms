@@ -325,7 +325,18 @@ class wg
         $props = $parentClass ? call_user_func("$parentClass::getDefinedProps") : array();
 
         if(is_string($definition)) $definition = explode(',', $definition);
-        if(!is_array($definition)) return $props;
+        if(!is_array($definition))
+        {
+            foreach($props as $name => $value)
+            {
+                if(is_array(static::$defaultProps) && isset(static::$defaultProps[$name]))
+                {
+                    $value['default'] = static::$defaultProps[$name];
+                    $props['name'] = $value;
+                }
+            }
+            return $props;
+        }
 
         foreach($definition as $name => $value)
         {
@@ -346,9 +357,9 @@ class wg
                     list($name, $value) = explode(':', $value, 2);
                 }
                 $name = trim($name);
-                if(strpos($name, '?') === 0)
+                if($name[strlen($name) - 1] === '?')
                 {
-                    $name = substr($name, 1);
+                    $name = substr($name, 0, strlen($name) - 1);
                     $optional = true;
                 }
             }
@@ -380,7 +391,7 @@ class wg
                 $default = static::$defaultProps[$name];
             }
 
-            $props[$name] = array('type' => explode('|', $type), 'default' => $default, 'optional' => $default !== NULL || $optional);
+            $props[$name] = array('type' => empty($type) ? 'mixed' : $type, 'default' => $default, 'optional' => $default !== NULL || $optional);
         }
         return $props;
     }

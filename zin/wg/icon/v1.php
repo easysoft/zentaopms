@@ -12,7 +12,7 @@ class icon extends wg
         (
             setClass("icon icon-$iconName"),
             set($this->props->skip('name')),
-            parent::build()
+            $this->children()
         );
     }
 

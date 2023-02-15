@@ -5,7 +5,7 @@ require_once dirname(__DIR__) . DS . 'icon' . DS . 'v1.php';
 
 class btn extends wg
 {
-    static $defineProps = 'type,icon,text,square,disabled,active,url,target,size,trailingIcon,caret,hint,btnType';
+    static $defineProps = 'type?:string, icon?:string, text?:string, square?:bool, disabled?:bool, active?:bool, url?:string, target?:string, size?:string|number, trailingIcon?:string, caret?:string|bool, hint?:string, btnType?:string';
 
     public function onAddChild($child)
     {
