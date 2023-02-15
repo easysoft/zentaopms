@@ -2,7 +2,7 @@
 /**
  * The create view file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Yanyi Cao
  * @package     repo
  * @version     $Id: ajaxgetcommitrelation.html.php $
