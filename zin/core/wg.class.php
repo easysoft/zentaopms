@@ -215,7 +215,7 @@ class wg
             $values = array();
             foreach($name as $propName)
             {
-                $values[$propName] = $this->props->get($propName);
+                $values[] = $this->props->get($propName);
             }
             return $values;
         }
