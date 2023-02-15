@@ -32,11 +32,11 @@ class h extends wg
         return in_array($this->getTagName(), array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'));
     }
 
-    public function build($isPrinted = false)
+    public function build()
     {
         if($this->isSelfClose()) return $this->buildSelfCloseTag();
 
-        return array($this->buildTagBegin(), parent::build($isPrinted), $this->buildTagEnd());
+        return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
     }
 
     protected function getPropsStr()

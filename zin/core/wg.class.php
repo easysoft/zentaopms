@@ -52,13 +52,13 @@ class wg
      * Render element to html
      * @return string
      */
-    public function render($isPrinted = false)
+    public function render()
     {
         $before   = $this->buildBefore();
         $after    = $this->buildAfter();
         $children = $this->build();
 
-        return static::renderToHtml(array($before, $after, $children), $isPrinted, $this);
+        return static::renderToHtml(array($before, $after, $children), $this);
     }
 
     public function print()
@@ -247,6 +247,11 @@ class wg
     {
     }
 
+    protected function toJsonData()
+    {
+
+    }
+
     protected static function getDefaultProps()
     {
         $defaultProps = array();
@@ -273,7 +278,7 @@ class wg
     /**
      * @return string
      */
-    public static function renderToHtml($children, $isPrinted)
+    public static function renderToHtml($children)
     {
         $html = array();
         foreach($children as $child)
@@ -282,11 +287,11 @@ class wg
 
             if(is_array($child))
             {
-                $html[] = static::renderToHtml($child, $isPrinted);
+                $html[] = static::renderToHtml($child, );
             }
             elseif($child instanceof wg)
             {
-                $html[] = $child->render($isPrinted);
+                $html[] = $child->render();
             }
             elseif(is_string($child))
             {
@@ -294,7 +299,7 @@ class wg
             }
             elseif(is_object($child))
             {
-                if(method_exists($child, 'render')) $html[] = $child->render($isPrinted);
+                if(method_exists($child, 'render')) $html[] = $child->render();
                 elseif(isset($child->html))         $html[] = $child->html;
                 elseif(isset($child->text))         $html[] = htmlspecialchars($child->text);
                 else                                $html[] = strval($child);

@@ -22,7 +22,7 @@ class pagebase extends wg
         }
     }
 
-    protected function build($isPrinted = false)
+    protected function build()
     {
         global $lang, $config;
 
@@ -41,8 +41,8 @@ class pagebase extends wg
             h::body
             (
                 set($this->prop('bodyProps')),
-                parent::build($isPrinted),
-                $config->debug ? h::js('window.zin = ' . json_encode($this) . ';console.log("page", window.zin.page)') : null
+                parent::build(),
+                $config->debug ? h::js('window.zin = ' . json_encode($this->props->toJsonData()) . ';console.log("page", window.zin)') : null // TODO: support to export page data to client
             )
         );
     }
