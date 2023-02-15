@@ -97,7 +97,6 @@ class executionModel extends model
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
         $this->session->set('execution', $executionID, $this->app->tab);
 
-        /* Unset story, bug, build and testtask if type is ops. */
         if($execution and $execution->type == 'stage')
         {
             global $lang;
@@ -108,6 +107,7 @@ class executionModel extends model
 
         if(isset($execution->acl) and $execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
 
+        /* Unset story, bug, build and testtask if type is ops. */
         if($execution and $execution->lifetime == 'ops')
         {
             unset($this->lang->execution->menu->story);

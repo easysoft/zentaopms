@@ -3768,9 +3768,14 @@ class execution extends control
             $executions = zget($executionGroups, $project->id, array());
             if(isset($project->model) and $project->model == 'waterfall') ksort($executions);
 
+            $parents = array();
+            foreach($executions as $execution) $parents[$execution->parent] = $execution->parent;
+
             foreach($executions as $execution)
             {
-                if(isset($orderedExecutions[$execution->parent]) and $project->model != 'waterfall') unset($orderedExecutions[$execution->parent]);
+                /* Only show leaf executions. */
+                if(isset($parents[$execution->id])) continue;
+
                 $execution->teams = zget($teams, $execution->id, array());
                 $orderedExecutions[$execution->id] = $execution;
             }
