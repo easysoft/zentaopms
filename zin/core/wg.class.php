@@ -243,13 +243,26 @@ class wg
         }
     }
 
-    protected function created()
-    {
-    }
+    protected function created() {}
 
     protected function toJsonData()
     {
-
+        $data = $this->props->toJsonData();
+        foreach($data as $key => $value)
+        {
+            if($key[0] !== '#') continue;
+            foreach($value as $index => $child)
+            {
+                if($child instanceof wg || (is_object($child) && method_exists($child, 'toJsonData')))
+                {
+                    $value[$index] = $child->toJsonData();
+                }
+            }
+            $data[$key] = $value;
+        }
+        $data['$type'] = get_called_class();
+        if(strpos($data['$type'], 'zin\\') === 0) $data['$type'] = substr($data['$type'], 4);
+        return $data;
     }
 
     protected static function getDefaultProps()

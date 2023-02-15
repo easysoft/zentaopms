@@ -105,7 +105,7 @@ class props extends \zin\utils\dataset
 
     public function addChildren($items)
     {
-        $this->addBlock('default', $items);
+        $this->addBlock('children', $items);
     }
 
     public function getBlock($name)
@@ -116,7 +116,7 @@ class props extends \zin\utils\dataset
 
     public function getChildren()
     {
-        return $this->getBlock('default');
+        return $this->getBlock('children');
     }
 
     /**
@@ -197,7 +197,7 @@ class props extends \zin\utils\dataset
     {
         $data = $this->data;
         $data['style'] = $this->style->data;
-        $data['class'] = $this->class->list;
+        $data['class'] = $this->class->toStr();
         return $data;
     }
 

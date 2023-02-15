@@ -42,7 +42,7 @@ class pagebase extends wg
             (
                 set($this->prop('bodyProps')),
                 parent::build(),
-                $config->debug ? h::js('window.zin = ' . json_encode($this->props->toJsonData()) . ';console.log("page", window.zin)') : null // TODO: support to export page data to client
+                $config->debug ? h::js('window.zin = ' . json_encode($this->toJsonData()) . ';console.log("page", window.zin)') : null
             )
         );
     }
