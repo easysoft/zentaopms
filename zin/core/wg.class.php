@@ -41,7 +41,7 @@ class wg
 
     public function __construct(/* string|element|object|array|null ...$args */)
     {
-        $this->props    = new props();
+        $this->props = new props();
 
         $this->setDefaultProps(static::getDefaultProps());
         $this->append(func_get_args());
@@ -54,9 +54,9 @@ class wg
      */
     public function render($isPrinted = false)
     {
-        $before   = $this->buildBefore($isPrinted);
-        $after    = $this->buildAfter($isPrinted);
-        $children = $this->build($isPrinted);
+        $before   = $this->buildBefore();
+        $after    = $this->buildAfter();
+        $children = $this->build();
 
         return static::renderToHtml(array($before, $after, $children), $isPrinted, $this);
     }
@@ -68,17 +68,17 @@ class wg
         return $this;
     }
 
-    protected function buildBefore($isPrinted = false)
+    protected function buildBefore()
     {
         return $this->props->getBlock('before');
     }
 
-    protected function buildAfter($isPrinted = false)
+    protected function buildAfter()
     {
         return $this->props->getBlock('after');
     }
 
-    protected function build($isPrinted = false)
+    protected function build()
     {
         return $this->props->getChildren();
     }
@@ -263,14 +263,9 @@ class wg
         $name = get_called_class();
         if(!isset(self::$definedPropsMap[$name]))
         {
-            if(is_string(static::$defineProps) || is_array(static::$defineProps))
-            {
-                self::$definedPropsMap[$name] = defineProps(static::$defineProps);
-            }
-            else
-            {
-                self::$definedPropsMap[$name] = array();
-            }
+            self::$definedPropsMap[$name] = is_string(static::$defineProps) || is_array(static::$defineProps)
+                ? defineProps(static::$defineProps)
+                : array();
         }
         return self::$definedPropsMap[$name];
     }
