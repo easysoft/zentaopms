@@ -7967,6 +7967,13 @@ class upgradeModel extends model
         {
             if(!$module || !$name) continue;
 
+            $exist = $this->dao->select('id')->from(TABLE_MODULE)
+                 ->where('root')->eq($dimension)
+                 ->andWhere('collector')->eq($module)
+                 ->andWhere('type')->eq($type)
+                 ->fetchAll();
+            if(!empty($exist)) continue;
+
             $group->name      = $name;
             $group->collector = $module;
             $this->dao->replace(TABLE_MODULE)->data($group)->exec();
@@ -8008,6 +8015,24 @@ class upgradeModel extends model
         $dimension->createdDate = helper::now();
 
         $this->dao->insert(TABLE_DIMENSION)->data($dimension)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process pivot modules.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function processPivotModules($modules)
+    {
+        foreach($modules as $code => $module)
+        {
+            if(!$code || !$module) continue;
+            $this->dao->update(TABLE_PIVOT)->set("`group` = REPLACE(`group`, '$code', $module)")->exec();
+        }
 
         return !dao::isError();
     }
