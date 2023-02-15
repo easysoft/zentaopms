@@ -24,15 +24,20 @@
   <div class="side-left">
     <div class="title">默认值</div>
     <div class="label-list">
-      <div class="input-label h-32 my-6">项目集</div>
+      <div labelId="123456Input" class="input-label h-32 my-12">项目集</div>
+      <div labelId="223456Input" class="input-label h-32 my-12">产品</div>
     </div>
   </div>
   <div class="side-right">
     <div class="title">修改值</div>
     <div class="input-list">
-     <div class="input-control h-32 py-6">
-       <i class="icon icon-angle-right text-primary"></i>
-       <input class="form-control" placeholder="项目集"></input>
+     <div class="input-control h-32 my-12">
+       <input id="123456Input" class="form-control shadow-primary-hover" placeholder="项目集"></input>
+       <i iconId="123456Input" class="icon icon-angle-right text-primary hidden"></i>
+     </div>
+     <div class="input-control h-32 my-12">
+       <input id="223456Input" class="form-control shadow-primary-hover" placeholder="产品"></input>
+       <i iconId="223456Input" class="icon icon-angle-right text-primary hidden"></i>
      </div>
     </div>
   </div>
