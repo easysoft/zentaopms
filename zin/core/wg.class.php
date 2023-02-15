@@ -167,17 +167,17 @@ class wg
 
         if($type === 'prop')
         {
-            $this->prop($data);
+            $this->setProp($data);
             return;
         }
         if($type === 'class' || $type === 'style')
         {
-            $this->prop($type, $data);
+            $this->setProp($type, $data);
             return;
         }
         if($type === 'cssVar')
         {
-            $this->prop('--', $data);
+            $this->setProp('--', $data);
             return;
         }
         if($type === 'html')
@@ -200,26 +200,46 @@ class wg
         }
     }
 
+    public function prop($name)
+    {
+        $args = func_get_args();
+        if(count($args) > 1)
+        {
+            $name = $args;
+        }
+
+        if(is_string($name)) return $this->props->get($name);
+
+        if(is_array($name))
+        {
+            $values = array();
+            foreach($name as $propName)
+            {
+                $values[$propName] = $this->props->get($propName);
+            }
+            return $values;
+        }
+
+        return NULL;
+    }
+
     /**
      * Set property, an array can be passed to set multiple properties
      *
      * @access public
      * @param array|string   $prop        - Property name or properties list
      * @param mixed          $value       - Property value
-     * @param bool           $removeEmpty - Whether to remove empty value
      * @return dataset
      */
-    public function prop($prop, $value = '%%%NULL%%%')
+    public function setProp($prop, $value = NULL)
     {
         if(is_array($prop))
         {
-            foreach($prop as $name => $value) $this->prop($name, $value);
+            foreach($prop as $name => $value) $this->setProp($name, $value);
             return $this;
         }
 
         if(!is_string($prop) || empty($prop)) return $this;
-
-        if($value === '%%%NULL%%%') return $this->props->get($prop);
 
         if($prop[0] === '#')
         {
