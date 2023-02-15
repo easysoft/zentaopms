@@ -598,19 +598,7 @@ class repo extends control
         }
 
         /* Refresh repo. */
-        if($refresh)
-        {
-            /* Update code commit history. */
-            $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-
-            if(in_array($repo->SCM, $this->config->repo->gitTypeList))
-            {
-                $branch = $this->cookie->repoBranch;
-                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-                $_COOKIE['repoBranch'] = $branch;
-            }
-            if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
-        }
+        if($refresh) $this->repo->updateCommit($repoID);
 
         /* Get files info. */
         $infos = $this->repo->getFileCommits($repo, $branchID, $path);

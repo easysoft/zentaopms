@@ -333,8 +333,13 @@ class repoModel extends model
         if($type == 'task')  $links = $this->post->tasks;
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
-        $revisionID   = $revisionInfo->id;
-        $committer    = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
+        if(empty($revisionInfo)) $this->updateCommit($repoID);
+
+        $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+        if(empty($revisionInfo)) return false;
+
+        $revisionID = $revisionInfo->id;
+        $committer  = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
         if(empty($committer)) $committer = $revisionInfo->committer;
         foreach($links as $linkID)
         {
@@ -2768,5 +2773,27 @@ class repoModel extends model
         /* Get linked projects. */
         $linkedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchPairs('id', 'name');
         return $accessProjects + $linkedProjects; // Merge projects can be accessed and exists.
+    }
+
+    /**
+     * Update commit history.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function updateCommit($repoID)
+    {
+        $repo = $this->getRepoByID($repoID);
+        /* Update code commit history. */
+        $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repoID));
+
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+        {
+            $branch = $this->cookie->repoBranch;
+            $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+            $_COOKIE['repoBranch'] = $branch;
+        }
+        if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
     }
 }
