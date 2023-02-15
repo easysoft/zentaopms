@@ -89,10 +89,12 @@ class dev extends control
      * @access public
      * @return void
      */
-    public function langItem($type = 'common')
+    public function langItem($type = 'common', $module = 'my', $method = 'browse')
     {
+        $this->dev->loadLang();
         $this->view->title = $this->lang->langItem;
         $this->view->type  = $type;
+        $this->view->featureBar = $this->lang->dev->featureBar['langItem'];
         $this->display();
     }
 }

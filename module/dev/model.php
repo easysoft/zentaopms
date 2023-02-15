@@ -295,4 +295,34 @@ class devModel extends model
     {
         return ltrim(rtrim($line), "* \t\n\r\0\x0B");
     }
+
+    /**
+     * Load default lang.
+     *
+     * @access public
+     * @return object
+     */
+    public function loadDefaultLang()
+    {
+        $langFilesToLoad = $this->app->getMainAndExtFiles('common');
+        if(empty($langFilesToLoad)) return false;
+
+        $lang = new language();
+        $lang->URCommon        = $this->lang->URCommon;
+        $lang->SRCommon        = $this->lang->SRCommon;
+        $lang->productCommon   = $this->lang->productCommon;
+        $lang->projectCommon   = $this->lang->projectCommon;
+        $lang->executionCommon = $this->lang->executionCommon;
+        if(!isset($lang->common)) $lang->common = new stdclass();
+
+        $loadedLangs = array();
+        foreach($langFilesToLoad as $langFile)
+        {
+            if(in_array($langFile, $loadedLangs)) continue;
+            include $langFile;
+            $loadedLangs[] = $langFile;
+        }
+
+        return $lang;
+    }
 }
