@@ -533,7 +533,8 @@ class repo extends control
      */
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0, $branchOrTag = 'branch')
     {
-        $repoID = $this->repo->saveState($repoID, $objectID);
+        $repoID                 = $this->repo->saveState($repoID, $objectID);
+        $originBranchID         = $branchID;
         if($branchID) $branchID = base64_decode(helper::safe64Decode($branchID));
 
         /* Get path and refresh. */
@@ -598,7 +599,7 @@ class repo extends control
         }
 
         /* Refresh repo. */
-        if($refresh) $this->repo->updateCommit($repoID);
+        if($refresh) $this->repo->updateCommit($repoID, $originBranchID);
 
         /* Get files info. */
         $infos = $this->repo->getFileCommits($repo, $branchID, $path);
