@@ -1,26 +1,23 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-
-use \zin\core\h5;
-
-class pagemain extends \zin\core\wg
+class pagemain extends wg
 {
-    static $tag = 'div';
-
-    static $defaultProps = array('id' => 'main');
-
-    protected function acceptChild($child, $strAsHtml = false)
+    public function addChild($child)
     {
-        $child = parent::acceptChild($child, $strAsHtml);
-        $this->appendTo('inner', $child);
+        if($child instanceof wg) $this->addToBlock('inner', $child);
+        else $this->props->addChildren($child);
     }
 
-    protected function build($isPrint = false, $parent = null)
+    protected function build()
     {
-        $builder = parent::build($isPrint, $parent);
-        $builder->append(h5::div($this->blocks['inner'])->addClass('container'));
-        return $builder;
+        $pagemain = h::div(
+            h::div(
+                setClass('container'),
+                $this->block('inner'),
+            )
+        );
+        $pagemain->setDefaultProps(array('id' => 'main'));
+        return $pagemain;
     }
 }

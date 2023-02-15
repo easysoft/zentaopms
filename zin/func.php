@@ -19,3 +19,4 @@ function pagebase()  {return createWg('pagebase',    func_get_args());}
 function page()      {return createWg('page',    func_get_args());}
 function btngroup()  {return createWg('btngroup', func_get_args());}
 function checkbox()  {return createWg('checkbox', func_get_args());}
+function pagemain()  {return createWg('pagemain', func_get_args());}
