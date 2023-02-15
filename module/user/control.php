@@ -133,7 +133,7 @@ class user extends control
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
         $this->view->position[] = $this->lang->user->story;
-        $this->view->stories    = $this->story->getUserStories($account, $type, $orderBy, $pager, $storyType);
+        $this->view->stories    = $this->story->getUserStories($account, $type, $orderBy, $pager, $storyType, false, 'all');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->storyType  = $storyType;
         $this->view->orderBy    = $orderBy;
