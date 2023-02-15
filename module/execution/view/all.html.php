@@ -114,4 +114,8 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
   </script>
   <?php endif;?>
 </div>
+<style>
+.dtable-hover-row .dtable-rows > .dtable-row:hover .dtable-cells {background: var(--dtable-hover-bg) !important;}
+.dtable-hover-row .dtable-rows>.dtable-row:hover .dtable-cell {background: unset;}
+</style>
 <?php include '../../common/view/footer.html.php';?>
