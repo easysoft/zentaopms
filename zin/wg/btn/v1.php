@@ -54,6 +54,7 @@ class btn extends wg
             'btn-caret' => $onlyCaret,
             'square' => $square
         );
+
         $size = $this->prop('size');
         if(!empty($size)) $classList[] = "size-$size";
 
