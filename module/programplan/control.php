@@ -208,7 +208,7 @@ class programplan extends control
         $this->view->productID          = $productID ? $productID : key($productList);
         $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
         $this->view->programPlan        = $programPlan;
-        $this->view->plans              = empty($executions) ? $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent') : $executions;
+        $this->view->plans              = empty($executions) ? $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent', 'order_asc') : $executions;
         $this->view->planID             = $planID;
         $this->view->type               = 'lists';
         $this->view->executionType      = $executionType;

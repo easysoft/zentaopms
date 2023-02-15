@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <?php js::set('browseType', $type);?>
 <style>.icon-help{margin-left: 3px;}</style>
 <div id='mainMenu' class='clearfix'>
@@ -99,7 +100,7 @@
             <th class="c-action text-center w-110px"> <?php echo $lang->actions;?></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class='sortable'>
           <?php $i = 0;?>
           <?php if(empty($plans) and $planID == 0):?>
             <?php foreach($stages as $stage):?>
@@ -127,7 +128,9 @@
               <?php endif;?>
               <td class='c-actions text-center'>
                 <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+                <button type="button" class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
                 <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+                <?php echo html::hidden('orders[]', $stage->order);?>
               </td>
             </tr>
             <?php $i ++;?>
@@ -164,7 +167,9 @@
               <?php endif;?>
               <td class='c-actions text-center'>
                 <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+                <button type="button" class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
                 <a href='javascript:;' onclick='deleteItem(this)' class='invisible btn btn-link'><i class='icon icon-close'></i></a>
+                <?php echo html::hidden('orders[]', $plan->order);?>
               </td>
             </tr>
             <?php $i ++;?>
@@ -197,6 +202,7 @@
             <?php endif;?>
             <td class='c-actions text-center'>
               <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+              <button type="button" class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
               <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
             </td>
           </tr>
@@ -244,6 +250,7 @@
       <?php endif;?>
       <td class='c-actions text-center'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <button type="button" class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
         <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
     </tr>
@@ -260,6 +267,14 @@ js::set('projectEndDate', $project->end);
 ?>
 <script>
 $('[data-toggle="popover"]').popover();
+
+var options = {
+    selector: 'tr',
+    trigger: '.icon-move',
+    dragCssClass: 'drag-row',
+    reverse: true,
+}
+$('#planForm tbody.sortable').sortable(options);
 
 $('#planForm').submit(function()
 {
