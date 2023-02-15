@@ -9,8 +9,8 @@ $config->doc->edit      = new stdclass();
 
 $config->doc->createlib->requiredFields = 'name';
 $config->doc->editlib->requiredFields   = 'name';
-$config->doc->create->requiredFields = 'lib,title';
-$config->doc->edit->requiredFields   = 'title';
+$config->doc->create->requiredFields    = 'lib,title';
+$config->doc->edit->requiredFields      = 'title';
 
 $config->doc->customObjectLibs = 'files,customFiles';
 $config->doc->notArticleType   = '';
