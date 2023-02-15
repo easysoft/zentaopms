@@ -284,6 +284,38 @@ class devModel extends model
         return $extPaths;
     }
 
+    public function getOriginalLang($type, $module = '', $language = 'zh-cn')
+    {
+        $originalLangs = array();
+        if($type == 'common')
+        {
+            $projectKey = (int)$this->loadModel('setting')->getItem('owner=system&key=sprintConcept');
+            $clientLang = $this->app->getClientLang();
+            $originalLangs['productCommon']   = $this->config->productCommonList[$clientLang][PRODUCT_KEY];
+            $originalLangs['projectCommon']   = $this->config->projectCommonList[$clientLang][PROJECT_KEY];
+            $originalLangs['executionCommon'] = $this->config->executionCommonList[$clientLang][$projectKey];
+            $originalLangs['URCommon']        = $this->lang->dev->UR;
+            $originalLangs['SRCommon']        = $this->lang->dev->SR;
+        }
+
+        return $originalLangs;
+    }
+
+    public function getCustomedLang($type, $module = '', $language = 'zh-cn')
+    {
+        $customedLangs = array();
+        $clientLang    = $this->app->getClientLang();
+        if($type == 'common')
+        {
+            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module=common&section=&vision={$this->config->vision}&systemMode={$this->config->systemMode}");
+            foreach($customeds as $customed) $customedLangs[$customed->key] = $customed->value;
+            $customedLangs['URCommon'] = $this->lang->dev->UR == $this->lang->URCommon ? '' : $this->lang->URCommon;
+            $customedLangs['SRCommon'] = $this->lang->dev->SR == $this->lang->SRCommon ? '' : $this->lang->SRCommon;
+        }
+
+        return $customedLangs;
+    }
+
     /**
      * Trim asterisks and whitespace from the beginning and whitespace from the end of lines.
      *
@@ -302,9 +334,12 @@ class devModel extends model
      * @access public
      * @return object
      */
-    public function loadDefaultLang()
+    public function loadDefaultLang($language = 'zh-cn')
     {
+        $clientLang = $this->app->clientLang;
+        if($language != $clientLang) $this->app->clientLang = $language;
         $langFilesToLoad = $this->app->getMainAndExtFiles('common');
+        if($language != $clientLang) $this->app->clientLang = $clientLang;
         if(empty($langFilesToLoad)) return false;
 
         $lang = new language();
