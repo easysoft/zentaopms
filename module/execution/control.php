@@ -2697,7 +2697,7 @@ class execution extends control
         $userList['closed']->avatar   = '';
 
         $projectID  = $execution->project;
-        $project    = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
+        $project    = $this->project->getByID($projectID);
         $hiddenPlan = $project->model !== 'scrum';
 
         $this->view->title        = $this->lang->execution->kanban;
