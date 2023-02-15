@@ -2961,14 +2961,14 @@ class baseRouter
             $extPath = $this->getModuleExtPath($appName, $moduleName, $type);
             if($this->config->framework->extensionLevel >= 1)
             {
-                $client = $type == 'lang' and isset($this->client) ? $this->client : '';
-                if(!empty($extPath['common'])) $commonExtFiles = helper::ls($extPath['common'] . $client, '.php');
-                if(!empty($extPath['xuan']))   $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['xuan'] . $client, '.php'));
-                if(!empty($extPath['vision'])) $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['vision'] . $client, '.php'));
-                if(!empty($extPath['custom'])) $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['custom'] . $client, '.php'));
-                if(!empty($extPath['saas']))   $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['saas'] . $client, '.php'));
+                $clientLang = $type == 'lang' ? $this->clientLang : '';
+                if(!empty($extPath['common'])) $commonExtFiles = helper::ls($extPath['common'] . $clientLang, '.php');
+                if(!empty($extPath['xuan']))   $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['xuan'] . $clientLang, '.php'));
+                if(!empty($extPath['vision'])) $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['vision'] . $clientLang, '.php'));
+                if(!empty($extPath['custom'])) $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['custom'] . $clientLang, '.php'));
+                if(!empty($extPath['saas']))   $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['saas'] . $clientLang, '.php'));
             }
-            if($this->config->framework->extensionLevel == 2 and !empty($extPath['site'])) $siteExtFiles = helper::ls($extPath['site'] . $client, '.php');
+            if($this->config->framework->extensionLevel == 2 and !empty($extPath['site'])) $siteExtFiles = helper::ls($extPath['site'] . $clientLang, '.php');
             $extFiles  = array_merge($commonExtFiles, $siteExtFiles);
         }
 
