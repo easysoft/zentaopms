@@ -1,22 +1,16 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h5.class.php';
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
-class btnGroup extends \zin\core\wg
+class btngroup extends wg
 {
-    static $tag = 'div';
-
-    static $defaultProps = array('class' => 'btn-group');
-
-    static function create($btns)
+    protected function build()
     {
-        $btnGroup = new btnGroup();
-        foreach($btns as $props)
+        $btnGroup = h::div(setClass('btn-group'));
+        foreach($this->prop('btns') as $props)
         {
-            $btnGroup->append(btn::create($props));
+            $btnGroup->addChild(btn()->prop($props));
         }
         return $btnGroup;
     }
