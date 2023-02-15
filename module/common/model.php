@@ -3556,8 +3556,8 @@ EOD;
         {
             if(strpos($moduleName, 'Menu') === false) continue;
 
-            $isSecondMenu = strpos($moduleName, 'subMenu') === false;
-            $moduleName   = str_replace($isSecondMenu ? 'Menu' : 'subMenu', '', $moduleName);
+            $isSecondMenu = strpos($moduleName, 'SubMenu') === false;
+            $moduleName   = str_replace($isSecondMenu ? 'Menu' : 'SubMenu', '', $moduleName);
 
             foreach($sectionMenus as $section => $menus)
             {
@@ -3566,7 +3566,7 @@ EOD;
                     /* Get second menu. */
                     if($isSecondMenu)
                     {
-                        $isDropMenu = strpos($section, 'dropMenu') !== false;
+                        $isDropMenu = strpos($section, 'DropMenu') !== false;
                         if(!$isDropMenu)
                         {
                             if(!isset($lang->{$moduleName}->{$section})) break;
@@ -3576,7 +3576,7 @@ EOD;
                         else
                         {
                             /* Get drop menu in second menu. */
-                            $dropMenuKey = str_replace('dropMenu', '', $section);
+                            $dropMenuKey = str_replace('DropMenu', '', $section);
                             if(!isset($lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key})) break;
                             $settingMenu = &$lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key};
                         }
