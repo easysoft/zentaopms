@@ -87,10 +87,10 @@
                 $rebootAttr .= $node->status == 'shutoff' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
                 $closeAttr = "title='{$lang->zanode->shutdown}'";
-                $closeAttr .= $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+                $closeAttr .= $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
 
                 $startAttr = "title='{$lang->zanode->boot}'";
-                $startAttr .= $zanode->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+                $startAttr .= $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
 
                 $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
                 $snapshotAttr .= $node->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
@@ -109,11 +109,11 @@
 
                 if($node->status == "shutoff")
                 {
-                    common::printLink('zanode', 'start', "zanodeID={$node->id}", "<i class='icon icon-play'></i> ", '', "class='btn ' title='{$lang->zanode->boot}'");
+                    common::printLink('zanode', 'start', "zanodeID={$node->id}", "<i class='icon icon-play'></i> ", '', $startAttr);
                 }
                 else
                 {
-                    common::printLink('zanode', 'close', "zanodeID={$node->id}", "<i class='icon icon-off'></i> ", '', "class='btn ' title='{$lang->zanode->shutdown}'");
+                    common::printLink('zanode', 'close', "zanodeID={$node->id}", "<i class='icon icon-off'></i> ", '', $closeAttr);
                 }
 
                 common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
