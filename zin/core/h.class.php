@@ -77,7 +77,7 @@ class h extends wg
         return "</$tagName>";
     }
 
-    public static function create($tagName, $args, $defaultProps = NULL)
+    public static function create()
     {
         $args = func_get_args();
         $tagName = array_shift($args);
