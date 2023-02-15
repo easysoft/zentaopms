@@ -3,10 +3,13 @@ namespace zin;
 
 class pagemain extends wg
 {
-    public function addChild($child)
+    public function onAddChild($child)
     {
-        if($child instanceof wg) $this->addToBlock('inner', $child);
-        else $this->props->addChildren($child);
+        if($child instanceof wg) {
+            $this->addToBlock('inner', $child);
+            return false;
+        }
+        return null;
     }
 
     protected function build()
