@@ -25,6 +25,8 @@ class wg
      */
     protected static $defineProps = NULL;
 
+    protected static $defaultProps = NULL;
+
     protected static $defineBlocks = NULL;
 
     /**
@@ -295,18 +297,92 @@ class wg
         return $defaultProps;
     }
 
-    private static $definedPropsMap = array();
+    public static $definedPropsMap = array();
 
-    protected static function getDefinedProps()
+    protected static function getDefinedProps($name = NULL)
     {
-        $name = get_called_class();
-        if(!isset(self::$definedPropsMap[$name]))
+        if($name === NULL) $name = get_called_class();
+
+        if(!isset(wg::$definedPropsMap[$name]) && $name === get_called_class())
         {
-            self::$definedPropsMap[$name] = is_string(static::$defineProps) || is_array(static::$defineProps)
-                ? defineProps(static::$defineProps)
-                : array();
+            wg::$definedPropsMap[$name] = static::parsePropsDefinition(static::$defineProps);
         }
-        return self::$definedPropsMap[$name];
+        return wg::$definedPropsMap[$name];
+    }
+
+    /**
+     * Parse props definition
+     * @param $definition
+     * @example
+     *
+     * $definition = 'name,desc:string,title?:string|element,icon?:string="star"'
+     * $definition = array('name', 'desc:string', 'title?:string|element', 'icon?:string="star"');
+     * $definition = array('name' => 'mixed', 'desc' => 'string', 'title' => array('type' => 'string|element', 'optional' => true), 'icon' => array('type' => 'string', 'default' => 'star', 'optional' => true))))
+     */
+    private static function parsePropsDefinition($definition)
+    {
+        $parentClass = get_parent_class(get_called_class());
+        $props = $parentClass ? call_user_func("$parentClass::getDefinedProps") : array();
+
+        if(is_string($definition)) $definition = explode(',', $definition);
+        if(!is_array($definition)) return $props;
+
+        foreach($definition as $name => $value)
+        {
+            $optional = false;
+            $type     = 'mixed';
+            $default  = NULL;
+
+            if(is_int($name) && is_string($value))
+            {
+                $value = trim($value);
+                if(strpos($value, ':') === false)
+                {
+                    $name = $value;
+                    $value = '';
+                }
+                else
+                {
+                    list($name, $value) = explode(':', $value, 2);
+                }
+                $name = trim($name);
+                if(strpos($name, '?') === 0)
+                {
+                    $name = substr($name, 1);
+                    $optional = true;
+                }
+            }
+
+            if(is_array($value))
+            {
+                $type     = isset($value['type'])    ? $value['type']    : $type;
+                $default  = isset($value['default']) ? $value['default'] : $default;
+                $optional = isset($value['optional'])? $value['optional']: $optional;
+            }
+            else if(is_string($value))
+            {
+                if(strpos($value, '=') === false)
+                {
+                    $type = $value;
+                    $default = NULL;
+                }
+                else
+                {
+                    list($type, $default) = explode('=', $value, 2);
+                }
+                $type = trim($type);
+
+                if(is_string($default)) $default = json_decode(trim($default));
+            }
+
+            if(is_array(static::$defaultProps) && isset(static::$defaultProps[$name]))
+            {
+                $default = static::$defaultProps[$name];
+            }
+
+            $props[$name] = array('type' => explode('|', $type), 'default' => $default, 'optional' => $default !== NULL || $optional);
+        }
+        return $props;
     }
 
     /**

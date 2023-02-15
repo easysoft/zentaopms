@@ -11,7 +11,7 @@ class pagebase extends wg
         'title' => array('type' => 'string', 'default' => ''),
         'bodyProps' => array('type' => 'array', 'optional' => true),
         'zui'   => array('type' => 'bool', 'default' => false),
-        'print' => array('type' => 'bool', 'default' => false)
+        'print' => array('type' => 'bool', 'default' => true)
     );
 
     protected function created()
