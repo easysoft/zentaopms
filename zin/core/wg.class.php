@@ -217,10 +217,9 @@ class wg
             return $this;
         }
 
-        if(is_string($prop) && $value === '%%%NULL%%%')
-        {
-            return $this->props->get($prop);
-        }
+        if(!is_string($prop) || empty($prop)) return $this;
+
+        if($value === '%%%NULL%%%') return $this->props->get($prop);
 
         if($prop[0] === '#')
         {
