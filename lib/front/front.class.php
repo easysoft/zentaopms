@@ -404,7 +404,42 @@ class js extends baseJS
      */
     static public function openEntry($app, $url)
     {
-        return self::start() . "$.apps.open('$url', '$app')" . self::end();
+        return static::start() . "$.apps.open('$url', '$app')" . static::end();
+    }
+
+    /**
+     * Generate the start of a js block, injects code for zentao client.
+     *
+     * @param  bool   $full
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function start($full = true)
+    {
+        if($full)
+        {
+            $document = "<html><meta charset='utf-8'/><style>body{background:white}</style><script>";
+            if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') != false)
+            {
+                /* Inject handler for confirm, prompt and alert. */
+                $document .= <<<EOT
+window.confirm = function() {
+    console.warn('\"window.confirm\" is disabled in webview.');
+    return true;
+};
+window.prompt = function() {
+    console.warn('\"window.prompt\" is disabled in webview.');
+};
+window.alert = function(msg) {
+    const win = window.parent ? window.parent : window;
+    win.open(`xxc://webview/alert/\${encodeURIComponent(msg)}`, '_blank');
+};
+EOT;
+            }
+            return $document;
+        }
+        return '<script>';
     }
 }
 

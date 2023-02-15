@@ -780,13 +780,14 @@ class gitlab
         }
         else
         {
-            $response = commonModel::http($api);
+            list($response, $httpCode) = commonModel::http($api, null, array(), array(), 'data', 'Post', 30, true);
             if(!empty(commonModel::$requestErrors))
             {
                 commonModel::$requestErrors = array();
                 return array();
             }
 
+            if($httpCode == 500) return array();
             return json_decode($response);
         }
     }

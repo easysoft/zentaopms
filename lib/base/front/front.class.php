@@ -851,7 +851,7 @@ class baseJS
         $message = str_replace("\\'", "'", $message);
         $message = str_replace("'", "\\'", $message);
 
-        return self::start($full) . "alert('" . $message . "')" . self::end() . self::resetForm();
+        return static::start($full) . "alert('" . $message . "')" . static::end() . static::resetForm();
     }
 
     /**
@@ -864,7 +864,7 @@ class baseJS
      */
     static public function close()
     {
-        return self::start() . "window.close()" . self::end();
+        return static::start() . "window.close()" . static::end();
     }
 
     /**
@@ -903,7 +903,7 @@ class baseJS
         {
             $alertMessage = $message;
         }
-        return self::alert($alertMessage, $full);
+        return static::alert($alertMessage, $full);
     }
 
     /**
@@ -916,7 +916,7 @@ class baseJS
      */
     static public function resetForm()
     {
-        return self::start() . 'if(window.parent) window.parent.$.enableForm();' . self::end();
+        return static::start() . 'if(window.parent) window.parent.$.enableForm();' . static::end();
     }
 
     /**
@@ -954,7 +954,7 @@ class baseJS
             return json_encode($output);
         }
 
-        $js = self::start();
+        $js = static::start();
 
         $confirmAction = '';
         if(strtolower($okURL) == "back")
@@ -1001,7 +1001,7 @@ EOT;
             $js .= $confirmAction;
         }
 
-        $js .= self::end();
+        $js .= static::end();
         return $js;
     }
 
@@ -1038,7 +1038,7 @@ EOT;
             return json_encode($output);
         }
 
-        $js  = self::start();
+        $js  = static::start();
         if(strtolower($url) == "back")
         {
             $js .= "history.back(-1);\n";
@@ -1053,7 +1053,7 @@ EOT;
             if(strpos($url, '#app=') !== false) $url = substr($url, 0, strpos($url, '#app='));
             $js .= "$target.location='$url';\n";
         }
-        return $js . self::end();
+        return $js . static::end();
     }
 
     /**
@@ -1066,7 +1066,7 @@ EOT;
      */
     static public function closeWindow()
     {
-        return self::start(). "window.close();" . self::end();
+        return static::start(). "window.close();" . static::end();
     }
 
     /**
@@ -1082,9 +1082,9 @@ EOT;
      */
     static public function refresh($url, $target = "self", $time = 3000)
     {
-        $js  = self::start();
+        $js  = static::start();
         $js .= "setTimeout(\"$target.location='$url'\", $time);";
-        $js .= self::end();
+        $js .= static::end();
         return $js;
     }
 
@@ -1099,7 +1099,7 @@ EOT;
      */
     static public function reload($window = 'self')
     {
-        $js  = self::start();
+        $js  = static::start();
         // See bug #2379 http://pms.zentao.net/bug-view-2379.html
         if($window !== 'self' && $window !== 'window')
         {
@@ -1109,7 +1109,7 @@ EOT;
         {
             $js .= "$window.location.reload(true);\n";
         }
-        $js .= self::end();
+        $js .= static::end();
         return $js;
     }
 
@@ -1125,7 +1125,7 @@ EOT;
      */
     static public function closeColorbox($window = 'self')
     {
-        return self::closeModal($window);
+        return static::closeModal($window);
     }
 
     /**
@@ -1141,10 +1141,10 @@ EOT;
      */
     static public function closeModal($window = 'self', $location = 'this', $callback = 'null')
     {
-        $js  = self::start();
+        $js  = static::start();
         $js .= "if($window.location.href == self.location.href){ $window.window.close();}";
         $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.closeModal($callback, '$location');}";
-        $js .= self::end();
+        $js .= static::end();
         return $js;
     }
 
@@ -1201,10 +1201,10 @@ EOT;
         $jsLang->expand     = isset($lang->expand)  ? $lang->expand  : '';
         $jsLang->timeout    = isset($lang->timeout) ? $lang->timeout : '';
 
-        $js  = self::start(false);
+        $js  = static::start(false);
         $js .= 'window.config=' . json_encode($jsConfig) . ";\n";
         $js .= 'window.lang=' . json_encode($jsLang) . ";\n";
-        $js .= self::end();
+        $js .= static::end();
         echo $js;
     }
 
@@ -1219,9 +1219,9 @@ EOT;
      */
     static public function execute($code)
     {
-        $js = self::start($full = false);
+        $js = static::start($full = false);
         $js .= $code;
-        $js .= self::end();
+        $js .= static::end();
         echo $js;
     }
 
@@ -1241,7 +1241,7 @@ EOT;
         $prefix = (isset($config->framework->jsWithPrefix) and $config->framework->jsWithPrefix == false) ? '' : 'v.';
 
         static $viewOBJOut;
-        $js  = self::start(false);
+        $js  = static::start(false);
         if(!$viewOBJOut and $prefix)
         {
             $js .= 'if(typeof(v) != "object") v = {};';
@@ -1278,7 +1278,7 @@ EOT;
             $value = addslashes($value);
             $js .= "{$prefix}{$key} = '{$value}';";
         }
-        $js .= self::end($newline = false);
+        $js .= static::end($newline = false);
         echo $js;
     }
 }

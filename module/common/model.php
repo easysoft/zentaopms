@@ -1219,8 +1219,9 @@ class commonModel extends model
                             }
                             else
                             {
-                                $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
-                                if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                                $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                                $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
+                                if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
                             }
 
                             if($activeMainMenu)
@@ -2662,7 +2663,11 @@ EOD;
 
         if($this->app->user->account == $program->openedBy or $this->app->user->account == $program->PM) $program->auth = 'extend';
 
-        if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
+        if($program->auth == 'extend')
+        {
+            $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
+            $this->session->set('user', $this->app->user);
+        }
         if($program->auth == 'reset')
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
@@ -3207,11 +3212,13 @@ EOD;
      * @param  array        $headers   Set request headers.
      * @param  string       $dataType
      * @param  string       $method    POST|PATCH|PUT
+     * @param  int          $timeout
+     * @param  bool         $httpCode
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30)
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false)
     {
         global $lang, $app;
         if(!extension_loaded('curl'))
@@ -3258,6 +3265,7 @@ EOD;
         $response = curl_exec($curl);
         $errors   = curl_error($curl);
 
+        if($httpCode) $httpCode = curl_getinfo($curl,CURLINFO_HTTP_CODE);
         curl_close($curl);
 
         $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
@@ -3276,7 +3284,7 @@ EOD;
 
         if($errors) commonModel::$requestErrors[] = $errors;
 
-        return $response;
+        return $httpCode ? array($response, $httpCode) : $response;
     }
 
     /**

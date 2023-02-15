@@ -187,6 +187,9 @@ class zanodemodel extends model
 
         $node  = $this->getNodeByID($zanodeID);
 
+        if($node->status != 'running') dao::$errors['name'] = $this->lang->zanode->apiError['notRunning'];
+        if(dao::isError()) return false;
+
         $newSnapshot = new stdClass();
         $newSnapshot->host        = $node->id;
         $newSnapshot->name        = $data->name;

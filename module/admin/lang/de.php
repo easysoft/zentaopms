@@ -135,8 +135,8 @@ $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Stark';
 
-$lang->admin->safe->modeRuleList[1] = 'Beinhaltet Groß und Kleinbuchstaben sowie Ziffern. Länge >= 6.';
-$lang->admin->safe->modeRuleList[2] = 'Beinhaltet Groß und Kleinbuchstaben, Ziffern sowie Sonderzeichen.  Länge >= 10.';
+$lang->admin->safe->modeRuleList[1] = 'Beinhaltet Groß und Kleinbuchstaben sowie Ziffern. Länge ≥ 6.';
+$lang->admin->safe->modeRuleList[2] = ' ≥ 10 letters, combination of uppercase, lowercase letters, numbers, and special symbols.';
 
 $lang->admin->safe->reasonList['weak']     = 'Bekannte Schwache Passwörter';
 $lang->admin->safe->reasonList['account']  = 'Entspricht ihrem Konto';

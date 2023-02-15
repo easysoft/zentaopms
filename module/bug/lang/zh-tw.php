@@ -209,6 +209,7 @@ $lang->bug->tplResult = "<p>[結果]</p><br/>";
 $lang->bug->tplExpect = "<p>[期望]</p><br/>";
 
 /* 各個欄位取值列表。*/
+$lang->bug->severityList[0] = '';
 $lang->bug->severityList[1] = '1';
 $lang->bug->severityList[2] = '2';
 $lang->bug->severityList[3] = '3';

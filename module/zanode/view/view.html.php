@@ -21,6 +21,7 @@
 <?php js::set('nodeID', $zanode->id) ?>
 <?php js::set('zanodeLang', $lang->zanode); ?>
 <?php js::set('nodeStatus', $zanode->status); ?>
+<?php js::set('webRoot', getWebRoot());?>
 <?php $browseLink = $this->session->zanodeList ? $this->session->zanodeList : $this->createLink('zanode', 'browse', ""); ?>
 <?php
 $vars    = "id={$zanode->id}&orderBy=%s";

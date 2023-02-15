@@ -105,8 +105,9 @@ $lang->zanode->snapRestoring   = 'Snapshot is restoring.';
 
 $lang->zanode->runTimeout = 'Network connection timeout, please check the host and execution node status.';
 
-$lang->zanode->apiError['-10100'] = 'ZenAgent Node not found.';
-$lang->zanode->apiError['fail']   = 'Connection timeout, Please check the host and execution node status.';
+$lang->zanode->apiError['-10100']     = 'ZenAgent Node not found.';
+$lang->zanode->apiError['fail']       = 'Connection timeout, Please check the host and execution node status.';
+$lang->zanode->apiError['notRunning'] = 'Please check the execution node status.';
 
 $lang->zanode->publicList[0] = 'Private';
 $lang->zanode->publicList[1] = 'Public';

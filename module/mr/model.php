@@ -1879,7 +1879,7 @@ class mrModel extends model
             $relation->BID      = $storyID;
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            $this->action->create('story', $linkID, 'createmr', '', $MRCreateAction);
+            $this->action->create('story', $storyID, 'createmr', '', $MRCreateAction);
         }
 
         foreach($bugs as $bugID)
@@ -1893,7 +1893,7 @@ class mrModel extends model
             $relation->BID      = $bugID;
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            $this->action->create('bug', $linkID, 'createmr', '', $MRCreateAction);
+            $this->action->create('bug', $bugID, 'createmr', '', $MRCreateAction);
         }
 
         foreach($tasks as $taskID)
@@ -1907,7 +1907,7 @@ class mrModel extends model
             $relation->BID      = $taskID;
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            $this->action->create('task', $linkID, 'createmr', '', $MRCreateAction);
+            $this->action->create('task', $taskID, 'createmr', '', $MRCreateAction);
         }
     }
 

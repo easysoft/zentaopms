@@ -159,13 +159,13 @@ class gitModel extends model
             $lastInDB = $this->repo->getLatestCommit($repo->id);
 
             /* Ignore unsynced branch. */
-            if(empty($lastInDB))
+            if($repo->synced != 1)
             {
                 if($printLog) $this->printLog("Please init repo {$repo->name}");
                 continue;
             }
 
-            $version = (int)$lastInDB->commit + 1;
+            $version = isset($lastInDB->commit) ? (int)$lastInDB->commit + 1 : 1;
             $logs    = $this->repo->getUnsyncedCommits($repo);
             $objects = array();
             if(!empty($logs))

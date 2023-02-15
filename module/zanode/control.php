@@ -469,7 +469,9 @@ class zanode extends control
 
         if(dao::isError())
         {
-            return print(js::alert(dao::getError()) . js::reload('parent'));
+            $errors = dao::getError();
+            if(is_array($errors)) $errors = implode($errors, ',');
+            return print(js::alert($errors) . js::reload('parent'));
         }
         else
         {

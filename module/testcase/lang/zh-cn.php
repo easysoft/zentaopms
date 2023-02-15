@@ -264,6 +264,6 @@ $lang->testcase->featureBar['browse']['wait']        = '待评审';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
-$lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 $lang->testcase->featureBar['browse']['suite']       = '套件';
+$lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
