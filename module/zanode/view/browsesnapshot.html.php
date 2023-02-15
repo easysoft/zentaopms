@@ -46,7 +46,7 @@
         $deleteAttr .= ($snapshot->status == 'restoring' or $snapshot->status == 'creating') ? ' class="btn disabled"' :  'class="btn"';
 
         $isDefalut = $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system';
-        if($isDefalut) $editAttr = $restoreAttr = $deleteAttr = 'class="btn disabled"';
+        if($isDefalut) $editAttr = $deleteAttr = 'class="btn disabled"';
         $name  = $snapshot->localName ? $snapshot->localName : $snapshot->name;
         $title = $snapshot->name;
         if($snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system')
