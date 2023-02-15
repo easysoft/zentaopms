@@ -21,3 +21,4 @@
 .icon-refresh {font-size: 15px;}
 .load-indicator:after {top: 33%;}
 .btn.disabled i {color: #fff;}
+#statusContainer{min-height: 120px;}

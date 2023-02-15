@@ -2,11 +2,11 @@ var checkInterval;
 var intervalTimes = 0;
 
 $('#checkServiceStatus').click(function(){
-    $('#serviceContent').addClass('loading');
     checkServiceStatus();
 })
 
 function checkServiceStatus(){
+    $('#serviceContent').addClass('loading');
     $.get(createLink('zanode', 'ajaxGetServiceStatus', 'nodeID=' + nodeID), function(response)
     {
         var resultData = JSON.parse(response);
@@ -99,6 +99,7 @@ function checkServiceStatus(){
         }
         setTimeout(function() {
             $('#serviceContent').removeClass('loading');
+            $(".service-status, .status-notice").show()
         }, 500);
     });
     return

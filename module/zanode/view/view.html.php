@@ -129,20 +129,20 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <button type='button' id='checkServiceStatus' class='btn btn-info'><i class="icon icon-refresh"></i> <span class='checkStatus'><?php echo $lang->zanode->init->checkStatus;?></span></button>
           </div>
           <div class="detail-content statusContainer load-indicator" id='serviceContent'>
-            <div class="service-status">
+            <div class="service-status hide">
               <span class='dot-symbol dot-zenagent text-danger'>●</span>
               <span>&nbsp;&nbsp;ZenAgent &nbsp;
                 <span class="zenagent-status"><?php echo $lang->zanode->initializing; ?></span>
               </span>
             </div>
-            <div class="service-status">
+            <div class="service-status hide">
               <span class='dot-symbol dot-ztf text-danger'>●</span>
               <span>&nbsp;&nbsp;ZTF &nbsp;
                 <span class="ztf-status"><?php echo $lang->zanode->initializing; ?></span>&nbsp;
                 <a class='node-init-install hide' target='hiddenwin' href='javascript:;' data-href='<?php echo $this->createLink('zanode', 'ajaxInstallService', 'nodeID=' . $zanode->id . '&service=ztf');?>'><i class="icon icon-download icon-sm ztf-install-icon"></i><span class="ztf-install"><?php echo $lang->zanode->install ?></span></a>
               </span>
             </div>
-            <div class="status-notice">
+            <div class="status-notice hide">
               <span class='init-success hide'><?php echo sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a id='jumpManual' href='javascript:;'>{$lang->zanode->manual}</a>", html::a(helper::createLink('testcase', 'automation', "", '', true), $lang->zanode->automation, '', "class='iframe' title='{$lang->zanode->automation}' data-width='50%'", '')); ?></span>
               <span class='init-fail hide'><?php echo $lang->zanode->init->initFailNoticeTitle . '<br/>' . $lang->zanode->init->initFailNoticeDesc;?></span>
             </div>

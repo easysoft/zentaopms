@@ -105,10 +105,7 @@
         <div class="detail-content article-content load-indicator" id='serviceContent'>
           <div class="main-row">
             <div id="statusContainer">
-              <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>KVM</span></div>
-              <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>Nginx</span></div>
-              <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>noVNC</span></div>
-              <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>Websockify</span></div>
+              
             </div>
             <div class='result'>
               <?php $imageLink  = html::a($this->createLink('zahost', 'browseImage', "hostID=$zahost->id", '', true), $lang->zahost->image->downloadImage, '', "class='iframe'");?>
