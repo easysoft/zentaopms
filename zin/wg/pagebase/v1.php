@@ -39,7 +39,7 @@ class pagebase extends wg
             (
                 set($this->prop('bodyProps')),
                 parent::build(),
-                $config->debug ? h::js('window.zin = ' . json_encode($this->toJsonData()) . ';console.log("page", window.zin)') : null
+                $config->debug ? h::js('window.zin = ' . json_encode(array('page' => $this->toJsonData(), 'definedPropsMap' => wg::$definedPropsMap)) . ';console.log("zin", window.zin)') : null
             )
         );
     }
