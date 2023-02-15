@@ -356,6 +356,8 @@ class tutorialModel extends model
         $execution->burns         = array(35, 35);
         $execution->hasProduct    = '1';
         $execution->multiple      = '';
+        $execution->colWidth      = '200';
+
         return $execution;
     }
 
