@@ -111,6 +111,7 @@ class executionModel extends model
             unset($this->lang->execution->menu->story);
             unset($this->lang->execution->menu->qa);
             unset($this->lang->execution->menu->build);
+            unset($this->lang->execution->menu->burn);
         }
 
         $stageFilter = array('request', 'design', 'review');
