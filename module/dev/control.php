@@ -89,10 +89,41 @@ class dev extends control
      * @access public
      * @return void
      */
-    public function langItem($type = 'common')
+    public function langItem($type = 'common', $module = '', $method = '', $language = 'zh_cn')
     {
-        $this->view->title = $this->lang->langItem;
-        $this->view->type  = $type;
+        $language   = str_replace('_', '-', $language);
+        $moduleName = $module;
+        if($type == 'common') $moduleName = 'common';
+        if($type == 'second') $moduleName = $module . 'Menu';
+        if($type == 'third')  $moduleName = $module . 'subMenu';
+
+        if($_POST)
+        {
+            $section = '';
+            if($type == 'common') $section = '&section=';
+            if($type == 'first')  $section = '&section=mainNav';
+            $this->loadModel('custom')->deleteItems("lang={$language}&module={$moduleName}&vision={$this->config->vision}{$section}");
+
+            $data = fixer::input('post')->get();
+            foreach($data as $langKey => $customedLang)
+            {
+                if(strpos($langKey, "{$moduleName}_") !== 0) continue;
+                if(empty($customedLang)) continue;
+
+                $this->custom->setItem("{$language}." . str_replace('_', '.', $langKey), $customedLang);
+            }
+            return $this->send(array('result' => 'success', 'locate' => 'reload', 'message' => $this->lang->saveSuccess));
+        }
+
+        $this->dev->loadDefaultLang();
+
+        $this->view->title         = $this->lang->langItem;
+        $this->view->type          = $type;
+        $this->view->featureBar    = $this->lang->dev->featureBar['langItem'];
+        $this->view->originalLangs = $this->dev->getOriginalLang($type, $module, str_replace('_', '-', $language));
+        $this->view->customedLangs = $this->dev->getCustomedLang($type, $module, str_replace('_', '-', $language));
+        $this->view->moduleName    = $moduleName;
+        $this->view->language      = $language;
         $this->display();
     }
 }

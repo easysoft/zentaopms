@@ -2506,29 +2506,9 @@ class baseRouter
 
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
 
-        /* 初始化数组。Init the variables. */
-        $extConfigFiles       = array();
-        $commonExtConfigFiles = array();
-        $siteExtConfigFiles   = array();
-
-        /* 先获得模块的主配置文件。Get the main config file for current module first. */
-        $mainConfigFile = $this->getModulePath($appName, $moduleName) . 'config.php';
-
-        /* 查找扩展配置文件。Get extension config files. */
-        if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($appName, $moduleName, 'config');
-        if($config->framework->extensionLevel >= 1)
-        {
-            if(!empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
-            if(!empty($extConfigPath['xuan']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['xuan'], '.php'));
-            if(!empty($extConfigPath['vision'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['vision'], '.php'));
-            if(!empty($extConfigPath['saas']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['saas'], '.php'));
-            if(!empty($extConfigPath['custom'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['custom'], '.php'));
-        }
-        if($config->framework->extensionLevel == 2 and !empty($extConfigPath['site'])) $siteExtConfigFiles = helper::ls($extConfigPath['site'], '.php');
-        $extConfigFiles = array_merge($commonExtConfigFiles, $siteExtConfigFiles);
-
         /* 将主配置文件和扩展配置文件合并在一起。Put the main config file and extension config files together. */
-        $configFiles = array_merge(array($mainConfigFile), $extConfigFiles);
+        $configFiles = $this->getMainAndExtFiles($moduleName, $appName, 'config');
+        if(empty($configFiles)) return false;
 
         /* 加载每一个配置文件。Load every config file. */
         static $loadedConfigs = array();
@@ -2670,36 +2650,8 @@ class baseRouter
      */
     public function loadLang($moduleName, $appName = '')
     {
-        /* 初始化变量。Init vars. */
-        $modulePath      = $this->getModulePath($appName, $moduleName);
-        $extLangFiles    = array();
-        $langFilesToLoad = array();
-
-        /* 判断主语言文件是否存在。Whether the main lang file exists or not. */
-        $mainLangFile = $this->getMainLangFile($moduleName, $appName);
-        if($mainLangFile) $langFilesToLoad[] = $mainLangFile;
-
-        /* 获取扩展语言文件。If extensionLevel > 0, get extension lang files. */
-        if($this->config->framework->extensionLevel > 0)
-        {
-            $commonExtLangFiles = array();
-            $siteExtLangFiles   = array();
-
-            $extLangPath = $this->getModuleExtPath($appName, $moduleName, 'lang');
-            if($this->config->framework->extensionLevel >= 1)
-            {
-                if(!empty($extLangPath['common'])) $commonExtLangFiles = helper::ls($extLangPath['common'] . $this->clientLang, '.php');
-                if(!empty($extLangPath['xuan']))   $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['xuan'] . $this->clientLang, '.php'));
-                if(!empty($extLangPath['vision'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['vision'] . $this->clientLang, '.php'));
-                if(!empty($extLangPath['custom'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['custom'] . $this->clientLang, '.php'));
-                if(!empty($extLangPath['saas']))   $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['saas'] . $this->clientLang, '.php'));
-            }
-            if($this->config->framework->extensionLevel == 2 and !empty($extLangPath['site'])) $siteExtLangFiles = helper::ls($extLangPath['site'] . $this->clientLang, '.php');
-            $extLangFiles  = array_merge($commonExtLangFiles, $siteExtLangFiles);
-        }
-
         /* 计算最终要加载的语言文件。 Get the lang files to be loaded. */
-        $langFilesToLoad = array_merge($langFilesToLoad, $extLangFiles);
+        $langFilesToLoad = $this->getMainAndExtFiles($moduleName, $appName, 'lang');
         if(empty($langFilesToLoad)) return false;
 
         /* 加载语言文件。Load lang files. */
@@ -2971,6 +2923,59 @@ class baseRouter
     public function isContainer()
     {
         return strtolower(getenv('IS_CONTAINER')) == 'true';
+    }
+
+    /**
+     * Get main file and ext files.
+     *
+     * @param  string $moduleName
+     * @param  string $appName
+     * @param  string $type        lang|config|control|model
+     * @access public
+     * @return array
+     */
+    public function getMainAndExtFiles($moduleName, $appName = '', $type = 'lang')
+    {
+        /* 初始化变量。Init vars. */
+        $modulePath  = $this->getModulePath($appName, $moduleName);
+        $extFiles    = array();
+        $filesToLoad = array();
+
+        /* 判断主文件是否存在。Whether the main file exists or not. */
+        if($type == 'lang')
+        {
+            $mainFile = $this->getMainLangFile($moduleName, $appName);
+        }
+        else
+        {
+            $mainFile = $modulePath . $type . '.php';
+        }
+        if($mainFile) $filesToLoad[] = $mainFile;
+
+        /* 获取扩展文件。If extensionLevel > 0, get extension files. */
+        if($this->config->framework->extensionLevel > 0)
+        {
+            $commonExtFiles = array();
+            $siteExtFiles   = array();
+
+            $extPath = $this->getModuleExtPath($appName, $moduleName, $type);
+            if($this->config->framework->extensionLevel >= 1)
+            {
+                $client = $type == 'lang' and isset($this->client) ? $this->client : '';
+                if(!empty($extPath['common'])) $commonExtFiles = helper::ls($extPath['common'] . $client, '.php');
+                if(!empty($extPath['xuan']))   $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['xuan'] . $client, '.php'));
+                if(!empty($extPath['vision'])) $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['vision'] . $client, '.php'));
+                if(!empty($extPath['custom'])) $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['custom'] . $client, '.php'));
+                if(!empty($extPath['saas']))   $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['saas'] . $client, '.php'));
+            }
+            if($this->config->framework->extensionLevel == 2 and !empty($extPath['site'])) $siteExtFiles = helper::ls($extPath['site'] . $client, '.php');
+            $extFiles  = array_merge($commonExtFiles, $siteExtFiles);
+        }
+
+        /* 计算最终要加载的文件。 Get the files to be loaded. */
+        $filesToLoad = array_merge($filesToLoad, $extFiles);
+        if(empty($filesToLoad)) return false;
+        return $filesToLoad;
     }
 }
 
