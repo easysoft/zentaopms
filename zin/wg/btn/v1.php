@@ -7,10 +7,13 @@ class btn extends wg
 {
     static $defineProps = 'type,icon,text,square,disabled,active,url,target,size,trailingIcon,caret,hint,btnType';
 
-    public function addChild($child)
+    public function onAddChild($child)
     {
-        if(is_string($child) && !$this->props->has('text')) $this->props->set('text', $child);
-        else parent::addChild($child);
+        if(is_string($child) && !$this->props->has('text'))
+        {
+            $this->props->set('text', $child);
+            return false;
+        }
     }
 
     /**

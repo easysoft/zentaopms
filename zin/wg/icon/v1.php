@@ -16,9 +16,12 @@ class icon extends wg
         );
     }
 
-    public function addChild($child)
+    public function onAddChild($child)
     {
-        if(is_string($child) && !$this->props->has('name')) $this->props->set('name', $child);
-        else parent::addChild($child);
+        if(is_string($child) && !$this->props->has('name'))
+        {
+            $this->props->set('name', $child);
+            return false;
+        }
     }
 }

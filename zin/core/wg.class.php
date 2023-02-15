@@ -70,6 +70,8 @@ class wg
         return $this;
     }
 
+    protected function created() {}
+
     protected function buildBefore()
     {
         return $this->block('before');
@@ -85,37 +87,32 @@ class wg
         return $this->children();
     }
 
-    public function add($item)
+    protected function onAddBlock($child, $name)
     {
-        if($item === NULL) return $this;
+        return $child;
+    }
+
+    protected function onAddChild($child)
+    {
+        return $child;
+    }
+
+    public function add($item, $blockName = 'children')
+    {
+        if($item === NULL || is_bool($item)) return $this;
 
         if(is_array($item))
         {
-            foreach($item as $child) $this->add($child);
+            foreach($item as $child) $this->add($child, $blockName);
             return $this;
         }
 
-        if($item instanceof wg)    $this->addChild($item);
-        elseif(is_string($item))   $this->addChild(htmlentities($item));
-        elseif(isDirective($item)) $this->directive($item);
-        else                       $this->addChild(htmlentities(strval($item)));
+        if($item instanceof wg)    $this->addToBlock($blockName, $item);
+        elseif(is_string($item))   $this->addToBlock($blockName, htmlentities($item));
+        elseif(isDirective($item)) $this->directive($item, $blockName);
+        else                       $this->addToBlock($blockName, htmlentities(strval($item)));
 
         return $this;
-    }
-
-    public function addChild($child)
-    {
-        return $this->addToBlock('children', $child);
-    }
-
-    public function addBefore($child)
-    {
-        $this->addToBlock('before', $child);
-    }
-
-    public function addAfter($child)
-    {
-        $this->addToBlock('after', $child);
     }
 
     public function addToBlock($name, $child = NULL)
@@ -139,6 +136,10 @@ class wg
 
         if($child instanceof wg) $child->parent = $this;
 
+        $result = $name === 'children' ? $this->onAddChild($child) : $this->onAddBlock($child, $name);
+        if($result === false) return;
+        if($result !== NULL && $result !== true) $child = $result;
+
         if(isset($this->blocks[$name])) $this->blocks[$name][] = $child;
         else $this->blocks[$name] = array($child);
     }
@@ -157,7 +158,7 @@ class wg
      * Apply directive
      * @param object $directive
      */
-    public function directive($directive)
+    public function directive($directive, $blockName)
     {
         $data = $directive->data;
         $type = $directive->type;
@@ -184,17 +185,20 @@ class wg
         }
         if($type === 'html')
         {
-            $this->addChild($data);
+            $this->addToBlock($blockName, $data);
             return;
         }
         if($type === 'text')
         {
-            $this->addChild(htmlspecialchars($data));
+            $this->addToBlock($blockName, htmlspecialchars($data));
             return;
         }
         if($type === 'block')
         {
-            $this->addToBlock($data);
+            foreach($data as $blockName => $blockChildren)
+            {
+                $this->add($blockChildren, $blockName);
+            }
             return;
         }
     }
@@ -236,7 +240,7 @@ class wg
         }
     }
 
-    protected function created() {}
+    protected function onCreated() {}
 
     protected function toJsonData()
     {
@@ -244,7 +248,7 @@ class wg
         $data['props'] = $this->props->toJsonData();
 
         $data['type'] = get_called_class();
-        if(strpos($data['$type'], 'zin\\') === 0) $data['$type'] = substr($data['$type'], 4);
+        if(strpos($data['type'], 'zin\\') === 0) $data['type'] = substr($data['type'], 4);
 
         $data['blocks'] = array();
         foreach($this->blocks as $key => $value)
@@ -297,7 +301,7 @@ class wg
 
             if(is_array($child))
             {
-                $html[] = static::renderToHtml($child, );
+                $html[] = static::renderToHtml($child);
             }
             elseif($child instanceof wg)
             {
