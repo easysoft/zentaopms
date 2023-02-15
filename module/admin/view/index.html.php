@@ -38,7 +38,7 @@
       </div>
       <div class="plugin-list" <?php if($langNotCN) echo 'style="flex-wrap: nowrap"';?>>
         <?php foreach($plugins as $plugin):?>
-        <?php $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->desc));?>
+        <?php $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract));?>
         <div class="plugin-item shadow-primary-hover" data-link='<?php echo $plugin->viewLink;?>'>
           <a href="<?php echo $plugin->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
           <h4 class="plug-title" title="<?php echo $plugin->name;?>"><?php echo $plugin->name;?></h4>
