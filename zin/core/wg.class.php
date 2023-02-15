@@ -97,6 +97,8 @@ class wg
         return $child;
     }
 
+    protected function onSetProp($name, $value) {}
+
     public function add($item, $blockName = 'children')
     {
         if($item === NULL || is_bool($item)) return $this;
@@ -165,22 +167,17 @@ class wg
 
         if($type === 'prop')
         {
-            $this->props->set($data);
+            $this->prop($data);
             return;
         }
-        if($type === 'class')
+        if($type === 'class' || $type === 'style')
         {
-            $this->props->class->set($data);
-            return;
-        }
-        if($type === 'style')
-        {
-            $this->props->style->set($data);
+            $this->prop($type, $data);
             return;
         }
         if($type === 'cssVar')
         {
-            $this->props->style->var($data);
+            $this->prop('--', $data);
             return;
         }
         if($type === 'html')
@@ -216,13 +213,27 @@ class wg
     {
         if(is_array($prop))
         {
-            $this->props->set($prop);
+            foreach($prop as $name => $value) $this->prop($name, $value);
             return $this;
         }
 
         if(is_string($prop) && $value === '%%%NULL%%%')
         {
             return $this->props->get($prop);
+        }
+
+        if($prop[0] === '#')
+        {
+            $this->add($value, substr($prop, 1));
+            return;
+        }
+
+        $result = $this->onSetProp($prop, $value);
+        if($result === false) return $this;
+        if(is_array($result))
+        {
+            $prop = $result[0];
+            $value = $result[1];
         }
 
         $this->props->set($prop, $value);

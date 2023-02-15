@@ -59,16 +59,16 @@ class props extends \zin\utils\dataset
      */
     protected function setVal($prop, $value)
     {
-        if($prop === 'class' || $prop === '.') return $this->class->set($value);
-        if($prop === 'style' || $prop === '~') return $this->style->set($value);
-        if(strpos($prop, '~') === 0)           return $this->style->set(substr($prop, 1), $value);
-        if($prop === '--')                     return $this->style->var($value);
-        if(strpos($prop, '--') === 0)          return $this->style->var(substr($prop, 2), $value);
-        if($prop === '!')                      return $this->hx($value);
-        if(strpos($prop, '!') === 0)           return $this->hx(substr($prop, 1), $value);
-        if(strpos($prop, ':') === 0)           return $this->set('data-' . substr($prop, 1), $value);
-        if($prop === '@')                      return $this->onEvent($value);
-        if(strpos($prop, '@') === 0)           return $this->onEvent(substr($prop, 1), $value);
+        if($prop === 'class' || $prop === '.')   return $this->class->set($value);
+        if($prop === 'style' || $prop === '~')   return $this->style->set($value);
+        if(strpos($prop, '~') === 0)             return $this->style->set(substr($prop, 1), $value);
+        if($prop === '--')                       return $this->style->var($value);
+        if(strpos($prop, '--') === 0)            return $this->style->var(substr($prop, 2), $value);
+        if($prop === '!')                        return $this->hx($value);
+        if(strpos($prop, '!') === 0)             return $this->hx(substr($prop, 1), $value);
+        if(strpos($prop, ':') === 0)             return $this->set('data-' . substr($prop, 1), $value);
+        if($prop === '@')                        return $this->onEvent($value);
+        if(strpos($prop, '@') === 0)             return $this->onEvent(substr($prop, 1), $value);
 
         if($prop === 'id' && $value === '$GID') $value = 'zin-' . uniqid();
 
