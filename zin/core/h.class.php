@@ -144,14 +144,25 @@ class h extends wg
 
     public static function css()
     {
-        $children = h::convertStrToRawHtml(func_get_args());
-        return static::create('style', $children);
+        return static::create('style', html(implode('\n', \zin\utils\flat(func_get_args()))));
     }
 
     public static function js()
     {
-        $children = h::convertStrToRawHtml(func_get_args());
-        return static::create('script', $children);
+        return static::create('script', html('(function(){'. implode('\n', \zin\utils\flat(func_get_args())) . '}())'));
+    }
+
+    public static function jsVar($name, $value)
+    {
+        $vars = is_string($name) ? array($name => $value) : $name;
+        $jsCode = '';
+        foreach($vars as $var => $val)
+        {
+            if(empty($var)) continue;
+            if(strpos($var, 'window.') === 0) $jsCode .= "$var=" . json_encode($val) . ';';
+            else $jsCode .= "var $var=" . json_encode($val) . ';';
+        }
+        return static::js($jsCode);
     }
 
     protected static function convertStrToRawHtml($children)
