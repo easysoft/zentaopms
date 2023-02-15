@@ -1682,10 +1682,7 @@ class executionModel extends model
             }
         }
 
-        if($this->app->moduleName != 'execution' and $this->app->methodName != 'all')
-        {
-            foreach($childList as $id) unset($executions[$id]);
-        }
+        foreach($childList as $id) unset($executions[$id]);
 
         return array_values($executions);
     }
@@ -5218,21 +5215,20 @@ class executionModel extends model
                     continue;
                 }
 
-                if($set->id == 'actions') $set->width = $fieldList[$set->id]['width'];
-
                 $set->name  = $set->id;
                 $set->title = $fieldList[$set->id]['title'];
 
                 if(isset($fieldList[$set->id]['checkbox']))     $set->checkbox     = $fieldList[$set->id]['checkbox'];
                 if(isset($fieldList[$set->id]['nestedToggle'])) $set->nestedToggle = $fieldList[$set->id]['nestedToggle'];
                 if(isset($fieldList[$set->id]['fixed']))        $set->fixed        = $fieldList[$set->id]['fixed'];
-                if(isset($fieldList[$set->id]['width']))        $set->width        = $fieldList[$set->id]['width'];
                 if(isset($fieldList[$set->id]['type']))         $set->type         = $fieldList[$set->id]['type'];
                 if(isset($fieldList[$set->id]['sortType']))     $set->sortType     = $fieldList[$set->id]['sortType'];
                 if(isset($fieldList[$set->id]['flex']))         $set->flex         = $fieldList[$set->id]['flex'];
                 if(isset($fieldList[$set->id]['minWidth']))     $set->minWidth     = $fieldList[$set->id]['minWidth'];
                 if(isset($fieldList[$set->id]['maxWidth']))     $set->maxWidth     = $fieldList[$set->id]['maxWidth'];
                 if(isset($fieldList[$set->id]['pri']))          $set->pri          = $fieldList[$set->id]['pri'];
+
+                $set->width = str_replace('px', '', $set->width);
 
                 unset($set->id);
 
@@ -5255,15 +5251,14 @@ class executionModel extends model
      */
     public function generateRow($executions, $users, $productID)
     {
-        $canBatchEdit = common::hasPriv('execution', 'batchEdit');
-
+        $rows = array();
         foreach($executions as $id => $execution)
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
             $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . html::a($link, $execution->name);
             $execution->project  = $execution->projectName;
-            $execution->parent   = $execution->parent ? $execution->parent : '';
+            $execution->parent   = ($execution->parent and $execution->grade > 1) ? $execution->parent : '';
             $execution->asParent = !empty($execution->children);
             $execution->status   = zget($this->lang->execution->statusList, $execution->status);
             $execution->PM       = zget($users, $execution->PM);
@@ -5271,9 +5266,19 @@ class executionModel extends model
             $execution->estimate = $execution->hours->totalEstimate;
             $execution->consumed = $execution->hours->totalConsumed;
             $execution->left     = $execution->hours->totalLeft;
+
+            $children = isset($execution->children) ? $execution->children : array();
+            unset($execution->children);
+
+            $rows[] = $execution;
+
+            if(!empty($children))
+            {
+                $rows = array_merge($rows, $this->generateRow($children, $users, $productID));
+            }
         }
 
-        return $executions;
+        return $rows;
     }
 
     /*

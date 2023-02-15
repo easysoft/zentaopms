@@ -7,23 +7,17 @@ css::import($jsRoot . 'dtable/min.css');
 $cols       = $this->execution->generateCol();
 $executions = $this->execution->generateRow($executionStats, $users, $productID);
 
+$sortLink = $this->createLink('execution', 'all', "status=$status&orderBy={orderBy}&productID=$productID&param=$param&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID");
+
+js::set('sortLink', $sortLink);
 js::set('cols', json_encode($cols));
 js::set('data', json_encode($executions));
 
 js::set('orderBy', $orderBy);
 js::set('status', $status);
-js::set('unfoldExecutions', array());
 js::set('from', $from);
 
-/* Replace Iteration to Execution. */
-js::set('checkedSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->checkedExecSummary));
-js::set('pageSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->pageExecSummary));
-js::set('executionSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->executionSummary));
-js::set('checkedExecutions', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->checkedExecutions));
-/* Set unfold parent executionID. */
-js::set('unfoldAll', $lang->execution->treeLevel['all']);
-js::set('foldAll', $lang->execution->treeLevel['root']);
-js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
+js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
 ?>
 
 <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit');?>
@@ -53,7 +47,6 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
-    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->execution->editAction), $showBatchEdit);?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -76,25 +69,46 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>'>
+  <form class='main-table' id='' method='post' action='<?php echo inLink('batchEdit');?>'>
     <div class="table-header fixed-right">
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
     <div id="myTable"></div>
     <div class='table-footer'>
-    <?php $pager->show('right', 'pagerjs');?>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <div class="table-actions btn-toolbar">
+        <?php
+        if($canBatchEdit)
+        {
+            $actionLink = $this->createLink('project', 'batchEdit');
+            $misc       = "data-form-action='$actionLink'";
+            echo html::commonButton($lang->edit, $misc); 
+        }
+        ?>
+      </div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <script>
   cols = JSON.parse(cols);
   data = JSON.parse(data);
+  console.log(cols);
   const options = {
       height: 'auto',
       striped: true,
-      plugins: ['nested'],
+      plugins: ['nested', 'checkable'],
+      checkOnClickRow: true,
+      sortLink: createSortLink,
       cols: cols,
       data: data,
   };
+
+  function createSortLink(col)
+  {
+      var sort = col.name + '_asc';
+      if(sort == orderBy) sort = col.name + '_desc';
+      return sortLink.replace('{orderBy}', sort);
+  }
 
   $('#myTable').dtable(options);
   </script>

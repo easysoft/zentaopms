@@ -189,29 +189,28 @@ $config->execution->datatable->fieldList['id']['fixed']    = 'left';
 $config->execution->datatable->fieldList['id']['width']    = '70';
 $config->execution->datatable->fieldList['id']['required'] = 'yes';
 $config->execution->datatable->fieldList['id']['sortType'] = true;
+$config->execution->datatable->fieldList['id']['checkbox'] = true;
 
 $config->execution->datatable->fieldList['name']['name']         = 'name';
 $config->execution->datatable->fieldList['name']['title']        = $lang->execution->name;
-$config->execution->datatable->fieldList['name']['width']        = 356;
+$config->execution->datatable->fieldList['name']['width']        = '356';
 $config->execution->datatable->fieldList['name']['type']         = 'html';
-$config->execution->datatable->fieldList['name']['flex']         = 1;
 $config->execution->datatable->fieldList['name']['fixed']        = 'left';
 $config->execution->datatable->fieldList['name']['nestedToggle'] = true;
-$config->execution->datatable->fieldList['name']['checkbox']     = true;
 $config->execution->datatable->fieldList['name']['iconRender']   = true;
-$config->execution->datatable->fieldList['name']['sortType']     = true;
 $config->execution->datatable->fieldList['name']['required']     = 'yes';
 
 if(!isset($config->setCode) or $config->setCode == 1)
 {
     $config->execution->datatable->fieldList['code']['title']    = 'execCode';
-    $config->execution->datatable->fieldList['code']['width']    = '120';
+    $config->execution->datatable->fieldList['code']['width']    = '140';
     $config->execution->datatable->fieldList['code']['fixed']    = 'left';
     $config->execution->datatable->fieldList['code']['required'] = 'no';
 }
 
 $config->execution->datatable->fieldList['project']['title']    = 'project';
 $config->execution->datatable->fieldList['project']['width']    = '200';
+$config->execution->datatable->fieldList['project']['flex']     = 1;
 $config->execution->datatable->fieldList['project']['required'] = 'no';
 
 $config->execution->datatable->fieldList['status']['title']    = 'execStatus';
