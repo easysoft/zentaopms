@@ -2752,6 +2752,16 @@ class projectModel extends model
         $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
         $project  = $this->getByID($objectID);
 
+        if(!$project)
+        {
+            $execution = $this->loadModel('execution')->getByID($objectID);
+            if($execution and $execution->project and !$execution->multiple)
+            {
+                $project = $this->getByID($execution->project);
+                $objectID = $execution->project;
+            }
+        }
+
         if($project and $project->model == 'waterfall') $model = $project->model;
         if($project and $project->model == 'kanban')
         {
