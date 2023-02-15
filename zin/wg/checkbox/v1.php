@@ -1,38 +1,18 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
-
-use \zin\core\h5;
-
-use function zin\set;
-
-class checkbox extends \zin\core\wg
+class checkbox extends wg
 {
-    static $tag = 'label';
+    protected static $defineProps = 'text,checked';
 
-    static $defaultProps = array('class' => 'checkbox');
-
-    static $customProps = 'text,checked';
-
-    static function create($props)
+    protected function build()
     {
-        $checkbox = new checkbox();
-        foreach($props as $key => $value) $checkbox->prop($key, $value);
-        return $checkbox;
-    }
-
-    protected function build($isPrint = false, $parent = null)
-    {
-        $builder = parent::build($isPrint, $parent);
-
-        $input = h5::input(set('type', 'checkbox'));
-        if ($this->prop('checked')) $input->append(set('checked', 'true'));
-
-        $builder->append($input);
-        $builder->append($this->prop('text'));
-
-        return $builder;
+        $input = h::checkbox();
+        if ($this->prop('checked')) $input->prop('checked', 'true');
+        return h::label(
+            setClass('checkbox'),
+            $input,
+            $this->prop('text'),
+        );
     }
 }
