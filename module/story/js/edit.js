@@ -93,6 +93,6 @@ $(function()
 
     $('#planIdBox').click(function()
     {
-        $('#planIdBox .chosen-container').find('div').css('width', '280px')
+        $('#planIdBox .chosen-container').find('div').css('width', $('#planIdBox').width())
     });
 })
