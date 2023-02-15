@@ -43,7 +43,7 @@
 </div>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <?php if(!empty($planID)):?>
+    <?php if(!empty($planID) and $project->model == 'waterfallplus'):?>
     <div class="pull-left">
       <div class='btn-group'>
         <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo zget($lang->programplan->typeList, $executionType);?>'><?php echo zget($lang->programplan->typeList, $executionType);?></span> <span class='caret'></span></a>

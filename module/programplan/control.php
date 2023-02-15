@@ -168,13 +168,13 @@ class programplan extends control
 
         $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID) : array();
         $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
-        if(!empty($planID) and !empty($plans))
+        if(!empty($planID) and !empty($plans) and $project->model == 'waterfallplus')
         {
             $executionType = 'stage';
             unset($this->lang->programplan->typeList['agileplus']);
         }
 
-        if(!empty($planID) and !empty($executions) and empty($plans))
+        if(!empty($planID) and !empty($executions) and empty($plans) and $project->model == 'waterfallplus')
         {
             $executionType = 'agileplus';
             unset($this->lang->programplan->typeList['stage']);
@@ -208,7 +208,7 @@ class programplan extends control
         $this->view->productID          = $productID ? $productID : key($productList);
         $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
         $this->view->programPlan        = $programPlan;
-        $this->view->plans              = empty($executions) ? $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent', 'order_asc') : $executions;
+        $this->view->plans              = empty($executions) ? $plans : $executions;
         $this->view->planID             = $planID;
         $this->view->type               = 'lists';
         $this->view->executionType      = $executionType;

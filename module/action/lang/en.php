@@ -63,6 +63,11 @@ $lang->action->hasDeletedParent   = 'Restoring this phase requires restoring the
 $lang->action->hasChangedAttr     = "After recovery, the phase type will be adjusted to '%s' according to the parent phase type.";
 $lang->action->whetherToRestore   = 'Confirm to restore?';
 
+$lang->action->hasOtherType = array();
+$lang->action->hasOtherType['stage']  = "Only subtypes of {$lang->executionCommon} / Kanban types can be created at this parent stage, so the current stage cannot be restored.";
+$lang->action->hasOtherType['sprint'] = "Only subtypes of Stage types can be created at this parent stage, so the current {$lang->executionCommon} cannot be restored.";
+$lang->action->hasOtherType['kanban'] = "Only subtypes of Stage types can be created at this parent stage, so the current Kanban cannot be restored.";
+
 $lang->action->repeatChange     = '%s with the same name and code already exists in the system, After recovery, the name are \"%s\",the code are \"%s\".';
 $lang->action->nameRepeatChange = '%s with the same name already exists in the system, After recovery, the name are \"%s\".';
 $lang->action->codeRepeatChange = '%s with the same code already exists in the system, After recovery, the code are \"%s\".';
