@@ -1834,7 +1834,7 @@ class execution extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));
             }
 
-            if(!empty($projectID) and strpos(',kanban,agileplus,', ",$project->model,") !== false)
+            if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,', ",$project->model,") !== false)
             {
                 $execution = $this->execution->getById($executionID);
                 if($execution->type == 'kanban') $this->loadModel('kanban')->createRDKanban($execution);

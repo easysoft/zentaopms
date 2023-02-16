@@ -921,6 +921,11 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $stageID = $this->dao->lastInsertID();
+                    if($data->type == 'kanban')
+                    {
+                        $execution = $this->execution->getByID($stageID);
+                        $this->loadModel('kanban')->createRDKanban($execution);
+                    }
 
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
