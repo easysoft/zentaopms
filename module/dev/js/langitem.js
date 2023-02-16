@@ -44,7 +44,7 @@ $(function()
     
     function initMenu()
     {
-      if (arrTypesWithMenu.includes(type))
+      if (navTypes.includes(type))
       {
           var myTreeData = [{
 	      title: '水果',

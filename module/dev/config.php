@@ -241,7 +241,7 @@ $config->dev->postParams['testcase']['create']['expect']       = 'string';
 $config->dev->postParams['testcase']['create']['mailto']       = 'string';
 $config->dev->postParams['testcase']['create']['keywords']     = 'string';
 
-$config->dev->arrTypesWithMenu = array('second', 'third', 'feature');
+$config->dev->navTypes = array('second', 'third', 'feature');
 
 $config->disableFeature = array();
 if(!helper::hasFeature('waterfall')) $config->disableFeature = array('design', 'stage', 'programplan', 'weekly', 'researchplan', 'researchreport', 'gapanalysis');

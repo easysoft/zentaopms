@@ -11,7 +11,7 @@
  */
 ?>
 <?php js::set('type', $type); ?>
-<?php js::set('arrTypesWithMenu', $config->dev->arrTypesWithMenu); ?>
+<?php js::set('navTypes', $config->dev->navTypes); ?>
 <?php include 'header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">
@@ -23,7 +23,7 @@
   </div>
 </div>
 <div class="flex gap-15">
-<?php if(in_array($type, $config->dev->arrTypesWithMenu , false)):?>
+<?php if(in_array($type, $config->dev->navTypes , false)):?>
   <div class="menu-tree">
     <div class="input-control search-box has-icon-left has-icon-right search-example">
       <input type="search" class="form-control search-input" />
