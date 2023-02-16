@@ -28,7 +28,7 @@ if($config->vision == 'lite')
     $config->admin->menuModuleGroup['model']['custom|set']        = array();
     $config->admin->menuModuleGroup['model']['custom|required']   = array('build');
     $config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'block', 'task', 'story', 'user');
-    $config->admin->menuModuleGroup['feature']['custom|required'] = array('project', 'task', 'story', 'doc', 'user');
+    $config->admin->menuModuleGroup['feature']['custom|required'] = array('task', 'story', 'doc', 'user');
 }
 
 $config->admin->plugins[203] = new stdClass();

@@ -203,12 +203,10 @@ if($config->vision == 'lite')
 
     $lang->admin->menuList->feature['subMenu']['project'] = array('link' => "{$lang->projectCommon}|custom|execution|", 'exclude' => 'set,required', 'alias' => 'execution');
     $lang->admin->menuList->feature['tabMenu']['my']['task']           = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList'), 'exclude' => 'custom-required,custom-set');
-    $lang->admin->menuList->feature['tabMenu']['project']['project']   = array('link' => "{$lang->projectCommon}|custom|required|module=project", 'exclude' => 'custom-required');
     $lang->admin->menuList->feature['tabMenu']['project']['execution'] = array('link' => "{$lang->execution->common}|custom|execution|");
     $lang->admin->menuList->feature['tabMenu']['project']['story']     = array('link' => "{$lang->SRCommon}|custom|required|module=story", 'links' => array("custom|set|module=story&field=priList"), 'exclude' => 'custom-required,custom-set');
     $lang->admin->menuList->feature['tabMenu']['menuOrder']['my']['15']      = 'task';
-    $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['5']  = 'project';
-    $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['10'] = 'execution';
-    $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['15'] = 'story';
+    $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['5'] = 'execution';
+    $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['10'] = 'story';
     $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
 }
