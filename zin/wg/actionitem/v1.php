@@ -14,7 +14,7 @@ class actionItem extends wg
 
     protected function buildHeadingItem()
     {
-        list($icon, $text, $trailingIcon) = $this->prop('icon', 'text', 'trailingIcon');
+        list($icon, $text, $trailingIcon) = $this->prop(array('icon', 'text', 'trailingIcon'));
 
         return h::span
         (
@@ -37,7 +37,7 @@ class actionItem extends wg
         $methodName = "build{$type}Item";
         if(method_exists($this, $methodName)) return $this->$methodName();
 
-        list($tagName, $icon, $text, $trailingIcon) = $this->prop('tagName', 'icon', 'text', 'trailingIcon');
+        list($tagName, $icon, $text, $trailingIcon) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon'));
 
         return h::create
         (
@@ -52,7 +52,7 @@ class actionItem extends wg
 
     protected function build()
     {
-        list($name, $type, $outerTag, $tagName, $url, $target, $active, $disabled, $outerProps) = $this->prop('name', 'type', 'outerTag', 'tagName', 'url', 'target', 'active', 'disabled', 'outerProps');
+        list($name, $type, $outerTag, $tagName, $url, $target, $active, $disabled, $outerProps) = $this->prop(array('name', 'type', 'outerTag', 'tagName', 'url', 'target', 'active', 'disabled', 'outerProps'));
 
         return h::create
         (

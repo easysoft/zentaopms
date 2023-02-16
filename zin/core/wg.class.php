@@ -202,27 +202,19 @@ class wg
         }
     }
 
-    public function prop($name)
+    public function prop($name, $defaultValue = NULL)
     {
-        $args = func_get_args();
-        if(count($args) > 1)
-        {
-            $name = $args;
-        }
-
-        if(is_string($name)) return $this->props->get($name);
-
         if(is_array($name))
         {
             $values = array();
-            foreach($name as $propName)
+            foreach($name as $index => $propName)
             {
-                $values[] = $this->props->get($propName);
+                $values[] = $this->props->get($propName, is_array($defaultValue) ? (isset($defaultValue[$propName]) ? $defaultValue[$propName] : $defaultValue[$index]) : $defaultValue);
             }
             return $values;
         }
 
-        return NULL;
+        return $this->props->get($name, $defaultValue);
     }
 
     /**
