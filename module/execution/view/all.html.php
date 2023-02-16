@@ -102,7 +102,6 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
   <script>
   cols = JSON.parse(cols);
   data = JSON.parse(data);
-  console.log(cols);
   const options = {
       height: 'auto',
       striped: true,
@@ -124,7 +123,6 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
   function toggleActions(changes)
   {
       checkItems = this.getChecks();
-      $.cookie('checkedItem', checkItems.join(','), {expires: config.cookieLife, path: config.webRoot});
 
       if(checkItems.length > 0)
       {
@@ -134,6 +132,13 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
       {
           $('.table-footer .table-actions').hide();
       }
+  }
+
+  $(".export").modalTrigger({width:650, type:'iframe', shown: setCookie});
+
+  function setCookie()
+  {
+      $.cookie('checkedItem', checkItems.join(','), {expires: config.cookieLife, path: config.webRoot});
   }
 
   $('#myTable').dtable(options);
