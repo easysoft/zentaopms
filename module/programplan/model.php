@@ -708,22 +708,12 @@ class programplanModel extends model
             $parentACL       = $parentStage->acl;
         }
 
-        if(!$this->checkNameUnique($names))
-        {
-            $this->app->loadLang('execution');
-            dao::$errors['message'][] = empty($type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);;
-            return false;
-        }
+        $names     = array_filter($names);
+        $sameNames = array_diff_assoc($names, array_unique($names));
 
         $project   = $this->loadModel('project')->getByID($projectID);
         $setCode   = (!isset($this->config->setCode) or $this->config->setCode == 1) ? true : false;
-        $checkCode = $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '');
-        if($setCode and $checkCode !== true)
-        {
-            if($checkCode) dao::$errors['message'][] = sprintf($this->lang->error->repeat, $this->lang->execution->code, $checkCode);
-            else dao::$errors['message'][] = $this->lang->programplan->error->sameCode;
-            return false;
-        }
+        $sameCodes = $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '');
 
         $datas = array();
         foreach($names as $key => $name)
@@ -756,68 +746,61 @@ class programplanModel extends model
         $totalPercent = 0;
         $totalDevType = 0;
         $milestone    = 0;
-        foreach($datas as $plan)
+        foreach($datas as $index => $plan)
         {
+            if(!empty($sameNames) and in_array($plan->name, $sameNames)) dao::$errors[$index]['name'] = empty($type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
+            if($setCode and $sameCodes !== true and !empty($sameCodes) and in_array($plan->code, $sameCodes)) dao::$errors[$index]['code'] = sprintf($this->lang->error->repeat, $this->lang->execution->code, $plan->code);
+
             if($plan->percent and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $plan->percent))
             {
-                dao::$errors['message'][] = $this->lang->programplan->error->percentNumber;
-                return false;
+                dao::$errors[$index]['percent'] = $this->lang->programplan->error->percentNumber;
             }
             if(helper::isZeroDate($plan->begin))
             {
-                dao::$errors['message'][] = $this->lang->programplan->emptyBegin;
-                return false;
+                dao::$errors[$index]['begin'] = $this->lang->programplan->emptyBegin;
             }
-            if(!validater::checkDate($plan->begin))
+            if(!validater::checkDate($plan->begin) and empty(dao::$errors[$index]['begin']))
             {
-                dao::$errors['message'][] = $this->lang->programplan->checkBegin;
-                return false;
+                dao::$errors[$index]['begin'] = $this->lang->programplan->checkBegin;
             }
             if(helper::isZeroDate($plan->end))
             {
-                dao::$errors['message'][] = $this->lang->programplan->emptyEnd;
-                return false;
+                dao::$errors[$index]['end'] = $this->lang->programplan->emptyEnd;
             }
-            if(!validater::checkDate($plan->end))
+            if(!validater::checkDate($plan->end) and empty(dao::$errors[$index]['end']))
             {
-                dao::$errors['message'][] = $this->lang->programplan->checkEnd;
-                return false;
+                dao::$errors[$index]['end'] = $this->lang->programplan->checkEnd;
             }
-            if(!helper::isZeroDate($plan->end) and $plan->end < $plan->begin)
+            if(!helper::isZeroDate($plan->end) and $plan->end < $plan->begin and empty(dao::$errors[$index]['begin']))
             {
-                dao::$errors['message'][] = $this->lang->programplan->error->planFinishSmall;
-                return false;
+                dao::$errors[$index]['end'] = $this->lang->programplan->error->planFinishSmall;
             }
             if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
             {
-                dao::$errors['message'][] = $this->lang->programplan->error->parentDuration;
-                return false;
+                if($plan->begin < $parentStage->begin and empty(dao::$errors[$index]['begin'])) dao::$errors[$index]['begin'] = $this->lang->programplan->error->parentDuration;
+                if($plan->end < $parentStage->end and empty(dao::$errors[$index]['end']))      dao::$errors[$index]['end']   = $this->lang->programplan->error->parentDuration;
             }
-            if($plan->begin < $project->begin)
+            if($plan->begin < $project->begin and empty(dao::$errors[$index]['begin']))
             {
-                dao::$errors['message'][] = sprintf($this->lang->programplan->errorBegin, $project->begin);
-                return false;
+                dao::$errors[$index]['begin'] = sprintf($this->lang->programplan->errorBegin, $project->begin);
             }
-            if(!helper::isZeroDate($plan->end) and $plan->end > $project->end)
+            if(!helper::isZeroDate($plan->end) and $plan->end > $project->end and empty(dao::$errors[$index]['end']))
             {
-                dao::$errors['message'][] = sprintf($this->lang->programplan->errorEnd, $project->end);
-                return false;
+                dao::$errors[$index]['end'] = sprintf($this->lang->programplan->errorEnd, $project->end);
             }
 
             if(helper::isZeroDate($plan->begin)) $plan->begin = '';
             if(helper::isZeroDate($plan->end))   $plan->end   = '';
             if($setCode and empty($plan->code))
             {
-                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
-                return false;
+                dao::$errors[$index]['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
             }
             foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
             {
                 $field = trim($field);
                 if($field and empty($plan->$field))
                 {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->$field);
-                    return false;
+                    dao::$errors[$index][$field] = sprintf($this->lang->error->notempty, $this->lang->programplan->$field);
                 }
             }
 
@@ -827,7 +810,8 @@ class programplanModel extends model
             if($plan->milestone) $milestone = 1;
         }
 
-        if($totalPercent > 100) return dao::$errors['message'][] = $this->lang->programplan->error->percentOver;
+        if($totalPercent > 100) dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
+        if(dao::isError()) return false;
 
         $this->loadModel('action');
         $this->loadModel('user');
@@ -1296,6 +1280,20 @@ class programplanModel extends model
     }
 
     /**
+     * Get parent stage's children types.
+     *
+     * @param  int    $parentID
+     * @access public
+     * @return array
+     */
+    public function getParentChildrenTypes($parentID)
+    {
+        if(empty($parentID)) return true;
+
+        return $this->dao->select('DISTINCT type')->from(TABLE_EXECUTION)->where('parent')->eq($parentID)->andWhere('deleted')->eq('0')->fetchPairs('type');
+    }
+
+    /**
      * Is clickable.
      *
      * @param  int    $plan
@@ -1350,7 +1348,7 @@ class programplanModel extends model
             ->andWhere('deleted')->eq('0')
             ->andWhere('code')->in($codes)
             ->beginIF($planIDList)->andWhere('id')->notin($planIDList)->fi()
-            ->fetch('code');
+            ->fetchPairs('code');
         return $code ? $code : true;
     }
 
@@ -1438,6 +1436,7 @@ class programplanModel extends model
             ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.project')->eq($executionID)
+            ->andWhere('t2.type')->eq('stage')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.path')->notlike("%,$planID,%")
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
@@ -1449,6 +1448,10 @@ class programplanModel extends model
         {
             $isCreate = $this->isCreateTask($key);
             if($isCreate === false and $key != $plan->parent) unset($parentStage[$key]);
+
+            $parentTypes = $this->getParentChildrenTypes($key);
+            if($plan->type == 'stage' and (isset($parentTypes['sprint']) or isset($parentTypes['kanban']))) unset($parentStage[$key]);
+            if(($plan->type == 'sprint' or $plan->type == 'kanban') and isset($parentTypes['stage'])) unset($parentStage[$key]);
         }
         $parentStage[0] = $this->lang->programplan->emptyParent;
         ksort($parentStage);

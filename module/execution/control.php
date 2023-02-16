@@ -2105,6 +2105,11 @@ class execution extends control
 
             $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
         }
+        if($this->app->tab == 'project' and $project->model == 'waterfallplus')
+        {
+            $productID       = $this->product->getProductIDByProject($executionID);
+            $parentStageList = $this->loadModel('programplan')->getParentStageList($execution->project, $executionID, $productID);
+        }
 
         $this->view->title                = $title;
         $this->view->position             = $position;
@@ -2129,6 +2134,7 @@ class execution extends control
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $execution->project, 'noclosed', $linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         $this->view->allProjects          = $this->project->getPairsByModel($project->model, 0, 'noclosed', $project->id);
+        $this->view->parentStageList      = isset($parentStageList) ? $parentStageList : array();
 
         $this->display();
     }
@@ -2148,7 +2154,7 @@ class execution extends control
         if($this->post->names)
         {
             $allChanges = $this->execution->batchUpdate();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($allChanges))
             {
@@ -2171,7 +2177,8 @@ class execution extends control
                     $this->loadModel('common')->syncPPEStatus($syncExecution);
                 }
             }
-            return print(js::locate($this->session->executionList, 'parent'));
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->executionList));
         }
 
         if($this->app->tab == 'project')
@@ -2557,6 +2564,7 @@ class execution extends control
         $this->view->chartData    = $chartData;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->type         = $type;
+        $this->view->project      = $this->loadModel('project')->getByID($execution->project);
 
         $this->display();
     }

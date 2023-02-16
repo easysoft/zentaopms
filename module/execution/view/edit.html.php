@@ -39,6 +39,11 @@
           <th><?php echo $lang->execution->method;?></th>
           <td><?php echo zget($lang->execution->typeList, $execution->type);?></td><td></td>
         </tr>
+        <?php elseif($app->tab == 'project' and $project->model == 'waterfallplus'):?>
+        <tr>
+          <th><?php echo $lang->programplan->parent;?></th>
+          <td><?php echo html::select('parent', $parentStageList, $execution->parent, "class='form-control chosen '");?></td><td></td>
+        </tr>
         <?php endif;?>
         <?php endif;?>
         <tr>
@@ -226,6 +231,8 @@
         </tr>
         <?php endif; ?>
         <?php elseif(($execution->type == 'stage' and !in_array($execution->attribute, array('request', 'design', 'review'))) or $execution->type != 'stage'): ?>
+        <?php echo html::hidden("products[]", key($linkedProducts));?>
+        <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>
         <tr>
           <th><?php echo $lang->execution->manageProducts;?></th>
           <td colspan='2'>
@@ -245,6 +252,7 @@
         </tr>
         <?php else: ?>
         <?php echo html::hidden("products[]", key($linkedProducts));?>
+        <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>
         <?php endif; ?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>

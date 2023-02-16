@@ -329,7 +329,7 @@
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->execution->manageProducts;?></strong>
-                <?php if(common::hasPriv('execution', 'manageproducts') and $execution->type != 'stage') common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
+                <?php if(common::hasPriv('execution', 'manageproducts') and $execution->type != 'stage' and $project->model != 'waterfallplus') common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">

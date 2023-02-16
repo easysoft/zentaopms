@@ -43,7 +43,7 @@
   $desc     = $from == 'execution' ? 'execDesc' : 'desc';
   $status   = $from == 'execution' ? 'execStatus' : 'status';
   ?>
-  <form class='main-form' method='post' target='hiddenwin' id='executionForm' action='<?php echo inLink('batchEdit');?>'>
+  <form class='main-form form-ajax' method='post' id='executionForm' action='<?php echo inLink('batchEdit');?>'>
     <div class="table-responsive">
       <table class='table table-form'>
         <thead>
@@ -148,111 +148,5 @@
 <?php
 js::set('weekend', $config->execution->weekend);
 js::set('confirmSync', $lang->execution->confirmSync);
-js::set('emptyBegin', $lang->programplan->emptyBegin);
-js::set('emptyEnd', $lang->programplan->emptyEnd);
-js::set('planFinishSmall', $lang->programplan->error->planFinishSmall);
-js::set('errorBegin', $lang->execution->errorLetterProject);
-js::set('errorEnd', $lang->execution->errorGreaterProject);
 ?>
-
-<script>
-$('#executionForm').submit(function()
-{
-    /* Clear all error messages. */
-    $('input[name^=begins]').each(function()
-    {
-        var executionID = $(this).attr('id').replace(/\w*\[|\]/g, '');
-        $('#helpbegins' + executionID).remove();
-        $('#helpends' + executionID).remove();
-    });
-
-    var submitForm = true;
-    $('input[name^=begins]').each(function()
-    {
-        var beginDate   = $(this).val();
-        var executionID = $(this).attr('id').replace(/\w*\[|\]/g, '');
-
-        $('#helpbegins' + executionID).remove();
-        $('#helpends' + executionID).remove();
-
-        /* Invalid data is skipped. */
-        var nameVal = $("[name='names[" + executionID + "]']").val()
-        if(!nameVal) return;
-
-        var projectBeginDate = '0000-00-00';
-        var projectEndDate   = '2059-12-31';
-
-        $.ajax(
-        {
-            url: createLink('execution', 'ajaxGetProjectStartDate', "executionID=" + executionID),
-            dataType: 'json',
-            method: 'post',
-            async: false,
-            success: function(data)
-            {
-                if(data)
-                {
-                    projectBeginDate = data.begin;
-                    projectEndDate   = data.end;
-                }
-            }
-        });
-
-        /* Check if the begin date is empty. */
-        if(!beginDate)
-        {
-            submitForm = false;
-            var emptyBeginHtml = '<div id="helpbegins' + executionID + '" class="text-danger help-text">' + emptyBegin + '</div>';
-            $(this).after(emptyBeginHtml);
-            alert(emptyBegin);
-            return false;
-        }
-
-        var endDate = $("[name='ends[" + executionID + "]']").val();
-        if(!endDate)
-        {
-            submitForm = false;
-            var emptyEndHtml = '<div id="helpends' + executionID + '" class="text-danger help-text">' + emptyEnd + '</div>';
-            $("[name='ends[" + executionID + "]']").after(emptyEndHtml);
-            alert(emptyEnd);
-            return false;
-        }
-
-        if(endDate < beginDate)
-        {
-            submitForm = false;
-            var emptyEndHtml = '<div id="helpends' + executionID + '" class="text-danger help-text">' + planFinishSmall + '</div>';
-            $("[name='ends[" + executionID + "]']").after(emptyEndHtml);
-            alert(planFinishSmall);
-            return false;
-        }
-
-        if(beginDate < projectBeginDate)
-        {
-            submitForm = false;
-            var errorBeginTip  = errorBegin.replace('%s', projectBeginDate);
-            var errorBeginHtml = '<div id="helpbegins' + executionID + '" class="text-danger help-text">' + errorBeginTip + '</div>';
-            $("[name='begins[" + executionID + "]']").after(errorBeginHtml);
-            alert(errorBeginTip);
-            return false;
-        }
-
-        if(endDate > projectEndDate)
-        {
-            submitForm = false;
-            var errorEndTip  = errorEnd.replace('%s', projectEndDate);
-            var errorEndHtml = '<div id="helpends' + executionID + '" class="text-danger help-text">' + errorEndTip + '</div>';
-            $("[name='ends[" + executionID + "]']").after(errorEndHtml);
-            alert(errorEndTip);
-            return false;
-        }
-    });
-
-    if(!submitForm)
-    {
-        setTimeout(function(){$('#submit').removeAttr('disabled')}, 500);
-        return false;
-    }
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>
