@@ -45,7 +45,7 @@ class customModel extends model
         {
             if(isset($sectionLang[$customLang->module][$customLang->section]['all']) && isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) && $customLang->lang == 'all') continue;
 
-            $sections     = explode('.', $customLang->section);
+            $sections     = explode('-', $customLang->section);
             $sectionIndex = count($sections) - 1;
             $sectionArr   = array($customLang->key => $customLang->value);
             for($index = $sectionIndex; $index >= 0; $index --) $sectionArr = array($sections[$index] => $sectionArr);

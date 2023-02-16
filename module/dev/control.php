@@ -120,8 +120,8 @@ class dev extends control
         $this->view->title         = $this->lang->langItem;
         $this->view->type          = $type;
         $this->view->featureBar    = $this->lang->dev->featureBar['langItem'];
-        $this->view->originalLangs = $this->dev->getOriginalLang($type, $module, str_replace('_', '-', $language));
-        $this->view->customedLangs = $this->dev->getCustomedLang($type, $module, str_replace('_', '-', $language));
+        $this->view->originalLangs = $this->dev->getOriginalLang($type, $module, $method, $language);
+        $this->view->customedLangs = $this->dev->getCustomedLang($type, $module, $method, $language);
         $this->view->moduleName    = $moduleName;
         $this->view->language      = $language;
         $this->display();
