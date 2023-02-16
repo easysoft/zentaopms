@@ -19,7 +19,7 @@ class btn extends wg
     /**
      * @return builder
      */
-    protected function build($isPrint = false)
+    protected function build()
     {
         $props = $this->props->skip(array_keys(static::getDefinedProps()));
 
@@ -65,7 +65,7 @@ class btn extends wg
         if(!empty($icon))         $children[] = new icon($icon);
         if(!empty($text))         $children[] = h::span($text, setClass('text'));
 
-        $children[] = parent::build($isPrint);
+        $children[] = parent::build();
 
         if(!empty($trailingIcon)) $children[] = new icon($trailingIcon);
         if(!empty($caret))        $children[] = h::span(setClass(is_string($caret) ? "caret-$caret" : 'caret'));

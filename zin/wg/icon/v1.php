@@ -5,7 +5,7 @@ class icon extends wg
 {
     protected static $defineProps = 'name:string';
 
-    protected function build($isPrint = false)
+    protected function build()
     {
         $iconName = $this->props->get('name', '');
         return h::i

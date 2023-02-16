@@ -11,12 +11,12 @@ class pagebase extends wg
         'title' => array('type' => 'string', 'default' => ''),
         'bodyProps' => array('type' => 'array', 'optional' => true),
         'zui'   => array('type' => 'bool', 'default' => false),
-        'print' => array('type' => 'bool', 'default' => true)
+        'display' => array('type' => 'bool', 'default' => true)
     );
 
     protected function created()
     {
-        if($this->prop('print')) $this->print();
+        if($this->prop('display')) $this->display();
     }
 
     protected function build()

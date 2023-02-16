@@ -65,7 +65,7 @@ class wg
         return static::renderToHtml(array($before, $after, $children), $this);
     }
 
-    public function print()
+    public function display()
     {
         $html = $this->render(true);
         echo $html;
