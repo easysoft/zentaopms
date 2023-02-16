@@ -307,7 +307,7 @@ class devModel extends model
         // Defalut value set, remove when left tree display.
         if($type == 'feature')
         {
-            $module = 'program';
+            $module = 'product';
             $method = 'browse';
         }
         elseif($type == 'second')
@@ -323,12 +323,11 @@ class devModel extends model
 
         $originalLangs = array();
         $clientLang    = $this->app->getClientLang();
-
         $defaultLang   = $this->loadDefaultLang();
         if($type == 'feature')
         {
             $this->defaultLang = $defaultLang;
-            $defaultLang = $this->loadDefaultLang($clientLang, $module);
+            $defaultLang       = $this->loadDefaultLang($clientLang, $module);
         }
 
         $lang    = new stdClass();
@@ -344,7 +343,18 @@ class devModel extends model
         }
         elseif($type == 'feature')
         {
-            $originalLangs = $defaultLang->$module->featureBar[$method];
+            $langKey = $module . '_feature-' . $method . '_';
+            foreach($defaultLang->$module->featureBar[$method] as $feature => $featureName)
+            {
+                $selectKey = $feature . 'Selects';
+                if(isset($defaultLang->$module->$selectKey))
+                {
+                    foreach($defaultLang->$module->$selectKey as $feature => $featureName) $originalLangs[$langKey . $feature] = $featureName;
+                    continue;
+                }
+                $originalLangs[$langKey . $feature] = $featureName;
+            }
+
         }
         elseif($type == 'first')
         {
@@ -466,6 +476,7 @@ class devModel extends model
         $lang->productCommon   = $this->lang->productCommon;
         $lang->projectCommon   = $this->lang->projectCommon;
         $lang->executionCommon = $this->lang->executionCommon;
+        $lang->hourCommon      = $this->lang->hourCommon;
         if(!isset($lang->common)) $lang->common = new stdclass();
 
         $loadedLangs = array();
