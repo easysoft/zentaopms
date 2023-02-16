@@ -13,7 +13,6 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once 'props.class.php';
 require_once 'directive.func.php';
-require_once 'set.class.php';
 require_once 'wg.class.php';
 
 function set($name, $value = NULL)
@@ -59,6 +58,11 @@ function text(/* string ...$lines */)
 function block($name, $value = NULL)
 {
     return directive('block', is_array($name) ? $name : array($name => $value));
+}
+
+function to($name, $value = NULL)
+{
+    return block($name, $value);
 }
 
 function before()

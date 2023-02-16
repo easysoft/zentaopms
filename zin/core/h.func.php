@@ -14,6 +14,8 @@ namespace zin;
 require_once 'h.class.php';
 require_once 'item.class.php';
 require_once 'wg.func.php';
+require_once 'set.class.php';
+require_once 'to.class.php';
 
 function h()        {return call_user_func_array('\zin\h::create', func_get_args());}
 
