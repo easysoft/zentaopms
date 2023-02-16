@@ -2074,12 +2074,17 @@ class executionModel extends model
      * Get child executions.
      *
      * @param  int    $executionID
+     * @param  string $orderBy
      * @access public
-     * @return void
+     * @return array
      */
-    public function getChildExecutions($executionID)
+    public function getChildExecutions($executionID, $orderBy = 'id_desc')
     {
-        return $this->dao->select('*')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq((int)$executionID)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('parent')->eq((int)$executionID)
+            ->orderBy($orderBy)
+            ->fetchAll('id');
     }
 
     /**
