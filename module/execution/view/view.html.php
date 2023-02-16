@@ -2,7 +2,7 @@
 /**
  * The view method view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -325,11 +325,11 @@
                 </div>
               </div>
             </div>
-            <?php if(!in_array($execution->attribute, array('request', 'design', 'review')) and $execution->projectInfo->hasProduct): ?>
+            <?php if($execution->projectInfo->hasProduct): ?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->execution->manageProducts;?></strong>
-                <?php if(common::hasPriv('execution', 'manageproducts') and $execution->type != 'stage') common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
+                <?php if(common::hasPriv('execution', 'manageproducts') and $execution->type != 'stage' and $project->model != 'waterfallplus') common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">

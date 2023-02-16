@@ -2,7 +2,7 @@
 /**
  * The create of programplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
@@ -275,91 +275,5 @@ var options = {
     reverse: true,
 }
 $('#planForm tbody.sortable').sortable(options);
-
-$('#planForm').submit(function()
-{
-    /* Clear all error messages. */
-    $('input[name^=begin]').each(function()
-    {
-        var beginDateID = $(this).attr('id');
-        if(beginDateID == 'begin%i%') return;
-
-        var endDateID = beginDateID.replace('begin', 'end');
-        $('#help' + beginDateID).remove();
-        $('#help' + endDateID).remove();
-    });
-
-    var submitForm = true;
-    $('input[name^=begin]').each(function()
-    {
-        var beginDate   = $(this).val();
-        var beginDateID = $(this).attr('id');
-        if(beginDateID == 'begin%i%') return;
-
-        var nameID    = beginDateID.replace('begin', 'names');
-        var endDateID = beginDateID.replace('begin', 'end');
-        $('#help' + beginDateID).remove();
-        $('#help' + endDateID).remove();
-
-        /* Invalid data is skipped. */
-        var nameVal = $('#' + nameID).val()
-        if(!nameVal) return;
-
-        /* Check if the begin date is empty. */
-        if(!beginDate)
-        {
-            submitForm = false;
-            var emptyBeginHtml = '<div id="help' + beginDateID + '" class="text-danger help-text">' + emptyBegin + '</div>';
-            $(this).after(emptyBeginHtml);
-            alert(emptyBegin);
-            return false;
-        }
-
-        var endDate = $('#' + endDateID).val();
-        if(!endDate)
-        {
-            submitForm = false;
-            var emptyEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + emptyEnd + '</div>';
-            $('#' + endDateID).after(emptyEndHtml);
-            alert(emptyEnd);
-            return false;
-        }
-
-        if(endDate < beginDate)
-        {
-            submitForm = false;
-            var emptyEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + planFinishSmall + '</div>';
-            $('#' + endDateID).after(emptyEndHtml);
-            alert(planFinishSmall);
-            return false;
-        }
-
-        if(beginDate < projectBeginDate)
-        {
-            submitForm = false;
-            var errorBeginTip  = errorBegin.replace('%s', projectBeginDate);
-            var errorBeginHtml = '<div id="help' + beginDateID + '" class="text-danger help-text">' + errorBeginTip + '</div>';
-            $('#' + beginDateID).after(errorBeginHtml);
-            alert(errorBeginTip);
-            return false;
-        }
-
-        if(endDate > projectEndDate)
-        {
-            submitForm = false;
-            var errorEndTip  = errorEnd.replace('%s', projectEndDate);
-            var errorEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + errorEndTip + '</div>';
-            $('#' + endDateID).after(errorEndHtml);
-            alert(errorEndTip);
-            return false;
-        }
-    });
-
-    if(!submitForm)
-    {
-        setTimeout(function(){$('#submit').removeAttr('disabled')}, 500);
-        return false;
-    }
-});
 </script>
 <?php include '../../common/view/footer.html.php';?>

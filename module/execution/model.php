@@ -2,7 +2,7 @@
 /**
  * The model file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -113,6 +113,7 @@ class executionModel extends model
             unset($this->lang->execution->menu->story);
             unset($this->lang->execution->menu->qa);
             unset($this->lang->execution->menu->build);
+            unset($this->lang->execution->menu->burn);
         }
 
         $stageFilter = array('request', 'design', 'review');
@@ -1671,9 +1672,10 @@ class executionModel extends model
         /* Process executions. */
         $this->app->loadConfig('task');
 
-        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
-        $today     = helper::today();
-        $childList = array();
+        $emptyHour  = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $today      = helper::today();
+        $childList  = array();
+        $parentList = array();
         foreach($executions as $key => $execution)
         {
             $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
@@ -1706,7 +1708,7 @@ class executionModel extends model
             /* In the case of the waterfall model, calculate the sub-stage. */
             if($param === 'skipParent')
             {
-                if($execution->parent < 0 and $execution->type == 'stage') unset($executions[$key]);
+                if($execution->parent) $parentList[$execution->parent] = $execution->parent;
                 if($execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
             }
             elseif($param === 'hasParentName')
@@ -1714,13 +1716,10 @@ class executionModel extends model
                 $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
                 $executions[$execution->id]->title = implode('/', $parentExecutions);
             }
-            else
+            elseif(isset($executions[$execution->parent]))
             {
-                if(isset($executions[$execution->parent]))
-                {
-                    $executions[$execution->parent]->children[$key] = $execution;
-                    $childList[$key] = $key;
-                }
+                $executions[$execution->parent]->children[$key] = $execution;
+                $childList[$key] = $key;
             }
 
             /* Bind execution product */
@@ -1730,7 +1729,8 @@ class executionModel extends model
             }
         }
 
-        foreach($childList as $id) unset($executions[$id]);
+        foreach($childList as $childID) unset($executions[$childID]);
+        foreach($parentList as $parentID) unset($executions[$parentID]);
 
         return array_values($executions);
     }
@@ -4633,7 +4633,7 @@ class executionModel extends model
                 $storyItem->storyId       = $story->id;
                 $storyItem->openedBy      = zget($users, $story->openedBy);
                 $storyItem->assignedTo    = zget($users, $story->assignedTo);
-                $storyItem->url           = helper::createLink('execution', 'storyView', "storyID=$story->id&version=$story->version&from=execution&param=$executionID");
+                $storyItem->url           = helper::createLink('execution', 'storyView', "storyID=$story->id&execution=$executionID");
                 $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "executionID={$executionID}&story={$story->id}");
 
                 $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();

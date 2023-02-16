@@ -2,7 +2,7 @@
 /**
  * The control file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: control.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
@@ -2552,6 +2552,7 @@ class execution extends control
         $this->view->chartData    = $chartData;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->type         = $type;
+        $this->view->project      = $this->loadModel('project')->getByID($execution->project);
 
         $this->display();
     }
@@ -2724,7 +2725,7 @@ class execution extends control
         $userList['closed']->avatar   = '';
 
         $projectID  = $execution->project;
-        $project    = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
+        $project    = $this->project->getByID($projectID);
         $hiddenPlan = $project->model !== 'scrum';
 
         $this->view->title        = $this->lang->execution->kanban;

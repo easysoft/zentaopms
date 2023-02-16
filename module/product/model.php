@@ -2,7 +2,7 @@
 /**
  * The model file of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -2062,8 +2062,19 @@ class productModel extends model
 
         $projectLatestExecutions = array();
         $latestExecutionList     = array();
+        $today                   = helper::today();
         foreach($executionList as $projectID => $executions)
         {
+            foreach($executions as $executionID => &$execution)
+            {
+                /* Judge whether the execution is delayed. */
+                if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
+                {
+                    $delay = helper::diffDate($today, $execution->end);
+                    if($delay > 0) $execution->delay = $delay;
+                }
+            }
+
             /* Used to computer execution progress. */
             $latestExecutionList[key($executions)] = current($executions);
 
