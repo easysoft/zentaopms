@@ -130,7 +130,6 @@
                 <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
                 <button type="button" class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
                 <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
-                <?php echo html::hidden('orders[]', $stage->order);?>
               </td>
             </tr>
             <?php $i ++;?>
