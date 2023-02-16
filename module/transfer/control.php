@@ -101,9 +101,9 @@ class transfer extends control
         $locate = $locate ? $locate : $this->session->showImportURL;
         if($_FILES)
         {
-            $file      = $this->loadModel('file')->getUpload('file');
+            $file = $this->loadModel('file')->getUpload('file');
 
-            if(!empty($file['error'])) return print(js::confirm($this->lang->file->uploadError[$file['error']]));
+            if(!empty($file['error'])) return print(js::alert($this->lang->file->uploadError[$file['error']]));
 
             $file      = $file[0];
             $shortName = $this->file->getSaveName($file['pathname']);
