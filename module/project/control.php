@@ -2171,7 +2171,9 @@ class project extends control
         $this->loadModel('program');
         $this->loadModel('execution');
 
-        $project    = $this->project->getById($projectID);
+        $project = $this->project->getById($projectID);
+        if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
+
         $executions = $this->execution->getPairs($projectID);
 
         if(!empty($_POST))

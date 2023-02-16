@@ -385,3 +385,5 @@ $lang->project->copyProject->daysTips           = '『可用工作日』应当�
 
 $lang->project->linkBranchStoryByPlanTips = "项目按计划关联需求时，只导入本项目所关联%s的激活状态的需求。";
 $lang->project->linkNormalStoryByPlanTips = "项目按计划关联需求时，只导入激活状态的需求。";
+
+$lang->project->cannotManageProducts = "该项目为项目型项目，不能关联产品。";
