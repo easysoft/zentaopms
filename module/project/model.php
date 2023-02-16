@@ -122,6 +122,14 @@ class projectModel extends model
         {
             if($projectID and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !empty($projects))
             {
+                /* Redirect old project to new project. */
+                $newProjectID = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('project');
+                if($newProjectID and strpos(",{$this->app->user->view->projects},", ",{$newProjectID},") !== false)
+                {
+                    $this->session->set('project', (int)$newProjectID, $this->app->tab);
+                    return $this->session->project;
+                }
+
                 $this->session->set('project', key($projects), $this->app->tab);
                 $this->accessDenied();
             }
