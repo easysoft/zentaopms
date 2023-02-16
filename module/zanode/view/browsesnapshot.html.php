@@ -73,4 +73,3 @@
   </div>
   <?php endif;?>
 </div>
-<?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>

@@ -93,11 +93,11 @@ $lang->zanode->confirmDeleteSnapshot = "快照被删除后无法从回收站中�
 
 $lang->zanode->snapshot = new stdClass();
 $lang->zanode->snapshot->statusList['creating']          = '创建中';
-$lang->zanode->snapshot->statusList['completed']         = '创建完成';
+$lang->zanode->snapshot->statusList['completed']         = '可使用';
 $lang->zanode->snapshot->statusList['failed']            = '创建失败';
 $lang->zanode->snapshot->statusList['restoring']         = '还原中';
 $lang->zanode->snapshot->statusList['restore_failed']    = '还原失败';
-$lang->zanode->snapshot->statusList['restore_completed'] = '还原成功';
+$lang->zanode->snapshot->statusList['restore_completed'] = '可使用';
 
 $lang->zanode->snapshot->defaultSnapName = '初始快照';
 $lang->zanode->snapshot->defaultSnapUser = '系统';

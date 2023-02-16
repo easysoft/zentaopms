@@ -97,7 +97,7 @@ $lang->zanode->snapshot->statusList['completed']         = 'Usable';
 $lang->zanode->snapshot->statusList['failed']            = 'Create Failed';
 $lang->zanode->snapshot->statusList['restoring']         = 'Restoring';
 $lang->zanode->snapshot->statusList['restore_failed']    = 'Restore Failed';
-$lang->zanode->snapshot->statusList['restore_completed'] = 'Restore Completed';
+$lang->zanode->snapshot->statusList['restore_completed'] = 'Usable';
 
 $lang->zanode->snapshot->defaultSnapName = 'DefaultSnapshot';
 $lang->zanode->snapshot->defaultSnapUser = 'System';

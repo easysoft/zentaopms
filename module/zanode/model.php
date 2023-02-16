@@ -270,7 +270,6 @@ class zanodemodel extends model
 
         if(!empty($result) and $result->code == 'success')
         {
-            $this->loadModel('action')->create('zanode', $zanodeID, 'createdSnapshot', '', $data->name);
             return $newID;
         }
 
@@ -420,7 +419,7 @@ class zanodemodel extends model
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq($status)->where('id')->eq($id)->exec();
         }
 
-        $this->loadModel('action')->create('zanode', $id, ucfirst($type));
+        $this->loadModel('action')->create('zanode', $id, ucfirst($type), $node->name);
         return;
     }
 
