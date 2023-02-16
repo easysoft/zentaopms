@@ -333,12 +333,18 @@ class helper extends baseHelper
         else
         {
             $dateInterval = new stdClass();
-            $dateInterval->year    = $interval->format('%Y');
+            $dateInterval->year    = $interval->format('%y');
             $dateInterval->month   = $interval->format('%m');
             $dateInterval->day     = $interval->format('%d');
             $dateInterval->hour    = $interval->format('%H');
             $dateInterval->minute  = $interval->format('%i');
             $dateInterval->secound = $interval->format('%s');
+            $dateInterval->year    = trim($dateInterval->year, '0');
+            $dateInterval->month   = trim($dateInterval->month, '0');
+            $dateInterval->day     = trim($dateInterval->day, '0');
+            $dateInterval->hour    = trim($dateInterval->hour, '0');
+            $dateInterval->minute  = trim($dateInterval->minute, '0');
+            $dateInterval->secound = trim($dateInterval->secound, '0');
         }
         return $dateInterval;
     }

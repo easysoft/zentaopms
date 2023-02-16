@@ -179,8 +179,6 @@ $lang->admin->menuSetting['dev']['desc']       = 'Support for secondary developm
 $lang->admin->menuSetting['convert']['name']   = 'Data Import';
 $lang->admin->menuSetting['convert']['desc']   = 'Data import from third-party systems.';
 
-$lang->admin->mon              = 'Month';
-$lang->admin->day              = 'Day';
 $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
 $lang->admin->upgradeRecommend = 'Recommend Upgrade';
