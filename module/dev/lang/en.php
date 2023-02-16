@@ -20,8 +20,10 @@ $lang->dev->noteEditor     = "The editor is disabled for security reasons. To us
 $lang->dev->noteTranslate  = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
 $lang->dev->confirmRestore = 'Do you want to reset?';
 
-$lang->dev->UR = 'Epic';
-$lang->dev->SR = 'Story';
+$lang->dev->default = 'Default';
+$lang->dev->change  = 'Change';
+$lang->dev->UR      = 'Epic';
+$lang->dev->SR      = 'Story';
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = 'ID';
