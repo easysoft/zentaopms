@@ -21,7 +21,7 @@ class item extends wg
     {
         if($this->parent instanceof wg && method_exists($this->parent, 'onBuildItem'))
         {
-            return $this->parent->onBuildItem($this);
+            return call_user_func(array($this->parent, 'onBuildItem'), $this);
         }
         return parent::build();
     }
