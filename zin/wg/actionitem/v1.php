@@ -1,13 +1,44 @@
 <?php
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
+
 class actionItem extends wg
 {
     static $defineProps = 'name:string="action", type:string="item", outerTag:string="li", tagName:string="a", icon?:string, text?:string, url?:string, target?:string, active?:bool, disabled?:bool, trailingIcon?:string, outerProps?:array';
 
+    protected function buildDividerItem()
+    {
+        return null;
+    }
+
+    protected function buildHeadingItem()
+    {
+        list($icon, $text, $trailingIcon) = $this->prop('icon', 'text', 'trailingIcon');
+
+        return h::span
+        (
+            set($text),
+            set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
+            $icon ? icon($icon) : NULL,
+            $this->children(),
+            $trailingIcon ? icon($trailingIcon) : NULL,
+        );
+    }
+
+    protected function buildBtnItem()
+    {
+        return new btn($this->props->skip('tagName,type,name,outerTag,outerProps'));
+    }
+
     protected function buildItem()
     {
+        $type = $this->prop('type');
+        $methodName = "build{$type}Item";
+        if(method_exists($this, $methodName)) return $this->$methodName();
+
         list($tagName, $icon, $text, $trailingIcon) = $this->prop('tagName', 'icon', 'text', 'trailingIcon');
+
         return h::create
         (
             $tagName,
