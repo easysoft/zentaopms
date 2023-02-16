@@ -6,3 +6,4 @@ body {margin-bottom: 25px;}
 #myTable input[type=checkbox] {margin: 0px}
 
 .table-footer .pager{z-index: 10}
+#myTable .scrollbar {z-index: 11}
