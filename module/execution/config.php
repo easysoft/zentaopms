@@ -177,11 +177,11 @@ $config->execution->gantt->linkType['begin']['end']   = 3;
 $config->execution->datatable = new stdclass();
 if(!isset($config->setCode) or $config->setCode == 1)
 {
-    $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+    $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'openedDate', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
 else
 {
-    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'openedDate', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
 
 $config->execution->datatable->fieldList['id']['title']    = 'idAB';
@@ -203,13 +203,13 @@ $config->execution->datatable->fieldList['name']['required']     = 'yes';
 if(!isset($config->setCode) or $config->setCode == 1)
 {
     $config->execution->datatable->fieldList['code']['title']    = 'execCode';
-    $config->execution->datatable->fieldList['code']['width']    = '140';
+    $config->execution->datatable->fieldList['code']['width']    = '180';
     $config->execution->datatable->fieldList['code']['fixed']    = 'left';
     $config->execution->datatable->fieldList['code']['required'] = 'no';
 }
 
 $config->execution->datatable->fieldList['project']['title']    = 'project';
-$config->execution->datatable->fieldList['project']['width']    = '200';
+$config->execution->datatable->fieldList['project']['width']    = '220';
 $config->execution->datatable->fieldList['project']['flex']     = 1;
 $config->execution->datatable->fieldList['project']['fixed']    = 'no';
 $config->execution->datatable->fieldList['project']['required'] = 'no';
