@@ -2,6 +2,14 @@
 class devModel extends model
 {
     /**
+     * Default lang object.
+     *
+     * @var    object
+     * @access public
+     */
+    public $defaultLang;
+
+    /**
      * Get All tables.
      *
      * @access public
@@ -284,23 +292,131 @@ class devModel extends model
         return $extPaths;
     }
 
-    public function getOriginalLang($type, $module = '', $language = 'zh-cn')
+    /**
+     * Get original lang.
+     *
+     * @param  string $type
+     * @param  string $module
+     * @param  string $method
+     * @param  string $language
+     * @access public
+     * @return array
+     */
+    public function getOriginalLang($type, $module = '', $method = '', $language = 'zh-cn')
     {
+        // Defalut value set, remove when left tree display.
+        if($type == 'feature')
+        {
+            $module = 'program';
+            $method = 'browse';
+        }
+        elseif($type == 'second')
+        {
+            $module = 'scrum';
+        }
+        elseif($type == 'third')
+        {
+            $module = 'kanbanProject';
+            $method = 'settings';
+        }
+        // Defalut value set end.
+
         $originalLangs = array();
+        $clientLang    = $this->app->getClientLang();
+
+        $defaultLang   = $this->loadDefaultLang();
+        if($type == 'feature')
+        {
+            $this->defaultLang = $defaultLang;
+            $defaultLang = $this->loadDefaultLang($clientLang, $module);
+        }
+
+        $lang    = new stdClass();
+        $langKey = '';
         if($type == 'common')
         {
             $projectKey = (int)$this->loadModel('setting')->getItem('owner=system&key=sprintConcept');
-            $clientLang = $this->app->getClientLang();
             $originalLangs['productCommon']   = $this->config->productCommonList[$clientLang][PRODUCT_KEY];
             $originalLangs['projectCommon']   = $this->config->projectCommonList[$clientLang][PROJECT_KEY];
             $originalLangs['executionCommon'] = $this->config->executionCommonList[$clientLang][$projectKey];
             $originalLangs['URCommon']        = $this->lang->dev->UR;
             $originalLangs['SRCommon']        = $this->lang->dev->SR;
         }
+        elseif($type == 'feature')
+        {
+            $originalLangs = $defaultLang->$module->featureBar[$method];
+        }
+        elseif($type == 'first')
+        {
+           $lang    = $defaultLang->mainNav;
+           $langKey = 'mainMenu_';
+        }
+        elseif($type == 'second')
+        {
+            $menus = new stdclass();
+            if(isset($defaultLang->$module->homeMenu))
+            {
+                foreach($defaultLang->$module->homeMenu as $menuKey => $menu)
+                {
+                    $menuKey = 'homeMenu_' . $menuKey;
+                    $menus->{$menuKey} = $menu;
+                }
+            }
+
+            if(isset($defaultLang->$module->menu))
+            {
+                foreach($defaultLang->$module->menu as $menuKey => $menu)
+                {
+                    if(is_array($menu) and !isset($menu['link'])) continue;
+
+                    $newKey = 'menu_' . $menuKey;
+                    $menus->{$newKey} = $menu;
+
+                    if(isset($menu['dropMenu']))
+                    {
+                        foreach($menu['dropMenu'] as $menuKey => $menu)
+                        {
+                            $menuKey = 'dropMenu_' . $menuKey;
+                            $menus->{$menuKey} = $menu;
+                        }
+                    }
+                }
+            }
+            $lang = $menus;
+        }
+        elseif($type == 'third')
+        {
+            $langKey = "{$module}SubMenu_menu_{$method}_";
+            $lang    = $defaultLang->$module->menu->$method['subMenu'];
+        }
+
+        foreach($lang as $linkKey => $link)
+        {
+            if(is_array($link))
+            {
+                if(!isset($link['link'])) continue;
+                $link = $link['link'];
+            }
+
+            $link = strip_tags($link);
+            $link = explode('|', $link);
+
+            if($type == 'second') $langKey = $module . 'Menu_' . $linkKey . '_';
+            $originalLangs[$langKey . $linkKey] = trim($link[0]);
+        }
 
         return $originalLangs;
     }
 
+    /**
+     * Get customed lang.
+     *
+     * @param  string $type
+     * @param  string $module
+     * @param  string $language
+     * @access public
+     * @return array
+     */
     public function getCustomedLang($type, $module = '', $language = 'zh-cn')
     {
         $customedLangs = array();
@@ -331,18 +447,20 @@ class devModel extends model
     /**
      * Load default lang.
      *
+     * @param  string $language
+     * @param  string $module
      * @access public
      * @return object
      */
-    public function loadDefaultLang($language = 'zh-cn')
+    public function loadDefaultLang($language = 'zh-cn', $module = 'common')
     {
         $clientLang = $this->app->clientLang;
         if($language != $clientLang) $this->app->clientLang = $language;
-        $langFilesToLoad = $this->app->getMainAndExtFiles('common');
+        $langFilesToLoad = $this->app->getMainAndExtFiles($module);
         if($language != $clientLang) $this->app->clientLang = $clientLang;
         if(empty($langFilesToLoad)) return false;
 
-        $lang = new language();
+        $lang = $module == 'common' ? new language() : $this->defaultLang;
         $lang->URCommon        = $this->lang->URCommon;
         $lang->SRCommon        = $this->lang->SRCommon;
         $lang->productCommon   = $this->lang->productCommon;
