@@ -5523,4 +5523,60 @@ class executionModel extends model
 
         return $executionID;
     }
+
+    /**
+     * Expand executions, return id list.
+     *
+     * @param  object $stats
+     * @access public
+     * @return array
+     */
+    public function expandExecutionIdList($stats)
+    {
+        $executionIdList = array();
+        foreach($stats as $execution)
+        {
+            $executionIdList[$execution->id] = $execution->id;
+            if(!empty($execution->children))
+            {
+                foreach($execution->children as $child)
+                {
+                    $childrenIdList = $this->expandExecutionChildrenIdList($child);
+                    foreach($childrenIdList as $childID)
+                    {
+                        $executionIdList[$childID] = $childID;
+                    }
+                }
+            }
+        }
+
+        return $executionIdList;
+    }
+
+    /**
+     * Expand children of execution, return id list.
+     *
+     * @param object $execution
+     * @access public
+     * @return array
+     */
+    public function expandExecutionChildrenIdList($execution)
+    {
+        $executionIdList = array();
+        $executionIdList[$execution->id] = $execution->id;
+
+        if(!empty($execution->children))
+        {
+            foreach($execution->children as $child)
+            {
+                $childrenIdList = $this->expandExecutionChildrenIdList($child);
+                foreach($childrenIdList as $childID)
+                {
+                    $executionIdList[$childID] = $childID;
+                }
+            }
+        }
+
+        return $executionIdList;
+    }
 }
