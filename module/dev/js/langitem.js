@@ -9,17 +9,19 @@ $(function()
         removeActive(event.target.id);
     });
 
-    $('.label-list').on('click', '.input-label', function(e)
+    $('.label-list > .input-label').on('click', function(e)
     {
 	var clearId = $('.label-list > .text-primary').attr('labelid');
-        var clickId = $(e.target).attr('labelid');
-        if(clearId && clearId != clickId) removeActive(clearId);
+        var clickId = $(this).attr('labelid');
+        if(clearId && clearId !== clickId) 
+	{
+	    removeActive(clearId);
+	};
 
         if(clickId && clickId != clearId)
         {
             addActive(clickId);
-            $('#' + clickId).focus();
-        }
+        };
     });
 
     function addActive(id)
@@ -32,6 +34,7 @@ $(function()
     {
         $('[labelid=' + id + ']').removeClass('text-primary');
         $('[iconid=' + id + ']').addClass('hidden');
-        $('#' + id).blur();
     }
+
+
 })
