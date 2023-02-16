@@ -4423,29 +4423,6 @@ class execution extends control
     }
 
     /**
-     * AJAX: Gets the start date of the project to which the execution belongs.
-     *
-     * @param  int     $executionID
-     * @access public
-     * @return string
-     */
-    public function ajaxGetProjectStartDate($executionID = 0)
-    {
-        $execution = $this->dao->select('id,project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
-        $project   = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->fetch();
-        if(empty($project))
-        {
-            echo '';
-            return false;
-        }
-
-        $date = array();
-        $date['begin'] = $project->begin;
-        $date['end']   = $project->end;
-        echo json_encode($date);
-    }
-
-    /**
      * Ajax get copy project executions.
      *
      * @param  int    $projectID
