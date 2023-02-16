@@ -1,25 +1,17 @@
 $(function()
 {
-    $(".input-list").on("click", 'input', function(event)
+    $(".input-list").on("click", 'input', function(e)
     {
-        addActive(event.target.id);
+	handleClickItem(e.target.id);
     });
-    $(".input-list").on("blur", 'input', function(event)
+    $(".input-list").on("blur", 'input', function(e)
     {
-        removeActive(event.target.id);
+        removeActive(e.target.id);
     });
 
-    $('.label-list').on('click', '.input-label', function(e)
+    $('.label-list > .input-label').on('click', function(e)
     {
-	var clearId = $('.label-list > .text-primary').attr('labelid');
-        var clickId = $(e.target).attr('labelid');
-        if(clearId && clearId != clickId) removeActive(clearId);
-
-        if(clickId && clickId != clearId)
-        {
-            addActive(clickId);
-            $('#' + clickId).focus();
-        }
+	handleClickItem($(this).attr('labelid'));
     });
 
     function addActive(id)
@@ -32,5 +24,19 @@ $(function()
     {
         $('[labelid=' + id + ']').removeClass('text-primary');
         $('[iconid=' + id + ']').addClass('hidden');
+    }
+
+    function handleClickItem(clickId)
+    {
+	var clearId = $('.label-list > .text-primary').attr('labelid');
+        if(clearId && clearId !== clickId) 
+	{
+	    removeActive(clearId);
+	};
+
+        if(clickId && clickId != clearId)
+        {
+            addActive(clickId);
+        };
     }
 })

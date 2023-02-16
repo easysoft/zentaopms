@@ -48,4 +48,9 @@
     <div class="side-main"></div>
   </div>
 </form>
+<div class="bottom-btn">
+  <?php echo html::submitButton(); ?>
+  <button id="reset" class="btn btn-wide ml-20"><?php echo $lang->restore?> </button>
+</div>
+</div>
 <?php include '../../common/view/footer.html.php';?>
