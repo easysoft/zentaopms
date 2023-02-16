@@ -9,7 +9,6 @@
  * @version     $Id: zh-cn.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->dept->common       = '部门';
 $lang->dept->id           = '编号';
 $lang->dept->path         = '路径';
 $lang->dept->position     = '职位';
