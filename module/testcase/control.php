@@ -1775,8 +1775,8 @@ class testcase extends control
                         }
                         if($step->version != $case->version) continue;
                         $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
-                        $case->stepDesc   .= $stepId . ". " . $step->desc . $sign;
-                        $case->stepExpect .= $stepId . ". " . $step->expect . $sign;
+                        $case->stepDesc   .= $stepId . ". " . htmlspecialchars_decode($step->desc) . $sign;
+                        $case->stepExpect .= $stepId . ". " . htmlspecialchars_decode($step->expect) . $sign;
                         $case->real .= $stepId . ". " . (isset($result[$step->id]) ? $result[$step->id]['real'] : '') . $sign;
                         $childId ++;
                     }
@@ -1784,7 +1784,6 @@ class testcase extends control
                 $case->stepDesc     = trim($case->stepDesc);
                 $case->stepExpect   = trim($case->stepExpect);
                 $case->real         = trim($case->real);
-                $case->precondition = htmlspecialchars_decode($case->precondition, ENT_QUOTES);
 
                 if($this->post->fileType == 'csv')
                 {
