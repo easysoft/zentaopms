@@ -19,6 +19,9 @@ $lang->dev->paramMailto   = "User account. Separate accounts by ','.";
 $lang->dev->noteEditor    = "The editor is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of the <a href='https://www.zentao.net/extension-viewExt-150.html' target='_blank'>editor</a>.";
 $lang->dev->noteTranslate = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
 
+$lang->dev->UR = 'Epic';
+$lang->dev->SR = 'Story';
+
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = 'ID';
 $lang->dev->fields['name']   = 'Feld';

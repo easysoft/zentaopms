@@ -2,7 +2,7 @@
 /**
  * The model file of custom module of ZenTaoCMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     custom
@@ -45,7 +45,7 @@ class customModel extends model
         {
             if(isset($sectionLang[$customLang->module][$customLang->section]['all']) && isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) && $customLang->lang == 'all') continue;
 
-            $sections     = explode('.', $customLang->section);
+            $sections     = explode('-', $customLang->section);
             $sectionIndex = count($sections) - 1;
             $sectionArr   = array($customLang->key => $customLang->value);
             for($index = $sectionIndex; $index >= 0; $index --) $sectionArr = array($sections[$index] => $sectionArr);
@@ -789,9 +789,14 @@ class customModel extends model
 
         if(!$data->SRName || !$data->URName) return false;
 
+        $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($key)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($lang)->andWhere('module')->eq('custom')->fetch('value');
+        $oldValue = json_decode($oldValue);
+
         $URSRList = new stdclass();
-        $URSRList->SRName = $data->SRName;
-        $URSRList->URName = $data->URName;
+        $URSRList->SRName        = $data->SRName;
+        $URSRList->URName        = $data->URName;
+        $URSRList->defaultSRName = zget($oldValue, 'defaultSRName', $oldValue->SRName);
+        $URSRList->defaultURName = zget($oldValue, 'defaultURName', $oldValue->URName);
 
         $value = json_encode($URSRList);
         $this->dao->update(TABLE_LANG)->set('value')->eq($value)

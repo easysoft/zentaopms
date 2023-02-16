@@ -136,6 +136,7 @@
             if(methodLowerCase === 'edit' && (link.params.programID || link.params.$4)) return 'program';
             if(methodLowerCase === 'batchedit') return 'program';
             var moduleGroup = link.params.moduleGroup ? link.params.moduleGroup : link.params.$2;
+            if(methodLowerCase === 'showerrornone' && link.params.$1 == 'project') return 'project';
             if(methodLowerCase === 'showerrornone' && (moduleGroup || moduleGroup)) return moduleGroup;
         }
         if(moduleName === 'stakeholder')
