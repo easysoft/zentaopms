@@ -13,7 +13,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once 'wg.class.php';
-require_once 'directive.func.php';
+require_once 'wg.func.php';
 
 class h extends wg
 {

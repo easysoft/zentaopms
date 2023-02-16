@@ -1,6 +1,6 @@
 <?php
 /**
- * The html element class file of zin of ZenTaoPMS.
+ * The common item element class file of zin of ZenTaoPMS.
  *
  * @copyright   Copyright 2023 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @author      Hao Sun <sunhao@easycorp.ltd>
@@ -13,7 +13,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once 'wg.class.php';
-require_once 'directive.func.php';
+require_once 'wg.func.php';
 
 class item extends wg
 {
