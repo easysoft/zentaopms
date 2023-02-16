@@ -385,3 +385,5 @@ $lang->project->copyProject->daysTips           = '『Available working days』S
 
 $lang->project->linkBranchStoryByPlanTips = "When the project is scheduled to associate requirements, only the activated requirements associated with the %s of the project are imported.";
 $lang->project->linkNormalStoryByPlanTips = "When the project plans to associate requirements, only the requirements that are active are imported.";
+
+$lang->project->cannotManageProducts = "This project is a project-type project and cannot be associated with products.";
