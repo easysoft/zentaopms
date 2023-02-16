@@ -2062,8 +2062,19 @@ class productModel extends model
 
         $projectLatestExecutions = array();
         $latestExecutionList     = array();
+        $today                   = helper::today();
         foreach($executionList as $projectID => $executions)
         {
+            foreach($executions as $executionID => &$execution)
+            {
+                /* Judge whether the execution is delayed. */
+                if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
+                {
+                    $delay = helper::diffDate($today, $execution->end);
+                    if($delay > 0) $execution->delay = $delay;
+                }
+            }
+
             /* Used to computer execution progress. */
             $latestExecutionList[key($executions)] = current($executions);
 
