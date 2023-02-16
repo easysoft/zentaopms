@@ -3,21 +3,13 @@ namespace zin;
 
 class pagemain extends wg
 {
-    public function onAddChild($child)
-    {
-        if($child instanceof wg) {
-            $this->addToBlock('inner', $child);
-            return false;
-        }
-        return null;
-    }
-
     protected function build()
     {
-        $pagemain = h::div(
-            h::div(
+        $pagemain = div(
+            div(
                 setClass('container'),
-                $this->block('inner'),
+                set($this->props->skip(array_keys(static::getDefinedProps()))),
+                $this->children()
             )
         );
         $pagemain->setDefaultProps(array('id' => 'main'));

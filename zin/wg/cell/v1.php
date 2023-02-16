@@ -8,15 +8,6 @@ class cell extends wg
 {
     static $defineProps = 'order,grow,shrink,width,align,flex';
 
-    public function onAddChild($child)
-    {
-        if($child instanceof wg) {
-            $this->addToBlock('inner', $child);
-            return false;
-        }
-        return null;
-    }
-
     protected function build()
     {
         $basis  = empty($this->prop('width')) ? 'auto' : $this->prop('width');
@@ -32,9 +23,11 @@ class cell extends wg
         if(!empty($this->prop('width')))  $style['flex-basis']  = $this->prop('width');
         if(!empty($this->prop('align')))  $style['align-self']  = $this->prop('align');
         if(!empty($this->prop('flex')))   $style['flex']        = $this->prop('flex');
+
         return div(
             setStyle($style),
-            $this->block('inner'),
+            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            $this->children()
         );
     }
 }
