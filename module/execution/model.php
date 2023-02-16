@@ -536,6 +536,7 @@ class executionModel extends model
         {
             $this->app->loadLang('project');
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
+            if(is_string($_POST['branch']) !== false) $_POST['branch'] = json_decode($_POST['branch'], true);
             foreach($_POST['products'] as $index => $productID)
             {
                 if(isset($multipleProducts[$productID]) and !isset($_POST['branch'][$index]))

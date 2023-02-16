@@ -2099,6 +2099,11 @@ class execution extends control
 
             $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
         }
+        if($this->app->tab == 'project' and $project->model == 'waterfallplus')
+        {
+            $productID       = $this->product->getProductIDByProject($executionID);
+            $parentStageList = $this->loadModel('programplan')->getParentStageList($execution->project, $executionID, $productID);
+        }
 
         $this->view->title                = $title;
         $this->view->position             = $position;
@@ -2123,6 +2128,7 @@ class execution extends control
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $execution->project, 'noclosed', $linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         $this->view->allProjects          = $this->project->getPairsByModel($project->model, 0, 'noclosed', $project->id);
+        $this->view->parentStageList      = isset($parentStageList) ? $parentStageList : array();
 
         $this->display();
     }

@@ -1280,6 +1280,20 @@ class programplanModel extends model
     }
 
     /**
+     * Get parent stage's children types.
+     *
+     * @param  int    $parentID
+     * @access public
+     * @return array
+     */
+    public function getParentChildrenTypes($parentID)
+    {
+        if(empty($parentID)) return true;
+
+        return $this->dao->select('DISTINCT type')->from(TABLE_EXECUTION)->where('parent')->eq($parentID)->andWhere('deleted')->eq('0')->fetchPairs('type');
+    }
+
+    /**
      * Is clickable.
      *
      * @param  int    $plan
@@ -1422,6 +1436,7 @@ class programplanModel extends model
             ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.project')->eq($executionID)
+            ->andWhere('t2.type')->eq('stage')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.path')->notlike("%,$planID,%")
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
@@ -1433,6 +1448,10 @@ class programplanModel extends model
         {
             $isCreate = $this->isCreateTask($key);
             if($isCreate === false and $key != $plan->parent) unset($parentStage[$key]);
+
+            $parentTypes = $this->getParentChildrenTypes($key);
+            if($plan->type == 'stage' and (isset($parentTypes['sprint']) or isset($parentTypes['kanban']))) unset($parentStage[$key]);
+            if(($plan->type == 'sprint' or $plan->type == 'kanban') and isset($parentTypes['stage'])) unset($parentStage[$key]);
         }
         $parentStage[0] = $this->lang->programplan->emptyParent;
         ksort($parentStage);
