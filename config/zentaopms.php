@@ -2,7 +2,7 @@
 /**
 * The config file of zentaophp.  Don't modify this file directly, copy the item to my.php and change it.
 *
-* @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+* @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
 * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
 * @package     config
@@ -227,7 +227,7 @@ $config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
 $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
-$config->openMethods[] = 'zanode.nodeList';
+$config->openMethods[] = 'zanode.nodelist';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

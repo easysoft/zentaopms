@@ -2,7 +2,7 @@
 /**
  * The control file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2012 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Yidong Wang, Jinyong Zhu
  * @package     repo
  * @version     $Id$
@@ -533,7 +533,8 @@ class repo extends control
      */
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0, $branchOrTag = 'branch')
     {
-        $repoID = $this->repo->saveState($repoID, $objectID);
+        $repoID                 = $this->repo->saveState($repoID, $objectID);
+        $originBranchID         = $branchID;
         if($branchID) $branchID = base64_decode(helper::safe64Decode($branchID));
 
         /* Get path and refresh. */
@@ -598,19 +599,7 @@ class repo extends control
         }
 
         /* Refresh repo. */
-        if($refresh)
-        {
-            /* Update code commit history. */
-            $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-
-            if(in_array($repo->SCM, $this->config->repo->gitTypeList))
-            {
-                $branch = $this->cookie->repoBranch;
-                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-                $_COOKIE['repoBranch'] = $branch;
-            }
-            if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
-        }
+        if($refresh) $this->repo->updateCommit($repoID, $originBranchID);
 
         /* Get files info. */
         $infos = $this->repo->getFileCommits($repo, $branchID, $path);
