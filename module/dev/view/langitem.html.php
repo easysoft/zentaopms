@@ -45,7 +45,7 @@
   </div>
   <div class="bottom-btn">
     <?php echo html::submitButton(); ?>
-    <button id="reset" class="btn btn-wide ml-20"><?php echo $lang->restore?> </button>
+    <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide ml-20'");?>
   </div>
 </form>
 <?php include '../../common/view/footer.html.php';?>
