@@ -12,6 +12,7 @@
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
+require_once 'props.class.php';
 
 use stdClass;
 
@@ -51,7 +52,7 @@ function isDirective($object)
 
 function prop($name, $value = NULL)
 {
-    return directive('prop', is_array($name) ? $name : array($name => $value));
+    return directive('prop', (is_array($name) || $name instanceof props) ? $name : array($name => $value));
 }
 
 function set($name, $value = NULL)

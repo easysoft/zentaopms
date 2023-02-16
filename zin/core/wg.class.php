@@ -12,7 +12,6 @@
 namespace zin;
 
 require_once 'props.class.php';
-require_once 'wg.func.php';
 require_once 'directive.func.php';
 
 class wg
@@ -41,10 +40,13 @@ class wg
 
     public $parent = NULL;
 
+    public $gid;
+
     public function __construct(/* string|element|object|array|null ...$args */)
     {
         $this->props = new props();
 
+        $this->gid = self::nextGid();
         $this->setDefaultProps(static::getDefaultProps());
         $this->add(func_get_args());
         $this->created();
@@ -136,7 +138,7 @@ class wg
             return;
         }
 
-        if($child instanceof wg) $child->parent = $this;
+        if($child instanceof wg && empty($child->parent)) $child->parent = &$this;
 
         $result = $name === 'children' ? $this->onAddChild($child) : $this->onAddBlock($child, $name);
         if($result === false) return;
@@ -233,6 +235,8 @@ class wg
      */
     public function setProp($prop, $value = NULL)
     {
+        if($prop instanceof props) $prop = $prop->toJsonData();
+
         if(is_array($prop))
         {
             foreach($prop as $name => $value) $this->setProp($name, $value);
@@ -255,6 +259,8 @@ class wg
             $value = $result[1];
         }
 
+        if($prop === 'id' && $value === '$GID') $value = $this->gid;
+
         $this->props->set($prop, $value);
         return $this;
     }
@@ -275,6 +281,7 @@ class wg
     protected function toJsonData()
     {
         $data = array();
+        $data['gid'] = $this->gid;
         $data['props'] = $this->props->toJsonData();
 
         $data['type'] = get_called_class();
@@ -303,6 +310,8 @@ class wg
 
         if(empty($data['blocks'])) unset($data['blocks']);
 
+        if(!empty($this->parent)) $data['parent'] = $this->parent->gid;
+
         return $data;
     }
 
@@ -318,6 +327,13 @@ class wg
     }
 
     public static $definedPropsMap = array();
+
+    private static $gidSeed = 0;
+
+    public static function nextGid()
+    {
+        return str_replace('\\', '_', get_called_class()) . '_' . ++static::$gidSeed;
+    }
 
     protected static function getDefinedProps($name = NULL)
     {

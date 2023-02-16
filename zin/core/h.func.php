@@ -13,6 +13,7 @@ namespace zin;
 
 require_once 'h.class.php';
 require_once 'item.class.php';
+require_once 'wg.func.php';
 
 function div()      {return call_user_func_array('\zin\h::div', func_get_args());}
 function span()     {return call_user_func_array('\zin\h::span', func_get_args());}

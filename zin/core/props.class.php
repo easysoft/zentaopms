@@ -70,8 +70,6 @@ class props extends \zin\utils\dataset
         if($prop === '@')                        return $this->onEvent($value);
         if(strpos($prop, '@') === 0)             return $this->onEvent(substr($prop, 1), $value);
 
-        if($prop === 'id' && $value === '$GID') $value = 'zin-' . uniqid();
-
         return parent::setVal($prop, $value);
     }
 

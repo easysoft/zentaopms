@@ -15,16 +15,19 @@ require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once 'wg.class.php';
 require_once 'directive.func.php';
 
-class itemWg extends wg
+class item extends wg
 {
     public function build()
     {
-        if(!($this->parent instanceof wg) || method_exists($this->parent, 'onBuildItem')) return parent::build();
-        return $this->parent->onBuildItem($this);
+        if($this->parent instanceof wg && method_exists($this->parent, 'onBuildItem'))
+        {
+            return $this->parent->onBuildItem($this);
+        }
+        return parent::build();
     }
 }
 
 function item()
 {
-    return new itemWg(func_num_args());
+    return new item(func_get_args());
 }
