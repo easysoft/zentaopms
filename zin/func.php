@@ -26,3 +26,4 @@ function center()     {return createWg('center', func_get_args());}
 function cell()       {return createWg('cell', func_get_args());}
 function actionItem() {return createWg('actionitem', func_get_args());}
 function nav()        {return createWg('nav', func_get_args());}
+function label()      {return createWg('label', func_get_args());}
