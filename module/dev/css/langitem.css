@@ -1,9 +1,18 @@
 .flex {display: flex;}
+.flex-1 {flex: 1;}
+.align-center {align-items: center;}
+.justify-center {justify-content: center;}
 .h-32 {height: 32px;}
 .py-6 {padding: 6px 0;}
 .my-12 {margin: 12px 0;}
 .ml-20 {margin-left: 20px;}
 .title {font-size: 13px; color: #313C52; font-weight: 700; height: 40px; text-align: center;}
+.gap-15 {gap: 15px;}
+
+/* menu-tree */
+.menu-tree {flex: 0 0 200px; background: #fff; padding: 10px 10px;}
+.menu-tree > .tree {padding-top: 20px;}
+.menu-tree li {padding: 5px 25px;}
 
 /* side-left */
 .main-content > .side-left {flex: 0 0 160px; margin-left: 64px;}

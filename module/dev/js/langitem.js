@@ -14,6 +14,8 @@ $(function()
 	handleClickItem($(this).attr('labelid'));
     });
 
+    initMenu();
+
     function addActive(id)
     {
         $('[labelid=' + id + ']').addClass('text-primary');
@@ -38,5 +40,62 @@ $(function()
         {
             addActive(clickId);
         };
+    }
+    
+    function initMenu()
+    {
+      if (arrTypesWithMenu.includes(type))
+      {
+	var myTreeData = [{
+	    title: '水果',
+	    children: [
+	        {title: '橘子'},
+		{title: '瓜'}
+            ]
+	}, {
+            title: '坚果',
+            children: [
+                {title: '向日葵'},
+                {title: '瓜子'}
+            ]
+	}, {
+            title: '蔬菜'
+	}];
+        $('#menuTree').tree(
+        {
+            data: myTreeData
+        });
+      }
+      $('#searchInputTree').on('input', function()
+      {
+	  var val = $(this).val();
+	  if (!val)
+          {
+              var updateData = JSON.parse(JSON.stringify(myTreeData));
+          }
+          else
+          {
+              var updateData = [];
+              for (var i = 0; i < myTreeData.length; i++)
+	      {
+                  var item = {};
+                  $.extend(true, item, myTreeData[i])
+                  if (item.children)
+                  {
+                      var children = [];
+                      for (var j = 0; j < item.children.length; j++)
+                      {
+                          if (item.children[j].title.includes(val))
+                          {
+                              children.push(item.children[j]);
+			  }
+		      }
+                      item.children = children;
+		  }
+                  updateData.push(item);
+	      }
+          }
+          $('#menuTree').data('zui.tree').reload(updateData);
+      })
     }
 })
