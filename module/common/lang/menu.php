@@ -35,8 +35,8 @@ if(defined('TUTORIAL'))
 $lang->mainNav            = new stdclass();
 $lang->mainNav->my        = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
 $lang->mainNav->program   = "{$lang->navIcons['program']} {$lang->program->common}|$programModule|$programMethod|";
-$lang->mainNav->product   = "{$lang->navIcons['product']} {$lang->product->common}|$productModule|$productMethod|";
-$lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
+$lang->mainNav->product   = "{$lang->navIcons['product']} {$lang->productCommon}|$productModule|$productMethod|";
+$lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->projectCommon}|$projectModule|$projectMethod|";
 $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
 $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
 $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";

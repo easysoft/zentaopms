@@ -443,9 +443,12 @@ class devModel extends model
             {
                 $URSRList = $this->custom->getItems("lang={$clientLang}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
                 $URSRList = array_shift($URSRList);
-                $URSRList = json_decode($URSRList->value);
-                $customedLangs['URCommon'] = $this->lang->dev->UR == $URSRList->URName ? '' : $URSRList->URName;
-                $customedLangs['SRCommon'] = $this->lang->dev->SR == $URSRList->SRName ? '' : $URSRList->SRName;
+                if($URSRList)
+                {
+                    $URSRList = json_decode($URSRList->value);
+                    $customedLangs['URCommon'] = $this->lang->dev->UR == $URSRList->URName ? '' : $URSRList->URName;
+                    $customedLangs['SRCommon'] = $this->lang->dev->SR == $URSRList->SRName ? '' : $URSRList->SRName;
+                }
             }
             if(!$this->config->URAndSR) unset($customedLangs['SRCommon']);
         }

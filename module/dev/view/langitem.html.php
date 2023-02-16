@@ -26,10 +26,10 @@
 <?php if(in_array($type, $config->dev->arrTypesWithMenu , false)):?>
   <div class="menu-tree">
     <div class="input-control search-box has-icon-left has-icon-right search-example">
-      <input id="searchInputTree" type="search" class="form-control search-input empty">
+      <input type="search" class="form-control search-input" />
       <label class="input-control-icon-left search-icon flex align-center justify-center"><i class="icon icon-search"></i></label>
     </div>
-    <div id="menuTree" ></div>
+    <div id="menuTree"></div>
   </div>
 <?php endif;?>
   <form class='main-form form-ajax flex-1' method='post'>
@@ -61,9 +61,10 @@
       </div>
       <div class="bottom-btn">
         <?php echo html::submitButton(); ?>
-        <button id="reset" class="btn btn-wide ml-20"><?php echo $lang->restore?> </button>
+        <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide ml-20'");?>
       </div>
     </form>
+    </div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

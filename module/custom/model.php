@@ -778,13 +778,14 @@ class customModel extends model
     /**
      * Edit UR and SR concept.
      *
-     * @param  int $key
+     * @param  int    $key
+     * @param  string $lang    zh-cn|zh-tw|en|fr|de
      * @access public
      * @return bool
      */
-    public function updateURAndSR($key = 0)
+    public function updateURAndSR($key = 0, $lang = '')
     {
-        $lang = $this->app->getClientLang();
+        if(empty($lang)) $lang = $this->app->getClientLang();
         $data = fixer::input('post')->get();
 
         if(!$data->SRName || !$data->URName) return false;

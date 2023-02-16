@@ -46,32 +46,32 @@ $(function()
     {
       if (arrTypesWithMenu.includes(type))
       {
-	var myTreeData = [{
-	    title: '水果',
-	    children: [
-	        {title: '橘子'},
-		{title: '瓜'}
-            ]
-	}, {
-            title: '坚果',
-            children: [
-                {title: '向日葵'},
-                {title: '瓜子'}
-            ]
-	}, {
-            title: '蔬菜'
-	}];
+          var myTreeData = [{
+	      title: '水果',
+	      children: [
+	          {title: '橘子', key: 'juzi jz'},
+                  {title: '瓜', key: '123'}
+              ]
+          }, {
+              title: '坚果',
+              children: [
+                  {title: '向日葵'},
+                  {title: '瓜子'}
+              ]
+          }, {
+              title: '蔬菜'
+	  }];
         $('#menuTree').tree(
         {
             data: myTreeData
         });
       }
-      $('#searchInputTree').on('input', function()
+      $('.menu-tree .search-input').on('input', function()
       {
-	  var val = $(this).val();
+          var val = $(this).val();
 	  if (!val)
           {
-              var updateData = JSON.parse(JSON.stringify(myTreeData));
+              var updateData = myTreeData;
           }
           else
           {
@@ -85,15 +85,15 @@ $(function()
                       var children = [];
                       for (var j = 0; j < item.children.length; j++)
                       {
-                          if (item.children[j].title.includes(val))
+                          if (item.children[j].title.includes(val) || (item.children[j].key && item.children[j].key.includes(val)))
                           {
                               children.push(item.children[j]);
-			  }
+              	          }
 		      }
                       item.children = children;
 		  }
                   updateData.push(item);
-	      }
+              }
           }
           $('#menuTree').data('zui.tree').reload(updateData);
       })

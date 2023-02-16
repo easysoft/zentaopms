@@ -83,9 +83,12 @@ class dev extends control
     }
 
     /**
-     * Lang item.
+     *  Custom menu lang item.
      *
-     * @param  string $type
+     * @param  string $type       common|first|second|third|feature
+     * @param  string $module
+     * @param  string $method
+     * @param  string $language   zh_cn|en|fr|de|zh_tw
      * @access public
      * @return void
      */
@@ -119,7 +122,7 @@ class dev extends control
                 $_POST = array();
                 if(!empty($post['common_SRCommon'])) $_POST['SRName'] = $post['common_SRCommon'];
                 if(!empty($post['common_URCommon'])) $_POST['URName'] = $post['common_URCommon'];
-                $this->custom->updateURAndSR($this->config->custom->URSR);
+                $this->custom->updateURAndSR($this->config->custom->URSR, $language);
             }
 
             return $this->send(array('result' => 'success', 'locate' => 'reload', 'message' => $this->lang->saveSuccess));
@@ -133,7 +136,42 @@ class dev extends control
         $this->view->originalLangs = $this->dev->getOriginalLang($type, $module, $method, $language);
         $this->view->customedLangs = $this->dev->getCustomedLang($type, $module, $method, $language);
         $this->view->moduleName    = $moduleName;
-        $this->view->language      = $language;
+        $this->view->language      = str_replace('-', '_', $language);
         $this->display();
+    }
+
+    /**
+     * Reset customed menu lang.
+     *
+     * @param  string $type       common|first|second|third|feature
+     * @param  string $module
+     * @param  string $language   zh_cn|en|fr|de|zh_tw
+     * @param  string $confirm    no|yes
+     * @access public
+     * @return void
+     */
+    public function resetLang($type = 'common', $module = '', $language = 'zh_cn', $confirm = 'no')
+    {
+        if($confirm == 'no') return print(js::confirm($this->lang->dev->confirmRestore, inlink('resetLang', "type={$type}&module={$module}&language={$language}&confirm=yes")));
+
+        $language = str_replace('_', '-', $language);
+        $section  = '';
+        if($type == 'common') $section = '&section=';
+        if($type == 'first')  $section = '&section=mainNav';
+        $this->loadModel('custom')->deleteItems("lang={$language}&module={$module}&vision={$this->config->vision}{$section}");
+        if($type == 'common' and $this->config->custom->URSR)
+        {
+            $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($this->config->custom->URSR)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($language)->andWhere('module')->eq('custom')->fetch('value');
+            if($oldValue)
+            {
+                $oldValue = json_decode($oldValue);
+                $_POST    = array();
+                $_POST['SRName'] = zget($oldValue, 'defaultSRName', $oldValue->SRName);
+                $_POST['URName'] = zget($oldValue, 'defaultURName', $oldValue->URName);
+                $this->custom->updateURAndSR($this->config->custom->URSR, $language);
+            }
+        }
+
+        return print(js::reload('parent'));
     }
 }
