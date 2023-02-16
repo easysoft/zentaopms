@@ -712,6 +712,9 @@ class executionModel extends model
         $codeList      = array();
         $projectModel  = 'scrum';
 
+        $parents = array();
+        foreach($oldExecutions as $oldExecution) $parents[$oldExecution->id] = $oldExecution->parent;
+
         /* Replace required language. */
         if($this->app->tab == 'project')
         {
@@ -743,7 +746,6 @@ class executionModel extends model
             $executions[$executionID]->PO             = $data->POs[$executionID];
             $executions[$executionID]->QD             = $data->QDs[$executionID];
             $executions[$executionID]->RD             = $data->RDs[$executionID];
-            $executions[$executionID]->lifetime       = $data->lifetimes[$executionID];
             $executions[$executionID]->status         = $data->statuses[$executionID];
             $executions[$executionID]->begin          = $data->begins[$executionID];
             $executions[$executionID]->end            = $data->ends[$executionID];
@@ -753,27 +755,58 @@ class executionModel extends model
             $executions[$executionID]->lastEditedBy   = $this->app->user->account;
             $executions[$executionID]->lastEditedDate = helper::now();
 
-            if(isset($data->codes)) $executions[$executionID]->code = $executionCode;
+            if(isset($data->codes))      $executions[$executionID]->code      = $executionCode;
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
+            if(isset($data->lifetimes))  $executions[$executionID]->lifetime  = $data->lifetimes[$executionID];
             if($executions[$executionID]->status == 'closed' and $oldExecutions[$executionID]->status != 'closed') $executions[$executionID]->closedDate = helper::now();
             if($executions[$executionID]->status == 'suspended' and $oldExecutions[$executionID]->status != 'suspended') $executions[$executionID]->suspendedDate = helper::today();
 
             /* Check unique code for edited executions. */
-            if($projectModel == 'scrum' and isset($executionCode) and empty($executionCode))
+            if(isset($data->codes) and empty($executionCode))
             {
-                dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
-                return false;
+                dao::$errors["codes\[$executionID\]"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
             }
-            elseif(!empty($executionCode))
+            elseif(isset($data->codes) and $executionCode)
             {
                 /* Check unique code for edited executions. */
                 if(isset($codeList[$executionCode]))
                 {
-                    dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
-                    return false;
+                    dao::$errors["codes\[$executionID\]"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
                 }
                 $codeList[$executionCode] = $executionCode;
+            }
+
+            /* Name check. */
+            $parentID = $parents[$executionID];
+            if(isset($nameList[$executionName]))
+            {
+                foreach($nameList[$executionName] as $repeatID)
+                {
+                    if($parentID == $parents[$repeatID])
+                    {
+                        dao::$errors["names\[$executionID\]"][] = $this->lang->execution->errorNameRepeat;
+                        break;
+                    }
+                }
+            }
+
+            $nameList[$executionName][] = $executionID;
+
+            /* Attribute check. */
+            if(isset($data->attributes))
+            {
+                $this->app->loadLang('stage');
+                $attribute = $executions[$executionID]->attribute;
+                if(isset($attributeList[$parentID]))
+                {
+                    if($attributeList[$parentID] != $attribute and $attributeList[$parentID] != 'mix')
+                    {
+                        $parentAttr = zget($this->lang->stage->typeList, $attributeList[$parentID]);
+                        dao::$errors["attributes$executionID"][] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
+                    }
+                }
+                $attributeList[$executionID] = $attribute;
             }
 
             /* Judge workdays is legitimate. */
@@ -785,6 +818,37 @@ class executionModel extends model
                 return false;
             }
 
+            /* Parent stage begin and end check. */
+            if(isset($executions[$parentID]))
+            {
+                $begin       = $executions[$executionID]->begin;
+                $end         = $executions[$executionID]->end;
+                $parentBegin = $executions[$parentID]->begin;
+                $parentEnd   = $executions[$parentID]->end;
+
+                if($begin < $parentBegin)
+                {
+                    dao::$errors["begins\[$executionID\]"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                }
+
+                if($end > $parentEnd)
+                {
+                    dao::$errors["ends\[$executionID\]"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                }
+            }
+
+            /* Project begin and end check. */
+            if($project and $execution->begin < $project->begin)
+            {
+                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
+                return false;
+            }
+            if($project and $execution->end > $project->end)
+            {
+                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
+                return false;
+            }
+
             foreach($extendFields as $extendField)
             {
                 $executions[$executionID]->{$extendField->field} = $this->post->{$extendField->field}[$executionID];
@@ -793,6 +857,8 @@ class executionModel extends model
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
             }
         }
+
+        if(dao::isError()) return false;
 
         /* Update burn before close execution. */
         $closedIdList = array();
@@ -828,29 +894,6 @@ class executionModel extends model
                         $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
                     }
                 }
-            }
-
-            if($project  and $execution->begin < $project->begin)
-            {
-                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
-                return false;
-            }
-            if($project and $execution->end > $project->end)
-            {
-                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
-                return false;
-            }
-
-            /* Replace required language. */
-            if($this->app->tab == 'project')
-            {
-                $this->lang->project->name = $this->lang->execution->name;
-                $this->lang->project->code = $this->lang->execution->code;
-            }
-            else
-            {
-                $this->lang->project->name = $this->lang->execution->execName;
-                $this->lang->project->code = $this->lang->execution->execCode;
             }
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
