@@ -543,8 +543,6 @@ class baseHelper
     static public function diffDate($date1, $date2)
     {
         /* Get the timestamp in the current operating system. */
-        $date1 = date('Y-m-d h:i:s', strtotime($date1));
-        $date2 = date('Y-m-d h:i:s', strtotime($date2));
         $date1 = new DateTime($date1);
         $date2 = new DateTime($date2);
         $date1 = date_format($date1, "U");
