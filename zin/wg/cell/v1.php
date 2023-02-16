@@ -2,6 +2,8 @@
 
 namespace zin;
 
+use stdClass;
+
 class cell extends wg
 {
     static $defineProps = 'order,grow,shrink,width,align,flex';
@@ -17,26 +19,21 @@ class cell extends wg
 
     protected function build()
     {
-        $order  = empty($this->prop('order')) ? '0' : $this->prop('order');
-        $grow   = empty($this->prop('grow')) ? '0' : $this->prop('grow');
-        $shrink = empty($this->prop('shrink')) ? '1' : $this->prop('shrink');
         $basis  = empty($this->prop('width')) ? 'auto' : $this->prop('width');
-        $align  = empty($this->prop('align')) ? 'auto' : $this->prop('align');
-        $flex   = empty($this->prop('flex')) ? '0 1 auto' : $this->prop('flex');
-
         if(is_numeric($basis)) $basis .= 'px';
         elseif(preg_match('/^(\d+)\/(\d+)$/', $basis, $matches) !== 0) {
             $basis = ((int)$matches[1] / (int)$matches[2] * 100) . '%';
         }
+
+        $style = new stdClass();
+        if(!empty($this->prop('order')))  $style['order']       = $this->prop('order');
+        if(!empty($this->prop('grow')))   $style['flex-grow']   = $this->prop('grow');
+        if(!empty($this->prop('shrink'))) $style['flex-shrink'] = $this->prop('shrink');
+        if(!empty($this->prop('width')))  $style['flex-basis']  = $this->prop('width');
+        if(!empty($this->prop('align')))  $style['align-self']  = $this->prop('align');
+        if(!empty($this->prop('flex')))   $style['flex']        = $this->prop('flex');
         return div(
-            setStyle(array(
-                'order'       => $order,
-                'flex-grow'   => $grow,
-                'flex-shrink' => $shrink,
-                'basis'       => $basis,
-                'align-self'  => $align,
-                'flex'        => $flex
-            )),
+            setStyle($style),
             $this->block('inner'),
         );
     }
