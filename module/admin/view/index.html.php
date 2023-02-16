@@ -134,11 +134,10 @@
     <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->upgradeRecommend?></div>
-        <?php echo html::a($config->admin->apiRoot, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
       <?php if($config->edition != 'biz'):?>
       <div class="upgrade-block">
-        <a class="title text-primary flex justify-between" href="<?php echo $lang->admin->bizInfoURL;?>" target="_blank">
+        <a class="title text-primary flex justify-between" href="<?php echo $config->admin->apiRoot;?>" target="_blank">
           <div class="panel-title"><i class="icon icon-zentao text-primary pr-4 font-18"></i><?php echo $lang->admin->bizTag?></div>
           <div class="flex align-center"><div><?php echo $lang->admin->productDetail?></div><i class="icon icon-caret-right text-primary pb-3"></i></div>
         </a>
@@ -148,7 +147,7 @@
       </div>
       <?php endif;?>
       <div class="upgrade-block">
-        <a class="title text-primary flex justify-between" href='<?php echo $lang->admin->maxInfoURL;?>' target="_blank">
+        <a class="title text-primary flex justify-between" href='<?php echo $config->admin->apiRoot;?>' target="_blank">
           <div class="panel-title"><i class="icon icon-zentao text-primary pr-4 font-18"></i><?php echo $lang->admin->maxTag?></div>
           <div class="flex align-center"><div><?php echo $lang->admin->productDetail?></div><i class="icon icon-caret-right text-primary pb-3"></i></div>
         </a>
