@@ -171,8 +171,8 @@ class programplan extends control
         $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->programplan->create;
 
-        $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID) : array();
-        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
+        $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
+        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent', 'order_asc');
         if(!empty($planID) and !empty($plans) and $project->model == 'waterfallplus')
         {
             $executionType = 'stage';
