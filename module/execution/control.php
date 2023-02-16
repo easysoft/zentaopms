@@ -282,7 +282,12 @@ class execution extends control
 
         /* Get tasks and group them. */
         if(empty($groupBy))$groupBy = 'story';
-        if(($groupBy == 'story') and ($execution->lifetime == 'ops')) $groupBy = 'status';
+        if($groupBy == 'story' and $execution->lifetime == 'ops')
+        {
+            $groupBy = 'status';
+            unset($this->lang->execution->groups['story']);
+        }
+
         $sort        = common::appendOrder($groupBy);
         $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, $productID = 0, $status = 'all', $modules = 0, $sort);
         $groupBy     = str_replace('`', '', $groupBy);
@@ -1489,6 +1494,7 @@ class execution extends control
 
         $minDate = !helper::isZeroDate($execution->openedDate) ? date('Y-m-d', strtotime($execution->openedDate)) : date('Y-m-d', strtotime($execution->begin));
         $maxDate = !helper::isZeroDate($execution->closedDate) ? date('Y-m-d', strtotime($execution->closedDate)) : helper::today();
+        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))) $type = 'task';
 
         if(!empty($_POST))
         {
@@ -2583,10 +2589,15 @@ class execution extends control
 
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
-
         foreach($this->config->execution->statusActions as $action)
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
+        }
+
+        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
+        {
+            $browseType = 'task';
+            unset($this->lang->kanban->group->task['story']);
         }
 
         $userList    = array();
@@ -2682,12 +2693,9 @@ class execution extends control
 
         $this->execution->setMenu($executionID);
         $execution = $this->execution->getById($executionID);
-        if($execution->lifetime == 'ops')
+        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
         {
             $browseType = 'task';
-            unset($this->lang->kanban->type['story']);
-            unset($this->lang->kanban->type['bug']);
-            unset($this->lang->kanban->type['all']);
             unset($this->lang->kanban->group->task['story']);
         }
 
@@ -2885,6 +2893,7 @@ class execution extends control
         $this->app->session->set('bugList', $uri, 'qa');
 
         if($type === 'json') return print(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
+        if($execution->lifetime == 'ops') unset($this->lang->execution->treeLevel['story']);
 
         $this->view->title       = $this->lang->execution->tree;
         $this->view->position[]  = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
@@ -3130,7 +3139,7 @@ class execution extends control
         $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
 
         $this->loadModel('product');
-        $execution  = $this->execution->getById($executionID);
+        $execution = $this->execution->getById($executionID);
 
         if(!empty($_POST))
         {

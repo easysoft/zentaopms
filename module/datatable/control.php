@@ -128,6 +128,7 @@ class datatable extends control
             if(!$execution->hasProduct and !$execution->multiple) unset($cols['plan']);
             if(!$execution->hasProduct) unset($cols['branch']);
         }
+        if($extra == 'unsetStory' and isset($cols['story'])) unset($cols['story']);
 
         $this->view->cols    = $cols;
         $this->view->setting = $setting;

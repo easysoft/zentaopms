@@ -83,6 +83,13 @@ foreach($projectExecutions as $projectID => $executions)
         if(isset($execution->type) and $execution->type == 'kanban' and !$isKanbanMethod) $executionLink = $kanbanLink;
         if(isset($execution->type) and $execution->type != 'kanban' and strpos(',kanban,cfd,', ",$method,") !== false) $executionLink = $taskLink;
         if(isset($execution->type) and $execution->type == 'stage' and in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'meeting'))) $executionLink = $taskLink;
+        if(isset($execution->attribute) and in_array($execution->attribute, array('request', 'review')))
+        {
+            $changeLink = false;
+            if(in_array($module, array('repo', 'issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'meeting'))) $changeLink = true;
+            if($module == 'execution' and in_array($method, array('story', 'bug', 'testcase', 'testtask', 'build', 'grouptask', 'tree', 'manageproducts'))) $changeLink = true;
+            if($changeLink) $executionLink = (isset($execution->type) and $execution->type == 'kanban') ? $kanbanLink : $taskLink;
+        }
 
         if($execution->id == $executionID) $currentExecution = $execution;
         $selected = $execution->id == $executionID ? 'selected' : '';

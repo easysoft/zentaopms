@@ -33,9 +33,11 @@
     $weekend = $withWeekend == 'true' ? 'noweekend' : 'withweekend';
     echo html::a('#', $lang->execution->$weekend, '', "class='btn btn-link' id='weekend'");
     ?>
+    <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
     <div class='input-control w-140px'>
       <?php echo html::select('type', $lang->execution->cfdTypeList, $type, "class='form-control chosen'");?>
     </div>
+    <?php endif;?>
     <div id="cfdDateSelect">
     <form method='post' class='form-ajax not-watch'>
       <div class='input-group'>

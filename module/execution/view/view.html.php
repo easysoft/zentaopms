@@ -420,7 +420,7 @@
                 <table class="table table-data data-basic">
                   <tbody>
                     <tr>
-                      <?php if($execution->lifetime == 'ops'):?>
+                      <?php if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))):?>
                       <th><?php echo $lang->task->common;?></th>
                       <td><?php echo $statData->taskCount;?></td>
                       <?php else:?>

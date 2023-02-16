@@ -69,7 +69,7 @@ class executionModel extends model
         if($execution and $execution->type == 'kanban')
         {
             global $lang;
-            $lang->executionCommon   = $lang->execution->kanban;
+            $lang->executionCommon = $lang->execution->kanban;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
 
             $this->lang->execution->menu           = new stdclass();
@@ -119,7 +119,13 @@ class executionModel extends model
         $stageFilter = array('request', 'design', 'review');
         if(isset($execution->attribute) and in_array($execution->attribute, $stageFilter))
         {
-            if(in_array($execution->attribute, array('request', 'review'))) unset($this->lang->execution->menu->story);
+            if(in_array($execution->attribute, array('request', 'review')))
+            {
+                unset($this->lang->execution->menu->story);
+                unset($this->lang->execution->menu->view['subMenu']->groupTask);
+                unset($this->lang->execution->menu->view['subMenu']->tree);
+                unset($this->lang->execution->menu->other);
+            }
 
             unset($this->lang->execution->menu->devops);
             unset($this->lang->execution->menu->qa);

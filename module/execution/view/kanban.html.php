@@ -61,24 +61,40 @@ js::set('rdSearchValue', '');
 js::set('defaultMinColWidth', $this->config->minColWidth);
 js::set('defaultMaxColWidth', $this->config->maxColWidth);
 
-$canSortRegion       = (commonModel::hasPriv('kanban', 'sortRegion') and count($regions) > 1);
-$canCreateRegion     = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
-$canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
-$canDeleteRegion     = commonModel::hasPriv('kanban', 'deleteRegion');
-$canCreateLane       = commonModel::hasPriv('kanban', 'createLane');
-$canCreateTask       = common::hasPriv('task', 'create');
-$canBatchCreateTask  = common::hasPriv('task', 'batchCreate');
-$canImportTask       = (common::hasPriv('execution', 'importTask') and $execution->multiple);
-$canCreateBug        = ($productID and common::hasPriv('bug', 'create'));
-$canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate') and $execution->multiple);
-$canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
-$canCreateStory      = ($productID and common::hasPriv('story', 'create'));
-$canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
-$canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory') and !empty($execution->hasProduct));
-$canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories') and !empty($project->hasProduct));
-$hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
-$hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
-$hasBugButton        = ($canCreateBug or $canBatchCreateBug);
+$canSortRegion      = (commonModel::hasPriv('kanban', 'sortRegion') and count($regions) > 1);
+$canCreateRegion    = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
+$canEditRegion      = commonModel::hasPriv('kanban', 'editRegion');
+$canDeleteRegion    = commonModel::hasPriv('kanban', 'deleteRegion');
+$canCreateLane      = commonModel::hasPriv('kanban', 'createLane');
+$canCreateTask      = common::hasPriv('task', 'create');
+$canBatchCreateTask = common::hasPriv('task', 'batchCreate');
+$canImportTask      = (common::hasPriv('execution', 'importTask') and $execution->multiple);
+
+if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review')))
+{
+    $canCreateBug        = ($productID and common::hasPriv('bug', 'create'));
+    $canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate') and $execution->multiple);
+    $canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
+    $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
+    $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
+    $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory') and !empty($execution->hasProduct));
+    $canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories') and !empty($project->hasProduct));
+    $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
+    $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
+}
+else
+{
+    $canCreateBug        = false;
+    $canBatchCreateBug   = false;
+    $canImportBug        = false;
+    $canCreateStory      = false;
+    $canBatchCreateStory = false;
+    $canLinkStory        = false;
+    $canLinkStoryByPlan  = false;
+    $hasStoryButton      = false;
+    $hasBugButton        = false;
+}
+$hasTaskButton = ($canCreateTask or $canBatchCreateTask or $canImportBug);
 
 js::set('priv',
     array(
@@ -124,15 +140,18 @@ js::set('priv',
 );
 ?>
 <?php if($groupBy == 'story' and $browseType == 'task'):?>
-<style>
-.kanban-cols {left: 0px !important;}
-</style>
+<style>.kanban-cols {left: 0px !important;}</style>
+<?php endif;?>
+<?php if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))):?>
+<style>#mainMenu .c-group{margin-left: 0px;}</style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
     <div class="input-control space c-type">
       <?php echo html::select('type', $lang->kanban->type, $browseType, 'class="form-control chosen" data-max_drop_width="215"');?>
     </div>
+    <?php endif;?>
     <?php if($browseType != 'all'):?>
     <div class="input-control space c-group">
       <?php echo html::select('group',  $lang->kanban->group->$browseType, $groupBy, 'class="form-control chosen" data-max_drop_width="215"');?>
