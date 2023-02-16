@@ -35,11 +35,7 @@
       <div class="input-list">
         <?php foreach($originalLangs as $langKey => $originalLang):?>
         <div class="input-control h-32 my-12">
-          <?php
-          $disabled = '';
-          if($type == 'common' and ($langKey == 'URCommon' or $langKey == 'SRCommon')) $disabled = 'disabled';
-          ?>
-          <?php echo html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover {$disabled}' {$disabled} placeholder='{$originalLang}'");?>
+          <?php echo html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$originalLang}'");?>
           <i iconId="<?php echo "{$moduleName}_{$langKey}"?>" class="icon icon-angle-right text-primary hidden"></i>
         </div>
         <?php endforeach;?>
@@ -47,10 +43,9 @@
     </div>
     <div class="side-main"></div>
   </div>
+  <div class="bottom-btn">
+    <?php echo html::submitButton(); ?>
+    <button id="reset" class="btn btn-wide ml-20"><?php echo $lang->restore?> </button>
+  </div>
 </form>
-<div class="bottom-btn">
-  <?php echo html::submitButton(); ?>
-  <button id="reset" class="btn btn-wide ml-20"><?php echo $lang->restore?> </button>
-</div>
-</div>
 <?php include '../../common/view/footer.html.php';?>

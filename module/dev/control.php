@@ -95,9 +95,9 @@ class dev extends control
         $moduleName = $module;
         if($type == 'common') $moduleName = 'common';
         if($type == 'second') $moduleName = $module . 'Menu';
-        if($type == 'third')  $moduleName = $module . 'subMenu';
+        if($type == 'third')  $moduleName = $module . 'SubMenu';
 
-        if($_POST)
+        if($this->server->request_method == 'POST')
         {
             $section = '';
             if($type == 'common') $section = '&section=';
@@ -105,6 +105,7 @@ class dev extends control
             $this->loadModel('custom')->deleteItems("lang={$language}&module={$moduleName}&vision={$this->config->vision}{$section}");
 
             $data = fixer::input('post')->get();
+            if($type == 'common') unset($data->common_SRCommon, $data->common_URCommon);
             foreach($data as $langKey => $customedLang)
             {
                 if(strpos($langKey, "{$moduleName}_") !== 0) continue;
@@ -112,6 +113,15 @@ class dev extends control
 
                 $this->custom->setItem("{$language}." . str_replace('_', '.', $langKey), $customedLang);
             }
+            if($type == 'common' and $this->config->custom->URSR)
+            {
+                $post  = $_POST;
+                $_POST = array();
+                if(!empty($post['common_SRCommon'])) $_POST['SRName'] = $post['common_SRCommon'];
+                if(!empty($post['common_URCommon'])) $_POST['URName'] = $post['common_URCommon'];
+                $this->custom->updateURAndSR($this->config->custom->URSR);
+            }
+
             return $this->send(array('result' => 'success', 'locate' => 'reload', 'message' => $this->lang->saveSuccess));
         }
 

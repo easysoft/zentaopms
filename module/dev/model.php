@@ -340,6 +340,7 @@ class devModel extends model
             $originalLangs['executionCommon'] = $this->config->executionCommonList[$clientLang][$projectKey];
             $originalLangs['URCommon']        = $this->lang->dev->UR;
             $originalLangs['SRCommon']        = $this->lang->dev->SR;
+            if(!$this->config->URAndSR) unset($originalLangs['SRCommon']);
         }
         elseif($type == 'feature')
         {
@@ -433,10 +434,20 @@ class devModel extends model
         $clientLang    = $this->app->getClientLang();
         if($type == 'common')
         {
-            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module=common&section=&vision={$this->config->vision}&systemMode={$this->config->systemMode}");
+            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module=common&section=&vision={$this->config->vision}");
             foreach($customeds as $customed) $customedLangs[$customed->key] = $customed->value;
+
             $customedLangs['URCommon'] = $this->lang->dev->UR == $this->lang->URCommon ? '' : $this->lang->URCommon;
             $customedLangs['SRCommon'] = $this->lang->dev->SR == $this->lang->SRCommon ? '' : $this->lang->SRCommon;
+            if($this->config->custom->URSR)
+            {
+                $URSRList = $this->custom->getItems("lang={$clientLang}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
+                $URSRList = array_shift($URSRList);
+                $URSRList = json_decode($URSRList->value);
+                $customedLangs['URCommon'] = $this->lang->dev->UR == $URSRList->URName ? '' : $URSRList->URName;
+                $customedLangs['SRCommon'] = $this->lang->dev->SR == $URSRList->SRName ? '' : $URSRList->SRName;
+            }
+            if(!$this->config->URAndSR) unset($customedLangs['SRCommon']);
         }
 
         return $customedLangs;
