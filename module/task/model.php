@@ -154,11 +154,6 @@ class taskModel extends model
 
             /* Fix Bug #2466 */
             if($this->post->multiple)  $task->assignedTo = '';
-            if($task->mode == 'multi')
-            {
-                $task->assignedTo   = isset($_POST['team'][0]) ? $_POST['team'][0] : '';
-                $task->assignedDate = helper::now();
-            }
             if(!$this->post->multiple or count(array_filter($this->post->team)) < 1) $task->mode = '';
             $this->dao->insert(TABLE_TASK)->data($task, $skip = 'gitlab,gitlabProject')
                 ->autoCheck()
@@ -869,7 +864,7 @@ class taskModel extends model
                     }
                     elseif(strpos('wait,doing,pause', $oldTask->status) !== false)
                     {
-                        $currentTask->status = 'done';
+                        $currentTask->status       = 'done';
                         $currentTask->assignedTo   = $oldTask->openedBy;
                         $currentTask->assignedDate = $now;
                         $currentTask->finishedBy   = $this->app->user->account;
@@ -2497,7 +2492,7 @@ class taskModel extends model
             ->beginIF($productID)->andWhere("((t5.root=" . (int)$productID . " and t5.type='story') OR t2.product=" . (int)$productID . ")")->fi()
             ->beginIF($type == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
-            ->beginIF($type == 'assignedtome')->andWhere("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}') )")->fi()
+            ->beginIF($type == 'assignedtome')->andWhere("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t4.status != 'done') )")->fi()
             ->beginIF($type == 'finishedbyme')
             ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
             ->orWhere('t4.status')->eq("done")
@@ -2642,7 +2637,7 @@ class taskModel extends model
             ->fi()
             ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed') )")->fi()
+            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel,pause')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -3930,7 +3925,7 @@ class taskModel extends model
         $btnTextClass   = '';
         $btnClass       = '';
         $assignedToText = $assignedToTitle = zget($users, $task->assignedTo);
-        if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
+        if(!empty($task->team) and $task->mode == 'multi' and strpos('done,closed', $task->status) === false)
         {
             $assignedToText = $this->lang->task->team;
 

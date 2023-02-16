@@ -58,6 +58,15 @@ $lang->action->noDynamic          = 'No dynamics. ';
 $lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
 $lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
 $lang->action->repoNoServer       = 'The repo does not belong to a server,please restore the server first';
+$lang->action->hasCreatedTask     = 'Tasks have been created in this parent phase and cannot be restored!';
+$lang->action->hasDeletedParent   = 'Restoring this phase requires restoring the deleted parent phase %s at the same time.';
+$lang->action->hasChangedAttr     = "After recovery, the phase type will be adjusted to '%s' according to the parent phase type.";
+$lang->action->whetherToRestore   = 'Confirm to restore?';
+
+$lang->action->hasOtherType = array();
+$lang->action->hasOtherType['stage']  = "Only subtypes of {$lang->executionCommon} / Kanban types can be created at this parent stage, so the current stage cannot be restored.";
+$lang->action->hasOtherType['sprint'] = "Only subtypes of Stage types can be created at this parent stage, so the current {$lang->executionCommon} cannot be restored.";
+$lang->action->hasOtherType['kanban'] = "Only subtypes of Stage types can be created at this parent stage, so the current Kanban cannot be restored.";
 
 $lang->action->repeatChange     = '%s with the same name and code already exists in the system, After recovery, the name are \"%s\",the code are \"%s\".';
 $lang->action->nameRepeatChange = '%s with the same name already exists in the system, After recovery, the name are \"%s\".';

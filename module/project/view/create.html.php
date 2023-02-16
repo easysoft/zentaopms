@@ -79,7 +79,7 @@
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
-        <?php if($model != 'waterfall'):?>
+        <?php if($model == 'scrum' or $model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->project->multiple;?></th>
           <td colspan='3'>
@@ -229,7 +229,7 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if($model == 'waterfall'):?>
+        <?php if($model == 'waterfall' or $model == 'waterfallplus'):?>
         <tr class='hide division'>
           <th><?php echo $lang->project->division;?></th>
           <td>

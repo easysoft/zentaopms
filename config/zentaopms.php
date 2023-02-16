@@ -227,7 +227,8 @@ $config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
 $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
-$config->openMethods[] = 'zanode.nodelist';
+$config->openMethods[] = 'zanode.nodeList';
+$config->openMethods[] = 'action.restoreStages';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

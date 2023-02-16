@@ -34,7 +34,8 @@
           if(strpos(",{$config->execution->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
-  $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
+  $maxCount = strpos($this->app->getClientLang(), 'zh-') !== false ? 5 : 3;
+  $minWidth = (count($visibleFields) > $maxCount) ? 'w-150px' : '';
   $name     = $from == 'execution' ? 'execName' : 'name';
   $code     = $from == 'execution' ? 'execCode' : 'code';
   $PM       = $from == 'execution' ? 'execPM'   : 'PM';
@@ -42,7 +43,7 @@
   $desc     = $from == 'execution' ? 'execDesc' : 'desc';
   $status   = $from == 'execution' ? 'execStatus' : 'status';
   ?>
-  <form class='main-form' method='post' target='hiddenwin' id='ajaxForm' action='<?php echo inLink('batchEdit');?>'>
+  <form class='main-form form-ajax' method='post' id='executionForm' action='<?php echo inLink('batchEdit');?>'>
     <div class="table-responsive">
       <table class='table table-form'>
         <thead>
@@ -50,6 +51,9 @@
             <th class='c-id'><?php echo $lang->idAB;?></th>
             <?php if(isset($project) and $project->model == 'scrum'):?>
             <th class='c-project required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->projectName;?></th>
+            <?php endif;?>
+            <?php if($app->tab == 'project' and isset($project) and ($project->model == 'agileplus' or $project->model == 'waterfallplus')):?>
+            <th class='c-method'><?php echo $lang->execution->method;?></th>
             <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
             <?php if(!isset($config->setCode) or $config->setCode == 1):?>
@@ -73,7 +77,7 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach($executionIDList as $executionID):?>
+          <?php foreach($executions as $executionID => $execution):?>
           <?php
           if(!empty($this->config->moreLinks["PM"])) $this->config->moreLinks["PMs[$executionID]"] = $this->config->moreLinks["PM"];
           if(!empty($this->config->moreLinks["PO"])) $this->config->moreLinks["POs[$executionID]"] = $this->config->moreLinks["PO"];
@@ -84,6 +88,9 @@
             <td><?php echo sprintf('%03d', $executionID) . html::hidden("executionIDList[$executionID]", $executionID);?></td>
             <?php if(isset($project) and $project->model == 'scrum'):?>
             <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$executionID]", $allProjects, $executions[$executionID]->project, "class='form-control picker-select' data-lastselected='{$executions[$executionID]->project}' onchange='changeProject(this, $executionID, {$executions[$executionID]->project})'");?></td>
+            <?php endif;?>
+            <?php if($app->tab == 'project' and isset($project) and ($project->model == 'agileplus' or $project->model == 'waterfallplus')):?>
+            <td title='<?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?>'><?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?></td>
             <?php endif;?>
             <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control'");?></td>
             <?php if(!isset($config->setCode) or $config->setCode == 1):?>
@@ -136,12 +143,5 @@
 <?php
 js::set('weekend', $config->execution->weekend);
 js::set('confirmSync', $lang->execution->confirmSync);
-js::set('emptyBegin', $lang->programplan->emptyBegin);
-js::set('emptyEnd', $lang->programplan->emptyEnd);
-js::set('planFinishSmall', $lang->programplan->error->planFinishSmall);
-js::set('errorBegin', $lang->execution->errorLetterProject);
-js::set('errorEnd', $lang->execution->errorGreaterProject);
 ?>
-
-
 <?php include '../../common/view/footer.html.php';?>

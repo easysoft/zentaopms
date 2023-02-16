@@ -10,29 +10,27 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/sortable.html.php';?>
 <?php include '../../common/view/datatable.fix.html.php';?>
 <?php
-$datatableId  = $this->moduleName . ucfirst($this->methodName);
-$useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-?>
-<?php
-js::set('unfoldExecutions', array());
-js::set('useDatatable', $useDatatable);
+js::import($jsRoot . 'dtable/min.js');
+css::import($jsRoot . 'dtable/min.css');
+
+$cols       = $this->execution->generateCol();
+$executions = $this->execution->generateRow($executionStats, $users, $productID);
+
+$sortLink = $this->createLink('execution', 'all', "status=$status&orderBy={orderBy}&productID=$productID&param=$param&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID");
+
+js::set('sortLink', $sortLink);
+js::set('cols', json_encode($cols));
+js::set('data', json_encode($executions));
+
+js::set('orderBy', $orderBy);
+js::set('status', $status);
 js::set('from', $from);
 
-/* Replace Iteration to Execution. */
-js::set('checkedSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->checkedExecSummary));
-js::set('pageSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->pageExecSummary));
-js::set('executionSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->executionSummary));
-js::set('checkedExecutions', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->checkedExecutions));
+js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
 ?>
-<?php
-/* Set unfold parent executionID. */
-js::set('unfoldAll', $lang->execution->treeLevel['all']);
-js::set('foldAll', $lang->execution->treeLevel['root']);
-js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
-?>
+
 <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit');?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolBar pull-left'>
@@ -60,7 +58,6 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
-    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->execution->editAction), $showBatchEdit);?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -68,6 +65,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
     <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . ($from == 'execution' ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
   </div>
 </div>
+
 <div id='mainContent' class="main-row fade">
   <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='execution'></div>
   <?php if(empty($executionStats)):?>
@@ -82,70 +80,86 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>'>
+  <form class='main-table' id='' method='post' action='<?php echo inLink('batchEdit');?>'>
     <div class="table-header fixed-right">
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
-    <?php
-    $vars = "status=$status&orderBy=%s&productID=$productID&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
-    if($useDatatable) include '../../common/view/datatable.html.php';
-    else              include '../../common/view/tablesorter.html.php';
-
-    $setting = $this->datatable->getSetting('execution');
-    $widths  = $this->datatable->setFixedFieldWidth($setting);
-    $columns = 0;
-    ?>
-    <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
-    <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='executionList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
-      <thead>
-        <tr>
-          <?php
-          foreach($setting as $key => $value)
-          {
-              if($value->show)
-              {
-                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
-                  $columns ++;
-              }
-          }
-          ?>
-        </tr>
-      </thead>
-      <tbody class='sortable' id='executionTableList'>
-        <?php foreach($executionStats as $execution):?>
-        <tr data-id='<?php echo $execution->id ?>' data-order='<?php echo $execution->order ?>' data-status='<?php echo $execution->status?>'>
-          <?php foreach($setting as $key => $value) $this->execution->printCell($value, $execution, $users, $useDatatable ? 'datatable' : 'table', $isStage, $productID);?>
-        </tr>
-        <?php if(!empty($execution->children)):?>
-        <?php $i = 0;?>
-        <?php foreach($execution->children as $key => $child):?>
-        <?php $class  = $i == 0 ? ' table-child-top' : '';?>
-        <?php $class .= ($i + 1 == count($execution->children)) ? ' table-child-bottom' : '';?>
-        <tr class='table-children<?php echo $class;?> parent-<?php echo $execution->id;?>' data-id='<?php echo $child->id?>'>
-          <?php foreach($setting as $key => $value) $this->execution->printCell($value, $child, $users, $useDatatable ? 'datatable' : 'table', $isStage, $productID, true);?>
-        </tr>
-        <?php $i ++;?>
-        <?php endforeach;?>
-        <?php endif;?>
-        <?php endforeach;?>
-      </tbody>
-    </table>
-    <?php if(!$useDatatable) echo '</div>';?>
-    <?php if($executionStats):?>
+    <div id="myTable"></div>
     <div class='table-footer'>
-      <?php if($canBatchEdit):?>
-      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->execution->batchEdit, '', 'btn');?>
+        <?php
+        if($canBatchEdit)
+        {
+            $actionLink = $this->createLink('project', 'batchEdit');
+            $misc       = "id='batchEditBtn'";
+            echo html::commonButton($lang->edit, $misc); 
+        }
+        ?>
       </div>
-      <?php endif;?>
-      <div class="table-statistic"></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <script>
+  cols = JSON.parse(cols);
+  data = JSON.parse(data);
+  const options = {
+      height: 'auto',
+      striped: true,
+      plugins: ['nested', 'checkable'],
+      checkOnClickRow: true,
+      sortLink: createSortLink,
+      cols: cols,
+      data: data,
+      onCheckChange: toggleActions,
+  };
+
+  function createSortLink(col)
+  {
+      var sort = col.name + '_asc';
+      if(sort == orderBy) sort = col.name + '_desc';
+      return sortLink.replace('{orderBy}', sort);
+  }
+
+  function toggleActions(changes)
+  {
+      checkItems = this.getChecks();
+
+      if(checkItems.length > 0)
+      {
+          $('.table-footer .table-actions').show();
+      }
+      else
+      {
+          $('.table-footer .table-actions').hide();
+      }
+  }
+
+  $(".export").modalTrigger({width:650, type:'iframe', shown: setCookie});
+
+  function setCookie()
+  {
+      $.cookie('checkedItem', checkItems.join(','), {expires: config.cookieLife, path: config.webRoot});
+  }
+
+  $('#myTable').dtable(options);
+
+  $('#batchEditBtn').click(function()
+  {
+      var batchEditLink = createLink('execution', 'batchEdit');
+      var tempform      = document.createElement("form");
+      tempform.action   = batchEditLink;
+      tempform.method   = "post";
+      tempform.style.display = "none";
+
+      var opt   = document.createElement("input");
+      opt.name  = 'executionIDList';
+      opt.value = checkItems;
+
+      tempform.appendChild(opt);
+      document.body.appendChild(tempform);
+      tempform.submit();
+  })
+  </script>
   <?php endif;?>
 </div>
-<?php js::set('orderBy', $orderBy)?>
-<?php js::set('status', $status)?>
 <?php include '../../common/view/footer.html.php';?>
