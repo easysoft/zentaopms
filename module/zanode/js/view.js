@@ -2,11 +2,11 @@ var checkInterval;
 var intervalTimes = 0;
 
 $('#checkServiceStatus').click(function(){
+    $('#serviceContent').addClass('loading');
     checkServiceStatus();
 })
 
 function checkServiceStatus(){
-    $('#serviceContent').addClass('loading');
     $.get(createLink('zanode', 'ajaxGetServiceStatus', 'nodeID=' + nodeID), function(response)
     {
         var resultData = JSON.parse(response);
@@ -187,7 +187,7 @@ $('#jumpManual').click(function()
 
 
 $(function(){
-    checkServiceStatus();
+    $('#checkServiceStatus').trigger("click")
     checkInterval = setInterval(() => {
         intervalTimes++;
         if(intervalTimes > 300)

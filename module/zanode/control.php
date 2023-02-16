@@ -243,9 +243,7 @@ class zanode extends control
 
         if($error)
         {
-             $response['result']  = 'fail';
-             $response['message'] = $error;
-             return $this->send($response);
+            return print(js::alert($error) . js::reload('parent'));
         }
         else
         {
