@@ -17,7 +17,12 @@ require_once 'wg.class.php';
 
 function set($name, $value = NULL)
 {
-    return directive('prop', (is_array($name) || $name instanceof props) ? $name : array($name => $value));
+    $props = null;
+    if($name instanceof props) $props = $name;
+    else if(is_array($name)) $props = $name;
+    else if(is_object($name))  $props = (array)$name;
+    else if(is_string($name)) $props = array($name => $value);
+    if($props) return directive('prop', $props);
 }
 
 function prop($name, $value = NULL)

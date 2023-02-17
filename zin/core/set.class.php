@@ -18,6 +18,7 @@ class set
     public static function __callStatic($prop, $args)
     {
         $value = array_shift($args);
+        if(is_object($value)) $value = (array)$value;
         if($prop === '_' && is_array($value)) return directive('prop', $value);
         return directive('prop', array($prop => $value));
     }
