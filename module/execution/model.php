@@ -807,17 +807,30 @@ class executionModel extends model
             /* Attribute check. */
             if(isset($data->attributes))
             {
-                $this->app->loadLang('stage');
-                $attribute = $executions[$executionID]->attribute;
-                if(isset($attributeList[$parentID]))
+                $executionType = $oldExecutions[$executionID]->type;
+
+                if($executionType == 'stage')
                 {
-                    if($attributeList[$parentID] != $attribute and $attributeList[$parentID] != 'mix')
+                    $this->app->loadLang('stage');
+                    $attribute = $executions[$executionID]->attribute;
+
+                    if(isset($attributeList[$parentID]))
                     {
-                        $parentAttr = zget($this->lang->stage->typeList, $attributeList[$parentID]);
+                        $parentAttr = $attributeList[$parentID];
+                    }
+                    else
+                    {
+                        $parentAttr = $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
+                    }
+
+                    if($parentAttr and $parentAttr != $attribute and $parentAttr != 'mix')
+                    {
+                        $parentAttr = zget($this->lang->stage->typeList, $parentAttr);
                         dao::$errors["attributes$executionID"][] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
                     }
+
+                    $attributeList[$executionID] = $attribute;
                 }
-                $attributeList[$executionID] = $attribute;
             }
 
             /* Judge workdays is legitimate. */
