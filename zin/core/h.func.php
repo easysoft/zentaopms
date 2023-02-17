@@ -26,7 +26,12 @@ function a()        {return call_user_func_array('\zin\h::a', func_get_args());}
 function p()        {return call_user_func_array('\zin\h::p', func_get_args());}
 function img()      {return call_user_func_array('\zin\h::img', func_get_args());}
 function button()   {return call_user_func_array('\zin\h::button', func_get_args());}
-function ol()       {return call_user_func_array('\zin\h::ol', func_get_args());}
+function h1()       {return call_user_func_array('\zin\h::h1', func_get_args());}
+function h2()       {return call_user_func_array('\zin\h::h2', func_get_args());}
+function h3()       {return call_user_func_array('\zin\h::h3', func_get_args());}
+function h4()       {return call_user_func_array('\zin\h::h4', func_get_args());}
+function h5()       {return call_user_func_array('\zin\h::h5', func_get_args());}
+function h6()       {return call_user_func_array('\zin\h::h6', func_get_args());}
 function ul()       {return call_user_func_array('\zin\h::ul', func_get_args());}
 function li()       {return call_user_func_array('\zin\h::li', func_get_args());}
 function input()    {return call_user_func_array('\zin\h::input', func_get_args());}
