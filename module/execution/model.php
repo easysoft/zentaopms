@@ -777,13 +777,13 @@ class executionModel extends model
             /* Check unique code for edited executions. */
             if(isset($data->codes) and empty($executionCode))
             {
-                dao::$errors["codes\[$executionID\]"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
+                dao::$errors["codes$executionID"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
             }
             elseif(isset($data->codes) and $executionCode)
             {
                 if(isset($codeList[$executionCode]))
                 {
-                    dao::$errors["codes\[$executionID\]"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
+                    dao::$errors["codes$executionID"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
                 }
                 $codeList[$executionCode] = $executionCode;
             }
@@ -796,7 +796,7 @@ class executionModel extends model
                 {
                     if($parentID == $parents[$repeatID])
                     {
-                        dao::$errors["names\[$executionID\]"][] = $this->lang->execution->errorNameRepeat;
+                        dao::$errors["names$executionID"][] = $this->lang->execution->errorNameRepeat;
                         break;
                     }
                 }
@@ -807,17 +807,30 @@ class executionModel extends model
             /* Attribute check. */
             if(isset($data->attributes))
             {
-                $this->app->loadLang('stage');
-                $attribute = $executions[$executionID]->attribute;
-                if(isset($attributeList[$parentID]))
+                $executionType = $oldExecutions[$executionID]->type;
+
+                if($executionType == 'stage')
                 {
-                    if($attributeList[$parentID] != $attribute and $attributeList[$parentID] != 'mix')
+                    $this->app->loadLang('stage');
+                    $attribute = $executions[$executionID]->attribute;
+
+                    if(isset($attributeList[$parentID]))
                     {
-                        $parentAttr = zget($this->lang->stage->typeList, $attributeList[$parentID]);
+                        $parentAttr = $attributeList[$parentID];
+                    }
+                    else
+                    {
+                        $parentAttr = $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
+                    }
+
+                    if($parentAttr and $parentAttr != $attribute and $parentAttr != 'mix')
+                    {
+                        $parentAttr = zget($this->lang->stage->typeList, $parentAttr);
                         dao::$errors["attributes$executionID"][] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
                     }
+
+                    $attributeList[$executionID] = $attribute;
                 }
-                $attributeList[$executionID] = $attribute;
             }
 
             /* Judge workdays is legitimate. */
@@ -838,12 +851,12 @@ class executionModel extends model
 
                 if($begin < $parentBegin)
                 {
-                    dao::$errors["begins\[$executionID\]"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                    dao::$errors["begins$executionID"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
                 }
 
                 if($end > $parentEnd)
                 {
-                    dao::$errors["ends\[$executionID\]"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                    dao::$errors["ends$executionID"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
                 }
             }
 
@@ -2243,10 +2256,16 @@ class executionModel extends model
             ->orderBy('id_asc')
             ->fetchGroup('execution', 'id');
 
+        $taskIdList = array();
+        foreach($executionTasks as $executionID => $tasks) $taskIdList = array_merge($taskIdList, array_keys($tasks));
+        $taskIdList = array_unique($taskIdList);
+        $teamGroups = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
+
         foreach($executionTasks as $executionID => $tasks)
         {
             foreach($tasks as $task)
             {
+                if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
                 if($task->parent > 0 and isset($executionTasks[$executionID][$task->parent]))
                 {
                     $executionTasks[$executionID][$task->parent]->children[$task->id] = $task;
