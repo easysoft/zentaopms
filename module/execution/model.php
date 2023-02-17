@@ -777,13 +777,13 @@ class executionModel extends model
             /* Check unique code for edited executions. */
             if(isset($data->codes) and empty($executionCode))
             {
-                dao::$errors["codes\[$executionID\]"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
+                dao::$errors["codes$executionID"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
             }
             elseif(isset($data->codes) and $executionCode)
             {
                 if(isset($codeList[$executionCode]))
                 {
-                    dao::$errors["codes\[$executionID\]"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
+                    dao::$errors["codes$executionID"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
                 }
                 $codeList[$executionCode] = $executionCode;
             }
@@ -796,7 +796,7 @@ class executionModel extends model
                 {
                     if($parentID == $parents[$repeatID])
                     {
-                        dao::$errors["names\[$executionID\]"][] = $this->lang->execution->errorNameRepeat;
+                        dao::$errors["names$executionID"][] = $this->lang->execution->errorNameRepeat;
                         break;
                     }
                 }
@@ -838,12 +838,12 @@ class executionModel extends model
 
                 if($begin < $parentBegin)
                 {
-                    dao::$errors["begins\[$executionID\]"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                    dao::$errors["begins$executionID"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
                 }
 
                 if($end > $parentEnd)
                 {
-                    dao::$errors["ends\[$executionID\]"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                    dao::$errors["ends$executionID"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
                 }
             }
 
