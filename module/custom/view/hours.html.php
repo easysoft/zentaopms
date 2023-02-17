@@ -57,7 +57,7 @@
           </table>
         </div>
       </div>
-      <div class='table-footer text-center'>
+      <div class='table-footer text-center mr-xl'>
         <?php echo html::submitButton();?>
         <?php echo html::hidden('type', $type);?>
       </div>
