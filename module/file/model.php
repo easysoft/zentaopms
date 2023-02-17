@@ -1172,13 +1172,16 @@ class fileModel extends model
     /**
      * Process file info for object.
      *
-     * @param  string    $objectType
-     * @param  object    $oldObject
-     * @param  object    $newObject
+     * @param  string $objectType
+     * @param  object $oldObject
+     * @param  object $newObject
+     * @param  string $extra
+     * @param  string $filesName
+     * @param  string $labelsName
      * @access public
      * @return void
      */
-    public function processFile4Object($objectType, $oldObject, $newObject)
+    public function processFile4Object($objectType, $oldObject, $newObject, $extra = '', $filesName = 'files', $labelsName = 'labels')
     {
         $oldFiles    = empty($oldObject->files) ? '' : join(',', array_keys($oldObject->files));
         $deleteFiles = $newObject->deleteFiles;
@@ -1193,7 +1196,7 @@ class fileModel extends model
         }
 
         $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
-        $addedFiles = $this->saveUpload($objectType, $oldObject->id);
+        $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
         $addedFiles = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
 
         $newObject->files = trim($oldFiles . $addedFiles, ',');
