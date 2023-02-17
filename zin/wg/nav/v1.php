@@ -9,7 +9,7 @@ class nav extends wg
 
     public function onBuildItem($item)
     {
-        if(!($item instanceof item)) $item = item($item);
+        if(!($item instanceof item)) $item = item(set($item));
         return actionItem
         (
             set('name', 'nav'),
@@ -28,7 +28,7 @@ class nav extends wg
             setClass('nav'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : NULL,
-            $this->children(),
+            $this->children()
         );
     }
 }

@@ -42,9 +42,9 @@ class actionItem extends wg
         return h::create
         (
             $tagName,
-            set($text),
             set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
             $icon ? icon($icon) : NULL,
+            $text,
             $this->children(),
             $trailingIcon ? icon($trailingIcon) : NULL,
         );
