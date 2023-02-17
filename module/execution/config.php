@@ -10,9 +10,10 @@ $config->execution->defaultBurnPeriod = 30;
 $config->execution->list = new stdclass();
 $config->execution->list->exportFields = 'id,name,projectName,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
 
-$config->execution->modelList['scrum']     = 'sprint';
-$config->execution->modelList['waterfall'] = 'stage';
-$config->execution->modelList['kanban']    = 'kanban';
+$config->execution->modelList['scrum']         = 'sprint';
+$config->execution->modelList['waterfall']     = 'stage';
+$config->execution->modelList['kanban']        = 'kanban';
+$config->execution->modelList['waterfallplus'] = 'stage';
 
 $config->execution->statusActions = array('start', 'putoff', 'suspend', 'close', 'activate');
 
