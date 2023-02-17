@@ -1,16 +1,8 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
-use \zin\core\h5;
-
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-
-class pageheader extends \zin\core\wg
+class pageheader extends wg
 {
-    static $tag = 'header';
-
-    static $defaultProps = array('id' => 'header');
-
     static $customprops = 'heading,navbar,toolbar';
 
     public $heading;
@@ -27,9 +19,9 @@ class pageheader extends \zin\core\wg
      * @access protected
      * @return object|string
      */
-    protected function acceptChild($child, $strAsHtml = false)
+    protected function onAddChild($child, $strAsHtml = false)
     {
-        if(class_exists('\zin\wg\pageheading') and $child instanceof \zin\wg\pageheading)
+        if(class_exists('\zin\pageheading') and $child instanceof \zin\pageheading)
         {
             $this->heading = $child;
             return NULL;
@@ -48,7 +40,7 @@ class pageheader extends \zin\core\wg
         }
 
         /* Invoke parent method; */
-        $child = parent::acceptChild($child, $strAsHtml);
+        $child = parent::onAddChild($child, $strAsHtml);
 
         if(!$strAsHtml && is_string($child) && !$this->props->has('name'))
         {
@@ -67,23 +59,27 @@ class pageheader extends \zin\core\wg
      * @access protected
      * @return object
      */
-    protected function build($isPrint = false, $parent = NULL)
+    protected function build()
     {
-        $builder = parent::build($isPrint, $parent);
-
-        $container = h5::div()->addClass('container main-header');
+        $container = h::div
+        (
+            setClass('container main-header')
+        );
 
         /* Heading. */
-        $container->append($this->heading);
+        $container->add($this->heading);
 
         /* Navigation Bar. */
-        $container->append($this->navbar);
+        $container->add($this->navbar);
 
         /* Tool Bar. */
-        $container->append($this->toolbar);
+        $container->add($this->toolbar);
 
-        $builder->append($container);
-
-        return $builder;
+        return h::create
+        (
+            'header',
+            setId('header'),
+            $container
+        );
     }
 }

@@ -1,13 +1,7 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h5.class.php';
-require_once dirname(__DIR__) . DS . 'icon' . DS . 'v1.php';
-
-use \zin\core\h5;
-
-class dropdown extends \zin\core\wg
+class dropdown extends wg
 {
     static $tag = 'menu';
 
@@ -19,14 +13,14 @@ class dropdown extends \zin\core\wg
     {
         if(is_string($item))
         {
-            $li = h5::li();
+            $li = h::li();
             if($item === '|' or $item === 'divider') $li->addClass('menu-divider');
             else $li->addClass('menu-item')->append($item);
 
             return $li;
         }
 
-        $li = h5::li()->addClass('menu-item');
+        $li = h::li()->addClass('menu-item');
 
         /* Divider. */
         if(isset($item['text']) and ($item['text'] === '|' or $item['text'] === 'divider'))
@@ -35,17 +29,17 @@ class dropdown extends \zin\core\wg
             return $li;
         }
 
-        $a = h5::a();
+        $a = h::a();
 
         /* Avatar item. */
         if(isset($item['avatar']))
         {
-            $div = h5::div()->addClass('avatar')->addClass('avatar circle primary');
-            $div->append(h5::img(\zin\set('src', $item['avatar'])));
+            $div = h::div()->addClass('avatar')->addClass('avatar circle primary');
+            $div->append(h::img(\zin\set('src', $item['avatar'])));
             $a->append($div);
         }
         if(isset($item['url']))  $a->prop('href', $item['url']);
-        if(isset($item['icon'])) $a->append(h5::i()->addClass("icon icon-{$item['icon']}"));
+        if(isset($item['icon'])) $a->append(h::i()->addClass("icon icon-{$item['icon']}"));
         if(isset($item['text'])) $a->append($item['text']);
         if(isset($item['attr']))
         {

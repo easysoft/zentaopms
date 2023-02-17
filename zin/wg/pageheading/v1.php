@@ -1,63 +1,51 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
-use \zin\core\h5;
-
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-
-class pageheading extends \zin\core\wg
+class pageheading extends wg
 {
-    static $tag = 'div';
-
-    static $defaultProps = array('id' => 'heading');
-
-    static $customProps = 'text,icon,url';
+    protected static $defineProps = 'text?:string, icon?:string, url?:string';
 
     /**
-     * Accept child node.
+     * On add child.
      *
      * @param  object|string $child
-     * @param  bool          $strAsHtml
      * @access protected
      * @return object|string
      */
-    protected function acceptChild($child, $strAsHtml = false)
+    protected function onAddChild($child)
     {
-        /* Invoke parent method; */
-        $child = parent::acceptChild($child, $strAsHtml);
-
-        if(!$strAsHtml && is_string($child) && !$this->props->has('text'))
+        if(is_string($child) && !$this->props->has('text'))
         {
-            $this->prop('text', $child);
-            return NULL;
+            $this->props->set('text', $child);
+            return false;
         }
-
-        return $child;
     }
 
     /**
-     * Build builder.
+     * Build.
      *
-     * @param  bool      $isPrint
-     * @param  object    $parent
      * @access protected
      * @return object
      */
-    protected function build($isPrint = false, $parent = NULL)
+    protected function build()
     {
         $icon = $this->prop('icon');
         $text = $this->prop('text');
         $url  = $this->prop('url');
 
-        $builder = parent::build($isPrint, $parent);
+        $container = h::div
+        (
+            setId('heading'),
+            setClass('primary'),
+            icon(set('name', $icon))
+        );
 
-        if(!empty($icon)) $builder->append(new icon($icon));
+        /* Generate button with url. */
+        if(!empty($url)) $container->add(btn($text, set('url', $url), setClass('primary')));
+        else $container->add(h::span($text, setClass('text')));
 
-        if(empty($text)) return $builder;
+        $this->add($container);
 
-        if(!empty($url)) $builder->append(\zin\btn($text, \zin\set('url', $url))->addClass('primary'));
-        else $builder->append(h5::span($text)->addClass('text'));
-
-        return $builder;
+        return $this->children();
     }
 }
