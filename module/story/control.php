@@ -26,6 +26,8 @@ class story extends control
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
+
+        if($this->app->rawModule == 'projectstory') $this->app->tab = 'project';
     }
 
     /**
@@ -1432,10 +1434,10 @@ class story extends control
         if(!empty($product->shadow))
         {
             $projectInfo = $this->dao->select('t2.model, t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                    ->where('t1.product')->eq($product->id)
-                    ->andWhere('t2.type')->eq('project')
-                    ->fetch();
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.product')->eq($product->id)
+                ->andWhere('t2.type')->eq('project')
+                ->fetch();
 
             if($projectInfo->model == 'waterfall')
             {
