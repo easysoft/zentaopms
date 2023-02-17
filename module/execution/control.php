@@ -1694,7 +1694,7 @@ class execution extends control
 
             $lang->execution->typeList['sprint'] = $executionCommonLang;
         }
-        elseif(!empty($project) and $project->model == 'waterfall')
+        elseif(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))
         {
             global $lang;
             $lang->executionCommon = $lang->execution->stage;
