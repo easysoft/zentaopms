@@ -781,7 +781,6 @@ class executionModel extends model
             }
             elseif(isset($data->codes) and $executionCode)
             {
-                /* Check unique code for edited executions. */
                 if(isset($codeList[$executionCode]))
                 {
                     dao::$errors["codes\[$executionID\]"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
@@ -848,18 +847,6 @@ class executionModel extends model
                 }
             }
 
-            /* Project begin and end check. */
-            if($project and $execution->begin < $project->begin)
-            {
-                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
-                return false;
-            }
-            if($project and $execution->end > $project->end)
-            {
-                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
-                return false;
-            }
-
             foreach($extendFields as $extendField)
             {
                 $executions[$executionID]->{$extendField->field} = $this->post->{$extendField->field}[$executionID];
@@ -871,6 +858,7 @@ class executionModel extends model
             if(empty($executions[$executionID]->begin)) dao::$errors["begins{$executionID}"][] = sprintf($this->lang->error->notempty, $this->lang->execution->begin);
             if(empty($executions[$executionID]->end))   dao::$errors["ends{$executionID}"][]   = sprintf($this->lang->error->notempty, $this->lang->execution->end);
 
+            /* Project begin and end check. */
             if(!empty($executions[$executionID]->begin) and !empty($executions[$executionID]->end))
             {
                 if($executions[$executionID]->begin > $executions[$executionID]->end)

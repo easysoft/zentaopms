@@ -512,9 +512,8 @@ class story extends control
             if($execution->type == 'project')
             {
                 $this->project->setMenu($executionID);
-                $this->app->rawModule = 'projectstory';
                 $this->lang->navGroup->story = 'project';
-                $this->lang->product->menu = $this->lang->{$execution->model}->menu;
+                $this->lang->product->menu   = $this->lang->{$execution->model}->menu;
             }
             else
             {
@@ -536,7 +535,6 @@ class story extends control
                 }
 
                 $this->execution->setMenu($executionID);
-                $this->app->rawModule = 'execution';
                 $this->lang->navGroup->story = 'execution';
             }
             $this->view->execution = $execution;
