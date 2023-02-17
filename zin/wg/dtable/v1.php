@@ -1,5 +1,4 @@
 <?php
-
 namespace zin;
 
 class dtable extends wg
