@@ -10,6 +10,8 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php js::set('type', $type); ?>
+<?php js::set('navTypes', $config->dev->navTypes); ?>
 <?php include 'header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">
@@ -20,32 +22,49 @@
     <?php endforeach;?>
   </div>
 </div>
-<form class='main-form form-ajax' method='post'>
-  <div id='mainContent' class='main-content flex'>
-    <div class="side-left">
-      <div class="title"><?php echo $lang->dev->default;?></div>
-      <div class="label-list">
-        <?php foreach($originalLangs as $langKey => $originalLang):?>
-        <div labelId="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-32 my-12"><?php echo $originalLang?></div>
-        <?php endforeach;?>
-      </div>
+<div class="flex gap-15">
+<?php if(in_array($type, $config->dev->navTypes , false)):?>
+  <div class="menu-tree">
+    <div class="input-control search-box has-icon-left has-icon-right search-example">
+      <input type="search" class="form-control search-input" />
+      <label class="input-control-icon-left search-icon flex align-center justify-center"><i class="icon icon-search"></i></label>
     </div>
-    <div class="side-right">
-      <div class="title"><?php echo $lang->dev->change?></div>
-      <div class="input-list">
-        <?php foreach($originalLangs as $langKey => $originalLang):?>
-        <div class="input-control h-32 my-12">
-          <?php echo html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$originalLang}'");?>
-          <i iconId="<?php echo "{$moduleName}_{$langKey}"?>" class="icon icon-angle-right text-primary hidden"></i>
+    <div id="menuTree"></div>
+  </div>
+<?php endif;?>
+  <form class='main-form form-ajax flex-1' method='post'>
+    <div id='mainContent' class='main-content flex'>
+      <div class="side-left">
+        <div class="title">默认值</div>
+        <div class="label-list">
+          <?php foreach($originalLangs as $langKey => $originalLang):?>
+          <div labelId="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-32 my-12"><?php echo $originalLang?></div>
+          <?php endforeach;?>
         </div>
-        <?php endforeach;?>
       </div>
+      <div class="side-right">
+        <div class="title">修改值</div>
+        <div class="input-list">
+          <?php foreach($originalLangs as $langKey => $originalLang):?>
+          <div class="input-control h-32 my-12">
+            <?php
+            $disabled = '';
+            if($type == 'common' and ($langKey == 'URCommon' or $langKey == 'SRCommon')) $disabled = 'disabled';
+            ?>
+            <?php echo html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover {$disabled}' {$disabled} placeholder='{$originalLang}'");?>
+            <i iconId="<?php echo "{$moduleName}_{$langKey}"?>" class="icon icon-angle-right text-primary hidden"></i>
+          </div>
+          <?php endforeach;?>
+        </div>
+        </div>
+        <div class="side-main"></div>
+      </div>
+      <div class="bottom-btn">
+        <?php echo html::submitButton(); ?>
+        <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide ml-20'");?>
+      </div>
+    </form>
     </div>
-    <div class="side-main"></div>
   </div>
-  <div class="bottom-btn">
-    <?php echo html::submitButton(); ?>
-    <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide ml-20'");?>
-  </div>
-</form>
+</div>
 <?php include '../../common/view/footer.html.php';?>
