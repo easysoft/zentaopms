@@ -419,7 +419,7 @@ class zanodemodel extends model
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq($status)->where('id')->eq($id)->exec();
         }
 
-        $this->loadModel('action')->create('zanode', $id, ucfirst($type), $node->name);
+        $this->loadModel('action')->create('zanode', $id, ucfirst($type));
         return;
     }
 
