@@ -40,6 +40,7 @@
 <?php js::set('allProducts', $allProducts);?>
 <?php js::set('branchGroups', $branchGroups);?>
 <?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>
+<?php js::set('model', $project->model);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -80,7 +81,7 @@
           <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
-        <?php if($model != 'waterfall'):?>
+        <?php if($model != 'waterfall' and $model != 'agileplus' and $model != 'waterfallplus'):?>
         <tr>
           <th><?php echo $lang->project->multiple;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('multiple', $lang->project->multipleList, $project->multiple, 'disabled'));?></td>
@@ -186,7 +187,7 @@
         <?php $i ++;?>
         <?php endforeach;?>
         <?php endif;?>
-        <?php if($project->model == 'waterfall'):?>
+        <?php if($project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
         <?php $class    = (!$project->division and count($linkedProducts) < 2) ? 'hide' : '';?>
         <?php $disabled = !empty($executions) ? "disabled='disabled'" : '';?>
         <tr class='<?php echo $class;?> division'>

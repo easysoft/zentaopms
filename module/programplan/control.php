@@ -138,21 +138,29 @@ class programplan extends control
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $planID
+     * @param  string $executionType
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $productID = 0, $planID = 0)
+    public function create($projectID = 0, $productID = 0, $planID = 0, $executionType = 'stage')
     {
         $this->commonAction($projectID, $productID);
         $this->app->loadLang('project');
         if($_POST)
         {
             $this->programplan->create($projectID, $this->productID, $planID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                if(isset($errors['message']))  return $this->send(array('result' => 'fail', 'message' => $errors));
+                if(!isset($errors['message'])) return $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
+            }
 
             $locate = $this->createLink('project', 'execution', "status=all&projectID=$projectID&orderBy=order_asc&productID=$productID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
+
+        $programPlan = $this->project->getById($planID, 'stage');
 
         $productList = array();
         $this->app->loadLang('stage');
@@ -163,10 +171,27 @@ class programplan extends control
         $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->programplan->create;
 
-        $visibleFields  = array();
-        $requiredFields = array();
-        foreach(explode(',', $this->config->programplan->customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
-        $showFields = $this->config->programplan->custom->createFields;
+        $executions = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
+        $plans      = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent', 'order_asc');
+        if(!empty($planID) and !empty($plans) and $project->model == 'waterfallplus')
+        {
+            $executionType = 'stage';
+            unset($this->lang->programplan->typeList['agileplus']);
+        }
+
+        if(!empty($planID) and !empty($executions) and empty($plans) and $project->model == 'waterfallplus')
+        {
+            $executionType = 'agileplus';
+            unset($this->lang->programplan->typeList['stage']);
+        }
+
+
+        $visibleFields      = array();
+        $requiredFields     = array();
+        $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
+        $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
+        foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
+        $showFields = $this->config->programplan->$custom->createFields;
         foreach(explode(',', $showFields) as $field)
         {
             if($field) $visibleFields[$field] = '';
@@ -177,24 +202,29 @@ class programplan extends control
             if($field)
             {
                 $requiredFields[$field] = '';
-                if(strpos(",{$this->config->programplan->customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+                if(strpos(",{$this->config->programplan->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
             }
         }
 
-        $this->view->productList    = $productList;
-        $this->view->project        = $project;
-        $this->view->productID      = $productID ? $productID : key($productList);
-        $this->view->stages         = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
-        $this->view->programPlan    = $this->project->getById($planID, 'stage');
-        $this->view->plans          = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
-        $this->view->planID         = $planID;
-        $this->view->type           = 'lists';
-        $this->view->PMUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->customFields   = $customFields;
-        $this->view->showFields     = $showFields;
-        $this->view->visibleFields  = $visibleFields;
-        $this->view->requiredFields = $requiredFields;
-        $this->view->colspan        = count($visibleFields) + 3;
+        if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
+
+        $this->view->productList        = $productList;
+        $this->view->project            = $project;
+        $this->view->productID          = $productID ? $productID : key($productList);
+        $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
+        $this->view->programPlan        = $programPlan;
+        $this->view->plans              = empty($executions) ? $plans : $executions;
+        $this->view->planID             = $planID;
+        $this->view->type               = 'lists';
+        $this->view->executionType      = $executionType;
+        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->custom             = $custom;
+        $this->view->customFields       = $customFields;
+        $this->view->showFields         = $showFields;
+        $this->view->visibleFields      = $visibleFields;
+        $this->view->requiredFields     = $requiredFields;
+        $this->view->colspan            = count($visibleFields) + 3;
+        $this->view->enableOptionalAttr = (empty($programPlan) or (!empty($programPlan) and $programPlan->attribute == 'mix'));
 
         $this->display();
     }
@@ -209,8 +239,10 @@ class programplan extends control
      */
     public function edit($planID = 0, $projectID = 0)
     {
-        $this->app->loadLang('project');
+        $this->loadModel('project');
         $this->app->loadLang('execution');
+        $this->app->loadLang('stage');
+
         $plan = $this->programplan->getByID($planID);
 
         global $lang;
@@ -226,18 +258,30 @@ class programplan extends control
             {
                 $actionID = $this->loadModel('action')->create('execution', $planID, 'edited');
                 $this->action->logHistory($actionID, $changes);
+
+                $newPlan = $this->programplan->getByID($planID);
+
+                if($plan->parent != $newPlan->parent)
+                {
+                    $this->programplan->computeProgress($planID, 'edit');
+                    $this->programplan->computeProgress($plan->parent, 'edit', true);
+                }
             }
             $locate = isonlybody() ? 'parent' : inlink('browse', "program=$plan->program&type=lists");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $this->app->loadLang('stage');
-        $this->view->title        = $this->lang->programplan->edit;
-        $this->view->position[]   = $this->lang->programplan->edit;
-        $this->view->PMUsers      = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst', $plan->PM);
-        $this->view->parentStage  = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
-        $this->view->isCreateTask = $this->programplan->isCreateTask($planID);
-        $this->view->plan         = $plan;
+        $parentStage = $this->project->getByID($plan->parent, 'stage');
+
+        $this->view->title              = $this->lang->programplan->edit;
+        $this->view->position[]         = $this->lang->programplan->edit;
+        $this->view->isCreateTask       = $this->programplan->isCreateTask($planID);
+        $this->view->plan               = $plan;
+        $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $planID, $plan->product);
+        $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));
+        $this->view->isTopStage         = $this->programplan->checkTopStage($planID);
+        $this->view->isLeafStage        = $this->programplan->checkLeafStage($planID);
+        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
 
         $this->display();
     }
@@ -325,5 +369,41 @@ class programplan extends control
             $this->loadModel('action')->create('task', $taskID, 'ganttMove');
             return $this->send(array('result' => 'success'));
         }
+    }
+
+    /**
+     * AJAX: Get attributes.
+     *
+     * @param  int    $stageID
+     * @param  string $attribute
+     * @access public
+     * @return int
+     */
+    public function ajaxGetAttribute($stageID, $attribute)
+    {
+        $this->app->loadLang('stage');
+
+        $parentAttribute = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
+        if(empty($parentAttribute) or $parentAttribute == 'mix')
+        {
+            return print(html::select('attribute', $this->lang->stage->typeList, $attribute, "class='form-control chosen'"));
+        }
+        else
+        {
+            return print(zget($this->lang->stage->typeList, $parentAttribute));
+        }
+    }
+
+    /**
+     * AJAX: Get stage's attribute.
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return int
+     */
+    public function ajaxGetStageAttr($stageID)
+    {
+        $stage = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
+        return print($stage);
     }
 }

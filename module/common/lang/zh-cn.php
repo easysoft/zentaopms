@@ -83,6 +83,7 @@ $lang->whitelist      = '访问白名单';
 $lang->globalSetting  = '通用';
 $lang->waterfallModel = '瀑布模型';
 $lang->scrumModel     = '敏捷模型';
+$lang->agilePlusModel = '融合敏捷模型';
 $lang->all            = '所有';
 $lang->viewDetails    = '查看详情';
 

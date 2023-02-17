@@ -116,13 +116,14 @@ class docModel extends model
             {
                 if(strpos($extra, 'withObject') !== false)
                 {
-                    if($lib->product != 0) $lib->name = zget($products, $lib->product, '') . ' / ' . $lib->name;
-                    if($lib->project != 0) $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
                     if($lib->execution != 0)
                     {
                         $lib->name = zget($executions, $lib->execution, '') . ' / ' . $lib->name;
                         if(!empty($waterfalls[$lib->execution])) $lib->name = $waterfalls[$lib->execution] . ' / ' . $lib->name;
+                        $lib->name = trim($lib->name, '/');
                     }
+                    if($lib->product != 0) $lib->name = zget($products, $lib->product, '') . ' / ' . $lib->name;
+                    if($lib->project != 0) $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
                 }
 
                 $libPairs[$lib->id] = $lib->name;
@@ -1580,6 +1581,11 @@ class docModel extends model
             $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
+                if($execution->type == 'stage' and $execution->grade != 1)
+                {
+                    $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                    $execution->name  = implode('/', $parentExecutions);
+                }
                 $execution->name = zget($projectPairs, $execution->project) . ' / ' . $execution->name;
 
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)

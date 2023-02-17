@@ -176,6 +176,18 @@ function refreshPage(projectID)
 }
 
 /**
+ * Refresh page.
+ *
+ * @param  object $projectID
+ * @access public
+ * @return void
+ */
+function setType(type)
+{
+    location.href = createLink('execution', 'create', 'projectID=' + projectID + '&executionID=0&copyExecutionID=&planID=0&confirm=no&productID=0&extra=type=' + type);
+}
+
+/**
  * Cut a string of letters and characters with the same length.
  *
  * @param  string $title
@@ -211,15 +223,15 @@ function subString(title, stringLength)
  */
 function loadProjectExecutions(projectID)
 {
-    $.get(createLink('execution', 'ajaxGetCopyProjectExecutions', 'projectID=' + projectID + '&$copyExecutionID' + copyExecutionID), function(data)
+    $.get(createLink('execution', 'ajaxGetCopyProjectExecutions', 'projectID=' + projectID), function(data)
     {
         if(data != '[]')
         {
-            $('.alert').replaceWith("<div id='copyProjects' class='row'>");
+            $('#copyProjectModal .alert').replaceWith("<div id='copyProjects' class='row'>");
             $("#copyProjects > div[data-id != '']").remove();
             $(".model-body").remove();
             var data = JSON.parse(data);
-            if(copyExecutionID != 0 )
+            if(copyExecutionID != 0)
             {
                 $('#copyProjects').append("<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><i class='icon-ban-circle'></i>" + cancelCopy + "</a></div>");
             }

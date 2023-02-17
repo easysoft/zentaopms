@@ -139,6 +139,7 @@ $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon
 $lang->execution->myTask              = "我的任务";
 $lang->execution->list                = '列表';
 $lang->execution->allProject          = '全部项目';
+$lang->execution->method              = '方法';
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';
@@ -391,6 +392,10 @@ $lang->execution->errorLetterProject          = "{$lang->executionCommon}的计�
 $lang->execution->errorGreaterProject         = "{$lang->executionCommon}的计划完成时间不能大于所属项目的计划完成时间%s。";
 $lang->execution->errorCommonBegin            = $lang->executionCommon . '开始日期应大于等于项目的开始日期：%s。';
 $lang->execution->errorCommonEnd              = $lang->executionCommon . '截止日期应小于等于项目的截止日期：%s。';
+$lang->execution->errorLetterParent           = '计划开始时间不能小于所属父阶段的计划开始时间：%s。';
+$lang->execution->errorGreaterParent          = '计划完成时间不能大于所属父阶段的计划完成时间：%s。';
+$lang->execution->errorNameRepeat             = '相同父阶段的子阶段名称不能相同';
+$lang->execution->errorAttrMatch              = "父阶段类型为[%s]，阶段类型需与父阶段一致";
 $lang->execution->accessDenied                = "您无权访问该{$lang->executionCommon}！";
 $lang->execution->tips                        = '提示';
 $lang->execution->afterInfo                   = "{$lang->executionCommon}添加成功，您现在可以进行以下操作：";
@@ -546,11 +551,32 @@ $lang->execution->action->startbychildactivate = '$date, 系统判断由于子�
 $lang->execution->action->waitbychilddelete    = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为未开始。' . "\n";
 $lang->execution->action->closebychilddelete   = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为已关闭。' . "\n";
 $lang->execution->action->closebychildclose    = '$date, 系统判断由于子阶段关闭，将' . $lang->executionCommon . '状态置为已关闭。' . "\n";
+$lang->execution->action->waitbychild          = '$date, 系统判断由于子阶段 <strong>全部为未开始</strong> ，将阶段状态置为 <strong>未开始</strong> 。';
+$lang->execution->action->suspendedbychild     = '$date, 系统判断由于子阶段 <strong>全部挂起</strong> ，将阶段状态置为 <strong>已挂起</strong> 。';
+$lang->execution->action->closedbychild        = '$date, 系统判断由于子阶段 <strong>全部关闭</strong> ，将阶段状态置为 <strong>已关闭</strong> 。';
+$lang->execution->action->startbychildstart    = '$date, 系统判断由于子阶段 <strong>开始</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildactivate = '$date, 系统判断由于子阶段 <strong>激活</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildsuspend  = '$date, 系统判断由于子阶段 <strong>挂起</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildclose    = '$date, 系统判断由于子阶段 <strong>关闭</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildcreate   = '$date, 系统判断由于 <strong>创建</strong> 子阶段 ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychildedit     = '$date, 系统判断由于子阶段 <strong>状态修改</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+$lang->execution->action->startbychild         = '$date, 系统判断由于子阶段 <strong>激活</strong> ，将阶段状态置为 <strong>进行中</strong> 。';
+
 
 $lang->execution->startbychildactivate = '激活了';
 $lang->execution->waitbychilddelete    = '停止了';
 $lang->execution->closebychilddelete   = '关闭了';
 $lang->execution->closebychildclose    = '关闭了';
+$lang->execution->waitbychild          = '激活了';
+$lang->execution->suspendedbychild     = '挂起了';
+$lang->execution->closedbychild        = '关闭了';
+$lang->execution->startbychildstart    = '开始了';
+$lang->execution->startbychildactivate = '激活了';
+$lang->execution->startbychildsuspend  = '激活了';
+$lang->execution->startbychildclose    = '激活了';
+$lang->execution->startbychildcreate   = '激活了';
+$lang->execution->startbychildedit     = '激活了';
+$lang->execution->startbychild         = '激活了';
 
 $lang->execution->statusColorList = array();
 $lang->execution->statusColorList['wait']      = '#0991FF';

@@ -19,7 +19,7 @@ $lang->programplan->edit          = '编辑';
 $lang->programplan->delete        = '删除阶段';
 $lang->programplan->close         = '关闭阶段';
 $lang->programplan->activate      = '激活阶段';
-$lang->programplan->createSubPlan = '创建二级阶段';
+$lang->programplan->createSubPlan = '创建子阶段';
 
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';
@@ -64,6 +64,7 @@ $lang->programplan->delay            = '是否延期';
 $lang->programplan->delayDays        = '延期天数';
 $lang->programplan->settingGantt     = '设置甘特图';
 $lang->programplan->viewSetting      = '显示设置';
+$lang->programplan->desc             = '描述';
 
 $lang->programplan->errorBegin       = '阶段的开始时间不能小于所属项目的开始时间%s';
 $lang->programplan->errorEnd         = '阶段的结束时间不能大于所属项目的结束时间%s';
@@ -79,11 +80,16 @@ $lang->programplan->delayList = array();
 $lang->programplan->delayList[1] = '是';
 $lang->programplan->delayList[0] = '否';
 
-$lang->programplan->noData        = '暂无数据。';
-$lang->programplan->children      = '二级计划';
-$lang->programplan->childrenAB    = '子';
-$lang->programplan->confirmDelete = '确定要删除当前计划吗？';
-$lang->programplan->workloadTips  = '子阶段工作量占比按百分百的比例进行拆分';
+$lang->programplan->typeList = array();
+$lang->programplan->typeList['stage']     = '阶段';
+$lang->programplan->typeList['agileplus'] = '迭代/看板';
+
+$lang->programplan->noData            = '暂无数据。';
+$lang->programplan->children          = '二级计划';
+$lang->programplan->childrenAB        = '子';
+$lang->programplan->confirmDelete     = '确定要删除当前计划吗？';
+$lang->programplan->confirmChangeAttr = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”，是否保存？';
+$lang->programplan->workloadTips      = '子阶段工作量占比按百分百的比例进行拆分';
 
 $lang->programplan->stageCustom = new stdClass();
 $lang->programplan->stageCustom->date = '显示日期';
@@ -112,6 +118,7 @@ $lang->programplan->error->sameName        = '阶段名称不能相同！';
 $lang->programplan->error->sameCode        = '阶段代号不能相同！';
 $lang->programplan->error->taskDrag        = '%s的任务不可以拖动';
 $lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
+$lang->programplan->error->notStage        = '迭代/看板不支持创建子阶段';
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
 $lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';

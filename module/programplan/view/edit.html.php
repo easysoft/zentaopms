@@ -12,6 +12,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('plan', $plan);?>
+<?php js::set('stageTypeList', $lang->stage->typeList);?>
+<?php js::set('changeAttrLang', $lang->programplan->confirmChangeAttr);?>
+<?php js::set('isTopStage', $isTopStage);?>
+<?php js::set('isLeafStage', $isLeafStage);?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -25,7 +30,7 @@
         <tbody>
           <tr>
             <th class="w-100px"><?php echo $lang->programplan->parent;?></th>
-            <td colspan='2'><?php echo html::select('parent', $parentStage, $plan->parent, "class='form-control chosen '");?></td>
+            <td colspan='2'><?php echo html::select('parent', $parentStageList, $plan->parent, "class='form-control chosen '");?></td>
           </tr>
           <tr>
             <th class='w-100px'><?php echo $lang->programplan->name;?> </th>
@@ -50,9 +55,11 @@
               </div>
             </td>
           </tr>
-          <tr class="<?php if($plan->grade == 2) echo "hidden";?>" id="attributeType">
-            <th><?php echo $lang->programplan->attribute;?> </th>
-            <td colspan='2'><?php echo html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'");?></td>
+          <tr id="attributeType">
+            <th><?php echo $lang->programplan->attribute;?></th>
+            <td colspan='2'>
+              <?php echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'") : zget($lang->stage->typeList, $plan->attribute);?>
+            </td>
           </tr>
           <?php if($plan->setMilestone):?>
           <tr>
@@ -101,20 +108,4 @@
     </form>
   </div>
 </div>
-<script>
-$("#parent").change(function()
-{
-    var parent = $(this).children("option:selected").val();
-    if(parent == 0)
-    {
-        $("#attributeType").removeClass('hidden');
-        $("#acl").attr('disabled', false);
-    }
-    else
-    {
-        $("#attributeType").addClass('hidden');
-        $("#acl").attr('disabled', true);
-    }
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>
