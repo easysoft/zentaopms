@@ -4,4 +4,6 @@
 .panel-sm .panel-body {padding: 10px;}
 #mainMenu .input-control {display: flex; width: 200px;}
 #mainMenu .input-control .form-name {margin: 8px 10px; white-space: pre;}
-.table-import {padding-top: 6px;}
+.table-import {padding: 6px 5px 5px 5px; }
+.shadow-sm {box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 25%)}
+.flex-center {display: flex; align-items: center; justify-content: center;}

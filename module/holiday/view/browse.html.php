@@ -33,9 +33,8 @@
         <?php common::printLink('holiday', 'create', "", "<i class='icon icon-plus'> </i>" . $lang->holiday->create, '', "class='btn btn-primary iframe'", '', true)?>
       </div>
     </div>
-    <?php if(!empty($holidays)):?>
     <table class='table has-sort-head'>
-      <thead>
+      <thead class="shadow-sm">
         <tr>
           <th class='c-name'><?php echo $lang->holiday->name;?></th>
           <th class='c-time-limit'><?php echo $lang->holiday->holiday;?></th>
@@ -44,6 +43,7 @@
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
+      <?php if(!empty($holidays)):?>
       <?php foreach($holidays as $holiday):?>
       <tr>
         <td><?php echo $holiday->name;?></td>
@@ -56,17 +56,11 @@
         </td>
       </tr>
       <?php endforeach;?>
+      <?php endif;?>
     </table>
-    <?php else:?>
-    <div class="table-empty-tip">
-      <p>
-        <span class="text-muted"><?php echo $lang->holiday->emptyTip;?></span>
-      </p>
-    </div>
-    <?php endif;?>
     <?php if(!common::checkNotCN() and common::hasPriv('holiday', 'import') and $currentYear >= date('Y')):?>
-    <div class="table-footer">
-      <div class="table-import">
+    <div class="table-footer flex-center">
+      <div class="table-import shadow-sm">
         <?php echo sprintf($lang->holiday->importTip, html::a(helper::createLink('holiday', 'import', "year=$currentYear", '', true), $lang->import, '', "class='text-primary iframe' data-width='400px'"));?>
       </div>
     </div>
