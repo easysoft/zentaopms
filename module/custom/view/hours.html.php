@@ -32,7 +32,7 @@
           </div>
           <table class='table table-form mw-600px'>
             <tr>
-              <th class='w-150px'><?php echo $lang->custom->workingHours;?></th>
+              <th class='w-150px text-left'><?php echo $lang->custom->workingHours;?></th>
               <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px'");?></td>
               <td></td>
             </tr>
@@ -46,7 +46,7 @@
           </div>
           <table class='table table-form mw-600px'>
             <tr>
-              <th class='w-150px'><?php echo $lang->custom->weekendRole;?></th>
+              <th class='w-150px text-left'><?php echo $lang->custom->weekendRole;?></th>
               <td class='w-200px'><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
               <td></td>
             </tr>
@@ -57,7 +57,7 @@
           </table>
         </div>
       </div>
-      <div class='table-footer text-center mr-xl'>
+      <div class='table-footer text-left pl-none'>
         <?php echo html::submitButton();?>
         <?php echo html::hidden('type', $type);?>
       </div>

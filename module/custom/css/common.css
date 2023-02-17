@@ -3,4 +3,4 @@
 .main-content .main-header {padding: 10px 20px;}
 #subNavbar .nav>li>a { padding: 4px 12px;}
 #subHeader.admin-tab-menu {margin-bottom: -25px;}
-.mr-xl{margin-right: 60%;}
+.pl-none {padding-left: 0;}
