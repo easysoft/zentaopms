@@ -1994,9 +1994,9 @@ class execution extends control
             $newPlans = array();
             if(isset($_POST['plans']))
             {
-                foreach($_POST['plans'] as $products)
+                foreach($_POST['plans'] as $plans)
                 {
-                    foreach($products as $planID)
+                    foreach($plans as $planID)
                     {
                         if(array_search($planID, $oldPlans) === false) $newPlans[$planID] = $planID;
                     }
