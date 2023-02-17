@@ -2,7 +2,7 @@
 /**
  * The required view file of custom module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     custom
@@ -10,27 +10,14 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-row'>
-  <div class='side-col' id='sidebar'>
-    <div class='cell'>
-      <div class='list-group'>
-        <?php
-        ksort($config->custom->requiredModules);
-        foreach($config->custom->requiredModules as $requiredModule)
-        {
-            $requiredModuleName = zget($lang->custom->moduleName, $requiredModule, $lang->$requiredModule->common);
-            echo html::a(inlink('required', "module=$requiredModule"), $requiredModuleName, '', "id='{$requiredModule}Tab'");
-        }
-        ?>
-      </div>
-    </div>
-  </div>
+  <?php if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib', 'doc')) and (!in_array($module, array('project', 'execution')) or (in_array($module, array('project', 'execution')) and $config->vision == 'rnd'))) include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
-          <strong><?php echo $lang->$moduleName->common?></strong>
+          <strong><?php echo $lang->custom->required;?></strong>
         </div>
       </div>
       <table class='table table-form mw-800px'>
@@ -39,18 +26,18 @@
         <tr>
           <th class='thWidth'>
           <?php
-          $fields = $this->custom->getFormFields($moduleName, $method);
+          $fields = $this->custom->getFormFields($module, $method);
           if(empty($fields)) continue;
-          if($moduleName == 'caselib' and $method == 'createcase') continue;
+          if($module == 'caselib' and $method == 'createcase') continue;
 
           $actionKey = $method . 'Action';
-          if(isset($lang->$moduleName->$actionKey))
+          if(isset($lang->$module->$actionKey))
           {
-              echo $lang->$moduleName->$actionKey . $lang->custom->page;
+              echo $lang->$module->$actionKey . $lang->custom->page;
           }
           else
           {
-              echo $lang->$moduleName->$method . $lang->custom->page;
+              echo $lang->$module->$method . $lang->custom->page;
           }
           ?>
           </th>
@@ -63,18 +50,11 @@
           <th></th>
           <td colspan='2' class='form-actions'>
           <?php echo html::submitButton();?>
-          <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
+          <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$module"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>
         </tr>
       </table>
     </form>
   </div>
 </div>
-<script>
-$(function()
-{
-    $('#mainMenu #requiredTab').addClass('btn-active-text');
-    $('#sidebar #<?php echo $moduleName?>Tab').addClass('active');
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>

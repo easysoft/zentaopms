@@ -2,7 +2,7 @@
 /**
  * The view file of zahost module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Ke Zhao <zhaoke@cnezsoft.com>
  * @package     zahost
@@ -131,43 +131,25 @@
         <div class="detail-title"><?php echo $lang->zahost->desc;?></div>
         <div class="detail-content article-content"><?php echo !empty($zahost->desc) ? htmlspecialchars_decode($zahost->desc) : $lang->noData;?></div>
       </div>
-      <?php if(!empty($nodeList)): ?>
+    </div>
+    <?php if(commonModel::hasPriv('zanode', 'browse')):?>
+    <div class="cell">
       <div class="detail">
         <div class="detail-title"><?php echo $lang->zahost->browseNode;?></div>
+        <?php if(!empty($nodeList)): ?>
         <div class="detail-content article-content">
-        <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'list', "hostID=$zahost->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' onload='setIframeHeight(this)' style='min-height:300px;'></iframe>";?>
-          <!-- <table class='table has-sort-head table-fixed' id='nodeList'>
-            <thead>
-              <tr>
-                <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->zahost->name);?></th>
-                <th class='c-cpu'><?php common::printOrderLink('cpuCores', $orderBy, $vars, $lang->zanode->cpuCores);?></th>
-                <th class='c-number'><?php common::printOrderLink('memory', $orderBy, $vars, $lang->zanode->memory);?></th>
-                <th class='c-number'><?php common::printOrderLink('diskSize', $orderBy, $vars, $lang->zanode->diskSize);?></th>
-                <th class='c-os'><?php common::printOrderLink('osName', $orderBy, $vars, $lang->zanode->osName);?></th>
-                <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->zanode->status);?></th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach($nodeList as $node):?>
-              <tr>
-                <td title="<?php echo $node->name;?>"><?php echo html::a($this->createLink('zanode', 'view', "id=$node->id"), $node->name, '_target', "");?></td>
-                <td><?php echo zget($config->zanode->os->cpuCores, $node->cpuCores);?></td>
-                <td><?php echo $node->memory . $this->lang->zahost->unitList['GB'];?></td>
-                <td><?php echo $node->diskSize . $this->lang->zahost->unitList['GB'];?></td>
-                <td><?php echo $node->osName;?></td>
-                <td><?php echo zget($lang->zanode->statusList, $node->status);?></td>
-              </tr>
-              <?php endforeach;?>
-            </tbody>
-          </table> -->
+        <?php echo "<iframe width='100%' id='nodesIframe' src='" . $this->createLink('zanode', 'nodeList', "hostID=$zahost->id", '', true) . "' frameborder='no' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true' allowtransparency='true' scrolling='auto' onload='setIframeHeight(this)' style='min-height:300px;'></iframe>";?>
         </div>
+        <?php else: ?>
+        <div class="detail-content article-content"><?php echo $lang->noData;?></div>
+        <?php endif; ?>
       </div>
-      <?php endif; ?>
       <?php
       $canBeChanged = common::canBeChanged('zahost', $zahost);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=zahost&objectID=$zahost->hostID");
       ?>
     </div>
+    <?php endif; ?>
     <?php $this->printExtendFields($zahost, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='main-actions'>
       <div class="btn-toolbar">

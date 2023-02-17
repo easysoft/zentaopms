@@ -2,7 +2,7 @@
 /**
  * The model file of case module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
@@ -176,7 +176,7 @@ class testcaseModel extends model
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
             if($this->app->tab == 'project') $data[$i]->project = $this->session->project;
-            $data[$i]->branch       = $cases->branch[$i];
+            $data[$i]->branch       = isset($cases->branch[$i]) ? $cases->branch[$i] : '0';
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
             $data[$i]->pri          = $cases->pri[$i];
@@ -1840,7 +1840,8 @@ class testcaseModel extends model
             }
             else
             {
-                $libCaseID = array_keys($libCases[$caseID])[0];
+                $libCaseList = array_keys($libCases[$caseID]);
+                $libCaseID   = $libCaseList[0];
 
                 $libCase->lastEditedBy   = $this->app->user->account;
                 $libCase->lastEditedDate = helper::now();

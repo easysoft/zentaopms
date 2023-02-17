@@ -2,7 +2,7 @@
 /**
  * The browse view file of tree module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
@@ -118,9 +118,9 @@ if($viewType == 'doc' or $viewType == 'api')
         <?php if($viewType == 'story' and $allProduct and $canBeChanged):?>
         <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm btn-primary'")?></div>
         <?php elseif($viewType == 'feedback' and common::hasPriv('feedback', 'syncProduct') and !isset($syncConfig[$rootID])):?>
-        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', "productID=$rootID&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', "productID=$rootID&module=feedback&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='60%'");?></div>
         <?php elseif($viewType == 'ticket' and common::hasPriv('ticket', 'syncProduct') and !isset($syncConfig[$rootID])):?>
-        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('ticket', 'syncProduct', "productID=$rootID&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('ticket', 'syncProduct', "productID=$rootID&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='60%'");?></div>
         <?php endif;?>
       </div>
       <div class="panel-body">

@@ -2,7 +2,7 @@
 /**
  * The testcase module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
@@ -13,6 +13,7 @@ $lang->testcase->id               = '用例编号';
 $lang->testcase->product          = "所属{$lang->productCommon}";
 $lang->testcase->project          = '所属项目';
 $lang->testcase->execution        = '所属执行';
+$lang->testcase->linkStory        = '关联需求';
 $lang->testcase->module           = '所属模块';
 $lang->testcase->auto             = '自动化测试用例';
 $lang->testcase->frame            = '自动化测试框架';
@@ -109,7 +110,6 @@ $lang->testcase->stepDesc    = '步骤';
 $lang->testcase->stepExpect  = '预期';
 $lang->testcase->stepVersion = '版本';
 
-$lang->testcase->common                  = '用例';
 $lang->testcase->index                   = "用例管理首页";
 $lang->testcase->create                  = "建用例";
 $lang->testcase->batchCreate             = "批量建用例";
@@ -264,6 +264,6 @@ $lang->testcase->featureBar['browse']['wait']        = '待评审';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
-$lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 $lang->testcase->featureBar['browse']['suite']       = '套件';
+$lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

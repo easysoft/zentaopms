@@ -2,7 +2,7 @@
 /**
  * The view of productplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
@@ -66,7 +66,7 @@
             <?php endif;?>
           </a>
         </li>
-        <li>
+        <li class='<?php if($type == 'planInfo') echo 'active'?>'>
           <a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->productplan->view;?></a>
         </li>
     </ul>
@@ -137,17 +137,17 @@
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
                 <?php if($canOrder):?>
-                <th class='w-70px'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
+                <th class='w-90px'><?php echo $lang->productplan->updateOrder;?></th>
                 <?php endif;?>
                 <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
-                <th class='w-150px text-left'><?php common::printOrderLink('module', $orderBy, $vars, $lang->story->module);?></th>
+                <th class='w-90px text-left'><?php common::printOrderLink('module', $orderBy, $vars, $lang->story->module);?></th>
                 <th class='w-70px' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='w-70px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
                 <th class='c-user'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-                <th class='w-70px text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+                <th class='w-110px text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                 <th class='w-80px'><?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
-                <th class='c-actions-1'><?php echo $lang->actions?></th>
+                <th class='c-actions-1 w-90px'><?php echo $lang->actions?></th>
                 <?php endif;?>
               </tr>
             </thead>
@@ -533,7 +533,7 @@
           <?php endif;?>
         </form>
       </div>
-      <div id='planInfo' class='tab-pane'>
+      <div id='planInfo' class='tab-pane <?php if($type == 'planInfo') echo 'active';?>'>
         <div class='cell'>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->productplan->basicInfo;?></div>

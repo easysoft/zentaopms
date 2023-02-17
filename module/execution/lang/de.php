@@ -2,7 +2,7 @@
 /**
  * The execution module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -139,6 +139,7 @@ $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = "{$lang->executionCommon} List";
 $lang->execution->allProject          = 'All';
+$lang->execution->method              = 'Method';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
@@ -391,6 +392,10 @@ $lang->execution->errorLetterProject          = "The start time of {$lang->execu
 $lang->execution->errorGreaterProject         = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
 $lang->execution->errorCommonBegin            = 'The start date of ' . $lang->executionCommon . ' should be ≥ the start date of project : %s.';
 $lang->execution->errorCommonEnd              = 'The deadline of ' . $lang->executionCommon .  ' should be ≤ the deadline of project : %s.';
+$lang->execution->errorLetterParent           = 'The begin cannot be less than the begin of the parent stage to which it belongs: %s.';
+$lang->execution->errorGreaterParent          = 'The end cannot be greater than the end of the parent stage to which it belongs：%s.';
+$lang->execution->errorNameRepeat             = 'Child stages of the same parent stage cannot have the same name.';
+$lang->execution->errorAttrMatch              = "Parent stage's attribute is [%s], the attribute needs to be consistent with the parent stage.";
 $lang->execution->accessDenied                = "Zugriff zu {$lang->executionCommon} verweigert!";
 $lang->execution->tips                        = 'Hinweis';
 $lang->execution->afterInfo                   = "{$lang->executionCommon} wurde erstellt. Als nächstes können Sie ";
@@ -546,11 +551,31 @@ $lang->execution->action->startbychildactivate = '$date, activating the sub stag
 $lang->execution->action->waitbychilddelete    = '$date, deleting the sub stage sets the execution status as waitting.' . "\n";
 $lang->execution->action->closebychilddelete   = '$date, deleting the sub stage sets the execution status as closing.' . "\n";
 $lang->execution->action->closebychildclose    = '$date, closing the sub stage sets the execution status as closing.' . "\n";
+$lang->execution->action->waitbychild          = '$date, the stage status is <strong>Wait</strong> as the system judges that all its sub-stages statuses are <strong>Wait</strong>.';
+$lang->execution->action->suspendedbychild     = '$date, the stage status is <strong>Suspended</strong> as the system judges that all its sub-stages statuses are <strong>Suspended</strong>.';
+$lang->execution->action->closedbychild        = '$date, the stage status is <strong>Closed</strong> as the system judges that all its sub-stages are <strong>Closed</strong>.';
+$lang->execution->action->startbychildstart    = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Started</strong>.';
+$lang->execution->action->startbychildactivate = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Activated</strong>.';
+$lang->execution->action->startbychildsuspend  = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Suspended</strong>.';
+$lang->execution->action->startbychildclose    = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Closed</strong>.';
+$lang->execution->action->startbychildcreate   = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Created</strong>. ';
+$lang->execution->action->startbychildedit     = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Edited</strong>';
+$lang->execution->action->startbychild         = '$date, the stage status is <strong>Doing</strong> as the system judges that its sub-stages are <strong>Activated</strong>.';
 
 $lang->execution->startbychildactivate = 'activated';
 $lang->execution->waitbychilddelete    = 'stop';
 $lang->execution->closebychilddelete   = 'closed';
 $lang->execution->closebychildclose    = 'closed';
+$lang->execution->waitbychild          = 'activated';
+$lang->execution->suspendedbychild     = 'suspended';
+$lang->execution->closedbychild        = 'closed';
+$lang->execution->startbychildstart    = 'started';
+$lang->execution->startbychildactivate = 'activated';
+$lang->execution->startbychildsuspend  = 'activated';
+$lang->execution->startbychildclose    = 'activated';
+$lang->execution->startbychildcreate   = 'activated';
+$lang->execution->startbychildedit     = 'activated';
+$lang->execution->startbychild         = 'activated';
 
 $lang->execution->statusColorList = array();
 $lang->execution->statusColorList['wait']      = '#0991FF';

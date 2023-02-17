@@ -2,7 +2,7 @@
 /**
  * The control file of group module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
@@ -200,6 +200,7 @@ class group extends control
     public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
         if($type == 'byGroup') $groupID = $param;
+
         $this->view->type = $type;
         foreach($this->lang->resource as $moduleName => $action)
         {
@@ -233,6 +234,9 @@ class group extends control
             {
                 if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join(',', $currentChangeLog);
             }
+
+            $this->lang->custom->common = $this->lang->group->config;
+            if($this->config->edition == 'max' and $this->config->vision == 'rnd' and (!$menu or $menu == 'admin')) $this->lang->baseline->common = $this->lang->group->docTemplate;
 
             $this->view->group      = $group;
             $this->view->changelogs = ',' . join(',', $changelog) . ',';

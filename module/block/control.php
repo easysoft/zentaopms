@@ -2,7 +2,7 @@
  /**
  * The control file of block of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
@@ -1101,7 +1101,7 @@ class block extends control
 
         /* Get projects. */
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
-        $executions = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count);
+        $executions = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
         if(empty($executions))
         {
             $this->view->executions = $executions;

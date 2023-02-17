@@ -2,7 +2,7 @@
 /**
  * The model file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -78,7 +78,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->join('os', ',')
             ->join('browser', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket')
+            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
             ->get();
 
         /* Check repeat bug. */
@@ -97,6 +97,23 @@ class bugModel extends model
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
+
+            if(isset($_POST['resultFiles']))
+            {
+                $resultFiles = $_POST['resultFiles'];
+                if(isset($_POST['deleteFiles']))
+                {
+                    foreach($_POST['deleteFiles'] as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
+                }
+                $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
+                foreach($files as $file)
+                {
+                    unset($file->id);
+                    $file->objectType = 'bug';
+                    $file->objectID   = $bugID;
+                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                }
+            }
 
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
@@ -1578,7 +1595,7 @@ class bugModel extends model
             if($day == $days -1) $startDate = date('Y-m-d', $time) . ' 00:00:00';
         }
 
-        $dateFields = ['openedDate', 'resolvedDate', 'closedDate'];
+        $dateFields = array('openedDate', 'resolvedDate', 'closedDate');
         $staticData = array();
         foreach($dateFields as $field)
         {
@@ -3728,13 +3745,8 @@ class bugModel extends model
         /* Get related objects title or names. */
         $table = $this->config->objectTables[$object];
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
-        if($object == 'branch' and $this->session->currentProductType != 'normal')
-        {
-            $productID      = current($bugs)->product;
-            $relatedObjects = $this->dao->select($pairs)->from($table)->where('product')->eq($productID)->fetchPairs();
-        }
 
-        if(in_array($object, array('build','resolvedBuild','branch'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
+        if(in_array($object, array('build','resolvedBuild'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
         return array('' => '', 0 => '') + $relatedObjects;
     }
 

@@ -2,7 +2,7 @@
 /**
  * The model file of mr module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      dingguodong <dingguodong@easycorp.ltd>
  * @package     mr
@@ -1879,7 +1879,7 @@ class mrModel extends model
             $relation->BID      = $storyID;
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            $this->action->create('story', $linkID, 'createmr', '', $MRCreateAction);
+            $this->action->create('story', $storyID, 'createmr', '', $MRCreateAction);
         }
 
         foreach($bugs as $bugID)
@@ -1893,7 +1893,7 @@ class mrModel extends model
             $relation->BID      = $bugID;
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            $this->action->create('bug', $linkID, 'createmr', '', $MRCreateAction);
+            $this->action->create('bug', $bugID, 'createmr', '', $MRCreateAction);
         }
 
         foreach($tasks as $taskID)
@@ -1907,7 +1907,7 @@ class mrModel extends model
             $relation->BID      = $taskID;
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            $this->action->create('task', $linkID, 'createmr', '', $MRCreateAction);
+            $this->action->create('task', $taskID, 'createmr', '', $MRCreateAction);
         }
     }
 

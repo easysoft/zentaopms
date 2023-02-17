@@ -2,14 +2,13 @@
 /**
  * The todo module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  todo
  * @version  $Id: vi.php 4676 2020-04-06 06:08:23Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->todo->common       = 'Việc làm';
 $lang->todo->index        = "Home";
 $lang->todo->create       = "Thêm việc";
 $lang->todo->createCycle  = "Thêm việc lặp lại";

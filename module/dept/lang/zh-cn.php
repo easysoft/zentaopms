@@ -2,14 +2,13 @@
 /**
  * The dept module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
  * @version     $Id: zh-cn.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->dept->common       = '部门结构';
 $lang->dept->id           = '编号';
 $lang->dept->path         = '路径';
 $lang->dept->position     = '职位';

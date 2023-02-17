@@ -2,7 +2,7 @@
 /**
  * The control file of release module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
@@ -195,7 +195,11 @@ class projectrelease extends control
 
         /* Get release and build. */
         $release = $this->projectrelease->getById((int)$releaseID);
-        if(!$this->session->project) $this->session->set('project', explode(',', $release->project)[0], 'project');
+        if(!$this->session->project)
+        {
+            $releaseProject = explode(',', $release->project);
+            $this->session->set('project', $releaseProject[0], 'project');
+        }
 
         $this->commonAction($this->session->project, $release->product, $release->branch);
         $bindBuilds = $this->build->getByList($release->build);
@@ -554,7 +558,11 @@ class projectrelease extends control
         $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
 
         $release = $this->projectrelease->getByID($releaseID);
-        if(!$this->session->project) $this->session->set('project', explode(',', $release->project)[0], 'project');
+        if(!$this->session->project)
+        {
+            $releaseProject = explode(',', $release->project);
+            $this->session->set('project', $releaseProject[0], 'project');
+        }
 
         $builds  = $this->loadModel('build')->getByList($release->build);
         $project = $this->loadModel('project')->getByID($this->session->project);
@@ -690,7 +698,11 @@ class projectrelease extends control
         $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
         /* Set menu. */
         $release = $this->projectrelease->getByID($releaseID);
-        if(!$this->session->project) $this->session->set('project', explode(',', $release->project)[0], 'project');
+        if(!$this->session->project)
+        {
+            $releaseProject = explode(',', $release->project);
+            $this->session->set('project', $releaseProject[0], 'project');
+        }
 
         $builds  = $this->loadModel('build')->getByList($release->build);
         $project = $this->loadModel('project')->getByID($this->session->project);

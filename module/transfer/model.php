@@ -603,7 +603,7 @@ class transferModel extends model
             $values = $valuePairs;
             if(reset($values))
             {
-                if(current($values) or (current($values) == 0)) $values = [0 => ''] + $values;
+                if(current($values) or (current($values) == 0)) $values = array('');
             }
         }
 
@@ -852,10 +852,20 @@ class transferModel extends model
     {
         $productID = array();
         foreach($stories as $values) $productID[] = $values->product;
+        $product = array_unique($productID);
+
         $storyDatas = end($stories);
         $lastBranch = $storyDatas->branch;
         $lastType   = $storyDatas->type;
-        $stories    = $this->loadModel('story')->mergePlanTitle($productID , $stories, $lastBranch, $lastType);
+
+        if($storyDatas->type == 'requirement')
+        {
+            $stories = $this->loadModel('story')->mergePlanTitle($productID , $stories, $lastBranch, $lastType);
+        }
+        elseif($storyDatas->type == 'story')
+        {
+             return $stories;
+        }
 
         return $stories;
     }

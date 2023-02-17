@@ -21,7 +21,7 @@ class reportZen extends report
         if(!$module || !$method) list($module, $method, $params) = $this->getDefaultMethod($dimension, $group);
 
         if(!empty($module) && !empty($method) && !common::hasPriv($module, $method)) common::deny('report', $method);
-        
+
         $this->view->sidebar   = $this->getSidebar($dimension, $group, $module, $method, $params);
         $this->view->dimension = $dimension;
         $this->view->group     = $group;

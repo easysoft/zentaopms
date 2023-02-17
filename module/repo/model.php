@@ -333,11 +333,16 @@ class repoModel extends model
         if($type == 'task')  $links = $this->post->tasks;
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
-        $committer    = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
+        if(empty($revisionInfo)) $this->updateCommit($repoID);
+
+        $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+        if(empty($revisionInfo)) return false;
+
+        $revisionID = $revisionInfo->id;
+        $committer  = $this->dao->select('account')->from(TABLE_USER)->where('commiter')->eq($revisionInfo->committer)->fetch('account');
         if(empty($committer)) $committer = $revisionInfo->committer;
         foreach($links as $linkID)
         {
-            $revisionID = $revisionInfo->id;
 
             $relation           = new stdclass;
             $relation->AType    = 'revision';
@@ -679,18 +684,33 @@ class repoModel extends model
      *
      * @param  object  $repo
      * @param  bool    $printLabel
+     * @param  string  $source  select current repo's branches from scm or database.
      * @access public
      * @return array
      */
-    public function getBranches($repo, $printLabel = false)
+    public function getBranches($repo, $printLabel = false, $source = 'scm')
     {
-        $this->scm = $this->app->loadClass('scm');
-        $this->scm->setEngine($repo);
-        $branches = $this->scm->branch();
-
-        if($printLabel)
+        if($source == 'database')
         {
-            foreach($branches as &$branch) $branch = 'Branch::' . $branch;
+            $branches = $this->dao->select('branch')->from(TABLE_REPOBRANCH)
+                ->where('repo')->eq($repo->id)
+                ->fetchPairs();
+
+            if($printLabel)
+            {
+                foreach($branches as &$branch) $branch = 'Branch::' . $branch;
+            }
+        }
+        else
+        {
+            $this->scm = $this->app->loadClass('scm');
+            $this->scm->setEngine($repo);
+            $branches = $this->scm->branch();
+
+            if($printLabel)
+            {
+                foreach($branches as &$branch) $branch = 'Branch::' . $branch;
+            }
         }
 
         return $branches;
@@ -1106,6 +1126,7 @@ class repoModel extends model
             $log->files = array();
             foreach($log->change as $file => $info) $log->files[$info['action']][] = $file;
         }
+
         return $logs;
     }
 
@@ -2203,7 +2224,18 @@ class repoModel extends model
     {
         $pairs      = array();
         $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
-        foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
+        $parents    = $this->dao->select('distinct parent,parent')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('grade')->gt(1)->andWhere('deleted')->eq(0)->fetchPairs();
+        foreach($executions as $execution)
+        {
+            if(!empty($parents[$execution->id]) or ($execution->type == 'stage' and in_array($execution->attribute, array('request', 'design', 'review')))) continue;
+
+            if($execution->type == 'stage' and $execution->grade > 1)
+            {
+                $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                $execution->name  = implode('/', $parentExecutions);
+            }
+            $pairs[$execution->id] = $execution->name;
+        }
         return $pairs;
     }
 
@@ -2275,13 +2307,14 @@ class repoModel extends model
 
         /* Get file commits by repo. */
         if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
-        $fileCommits = $this->dao->select('t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
+        $fileCommits = $this->dao->select('t1.id,t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
             ->where('t1.repo')->eq($repo->id)
             ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
-            ->andWhere('t1.parent')->like("$parent%")->fi()
+            ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.parent')->eq("$parent")->fi()
+            ->beginIF($repo->SCM != 'Subversion')->andWhere('t1.parent')->like("$parent%")->fi()
             ->orderBy('t2.`time` asc')
             ->fetchAll('path');
 
@@ -2346,11 +2379,12 @@ class repoModel extends model
      */
     public function getFileTree($repo, $branch = '', $diffs = null)
     {
+        set_time_limit(0);
         $allFiles = array();
         if(is_null($diffs))
         {
             if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
-            $files = $this->dao->select('t1.path,t1.action')->from(TABLE_REPOFILES)->alias('t1')
+            $files = $this->dao->select('t1.path,t2.time,t1.action')->from(TABLE_REPOFILES)->alias('t1')
                 ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
                 ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                 ->where('t1.repo')->eq($repo->id)
@@ -2358,11 +2392,33 @@ class repoModel extends model
                 ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
                 ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
                 ->orderBy('t2.`time` asc')
-                ->fetchPairs();
+                ->fetchAll('path');
 
-            foreach($files as $file => $action)
+            $removeDirs = array();
+            if($repo->SCM == 'Subversion')
             {
-                if($action != 'D') $allFiles[] = $file;
+                $removeDirs = $this->dao->select('t2.time,t1.path')->from(TABLE_REPOFILES)->alias('t1')
+                    ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                    ->where('t1.repo')->eq($repo->id)
+                    ->andWhere('t1.type')->eq('dir')
+                    ->andWhere('t1.action')->eq('D')
+                    ->fetchPairs();
+
+            }
+            foreach($files as $file)
+            {
+                foreach($removeDirs as $removeTime => $dir)
+                {
+                    if(strpos($file->path, $dir . '/') === 0 and $file->time <= $removeTime)
+                    {
+                        $file->action = 'D';
+                        break;
+                    }
+                }
+                if($file->action != 'D')
+                {
+                    $allFiles[] = $file->path;
+                }
             }
         }
         else
@@ -2426,6 +2482,7 @@ class repoModel extends model
             $html .= '</li>';
         }
         $html .= '</ul>';
+
         return $html;
     }
 
@@ -2439,10 +2496,11 @@ class repoModel extends model
      */
     public function buildTree($files = array(), $parent = 0)
     {
-        $treeList = [];
+        $treeList = array();
         $key      = 0;
         $pathName = array();
         $fileName = array();
+
         foreach($files as $key => $file)
         {
             if ($file['parent'] == $parent)
@@ -2453,6 +2511,7 @@ class repoModel extends model
                 $pathName[$key] = '~';
 
                 $children = $this->buildTree($files, $file['id']);
+
                 if($children)
                 {
                     $treeList[$key]['children'] = $children;
@@ -2741,5 +2800,41 @@ class repoModel extends model
         /* Get linked projects. */
         $linkedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchPairs('id', 'name');
         return $accessProjects + $linkedProjects; // Merge projects can be accessed and exists.
+    }
+
+    /**
+     * Update commit history.
+     *
+     * @param  int    $repoID
+     * @param  int    $branchID
+     * @access public
+     * @return void
+     */
+    public function updateCommit($repoID, $branchID = 0)
+    {
+        $repo = $this->getRepoByID($repoID);
+        /* Update code commit history. */
+        $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repoID));
+
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+        {
+            $branch = $this->cookie->repoBranch;
+
+            if($branchID)
+            {
+                $currentBranches = $this->getBranches($repo, false, 'database');
+                if(!in_array($branch, $currentBranches))
+                {
+                    $link = $this->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=$branchID", '', false) . '#app=' . $this->app->tab;
+                    return print(js::locate($link));
+                }
+            }
+            else
+            {
+                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+                $_COOKIE['repoBranch'] = $branch;
+            }
+        }
+        if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
     }
 }

@@ -2,7 +2,7 @@
 /**
  * The control file of testtask module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -1059,6 +1059,11 @@ class testtask extends control
      * Link cases to a test task.
      *
      * @param  int    $taskID
+     * @param  string $type
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -1107,7 +1112,21 @@ class testtask extends control
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
         $this->config->testcase->search['style']     = 'simple';
 
+        $build   = $this->loadModel('build')->getByID($task->build);
+        $stories = array();
+        if($build)
+        {
+            $stories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchPairs();
+            $this->config->testcase->search['params']['story']['values'] = $stories;
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        }
+
         if($product->shadow) unset($this->config->testcase->search['fields']['product']);
+        if($type != 'bystory')
+        {
+            unset($this->config->testcase->search['fields']['story']);
+            unset($this->config->testcase->search['params']['story']);
+        }
         if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);
@@ -1605,7 +1624,9 @@ class testtask extends control
     {
         $scope     = empty($objectType) ? 'local' : 'all';
         $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, array($scope, 'totalStatus'));
-        $namePairs = array_column($testtasks, 'name');
+
+        $namePairs = array();
+        foreach($testtasks as $testtaskID => $testtask) $namePairs[$testtaskID] = $testtask->name;
 
         $this->view->currentTaskID   = $taskID;
         $this->view->testtasks       = $testtasks;

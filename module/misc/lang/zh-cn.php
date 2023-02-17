@@ -2,7 +2,7 @@
 /**
  * The misc module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "手机访问";
 $lang->misc->noGDLib     = "请用手机浏览器访问：<strong>%s</strong>";
-$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.easycorp.cn' target='_blank'>青岛易软天创网络科技有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.easycorp.cn' target='_blank'>禅道软件（青岛）有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
 $lang->misc->checkTable  = "检查修复数据表";
 $lang->misc->needRepair  = "修复表";
 $lang->misc->repairTable = "数据库表可能因为断电原因损坏，需要检查修复！！";
@@ -104,6 +104,7 @@ $lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.1']        = '2023-02-08';
 $lang->misc->releaseDate['18.0']        = '2023-01-03';
 $lang->misc->releaseDate['18.0.beta3']  = '2022-12-26';
 $lang->misc->releaseDate['18.0.beta2']  = '2022-12-14';
@@ -198,6 +199,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.1'][]       = array('title' => '自动化测试解决方案交互优化、新增快照管理功能。禅道客户端实现了 PPT文档在线协作。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['18.0'][]       = array('title' => '推出自动化测试解决方案；运营管理界面增加工单功能；审批流支持增加所有类型的通知以及挣值计算规则完善。', 'desc' => '');
 $lang->misc->feature->all['18.0.beta3'][] = array('title' => '统计模块升级为BI，内置5张宏观管理维度大屏。', 'desc' => '');
 $lang->misc->feature->all['18.0.beta2'][] = array('title' => '优化多分支/多平台产品，支持创建孪生需求，计划、版本、发布支持跨分支关联需求和bug，并且禅道客户端实现了机器人会话机制。', 'desc' => '');

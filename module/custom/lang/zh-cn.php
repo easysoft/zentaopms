@@ -8,7 +8,7 @@ $lang->custom->set                  = '自定义配置';
 $lang->custom->restore              = '恢复默认';
 $lang->custom->key                  = '键';
 $lang->custom->value                = '值';
-$lang->custom->flow                 = '流程';
+$lang->custom->flow                 = '流程设置';
 $lang->custom->working              = '工作方式';
 $lang->custom->select               = '请选择流程：';
 $lang->custom->branch               = '多分支';
@@ -22,7 +22,7 @@ $lang->custom->score                = '积分';
 $lang->custom->timezone             = '时区';
 $lang->custom->scoreReset           = '重置积分';
 $lang->custom->scoreTitle           = '积分功能';
-$lang->custom->product              = $lang->productCommon;
+$lang->custom->productName          = $lang->productCommon;
 $lang->custom->convertFactor        = '换算系数';
 $lang->custom->region               = '区间';
 $lang->custom->tips                 = '提示语';
@@ -55,7 +55,7 @@ $lang->custom->role                 = '职位';
 $lang->custom->dept                 = '部门';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = '是否启用代号';
-$lang->custom->execution            = '执行';
+$lang->custom->executionCommon      = '执行';
 $lang->custom->selectDefaultProgram = '请选择一个默认项目集';
 $lang->custom->defaultProgram       = '默认项目集';
 $lang->custom->modeManagement       = '模式管理';
@@ -85,43 +85,9 @@ $lang->custom->saveTips            = '点击保存后，则以当前%s为默认�
 
 $lang->custom->numberError = '区间必须大于零';
 
-$lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
+$lang->custom->closedExecution = '已关闭' . $lang->custom->executionCommon;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
-
-$lang->custom->object['project']   = '项目';
-$lang->custom->object['product']   = $lang->productCommon;
-$lang->custom->object['execution'] = $lang->custom->execution;
-$lang->custom->object['kanban']    = $lang->custom->kanban;
-$lang->custom->object['story']     = $lang->SRCommon;
-$lang->custom->object['task']      = '任务';
-$lang->custom->object['bug']       = 'Bug';
-$lang->custom->object['testcase']  = '用例';
-$lang->custom->object['testtask']  = '测试单';
-$lang->custom->object['todo']      = '待办';
-$lang->custom->object['user']      = '用户';
-$lang->custom->object['block']     = '区块';
-$lang->custom->object['flow']      = '流程';
-$lang->custom->object['score']     = '积分';
-$lang->custom->object['mode']      = '模式';
-
-$lang->custom->menuOrder[5]  = 'project';
-$lang->custom->menuOrder[10] = 'product';
-$lang->custom->menuOrder[15] = 'execution';
-$lang->custom->menuOrder[20] = 'kanban';
-$lang->custom->menuOrder[25] = 'story';
-$lang->custom->menuOrder[30] = 'task';
-$lang->custom->menuOrder[35] = 'bug';
-$lang->custom->menuOrder[40] = 'testcase';
-$lang->custom->menuOrder[45] = 'testtask';
-$lang->custom->menuOrder[50] = 'todo';
-$lang->custom->menuOrder[55] = 'user';
-$lang->custom->menuOrder[60] = 'block';
-$lang->custom->menuOrder[65] = 'flow';
-$lang->custom->menuOrder[70] = 'score';
-
-$lang->custom->dividerMenu  = ',story,todo,block,';
-$lang->custom->separatePage = ',execution,product,kanban,flow,score';
 
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = '关闭的区块';
@@ -129,9 +95,20 @@ $lang->custom->block->fields['closed'] = '关闭的区块';
 $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = '货币设置';
 $lang->custom->project->defaultCurrency    = '默认货币';
+$lang->custom->project->fields['required'] = $lang->custom->required;
 $lang->custom->project->fields['unitList'] = '预算单位';
 
+$lang->custom->execution = new stdClass();
+$lang->custom->execution->fields['required']  = $lang->custom->required;
+$lang->custom->execution->fields['execution'] = '关闭设置';
+
+$lang->custom->product = new stdClass();
+$lang->custom->product->fields['required']           = $lang->custom->required;
+$lang->custom->product->fields['browsestoryconcept'] = '需求概念';
+$lang->custom->product->fields['product']            = '关闭设置';
+
 $lang->custom->story = new stdClass();
+$lang->custom->story->fields['required']         = $lang->custom->required;
 $lang->custom->story->fields['categoryList']     = '类型';
 $lang->custom->story->fields['priList']          = '优先级';
 $lang->custom->story->fields['sourceList']       = '来源';
@@ -143,13 +120,14 @@ $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
 
 $lang->custom->task = new stdClass();
+$lang->custom->task->fields['required']   = $lang->custom->required;
 $lang->custom->task->fields['priList']    = '优先级';
 $lang->custom->task->fields['typeList']   = '类型';
 $lang->custom->task->fields['reasonList'] = '关闭原因';
 $lang->custom->task->fields['statusList'] = '状态';
-$lang->custom->task->fields['hours']      = '工时';
 
 $lang->custom->bug = new stdClass();
+$lang->custom->bug->fields['required']       = $lang->custom->required;
 $lang->custom->bug->fields['priList']        = '优先级';
 $lang->custom->bug->fields['severityList']   = '严重程度';
 $lang->custom->bug->fields['osList']         = '操作系统';
@@ -160,6 +138,7 @@ $lang->custom->bug->fields['statusList']     = '状态';
 $lang->custom->bug->fields['longlife']       = '久未处理天数';
 
 $lang->custom->testcase = new stdClass();
+$lang->custom->testcase->fields['required']   = $lang->custom->required;
 $lang->custom->testcase->fields['priList']    = '优先级';
 $lang->custom->testcase->fields['typeList']   = '类型';
 $lang->custom->testcase->fields['stageList']  = '阶段';
@@ -168,9 +147,16 @@ $lang->custom->testcase->fields['statusList'] = '状态';
 $lang->custom->testcase->fields['review']     = '评审流程';
 
 $lang->custom->testtask = new stdClass();
+$lang->custom->testtask->fields['required']   = $lang->custom->required;
 $lang->custom->testtask->fields['statusList'] = '状态';
 $lang->custom->testtask->fields['typeList']   = '测试类型';
 $lang->custom->testtask->fields['priList']    = '优先级';
+
+$lang->custom->testreport = new stdClass();
+$lang->custom->testreport->fields['required'] = $lang->custom->required;
+
+$lang->custom->caselib = new stdClass();
+$lang->custom->caselib->fields['required'] = $lang->custom->required;
 
 $lang->custom->todo = new stdClass();
 $lang->custom->todo->fields['priList']    = '优先级';
@@ -178,6 +164,7 @@ $lang->custom->todo->fields['typeList']   = '类型';
 $lang->custom->todo->fields['statusList'] = '状态';
 
 $lang->custom->user = new stdClass();
+$lang->custom->user->fields['required']     = $lang->custom->required;
 $lang->custom->user->fields['roleList']     = '职位';
 $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
@@ -202,7 +189,7 @@ $lang->custom->notice->required            = '页面提交时，选中的字段�
 $lang->custom->notice->conceptResult       = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath         = '您可以在：后台 -> 自定义 -> 流程页面修改。';
 $lang->custom->notice->readOnlyOfProduct   = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
-$lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->execution}下的任务、版本、日志以及关联需求都禁止修改。";
+$lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、版本、日志以及关联需求都禁止修改。";
 $lang->custom->notice->readOnlyOfKanban    = "禁止修改后，已关闭{$lang->custom->kanban}下的卡片以及相关设置都禁止修改。";
 $lang->custom->notice->URSREmpty           = '自定义需求名称不能为空！';
 $lang->custom->notice->valueEmpty          = '值不能为空！';
@@ -232,10 +219,15 @@ $lang->custom->reviewList[0]  = '关闭';
 $lang->custom->deletedList[1] = '列出';
 $lang->custom->deletedList[0] = '不列出';
 
+$lang->custom->setHours       = '工时设置';
+$lang->custom->setWeekend     = '休息日设置';
+$lang->custom->setHoliday     = '节假日设置';
 $lang->custom->workingHours   = '每天可用工时';
-$lang->custom->weekend        = '休息日';
-$lang->custom->weekendList[2] = '双休';
+$lang->custom->weekendRole    = '规则设置';
 $lang->custom->weekendList[1] = '单休';
+$lang->custom->weekendList[2] = '双休';
+$lang->custom->restDayList[6] = '周六休息';
+$lang->custom->restDayList[0] = '周天休息';
 
 global $config;
 $lang->custom->sprintConceptList[0] = '项目 产品 迭代';
@@ -301,7 +293,7 @@ $lang->custom->CRKanban[0] = '禁止修改';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
-$lang->custom->moduleName['execution']   = $lang->custom->execution;
+$lang->custom->moduleName['execution']   = $lang->custom->executionCommon;
 
 $lang->custom->conceptQuestions['overview']   = "下述哪种组合方式更适合您公司的管理现状？";
 $lang->custom->conceptQuestions['URAndSR']    = "是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";

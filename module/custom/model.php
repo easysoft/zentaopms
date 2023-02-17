@@ -2,7 +2,7 @@
 /**
  * The model file of custom module of ZenTaoCMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     custom
@@ -233,6 +233,7 @@ class customModel extends model
             $dropMenu  = '';
             $alias     = '';
             $exclude   = '';
+            $divider   = false;
 
             $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
             /* The variable of item has not link and is not link then ignore it. */
@@ -287,6 +288,7 @@ class customModel extends model
                     if(isset($item['dropMenu']))  $dropMenu  = $item['dropMenu'];
                     if(isset($item['alias']))     $alias     = $item['alias'];
                     if(isset($item['exclude']))   $exclude   = $item['exclude'];
+                    if(isset($item['divider']))   $divider   = $item['divider'];
                 }
 
                 $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
@@ -327,6 +329,7 @@ class customModel extends model
                 if($dropMenu) $menuItem->dropMenu  = $dropMenu;
                 if($alias)    $menuItem->alias     = $alias;
                 if($exclude)  $menuItem->exclude   = $exclude;
+                if($divider)  $menuItem->divider   = $divider;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
                 /* Hidden menu by config in mobile. */
@@ -363,7 +366,7 @@ class customModel extends model
             else
             {
                 $isFirst = false;
-                $menu[$item->order]->divider = false;
+                if(!isset($menu[$item->order]->divider))$menu[$item->order]->divider = false;
             }
         }
 

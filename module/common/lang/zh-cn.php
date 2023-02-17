@@ -2,7 +2,7 @@
 /**
  * The common simplified chinese file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -80,9 +80,10 @@ $lang->noData         = '暂无';
 $lang->fullscreen     = '全屏';
 $lang->retrack        = '收起';
 $lang->whitelist      = '访问白名单';
-$lang->globalSetting  = '全局设置';
+$lang->globalSetting  = '通用';
 $lang->waterfallModel = '瀑布模型';
 $lang->scrumModel     = '敏捷模型';
+$lang->agilePlusModel = '融合敏捷模型';
 $lang->all            = '所有';
 $lang->viewDetails    = '查看详情';
 
@@ -158,6 +159,8 @@ $lang->delayed = '已延期';
 $lang->common->common     = '公有模块';
 $lang->common->story      = '需求';
 $lang->my->common         = '地盘';
+$lang->todo->common       = '待办';
+$lang->block->common      = '区块';
 $lang->program->common    = '项目集';
 $lang->product->common    = '产品';
 $lang->project->common    = '项目';
@@ -248,7 +251,7 @@ $lang->indexPage       = '首页';
 $lang->model           = '模型';
 $lang->redev           = '二次开发';
 $lang->browser         = '浏览器';
-$lang->db              = '数据库';
+$lang->database        = '数据库';
 $lang->editor          = '编辑器';
 $lang->timezone        = '时区';
 $lang->security        = '安全';
@@ -296,7 +299,7 @@ $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
 $lang->devops->set      = '设置';
 
-$lang->admin->module      = '功能设置';
+$lang->admin->module      = '功能配置';
 $lang->admin->system      = '系统';
 $lang->admin->entry       = '应用';
 $lang->admin->data        = '数据';

@@ -2,7 +2,7 @@
 /**
  * The model file of file module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
@@ -46,7 +46,7 @@ class fileModel extends model
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->andWhere('extra')->ne('editor')
-            ->beginIF($extra)->andWhere('extra')->eq($extra)
+            ->beginIF($extra)->andWhere('extra')->in($extra)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('id')
             ->fetchAll('id');
@@ -1172,13 +1172,16 @@ class fileModel extends model
     /**
      * Process file info for object.
      *
-     * @param  string    $objectType
-     * @param  object    $oldObject
-     * @param  object    $newObject
+     * @param  string $objectType
+     * @param  object $oldObject
+     * @param  object $newObject
+     * @param  string $extra
+     * @param  string $filesName
+     * @param  string $labelsName
      * @access public
      * @return void
      */
-    public function processFile4Object($objectType, $oldObject, $newObject)
+    public function processFile4Object($objectType, $oldObject, $newObject, $extra = '', $filesName = 'files', $labelsName = 'labels')
     {
         $oldFiles    = empty($oldObject->files) ? '' : join(',', array_keys($oldObject->files));
         $deleteFiles = $newObject->deleteFiles;
@@ -1193,7 +1196,7 @@ class fileModel extends model
         }
 
         $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
-        $addedFiles = $this->saveUpload($objectType, $oldObject->id);
+        $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
         $addedFiles = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
 
         $newObject->files = trim($oldFiles . $addedFiles, ',');

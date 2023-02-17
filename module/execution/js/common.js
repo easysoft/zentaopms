@@ -179,6 +179,13 @@ function loadBranches(product)
 
         var branch = $('#branch' + index);
         loadPlans(product, branch);
+
+        if(typeof isWaterfall != 'undefined' && isWaterfall == true)
+        {
+            $tableRow.find("select[name^='branch'] option").attr('selected', 'selected');
+            $tableRow.find("select[name^='branch']").trigger('chosen:updated');
+            $tableRow.find("div[id^='branch']").addClass('chosen-disabled');
+        }
     });
 }
 
@@ -210,15 +217,15 @@ function loadPlans(product, branch)
 
 /**
  * Add new line for link product.
- * 
- * @param  obj $obj 
+ *
+ * @param  obj $obj
  * @access public
  * @return void
  */
 function addNewLine(obj)
 {
     var newLine = $(obj).closest('tr').clone();
-    var index   = 0; 
+    var index   = 0;
     $(".productsBox select[name^='products']").each(function()
     {
         var id = $(this).attr('id').replace('products' , '');

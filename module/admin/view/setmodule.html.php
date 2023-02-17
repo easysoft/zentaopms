@@ -2,7 +2,7 @@
 /**
  * The setmodule view file of admin module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang <wangyuting@cnezsoft.com>
  * @package     admin
@@ -47,7 +47,16 @@
               <?php foreach($features as $feature):?>
               <?php $code = $group. ucfirst($feature);?>
               <?php if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;?>
-              <?php $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';?>
+              <?php
+              if($code == 'myScore')
+              {
+                  $value = $useScore;
+              }
+              else
+              {
+                  $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';
+              }
+              ?>
               <div class='group-item'>
               <?php echo html::checkbox("module[{$code}]", array('1' => $lang->admin->setModule->{$feature}), $value, "data-code='{$code}'", 'inline');?>
               <?php echo html::hidden("module[{$code}][]", $value, $value ? 'disabled' : '');?>

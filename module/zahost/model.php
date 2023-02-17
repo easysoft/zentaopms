@@ -2,7 +2,7 @@
 /**
  * The model file of zahost module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wang Jianhua <wangjiahua@easycorp.ltd>
  * @package     zahost
@@ -85,7 +85,10 @@ class zahostModel extends model
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float');
+            ->batchCheck('diskSize,memory', 'float')
+            ->check('name', 'unique', "id != $hostID and type in ('vhost', 'zahost')")
+            ->autoCheck();
+
         if(dao::isError()) return false;
 
         $ping = $this->checkAddress($hostInfo->extranet);

@@ -2,7 +2,7 @@
 /**
  * The host entry point of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Ke Zhao <zhaoke@easycorp.ltd>
  * @package     entries
@@ -23,7 +23,7 @@ class hostSubmitEntry extends baseEntry
         /* Check authorize. */
         $header = getallheaders();
         $token  = isset($header['Authorization']) ? substr($header['Authorization'], 7) : '';
-        // if(!$token) return $this->sendError(401, 'Unauthorized');
+        if(!$token) return $this->sendError(401, 'Unauthorized');
 
         $now    = helper::now();
 
@@ -38,7 +38,16 @@ class hostSubmitEntry extends baseEntry
             ->andWhere('tokenTime')->gt($now)->fi()
             ->fetch('id');
             
-        // if(!$id) return $this->sendError(400, 'Secret error.');
+        if(!$id) return $this->sendError(400, 'Secret error.');
+
+        $imageInfo = $this->dao->select('`status`,`from`')->from(TABLE_IMAGE)
+            ->where('id')->eq($task)
+            ->fetch();
+        if(empty($imageInfo)) return $this->sendSuccess(200, 'success');
+        if($imageInfo->from == 'snapshot' && $imageInfo->status == 'restoring') 
+        {
+            $image->status = $image->status == 'completed' ? 'restore_completed' : 'restore_failed';
+        }
 
         $this->dao->update(TABLE_IMAGE)->data($image)->where("id")->eq($task)->exec();
 

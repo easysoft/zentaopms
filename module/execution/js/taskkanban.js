@@ -979,7 +979,7 @@ function createColumnCreateMenu(options)
     {
         if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '80%'}});
         if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
-        if(priv.canImportBug) items.push({label: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
+        if(priv.canImportBug && canImportBug) items.push({label: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
     }
     return items;
 }
@@ -1382,6 +1382,7 @@ $(function()
         $('.kanban-header-col>.title>span:not(.text)').hide();
         $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
     }
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 $('#type').change(function()

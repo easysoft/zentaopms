@@ -160,6 +160,31 @@ $('.btn-pwd-copy').live('click', function()
     }, 2000)
 })
 
+$('.btn-pwd-show').live('click', function()
+{
+    var pwd     = $('#pwd-copy').text();
+    var pwdStar = "******".padEnd(pwd.length, '*')
+    var html    = $(this).html()
+    if(html.indexOf('icon-eye-off') != -1)
+    {
+        $('#pwd-text').text(pwdStar)
+        $(this).html("<i class='icon-common-eye icon-eye' title='" + zanodeLang.showPwd +  "'></i>")
+    }
+    else
+    {
+        $('#pwd-text').text(pwd)
+        $(this).html("<i class='icon-common-eye icon-eye-off' title='" + zanodeLang.hidePwd +  "'></i>")
+    }
+})
+
+$('#jumpManual').click(function()
+{
+    var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/974.html?fullScreen=zentao');
+    var urlForNewTab = webRoot + '#app=help&url=' + encodedHelpPageUrl;
+    window.open(urlForNewTab)
+})
+
+
 $(function(){
     checkServiceStatus();
     checkInterval = setInterval(() => {
@@ -171,3 +196,15 @@ $(function(){
         checkServiceStatus();
     }, 2000);
 })
+
+/**
+ * Edit Snapshot.
+ *
+ * @param string $link
+ * @access public
+ * @return void
+ */
+function editSnapshot(link)
+{
+    $('#editSnapshot').attr('href', link).click();
+}

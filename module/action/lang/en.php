@@ -2,7 +2,7 @@
 /**
  * The action module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -58,6 +58,15 @@ $lang->action->noDynamic          = 'No dynamics. ';
 $lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
 $lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
 $lang->action->repoNoServer       = 'The repo does not belong to a server,please restore the server first';
+$lang->action->hasCreatedTask     = 'Tasks have been created in this parent phase and cannot be restored!';
+$lang->action->hasDeletedParent   = 'Restoring this phase requires restoring the deleted parent phase %s at the same time.';
+$lang->action->hasChangedAttr     = "After recovery, the phase type will be adjusted to '%s' according to the parent phase type.";
+$lang->action->whetherToRestore   = 'Confirm to restore?';
+
+$lang->action->hasOtherType = array();
+$lang->action->hasOtherType['stage']  = "Only subtypes of {$lang->executionCommon} / Kanban types can be created at this parent stage, so the current stage cannot be restored.";
+$lang->action->hasOtherType['sprint'] = "Only subtypes of Stage types can be created at this parent stage, so the current {$lang->executionCommon} cannot be restored.";
+$lang->action->hasOtherType['kanban'] = "Only subtypes of Stage types can be created at this parent stage, so the current Kanban cannot be restored.";
 
 $lang->action->repeatChange     = '%s with the same name and code already exists in the system, After recovery, the name are \"%s\",the code are \"%s\".';
 $lang->action->nameRepeatChange = '%s with the same name already exists in the system, After recovery, the name are \"%s\".';
@@ -237,6 +246,10 @@ $lang->action->desc->relieved             = '$date, relieved by <strong>$actor</
 $lang->action->desc->switchtolight        = '$date, Switch from ALM mode to light mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
 $lang->action->desc->getvnc               = '$date, Remote control <strong>$extra</strong> by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the ' . $lang->executionCommon . 's of the project from the $extra.' . "\n";
+$lang->action->desc->createdsnapshot      = '$date, <strong>$actor</strong> creates a snapshot <strong>$extra</strong>。' . "\n";
+$lang->action->desc->restoredsnapshot     = '$date, <strong>$actor</strong> restored a snapshot <strong>$extra</strong>。' . "\n";
+$lang->action->desc->editsnapshot         = '$date, <strong>$actor</strong> edited the snapshot <strong>$extra</strong>。' . "\n";
+$lang->action->desc->deletesnapshot       = '$date, <strong>$actor</strong> deleted snapshot <strong>$extra</strong>。' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -419,6 +432,10 @@ $lang->action->label->switchtolight         = 'switch from ALM mode to light mod
 $lang->action->label->linkedrepo            = 'Linked Code Repo';
 $lang->action->label->unlinkedrepo          = 'Unlinked Code Repo';
 $lang->action->label->unlinkproduct         = 'Unlinked Product';
+$lang->action->label->createdsnapshot       = 'create snapshot';
+$lang->action->label->restoredsnapshot      = 'create snapshot';
+$lang->action->label->editsnapshot          = 'edit snapshot';
+$lang->action->label->deletesnapshot        = 'deleted snapshot';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

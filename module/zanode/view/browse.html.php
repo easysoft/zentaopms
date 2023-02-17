@@ -3,7 +3,7 @@
 /**
  * The browse view file of zanode module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      xiawenlong <xiawenlong@cnezsoft.com>
  * @package     zanode
@@ -18,6 +18,7 @@
 <?php js::set('confirmShutdown', $lang->zanode->confirmShutdown) ?>
 <?php js::set('actionSuccess', $lang->zanode->actionSuccess) ?>
 <?php js::set('showFeature', $showFeature);?>
+<?php js::set('webRoot', getWebRoot());?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <?php echo html::a($this->createLink('zanode', 'browse'), "<span class='text'>{$lang->zanode->all}</span>", '', "class='btn btn-link btn-active-text'"); ?>
@@ -85,6 +86,9 @@
                 $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
                 $rebootAttr .= $node->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
 
+                $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
+                $snapshotAttr .= $node->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
+
                 common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-remote'></i> ", (in_array($node->status ,array('running', 'launch', 'wait')) ? '_blank' : ''), "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($node->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
                 if($node->status == "suspend")
                 {
@@ -105,13 +109,14 @@
                 }
 
                 common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
-                common::printIcon('zanode', 'edit', "id={$node->id}", $node, 'list');
+                common::printLink('zanode', 'createSnapshot', "zanodeID={$node->id}", "<i class='icon icon-plus'></i> ", '', $snapshotAttr, true, true);
 
                 if(common::hasPriv('zanode', 'createImage') or common::hasPriv('zanode', 'destroy'))
                 {
                     echo "<div class='btn-group'>";
                     echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
+                    common::printIcon('zanode', 'edit', "id={$node->id}", $node, 'list', '', '', 'btn-action');
                     common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-export'></i> ", '', "class='btn btn-action iframe createImage' title='{$lang->zanode->createImage}' data-width='55%'", '', true);
                     common::printLink('zanode', 'destroy', "zanodeID={$node->id}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->zanode->destroy}' class='btn btn-action' target='hiddenwin'");
                     echo "</ul>";

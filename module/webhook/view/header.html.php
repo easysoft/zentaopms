@@ -2,7 +2,7 @@
 /**
  * The header view file of webhook module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     webhook
@@ -14,10 +14,6 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'><?php // common::printAdminSubMenu('message');?></div>
   <div class='btn-toolbar pull-right'>
-    <div class='btn-group'>
-      <div class='btn-group' id='createActionMenu'>
-        <?php if(common::hasPriv('webhook', 'create') and ($app->rawMethod == 'browse') or $app->rawMethod == 'log') echo html::a($this->createLink('webhook', 'create'), "<i class='icon-plus'></i> {$lang->webhook->create}", '', "class='btn btn-primary'");?>
-      </div>
-    </div>
+    <?php if(common::hasPriv('webhook', 'create') and ($app->rawMethod == 'browse') or $app->rawMethod == 'log') echo html::a($this->createLink('webhook', 'create'), "<i class='icon-plus'></i> {$lang->webhook->create}", '', "class='btn btn-primary'");?>
   </div>
 </div>

@@ -2,7 +2,7 @@
 /**
  * The model file of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -1144,7 +1144,8 @@ class productModel extends model
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) or $branchParam == 'all') ? '' : $branchParam);
 
-        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
+        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array();
+        if(empty($product) and isset($products[$productID])) $product = array($productID => $products[$productID]);
 
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
@@ -1303,14 +1304,22 @@ class productModel extends model
     {
         $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.id=t3.root')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t4')->on('t2.id=t4.objectID')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
+            ->beginIF($this->cookie->involved or $involved)->andWhere('t3.type')->eq('project')->fi()
             ->beginIF($browseType == 'undone')->andWhere('t2.status')->in('wait,doing')->fi()
             ->beginIF(strpos(",all,undone,", ",$browseType,") === false)->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->cookie->involved or $involved)
             ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t2.PM')->eq($this->app->user->account)
+            ->orWhere('t3.account')->eq($this->app->user->account)
+            ->orWhere('(t4.user')->eq($this->app->user->account)
+            ->andWhere('t4.deleted')->eq(0)
+            ->markRight(1)
+            ->orWhere("CONCAT(',', t2.whitelist, ',')")->like("%,{$this->app->user->account},%")
             ->markRight(1)
             ->fi()
             ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
@@ -1438,7 +1447,7 @@ class productModel extends model
         }
         $orderBy = $hasWaterfall ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
-        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
             ->where('t1.product')->eq($productID)
@@ -1452,38 +1461,35 @@ class productModel extends model
             ->orderBy($orderBy)
             ->fetchAll('id');
 
-        /* The waterfall project needs to show the hierarchy and remove the parent stage. */
-        $executionPairs = array('0' => '');
-        if($hasWaterfall)
+        /* Only show leaf executions. */
+        $allExecutions = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)->where('type')->notin(array('program', 'project'))->fetchAll('id');
+        $parents = array();
+        foreach($allExecutions as $exec)
         {
-            foreach($executions as $id => $execution)
-            {
-                if($execution->grade == 2 and isset($executions[$execution->parent]))
-                {
-                    $execution->name = $executions[$execution->parent]->name . '/' . $execution->name;
-                    $executions[$execution->parent]->children[$id] = $execution->name;
-                    unset($executions[$id]);
-                }
-            }
-
-            foreach($executions as $execution)
-            {
-                if(isset($execution->children))
-                {
-                    $executionPairs = $executionPairs + $execution->children;
-                    continue;
-                }
-                if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
-                $executionPairs[$execution->id] = $execution->name;
-            }
+            $parents[$exec->parent] = true;
         }
-        else
+
+        $executionPairs = array('0' => '');
+        foreach($executions as $execID=> $execution)
         {
-            $this->app->loadLang('project');
-            foreach($executions as $execution)
+            if(isset($parents[$execID])) continue; // Only show leaf.
+            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
+
+            if(empty($execution->multiple))
             {
-                $executionPairs[$execution->id] = $execution->name;
-                if(empty($execution->multiple)) $executionPairs[$execution->id] = $execution->projectName . "({$this->lang->project->disableExecution})";
+                $this->app->loadLang('project');
+                $executionPairs[$execution->id] = $execution->projectName . "({$this->lang->project->disableExecution})";
+            }
+            else
+            {
+                $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
+                $executionName = $projectID != 0 ? '' : $execution->projectName;
+                foreach($paths as $path)
+                {
+                    $executionName .= '/' . $allExecutions[$path]->name;
+                }
+
+                $executionPairs[$execID] = $executionName;
             }
         }
 
@@ -2057,8 +2063,19 @@ class productModel extends model
 
         $projectLatestExecutions = array();
         $latestExecutionList     = array();
+        $today                   = helper::today();
         foreach($executionList as $projectID => $executions)
         {
+            foreach($executions as $executionID => &$execution)
+            {
+                /* Judge whether the execution is delayed. */
+                if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
+                {
+                    $delay = helper::diffDate($today, $execution->end);
+                    if($delay > 0) $execution->delay = $delay;
+                }
+            }
+
             /* Used to computer execution progress. */
             $latestExecutionList[key($executions)] = current($executions);
 

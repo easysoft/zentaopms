@@ -2,7 +2,7 @@
 /**
  * The control file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -26,6 +26,8 @@ class story extends control
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
+
+        if($this->app->rawModule == 'projectstory') $this->app->tab = 'project';
     }
 
     /**
@@ -510,9 +512,8 @@ class story extends control
             if($execution->type == 'project')
             {
                 $this->project->setMenu($executionID);
-                $this->app->rawModule = 'projectstory';
                 $this->lang->navGroup->story = 'project';
-                $this->lang->product->menu = $this->lang->{$execution->model}->menu;
+                $this->lang->product->menu   = $this->lang->{$execution->model}->menu;
             }
             else
             {
@@ -534,7 +535,6 @@ class story extends control
                 }
 
                 $this->execution->setMenu($executionID);
-                $this->app->rawModule = 'execution';
                 $this->lang->navGroup->story = 'execution';
             }
             $this->view->execution = $execution;
@@ -1160,6 +1160,12 @@ class story extends control
                 $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
                 if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
             }
+
+            if(!empty($story->plan) and !isset($plans[$story->product][$story->branch][$story->plan]))
+            {
+                $plan = $this->dao->select('id,title,begin,end')->from(TABLE_PRODUCTPLAN)->where('id')->eq($story->plan)->fetch();
+                $plans[$story->product][$story->branch][$story->plan] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
+            }
         }
 
         $this->view->title             = $this->lang->story->batchEdit;
@@ -1173,7 +1179,7 @@ class story extends control
         $this->view->branchProduct     = $branchProduct;
         $this->view->storyIdList       = $storyIdList;
         $this->view->branch            = $branch;
-        $this->view->plans             = array('' => '') + $plans;
+        $this->view->plans             = $plans;
         $this->view->storyType         = $storyType;
         $this->view->stories           = $stories;
         $this->view->executionID       = $executionID;
@@ -1426,10 +1432,10 @@ class story extends control
         if(!empty($product->shadow))
         {
             $projectInfo = $this->dao->select('t2.model, t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                    ->where('t1.product')->eq($product->id)
-                    ->andWhere('t2.type')->eq('project')
-                    ->fetch();
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.product')->eq($product->id)
+                ->andWhere('t2.type')->eq('project')
+                ->fetch();
 
             if($projectInfo->model == 'waterfall')
             {
@@ -1606,9 +1612,19 @@ class story extends control
             }
             elseif($from == 'execution')
             {
-                $module = 'execution';
-                $method = 'storyView';
-                $params = "storyID=$storyID";
+                $execution = $this->execution->getByID($this->session->execution);
+                if($execution->multiple)
+                {
+                    $module = 'execution';
+                    $method = 'storyView';
+                    $params = "storyID=$storyID";
+                }
+                else
+                {
+                    $module = 'story';
+                    $method = 'view';
+                    $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+                }
             }
             else
             {

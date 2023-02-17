@@ -59,12 +59,12 @@ $lang->zahost->init->next          = "Next";
 $lang->zahost->init->initFailNotice    = "Fail，Execute the installation service command on the host or <a href='https://github.com/easysoft/zenagent/' target='_blank'>See Help</a>.";
 $lang->zahost->init->initSuccessNotice = "Succeed，%s and %s。";
 
-$lang->zahost->init->serviceStatus = [
+$lang->zahost->init->serviceStatus = array(
     "kvm"        => 'not_install',
     "nginx"      => 'not_install',
     "novnc"      => 'not_install',
     "websockify" => 'not_install',
-];
+);
 $lang->zahost->init->title          = "Initialize Host";
 $lang->zahost->init->descTitle      = "Follow these steps to complete the initialization on the host:";
 $lang->zahost->init->initDesc       = "Execute the init script on the host: %s %s  <br>- Click check service status button.";

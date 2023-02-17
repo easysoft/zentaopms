@@ -2,7 +2,7 @@
 /**
  * The edit view file of mail module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <wwccss@cnezsoft.com>
  * @package     mail
@@ -12,13 +12,7 @@
 ?>
 <?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-800px'>
-    <div class='main-header'>
-      <h2>
-        <?php echo $lang->mail->common;?>
-        <small class='text-muted'> <?php echo $lang->arrow . $lang->mail->edit;?></small>
-      </h2>
-    </div>
+  <div class=' mw-800px'>
     <form method='post' action='<?php echo inlink('save');?>' id='dataform'>
       <table class='table table-form'>
         <tr>

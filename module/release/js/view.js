@@ -10,9 +10,9 @@ function showLink(releaseID, type, param)
 
 /**
  * Load URL.
- * 
- * @param  string $url 
- * @param  string$type 
+ *
+ * @param  string $url
+ * @param  string$type
  * @access public
  * @return void
  */

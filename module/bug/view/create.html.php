@@ -2,7 +2,7 @@
 /**
  * The create view of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -209,6 +209,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 $hasCustomSeverity = false;
                 foreach($lang->bug->severityList as $severityKey => $severityValue)
                 {
+                    if(empty($severityValue)) unset($lang->bug->severityList[$severityKey]);
                     if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
                     {
                         $hasCustomSeverity = true;
@@ -335,7 +336,16 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <?php $this->printExtendFields('', 'table');?>
           <tr>
             <th><?php echo $lang->bug->files;?></th>
-            <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?></td>
+            <td colspan='2'>
+              <?php
+              if($caseID)
+              {
+                  echo $this->fetch('file', 'printFiles', array('files' => $resultFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
+                  echo html::hidden('resultFiles', implode(',', array_keys($resultFiles)));
+              }
+              echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');
+              ?>
+            </td>
           </tr>
         </tbody>
         <tfoot>

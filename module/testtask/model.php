@@ -2,7 +2,7 @@
 /**
  * The model file of test task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -399,18 +399,20 @@ class testtaskModel extends model
     {
         $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
         $cases   = array();
+        $query   = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
         if($stories)
         {
-            $cases = $this->dao->select('*')->from(TABLE_CASE)
+            $cases = $this->dao->select('t1.*,t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where($query)
-                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
-                ->andWhere('product')->eq($productID)
-                ->andWhere('status')->ne('wait')
-                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
-                ->beginIF($task->branch !== '')->andWhere('branch')->in("0,$task->branch")->fi()
-                ->andWhere('story')->in(trim($stories, ','))
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('id desc')
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+                ->andWhere('t1.product')->eq($productID)
+                ->andWhere('t1.status')->ne('wait')
+                ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,$task->branch")->fi()
+                ->andWhere('t1.story')->in(trim($stories, ','))
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy('t1.id desc')
                 ->page($pager)
                 ->fetchAll();
         }

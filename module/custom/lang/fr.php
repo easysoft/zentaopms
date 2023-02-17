@@ -22,7 +22,7 @@ $lang->custom->score                = 'Point';
 $lang->custom->timezone             = 'Timezone';
 $lang->custom->scoreReset           = 'Réinit Points';
 $lang->custom->scoreTitle           = 'Fonctionnalité des Points';
-$lang->custom->product              = $lang->productCommon;
+$lang->custom->productName          = $lang->productCommon;
 $lang->custom->convertFactor        = 'Convert factor';
 $lang->custom->region               = 'Interval';
 $lang->custom->tips                 = 'Tips';
@@ -55,7 +55,7 @@ $lang->custom->role                 = 'Role';
 $lang->custom->dept                 = 'Dept';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Activer ou Désactiver le Code';
-$lang->custom->execution            = 'Execution';
+$lang->custom->executionCommon      = 'Execution';
 $lang->custom->selectDefaultProgram = 'Please select default program';
 $lang->custom->defaultProgram       = 'Default program';
 $lang->custom->modeManagement       = 'Mode Management';
@@ -89,49 +89,26 @@ $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
-$lang->custom->object['project']   = 'Project';
-$lang->custom->object['product']   = $lang->productCommon;
-$lang->custom->object['execution'] = $lang->custom->execution;
-$lang->custom->object['kanban']    = $lang->custom->kanban;
-$lang->custom->object['story']     = 'Story';
-$lang->custom->object['task']      = 'Tâche';
-$lang->custom->object['bug']       = 'Bug';
-$lang->custom->object['testcase']  = 'CasTest';
-$lang->custom->object['testtask']  = 'Build';
-$lang->custom->object['todo']      = 'Agenda';
-$lang->custom->object['user']      = 'Utilisateur';
-$lang->custom->object['block']     = 'Bloc';
-$lang->custom->object['flow']      = 'Flow';
-$lang->custom->object['score']     = 'Score';
-$lang->custom->object['mode']      = 'Mode';
-
-$lang->custom->menuOrder[5]  = 'project';
-$lang->custom->menuOrder[10] = 'product';
-$lang->custom->menuOrder[15] = 'execution';
-$lang->custom->menuOrder[20] = 'kanban';
-$lang->custom->menuOrder[25] = 'story';
-$lang->custom->menuOrder[30] = 'task';
-$lang->custom->menuOrder[35] = 'bug';
-$lang->custom->menuOrder[40] = 'testcase';
-$lang->custom->menuOrder[45] = 'testtask';
-$lang->custom->menuOrder[50] = 'todo';
-$lang->custom->menuOrder[55] = 'user';
-$lang->custom->menuOrder[60] = 'block';
-$lang->custom->menuOrder[65] = 'flow';
-$lang->custom->menuOrder[70] = 'score';
-
-$lang->custom->dividerMenu  = ',story,todo,block,';
-$lang->custom->separatePage = ',execution,product,kanban,flow,score,';
-
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Bloc Fermé';
 
 $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = 'Currency Setting';
 $lang->custom->project->defaultCurrency    = 'Default Currency';
+$lang->custom->project->fields['required'] = $lang->custom->required;
 $lang->custom->project->fields['unitList'] = 'Unit List';
 
+$lang->custom->execution = new stdClass();
+$lang->custom->execution->fields['required']  = $lang->custom->required;
+$lang->custom->execution->fields['execution'] = 'Close Setting';
+
+$lang->custom->product = new stdClass();
+$lang->custom->product->fields['required']           = $lang->custom->required;
+$lang->custom->product->fields['browsestoryconcept'] = 'Story Concpet';
+$lang->custom->product->fields['product']            = 'Close Setting';
+
 $lang->custom->story = new stdClass();
+$lang->custom->story->fields['required']         = $lang->custom->required;
 $lang->custom->story->fields['categoryList']     = 'Category';
 $lang->custom->story->fields['priList']          = 'Priorité';
 $lang->custom->story->fields['sourceList']       = 'Source';
@@ -143,13 +120,14 @@ $lang->custom->story->fields['reviewResultList'] = 'Valider Résultats';
 $lang->custom->story->fields['review']           = 'Validation Requise';
 
 $lang->custom->task = new stdClass();
+$lang->custom->task->fields['required']   = $lang->custom->required;
 $lang->custom->task->fields['priList']    = 'Priorité';
 $lang->custom->task->fields['typeList']   = 'Type';
 $lang->custom->task->fields['reasonList'] = 'Raison Fermeture';
 $lang->custom->task->fields['statusList'] = 'Statut';
-$lang->custom->task->fields['hours']      = 'Effort';
 
 $lang->custom->bug = new stdClass();
+$lang->custom->bug->fields['required']       = $lang->custom->required;
 $lang->custom->bug->fields['priList']        = 'Priorité';
 $lang->custom->bug->fields['severityList']   = 'Sévérité';
 $lang->custom->bug->fields['osList']         = 'OS';
@@ -160,6 +138,7 @@ $lang->custom->bug->fields['statusList']     = 'Statut';
 $lang->custom->bug->fields['longlife']       = 'Jours Calage';
 
 $lang->custom->testcase = new stdClass();
+$lang->custom->testcase->fields['required']   = $lang->custom->required;
 $lang->custom->testcase->fields['priList']    = 'Priorité';
 $lang->custom->testcase->fields['typeList']   = 'Type';
 $lang->custom->testcase->fields['stageList']  = 'Phase';
@@ -168,9 +147,16 @@ $lang->custom->testcase->fields['statusList'] = 'Statut';
 $lang->custom->testcase->fields['review']     = 'Validation Requise';
 
 $lang->custom->testtask = new stdClass();
+$lang->custom->testtask->fields['required']   = $lang->custom->required;
 $lang->custom->testtask->fields['statusList'] = 'Statut';
 $lang->custom->testtask->fields['typeList']   = 'Type de test';
 $lang->custom->testtask->fields['priList']    = 'Priorité';
+
+$lang->custom->testreport = new stdClass();
+$lang->custom->testreport->fields['required'] = $lang->custom->required;
+
+$lang->custom->caselib = new stdClass();
+$lang->custom->caselib->fields['required'] = $lang->custom->required;
 
 $lang->custom->todo = new stdClass();
 $lang->custom->todo->fields['priList']    = 'Priorité';
@@ -178,6 +164,7 @@ $lang->custom->todo->fields['typeList']   = 'Type';
 $lang->custom->todo->fields['statusList'] = 'Statut';
 
 $lang->custom->user = new stdClass();
+$lang->custom->user->fields['required']     = $lang->custom->required;
 $lang->custom->user->fields['roleList']     = 'Rôle';
 $lang->custom->user->fields['statusList']   = 'Statut';
 $lang->custom->user->fields['contactField'] = 'Contact';
@@ -232,10 +219,15 @@ $lang->custom->reviewList[0]  = 'Off';
 $lang->custom->deletedList[1] = 'Montrer';
 $lang->custom->deletedList[0] = 'Cacher';
 
+$lang->custom->setHours       = 'Setting Hours';
+$lang->custom->setWeekend     = 'Setting Weekend';
+$lang->custom->setHoliday     = 'Setting Holiday';
 $lang->custom->workingHours   = 'Heures/Jour';
-$lang->custom->weekend        = 'Weekend';
-$lang->custom->weekendList[2] = '2-Jour';
+$lang->custom->weekendRole    = 'Role';
 $lang->custom->weekendList[1] = '1-Jour';
+$lang->custom->weekendList[2] = '2-Jour';
+$lang->custom->restDayList[6] = 'Saturday rest';
+$lang->custom->restDayList[0] = 'Sunday rest';
 
 global $config;
 $lang->custom->sprintConceptList[0] = 'Program Product Iteration';
@@ -301,7 +293,7 @@ $lang->custom->CRKanban[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
-$lang->custom->moduleName['execution']   = $lang->custom->execution;
+$lang->custom->moduleName['execution']   = $lang->custom->executionCommon;
 
 $lang->custom->conceptQuestions['overview']   = "Quelle combinaison de gestion convient le mieux à votre entreprise ?";
 $lang->custom->conceptQuestions['URAndSR']    = "Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";

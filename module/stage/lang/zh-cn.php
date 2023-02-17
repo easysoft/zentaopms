@@ -2,7 +2,7 @@
 /**
  * The stage module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     stage
@@ -18,13 +18,13 @@ $lang->stage->delete      = '删除';
 $lang->stage->view        = '阶段详情';
 
 /* Fields. */
-$lang->stage->common  = '阶段';
 $lang->stage->id      = '编号';
 $lang->stage->name    = '阶段名称';
 $lang->stage->type    = '阶段类型';
 $lang->stage->percent = '工作量占比';
 $lang->stage->setType = '阶段类型';
 
+$lang->stage->typeList['mix']     = '综合';
 $lang->stage->typeList['request'] = '需求';
 $lang->stage->typeList['design']  = '设计';
 $lang->stage->typeList['dev']     = '开发';

@@ -2,7 +2,7 @@
 /**
  * The model file of upgrade module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
@@ -587,6 +587,9 @@ class upgradeModel extends model
             case '18_0_beta3':
                 $this->updateMyBlocks();
                 break;
+            case '18_1':
+                $this->addMixStage();
+                break;
         }
 
         $this->deletePatch();
@@ -1080,7 +1083,9 @@ class upgradeModel extends model
             case '18_0_beta2':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta2'));
             case '18_0_beta3':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta3')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta3'));
+             case '18_0':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -5908,13 +5913,28 @@ class upgradeModel extends model
         if(empty($moduleBranchPairs)) return true;
 
         $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
-        foreach($storyModulePairs as $moduleID) $this->dao->update(TABLE_STORY)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+        foreach($storyModulePairs as $moduleID)
+        {
+            if(!isset($moduleBranchPairs[$moduleID])) continue;
+
+            $this->dao->update(TABLE_STORY)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+        }
 
         $bugModulePairs = $this->dao->select('module')->from(TABLE_BUG)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
-        foreach($bugModulePairs as $moduleID) $this->dao->update(TABLE_BUG)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+        foreach($bugModulePairs as $moduleID)
+        {
+            if(!isset($moduleBranchPairs[$moduleID])) continue;
+
+            $this->dao->update(TABLE_BUG)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+        }
 
         $caseModulePairs = $this->dao->select('module')->from(TABLE_CASE)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
-        foreach($caseModulePairs as $moduleID) $this->dao->update(TABLE_CASE)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+        foreach($caseModulePairs as $moduleID)
+        {
+            if(!isset($moduleBranchPairs[$moduleID])) continue;
+
+            $this->dao->update(TABLE_CASE)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+        }
 
         return true;
     }
@@ -6330,7 +6350,8 @@ class upgradeModel extends model
         {
             $dirPath    = dirname($filePath);
             $dir        = str_replace($this->app->appRoot . 'extension' . DS . 'custom' .DS , '', $dirPath);
-            $moduleName = explode(DS,  $dir)[0];
+            $dirList    = explode(DS,  $dir);
+            $moduleName = $dirList[0];
 
             $content = str_replace("include '../../control.php';", "helper::importControl('$moduleName');", $content);
             $content = str_replace("helper::import('../../control.php');", "helper::importControl('$moduleName');", $content);
@@ -7558,6 +7579,7 @@ class upgradeModel extends model
         {
             $project = new stdclass();
             $project->name           = $sprint->name;
+            $project->desc           = $sprint->desc;
             $project->type           = 'project';
             $project->model          = 'scrum';
             $project->parent         = $programID;
@@ -8165,6 +8187,37 @@ class upgradeModel extends model
                 $guideBlock->account = $account;
                 $this->dao->insert(TABLE_BLOCK)->data($guideBlock)->exec();
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Add mix stage.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addMixStage()
+    {
+        $typeList = $this->dao->select('lang,vision')->from(TABLE_LANG)
+            ->where('module')->eq('stage')
+            ->andWhere('section')->eq('typeList')
+            ->groupBy('lang,vision')
+            ->fetchAll();
+        foreach($typeList as $type)
+        {
+            $langFile = $this->app->getModuleRoot() . DS . 'stage' . DS . 'lang' . DS . $type->lang . '.php';
+            if(is_file($langFile)) include $langFile;
+
+            $this->dao->replace(TABLE_LANG)
+                ->set('module')->eq('stage')
+                ->set('section')->eq('typeList')
+                ->set('lang')->eq($type->lang)
+                ->set('vision')->eq($type->vision)
+                ->set('key')->eq('mix')
+                ->set('value')->eq($lang->stage->typeList['mix'])
+                ->exec();
         }
 
         return true;

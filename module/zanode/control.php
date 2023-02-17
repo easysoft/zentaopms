@@ -2,7 +2,7 @@
 /**
  * The control file of ZenAgent Node of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      liyuchun <liyuchun@easycorp.ltd>
  * @package     qa
@@ -44,8 +44,13 @@ class zanode extends control
         $this->loadModel('search')->setSearchParams($this->config->zanode->search);
 
         $showFeature = false;
-        $skipAutomation = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
-        if(strpos(",$skipAutomation,", $this->app->user->account) === false) $showFeature = true;
+        $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
+        if(strpos(",$accounts,", $this->app->user->account) === false)
+        {
+            $showFeature = true;
+            $accounts .= ',' . $this->app->user->account;
+            $this->loadModel('setting')->setItem('system.common.global.skipAutomation', $accounts);
+        }
 
         $this->view->title       = $this->lang->zanode->common;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
@@ -71,8 +76,12 @@ class zanode extends control
      * @access public
      * @return void
      */
-    public function list($hostID, $orderBy = 'id_desc')
+    public function nodeList($hostID, $orderBy = 'id_desc')
     {
+        if(!commonModel::hasPriv('zanode', 'browse'))
+        {
+            $this->loadModel('common')->deny('zanode', 'browse');
+        }
         $this->view->title       = $this->lang->zanode->common;
         $this->view->nodeList    = $this->loadModel("zanode")->getListByHost($hostID, $orderBy);
         $this->view->orderBy     = $orderBy;
@@ -155,6 +164,7 @@ class zanode extends control
         $this->view->token       = !empty($vnc->token) ? $vnc->token:'';
         $this->view->title       = $this->lang->zanode->view;
         $this->view->zanode      = $node;
+        $this->view->snapshotList = $this->zanode->getSnapshotList($id);
         $this->view->actions     = $this->loadModel('action')->getList('zanode', $id);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->display();
@@ -277,6 +287,90 @@ class zanode extends control
     }
 
     /**
+     * Create snapshot.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return void
+     */
+    public function createSnapshot($nodeID = 0)
+    {
+        $node = $this->zanode->getNodeByID($nodeID);
+
+        if($_POST)
+        {
+            $this->zanode->createSnapshot($nodeID);
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->node = $node;
+        $this->display();
+    }
+
+    /**
+     * Edit Snapshot.
+     *
+     * @param int $snapshotID
+     * @access public
+     * @return void
+     */
+    public function editSnapshot($snapshotID)
+    {
+        $snapshot = $this->zanode->getImageByID($snapshotID);
+        if($_POST)
+        {
+            $this->zanode->editSnapshot($snapshotID);
+
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+            $this->loadModel('action')->create('zanode', $snapshot->host, 'editSnapshot', '', $snapshot->localName ? $snapshot->localName : $snapshot->name);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->snapshot = $snapshot;
+        $this->display();
+    }
+
+    /**
+     * Delete Snapshot.
+     *
+     * @param  int    $snapshotID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteSnapshot($snapshotID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->zanode->confirmDeleteSnapshot, inlink('deleteSnapshot', "snapshotID={$snapshotID}&confirm=yes")));
+        }
+
+        $result = $this->zanode->deleteSnapshot($snapshotID);
+
+        if($result !== true)
+        {
+            return print(js::alert($result));
+        }
+        else
+        {
+            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+        }
+    }
+
+    /**
      * Desctroy node.
      *
      * @param  int  $nodeID
@@ -297,8 +391,7 @@ class zanode extends control
         }
         else
         {
-            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
-            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent.parent'));
         }
     }
 
@@ -322,6 +415,68 @@ class zanode extends control
         $this->view->host  = !empty($vnc->hostIP) ? $vnc->hostIP:'';
         $this->view->token = !empty($vnc->token) ? $vnc->token:'';
         $this->display();
+    }
+
+    /**
+     * Browse snapshot.
+     *
+     * @param int    $nodeID
+     * @param string $browseType
+     * @param int    $param
+     * @param string $orderBy
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseSnapshot($nodeID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->loadLang('zahost');
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $snapshotList = $this->zanode->getSnapshotList($nodeID, $browseType, $param, $orderBy, $pager);
+
+        $this->view->title        = $this->lang->zanode->browseSnapshot;
+        $this->view->nodeID       = $nodeID;
+        $this->view->node         = $this->zanode->getNodeByID($nodeID);
+        $this->view->snapshotList = $snapshotList;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->browseType   = $browseType;
+
+        $this->display();
+    }
+
+    /**
+     * Restore node.
+     *
+     * @param  int  $nodeID
+     * @return void
+     */
+    public function restoreSnapshot($nodeID, $snapshotID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->zanode->confirmRestore, inlink('restoreSnapshot', "nodeID={$nodeID}&snapshotID={$snapshotID}&confirm=yes")));
+        }
+
+        $this->zanode->restoreSnapshot($nodeID, $snapshotID);
+
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            if(is_array($errors)) $errors = implode($errors, ',');
+            return print(js::alert($errors) . js::reload('parent'));
+        }
+        else
+        {
+            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+        }
     }
 
     /**

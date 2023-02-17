@@ -2,7 +2,7 @@
 /**
  * The create text view of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Fangzhou Hu <hufangzhou@easycorp.ltd>
  * @package     doc
@@ -15,6 +15,9 @@
 <?php include '../../common/view/markdown.html.php';?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
+<?php js::set('requiredFields', ',' . $config->doc->create->requiredFields . ',');?>
+<?php js::set('libNotEmpty', sprintf($lang->error->notempty, $lang->doc->lib));?>
+<?php js::set('keywordsNotEmpty', sprintf($lang->error->notempty, $lang->doc->keywords));?>
 <style>
 #main {padding: 0;}
 .container {padding: 0 !important;}
@@ -147,7 +150,7 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->doc->confirm, '', "class='btn btn-primary btn-wide'");?></td>
+                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->doc->confirm, '', "id='saveBtn' class='btn btn-primary btn-wide'");?></td>
                 </tr>
               </tfoot>
             </table>
@@ -164,9 +167,21 @@ $(function()
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea, .CodeMirror').height(contentHeight);}, 100);
     $('#modalBasicInfo .modal-content').css('max-height', contentHeight);
 
-    $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
-
     $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
+
+    $('#saveBtn').click(function()
+    {
+        var requiredArr = ['lib', 'keywords'];
+        for(var i = 0; i < 3; i++)
+        {
+            if(requiredFields.indexOf(',' + requiredArr[i] + ',') != -1 && !$('#' + requiredArr[i]).val().trim())
+            {
+                alert(eval(requiredArr[i] + 'NotEmpty'));
+                return false;
+            }
+        }
+        $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
+    });
 })
 </script>
 <?php js::set('textType', $config->doc->textTypes);?>

@@ -2,7 +2,7 @@
 /**
  * The model file of common module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     common
@@ -156,30 +156,9 @@ class commonModel extends model
             $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
         }
 
-        if($parentExecution->type == 'stage')
+        if($execution->type == 'stage')
         {
-            $childExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($parentExecutionID)->andWhere('deleted')->eq('0')->fetchAll('id');
-            if($execution->deleted == '1' and count($childExecutions) > 0)
-            {
-                $childWait   = true;
-                $childClosed = true;
-                foreach($childExecutions as $childExecution)
-                {
-                    if($childExecution->status != 'wait')   $childWait = false;
-                    if($childExecution->status != 'closed') $childClosed = false;
-                }
-
-                if($childWait and $parentExecution->status != 'wait')
-                {
-                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('wait')->where('id')->eq($parentExecutionID)->exec();
-                    $this->loadModel('action')->create('execution', $parentExecutionID, 'waitbychilddelete');
-                }
-                if($childClosed and $parentExecution->status != 'closed')
-                {
-                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parentExecutionID)->exec();
-                    $this->loadModel('action')->create('execution', $parentExecutionID, 'closebychilddelete');
-                }
-            }
+            $this->loadModel('programplan')->computeProgress($execution->id);
         }
 
         return $parentExecution;
@@ -914,10 +893,10 @@ class commonModel extends model
      */
     public static function printHomeButton($tab)
     {
-        global $lang;
-        global $config;
+        global $lang, $config, $app;
 
         if(!$tab) return;
+        if($tab == 'admin' and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
         $icon = zget($lang->navIcons, $tab, '');
 
         if(!in_array($tab, array('program', 'product', 'project')))
@@ -1038,7 +1017,8 @@ class commonModel extends model
             {
                 foreach($lang->my->$moduleLinkList as $key => $linkList)
                 {
-                    $method = explode('-', $key)[1];
+                    $moduleMethodList = explode('-', $key);
+                    $method           = $moduleMethodList[1];
                     if(common::hasPriv($currentModule, $method))
                     {
                         $display       = true;
@@ -1218,8 +1198,9 @@ class commonModel extends model
                             }
                             else
                             {
-                                $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
-                                if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                                $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                                $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
+                                if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
                             }
 
                             if($activeMainMenu)
@@ -1343,9 +1324,10 @@ class commonModel extends model
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
             $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
             $class     = isset($menuItem->class) ? $menuItem->class : '';
+            $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
             $active    = '';
+
             if($subModule and in_array($currentModule, $subModule)) $active = 'active';
-            // if($alias and $moduleName == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
             if($menuItem->link)
             {
                 $target = '';
@@ -1358,7 +1340,10 @@ class commonModel extends model
                     if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
-                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
+
+                if($module == $currentModule and $method == $currentMethod) $active = 'active';
+                if($module == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
+                if(strpos(",$exclude,", ",$currentModule-$currentMethod,") !== false or strpos(",$exclude,", ",$currentModule,") !== false) $active = '';
 
                 $label    = $menuItem->text;
                 $dropMenu = '';
@@ -2462,6 +2447,12 @@ EOD;
 
             if(isset($this->app->user))
             {
+                if($this->app->tab == 'project')
+                {
+                    $this->resetProjectPriv();
+                    if(commonModel::hasPriv($module, $method)) return true;
+                }
+
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
                 {
@@ -2681,7 +2672,6 @@ EOD;
             if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
 
             $this->app->user->rights['rights'] = $recomputedRights;
-            $this->session->set('user', $this->app->user);
         }
     }
 
@@ -3202,11 +3192,13 @@ EOD;
      * @param  array        $headers   Set request headers.
      * @param  string       $dataType
      * @param  string       $method    POST|PATCH|PUT
+     * @param  int          $timeout
+     * @param  bool         $httpCode
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30)
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false)
     {
         global $lang, $app;
         if(!extension_loaded('curl'))
@@ -3253,6 +3245,7 @@ EOD;
         $response = curl_exec($curl);
         $errors   = curl_error($curl);
 
+        if($httpCode) $httpCode = curl_getinfo($curl,CURLINFO_HTTP_CODE);
         curl_close($curl);
 
         $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
@@ -3271,7 +3264,7 @@ EOD;
 
         if($errors) commonModel::$requestErrors[] = $errors;
 
-        return $response;
+        return $httpCode ? array($response, $httpCode) : $response;
     }
 
     /**

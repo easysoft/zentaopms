@@ -2,7 +2,7 @@
 /**
  * The action module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -58,6 +58,15 @@ $lang->action->noDynamic          = '暂时没有动态。';
 $lang->action->undeletedTips      = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
 $lang->action->executionNoProject = '该执行没有所属的项目，请先还原项目再还原执行';
 $lang->action->repoNoServer       = '该代码库没有所属的服务器，请先还原服务器再还原代码库';
+$lang->action->hasCreatedTask     = '该父阶段已创建任务，无法恢复！';
+$lang->action->hasDeletedParent   = '恢复该阶段需要同时恢复已删除的父阶段%s，';
+$lang->action->hasChangedAttr     = '恢复后阶段类型将根据父阶段类型均调整为“%s”，';
+$lang->action->whetherToRestore   = '是否恢复？';
+
+$lang->action->hasOtherType = array();
+$lang->action->hasOtherType['stage']  = "当前阶段的父级现在只允许创建{$lang->executionCommon}/看板类型的子级,故无法恢复当前阶段。";
+$lang->action->hasOtherType['sprint'] = "当前{$lang->executionCommon}的父级现在只允许创建阶段类型的子级,故无法恢复当前{$lang->executionCommon}。";
+$lang->action->hasOtherType['kanban'] = "当前看板的父级现在只允许创建阶段类型的子级,故无法恢复当前看板。";
 
 $lang->action->repeatChange     = '系统内已有同名、同代号的%s，恢复后名称为\"%s\"、代号为\"%s\"。';
 $lang->action->nameRepeatChange = '系统内已有同名的%s，恢复后名称为\"%s\"。';
@@ -237,6 +246,10 @@ $lang->action->desc->relieved             = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->switchtolight        = '$date, 由于 <strong>'. $lang->admin->system .'</strong> 从全生命周期管理模式切换为轻量管理模式，项目访问控制由项目集内公开调整为私有。' . "\n";
 $lang->action->desc->getvnc               = '$date, <strong>$actor</strong>对执行节点 <strong>$extra</strong> 进行了远程操控。' . "\n";
 $lang->action->desc->unlinkproduct        = '$date, 系统判断由于' . $lang->executionCommon . '所属项目与$extra取消关联，同步将' . $lang->executionCommon . '与$extra取消关联。' . "\n";
+$lang->action->desc->createdsnapshot      = '$date, <strong>$actor</strong> 创建了快照 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->restoredsnapshot     = '$date, <strong>$actor</strong> 还原了快照 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->editsnapshot         = '$date, <strong>$actor</strong> 编辑了快照 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->deletesnapshot       = '$date, <strong>$actor</strong> 删除了快照 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -412,13 +425,17 @@ $lang->action->label->resume                = '恢复了';
 $lang->action->label->reboot                = '重启了';
 $lang->action->label->boot                  = '启动了';
 $lang->action->label->destroy               = '关闭了';
-$lang->action->label->getvnc                = '远程操控';
+$lang->action->label->getvnc                = '远程操控了';
 $lang->action->label->synctwins             = '同步修改了';
 $lang->action->label->relieved              = '解除了';
 $lang->action->label->switchtolight         = '从全生命周期管理模式切换为轻量管理模式';
 $lang->action->label->linkedrepo            = '关联代码库到';
 $lang->action->label->unlinkedrepo          = '取消了项目与代码库的关联';
 $lang->action->label->unlinkproduct         = '取消了与产品的关联';
+$lang->action->label->createdsnapshot       = '创建了快照';
+$lang->action->label->restoredsnapshot      = '还原了快照';
+$lang->action->label->editsnapshot          = '编辑了快照';
+$lang->action->label->deletesnapshot        = '编辑了快照';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

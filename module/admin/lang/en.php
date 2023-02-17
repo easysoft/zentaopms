@@ -2,7 +2,7 @@
 /**
  * The admin module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
@@ -25,19 +25,32 @@ $lang->admin->resetPWDSetting = 'Reset password Setting';
 $lang->admin->tableEngine     = 'Table Engine';
 $lang->admin->setModuleIndex  = 'Set Module';
 
-$lang->admin->api            = 'API';
-$lang->admin->log            = 'Log';
-$lang->admin->setting        = 'Setting';
-$lang->admin->days           = 'Valid Day';
-$lang->admin->resetPWDByMail = 'Reset the password via the email';
+$lang->admin->mon              = 'month';
+$lang->admin->day              = 'day';
+$lang->admin->updateDynamics   = 'updateDynamics';
+$lang->admin->updatePatch      = 'updatePatch';
+$lang->admin->upgradeRecommend = 'upgradeRecommend';
+$lang->admin->zentaoUsed       = '';
 
-$lang->admin->changeEngine   = "Change to InnoDB";
-$lang->admin->changingTable  = 'Replacing data table %s engine...';
-$lang->admin->changeSuccess  = 'The data table %s engine has been changed to InnoDB.';
-$lang->admin->changeFail     = "Failed to replace table %s engine. Reason: <span class='text-red'>%s</span>。";
-$lang->admin->errorInnodb    = 'Your MySQL does not support InnoDB data table engine.';
-$lang->admin->changeFinished = "Database engine replacement completed.";
-$lang->admin->engineInfo     = "The <strong>%s</strong> table engine is <strong>%s</strong>.";
+$lang->admin->api                  = 'API';
+$lang->admin->log                  = 'Log';
+$lang->admin->setting              = 'Setting';
+$lang->admin->pluginRecommendation = 'Recommended plug-ins';
+$lang->admin->zentaoInfo           = 'ZenTao information';
+$lang->admin->officialAccount      = 'WeChat Official Account';
+$lang->admin->publicClass          = 'Public class';
+$lang->admin->days                 = 'Valid Day';
+$lang->admin->resetPWDByMail       = 'Reset the password via the email';
+$lang->admin->followUs             = 'Follow Us';
+$lang->admin->followUsContent      = 'Check out ZenTao news, events, and support at any time';
+
+$lang->admin->changeEngine               = "Change to InnoDB";
+$lang->admin->changingTable              = 'Replacing data table %s engine...';
+$lang->admin->changeSuccess              = 'The data table %s engine has been changed to InnoDB.';
+$lang->admin->changeFail                 = "Failed to replace table %s engine. Reason: <span class='text-red'>%s</span>。";
+$lang->admin->errorInnodb                = 'Your MySQL does not support InnoDB data table engine.';
+$lang->admin->changeFinished             = "Database engine replacement completed.";
+$lang->admin->engineInfo                 = "The <strong>%s</strong> table engine is <strong>%s</strong>.";
 $lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not InnoDB engines";
 $lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 
@@ -72,12 +85,14 @@ $lang->admin->setModule->optional       = 'Optional';
 $lang->admin->setModule->opened         = 'Opened';
 $lang->admin->setModule->closed         = 'Closed';
 
+$lang->admin->setModule->my             = 'My';
 $lang->admin->setModule->product        = 'Product';
 $lang->admin->setModule->scrum          = 'Scrum Project';
 $lang->admin->setModule->waterfall      = 'Waterfall Project';
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
+$lang->admin->setModule->score          = 'Score';
 $lang->admin->setModule->repo           = 'Repo';
 $lang->admin->setModule->issue          = 'Issue';
 $lang->admin->setModule->risk           = 'Risk';
@@ -120,8 +135,8 @@ $lang->admin->safe->modeList[0] = 'I don\'t care.';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Strong';
 
-$lang->admin->safe->modeRuleList[1] = ' >= 6 upper and lower case, and numbers.';
-$lang->admin->safe->modeRuleList[2] = ' >= 10 upper and lower case, numbers and special characters.';
+$lang->admin->safe->modeRuleList[1] = ' ≥ 6 upper and lower case, and numbers.';
+$lang->admin->safe->modeRuleList[2] = ' ≥ 10 letters, combination of uppercase, lowercase letters, numbers, and special symbols.';
 
 $lang->admin->safe->reasonList['weak']     = 'Common Weak Password';
 $lang->admin->safe->reasonList['account']  = 'Same as account';
@@ -142,3 +157,47 @@ $lang->admin->safe->noticeMode     = 'The password will be checked when creating
 $lang->admin->safe->noticeWeakMode = 'The password will be checked when logging into the system, creating and modifying user information, and changing passwords.';
 $lang->admin->safe->noticeStrong   = 'The longer the password, the more letters, numbers, or special characters it contains, and the less repetitive the password, the more secure it is!';
 $lang->admin->safe->noticeGd       = 'Your server does not have GD module installed, you cannot use the Captcha function, Please use it after installation.';
+
+$lang->admin->menuSetting['system']['name']    = 'System';
+$lang->admin->menuSetting['system']['desc']    = 'System elements configuration, such as backup, chat, security etc.';
+$lang->admin->menuSetting['user']['name']      = 'User';
+$lang->admin->menuSetting['user']['desc']      = 'Manage departments,add members and group configuration permissions.';
+$lang->admin->menuSetting['switch']['name']    = 'Switch';
+$lang->admin->menuSetting['switch']['desc']    = 'Turn on and off some functions of the system.';
+$lang->admin->menuSetting['model']['name']     = 'Model';
+$lang->admin->menuSetting['model']['desc']     = 'Configure different project management models and project common elements.';
+$lang->admin->menuSetting['feature']['name']   = 'Feature';
+$lang->admin->menuSetting['feature']['desc']   = 'Configure the elements of the system according to the function menu.';
+$lang->admin->menuSetting['template']['name']  = 'Template';
+$lang->admin->menuSetting['template']['desc']  = 'Configure the template type and template content of the document.';
+$lang->admin->menuSetting['message']['name']   = 'Message';
+$lang->admin->menuSetting['message']['desc']   = 'Configure notification paths and customize the actions to be notified.';
+$lang->admin->menuSetting['extension']['name'] = 'Extension';
+$lang->admin->menuSetting['extension']['desc'] = 'Browse and install plugins.';
+$lang->admin->menuSetting['dev']['name']       = 'Develop';
+$lang->admin->menuSetting['dev']['desc']       = 'Support for secondary development of the system.';
+$lang->admin->menuSetting['convert']['name']   = 'Data Import';
+$lang->admin->menuSetting['convert']['desc']   = 'Data import from third-party systems.';
+
+$lang->admin->updateDynamics   = 'Dynamics';
+$lang->admin->updatePatch      = 'Patch';
+$lang->admin->upgradeRecommend = 'Recommend Upgrade';
+$lang->admin->zentaoUsed       = 'You have used ZenTao';
+
+$lang->admin->openTag = 'ZenTao Opensource ';
+$lang->admin->bizTag  = 'ZenTao Biz ';
+$lang->admin->maxTag  = 'ZenTao Max ';
+
+$lang->admin->bizInfoURL    = 'https://www.zentao.net/page/enterprise.html';
+$lang->admin->maxInfoURL    = 'https://www.zentao.net/page/max.html';
+$lang->admin->productDetail = 'Detail';
+$lang->admin->productFeature['biz'][] = 'Feedback Management';
+$lang->admin->productFeature['biz'][] = 'Task Gantt Charts/Calendar/Effort';
+$lang->admin->productFeature['biz'][] = 'MS Word/Excel Import & Export';
+$lang->admin->productFeature['biz'][] = 'LDAP Support';
+$lang->admin->productFeature['max'][] = 'Project Metrics';
+$lang->admin->productFeature['max'][] = 'Asset Library';
+$lang->admin->productFeature['max'][] = 'QA Plan';
+$lang->admin->productFeature['max'][] = 'Opportunity/Risk/Issues Management';
+
+include dirname(__FILE__) . '/menu.php';

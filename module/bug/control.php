@@ -2,7 +2,7 @@
 /**
  * The control file of bug currentModule of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -288,7 +288,7 @@ class bug extends control
         }
 
         $project = $this->loadModel('project')->getByShadowProduct($productID);
-        if(!$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
+        if(!empty($project) and !$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
 
         $this->qa->setMenu($this->products, $productID, $branchID);
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
@@ -565,8 +565,9 @@ class bug extends control
         }
         else
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
-            $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'all','id_desc', 0, 'full', 'story', false);
+            $moduleID = $moduleID ? $moduleID : 0;
+            $builds   = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all','id_desc', 0, 'full', 'story', false);
         }
 
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
@@ -665,6 +666,7 @@ class bug extends control
         $this->view->storyID               = $storyID;
         $this->view->buildID               = $buildID;
         $this->view->caseID                = $caseID;
+        $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->runID                 = $runID;
         $this->view->version               = $version;
         $this->view->testtask              = $testtask;

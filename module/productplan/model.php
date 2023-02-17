@@ -2,7 +2,7 @@
 /**
  * The model file of productplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
@@ -114,9 +114,12 @@ class productplanModel extends model
 
         $productplanQuery = $this->session->productplanQuery;
 
-        $date  = date('Y-m-d');
-        $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
-            ->andWhere('deleted')->eq(0)
+        $date     = date('Y-m-d');
+        $products = (strpos($param, 'noproduct') !== false and empty($product)) ? $this->loadModel('product')->getList() : array(0);
+        $plans    = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->beginIF(strpos($param, 'noproduct') === false or !empty($product))->andWhere('product')->eq($product)->fi()
+            ->beginIF(strpos($param, 'noproduct') !== false and empty($product))->andWhere('product')->in(array_keys($products))->fi()
             ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF(strpos(',all,undone,bySearch,review,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
@@ -137,7 +140,8 @@ class productplanModel extends model
             {
                 $planProjects[$planID] = $this->dao->select('t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->where('t1.product')->eq($product)
+                    ->where('1=1')
+                    ->beginIF(strpos($param, 'noproduct') === false or !empty($product))->andWhere('product')->eq($product)->fi()
                     ->andWhere('t2.deleted')->eq(0)
                     ->andWhere('t1.plan')->like(",$planID,")
                     ->andWhere('t2.type')->in('sprint,stage,kanban')
@@ -147,7 +151,7 @@ class productplanModel extends model
 
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
             $product = $this->loadModel('product')->getById($product);
-            if($product->type == 'normal')
+            if(!empty($product) and $product->type == 'normal')
             {
                 $storyGroups = $this->dao->select('id,plan,estimate')->from(TABLE_STORY)
                     ->where("plan")->in($planIdList)
@@ -159,7 +163,7 @@ class productplanModel extends model
             $parentStories = $parentBugs = $parentHour = array();
             foreach($plans as $plan)
             {
-                if($product->type == 'normal')
+                if(!empty($product) and $product->type == 'normal')
                 {
                     $stories    = zget($storyGroups, $plan->id, array());
                     $storyPairs = array();

@@ -58,6 +58,11 @@ $config->programplan->customCreateFields = 'PM,percent,attribute,acl,milestone,r
 $config->programplan->custom = new stdclass();
 $config->programplan->custom->createFields = 'PM,percent,attribute,acl,milestone';
 
+$config->programplan->customAgilePlusCreateFields = 'PM,milestone,acl,desc,attribute';
+
+$config->programplan->customAgilePlus = new stdclass();
+$config->programplan->customAgilePlus->createFields = 'PM,milestone,acl,desc,attribute';
+
 $config->programplan->custom->customGanttFields = 'PM,deadline,status,realBegan,realEnd,progress,taskProgress,estimate,consumed,delay,delayDays';
 $config->programplan->ganttCustom = new stdclass();
 $config->programplan->ganttCustom->ganttFields = 'PM,deadline';

@@ -2,7 +2,7 @@
 /**
  * The model file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -154,11 +154,6 @@ class taskModel extends model
 
             /* Fix Bug #2466 */
             if($this->post->multiple)  $task->assignedTo = '';
-            if($task->mode == 'multi')
-            {
-                $task->assignedTo   = isset($_POST['team'][0]) ? $_POST['team'][0] : '';
-                $task->assignedDate = helper::now();
-            }
             if(!$this->post->multiple or count(array_filter($this->post->team)) < 1) $task->mode = '';
             $this->dao->insert(TABLE_TASK)->data($task, $skip = 'gitlab,gitlabProject')
                 ->autoCheck()
@@ -869,7 +864,7 @@ class taskModel extends model
                     }
                     elseif(strpos('wait,doing,pause', $oldTask->status) !== false)
                     {
-                        $currentTask->status = 'done';
+                        $currentTask->status       = 'done';
                         $currentTask->assignedTo   = $oldTask->openedBy;
                         $currentTask->assignedDate = $now;
                         $currentTask->finishedBy   = $this->app->user->account;
@@ -2497,7 +2492,7 @@ class taskModel extends model
             ->beginIF($productID)->andWhere("((t5.root=" . (int)$productID . " and t5.type='story') OR t2.product=" . (int)$productID . ")")->fi()
             ->beginIF($type == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
-            ->beginIF($type == 'assignedtome')->andWhere("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}') )")->fi()
+            ->beginIF($type == 'assignedtome')->andWhere("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t4.status != 'done') )")->fi()
             ->beginIF($type == 'finishedbyme')
             ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
             ->orWhere('t4.status')->eq("done")
@@ -2621,6 +2616,7 @@ class taskModel extends model
     {
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        $orderBy = str_replace('project_', 't1.project_', $orderBy);
         $tasks   = $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t4.name as projectName, t2.multiple as executionMultiple, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
@@ -2641,7 +2637,7 @@ class taskModel extends model
             ->fi()
             ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed') )")->fi()
+            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel,pause')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -3643,6 +3639,7 @@ class taskModel extends model
         if(!empty($task->team))
         {
             global $app;
+            $myself = new self();
             if($task->mode == 'linear')
             {
                 if($action == 'assignto' and strpos('done,cencel,closed', $task->status) === false) return false;
@@ -3650,14 +3647,14 @@ class taskModel extends model
                 {
                     if($task->assignedTo != $app->user->account) return false;
 
-                    $currentTeam = (new self())->getTeamByAccount($task->team, $app->user->account);
+                    $currentTeam = $myself->getTeamByAccount($task->team, $app->user->account);
                     if($currentTeam and $currentTeam->status == 'wait') return true;
                 }
                 if($action == 'finish' and $task->assignedTo != $app->user->account) return false;
             }
             elseif($task->mode == 'multi')
             {
-                $currentTeam = (new self())->getTeamByAccount($task->team, $app->user->account);
+                $currentTeam = $myself->getTeamByAccount($task->team, $app->user->account);
                 if($action == 'start' and strpos('wait,doing', $task->status) !== false and $currentTeam and $currentTeam->status == 'wait') return true;
                 if($action == 'finish' and (empty($currentTeam) or $currentTeam->status == 'done')) return false;
             }
@@ -3928,7 +3925,7 @@ class taskModel extends model
         $btnTextClass   = '';
         $btnClass       = '';
         $assignedToText = $assignedToTitle = zget($users, $task->assignedTo);
-        if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
+        if(!empty($task->team) and $task->mode == 'multi' and strpos('done,closed', $task->status) === false)
         {
             $assignedToText = $this->lang->task->team;
 

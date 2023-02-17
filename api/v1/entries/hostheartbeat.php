@@ -2,7 +2,7 @@
 /**
  * The host entry point of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     entries
@@ -78,6 +78,9 @@ class hostHeartbeatEntry extends baseEntry
                     'status'    => $vm->status,
                     'extranet'  => $vm->ip,
                 );
+                
+                if(!$vm->sshPortOnHost) unset($vmData['ssh']);
+
                 if($heartbeat > 0) $vmData['heartbeat'] = date("Y-m-d H:i:s", $heartbeat);
                 
                 $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('mac')->eq($vm->macAddress)->exec();

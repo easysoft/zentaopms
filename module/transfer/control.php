@@ -101,9 +101,9 @@ class transfer extends control
         $locate = $locate ? $locate : $this->session->showImportURL;
         if($_FILES)
         {
-            $file      = $this->loadModel('file')->getUpload('file');
+            $file = $this->loadModel('file')->getUpload('file');
 
-            if(!empty($file['error'])) return print(js::confirm($this->lang->file->uploadError[$file['error']]));
+            if(!empty($file['error'])) return print(js::alert($this->lang->file->uploadError[$file['error']]));
 
             $file      = $file[0];
             $shortName = $this->file->getSaveName($file['pathname']);
@@ -152,7 +152,7 @@ class transfer extends control
         $this->loadModel($model);
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
 
-        if($model == 'testcase' and !empty($_SESSION[$model . 'TemplateFields'])) $this->config->$model->templateFields = implode(',', $importFields);
+        if($model == 'testcase' and !empty($_SESSION[$model . 'TemplateFields']) and is_array($importFields)) $this->config->$model->templateFields = implode(',', $importFields);
         $fields       = $this->transfer->initFieldList($model, $importFields, false);
         $formatDatas  = $this->transfer->format($model, $filter);
         $datas        = $this->transfer->getPageDatas($formatDatas, $pagerID);

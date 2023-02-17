@@ -2,7 +2,7 @@
 /**
  * The common simplified chinese file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -80,9 +80,10 @@ $lang->noData         = 'Kein Datensatz';
 $lang->fullscreen     = 'Fullscreen';
 $lang->retrack        = 'Retrack';
 $lang->whitelist      = 'Weiße Liste';
-$lang->globalSetting  = 'Global Setting';
+$lang->globalSetting  = 'Common';
 $lang->waterfallModel = 'Waterfall';
 $lang->scrumModel     = 'Scrum';
+$lang->agilePlusModel = 'Agile Plus';
 $lang->all            = 'All';
 $lang->viewDetails    = 'View Details';
 
@@ -158,6 +159,8 @@ $lang->delayed = 'Delayed';
 $lang->common->common     = 'Standard Module';
 $lang->common->story      = 'Story';
 $lang->my->common         = 'My';
+$lang->todo->common       = 'Todo';
+$lang->block->common      = 'InfoBlock';
 $lang->program->common    = 'Program';
 $lang->product->common    = 'Product';
 $lang->project->common    = 'Project';
@@ -248,7 +251,7 @@ $lang->indexPage       = 'Index';
 $lang->model           = 'Model';
 $lang->redev           = 'Develop';
 $lang->browser         = 'Browser';
-$lang->db              = 'Database';
+$lang->database        = 'Database';
 $lang->editor          = 'Editor';
 $lang->timezone        = 'Timezone';
 $lang->security        = 'Security';

@@ -2,7 +2,7 @@
 /**
  * The model file of build module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -65,10 +65,11 @@ class buildModel extends model
     {
         return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t2.deleted as executionDeleted, t3.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = 0 or t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.project')->ne(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->beginIF($projectID)->andWhere('t1.project')->eq((int)$projectID)->fi()
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
@@ -321,7 +322,7 @@ class buildModel extends model
             $builds[$build->date][$id] = $buildName;
         }
 
-        if(empty($builds)) return $sysBuilds + $selectedBuilds;
+        if(empty($builds) and empty($shadows)) return $sysBuilds + $selectedBuilds;
 
         /* if the build has been released and replace is true, replace build name with release name. */
         if($replace)
@@ -335,6 +336,17 @@ class buildModel extends model
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t1.shadow')->ne(0)
                 ->fetchAll('id');
+            if($shadows)
+            {
+                /* Append releases of only shadow and not link build. */
+                $releases += $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
+                    ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
+                    ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+                    ->where('t1.shadow')->in($shadows)
+                    ->andWhere('t1.build')->eq(0)
+                    ->andWhere('t1.deleted')->eq(0)
+                    ->fetchAll('id');
+            }
             foreach($releases as $release)
             {
                 if($branch !== 'all')

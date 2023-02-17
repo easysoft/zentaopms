@@ -2,7 +2,7 @@
 /**
  * The import release view of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Qiyu Xie<xieqiyu@cnezsoft.com>
  * @package     kanban
@@ -51,33 +51,41 @@
       <tbody>
         <?php foreach($releases2Imported as $release):?>
         <?php $i = 1;?>
-        <?php $buildCount = count($release->builds);?>
-        <?php foreach($release->builds as $build):?>
+        <?php $rowspan = empty(count($release->builds)) ? 1 : count($release->builds);?>
         <tr>
-          <?php if($i == 1):?>
-          <td rowspan="<?php echo $buildCount;?>" class='c-id'>
+          <td rowspan="<?php echo $rowspan;?>" class='c-id'>
             <div class="checkbox-primary">
               <input type='checkbox' name='releases[]' value='<?php echo $release->id;?>'/>
               <label></label>
             </div>
             <?php printf('%03d', $release->id);?>
           </td>
-          <td rowspan="<?php echo $buildCount;?>" title='<?php echo $release->name;?>'>
+          <td rowspan="<?php echo $rowspan;?>" title='<?php echo $release->name;?>'>
             <?php if(common::hasPriv('release', 'view')):?>
             <a href='javascript:void(0);' onclick="locateView('release', <?php echo $release->id;?>)"><?php echo $release->name;?></a>
             <?php else:?>
             <?php echo $release->name;?>
             <?php endif;?>
           </td>
+          <?php if(count($release->builds) == 0):?>
+          <td></td>
+          <td></td>
+          <?php else:?>
+          <?php foreach($release->builds as $build):?>
+          <?php if($i > 1):?>
+        <tr>
           <?php endif;?>
           <td title='<?php echo $build->name;?>'><?php echo $build->name;?></td>
           <td title='<?php echo $build->projectName;?>'><?php echo $build->projectName;?></td>
           <?php if($i == 1):?>
-          <td rowspan="<?php echo $buildCount;?>" title='<?php echo $release->date;?>'><?php echo $release->date;?></td>
-          <?php endif;?>
+          <td rowspan="<?php echo $rowspan;?>" title='<?php echo $release->date;?>'><?php echo $release->date;?></td>
         </tr>
+        <?php else:?>
+        </tr>
+        <?php endif;?>
         <?php $i++;?>
         <?php endforeach;?>
+        <?php endif;?>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>
       </tbody>
