@@ -31,7 +31,7 @@ $(function()
     function handleClickItem(clickId)
     {
 	var clearId = $('.label-list > .text-primary').attr('labelid');
-        if(clearId && clearId !== clickId) 
+        if(clearId && clearId !== clickId)
 	{
 	    removeActive(clearId);
 	};
@@ -41,29 +41,14 @@ $(function()
             addActive(clickId);
         };
     }
-    
+
     function initMenu()
     {
       if (navTypes.includes(type))
       {
-          var myTreeData = [{
-	      title: '水果',
-	      children: [
-	          {title: '橘子', key: 'juzi jz'},
-                  {title: '瓜', key: '123'}
-              ]
-          }, {
-              title: '坚果',
-              children: [
-                  {title: '向日葵'},
-                  {title: '瓜子'}
-              ]
-          }, {
-              title: '蔬菜'
-	  }];
         $('#menuTree').tree(
         {
-            data: myTreeData
+            data: menuTree
         });
       }
       $('.menu-tree .search-input').on('input', function()
@@ -71,15 +56,15 @@ $(function()
           var val = $(this).val();
 	  if (!val)
           {
-              var updateData = myTreeData;
+              var updateData = menuTree;
           }
           else
           {
               var updateData = [];
-              for (var i = 0; i < myTreeData.length; i++)
+              for (var i = 0; i < menuTree.length; i++)
 	      {
                   var item = {};
-                  $.extend(true, item, myTreeData[i])
+                  $.extend(true, item, menuTree[i])
                   if (item.children)
                   {
                       var children = [];

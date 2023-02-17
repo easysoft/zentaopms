@@ -247,3 +247,4 @@ $config->disableFeature = array();
 if(!helper::hasFeature('waterfall')) $config->disableFeature = array('design', 'stage', 'programplan', 'weekly', 'researchplan', 'researchreport', 'gapanalysis');
 
 $config->dev->disableMainMenu = array('project', 'product', 'execution');
+$config->dev->projectMenus    = array('project', 'scrum', 'waterfall', 'kanbanProject');

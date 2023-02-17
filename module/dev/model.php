@@ -401,19 +401,12 @@ class devModel extends model
             $lang    = $defaultLang->$module->menu->$method['subMenu'];
         }
 
-        foreach($lang as $linkKey => $link)
+        $menus = $this->getLinkTitle($lang);
+        foreach($menus as $linkKey => $menu)
         {
             if($type == 'first' and in_array($linkKey, $this->config->dev->disableMainMenu)) continue;
-            if(is_array($link))
-            {
-                if(!isset($link['link'])) continue;
-                $link = $link['link'];
-            }
 
-            $link = strip_tags($link);
-            $link = explode('|', $link);
-
-            $originalLangs[$langKey . $linkKey] = trim($link[0]);
+            $originalLangs[$langKey . $linkKey] = $menu;
         }
 
         return $originalLangs;
@@ -549,5 +542,80 @@ class devModel extends model
         }
 
         return $lang;
+    }
+
+    /**
+     * Get menu tree.
+     *
+     * @param  string $type
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getMenuTree($type = 'second', $module = '', $method = '')
+    {
+        $menuTree = array();
+        if(!in_array($type, $this->config->dev->navTypes)) return $menuTree;
+
+        $lang = new stdclass();
+        if($type == 'second')
+        {
+            if(empty($module)) $module = 'my';
+            $menus       = $this->getLinkTitle($this->lang->mainNav);
+            $menusPinYin = common::convert2Pinyin($menus);
+            foreach($menus as $menuKey => $menu)
+            {
+                $menuItem = new stdclass();
+                $menuItem->title    = $menu;
+                $menuItem->module   = $menuKey;
+                $menuItem->method   = '';
+                $menuItem->active   = ($module == $menuKey and $method == '') ? 1 : 0;
+                $menuItem->key      = zget($menusPinYin, $menu, '');
+                $menuItem->children = array();
+
+                if($menuKey == 'project')
+                {
+                    $menusPinYin = common::convert2Pinyin($this->lang->dev->projectMenu);
+                    foreach($this->config->dev->projectMenus as $subMenuKey)
+                    {
+                        $subMenu = new stdClass();
+                        $subMenu->title  = $this->lang->dev->projectMenu[$subMenuKey];
+                        $subMenu->key    = zget($menusPinYin, $this->lang->dev->projectMenu[$subMenuKey], '');
+                        $subMenu->module = $subMenuKey;
+                        $subMenu->method = '';
+                        $subMenu->active = ($module == $subMenuKey and $method == '') ? 1 : 0;
+
+                        $menuItem->children[] = $subMenu;
+                    }
+                }
+                $menuTree[] = $menuItem;
+            }
+        }
+
+        return $menuTree;
+    }
+
+    /**
+     * Get links title.
+     *
+     * @param  array  $menus
+     * @access public
+     * @return void
+     */
+    public function getLinkTitle($menus)
+    {
+        $linksTitle = array();
+        foreach($menus as $menuKey => $menu)
+        {
+            if(is_array($menu) and !isset($menu['link'])) continue;
+
+            $link = is_array($menu) ? strip_tags($menu['link']) : strip_tags($menu);
+            $link = explode('|', $link);
+
+            $linksTitle[$menuKey] = trim($link[0]);
+        }
+
+        return $linksTitle;
     }
 }

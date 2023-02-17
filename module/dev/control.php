@@ -135,6 +135,7 @@ class dev extends control
         $this->view->featureBar    = $this->lang->dev->featureBar['langItem'];
         $this->view->originalLangs = $this->dev->getOriginalLang($type, $module, $method, $language);
         $this->view->customedLangs = $this->dev->getCustomedLang($type, $module, $method, $language);
+        $this->view->menuTree      = $this->dev->getMenuTree($type, $module, $method);
         $this->view->moduleName    = $moduleName;
         $this->view->language      = str_replace('-', '_', $language);
         $this->display();

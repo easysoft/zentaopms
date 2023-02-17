@@ -12,6 +12,7 @@
 ?>
 <?php js::set('type', $type); ?>
 <?php js::set('navTypes', $config->dev->navTypes); ?>
+<?php js::set('menuTree', $menuTree)?>
 <?php include 'header.html.php';?>
 <div id='mainMenu' class='clearfix menu-secondary'>
   <div class="btn-toolBar pull-left">
