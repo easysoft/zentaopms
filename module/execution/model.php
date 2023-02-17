@@ -2243,10 +2243,16 @@ class executionModel extends model
             ->orderBy('id_asc')
             ->fetchGroup('execution', 'id');
 
+        $taskIdList = array();
+        foreach($executionTasks as $executionID => $tasks) $taskIdList = array_merge($taskIdList, array_keys($tasks));
+        $taskIdList = array_unique($taskIdList);
+        $teamGroups = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
+
         foreach($executionTasks as $executionID => $tasks)
         {
             foreach($tasks as $task)
             {
+                if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
                 if($task->parent > 0 and isset($executionTasks[$executionID][$task->parent]))
                 {
                     $executionTasks[$executionID][$task->parent]->children[$task->id] = $task;
