@@ -1,9 +1,9 @@
 <?php
-$lang->custom->execution       = 'Kanban';
-$lang->custom->closedExecution = 'Closed ' . $lang->custom->execution;
+$lang->custom->executionCommon = 'Kanban';
+$lang->custom->closedExecution = 'Closed ' . $lang->custom->executionCommon;
 $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->executionCommon} is also forbidden.";
 
-$lang->custom->moduleName['execution'] = $lang->custom->execution;
+$lang->custom->moduleName['execution'] = $lang->custom->executionCommon;
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['required'] = $lang->custom->required;

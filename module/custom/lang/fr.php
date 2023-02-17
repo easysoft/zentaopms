@@ -55,7 +55,7 @@ $lang->custom->role                 = 'Role';
 $lang->custom->dept                 = 'Dept';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Activer ou Désactiver le Code';
-$lang->custom->execution            = 'Execution';
+$lang->custom->executionCommon      = 'Execution';
 $lang->custom->selectDefaultProgram = 'Please select default program';
 $lang->custom->defaultProgram       = 'Default program';
 $lang->custom->modeManagement       = 'Mode Management';
@@ -97,6 +97,10 @@ $lang->custom->project->currencySetting    = 'Currency Setting';
 $lang->custom->project->defaultCurrency    = 'Default Currency';
 $lang->custom->project->fields['required'] = $lang->custom->required;
 $lang->custom->project->fields['unitList'] = 'Unit List';
+
+$lang->custom->execution = new stdClass();
+$lang->custom->execution->fields['required']  = $lang->custom->required;
+$lang->custom->execution->fields['execution'] = 'Close Setting';
 
 $lang->custom->product = new stdClass();
 $lang->custom->product->fields['required']           = $lang->custom->required;
@@ -289,7 +293,7 @@ $lang->custom->CRKanban[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
-$lang->custom->moduleName['execution']   = $lang->custom->execution;
+$lang->custom->moduleName['execution']   = $lang->custom->executionCommon;
 
 $lang->custom->conceptQuestions['overview']   = "Quelle combinaison de gestion convient le mieux à votre entreprise ?";
 $lang->custom->conceptQuestions['URAndSR']    = "Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";

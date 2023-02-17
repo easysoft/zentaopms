@@ -546,9 +546,8 @@ class custom extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
-        $this->view->title      = $this->lang->custom->execution;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->view->title;
+        $this->view->title  = $this->lang->custom->executionCommon;
+        $this->view->module = 'execution';
 
         $this->display();
     }

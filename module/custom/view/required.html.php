@@ -12,7 +12,7 @@
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-row'>
-  <?php if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib', 'doc')) and ($module != 'project' or ($module == 'project' and $config->vision == 'rnd'))) include 'sidebar.html.php';?>
+  <?php if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib', 'doc')) and (!in_array($module, array('project', 'execution')) or (in_array($module, array('project', 'execution')) and $config->vision == 'rnd'))) include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
