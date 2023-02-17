@@ -50,6 +50,11 @@ function setId($id)
     return prop('id', $id);
 }
 
+function setTag($id)
+{
+    return prop('tagName', $id);
+}
+
 function html(/* string ...$lines */)
 {
     return directive('html', implode("\n", \zin\utils\flat(func_get_args())));

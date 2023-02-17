@@ -22,6 +22,10 @@ function h()        {return call_user_func_array('\zin\h::create', func_get_args
 
 function div()      {return call_user_func_array('\zin\h::div', func_get_args());}
 function span()     {return call_user_func_array('\zin\h::span', func_get_args());}
+function code()     {return call_user_func_array('\zin\h::code', func_get_args());}
+function canvas()   {return call_user_func_array('\zin\h::canvas', func_get_args());}
+function form()     {return call_user_func_array('\zin\h::form', func_get_args());}
+function br()       {return call_user_func_array('\zin\h::br', func_get_args());}
 function a()        {return call_user_func_array('\zin\h::a', func_get_args());}
 function p()        {return call_user_func_array('\zin\h::p', func_get_args());}
 function img()      {return call_user_func_array('\zin\h::img', func_get_args());}
@@ -39,5 +43,6 @@ function textarea() {return call_user_func_array('\zin\h::textarea', func_get_ar
 
 function js()       {return call_user_func_array('\zin\h::js', func_get_args());}
 function jsVar()    {return call_user_func_array('\zin\h::jsVar', func_get_args());}
+function jsCall()   {return call_user_func_array('\zin\h::jsCall', func_get_args());}
 function css()      {return call_user_func_array('\zin\h::css', func_get_args());}
 function import()   {return call_user_func_array('\zin\h::import', func_get_args());}
