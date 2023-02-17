@@ -1,1 +1,7 @@
+.table-form>tbody>tr>th{text-align: center}
 .c-default {width: 70px;}
+.setBtn {margin-top: -5px;}
+.px-0 {padding-left: 0; padding-right: 0;}
+.pl-20 {padding-left: 20px;}
+.pt-5 {padding-top: 5px;}
+.box-shadow-none {box-shadow: unset!important;}

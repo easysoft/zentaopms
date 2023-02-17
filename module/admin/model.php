@@ -14,6 +14,11 @@
 class adminModel extends model
 {
     /**
+     * The extension manager version. Don't change it.
+     */
+    const EXT_MANAGER_VERSION = '1.3';
+
+    /**
      * The api root.
      *
      * @var string
@@ -246,5 +251,423 @@ class adminModel extends model
         if($user->mobile   and $user->password == md5($user->mobile))   return true;
         if($user->birthday and $user->password == md5($user->birthday)) return true;
         return false;
+    }
+
+    /**
+     * Set admin menu.
+     *
+     * @access public
+     * @return void
+     */
+    public function setMenu()
+    {
+        $this->checkPrivMenu();
+
+        $menuKey = $this->getMenuKey();
+        if(empty($menuKey)) return;
+
+        $this->setSwitcher($menuKey);
+        if(isset($this->lang->admin->menuList->$menuKey))
+        {
+            if(isset($this->lang->admin->menuList->$menuKey['subMenu']))
+            {
+                $moduleName = $this->app->rawModule;
+                $methodName = $this->app->rawMethod;
+                $firstParam = $this->app->rawParams ? reset($this->app->rawParams) : '';
+
+                foreach($this->lang->admin->menuList->$menuKey['subMenu'] as $subMenuKey => $subMenu)
+                {
+                    $subModule = '';
+                    if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
+                    {
+                        if(isset($this->config->admin->navsGroup[$menuKey][$subMenuKey]) and strpos($this->config->admin->navsGroup[$menuKey][$subMenuKey], ",$firstParam,") !== false) $subModule = 'custom';
+                        if($firstParam == $subMenuKey) $subModule = 'custom';
+                    }
+
+                    if(!empty($subModule)) $subMenu['subModule'] = $subModule;
+                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey]))
+                    {
+                        if(!empty($subModule))
+                        {
+                            $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$firstParam]['subModule'] = $subModule;
+                            unset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$firstParam]['exclude']);
+                        }
+                        $subMenu['subMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey];
+                    }
+                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu']['menuOrder'][$subMenuKey]))   $subMenu['menuOrder']   = $this->lang->admin->menuList->$menuKey['tabMenu']['menuOrder'][$subMenuKey];
+                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu']['dividerMenu'][$subMenuKey])) $subMenu['dividerMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu']['dividerMenu'][$subMenuKey];
+
+                    $this->lang->admin->menu->$subMenuKey = $subMenu;
+                }
+            }
+
+            if(isset($this->lang->admin->menuList->$menuKey['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->$menuKey['menuOrder'];
+            if(isset($this->lang->admin->menuList->$menuKey['dividerMenu'])) $this->lang->admin->dividerMenu = $this->lang->admin->menuList->$menuKey['dividerMenu'];
+            if(isset($this->lang->admin->menuList->$menuKey['tabMenu']))     $this->lang->admin->tabMenu     = $this->lang->admin->menuList->$menuKey['tabMenu'];
+        }
+    }
+
+    /**
+     * Check priv menu.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkPrivMenu()
+    {
+        $orders = array();
+        foreach($this->lang->admin->menuList as $menuKey => $menu)
+        {
+            $menu['disabled'] = true;
+            if(!isset($menu['link'])) $menu['link'] = '';
+
+            /* Set links to authorized navigation. */
+            if(isset($menu['subMenu']))
+            {
+                /* Reorder secondary navigation. */
+                $subMenuList   = array();
+                $subMenuOrders = $menu['menuOrder'];
+                ksort($subMenuOrders);
+                foreach($subMenuOrders as $value) $subMenuList[$value] = $menu['subMenu'][$value];
+
+                /* Check sub menu priv. */
+                foreach($subMenuList as $subMenuKey => $subMenu)
+                {
+                    $link = array();
+                    if(isset($menu['tabMenu'][$subMenuKey]))
+                    {
+                        /* Reorder tertiary navigation. */
+                        $tabMenuList   = $menu['tabMenu'][$subMenuKey];
+                        if(isset($menu['tabMenu']['menuOrder'][$subMenuKey]))
+                        {
+                            $tabMenuOrders = $menu['tabMenu']['menuOrder'][$subMenuKey];
+                            ksort($tabMenuOrders);
+                            foreach($tabMenuOrders as $value) $tabMenuList[$value] = $menu['tabMenu'][$subMenuKey][$value];
+                        }
+
+                        /* Check tab menu priv. */
+                        foreach($tabMenuList as $tabMenuKey => $tabMenu)
+                        {
+                            $tabMenuLink = $this->getHasPrivLink($tabMenu);
+                            if(!empty($tabMenuLink))
+                            {
+                                /* Updated tertiary navigation links. */
+                                list($module, $method, $params) = $tabMenuLink;
+                                $tabMenuLabel = $tabMenu['link'];
+                                $menu['tabMenu'][$subMenuKey][$tabMenuKey]['link'] = substr($tabMenuLabel, 0, strpos($tabMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
+
+                                if(empty($link)) $link = $tabMenuLink;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if($menuKey == 'message' and $subMenuKey == 'mail')
+                        {
+                            $this->loadModel('mail');
+                            if(!$this->config->mail->turnon and !$this->session->mailConfig) $subMenu['link'] = $this->lang->mail->common . '|mail|detect|';
+                        }
+
+                        $link = $this->getHasPrivLink($subMenu);
+                    }
+
+                    if(!empty($link))
+                    {
+                        /* Updated secondary navigation link. */
+                        list($module, $method, $params) = $link;
+                        $subMenuLabel = $subMenu['link'];
+                        $menu['subMenu'][$subMenuKey]['link'] = substr($subMenuLabel, 0, strpos($subMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
+
+                        /* Update the level 1 navigation link. */
+                        if(empty($menu['link'])) $menu['link'] = helper::createLink($module, $method, $params);
+                        $menu['disabled'] = false;
+                    }
+                }
+            }
+            elseif(!empty($menu['link']) and strpos($menu['link'], '|') !== false)
+            {
+                list($module, $method) = explode('|', $menu['link']);
+                $menu['link'] = helper::createLink($module, $method);
+                if(common::hasPriv($module, $method)) $menu['disabled'] = false;
+            }
+
+            $order = $menu['order'];
+            $orders[$order] = $menuKey;
+
+            $this->lang->admin->menuList->$menuKey = $menu;
+        }
+
+        ksort($orders);
+        $menuList = new stdclass();
+        foreach($orders as $index => $menuKey)
+        {
+            $menuList->$menuKey = $this->lang->admin->menuList->$menuKey;
+            $menuList->$menuKey['order'] = $index;
+        }
+
+        $this->lang->admin->menuList = $menuList;
+    }
+
+    /**
+     * Get the authorized link.
+     *
+     * @param  array  $menu
+     * @access public
+     * @return array
+     */
+    public function getHasPrivLink($menu)
+    {
+        $link = array();
+        if(!empty($menu['link']))
+        {
+            list($label, $module, $method, $params) = explode('|', $menu['link']);
+            if(common::hasPriv($module, $method))
+            {
+                $link = array($module, $method, $params);
+            }
+            elseif(!empty($menu['links']))
+            {
+                foreach($menu['links'] as $menuLink)
+                {
+                    list($module, $method, $params) = explode('|', $menuLink);
+                    if(common::hasPriv($module, $method))
+                    {
+                        $link = array($module, $method, $params);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $link;
+    }
+
+    /**
+     * Get menu key
+     *
+     * @access public
+     * @return string
+     */
+    public function getMenuKey()
+    {
+        $moduleName  = $this->app->rawModule;
+        $methodName  = $this->app->rawMethod;
+        $firstParam  = $this->app->rawParams ? reset($this->app->rawParams) : '';
+        $secondParam = $this->app->rawParams ? next($this->app->rawParams)  : '';
+
+        foreach($this->config->admin->menuGroup as $menuKey => $menuGroup)
+        {
+            if(in_array($moduleName, $menuGroup))
+            {
+                return $menuKey;
+            }
+            elseif(in_array("$moduleName|$methodName", $menuGroup))
+            {
+                if($moduleName == 'custom' and ($methodName == 'required' or $methodName == 'set'))
+                {
+                    if(in_array($firstParam, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"])) return $menuKey;
+                }
+                else
+                {
+                    return $menuKey;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Set switcher.
+     *
+     * @param  string $currentMenuKey
+     * @access public
+     * @return string
+     */
+    public function setSwitcher($currentMenuKey = 'system')
+    {
+        if(empty($currentMenuKey)) return null;
+
+        $currentMenu = $this->lang->admin->menuList->$currentMenuKey;
+        $output      = "<div class='btn-group header-btn'>";
+        $output     .= "<button class='btn pull-right btn-link' data-toggle='dropdown'>";
+        $output     .= "<span class='text'>{$currentMenu['name']}</span> ";
+        $output     .= "<span class='caret'></span></button>";
+        $output     .= "<ul class='dropdown-menu menu-hover-primary menu-active-primary' id='adminMenu'>";
+        foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
+        {
+            if($this->config->vision == 'lite' and !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
+            $class = $menuKey == $currentMenuKey ? "active" : '';
+            if($menuGroup['disabled']) $class .= ' disabled not-clear-menu';
+            $output .= "<li class='$class'>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/>" . $menuGroup['name']) . "</li>";
+        }
+        $output .= "</ul></div>";
+
+        $this->lang->switcherMenu = $output;
+    }
+
+    /**
+     * Get extensions from zentao.net.
+     *
+     * @param  string $type plugin|patch
+     * @param  int    $limit
+     * @param  bool   $hasInternet
+     * @access public
+     * @return array
+     */
+    public function getExtensionsByAPI($type = 'plugin', $limit = 6, $hasInternet = true)
+    {
+        if($hasInternet)
+        {
+            $searchType = $type == 'plugin' ? 'byUpdatedTime,offcial' : 'byModule';
+            $param      = $type == 'plugin' ? '' : 'MTIxOA==';
+            $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
+            $plugins    = isset($extensions->extensions) ? (array)$extensions->extensions : array();
+            foreach($plugins as $id => $plugin)
+            {
+                $plugin->viewLink = str_replace(array('info', 'client'), '', $plugin->viewLink);
+                if($type == 'patch' and !isset($plugin->compatibleRelease)) unset($plugins[$id]);
+            }
+        }
+        else
+        {
+            if($this->config->edition == 'open')
+            {
+                $plugins = array(
+                    $this->config->admin->plugins[27],
+                    $this->config->admin->plugins[26],
+                    $this->config->admin->plugins[30]
+                );
+            }
+            else
+            {
+                $plugins = array(
+                    $this->config->admin->plugins[198],
+                    $this->config->admin->plugins[194],
+                    $this->config->admin->plugins[203]
+                );
+            }
+        }
+
+        return $plugins;
+    }
+
+    /**
+     * Fetch data from an api.
+     *
+     * @param  string    $url
+     * @access public
+     * @return mixed
+     */
+    public function fetchAPI($url)
+    {
+        $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $version = str_replace('_', '.', $version);
+
+        $url   .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version . '&edition=' . $this->config->edition;
+        $result = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($url)));
+
+        if(!isset($result->status)) return false;
+        if($result->status != 'success') return false;
+        if(isset($result->data)) return json_decode($result->data);
+    }
+
+    /**
+     * Get public class from zentao.net.
+     *
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getPublicClassByAPI($limit = 2)
+    {
+        $apiURL  = $this->config->admin->videoAPIURL;
+        $data    = $this->fetchAPI($apiURL);
+        $courses = $data->videos;
+
+        $index       = 1;
+        $publicClass = array();
+        foreach($courses as $course)
+        {
+            if($index > $limit) break;
+
+            $publicClass[$index] = new stdClass();
+            $publicClass[$index]->name     = $course->title;
+            $publicClass[$index]->image    = $this->config->admin->cdnRoot . $course->image->list[0]->middleURL;
+            $publicClass[$index]->viewLink = $this->config->admin->apiRoot . '/publicclass/' . ($course->alias ? "{$course->alias}-" : '') . "{$course->id}.html";
+            $index ++;
+        }
+        return $publicClass;
+    }
+
+    /**
+     * Get dynamics by API.
+     *
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getDynamicsByAPI($limit = 2)
+    {
+        $apiURL   = $this->config->admin->downloadAPIURL;
+        $data     = $this->fetchAPI($apiURL);
+        $articles = $data->articles;
+
+        $index     = 1;
+        $downloads = array();
+        foreach($articles as $article)
+        {
+            if($index > $limit) break;
+
+            $tagKey = $this->config->edition . 'Tag';
+            if(!isset($this->lang->admin->$tagKey)) break;
+            if(!preg_match("/{$this->lang->admin->$tagKey}\d/", $article->title)) continue;
+
+            $downloads[$index] = new stdClass();
+            $downloads[$index]->id        = $article->id;
+            $downloads[$index]->title     = $article->title;
+            $downloads[$index]->addedDate = $article->addedDate;
+            $downloads[$index]->link      = $this->config->admin->apiRoot . "/download/{$article->alias}-{$article->id}.html";
+            $index ++;
+        }
+        return $downloads;
+    }
+
+    /**
+     * Check internet.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkInternet()
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $this->config->admin->apiSite);
+        curl_setopt($curl, CURLOPT_TIMEOUT_MS, 1000);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        $connected = curl_exec($curl);
+        curl_close($curl);
+
+        return (bool)$connected;
+    }
+
+    /**
+     * Get date used object.
+     *
+     * @access public
+     * @return object
+     */
+    public function genDateUsed()
+    {
+        $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
+            ->where('date')->gt('0000-00-00')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->orderBy('date_asc')
+            ->limit('1')
+            ->fetch('date');
+
+        return helper::getDateInterval($firstUseDate);
     }
 }

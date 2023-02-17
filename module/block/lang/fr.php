@@ -10,8 +10,6 @@
  * @link        http://www.zentao.net
  */
 global $config;
-$lang->block = new stdclass();
-$lang->block->common     = 'Bloc';
 $lang->block->id         = 'ID';
 $lang->block->params     = 'Params';
 $lang->block->name       = 'Nom';

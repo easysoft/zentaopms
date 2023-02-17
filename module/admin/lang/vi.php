@@ -22,10 +22,17 @@ $lang->admin->captcha       = 'Mã xác thực';
 $lang->admin->getCaptcha    = 'Gửi Mã xác thực';
 $lang->admin->register      = 'Register';
 
-$lang->admin->api     = 'API';
-$lang->admin->log     = 'Nhật ký';
-$lang->admin->setting = 'Thiết lập';
-$lang->admin->days    = 'Ngày hợp lệ';
+$lang->admin->api                  = 'API';
+$lang->admin->log                  = 'Nhật ký';
+$lang->admin->setting              = 'Thiết lập';
+$lang->admin->pluginRecommendation = 'Recommended plug-ins';
+$lang->admin->zentaoInfo           = 'ZenTao information';
+$lang->admin->officialAccount      = 'WeChat Official Account';
+$lang->admin->publicClass          = 'Public class';
+$lang->admin->days                 = 'Ngày hợp lệ';
+$lang->admin->resetPWDByMail       = 'Reset the password via the email';
+$lang->admin->followUs             = 'Follow Us';
+$lang->admin->followUsContent      = 'Check out ZenTao news, events, and support at any time';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Phiên bản hiện tại là %s. ';
@@ -85,3 +92,11 @@ $lang->admin->safe->loginCaptchaList[0] = 'No';
 $lang->admin->safe->noticeMode   = 'Mật khẩu sẽ được kiểm tra khi người dùng đăng nhập hoặc người dùng thêm hoặc sửa.';
 $lang->admin->safe->noticeStrong = '';
 $lang->admin->safe->noticeGd     = 'Your server does not have GD module installed, you cannot use the Captcha function, Please use it after installation.';
+
+$lang->admin->mon              = 'month';
+$lang->admin->day              = 'day';
+$lang->admin->updateDynamics   = 'updateDynamics';
+$lang->admin->updatePatch      = 'updatePatch';
+$lang->admin->upgradeRecommend = 'upgradeRecommend';
+
+include dirname(__FILE__) . '/menu.php';

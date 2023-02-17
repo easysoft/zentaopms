@@ -10,8 +10,6 @@
  * @link        http://www.zentao.net
  */
 global $config;
-$lang->block = new stdclass();
-$lang->block->common     = 'Block';
 $lang->block->name       = 'Tên';
 $lang->block->style      = 'Kiểu';
 $lang->block->grid       = 'Vị trí';

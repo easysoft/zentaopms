@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php
 $itemRow = <<<EOT
   <tr class='text-center'>
@@ -28,14 +28,14 @@ $itemRow = <<<EOT
   </tr>
 EOT;
 ?>
+<style>
+.checkbox-primary {width: 170px; margin: 0 10px 10px 0; display: inline-block;}
+</style>
 <?php js::set('itemRow', $itemRow)?>
 <?php js::set('module',  $module)?>
 <?php js::set('field',   $field)?>
 <?php js::set('confirmReviewCase', $lang->custom->notice->confirmReviewCase)?>
 <?php js::set('stopSubmit', true)?>
-<style>
-.checkbox-primary {width: 170px; margin: 0 10px 10px 0; display: inline-block;}
-</style>
 <?php if($module == 'story' and $field == 'review'):?>
 <style>
 .table-form>tbody>tr>th {width: 120px !important}
@@ -48,23 +48,12 @@ EOT;
 </style>
 <?php endif;?>
 <div id='mainContent' class='main-row'>
-  <div class='side-col' id='sidebar'>
-    <div class='cell'>
-      <div class='list-group'>
-        <?php
-        foreach($lang->custom->{$module}->fields as $key => $value)
-        {
-            echo html::a(inlink('set', "module=$module&field=$key"), $value, '', " id='{$key}Tab'");
-        }
-        ?>
-      </div>
-    </div>
-  </div>
+  <?php if(!in_array($module, array('block', 'baseline'))) include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
-          <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
+          <strong><?php echo $lang->custom->$module->fields[$field]?></strong>
         </div>
       </div>
       <?php if($module == 'project' and $field == 'unitList'):?>
@@ -148,21 +137,6 @@ EOT;
           <td style='width:300px'><?php printf($lang->custom->notice->forceNotReview, $lang->$module->common);?></td>
         </tr>
         <?php endif;?>
-        <tr>
-          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
-        </tr>
-      </table>
-      <?php elseif($module == 'task' and $field == 'hours'):?>
-      <table class='table table-form mw-600px'>
-        <tr>
-          <th class='w-150px'><?php echo $lang->custom->workingHours;?></th>
-          <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px'");?></td>
-          <td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->custom->weekend;?></th>
-          <td><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
-        </tr>
         <tr>
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>

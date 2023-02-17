@@ -9,9 +9,14 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <form class="load-indicator main-form form-ajax" method='post'>
+    <div class='main-header'>
+      <div class='heading'>
+        <strong><?php echo $lang->custom->product->fields['product'];?></strong>
+      </div>
+    </div>
     <table class='table table-form'>
       <tr>
         <th class='w-150px'><?php echo $lang->custom->closedKanban;?></th>
