@@ -432,7 +432,7 @@ class wg
         $html = array();
         foreach($children as $child)
         {
-            if($child === NULL) continue;
+            if($child === NULL || is_bool($child)) continue;
 
             if(is_array($child))
             {
