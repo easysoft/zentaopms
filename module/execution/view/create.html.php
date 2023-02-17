@@ -31,6 +31,7 @@
 
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php $isWaterfall = (!empty($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('holders', $lang->execution->placeholder);?>
@@ -46,6 +47,7 @@
 <?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
 <?php js::set('copyNoExecution', $lang->execution->copyNoExecution);?>
 <?php js::set('model', isset($project->model) ? $project->model : '');?>
+<?php js::set('isWaterfall', $isWaterfall);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -151,12 +153,12 @@
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
                       <span class='input-group-addon'><?php echo $lang->product->common;?></span>
-                      <?php $disabled = ($project->model == 'waterfall' and !$project->division) ? "disabled='disabled'" : '';?>
+                      <?php $disabled = ($isWaterfall and !$project->division) ? "disabled='disabled'" : '';?>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
-                      <?php if($project->model == 'waterfall' and !$project->division) echo html::hidden("products[$i]", $product->id);?>
+                      <?php if($isWaterfall and !$project->division) echo html::hidden("products[$i]", $product->id);?>
                     </div>
                   </div>
-                  <div class='table-col <?php if(!$hasBranch) echo 'hidden';?>'>
+                  <div class='table-col <?php if(!$hasBranch) echo 'hidden'; if($disabled) echo ' disabledBranch'?>'>
                     <div class='input-group required'>
                       <span class='input-group-addon fix-border'><?php echo $lang->project->branch;?></span>
                       <?php $branchIdList = isset($product->branches) ? join(',', $product->branches) : '';?>
@@ -169,7 +171,7 @@
                 <div class='input-group' <?php echo "id='plan$i'";?>>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
                   <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), isset($product->plans) ? $product->plans : '', "class='form-control chosen' multiple");?>
-                  <?php if(!($project->model == 'waterfall' and !$project->division)):?>
+                  <?php if(!($isWaterfall and !$project->division)):?>
                   <div class='input-group-btn'>
                     <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>
                     <a href='javascript:;' onclick='removeLine(this)' class='btn btn-link removeLine' <?php if($i == 0) echo "style='visibility: hidden'";?>><i class='icon-close'></i></a>
@@ -207,7 +209,7 @@
                 <div class='input-group' id='plan0'>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
                   <?php echo html::select("plans[][]", $productPlan, '', "class='form-control chosen' multiple");?>
-                  <?php if(!($project->model == 'waterfall' and $project->division)):?>
+                  <?php if(!($isWaterfall and $project->division)):?>
                   <div class='input-group-btn'>
                     <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>
                     <a href='javascript:;' onclick='removeLine(this)' class='btn btn-link removeLine' style='visibility: hidden'><i class='icon-close'></i></a>
