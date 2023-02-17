@@ -32,7 +32,19 @@ class pagebase extends wg
                 html($this->prop('metas')),
                 h::title($this->props->get('title', '') . " - $lang->zentaoPMS"),
                 $zui ? h::import(array($config->zin->zuiPath . 'zui.zentao.umd.cjs', $config->zin->zuiPath . 'zui.zentao.css')) : null,
-                h::js('window.domReady = function(fn){if (document.readyState !== \'loading\') {fn();} else {document.addEventListener(\'DOMContentLoaded\', fn);}}'),
+                h::js('window.domReady = function(fn){if (document.readyState !== \'loading\') {fn();} else {document.addEventListener(\'DOMContentLoaded\', fn);}};'),
+                $zui ? h::js
+                (
+                    'zui.create = function(name, element, options){',
+                        'if(!zui.componentsMap) zui.componentsMap = Object.keys(zui).reduce(function(map, n){',
+                            'if(n[0] !== n[0].toUpperCase()) return map;',
+                            'map[n.toLowerCase()] = zui[n];',
+                            'return map;',
+                        '}, {});',
+                        'const Component = zui.componentsMap[name.toLowerCase()];',
+                        'return Component ? new Component(element, options) : null;',
+                    '};'
+                ) : null,
                 $this->block('head'),
             ),
             h::body

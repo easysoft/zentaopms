@@ -21,7 +21,7 @@ use stdClass;
  * @access public
  * @return object
  */
-function directive($type, $data)
+function directive($type, $data, $options = NULL)
 {
     if(!in_array($type, array('prop', 'class', 'style', 'cssVar', 'block', 'html', 'text')))
     {
@@ -30,8 +30,9 @@ function directive($type, $data)
 
     $directive = new stdClass();
     $directive->directive = true;
-    $directive->type = $type;
-    $directive->data = $data;
+    $directive->type      = $type;
+    $directive->data      = $data;
+    $directive->options   = $options;
     return $directive;
 }
 

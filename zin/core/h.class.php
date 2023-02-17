@@ -144,12 +144,12 @@ class h extends wg
 
     public static function css()
     {
-        return static::create('style', html(implode('\n', \zin\utils\flat(func_get_args()))));
+        return static::create('style', html(implode("\n", \zin\utils\flat(func_get_args()))));
     }
 
     public static function js()
     {
-        return static::create('script', html('(function(){'. implode('\n', \zin\utils\flat(func_get_args())) . '}())'));
+        return static::create('script', html('(function(){'. implode("\n", \zin\utils\flat(func_get_args())) . '}())'));
     }
 
     public static function jsVar($name, $value)
@@ -163,6 +163,17 @@ class h extends wg
             else $jsCode .= "var $var=" . json_encode($val) . ';';
         }
         return static::js($jsCode);
+    }
+
+    public static function jsCall()
+    {
+        $args = func_get_args();
+        $func = array_shift($args);
+        foreach($args as $index => $arg)
+        {
+            $args[$index] = json_encode($arg, JSON_UNESCAPED_UNICODE);
+        }
+        return static::js($func . '(' . implode(',', $args) . ');');
     }
 
     protected static function convertStrToRawHtml($children)
