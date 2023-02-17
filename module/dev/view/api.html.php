@@ -10,7 +10,7 @@
         <?php foreach($modules[$group] as $module):?>
         <?php
         if($config->disableFeature and in_array($module, $config->disableFeature)) continue;
-        $active     = ($module == $selectedModule) ? 'active' : '';
+        $active     = ($module == $selectedModule) ? 'text-primary' : '';
         $moduleName = zget($lang->dev->tableList, $module, $module);
         ?>
         <?php echo html::a(inlink('api', "module=$module"), $moduleName, '', "class='$active'");?>
@@ -22,7 +22,7 @@
         <div class='modulegroup'><?php echo $groupName?></div>
         <?php foreach($modules[$group] as $module):?>
         <?php
-        $active     = ($module == $selectedModule) ? 'active' : '';
+        $active     = ($module == $selectedModule) ? 'text-primary' : '';
         $moduleName = zget($lang->dev->tableList, $module, $module);
         ?>
         <?php echo html::a(inlink('api', "module=$module"), $moduleName, '', "class='$active'");?>

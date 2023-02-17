@@ -1,2 +1,6 @@
 .alert-block {border-top: 1px solid #ddd;}
 .btn-toolbar.pull-left .divider {margin-left: 0px; border-color: rgba(0,0,0,.2);}
+.main-content .main-header {padding: 10px 20px;}
+#subNavbar .nav>li>a { padding: 4px 12px;}
+#subHeader.admin-tab-menu {margin-bottom: -25px;}
+.pl-none {padding-left: 0;}

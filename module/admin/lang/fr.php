@@ -25,11 +25,24 @@ $lang->admin->resetPWDSetting = 'Reset password Setting';
 $lang->admin->tableEngine     = 'Table Engine';
 $lang->admin->setModuleIndex  = 'Set Module';
 
-$lang->admin->api            = 'API';
-$lang->admin->log            = 'Log';
-$lang->admin->setting        = 'Paramétrage';
-$lang->admin->days           = 'Durée de conservation';
-$lang->admin->resetPWDByMail = 'Reset the password via the email';
+$lang->admin->mon              = 'month';
+$lang->admin->day              = 'day';
+$lang->admin->updateDynamics   = 'updateDynamics';
+$lang->admin->updatePatch      = 'updatePatch';
+$lang->admin->upgradeRecommend = 'upgradeRecommend';
+$lang->admin->zentaoUsed       = '';
+
+$lang->admin->api                  = 'API';
+$lang->admin->log                  = 'Log';
+$lang->admin->setting              = 'Paramétrage';
+$lang->admin->pluginRecommendation = 'Recommended plug-ins';
+$lang->admin->zentaoInfo           = 'ZenTao information';
+$lang->admin->officialAccount      = 'WeChat Official Account';
+$lang->admin->publicClass          = 'Public class';
+$lang->admin->days                 = 'Durée de conservation';
+$lang->admin->resetPWDByMail       = 'Reset the password via the email';
+$lang->admin->followUs             = 'Follow Us';
+$lang->admin->followUsContent      = 'Check out ZenTao news, events, and support at any time';
 
 $lang->admin->changeEngine   = "Change to InnoDB";
 $lang->admin->changingTable  = 'Replacing data table %s engine...';
@@ -72,12 +85,14 @@ $lang->admin->setModule->optional       = 'Optional';
 $lang->admin->setModule->opened         = 'Opened';
 $lang->admin->setModule->closed         = 'Closed';
 
+$lang->admin->setModule->my             = 'My';
 $lang->admin->setModule->product        = 'Product';
 $lang->admin->setModule->scrum          = 'Scrum Project';
 $lang->admin->setModule->waterfall      = 'Waterfall Project';
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
+$lang->admin->setModule->score          = 'Score';
 $lang->admin->setModule->repo           = 'Repo';
 $lang->admin->setModule->issue          = 'Issue';
 $lang->admin->setModule->risk           = 'Risk';
@@ -142,3 +157,47 @@ $lang->admin->safe->noticeMode     = "Le mot de passe sera vérifié lors de la 
 $lang->admin->safe->noticeWeakMode = "Le mot de passe sera vérifié lors de la connexion au système, de la création et de la modification des coordonnées de l'utilisateur, et du changement de mot de passe.";
 $lang->admin->safe->noticeStrong   = "Le mot de passe est d'autant plus sécurisé qu'il est long, qu'il contient plus de lettres, de chiffres ou de caractères spéciaux, et que les lettres du mot de passe sont peu répétitives !";
 $lang->admin->safe->noticeGd       = 'Your server does not have GD module installed, you cannot use the Captcha function, Please use it after installation.';
+
+$lang->admin->menuSetting['system']['name']    = 'System';
+$lang->admin->menuSetting['system']['desc']    = 'System elements configuration, such as backup, chat, security etc.';
+$lang->admin->menuSetting['user']['name']      = 'User';
+$lang->admin->menuSetting['user']['desc']      = 'Manage departments,add members and group configuration permissions.';
+$lang->admin->menuSetting['switch']['name']    = 'Switch';
+$lang->admin->menuSetting['switch']['desc']    = 'Turn on and off some functions of the system.';
+$lang->admin->menuSetting['model']['name']     = 'Model';
+$lang->admin->menuSetting['model']['desc']     = 'Configure different project management models and project common elements.';
+$lang->admin->menuSetting['feature']['name']   = 'Feature';
+$lang->admin->menuSetting['feature']['desc']   = 'Configure the elements of the system according to the function menu.';
+$lang->admin->menuSetting['template']['name']  = 'Template';
+$lang->admin->menuSetting['template']['desc']  = 'Configure the template type and template content of the document.';
+$lang->admin->menuSetting['message']['name']   = 'Message';
+$lang->admin->menuSetting['message']['desc']   = 'Configure notification paths and customize the actions to be notified.';
+$lang->admin->menuSetting['extension']['name'] = 'Extension';
+$lang->admin->menuSetting['extension']['desc'] = 'Browse and install plugins.';
+$lang->admin->menuSetting['dev']['name']       = 'Develop';
+$lang->admin->menuSetting['dev']['desc']       = 'Support for secondary development of the system.';
+$lang->admin->menuSetting['convert']['name']   = 'Data Import';
+$lang->admin->menuSetting['convert']['desc']   = 'Data import from third-party systems.';
+
+$lang->admin->updateDynamics   = 'Dynamics';
+$lang->admin->updatePatch      = 'Patch';
+$lang->admin->upgradeRecommend = 'Recommend Upgrade';
+$lang->admin->zentaoUsed       = 'You have used ZenTao';
+
+$lang->admin->openTag = 'ZenTao Opensource ';
+$lang->admin->bizTag  = 'ZenTao Biz ';
+$lang->admin->maxTag  = 'ZenTao Max ';
+
+$lang->admin->bizInfoURL    = 'https://www.zentao.net/page/enterprise.html';
+$lang->admin->maxInfoURL    = 'https://www.zentao.net/page/max.html';
+$lang->admin->productDetail = 'Detail';
+$lang->admin->productFeature['biz'][] = 'Feedback Management';
+$lang->admin->productFeature['biz'][] = 'Task Gantt Charts/Calendar/Effort';
+$lang->admin->productFeature['biz'][] = 'MS Word/Excel Import & Export';
+$lang->admin->productFeature['biz'][] = 'LDAP Support';
+$lang->admin->productFeature['max'][] = 'Project Metrics';
+$lang->admin->productFeature['max'][] = 'Asset Library';
+$lang->admin->productFeature['max'][] = 'QA Plan';
+$lang->admin->productFeature['max'][] = 'Opportunity/Risk/Issues Management';
+
+include dirname(__FILE__) . '/menu.php';

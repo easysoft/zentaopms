@@ -12,13 +12,7 @@
 ?>
 <?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-800px'>
-    <div class='main-header'>
-      <h2>
-        <?php echo $lang->mail->common;?>
-        <small class='text-muted'> <?php echo $lang->arrow . $lang->mail->edit;?></small>
-      </h2>
-    </div>
+  <div class=' mw-800px'>
     <form method='post' action='<?php echo inlink('save');?>' id='dataform'>
       <table class='table table-form'>
         <tr>

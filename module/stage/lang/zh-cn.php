@@ -18,7 +18,6 @@ $lang->stage->delete      = '删除';
 $lang->stage->view        = '阶段详情';
 
 /* Fields. */
-$lang->stage->common  = '阶段';
 $lang->stage->id      = '编号';
 $lang->stage->name    = '阶段名称';
 $lang->stage->type    = '阶段类型';

@@ -5,27 +5,13 @@ $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on
 
 $lang->custom->moduleName['execution'] = $lang->custom->execution;
 
-$lang->custom->object = array();
-$lang->custom->object['execution'] = $lang->custom->execution;
-$lang->custom->object['story']     = $lang->SRCommon;
-$lang->custom->object['task']      = 'Task';
-$lang->custom->object['todo']      = 'Todo';
-$lang->custom->object['user']      = 'User';
-$lang->custom->object['block']     = 'Block';
-
-$lang->custom->menuOrder = array();
-$lang->custom->menuOrder[10] = 'execution';
-$lang->custom->menuOrder[15] = 'story';
-$lang->custom->menuOrder[20] = 'task';
-$lang->custom->menuOrder[25] = 'todo';
-$lang->custom->menuOrder[30] = 'user';
-$lang->custom->menuOrder[35] = 'block';
-
 $lang->custom->task = new stdClass();
+$lang->custom->task->fields['required'] = $lang->custom->required;
 $lang->custom->task->fields['priList']  = 'Priority';
 $lang->custom->task->fields['typeList'] = 'Type';
 
 $lang->custom->story = new stdClass();
+$lang->custom->story->fields['required']         = $lang->custom->required;
 $lang->custom->story->fields['priList']          = 'Priority';
 $lang->custom->story->fields['reasonList']       = 'Close Reason';
 $lang->custom->story->fields['statusList']       = 'Status';

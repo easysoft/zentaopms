@@ -34,8 +34,20 @@ class admin extends control
 
         $this->loadModel('misc');
 
-        $this->view->title      = $this->lang->admin->common;
-        $this->view->position[] = $this->lang->admin->index;
+        $hasInternet = $this->admin->checkInternet();
+        $clientLang  = $this->app->getClientLang();
+        $langNotCN   = common::checkNotCN();
+        $dateUsed    = $this->admin->genDateUsed();
+
+        $this->view->title       = $this->lang->admin->common;
+        $this->view->position[]  = $this->lang->admin->index;
+        $this->view->plugins     = $this->admin->getExtensionsByAPI('plugin', $langNotCN ? 5 : 6, $hasInternet);
+        $this->view->patches     = $this->admin->getExtensionsByAPI('patch', 5, $hasInternet);
+        $this->view->dateUsed    = $dateUsed;
+        $this->view->hasInternet = $hasInternet;
+        $this->view->dynamics    = ($hasInternet and !$langNotCN) ? $this->admin->getDynamicsByAPI(3) : array();
+        $this->view->publicClass = ($hasInternet and !$langNotCN) ? $this->admin->getPublicClassByAPI(3) : array();
+        $this->view->langNotCN   = $langNotCN;
         $this->display();
     }
 
@@ -235,7 +247,7 @@ class admin extends control
 
     /**
      * Set closed features config.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -248,17 +260,21 @@ class admin extends control
             {
                 foreach($this->post->module as $module => $options)
                 {
+                    if($module == 'myScore') continue;
                     $checked = reset($options);
                     if(!$checked) $closedFeatures .= "$module,";
                 }
             }
             $closedFeatures = rtrim($closedFeatures, ',');
             $this->loadModel('setting')->setItem('system.common.closedFeatures', $closedFeatures);
+            $this->loadModel('setting')->setItem('system.common.global.scoreStatus', $this->post->module['myScore'][0]);
+            $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->post->module['productUR'][0]);
             $this->loadModel('custom')->processMeasrecordCron();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
         $this->view->title            = $this->lang->admin->setModuleIndex;
         $this->view->closedFeatures   = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=closedFeatures');
+        $this->view->useScore         = $this->setting->getItem('owner=system&module=common&global&key=scoreStatus');
         $this->view->disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
         $this->display();
     }

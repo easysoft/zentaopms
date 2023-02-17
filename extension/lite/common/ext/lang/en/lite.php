@@ -143,81 +143,6 @@ $lang->doc->menuOrder[30] = 'custom';
 $lang->doc->menu->project['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']  = new stdclass();
 
-if(isset($lang->admin->menu->xuanxuan)) $xuanxuanMenu = $lang->admin->menu->xuanxuan;
-/* Admin menu. */
-$lang->admin->menu            = new stdclass();
-$lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-if(isset($xuanxuanMenu)) $lang->admin->menu->xuanxuan = $xuanxuanMenu;
-$lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
-$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate');
-$lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
-$lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
-$lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook,sms');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search,ldap', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
-
-if($config->vision != 'lite') $lang->admin->menu->xuanxuan['link']  = 'Chat|admin|xuanxuan';
-
-/* Admin menu order. */
-$lang->admin->menuOrder = array();
-$lang->admin->menuOrder[5]  = 'index';
-$lang->admin->menuOrder[6]  = 'xuanxuan';
-$lang->admin->menuOrder[10] = 'company';
-$lang->admin->menuOrder[15] = 'custom';
-$lang->admin->menuOrder[20] = 'message';
-$lang->admin->menuOrder[25] = 'extension';
-$lang->admin->menuOrder[30] = 'dev';
-$lang->admin->menuOrder[35] = 'system';
-
-$lang->admin->menu->message['subMenu']          = new stdclass();
-$lang->admin->menu->message['subMenu']->message = array();
-$lang->admin->menu->message['subMenu']->mail    = array('link' => "{$lang->mail->common}|mail|index", 'subModule' => 'mail');
-$lang->admin->menu->message['subMenu']->webhook = array('link' => "Webhook|webhook|browse", 'subModule' => 'webhook');
-
-if($config->edition != 'open') $lang->admin->menu->message['subMenu']->sms = array('link' => "Message|sms|index");
-
-$lang->admin->menu->message['subMenu']->browser = array('link' => "$lang->browser|message|browser");
-$lang->admin->menu->message['subMenu']->setting = array('link' => "$lang->settings|message|setting");
-
-$lang->admin->menu->message['menuOrder'][5]  = 'mail';
-$lang->admin->menu->message['menuOrder'][10] = 'webhook';
-$lang->admin->menu->message['menuOrder'][11] = 'sms';
-$lang->admin->menu->message['menuOrder'][15] = 'browser';
-$lang->admin->menu->message['menuOrder'][20] = 'setting';
-
-$lang->admin->menu->company['subMenu']              = new stdclass();
-$lang->admin->menu->company['subMenu']->browseUser  = array('link' => "{$lang->user->common}|company|browse", 'subModule' => 'user');
-$lang->admin->menu->company['subMenu']->dept        = array('link' => "{$lang->dept->common}|dept|browse", 'subModule' => 'dept');
-$lang->admin->menu->company['subMenu']->browseGroup = array('link' => "{$lang->priv}|group|browse", 'subModule' => 'group');
-
-$lang->admin->menu->dev['subMenu']         = new stdclass();
-$lang->admin->menu->dev['subMenu']->api    = array('link' => "API|dev|api");
-$lang->admin->menu->dev['subMenu']->db     = array('link' => "$lang->db|dev|db");
-$lang->admin->menu->dev['subMenu']->editor = array('link' => "$lang->editor|dev|editor");
-$lang->admin->menu->dev['subMenu']->entry  = array('link' => "{$lang->admin->entry}|entry|browse", 'subModule' => 'entry');
-
-$lang->admin->menu->dev['menuOrder'][5]  = 'api';
-$lang->admin->menu->dev['menuOrder'][10] = 'db';
-$lang->admin->menu->dev['menuOrder'][15] = 'editor';
-$lang->admin->menu->dev['menuOrder'][20] = 'entry';
-
-$lang->admin->menu->system['subMenu']              = new stdclass();
-$lang->admin->menu->system['subMenu']->data        = array('link' => "{$lang->admin->data}|backup|index", 'subModule' => 'action');
-$lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak');
-$lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
-$lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
-$lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
-
-if($config->visions == ',lite,' and $config->edition != 'open') $lang->admin->menu->system['subMenu']->license = array('link' => "License|admin|license'", 'alias' => 'license');
-if($config->visions != ',lite,') unset($lang->admin->menu->system['subMenu']->buildIndex);
-
-if($config->edition != 'open')
-{
-    $lang->admin->menu->system['subMenu']->ldap        = array('link' => 'LDAP|ldap|set', 'subModule' => 'ldap');
-    $lang->admin->menu->system['subMenu']->libreoffice = array('link' => 'Office|custom|libreoffice');
-}
-
-$lang->admin->dividerMenu = ',company,message,system,';
-
 /* adjust items of search. */
 $lang->searchObjects['all']       = 'All';
 $lang->searchObjects['todo']      = 'Todo';
@@ -275,25 +200,6 @@ global $config;
 if(isset($config->xuanxuan) && strpos($config->visions, ',rnd,') === false)
 {
     $lang->xuanxuan = new stdclass();
-    $lang->admin->menu->xuanxuan = array('link' => 'Chat|admin|xuanxuan', 'subModule' => 'client,setting');
-    $lang->admin->menuOrder[6]   = 'xuanxuan';
-
-    $lang->admin->menu->xuanxuan['subMenu'] = new stdclass();
-    $lang->admin->menu->xuanxuan['subMenu']->index   = array('link' => 'Home|admin|xuanxuan');
-    $lang->admin->menu->xuanxuan['subMenu']->setting = array('link' => 'Parameter|setting|xuanxuan');
-    $lang->admin->menu->xuanxuan['subMenu']->update  = array('link' => 'Update|client|browse', 'subModule' => 'client');
-
-    $lang->admin->menu->xuanxuan['menuOrder'][0]  = 'index';
-    $lang->admin->menu->xuanxuan['menuOrder'][5]  = 'setting';
-    $lang->admin->menu->xuanxuan['menuOrder'][10] = 'update';
-
-    if($config->edition != 'open')
-    {
-        $lang->admin->menu->xuanxuan['subModule']           = 'client,setting,conference';
-        $lang->admin->menu->xuanxuan['subMenu']->conference = array('link' => 'Conference|conference|admin');
-        $lang->admin->menu->xuanxuan['menuOrder'][7]        = 'conference';
-        $lang->navGroup->conference                         = 'admin';
-    }
 
     $lang->navGroup->im      = 'admin';
     $lang->navGroup->setting = 'admin';

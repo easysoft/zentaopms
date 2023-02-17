@@ -12,11 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('repeatDepart', $lang->dept->repeatDepart);?>
-<div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->dept->common;?></span></span>
-  </div>
-</div>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-4'>
     <div class='panel'>

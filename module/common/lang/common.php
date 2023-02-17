@@ -3,6 +3,7 @@ $lang->common      = new stdclass();
 $lang->index       = new stdclass();
 $lang->my          = new stdclass();
 $lang->todo        = new stdclass();
+$lang->block       = new stdclass();
 $lang->program     = new stdclass();
 $lang->programplan = new stdclass();
 $lang->product     = new stdclass();
@@ -87,6 +88,7 @@ $lang->sonarqube   = new stdclass();
 $lang->app         = new stdclass();
 $lang->zahost      = new stdclass();
 $lang->zanode      = new stdclass();
+$lang->holiday     = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
