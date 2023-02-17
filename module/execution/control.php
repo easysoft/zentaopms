@@ -4071,22 +4071,7 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, '', 'id_asc');
-            if(isset($project->model) and $project->model == 'waterfall')
-            {
-                $stageList = array();
-                foreach($executionStats as $stage)
-                {
-                    $stageList[] = $stage;
-                    foreach($stage->children as $child)
-                    {
-                        $child->name = $stage->name . '/' . $child->name;
-                        $stageList[] = $child;
-                    }
-                }
-
-                $executionStats = $stageList;
-            }
+            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, 'hasParentName', 'order_asc');
 
             $users = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
@@ -4097,6 +4082,7 @@ class execution extends control
                 $execution->totalConsumed = $execution->hours->totalConsumed;
                 $execution->totalLeft     = $execution->hours->totalLeft;
                 $execution->progress      = $execution->hours->progress . '%';
+                $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 if($this->post->exportType == 'selected')
