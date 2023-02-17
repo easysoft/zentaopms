@@ -140,7 +140,7 @@
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <?php $hidden = 'hide'?>
         <?php if(!empty($project->hasProduct)) $hidden = ''?>
-        <?php if($products):?>
+        <?php if(isset($project->hasProduct) and !empty($project->hasProduct) and $products):?>
         <?php $i = 0;?>
         <?php foreach($products as $product):?>
         <tr class="<?php echo $hidden;?>">
@@ -184,6 +184,16 @@
         </tr>
         <?php $i ++;?>
         <?php endforeach;?>
+        <?php elseif(!empty($project) and empty($project->hasProduct)):?>
+        <tr>
+          <th><?php echo $lang->execution->linkPlan;?></th>
+          <td id="plansBox">
+            <?php $planProductID = current(array_keys($allProducts));?>
+            <?php echo html::select("plans[$planProductID][]", isset($productPlan) ? $productPlan : array(), '', "class='form-control chosen' multiple");?>
+            <?php echo html::hidden("products[]", $planProductID);?>
+            <?php echo html::hidden("branch[0][0]", '0');?>
+          </td>
+        </tr>
         <?php else:?>
         <tr class='<?php echo $hidden;?>'>
           <th id='productTitle'><?php echo $lang->project->manageProductPlan;?></th>
