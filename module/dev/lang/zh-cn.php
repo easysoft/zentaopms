@@ -1,16 +1,18 @@
 <?php
-$lang->dev->common     = '二次开发';
-$lang->dev->api        = 'API';
-$lang->dev->db         = '数据库';
-$lang->dev->editor     = '编辑器';
-$lang->dev->translate  = '翻译';
-$lang->dev->dbList     = '数据库';
-$lang->dev->moduleList = '模块列表';
-$lang->dev->params     = '参数列表';
-$lang->dev->type       = '类型';
-$lang->dev->desc       = '描述';
-$lang->dev->noParams   = '无参数';
-$lang->dev->post       = 'POST参数';
+$lang->dev->common       = '二次开发';
+$lang->dev->api          = 'API';
+$lang->dev->db           = '数据库';
+$lang->dev->editor       = '编辑器';
+$lang->dev->translate    = '翻译';
+$lang->dev->dbList       = '数据库';
+$lang->dev->moduleList   = '模块列表';
+$lang->dev->params       = '参数列表';
+$lang->dev->type         = '类型';
+$lang->dev->desc         = '描述';
+$lang->dev->noParams     = '无参数';
+$lang->dev->post         = 'POST参数';
+$lang->dev->modifyValue  = '修改值';
+$lang->dev->defaultValue = '默认值';
 
 $lang->dev->paramRange     = '取值范围：%s';
 $lang->dev->paramDate      = '日期格式：YY-mm-dd，如：2019-01-01';

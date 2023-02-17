@@ -1,16 +1,19 @@
 <?php
-$lang->dev->common     = 'Entwicklung';
-$lang->dev->api        = 'API';
-$lang->dev->db         = 'Datenbank';
-$lang->dev->editor     = 'Bearbeiter';
-$lang->dev->translate  = 'Translate';
-$lang->dev->dbList     = 'Datenbank';
-$lang->dev->moduleList = 'Module';
-$lang->dev->params     = 'Parameter';
-$lang->dev->type       = 'Typ';
-$lang->dev->desc       = 'Beschreibung';
-$lang->dev->noParams   = 'Keine Parameter';
-$lang->dev->post       = 'POST Parameter';
+$lang->dev->common       = 'Entwicklung';
+$lang->dev->api          = 'API';
+$lang->dev->db           = 'Datenbank';
+$lang->dev->editor       = 'Bearbeiter';
+$lang->dev->translate    = 'Translate';
+$lang->dev->dbList       = 'Datenbank';
+$lang->dev->moduleList   = 'Module';
+$lang->dev->params       = 'Parameter';
+$lang->dev->type         = 'Typ';
+$lang->dev->desc         = 'Beschreibung';
+$lang->dev->noParams     = 'Keine Parameter';
+$lang->dev->post         = 'POST Parameter';
+$lang->dev->modifyValue  = 'modifyValue';
+$lang->dev->defaultValue = 'defaultValue';
+
 
 $lang->dev->paramRange     = 'Parameter Range: %s';
 $lang->dev->paramDate      = 'Date format: YY-mm-dd, e.g 2019-01-01';

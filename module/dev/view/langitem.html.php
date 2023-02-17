@@ -23,7 +23,7 @@
   </div>
 </div>
 <div class="flex gap-15">
-<?php if(in_array($type, $config->dev->navTypes , false)):?>
+<?php if(in_array($type, $config->dev->navTypes)):?>
   <div class="menu-tree">
     <div class="input-control search-box has-icon-left has-icon-right search-example">
       <input type="search" class="form-control search-input" />
@@ -35,7 +35,7 @@
   <form class='main-form form-ajax flex-1' method='post'>
     <div id='mainContent' class='main-content flex'>
       <div class="side-left">
-        <div class="title">默认值</div>
+      <div class="title"><?php echo $lang->dev->defaultValue ?> </div>
         <div class="label-list">
           <?php foreach($originalLangs as $langKey => $originalLang):?>
           <div labelId="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-32 my-12"><?php echo $originalLang?></div>
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="side-right">
-        <div class="title">修改值</div>
+      <div class="title"><?php echo $lang->dev->modifyValue?></div>
         <div class="input-list">
           <?php foreach($originalLangs as $langKey => $originalLang):?>
           <div class="input-control h-32 my-12">
