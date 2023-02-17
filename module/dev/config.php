@@ -246,5 +246,4 @@ $config->dev->navTypes = array('second', 'third', 'feature');
 $config->disableFeature = array();
 if(!helper::hasFeature('waterfall')) $config->disableFeature = array('design', 'stage', 'programplan', 'weekly', 'researchplan', 'researchreport', 'gapanalysis');
 
-$config->dev->disableMainMenu = array();
-if($config->systemMode == 'light') $config->dev->disableMainMenu = array('project');
+$config->dev->disableMainMenu = array('project', 'product', 'execution');

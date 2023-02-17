@@ -344,7 +344,7 @@ class devModel extends model
         }
         elseif($type == 'feature')
         {
-            $langKey = $module . '_feature-' . $method . '_';
+            $langKey = 'featureBar-' . $method . '_';
             foreach($defaultLang->$module->featureBar[$method] as $feature => $featureName)
             {
                 $selectKey = $feature . 'Selects';
@@ -360,7 +360,7 @@ class devModel extends model
         elseif($type == 'first')
         {
            $lang    = $defaultLang->mainNav;
-           $langKey = 'mainMenu_';
+           $langKey = 'mainNav_';
         }
         elseif($type == 'second')
         {
@@ -385,10 +385,10 @@ class devModel extends model
 
                     if(isset($menu['dropMenu']))
                     {
-                        foreach($menu['dropMenu'] as $menuKey => $menu)
+                        foreach($menu['dropMenu'] as $key => $menu)
                         {
-                            $menuKey = 'dropMenu_' . $menuKey;
-                            $menus->{$menuKey} = $menu;
+                            $dropMenuKey = $menuKey . 'DropMenu_' . $key;
+                            $menus->{$dropMenuKey} = $menu;
                         }
                     }
                 }
@@ -397,12 +397,13 @@ class devModel extends model
         }
         elseif($type == 'third')
         {
-            $langKey = "{$module}SubMenu_menu_{$method}_";
+            $langKey = "{$method}_";
             $lang    = $defaultLang->$module->menu->$method['subMenu'];
         }
 
         foreach($lang as $linkKey => $link)
         {
+            if($type == 'first' and in_array($linkKey, $this->config->dev->disableMainMenu)) continue;
             if(is_array($link))
             {
                 if(!isset($link['link'])) continue;
@@ -412,7 +413,6 @@ class devModel extends model
             $link = strip_tags($link);
             $link = explode('|', $link);
 
-            if($type == 'second') $langKey = $module . 'Menu_' . $linkKey . '_';
             $originalLangs[$langKey . $linkKey] = trim($link[0]);
         }
 
@@ -424,14 +424,35 @@ class devModel extends model
      *
      * @param  string $type
      * @param  string $module
+     * @param  string $method
      * @param  string $language
      * @access public
      * @return array
      */
-    public function getCustomedLang($type, $module = '', $language = 'zh-cn')
+    public function getCustomedLang($type, $module = '', $method = '', $language = 'zh-cn')
     {
         $customedLangs = array();
         $clientLang    = $this->app->getClientLang();
+
+        // Defalut value set, remove when left tree display.
+        if($type == 'feature')
+        {
+            $module = 'product';
+            $method = 'browse';
+        }
+        elseif($type == 'second')
+        {
+            $module = 'scrum';
+        }
+        elseif($type == 'third')
+        {
+            $module = 'kanbanProject';
+            $method = 'settings';
+        }
+        // Defalut value set end.
+
+        $langKey   = '';
+        $customeds = array();
         if($type == 'common')
         {
             $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module=common&section=&vision={$this->config->vision}");
@@ -451,6 +472,32 @@ class devModel extends model
                 }
             }
             if(!$this->config->URAndSR) unset($customedLangs['SRCommon']);
+        }
+        elseif($type == 'first')
+        {
+            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module=common&section=mainNav&vision={$this->config->vision}");
+            $langKey   = 'mainNav_';
+        }
+        elseif($type == 'second')
+        {
+            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module={$module}Menu&section=&vision={$this->config->vision}");
+        }
+        elseif($type == 'third')
+        {
+            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module={$module}SubMenu&section=$method&vision={$this->config->vision}");
+            $langKey   = "{$method}_";
+        }
+        elseif($type == 'feature')
+        {
+            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module={$module}&section=featureBar-$method&vision={$this->config->vision}");
+            $langKey   = "featureBar-{$method}_";
+        }
+
+        foreach($customeds as $customed)
+        {
+            $customedKey = $customed->key;
+            if($type == 'second') $customedKey = $customed->section . '_' . $customed->key;
+            $customedLangs[$langKey . $customedKey] = $customed->value;
         }
 
         return $customedLangs;

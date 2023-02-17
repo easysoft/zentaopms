@@ -189,16 +189,18 @@ $lang->admin->menu->company['subMenu']->browseUser  = array('link' => "{$lang->u
 $lang->admin->menu->company['subMenu']->dept        = array('link' => "{$lang->dept->common}|dept|browse", 'subModule' => 'dept');
 $lang->admin->menu->company['subMenu']->browseGroup = array('link' => "{$lang->priv}|group|browse", 'subModule' => 'group');
 
-$lang->admin->menu->dev['subMenu']         = new stdclass();
-$lang->admin->menu->dev['subMenu']->api    = array('link' => "API|dev|api");
-$lang->admin->menu->dev['subMenu']->db     = array('link' => "$lang->db|dev|db");
-$lang->admin->menu->dev['subMenu']->editor = array('link' => "$lang->editor|dev|editor");
-$lang->admin->menu->dev['subMenu']->entry  = array('link' => "{$lang->admin->entry}|entry|browse", 'subModule' => 'entry');
+$lang->admin->menu->dev['subMenu']           = new stdclass();
+$lang->admin->menu->dev['subMenu']->api      = array('link' => "API|dev|api");
+$lang->admin->menu->dev['subMenu']->db       = array('link' => "$lang->db|dev|db");
+$lang->admin->menu->dev['subMenu']->langItem = array('link' => "{$lang->langItem}|dev|langitem");
+$lang->admin->menu->dev['subMenu']->editor   = array('link' => "$lang->editor|dev|editor");
+$lang->admin->menu->dev['subMenu']->entry    = array('link' => "{$lang->admin->entry}|entry|browse", 'subModule' => 'entry');
 
 $lang->admin->menu->dev['menuOrder'][5]  = 'api';
 $lang->admin->menu->dev['menuOrder'][10] = 'db';
-$lang->admin->menu->dev['menuOrder'][15] = 'editor';
-$lang->admin->menu->dev['menuOrder'][20] = 'entry';
+$lang->admin->menu->dev['menuOrder'][15] = 'langItem';
+$lang->admin->menu->dev['menuOrder'][20] = 'editor';
+$lang->admin->menu->dev['menuOrder'][25] = 'entry';
 
 $lang->admin->menu->system['subMenu']              = new stdclass();
 $lang->admin->menu->system['subMenu']->data        = array('link' => "{$lang->admin->data}|backup|index", 'subModule' => 'action');
