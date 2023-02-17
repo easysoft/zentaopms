@@ -190,7 +190,7 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td>
+          <td class="form-actions">
             <?php echo html::submitButton();?>
             <?php if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=user&field=contactField"), 'hiddenwin', '', 'btn btn-wide');?>
           </td>
