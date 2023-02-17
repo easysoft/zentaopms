@@ -157,15 +157,17 @@ $lang->admin->menuList->message['menuOrder']['10'] = 'webhook';
 $lang->admin->menuList->message['menuOrder']['20'] = 'browser';
 $lang->admin->menuList->message['menuOrder']['25'] = 'setting';
 
-$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "API|dev|api|module=index");
-$lang->admin->menuList->dev['subMenu']['db']     = array('link' => "{$lang->database}|dev|db|table=" . trim(TABLE_EFFORT, '`'));
-$lang->admin->menuList->dev['subMenu']['editor'] = array('link' => "{$lang->editor}|dev|editor|");
-$lang->admin->menuList->dev['subMenu']['entry']  = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');
+$lang->admin->menuList->dev['subMenu']['api']      = array('link' => "API|dev|api|module=index");
+$lang->admin->menuList->dev['subMenu']['db']       = array('link' => "{$lang->database}|dev|db|table=" . trim(TABLE_EFFORT, '`'));
+$lang->admin->menuList->dev['subMenu']['langItem'] = array('link' => "{$lang->langItem}|dev|langitem|");
+$lang->admin->menuList->dev['subMenu']['editor']   = array('link' => "{$lang->editor}|dev|editor|");
+$lang->admin->menuList->dev['subMenu']['entry']    = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');
 
 $lang->admin->menuList->dev['menuOrder']['5']  = 'api';
 $lang->admin->menuList->dev['menuOrder']['10'] = 'db';
-$lang->admin->menuList->dev['menuOrder']['15'] = 'editor';
-$lang->admin->menuList->dev['menuOrder']['20'] = 'entry';
+$lang->admin->menuList->dev['menuOrder']['15'] = 'langItem';
+$lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
+$lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
 if($config->edition != 'max') unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10'], $lang->admin->menuList->template);
 if(!helper::hasFeature('waterfall'))

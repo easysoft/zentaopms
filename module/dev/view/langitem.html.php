@@ -13,7 +13,7 @@
 <?php js::set('type', $type); ?>
 <?php js::set('navTypes', $config->dev->navTypes); ?>
 <?php include 'header.html.php';?>
-<div id='mainMenu' class='clearfix'>
+<div id='mainMenu' class='clearfix menu-secondary'>
   <div class="btn-toolBar pull-left">
     <?php foreach($featureBar as $key => $label):?>
     <?php $active = $type == $key ? 'btn-active-text' : '';?>
