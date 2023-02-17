@@ -156,30 +156,9 @@ class commonModel extends model
             $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
         }
 
-        if($parentExecution->type == 'stage')
+        if($execution->type == 'stage')
         {
-            $childExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($parentExecutionID)->andWhere('deleted')->eq('0')->fetchAll('id');
-            if($execution->deleted == '1' and count($childExecutions) > 0)
-            {
-                $childWait   = true;
-                $childClosed = true;
-                foreach($childExecutions as $childExecution)
-                {
-                    if($childExecution->status != 'wait')   $childWait = false;
-                    if($childExecution->status != 'closed') $childClosed = false;
-                }
-
-                if($childWait and $parentExecution->status != 'wait')
-                {
-                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('wait')->where('id')->eq($parentExecutionID)->exec();
-                    $this->loadModel('action')->create('execution', $parentExecutionID, 'waitbychilddelete');
-                }
-                if($childClosed and $parentExecution->status != 'closed')
-                {
-                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parentExecutionID)->exec();
-                    $this->loadModel('action')->create('execution', $parentExecutionID, 'closebychilddelete');
-                }
-            }
+            $this->loadModel('programplan')->computeProgress($execution->id);
         }
 
         return $parentExecution;
@@ -914,10 +893,10 @@ class commonModel extends model
      */
     public static function printHomeButton($tab)
     {
-        global $lang;
-        global $config;
+        global $lang, $config, $app;
 
         if(!$tab) return;
+        if($tab == 'admin' and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
         $icon = zget($lang->navIcons, $tab, '');
 
         if(!in_array($tab, array('program', 'product', 'project')))
@@ -1346,9 +1325,10 @@ class commonModel extends model
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
             $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
             $class     = isset($menuItem->class) ? $menuItem->class : '';
+            $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
             $active    = '';
+
             if($subModule and in_array($currentModule, $subModule)) $active = 'active';
-            // if($alias and $moduleName == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
             if($menuItem->link)
             {
                 $target = '';
@@ -1361,7 +1341,10 @@ class commonModel extends model
                     if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
-                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
+
+                if($module == $currentModule and $method == $currentMethod) $active = 'active';
+                if($module == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
+                if(strpos(",$exclude,", ",$currentModule-$currentMethod,") !== false or strpos(",$exclude,", ",$currentModule,") !== false) $active = '';
 
                 $label    = $menuItem->text;
                 $dropMenu = '';

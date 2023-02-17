@@ -10,8 +10,6 @@
  * @link        http://www.zentao.net
  */
 global $config;
-$lang->block = new stdclass();
-$lang->block->common     = 'Block';
 $lang->block->id         = 'ID';
 $lang->block->params     = 'Params';
 $lang->block->name       = 'Name';
@@ -142,6 +140,8 @@ $lang->block->default['waterfall']['project']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['project']['6']['grid']   = 4;
 $lang->block->default['waterfall']['project']['6']['source'] = 'project';
 
+$lang->block->default['waterfallplus'] = $lang->block->default['waterfall'];
+
 $lang->block->default['scrum']['project']['1']['title'] =  'Project Overview';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['project']['1']['grid']  = 8;
@@ -169,7 +169,8 @@ $lang->block->default['scrum']['project']['4']['grid']  = 4;
 $lang->block->default['scrum']['project']['5']['title'] = 'Dynamic';
 $lang->block->default['scrum']['project']['5']['block'] = 'projectdynamic';
 $lang->block->default['scrum']['project']['5']['grid']  = 4;
-$lang->block->default['kanban'] = $lang->block->default['scrum'];
+$lang->block->default['kanban']    = $lang->block->default['scrum'];
+$lang->block->default['agileplus'] = $lang->block->default['scrum'];
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Report';
 $lang->block->default['product']['1']['block'] = 'statistic';
@@ -375,10 +376,14 @@ $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = 'Test Version';
 $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dynamics';
 
+$lang->block->modules['agileplus']['index'] = $lang->block->modules['scrum']['index'];
+
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt = 'Plan Gantt Chart';
 $lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic = 'Dynamics';
+
+$lang->block->modules['waterfallplus']['index'] = $lang->block->modules['waterfall']['index'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();

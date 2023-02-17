@@ -122,6 +122,14 @@ class projectModel extends model
         {
             if($projectID and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !empty($projects))
             {
+                /* Redirect old project to new project. */
+                $newProjectID = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('project');
+                if($newProjectID and strpos(",{$this->app->user->view->projects},", ",{$newProjectID},") !== false)
+                {
+                    $this->session->set('project', (int)$newProjectID, $this->app->tab);
+                    return $this->session->project;
+                }
+
                 $this->session->set('project', key($projects), $this->app->tab);
                 $this->accessDenied();
             }
@@ -1228,6 +1236,7 @@ class projectModel extends model
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
+            ->setDefault('multiple', '1')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', $this->post->name)
@@ -1483,7 +1492,7 @@ class projectModel extends model
 
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->createDefaultSprint($projectID);
+            if(empty($project->multiple) and $project->model != 'waterfall' and $project->model != 'waterfallplus') $this->loadModel('execution')->createDefaultSprint($projectID);
 
             return $projectID;
         }
@@ -2709,18 +2718,21 @@ class projectModel extends model
             }
             $hours[$executionID] = $hour;
 
-            if(isset($executions[$executionID]) and $executions[$executionID]->type == 'stage' and $executions[$executionID]->grade == 2)
+            if(isset($executions[$executionID]) and $executions[$executionID]->type == 'stage' and $executions[$executionID]->grade > 1)
             {
-                $stageParent = $executions[$executionID]->parent;
-                if(!isset($hours[$stageParent]))
+                $stageParents = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in(trim($executions[$executionID]->path, ','))->andWhere('type')->eq('stage')->andWhere('id')->ne($executions[$executionID]->id)->orderBy('grade')->fetchPairs();
+                foreach($stageParents as $stageParent)
                 {
-                    $hours[$stageParent] = clone $hour;
-                    continue;
-                }
+                    if(!isset($hours[$stageParent]))
+                    {
+                        $hours[$stageParent] = clone $hour;
+                        continue;
+                    }
 
-                $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
-                $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
-                $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+                    $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
+                    $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
+                    $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+                }
             }
         }
 
@@ -2763,6 +2775,7 @@ class projectModel extends model
         }
 
         if($project and $project->model == 'waterfall') $model = $project->model;
+        if($project and $project->model == 'waterfallplus') $model = 'waterfall';
         if($project and $project->model == 'kanban')
         {
             $model = $project->model . 'Project';
@@ -2783,7 +2796,7 @@ class projectModel extends model
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
             $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-            if(isset($project->model) and $project->model == 'scrum')
+            if(isset($project->model) and ($project->model == 'scrum' or $project->model == 'agileplus'))
             {
                 $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
             }
@@ -2822,15 +2835,18 @@ class projectModel extends model
         $this->loadModel('common')->resetProjectPriv($objectID);
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
-        if(isset($project->model) and $project->model == 'waterfall')
+        if(isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))
         {
             $lang->project->createExecution = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
             $lang->project->lastIteration   = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
 
             $this->loadModel('execution');
+            $executionCommonLang   = $lang->executionCommon;
             $lang->executionCommon = $lang->project->stage;
 
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
+            $lang->execution->typeList['sprint'] = $executionCommonLang;
         }
 
         $lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);

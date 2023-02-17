@@ -1,0 +1,9 @@
+vim  extension/lite/common/ext/lang/de/lite.php
+vim  extension/lite/common/ext/lang/en/lite.php
+vim  extension/lite/common/ext/lang/fr/lite.php
+vim  extension/lite/common/ext/lang/zh-cn/lite.php
+vim  module/common/lang/de.php
+vim  module/common/lang/en.php
+vim  module/common/lang/fr.php
+vim  module/common/lang/menu.php
+vim  module/common/lang/zh-cn.php

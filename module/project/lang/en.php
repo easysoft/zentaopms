@@ -271,6 +271,8 @@ $lang->project->modelList['']          = '';
 $lang->project->modelList['scrum']     = "Scrum";
 if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
+$lang->project->modelList['agileplus'] = "Agile +";
+if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfallplus'] = "Waterfall +";
 
 $lang->project->featureBar['browse']['all']       = 'All';
 $lang->project->featureBar['browse']['undone']    = 'Unfinished';
@@ -324,9 +326,12 @@ $lang->project->endList[186] = 'Half year';
 $lang->project->endList[365] = 'One year';
 $lang->project->endList[999] = 'Longtime';
 
-$lang->project->scrumTitle     = 'Agile Development Management';
-$lang->project->waterfallTitle = 'Waterfall Project Management';
-$lang->project->kanbanTitle    = 'Kanban Project Management';
+$lang->project->scrumTitle         = 'Agile Development Management';
+$lang->project->waterfallTitle     = 'Waterfall Project Management';
+$lang->project->kanbanTitle        = 'Kanban Project Management';
+$lang->project->agileplusTitle     = 'Agile + Kanban Project Management';
+$lang->project->waterfallplusTitle = 'Waterfall + Agile + Kanban Project Management';
+$lang->project->moreModelTitle     = 'Please look forward to more models...';
 
 $lang->project->empty                  = 'No project.';
 $lang->project->nextStep               = 'Next step';
@@ -337,6 +342,8 @@ $lang->project->lastKanban             = 'Recent Kanban';
 $lang->project->ongoingStage           = 'Ongoing stage';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = 'Waterfall';
+$lang->project->agileplus              = 'Agile +';
+$lang->project->waterfallplus          = 'Waterfall +';
 $lang->project->cannotCreateChild      = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
 $lang->project->emptyPM                = 'No manager';
 $lang->project->emptyBranch            = 'Branch can not be empty!';
@@ -385,3 +392,4 @@ $lang->project->copyProject->daysTips           = '『Available working days』S
 
 $lang->project->linkBranchStoryByPlanTips = "When the project is scheduled to associate requirements, only the activated requirements associated with the %s of the project are imported.";
 $lang->project->linkNormalStoryByPlanTips = "When the project plans to associate requirements, only the requirements that are active are imported.";
+$lang->project->cannotManageProducts      = "This project is a project-type project and cannot be associated with products.";

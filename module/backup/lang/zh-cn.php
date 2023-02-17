@@ -1,5 +1,5 @@
 <?php
-$lang->backup->common      = '系统备份';
+$lang->backup->common      = '备份';
 $lang->backup->index       = '备份首页';
 $lang->backup->history     = '备份历史';
 $lang->backup->delete      = '删除备份';

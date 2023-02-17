@@ -105,15 +105,16 @@ js::set('systemMode', $this->config->systemMode);
             <?php if($card->estimate and $card->estimate != 0) echo "<span class='text-gray'>{$card->estimate}h</span>";?>
         <?php else:?>
         <?php
-        $name = isset($card->title) ? $card->title : $card->name;
+        $name    = isset($card->name) ? $card->name : $card->title;
+        $title   = isset($card->title) ? $card->title : $name;
         $delayed = '';
         if($card->fromType == 'execution' or $card->fromType == 'ticket')
         {
             $delayed = (!empty($card->delay) or (!helper::isZeroDate($card->deadline) and helper::now() > $card->deadline)) ? "<span class='delayed label label-danger label-badge'>{$lang->execution->delayed}</span>" : '';
         }
 
-        if(common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'>" . html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', " title='$name'") . "$delayed</div>";
-        if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'><div title='$name'>$name</div>$delayed</div>";
+        if(common::hasPriv($card->fromType, 'view') and empty($card->children)) echo "<div class='cardName {$card->fromType}Name'>" . html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', " title='$title'") . "$delayed</div>";
+        if(!common::hasPriv($card->fromType, 'view') or !empty($card->children)) echo "<div class='cardName {$card->fromType}Name'><div title='$title'>$name</div>$delayed</div>";
         if($card->fromType == 'productplan' or $card->fromType == 'build')
         {
             echo "<div class='desc' title='$card->desc'>$card->desc</div>";

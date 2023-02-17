@@ -64,6 +64,7 @@ $lang->group->outside  = 'Other Users';
 $lang->group->limited  = 'Limited Users';
 $lang->group->other    = 'Others';
 $lang->group->all      = 'All Privileges';
+$lang->group->config   = 'Config';
 
 $lang->group->copyOptions['copyPriv'] = 'Copy Privileges';
 $lang->group->copyOptions['copyUser'] = 'Copy Users';

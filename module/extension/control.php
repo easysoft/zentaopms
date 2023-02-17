@@ -26,6 +26,7 @@ class extension extends control
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
+            $this->loadModel('admin')->setMenu();
             $this->view->title      = $this->lang->extension->browse;
             $this->view->position[] = $this->lang->extension->browse;
 

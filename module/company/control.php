@@ -223,15 +223,12 @@ class company extends control
 
         /* Get executions' list.*/
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode|multiple');
-        $executionsIDList = array_keys($executions);
-        $executionsList = $this->execution->getByIdList($executionsIDList);
-        foreach($executionsList as $executionsID => $executionObj)
+        $executionsList = $this->execution->getByIdList(array_keys($executions));
+        foreach($executionsList as $executionID => $execution)
         {
-            foreach($projects as $projectsID => $projectsName)
-            {
-                if($executionObj->project == $projectsID) $executions[$executionObj->id] = $projectsName . '/' . $executionObj->name;
-            }
+            if(isset($projects[$execution->project])) $executions[$execution->id] = $projects[$execution->project] . '/' . $executions[$execution->id]; 
         }
+
         $executions = array($this->lang->execution->common) + $executions;
         $this->view->executions = $executions;
 

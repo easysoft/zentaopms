@@ -14,10 +14,6 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'><?php // common::printAdminSubMenu('message');?></div>
   <div class='btn-toolbar pull-right'>
-    <div class='btn-group'>
-      <div class='btn-group' id='createActionMenu'>
-        <?php if(common::hasPriv('webhook', 'create') and ($app->rawMethod == 'browse') or $app->rawMethod == 'log') echo html::a($this->createLink('webhook', 'create'), "<i class='icon-plus'></i> {$lang->webhook->create}", '', "class='btn btn-primary'");?>
-      </div>
-    </div>
+    <?php if(common::hasPriv('webhook', 'create') and ($app->rawMethod == 'browse') or $app->rawMethod == 'log') echo html::a($this->createLink('webhook', 'create'), "<i class='icon-plus'></i> {$lang->webhook->create}", '', "class='btn btn-primary'");?>
   </div>
 </div>

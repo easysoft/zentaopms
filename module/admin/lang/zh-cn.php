@@ -25,19 +25,32 @@ $lang->admin->resetPWDSetting = '重置密码设置';
 $lang->admin->tableEngine     = '表引擎';
 $lang->admin->setModuleIndex  = '系统功能配置';
 
-$lang->admin->api            = '接口';
-$lang->admin->log            = '日志';
-$lang->admin->setting        = '设置';
-$lang->admin->days           = '日志保存天数';
-$lang->admin->resetPWDByMail = '通过邮箱重置密码';
+$lang->admin->mon              = '月';
+$lang->admin->day              = '天';
+$lang->admin->updateDynamics   = '更新动态';
+$lang->admin->updatePatch      = '补丁更新';
+$lang->admin->upgradeRecommend = '推荐升级';
+$lang->admin->zentaoUsed       = '您已使用禅道';
 
-$lang->admin->changeEngine   = "更换到InnoDB";
-$lang->admin->changingTable  = '正在更换数据表%s引擎...';
-$lang->admin->changeSuccess  = '已经更换数据表%s引擎为InnoDB。';
-$lang->admin->changeFail     = "更换数据表%s引擎失败，原因：<span class='text-red'>%s</span>。";
-$lang->admin->errorInnodb    = '您当前的数据库不支持使用InnoDB数据表引擎。';
-$lang->admin->changeFinished = "更换数据库引擎完毕。";
-$lang->admin->engineInfo     = "表<strong>%s</strong>的引擎是<strong>%s</strong>。";
+$lang->admin->api                  = '接口';
+$lang->admin->log                  = '日志';
+$lang->admin->setting              = '设置';
+$lang->admin->pluginRecommendation = '插件推荐';
+$lang->admin->zentaoInfo           = '禅道信息';
+$lang->admin->officialAccount      = '官方公众号';
+$lang->admin->publicClass          = '公开课';
+$lang->admin->days                 = '日志保存天数';
+$lang->admin->resetPWDByMail       = '通过邮箱重置密码';
+$lang->admin->followUs             = '扫码关注公众号';
+$lang->admin->followUsContent      = '随时查看禅道动态、活动信息、也可获取帮助支持';
+
+$lang->admin->changeEngine               = "更换到InnoDB";
+$lang->admin->changingTable              = '正在更换数据表%s引擎...';
+$lang->admin->changeSuccess              = '已经更换数据表%s引擎为InnoDB。';
+$lang->admin->changeFail                 = "更换数据表%s引擎失败，原因：<span class='text-red'>%s</span>。";
+$lang->admin->errorInnodb                = '您当前的数据库不支持使用InnoDB数据表引擎。';
+$lang->admin->changeFinished             = "更换数据库引擎完毕。";
+$lang->admin->engineInfo                 = "表<strong>%s</strong>的引擎是<strong>%s</strong>。";
 $lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
 $lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";
 
@@ -72,12 +85,14 @@ $lang->admin->setModule->optional       = '可选功能';
 $lang->admin->setModule->opened         = '已开启';
 $lang->admin->setModule->closed         = '已关闭';
 
+$lang->admin->setModule->my             = '地盘';
 $lang->admin->setModule->product        = '产品';
 $lang->admin->setModule->scrum          = '敏捷项目';
 $lang->admin->setModule->waterfall      = '瀑布项目';
 $lang->admin->setModule->assetlib       = '资产库';
 $lang->admin->setModule->other          = '通用功能';
 
+$lang->admin->setModule->score          = '积分';
 $lang->admin->setModule->repo           = '代码';
 $lang->admin->setModule->issue          = '问题';
 $lang->admin->setModule->risk           = '风险';
@@ -142,3 +157,47 @@ $lang->admin->safe->noticeMode     = '系统会在创建和修改用户、修改
 $lang->admin->safe->noticeWeakMode = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';
 $lang->admin->safe->noticeStrong   = '密码长度越长，含有大写字母或数字或特殊符号越多，密码字母越不重复，安全度越强！';
 $lang->admin->safe->noticeGd       = '系统检测到您的服务器未安装GD模块，无法使用验证码功能，请安装后使用。';
+
+$lang->admin->menuSetting['system']['name']    = '系统设置';
+$lang->admin->menuSetting['system']['desc']    = '备份、聊天、安全等系统各要素配置。';
+$lang->admin->menuSetting['user']['name']      = '人员管理';
+$lang->admin->menuSetting['user']['desc']      = '维护部门、添加人员、分组配置权限。';
+$lang->admin->menuSetting['switch']['name']    = '功能开关';
+$lang->admin->menuSetting['switch']['desc']    = '打开、关闭系统部分功能。';
+$lang->admin->menuSetting['model']['name']     = '模型配置';
+$lang->admin->menuSetting['model']['desc']     = '不同项目管理模型和项目通用要素配置。';
+$lang->admin->menuSetting['feature']['name']   = '功能配置';
+$lang->admin->menuSetting['feature']['desc']   = '按照功能菜单进行系统的要素配置。';
+$lang->admin->menuSetting['template']['name']  = '文档模板';
+$lang->admin->menuSetting['template']['desc']  = '配置文档的模板类型和模板内容。';
+$lang->admin->menuSetting['message']['name']   = '通知设置';
+$lang->admin->menuSetting['message']['desc']   = '配置通知路径，自定义需要通知的动作。';
+$lang->admin->menuSetting['extension']['name'] = '插件管理';
+$lang->admin->menuSetting['extension']['desc'] = '浏览、安装插件。';
+$lang->admin->menuSetting['dev']['name']       = '二次开发';
+$lang->admin->menuSetting['dev']['desc']       = '支持对系统进行二次开发。';
+$lang->admin->menuSetting['convert']['name']   = '数据导入';
+$lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入。';
+
+$lang->admin->updateDynamics   = '更新动态';
+$lang->admin->updatePatch      = '补丁更新';
+$lang->admin->upgradeRecommend = '推荐升级';
+$lang->admin->zentaoUsed       = '您已使用禅道';
+
+$lang->admin->openTag = '禅道';
+$lang->admin->bizTag  = '禅道企业版';
+$lang->admin->maxTag  = '禅道旗舰版';
+
+$lang->admin->bizInfoURL    = 'https://www.zentao.net/page/enterprise.html';
+$lang->admin->maxInfoURL    = 'https://www.zentao.net/page/max.html';
+$lang->admin->productDetail = '查看详情';
+$lang->admin->productFeature['biz'][] = '工时管理、甘特图、导入导出';
+$lang->admin->productFeature['biz'][] = '40+内置统计报表、自定义报表功能';
+$lang->admin->productFeature['biz'][] = '强大的自定义工作流、反馈管理功能';
+$lang->admin->productFeature['biz'][] = '价格厚道，专属技术支持服务';
+$lang->admin->productFeature['max'][] = '120+概念，全面覆盖瀑布管理模型';
+$lang->admin->productFeature['max'][] = '项目管理可视化，精准掌控项目进度';
+$lang->admin->productFeature['max'][] = '资产库管理，为项目提供数据支撑';
+$lang->admin->productFeature['max'][] = '严格权限控制，方式灵活安全';
+
+include dirname(__FILE__) . '/menu.php';

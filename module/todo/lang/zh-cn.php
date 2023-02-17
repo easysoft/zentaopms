@@ -9,7 +9,6 @@
  * @version     $Id: zh-cn.php 5022 2013-07-05 06:50:39Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->todo->common       = '待办';
 $lang->todo->index        = "待办一览";
 $lang->todo->create       = "添加待办";
 $lang->todo->createCycle  = "创建周期待办";

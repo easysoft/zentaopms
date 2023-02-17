@@ -531,7 +531,7 @@ class project extends control
             }
             else
             {
-                if($model == 'waterfall')
+                if($model == 'waterfall' or $model == 'waterfallplus')
                 {
                     $productID = $this->product->getProductIDByProject($projectID, true);
                     $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
@@ -764,6 +764,8 @@ class project extends control
 
         $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
+        unset($this->lang->project->modelList['']);
+
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
 
@@ -873,7 +875,7 @@ class project extends control
             $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
         }
 
-        if(empty($project) || strpos('scrum,waterfall,kanban', $project->model) === false)
+        if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
@@ -1095,22 +1097,9 @@ class project extends control
 
         $executionStats  = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
         $showToggleIcon  = false;
-        $productNameList = $this->dao->select('t1.id,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-            ->leftjoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
-            ->where('t1.project')->eq($projectID)
-            ->andWhere('t1.type')->in('kanban,sprint,stage')
-            ->groupBy('t1.id')
-            ->fetchPairs();
 
         foreach($executionStats as $execution)
         {
-            $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
-
-            if(!empty($execution->children))
-            {
-                foreach($execution->children as $childrenID => $children) $children->productName = isset($productNameList[$childrenID]) ? $productNameList[$childrenID] : '';
-            }
             if(!empty($execution->tasks) or !empty($execution->children)) $showToggleIcon = true;
         }
 
@@ -1126,7 +1115,7 @@ class project extends control
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
-        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->isStage        = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
 
         $this->display();
     }
@@ -1597,7 +1586,7 @@ class project extends control
                 unset($this->lang->resource->tree->fix);
             }
 
-            if($project->model == 'waterfall')
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus')
             {
                 unset($this->lang->resource->productplan);
                 unset($this->lang->resource->projectplan);
@@ -2171,7 +2160,9 @@ class project extends control
         $this->loadModel('program');
         $this->loadModel('execution');
 
-        $project    = $this->project->getById($projectID);
+        $project = $this->project->getById($projectID);
+        if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
+
         $executions = $this->execution->getPairs($projectID);
 
         if(!empty($_POST))

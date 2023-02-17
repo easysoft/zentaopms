@@ -10,8 +10,6 @@
  * @link        http://www.zentao.net
  */
 global $config;
-$lang->block = new stdclass();
-$lang->block->common     = '区块';
 $lang->block->id         = '编号';
 $lang->block->params     = '参数';
 $lang->block->name       = '区块名称';
@@ -142,6 +140,8 @@ $lang->block->default['waterfall']['project']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['project']['6']['grid']   = 4;
 $lang->block->default['waterfall']['project']['6']['source'] = 'project';
 
+$lang->block->default['waterfallplus'] = $lang->block->default['waterfall'];
+
 $lang->block->default['scrum']['project']['1']['title'] =  '项目概况';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['project']['1']['grid']  = 8;
@@ -169,7 +169,8 @@ $lang->block->default['scrum']['project']['4']['grid']  = 4;
 $lang->block->default['scrum']['project']['5']['title'] = '最新动态';
 $lang->block->default['scrum']['project']['5']['block'] = 'projectdynamic';
 $lang->block->default['scrum']['project']['5']['grid']  = 4;
-$lang->block->default['kanban'] = $lang->block->default['scrum'];
+$lang->block->default['kanban']    = $lang->block->default['scrum'];
+$lang->block->default['agileplus'] = $lang->block->default['scrum'];
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '统计';
 $lang->block->default['product']['1']['block'] = 'statistic';
@@ -375,10 +376,14 @@ $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = '待测版本';
 $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = '最新动态';
 
+$lang->block->modules['agileplus']['index'] = $lang->block->modules['scrum']['index'];
+
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    = "项目计划";
 $lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic    = '最新动态';
+
+$lang->block->modules['waterfallplus']['index'] = $lang->block->modules['waterfall']['index'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();

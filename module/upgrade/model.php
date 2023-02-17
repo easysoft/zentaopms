@@ -587,6 +587,9 @@ class upgradeModel extends model
             case '18_0_beta3':
                 $this->updateMyBlocks();
                 break;
+            case '18_1':
+                $this->addMixStage();
+                break;
         }
 
         $this->deletePatch();
@@ -8159,6 +8162,37 @@ class upgradeModel extends model
                 $guideBlock->account = $account;
                 $this->dao->insert(TABLE_BLOCK)->data($guideBlock)->exec();
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Add mix stage.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addMixStage()
+    {
+        $typeList = $this->dao->select('lang,vision')->from(TABLE_LANG)
+            ->where('module')->eq('stage')
+            ->andWhere('section')->eq('typeList')
+            ->groupBy('lang,vision')
+            ->fetchAll();
+        foreach($typeList as $type)
+        {
+            $langFile = $this->app->getModuleRoot() . DS . 'stage' . DS . 'lang' . DS . $type->lang . '.php';
+            if(is_file($langFile)) include $langFile;
+
+            $this->dao->replace(TABLE_LANG)
+                ->set('module')->eq('stage')
+                ->set('section')->eq('typeList')
+                ->set('lang')->eq($type->lang)
+                ->set('vision')->eq($type->vision)
+                ->set('key')->eq('mix')
+                ->set('value')->eq($lang->stage->typeList['mix'])
+                ->exec();
         }
 
         return true;
