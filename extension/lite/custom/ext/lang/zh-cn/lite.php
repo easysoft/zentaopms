@@ -1,9 +1,9 @@
 <?php
-$lang->custom->execution       = '看板';
-$lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
-$lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->execution}下的任务、日志以及关联目标都禁止修改。";
+$lang->custom->executionCommon = '看板';
+$lang->custom->closedExecution = '已关闭' . $lang->custom->executionCommon;
+$lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、日志以及关联目标都禁止修改。";
 
-$lang->custom->moduleName['execution'] = $lang->custom->execution;
+$lang->custom->moduleName['execution'] = $lang->custom->executionCommon;
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['required'] = $lang->custom->required;
