@@ -96,7 +96,7 @@ $(function()
         <?php $selected = !isset($executions[$selected]) ? key($executions) : $selected;?>
         <?php foreach($executions as $execution):?>
         <li <?php if($execution->id == $selected) echo "class='active' id='activeExecution'";?> executionID='<?php echo $execution->id;?>'>
-          <a href="###" data-target="#tab3Content<?php echo $execution->id;?>" data-toggle="tab" title='<?php echo $execution->name;?>'><?php echo $execution->name;?></a>
+          <a href="###" data-target="#tab3Content<?php echo $blockNavId . $execution->id;?>" data-toggle="tab" title='<?php echo $execution->name;?>'><?php echo $execution->name;?></a>
           <?php echo html::a(helper::createLink('execution', 'task', "executionID=$execution->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->execution->task}");?>
         </li>
         <?php endforeach;?>
@@ -105,7 +105,7 @@ $(function()
     </div>
     <div class="col tab-content">
       <?php foreach($executions as $execution):?>
-      <div class="tab-pane fade<?php if($execution->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $execution->id;?>">
+      <div class="tab-pane fade<?php if($execution->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $blockNavId . $execution->id;?>">
         <div class="table-row">
           <div class="col-5 text-middle text-center">
             <div class="progress-pie inline-block space" data-value="<?php echo $execution->progress;?>" data-doughnut-size="84">

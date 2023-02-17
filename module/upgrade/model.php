@@ -2,7 +2,7 @@
 /**
  * The model file of upgrade module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
@@ -586,6 +586,9 @@ class upgradeModel extends model
                 break;
             case '18_0_beta3':
                 $this->updateMyBlocks();
+                break;
+            case '18_1':
+                $this->addMixStage();
                 break;
         }
 
@@ -8159,6 +8162,37 @@ class upgradeModel extends model
                 $guideBlock->account = $account;
                 $this->dao->insert(TABLE_BLOCK)->data($guideBlock)->exec();
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Add mix stage.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addMixStage()
+    {
+        $typeList = $this->dao->select('lang,vision')->from(TABLE_LANG)
+            ->where('module')->eq('stage')
+            ->andWhere('section')->eq('typeList')
+            ->groupBy('lang,vision')
+            ->fetchAll();
+        foreach($typeList as $type)
+        {
+            $langFile = $this->app->getModuleRoot() . DS . 'stage' . DS . 'lang' . DS . $type->lang . '.php';
+            if(is_file($langFile)) include $langFile;
+
+            $this->dao->replace(TABLE_LANG)
+                ->set('module')->eq('stage')
+                ->set('section')->eq('typeList')
+                ->set('lang')->eq($type->lang)
+                ->set('vision')->eq($type->vision)
+                ->set('key')->eq('mix')
+                ->set('value')->eq($lang->stage->typeList['mix'])
+                ->exec();
         }
 
         return true;

@@ -2,7 +2,7 @@
 /**
  * The action module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -58,6 +58,15 @@ $lang->action->noDynamic          = '暂时没有动态。';
 $lang->action->undeletedTips      = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
 $lang->action->executionNoProject = '该执行没有所属的项目，请先还原项目再还原执行';
 $lang->action->repoNoServer       = '该代码库没有所属的服务器，请先还原服务器再还原代码库';
+$lang->action->hasCreatedTask     = '该父阶段已创建任务，无法恢复！';
+$lang->action->hasDeletedParent   = '恢复该阶段需要同时恢复已删除的父阶段%s，';
+$lang->action->hasChangedAttr     = '恢复后阶段类型将根据父阶段类型均调整为“%s”，';
+$lang->action->whetherToRestore   = '是否恢复？';
+
+$lang->action->hasOtherType = array();
+$lang->action->hasOtherType['stage']  = "当前阶段的父级现在只允许创建{$lang->executionCommon}/看板类型的子级,故无法恢复当前阶段。";
+$lang->action->hasOtherType['sprint'] = "当前{$lang->executionCommon}的父级现在只允许创建阶段类型的子级,故无法恢复当前{$lang->executionCommon}。";
+$lang->action->hasOtherType['kanban'] = "当前看板的父级现在只允许创建阶段类型的子级,故无法恢复当前看板。";
 
 $lang->action->repeatChange     = '系统内已有同名、同代号的%s，恢复后名称为\"%s\"、代号为\"%s\"。';
 $lang->action->nameRepeatChange = '系统内已有同名的%s，恢复后名称为\"%s\"。';

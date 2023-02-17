@@ -2,7 +2,7 @@
 /**
  * The model file of programplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
@@ -115,22 +115,33 @@ class programplanModel extends model
      *
      * @param  int    $executionID
      * @param  int    $productID
-     * @param  string $type
+     * @param  string $type all|leaf
      * @access public
      * @return array
      */
     public function getPairs($executionID, $productID = 0, $type = 'all')
     {
-        $plans = $this->getPlans($executionID, $productID);
+        $plans = $this->getStage($executionID, $productID, 'all', $orderBy);
 
         $pairs = array(0 => '');
-        foreach($plans as $plan)
+
+        if(strpos($type, 'leaf') !== false)
         {
-            $pairs[$plan->id] = $plan->name;
-            if(!empty($plan->children))
+            $parents = array();
+            foreach($plans as $planID => $plan) $parents[$plan->parent] = true;
+        }
+
+        foreach($plans as $planID => $plan)
+        {
+            if(strpos($type, 'leaf') !== false and isset($parents[$plan->id])) continue;
+
+            $paths = array_slice(explode(',', trim($plan->path, ',')), 1);
+            $planName = '';
+            foreach($paths as $path)
             {
-                foreach($plan->children as $child) $pairs[$child->id] = $plan->name . '/' . $child->name;
+                if(isset($plans[$path])) $planName .= '/' . $plans[$path]->name;
             }
+            $pairs[$planID] = $planName;
         }
 
         return $pairs;
@@ -697,21 +708,12 @@ class programplanModel extends model
             $parentACL       = $parentStage->acl;
         }
 
-        if(!$this->checkNameUnique($names))
-        {
-            dao::$errors['message'][] = $this->lang->programplan->error->sameName;
-            return false;
-        }
+        $names     = array_filter($names);
+        $sameNames = array_diff_assoc($names, array_unique($names));
 
         $project   = $this->loadModel('project')->getByID($projectID);
         $setCode   = (!isset($this->config->setCode) or $this->config->setCode == 1) ? true : false;
-        $checkCode = $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '');
-        if($setCode and $checkCode !== true)
-        {
-            if($checkCode) dao::$errors['message'][] = sprintf($this->lang->error->repeat, $this->lang->execution->code, $checkCode);
-            else dao::$errors['message'][] = $this->lang->programplan->error->sameCode;
-            return false;
-        }
+        $sameCodes = $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '');
 
         $datas = array();
         foreach($names as $key => $name)
@@ -720,13 +722,13 @@ class programplanModel extends model
 
             $plan = new stdclass();
             $plan->id         = isset($planIDList[$key]) ? $planIDList[$key] : '';
-            $plan->type       = 'stage';
+            $plan->type       = empty($type[$key]) ? 'stage' : $type[$key];
             $plan->project    = $projectID;
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->name       = $names[$key];
             if($setCode) $plan->code = $codes[$key];
             $plan->percent    = $percents[$key];
-            $plan->attribute  = empty($parentID) ? $attributes[$key] : $parentAttribute;
+            $plan->attribute  = (empty($parentID) or $parentAttribute == 'mix') ? $attributes[$key] : $parentAttribute;
             $plan->milestone  = $milestone[$key];
             $plan->begin      = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
             $plan->end        = empty($end[$key]) ? '0000-00-00' : $end[$key];
@@ -735,77 +737,70 @@ class programplanModel extends model
             $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
+            $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
             $plan->hasProduct = $project->hasProduct;
 
             $datas[] = $plan;
         }
 
-
         $totalPercent = 0;
         $totalDevType = 0;
         $milestone    = 0;
-        foreach($datas as $plan)
+        foreach($datas as $index => $plan)
         {
+            if(!empty($sameNames) and in_array($plan->name, $sameNames)) dao::$errors[$index]['name'] = empty($type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
+            if($setCode and $sameCodes !== true and !empty($sameCodes) and in_array($plan->code, $sameCodes)) dao::$errors[$index]['code'] = sprintf($this->lang->error->repeat, $this->lang->execution->code, $plan->code);
+
             if($plan->percent and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $plan->percent))
             {
-                dao::$errors['message'][] = $this->lang->programplan->error->percentNumber;
-                return false;
+                dao::$errors[$index]['percent'] = $this->lang->programplan->error->percentNumber;
             }
             if(helper::isZeroDate($plan->begin))
             {
-                dao::$errors['message'][] = $this->lang->programplan->emptyBegin;
-                return false;
+                dao::$errors[$index]['begin'] = $this->lang->programplan->emptyBegin;
             }
-            if(!validater::checkDate($plan->begin))
+            if(!validater::checkDate($plan->begin) and empty(dao::$errors[$index]['begin']))
             {
-                dao::$errors['message'][] = $this->lang->programplan->checkBegin;
-                return false;
+                dao::$errors[$index]['begin'] = $this->lang->programplan->checkBegin;
             }
             if(helper::isZeroDate($plan->end))
             {
-                dao::$errors['message'][] = $this->lang->programplan->emptyEnd;
-                return false;
+                dao::$errors[$index]['end'] = $this->lang->programplan->emptyEnd;
             }
-            if(!validater::checkDate($plan->end))
+            if(!validater::checkDate($plan->end) and empty(dao::$errors[$index]['end']))
             {
-                dao::$errors['message'][] = $this->lang->programplan->checkEnd;
-                return false;
+                dao::$errors[$index]['end'] = $this->lang->programplan->checkEnd;
             }
-            if(!helper::isZeroDate($plan->end) and $plan->end < $plan->begin)
+            if(!helper::isZeroDate($plan->end) and $plan->end < $plan->begin and empty(dao::$errors[$index]['begin']))
             {
-                dao::$errors['message'][] = $this->lang->programplan->error->planFinishSmall;
-                return false;
+                dao::$errors[$index]['end'] = $this->lang->programplan->error->planFinishSmall;
             }
             if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
             {
-                dao::$errors['message'][] = $this->lang->programplan->error->parentDuration;
-                return false;
+                if($plan->begin < $parentStage->begin and empty(dao::$errors[$index]['begin'])) dao::$errors[$index]['begin'] = $this->lang->programplan->error->parentDuration;
+                if($plan->end < $parentStage->end and empty(dao::$errors[$index]['end']))      dao::$errors[$index]['end']   = $this->lang->programplan->error->parentDuration;
             }
-            if($plan->begin < $project->begin)
+            if($plan->begin < $project->begin and empty(dao::$errors[$index]['begin']))
             {
-                dao::$errors['message'][] = sprintf($this->lang->programplan->errorBegin, $project->begin);
-                return false;
+                dao::$errors[$index]['begin'] = sprintf($this->lang->programplan->errorBegin, $project->begin);
             }
-            if(!helper::isZeroDate($plan->end) and $plan->end > $project->end)
+            if(!helper::isZeroDate($plan->end) and $plan->end > $project->end and empty(dao::$errors[$index]['end']))
             {
-                dao::$errors['message'][] = sprintf($this->lang->programplan->errorEnd, $project->end);
-                return false;
+                dao::$errors[$index]['end'] = sprintf($this->lang->programplan->errorEnd, $project->end);
             }
 
             if(helper::isZeroDate($plan->begin)) $plan->begin = '';
             if(helper::isZeroDate($plan->end))   $plan->end   = '';
             if($setCode and empty($plan->code))
             {
-                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
-                return false;
+                dao::$errors[$index]['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
             }
             foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
             {
                 $field = trim($field);
                 if($field and empty($plan->$field))
                 {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->$field);
-                    return false;
+                    dao::$errors[$index][$field] = sprintf($this->lang->error->notempty, $this->lang->programplan->$field);
                 }
             }
 
@@ -815,7 +810,8 @@ class programplanModel extends model
             if($plan->milestone) $milestone = 1;
         }
 
-        if($totalPercent > 100) return dao::$errors['message'][] = $this->lang->programplan->error->percentOver;
+        if($totalPercent > 100) dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
+        if(dao::isError()) return false;
 
         $this->loadModel('action');
         $this->loadModel('user');
@@ -823,6 +819,20 @@ class programplanModel extends model
         $this->app->loadLang('doc');
         $account = $this->app->user->account;
         $now     = helper::now();
+
+        if(!isset($orders)) $orders = array();
+        asort($orders);
+        if(count($orders) < count($datas))
+        {
+            $orderIndex = empty($orders) ? 0 : count($orders);
+            $lastID     = $this->dao->select('id')->from(TABLE_EXECUTION)->orderBy('id_desc')->fetch('id');
+            for($i = $orderIndex; $i < count($datas); $i ++)
+            {
+                $lastID ++;
+                $orders[$i] = $lastID * 5;
+            }
+        }
+
         foreach($datas as $data)
         {
             /* Set planDuration and realDuration. */
@@ -834,6 +844,8 @@ class programplanModel extends model
 
             $projectChanged = false;
             $data->days     = helper::diffDate($data->end, $data->begin) + 1;
+            $data->order    = current($orders);
+
             if($data->id)
             {
                 $stageID = $data->id;
@@ -909,9 +921,13 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $stageID = $this->dao->lastInsertID();
+                    if($data->type == 'kanban')
+                    {
+                        $execution = $this->execution->getByID($stageID);
+                        $this->loadModel('kanban')->createRDKanban($execution);
+                    }
 
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
-                    $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($stageID * 5)->where('id')->eq($stageID)->exec();
 
                     /* Create doc lib. */
                     $lib = new stdclass();
@@ -965,6 +981,8 @@ class programplanModel extends model
                     {
                         $this->action->create('execution', $stageID, 'opened');
                     }
+
+                    $this->computeProgress($stageID, 'create');
                 }
             }
 
@@ -989,6 +1007,8 @@ class programplanModel extends model
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
 
             if(dao::isError()) return print(js::error(dao::getError()));
+
+            next($orders);
         }
     }
 
@@ -1063,7 +1083,7 @@ class programplanModel extends model
 
         if($plan->parent > 0)
         {
-            $plan->attribute = $parentStage->attribute;
+            $plan->attribute = $parentStage->attribute == 'mix' ? $plan->attribute : $parentStage->attribute;
             $plan->acl       = $parentStage->acl;
             $parentPercent   = $parentStage->percent;
 
@@ -1118,6 +1138,7 @@ class programplanModel extends model
 
         if(dao::isError()) return false;
         $this->setTreePath($planID);
+        $this->updateSubStageAttr($planID, $plan->attribute);
         if($plan->acl != 'open')
         {
             $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->eq('stage')->fetchAll('id');
@@ -1264,6 +1285,20 @@ class programplanModel extends model
     }
 
     /**
+     * Get parent stage's children types.
+     *
+     * @param  int    $parentID
+     * @access public
+     * @return array
+     */
+    public function getParentChildrenTypes($parentID)
+    {
+        if(empty($parentID)) return true;
+
+        return $this->dao->select('DISTINCT type')->from(TABLE_EXECUTION)->where('parent')->eq($parentID)->andWhere('deleted')->eq('0')->fetchPairs('type');
+    }
+
+    /**
      * Is clickable.
      *
      * @param  int    $plan
@@ -1276,7 +1311,12 @@ class programplanModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'create' and $plan->grade > 1) return false;
+        if($action == 'create')
+        {
+            global $dao;
+            $task = !empty($plan->id) ? $dao->select('*')->from(TABLE_TASK)->where('execution')->eq($plan->id)->andWhere('deleted')->eq('0')->limit(1)->fetch() : '';
+            return empty($task) ? true : false;
+        }
 
         return true;
     }
@@ -1313,7 +1353,7 @@ class programplanModel extends model
             ->andWhere('deleted')->eq('0')
             ->andWhere('code')->in($codes)
             ->beginIF($planIDList)->andWhere('id')->notin($planIDList)->fi()
-            ->fetch('code');
+            ->fetchPairs('code');
         return $code ? $code : true;
     }
 
@@ -1326,13 +1366,14 @@ class programplanModel extends model
      */
     public function getMilestones($projectID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+        $milestones = $this->dao->select('id, path')->from(TABLE_PROJECT)
             ->where('project')->eq($projectID)
             ->andWhere('type')->eq('stage')
             ->andWhere('milestone')->eq(1)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id_desc')
+            ->orderBy('begin_desc,path')
             ->fetchPairs();
+        return $this->formatMilestones($milestones, $projectID);
     }
 
     /**
@@ -1341,19 +1382,48 @@ class programplanModel extends model
      * @param  int    $productID
      * @param  int    $projectID
      * @access public
-     * @return object
+     * @return array
      */
     public function getMilestoneByProduct($productID, $projectID)
     {
-        return $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+        $milestones = $this->dao->select('t1.id, t1.path')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t2.product')->eq($productID)
             ->andWhere('t1.project')->eq($projectID)
             ->andWhere('t1.type')->eq('stage')
             ->andWhere('t1.milestone')->eq(1)
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.begin asc')
+            ->orderBy('t1.begin asc,path')
             ->fetchPairs();
+        return $this->formatMilestones($milestones, $projectID);
+    }
+
+    /**
+     * Format milestones use '/'.
+     *
+     * @param  array  $milestones
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    private function formatMilestones($milestones, $projectID)
+    {
+        $allStages = $this->dao->select('id,name')->from(TABLE_EXECUTION)
+            ->where('project')->eq($projectID)
+            ->andWhere('type')->notin('program,project')
+            ->fetchPairs();
+        foreach($milestones as $id => $path)
+        {
+            $paths = explode(',', trim($path, ','));
+            $stageName = '';
+            foreach($paths as $stage)
+            {
+                if(isset($allStages[$stage])) $stageName .= '/' . $allStages[$stage];
+            }
+            $milestones[$id] = trim($stageName, '/');
+        }
+
+        return $milestones;
     }
 
     /**
@@ -1371,24 +1441,179 @@ class programplanModel extends model
             ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.project')->eq($executionID)
-            ->andWhere('t2.grade')->eq(1)
+            ->andWhere('t2.type')->eq('stage')
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.path')->notlike("%,$planID,%")
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->orderBy('t2.id desc')
             ->fetchPairs();
-
-        /* Remove the currently edited stage. */
-        if(isset($parentStage[$planID])) unset($parentStage[$planID]);
 
         $plan = $this->getByID($planID);
         foreach($parentStage as $key => $stage)
         {
             $isCreate = $this->isCreateTask($key);
             if($isCreate === false and $key != $plan->parent) unset($parentStage[$key]);
+
+            $parentTypes = $this->getParentChildrenTypes($key);
+            if($plan->type == 'stage' and (isset($parentTypes['sprint']) or isset($parentTypes['kanban']))) unset($parentStage[$key]);
+            if(($plan->type == 'sprint' or $plan->type == 'kanban') and isset($parentTypes['stage'])) unset($parentStage[$key]);
         }
         $parentStage[0] = $this->lang->programplan->emptyParent;
         ksort($parentStage);
 
         return $parentStage;
+    }
+
+    /**
+     * Compute stage status.
+     *
+     * @param  int    $stage
+     * @param  string $action
+     * @param  bool   $isParent
+     * @access public
+     * @return void
+     */
+    public function computeProgress($stageID, $action = '', $isParent = false)
+    {
+        $stage = $this->loadModel('execution')->getByID($stageID);
+        if(empty($stage) or empty($stage->path) or $stage->type != 'stage') return false;
+
+        $this->loadModel('execution');
+        $this->loadModel('action');
+        $action       = strtolower($action);
+        $parentIdList = explode(',', trim($stage->path, ','));
+        $parentIdList = array_reverse($parentIdList);
+        foreach($parentIdList as $id)
+        {
+            $parent = $this->execution->getByID($id);
+            if($parent->type != 'stage' or (!$isParent and $id == $stageID)) continue;
+
+            $statusCount = array();
+            $children    = $this->execution->getChildExecutions($parent->id);
+            $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->andWhere('id')->ne($id)->fetchPairs();
+            $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
+            foreach($children as $childID => $childExecution) $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $statusCount[$childExecution->status] ++;
+
+            if(isset($statusCount['wait']) and count($statusCount) == 1 and helper::isZeroDate($parent->realBegan) and $startTasks == 0)
+            {
+                if($parent->status != 'wait')
+                {
+                    $newParent = new stdclass();
+                    $newParent->status         = 'wait';
+                    $newParent->realBegan      = '';
+                    $newParent->closedDate     = '';
+                    $newParent->closedBy       = '';
+                    $newParent->canceledDate   = '';
+                    $newParent->canceledBy     = '';
+                    $newParent->suspendedDate  = '';
+                    $newParent->lastEditedBy   = $this->app->user->account;
+                    $newParent->lastEditedDate = helper::now();
+                    $parentAction = 'waitbychild';
+                }
+            }
+            elseif(isset($statusCount['closed']) and count($statusCount) == 1)
+            {
+                if($parent->status != 'closed')
+                {
+                    $newParent = new stdclass();
+                    $newParent->status         = 'closed';
+                    $newParent->closedDate     = helper::now();
+                    $newParent->closedBy       = $this->app->user->account;
+                    $newParent->lastEditedBy   = $this->app->user->account;
+                    $newParent->lastEditedDate = helper::now();
+                    $parentAction = 'closedbychild';
+                }
+            }
+            elseif(isset($statusCount['suspended']) and (count($statusCount) == 1 or (isset($statusCount['closed']) and count($statusCount) == 2)))
+            {
+                if($parent->status != 'suspended')
+                {
+                    $newParent = new stdclass();
+                    $newParent->status         = 'suspended';
+                    $newParent->suspendedDate  = helper::now();
+                    $newParent->lastEditedBy   = $this->app->user->account;
+                    $newParent->lastEditedDate = helper::now();
+                    $parentAction = 'suspendedbychild';
+                }
+            }
+            else
+            {
+                if($parent->status != 'doing')
+                {
+                    $newParent = new stdclass();
+                    $newParent->status         = 'doing';
+                    $newParent->realBegan      = helper::today();
+                    $newParent->closedDate     = '';
+                    $newParent->closedBy       = '';
+                    $newParent->canceledDate   = '';
+                    $newParent->canceledBy     = '';
+                    $newParent->suspendedDate  = '';
+                    $newParent->lastEditedBy   = $this->app->user->account;
+                    $newParent->lastEditedDate = helper::now();
+                    $parentAction = $parent->status == 'wait' ?'startbychildstart' : 'startbychild' . $action;
+                }
+            }
+
+            if(isset($newParent))
+            {
+                $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($id)->exec();
+                $this->action->create('execution', $id, $parentAction, '', $parentAction);
+            }
+            unset($newParent, $parentAction);
+        }
+    }
+
+    /**
+     * Check if the stage is a leaf stage.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return bool
+     */
+    public function checkLeafStage($planID)
+    {
+        $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
+
+        return $subStageList ? false : true;
+    }
+
+    /**
+     * Change whether it is the top stage.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return bool
+     */
+    public function checkTopStage($planID)
+    {
+        $parentID   = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($planID)->fetch('parent');
+        $parentType = $this->dao->select('type')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch('type');
+
+        return $parentType == 'project';
+    }
+
+    /**
+     * Update sub-stage attribute.
+     *
+     * @param  int    $planID
+     * @param  string $attribute
+     * @param  bool   $withDeleted
+     * @access public
+     * @return bool
+     */
+    public function updateSubStageAttr($planID, $attribute, $withDeleted = false)
+    {
+        if($attribute == 'mix') return true;
+
+        $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('parent')->eq($planID)
+            ->beginIF(!$withDeleted)->andWhere('deleted')->eq(0)->fi()
+            ->fetchAll('id');
+        $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in(array_keys($subStageList))->exec();
+
+        foreach($subStageList as $childID => $subStage)
+        {
+            $this->updateSubStageAttr($childID, $attribute, $withDeleted);
+        }
     }
 }

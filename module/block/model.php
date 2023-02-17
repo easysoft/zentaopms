@@ -2,7 +2,7 @@
 /**
  * The model file of block module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
@@ -170,7 +170,7 @@ class blockModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
             ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t4.task = t1.id and t4.account = '{$this->app->user->account}'")
-            ->where("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}') )")
+            ->where("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t4.status != 'done') )")
             ->andWhere('(t2.status')->ne('suspended')
             ->orWhere('t3.status')->ne('suspended')
             ->markRight(1)

@@ -472,6 +472,7 @@ function renderExecutionItem(item, $item)
     ].join('')).appendTo($item);
 
     var $titleBox = $header.children('.executionName');
+    debugger
     if(!$titleBox.length) $titleBox = $(
     [
         '<div class="executionName">',
@@ -480,19 +481,20 @@ function renderExecutionItem(item, $item)
 
     /* Print execution name. */
     var $title = $titleBox.children('.title');
-    var name   = item.title ? item.title : item.name;
+    var name   = item.name ? item.name : item.title;
+    var title  = item.title ? item.title : name;
     if(!$title.length)
     {
         var icon = mode == 'ALM' ? 'run' : 'project';
         var viewMethod = item.execType == 'kanban' ? 'kanban' : 'view';
-        if(privs.includes('viewExecution') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
-        if(!privs.includes('viewExecution') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + name + '</div>').appendTo($titleBox);
+        if(privs.includes('viewExecution') && item.deleted == '0' && item.children == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
+        if(!privs.includes('viewExecution') || item.deleted == '1' || item.children != '0') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + name + '</div>').appendTo($titleBox);
     }
     if(!$title.children('i').length)
     {
         $title.append('<i class="icon icon-run"></i>' + item.title);
     }
-    $title.attr('title', name);
+    $title.attr('title', title);
 
     if(item.delay)
     {

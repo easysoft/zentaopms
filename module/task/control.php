@@ -2,7 +2,7 @@
 /**
  * The control file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -298,33 +298,16 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
-        $executions = array();
         if(!empty($projectID))
         {
-            $executionList = $this->execution->getByProject($projectID, 'all', 0, true);
-            $project       = $this->loadModel('project')->getByID($projectID);
-            $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
+            $executions = $this->execution->getByProject($projectID, 'all', 0, true);
 
             $executionKey = 0;
-            $executionModifyList = $this->execution->getByIdList(array_keys($executionList));
+            $executionModifyList = $this->execution->getByIdList(array_keys($executions));
             foreach($executionModifyList as $modifykey)
             {
                 if(!common::canModify('execution', $modifykey)) $executionKey = $modifykey->id;
-                if($executionKey) unset($executionList[$executionKey]);
-            }
-            $executionAll = $executionList;
-
-            if(isset($project->model) and $project->model == 'waterfall')
-            {
-                foreach($executionList as $key => $val)
-                {
-                    $values = str_replace($replace, $project->name, $val);
-                    $executions[$key] = $values;
-                }
-            }
-            else
-            {
-                $executions = $executionList;
+                if($executionKey) unset($executions[$executionKey]);
             }
         }
 
@@ -639,24 +622,7 @@ class task extends control
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
         $executions = array();
-        if(!empty($task->project))
-        {
-            $executionList  = $this->execution->getPairs($task->project);
-            $project        = $this->loadModel('project')->getByID($task->project);
-
-            if(isset($project->model) and $project->model == 'waterfall')
-            {
-                foreach($executionList as $key=>$val)
-                {
-                    $values           = $project->name . '/' . $val;
-                    $executions[$key] = $values;
-                }
-            }
-            else
-            {
-                $executions = $executionList;
-            }
-        }
+        if(!empty($task->project)) $executions = $this->execution->getByProject($task->project, 'all', 0, true);
 
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;

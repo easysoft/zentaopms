@@ -25,6 +25,7 @@ $lang->stage->type    = '階段分類';
 $lang->stage->percent = '工作量占比';
 $lang->stage->setType = '階段類型';
 
+$lang->stage->typeList['mix']     = '綜合';
 $lang->stage->typeList['request'] = '需求';
 $lang->stage->typeList['design']  = '設計';
 $lang->stage->typeList['dev']     = '開發';

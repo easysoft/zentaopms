@@ -684,18 +684,33 @@ class repoModel extends model
      *
      * @param  object  $repo
      * @param  bool    $printLabel
+     * @param  string  $source  select current repo's branches from scm or database.
      * @access public
      * @return array
      */
-    public function getBranches($repo, $printLabel = false)
+    public function getBranches($repo, $printLabel = false, $source = 'scm')
     {
-        $this->scm = $this->app->loadClass('scm');
-        $this->scm->setEngine($repo);
-        $branches = $this->scm->branch();
-
-        if($printLabel)
+        if($source == 'database')
         {
-            foreach($branches as &$branch) $branch = 'Branch::' . $branch;
+            $branches = $this->dao->select('branch')->from(TABLE_REPOBRANCH)
+                ->where('repo')->eq($repo->id)
+                ->fetchPairs();
+
+            if($printLabel)
+            {
+                foreach($branches as &$branch) $branch = 'Branch::' . $branch;
+            }
+        }
+        else
+        {
+            $this->scm = $this->app->loadClass('scm');
+            $this->scm->setEngine($repo);
+            $branches = $this->scm->branch();
+
+            if($printLabel)
+            {
+                foreach($branches as &$branch) $branch = 'Branch::' . $branch;
+            }
         }
 
         return $branches;
@@ -2209,7 +2224,18 @@ class repoModel extends model
     {
         $pairs      = array();
         $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
-        foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
+        $parents    = $this->dao->select('distinct parent,parent')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('grade')->gt(1)->andWhere('deleted')->eq(0)->fetchPairs();
+        foreach($executions as $execution)
+        {
+            if(!empty($parents[$execution->id]) or ($execution->type == 'stage' and in_array($execution->attribute, array('request', 'design', 'review')))) continue;
+
+            if($execution->type == 'stage' and $execution->grade > 1)
+            {
+                $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                $execution->name  = implode('/', $parentExecutions);
+            }
+            $pairs[$execution->id] = $execution->name;
+        }
         return $pairs;
     }
 
@@ -2287,7 +2313,8 @@ class repoModel extends model
             ->where('t1.repo')->eq($repo->id)
             ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
-            ->andWhere('t1.parent')->eq("$parent")
+            ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.parent')->eq("$parent")->fi()
+            ->beginIF($repo->SCM != 'Subversion')->andWhere('t1.parent')->like("$parent%")->fi()
             ->orderBy('t2.`time` asc')
             ->fetchAll('path');
 
@@ -2779,10 +2806,11 @@ class repoModel extends model
      * Update commit history.
      *
      * @param  int    $repoID
+     * @param  int    $branchID
      * @access public
      * @return void
      */
-    public function updateCommit($repoID)
+    public function updateCommit($repoID, $branchID = 0)
     {
         $repo = $this->getRepoByID($repoID);
         /* Update code commit history. */
@@ -2791,8 +2819,21 @@ class repoModel extends model
         if(in_array($repo->SCM, $this->config->repo->gitTypeList))
         {
             $branch = $this->cookie->repoBranch;
-            $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-            $_COOKIE['repoBranch'] = $branch;
+
+            if($branchID)
+            {
+                $currentBranches = $this->getBranches($repo, false, 'database');
+                if(!in_array($branch, $currentBranches))
+                {
+                    $link = $this->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=$branchID", '', false) . '#app=' . $this->app->tab;
+                    return print(js::locate($link));
+                }
+            }
+            else
+            {
+                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+                $_COOKIE['repoBranch'] = $branch;
+            }
         }
         if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
     }

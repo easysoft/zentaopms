@@ -2,7 +2,7 @@
 /**
  * The edit view of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -134,7 +134,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 <th><?php echo $lang->task->mode;?></th>
                 <td>
                   <?php
-                  if($task->status == 'wait')
+                  if($task->status == 'wait' and $task->parent == 0)
                   {
                       echo html::select('mode', $lang->task->editModeList, $task->mode, "class='form-control chosen'");
                   }

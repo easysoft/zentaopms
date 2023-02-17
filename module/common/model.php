@@ -2,7 +2,7 @@
 /**
  * The model file of common module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     common
@@ -156,30 +156,9 @@ class commonModel extends model
             $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
         }
 
-        if($parentExecution->type == 'stage')
+        if($execution->type == 'stage')
         {
-            $childExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($parentExecutionID)->andWhere('deleted')->eq('0')->fetchAll('id');
-            if($execution->deleted == '1' and count($childExecutions) > 0)
-            {
-                $childWait   = true;
-                $childClosed = true;
-                foreach($childExecutions as $childExecution)
-                {
-                    if($childExecution->status != 'wait')   $childWait = false;
-                    if($childExecution->status != 'closed') $childClosed = false;
-                }
-
-                if($childWait and $parentExecution->status != 'wait')
-                {
-                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('wait')->where('id')->eq($parentExecutionID)->exec();
-                    $this->loadModel('action')->create('execution', $parentExecutionID, 'waitbychilddelete');
-                }
-                if($childClosed and $parentExecution->status != 'closed')
-                {
-                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parentExecutionID)->exec();
-                    $this->loadModel('action')->create('execution', $parentExecutionID, 'closebychilddelete');
-                }
-            }
+            $this->loadModel('programplan')->computeProgress($execution->id);
         }
 
         return $parentExecution;
@@ -2464,6 +2443,12 @@ EOD;
 
             if(isset($this->app->user))
             {
+                if($this->app->tab == 'project')
+                {
+                    $this->resetProjectPriv();
+                    if(commonModel::hasPriv($module, $method)) return true;
+                }
+
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
                 {
@@ -2659,11 +2644,7 @@ EOD;
 
         if($this->app->user->account == $program->openedBy or $this->app->user->account == $program->PM) $program->auth = 'extend';
 
-        if($program->auth == 'extend')
-        {
-            $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
-            $this->session->set('user', $this->app->user);
-        }
+        if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
@@ -2687,7 +2668,6 @@ EOD;
             if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
 
             $this->app->user->rights['rights'] = $recomputedRights;
-            $this->session->set('user', $this->app->user);
         }
     }
 

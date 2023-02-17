@@ -2,7 +2,7 @@
 /**
  * The model file of action module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -1887,7 +1887,7 @@ class actionModel extends model
 
             if($action->objectType == 'execution')
             {
-                $execution = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
+                $execution = $this->dao->select('id, type, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
                 $this->loadModel('common')->syncExecutionByChild($execution);
             }
         }
@@ -2220,5 +2220,30 @@ class actionModel extends model
         $this->config->trash->search['queryID']   = $queryID;
 
         $this->loadModel('search')->setSearchParams($this->config->trash->search);
+    }
+
+    /**
+     * Restore stages.
+     *
+     * @param  array  $stageList
+     * @access public
+     * @return void
+     */
+    public function restoreStages($stageList)
+    {
+        $deletedActions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectID')->in(array_keys($stageList))
+            ->andWhere('objectType')->eq('execution')
+            ->andWhere('action')->eq('deleted')
+            ->orderBy('id_desc')
+            ->fetchGroup('objectID');
+
+        foreach($stageList as $stageID => $stage)
+        {
+            $deletedAction = $deletedActions[$stageID][0];
+            $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('id')->eq($stageID)->exec();
+            $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($deletedAction->id)->exec();
+            $this->create($deletedAction->objectType, $deletedAction->objectID, 'undeleted');
+        }
     }
 }

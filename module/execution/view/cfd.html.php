@@ -2,7 +2,7 @@
 /**
  * The burn view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -33,9 +33,11 @@
     $weekend = $withWeekend == 'true' ? 'noweekend' : 'withweekend';
     echo html::a('#', $lang->execution->$weekend, '', "class='btn btn-link' id='weekend'");
     ?>
+    <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
     <div class='input-control w-140px'>
       <?php echo html::select('type', $lang->execution->cfdTypeList, $type, "class='form-control chosen'");?>
     </div>
+    <?php endif;?>
     <div id="cfdDateSelect">
     <form method='post' class='form-ajax not-watch'>
       <div class='input-group'>

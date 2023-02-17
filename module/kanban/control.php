@@ -2,7 +2,7 @@
 /**
  * The control file of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     kanban
@@ -1382,7 +1382,7 @@ class kanban extends control
         $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram('', 'all', false, '', '', '', 'multiple');
         $this->view->selectedProjectID   = $selectedProjectID;
         $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->executions2Imported = $this->execution->getStatData($selectedProjectID, 'undone', 0, 0, false, '', 'id_asc', $pager);
+        $this->view->executions2Imported = $this->execution->getStatData($selectedProjectID, 'undone', 0, 0, false, 'hasParentName', 'id_asc', $pager);
         $this->view->users               = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->pager               = $pager;
         $this->view->kanbanID            = $kanbanID;

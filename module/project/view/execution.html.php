@@ -52,6 +52,15 @@
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
     <?php if(common::hasPriv('programplan', 'create') and $isStage and empty($product->deleted)):?>
     <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
+    <?php elseif($project->model == 'agileplus'):?>
+    <div class="btn-group dropdown">
+      <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+      <ul class='dropdown-menu pull-right'>
+        <li><?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), $lang->execution->create);?></li>
+        <li><?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID&executionID=0&copyExecutionID=&planID=0&confirm=no&productID=0&extra=type=kanban"), $lang->project->createKanban);?></li>
+      </ul>
+    </div>
     <?php else: ?>
     <?php if(common::hasPriv('execution', 'create') and !$isStage) echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
     <?php endif;?>

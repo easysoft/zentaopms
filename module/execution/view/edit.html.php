@@ -2,7 +2,7 @@
 /**
  * The edit view of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -34,6 +34,16 @@
         </tr>
         <?php elseif($project->model == 'kanban'):?>
         <?php echo html::hidden('project', $project->id);?>
+        <?php elseif($project->model == 'agileplus'):?>
+        <tr>
+          <th><?php echo $lang->execution->method;?></th>
+          <td><?php echo zget($lang->execution->typeList, $execution->type);?></td><td></td>
+        </tr>
+        <?php elseif($app->tab == 'project' and $project->model == 'waterfallplus'):?>
+        <tr>
+          <th><?php echo $lang->programplan->parent;?></th>
+          <td><?php echo html::select('parent', $parentStageList, $execution->parent, "class='form-control chosen '");?></td><td></td>
+        </tr>
         <?php endif;?>
         <?php endif;?>
         <tr>
@@ -84,7 +94,7 @@
           }
           else
           {
-              echo html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='chosen form-control'");
+              echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute);
           }
           ?>
           </td>
@@ -138,7 +148,7 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
+        <?php if($project->model != 'waterfall' and $project->model != 'waterfallplus'): ?>
         <?php $hidden = 'hide'?>
         <?php if(!empty($project->hasProduct)) $hidden = ''?>
         <?php if($linkedProducts):?>
@@ -153,7 +163,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span> 
+                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
                       <?php $disabled = ($execution->type == 'stage' and !$execution->division) ? "disabled='disabled'" : '';?>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                       <?php if($execution->type == 'stage' and !$execution->division) echo html::hidden("products[$i]", $product->id);?>
@@ -220,8 +230,29 @@
           </td>
         </tr>
         <?php endif; ?>
+        <?php elseif(($execution->type == 'stage' and !in_array($execution->attribute, array('request', 'design', 'review'))) or $execution->type != 'stage'): ?>
+        <?php echo html::hidden("products[]", key($linkedProducts));?>
+        <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>
+        <tr>
+          <th><?php echo $lang->execution->manageProducts;?></th>
+          <td colspan='2'>
+            <div class="row row-grid">
+              <?php if($linkedProducts):?>
+              <?php foreach($linkedProducts as $productID => $product):?>
+              <?php foreach($product->branches as $branchID):?>
+              <?php $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';?>
+              <div class="col-xs-4" title="<?php echo $product->name . $branchName;?>">
+                <?php echo "<i class='icon icon-product text-muted'></i> " . $product->name . $branchName;?>
+              </div>
+              <?php endforeach;?>
+              <?php endforeach;?>
+              <?php endif;?>
+            </div>
+          </td>
+        </tr>
         <?php else: ?>
         <?php echo html::hidden("products[]", key($linkedProducts));?>
+        <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>
         <?php endif; ?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>

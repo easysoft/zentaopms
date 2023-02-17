@@ -2,7 +2,7 @@
 /**
  * The view file of datatable module of ZenTaoPMS.
  *
- * @copyright   Copyright 2014-2014 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2014-2014 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     business(商业软件)
  * @author      Hao sun <sunhao@cnezsoft.com>
  * @package     datatable
@@ -62,8 +62,8 @@
       <div class='cols-list template' id="originCols">
         <?php foreach ($cols as $key => $col):?>
         <?php
-        $required = $col['required'] == 'yes';
-        $fixed = $col['fixed'];
+        $required  = $col['required'] == 'yes';
+        $fixed     = $col['fixed'];
         $autoWidth = $col['width'] == 'auto';
         ?>
         <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $col['width']?>'>

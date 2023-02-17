@@ -2,7 +2,7 @@
 /**
  * The install module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
@@ -30,7 +30,7 @@ $lang->install->desc             = <<<EOT
 禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。
 EOT;
 $lang->install->links = <<<EOT
-禅道项目管理软件由<strong><a href='https://www.cnezsoft.com' target='_blank' class='text-danger'>青岛易软天创网络科技有限公司</a>开发</strong>。
+禅道项目管理软件由<strong><a href='https://www.cnezsoft.com' target='_blank' class='text-danger'>禅道软件（青岛）有限公司</a>开发</strong>。
 官方网站：<a href='https://www.zentao.net' target='_blank'>https://www.zentao.net</a>
 技术支持：<a href='https://www.zentao.net/ask/' target='_blank'>https://www.zentao.net/ask/</a>
 新浪微博：<a href='https://weibo.com/easysoft' target='_blank'>https://weibo.com/easysoft</a>
@@ -293,7 +293,7 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
 
-$lang->install->promotion = "为您推荐易软天创旗下其他产品：";
+$lang->install->promotion = "为您推荐禅道软件旗下其他产品：";
 
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = '蝉知门户';
