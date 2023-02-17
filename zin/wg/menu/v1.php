@@ -9,7 +9,7 @@ class menu extends wg
 
     public function onBuildItem($item)
     {
-        if(!($item instanceof item)) $item = item($item);
+        if(!($item instanceof item)) $item = item(set($item));
         return actionItem
         (
             set('name', 'menu'),
