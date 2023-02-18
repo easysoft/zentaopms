@@ -10,11 +10,35 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+
+jsVar('confirmChangeProduct', $lang->bug->confirmChangeProduct);
+jsVar('oldProjectID',         $bug->project);
+jsVar('oldProductID',         $product->id);
+jsVar('oldStoryID',           $bug->story);
+jsVar('oldTaskID',            $bug->task);
+jsVar('oldOpenedBuild',       $bug->openedBuild);
+jsVar('oldResolvedBuild',     $bug->resolvedBuild);
+jsVar('moduleID',             $moduleID);
+jsVar('tab',                  $this->app->tab);
+jsVar('bugBranch',            $bug->branch);
+jsVar('isClosedBug',          $bug->status == 'closed');
+jsVar('released',             $lang->build->released);
+if($this->app->tab == 'execution') jsVar('objectID', $bug->execution);
+if($this->app->tab == 'project')   jsVar('objectID', $bug->project);
+
 panel
 (
     set::title($bug->title),
     form
     (
+        on::change('#product',   'changeProduct'),
+        on::change('#branch',    'changeBranch'),
+        on::change('#project',   'changeProject'),
+        on::change('#execution', 'changeExecution'),
+        on::change('#module',    'changeModule'),
+        on::click('#refresh',    'clickRefresh'),
+        on::click('#allBuilds',  'loadAllBuilds'),
+        on::click('#allUsers',   'loadAllUsers'),
         div
         (
             set::class('flex'),

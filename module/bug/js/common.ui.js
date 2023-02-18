@@ -13,7 +13,7 @@ function changeProduct(event)
             if(result)
             {
                 changeProductConfirmed = true; // Only notice the user one time.
-                loadAll(event);
+                changeProduct(event);
             }
             else
             {
@@ -123,10 +123,14 @@ function loadProductBranches(productID)
 
 function loadProductModules(productID)
 {
+    if(config.currentMethod == 'edit')
+    {
+        const moduleID = $('#module').val();
+    }
+
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined')   branch   = 0;
     if(typeof(moduleID) == 'undefined') moduleID = 0;
-    if(config.currentMethod == 'edit')  moduleID = $('#module').val();
 
     const link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
     $('#moduleBox').load(link);
