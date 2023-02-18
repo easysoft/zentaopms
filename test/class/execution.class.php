@@ -2491,34 +2491,6 @@ class executionTest
     }
 
     /**
-     * Test Get lifetime by id list.
-     *
-     * @param array $idList
-     * @access public
-     * @return void
-     */
-    public function getLifetimeByIdListTest($idList = '')
-    {
-        $result = $this->executionModel->getLifetimeByIdList($idList);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            if(!$result) return 'empty';
-
-            foreach($result as $id => $lifetime)
-            {
-                if(!$lifetime) $result[$id] = 'emptyLifetime';
-            }
-            return $result;
-        }
-    }
-
-    /**
      * Test Update user view of execution and it's product.
      *
      * @param int    $executionID
