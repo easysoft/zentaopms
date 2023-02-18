@@ -3771,7 +3771,7 @@ class execution extends control
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('project')->in(array_keys($projects))
-            ->orderBy('id_desc')
+            ->orderBy('order_asc')
             ->fetchGroup('project', 'id');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
@@ -3788,6 +3788,7 @@ class execution extends control
             $parents = array();
             foreach($executions as $execution) $parents[$execution->parent] = $execution->parent;
 
+            $executions = $this->execution->resetExecutionSorts($executions);
             foreach($executions as $execution)
             {
                 /* Only show leaf executions. */
