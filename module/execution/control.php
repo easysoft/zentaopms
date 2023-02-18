@@ -2595,17 +2595,17 @@ class execution extends control
         $execution = $this->commonAction($executionID);
         if($execution->type != 'kanban') return print(js::locate(inlink('view', "executionID=$executionID")));
 
+        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
+        {
+            $browseType = 'task';
+            unset($this->lang->kanban->group->task['story']);
+        }
+
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
         foreach($this->config->execution->statusActions as $action)
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
-        }
-
-        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
-        {
-            $browseType = 'task';
-            unset($this->lang->kanban->group->task['story']);
         }
 
         $userList    = array();
