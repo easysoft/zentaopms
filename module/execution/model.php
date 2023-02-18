@@ -5609,6 +5609,7 @@ class executionModel extends model
      */
     public function resetExecutionSorts($executions, $parentExecutions = array())
     {
+        if(empty($executions)) return array();
         if(empty($parentExecutions))
         {
             $execution        = current($executions);
@@ -5616,6 +5617,7 @@ class executionModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('kanban,sprint,stage')
                 ->andWhere('grade')->eq(1)
+                ->andWhere('project')->eq($execution->project)
                 ->orderBy('order_asc')
                 ->fetchAll('id');
         }
@@ -5623,9 +5625,10 @@ class executionModel extends model
         $sortedExecutions = array();
         foreach($parentExecutions as $executionID => $execution)
         {
+            if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
+
             $children = $this->getChildExecutions($executionID, 'order_asc');
             if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
-            if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
         }
         return $sortedExecutions;
     }

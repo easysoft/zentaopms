@@ -2806,4 +2806,44 @@ class executionTest
             ->andWhere('date')->eq($date)
             ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
     }
+
+    /**
+     * Reset execution sorts.
+     *
+     * @param  int    $projectID
+     * @param  string $type noParent
+     * @access public
+     * @return string
+     */
+    public function resetExecutionSortsTest($projectID, $type = '')
+    {
+        $executions           = array();
+        $executionIDList      = '';
+        $firstGradeExecutions = array();
+        if($projectID)
+        {
+            $executions = $this->executionModel->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('deleted')->eq(0)
+                ->andWhere('project')->eq($projectID)
+                ->andWhere('type')->in('sprint,stage,kanban')
+                ->orderBy('order_asc')
+                ->fetchAll('id');
+
+            if($type == 'hasParent')
+            {
+                foreach($executions as $execution)
+                {
+                    if($execution->grade == 1) $firstGradeExecutions[$execution->id] = $execution->id;
+                }
+            }
+        }
+
+        $executions = $this->executionModel->resetExecutionSorts($executions, $firstGradeExecutions);
+        if(!empty($executions))
+        {
+            $executionIDList = array_keys($executions);
+            $executionIDList = implode(',', $executionIDList);
+        }
+        return $executionIDList;
+    }
 }
