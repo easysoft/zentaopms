@@ -833,6 +833,22 @@ class programplanModel extends model
             }
         }
 
+        $linkProducts = array();
+        $linkBranches = array();
+        $productList  = $this->loadModel('product')->getProducts($projectID);
+        if($project->division)
+        {
+            $linkProducts = array(0 => $productID);
+            $linkBranches = array(0 => $productList[$productID]->branches);
+        }
+        else
+        {
+            $linkProducts = array_keys($productList);
+            foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
+        }
+        $this->post->set('products', $linkProducts);
+        $this->post->set('branch', $linkBranches);
+
         foreach($datas as $data)
         {
             /* Set planDuration and realDuration. */
@@ -845,6 +861,7 @@ class programplanModel extends model
             $projectChanged = false;
             $data->days     = helper::diffDate($data->end, $data->begin) + 1;
             $data->order    = current($orders);
+
 
             if($data->id)
             {
@@ -985,22 +1002,6 @@ class programplanModel extends model
                     $this->computeProgress($stageID, 'create');
                 }
             }
-
-            $linkProducts = array();
-            $linkBranches = array();
-            $productList  = $this->loadModel('product')->getProducts($projectID);
-            if($project->division)
-            {
-                $linkProducts = array(0 => $productID);
-                $linkBranches = array(0 => $productList[$productID]->branches);
-            }
-            else
-            {
-                $linkProducts = array_keys($productList);
-                foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
-            }
-            $this->post->set('products', $linkProducts);
-            $this->post->set('branch', $linkBranches);
             $this->execution->updateProducts($stageID);
 
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
