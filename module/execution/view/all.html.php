@@ -32,6 +32,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
 ?>
 
 <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit');?>
+<?php $canBatchChangeStatus = common::hasPriv('execution', 'batchChangeStatus');?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolBar pull-left'>
     <?php if($from == 'project'):?>
@@ -80,7 +81,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' id='' method='post' action='<?php echo inLink('batchEdit');?>'>
+  <form class='main-table' id='executionForm' method='post'>
     <div class="table-header fixed-right">
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
@@ -93,6 +94,20 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
             $actionLink = $this->createLink('project', 'batchEdit');
             $misc       = "id='batchEditBtn'";
             echo html::commonButton($lang->edit, $misc); 
+        }
+        if($canBatchChangeStatus)
+        {
+            $changeStatusHtml  = "<div class='btn-group dropup'>";
+            $changeStatusHtml .= "<button data-toggle='dropdown' type='button' class='btn'>{$this->lang->statusAB} <span class='caret'></span></button>";
+            $changeStatusHtml .= "<div class='dropdown-menu search-list'><div class='list-group'>";
+            foreach($this->lang->execution->statusList as $status => $statusText)
+            {
+                $actionLink        = $this->createLink('execution', 'batchChangeStatus', "status=$status");
+                $changeStatusHtml .= html::a('#', $statusText, '', "class='statusLink' data-link='$actionLink'  onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
+            }
+            $changeStatusHtml .= "</div></div></div>";
+
+            echo $changeStatusHtml;
         }
         ?>
       </div>
@@ -149,6 +164,24 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
       var tempform      = document.createElement("form");
       tempform.action   = batchEditLink;
       tempform.method   = "post";
+      tempform.style.display = "none";
+
+      var opt   = document.createElement("input");
+      opt.name  = 'executionIDList';
+      opt.value = checkItems;
+
+      tempform.appendChild(opt);
+      document.body.appendChild(tempform);
+      tempform.submit();
+  })
+
+  $('.statusLink').click(function()
+  {
+      var changeStatusLink   = $(this).data('link');
+      var tempform           = document.createElement("form");
+      tempform.action        = changeStatusLink;
+      tempform.method        = "post";
+      tempform.target        = "hiddenwin";
       tempform.style.display = "none";
 
       var opt   = document.createElement("input");
