@@ -2164,17 +2164,6 @@ class execution extends control
 
                     $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
-
-                    $syncExecution = '';
-                    foreach($changes as $changeField)
-                    {
-                        if($changeField['field'] == 'status' && $changeField['old'] =='wait' && $changeField['new'] =='doing')
-                        {
-                            $syncExecution = $executionID;
-                            break;
-                        }
-                    }
-                    $this->loadModel('common')->syncPPEStatus($syncExecution);
                 }
             }
 
@@ -2235,6 +2224,54 @@ class execution extends control
         $this->view->rdUsers     = $rdUsers;
         $this->view->from        = $this->app->tab;
         $this->display();
+    }
+
+    /**
+     * Batch change status.
+     *
+     * @param  string    $status
+     * @param  int       $projectID
+     * @access public
+     * @return void
+     */
+    public function batchChangeStatus($status, $projectID = 0)
+    {
+        $executionIdList = $this->post->executionIDList;
+        if(is_string($executionIdList)) $executionIdList = explode(',', $executionIdList);
+        /* Sub-phases are changed first and then parented. */
+        rsort($executionIdList);
+
+        $pointOutStages = $this->execution->batchChangeStatus($executionIdList, $status);
+        $project        = $this->loadModel('project')->getById($projectID);
+
+        if($pointOutStages)
+        {
+            $alertLang = '';
+
+            if($status == 'wait')
+            {
+                /* In execution-all list or waterfall, waterfallplus project's execution list. */
+                if(empty($project) or (!empty($project) and strpos($project->model, 'waterfall') !== false))
+                {
+                    $executionLang = (empty($project) or (!empty($project) and $project->model == 'waterfallplus')) ? $this->lang->execution->common : $this->lang->stage->common;
+                    $alertLang     = sprintf($this->lang->execution->hasStartedTaskOrSubStage, $executionLang, $pointOutStages);
+                }
+
+                if(!empty($project) and strpos('agileplus,scrum', $project->model) !== false)
+                {
+                    $executionLang = $project->model == 'scrum' ? $this->lang->executionCommon : $this->lang->execution->common;
+                    $alertLang     = sprintf($this->lang->execution->hasStartedTask, $executionLang, $pointOutStages);
+                }
+            }
+
+            if($status == 'suspended') $alertLang = sprintf($this->lang->execution->hasSuspendedOrClosedChildren, $pointOutStages);
+
+            if($status == 'closed') $alertLang = sprintf($this->lang->execution->hasNotClosedChildren, $pointOutStages);
+
+            return print(js::alert($alertLang) . js::locate($this->session->executionList, 'parent'));
+        }
+
+        return print(js::locate($this->session->executionList, 'parent'));
     }
 
     /**

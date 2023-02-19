@@ -31,10 +31,10 @@ $config->execution->edit->requiredFields    = 'name,code,begin,end';
 $config->execution->start->requiredFields   = 'realBegan';
 $config->execution->close->requiredFields   = 'realEnd';
 
-$config->execution->customBatchEditFields = 'days,type,teamname,status,desc,PO,QD,PM,RD';
+$config->execution->customBatchEditFields = 'days,type,teamname,desc,PO,QD,PM,RD';
 
 $config->execution->custom = new stdclass();
-$config->execution->custom->batchEditFields = 'days,status,PM';
+$config->execution->custom->batchEditFields = 'days,PM';
 
 $config->execution->editor = new stdclass();
 $config->execution->editor->create   = array('id' => 'desc',    'tools' => 'simpleTools');

@@ -13,6 +13,7 @@
 <?php js::set('pageSummary', $lang->execution->pageExecSummary);?>
 <?php js::set('executionSummary', $lang->execution->executionSummary);?>
 <?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
+<?php js::set('changeStatusHtml', $changeStatusHtml);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if($project->division and $project->hasProduct):?>
