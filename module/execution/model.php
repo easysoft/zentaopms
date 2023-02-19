@@ -985,12 +985,13 @@ class executionModel extends model
         $this->loadModel('programplan');
         $this->loadModel('action');
 
-        $selfAndChildrenList = $this->programplan->getSelfAndChildrenList($executionIdList);
-        $siblingStages       = $this->programplan->getSiblings($executionIdList);
-        $pointOutStages      = '';
-
+        $pointOutStages = '';
         foreach($executionIdList as $executionID)
         {
+            /* The state of the parent stage or the sibling stage may be affected by the child stage before the change, so it cannot be checked in advance. */
+            $selfAndChildrenList = $this->programplan->getSelfAndChildrenList($executionID);
+            $siblingStages       = $this->programplan->getSiblings($executionID);
+
             $selfAndChildren = $selfAndChildrenList[$executionID];
             $execution       = $selfAndChildren[$executionID];
             $executionType   = $execution->type;
