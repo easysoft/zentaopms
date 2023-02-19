@@ -52,3 +52,20 @@ function setBadgeStyle(obj, isShow)
         $label.find('.label-badge').css({"color":"#838a9d", "border-color":"#838a9d"});
     }
 }
+
+function buildForm(action, target)
+{
+    var tempform           = document.createElement("form");
+    tempform.action        = action;
+    tempform.method        = "post";
+    tempform.target        = typeof(target) == 'undefined' ? '' : target;
+    tempform.style.display = "none";
+
+    var opt   = document.createElement("input");
+    opt.name  = 'executionIDList';
+    opt.value = checkItems;
+
+    tempform.appendChild(opt);
+    document.body.appendChild(tempform);
+    tempform.submit();
+}

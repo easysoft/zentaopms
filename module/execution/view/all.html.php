@@ -160,37 +160,12 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
 
   $('#batchEditBtn').click(function()
   {
-      var batchEditLink = createLink('execution', 'batchEdit');
-      var tempform      = document.createElement("form");
-      tempform.action   = batchEditLink;
-      tempform.method   = "post";
-      tempform.style.display = "none";
-
-      var opt   = document.createElement("input");
-      opt.name  = 'executionIDList';
-      opt.value = checkItems;
-
-      tempform.appendChild(opt);
-      document.body.appendChild(tempform);
-      tempform.submit();
+      buildForm(createLink('execution', 'batchEdit'));
   })
 
   $('.statusLink').click(function()
   {
-      var changeStatusLink   = $(this).data('link');
-      var tempform           = document.createElement("form");
-      tempform.action        = changeStatusLink;
-      tempform.method        = "post";
-      tempform.target        = "hiddenwin";
-      tempform.style.display = "none";
-
-      var opt   = document.createElement("input");
-      opt.name  = 'executionIDList';
-      opt.value = checkItems;
-
-      tempform.appendChild(opt);
-      document.body.appendChild(tempform);
-      tempform.submit();
+      buildForm($(this).data('link'), 'hiddenwin');
   })
   </script>
   <?php endif;?>

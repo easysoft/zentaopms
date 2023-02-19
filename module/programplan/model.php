@@ -1620,12 +1620,14 @@ class programplanModel extends model
     /**
      * Get plan and its children.
      *
-     * @param  array    $planIdList
+     * @param  string|int|array    $planIdList
      * @access public
      * @return array
      */
     public function getSelfAndChildrenList($planIdList)
     {
+        if(is_numeric($planIdList)) $planIdList = (array)$planIdList;
+
         $planList = $this->dao->select('t2.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('FIND_IN_SET(t1.id,t2.`path`)')
             ->where('t1.id')->in($planIdList)
@@ -1648,12 +1650,14 @@ class programplanModel extends model
     /**
      * Get plan's siblings.
      *
-     * @param  array    $planIdList
+     * @param  string|int|array    $planIdList
      * @access public
      * @return array
      */
     public function getSiblings($planIdList)
     {
+        if(is_numeric($planIdList)) $planIdList = (array)$planIdList;
+
         $siblingsList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.parent=t2.parent')
             ->where('t2.id')->in($planIdList)
