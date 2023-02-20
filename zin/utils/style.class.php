@@ -53,27 +53,27 @@ class style extends dataset
      *
      *     // Create a style object and set
      *     $style = new style();
-     *     $style->var('text-size', '14px');
+     *     $style->cssVar('text-size', '14px');
      *
      *     // Set multiple variables
-     *     $style->var(array('text-color' => 'yellow', 'background-image': 'none'));
+     *     $style->cssVar(array('text-color' => 'yellow', 'background-image': 'none'));
      *
      *     // Get variable value
-     *     echo $style->var('text-size'); // Output "14px"
+     *     echo $style->cssVar('text-size'); // Output "14px"
      *
      *     // Get all variables value
-     *     echo $style->var();
+     *     echo $style->cssVar();
      *     // Output array('text-size' => '14px', 'color' => 'yellow', 'background': 'none');
      *
      *     // Remove variable by setting value with an empty string
-     *     $style->var('text-color', '');
+     *     $style->cssVar('text-color', '');
      *
      * @access public
      * @param array|string   $name  - Variable name or variables list
      * @param mixed          $value - Property value
      * @return mixed
      */
-    public function var($name = '', $value = NULL)
+    public function cssVar($name = '', $value = NULL)
     {
         /* Support for setting multiple variables by an array */
         if(is_array($name))
