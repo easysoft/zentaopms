@@ -749,7 +749,7 @@ class programplanModel extends model
         foreach($datas as $index => $plan)
         {
             if(!empty($sameNames) and in_array($plan->name, $sameNames)) dao::$errors[$index]['name'] = empty($type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
-            if($setCode and $sameCodes !== true and !empty($sameCodes) and in_array($plan->code, $sameCodes)) dao::$errors[$index]['code'] = sprintf($this->lang->error->repeat, $this->lang->execution->code, $plan->code);
+            if($setCode and $sameCodes !== true and !empty($sameCodes) and in_array($plan->code, $sameCodes)) dao::$errors[$index]['code'] = sprintf($this->lang->error->repeat, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code, $plan->code);
 
             if($plan->percent and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $plan->percent))
             {
@@ -778,7 +778,7 @@ class programplanModel extends model
             if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
             {
                 if($plan->begin < $parentStage->begin and empty(dao::$errors[$index]['begin'])) dao::$errors[$index]['begin'] = $this->lang->programplan->error->parentDuration;
-                if($plan->end < $parentStage->end and empty(dao::$errors[$index]['end']))      dao::$errors[$index]['end']   = $this->lang->programplan->error->parentDuration;
+                if($plan->end > $parentStage->end and empty(dao::$errors[$index]['end']))       dao::$errors[$index]['end']   = $this->lang->programplan->error->parentDuration;
             }
             if($plan->begin < $project->begin and empty(dao::$errors[$index]['begin']))
             {
@@ -793,7 +793,7 @@ class programplanModel extends model
             if(helper::isZeroDate($plan->end))   $plan->end   = '';
             if($setCode and empty($plan->code))
             {
-                dao::$errors[$index]['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
+                dao::$errors[$index]['code'] = sprintf($this->lang->error->notempty, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code);
             }
             foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
             {
@@ -833,6 +833,22 @@ class programplanModel extends model
             }
         }
 
+        $linkProducts = array();
+        $linkBranches = array();
+        $productList  = $this->loadModel('product')->getProducts($projectID);
+        if($project->division)
+        {
+            $linkProducts = array(0 => $productID);
+            $linkBranches = array(0 => $productList[$productID]->branches);
+        }
+        else
+        {
+            $linkProducts = array_keys($productList);
+            foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
+        }
+        $this->post->set('products', $linkProducts);
+        $this->post->set('branch', $linkBranches);
+
         foreach($datas as $data)
         {
             /* Set planDuration and realDuration. */
@@ -845,6 +861,7 @@ class programplanModel extends model
             $projectChanged = false;
             $data->days     = helper::diffDate($data->end, $data->begin) + 1;
             $data->order    = current($orders);
+
 
             if($data->id)
             {
@@ -985,22 +1002,6 @@ class programplanModel extends model
                     $this->computeProgress($stageID, 'create');
                 }
             }
-
-            $linkProducts = array();
-            $linkBranches = array();
-            $productList  = $this->loadModel('product')->getProducts($projectID);
-            if($project->division)
-            {
-                $linkProducts = array(0 => $productID);
-                $linkBranches = array(0 => $productList[$productID]->branches);
-            }
-            else
-            {
-                $linkProducts = array_keys($productList);
-                foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
-            }
-            $this->post->set('products', $linkProducts);
-            $this->post->set('branch', $linkBranches);
             $this->execution->updateProducts($stageID);
 
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
@@ -1346,15 +1347,15 @@ class programplanModel extends model
     public function checkCodeUnique($codes, $planIDList)
     {
         $codes = array_filter($codes);
-        if(count(array_unique($codes)) != count($codes)) return false;
 
-        $code = $this->dao->select('code')->from(TABLE_EXECUTION)
+        $sameCodes = $this->dao->select('code')->from(TABLE_EXECUTION)
             ->where('type')->in('sprint,stage,kanban')
             ->andWhere('deleted')->eq('0')
             ->andWhere('code')->in($codes)
             ->beginIF($planIDList)->andWhere('id')->notin($planIDList)->fi()
             ->fetchPairs('code');
-        return $code ? $code : true;
+        if(count(array_unique($codes)) != count($codes)) $sameCodes += array_diff_assoc($codes, array_unique($codes));
+        return $sameCodes ? $sameCodes : true;
     }
 
     /**

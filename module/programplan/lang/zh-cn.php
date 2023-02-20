@@ -82,7 +82,7 @@ $lang->programplan->delayList[0] = '否';
 
 $lang->programplan->typeList = array();
 $lang->programplan->typeList['stage']     = '阶段';
-$lang->programplan->typeList['agileplus'] = '迭代/看板';
+$lang->programplan->typeList['agileplus'] = $lang->executionCommon . '/看板';
 
 $lang->programplan->noData            = '暂无数据。';
 $lang->programplan->children          = '二级计划';
@@ -118,7 +118,7 @@ $lang->programplan->error->sameName        = '阶段名称不能相同！';
 $lang->programplan->error->sameCode        = '阶段代号不能相同！';
 $lang->programplan->error->taskDrag        = '%s的任务不可以拖动';
 $lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
-$lang->programplan->error->notStage        = '迭代/看板不支持创建子阶段';
+$lang->programplan->error->notStage        = $lang->executionCommon . '/看板不支持创建子阶段';
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
 $lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';

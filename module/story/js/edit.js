@@ -95,4 +95,9 @@ $(function()
     {
         $('#planIdBox .chosen-container').find('div').css('width', $('#planIdBox').width())
     });
+
+    $('#parent_chosen').click(function()
+    {
+        $('#parent_chosen').find('div').css('width', $('#parent_chosen').width())
+    });
 })
