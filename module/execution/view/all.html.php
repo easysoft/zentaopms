@@ -134,7 +134,6 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
       },
       onRenderCell: function(result, info)
       {
-          info.row.data.burns = [126.5,81.5,29,29,29];
           if(info.col.name === 'burn' && Array.isArray(info.row.data.burns) && info.row.data.burns.length)
           {
               tryRenderSparkline();
