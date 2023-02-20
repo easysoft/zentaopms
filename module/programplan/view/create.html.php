@@ -140,7 +140,7 @@
             <?php $disabled = isset($plan->setMilestone) ? '' : "disabled='disabled'"?>
             <?php echo html::hidden("planIDList[$i]", $plan->id);?>
             <tr>
-              <td class='<?php echo $typeClass;?>'><?php echo html::select("type[$i]", $lang->execution->typeList, $plan->type, "class='form-control chosen'");?></td>
+              <td class='<?php echo $typeClass . ' text-center ' .zget($lang->execution->typeList, $plan->type);?>'><?php echo zget($lang->execution->typeList, $plan->type);?></td>
               <td><input type='text' name="names[<?php echo $i;?>]" id='names<?php echo $i;?>' value='<?php echo $plan->name;?>' class='form-control' /></td>
               <?php if(!isset($config->setCode) or $config->setCode == 1):?>
               <td><?php echo html::input("codes[$i]", $plan->code, "class='form-control'");?></td>
