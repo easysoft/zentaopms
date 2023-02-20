@@ -1727,15 +1727,8 @@ class execution extends control
                     }
 
                     $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
-                    if(!$execution->hasProduct)
-                    {
-                        return print(js::locate(inlink('create', "projectID=$projectID&executionID=$executionID")));
-                    }
-                    else
-                    {
-                        return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
 
-                    }
+                    return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
             }
 
@@ -1801,16 +1794,11 @@ class execution extends control
         {
             if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
 
-            /* No product execution link plans. */
-            if(isset($project->hasProduct) and empty($project->hasProduct) and !empty($_POST['plans']))
+            /* Filter empty plans. */
+            if(!empty($_POST['plans']))
             {
-                $plansItem = array();
-                foreach($_POST['plans'] as $planItem)
-                {
-                    if(empty($planItem[0][0])) continue;
-                    $plansItem[] = $planItem[0][0];
-                }
-                $_POST['plans'] = array($_POST['products'][0] => array(0 => $plansItem));
+                foreach($_POST['plans'] as $key => $planItem) $_POST['plans'][$key] = array_filter($_POST['plans'][$key]);
+                $_POST['plans'] = array_filter($_POST['plans']);
             }
 
             $executionID = $this->execution->create($copyExecutionID);
@@ -2006,15 +1994,11 @@ class execution extends control
             $newPlans = array();
             if(isset($_POST['plans']))
             {
-
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planList)
+                    foreach($plans as $planID)
                     {
-                        foreach($planList as $planID)
-                        {
-                            if(array_search($planID, $oldPlans) === false) $newPlans[$planID] = $planID;
-                        }
+                        if(array_search($planID, $oldPlans) === false) $newPlans[$planID] = $planID;
                     }
                 }
             }
