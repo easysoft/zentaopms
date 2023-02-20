@@ -545,6 +545,104 @@ class devModel extends model
     }
 
     /**
+     * Get second menus.
+     *
+     * @param  string $menu
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getSecondMenus($menu, $module = '', $method = '')
+    {
+        $menus = array();
+        if($menu == 'project')
+        {
+            $menusPinYin = common::convert2Pinyin($this->lang->dev->projectMenu);
+            foreach($this->config->dev->projectMenus as $subMenuKey)
+            {
+                $subMenu = new stdClass();
+                $subMenu->title  = $this->lang->dev->projectMenu[$subMenuKey];
+                $subMenu->key    = zget($menusPinYin, $this->lang->dev->projectMenu[$subMenuKey], '');
+                $subMenu->module = $subMenuKey;
+                $subMenu->method = '';
+                $subMenu->active = ($module == $subMenuKey and $method == '') ? 1 : 0;
+
+                $menus[] = $subMenu;
+            }
+        }
+
+        return $menus;
+    }
+
+    /**
+     * Get third menus.
+     *
+     * @param  string $menu
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getThirdMenus($menu, $module = '', $method = '')
+    {
+        $menus = array();
+        if(!isset($this->lang->$menu->menu)) return $menus;
+
+        $menuLang    = $this->getLinkTitle($this->lang->$menu->menu);
+        $menusPinYin = common::convert2Pinyin($menuLang);
+        foreach($menuLang as $menuKey => $menuName)
+        {
+            if(!isset($this->lang->$menu->menu->$menuKey['subMenu'])) continue;
+
+            $subMenu = new stdClass();
+            $subMenu->title  = $menuName;
+            $subMenu->key    = zget($menusPinYin, $menuName, '');
+            $subMenu->module = $menu;
+            $subMenu->method = $menuKey;
+            $subMenu->active = ($method == $menuKey and $module == $menu) ? 1 : 0;
+
+            $menus[] = $subMenu;
+        }
+
+        return $menus;
+    }
+
+    /**
+     * Get feature menus.
+     *
+     * @param  string $menu
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getFeatureMenus($menu, $module = '', $method = '')
+    {
+        $this->app->loadLang($menu);
+        $menus = array();
+        if(isset($this->lang->$menu->featureBar))
+        {
+            $featureBar = $this->lang->$menu->featureBar;
+            foreach($featureBar as $methodName => $feature)
+            {
+                if($methodName == 'caselib') $methodName = 'caseLib';
+
+                $subMenu = new stdClass();
+                $subMenu->title  = zget($this->lang->$menu, $methodName);
+                $subMenu->key    = '';
+                $subMenu->module = $menu;
+                $subMenu->method = $methodName;
+                $subMenu->active = ($method == $methodName and $module == $menu) ? 1 : 0;
+
+                $menus[] = $subMenu;
+            }
+        }
+
+        return $menus;
+    }
+
+    /**
      * Get menu tree.
      *
      * @param  string $type
@@ -558,39 +656,24 @@ class devModel extends model
         $menuTree = array();
         if(!in_array($type, $this->config->dev->navTypes)) return $menuTree;
 
-        $lang = new stdclass();
-        if($type == 'second')
+        $mainNav       = $this->getLinkTitle($this->lang->mainNav);
+        $maimNavPinYin = common::convert2Pinyin($mainNav);
+
+        if(empty($module)) $module = 'my';
+        foreach($mainNav as $menuKey => $menu)
         {
-            if(empty($module)) $module = 'my';
-            $menus       = $this->getLinkTitle($this->lang->mainNav);
-            $menusPinYin = common::convert2Pinyin($menus);
-            foreach($menus as $menuKey => $menu)
-            {
-                $menuItem = new stdclass();
-                $menuItem->title    = $menu;
-                $menuItem->module   = $menuKey;
-                $menuItem->method   = '';
-                $menuItem->active   = ($module == $menuKey and $method == '') ? 1 : 0;
-                $menuItem->key      = zget($menusPinYin, $menu, '');
-                $menuItem->children = array();
+            $menuItem = new stdclass();
+            $menuItem->title  = $menu;
+            $menuItem->module = $menuKey;
+            $menuItem->method = '';
+            $menuItem->active = ($module == $menuKey and $method == '') ? 1 : 0;
+            $menuItem->key    = zget($maimNavPinYin, $menu, '');
 
-                if($menuKey == 'project')
-                {
-                    $menusPinYin = common::convert2Pinyin($this->lang->dev->projectMenu);
-                    foreach($this->config->dev->projectMenus as $subMenuKey)
-                    {
-                        $subMenu = new stdClass();
-                        $subMenu->title  = $this->lang->dev->projectMenu[$subMenuKey];
-                        $subMenu->key    = zget($menusPinYin, $this->lang->dev->projectMenu[$subMenuKey], '');
-                        $subMenu->module = $subMenuKey;
-                        $subMenu->method = '';
-                        $subMenu->active = ($module == $subMenuKey and $method == '') ? 1 : 0;
+            $childFunc = 'get' . ucfirst($type) . 'Menus';
+            $menuItem->children = $this->$childFunc($menuKey, $module, $method);
+            if($type != 'second' and empty($menuItem->children)) continue;
 
-                        $menuItem->children[] = $subMenu;
-                    }
-                }
-                $menuTree[] = $menuItem;
-            }
+            $menuTree[] = $menuItem;
         }
 
         return $menuTree;
