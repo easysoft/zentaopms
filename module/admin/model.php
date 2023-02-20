@@ -402,7 +402,7 @@ class adminModel extends model
         foreach($orders as $index => $menuKey)
         {
             $menuList->$menuKey = $this->lang->admin->menuList->$menuKey;
-            $menuList->$menuKey['order'] = $index;
+            $menuList->{$menuKey}['order'] = $index;
         }
 
         $this->lang->admin->menuList = $menuList;

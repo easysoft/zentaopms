@@ -1616,4 +1616,64 @@ class programplanModel extends model
             $this->updateSubStageAttr($childID, $attribute, $withDeleted);
         }
     }
+
+    /**
+     * Get plan and its children.
+     *
+     * @param  string|int|array    $planIdList
+     * @access public
+     * @return array
+     */
+    public function getSelfAndChildrenList($planIdList)
+    {
+        if(is_numeric($planIdList)) $planIdList = (array)$planIdList;
+
+        $planList = $this->dao->select('t2.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('FIND_IN_SET(t1.id,t2.`path`)')
+            ->where('t1.id')->in($planIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll('id');
+
+        $selfAndChildrenList = array();
+        foreach($planIdList as $planID)
+        {
+            if(!isset($selfAndChildrenList[$planID])) $selfAndChildrenList[$planID] = array();
+            foreach($planList as $plan)
+            {
+                if(strpos($plan->path, ",$planID,") !== false) $selfAndChildrenList[$planID][$plan->id] = $plan;
+            }
+        }
+
+        return $selfAndChildrenList;
+    }
+
+    /**
+     * Get plan's siblings.
+     *
+     * @param  string|int|array    $planIdList
+     * @access public
+     * @return array
+     */
+    public function getSiblings($planIdList)
+    {
+        if(is_numeric($planIdList)) $planIdList = (array)$planIdList;
+
+        $siblingsList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.parent=t2.parent')
+            ->where('t2.id')->in($planIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id');
+
+        $siblingStages = array();
+        foreach($planIdList as $planID)
+        {
+            if(!isset($siblingStages[$planID])) $siblingStages[$planID] = array();
+            foreach($siblingsList as $sibling)
+            {
+                if($siblingsList[$planID]->parent == $sibling->parent) $siblingStages[$planID][$sibling->id] = $sibling;
+            }
+        }
+
+        return $siblingStages;
+    }
 }

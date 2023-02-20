@@ -754,7 +754,6 @@ class executionModel extends model
             $executions[$executionID]->PO             = $data->POs[$executionID];
             $executions[$executionID]->QD             = $data->QDs[$executionID];
             $executions[$executionID]->RD             = $data->RDs[$executionID];
-            $executions[$executionID]->status         = $data->statuses[$executionID];
             $executions[$executionID]->begin          = $data->begins[$executionID];
             $executions[$executionID]->end            = $data->ends[$executionID];
             $executions[$executionID]->team           = $data->teams[$executionID];
@@ -767,8 +766,6 @@ class executionModel extends model
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
             if(isset($data->lifetimes))  $executions[$executionID]->lifetime  = $data->lifetimes[$executionID];
-            if($executions[$executionID]->status == 'closed' and $oldExecutions[$executionID]->status != 'closed') $executions[$executionID]->closedDate = helper::now();
-            if($executions[$executionID]->status == 'suspended' and $oldExecutions[$executionID]->status != 'suspended') $executions[$executionID]->suspendedDate = helper::today();
 
             $oldExecution = $oldExecutions[$executionID];
             $projectID    = isset($executions[$executionID]->project) ? $executions[$executionID]->project : $oldExecution->project;
@@ -777,14 +774,13 @@ class executionModel extends model
             /* Check unique code for edited executions. */
             if(isset($data->codes) and empty($executionCode))
             {
-                dao::$errors["codes\[$executionID\]"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
+                dao::$errors["codes$executionID"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
             }
             elseif(isset($data->codes) and $executionCode)
             {
-                /* Check unique code for edited executions. */
                 if(isset($codeList[$executionCode]))
                 {
-                    dao::$errors["codes\[$executionID\]"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
+                    dao::$errors["codes$executionID"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
                 }
                 $codeList[$executionCode] = $executionCode;
             }
@@ -797,7 +793,7 @@ class executionModel extends model
                 {
                     if($parentID == $parents[$repeatID])
                     {
-                        dao::$errors["names\[$executionID\]"][] = $this->lang->execution->errorNameRepeat;
+                        dao::$errors["names$executionID"][] = $this->lang->execution->errorNameRepeat;
                         break;
                     }
                 }
@@ -808,17 +804,30 @@ class executionModel extends model
             /* Attribute check. */
             if(isset($data->attributes))
             {
-                $this->app->loadLang('stage');
-                $attribute = $executions[$executionID]->attribute;
-                if(isset($attributeList[$parentID]))
+                $executionType = $oldExecutions[$executionID]->type;
+
+                if($executionType == 'stage')
                 {
-                    if($attributeList[$parentID] != $attribute and $attributeList[$parentID] != 'mix')
+                    $this->app->loadLang('stage');
+                    $attribute = $executions[$executionID]->attribute;
+
+                    if(isset($attributeList[$parentID]))
                     {
-                        $parentAttr = zget($this->lang->stage->typeList, $attributeList[$parentID]);
+                        $parentAttr = $attributeList[$parentID];
+                    }
+                    else
+                    {
+                        $parentAttr = $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
+                    }
+
+                    if($parentAttr and $parentAttr != $attribute and $parentAttr != 'mix')
+                    {
+                        $parentAttr = zget($this->lang->stage->typeList, $parentAttr);
                         dao::$errors["attributes$executionID"][] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
                     }
+
+                    $attributeList[$executionID] = $attribute;
                 }
-                $attributeList[$executionID] = $attribute;
             }
 
             /* Judge workdays is legitimate. */
@@ -839,25 +848,13 @@ class executionModel extends model
 
                 if($begin < $parentBegin)
                 {
-                    dao::$errors["begins\[$executionID\]"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                    dao::$errors["begins$executionID"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
                 }
 
                 if($end > $parentEnd)
                 {
-                    dao::$errors["ends\[$executionID\]"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                    dao::$errors["ends$executionID"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
                 }
-            }
-
-            /* Project begin and end check. */
-            if($project and $execution->begin < $project->begin)
-            {
-                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
-                return false;
-            }
-            if($project and $execution->end > $project->end)
-            {
-                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
-                return false;
             }
 
             foreach($extendFields as $extendField)
@@ -871,6 +868,7 @@ class executionModel extends model
             if(empty($executions[$executionID]->begin)) dao::$errors["begins{$executionID}"][] = sprintf($this->lang->error->notempty, $this->lang->execution->begin);
             if(empty($executions[$executionID]->end))   dao::$errors["ends{$executionID}"][]   = sprintf($this->lang->error->notempty, $this->lang->execution->end);
 
+            /* Project begin and end check. */
             if(!empty($executions[$executionID]->begin) and !empty($executions[$executionID]->end))
             {
                 if($executions[$executionID]->begin > $executions[$executionID]->end)
@@ -972,6 +970,246 @@ class executionModel extends model
         }
         $this->fixOrder();
         return $allChanges;
+    }
+
+    /**
+     * Batch change status.
+     *
+     * @param  array     $executionIdList
+     * @param  string    $status
+     * @access public
+     * @return void
+     */
+    public function batchChangeStatus($executionIdList, $status)
+    {
+        $this->loadModel('programplan');
+        $this->loadModel('action');
+
+        $pointOutStages = '';
+        foreach($executionIdList as $executionID)
+        {
+            /* The state of the parent stage or the sibling stage may be affected by the child stage before the change, so it cannot be checked in advance. */
+            $selfAndChildrenList = $this->programplan->getSelfAndChildrenList($executionID);
+            $siblingStages       = $this->programplan->getSiblings($executionID);
+
+            $selfAndChildren = $selfAndChildrenList[$executionID];
+            $execution       = $selfAndChildren[$executionID];
+            $executionType   = $execution->type;
+
+            $siblingList = array();
+            if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
+
+            if($status == 'wait' and $execution->status != 'wait')
+            {
+                $pointOutStages .= $this->changeStatus2Wait($executionID, $selfAndChildren, $siblingList);
+            }
+
+            if($status == 'doing' and $execution->status != 'doing')
+            {
+                $this->changeStatus2Doing($executionID, $selfAndChildren);
+            }
+
+            if(($status == 'suspended' and $execution->status != 'suspended') or ($status == 'closed' and $execution->status != 'closed'))
+            {
+                $pointOutStages .= $this->changeStatus2Inactived($executionID, $status, $selfAndChildren, $siblingList);
+            }
+        }
+
+        return trim($pointOutStages, ',');
+    }
+
+    /**
+     * Change status to wait.
+     *
+     * @param  int    $executionID
+     * @param  array  $selfAndChildren
+     * @param  array  $siblingStages
+     * @access public
+     * @return string
+     */
+    public function changeStatus2Wait($executionID, $selfAndChildren, $siblingStages)
+    {
+        $parentID = $selfAndChildren[$executionID]->parent;
+
+        /* There are already tasks consuming work in this phase or its sub-phases already have start times. */
+        $hasStartedChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('realBegan')->ne('0000-00-00')->andWhere('id')->in(array_keys($selfAndChildren))->andWhere('id')->ne($executionID)->fetchPairs();
+        $hasConsumedTasks   = $this->dao->select('count(consumed) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in(array_keys($selfAndChildren))->andWhere('consumed')->gt(0)->fetch('count');
+        if($hasStartedChildren or $hasConsumedTasks) return "'{$selfAndChildren[$executionID]->name}',";
+
+        $newExecution = $this->buildExecutionBySstatus('wait');
+        $this->dao->update(TABLE_EXECUTION)->data($newExecution)->where('id')->eq($executionID)->exec();
+
+        if(!dao::isError())
+        {
+            /* Action. */
+            $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
+            $actionID = $this->action->create('execution', $executionID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+
+            /* This stage has a parent stage. */
+            $checkTopStage   = $this->programplan->checkTopStage($executionID);
+            $siblingsAllWait = true;
+            if(!$checkTopStage)
+            {
+                /* Check sibling stages are all wait. */
+                foreach($siblingStages as $siblingID => $sibling)
+                {
+                    if($siblingID == $executionID) continue;
+
+                    if($sibling->status != 'wait')
+                    {
+                        $siblingsAllWait = false;
+                        return $pointOutStages;
+                    }
+                }
+
+                if($siblingsAllWait)
+                {
+                    /* Actual start or consumed work exists for the parent phase. */
+                    $parent                 = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch();
+                    $parentsChildren        = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("%,$executionID,%")->andWhere('id')->ne($parentID)->fetchPairs();
+                    $parentHasConsumedTasks = $this->dao->select('count(id) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($parentsChildren)->andWhere('consumed')->gt(0)->fetch('count');
+
+                    $parentStatus = (!helper::isZeroDate($parent->realBegan) or $parentHasConsumedTasks) ? 'doing' : 'wait';
+                    if($parent->status == $parentStatus) return '';
+
+                    $newParent = $this->buildExecutionBySstatus($parentStatus);
+                    $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($parentID)->exec();
+
+                    if(!dao::isError())
+                    {
+                        $changes    = common::createChanges($parent, $newParent);
+                        $actionType = $parentStatus == 'doing' ? 'startbychildedit' : 'waitbychild';
+                        $actionID   = $this->action->create('execution', $parentID, $actionType, '', $actionType);
+                        $this->action->logHistory($actionID, $changes);
+
+                        if($parent->status == 'wait' and $parentStatus == 'doing') $this->loadModel('common')->syncPPEStatus($parentID);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Change status to doing.
+     *
+     * @param  int    $executionID
+     * @param  array  $selfAndChildren
+     * @access public
+     * @return string
+     */
+    public function changeStatus2Doing($executionID, $selfAndChildren)
+    {
+        $type     = $selfAndChildren[$executionID]->type;
+        $parentID = $selfAndChildren[$executionID]->parent;
+
+        $newExecution = $this->buildExecutionBySstatus('doing');
+        $this->dao->update(TABLE_EXECUTION)->data($newExecution)->where('id')->eq($executionID)->exec();
+        if(!dao::isError())
+        {
+            $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
+            $actionID = $this->action->create('execution', $executionID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+
+            if($type != 'stage') return '';
+
+            /* This stage has a parent stage. */
+            $checkTopStage = $this->programplan->checkTopStage($executionID);
+            if(!$checkTopStage)
+            {
+                $parent = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch();
+                if($parent->status == 'doing') return '';
+
+                $newParent = $this->buildExecutionBySstatus('doing');
+                $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($parentID)->exec();
+
+                if(!dao::isError())
+                {
+                    $changes  = common::createChanges($parent, $newParent);
+                    $actionID = $this->action->create('execution', $parentID, 'startbychildedit', '', 'startbychildedit');
+                    $this->action->logHistory($actionID, $changes);
+
+                    if($parent->status == 'wait') $this->loadModel('common')->syncPPEStatus($parentID);
+                }
+            }
+        }
+    }
+
+    /**
+     * Change status to suspended or closed.
+     *
+     * @param  int    $executionID
+     * @param  strint $status
+     * @param  array  $selfAndChildren
+     * @param  array  $siblingStages
+     * @access public
+     * @return string
+     */
+    public function changeStatus2Inactived($executionID, $status, $selfAndChildren, $siblingStages)
+    {
+        $type          = $selfAndChildren[$executionID]->type;
+        $parentID      = $selfAndChildren[$executionID]->parent;
+        $checkedStatus = $status == 'suspended' ? 'wait,doing' : 'wait,doing,suspended';
+
+        /* If status is suspended, the rules is there are sub-stages under this stage, and not all sub-stages are suspended or closed. */
+        /* If status is closed, the rules is there are sub-stages under this stage, and not all sub-stages are closed. */
+        $checkLeafStage = $this->programplan->checkLeafStage($executionID);
+        if(!$checkLeafStage)
+        {
+            foreach($selfAndChildren as $childID => $child)
+            {
+                if($childID == $executionID) continue;
+
+                if(strpos($checkedStatus, $child->status) !== false) return "'{$selfAndChildren[$executionID]->name}',";
+            }
+        }
+
+        $newExecution = $this->buildExecutionBySstatus($status);
+        $this->dao->update(TABLE_EXECUTION)->data($newExecution)->where('id')->eq($executionID)->exec();
+        if(!dao::isError())
+        {
+            $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
+            $actionID = $this->action->create('execution', $executionID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+
+            if($type != 'stage') return '';
+
+            /* Suspended: When all child stages at the same level are suspended or closed, the status of the parent stage becomes "suspended". */
+            /* Closed: When all child stages at the same level are closed, the status of the parent stage becomes "closed". */
+            $checkTopStage        = $this->programplan->checkTopStage($executionID);
+            $siblingsAllInactived = true;
+            if(!$checkTopStage)
+            {
+                foreach($siblingStages as $siblingID => $sibling)
+                {
+                    if($siblingID == $executionID) continue;
+
+                    if(strpos($checkedStatus, $sibling->status) !== false)
+                    {
+                        $siblingsAllInactived = false;
+                        break;
+                    }
+                }
+
+                if($siblingsAllInactived)
+                {
+                    $parent = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch();
+                    if($parent->status == $status) return '';
+
+                    $newParent = $this->buildExecutionBySstatus($status);
+                    $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($parentID)->exec();
+
+                    if(!dao::isError())
+                    {
+                        $changes    = common::createChanges($parent, $newParent);
+                        $actionType = $status == 'suspended' ? 'suspendbychild' : 'closebychild';
+                        $actionID   = $this->action->create('execution', $parentID, $actionType, '', $actionType);
+                        $this->action->logHistory($actionID, $changes);
+                    }
+                }
+            }
+        }
+
     }
 
     /**
@@ -2255,10 +2493,16 @@ class executionModel extends model
             ->orderBy('id_asc')
             ->fetchGroup('execution', 'id');
 
+        $taskIdList = array();
+        foreach($executionTasks as $executionID => $tasks) $taskIdList = array_merge($taskIdList, array_keys($tasks));
+        $taskIdList = array_unique($taskIdList);
+        $teamGroups = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
+
         foreach($executionTasks as $executionID => $tasks)
         {
             foreach($tasks as $task)
             {
+                if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
                 if($task->parent > 0 and isset($executionTasks[$executionID][$task->parent]))
                 {
                     $executionTasks[$executionID][$task->parent]->children[$task->id] = $task;
@@ -5605,5 +5849,57 @@ class executionModel extends model
         }
 
         return $executionIdList;
+    }
+
+    /**
+     * Build execution object by status.
+     *
+     * @param  string    $status
+     * @access public
+     * @return object
+     */
+    public function buildExecutionBySstatus($status)
+    {
+        $execution = new stdclass();
+        $execution->status         = $status;
+        $execution->lastEditedBy   = $this->app->user->account;
+        $execution->lastEditedDate = helper::now();
+
+        if($status == 'wait')
+        {
+            $execution->realBegan     = '';
+            $execution->realEnd       = '';
+            $execution->closedBy      = '';
+            $execution->closedDate    = '';
+            $execution->canceledBy    = '';
+            $execution->canceledDate  = '';
+            $execution->suspendedDate = '';
+        }
+
+        if($status == 'doing')
+        {
+            $execution->realBegan     = helper::today();
+            $execution->realEnd       = '';
+            $execution->closedBy      = '';
+            $execution->closedDate    = '';
+            $execution->canceledBy    = '';
+            $execution->canceledDate  = '';
+            $execution->suspendedDate = '';
+        }
+
+        if($status == 'suspended')
+        {
+            $execution->suspendedDate = helper::now();
+            $execution->closedBy      = '';
+            $execution->closedDate    = '';
+        }
+
+        if($status == 'closed')
+        {
+            $execution->closedBy   = $this->app->user->account;
+            $execution->closedDate = helper::now();
+        }
+
+        return $execution;
     }
 }

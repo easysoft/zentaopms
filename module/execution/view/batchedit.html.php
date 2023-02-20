@@ -41,7 +41,6 @@
   $PM       = $from == 'execution' ? 'execPM'   : 'PM';
   $type     = $from == 'execution' ? 'execType' : 'type';
   $desc     = $from == 'execution' ? 'execDesc' : 'desc';
-  $status   = $from == 'execution' ? 'execStatus' : 'status';
   ?>
   <form class='main-form form-ajax' method='post' id='executionForm' action='<?php echo inLink('batchEdit');?>'>
     <div class="table-responsive">
@@ -64,7 +63,6 @@
             <th class='c-user<?php echo zget($visibleFields, 'QD',       ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->execution->QD;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'RD',       ' hidden') . zget($requiredFields, 'RD',     '', ' required');?>'><?php echo $lang->execution->RD;?></th>
             <th class='c-type<?php echo zget($visibleFields, 'type',     ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $lang->execution->$type;?></th>
-            <th class='c-status<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->execution->$status;?></th>
             <th class='c-date required'><?php echo $lang->execution->begin;?></th>
             <th class='c-date required'><?php echo $lang->execution->end;?></th>
             <th class='c-desc <?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'><?php echo $lang->execution->$desc;?></th>
@@ -92,7 +90,7 @@
             <?php if($app->tab == 'project' and isset($project) and ($project->model == 'agileplus' or $project->model == 'waterfallplus')):?>
             <td title='<?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?>'><?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?></td>
             <?php endif;?>
-            <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control'");?></td>
+            <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control' id='names{$executionID}'");?></td>
             <?php if(!isset($config->setCode) or $config->setCode == 1):?>
             <td><?php echo html::input("codes[$executionID]", $executions[$executionID]->code, "id='codes{$executionID}' class='form-control'");?></td>
             <?php endif;?>
@@ -107,7 +105,6 @@
               <?php echo html::select("lifetimes[$executionID]", $lang->execution->lifeTimeList, $executions[$executionID]->lifetime, 'class=form-control');?>
               <?php endif;?>
             </td>
-            <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$executionID]", $lang->execution->statusList, $executions[$executionID]->status, 'class=form-control');?></td>
             <td><?php echo html::input("begins[$executionID]", $executions[$executionID]->begin, "id='begins{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td><?php echo html::input("ends[$executionID]", $executions[$executionID]->end, "id='ends{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'><?php echo html::textarea("descs[$executionID]", $executions[$executionID]->desc, "rows='1' class='form-control autosize'");?></td>

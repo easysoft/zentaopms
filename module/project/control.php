@@ -1103,19 +1103,30 @@ class project extends control
             if(!empty($execution->tasks) or !empty($execution->children)) $showToggleIcon = true;
         }
 
-        $this->view->executionStats = $executionStats;
-        $this->view->showToggleIcon = $showToggleIcon;
-        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
-        $this->view->productID      = $productID;
-        $this->view->product        = $this->product->getByID($productID);
-        $this->view->projectID      = $projectID;
-        $this->view->project        = $project;
-        $this->view->projects       = $projects;
-        $this->view->pager          = $pager;
-        $this->view->orderBy        = $orderBy;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->status         = $status;
-        $this->view->isStage        = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
+        $changeStatusHtml  = "<div class='btn-group dropup'>";
+        $changeStatusHtml .= "<button data-toggle='dropdown' type='button' class='btn'>{$this->lang->statusAB} <span class='caret'></span></button>";
+        $changeStatusHtml .= "<div class='dropdown-menu search-list'><div class='list-group'>";
+        foreach($this->lang->execution->statusList as $status => $statusText)
+        {
+            $actionLink        = $this->createLink('execution', 'batchChangeStatus', "status=$status&projectID=$projectID");
+            $changeStatusHtml .= html::a('#', $statusText, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#executionForm')\" onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
+        }
+        $changeStatusHtml .= "</div></div></div>";
+
+        $this->view->executionStats   = $executionStats;
+        $this->view->showToggleIcon   = $showToggleIcon;
+        $this->view->productList      = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
+        $this->view->productID        = $productID;
+        $this->view->product          = $this->product->getByID($productID);
+        $this->view->projectID        = $projectID;
+        $this->view->project          = $project;
+        $this->view->projects         = $projects;
+        $this->view->pager            = $pager;
+        $this->view->orderBy          = $orderBy;
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
+        $this->view->status           = $status;
+        $this->view->isStage          = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
+        $this->view->changeStatusHtml = common::hasPriv('execution', 'batchChangeStatus') ? $changeStatusHtml : '';
 
         $this->display();
     }
