@@ -15,7 +15,7 @@
 js::import($jsRoot . 'dtable/min.js');
 css::import($jsRoot . 'dtable/min.css');
 
-$cols       = $this->execution->generateCol();
+$cols       = $this->execution->generateCol($orderBy);
 $executions = $this->execution->generateRow($executionStats, $users, $productID);
 
 $sortLink = $this->createLink('execution', 'all', "status=$status&orderBy={orderBy}&productID=$productID&param=$param&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID");

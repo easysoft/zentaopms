@@ -5537,15 +5537,15 @@ class executionModel extends model
     /**
      * Generate col for dtable.
      *
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function generateCol()
+    public function generateCol($orderBy = '')
     {
         $this->loadModel('datatable');
 
-        $setting = $this->datatable->getSetting('execution');
-
+        $setting   = $this->datatable->getSetting('execution');
         $fieldList = $this->config->execution->datatable->fieldList;
 
         foreach($fieldList as $field => $items)
@@ -5567,6 +5567,13 @@ class executionModel extends model
                 $set->name  = $value;
                 $set->title = $fieldList[$id]['title'];
 
+                $sortType = '';
+                if(strpos($orderBy, $id) !== false)
+                {
+                    $sort = str_replace("{$id}_", '', $orderBy);
+                    $sortType = $sort == 'asc' ? 'up' : 'down';
+                }
+
                 if(isset($fieldList[$id]['checkbox']))     $set->checkbox     = $fieldList[$id]['checkbox'];
                 if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle = $fieldList[$id]['nestedToggle'];
                 if(isset($fieldList[$id]['fixed']))        $set->fixed        = $fieldList[$id]['fixed'];
@@ -5577,6 +5584,8 @@ class executionModel extends model
                 if(isset($fieldList[$id]['minWidth']))     $set->minWidth     = $fieldList[$id]['minWidth'];
                 if(isset($fieldList[$id]['maxWidth']))     $set->maxWidth     = $fieldList[$id]['maxWidth'];
                 if(isset($fieldList[$id]['pri']))          $set->pri          = $fieldList[$id]['pri'];
+
+                if($sortType) $set->sortType = $sortType;
 
                 $setting[$key] = $set;
             }
@@ -5591,6 +5600,13 @@ class executionModel extends model
                     continue;
                 }
 
+                $sortType = '';
+                if(strpos($orderBy, $set->id) !== false)
+                {
+                    $sort = str_replace("{$set->id}_", '', $orderBy);
+                    $sortType = $sort == 'asc' ? 'up' : 'down';
+                }
+
                 $set->name  = $set->id;
                 $set->title = $fieldList[$set->id]['title'];
 
@@ -5603,6 +5619,8 @@ class executionModel extends model
                 if(isset($fieldList[$set->id]['minWidth']))     $set->minWidth     = $fieldList[$set->id]['minWidth'];
                 if(isset($fieldList[$set->id]['maxWidth']))     $set->maxWidth     = $fieldList[$set->id]['maxWidth'];
                 if(isset($fieldList[$set->id]['pri']))          $set->pri          = $fieldList[$set->id]['pri'];
+
+                if($sortType) $set->sortType = $sortType;
 
                 $set->width = str_replace('px', '', $set->width);
 

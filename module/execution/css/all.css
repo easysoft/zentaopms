@@ -9,3 +9,5 @@ body {margin-bottom: 25px;}
 #myTable .scrollbar {z-index: 11}
 
 .dtable-cell-html a{color: #2463c7}
+.dtable-cell[data-sort='up']   .dtable-sort:before {color: #000; opacity: 1}
+.dtable-cell[data-sort='down'] .dtable-sort:after  {color: #000; opacity: 1}
