@@ -2632,17 +2632,17 @@ class execution extends control
         $execution = $this->commonAction($executionID);
         if($execution->type != 'kanban') return print(js::locate(inlink('view', "executionID=$executionID")));
 
+        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
+        {
+            $browseType = 'task';
+            unset($this->lang->kanban->group->task['story']);
+        }
+
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
         foreach($this->config->execution->statusActions as $action)
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
-        }
-
-        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
-        {
-            $browseType = 'task';
-            unset($this->lang->kanban->group->task['story']);
         }
 
         $userList    = array();
@@ -3808,7 +3808,7 @@ class execution extends control
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('project')->in(array_keys($projects))
-            ->orderBy('id_desc')
+            ->orderBy('order_asc')
             ->fetchGroup('project', 'id');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
@@ -3822,9 +3822,15 @@ class execution extends control
             $executions = zget($executionGroups, $project->id, array());
             if(isset($project->model) and $project->model == 'waterfall') ksort($executions);
 
-            $parents = array();
-            foreach($executions as $execution) $parents[$execution->parent] = $execution->parent;
+            $parents         = array();
+            $firstGradeExecs = array();
+            foreach($executions as $execution)
+            {
+                $parents[$execution->parent] = $execution->parent;
+                if($execution->grade == 1) $firstGradeExecs[$execution->id] = $execution->id;
+            }
 
+            $executions = $this->execution->resetExecutionSorts($executions, $firstGradeExecs);
             foreach($executions as $execution)
             {
                 /* Only show leaf executions. */

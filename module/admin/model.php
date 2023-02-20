@@ -269,13 +269,13 @@ class adminModel extends model
         $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
-            if(isset($this->lang->admin->menuList->$menuKey['subMenu']))
+            if(isset($this->lang->admin->menuList->{$menuKey}['subMenu']))
             {
                 $moduleName = $this->app->rawModule;
                 $methodName = $this->app->rawMethod;
                 $firstParam = $this->app->rawParams ? reset($this->app->rawParams) : '';
 
-                foreach($this->lang->admin->menuList->$menuKey['subMenu'] as $subMenuKey => $subMenu)
+                foreach($this->lang->admin->menuList->{$menuKey}['subMenu'] as $subMenuKey => $subMenu)
                 {
                     $subModule = '';
                     if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
@@ -285,25 +285,25 @@ class adminModel extends model
                     }
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
-                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey]))
+                    if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey]))
                     {
                         if(!empty($subModule))
                         {
-                            $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$firstParam]['subModule'] = $subModule;
-                            unset($this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey][$firstParam]['exclude']);
+                            $this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey][$firstParam]['subModule'] = $subModule;
+                            unset($this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey][$firstParam]['exclude']);
                         }
-                        $subMenu['subMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu'][$subMenuKey];
+                        $subMenu['subMenu'] = $this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey];
                     }
-                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu']['menuOrder'][$subMenuKey]))   $subMenu['menuOrder']   = $this->lang->admin->menuList->$menuKey['tabMenu']['menuOrder'][$subMenuKey];
-                    if(isset($this->lang->admin->menuList->$menuKey['tabMenu']['dividerMenu'][$subMenuKey])) $subMenu['dividerMenu'] = $this->lang->admin->menuList->$menuKey['tabMenu']['dividerMenu'][$subMenuKey];
+                    if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu']['menuOrder'][$subMenuKey]))   $subMenu['menuOrder']   = $this->lang->admin->menuList->{$menuKey}['tabMenu']['menuOrder'][$subMenuKey];
+                    if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu']['dividerMenu'][$subMenuKey])) $subMenu['dividerMenu'] = $this->lang->admin->menuList->{$menuKey}['tabMenu']['dividerMenu'][$subMenuKey];
 
                     $this->lang->admin->menu->$subMenuKey = $subMenu;
                 }
             }
 
-            if(isset($this->lang->admin->menuList->$menuKey['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->$menuKey['menuOrder'];
-            if(isset($this->lang->admin->menuList->$menuKey['dividerMenu'])) $this->lang->admin->dividerMenu = $this->lang->admin->menuList->$menuKey['dividerMenu'];
-            if(isset($this->lang->admin->menuList->$menuKey['tabMenu']))     $this->lang->admin->tabMenu     = $this->lang->admin->menuList->$menuKey['tabMenu'];
+            if(isset($this->lang->admin->menuList->{$menuKey}['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->{$menuKey}['menuOrder'];
+            if(isset($this->lang->admin->menuList->{$menuKey}['dividerMenu'])) $this->lang->admin->dividerMenu = $this->lang->admin->menuList->{$menuKey}['dividerMenu'];
+            if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu']))     $this->lang->admin->tabMenu     = $this->lang->admin->menuList->{$menuKey}['tabMenu'];
         }
     }
 
