@@ -93,7 +93,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
         {
             $actionLink = $this->createLink('project', 'batchEdit');
             $misc       = "id='batchEditBtn'";
-            echo html::commonButton($lang->edit, $misc); 
+            echo html::commonButton($lang->edit, $misc);
         }
         if($canBatchChangeStatus)
         {
@@ -117,16 +117,43 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
   <script>
   cols = JSON.parse(cols);
   data = JSON.parse(data);
-  const options = {
-      height: 'auto',
+  const options =
+  {
       striped: true,
       plugins: ['nested', 'checkable'],
       checkOnClickRow: true,
       sortLink: createSortLink,
       cols: cols,
       data: data,
+      footer: false,
+      responsive: true,
       onCheckChange: toggleActions,
+      height: function(height)
+      {
+          return Math.min($(window).height() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - $('.table-footer').outerHeight() - 30, height);
+      },
+      onRenderCell: function(result, info)
+      {
+          info.row.data.burns = [126.5,81.5,29,29,29];
+          if(info.col.name === 'burn' && Array.isArray(info.row.data.burns) && info.row.data.burns.length)
+          {
+              tryRenderSparkline();
+              return [{html: '<span class="sparkline pending text-left no-padding" values="' + info.row.data.burns.join(',') + '"></span>'}];
+          }
+          return result;
+      }
   };
+
+  function renderSparkline()
+  {
+      $('#myTable .dtable-rows .sparkline.pending').removeClass('pending').sparkline();
+  }
+
+  function tryRenderSparkline()
+  {
+      if(window.renderingSparkline) clearTimeout(window.renderingSparkline);
+      window.renderingSparkline = setTimeout(renderSparkline, 200);
+  }
 
   function createSortLink(col)
   {
