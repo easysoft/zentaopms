@@ -7,3 +7,5 @@ body {margin-bottom: 25px;}
 
 .table-footer .pager{z-index: 10}
 #myTable .scrollbar {z-index: 11}
+
+.dtable-cell-html a{color: #2463c7}
