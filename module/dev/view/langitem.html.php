@@ -30,7 +30,7 @@
       <input type="search" class="form-control search-input" />
       <label class="input-control-icon-left search-icon flex align-center justify-center"><i class="icon icon-search"></i></label>
     </div>
-    <div id="menuTree"></div>
+    <div id="menuTree" class="menu-active-primary menu-hover-primary"></div>
   </div>
 <?php endif;?>
   <form class='main-form form-ajax flex-1' method='post'>

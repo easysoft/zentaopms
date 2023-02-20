@@ -12,10 +12,11 @@
 /* menu-tree */
 .menu-tree {flex: 0 0 200px; background: #fff; padding: 10px 10px;}
 .menu-tree > .tree {padding-top: 20px;}
-.menu-tree li {padding: 5px 25px;}
+li.has-list > ul > li {padding-left: 10px;}
+.tree ul {margin-bottom: 0;}
 
 /* side-left */
-.main-content > .side-left {flex: 0 0 160px; margin-left: 64px;}
+.main-content > .side-left {flex: 0 0 160px; margin-left: 44px;}
 .label-list {background: #F8F8F8; padding: 5px 0;}
 .label-list > .input-label {display: flex; align-items: center; cursor: pointer; padding-left: 40px;}
 

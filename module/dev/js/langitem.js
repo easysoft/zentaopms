@@ -48,9 +48,14 @@ $(function()
       {
         $('#menuTree').tree(
         {
-            data: menuTree
+            data: menuTree,
+            itemCreator: function($li, item) 
+            {
+                $li.append('<a data-module="' + item.module  + '" data-method="' + item.method + '" data-has-children="' + (item.children ? !!item.children.length : false)  + '"class="text-muted""' + '" href=# >' + item.title + '</a>');
+	    }
         });
       }
+
       $('.menu-tree .search-input').on('input', function()
       {
           var val = $(this).val();
@@ -77,10 +82,21 @@ $(function()
 		      }
                       item.children = children;
 		  }
-                  updateData.push(item);
+                  if (item.children.length || item.title.includes(val) ||(item.key && item.key.includes(val)))
+                  {
+                      updateData.push(item);
+		  }
               }
           }
           $('#menuTree').data('zui.tree').reload(updateData);
+      })
+      
+      $('#menuTree').on('click', 'a', function(e)
+      {
+          var target = $(e.target);
+          if (target.attr('data-has-children') === 'true') return
+
+          self.location.href = createLink('dev', 'langItem', 'type=' + type + '&module=' + target.attr('data-module') + '&method=' + target.attr('data-method'));
       })
     }
 })
