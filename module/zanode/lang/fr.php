@@ -91,6 +91,7 @@ $lang->zanode->snapshotEmpty         = 'No snapshots';
 $lang->zanode->confirmDeleteSnapshot = "The snapshot cannot be restored from the recycle bin after being deleted. Are you sure to continue?";
 
 $lang->zanode->snapshot->statusList['creating']          = 'Creating';
+$lang->zanode->snapshot->statusList['inprogress']        = 'Creating';
 $lang->zanode->snapshot->statusList['completed']         = 'Usable';
 $lang->zanode->snapshot->statusList['failed']            = 'Create Failed';
 $lang->zanode->snapshot->statusList['restoring']         = 'Restoring';

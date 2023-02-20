@@ -93,6 +93,7 @@ $lang->zanode->confirmDeleteSnapshot = "快照被删除后无法从回收站中�
 
 $lang->zanode->snapshot = new stdClass();
 $lang->zanode->snapshot->statusList['creating']          = '创建中';
+$lang->zanode->snapshot->statusList['inprogress']        = '创建中';
 $lang->zanode->snapshot->statusList['completed']         = '可使用';
 $lang->zanode->snapshot->statusList['failed']            = '创建失败';
 $lang->zanode->snapshot->statusList['restoring']         = '还原中';
