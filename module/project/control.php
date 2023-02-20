@@ -578,7 +578,6 @@ class project extends control
             $multiple    = $copyProject->multiple;
             $hasProduct  = $copyProject->hasProduct;
             $programID   = $copyProject->parent;
-            $model       = $copyProject->model;
             $products    = $this->product->getProducts($copyProjectID);
 
             if(!$copyProject->hasProduct) $shadow = 1;
