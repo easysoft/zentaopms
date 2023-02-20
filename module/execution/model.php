@@ -387,6 +387,7 @@ class executionModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', $this->post->name)
             ->setDefault('parent', $this->post->project)
+            ->setIF($this->post->parent, 'parent', $this->post->parent)
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
@@ -396,7 +397,7 @@ class executionModel extends model
             ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
             ->get();
 
-        if(!empty($sprint->parent))
+        if(!empty($sprint->parent) and ($sprint->project == $sprint->parent))
         {
             $project = $this->loadModel('project')->getByID($sprint->parent);
             $sprint->hasProduct = $project->hasProduct;
@@ -458,6 +459,15 @@ class executionModel extends model
             $teamMembers   = array();
 
             if((isset($project) and $project->model != 'kanban') or empty($project)) $this->loadModel('kanban')->createExecutionLane($executionID);
+
+            /* Api create infinitus stages. */
+            if(isset($sprint->parent) and ($sprint->parent != $sprint->project) and $sprint->type == 'stage')
+            {
+                $parent = $this->getByID($sprint->parent);
+                $grade  = $parent->grade + 1;
+                $path   = rtrim($parent->path, ',') . ",{$executionID}";
+                $this->dao->update(TABLE_EXECUTION)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($executionID)->exec();
+            }
 
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
