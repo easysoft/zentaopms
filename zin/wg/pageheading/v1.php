@@ -33,19 +33,16 @@ class pageheading extends wg
         $text = $this->prop('text');
         $url  = $this->prop('url');
 
-        $container = h::div
+        /* Generate button with url. */
+        if(!empty($url)) $child = btn($text, set('url', $url), setClass('primary'));
+        else $child = h::span($text, setClass('text'));
+
+        return h::div
         (
             setId('heading'),
             setClass('primary'),
-            icon(set('name', $icon))
+            icon(set('name', $icon)),
+            $child
         );
-
-        /* Generate button with url. */
-        if(!empty($url)) $container->add(btn($text, set('url', $url), setClass('primary')));
-        else $container->add(h::span($text, setClass('text')));
-
-        $this->add($container);
-
-        return $this->children();
     }
 }

@@ -3,83 +3,63 @@ namespace zin;
 
 class pageheader extends wg
 {
-    static $customprops = 'heading,navbar,toolbar';
-
-    public $heading;
-
-    public $navbar;
-
-    public $toolbar;
-
     /**
-     * Accept child node.
+     * Add child.
      *
      * @param  object|string $child
-     * @param  bool          $strAsHtml
      * @access protected
      * @return object|string
      */
-    protected function onAddChild($child, $strAsHtml = false)
+    protected function onAddChild($child)
     {
-        if(class_exists('\zin\pageheading') and $child instanceof \zin\pageheading)
+        if(class_exists('zin\pageheading') and $child instanceof pageheading)
         {
-            $this->heading = $child;
-            return NULL;
+            $this->add($child, 'heading');
+            return false;
         }
 
-        if(class_exists('\zin\wg\pagenavbar') and $child instanceof \zin\wg\pagenavbar)
+        if(class_exists('\zin\pagenavbar') and $child instanceof \zin\pagenavbar)
         {
-            $this->navbar = $child;
-            return NULL;
+            $this->add($child, 'navbar');
+            return false;
         }
 
-        if(class_exists('\zin\wg\pagetoolbar') and $child instanceof \zin\wg\pagetoolbar)
+        if(class_exists('\zin\pagetoolbar') and $child instanceof \zin\pagetoolbar)
         {
-            $this->toolbar = $child;
-            return NULL;
+            $this->add($child, 'toolbar');
+            return false;
         }
 
         /* Invoke parent method; */
-        $child = parent::onAddChild($child, $strAsHtml);
+        $child = parent::onAddChild($child);
 
-        if(!$strAsHtml && is_string($child) && !$this->props->has('name'))
+        if(is_string($child) && !$this->props->has('name'))
         {
             $this->prop('name', $child);
-            return NULL;
+            return false;
         }
 
         return $child;
     }
 
     /**
-     * Build builder.
+     * Build.
      *
-     * @param  bool      $isPrint
-     * @param  object    $parent
      * @access protected
      * @return object
      */
     protected function build()
     {
-        $container = h::div
+        return h::header
         (
-            setClass('container main-header')
-        );
-
-        /* Heading. */
-        $container->add($this->heading);
-
-        /* Navigation Bar. */
-        $container->add($this->navbar);
-
-        /* Tool Bar. */
-        $container->add($this->toolbar);
-
-        return h::create
-        (
-            'header',
             setId('header'),
-            $container
+            h::div
+            (
+                setClass('container main-header'),
+                $this->block('heading'),
+                $this->block('navbar'),
+                $this->block('toolbar')
+            )
         );
     }
 }

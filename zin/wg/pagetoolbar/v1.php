@@ -1,5 +1,5 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
 use zin\core\h5;
 use function zin\Icon;
@@ -7,7 +7,7 @@ use function zin\Icon;
 require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
 require_once dirname(__DIR__) . DS . 'avatar' . DS . 'v1.php';
 
-class pagetoolbar extends \zin\core\wg
+class pagetoolbar extends wg
 {
     static $tag = 'div';
 
@@ -17,8 +17,8 @@ class pagetoolbar extends \zin\core\wg
 
     private function buildGlobalCreate($props)
     {
-        $div = h5::create('div', NULL, $props);
-        $div->append(h5::div(Icon('plus'))->addClass('rounded-sm btn square size-sm secondary'));
+        $div = h::create('div', NULL, $props);
+        $div->append(h::div(Icon('plus'))->addClass('rounded-sm btn square size-sm secondary'));
         $div->addClass('globalGreate');
 
         return $div;
@@ -31,8 +31,8 @@ class pagetoolbar extends \zin\core\wg
 
     private function buildSwitcher($props)
     {
-        $div = h5::create('div', NULL, $props);
-        $div->append(h5::div($props['text'])->addClass('switcher-text'));
+        $div = h::create('div', NULL, $props);
+        $div->append(h::div($props['text'])->addClass('switcher-text'));
         $div->addClass('vision-switcher');
 
         return $div;
