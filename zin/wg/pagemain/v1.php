@@ -5,14 +5,15 @@ class pagemain extends wg
 {
     protected function build()
     {
-        $pagemain = div(
-            div(
+        return div
+        (
+            setId('main'),
+            div
+            (
                 setClass('container'),
                 set($this->props->skip(array_keys(static::getDefinedProps()))),
                 $this->children()
             )
         );
-        $pagemain->setDefaultProps(array('id' => 'main'));
-        return $pagemain;
     }
 }

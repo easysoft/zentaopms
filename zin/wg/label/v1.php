@@ -4,11 +4,12 @@ namespace zin;
 
 class label extends wg
 {
-    static $defineProps = 'text';
+    static $defineProps = 'text?:string';
 
     public function build()
     {
-        return span(
+        return span
+        (
             setClass('label'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $this->children()

@@ -3,16 +3,19 @@ namespace zin;
 
 class checkbox extends wg
 {
-    protected static $defineProps = 'text,checked';
+    protected static $defineProps = 'text?:string,checked?:bool';
 
     protected function build()
     {
-        $input = h::checkbox();
-        if ($this->prop('checked')) $input->prop('checked', 'true');
-        return h::label(
+        return h::label
+        (
             setClass('checkbox'),
-            $input,
-            $this->prop('text'),
+            h::checkbox
+            (
+                set('checked', $this->prop('checked')),
+                set($this->props->skip(array_keys(static::getDefinedProps()))),
+            ),
+            $this->prop('text')
         );
     }
 }
