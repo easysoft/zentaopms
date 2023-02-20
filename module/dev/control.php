@@ -92,13 +92,21 @@ class dev extends control
      * @access public
      * @return void
      */
-    public function langItem($type = 'common', $module = '', $method = '', $language = 'zh_cn')
+    public function langItem($type = 'common', $module = 'my', $method = '', $language = 'zh_cn')
     {
         $language   = str_replace('_', '-', $language);
         $moduleName = $module;
+
         if($type == 'common') $moduleName = 'common';
         if($type == 'second') $moduleName = $module . 'Menu';
-        if($type == 'third')  $moduleName = $module . 'SubMenu';
+
+        if($type == 'third')
+        {
+            if(empty($method)) $method = 'work';
+            $moduleName = $module . 'SubMenu';
+        }
+
+        if($type == 'feature' and empty($method)) $method = 'todo';
 
         if($this->server->request_method == 'POST')
         {
@@ -128,11 +136,8 @@ class dev extends control
             return $this->send(array('result' => 'success', 'locate' => 'reload', 'message' => $this->lang->saveSuccess));
         }
 
-        $this->dev->loadDefaultLang();
-
         $this->view->title         = $this->lang->langItem;
         $this->view->type          = $type;
-        $this->view->featureBar    = $this->lang->dev->featureBar['langItem'];
         $this->view->originalLangs = $this->dev->getOriginalLang($type, $module, $method, $language);
         $this->view->customedLangs = $this->dev->getCustomedLang($type, $module, $method, $language);
         $this->view->menuTree      = $this->dev->getMenuTree($type, $module, $method);
