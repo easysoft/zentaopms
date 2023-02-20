@@ -51,7 +51,7 @@ $(function()
             data: menuTree,
             itemCreator: function($li, item) 
             {
-                $li.append($('<a data-module="' + item.module  + '"data-method="' + item.method + '"data-has-children="' + (item.children ? !!item.children.length : false) + '" />', {href: item.url}).text(item.title));
+                $li.append('<a data-module="' + item.module  + '" data-method="' + item.method + '" data-has-children="' + (item.children ? !!item.children.length : false)  + '"class="text-muted""' + '" href=# >' + item.title + '</a>');
 	    }
         });
       }
@@ -82,7 +82,7 @@ $(function()
 		      }
                       item.children = children;
 		  }
-                  if (item.children.length || item.title.includes(val) ||(item.key && item.key.includes(val)) )
+                  if (item.children.length || item.title.includes(val) ||(item.key && item.key.includes(val)))
                   {
                       updateData.push(item);
 		  }
@@ -94,10 +94,8 @@ $(function()
       $('#menuTree').on('click', 'a', function(e)
       {
           var target = $(e.target);
-          if (target.attr('data-has-children') === 'true')
-          {
-              return;
-          }
+          if (target.attr('data-has-children') === 'true') return
+
           self.location.href = createLink('dev', 'langItem', 'type=' + type + '&module=' + target.attr('data-module') + '&method=' + target.attr('data-method'));
       })
     }
