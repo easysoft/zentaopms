@@ -2,7 +2,7 @@ $(function()
 {
     $(".input-list").on("click", 'input', function(e)
     {
-	handleClickItem(e.target.id);
+        handleClickItem(e.target.id);
     });
     $(".input-list").on("blur", 'input', function(e)
     {
@@ -11,10 +11,14 @@ $(function()
 
     $('.label-list > .input-label').on('click', function(e)
     {
-	handleClickItem($(this).attr('labelid'));
+        handleClickItem($(this).attr('labelid'));
     });
 
     initMenu();
+
+    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary")
+
+    handleInputSearch();
 
     function addActive(id)
     {
@@ -42,61 +46,66 @@ $(function()
         };
     }
 
+    function handleInputSearch()
+    {
+        $('.menu-tree .search-input').on('input', function()
+        {
+            var val = $(this).val();
+            if (!val)
+            {
+                var updateData = menuTree;
+            }
+            else
+            {
+                var updateData = [];
+                for (var i = 0; i < menuTree.length; i++)
+                {
+                    var item = {};
+                    $.extend(true, item, menuTree[i])
+                    if (item.children)
+                    {
+                        var children = [];
+                        for (var j = 0; j < item.children.length; j++)
+                        {
+                            if (item.children[j].title.includes(val) || (item.children[j].key && item.children[j].key.includes(val)))
+                            {
+                                children.push(item.children[j]);
+              	            }
+                        }
+                        item.children = children;
+                    }
+                    if (item.children.length || item.title.includes(val) ||(item.key && item.key.includes(val)))
+                    {
+                        updateData.push(item);
+                    }
+                }
+            }
+            $('#menuTree').data('zui.tree').reload(updateData);
+        })
+    }
+
     function initMenu()
     {
-      if (navTypes.includes(type))
-      {
-        $('#menuTree').tree(
+        if (navTypes.includes(type))
         {
-            data: menuTree,
-            itemCreator: function($li, item) 
+            $('#menuTree').tree(
             {
-                $li.append('<a data-module="' + item.module  + '" data-method="' + item.method + '" data-has-children="' + (item.children ? !!item.children.length : false)  + '"class="text-muted""' + '" href=# >' + item.title + '</a>');
-	    }
-        });
-      }
+                data: menuTree,
+                initialState: 'active',
+                itemCreator: function($li, item)
+                {
+                    $li.append('<a data-module="' + item.module  + '" data-method="' + item.method + '" data-has-children="' + (item.children ? !!item.children.length : false) + '" href=# >' + item.title + '</a>');
+                    if (item.active) $li.addClass('active open in');
+                }
+            });
+        }
 
-      $('.menu-tree .search-input').on('input', function()
-      {
-          var val = $(this).val();
-	  if (!val)
-          {
-              var updateData = menuTree;
-          }
-          else
-          {
-              var updateData = [];
-              for (var i = 0; i < menuTree.length; i++)
-	      {
-                  var item = {};
-                  $.extend(true, item, menuTree[i])
-                  if (item.children)
-                  {
-                      var children = [];
-                      for (var j = 0; j < item.children.length; j++)
-                      {
-                          if (item.children[j].title.includes(val) || (item.children[j].key && item.children[j].key.includes(val)))
-                          {
-                              children.push(item.children[j]);
-              	          }
-		      }
-                      item.children = children;
-		  }
-                  if (item.children.length || item.title.includes(val) ||(item.key && item.key.includes(val)))
-                  {
-                      updateData.push(item);
-		  }
-              }
-          }
-          $('#menuTree').data('zui.tree').reload(updateData);
-      })
-      
-      $('#menuTree').on('click', 'a', function(e)
-      {
-          var target = $(e.target);
-          if (target.attr('data-has-children') === 'true') return
+        $('#menuTree').on('click', 'a', function(e)
+        {
+            var target = $(e.target);
+            if (target.attr('data-has-children') === 'true') return
 
-          self.location.href = createLink('dev', 'langItem', 'type=' + type + '&module=' + target.attr('data-module') + '&method=' + target.attr('data-method'));
-      })
+            self.location.href = createLink('dev', 'langItem', 'type=' + type + '&module=' + target.attr('data-module') + '&method=' + target.attr('data-method'));
+        })
     }
 })
