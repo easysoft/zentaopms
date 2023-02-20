@@ -48,9 +48,14 @@ $(function()
       {
         $('#menuTree').tree(
         {
-            data: menuTree
+            data: menuTree,
+            itemCreator: function($li, item) 
+            {
+                $li.append($('<a data-module="' + item.module  + '"data-method="' + item.method + '"data-has-children="' + !!item.children + '" />', {href: item.url}).text(item.title));
+	    }
         });
       }
+
       $('.menu-tree .search-input').on('input', function()
       {
           var val = $(this).val();
@@ -77,10 +82,19 @@ $(function()
 		      }
                       item.children = children;
 		  }
-                  updateData.push(item);
+                  if (item.children.length || item.title.includes(val) ||(item.key && item.key.includes(val)) )
+                  {
+                      updateData.push(item);
+		  }
               }
           }
           $('#menuTree').data('zui.tree').reload(updateData);
+      })
+      
+      $('#menuTree').on('click', 'a', function(e)
+      {
+          var clickTarget = e.target;
+          debugger;
       })
     }
 })
