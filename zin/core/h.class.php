@@ -109,6 +109,11 @@ class h extends wg
         return static::create('input', prop('type', 'radio'), func_get_args());
     }
 
+    public static function date()
+    {
+        return static::create('input', prop('type', 'date'), func_get_args());
+    }
+
     public static function textarea()
     {
         $children = h::convertStrToRawHtml(func_get_args());
