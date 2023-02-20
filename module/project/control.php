@@ -1105,9 +1105,9 @@ class project extends control
         $changeStatusHtml  = "<div class='btn-group dropup'>";
         $changeStatusHtml .= "<button data-toggle='dropdown' type='button' class='btn'>{$this->lang->statusAB} <span class='caret'></span></button>";
         $changeStatusHtml .= "<div class='dropdown-menu search-list'><div class='list-group'>";
-        foreach($this->lang->execution->statusList as $status => $statusText)
+        foreach($this->lang->execution->statusList as $statusAB => $statusText)
         {
-            $actionLink        = $this->createLink('execution', 'batchChangeStatus', "status=$status&projectID=$projectID");
+            $actionLink        = $this->createLink('execution', 'batchChangeStatus', "status=$statusAB&projectID=$projectID");
             $changeStatusHtml .= html::a('#', $statusText, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#executionForm')\" onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
         }
         $changeStatusHtml .= "</div></div></div>";
