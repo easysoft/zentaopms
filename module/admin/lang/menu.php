@@ -167,15 +167,25 @@ $lang->admin->menuList->dev['menuOrder']['10'] = 'db';
 $lang->admin->menuList->dev['menuOrder']['15'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['20'] = 'entry';
 
-if($config->edition != 'max') unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10'], $lang->admin->menuList->template);
+if($config->edition != 'max')
+{
+    unset($lang->admin->menuList->model['subMenu']['scrum']);
+    unset($lang->admin->menuList->model['subMenu']['agileplus']);
+    unset($lang->admin->menuList->model['menuOrder']['10']);
+    unset($lang->admin->menuList->model['menuOrder']['20']);
+    unset($lang->admin->menuList->template);
+}
 if(!helper::hasFeature('waterfall'))
 {
     unset($lang->admin->menuList->model['subMenu']['waterfall']);
+    unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
     unset($lang->admin->menuList->model['menuOrder']['15']);
+    unset($lang->admin->menuList->model['menuOrder']['25']);
 }
-if($config->edition == 'max' and !helper::hasFeature('scrum_auditplan'))
+if($config->edition == 'max')
 {
-    if(!helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
+    if(!helper::hasFeature('scrum_auditplan') and !helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
+    if(!helper::hasFeature('agileplus_auditplan') and !helper::hasFeature('agileplus_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
 }
 
 if($config->vision == 'lite')
@@ -189,8 +199,12 @@ if($config->vision == 'lite')
 
     unset($lang->admin->menuList->model['subMenu']['scrum']);
     unset($lang->admin->menuList->model['subMenu']['waterfall']);
+    unset($lang->admin->menuList->model['subMenu']['agileplus']);
+    unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
     unset($lang->admin->menuList->model['menuOrder']['10']);
     unset($lang->admin->menuList->model['menuOrder']['15']);
+    unset($lang->admin->menuList->model['menuOrder']['20']);
+    unset($lang->admin->menuList->model['menuOrder']['25']);
 
     unset($lang->admin->menuList->feature['subMenu']['product']);
     unset($lang->admin->menuList->feature['subMenu']['execution']);

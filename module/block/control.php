@@ -78,7 +78,25 @@ class block extends control
         elseif(isset($this->lang->block->moduleList[$module]))
         {
             $this->get->set('mode', 'getblocklist');
-            if($module == 'project') $this->get->set('dashboard', 'project');
+            if($module == 'project')
+            {
+                $this->get->set('dashboard', 'project');
+
+                if($this->config->edition == 'max' and $this->app->tab == 'project')
+                {
+                    $project = $this->loadModel('project')->getByID($this->session->project);
+                    if(isset($project->model) and !helper::hasFeature("{$project->model}_issue"))
+                    {
+                        unset($this->lang->block->modules['scrum']['index']->availableBlocks->scrumissue);
+                        unset($this->lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue);
+                    }
+                    if(isset($project->model) and !helper::hasFeature("{$project->model}_risk"))
+                    {
+                        unset($this->lang->block->modules['scrum']['index']->availableBlocks->scrumrisk);
+                        unset($this->lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk);
+                    }
+                }
+            }
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
             $this->view->module = $module;
         }
@@ -253,10 +271,20 @@ class block extends control
         $shortBlocks = $longBlocks = array();
         foreach($blocks as $key => $block)
         {
-            if($block->block == 'waterfallrisk'  and !helper::hasFeature('waterfall_risk'))  continue;
-            if($block->block == 'waterfallissue' and !helper::hasFeature('waterfall_issue')) continue;
-            if($block->block == 'scrumrisk'      and !helper::hasFeature('scrum_risk'))      continue;
-            if($block->block == 'scrumissue'     and !helper::hasFeature('scrum_issue'))     continue;
+            if(in_array($block->block, array('waterfallrisk', 'waterfallissue')))
+            {
+                $model = isset($project->model) ? $project->model : 'waterfall';
+                if($block->block == 'waterfallrisk' and !helper::hasFeature("{$model}_risk")) continue;
+                if($block->block == 'waterfallissue' and !helper::hasFeature("{$model}_issue")) continue;
+            }
+
+            if(in_array($block->block, array('scrumrisk', 'scrumissue')))
+            {
+                $model = isset($project->model) ? $project->model : 'scrum';
+                if($block->block == 'scrumrisk' and !helper::hasFeature("{$model}_risk")) continue;
+                if($block->block == 'scrumissue' and !helper::hasFeature("{$model}_issue")) continue;
+            }
+
             if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
             {
                 unset($blocks[$key]);
