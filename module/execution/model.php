@@ -985,6 +985,9 @@ class executionModel extends model
         $this->loadModel('programplan');
         $this->loadModel('action');
 
+        /* Sort the IDs, the child stage comes first, and the parent stage follows. */
+        $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchPairs();
+
         $pointOutStages = '';
         foreach($executionIdList as $executionID)
         {

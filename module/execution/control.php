@@ -2222,8 +2222,6 @@ class execution extends control
     {
         $executionIdList = $this->post->executionIDList;
         if(is_string($executionIdList)) $executionIdList = explode(',', $executionIdList);
-        /* Sub-phases are changed first and then parented. */
-        rsort($executionIdList);
 
         $pointOutStages = $this->execution->batchChangeStatus($executionIdList, $status);
         $project        = $this->loadModel('project')->getById($projectID);
