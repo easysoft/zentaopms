@@ -66,7 +66,7 @@
           <table class='table table-data'>
             <tr>
               <th><?php echo $lang->design->type;?></th>
-              <td><?php echo zget($lang->design->typeList, $design->type);?></td>
+              <td><?php echo zget($typeList, $design->type);?></td>
             </tr>
             <tr <?php if(empty($project->hasProduct)) echo "class='hide'";?>>
               <th><?php echo $lang->design->product;?></th>

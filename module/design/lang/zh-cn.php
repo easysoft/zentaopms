@@ -65,6 +65,8 @@ $lang->design->typeList['DDS']  = '详细设计';
 $lang->design->typeList['DBDS'] = '数据库设计';
 $lang->design->typeList['ADS']  = '接口设计';
 
+$lang->design->plusTypeList = $lang->design->typeList;
+
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = '全部记录';
 $lang->design->rangeList['assign'] = '选中记录';
