@@ -203,10 +203,16 @@ class stageModel extends model
         if($type == 'waterfall')
         {
             $this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'] .= ",{$moduleName}-{$methodName}";
+            unset($this->lang->admin->menuList->model['subMenu']['scrum']['subModule']);
+            unset($this->lang->admin->menuList->model['subMenu']['scrumplus']['subModule']);
+            unset($this->lang->admin->menuList->model['subMenu']['waterfallplus']['subModule']);
         }
         if($type == 'waterfallplus')
         {
             $this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'] .= ",{$moduleName}-{$methodName}";
+            unset($this->lang->admin->menuList->model['subMenu']['scrum']['subModule']);
+            unset($this->lang->admin->menuList->model['subMenu']['waterfall']['subModule']);
+            unset($this->lang->admin->menuList->model['subMenu']['scrumplus']['subModule']);
         }
     }
 }

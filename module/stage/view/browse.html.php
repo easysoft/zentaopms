@@ -22,15 +22,6 @@
     </p>
   </div>
   <?php else:?>
-  <div class='side-col'>
-    <div class='panel'>
-      <div class='panel-body'>
-        <div class="list-group">
-          <?php echo html::a(inlink('browse', "orderBy=id_asc&type={$type}"), $lang->stage->browse, '', "class='selected'");?>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class='main-col main-content main-table' style='padding: 0;padding-top: 20px;'>
     <div id="mainMenu" class="clearfix" style='padding:0px 10px'>
       <div class="pull-left" style='padding-top:5px'>
