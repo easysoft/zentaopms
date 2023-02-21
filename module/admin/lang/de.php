@@ -72,6 +72,7 @@ $lang->admin->registerNotice->click      = 'Bitte registieren Sie sich hier';
 $lang->admin->registerNotice->lblAccount = 'mindestens 3 Zeichen bitte; mit Buchsten und Ziffern.';
 $lang->admin->registerNotice->lblPasswd  = 'mindestens 6 Zeichen bitte; mit Buchsten und Ziffern.';
 $lang->admin->registerNotice->submit     = 'Registieren';
+$lang->admin->registerNotice->submitHere = 'RegistierenHere';
 $lang->admin->registerNotice->bind       = "Verbinde bestehendes Konto";
 $lang->admin->registerNotice->success    = "Sie haben sich erfolgreich registriert!";
 
