@@ -429,9 +429,11 @@ $config->maxPriValue  = '256';
 $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
 
 $config->featureGroup = new stdclass();
-$config->featureGroup->my        = array('score');
-$config->featureGroup->product   = array('roadmap', 'track', 'UR');
-$config->featureGroup->scrum     = array();
-$config->featureGroup->waterfall = array();
-$config->featureGroup->assetlib  = array();
-$config->featureGroup->other     = array('devops', 'kanban');
+$config->featureGroup->my            = array('score');
+$config->featureGroup->product       = array('roadmap', 'track', 'UR');
+$config->featureGroup->scrum         = array();
+$config->featureGroup->waterfall     = array();
+$config->featureGroup->agileplus     = array();
+$config->featureGroup->waterfallplus = array();
+$config->featureGroup->assetlib      = array();
+$config->featureGroup->other         = array('devops', 'kanban');

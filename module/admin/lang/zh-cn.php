@@ -86,9 +86,11 @@ $lang->admin->setModule->opened         = '已开启';
 $lang->admin->setModule->closed         = '已关闭';
 
 $lang->admin->setModule->my             = '地盘';
-$lang->admin->setModule->product        = '产品';
-$lang->admin->setModule->scrum          = '敏捷项目';
-$lang->admin->setModule->waterfall      = '瀑布项目';
+$lang->admin->setModule->product        = $lang->productCommon;
+$lang->admin->setModule->scrum          = '敏捷' . $lang->projectCommon;
+$lang->admin->setModule->waterfall      = '瀑布' . $lang->projectCommon;
+$lang->admin->setModule->agileplus      = '融合敏捷' . $lang->projectCommon;
+$lang->admin->setModule->waterfallplus  = '融合瀑布' . $lang->projectCommon;
 $lang->admin->setModule->assetlib       = '资产库';
 $lang->admin->setModule->other          = '通用功能';
 

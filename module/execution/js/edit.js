@@ -107,6 +107,11 @@ $(function()
     });
 
     $(document).on('change', "select[id^='branch']", disableSelectedBranch);
+
+    if($('.disabledBranch').length > 0)
+    {
+        $('.disabledBranch div[id^="branch"]').addClass('chosen-disabled');
+    }
 })
 var lastProjectID = $("#project").val();
 
