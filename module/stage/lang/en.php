@@ -10,12 +10,13 @@
  * @link        http://www.zentao.net
  */
 /* Actions. */
-$lang->stage->browse      = 'Stage List';
+$lang->stage->browse      = 'Waterfall Stage List';
 $lang->stage->create      = 'Create Stage';
 $lang->stage->batchCreate = 'Batch Create';
 $lang->stage->edit        = 'Edit';
 $lang->stage->delete      = 'Delete';
 $lang->stage->view        = 'Details';
+$lang->stage->plusBrowse  = 'Waterfall Plus Stage List';
 
 /* Fields. */
 $lang->stage->id      = 'ID';

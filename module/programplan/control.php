@@ -211,7 +211,7 @@ class programplan extends control
         $this->view->productList        = $productList;
         $this->view->project            = $project;
         $this->view->productID          = $productID ? $productID : key($productList);
-        $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
+        $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc', 0, $project->model) : array();
         $this->view->programPlan        = $programPlan;
         $this->view->plans              = empty($executions) ? $plans : $executions;
         $this->view->planID             = $planID;

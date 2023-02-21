@@ -10,12 +10,13 @@
  * @link        http://www.zentao.net
  */
 /* Actions. */
-$lang->stage->browse      = '阶段列表';
+$lang->stage->browse      = '瀑布阶段列表';
 $lang->stage->create      = '新建';
 $lang->stage->batchCreate = '批量新建';
 $lang->stage->edit        = '编辑';
 $lang->stage->delete      = '删除';
 $lang->stage->view        = '阶段详情';
+$lang->stage->plusBrowse  = '融合瀑布阶段列表';
 
 /* Fields. */
 $lang->stage->id      = '编号';
