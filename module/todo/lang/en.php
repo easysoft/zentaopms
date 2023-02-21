@@ -119,14 +119,14 @@ $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not 
 $lang->todo->today          = 'Todo Today';
 $lang->todo->selectProduct  = "Please select a product";
 
-$lang->todo->featureBar['todo']['all']             = 'Assigned To Yourself';
-$lang->todo->featureBar['todo']['before']          = 'Unfinished';
-$lang->todo->featureBar['todo']['future']          = 'TBD';
-$lang->todo->featureBar['todo']['thisWeek']        = 'This Week';
-$lang->todo->featureBar['todo']['thisMonth']       = 'This Month';
-$lang->todo->featureBar['todo']['thisYear']        = 'This Year';
-$lang->todo->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
-$lang->todo->featureBar['todo']['cycle']           = 'Recurrence';
+$lang->my->featureBar['todo']['all']             = 'Assigned To Yourself';
+$lang->my->featureBar['todo']['before']          = 'Unfinished';
+$lang->my->featureBar['todo']['future']          = 'TBD';
+$lang->my->featureBar['todo']['thisWeek']        = 'This Week';
+$lang->my->featureBar['todo']['thisMonth']       = 'This Month';
+$lang->my->featureBar['todo']['thisYear']        = 'This Year';
+$lang->my->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->my->featureBar['todo']['cycle']           = 'Recurrence';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, is $extra by <strong>$actor</strong>.', 'extra' => 'reasonList');
