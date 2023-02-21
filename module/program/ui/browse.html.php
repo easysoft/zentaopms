@@ -1,5 +1,4 @@
 <?php
-
 namespace zin;
 
 \commonModel::setMainMenu();
@@ -15,18 +14,13 @@ foreach(\customModel::getMainMenu() as $menuItem)
 }
 
 /* Generate dropdown menus. */
-$userMenu = dropdown(setId('userMenu'));
-foreach(\commonModel::printUserBarZin() as $item) $userMenu->append(item($item));
+$userMenu         = \commonModel::printUserBarZin();
+$globalCreateMenu = \commonModel::printCreateListZin();
+$switcherMenu     = \commonModel::printVisionSwitcherZin();
 
-$globalCreateMenu = dropdown(setId('globalCreateMenu'));
-foreach(\commonModel::printCreateListZin() as $item) $globalCreateMenu->append(item($item));
-
-$switcherMenu = dropdown(setId('switcherMenu'));
-foreach(\commonModel::printVisionSwitcherZin() as $item) $switcherMenu->append(item($item));
-
-$cols  = array_values($config->program->dtable->fieldList);
+$cols   = array_values($config->program->dtable->fieldList);
 $fields = array_keys($config->program->dtable->fieldList);
-$data  = array_values($programs);
+$data   = array_values($programs);
 
 foreach($data as $row)
 {
@@ -91,57 +85,54 @@ if(\common::hasPriv('program', 'create'))
   );
 }
 
-Page(
-  set('title', $title),
-  Pageheader(
-    Pageheading(
-      $lang->{$app->tab}->common,
-      set('icon', $app->tab),
-      set('url', \helper::createLink($app->tab, 'browse')),
+page(
+    set('title', $title),
+    pageheader
+    (
+        pageheading
+        (
+            set('text', $lang->{$app->tab}->common),
+            set('icon', $app->tab),
+            set('url', \helper::createLink($app->tab, 'browse')),
+        ),
+        pagenavbar
+        (
+            setId('navbar'),
+            set('items', $navItems)
+        ),
+        pagetoolbar
+        (
+            set('create',   array('href'=>'#globalCreateMenu')),
+            set('switcher', array('href'=>'#switcherMenu', 'text' => '研发管理界面')),
+            block('avatar', avatar(set('name', $app->user->account), set('avatar', $app->user->avatar), set('trigger', '#userMenu')))
+        )
     ),
-    Pagenavbar(
-      Zuinav(
-        set('js-render', false),
-        set('items', $navItems),
-      ),
+    pagemain(
+        //mainmenu(
+        //  set('statuses', array('items' => $statuses)),
+        //  set('others', $others),
+        //  set('btnGroup', $btnGroup),
+        //),
+        dtable(
+          set('js-render', true),
+          set('cols', $cols),
+          set('width', '100%'),
+          set('data', $data),
+        )
     ),
-    PageToolbar(
-      set('globalCreate', array(
-        'data-arrow'     => true,
-        'data-toggle'    => 'dropdown',
-        'data-trigger'   => 'hover',
-        'href'           => '#globalCreateMenu',
-      )),
-      set('avatar', array(
-        'name'   => $app->user->account,
-        'avatar' => $app->user->avatar,
-        'href'   => '#userMenu'
-      )),
-      set('switcher', array(
-        'text' => '研发管理界面',
-        'data-arrow'     => true,
-        'data-toggle'    => 'dropdown',
-        'data-trigger'   => 'hover',
-        'href'           => '#switcherMenu',
-      ))
+    dropdown
+    (
+        setId('userMenu'),
+        set('items', $userMenu)
     ),
-  ),
-
-  Pagemain(
-    Mainmenu(
-      set('statuses', array('items' => $statuses)),
-      set('others', $others),
-      set('btnGroup', $btnGroup),
+    dropdown
+    (
+        setId('globalCreateMenu'),
+        set('items', $globalCreateMenu)
     ),
-
-    Dtable(
-      set('js-render', true),
-      set('cols', $cols),
-      set('width', '100%'),
-      set('data', $data),
+    dropdown
+    (
+        setId('switcherMenu'),
+        set('items', $switcherMenu)
     )
-  ),
-  $userMenu,
-  $globalCreateMenu,
-  $switcherMenu,
 );

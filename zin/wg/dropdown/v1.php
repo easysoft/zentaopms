@@ -15,34 +15,20 @@ class dropdown extends wg
     {
         if(is_string($item))
         {
-            $li = h::li();
-            if($item === '|' or $item === 'divider') $li->addClass('menu-divider');
-            else $li->addClass('menu-item')->append($item);
-
-            return $li;
+            return h::li
+            (
+                ($item === '|' or $item === 'divider') ? null : $item,
+                ($item === '|' or $item === 'divider') ? setClass('menu-divider') : setClass('menu-item')
+            );
         }
-
-        $li = h::li()->addClass('menu-item');
 
         /* Divider. */
-        if(isset($item['text']) and ($item['text'] === '|' or $item['text'] === 'divider'))
-        {
-            $li->addClass('menu-divider');
-            return $li;
-        }
+        if(isset($item['text']) and ($item['text'] === '|' or $item['text'] === 'divider')) return h::li(setClass('menu-divider'));
 
-        $a = h::a();
+        $classes = array('menu-item');
+        $props   = array();
 
-        /* Avatar item. */
-        if(isset($item['avatar']))
-        {
-            $div = h::div()->addClass('avatar')->addClass('avatar circle primary');
-            $div->append(h::img(\zin\set('src', $item['avatar'])));
-            $a->append($div);
-        }
-        if(isset($item['url']))  $a->prop('href', $item['url']);
-        if(isset($item['icon'])) $a->append(h::i()->addClass("icon icon-{$item['icon']}"));
-        if(isset($item['text'])) $a->append($item['text']);
+        if(isset($item['url'])) $props['href'] = $item['url'];
         if(isset($item['attr']))
         {
             $attr = $item['attr'];
@@ -50,22 +36,34 @@ class dropdown extends wg
             {
                 if($key != 'class')
                 {
-                    $a->prop($key, $val);
+                    $props[$key] = $val;
                     continue;
                 }
 
                 if(strpos($val, 'switchTo') !== false)
                 {
-                    $li->addClass($val);
+                    $classes[] = $val;
                     $a = $item['text'];
                 }
-                else $a->addClass($val);
+                else $classes[] = $val;
             }
         }
 
-        $li->append($a);
-
-        return $li;
+        return h::li
+        (
+            setClass($classes),
+            h::a
+            (
+                set($props),
+                (!isset($item['avatar']) or empty($item['avatar'])) ? null : h::div
+                (
+                    setClass('avatar circle primary'),
+                    h::img(set('src', $item['avatar']))
+                ),
+                (!isset($item['icon']) or empty($item['icon'])) ? null : h::i(setClass("icon icon-{$item['icon']}")),
+                (!isset($item['text']) or empty($item['text'])) ? null : $item['text'],
+            )
+        );
     }
 
     protected function build()
