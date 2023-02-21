@@ -8,3 +8,15 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 UPDATE `zt_project` AS parent INNER JOIN (select `id`,`parent`,`attribute` from `zt_project` where `parent` != 0 and `type` = 'stage') AS child ON parent.`id` = child.`parent` SET parent.`attribute`='mix' where parent.`grade`=1 and parent.`type`='stage' and parent.`attribute` != child.`attribute`;
 
 REPLACE INTO `zt_grouppriv` (SELECT `group`,`module`,'batchChangeStatus' FROM `zt_grouppriv` WHERE `module` = 'execution' AND `method` = 'batchEdit');
+
+ALTER table `zt_stage` ADD `projectType` varchar(255) NOT NULL DEFAULT '' AFTER `type`;
+UPDATE `zt_stage` SET `projectType` = 'waterfall' WHERE `projectType` = '';
+
+REPLACE INTO `zt_stage` (`name`,`percent`,`type`, `projectType`, `createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES
+('需求','10','request','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('设计','10','design','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('开发','50','dev','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('测试','15','qa','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('发布','10','release','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('总结评审','5','review','waterfallplus','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
+

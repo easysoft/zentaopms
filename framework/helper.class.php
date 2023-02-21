@@ -96,7 +96,7 @@ class helper extends baseHelper
         }
         else
         {
-            if($feature == 'scrum' or $feature == 'waterfall') return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+            if(in_array($feature, array('scrum', 'waterfall', 'agileplus', 'waterfallplus'))) return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
 
             $hasFeature       = false;
             $canConfigFeature = false;
@@ -107,7 +107,7 @@ class helper extends baseHelper
                     if($feature == $group or $feature == $module)
                     {
                         $canConfigFeature = true;
-                        if($group == 'scrum' or $group == 'waterfall')
+                        if(in_array($group, array('scrum', 'waterfall', 'agileplus', 'waterfallplus')))
                         {
                             if(helper::hasFeature("{$group}") and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
                         }

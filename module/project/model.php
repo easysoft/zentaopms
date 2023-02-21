@@ -818,13 +818,13 @@ class projectModel extends model
     /**
      * Get project pairs by programID.
      *
-     * @param  int    $programID
-     * @param  status $status    all|wait|doing|suspended|closed|noclosed
-     * @param  bool   $isQueryAll
-     * @param  string $orderBy
-     * @param  string $excludedModel
-     * @param  string $model
-     * @param  string $param multiple|product
+     * @param  int          $programID
+     * @param  status       $status    all|wait|doing|suspended|closed|noclosed
+     * @param  bool         $isQueryAll
+     * @param  string       $orderBy
+     * @param  string       $excludedModel
+     * @param  string|array $model
+     * @param  string       $param multiple|product
      * @access public
      * @return object
      */
@@ -839,7 +839,7 @@ class projectModel extends model
             ->beginIF($programID === 0)->andWhere('parent')->eq(0)->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
-            ->beginIF($model)->andWhere('model')->eq($model)->fi()
+            ->beginIF($model)->andWhere('model')->in($model)->fi()
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq(1)->fi()
             ->beginIF(strpos($param, 'product') !== false)->andWhere('hasProduct')->eq(1)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()

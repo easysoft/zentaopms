@@ -80,19 +80,19 @@ foreach($projects as $programID => $programProjects)
         {
             $link = $indexLink;
         }
-        elseif($project->model == 'scrum' and
+        elseif((in_array($project->model, array('scrum', 'agileplus'))) and
             (
-                (in_array($module, array('issue', 'risk', 'meeting')) and !helper::hasFeature("scrum_{$module}")) or
-                ($module == 'report' and $method == 'projectsummary' and !helper::hasFeature("scrum_measrecord"))
+                (in_array($module, array('issue', 'risk', 'meeting')) and !helper::hasFeature("{$project->model}_{$module}")) or
+                ($module == 'report' and $method == 'projectsummary' and !helper::hasFeature("{$project->model}_measrecord"))
             ))
         {
             $link = $indexLink;
         }
-        elseif($project->model == 'waterfall' and
+        elseif(in_array($project->model, array('waterfall', 'waterfallplus')) and
             (
-                (in_array($module, array('issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'meeting')) and !helper::hasFeature("waterfall_{$module}")) or
-                ($module == 'pssp' and !helper::hasFeature("waterfall_process")) or
-                ($module == 'report' and $method == 'projectsummary' and !helper::hasFeature("scrum_measrecord"))
+                (in_array($module, array('issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'meeting')) and !helper::hasFeature("{$project->model}_{$module}")) or
+                ($module == 'pssp' and !helper::hasFeature("{$project->model}_process")) or
+                ($module == 'report' and $method == 'projectsummary' and !helper::hasFeature("{$project->model}_measrecord"))
             ))
         {
             $link = $indexLink;

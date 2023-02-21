@@ -46,7 +46,7 @@ class convertModel extends model
     public function dbExists($dbName = '')
     {
         $statement = $this->dbh->prepare('SHOW DATABASES like ?');
-        $statement->execute([$dbName]);
+        $statement->execute(array($dbName));
         return $statement->fetch();
     }
 

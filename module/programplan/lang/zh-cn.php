@@ -110,7 +110,7 @@ $lang->programplan->ganttCustom['delayDays']    = '延期天数';
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"工作量占比"必须为数字';
 $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"计划开始时间"';
-$lang->programplan->error->percentOver     = '工作量占比累计不应当超过100%';
+$lang->programplan->error->percentOver     = '相同父阶段的子阶段工作量占比之和不超过100%';
 $lang->programplan->error->createdTask     = '已分解任务，不可添加子阶段';
 $lang->programplan->error->parentWorkload  = '子阶段的工作量之和不能大于父阶段的工作量:%s';
 $lang->programplan->error->parentDuration  = '子阶段计划开始、计划完成不能超过父阶段';
@@ -119,6 +119,7 @@ $lang->programplan->error->sameCode        = '阶段代号不能相同！';
 $lang->programplan->error->taskDrag        = '%s的任务不可以拖动';
 $lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
 $lang->programplan->error->notStage        = $lang->executionCommon . '/看板不支持创建子阶段';
+$lang->programplan->error->sameType        = '父阶段类型为"%s"，阶段类型需与父阶段一致';
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
 $lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';

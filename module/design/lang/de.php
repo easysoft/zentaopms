@@ -65,6 +65,8 @@ $lang->design->typeList['DDS']  = 'Detailed';
 $lang->design->typeList['DBDS'] = 'Database';
 $lang->design->typeList['ADS']  = 'API';
 
+$lang->design->plusTypeList = $lang->design->typeList;
+
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = 'All';
 $lang->design->rangeList['assign'] = 'Selected';

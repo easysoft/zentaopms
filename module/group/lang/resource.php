@@ -399,6 +399,7 @@ $lang->resource->stage->batchCreate = 'batchCreate';
 $lang->resource->stage->edit        = 'edit';
 $lang->resource->stage->setType     = 'setType';
 $lang->resource->stage->delete      = 'delete';
+$lang->resource->stage->plusBrowse  = 'plusBrowse';
 
 $lang->stage->methodOrder[5]  = 'browse';
 $lang->stage->methodOrder[10] = 'create';
@@ -406,6 +407,7 @@ $lang->stage->methodOrder[15] = 'batchCreate';
 $lang->stage->methodOrder[20] = 'edit';
 $lang->stage->methodOrder[25] = 'setType';
 $lang->stage->methodOrder[30] = 'delete';
+$lang->stage->methodOrder[35] = 'plusBrowse';
 
 /* Program. */
 $lang->resource->program = new stdclass();
@@ -2017,15 +2019,15 @@ if(!$inUpgrade)
         unset($lang->resource->program);
         unset($lang->resource->project->programTitle);
     }
-    if(!helper::hasFeature('waterfall'))
+    if(!helper::hasFeature('waterfall') and !helper::hasFeature('waterfallplus'))
     {
         unset($lang->resource->design);
         unset($lang->resource->programplan);
         unset($lang->resource->stage);
     }
-    if(!helper::hasFeature('product_track'))    unset($lang->resource->product->track);
-    if(!helper::hasFeature('product_roadmap'))  unset($lang->resource->product->roadmap);
-    if(!helper::hasFeature('waterfall_track'))  unset($lang->resource->projectstory->track);
+    if(!helper::hasFeature('product_track')) unset($lang->resource->product->track);
+    if(!helper::hasFeature('product_roadmap')) unset($lang->resource->product->roadmap);
+    if(!helper::hasFeature('waterfall_track') and !helper::hasFeature('waterfallplus_track'))  unset($lang->resource->projectstory->track);
     if(!helper::hasFeature('devops'))
     {
         unset($lang->resource->repo);

@@ -34,7 +34,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->design->type;?></th>
-            <td><?php echo html::select('type', $lang->design->typeList, '', "class='form-control chosen'");?></td>
+            <td><?php echo html::select('type', $typeList, '', "class='form-control chosen'");?></td>
             <td></td>
           </tr>
           <tr>
