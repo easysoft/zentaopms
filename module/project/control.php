@@ -545,13 +545,13 @@ class project extends control
             }
         }
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if($this->app->tab == 'program' and $programID)                   $this->loadModel('program')->setMenu($programID);
         if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
         $this->session->set('projectModel', $model);
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
 
         $name          = '';
         $code          = '';
