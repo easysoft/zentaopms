@@ -187,7 +187,6 @@ function loadBranches(product)
 
     var branch = $('#branch' + index);
     loadPlans(product, branch);
-
 }
 
 /**
