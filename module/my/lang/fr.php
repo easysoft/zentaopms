@@ -99,7 +99,7 @@ $lang->my->auditMenu->audit = new stdclass();
 $lang->my->auditMenu->audit->all      = 'All';
 $lang->my->auditMenu->audit->story    = 'Story';
 $lang->my->auditMenu->audit->testcase = 'Case';
-if($config->edition == 'max' and helper::hasFeature('waterfall')) $lang->my->auditMenu->audit->project = 'Project';
+if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->auditMenu->audit->project = $lang->projectCommon;
 if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = 'Feedback';
 if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->auditMenu->audit->oa = 'OA';
 

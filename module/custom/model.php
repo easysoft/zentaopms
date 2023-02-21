@@ -840,7 +840,7 @@ class customModel extends model
                     if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
                     $disabledFeatures['scrum'][] = $feature;
                 }
-                elseif($feature == 'waterfall')
+                elseif(in_array($feature, array('waterfall', 'waterfallplus')))
                 {
                     $disabledFeatures[] = 'project' . ucfirst($feature);
                 }
@@ -989,6 +989,17 @@ class customModel extends model
     }
 
     /**
+     * Check for waterfallplus project data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasWaterfallplusData()
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfallplus')->andWhere('deleted')->eq('0')->count();
+    }
+
+    /**
      * Check for assetlib data.
      *
      * @access public
@@ -1124,8 +1135,9 @@ class customModel extends model
         $disabledFeatures = $disabledFeatures . ',' . $closedFeatures;
 
         $hasWaterfall           = strpos(",{$disabledFeatures},",  ',waterfall,')           === false;
+        $hasWaterfallPlus       = strpos(",{$disabledFeatures},",  ',waterfallplus,')           === false;
         $hasScrumMeasrecord     = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
-        $hasWaterfallMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+        $hasWaterfallMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and ($hasWaterfall or $hasWaterfallPlus));
 
         $cronStatus = 'normal';
         if(!$hasScrumMeasrecord and !$hasWaterfallMeasrecord) $cronStatus = 'stop';
