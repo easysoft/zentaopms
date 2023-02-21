@@ -79,7 +79,16 @@
     <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}UnitTab' class='btn btn-link' data-app='{$this->app->tab}'");?>
     <?php endforeach;?>
     <?php else:?>
-    <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
+    <?php
+    $rawModule = $this->app->rawModule;
+    $rawMethod = $this->app->rawMethod;
+    if(!isset($lang->{$rawModule}->featureBar[$rawMethod]))
+    {
+        $rawModule = 'testcase';
+        $rawMethod = 'browse';
+    }
+    ?>
+    <?php foreach(customModel::getFeatureMenu($rawModule, $rawMethod) as $menuItem):?>
     <?php
     if(isset($menuItem->hidden)) continue;
     $menuType = $menuItem->name;
@@ -196,7 +205,7 @@
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
-        <i class='icon icon-export muted'></i> 
+        <i class='icon icon-export muted'></i>
         <span class='caret'></span>
       </button>
       <ul class='dropdown-menu pull-right' id='exportActionMenu'>
