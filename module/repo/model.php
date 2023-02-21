@@ -2829,11 +2829,8 @@ class repoModel extends model
                     return print(js::locate($link));
                 }
             }
-            else
-            {
-                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-                $_COOKIE['repoBranch'] = $branch;
-            }
+            $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+            $_COOKIE['repoBranch'] = $branch;
         }
         if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
     }

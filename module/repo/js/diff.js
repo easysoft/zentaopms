@@ -48,20 +48,23 @@ function getDiffs(fileName)
         {
             if(!diff.contents || typeof diff.contents[0].lines != 'object') return result;
 
-            var lines = diff.contents[0].lines;
-            $.each(lines, function(l, code)
+            $.each(diff.contents, function(content)
             {
-                if(code.type == 'all' || code.type == 'new')
+                var lines = content.lines;
+                $.each(lines, function(l, code)
                 {
-                    result.code.new += htmlspecialchars_decode(code.line.substring(2)) + "\n";
-                    result.line.new.push(parseInt(code.newlc));
-                }
+                    if(code.type == 'all' || code.type == 'new')
+                    {
+                        result.code.new += htmlspecialchars_decode(code.line.substring(2)) + "\n";
+                        result.line.new.push(parseInt(code.newlc));
+                    }
 
-                if(code.type == 'all' || code.type == 'old')
-                {
-                    result.code.old += htmlspecialchars_decode(code.line.substring(2)) + "\n";
-                    result.line.old.push(parseInt(code.oldlc));
-                }
+                    if(code.type == 'all' || code.type == 'old')
+                    {
+                        result.code.old += htmlspecialchars_decode(code.line.substring(2)) + "\n";
+                        result.line.old.push(parseInt(code.oldlc));
+                    }
+                })
             })
             return result;
         }
