@@ -167,10 +167,16 @@ class project extends control
     public function ajaxGetCopyProjects()
     {
         $data = fixer::input('post')->get();
+
+        $model = $data->model;
+        if($data->model == 'agileplus')     $model = array('scrum', 'agileplus');
+        if($data->model == 'waterfallplus') $model = array('waterfall', 'waterfallplus');
+
         $projectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('model')->in($model)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(trim($data->name))->andWhere('name')->like("%$data->name%")->fi()
             ->fetchPairs();
@@ -545,13 +551,13 @@ class project extends control
             }
         }
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if($this->app->tab == 'program' and $programID)                   $this->loadModel('program')->setMenu($programID);
         if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
         $this->session->set('projectModel', $model);
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
 
         $name          = '';
         $code          = '';

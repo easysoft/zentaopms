@@ -140,6 +140,7 @@ $lang->execution->myTask              = "My Task";
 $lang->execution->list                = 'List';
 $lang->execution->allProject          = 'All';
 $lang->execution->method              = 'Method';
+$lang->execution->sameAsParent        = "Same as parent";
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';

@@ -30,7 +30,7 @@
         <tr>
           <td><?php echo $i;?></td>
           <td><?php echo html::select("story[$i]", $stories, '', "class='form-control chosen'");?></td>
-          <td><?php echo html::select("type[$i]", $lang->design->typeList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select("type[$i]", $typeList, '', "class='form-control chosen'");?></td>
           <td><?php echo html::input("name[$i]", '', "class='form-control'");?></td>
           <td><?php echo html::textarea("desc[$i]", '', "class='form-control autosize'");?></td>
         </tr>

@@ -243,23 +243,43 @@
         <?php elseif(($execution->type == 'stage' and !in_array($execution->attribute, array('request', 'design', 'review'))) or $execution->type != 'stage'): ?>
         <?php echo html::hidden("products[]", key($linkedProducts));?>
         <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>
+        <?php $i = 0;?>
+        <?php foreach($linkedProducts as $product):?>
         <tr>
-          <th><?php echo $lang->execution->manageProducts;?></th>
-          <td colspan='2'>
-            <div class="row row-grid">
-              <?php if($linkedProducts):?>
-              <?php foreach($linkedProducts as $productID => $product):?>
-              <?php foreach($product->branches as $branchID):?>
-              <?php $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';?>
-              <div class="col-xs-4" title="<?php echo $product->name . $branchName;?>">
-                <?php echo "<i class='icon icon-product text-muted'></i> " . $product->name . $branchName;?>
+          <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
+          <td class='text-left productsBox' colspan="3">
+            <div class='row'>
+              <div class="col-sm-6">
+                <div class='table-row'>
+                  <div class='table-col'>
+                    <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+                    <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
+                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <?php $disabled = $execution->type == 'stage' ? "disabled='disabled'" : '';?>
+                      <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
+                      <?php if($execution->type == 'stage' and !$project->division) echo html::hidden("products[$i]", $product->id);?>
+                    </div>
+                  </div>
+                  <div class='table-col <?php if(!$hasBranch) echo 'hidden'; if($disabled) echo ' disabledBranch'?>'>
+                    <div class='input-group required'>
+                      <span class='input-group-addon fix-border'><?php echo $lang->project->branch;?></span>
+                      <?php $branchIdList = isset($product->branches) ? join(',', $product->branches) : '';?>
+                      <?php echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <?php endforeach;?>
-              <?php endforeach;?>
-              <?php endif;?>
+              <div class="col-sm-6">
+                <div class='input-group' <?php echo "id='plan$i'";?>>
+                  <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
+                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), isset($product->plans) ? $product->plans : '', "class='form-control chosen' multiple");?>
+                </div>
+              </div>
             </div>
           </td>
         </tr>
+        <?php $i ++;?>
+        <?php endforeach;?>
         <?php else: ?>
         <?php echo html::hidden("products[]", key($linkedProducts));?>
         <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>

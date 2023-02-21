@@ -272,7 +272,7 @@ $lang->project->modelList['scrum']       = "Scrum";
 if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "瀑布";
 $lang->project->modelList['kanban']      = "看板";
 $lang->project->modelList['agileplus']   = "融合敏捷";
-if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfallplus'] = "融合瀑布";
+if(helper::hasFeature('waterfallplus')) $lang->project->modelList['waterfallplus'] = "融合瀑布";
 
 $lang->project->featureBar['browse']['all']       = '全部';
 $lang->project->featureBar['browse']['undone']    = '未完成';

@@ -299,7 +299,7 @@ class backupModel extends model
         $summaryFile = dirname($backup) . DS . 'summary';
         if(!file_exists($summaryFile)) return array();
 
-        $summary = json_decode(file_get_contents(dirname($backup) . DS . 'summary'), 'true');
+        $summary = json_decode(file_get_contents(dirname($backup) . DS . 'summary'), true);
         return isset($summary[basename($backup)]) ? $summary[basename($backup)] : array();
     }
 

@@ -110,7 +110,7 @@ $lang->programplan->ganttCustom['delayDays']    = 'Delay days';
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"Workload %" must be digits.';
 $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begin" date.';
-$lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100%.';
+$lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100% of one stage.';
 $lang->programplan->error->createdTask     = 'The task has been decomposed. Sub phases cannot be added.';
 $lang->programplan->error->parentWorkload  = 'The sum of the workload of the child phase cannot be greater than that of the parent phase: %s.';
 $lang->programplan->error->parentDuration  = 'The planned start and planned completion of the child phase cannot exceed the parent phase.';
@@ -119,6 +119,7 @@ $lang->programplan->error->sameCode        = 'Stage code cannot be the same!';
 $lang->programplan->error->taskDrag        = 'The %s task cannot be dragged';
 $lang->programplan->error->planDrag        = 'The %s stage cannot be dragged';
 $lang->programplan->error->notStage        = $lang->executionCommon . '/Kanban cannot create a sub stage.';
+$lang->programplan->error->sameType        = 'Type of the stage must be as same as parent: "%s"';
 
 $lang->programplan->ganttBrowseType['gantt']       = 'Group by Stage';
 $lang->programplan->ganttBrowseType['assignedTo']  = 'Group by AssignedTo';

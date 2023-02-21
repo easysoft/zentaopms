@@ -19,14 +19,15 @@ class stageModel extends model
      * @access public
      * @return int|bool
      */
-    public function create()
+    public function create($type = 'waterfall')
     {
         $stage = fixer::input('post')
+            ->setDefault('projectType', $type)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::today())
             ->get();
 
-        $totalPercent = $this->getTotalPercent();
+        $totalPercent = $this->getTotalPercent($type);
 
         if(!is_numeric($stage->percent)) return dao::$errors['message'][] = $this->lang->stage->error->notNum;
         if(round($totalPercent + $stage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
@@ -48,11 +49,11 @@ class stageModel extends model
      * @access public
      * @return bool
      */
-    public function batchCreate()
+    public function batchCreate($type = 'waterfall')
     {
         $data = fixer::input('post')->get();
 
-        $totalPercent = $this->getTotalPercent();
+        $totalPercent = $this->getTotalPercent($type);
 
         if(round($totalPercent + array_sum($data->percent)) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
 
@@ -65,6 +66,7 @@ class stageModel extends model
             $stage->name        = $name;
             $stage->percent     = $data->percent[$i];
             $stage->type        = $data->type[$i];
+            $stage->projectType = $type;
             $stage->createdBy   = $this->app->user->account;
             $stage->createdDate = helper::today();
 
@@ -98,7 +100,7 @@ class stageModel extends model
             ->add('editedDate', helper::today())
             ->get();
 
-        $totalPercent = $this->getTotalPercent();
+        $totalPercent = $this->getTotalPercent($oldStage->projectType);
 
         if(round($totalPercent + $stage->percent - $oldStage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
 
@@ -118,10 +120,11 @@ class stageModel extends model
      *
      * @param  string $orderBy
      * @param  int    $projectID
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getStages($orderBy = 'id_desc', $projectID = 0)
+    public function getStages($orderBy = 'id_desc', $projectID = 0, $type = '')
     {
         if($projectID)
         {
@@ -137,7 +140,7 @@ class stageModel extends model
         }
         else
         {
-            return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
+            return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->andWhere('projectType')->eq($type)->orderBy($orderBy)->fetchAll('id');
         }
      }
 
@@ -175,10 +178,41 @@ class stageModel extends model
     /**
      *  Get stage total percent
      *
-     *  return string
+     *  @param  string $type
+     *  @return string
      */
-    public function getTotalPercent()
+    public function getTotalPercent($type)
     {
-        return $this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->fetch('total');
+        return $this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('projectType')->eq($type)->fetch('total');
+    }
+
+    /**
+     * Set menu.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function setMenu($type)
+    {
+        $this->app->loadLang('admin');
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
+        if(!isset($this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'])) $this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'] = '';
+        if(!isset($this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'])) $this->lang->admin->menuList->model['subMenu']['agileplus']['exclude'] = '';
+        if($type == 'waterfall')
+        {
+            $this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'] .= ",{$moduleName}-{$methodName}";
+            unset($this->lang->admin->menuList->model['subMenu']['scrum']['subModule']);
+            unset($this->lang->admin->menuList->model['subMenu']['scrumplus']['subModule']);
+            unset($this->lang->admin->menuList->model['subMenu']['waterfallplus']['subModule']);
+        }
+        if($type == 'waterfallplus')
+        {
+            $this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'] .= ",{$moduleName}-{$methodName}";
+            unset($this->lang->admin->menuList->model['subMenu']['scrum']['subModule']);
+            unset($this->lang->admin->menuList->model['subMenu']['waterfall']['subModule']);
+            unset($this->lang->admin->menuList->model['subMenu']['scrumplus']['subModule']);
+        }
     }
 }
