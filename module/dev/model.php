@@ -381,7 +381,7 @@ class devModel extends model
         elseif($type == 'third')
         {
             $langKey = "{$method}_";
-            $lang    = $defaultLang->$module->menu->$method['subMenu'];
+            $lang    = $defaultLang->$module->menu->{$method}['subMenu'];
         }
 
         $menus = $this->getLinkTitle($lang);
@@ -559,7 +559,7 @@ class devModel extends model
         $menusPinYin = common::convert2Pinyin($menuLang);
         foreach($menuLang as $menuKey => $menuName)
         {
-            if(!isset($this->lang->$menu->menu->$menuKey['subMenu'])) continue;
+            if(!isset($this->lang->$menu->menu->{$menuKey}['subMenu']) or !get_object_vars($this->lang->$menu->menu->{$menuKey}['subMenu'])) continue;
 
             $subMenu = new stdClass();
             $subMenu->title  = $menuName;
@@ -622,7 +622,21 @@ class devModel extends model
         $menuTree = array();
         if(!in_array($type, $this->config->dev->navTypes)) return $menuTree;
 
-        $mainNav       = $this->getLinkTitle($this->lang->mainNav);
+        $mainNav = $type == 'second' ? $this->lang->mainNav : array();
+        if($type != 'second')
+        {
+            foreach($this->lang->mainNav as $menuKey => $menu)
+            {
+                if($menuKey == 'project')
+                {
+                    foreach($this->config->dev->projectMenus as $subMenuKey) $mainNav[$subMenuKey] = $this->lang->dev->projectMenu[$subMenuKey];
+                }
+
+                $mainNav[$menuKey] = $menu;
+            }
+        }
+
+        $mainNav       = $this->getLinkTitle($mainNav);
         $maimNavPinYin = common::convert2Pinyin($mainNav);
 
         if(empty($module)) $module = 'my';
