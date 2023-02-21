@@ -22,7 +22,9 @@
 <?php js::set('requiredFields', $config->task->create->requiredFields);?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
 <?php js::set('lifetime', $execution->lifetime);?>
+<?php js::set('attribute', $execution->attribute);?>
 <?php js::set('lifetimeList', $lifetimeList);?>
+<?php js::set('attributeList', $attributeList);?>
 <?php js::set('hasProduct', $execution->hasProduct);?>
 <?php
 $requiredFields = array();

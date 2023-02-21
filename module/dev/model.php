@@ -439,7 +439,7 @@ class devModel extends model
         }
         elseif($type == 'second')
         {
-            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module={$module}Menu&section=&vision={$this->config->vision}");
+            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module={$module}Menu&vision={$this->config->vision}");
         }
         elseif($type == 'third')
         {

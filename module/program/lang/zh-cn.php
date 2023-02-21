@@ -151,6 +151,10 @@ $lang->program->featureBar['browse']['doing']     = '进行中';
 $lang->program->featureBar['browse']['suspended'] = '已挂起';
 $lang->program->featureBar['browse']['closed']    = '已关闭';
 
+$lang->program->featureBar['product']['all']      = '全部' . $lang->productCommon;
+$lang->program->featureBar['product']['noclosed'] = '未关闭';
+$lang->program->featureBar['product']['closed']   = '结束';
+
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = '项目集看板';
 $lang->program->kanban->typeList['my']     = '我参与的项目集';

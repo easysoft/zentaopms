@@ -63,14 +63,16 @@ function showTeamMenu()
 function loadAll(executionID)
 {
     lifetime      = lifetimeList[executionID];
+    attribute     = attributeList[executionID];
     var fieldList = showFields + ',';
-    if(lifetime == 'ops')
+    if(lifetime == 'ops' || attribute == 'request' || attribute == 'review')
     {
-        $('.storyBox').addClass('hidden');
+        $('.storyBox,#selectTestStoryBox,#testStoryBox').addClass('hidden');
     }
     else if(fieldList.indexOf('story') >= 0)
     {
-        $('.storyBox').removeClass('hidden');
+        $('.storyBox,#selectTestStoryBox').removeClass('hidden');
+        if($('#selectTestStory').prop('checked')) $('#testStoryBox').removeClass('hidden');
     }
 
     loadModuleMenu(executionID);
@@ -504,9 +506,10 @@ $(document).ready(function()
         var value = $select.val();
         $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
     });
+
     $('#type').change(function()
     {
-        if(lifetime != 'ops')
+        if(lifetime != 'ops' && attribute != 'request' && attribute != 'review')
         {
             $('#selectTestStoryBox').toggleClass('hidden', $(this).val() != 'test');
             toggleSelectTestStory();

@@ -578,7 +578,6 @@ class project extends control
             $multiple    = $copyProject->multiple;
             $hasProduct  = $copyProject->hasProduct;
             $programID   = $copyProject->parent;
-            $model       = $copyProject->model;
             $products    = $this->product->getProducts($copyProjectID);
 
             if(!$copyProject->hasProduct) $shadow = 1;
@@ -1106,9 +1105,9 @@ class project extends control
         $changeStatusHtml  = "<div class='btn-group dropup'>";
         $changeStatusHtml .= "<button data-toggle='dropdown' type='button' class='btn'>{$this->lang->statusAB} <span class='caret'></span></button>";
         $changeStatusHtml .= "<div class='dropdown-menu search-list'><div class='list-group'>";
-        foreach($this->lang->execution->statusList as $status => $statusText)
+        foreach($this->lang->execution->statusList as $statusAB => $statusText)
         {
-            $actionLink        = $this->createLink('execution', 'batchChangeStatus', "status=$status&projectID=$projectID");
+            $actionLink        = $this->createLink('execution', 'batchChangeStatus', "status=$statusAB&projectID=$projectID");
             $changeStatusHtml .= html::a('#', $statusText, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#executionForm')\" onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
         }
         $changeStatusHtml .= "</div></div></div>";
@@ -1313,6 +1312,7 @@ class project extends control
      * @param  string|int $branch
      * @param  string     $browseType
      * @param  int        $param
+     * @param  string     $caseType
      * @param  string     $orderBy
      * @param  int        $recTotal
      * @param  int        $recPerPage
@@ -1320,7 +1320,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testcase($projectID = 0, $productID = 0, $branch = 'all', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($projectID = 0, $productID = 0, $branch = 'all', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('product');
         $this->session->set('bugList', $this->app->getURI(true), 'project');
@@ -1333,7 +1333,7 @@ class project extends control
         $hasProduct = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
         if($hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', $extra, $branch);
 
-        echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=&orderBy=$orderBy&recTotal=$orderBy&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
+        echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
 
     /**

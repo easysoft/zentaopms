@@ -80,7 +80,7 @@ class executionsEntry extends entry
      */
     public function post($projectID = 0)
     {
-        $fields = 'project,code,name,begin,end,lifetime,desc,days';
+        $fields = 'project,code,name,begin,end,lifetime,desc,days,percent,parent';
         $this->batchSetPost($fields);
 
         $projectID = $this->param('project', $projectID);

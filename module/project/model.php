@@ -1090,12 +1090,15 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
+        if($model == 'agileplus')     $model = array('scrum', 'agileplus');
+        if($model == 'waterfallplus') $model = array('waterfall', 'waterfallplus');
+
         $projects = $this->dao->select('id, name, path')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq('0')
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
-            ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
+            ->beginIF($model != 'all')->andWhere('model')->in($model)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
@@ -1236,7 +1239,7 @@ class projectModel extends model
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->setDefault('multiple', '1')
+            ->setIF(!isset($_POST['multiple']), 'multiple', '1')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', $this->post->name)
