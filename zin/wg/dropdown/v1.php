@@ -3,11 +3,13 @@ namespace zin;
 
 class dropdown extends wg
 {
-    static $tag = 'menu';
+    protected static $defineProps = array
+    (
+        'class?:string="dropdown-menu menu"',
+        'id?:string'
+    );
 
-    static $defaultProps = array('class' => 'dropdown-menu menu');
-
-    static $customProps = 'items';
+    private $skipProps = array('items');
 
     protected function buildItem($item)
     {
@@ -64,5 +66,17 @@ class dropdown extends wg
         $li->append($a);
 
         return $li;
+    }
+
+    protected function build()
+    {
+        $items = $this->prop('items');
+
+        return h::menu
+        (
+            set($this->props->skip($this->skipProps)),
+            is_array($items) ? array_map(array($this, 'buildItem'), $items) : null,
+            $this->children()
+        );
     }
 }

@@ -1,49 +1,58 @@
 <?php
 namespace zin;
 
-use zin\core\h5;
-use function zin\Icon;
-
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-require_once dirname(__DIR__) . DS . 'avatar' . DS . 'v1.php';
-
 class pagetoolbar extends wg
 {
-    static $tag = 'div';
-
-    static $defaultProps = array('id' => 'toolbar');
-
-    static $customProps = 'globalCreate,avatar,switcher';
-
-    private function buildGlobalCreate($props)
+    private function buildGlobalCreate()
     {
-        $div = h::create('div', NULL, $props);
-        $div->append(h::div(Icon('plus'))->addClass('rounded-sm btn square size-sm secondary'));
-        $div->addClass('globalGreate');
+        $props = $this->prop('create');
 
-        return $div;
+        if(!isset($props['data-arrow']))   $props['data-arrow']   = true;
+        if(!isset($props['data-toggle']))  $props['data-toggle']  = 'dropdown';
+        if(!isset($props['data-trigger'])) $props['data-trigger'] = 'hover';
+        if(!isset($props['href']))         $props['href']         = '#globalCreateMenu';
+
+        return h::div
+        (
+            setClass('globalCreate'),
+            h::div
+            (
+                set($props),
+                setClass('rounded-sm btn square size-sm secondary'),
+                icon('plus')
+            )
+        );
     }
 
-    private function buildAvatar($props)
+    private function buildSwitcher()
     {
-        return Avatar::create($props);
+        $props = $this->prop('switcher');
+
+        if(!isset($props['data-arrow']))   $props['data-arrow']   = true;
+        if(!isset($props['data-toggle']))  $props['data-toggle']  = 'dropdown';
+        if(!isset($props['data-trigger'])) $props['data-trigger'] = 'hover';
+        if(!isset($props['href']))         $props['href']         = '#globalCreateMenu';
+
+        return h::div
+        (
+            setClass('vision-switcher'),
+            h::div
+            (
+                set($props),
+                setClass('switcher-text'),
+                $props['text']
+            )
+        );
     }
 
-    private function buildSwitcher($props)
+    protected function build()
     {
-        $div = h::create('div', NULL, $props);
-        $div->append(h::div($props['text'])->addClass('switcher-text'));
-        $div->addClass('vision-switcher');
-
-        return $div;
-    }
-
-    protected function build($isPrint = false, $parent = null)
-    {
-        $builder = parent::build($isPrint, $parent);
-        $builder->append($this->buildGlobalCreate($this->prop('globalCreate')));
-        $builder->append($this->buildAvatar($this->prop('avatar')));
-        $builder->append($this->buildSwitcher($this->prop('switcher')));
-        return $builder;
+        return h::div
+        (
+            setId('toolbar'),
+            $this->buildGlobalCreate(),
+            $this->block('avatar'),
+            $this->buildSwitcher()
+        );
     }
 }

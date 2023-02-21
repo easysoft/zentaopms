@@ -19,6 +19,8 @@ class pageheading extends wg
             $this->props->set('text', $child);
             return false;
         }
+
+        return $child;
     }
 
     /**

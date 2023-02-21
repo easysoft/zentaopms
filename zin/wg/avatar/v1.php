@@ -1,95 +1,76 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
-use \zin\core\h5;
-
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h5.class.php';
-require_once dirname(__DIR__) . DS . 'icon' . DS . 'v1.php';
-
-class avatar extends \zin\core\wg
+class avatar extends wg
 {
-    static $tag = 'div';
-
-    static $defaultProps = array(
-        'class'          => 'userMenu dropdown-toggle',
-        'data-arrow'     => true,
-        'data-toggle'    => 'dropdown',
-        'data-trigger'   => 'hover',
-        'data-placement' => 'bottom',
-        'href'           => '#userMenu',
-        'theme'          => 'success',
-        'radius'         => 'circle',
-        'size'           => '',
-        'outline'        => '',
-        'showName'       => false,
+    protected static $defineProps = array
+    (
+        'class?:string="userMenu dropdown-toggle"',
+        'data-arrow?:string="true"',
+        'data-toggle?:string="dropdown"',
+        'data-trigger?:string="hover"',
+        'data-placement?:string="bottom"',
+        'href?:string="#userMenu"',
+        'theme?:string="success"',
+        'radius?:string="circle"',
+        'size?:string',
+        'outline?:string',
+        'trigger?:string',
+        'showName' => array
+        (
+            'type' => 'bool',
+            'default' => false
+        )
     );
 
-    static $customProps = 'text,theme,radius,size,outline,name,role';
+    private $skipProps        = array('theme', 'radius', 'showName', 'outline', 'size', 'avatar', 'name', 'trigger');
+    private $skipTriggerProps = array('data-arrow', 'data-toggle', 'data-placement', 'data-trigger', 'href');
 
-    static function create($props)
+    protected function onAddChild($child)
     {
-        $avatar = new avatar();
-        foreach($props as $key => $value) $avatar->prop($key, $value);
-        return $avatar;
-    }
-
-    protected function acceptChild($child, $strAsHtml = false)
-    {
-        $child = parent::acceptChild($child, $strAsHtml);
-
-        if(!$strAsHtml && is_string($child) && !$this->props->has('name'))
+        if(is_string($child) && !$this->props->has('name'))
         {
-            $this->prop('name', strtoupper($child[0]));
-            return NULL;
+            $this->setProp('name', $child);
+            return false;
         }
+
         return $child;
     }
 
-    protected function build($isPrint = false, $parent = NULL)
+    protected function build()
     {
-        $builder = parent::build($isPrint, $parent);
-
-        $name   = strtoupper($this->prop('name')[0]);
+        $name   = $this->prop('name');
         $avatar = $this->prop('avatar');
 
-        if(empty($name) and empty($avatar)) return $builder;
+        /* Without name and avatar url. */
+        if(empty($name) and empty($avatar)) return null;
 
-        /* Strig avatar. */
-        if(!empty($avatar))
-        {
-            /* Image avatar. */
-            $div = h5::div(h5::img(\zin\set('src', $this->prop('avatar'))))->addClass('avatar');
-            if(!empty($this->prop('radius')))  $div->addClass($this->prop('radius'));
-            if(!empty($this->prop('theme')))   $div->addClass($this->prop('theme'));
-            if(!empty($this->prop('outline'))) $div->addClass($this->prop('outline') . '-outline');
-            if(!empty($this->prop('size')))    $div->addClass($this->prop('size'));
-            $builder->append($div);
+        $radius   = $this->prop('radius');
+        $theme    = $this->prop('theme');
+        $outline  = $this->prop('outline');
+        $size     = $this->prop('size');
+        $role     = $this->prop('role');
+        $showName = $this->prop('showName');
+        $trigger  = $this->prop('trigger');
 
-            /* Show name and role. */
-            if(!empty($this->prop('showName')))
-            {
-                $builder->append(h5::span($name));
-                if(!empty($this->prop('role'))) $builder->append(h5::span($this->prop('role')));
-            }
+        $skipProps = !empty($trigger) ? $this->skipProps : array_merge($this->skipProps, $this->skipTriggerProps);
+        if(!empty($trigger)) $this->setProp('href', $trigger);
 
-            return $builder;
-        }
-
-        $div = h5::div($name)->addClass('avatar');
-        if(!empty($this->prop('radius')))  $div->addClass($this->prop('radius'));
-        if(!empty($this->prop('theme')))   $div->addClass($this->prop('theme'));
-        if(!empty($this->prop('outline'))) $div->addClass($this->prop('outline') . '-outline');
-        if(!empty($this->prop('size')))    $div->addClass($this->prop('size'));
-        $builder->append($div);
-
-        if(!empty($this->prop('showName')))
-        {
-            $builder->append(h5::span($name));
-            if(!empty($this->prop('role'))) $builder->append(h5::span($this->prop('role')));
-        }
-
-        return $builder;
+        return h::div
+        (
+            set($this->props->skip($skipProps)),
+            h::div
+            (
+                setClass('avatar'),
+                empty($radius)  ? null : setClass($radius),
+                empty($theme)   ? null : setClass($theme),
+                empty($outline) ? null : setClass($outline . '-outline'),
+                empty($size)    ? null : setClass($size),
+                !empty($avatar) ? h::img(set('src', $avatar)) : strtoupper(mb_substr($name, 0, 1))
+            ),
+            empty($showName) ? null : h::span($name),
+            empty($showName) or empty($role) ? null : h::span($role)
+        );
     }
 }
 

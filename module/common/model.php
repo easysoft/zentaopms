@@ -722,7 +722,7 @@ class commonModel extends model
      *
      * @static
      * @access public
-     * @return void
+     * @return array
      */
     public static function printVisionSwitcherZin()
     {
@@ -773,7 +773,7 @@ class commonModel extends model
      *
      * @static
      * @access public
-     * @return void
+     * @return array
      */
     public static function printCreateListZin()
     {

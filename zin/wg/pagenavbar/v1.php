@@ -1,9 +1,8 @@
 <?php
 namespace zin;
 
-class pagenavbar extends wg
-{
-    static $tag = 'nav';
+require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
-    static $defaultProps = array('id' => 'navbar');
+class pagenavbar extends nav
+{
 }
