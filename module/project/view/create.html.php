@@ -54,7 +54,6 @@
         <button type='button' class='btn btn-link open-btn' data-toggle='modal' data-target='#maxCopyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       <?php endif; ?>
       </div>
-      <?php endif; ?>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
