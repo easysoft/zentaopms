@@ -177,9 +177,6 @@ function loadBranches(product)
             disableSelectedProduct();
         }
 
-        var branch = $('#branch' + index);
-        loadPlans(product, branch);
-
         if(typeof isStage != 'undefined' && isStage == true)
         {
             $tableRow.find("select[name^='branch'] option").attr('selected', 'selected');
@@ -187,6 +184,9 @@ function loadBranches(product)
             $tableRow.find("div[id^='branch']").addClass('chosen-disabled');
         }
     });
+
+    var branch = $('#branch' + index);
+    loadPlans(product, branch);
 }
 
 /**
