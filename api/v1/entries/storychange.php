@@ -28,7 +28,7 @@ class storyChangeEntry extends entry
         $this->batchSetPost($fields, $oldStory);
 
         /* If reviewer is not post, set needNotReview. */
-        if(empty($this->request('reviewer')))
+        if(!$this->request('reviewer'))
         {
             $this->setPost('reviewer', array());
             $this->setPost('needNotReview', 1);
