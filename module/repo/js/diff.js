@@ -48,7 +48,7 @@ function getDiffs(fileName)
         {
             if(!diff.contents || typeof diff.contents[0].lines != 'object') return result;
 
-            $.each(diff.contents, function(content)
+            $.each(diff.contents, function(k, content)
             {
                 var lines = content.lines;
                 $.each(lines, function(l, code)
