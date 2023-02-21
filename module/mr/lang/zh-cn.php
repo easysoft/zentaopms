@@ -205,3 +205,10 @@ $lang->mr->confirmUnlinkTask = "您确认移除该任务吗？";
 $lang->mr->taskSummary       = "本页共 <strong>%s</strong> 个任务";
 $lang->mr->notDelbranch      = "源分支为受保护分支时不可删除";
 $lang->mr->addForApp         = "该服务器下没有项目，是否前往添加？";
+
+$lang->mr->featureBar['browse']['all']      = $lang->mr->statusList['all'];
+$lang->mr->featureBar['browse']['opened']   = $lang->mr->statusList['opened'];
+$lang->mr->featureBar['browse']['merged']   = $lang->mr->statusList['merged'];
+$lang->mr->featureBar['browse']['closed']   = $lang->mr->statusList['closed'];
+$lang->mr->featureBar['browse']['assignee'] = $lang->mr->assignedToMe;
+$lang->mr->featureBar['browse']['creator']  = $lang->mr->createdByMe;
