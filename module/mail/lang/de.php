@@ -1,5 +1,4 @@
 <?php
-$lang->mail->common        = 'Email Einstellungen';
 $lang->mail->index         = 'Home';
 $lang->mail->detect        = 'Testen';
 $lang->mail->detectAction  = 'Detect By Email Address';
