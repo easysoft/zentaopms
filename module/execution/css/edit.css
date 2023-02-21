@@ -7,3 +7,5 @@
 
 #dateRange {vertical-align: top; padding-top: 13px;}
 .form-date {min-width: 90px;}
+
+.productsBox div[id^='branch'].chosen-disabled {pointer-events: none;}

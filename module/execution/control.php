@@ -1862,7 +1862,12 @@ class execution extends control
 
         $this->loadModel('product');
         $allProducts   = $this->product->getProductPairsByProject($projectID, 'noclosed');
-        $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : '', 'noclosed', '', 'order_asc', '', isset($project->model) ? $project->model : '', 'multiple');
+
+        $projectModel = isset($project->model) ? $project->model : '';
+        if($projectModel == 'agileplus')     $projectModel = array('scrum', 'agileplus');
+        if($projectModel == 'waterfallplus') $projectModel = array('waterfall', 'waterfallplus');
+
+        $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : '', 'noclosed', '', 'order_asc', '', $projectModel, 'multiple');
         $copyProjectID = ($projectID == 0) ? key($copyProjects) : $projectID;
 
         if(!empty($project->hasProduct)) $allProducts = array(0 => '') + $allProducts;
