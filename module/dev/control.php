@@ -95,8 +95,9 @@ class dev extends control
     public function langItem($type = 'common', $module = '', $method = '', $language = 'zh_cn')
     {
         $language   = str_replace('_', '-', $language);
+        if($type == 'second' and empty($module)) $module = 'my';
         $moduleName = $module;
-        if($type == 'common') $moduleName = 'common';
+        if($type == 'common' or $type == 'first') $moduleName = 'common';
         if($type == 'second') $moduleName = $module . 'Menu';
         if($type == 'third')  $moduleName = $module . 'SubMenu';
 
