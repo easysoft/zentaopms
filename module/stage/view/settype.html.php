@@ -34,7 +34,6 @@ EOT;
       <div class='panel-body'>
         <div class="list-group">
           <?php echo html::a(inlink('setType'), $lang->stage->setType, '', "class='selected'");?>
-          <?php echo html::a(inlink('browse'), $lang->stage->browse);?>
         </div>
       </div>
     </div>

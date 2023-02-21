@@ -17,7 +17,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->stage->noStage;?></span>
       <?php if(common::hasPriv('stage', 'create')):?>
-      <?php echo html::a($this->createLink('stage', 'create'), "<i class='icon icon-plus'></i> " . $lang->stage->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('stage', 'create', "type={$type}"), "<i class='icon icon-plus'></i> " . $lang->stage->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -26,8 +26,7 @@
     <div class='panel'>
       <div class='panel-body'>
         <div class="list-group">
-          <?php echo html::a(inlink('setType'), $lang->stage->setType);?>
-          <?php echo html::a(inlink('browse'), $lang->stage->browse, '', "class='selected'");?>
+          <?php echo html::a(inlink('browse', "orderBy=id_asc&type={$type}"), $lang->stage->browse, '', "class='selected'");?>
         </div>
       </div>
     </div>
@@ -38,12 +37,12 @@
         <strong><?php echo $lang->stage->browse;?></strong>
       </div>
       <div class="btn-toolbar pull-right">
-        <?php common::printLink('stage', 'batchCreate', "", "<i class='icon icon-plus'></i>" . $lang->stage->batchCreate, '', "class='btn btn-primary'");?>
-        <?php common::printLink('stage', 'create', "", "<i class='icon icon-plus'></i>" . $lang->stage->create, '', "class='btn btn-primary'");?>
+        <?php common::printLink('stage', 'batchCreate', "type={$type}", "<i class='icon icon-plus'></i>" . $lang->stage->batchCreate, '', "class='btn btn-primary'");?>
+        <?php common::printLink('stage', 'create', "type={$type}", "<i class='icon icon-plus'></i>" . $lang->stage->create, '', "class='btn btn-primary'");?>
       </div>
     </div>
     <table class="table has-sort-head" id='stageList'>
-      <?php $vars = "orderBy=%s";?>
+      <?php $vars = "orderBy=%s&type={$type}";?>
       <thead>
         <tr>
         <th class='text-left w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->stage->id);?></th>
