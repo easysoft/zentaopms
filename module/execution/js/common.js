@@ -180,7 +180,7 @@ function loadBranches(product)
         var branch = $('#branch' + index);
         loadPlans(product, branch);
 
-        if(typeof isWaterfall != 'undefined' && isWaterfall == true)
+        if(typeof isStage != 'undefined' && isStage == true)
         {
             $tableRow.find("select[name^='branch'] option").attr('selected', 'selected');
             $tableRow.find("select[name^='branch']").trigger('chosen:updated');

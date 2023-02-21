@@ -1727,15 +1727,8 @@ class execution extends control
                     }
 
                     $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
-                    if(!$execution->hasProduct)
-                    {
-                        return print(js::locate(inlink('create', "projectID=$projectID&executionID=$executionID")));
-                    }
-                    else
-                    {
-                        return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
 
-                    }
+                    return print(js::confirm($importPlanStoryTips, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
             }
 
@@ -1801,16 +1794,11 @@ class execution extends control
         {
             if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
 
-            /* No product execution link plans. */
-            if(isset($project->hasProduct) and empty($project->hasProduct) and !empty($_POST['plans']))
+            /* Filter empty plans. */
+            if(!empty($_POST['plans']))
             {
-                $plansItem = array();
-                foreach($_POST['plans'] as $planItem)
-                {
-                    if(empty($planItem[0][0])) continue;
-                    $plansItem[] = $planItem[0][0];
-                }
-                $_POST['plans'] = array($_POST['products'][0] => array(0 => $plansItem));
+                foreach($_POST['plans'] as $key => $planItem) $_POST['plans'][$key] = array_filter($_POST['plans'][$key]);
+                $_POST['plans'] = array_filter($_POST['plans']);
             }
 
             $executionID = $this->execution->create($copyExecutionID);
@@ -1912,7 +1900,7 @@ class execution extends control
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
         $this->view->from                = $this->app->tab;
-        $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->isStage             = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
         $this->view->project             = $project;
         $this->view->division            = !empty($project) ? $project->division : 1;
         $this->view->type                = $type;
@@ -2006,15 +1994,11 @@ class execution extends control
             $newPlans = array();
             if(isset($_POST['plans']))
             {
-
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planList)
+                    foreach($plans as $planID)
                     {
-                        foreach($planList as $planID)
-                        {
-                            if(array_search($planID, $oldPlans) === false) $newPlans[$planID] = $planID;
-                        }
+                        if(array_search($planID, $oldPlans) === false) $newPlans[$planID] = $planID;
                     }
                 }
             }
@@ -2238,8 +2222,6 @@ class execution extends control
     {
         $executionIdList = $this->post->executionIDList;
         if(is_string($executionIdList)) $executionIdList = explode(',', $executionIdList);
-        /* Sub-phases are changed first and then parented. */
-        rsort($executionIdList);
 
         $pointOutStages = $this->execution->batchChangeStatus($executionIdList, $status);
         $project        = $this->loadModel('project')->getById($projectID);
@@ -2632,17 +2614,17 @@ class execution extends control
         $execution = $this->commonAction($executionID);
         if($execution->type != 'kanban') return print(js::locate(inlink('view', "executionID=$executionID")));
 
+        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
+        {
+            $browseType = 'task';
+            unset($this->lang->kanban->group->task['story']);
+        }
+
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
         foreach($this->config->execution->statusActions as $action)
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
-        }
-
-        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
-        {
-            $browseType = 'task';
-            unset($this->lang->kanban->group->task['story']);
         }
 
         $userList    = array();
@@ -3808,7 +3790,7 @@ class execution extends control
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('project')->in(array_keys($projects))
-            ->orderBy('id_desc')
+            ->orderBy('order_asc')
             ->fetchGroup('project', 'id');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
@@ -3822,9 +3804,15 @@ class execution extends control
             $executions = zget($executionGroups, $project->id, array());
             if(isset($project->model) and $project->model == 'waterfall') ksort($executions);
 
-            $parents = array();
-            foreach($executions as $execution) $parents[$execution->parent] = $execution->parent;
+            $parents         = array();
+            $firstGradeExecs = array();
+            foreach($executions as $execution)
+            {
+                $parents[$execution->parent] = $execution->parent;
+                if($execution->grade == 1) $firstGradeExecs[$execution->id] = $execution->id;
+            }
 
+            $executions = $this->execution->resetExecutionSorts($executions, $firstGradeExecs);
             foreach($executions as $execution)
             {
                 /* Only show leaf executions. */
@@ -4108,22 +4096,7 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, '', 'id_asc');
-            if(isset($project->model) and $project->model == 'waterfall')
-            {
-                $stageList = array();
-                foreach($executionStats as $stage)
-                {
-                    $stageList[] = $stage;
-                    foreach($stage->children as $child)
-                    {
-                        $child->name = $stage->name . '/' . $child->name;
-                        $stageList[] = $child;
-                    }
-                }
-
-                $executionStats = $stageList;
-            }
+            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, 'hasParentName', 'order_asc');
 
             $users = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
@@ -4134,6 +4107,7 @@ class execution extends control
                 $execution->totalConsumed = $execution->hours->totalConsumed;
                 $execution->totalLeft     = $execution->hours->totalLeft;
                 $execution->progress      = $execution->hours->progress . '%';
+                $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 if($this->post->exportType == 'selected')

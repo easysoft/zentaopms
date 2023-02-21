@@ -311,6 +311,15 @@ class task extends control
             }
         }
 
+        $lifetimeList  = array();
+        $attributeList = array();
+        $executionList = $this->execution->getByIdList(array_keys($executions));
+        foreach($executionList as $id => $object)
+        {
+            $lifetimeList[$id]  = $object->lifetime;
+            $attributeList[$id] = $object->attribute;
+        }
+
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         /* Stories that can be used to create test tasks. */
         $testStories     = array();
@@ -330,7 +339,8 @@ class task extends control
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
         $this->view->executions       = $executions;
-        $this->view->lifetimeList     = $this->execution->getLifetimeByIdList(array_keys($executions));
+        $this->view->lifetimeList     = $lifetimeList;
+        $this->view->attributeList    = $attributeList;
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->storyID          = $storyID;

@@ -2491,34 +2491,6 @@ class executionTest
     }
 
     /**
-     * Test Get lifetime by id list.
-     *
-     * @param array $idList
-     * @access public
-     * @return void
-     */
-    public function getLifetimeByIdListTest($idList = '')
-    {
-        $result = $this->executionModel->getLifetimeByIdList($idList);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            if(!$result) return 'empty';
-
-            foreach($result as $id => $lifetime)
-            {
-                if(!$lifetime) $result[$id] = 'emptyLifetime';
-            }
-            return $result;
-        }
-    }
-
-    /**
      * Test Update user view of execution and it's product.
      *
      * @param int    $executionID
@@ -2833,5 +2805,45 @@ class executionTest
             ->where('execution')->eq((int)$executionID)
             ->andWhere('date')->eq($date)
             ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+    }
+
+    /**
+     * Reset execution sorts.
+     *
+     * @param  int    $projectID
+     * @param  string $type noParent
+     * @access public
+     * @return string
+     */
+    public function resetExecutionSortsTest($projectID, $type = '')
+    {
+        $executions           = array();
+        $executionIDList      = '';
+        $firstGradeExecutions = array();
+        if($projectID)
+        {
+            $executions = $this->executionModel->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('deleted')->eq(0)
+                ->andWhere('project')->eq($projectID)
+                ->andWhere('type')->in('sprint,stage,kanban')
+                ->orderBy('order_asc')
+                ->fetchAll('id');
+
+            if($type == 'hasParent')
+            {
+                foreach($executions as $execution)
+                {
+                    if($execution->grade == 1) $firstGradeExecutions[$execution->id] = $execution->id;
+                }
+            }
+        }
+
+        $executions = $this->executionModel->resetExecutionSorts($executions, $firstGradeExecutions);
+        if(!empty($executions))
+        {
+            $executionIDList = array_keys($executions);
+            $executionIDList = implode(',', $executionIDList);
+        }
+        return $executionIDList;
     }
 }

@@ -4087,16 +4087,23 @@ class taskModel extends model
         $today    = helper::today();
         $showmore = $showmore ? 'showmore' : '';
         $trAttrs  = "data-id='t$task->id'";
+
+        /* Remove projectID in execution path. */
+        $executionPath = $execution->path;
+        $executionPath = trim($executionPath, ',');
+        $executionPath = substr($executionPath, strpos($executionPath, ',') + 1);
+
         if(!$isChild)
         {
-            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,t$task->id," : ",$execution->id,t$task->id,";
+
+            $path     = ",{$executionPath},t{$task->id},";
             $trAttrs .= " data-parent='$execution->id' data-nest-parent='$execution->id' data-nest-path='$path'";
             if(empty($task->children)) $trAttrs .= " data-nested='false'";
             $trClass  = empty($task->children) ? '' : " has-nest-child";
         }
         else
         {
-            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->parent,t$task->id," : ",$execution->id,$task->parent,t$task->id,";
+            $path     = ",{$executionPath},{$task->parent},t{$task->id},";
             $trClass  = 'is-nest-child no-nest';
             $trAttrs .= " data-nested='false' data-parent='t$task->parent' data-nest-parent='t$task->parent' data-nest-path='$path'";
         }

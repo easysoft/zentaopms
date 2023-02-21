@@ -151,7 +151,7 @@
         <?php if($project->model != 'waterfall' and $project->model != 'waterfallplus'): ?>
         <?php $hidden = 'hide'?>
         <?php if(!empty($project->hasProduct)) $hidden = ''?>
-        <?php if($linkedProducts):?>
+        <?php if(!empty($project) and !empty($project->hasProduct) and $linkedProducts):?>
         <?php $i = 0;?>
         <?php foreach($linkedProducts as $product):?>
         <tr class="<?php echo $hidden;?>">
@@ -195,6 +195,16 @@
         </tr>
         <?php $i ++;?>
         <?php endforeach;?>
+        <?php elseif(!empty($project) and empty($project->hasProduct)):?>
+        <tr>
+          <th><?php echo $lang->execution->linkPlan;?></th>
+          <td id="plansBox">
+            <?php $planProductID = current(array_keys($linkedProducts));?>
+            <?php echo html::select("plans[$planProductID][]", isset($productPlans[$planProductID]) ? $productPlans[$planProductID] : array(), isset($linkedProducts[$planProductID]) ? $linkedProducts[$planProductID]->plans : '', "class='form-control chosen' multiple");?>
+            <?php echo html::hidden("products[]", $planProductID);?>
+            <?php echo html::hidden("branch[0][0]", '0');?>
+          </td>
+        </tr>
         <?php else:?>
         <tr class='<?php echo $hidden;?>'>
           <th id='productTitle'><?php echo $lang->project->manageProductPlan;?></th>

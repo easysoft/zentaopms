@@ -387,6 +387,7 @@ class executionModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', $this->post->name)
             ->setDefault('parent', $this->post->project)
+            ->setIF($this->post->parent, 'parent', $this->post->parent)
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
@@ -396,7 +397,7 @@ class executionModel extends model
             ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
             ->get();
 
-        if(!empty($sprint->parent))
+        if(!empty($sprint->parent) and ($sprint->project == $sprint->parent))
         {
             $project = $this->loadModel('project')->getByID($sprint->parent);
             $sprint->hasProduct = $project->hasProduct;
@@ -458,6 +459,15 @@ class executionModel extends model
             $teamMembers   = array();
 
             if((isset($project) and $project->model != 'kanban') or empty($project)) $this->loadModel('kanban')->createExecutionLane($executionID);
+
+            /* Api create infinitus stages. */
+            if(isset($sprint->parent) and ($sprint->parent != $sprint->project) and $sprint->type == 'stage')
+            {
+                $parent = $this->getByID($sprint->parent);
+                $grade  = $parent->grade + 1;
+                $path   = rtrim($parent->path, ',') . ",{$executionID}";
+                $this->dao->update(TABLE_EXECUTION)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($executionID)->exec();
+            }
 
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
@@ -984,6 +994,9 @@ class executionModel extends model
     {
         $this->loadModel('programplan');
         $this->loadModel('action');
+
+        /* Sort the IDs, the child stage comes first, and the parent stage follows. */
+        $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchPairs();
 
         $pointOutStages = '';
         foreach($executionIdList as $executionID)
@@ -1603,7 +1616,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf or empty
+     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc or empty
      * @access public
      * @return array
      */
@@ -1638,20 +1651,19 @@ class executionModel extends model
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
-            ->fetchAll();
+            ->fetchAll('id');
 
         /* If mode == leaf, only show leaf executions. */
-        $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
+        $allExecutions = $this->dao->select('id,name,parent,grade')->from(TABLE_EXECUTION)
             ->where('type')->notin(array('program', 'project'))
             ->andWhere('deleted')->eq('0')
             ->beginIf($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
 
         $parents = array();
-        foreach($allExecutions as $exec)
-        {
-            $parents[$exec->parent] = true;
-        }
+        foreach($allExecutions as $exec) $parents[$exec->parent] = true;
+
+        if(strpos($mode, 'order_asc') !== false) $executions = $this->resetExecutionSorts($executions);
 
         $pairs       = array();
         $noMultiples = array();
@@ -2017,9 +2029,7 @@ class executionModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionPairs();
 
-        $project = $this->loadModel('project')->getByID($projectID);
-        $orderBy = (isset($project->model) and $project->model == 'waterfall') ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
-
+        $project    = $this->loadModel('project')->getByID($projectID);
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('type')->in('stage,sprint,kanban')
             ->andWhere('deleted')->eq('0')
@@ -2031,12 +2041,12 @@ class executionModel extends model
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($devel === true)->andWhere('attribute')->in('dev,qa,release')->fi()
             ->beginIF($appendedID)->orWhere('id')->eq($appendedID)->fi()
-            ->orderBy($orderBy)
+            ->orderBy('order_asc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
         /* Add product name and parent stage name to stage name. */
-        if(isset($project->model) and $project->model == 'waterfall')
+        if(isset($project->model) and in_array($project->model, array('waterfall', 'waterfallplus')))
         {
             $executionProducts = array();
             if($project->hasProduct and $project->division)
@@ -2049,8 +2059,8 @@ class executionModel extends model
                     ->fetchPairs();
             }
 
-            $allExecutions = $this->dao->select('id,name,parent')->from(TABLE_EXECUTION)
-                ->where('type')->eq('stage')
+            $allExecutions = $this->dao->select('id,name,parent,grade')->from(TABLE_EXECUTION)
+                ->where('type')->in('stage,sprint,kanban')
                 ->andWhere('deleted')->eq('0')
                 ->beginIf($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->fetchAll('id');
@@ -2058,6 +2068,7 @@ class executionModel extends model
             $parents = array();
             foreach($allExecutions as $id => $execution) $parents[$execution->parent] = $execution->parent;
 
+            $executions = $this->resetExecutionSorts($executions);
             foreach($executions as $id => $execution)
             {
                 if(isset($parents[$execution->id]))
@@ -2073,7 +2084,6 @@ class executionModel extends model
                 if($executionName) $execution->name = ltrim($executionName, '/');
                 if(isset($executionProducts[$id])) $execution->name = $executionProducts[$id] . '/' . $execution->name;
             }
-
         }
 
         $projects = array();
@@ -5304,18 +5314,6 @@ class executionModel extends model
     }
 
     /**
-     * Get lifetime by id list.
-     *
-     * @param  string $idList
-     * @access public
-     * @return array
-     */
-    public function getLifetimeByIdList($idList = '')
-    {
-        return $this->dao->select('id,lifetime')->from(TABLE_EXECUTION)->where('id')->in($idList)->fetchPairs();
-    }
-
-    /**
      * Set stage tree path.
      *
      * @param  int    $executionID
@@ -5552,15 +5550,15 @@ class executionModel extends model
     /**
      * Generate col for dtable.
      *
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function generateCol()
+    public function generateCol($orderBy = '')
     {
         $this->loadModel('datatable');
 
-        $setting = $this->datatable->getSetting('execution');
-
+        $setting   = $this->datatable->getSetting('execution');
         $fieldList = $this->config->execution->datatable->fieldList;
 
         foreach($fieldList as $field => $items)
@@ -5582,6 +5580,13 @@ class executionModel extends model
                 $set->name  = $value;
                 $set->title = $fieldList[$id]['title'];
 
+                $sortType = '';
+                if(strpos($orderBy, $id) !== false)
+                {
+                    $sort = str_replace("{$id}_", '', $orderBy);
+                    $sortType = $sort == 'asc' ? 'up' : 'down';
+                }
+
                 if(isset($fieldList[$id]['checkbox']))     $set->checkbox     = $fieldList[$id]['checkbox'];
                 if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle = $fieldList[$id]['nestedToggle'];
                 if(isset($fieldList[$id]['fixed']))        $set->fixed        = $fieldList[$id]['fixed'];
@@ -5592,6 +5597,8 @@ class executionModel extends model
                 if(isset($fieldList[$id]['minWidth']))     $set->minWidth     = $fieldList[$id]['minWidth'];
                 if(isset($fieldList[$id]['maxWidth']))     $set->maxWidth     = $fieldList[$id]['maxWidth'];
                 if(isset($fieldList[$id]['pri']))          $set->pri          = $fieldList[$id]['pri'];
+
+                if($sortType) $set->sortType = $sortType;
 
                 $setting[$key] = $set;
             }
@@ -5606,6 +5613,13 @@ class executionModel extends model
                     continue;
                 }
 
+                $sortType = '';
+                if(strpos($orderBy, $set->id) !== false)
+                {
+                    $sort = str_replace("{$set->id}_", '', $orderBy);
+                    $sortType = $sort == 'asc' ? 'up' : 'down';
+                }
+
                 $set->name  = $set->id;
                 $set->title = $fieldList[$set->id]['title'];
 
@@ -5618,6 +5632,8 @@ class executionModel extends model
                 if(isset($fieldList[$set->id]['minWidth']))     $set->minWidth     = $fieldList[$set->id]['minWidth'];
                 if(isset($fieldList[$set->id]['maxWidth']))     $set->maxWidth     = $fieldList[$set->id]['maxWidth'];
                 if(isset($fieldList[$set->id]['pri']))          $set->pri          = $fieldList[$set->id]['pri'];
+
+                if($sortType) $set->sortType = $sortType;
 
                 $set->width = str_replace('px', '', $set->width);
 
@@ -5901,5 +5917,39 @@ class executionModel extends model
         }
 
         return $execution;
+    }
+
+    /**
+     * Reset execution orders.
+     *
+     * @param  array  $executions
+     * @param  array  $parentExecutions
+     * @access public
+     * @return array
+     */
+    public function resetExecutionSorts($executions, $parentExecutions = array())
+    {
+        if(empty($executions)) return array();
+        if(empty($parentExecutions))
+        {
+            $execution        = current($executions);
+            $parentExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->in('kanban,sprint,stage')
+                ->andWhere('grade')->eq(1)
+                ->andWhere('project')->eq($execution->project)
+                ->orderBy('order_asc')
+                ->fetchAll('id');
+        }
+
+        $sortedExecutions = array();
+        foreach($parentExecutions as $executionID => $execution)
+        {
+            if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
+
+            $children = $this->getChildExecutions($executionID, 'order_asc');
+            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
+        }
+        return $sortedExecutions;
     }
 }

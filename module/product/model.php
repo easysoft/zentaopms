@@ -1464,10 +1464,9 @@ class productModel extends model
         /* Only show leaf executions. */
         $allExecutions = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)->where('type')->notin(array('program', 'project'))->fetchAll('id');
         $parents = array();
-        foreach($allExecutions as $exec)
-        {
-            $parents[$exec->parent] = true;
-        }
+        foreach($allExecutions as $exec) $parents[$exec->parent] = true;
+
+        if($projectID) $executions = $this->loadModel('execution')->resetExecutionSorts($executions);
 
         $executionPairs = array('0' => '');
         foreach($executions as $execID=> $execution)
@@ -1535,6 +1534,7 @@ class productModel extends model
             }
         }
 
+        if($projectID) $executions = $this->loadModel('execution')->resetExecutionSorts($executions);
         foreach($executions as $execution)
         {
             if(isset($execution->children))
