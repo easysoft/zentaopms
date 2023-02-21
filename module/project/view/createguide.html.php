@@ -29,7 +29,9 @@
           <?php
           $tab = $from == 'global' ? 'project' : $app->tab;
           if($tab == 'product') $tab = 'project';
-          $hasWaterfall = helper::hasFeature('waterfall');
+
+          $hasWaterfall     = helper::hasFeature('waterfall');
+          $hasWaterfallPlus = helper::hasFeature('waterfallplus');
           ?>
           <div class='project-type text-center'>
             <?php echo html::a($this->createLink("project", "create", "model=scrum&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', "data-app='{$tab}' class='createButton'")?>
@@ -60,7 +62,7 @@
             <p><?php echo $lang->project->agileplusTitle;?></p>
           </div>
         </div>
-        <?php if($hasWaterfall):?>
+        <?php if($hasWaterfallPlus):?>
         <div class='col col-xs-4'>
           <div class='project-type text-center'>
             <?php echo html::a($this->createLink("project", "create", "model=waterfallplus&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='waterfallplus' src='{$config->webRoot}theme/default/images/main/waterfallplus.png'>", '', "data-app='{$tab}' class='createButton'")?>

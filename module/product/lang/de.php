@@ -225,6 +225,13 @@ $lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
+$lang->product->featureBar['project']['all']       = 'Alle';
+$lang->product->featureBar['project']['undone']    = 'Geschlossen';
+$lang->product->featureBar['project']['wait']      = 'Wartend';
+$lang->product->featureBar['project']['doing']     = 'In Arbeit';
+$lang->product->featureBar['project']['suspended'] = 'Ausgesetzt';
+$lang->product->featureBar['project']['closed']    = 'Geschlossen';
+
 $lang->product->moreSelects['openedbyme']     = $lang->product->openedByMe;
 $lang->product->moreSelects['reviewedbyme']   = $lang->product->reviewedByMe;
 $lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;

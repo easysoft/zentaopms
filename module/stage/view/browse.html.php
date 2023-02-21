@@ -17,40 +17,30 @@
     <p>
       <span class="text-muted"><?php echo $lang->stage->noStage;?></span>
       <?php if(common::hasPriv('stage', 'create')):?>
-      <?php echo html::a($this->createLink('stage', 'create'), "<i class='icon icon-plus'></i> " . $lang->stage->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('stage', 'create', "type={$type}"), "<i class='icon icon-plus'></i> " . $lang->stage->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
   <?php else:?>
-  <div class='side-col'>
-    <div class='panel'>
-      <div class='panel-body'>
-        <div class="list-group">
-          <?php echo html::a(inlink('setType'), $lang->stage->setType);?>
-          <?php echo html::a(inlink('browse'), $lang->stage->browse, '', "class='selected'");?>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class='main-col main-content main-table' style='padding: 0;padding-top: 20px;'>
     <div id="mainMenu" class="clearfix" style='padding:0px 10px'>
       <div class="pull-left" style='padding-top:5px'>
         <strong><?php echo $lang->stage->browse;?></strong>
       </div>
       <div class="btn-toolbar pull-right">
-        <?php common::printLink('stage', 'batchCreate', "", "<i class='icon icon-plus'></i>" . $lang->stage->batchCreate, '', "class='btn btn-primary'");?>
-        <?php common::printLink('stage', 'create', "", "<i class='icon icon-plus'></i>" . $lang->stage->create, '', "class='btn btn-primary'");?>
+        <?php common::printLink('stage', 'batchCreate', "type={$type}", "<i class='icon icon-plus'></i>" . $lang->stage->batchCreate, '', "class='btn btn-primary'");?>
+        <?php common::printLink('stage', 'create', "type={$type}", "<i class='icon icon-plus'></i>" . $lang->stage->create, '', "class='btn btn-primary'");?>
       </div>
     </div>
     <table class="table has-sort-head" id='stageList'>
-      <?php $vars = "orderBy=%s";?>
+      <?php $vars = "orderBy=%s&type={$type}";?>
       <thead>
         <tr>
         <th class='text-left w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->stage->id);?></th>
           <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->stage->name);?></th>
           <th class='w-100px'><?php common::printOrderLink('percent', $orderBy, $vars, $lang->stage->percent);?></th>
           <th class='w-120px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->stage->type);?></th>
-          <th class='w-120px'><?php echo $lang->actions;?></th>
+          <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -63,7 +53,7 @@
           <td class="c-actions">
             <?php
             common::printIcon('stage', 'edit', "stageID=$stage->id", "", "list");
-            common::printIcon('stage', 'delete', "stageID=$stage->id", "", "list", '', 'hiddenwin');
+            common::printIcon('stage', 'delete', "stageID=$stage->id", "", "list", 'trash', 'hiddenwin');
             ?>
           </td>
         </tr>

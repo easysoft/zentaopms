@@ -151,6 +151,17 @@ $lang->program->featureBar['browse']['doing']     = 'En Cours';
 $lang->program->featureBar['browse']['suspended'] = 'Suspendues';
 $lang->program->featureBar['browse']['closed']    = 'Fermées';
 
+$lang->program->featureBar['product']['all']      = 'Tous';
+$lang->program->featureBar['product']['noclosed'] = 'Ouvertes';
+$lang->program->featureBar['product']['closed']   = 'Fermé';
+
+$lang->program->featureBar['project']['all']       = 'All';
+$lang->program->featureBar['project']['unclosed']  = 'Unclosed';
+$lang->program->featureBar['project']['wait']      = 'En Attente';
+$lang->program->featureBar['project']['doing']     = 'En Cours';
+$lang->program->featureBar['project']['suspended'] = 'Suspendues';
+$lang->program->featureBar['project']['closed']    = 'Fermées';
+
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';
 $lang->program->kanban->typeList['my']     = 'My Programs';
