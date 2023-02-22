@@ -1,51 +1,54 @@
 $(function()
 {
-    $(".input-list").on("click", 'input', function(e)
-    {
-        handleClickItem(e.target.id);
-    });
-    $(".input-list").on("blur", 'input', function(e)
-    {
-        removeActive(e.target.id);
-    });
-
-    $('.label-list > .input-label').on('click', function(e)
-    {
-        handleClickItem($(this).attr('labelid'));
-    });
-
-    initMenu();
-
-    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary")
-
-    handleInputSearch();
-
+    /**
+     * Add class active while click item in form.
+     *
+     * @param  string $id
+     * @access public
+     * @return void
+     */
     function addActive(id)
     {
         $('[labelid=' + id + ']').addClass('text-primary');
         $('[iconid=' + id + ']').removeClass('hidden');
     }
 
+    /**
+     * Remove class active while blur or click item in form.
+     *
+     * @param  string $id
+     * @access public
+     * @return void
+     */
     function removeActive(id)
     {
         $('[labelid=' + id + ']').removeClass('text-primary');
         $('[iconid=' + id + ']').addClass('hidden');
     }
 
+    /**
+     * Handle function click in label.
+     *
+     * @param  string $id
+     * @access public
+     * @return void
+     */
     function handleClickItem(clickId)
     {
-	var clearId = $('.label-list > .text-primary').attr('labelid');
-        if(clearId && clearId !== clickId)
-	{
-	    removeActive(clearId);
-	};
-
-        if(clickId && clickId != clearId)
+	      var clearId = $('.label-list > .text-primary').attr('labelid');
+        if(clearId !== clickId)
         {
-            addActive(clickId);
+            if(clearId) removeActive(clearId); 
+            if(clickId) addActive(clickId);
         };
     }
 
+    /**
+     * Handle function input on search comp and update menu tree.
+     *
+     * @access public
+     * @return void
+     */
     function handleInputSearch()
     {
         $('.menu-tree .search-input').on('input', function()
@@ -61,20 +64,9 @@ $(function()
                 for (var i = 0; i < menuTree.length; i++)
                 {
                     var item = {};
-                    $.extend(true, item, menuTree[i])
-                    if (item.children)
-                    {
-                        var children = [];
-                        for (var j = 0; j < item.children.length; j++)
-                        {
-                            if (item.children[j].title.includes(val) || (item.children[j].key && item.children[j].key.includes(val)))
-                            {
-                                children.push(item.children[j]);
-              	            }
-                        }
-                        item.children = children;
-                    }
-                    if (item.children.length || item.title.includes(val) ||(item.key && item.key.includes(val)))
+                    $.extend(true, item, menuTree[i]);
+                    item.children = filterChildren(item, val);
+                    if ((item.children && item.children.length) || item.title.indexOf(val) != -1 || (item.key && item.key.indexOf(val) != -1))
                     {
                         updateData.push(item);
                     }
@@ -84,9 +76,40 @@ $(function()
         })
     }
 
+    /**
+     * Handle function filter in array children in every item in menu tree.
+     *
+     * @access public
+     * @return array
+     */
+    function filterChildren(item, val)
+    {
+        var childern = null;
+        if (item && item.children)
+        {
+             children = [];
+             for (var i = 0; i < item.children.length; i++)
+             {
+                 item.children[i].children = filterChildren(item.children[i], val);
+                 if (item.children[i].title.indexOf(val) != -1 || (item.children[i].key && item.children[i].key.indexOf(val) != -1) || item.children[i].children)
+                 {
+                     children.push(item.children[i]);
+                 }
+             }
+        }
+
+        return children;
+    }
+
+    /**
+     * Init menu tree by zui.
+     *
+     * @access public
+     * @return void
+     */
     function initMenu()
     {
-        if (navTypes.includes(type))
+        if (navTypes.indexOf(type) != -1)
         {
             $('#menuTree').tree(
             {
@@ -103,9 +126,27 @@ $(function()
         $('#menuTree').on('click', 'a', function(e)
         {
             var target = $(e.target);
-            if (target.attr('data-has-children') === 'true') return
+            if (target.attr('data-has-children') === 'true') return;
 
             self.location.href = createLink('dev', 'langItem', 'type=' + type + '&module=' + target.attr('data-module') + '&method=' + target.attr('data-method'));
         })
     }
+
+    $(".input-list").on("click", 'input', function(e)
+    {
+        handleClickItem(e.target.id);
+    }).on("blur", 'input', function(e)
+    {
+        removeActive(e.target.id);
+    });
+
+    $('.label-list > .input-label').on('click', function()
+    {
+        handleClickItem($(this).attr('labelid'));
+    });
+
+    initMenu();
+    handleInputSearch();
+
+    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary")
 })
