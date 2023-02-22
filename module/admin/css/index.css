@@ -76,6 +76,7 @@
 .icon.follow-us {font-size: 20px; padding-left: 10px;}
 
 .setting-help {color: #9EA3B0; padding-left: 5px;}
+.setting-help > a {font-size: 15px;}
 [lang^='zh'] .setting-help {padding-top: 0;}
 .pointer-none {pointer-events: none;}
 
