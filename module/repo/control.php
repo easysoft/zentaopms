@@ -599,7 +599,7 @@ class repo extends control
         }
 
         /* Refresh repo. */
-        if($refresh) $this->repo->updateCommit($repoID, $originBranchID);
+        if($refresh) $this->repo->updateCommit($repoID, $objectID, $originBranchID);
 
         /* Get files info. */
         $infos = $this->repo->getFileCommits($repo, $branchID, $path);
