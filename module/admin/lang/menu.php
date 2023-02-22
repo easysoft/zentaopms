@@ -188,8 +188,11 @@ if($config->edition != 'max')
 if(!helper::hasFeature('waterfall'))
 {
     unset($lang->admin->menuList->model['subMenu']['waterfall']);
-    unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
     unset($lang->admin->menuList->model['menuOrder']['15']);
+}
+if(!helper::hasFeature('waterfallplus'))
+{
+    unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
     unset($lang->admin->menuList->model['menuOrder']['25']);
 }
 if($config->edition == 'max')

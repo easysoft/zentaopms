@@ -309,15 +309,14 @@
       <div class='projectSelect'><?php echo html::select("project", $copyProjects, $projectID, "class='form-control chosen' required onchange='loadProjectExecutions(this.value)'");?></div>
     </div>
     <div class='modal-body'>
-      <?php if(count($executions) == 1):?>
+      <?php if(count($copyExecutions) == 1):?>
       <div class='alert with-icon'>
         <i class='icon-exclamation-sign'></i>
         <div class='content'><?php echo $lang->execution->copyNoExecution;?></div>
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php if($projectID == 0) $executions = $copyExecutions;?>
-      <?php foreach($executions as $id => $execution):?>
+      <?php foreach($copyExecutions as $id => $execution):?>
       <?php if(empty($id)):?>
       <?php if($copyExecutionID != 0):?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->execution->cancelCopy;?></a></div>

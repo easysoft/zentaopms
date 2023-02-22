@@ -1876,7 +1876,6 @@ class execution extends control
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]          = $this->view->title;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
-        $this->view->executions          = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups              = $this->loadModel('group')->getPairs();
         $this->view->allProducts         = $allProducts;
         $this->view->acl                 = $acl;
@@ -1887,7 +1886,7 @@ class execution extends control
         $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
         $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed,multiple');
         $this->view->copyProjects        = $copyProjects;
-        $this->view->copyExecutions      = array('' => '') + $this->execution->getList($copyProjectID);
+        $this->view->copyExecutions      = array('' => '') + $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
         $this->view->executionID         = $executionID;
         $this->view->productID           = $productID;
         $this->view->projectID           = $projectID;
@@ -4447,7 +4446,7 @@ class execution extends control
      */
     public function ajaxGetCopyProjectExecutions($projectID = 0)
     {
-        $executions = $this->execution->getList($projectID);
+        $executions = $this->execution->getList($projectID, 'all', 'all', 0, 0, 0, null, false);
         echo json_encode($executions);
     }
 
