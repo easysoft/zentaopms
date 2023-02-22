@@ -119,14 +119,14 @@ $lang->todo->unfinishedTodo = '待办ID %s 不是完成状态，不能关闭。'
 $lang->todo->today          = '今日待办';
 $lang->todo->selectProduct  = "请选择产品";
 
-$lang->todo->periods['all']             = '指派自己';
-$lang->todo->periods['before']          = '未完';
-$lang->todo->periods['future']          = '待定';
-$lang->todo->periods['thisWeek']        = '本周';
-$lang->todo->periods['thisMonth']       = '本月';
-$lang->todo->periods['thisYear']        = '本年';
-$lang->todo->periods['assignedToOther'] = '指派他人';
-$lang->todo->periods['cycle']           = '周期';
+$lang->my->featureBar['todo']['all']             = '指派自己';
+$lang->my->featureBar['todo']['before']          = '未完';
+$lang->my->featureBar['todo']['future']          = '待定';
+$lang->my->featureBar['todo']['thisWeek']        = '本周';
+$lang->my->featureBar['todo']['thisMonth']       = '本月';
+$lang->my->featureBar['todo']['thisYear']        = '本年';
+$lang->my->featureBar['todo']['assignedToOther'] = '指派他人';
+$lang->my->featureBar['todo']['cycle']           = '周期';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, 由 <strong>$actor</strong> $extra。$appendLink', 'extra' => 'reasonList');

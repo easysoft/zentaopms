@@ -119,14 +119,14 @@ $lang->todo->unfinishedTodo = "Les entrées de l'ID %s ne sont pas terminés et 
 $lang->todo->today          = 'Todo Today';
 $lang->todo->selectProduct  = "Please select a product";
 
-$lang->todo->periods['all']             = 'Toutes les entrées';
-$lang->todo->periods['before']          = 'Non terminée';
-$lang->todo->periods['future']          = 'A définir';
-$lang->todo->periods['thisWeek']        = 'This Week';
-$lang->todo->periods['thisMonth']       = 'This Month';
-$lang->todo->periods['thisYear']        = 'Cette Année';
-$lang->todo->periods['assignedToOther'] = 'Assigned To Other';
-$lang->todo->periods['cycle']           = 'Récurrence';
+$lang->my->featureBar['todo']['all']             = 'Toutes les entrées';
+$lang->my->featureBar['todo']['before']          = 'Non terminée';
+$lang->my->featureBar['todo']['future']          = 'A définir';
+$lang->my->featureBar['todo']['thisWeek']        = 'This Week';
+$lang->my->featureBar['todo']['thisMonth']       = 'This Month';
+$lang->my->featureBar['todo']['thisYear']        = 'Cette Année';
+$lang->my->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->my->featureBar['todo']['cycle']           = 'Récurrence';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, est $extra par <strong>$actor</strong>.', 'extra' => 'reasonList');

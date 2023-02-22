@@ -101,3 +101,6 @@ $lang->job->pipelineVariablesKeyPlaceHolder   = "输入变量的名称";
 $lang->job->pipelineVariablesValuePlaceHolder = "输入变量的值";
 $lang->job->pipelineVariablesTips             = "指定要在此次运行中使用的变量值。CI/CD设置中指定的值将用作默认值。";
 $lang->job->setReferenceTips                  = "在执行构建前，请先设置代码库的分支信息。";
+
+$lang->job->featureBar['browse']['job']     = '列表';
+$lang->job->featureBar['browse']['compile'] = '构建历史';
