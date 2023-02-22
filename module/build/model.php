@@ -478,11 +478,13 @@ class buildModel extends model
      */
     public function update($buildID)
     {
-        $buildID  = (int)$buildID;
-        $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
-        $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+        $buildID    = (int)$buildID;
+        $oldBuild   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
+        $newProduct = $this->dao->select('id,type')->from(TABLE_PRODUCT)->where('id')->eq($_POST['product'])->fetchPairs();
+        $branch     = (!isset($_POST['branch']) or $newProduct == 'normal') ? 0 : $oldBuild->branch;
+        $build      = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->add('id', $buildID)
-            ->setIF(!isset($_POST['branch']), 'branch', $oldBuild->branch)
+            ->setDefault('branch', $branch)
             ->setDefault('product', $oldBuild->product)
             ->setDefault('builds', '')
             ->cleanInt('product,execution')
