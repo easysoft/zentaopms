@@ -204,6 +204,9 @@ class customModel extends model
                 ksort($menuOrder);
                 foreach($menuOrder as $name)
                 {
+                    /* If menu is removed, delete the menuOrder. */
+                    if(!isset($allMenu->$name)) continue;
+
                     $item = new stdclass();
                     $item->name   = $name;
                     $item->hidden = false;
