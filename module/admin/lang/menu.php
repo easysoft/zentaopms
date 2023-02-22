@@ -11,6 +11,7 @@ $lang->admin->menuList->user['order'] = 2;
 
 $lang->admin->menuList->switch['name']  = $lang->admin->menuSetting['switch']['name'];
 $lang->admin->menuList->switch['desc']  = $lang->admin->menuSetting['switch']['desc'];
+$lang->admin->menuList->switch['link']  = 'admin|setmodule';
 $lang->admin->menuList->switch['order'] = 3;
 
 $lang->admin->menuList->model['name']  = $lang->admin->menuSetting['model']['name'];
@@ -70,10 +71,6 @@ $lang->admin->menuList->user['subMenu']['group'] = array('link' => "{$lang->priv
 $lang->admin->menuList->user['menuOrder']['5']  = 'dept';
 $lang->admin->menuList->user['menuOrder']['10'] = 'user';
 $lang->admin->menuList->user['menuOrder']['15'] = 'group';
-
-$lang->admin->menuList->switch['subMenu']['setmodule'] = array('link' => "{$lang->admin->module}|admin|setmodule|");
-
-$lang->admin->menuList->switch['menuOrder']['5'] = 'setmodule';
 
 $lang->admin->menuList->model['subMenu']['common']        = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday,stage', 'exclude' => 'stage-browse,stage-plusbrowse,stage-create,stage-edit,stage-batchcreate');
 $lang->admin->menuList->model['subMenu']['scrum']         = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
@@ -165,7 +162,7 @@ $lang->admin->menuList->message['menuOrder']['10'] = 'webhook';
 $lang->admin->menuList->message['menuOrder']['20'] = 'browser';
 $lang->admin->menuList->message['menuOrder']['25'] = 'setting';
 
-$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "API|dev|api|module=index");
+$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "{$lang->api}|dev|api|module=index");
 $lang->admin->menuList->dev['subMenu']['db']     = array('link' => "{$lang->database}|dev|db|table=" . trim(TABLE_EFFORT, '`'));
 $lang->admin->menuList->dev['subMenu']['editor'] = array('link' => "{$lang->editor}|dev|editor|");
 $lang->admin->menuList->dev['subMenu']['entry']  = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');

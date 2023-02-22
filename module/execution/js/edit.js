@@ -112,6 +112,8 @@ $(function()
     {
         $('.disabledBranch div[id^="branch"]').addClass('chosen-disabled');
     }
+
+    $('[data-toggle="popover"]').popover();
 })
 var lastProjectID = $("#project").val();
 

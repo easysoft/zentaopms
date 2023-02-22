@@ -9780,6 +9780,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewlist` (
 CREATE TABLE IF NOT EXISTS `zt_cmcl` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `type` char(30) NOT NULL,
+  `projectType` varchar(255) NOT NULL,
   `title` int(11) NOT NULL,
   `contents` text NOT NULL,
   `assignedTo` varchar(30) NOT NULL,

@@ -66,7 +66,10 @@
         <tr>
           <th><?php echo $lang->execution->method;?></th>
           <td class="col-main"><?php echo html::select("type", $lang->execution->typeList, $type, "class='form-control chosen' required onchange='setType(this.value)'");?></td>
-          <td colspan='2'></td>
+          <td class='methodTip'>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->agileplusMethodTip;?>"></icon>
+          </td>
+          <td></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -74,7 +77,7 @@
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td colspan='2'></td>
         </tr>
-        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+        <?php if(isset($config->setCode) and $config->setCode == 1):?>
         <tr>
           <th><?php echo $showExecutionExec ? $lang->execution->execCode : $lang->execution->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
