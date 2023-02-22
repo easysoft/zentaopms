@@ -21,7 +21,7 @@
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
         <div class="setting-box">
           <button class="btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?> data-link='<?php echo $menu['link'];?>'>
-            <h4 class="flex align-center justify-between w-full">
+            <h4 class="flex align-center w-full">
               <div class="flex align-center">
                 <img src="/static/svg/admin-<?php echo $menuKey;?>.svg"/>
                 <?php echo $menu['name'];?>
@@ -118,7 +118,7 @@
       </div>
       <?php foreach($dynamics as $dynamic):?>
       <div class="dynamic-block">
-        <div class="dynamic-content"><i class="icon icon-horn text-primary pr-4 font-20"></i><?php echo html::a($dynamic->link, $dynamic->title, '_blank');?></div>
+        <div class="dynamic-content" title=<?php echo $dynamic->title ?>><i class="icon icon-horn text-primary pr-4 font-20"></i><?php echo html::a($dynamic->link, $dynamic->title, '_blank');?></div>
         <div class="dynamic-time"><?php echo substr($dynamic->addedDate, 0, 10);?></div>
       </div>
       <?php endforeach;?>
