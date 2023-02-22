@@ -22,10 +22,12 @@ $lang->dev->noteEditor     = "编辑器功能因为安全原因被禁用。使�
 $lang->dev->noteTranslate  = "翻译功能因为安全原因被禁用。使用该功能，请到官网下载安装 <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>翻译</a> 插件。";
 $lang->dev->confirmRestore = '是否要恢复默认？';
 
-$lang->dev->default = '默认值';
-$lang->dev->change  = '修改值';
-$lang->dev->UR      = '用户需求';
-$lang->dev->SR      = '软件需求';
+$lang->dev->language    = '语言：%s';
+$lang->dev->default     = '默认值';
+$lang->dev->currentLang = '当前语言';
+$lang->dev->change      = '修改值';
+$lang->dev->UR          = '用户需求';
+$lang->dev->SR          = '软件需求';
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = '序号';

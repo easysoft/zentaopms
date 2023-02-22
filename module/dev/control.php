@@ -92,9 +92,12 @@ class dev extends control
      * @access public
      * @return void
      */
-    public function langItem($type = 'common', $module = 'my', $method = '', $language = 'zh_cn')
+    public function langItem($type = 'common', $module = '', $method = '', $language = '')
     {
-        $language   = str_replace('_', '-', $language);
+        $clientLang = $this->app->getClientLang();
+        if(empty($language)) $language = $clientLang;
+        $language = str_replace('_', '-', $language);
+
         if($type == 'second' and empty($module)) $module = 'my';
         $moduleName = $module;
         if($type == 'common' or $type == 'first') $moduleName = 'common';
@@ -106,6 +109,7 @@ class dev extends control
             $moduleName = $module . 'SubMenu';
         }
 
+        if($type == 'feature' and empty($module)) $module = 'my';
         if($type == 'feature' and empty($method)) $method = 'todo';
 
         if($this->server->request_method == 'POST')
@@ -136,12 +140,15 @@ class dev extends control
             return $this->send(array('result' => 'success', 'locate' => 'reload', 'message' => $this->lang->saveSuccess));
         }
 
+        if($clientLang != $language) $this->view->currentLangs = $this->dev->getOriginalLang($type, $module, $method, $clientLang);
         $this->view->title         = $this->lang->langItem;
         $this->view->type          = $type;
         $this->view->originalLangs = $this->dev->getOriginalLang($type, $module, $method, $language);
         $this->view->customedLangs = $this->dev->getCustomedLang($type, $module, $method, $language);
         $this->view->menuTree      = $this->dev->getMenuTree($type, $module, $method);
         $this->view->moduleName    = $moduleName;
+        $this->view->module        = $module;
+        $this->view->method        = $method;
         $this->view->language      = str_replace('-', '_', $language);
         $this->display();
     }

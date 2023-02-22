@@ -304,13 +304,13 @@ class devModel extends model
      */
     public function getOriginalLang($type, $module = '', $method = '', $language = 'zh-cn')
     {
+        if(empty($language)) $language = $this->app->getClientLang();
         $originalLangs = array();
-        $clientLang    = $this->app->getClientLang();
-        $defaultLang   = $this->loadDefaultLang();
+        $defaultLang   = $this->loadDefaultLang($language);
         if($type == 'feature')
         {
             $this->defaultLang = $defaultLang;
-            $defaultLang       = $this->loadDefaultLang($clientLang, $module);
+            $defaultLang       = $this->loadDefaultLang($language, $module);
         }
 
         $lang    = new stdClass();
@@ -318,9 +318,9 @@ class devModel extends model
         if($type == 'common')
         {
             $projectKey = (int)$this->loadModel('setting')->getItem('owner=system&key=sprintConcept');
-            $originalLangs['productCommon']   = $this->config->productCommonList[$clientLang][PRODUCT_KEY];
-            $originalLangs['projectCommon']   = $this->config->projectCommonList[$clientLang][PROJECT_KEY];
-            $originalLangs['executionCommon'] = $this->config->executionCommonList[$clientLang][$projectKey];
+            $originalLangs['productCommon']   = $this->config->productCommonList[$language][PRODUCT_KEY];
+            $originalLangs['projectCommon']   = $this->config->projectCommonList[$language][PROJECT_KEY];
+            $originalLangs['executionCommon'] = $this->config->executionCommonList[$language][$projectKey];
             $originalLangs['URCommon']        = $this->lang->dev->UR;
             $originalLangs['SRCommon']        = $this->lang->dev->SR;
             if(!$this->config->URAndSR) unset($originalLangs['SRCommon']);
@@ -408,20 +408,19 @@ class devModel extends model
     public function getCustomedLang($type, $module = '', $method = '', $language = 'zh-cn')
     {
         $customedLangs = array();
-        $clientLang    = $this->app->getClientLang();
 
         $langKey   = '';
         $customeds = array();
         if($type == 'common')
         {
-            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module=common&section=&vision={$this->config->vision}");
+            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module=common&section=&vision={$this->config->vision}");
             foreach($customeds as $customed) $customedLangs[$customed->key] = $customed->value;
 
             $customedLangs['URCommon'] = $this->lang->dev->UR == $this->lang->URCommon ? '' : $this->lang->URCommon;
             $customedLangs['SRCommon'] = $this->lang->dev->SR == $this->lang->SRCommon ? '' : $this->lang->SRCommon;
             if($this->config->custom->URSR)
             {
-                $URSRList = $this->custom->getItems("lang={$clientLang}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
+                $URSRList = $this->custom->getItems("lang={$language}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
                 $URSRList = array_shift($URSRList);
                 if($URSRList)
                 {
@@ -434,21 +433,21 @@ class devModel extends model
         }
         elseif($type == 'first')
         {
-            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module=common&section=mainNav&vision={$this->config->vision}");
+            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module=common&section=mainNav&vision={$this->config->vision}");
             $langKey   = 'mainNav_';
         }
         elseif($type == 'second')
         {
-            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module={$module}Menu&vision={$this->config->vision}");
+            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}Menu&vision={$this->config->vision}");
         }
         elseif($type == 'third')
         {
-            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module={$module}SubMenu&section=$method&vision={$this->config->vision}");
+            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}SubMenu&section=$method&vision={$this->config->vision}");
             $langKey   = "{$method}_";
         }
         elseif($type == 'feature')
         {
-            $customeds = $this->loadModel('custom')->getItems("lang={$clientLang}&module={$module}&section=featureBar-$method&vision={$this->config->vision}");
+            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}&section=featureBar-$method&vision={$this->config->vision}");
             $langKey   = "featureBar-{$method}_";
         }
 
