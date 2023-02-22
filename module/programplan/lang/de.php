@@ -73,7 +73,7 @@ $lang->programplan->emptyBegin       = '『Begin』should not be blank';
 $lang->programplan->emptyEnd         = '『End』should not be blank';
 $lang->programplan->checkBegin       = '『Begin』should be valid date';
 $lang->programplan->checkEnd         = '『End』should be valid date';
-$lang->programplan->methodTip        = 'When creating sub-stages in a Waterfall Plus project stage, you can choose to create them as stages or as iterations/Kanban. If the sub-stage is created as an iteration/Kanban, it does not support creating sub-levels further down.';
+$lang->programplan->methodTip        = 'When creating sub-stages in a Waterfall Plus project stage, you can choose to create them as stages or as Iterations/Kanban. If the sub-stage is created as an Iteration/Kanban, it does not support creating sub-levels further down.';
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';
