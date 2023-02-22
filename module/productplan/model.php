@@ -141,7 +141,7 @@ class productplanModel extends model
                 $planProjects[$planID] = $this->dao->select('t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('1=1')
-                    ->beginIF(strpos($param, 'noproduct') === false or !empty($product))->andWhere('product')->eq($product)->fi()
+                    ->beginIF(strpos($param, 'noproduct') === false or !empty($product))->andWhere('t1.product')->eq($product)->fi()
                     ->andWhere('t2.deleted')->eq(0)
                     ->andWhere('t1.plan')->like(",$planID,")
                     ->andWhere('t2.type')->in('sprint,stage,kanban')

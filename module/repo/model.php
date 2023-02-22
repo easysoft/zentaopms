@@ -2810,7 +2810,7 @@ class repoModel extends model
      * @access public
      * @return void
      */
-    public function updateCommit($repoID, $branchID = 0)
+    public function updateCommit($repoID, $objectID = 0, $branchID = 0)
     {
         $repo = $this->getRepoByID($repoID);
         /* Update code commit history. */

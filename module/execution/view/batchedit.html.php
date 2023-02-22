@@ -55,14 +55,17 @@
             <th class='c-method'><?php echo $lang->execution->method;?></th>
             <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
-            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <?php if(isset($config->setCode) and $config->setCode == 1):?>
             <th class='c-code required'><?php echo $lang->execution->$code;?></th>
             <?php endif;?>
             <th class='c-user<?php echo zget($visibleFields, 'PM',       ' hidden') . zget($requiredFields, 'PM',     '', ' required');?>'><?php echo $lang->execution->$PM;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'PO',       ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->execution->PO;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'QD',       ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->execution->QD;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'RD',       ' hidden') . zget($requiredFields, 'RD',     '', ' required');?>'><?php echo $lang->execution->RD;?></th>
-            <th class='c-type<?php echo zget($visibleFields, 'type',     ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $lang->execution->$type;?></th>
+            <th class='c-type<?php echo zget($visibleFields, 'type',     ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'>
+              <?php echo $lang->execution->$type;?>
+              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
+            </th>
             <th class='c-date required'><?php echo $lang->execution->begin;?></th>
             <th class='c-date required'><?php echo $lang->execution->end;?></th>
             <th class='c-desc <?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'><?php echo $lang->execution->$desc;?></th>
@@ -91,7 +94,7 @@
             <td title='<?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?>'><?php echo zget($lang->execution->typeList, $executions[$executionID]->type);?></td>
             <?php endif;?>
             <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control' id='names{$executionID}'");?></td>
-            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <?php if(isset($config->setCode) and $config->setCode == 1):?>
             <td><?php echo html::input("codes[$executionID]", $executions[$executionID]->code, "id='codes{$executionID}' class='form-control'");?></td>
             <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'PM', ' hidden')?>' style='overflow:visible'><?php echo html::select("PMs[$executionID]", $pmUsers, $executions[$executionID]->PM, "class='form-control picker-select'");?></td>

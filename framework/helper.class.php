@@ -339,12 +339,12 @@ class helper extends baseHelper
             $dateInterval->hour    = $interval->format('%H');
             $dateInterval->minute  = $interval->format('%i');
             $dateInterval->secound = $interval->format('%s');
-            $dateInterval->year    = ltrim($dateInterval->year, '0');
-            $dateInterval->month   = ltrim($dateInterval->month, '0');
-            $dateInterval->day     = ltrim($dateInterval->day, '0');
-            $dateInterval->hour    = ltrim($dateInterval->hour, '0');
-            $dateInterval->minute  = ltrim($dateInterval->minute, '0');
-            $dateInterval->secound = ltrim($dateInterval->secound, '0');
+            $dateInterval->year    = $dateInterval->year == '00' ? 0 : ltrim($dateInterval->year, '0');
+            $dateInterval->month   = $dateInterval->month == '00' ? 0 : ltrim($dateInterval->month, '0');
+            $dateInterval->day     = $dateInterval->day == '00' ? 0 : ltrim($dateInterval->day, '0');
+            $dateInterval->hour    = $dateInterval->hour == '00' ? 0 : ltrim($dateInterval->hour, '0');
+            $dateInterval->minute  = $dateInterval->minute == '00' ? 0 : ltrim($dateInterval->minute, '0');
+            $dateInterval->secound = $dateInterval->secound == '00' ? 0 : ltrim($dateInterval->secound, '0');
         }
         return $dateInterval;
     }

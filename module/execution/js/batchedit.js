@@ -27,3 +27,8 @@ $('#executionForm').on('change input mousedown', '.has-error', function()
     $(this).parent().find('.text-danger').remove();
     $(this).removeClass('has-error');
 })
+
+$(function()
+{
+    $('[data-toggle="popover"]').popover();
+})

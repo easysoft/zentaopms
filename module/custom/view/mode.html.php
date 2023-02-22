@@ -39,7 +39,7 @@
           <?php if(is_array($feature) and empty($disabledScrumFeatures)) continue;?>
           <tr class='text-center'>
             <td class='text-left'><?php echo (is_array($feature) and !empty($disabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature];?></td>
-            <td><i class='icon text-red icon-close'></i></td>
+            <td><i class='icon text-red icon-ban-circle'></i></td>
             <td><i class='icon text-success icon-check'></i></td>
           </tr>
           <?php endforeach;?>

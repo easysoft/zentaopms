@@ -50,7 +50,7 @@
           <th class='w-120px'><?php echo $lang->execution->name;?></th>
           <td><?php echo html::input('name', $execution->name, "class='form-control' required");?></td><td></td>
         </tr>
-        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+        <?php if(isset($config->setCode) and $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->execution->code;?></th>
           <td><?php echo html::input('code', $execution->code, "class='form-control' required");?></td>
@@ -97,6 +97,9 @@
               echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute);
           }
           ?>
+          </td>
+          <td>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
           </td>
         </tr>
         <?php endif;?>

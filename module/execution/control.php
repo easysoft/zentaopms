@@ -2732,11 +2732,16 @@ class execution extends control
 
         if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
+
         if(empty($kanbanGroup))
         {
             $this->kanban->createExecutionLane($executionID, $browseType);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         }
+
+        /* Show lanes of the attribute: no story&bug in request, no bug in design. */
+        if(!isset($this->lang->execution->menu->story)) unset($kanbanGroup['story']);
+        if(!isset($this->lang->execution->menu->qa)) unset($kanbanGroup['bug']);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);
