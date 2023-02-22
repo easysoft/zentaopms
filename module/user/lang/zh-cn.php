@@ -322,3 +322,12 @@ $lang->user->jumping = "<span id='time'>10</span>秒钟后页面将自动跳转�
 
 $lang->user->zentaoapp = new stdclass();
 $lang->user->zentaoapp->logout = '退出登录';
+
+$lang->user->featureBar['todo']['all']             = '指派自己';
+$lang->user->featureBar['todo']['before']          = '未完';
+$lang->user->featureBar['todo']['future']          = '待定';
+$lang->user->featureBar['todo']['thisWeek']        = '本周';
+$lang->user->featureBar['todo']['thisMonth']       = '本月';
+$lang->user->featureBar['todo']['thisYear']        = '本年';
+$lang->user->featureBar['todo']['assignedToOther'] = '指派他人';
+$lang->user->featureBar['todo']['cycle']           = '周期';

@@ -5,8 +5,8 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $rawMethod = $app->rawMethod;?>
-    <?php $menuKey   = $rawMethod . 'Menu';?>
-    <?php foreach($lang->my->$menuKey->audit as $key => $type):?>
+    <?php $menuLang  = $rawMethod == 'audit' ? $lang->my->featureBar['audit'] : $lang->my->featureBar[$rawMethod]['audit'];?>
+    <?php foreach($menuLang as $key => $type):?>
     <?php
     $active = $key == $browseType ? 'btn-active-text' : '';
 

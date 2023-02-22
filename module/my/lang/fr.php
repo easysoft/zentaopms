@@ -156,3 +156,12 @@ $lang->my->guideChangeTheme = <<<EOT
   <p>Click <span style='color: #0c60e1'>Avatar-Theme-Young Blue</span>. It is done!</p>
 </div>
 EOT;
+
+$lang->my->featureBar['todo']['all']             = 'Toutes les entrées';
+$lang->my->featureBar['todo']['before']          = 'Non terminée';
+$lang->my->featureBar['todo']['future']          = 'A définir';
+$lang->my->featureBar['todo']['thisWeek']        = 'This Week';
+$lang->my->featureBar['todo']['thisMonth']       = 'This Month';
+$lang->my->featureBar['todo']['thisYear']        = 'Cette Année';
+$lang->my->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->my->featureBar['todo']['cycle']           = 'Récurrence';
