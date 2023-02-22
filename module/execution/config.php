@@ -176,7 +176,7 @@ $config->execution->gantt->linkType['end']['end']     = 2;
 $config->execution->gantt->linkType['begin']['end']   = 3;
 
 $config->execution->datatable = new stdclass();
-if(!isset($config->setCode) or $config->setCode == 1)
+if(isset($config->setCode) and $config->setCode == 1)
 {
     $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'openedDate', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
@@ -201,7 +201,7 @@ $config->execution->datatable->fieldList['name']['nestedToggle'] = true;
 $config->execution->datatable->fieldList['name']['iconRender']   = true;
 $config->execution->datatable->fieldList['name']['required']     = 'yes';
 
-if(!isset($config->setCode) or $config->setCode == 1)
+if(isset($config->setCode) and $config->setCode == 1)
 {
     $config->execution->datatable->fieldList['code']['title']    = 'execCode';
     $config->execution->datatable->fieldList['code']['width']    = '180';

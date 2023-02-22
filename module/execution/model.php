@@ -533,7 +533,7 @@ class executionModel extends model
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         /* Judgment of required items. */
-        if($oldExecution->type != 'stage' and $this->post->code == '' and (!isset($this->config->setCode) or $this->config->setCode == 1))
+        if($oldExecution->type != 'stage' and $this->post->code == '' and (isset($this->config->setCode) and $this->config->setCode == 1))
         {
             dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
             return false;
@@ -5789,7 +5789,7 @@ class executionModel extends model
         $_POST['status']    = $project->status;
         $_POST['acl']       = 'open';
 
-        if(!isset($this->config->setCode) or $this->config->setCode == 1) $_POST['code'] = $project->code;
+        if(isset($this->config->setCode) and $this->config->setCode == 1) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)

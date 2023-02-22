@@ -19,7 +19,7 @@
       <div class="col-sm-12">
         <div class="cell">
           <div class="detail">
-            <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+            <?php $hiddenCode = (!isset($config->setCode) or $config->setCode == 0) ? 'hidden' : '';?>
             <h2 class="detail-title"><span class="label-id"><?php echo $product->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $product->code;?></span> <?php echo $product->name;?></h2>
             <div class="detail-content article-content">
               <p><?php echo $product->desc;?></p>

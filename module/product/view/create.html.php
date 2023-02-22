@@ -56,7 +56,7 @@
             <th><?php echo $lang->product->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control input-product-title' required");?></td><td></td>
           </tr>
-          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+          <?php if(isset($config->setCode) and $config->setCode == 1):?>
           <tr>
             <th><?php echo $lang->product->code;?></th>
             <td><?php echo html::input('code', '', "class='form-control' required");?></td>
