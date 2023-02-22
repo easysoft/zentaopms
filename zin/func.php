@@ -44,3 +44,4 @@ function pageheading() {return createWg('pageheading', func_get_args());}
 function pagenavbar()  {return createWg('pagenavbar', func_get_args());}
 function pagetoolbar() {return createWg('pagetoolbar', func_get_args());}
 function avatar()      {return createWg('avatar', func_get_args());}
+function pager()       {return createWg('pager', func_get_args());}

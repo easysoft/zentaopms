@@ -85,6 +85,22 @@ if(\common::hasPriv('program', 'create'))
   );
 }
 
+$pagerData = array(
+    'items' => array
+    (
+        array('type' => 'info',      'text' => '共 {recTotal} 项'),
+        array('type' => 'size-menu', 'text' => '每页 {recPerPage} 项', 'dropdown' => array('placement' => 'top')),
+        array('type' => 'link',      'page' => 'prev', 'icon' => 'icon-angle-left', 'hint' => '上一页'),
+        array('type' => 'nav'),
+        array('type' => 'link',      'page' => 'next', 'icon' => 'icon-angle-right', 'hint' => '下一页'),
+    ),
+    'page' => 2,
+    'recTotal' => 101,
+    'recPerPage' => 10,
+    'linkCreator' => '#?page={page}&recPerPage={recPerPage}',
+    'onClickItem' => '(info)=>{console.log("> pager.onClickItem" => info)}'
+);
+
 page(
     set('title', $title),
     pageheader
@@ -117,7 +133,12 @@ page(
           set('js-render', true),
           set('cols', $cols),
           set('width', '100%'),
-          set('data', $data),
+          set('data', $data)
+        ),
+        pager
+        (
+            set('js-render',   true),
+            set($pagerData)
         )
     ),
     dropdown
