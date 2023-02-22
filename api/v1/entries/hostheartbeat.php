@@ -88,9 +88,12 @@ class hostHeartbeatEntry extends baseEntry
                 if($vm->status == 'running')
                 {
                     $node  = $this->loadModel('zanode')->getNodeByMac($vm->macAddress);
-                    $snaps = $this->loadModel('zanode')->getSnapshotList($node->id);
-                    if(empty($snaps)){
-                        if($vm->status == 'running') $this->loadModel('zanode')->createDefaultSnapshot($node->id);
+                    if(!empty($node))
+                    {
+                        $snaps = $this->loadModel('zanode')->getSnapshotList($node->id);
+                        if(empty($snaps)){
+                            if($vm->status == 'running') $this->loadModel('zanode')->createDefaultSnapshot($node->id);
+                        }
                     }
                 }
             }

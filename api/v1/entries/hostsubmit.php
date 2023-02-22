@@ -46,10 +46,13 @@ class hostSubmitEntry extends baseEntry
         if(empty($imageInfo)) return $this->sendSuccess(200, 'success');
         if($imageInfo->from == 'snapshot' && $imageInfo->status == 'restoring') 
         {
-            $image->status = $image->status == 'completed' ? 'restore_completed' : 'restore_failed';
-            if($image->status != 'completed')
+            if(in_array($image->status, array('failed', 'completed'))) $image->status = $image->status == 'completed' ? 'restore_completed' : 'restore_failed';
+        }
+        else if($imageInfo->from == 'snapshot' && $imageInfo->status == 'creating')
+        {
+            if($image->status == 'failed')
             {
-                $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($task)->exec();
+                $this->dao->delete()->from(TABLE_IMAGE)->where("id")->eq($task)->exec();
                 return $this->sendSuccess(200, 'success');
             }
         }
