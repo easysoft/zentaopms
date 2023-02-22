@@ -254,9 +254,9 @@ class group extends control
             foreach($this->lang->resource as $module => $moduleActions)
             {
                 $modules[$module] = $this->lang->$module->common;
-                foreach($moduleActions as $action)
+                foreach($moduleActions as $key => $action)
                 {
-                    $actions[$module][$action] = $this->lang->$module->$action;
+                    $actions[$module][$key] = $this->lang->$module->$action;
                 }
             }
             $this->view->groups  = $this->group->getPairs();

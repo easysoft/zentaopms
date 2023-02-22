@@ -57,4 +57,6 @@ $(function()
             if(!result) return false;
         }
     })
+
+    $('[data-toggle="popover"]').popover();
 })

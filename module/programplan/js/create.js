@@ -5,6 +5,8 @@ $(function()
         $(this).removeClass('has-error');
         $(this).closest('td').find('.text-danger.help-text').remove();
     });
+
+    $('[data-toggle="popover"]').popover();
 });
 /**
  * Add item to create view of programplan.
