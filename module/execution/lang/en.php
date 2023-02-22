@@ -151,6 +151,7 @@ $lang->execution->left     = 'Left';
 $lang->execution->copyTeamTip        = "copy Project/project team members";
 $lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';
 $lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』';
+$lang->execution->agileplusMethodTip = 'When creating executions in an agile Plus project, both iteration and Kanban management methods are supported.';
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Activate';
