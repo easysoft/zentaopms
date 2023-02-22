@@ -153,6 +153,8 @@ $(function()
     {
         $('.disabledBranch div[id^="branch"]').addClass('chosen-disabled');
     }
+
+    $('[data-toggle="popover"]').popover();
 });
 
 function showLifeTimeTips()

@@ -151,6 +151,8 @@ $lang->execution->left     = '剩余';
 $lang->execution->copyTeamTip         = "可以选择复制项目或{$lang->execution->common}团队的成员";
 $lang->execution->daysGreaterProject  = '可用工日不能大于执行的可用工日『%s』';
 $lang->execution->errorHours          = '可用工时/天不能大于『24』';
+$lang->execution->agileplusMethodTip  = '融合敏捷项目创建执行时，支持迭代和看板两种管理方法。';
+$lang->execution->typeTip             = '“综合”类型的父阶段可以创建其它类型的子级，其它父子层级的类型均一致。';
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";

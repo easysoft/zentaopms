@@ -582,16 +582,24 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getFeatureMenus($menu, $module = '', $method = '')
+    public function getFeatureMenus($menu, $module = '', $method = '', $loadModules = array())
     {
-        $this->app->loadLang($menu);
         $menus = array();
+        $this->app->loadLang($menu);
+        if(!in_array($menu, $loadModules) and isset($this->lang->$menu->menu))
+        {
+            $loadModules[] = $menu;
+            $menuLang      = $this->getLinkTitle($this->lang->$menu->menu);
+            foreach($menuLang as $menuKey => $menuName) $menus += $this->getFeatureMenus($menuKey, $module, $method, $loadModules);
+        }
+
         if(isset($this->lang->$menu->featureBar))
         {
-            $featureBar = $this->lang->$menu->featureBar;
+            $featureBar   = $this->lang->$menu->featureBar;
             foreach($featureBar as $methodName => $feature)
             {
                 if($methodName == 'caselib') $methodName = 'caseLib';
+                if($methodName == 'all')     $methodName = 'browse';
 
                 $subMenu = new stdClass();
                 $subMenu->title  = zget($this->lang->$menu, $methodName);
@@ -637,8 +645,6 @@ class devModel extends model
 
         $mainNav       = $this->getLinkTitle($mainNav);
         $maimNavPinYin = common::convert2Pinyin($mainNav);
-
-        if(empty($module)) $module = 'my';
         foreach($mainNav as $menuKey => $menu)
         {
             $menuItem = new stdclass();

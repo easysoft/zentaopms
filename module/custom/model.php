@@ -1146,13 +1146,15 @@ class customModel extends model
         $disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
         $disabledFeatures = $disabledFeatures . ',' . $closedFeatures;
 
-        $hasWaterfall           = strpos(",{$disabledFeatures},",  ',waterfall,')           === false;
-        $hasWaterfallPlus       = strpos(",{$disabledFeatures},",  ',waterfallplus,')           === false;
-        $hasScrumMeasrecord     = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
-        $hasWaterfallMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and ($hasWaterfall or $hasWaterfallPlus));
+        $hasWaterfall               = strpos(",{$disabledFeatures},",  ',waterfall,')           === false;
+        $hasWaterfallPlus           = strpos(",{$disabledFeatures},",  ',waterfallplus,')       === false;
+        $hasScrumMeasrecord         = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
+        $hasAgilePlusMeasrecord     = strpos(",{$disabledFeatures},",  ',agileMeasrecord,')     === false;
+        $hasWaterfallMeasrecord     = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+        $hasWaterfallPlusMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallplusMeasrecord,') === false and $hasWaterfallPlus);
 
         $cronStatus = 'normal';
-        if(!$hasScrumMeasrecord and !$hasWaterfallMeasrecord) $cronStatus = 'stop';
+        if(!$hasScrumMeasrecord and !$hasAgilePlusMeasrecord and !$hasWaterfallMeasrecord and $hasWaterfallPlusMeasrecord) $cronStatus = 'stop';
 
         $this->loadModel('cron');
         $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch();

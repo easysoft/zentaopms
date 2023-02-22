@@ -119,14 +119,14 @@ $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not 
 $lang->todo->today          = 'Todo Today';
 $lang->todo->selectProduct  = "Please select a product";
 
-$lang->todo->periods['all']             = 'Alle';
-$lang->todo->periods['before']          = 'Nicht abgeschlossen';
-$lang->todo->periods['future']          = 'Wartend';
-$lang->todo->periods['thisWeek']        = 'This Week';
-$lang->todo->periods['thisMonth']       = 'This Month';
-$lang->todo->periods['thisYear']        = 'Dieses Jahr';
-$lang->todo->periods['assignedToOther'] = 'Assigned To Other';
-$lang->todo->periods['cycle']           = 'Wiederkehrend';
+$lang->todo->featureBar['todo']['all']             = 'Alle';
+$lang->todo->featureBar['todo']['before']          = 'Nicht abgeschlossen';
+$lang->todo->featureBar['todo']['future']          = 'Wartend';
+$lang->todo->featureBar['todo']['thisWeek']        = 'This Week';
+$lang->todo->featureBar['todo']['thisMonth']       = 'This Month';
+$lang->todo->featureBar['todo']['thisYear']        = 'Dieses Jahr';
+$lang->todo->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->todo->featureBar['todo']['cycle']           = 'Wiederkehrend';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, wurde $extra von <strong>$actor</strong>.', 'extra' => 'reasonList');
