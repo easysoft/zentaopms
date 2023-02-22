@@ -450,7 +450,7 @@ class executionModel extends model
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
             ->checkFlow()
             ->exec();
-
+        
         /* Add the creater to the team. */
         if(!dao::isError())
         {
@@ -5728,12 +5728,13 @@ class executionModel extends model
         $_POST['status']      = 'wait';
         $_POST['days']        = $project->days;
         $_POST['team']        = $project->team;
+        $_POST['desc']        = $project->desc;
         $_POST['teamMembers'] = array($this->app->user->account);
         $_POST['acl']         = 'open';
-        $_POST['PO']          = '';
-        $_POST['QD']          = '';
-        $_POST['PM']          = '';
-        $_POST['RD']          = '';
+        $_POST['PO']          = $this->app->user->account;
+        $_POST['QD']          = $this->app->user->account;
+        $_POST['PM']          = $this->app->user->account;
+        $_POST['RD']          = $this->app->user->account;
         $_POST['multiple']    = '0';
         $_POST['hasProduct']  = $project->hasProduct;
         if($project->code) $_POST['code'] = $project->code;
