@@ -5,7 +5,7 @@
 <?php endif;?>
 <div class='modal-dialog' id='guideDialog'>
   <style>
-  #guideDialog {width: 600px}
+  #guideDialog {width: 900px}
   #guideDialog .row {margin-left: 0px;margin-right: 0px;}
   #guideDialog h2 {margin: 0px 0 20px 0; font-size: 16px; font-weight: normal}
   #guideDialog h3 {margin: 5px 0; font-size: 15px;}
@@ -15,10 +15,11 @@
   #guideDialog .project-type {padding: 0 5px}
   #guideDialog .project-type-img {width: 280px; border: 1px solid #CBD0DB; border-radius: 4px; margin-bottom: 10px; cursor: pointer; margin-top: 1px}
   #guideDialog .project-type-img:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,0,.25);}
-  #guideDialog .project-type-img.more-type {width: 154px; height: 98px; vertical-align: middle; display: table-cell; cursor:default; font-size: 12px;}
+  #guideDialog .project-type-img.more-type {height: 165px; vertical-align: middle; display: table-cell; cursor:default; font-size: 12px;}
   #guideDialog .project-type-img.more-type:hover {border-color: #CBD0DB; box-shadow:unset;}
   #guideDialog .project-type.active img {border-color: #006AF1; border-width: 2px; margin-top: 0}
   #guideDialog .col:nth-child(-n+3) {margin-bottom: 15px;}
+  @media screen and (max-width: 1366px){#guideDialog {width: 640px} #guideDialog .project-type-img.more-type {height: 108px;}}
   </style>
   <div class='modal-content'>
     <div class='modal-body'>
