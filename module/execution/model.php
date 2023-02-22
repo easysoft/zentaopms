@@ -450,6 +450,7 @@ class executionModel extends model
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
             ->checkFlow()
             ->exec();
+        
         /* Add the creater to the team. */
         if(!dao::isError())
         {
