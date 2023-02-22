@@ -21,3 +21,7 @@ CREATE TABLE `zt_pivot`  (
   `deleted` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE = MyISAM  DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_screen` ADD `status` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `scheme`;
+ALTER TABLE `zt_screen` ADD `builtin` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `status`;
+UPDATE `zt_screen` SET builtin = '1';
