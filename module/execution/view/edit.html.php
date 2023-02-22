@@ -14,6 +14,9 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
+<?php js::set('isStage', $execution->type == 'stage');?>
+<?php js::set('manageProductsLang', $lang->project->manageProducts);?>
+<?php js::set('manageProductPlanLang', $lang->project->manageProductPlan);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -161,7 +164,7 @@
           <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan="3">
             <div class='row'>
-              <div class="col-sm-6">
+              <div class="col-sm-6 productBox">
                 <div class='table-row'>
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
@@ -181,7 +184,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 planBox">
                 <div class='input-group' <?php echo "id='plan$i'";?>>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
                   <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), $product->plans, "class='form-control chosen' multiple");?>
@@ -213,7 +216,7 @@
           <th id='productTitle'><?php echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan='3'>
             <div class='row'>
-              <div class="col-sm-6">
+              <div class="col-sm-6 productBox">
                 <div class='table-row'>
                   <div class='table-col'>
                     <div class='input-group'>
@@ -229,7 +232,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 planBox">
                 <div class='input-group' id='plan0'>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
                   <?php echo html::select("plans[][]", '', '', "class='form-control chosen' multiple");?>
@@ -243,7 +246,7 @@
           </td>
         </tr>
         <?php endif; ?>
-        <?php elseif(($execution->type == 'stage' and !in_array($execution->attribute, array('request', 'design', 'review'))) or $execution->type != 'stage'): ?>
+        <?php elseif(!empty($project) and !empty($project->hasProduct)):?>
         <?php echo html::hidden("products[]", key($linkedProducts));?>
         <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>
         <?php $i = 0;?>
@@ -252,7 +255,7 @@
           <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan="3">
             <div class='row'>
-              <div class="col-sm-6">
+              <div class="col-sm-6 productBox">
                 <div class='table-row'>
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
@@ -272,7 +275,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 planBox">
                 <div class='input-group' <?php echo "id='plan$i'";?>>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
                   <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), isset($product->plans) ? $product->plans : '', "class='form-control chosen' multiple");?>
@@ -283,10 +286,10 @@
         </tr>
         <?php $i ++;?>
         <?php endforeach;?>
-        <?php else: ?>
+        <?php else:?>
         <?php echo html::hidden("products[]", key($linkedProducts));?>
         <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>
-        <?php endif; ?>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
           <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control picker-select' multiple"); ?></td>

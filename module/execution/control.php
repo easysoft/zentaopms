@@ -1930,6 +1930,7 @@ class execution extends control
         $this->app->loadLang('programplan');
         $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
         $execution           = $this->execution->getById($executionID);
+        $project             = $this->project->getById($execution->project);
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
 
@@ -2103,6 +2104,7 @@ class execution extends control
         $this->view->position             = $position;
         $this->view->executions           = $executions;
         $this->view->execution            = $execution;
+        $this->view->project              = $project;
         $this->view->poUsers              = $poUsers;
         $this->view->pmUsers              = $pmUsers;
         $this->view->qdUsers              = $qdUsers;
