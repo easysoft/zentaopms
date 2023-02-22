@@ -114,6 +114,17 @@ $(function()
     }
 
     $('[data-toggle="popover"]').popover();
+
+    if(isStage)
+    {
+        $('#attribute').change(function()
+        {
+            var attribute = $(this).val();
+            hidePlanBox(attribute);
+        })
+
+        $('#attribute').change();
+    }
 })
 var lastProjectID = $("#project").val();
 
