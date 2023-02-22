@@ -72,6 +72,7 @@ $lang->admin->registerNotice->click      = "S'enregistrer ici";
 $lang->admin->registerNotice->lblAccount = '>= 3 lettres et chiffres';
 $lang->admin->registerNotice->lblPasswd  = '>= 6 lettres et chiffres';
 $lang->admin->registerNotice->submit     = "S'enregistrer";
+$lang->admin->registerNotice->submitHere = "S'enregistrer here";
 $lang->admin->registerNotice->bind       = "S'associer à un compte existant";
 $lang->admin->registerNotice->success    = "Vous êtes enregistré !";
 

@@ -34,8 +34,8 @@
       </ul>
     </div>
     <?php endif;?>
-    <?php common::sortFeatureMenu('execution', 'all');?>
-    <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
+    <?php common::sortFeatureMenu();?>
+    <?php foreach($lang->project->featureBar['execution'] as $key => $label):?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a($this->createLink('project', 'execution', "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab'");?>

@@ -42,7 +42,7 @@
         <div class="plugin-item shadow-primary-hover" data-link='<?php echo $plugin->viewLink;?>'>
           <a href="<?php echo $plugin->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
           <h4 class="plug-title" title="<?php echo $plugin->name;?>"><?php echo $plugin->name;?></h4>
-          <p class='extension-desc' title="<?php echo $pluginDesc;?>"><?php echo $pluginDesc;?></p>
+          <p class='extension-desc text-muted' title="<?php echo $pluginDesc;?>"><?php echo $pluginDesc;?></p>
         </div>
         <?php endforeach;?>
       </div>
@@ -53,19 +53,22 @@
       <div class="flex bottom">
         <div class="panel official">
           <div class="panel-title"><?php echo $lang->admin->officialAccount?></div>
-	  <div class="flex main-panel">
-	    <div class="official-img"></div>
-	    <div class="official-content">
-            <div class="title">
-              <?php echo $lang->admin->followUs?>
-              <?php if(!$hasInternet):?>
-              <i class="icon follow-us icon-arrow-right text-primary"></i>
-              <?php endif;?>
+          <div class="flex main-panel">
+            <div class="official-img"></div>
+            <div class="official-content">
+              <div class="title">
+                <?php echo $lang->admin->followUs?>
+                <?php if(!$hasInternet):?>
+                <i class="icon follow-us icon-arrow-right text-primary"></i>
+                <?php endif;?>
               </div>
-            <div class="content"> <?php echo $lang->admin->followUsContent?></div>
-          </div>
+              <div class="content"> <?php echo $lang->admin->followUsContent?></div>
+            </div>
+            </div>
+            <?php if(!$bind and !$ignore and common::hasPriv('admin', 'register')):?>
+              <div class="panel-link"> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->registerNotice->submitHere, '', 'class="text-primary"'));?></div>
+            <?php endif;?>
         </div>
-      </div>
       <?php if($publicClass):?>
       <div class="panel publicClass">
         <div class="panel-title">
@@ -75,7 +78,7 @@
         <div class="classList flex">
           <?php foreach($publicClass as $class):?>
           <a class="classItem shadow-primary-hover" href='<?php echo $class->viewLink;?>' target='_blank'>
-	    <div class="imgBack">
+	      <div class="imgBack">
               <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>
             </div>
             <div class="classContent"><?php echo $class->name;?></div>

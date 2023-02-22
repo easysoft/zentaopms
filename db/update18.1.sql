@@ -4,6 +4,7 @@ update `zt_task` set `assignedTo` = '' where `mode` = 'multi' and `status` != 'd
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) SELECT `lang`, `module`, 'scrumClassify', `key`, `value`, `system`, `vision` FROM `zt_lang` WHERE `module` = 'process' and `section` = 'classify' ORDER BY id ASC;
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) SELECT `lang`, `module`, 'agileplusClassify', `key`, `value`, `system`, `vision` FROM `zt_lang` WHERE `module` = 'process' and `section` = 'classify' ORDER BY id ASC;
+REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) SELECT `lang`, `module`, 'waterfallplusClassify', `key`, `value`, `system`, `vision` FROM `zt_lang` WHERE `module` = 'process' and `section` = 'classify' ORDER BY id ASC;
 
 UPDATE `zt_project` AS parent INNER JOIN (select `id`,`parent`,`attribute` from `zt_project` where `parent` != 0 and `type` = 'stage') AS child ON parent.`id` = child.`parent` SET parent.`attribute`='mix' where parent.`grade`=1 and parent.`type`='stage' and parent.`attribute` != child.`attribute`;
 
@@ -20,3 +21,7 @@ REPLACE INTO `zt_stage` (`name`,`percent`,`type`, `projectType`, `createdBy`,`cr
 ('发布','10','release','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
 ('总结评审','5','review','waterfallplus','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
+ALTER table `zt_reviewcl` ADD `type` varchar(255) NOT NULL DEFAULT '' AFTER `category`;
+UPDATE `zt_reviewcl` SET `type` = 'waterfall' WHERE `type` = '';
+
+UPDATE `zt_activity` SET `order` = `id` * 5 WHERE `order` = '0';

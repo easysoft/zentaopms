@@ -281,6 +281,24 @@ $lang->project->featureBar['browse']['doing']     = 'Doing';
 $lang->project->featureBar['browse']['suspended'] = 'Suspended';
 $lang->project->featureBar['browse']['closed']    = 'Closed';
 
+$lang->project->featureBar['execution']['all']       = 'Alle';
+$lang->project->featureBar['execution']['undone']    = 'Geschlossen';
+$lang->project->featureBar['execution']['wait']      = 'Wartend';
+$lang->project->featureBar['execution']['doing']     = 'In Arbeit';
+$lang->project->featureBar['execution']['suspended'] = 'Ausgesetzt';
+$lang->project->featureBar['execution']['closed']    = 'Geschlossen';
+
+$lang->project->featureBar['bug']['all']        = 'All';
+$lang->project->featureBar['bug']['unresolved'] = 'Unresolved';
+
+$lang->project->featureBar['testcase']['all']         = 'Alle';
+$lang->project->featureBar['testcase']['wait']        = 'Wartend';
+$lang->project->featureBar['testcase']['needconfirm'] = "Story geändert";
+$lang->project->featureBar['testcase']['group']       = 'Group View';
+$lang->project->featureBar['testcase']['zerocase']    = "Zero Case Story";
+$lang->project->featureBar['testcase']['suite']       = 'Suite';
+$lang->project->featureBar['testcase']['autocase']    = 'Automated';
+
 $lang->project->featureBar['build']['all'] = 'Build List';
 
 $lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';

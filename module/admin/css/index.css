@@ -57,9 +57,11 @@
 .official {justify-content: center;}
 .official > .panel-title {position: absolute; top: 0px;}
 .official-img {background-image: url('/static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 30%; aspect-ratio: 1 / 1; background-position: center;}
-.official-content {flex: 0 0 60%; display: flex; flex-direction: column; justify-content: center; padding-left: 10px;}
+.official-content {flex: 0 0 60%; display: flex; flex-direction: column; padding-left: 10px; padding-top: 15px;}
 .official-content > .content {color: #838A9D; font-size: 12px; line-height: 22px; padding-top: 6px;}
 .official-content > .title {color: #313C52; font-size: 13px; line-height: 14px;}
+.panel-link {color: #313c52; padding-left: 10px; font-size: 13px;}
+.panel-link > a {border-bottom: 1px solid;}
 
 .classList > .classItem {flex: 1 1 30%; margin: 5px 5px 16px 5px; border: 1px solid rgba(227, 228, 233, 0.6); border-radius: 4px; padding-bottom: 5px; align-items: center;}
 .classItem > .imgBack {flex: 1 1 50%;}
