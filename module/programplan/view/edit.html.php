@@ -60,6 +60,9 @@
             <td colspan='2'>
               <?php echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'") : zget($lang->stage->typeList, $plan->attribute);?>
             </td>
+            <td>
+              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
+            </td>
           </tr>
           <?php if($plan->setMilestone):?>
           <tr>

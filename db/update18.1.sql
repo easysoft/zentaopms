@@ -25,3 +25,6 @@ ALTER table `zt_reviewcl` ADD `type` varchar(255) NOT NULL DEFAULT '' AFTER `cat
 UPDATE `zt_reviewcl` SET `type` = 'waterfall' WHERE `type` = '';
 
 UPDATE `zt_activity` SET `order` = `id` * 5 WHERE `order` = '0';
+
+ALTER table `zt_cmcl` ADD `projectType` varchar(255) NOT NULL DEFAULT '' AFTER `type`;
+UPDATE `zt_cmcl` SET `projectType` = 'waterfall' WHERE `projectType` = '';

@@ -45,6 +45,7 @@
   <div class='main-header'>
     <?php if(!empty($planID) and $project->model == 'waterfallplus'):?>
     <div class="pull-left">
+      <div class='methodTitle'><strong><?php echo $lang->programplan->subPlanManage . ':'?></strong></div>
       <div class='btn-group'>
         <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo zget($lang->programplan->typeList, $executionType);?>'><?php echo zget($lang->programplan->typeList, $executionType);?></span> <span class='caret'></span></a>
         <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
@@ -57,6 +58,7 @@
           ?>
         </ul>
       </div>
+      <div class='methodTip'><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->programplan->methodTip;?>"></icon></div>
     </div>
     <?php endif;?>
     <div class="btn-toolbar pull-right">

@@ -151,6 +151,8 @@ $lang->execution->left     = 'Left';
 $lang->execution->copyTeamTip        = "copy Project/project team members";
 $lang->execution->daysGreaterProject = 'Days cannot be greater than days of execution 『%s』';
 $lang->execution->errorHours         = 'Hours/Day cannot be greater than『24』';
+$lang->execution->agileplusMethodTip = 'When creating executions in an Agile Plus project, both Iteration and Kanban management methods are supported.';
+$lang->execution->typeTip            = "The sub-stages of other types can be created under the parent stage of the 'mix' type, while the type of other parent-child levels is consistent.";
 
 $lang->execution->start    = 'Démarrer';
 $lang->execution->activate = 'Activer';

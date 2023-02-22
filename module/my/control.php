@@ -198,6 +198,8 @@ class my extends control
             $meetingCount = $pager->recTotal;
         }
 
+        if($this->app->viewType != 'json')
+        {
 echo <<<EOF
 <script>
 var taskCount     = $taskCount;
@@ -227,6 +229,7 @@ if(isMax !== 0)
 }
 </script>
 EOF;
+        }
     }
 
     /**

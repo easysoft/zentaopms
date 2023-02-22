@@ -20,6 +20,7 @@ $lang->programplan->delete        = '删除阶段';
 $lang->programplan->close         = '关闭阶段';
 $lang->programplan->activate      = '激活阶段';
 $lang->programplan->createSubPlan = '创建子阶段';
+$lang->programplan->subPlanManage = '子阶段的管理方法';
 
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';
@@ -72,6 +73,7 @@ $lang->programplan->emptyBegin       = '『计划开始』日期不能为空';
 $lang->programplan->emptyEnd         = '『计划完成』日期不能为空';
 $lang->programplan->checkBegin       = '『计划开始』应当为合法的日期';
 $lang->programplan->checkEnd         = '『计划完成』应当为合法的日期';
+$lang->programplan->methodTip        = '融合瀑布项目阶段子阶段创建时，可以选择创建为阶段或创建为迭代/看板。子阶段为迭代/看板，不支持继续向下创建子级。';
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';

@@ -2810,7 +2810,7 @@ class repoModel extends model
      * @access public
      * @return void
      */
-    public function updateCommit($repoID, $branchID = 0)
+    public function updateCommit($repoID, $objectID = 0, $branchID = 0)
     {
         $repo = $this->getRepoByID($repoID);
         /* Update code commit history. */
@@ -2829,11 +2829,8 @@ class repoModel extends model
                     return print(js::locate($link));
                 }
             }
-            else
-            {
-                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-                $_COOKIE['repoBranch'] = $branch;
-            }
+            $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+            $_COOKIE['repoBranch'] = $branch;
         }
         if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
     }
