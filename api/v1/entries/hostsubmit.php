@@ -40,13 +40,18 @@ class hostSubmitEntry extends baseEntry
             
         if(!$id) return $this->sendError(400, 'Secret error.');
 
-        $imageInfo = $this->dao->select('`status`,`from`')->from(TABLE_IMAGE)
+        $imageInfo = $this->dao->select('`status`,`from`', 'name')->from(TABLE_IMAGE)
             ->where('id')->eq($task)
             ->fetch();
         if(empty($imageInfo)) return $this->sendSuccess(200, 'success');
         if($imageInfo->from == 'snapshot' && $imageInfo->status == 'restoring') 
         {
             $image->status = $image->status == 'completed' ? 'restore_completed' : 'restore_failed';
+            if($image->status != 'completed')
+            {
+                $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($task)->exec();
+                return $this->sendSuccess(200, 'success');
+            }
         }
 
         $this->dao->update(TABLE_IMAGE)->data($image)->where("id")->eq($task)->exec();
