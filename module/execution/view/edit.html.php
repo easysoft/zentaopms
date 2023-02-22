@@ -39,7 +39,7 @@
         <?php echo html::hidden('project', $project->id);?>
         <?php elseif($project->model == 'agileplus'):?>
         <tr>
-          <th><?php echo $lang->execution->method;?></th>
+          <th class='w-120px'><?php echo $lang->execution->method;?></th>
           <td><?php echo zget($lang->execution->typeList, $execution->type);?></td><td></td>
         </tr>
         <?php elseif($app->tab == 'project' and $project->model == 'waterfallplus'):?>
