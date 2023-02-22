@@ -199,7 +199,7 @@ class stageModel extends model
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
         if(!isset($this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'])) $this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'] = '';
-        if(!isset($this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'])) $this->lang->admin->menuList->model['subMenu']['agileplus']['exclude'] = '';
+        if(!isset($this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'])) $this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'] = '';
         if($type == 'waterfall')
         {
             $this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'] .= ",{$moduleName}-{$methodName}";
