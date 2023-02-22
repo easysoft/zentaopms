@@ -162,7 +162,7 @@ $lang->admin->menuList->message['menuOrder']['10'] = 'webhook';
 $lang->admin->menuList->message['menuOrder']['20'] = 'browser';
 $lang->admin->menuList->message['menuOrder']['25'] = 'setting';
 
-$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "{$lang->api}|dev|api|module=index");
+$lang->admin->menuList->dev['subMenu']['api']    = array('link' => "{$lang->api->doc}|dev|api|module=index");
 $lang->admin->menuList->dev['subMenu']['db']     = array('link' => "{$lang->database}|dev|db|table=" . trim(TABLE_EFFORT, '`'));
 $lang->admin->menuList->dev['subMenu']['editor'] = array('link' => "{$lang->editor}|dev|editor|");
 $lang->admin->menuList->dev['subMenu']['entry']  = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');
