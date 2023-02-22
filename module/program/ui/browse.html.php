@@ -139,6 +139,25 @@ page(
         (
             set('js-render',   true),
             set($pagerData)
+        ),
+        modal(
+            '点击打开',
+            setId('myModal2'),
+            set('title', '标题'),
+            to
+            (
+                'body',
+                array('body')
+            ),
+            to
+            (
+                'footer',
+                array
+                (
+                    btn('关闭', set('data-dismiss', 'modal')),
+                    btn('保存', setClass('primary'))
+                )
+            )
         )
     ),
     dropdown

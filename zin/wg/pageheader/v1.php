@@ -30,15 +30,6 @@ class pageheader extends wg
             return false;
         }
 
-        /* Invoke parent method; */
-        $child = parent::onAddChild($child);
-
-        if(is_string($child) && !$this->props->has('name'))
-        {
-            $this->prop('name', $child);
-            return false;
-        }
-
         return $child;
     }
 

@@ -40,11 +40,8 @@ class dropdown extends wg
                     continue;
                 }
 
-                if(strpos($val, 'switchTo') !== false)
-                {
-                    $classes[] = $val;
-                    $a = $item['text'];
-                }
+                /* switchTo with different bussiness logic. */
+                if(strpos($val, 'switchTo') !== false) $classes[] = $val;
                 else $classes[] = $val;
             }
         }

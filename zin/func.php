@@ -45,3 +45,4 @@ function pagenavbar()  {return createWg('pagenavbar', func_get_args());}
 function pagetoolbar() {return createWg('pagetoolbar', func_get_args());}
 function avatar()      {return createWg('avatar', func_get_args());}
 function pager()       {return createWg('pager', func_get_args());}
+function modal()       {return createWg('modal', func_get_args());}
