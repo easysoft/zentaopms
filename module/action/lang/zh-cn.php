@@ -91,14 +91,6 @@ $lang->action->dynamic->all        = '所有';
 $lang->action->dynamic->hidden     = '已隐藏';
 $lang->action->dynamic->search     = '搜索';
 
-$lang->action->periods['all']       = '全部';
-$lang->action->periods['today']     = $lang->action->dynamic->today;
-$lang->action->periods['yesterday'] = $lang->action->dynamic->yesterday;
-$lang->action->periods['thisweek']  = $lang->action->dynamic->thisWeek;
-$lang->action->periods['lastweek']  = $lang->action->dynamic->lastWeek;
-$lang->action->periods['thismonth'] = $lang->action->dynamic->thisMonth;
-$lang->action->periods['lastmonth'] = $lang->action->dynamic->lastMonth;
-
 $lang->action->objectTypes['product']          = $lang->productCommon;
 $lang->action->objectTypes['branch']           = '分支';
 $lang->action->objectTypes['story']            = $lang->SRCommon;

@@ -639,3 +639,11 @@ $lang->execution->boardColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F
 
 $lang->execution->linkBranchStoryByPlanTips = "When a scheduled association requirement is executed, only the active requirements associated with the %s of this execution are imported.";
 $lang->execution->linkNormalStoryByPlanTips = "Only the active requirements are imported when the scheduled requirements are associated.";
+
+$lang->execution->featureBar['dynamic']['all']       = 'All';
+$lang->execution->featureBar['dynamic']['today']     = 'Today';
+$lang->execution->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->execution->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->execution->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->execution->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->execution->featureBar['dynamic']['lastMonth'] = 'Last Month';

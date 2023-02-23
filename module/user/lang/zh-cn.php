@@ -331,3 +331,11 @@ $lang->user->featureBar['todo']['thisMonth']       = '本月';
 $lang->user->featureBar['todo']['thisYear']        = '本年';
 $lang->user->featureBar['todo']['assignedToOther'] = '指派他人';
 $lang->user->featureBar['todo']['cycle']           = '周期';
+
+$lang->user->featureBar['dynamic']['all']       = '全部';
+$lang->user->featureBar['dynamic']['today']     = '今天';
+$lang->user->featureBar['dynamic']['yesterday'] = '昨天';
+$lang->user->featureBar['dynamic']['thisWeek']  = '本周';
+$lang->user->featureBar['dynamic']['lastWeek']  = '上周';
+$lang->user->featureBar['dynamic']['thisMonth'] = '本月';
+$lang->user->featureBar['dynamic']['lastMonth'] = '上月';
