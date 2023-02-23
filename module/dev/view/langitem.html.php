@@ -31,7 +31,7 @@
     <?php foreach($lang->dev->featureBar['langItem'] as $key => $label):?>
     <?php $active = $type == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
-    <?php echo html::a(inlink('langItem', "type=$key&module=$module&method=$method&language=$language"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('langItem', "type=$key&module=&method=&language=$language"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
   </div>
 </div>
