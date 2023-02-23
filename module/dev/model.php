@@ -298,11 +298,12 @@ class devModel extends model
      * @param  string $type
      * @param  string $module
      * @param  string $method
+     * @param  string $language
      * @param  object $defaultLang
      * @access public
      * @return object
      */
-    public function getNavLang($type, $module, $method, $defaultLang = null)
+    public function getNavLang($type, $module, $method, $language = 'zh-cn', $defaultLang = null)
     {
         if(empty($defaultLang)) $defaultLang = $this->loadDefaultLang();
 
@@ -393,7 +394,7 @@ class devModel extends model
         }
         else
         {
-            $lang    = $this->getNavLang($type, $module, $method, $defaultLang);
+            $lang    = $this->getNavLang($type, $module, $method, $language, $defaultLang);
             $langKey = $type == 'first' ? 'mainNav_' : ($type == 'third' ? "{$method}_" : '');
 
             $menus = $this->getLinkTitle($lang);
@@ -496,8 +497,10 @@ class devModel extends model
     {
         $clientLang = $this->app->clientLang;
         if($language != $clientLang) $this->app->clientLang = $language;
+
         $langFilesToLoad = $this->app->getMainAndExtFiles($module);
         if($language != $clientLang) $this->app->clientLang = $clientLang;
+
         if(empty($langFilesToLoad)) return false;
 
         $lang = $module == 'common' ? new language() : $this->defaultLang;
