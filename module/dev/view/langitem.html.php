@@ -80,7 +80,7 @@
     </div>
     <div class="bottom-btn">
       <?php echo html::submitButton(); ?>
-      <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide ml-20'");?>
+      <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&method={$method}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide ml-20'");?>
     </div>
   </form>
 </div>

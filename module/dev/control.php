@@ -124,8 +124,9 @@ class dev extends control
         if($this->server->request_method == 'POST')
         {
             $section = '';
-            if($type == 'common') $section = '&section=';
-            if($type == 'first')  $section = '&section=mainNav';
+            if($type == 'common')  $section = '&section=';
+            if($type == 'first')   $section = '&section=mainNav';
+            if($type == 'feature') $section = str_replace('_', '-', "&section=featureBar-{$method}");
             $this->loadModel('custom')->deleteItems("lang={$language}&module={$moduleName}&vision={$this->config->vision}{$section}");
 
             $data = fixer::input('post')->get();
@@ -167,19 +168,21 @@ class dev extends control
      *
      * @param  string $type       common|first|second|third|feature
      * @param  string $module
+     * @param  string $method
      * @param  string $language   zh_cn|en|fr|de|zh_tw
      * @param  string $confirm    no|yes
      * @access public
      * @return void
      */
-    public function resetLang($type = 'common', $module = '', $language = 'zh_cn', $confirm = 'no')
+    public function resetLang($type = 'common', $module = '', $method = '', $language = 'zh_cn', $confirm = 'no')
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->dev->confirmRestore, inlink('resetLang', "type={$type}&module={$module}&language={$language}&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->dev->confirmRestore, inlink('resetLang', "type={$type}&module={$module}&method={$method}&language={$language}&confirm=yes")));
 
         $language = str_replace('_', '-', $language);
         $section  = '';
-        if($type == 'common') $section = '&section=';
-        if($type == 'first')  $section = '&section=mainNav';
+        if($type == 'common')  $section = '&section=';
+        if($type == 'first')   $section = '&section=mainNav';
+        if($type == 'feature') $section = str_replace('_', '-', "&section=featureBar-{$method}");
         $this->loadModel('custom')->deleteItems("lang={$language}&module={$module}&vision={$this->config->vision}{$section}");
         if($type == 'common' and $this->config->custom->URSR)
         {
