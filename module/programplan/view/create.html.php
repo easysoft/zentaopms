@@ -78,7 +78,7 @@
           <tr class='text-center'>
             <th class='c-type<?php echo $typeClass;?> required'><?php echo $lang->execution->method;?></th>
             <th class='c-name required'><?php echo $executionType == 'stage' ? $name : $lang->nameAB;?></th>
-            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <?php if(isset($config->setCode) and $config->setCode == 1):?>
             <th class='c-code required'><?php echo $executionType == 'stage' ? $lang->execution->code : $lang->code;?></th>
             <?php endif;?>
             <th class='c-pm <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>'><?php echo $executionType == 'stage' ? $lang->programplan->PM : $lang->programplan->PMAB;?></th>
@@ -108,7 +108,7 @@
             <?php foreach($stages as $stage):?>
             <tr>
               <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='<?php echo $stage->name;?>' class='form-control' /></td>
-              <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+              <?php if(isset($config->setCode) and $config->setCode == 1):?>
               <td><?php echo html::input("codes[$i]", isset($stage->code) ? $stage->code : '', "class='form-control'");?></td>
               <?php endif;?>
               <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control picker-select'");?></td>
@@ -144,7 +144,7 @@
             <tr>
               <td class='<?php echo $typeClass . ' text-center ' .zget($lang->execution->typeList, $plan->type);?>'><?php echo zget($lang->execution->typeList, $plan->type);?></td>
               <td><input type='text' name="names[<?php echo $i;?>]" id='names<?php echo $i;?>' value='<?php echo $plan->name;?>' class='form-control' /></td>
-              <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+              <?php if(isset($config->setCode) and $config->setCode == 1):?>
               <td><?php echo html::input("codes[$i]", $plan->code, "class='form-control'");?></td>
               <?php endif;?>
               <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, $plan->PM, "class='form-control picker-select'");?></td>
@@ -180,7 +180,7 @@
           <tr class='addedItem'>
             <td class='<?php echo $typeClass;?>'><?php echo html::select("type[$i]", $lang->execution->typeList, '', "class='form-control chosen'");?></td>
             <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='' class='form-control' /></td>
-            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <?php if(isset($config->setCode) and $config->setCode == 1):?>
             <td><?php echo html::input("codes[$i]", '', "class='form-control'");?></td>
             <?php endif;?>
             <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control picker-select'");?></td>
@@ -227,7 +227,7 @@
     <tr id='addItem' class='hidden'>
       <td class='<?php echo $typeClass;?>'><?php echo html::select("type[$i]", $lang->execution->typeList, '', "class='form-control chosen'");?></td>
       <td><input type='text' name='<?php echo "names[$i]";?>' id='names<?php echo $i;?>' class='form-control' /></td>
-      <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+      <?php if(isset($config->setCode) and $config->setCode == 1):?>
       <td><?php echo html::input("codes[$i]", '', "class='form-control'");?></td>
       <?php endif;?>
       <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control' id='PM$i'");?></td>

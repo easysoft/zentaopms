@@ -46,6 +46,8 @@
 <?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
 <?php js::set('copyNoExecution', $lang->execution->copyNoExecution);?>
 <?php js::set('model', isset($project->model) ? $project->model : '');?>
+<?php js::set('manageProductsLang', $lang->project->manageProducts);?>
+<?php js::set('manageProductPlanLang', $lang->project->manageProductPlan);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -77,7 +79,7 @@
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td colspan='2'></td>
         </tr>
-        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+        <?php if(isset($config->setCode) and $config->setCode == 1):?>
         <tr>
           <th><?php echo $showExecutionExec ? $lang->execution->execCode : $lang->execution->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
@@ -148,7 +150,7 @@
           <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan="3">
             <div class='row'>
-              <div class="col-sm-6">
+              <div class="col-sm-6 productBox">
                 <div class='table-row'>
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
@@ -168,7 +170,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 planBox">
                 <div class='input-group' <?php echo "id='plan$i'";?>>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
                   <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), isset($product->plans) ? $product->plans : '', "class='form-control chosen' multiple");?>
@@ -185,7 +187,7 @@
         </tr>
         <?php $i ++;?>
         <?php endforeach;?>
-        <?php elseif(!empty($project) and empty($project->hasProduct)):?>
+        <?php elseif(!empty($project) and empty($project->hasProduct) and strpos($project->model, 'waterfall') === false):?>
         <tr>
           <th><?php echo $lang->execution->linkPlan;?></th>
           <td id="plansBox">
@@ -200,7 +202,7 @@
           <th id='productTitle'><?php echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan='3'>
             <div class='row'>
-              <div class="col-sm-6">
+              <div class="col-sm-6 productBox">
                 <div class='table-row'>
                   <div class='table-col'>
                     <div class='input-group'>
@@ -216,7 +218,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 planBox">
                 <div class='input-group' id='plan0'>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
                   <?php echo html::select("plans[][]", $productPlan, '', "class='form-control chosen' multiple");?>

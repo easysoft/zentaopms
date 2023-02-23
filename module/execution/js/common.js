@@ -285,3 +285,32 @@ function setCardCount(heightType)
 {
     heightType != 'custom' ? $('#cardBox').addClass('hidden') : $('#cardBox').removeClass('hidden');
 }
+
+/**
+ * Hide plan box by stage's attribute.
+ *
+ * @param  string    attribute
+ * @access public
+ * @return void
+ */
+function hidePlanBox(attribute)
+{
+    if(attribute == 'request' || attribute == 'review')
+    {
+        $('.productsBox .planBox').addClass('hide');
+        $('.productsBox .planBox select').attr('disabled', 'disabled');
+        $('#productTitle').text(manageProductsLang);
+
+        $('#plansBox').closest('tr').addClass('hide');
+        $('#plansBox').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('.productsBox .planBox').removeClass('hide');
+        $('.productsBox .planBox select').attr('disabled', '');
+        $('#productTitle').text(manageProductPlanLang);
+
+        $('#plansBox').closest('tr').removeClass('hide');
+        $('#plansBox').attr('disabled', '');
+    }
+}

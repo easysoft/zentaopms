@@ -82,14 +82,7 @@ $(function()
         $('#attribute').change(function()
         {
             var attribute = $(this).val();
-            if(attribute == 'request' || attribute == 'design' || attribute == 'review')
-            {
-                $('#plansBox').closest('tr').addClass('hide');
-            }
-            else
-            {
-                $('#plansBox').closest('tr').removeClass('hide');
-            }
+            hidePlanBox(attribute);
         })
 
         $('#attribute').change();
