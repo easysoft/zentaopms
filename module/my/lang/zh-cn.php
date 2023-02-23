@@ -94,20 +94,6 @@ $lang->my->auditField->oaTitle['makeup']   = '%s的补班申请：%s';
 $lang->my->auditField->oaTitle['overtime'] = '%s的加班申请：%s';
 $lang->my->auditField->oaTitle['lieu']     = '%s的调休申请：%s';
 
-$lang->my->auditMenu = new stdclass();
-$lang->my->auditMenu->audit = new stdclass();
-$lang->my->auditMenu->audit->all      = '所有';
-$lang->my->auditMenu->audit->story    = '需求';
-$lang->my->auditMenu->audit->testcase = '用例';
-if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->auditMenu->audit->project = $lang->projectCommon;
-if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = '反馈';
-if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->auditMenu->audit->oa = '办公';
-
-$lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->audit = new stdclass();
-$lang->my->contributeMenu->audit->reviewedbyme = '由我评审';
-$lang->my->contributeMenu->audit->createdbyme  = '由我发起';
-
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = '进行中';
 $lang->my->projectMenu->wait       = '未开始';
@@ -169,6 +155,9 @@ $lang->my->featureBar['todo']['cycle']           = '周期';
 $lang->my->featureBar['audit']['all']      = '全部';
 $lang->my->featureBar['audit']['story']    = '需求';
 $lang->my->featureBar['audit']['testcase'] = '用例';
+if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
+if($config->edition != 'open') $lang->my->featureBar['audit']['feedback'] = '反馈';
+if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBar['audit']['oa'] = '办公';
 
 $lang->my->featureBar['project']['doing']      = '进行中';
 $lang->my->featureBar['project']['wait']       = '未开始';

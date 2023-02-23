@@ -57,7 +57,7 @@
 
       $typeName = '';
       if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
-      if($type == 'story') $typeName = $lang->my->auditMenu->audit->story;
+      if($type == 'story') $typeName = $lang->my->featureBar['audit']['story'];
       if($review->type == 'projectreview') $typeName = $lang->project->common;
       if(isset($flows[$review->type])) $typeName = $flows[$review->type];
 

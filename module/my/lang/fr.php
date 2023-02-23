@@ -94,20 +94,6 @@ $lang->my->auditField->oaTitle['makeup']   = '%s application for makeup:%s';
 $lang->my->auditField->oaTitle['overtime'] = '%s application for overtime: %s';
 $lang->my->auditField->oaTitle['lieu']     = '%s application for lieu: %s';
 
-$lang->my->auditMenu = new stdclass();
-$lang->my->auditMenu->audit = new stdclass();
-$lang->my->auditMenu->audit->all      = 'All';
-$lang->my->auditMenu->audit->story    = 'Story';
-$lang->my->auditMenu->audit->testcase = 'Case';
-if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->auditMenu->audit->project = $lang->projectCommon;
-if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = 'Feedback';
-if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->auditMenu->audit->oa = 'OA';
-
-$lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->audit = new stdclass();
-$lang->my->contributeMenu->audit->reviewedbyme = 'ReviewedByMe';
-$lang->my->contributeMenu->audit->createdbyme  = 'CreatedByMe';
-
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = 'Doing';
 $lang->my->projectMenu->wait       = 'Waiting';
@@ -169,6 +155,9 @@ $lang->my->featureBar['todo']['cycle']           = 'Récurrence';
 $lang->my->featureBar['audit']['all']      = 'All';
 $lang->my->featureBar['audit']['story']    = 'Story';
 $lang->my->featureBar['audit']['testcase'] = 'Test case';
+if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
+if($config->edition != 'open') $lang->my->featureBar['audit']['feedback'] = 'Feedback';
+if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBar['audit']['oa'] = 'OA';
 
 $lang->my->featureBar['project']['doing']      = 'Doing';
 $lang->my->featureBar['project']['wait']       = 'Waiting';
