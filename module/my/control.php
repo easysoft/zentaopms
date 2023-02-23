@@ -1256,6 +1256,7 @@ EOF;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->browseType = $browseType;
+        $this->view->mode       = 'ticket';
         $this->display();
     }
 
