@@ -319,3 +319,15 @@ $lang->user->mkdirLinux = <<<EOT
 EOT;
 
 $lang->user->jumping = "This page will redirect to the previous page in <span id='time'>3</span> seconds. <a href='%s' class='btn btn-primary btn-xs'>Redirect Now</a>";
+
+$lang->user->zentaoapp = new stdclass();
+$lang->user->zentaoapp->logout = 'Logout';
+
+$lang->my->featureBar['todo']['all']             = 'Assigned To Yourself';
+$lang->my->featureBar['todo']['before']          = 'Unfinished';
+$lang->my->featureBar['todo']['future']          = 'TBD';
+$lang->my->featureBar['todo']['thisWeek']        = 'This Week';
+$lang->my->featureBar['todo']['thisMonth']       = 'This Month';
+$lang->my->featureBar['todo']['thisYear']        = 'This Year';
+$lang->my->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->my->featureBar['todo']['cycle']           = 'Recurrence';
