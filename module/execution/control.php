@@ -1930,6 +1930,7 @@ class execution extends control
         $this->app->loadLang('programplan');
         $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
         $execution           = $this->execution->getById($executionID);
+        $project             = $this->project->getById($execution->project);
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
 
@@ -2103,6 +2104,7 @@ class execution extends control
         $this->view->position             = $position;
         $this->view->executions           = $executions;
         $this->view->execution            = $execution;
+        $this->view->project              = $project;
         $this->view->poUsers              = $poUsers;
         $this->view->pmUsers              = $pmUsers;
         $this->view->qdUsers              = $qdUsers;
@@ -2732,11 +2734,16 @@ class execution extends control
 
         if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
+
         if(empty($kanbanGroup))
         {
             $this->kanban->createExecutionLane($executionID, $browseType);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         }
+
+        /* Show lanes of the attribute: no story&bug in request, no bug in design. */
+        if(!isset($this->lang->execution->menu->story)) unset($kanbanGroup['story']);
+        if(!isset($this->lang->execution->menu->qa)) unset($kanbanGroup['bug']);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);

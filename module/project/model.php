@@ -1023,7 +1023,7 @@ class projectModel extends model
         $programPairs += $this->loadModel('program')->getPairs();
         $this->config->project->search['params']['parent']['values'] = $programPairs;
 
-        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($this->config->project->search['fields']['code'], $this->config->project->search['params']['code']);
+        if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($this->config->project->search['fields']['code'], $this->config->project->search['params']['code']);
         if($this->config->systemMode == 'light') unset($this->config->project->search['fields']['parent'], $this->config->project->search['params']['parent']);
 
         $this->loadModel('search')->setSearchParams($this->config->project->search);
@@ -1250,7 +1250,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
             ->get();
-        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
+        if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
 
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;

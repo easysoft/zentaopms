@@ -136,7 +136,7 @@ $config->project->datatable->fieldList['actions']['width']    = '165';
 $config->project->datatable->fieldList['actions']['required'] = 'yes';
 $config->project->datatable->fieldList['actions']['pri']      = '1';
 
-if(isset($config->setCode) and $config->setCode == 0) unset($config->project->datatable->fieldList['code']);
+if(!isset($config->setCode) or $config->setCode == 0) unset($config->project->datatable->fieldList['code']);
 
 $config->project->checkList = new stdclass();
 $config->project->checkList->scrum         = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case');

@@ -226,7 +226,7 @@ class company extends control
         $executionList = $this->execution->getByIdList(array_keys($executions));
         foreach($executionList as $executionID => $execution)
         {
-            if(isset($projects[$execution->project])) $executions[$execution->id] = $projects[$execution->project] . $executions[$execution->id]; 
+            if(isset($projects[$execution->project])) $executions[$execution->id] = $projects[$execution->project] . $executions[$execution->id];
         }
 
         $executions = array($this->lang->execution->common) + $executions;

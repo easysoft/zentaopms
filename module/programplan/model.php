@@ -714,7 +714,7 @@ class programplanModel extends model
         $sameNames = array_diff_assoc($names, array_unique($names));
 
         $project   = $this->loadModel('project')->getByID($projectID);
-        $setCode   = (!isset($this->config->setCode) or $this->config->setCode == 1) ? true : false;
+        $setCode   = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
         $sameCodes = $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '');
 
         $datas = array();
@@ -1075,7 +1075,7 @@ class programplanModel extends model
         if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
         if(dao::isError()) return false;
 
-        $setCode = (!isset($this->config->setCode) or $this->config->setCode == 1) ? true : false;
+        $setCode = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
         if($setCode and empty($plan->code))
         {
             dao::$errors['code'][] = sprintf($this->lang->error->notempty, $this->lang->execution->code);

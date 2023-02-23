@@ -450,7 +450,7 @@ class executionModel extends model
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
             ->checkFlow()
             ->exec();
-
+        
         /* Add the creater to the team. */
         if(!dao::isError())
         {
@@ -533,7 +533,7 @@ class executionModel extends model
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         /* Judgment of required items. */
-        if($oldExecution->type != 'stage' and $this->post->code == '' and (!isset($this->config->setCode) or $this->config->setCode == 1))
+        if($oldExecution->type != 'stage' and $this->post->code == '' and isset($this->config->setCode) and $this->config->setCode == 1)
         {
             dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
             return false;
@@ -5229,12 +5229,11 @@ class executionModel extends model
         $class = !empty($execution->children) ? 'disabled' : '';
         common::printIcon('task', 'create', "executionID={$execution->id}", '', 'list', '', '', $class, false, "data-app='execution'");
 
-        if($execution->type == 'stage' or $this->app->tab == 'project')
+        if($execution->type == 'stage')
         {
             $isCreateTask = $this->loadModel('programplan')->isCreateTask($execution->id);
             $disabled     = ($isCreateTask and $execution->type == 'stage') ? '' : ' disabled';
             $title        = !$isCreateTask ? $this->lang->programplan->error->createdTask : $this->lang->programplan->createSubPlan;
-            $title        = (!empty($disabled) and $execution->type != 'stage') ? $this->lang->programplan->error->notStage : $title;
             common::printIcon('programplan', 'create', "program={$execution->project}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', $disabled, '', '', $title);
         }
 
@@ -5729,12 +5728,13 @@ class executionModel extends model
         $_POST['status']      = 'wait';
         $_POST['days']        = $project->days;
         $_POST['team']        = $project->team;
+        $_POST['desc']        = $project->desc;
         $_POST['teamMembers'] = array($this->app->user->account);
         $_POST['acl']         = 'open';
-        $_POST['PO']          = '';
-        $_POST['QD']          = '';
-        $_POST['PM']          = '';
-        $_POST['RD']          = '';
+        $_POST['PO']          = $this->app->user->account;
+        $_POST['QD']          = $this->app->user->account;
+        $_POST['PM']          = $this->app->user->account;
+        $_POST['RD']          = $this->app->user->account;
         $_POST['multiple']    = '0';
         $_POST['hasProduct']  = $project->hasProduct;
         if($project->code) $_POST['code'] = $project->code;
@@ -5789,7 +5789,7 @@ class executionModel extends model
         $_POST['status']    = $project->status;
         $_POST['acl']       = 'open';
 
-        if(!isset($this->config->setCode) or $this->config->setCode == 1) $_POST['code'] = $project->code;
+        if(isset($this->config->setCode) and $this->config->setCode == 1) $_POST['code'] = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)

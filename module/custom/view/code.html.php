@@ -16,7 +16,7 @@
       <tr>
         <th class='c-setCode'><?php echo $lang->custom->setCode;?></th>
         <td class='c-code text-left'>
-          <?php $checkedKey = isset($config->setCode) ? $config->setCode : 1;?>
+          <?php $checkedKey = isset($config->setCode) ? $config->setCode : 0;?>
           <?php foreach($lang->custom->conceptOptions->URAndSR as $key => $value):?>
           <label class="radio-inline"><input type="radio" name="code" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="code<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>

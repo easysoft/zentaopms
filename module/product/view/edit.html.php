@@ -47,7 +47,7 @@
             <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
           </tr>
-          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+          <?php if(isset($config->setCode) and $config->setCode == 1):?>
           <tr>
             <th><?php echo $lang->product->code;?></th>
             <td><?php echo html::input('code', $product->code, "class='form-control' required");?></td><td></td>
