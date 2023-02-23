@@ -1092,7 +1092,7 @@ class executionModel extends model
                     if(!dao::isError())
                     {
                         $changes    = common::createChanges($parent, $newParent);
-                        $actionType = $parentStatus == 'doing' ? 'startbychildedit' : 'waitbychild';
+                        $actionType = $parentStatus == 'doing' ? 'started' : 'waitbychild';
                         $actionID   = $this->action->create('execution', $parentID, $actionType, '', $actionType);
                         $this->action->logHistory($actionID, $changes);
 
@@ -1121,7 +1121,7 @@ class executionModel extends model
         if(!dao::isError())
         {
             $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
-            $actionID = $this->action->create('execution', $executionID, 'Edited');
+            $actionID = $this->action->create('execution', $executionID, 'Started');
             $this->action->logHistory($actionID, $changes);
 
             if($type != 'stage') return '';
@@ -1182,7 +1182,7 @@ class executionModel extends model
         if(!dao::isError())
         {
             $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
-            $actionID = $this->action->create('execution', $executionID, 'Edited');
+            $actionID = $this->action->create('execution', $executionID, strtoupper($status));
             $this->action->logHistory($actionID, $changes);
 
             if($type != 'stage') return '';
