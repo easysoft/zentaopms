@@ -48,3 +48,6 @@ function pager()       {return createWg('pager', func_get_args());}
 function modal()       {return createWg('modal', func_get_args());}
 function tabs()        {return createWg('tabs', func_get_args());}
 function panel()       {return createWg('panel', func_get_args());}
+function inputaddon() {return createWg('inputaddon', func_get_args());}
+function inputgroup() {return createWg('inputgroup', func_get_args());}
+function inputbtn()   {return createWg('inputbtn', func_get_args());}
