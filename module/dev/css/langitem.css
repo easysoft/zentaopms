@@ -2,29 +2,31 @@
 .flex-1 {flex: 1;}
 .align-center {align-items: center;}
 .justify-center {justify-content: center;}
-.h-32 {height: 32px;}
-.py-6 {padding: 6px 0;}
-.my-12 {margin: 12px 0;}
-.ml-20 {margin-left: 20px;}
+.reset-btn {margin-left: 20px;}
 .title {font-size: 13px; color: #313C52; font-weight: 700; height: 40px; text-align: center;}
-.gap-15 {gap: 15px;}
+.h-full {height: 100%;}
 
 /* menu-tree */
 .menu-tree {flex: 0 0 200px; background: #fff; padding: 10px 10px;}
 .menu-tree > .tree {padding-top: 20px;}
-li.has-list > ul > li {padding-left: 10px;}
 .tree ul {margin-bottom: 0;}
+#menuTree > li.has-list > ul > li {padding-left: 10px;}
+#menuTree > li.has-list > ul > li.has-list {padding-left: 15px;}
 
-/* side-left */
-.main-content > .side-left {flex: 0 0 160px; margin-left: 44px;}
-.label-list {background: #F8F8F8; padding: 5px 0;}
-.label-list > .input-label {display: flex; align-items: center; cursor: pointer; padding-left: 40px;}
+/* main-box */
+.flex.main-box {gap: 15px;}
 
-/* side-right */
-.main-content > .side-right {margin-left: 50px;}
-.main-content > .side-right > .input-list {padding: 5px 0;}
-.main-content > .side-right > .input-list > .input-control {position: relative;}
-.main-content > .side-right > .input-list > .input-control > i.icon {position: absolute; font-size: 25px; left: -40px; top: 3px;}
+/* title-content */
+.title-content {gap: 20px;}
+.title-content > .title {margin-left: 44px; width: 160px;}
+
+/* form-content */
+.form-item-content {padding-left: 44px;}
+.form-item-content > .form-item {gap: 20px; height: 56px; align-items: center; position: relative;}
+.form-item-content > .form-item >  .input-label {flex: 0 0 160px; padding-left: 40px; background: #F8F8F8; display: flex; align-items: center;}
+.form-item-content > .form-item >  .input-control > input {margin-left: 40px;}
+.form-item-content > .form-item.active > .icon {display: unset;}
+.form-item-content > .form-item> .icon {display: none; position: absolute; left: 180px; font-size: 25px;}
 
 /* bottom-btn */
-.bottom-btn {display: flex; align-items: center; background: #fff;padding-left: 150px; padding-bottom: 20px;}
+.bottom-btn {display: flex; align-items: center; background: #fff; padding-left: 150px; padding-bottom: 20px;}
