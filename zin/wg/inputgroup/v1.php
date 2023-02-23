@@ -23,7 +23,6 @@ class inputgroup extends wg
 
         if($type === 'input')
         {
-            var_dump($item);
             return input(
                 $item,
                 setClass('form-control'),
