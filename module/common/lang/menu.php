@@ -545,6 +545,7 @@ $lang->report->menu->pivotTable = array('link' => "{$lang->report->pivotTable}|r
 $lang->report->menuOrder[5]  = 'screen';
 $lang->report->menuOrder[10] = 'pivotTable';
 
+/*
 $lang->report->menu->pivotTable['subMenu'] = new stdclass();
 $lang->report->menu->pivotTable['subMenu']->product = array('link' => "{$lang->product->common}|report|preview|dimension=&group=product");
 $lang->report->menu->pivotTable['subMenu']->project = array('link' => "{$lang->project->common}|report|preview|dimension=&group=project");
@@ -555,6 +556,7 @@ $lang->report->menu->pivotTable['menuOrder'][5]  = 'product';
 $lang->report->menu->pivotTable['menuOrder'][10] = 'project';
 $lang->report->menu->pivotTable['menuOrder'][15] = 'test';
 $lang->report->menu->pivotTable['menuOrder'][20] = 'staff';
+ */
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();
