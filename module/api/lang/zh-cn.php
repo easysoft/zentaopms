@@ -9,7 +9,6 @@
  * @version     $Id: zh-cn.php 5129 2013-07-15 00:16:07Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->api = new stdclass();
 $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';
 $lang->api->sql      = 'SQL查询接口';
