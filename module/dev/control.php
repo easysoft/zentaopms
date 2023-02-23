@@ -85,7 +85,7 @@ class dev extends control
     /**
      *  Custom menu lang item.
      *
-     * @param  string $type       common|first|second|third|feature
+     * @param  string $type       common|first|second|third|tag
      * @param  string $module
      * @param  string $method
      * @param  string $language   zh_cn|en|fr|de|zh_tw
@@ -118,8 +118,8 @@ class dev extends control
             $moduleName = $module . 'SubMenu';
         }
 
-        if($type == 'feature' and empty($module)) $module = 'my';
-        if($type == 'feature' and empty($method)) $method = 'todo';
+        if($type == 'tag' and empty($module)) $module = 'my';
+        if($type == 'tag' and empty($method)) $method = 'todo';
 
         if($this->server->request_method == 'POST')
         {
