@@ -11,15 +11,20 @@
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
-<?php js::set('mode', 'ticket');?>
+<?php js::set('mode', $mode);?>
 <?php js::set('rawMethod', $app->rawMethod);?>
 <div id='mainMenu' class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo html::a(inlink($app->rawMethod, "mode=ticket&type=assignedtome"), "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>"   . ($browseType == 'assignedtome' ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($browseType == 'assignedtome' ? ' btn-active-text' : '') . "'");
+    foreach($lang->my->featureBar[$app->rawMethod]['ticket'] as $key => $name)
+    {
+        $label  = "<span class='text'>{$name}</span>";
+        $label .= $key == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+        $active = $key == $browseType ? 'btn-active-text' : '';
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=$key"), $label, '', "class='btn btn-link $active'");
+    }
     ?>
-  <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
 </div>
 <div id='mainContent' class="main-row fade">

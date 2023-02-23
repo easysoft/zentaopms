@@ -241,3 +241,11 @@ $lang->product->moreSelects['changingstory']  = $lang->product->changingStory;
 $lang->product->moreSelects['reviewingstory'] = $lang->product->reviewingStory;
 $lang->product->moreSelects['willclose']      = $lang->product->willClose;
 $lang->product->moreSelects['closedstory']    = $lang->product->closedStory;
+
+$lang->product->featureBar['dynamic']['all']       = 'All';
+$lang->product->featureBar['dynamic']['today']     = 'Today';
+$lang->product->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->product->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->product->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->product->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';

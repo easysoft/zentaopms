@@ -968,7 +968,7 @@ EOF;
             $typeList = $this->my->getReviewingTypeList();
             if(!isset($typeList->$browseType)) $browseType = 'all';
 
-            $this->lang->my->auditMenu->audit = $typeList;
+            $this->lang->my->featureBar['audit'] = (array)$typeList;
             $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
         }
 
@@ -1256,6 +1256,7 @@ EOF;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->browseType = $browseType;
+        $this->view->mode       = 'ticket';
         $this->display();
     }
 

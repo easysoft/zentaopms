@@ -61,10 +61,6 @@ $lang->my->code         = 'Code';
 $lang->my->projects     = 'Projects';
 $lang->my->executions   = 'Executions';
 
-$lang->my->executionMenu = new stdclass();
-$lang->my->executionMenu->undone = 'Undone';
-$lang->my->executionMenu->done   = 'Done';
-
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'AssignedToMe';
 $lang->my->taskMenu->openedByMe   = 'CreatedByMe';
@@ -93,27 +89,6 @@ $lang->my->auditField->oaTitle['leave']    = '%s application for leave: %s';
 $lang->my->auditField->oaTitle['makeup']   = '%s application for makeup:%s';
 $lang->my->auditField->oaTitle['overtime'] = '%s application for overtime: %s';
 $lang->my->auditField->oaTitle['lieu']     = '%s application for lieu: %s';
-
-$lang->my->auditMenu = new stdclass();
-$lang->my->auditMenu->audit = new stdclass();
-$lang->my->auditMenu->audit->all      = 'All';
-$lang->my->auditMenu->audit->story    = 'Story';
-$lang->my->auditMenu->audit->testcase = 'Case';
-if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->auditMenu->audit->project = $lang->projectCommon;
-if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = 'Feedback';
-if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->auditMenu->audit->oa = 'OA';
-
-$lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->audit = new stdclass();
-$lang->my->contributeMenu->audit->reviewedbyme = 'ReviewedByMe';
-$lang->my->contributeMenu->audit->createdbyme  = 'CreatedByMe';
-
-$lang->my->projectMenu = new stdclass();
-$lang->my->projectMenu->doing      = 'Doing';
-$lang->my->projectMenu->wait       = 'Waiting';
-$lang->my->projectMenu->suspended  = 'Suspended';
-$lang->my->projectMenu->closed     = 'Closed';
-$lang->my->projectMenu->openedbyme = 'CreatedByMe';
 
 $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = 'Basic Info';
@@ -156,3 +131,69 @@ $lang->my->guideChangeTheme = <<<EOT
   <p>Click <span style='color: #0c60e1'>Avatar-Theme-Young Blue</span>. It is done!</p>
 </div>
 EOT;
+
+$lang->my->featureBar['todo']['all']             = 'Assigned To Yourself';
+$lang->my->featureBar['todo']['before']          = 'Unfinished';
+$lang->my->featureBar['todo']['future']          = 'TBD';
+$lang->my->featureBar['todo']['thisWeek']        = 'This Week';
+$lang->my->featureBar['todo']['thisMonth']       = 'This Month';
+$lang->my->featureBar['todo']['thisYear']        = 'This Year';
+$lang->my->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->my->featureBar['todo']['cycle']           = 'Recurrence';
+
+$lang->my->featureBar['audit']['all']      = 'All';
+$lang->my->featureBar['audit']['story']    = 'Story';
+$lang->my->featureBar['audit']['testcase'] = 'Test case';
+if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
+if($config->edition != 'open') $lang->my->featureBar['audit']['feedback'] = 'Feedback';
+if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBar['audit']['oa'] = 'OA';
+
+$lang->my->featureBar['project']['doing']      = 'Doing';
+$lang->my->featureBar['project']['wait']       = 'Waiting';
+$lang->my->featureBar['project']['suspended']  = 'Suspended';
+$lang->my->featureBar['project']['closed']     = 'Closed';
+$lang->my->featureBar['project']['openedbyme'] = 'CreatedByMe';
+
+$lang->my->featureBar['execution']['undone'] = 'Undone';
+$lang->my->featureBar['execution']['done']   = 'Done';
+
+$lang->my->featureBar['dynamic']['all']       = 'All';
+$lang->my->featureBar['dynamic']['today']     = 'Today';
+$lang->my->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->my->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->my->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->my->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->my->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->my->featureBar['work']['task']['assignedTo']     = $lang->my->assignedToMe;
+$lang->my->featureBar['work']['testcase']['assigntome'] = $lang->my->assignedToMe;
+
+$lang->my->featureBar['work']['requirement'] = $lang->my->featureBar['work']['task'];
+$lang->my->featureBar['work']['requirement']['reviewBy'] = 'ReviewByMe';
+
+$lang->my->featureBar['work']['story'] = $lang->my->featureBar['work']['requirement'];
+$lang->my->featureBar['work']['bug']   = $lang->my->featureBar['work']['task'];
+
+$lang->my->featureBar['contribute']['task']['openedBy']   = 'CreatedByMe';
+$lang->my->featureBar['contribute']['task']['finishedBy'] = 'FinishedByMe';
+$lang->my->featureBar['contribute']['task']['closedBy']   = 'ClosedByMe';
+$lang->my->featureBar['contribute']['task']['canceledBy'] = 'CancelledByMe';
+$lang->my->featureBar['contribute']['task']['assignedBy'] = 'AssignedByMe';
+
+$lang->my->featureBar['contribute']['requirement']['openedBy']   = 'CreatedByMe';
+$lang->my->featureBar['contribute']['requirement']['reviewedBy'] = 'ReviewedByMe';
+$lang->my->featureBar['contribute']['requirement']['closedBy']   = 'ClosedByMe';
+$lang->my->featureBar['contribute']['requirement']['assignedBy'] = 'AssignedByMe';
+
+$lang->my->featureBar['contribute']['story'] = $lang->my->featureBar['contribute']['requirement'];
+$lang->my->featureBar['contribute']['bug']   = $lang->my->featureBar['contribute']['requirement'];
+
+$lang->my->featureBar['contribute']['testcase']['openedbyme'] = 'CreatedByMe';
+
+$lang->my->featureBar['contribute']['testtask']['done'] = 'Tested';
+
+$lang->my->featureBar['contribute']['audit']['reviewedbyme'] = 'ReviewedByMe';
+$lang->my->featureBar['contribute']['audit']['createdbyme']  = 'CreatedByMe';
+
+$lang->my->featureBar['contribute']['doc']['openedbyme'] = 'CreatedByMe';
+$lang->my->featureBar['contribute']['doc']['editedbyme'] = 'EditedByMe';

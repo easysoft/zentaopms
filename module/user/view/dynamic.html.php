@@ -16,7 +16,7 @@
 <?php js::set('period', $type);?>
 <div id='mainContent'>
   <div id='contentNav'>
-    <?php foreach($lang->action->periods as $period => $label):?>
+    <?php foreach($lang->user->featureBar['dynamic'] as $period => $label):?>
     <?php
     $label  = "<span class='text'>$label</span>";
     $active = '';

@@ -199,3 +199,4 @@ $lang->dev->projectMenu['project']       = "{$lang->projectCommon}通用";
 $lang->dev->projectMenu['scrum']         = "敏捷{$lang->projectCommon}";
 $lang->dev->projectMenu['waterfall']     = "瀑布{$lang->projectCommon}";
 $lang->dev->projectMenu['kanbanProject'] = "看板{$lang->projectCommon}";
+if($config->vision == 'lite') $lang->dev->projectMenu['kanbanProject'] = $lang->projectCommon;

@@ -293,6 +293,59 @@ class devModel extends model
     }
 
     /**
+     * Get nav lang.
+     *
+     * @param  string $type
+     * @param  string $module
+     * @param  string $method
+     * @param  string $language
+     * @param  object $defaultLang
+     * @access public
+     * @return object
+     */
+    public function getNavLang($type, $module, $method, $language = 'zh-cn', $defaultLang = null)
+    {
+        if(empty($defaultLang)) $defaultLang = $this->loadDefaultLang();
+
+        $menus = new stdclass();
+        if($type == 'second')
+        {
+            if(isset($defaultLang->$module->homeMenu))
+            {
+                foreach($defaultLang->$module->homeMenu as $menuKey => $menu)
+                {
+                    $menuKey = 'homeMenu_' . $menuKey;
+                    $menus->{$menuKey} = $menu;
+                }
+            }
+
+            if(isset($defaultLang->$module->menu))
+            {
+                foreach($defaultLang->$module->menu as $menuKey => $menu)
+                {
+                    if(is_array($menu) and !isset($menu['link'])) continue;
+
+                    $newKey = 'menu_' . $menuKey;
+                    $menus->{$newKey} = $menu;
+
+                    if(!isset($menu['dropMenu'])) continue;
+                    foreach($menu['dropMenu'] as $key => $menu)
+                    {
+                        $dropMenuKey = $menuKey . 'DropMenu_' . $key;
+                        $menus->{$dropMenuKey} = $menu;
+                    }
+                }
+            }
+        }
+        else
+        {
+           $menus = $type == 'third' ? $defaultLang->$module->menu->{$method}['subMenu'] : $defaultLang->mainNav;
+        }
+
+        return $menus;
+    }
+
+    /**
      * Get original lang.
      *
      * @param  string $type
@@ -324,7 +377,7 @@ class devModel extends model
             $originalLangs['executionCommon'] = $this->config->executionCommonList[$language][$projectKey];
             $originalLangs['URCommon']        = $this->lang->dev->UR;
             $originalLangs['SRCommon']        = $this->lang->dev->SR;
-            if(!$this->config->URAndSR) unset($originalLangs['SRCommon']);
+            if(!$this->config->URAndSR) unset($originalLangs['URCommon']);
         }
         elseif($type == 'feature')
         {
@@ -347,56 +400,18 @@ class devModel extends model
                 $originalLangs[$langKey . $feature] = $featureName;
             }
         }
-        elseif($type == 'first')
+        else
         {
-           $lang    = $defaultLang->mainNav;
-           $langKey = 'mainNav_';
-        }
-        elseif($type == 'second')
-        {
-            $menus = new stdclass();
-            if(isset($defaultLang->$module->homeMenu))
+            $lang    = $this->getNavLang($type, $module, $method, $language, $defaultLang);
+            $langKey = $type == 'first' ? 'mainNav_' : ($type == 'third' ? "{$method}_" : '');
+
+            $menus = $this->getLinkTitle($lang);
+            foreach($menus as $linkKey => $menu)
             {
-                foreach($defaultLang->$module->homeMenu as $menuKey => $menu)
-                {
-                    $menuKey = 'homeMenu_' . $menuKey;
-                    $menus->{$menuKey} = $menu;
-                }
+                if($type == 'first' and in_array($linkKey, $this->config->dev->disableMainMenu)) continue;
+
+                $originalLangs[$langKey . $linkKey] = $menu;
             }
-
-            if(isset($defaultLang->$module->menu))
-            {
-                foreach($defaultLang->$module->menu as $menuKey => $menu)
-                {
-                    if(is_array($menu) and !isset($menu['link'])) continue;
-
-                    $newKey = 'menu_' . $menuKey;
-                    $menus->{$newKey} = $menu;
-
-                    if(isset($menu['dropMenu']))
-                    {
-                        foreach($menu['dropMenu'] as $key => $menu)
-                        {
-                            $dropMenuKey = $menuKey . 'DropMenu_' . $key;
-                            $menus->{$dropMenuKey} = $menu;
-                        }
-                    }
-                }
-            }
-            $lang = $menus;
-        }
-        elseif($type == 'third')
-        {
-            $langKey = "{$method}_";
-            $lang    = $defaultLang->$module->menu->{$method}['subMenu'];
-        }
-
-        $menus = $this->getLinkTitle($lang);
-        foreach($menus as $linkKey => $menu)
-        {
-            if($type == 'first' and in_array($linkKey, $this->config->dev->disableMainMenu)) continue;
-
-            $originalLangs[$langKey . $linkKey] = $menu;
         }
 
         return $originalLangs;
@@ -418,45 +433,43 @@ class devModel extends model
 
         $langKey   = '';
         $customeds = array();
-        if($type == 'common')
+        switch($type)
         {
-            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module=common&section=&vision={$this->config->vision}");
-            foreach($customeds as $customed) $customedLangs[$customed->key] = $customed->value;
+            case 'common':
+                $customeds = $this->loadModel('custom')->getItems("lang={$language}&module=common&section=&vision={$this->config->vision}");
+                foreach($customeds as $customed) $customedLangs[$customed->key] = $customed->value;
 
-            $customedLangs['URCommon'] = $this->lang->dev->UR == $this->lang->URCommon ? '' : $this->lang->URCommon;
-            $customedLangs['SRCommon'] = $this->lang->dev->SR == $this->lang->SRCommon ? '' : $this->lang->SRCommon;
-            if($this->config->custom->URSR)
-            {
-                $URSRList = $this->custom->getItems("lang={$language}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
-                $URSRList = array_shift($URSRList);
-                if($URSRList)
+                $customedLangs['URCommon'] = $this->lang->dev->UR == $this->lang->URCommon ? '' : $this->lang->URCommon;
+                $customedLangs['SRCommon'] = $this->lang->dev->SR == $this->lang->SRCommon ? '' : $this->lang->SRCommon;
+                if($this->config->custom->URSR)
                 {
-                    $URSRList = json_decode($URSRList->value);
-                    $customedLangs['URCommon'] = $this->lang->dev->UR == $URSRList->URName ? '' : $URSRList->URName;
-                    $customedLangs['SRCommon'] = $this->lang->dev->SR == $URSRList->SRName ? '' : $URSRList->SRName;
+                    $URSRList = $this->custom->getItems("lang={$language}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
+                    $URSRList = array_shift($URSRList);
+                    if($URSRList)
+                    {
+                        $URSRList = json_decode($URSRList->value);
+                        $customedLangs['URCommon'] = $this->lang->dev->UR == $URSRList->URName ? '' : $URSRList->URName;
+                        $customedLangs['SRCommon'] = $this->lang->dev->SR == $URSRList->SRName ? '' : $URSRList->SRName;
+                    }
                 }
-            }
-            if(!$this->config->URAndSR) unset($customedLangs['SRCommon']);
-        }
-        elseif($type == 'first')
-        {
-            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module=common&section=mainNav&vision={$this->config->vision}");
-            $langKey   = 'mainNav_';
-        }
-        elseif($type == 'second')
-        {
-            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}Menu&vision={$this->config->vision}");
-        }
-        elseif($type == 'third')
-        {
-            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}SubMenu&section=$method&vision={$this->config->vision}");
-            $langKey   = "{$method}_";
-        }
-        elseif($type == 'feature')
-        {
-            $method = str_replace('_', '-', $method);
-            $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}&section=featureBar-$method&vision={$this->config->vision}");
-            $langKey   = "featureBar-{$method}_";
+                if(!$this->config->URAndSR) unset($customedLangs['SRCommon']);
+                break;
+            case 'first':
+                $customeds = $this->loadModel('custom')->getItems("lang={$language}&module=common&section=mainNav&vision={$this->config->vision}");
+                $langKey   = 'mainNav_';
+                break;
+            case 'second':
+                $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}Menu&vision={$this->config->vision}");
+                break;
+            case 'third':
+                $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}SubMenu&section=$method&vision={$this->config->vision}");
+                $langKey   = "{$method}_";
+                break;
+            case 'feature':
+                $method = str_replace('_', '-', $method);
+                $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}&section=featureBar-$method&vision={$this->config->vision}");
+                $langKey   = "featureBar-{$method}_";
+                break;
         }
 
         foreach($customeds as $customed)
@@ -493,8 +506,10 @@ class devModel extends model
     {
         $clientLang = $this->app->clientLang;
         if($language != $clientLang) $this->app->clientLang = $language;
+
         $langFilesToLoad = $this->app->getMainAndExtFiles($module);
         if($language != $clientLang) $this->app->clientLang = $clientLang;
+
         if(empty($langFilesToLoad)) return false;
 
         $lang = $module == 'common' ? new language() : $this->defaultLang;
@@ -719,6 +734,7 @@ class devModel extends model
             $menuItem->children = array_values($menuItem->children);
 
             if($type != 'second' and empty($menuItem->children)) continue;
+            if($type == 'second' and in_array($menuKey, $this->config->dev->hideMainMenu)) continue;
 
             $menuTree[] = $menuItem;
         }

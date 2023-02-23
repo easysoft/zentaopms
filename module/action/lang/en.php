@@ -91,14 +91,6 @@ $lang->action->dynamic->all        = 'All';
 $lang->action->dynamic->hidden     = 'Hidden';
 $lang->action->dynamic->search     = 'Search';
 
-$lang->action->periods['all']       = $lang->action->dynamic->all;
-$lang->action->periods['today']     = $lang->action->dynamic->today;
-$lang->action->periods['yesterday'] = $lang->action->dynamic->yesterday;
-$lang->action->periods['thisweek']  = $lang->action->dynamic->thisWeek;
-$lang->action->periods['lastweek']  = $lang->action->dynamic->lastWeek;
-$lang->action->periods['thismonth'] = $lang->action->dynamic->thisMonth;
-$lang->action->periods['lastmonth'] = $lang->action->dynamic->lastMonth;
-
 $lang->action->objectTypes['product']          = $lang->productCommon;
 $lang->action->objectTypes['branch']           = 'Branch';
 $lang->action->objectTypes['story']            = $lang->SRCommon;
