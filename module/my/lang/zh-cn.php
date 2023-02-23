@@ -90,13 +90,6 @@ $lang->my->auditField->oaTitle['makeup']   = '%s的补班申请：%s';
 $lang->my->auditField->oaTitle['overtime'] = '%s的加班申请：%s';
 $lang->my->auditField->oaTitle['lieu']     = '%s的调休申请：%s';
 
-$lang->my->projectMenu = new stdclass();
-$lang->my->projectMenu->doing      = '进行中';
-$lang->my->projectMenu->wait       = '未开始';
-$lang->my->projectMenu->suspended  = '已挂起';
-$lang->my->projectMenu->closed     = '已关闭';
-$lang->my->projectMenu->openedbyme = '由我创建';
-
 $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '联系信息';

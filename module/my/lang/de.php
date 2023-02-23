@@ -90,13 +90,6 @@ $lang->my->auditField->oaTitle['makeup']   = '%s application for makeup:%s';
 $lang->my->auditField->oaTitle['overtime'] = '%s application for overtime: %s';
 $lang->my->auditField->oaTitle['lieu']     = '%s application for lieu: %s';
 
-$lang->my->projectMenu = new stdclass();
-$lang->my->projectMenu->doing      = 'Doing';
-$lang->my->projectMenu->wait       = 'Waiting';
-$lang->my->projectMenu->suspended  = 'Suspended';
-$lang->my->projectMenu->closed     = 'Closed';
-$lang->my->projectMenu->openedbyme = 'CreatedByMe';
-
 $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = 'Basic Info';
 $lang->my->form->lblContact = 'Contact Info';
