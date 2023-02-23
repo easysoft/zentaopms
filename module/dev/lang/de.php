@@ -193,7 +193,7 @@ $lang->dev->featureBar['langItem']['common']  = 'Common';
 $lang->dev->featureBar['langItem']['first']   = 'First Menu';
 $lang->dev->featureBar['langItem']['second']  = 'Second Menu';
 $lang->dev->featureBar['langItem']['third']   = 'Third Menu';
-$lang->dev->featureBar['langItem']['feature'] = 'Search Tab';
+$lang->dev->featureBar['langItem']['tag']     = 'Search Tag';
 
 $lang->dev->projectMenu['project']       = "{$lang->projectCommon} Common";
 $lang->dev->projectMenu['scrum']         = "Scrum {$lang->projectCommon}";

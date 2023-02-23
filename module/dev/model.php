@@ -360,8 +360,8 @@ class devModel extends model
         if(empty($language)) $language = $this->app->getClientLang();
         $originalLangs = array();
         $defaultLang   = $this->loadDefaultLang($language);
-        if($type == 'feature' and in_array($module, $this->config->dev->projectMenus)) $module = 'project';
-        if($type == 'feature')
+        if($type == 'tag' and in_array($module, $this->config->dev->projectMenus)) $module = 'project';
+        if($type == 'tag')
         {
             $this->defaultLang = $defaultLang;
             $defaultLang       = $this->loadDefaultLang($language, $module);
@@ -379,7 +379,7 @@ class devModel extends model
             $originalLangs['SRCommon']        = $this->lang->dev->SR;
             if(!$this->config->URAndSR) unset($originalLangs['URCommon']);
         }
-        elseif($type == 'feature')
+        elseif($type == 'tag')
         {
             $langKey     = 'featureBar-' . $method . '_';
             $featureBars = zget($defaultLang->$module->featureBar, $method, array());
@@ -465,7 +465,7 @@ class devModel extends model
                 $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}SubMenu&section=$method&vision={$this->config->vision}");
                 $langKey   = "{$method}_";
                 break;
-            case 'feature':
+            case 'tag':
                 $method = str_replace('_', '-', $method);
                 $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}&section=featureBar-$method&vision={$this->config->vision}");
                 $langKey   = "featureBar-{$method}_";
@@ -591,7 +591,7 @@ class devModel extends model
     }
 
     /**
-     * Get feature menus.
+     * Get tags.
      *
      * @param  string $menu
      * @param  string $module
@@ -599,7 +599,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getFeatureMenus($module, $moduleName = '', $methodName = '')
+    public function getTagMenus($module, $moduleName = '', $methodName = '')
     {
         $menus = array();
         foreach(array('homeMenu', 'menu') as $menu)
@@ -722,10 +722,10 @@ class devModel extends model
             $menuItem->children = array();
 
             $childFunc = 'get' . ucfirst($type) . 'Menus';
-            if($type == 'feature' and in_array($menuKey, $this->config->dev->projectMenus))
+            if($type == 'tag' and in_array($menuKey, $this->config->dev->projectMenus))
             {
                 if($menuKey != 'project') continue;
-                foreach($this->config->dev->projectMenus as $projectModule) $menuItem->children += $this->getFeatureMenus($projectModule, $module, $method);
+                foreach($this->config->dev->projectMenus as $projectModule) $menuItem->children += $this->getTagMenus($projectModule, $module, $method);
             }
             else
             {
@@ -740,7 +740,7 @@ class devModel extends model
         }
 
         /* Unique menu tree by module and method. */
-        if($type == 'feature')
+        if($type == 'tag')
         {
             $methods = array();
             foreach($menuTree as $index => $menuItem)
