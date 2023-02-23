@@ -97,8 +97,7 @@ $pagerData = array(
     'page' => 2,
     'recTotal' => 101,
     'recPerPage' => 10,
-    'linkCreator' => '#?page={page}&recPerPage={recPerPage}',
-    'onClickItem' => '(info)=>{console.log("> pager.onClickItem" => info)}'
+    'linkCreator' => '#?page={page}&recPerPage={recPerPage}'
 );
 
 $tabsData = array(
@@ -153,7 +152,7 @@ page(
         ),
         pager
         (
-            set('js-render',   true),
+            set('js-render', true),
             set($pagerData)
         ),
         modal(
@@ -175,12 +174,26 @@ page(
                 )
             )
         ),
+        tooltip
+        (
+            set('js-render', true),
+            set('title', '提示内容'),
+            set('_to', '#tooltipTrigger'),
+            set('type', 'warning'),
+            set('placement', 'right'),
+            btn
+            (
+                '提示消息demo',
+                set('data-toggle', 'tooltip'),
+                setId('tooltipTrigger')
+            )
+        ),
         panel
         (
             set('theme', 'warning'),
             to('heading', '标题'),
             to('body', tabs(set('items', $tabsData))),
-            to('footer', '注脚'),
+            to('footer', div('注脚', setClass('primary'))),
             p('其它内容')
         )
     ),
