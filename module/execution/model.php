@@ -1072,7 +1072,7 @@ class executionModel extends model
                     if($sibling->status != 'wait')
                     {
                         $siblingsAllWait = false;
-                        return $pointOutStages;
+                        break;
                     }
                 }
 
