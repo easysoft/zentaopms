@@ -19,7 +19,7 @@ $lang->stage->view        = '阶段详情';
 $lang->stage->plusBrowse  = '融合瀑布阶段列表';
 
 /* Fields. */
-$lang->stage->id      = '编号';
+$lang->stage->id      = 'ID';
 $lang->stage->name    = '阶段名称';
 $lang->stage->type    = '阶段类型';
 $lang->stage->percent = '工作量占比';
