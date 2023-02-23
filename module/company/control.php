@@ -224,7 +224,7 @@ class company extends control
         /* Get executions' list.*/
         $executions    = $this->loadModel('execution')->getPairs(0, 'all', 'nocode|multiple');
         $executionList = $this->execution->getByIdList(array_keys($executions));
-        foreach($executionList as $executionID => $execution)
+        foreach($executionList as $id => $execution)
         {
             if(isset($projects[$execution->project])) $executions[$execution->id] = $projects[$execution->project] . $executions[$execution->id];
         }
