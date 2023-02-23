@@ -429,6 +429,7 @@ $lang->execution->hasStartedTaskOrSubStage     = "%s%s下的任务或子阶段�
 $lang->execution->hasSuspendedOrClosedChildren = "阶段%s下的子阶段未全部挂起或关闭，无法修改，已过滤。";
 $lang->execution->hasNotClosedChildren         = "阶段%s下的子阶段未全部关闭，无法修改，已过滤。";
 $lang->execution->hasStartedTask               = "%s%s下的任务已经开始，无法修改，已过滤。";
+$lang->execution->cannotManageProducts         = "当前{$lang->execution->common}的{$lang->project->common}为%s{$lang->project->common}，不能关联产品。";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
