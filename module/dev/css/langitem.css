@@ -2,20 +2,19 @@
 .flex-1 {flex: 1;}
 .align-center {align-items: center;}
 .justify-center {justify-content: center;}
-.h-32 {height: 32px;}
-.py-6 {padding: 6px 0;}
-.my-12 {margin: 12px 0;}
-.ml-20 {margin-left: 20px;}
+.reset-btn {margin-left: 20px;}
 .title {font-size: 13px; color: #313C52; font-weight: 700; height: 40px; text-align: center;}
-.gap-15 {gap: 15px;}
 .h-full {height: 100%;}
 
 /* menu-tree */
 .menu-tree {flex: 0 0 200px; background: #fff; padding: 10px 10px;}
 .menu-tree > .tree {padding-top: 20px;}
-li.has-list > ul > li {padding-left: 10px;}
 .tree ul {margin-bottom: 0;}
+#menuTree > li.has-list > ul > li {padding-left: 10px;}
+#menuTree > li.has-list > ul > li.has-list {padding-left: 15px;}
 
+/* main-box */
+.flex.main-box {gap: 15px;}
 
 /* title-content */
 .title-content {gap: 20px;}
@@ -30,4 +29,4 @@ li.has-list > ul > li {padding-left: 10px;}
 .form-item-content > .form-item> .icon {display: none; position: absolute; left: 180px; font-size: 25px;}
 
 /* bottom-btn */
-.bottom-btn {display: flex; align-items: center; background: #fff;padding-left: 150px; padding-bottom: 20px;}
+.bottom-btn {display: flex; align-items: center; background: #fff; padding-left: 150px; padding-bottom: 20px;}

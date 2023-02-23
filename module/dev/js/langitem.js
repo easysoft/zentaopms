@@ -9,7 +9,7 @@ $(function()
      */
     function addActive(id)
     {
-        $('[itemid=' + id + ']').addClass('text-primary active');
+        $('[data-id=' + id + ']').addClass('text-primary active');
     }
 
     /**
@@ -21,7 +21,7 @@ $(function()
      */
     function removeActive(id)
     {
-        $('[itemid=' + id + ']').removeClass('text-primary active');
+        $('[data-id=' + id + ']').removeClass('text-primary active');
     }
 
     /**
@@ -33,7 +33,7 @@ $(function()
      */
     function handleClickItem(clickId)
     {
-	    var clearId = $('.form-item.active').attr('itemid');
+	    var clearId = $('.form-item.active').attr('data-id');
         if(clearId !== clickId)
         {
             if(clearId) removeActive(clearId);
@@ -85,15 +85,15 @@ $(function()
         var childern = null;
         if (item && item.children)
         {
-             children = [];
-             for (var i = 0; i < item.children.length; i++)
-             {
-                 item.children[i].children = filterChildren(item.children[i], val);
-                 if (item.children[i].title.indexOf(val) != -1 || (item.children[i].key && item.children[i].key.indexOf(val) != -1) || item.children[i].children)
-                 {
-                     children.push(item.children[i]);
-                 }
-             }
+            children = [];
+            for (var i = 0; i < item.children.length; i++)
+            {
+                item.children[i].children = filterChildren(item.children[i], val);
+                if (item.children[i].title.indexOf(val) != -1 || (item.children[i].key && item.children[i].key.indexOf(val) != -1) || item.children[i].children)
+                {
+                    children.push(item.children[i]);
+                }
+            }
         }
         return children;
     }

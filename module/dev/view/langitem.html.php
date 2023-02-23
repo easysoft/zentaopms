@@ -35,7 +35,7 @@
     <?php endforeach;?>
   </div>
 </div>
-<div class="flex gap-15">
+<div class="flex main-box">
   <?php if(in_array($type, $config->dev->navTypes)):?>
   <div class="menu-tree">
     <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -57,7 +57,7 @@
       </div>
       <div class="form-item-content">
         <?php foreach($originalLangs as $langKey => $originalLang):?>
-        <div itemid="<?php echo "{$moduleName}_{$langKey}"?>" class="form-item flex">
+        <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="form-item flex">
           <?php if(str_replace('-', '_', $this->app->getClientLang()) != $language):?>
           <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
           <?php endif;?>
@@ -73,7 +73,7 @@
 
     <div class="bottom-btn">
       <?php echo html::submitButton(); ?>
-      <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&method={$method}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide ml-20'");?>
+      <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&method={$method}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide reset-btn'");?>
     </div>
   </form>
 </div>
