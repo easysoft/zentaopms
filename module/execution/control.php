@@ -2607,14 +2607,9 @@ class execution extends control
     public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
     {
         $this->app->loadLang('bug');
+        $this->app->loadLang('kanban');
 
         if(empty($groupBy)) $groupBy = 'default';
-
-        /* Set Session. */
-        $this->session->set('execLaneType', $browseType);
-        $this->session->set('execGroupBy', $groupBy);
-        $this->session->set('storyList', $this->app->getURI(true), 'execution');
-        $this->session->set('rdSearchValue', '');
 
         $this->lang->execution->menu = new stdclass();
         $execution = $this->commonAction($executionID);
@@ -2625,6 +2620,12 @@ class execution extends control
             $browseType = 'task';
             unset($this->lang->kanban->group->task['story']);
         }
+
+        /* Set Session. */
+        $this->session->set('execGroupBy', $groupBy);
+        $this->session->set('storyList', $this->app->getURI(true), 'execution');
+        $this->session->set('rdSearchValue', '');
+        $this->session->set('execLaneType', $browseType);
 
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
