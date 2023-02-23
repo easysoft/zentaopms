@@ -9,7 +9,6 @@
  * @version     $Id: zh-tw.php 5129 2013-07-15 00:16:07Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->api = new stdclass();
 $lang->api->common   = 'API介面';
 $lang->api->getModel = '超級model調用介面';
 $lang->api->sql      = 'SQL查詢介面';
