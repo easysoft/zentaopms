@@ -912,9 +912,10 @@ class commonModel extends model
             if($tab == 'product') $currentMethod = 'all';
         }
 
-        $link = helper::createLink($currentModule, $currentMethod);
+        $link      = helper::createLink($currentModule, $currentMethod);
         $className = $tab == 'devops' ? 'btn num' : 'btn';
-        $html = $link ? html::a($link, "$icon {$lang->$tab->common}", '', "class='$className' style='padding-top: 2px'") : "$icon {$lang->$tab->common}";
+        $btnTitle  = isset($lang->db->custom['common']['mainNav'][$tab]) ? $lang->db->custom['common']['mainNav'][$tab] : $lang->$tab->common;
+        $html      = $link ? html::a($link, "$icon $btnTitle", '', "class='$className' style='padding-top: 2px'") : "$icon $btnTitle";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
     }

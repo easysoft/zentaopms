@@ -118,8 +118,11 @@ class dev extends control
             $moduleName = $module . 'SubMenu';
         }
 
-        if($type == 'tag' and empty($module)) $module = 'my';
-        if($type == 'tag' and empty($method)) $method = 'todo';
+        if($type == 'tag')
+        {
+            if(empty($module)) $module = 'my';
+            if(empty($method)) $method = 'todo';
+        }
 
         if($this->server->request_method == 'POST')
         {

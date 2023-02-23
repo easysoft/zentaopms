@@ -248,7 +248,7 @@ if(!helper::hasFeature('waterfall')) $config->disableFeature = array('design', '
 
 $config->dev->disableMainMenu = array('project', 'product', 'execution');
 $config->dev->projectMenus    = array('project', 'scrum', 'waterfall', 'kanbanProject');
-$config->dev->hideMainMenu    = array('admin');
+$config->dev->hideMainMenu    = array('admin', 'kanban');
 if($config->vision == 'lite')
 {
     $config->dev->projectMenus = array('project', 'kanbanProject');
