@@ -1,0 +1,1 @@
+import{aY as n,S as e}from"./index-ed17d07a.js";const g=()=>{const s=document.location.hash.split("/"),r=s&&s[s.length-1],t=n(e.GO_CHART_STORAGE_LIST);if(!!t){for(let o=0;o<t.length;o++)if(r.toString()===t[o].id)return t[o]}};export{g};
