@@ -124,29 +124,49 @@ class router extends baseRouter
         {
             foreach($lang->db->custom[$moduleName] as $section => $fields)
             {
-                if(isset($lang->{$moduleName}->{$section}['']))
+                if($section == 'featureBar')
                 {
-                    $nullKey   = '';
-                    $nullValue = $lang->{$moduleName}->{$section}[$nullKey];
+                    foreach($fields as $featureBarMethod => $featureBarValues)
+                    {
+                        foreach($featureBarValues as $featureBarKey => $featureBarValue)
+                        {
+                            if(is_array($featureBarValue))
+                            {
+                                foreach($featureBarValue as $key => $value) $lang->{$moduleName}->{$section}[$featureBarMethod][$featureBarKey][$key] = $value;
+                            }
+                            else
+                            {
+                                $lang->{$moduleName}->{$section}[$featureBarMethod][$featureBarKey] = $featureBarValue;
+                            }
+                        }
+                    }
                 }
-                elseif(isset($lang->{$moduleName}->{$section}[0]))
+                else
                 {
-                    $nullKey   = 0;
-                    $nullValue = $lang->{$moduleName}->{$section}[0];
-                }
-                unset($lang->{$moduleName}->{$section});
+                    if(isset($lang->{$moduleName}->{$section}['']))
+                    {
+                        $nullKey   = '';
+                        $nullValue = $lang->{$moduleName}->{$section}[$nullKey];
+                    }
+                    elseif(isset($lang->{$moduleName}->{$section}[0]))
+                    {
+                        $nullKey   = 0;
+                        $nullValue = $lang->{$moduleName}->{$section}[0];
+                    }
+                    unset($lang->{$moduleName}->{$section});
 
-                if(isset($nullKey))$lang->{$moduleName}->{$section}[$nullKey] = $nullValue;
-                foreach($fields as $key => $value)
-                {
-                    if($section == 'priList' and $key > 0 and trim($value) === '') continue; // Fix bug #23538.
+                    if(isset($nullKey))$lang->{$moduleName}->{$section}[$nullKey] = $nullValue;
+                    foreach($fields as $key => $value)
+                    {
+                        if($section == 'priList' and $key > 0 and trim($value) === '') continue; // Fix bug #23538.
 
-                    if(!isset($lang->{$moduleName})) $lang->{$moduleName} = new stdclass();
-                    if(!isset($lang->{$moduleName}->{$section})) $lang->{$moduleName}->{$section} = array();
-                    $lang->{$moduleName}->{$section}[$key] = $value;
+                        if(!isset($lang->{$moduleName})) $lang->{$moduleName} = new stdclass();
+                        if(!isset($lang->{$moduleName}->{$section})) $lang->{$moduleName}->{$section} = array();
+                        $lang->{$moduleName}->{$section}[$key] = $value;
+                    }
+                    unset($nullKey);
+                    unset($nullValue);
                 }
-                unset($nullKey);
-                unset($nullValue);
             }
         }
 
