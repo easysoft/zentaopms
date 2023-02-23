@@ -9,8 +9,6 @@
  * @version     $Id: model.php 5118 2013-07-12 07:41:41Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class executionModel extends model
 {
     /* The members every linking. */
@@ -1072,7 +1070,7 @@ class executionModel extends model
                     if($sibling->status != 'wait')
                     {
                         $siblingsAllWait = false;
-                        return $pointOutStages;
+                        break;
                     }
                 }
 
@@ -1092,7 +1090,7 @@ class executionModel extends model
                     if(!dao::isError())
                     {
                         $changes    = common::createChanges($parent, $newParent);
-                        $actionType = $parentStatus == 'doing' ? 'startbychildedit' : 'waitbychild';
+                        $actionType = $parentStatus == 'doing' ? 'started' : 'waitbychild';
                         $actionID   = $this->action->create('execution', $parentID, $actionType, '', $actionType);
                         $this->action->logHistory($actionID, $changes);
 
@@ -1121,7 +1119,7 @@ class executionModel extends model
         if(!dao::isError())
         {
             $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
-            $actionID = $this->action->create('execution', $executionID, 'Edited');
+            $actionID = $this->action->create('execution', $executionID, 'Started');
             $this->action->logHistory($actionID, $changes);
 
             if($type != 'stage') return '';
@@ -1182,7 +1180,7 @@ class executionModel extends model
         if(!dao::isError())
         {
             $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
-            $actionID = $this->action->create('execution', $executionID, 'Edited');
+            $actionID = $this->action->create('execution', $executionID, strtoupper($status));
             $this->action->logHistory($actionID, $changes);
 
             if($type != 'stage') return '';

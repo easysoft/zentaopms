@@ -69,3 +69,36 @@ $(function()
         }
     });
 })
+
+/**
+ * Delete item use ajax.
+ *
+ * @param  string url
+ * @param  string replaceID
+ * @param  string notice
+ * @access public
+ * @return void
+ */
+function ajaxDelete(url, replaceID, notice)
+{
+    if(confirm(notice))
+    {
+        $.ajax(
+        {
+            type:     'GET',
+            url:      url,
+            dataType: 'json',
+            success:  function(data)
+            {
+                if(data.result == 'success')
+                {
+                    location.reload();
+                }
+                else if(data.result == 'fail' && typeof(data.message) == 'string')
+                {
+                    bootbox.alert(data.message);
+                }
+            }
+        });
+    }
+}

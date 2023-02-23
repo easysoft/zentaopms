@@ -571,10 +571,15 @@ class myModel extends model
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
         $query = str_replace('t1.`project`', 't2.`project`', $query);
 
+        $assignedToMatches   = array();
+        $assignedToCondition = '';
+        $operatorAndAccount  = '';
         if(strpos($query, '`assignedTo`') !== false)
         {
-            preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $query, $matches);
-            $query = str_replace("t1.$matches[0]", "(t1.$matches[0] or (t1.mode = 'multi' and t5.`account` $matches[1] and t1.status != 'closed' and t5.status != 'done') )", $query);
+            preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $query, $assignedToMatches);
+            $assignedToCondition = $assignedToMatches[0];
+            $operatorAndAccount  = $assignedToMatches[1];
+            $query = str_replace("t1.$assignedToMatches[0]", "(t1.$assignedToCondition or (t1.mode = 'multi' and t5.`account` $operatorAndAccount and t1.status != 'closed' and t5.status != 'done') )", $query);
         }
 
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
@@ -588,7 +593,10 @@ class myModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('(t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)
-            ->beginIF($moduleName == 'workTask')->andWhere("(t1.$matches[0] or (t1.mode = 'multi' and t5.`account` $matches[1] and t1.status != 'closed' and t5.status != 'done') )")->fi()
+            ->beginIF($moduleName == 'workTask')
+            ->beginIF(!empty($assignedToMatches))->andWhere("(t1.$assignedToCondition or (t1.mode = 'multi' and t5.`account` $operatorAndAccount and t1.status != 'closed' and t5.status != 'done') )")->fi()
+            ->beginIF(empty($assignedToMatches))->andWhere("t1.assignedTo")->eq($account)->fi()
+            ->fi()
             ->beginIF($moduleName == 'contributeTask')
             ->andWhere('t1.openedBy', 1)->eq($account)
             ->orWhere('t1.closedBy')->eq($account)

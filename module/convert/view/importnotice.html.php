@@ -41,8 +41,8 @@ li .form-control {margin-top: 10px}
       </ol>
     </div>
     <hr />
-    <div class='panel-footer text-center'>
-      <?php echo html::submitButton($lang->convert->jira->next);?>
+    <div class='panel-footer text-center form-actions'>
+      <?php echo html::submitButton($lang->convert->jira->next) . html::backButton();?>
     </div>
   </form>
 </div>

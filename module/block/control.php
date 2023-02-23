@@ -978,14 +978,14 @@ class block extends control
 
         foreach($projects as $projectID => $project)
         {
-            if($project->model == 'scrum' or $project->model == 'kanban')
+            if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
             {
                 $this->app->loadClass('pager', $static = true);
                 $pager = pager::init(0, 3, 1);
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
                 $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
             }
-            elseif($project->model == 'waterfall')
+            elseif(in_array($project->model, array('waterfall', 'waterfallplus')))
             {
                 $begin   = $project->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);

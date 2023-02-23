@@ -206,22 +206,22 @@ $(function()
         }
     });
 
-    $('#swapper #dropMenu').on('onSearchComplete', function(event, value)
+    $('#swapper #dropMenu').on('onSearchComplete', function()
     {
-        if($('.list-group.executions').height() == 0)
-        {
-            $('#closed').attr("hidden", true);
-            $('#gray-line').attr("hidden", true);
-        }
-
         var listItem = $(this).find('.has-list');
-        listItem.each(function ()
+        listItem.each(function()
         {
             $(this).css('display','')
             var $hidden = $(this).find('.hidden');
             var $item   = $(this).find('.search-list-item');
             if($hidden.length == $item.length) $(this).css('display','none');
         });
+
+        if($('.list-group.executions').height() == 0)
+        {
+            $('#closed').attr("hidden", true);
+            $('#gray-line').attr("hidden", true);
+        }
     });
 })
 </script>

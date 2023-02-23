@@ -345,7 +345,7 @@
               </div>
             </div>
             <?php endif;?>
-            <?php if($execution->projectInfo->hasProduct or $execution->projectInfo->model == 'scrum'):?>
+            <?php if(!(strpos($execution->projectInfo->model, 'waterfall') !== false and (empty($execution->projectInfo->hasProduct) or in_array($execution->attribute, array('request', 'review'))))):?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">
