@@ -175,10 +175,13 @@ page(
                 )
             )
         ),
-        tabs
+        panel
         (
-            set('direction', 'h'),
-            set('items', $tabsData)
+            set('theme', 'warning'),
+            to('heading', '标题'),
+            to('body', tabs(set('items', $tabsData))),
+            to('footer', '注脚'),
+            p('其它内容')
         )
     ),
     dropdown
