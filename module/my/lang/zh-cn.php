@@ -61,10 +61,6 @@ $lang->my->code         = '代号';
 $lang->my->projects     = '所属项目';
 $lang->my->executions   = "所属{$lang->executionCommon}";
 
-$lang->my->executionMenu = new stdclass();
-$lang->my->executionMenu->undone = '未完成';
-$lang->my->executionMenu->done   = '已完成';
-
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = '指派给我';
 $lang->my->taskMenu->openedByMe   = '由我创建';
