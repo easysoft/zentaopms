@@ -24,4 +24,4 @@ CREATE TABLE `zt_pivot`  (
 
 ALTER TABLE `zt_screen` ADD `status` enum('draft','published') NOT NULL DEFAULT 'draft' AFTER `scheme`;
 ALTER TABLE `zt_screen` ADD `builtin` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `status`;
-UPDATE `zt_screen` SET builtin = '1';
+UPDATE `zt_screen` SET builtin = '1', status = 'published';

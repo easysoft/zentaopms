@@ -56,7 +56,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getByID($screenID, $year, $dept, $account)
+    public function getByID($screenID, $year = '', $dept = '', $account = '')
     {
         $this->filter = new stdclass();
         $this->filter->screen  = $screenID;
