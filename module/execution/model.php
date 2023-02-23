@@ -9,8 +9,6 @@
  * @version     $Id: model.php 5118 2013-07-12 07:41:41Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class executionModel extends model
 {
     /* The members every linking. */
@@ -1072,7 +1070,7 @@ class executionModel extends model
                     if($sibling->status != 'wait')
                     {
                         $siblingsAllWait = false;
-                        return $pointOutStages;
+                        break;
                     }
                 }
 
