@@ -4,6 +4,8 @@ include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/stage.class.php';
 su('admin');
 
+zdTable('stage')->gen(0);
+
 /**
 
 title=测试 stageModel->batchCreate();
@@ -28,8 +30,6 @@ pid=1
 测试批量创建融合瀑布项目的百分比超出100的阶段 >> 工作量占比累计不应当超过100%
 
 */
-zdTable('stage')->gen(0);
-
 $name1    = array('1' => '批量创建的需求', '2' => '批量创建的设计', '3' => '', '4' => '', '5' => '', '6' => '', '7' => '', '8' => '', '9' => '', '10' => '');
 $percent1 = array('1' => '1', '2' => '2', '3' => '', '4' => '', '5' => '', '6' => '', '7' => '', '8' => '', '9' => '', '10' => '');
 $type1    = array('1' => 'request', '2' => 'design', '3' => '', '4' => '', '5' => '', '6' => '', '7' => '', '8' => '', '9' => '', '10' => '');

@@ -118,4 +118,20 @@ class stageTest
 
         return $object;
     }
+
+    /**
+     * Test get a stage by id.
+     *
+     * @param  string $projectType
+     * @access public
+     * @return object
+     */
+    public function getTotalPercentTest($projectType)
+    {
+        $object = $this->objectModel->getTotalPercent($projectType);
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
+    }
 }

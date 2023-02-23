@@ -4,6 +4,8 @@ include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/stage.class.php';
 su('admin');
 
+zdTable('stage')->gen(0);
+
 /**
 
 title=测试 stageModel->create();
@@ -36,8 +38,6 @@ pid=1
 测试新建融合瀑布项目总百分比超过100 >> 工作量占比累计不应当超过100%
 
 */
-
-zdTable('stage')->gen(0);
 
 $stage1 = new stdclass();
 $stage1->name    = '新建的需求';
