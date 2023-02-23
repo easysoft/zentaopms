@@ -3,7 +3,7 @@ namespace zin;
 
 class formlabel extends wg
 {
-    protected static $defineProps = 'text?:string,required?:bool';
+    protected static $defineProps = 'text?:string,required?:bool,auto?:bool';
 
     public function onAddChild($child)
     {
@@ -18,9 +18,12 @@ class formlabel extends wg
     {
         $classList = 'form-label';
         if($this->prop('required')) $classList .= ' required';
+        $style = array();
+        if($this->prop('auto')) $style['width'] = 'auto !important';
         return h::label
         (
             setClass($classList),
+            setStyle($style),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $this->prop('text')
         );
