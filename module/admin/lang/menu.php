@@ -3,46 +3,46 @@ global $config;
 $lang->admin->menuList = new stdclass();
 $lang->admin->menuList->system['name']  = $lang->admin->menuSetting['system']['name'];
 $lang->admin->menuList->system['desc']  = $lang->admin->menuSetting['system']['desc'];
-$lang->admin->menuList->system['order'] = 1;
-
-$lang->admin->menuList->user['name']  = $lang->admin->menuSetting['user']['name'];
-$lang->admin->menuList->user['desc']  = $lang->admin->menuSetting['user']['desc'];
-$lang->admin->menuList->user['order'] = 2;
+$lang->admin->menuList->system['order'] = 5;
 
 $lang->admin->menuList->switch['name']  = $lang->admin->menuSetting['switch']['name'];
 $lang->admin->menuList->switch['desc']  = $lang->admin->menuSetting['switch']['desc'];
 $lang->admin->menuList->switch['link']  = 'admin|setmodule';
-$lang->admin->menuList->switch['order'] = 3;
+$lang->admin->menuList->switch['order'] = 10;
+
+$lang->admin->menuList->user['name']  = $lang->admin->menuSetting['user']['name'];
+$lang->admin->menuList->user['desc']  = $lang->admin->menuSetting['user']['desc'];
+$lang->admin->menuList->user['order'] = 15;
 
 $lang->admin->menuList->model['name']  = $lang->admin->menuSetting['model']['name'];
 $lang->admin->menuList->model['desc']  = $lang->admin->menuSetting['model']['desc'];
-$lang->admin->menuList->model['order'] = 4;
+$lang->admin->menuList->model['order'] = 20;
 
 $lang->admin->menuList->feature['name']  = $lang->admin->menuSetting['feature']['name'];
 $lang->admin->menuList->feature['desc']  = $lang->admin->menuSetting['feature']['desc'];
-$lang->admin->menuList->feature['order'] = 5;
+$lang->admin->menuList->feature['order'] = 25;
 
 $lang->admin->menuList->template['name']  = $lang->admin->menuSetting['template']['name'];
 $lang->admin->menuList->template['desc']  = $lang->admin->menuSetting['template']['desc'];
-$lang->admin->menuList->template['order'] = 6;
+$lang->admin->menuList->template['order'] = 30;
 
 $lang->admin->menuList->message['name']  = $lang->admin->menuSetting['message']['name'];
 $lang->admin->menuList->message['desc']  = $lang->admin->menuSetting['message']['desc'];
-$lang->admin->menuList->message['order'] = 7;
+$lang->admin->menuList->message['order'] = 35;
 
 $lang->admin->menuList->extension['name']  = $lang->admin->menuSetting['extension']['name'];
 $lang->admin->menuList->extension['desc']  = $lang->admin->menuSetting['extension']['desc'];
 $lang->admin->menuList->extension['link']  = 'extension|browse';
-$lang->admin->menuList->extension['order'] = 8;
+$lang->admin->menuList->extension['order'] = 40;
 
 $lang->admin->menuList->dev['name']  = $lang->admin->menuSetting['dev']['name'];
 $lang->admin->menuList->dev['desc']  = $lang->admin->menuSetting['dev']['desc'];
-$lang->admin->menuList->dev['order'] = 9;
+$lang->admin->menuList->dev['order'] = 45;
 
 $lang->admin->menuList->convert['name']  = $lang->admin->menuSetting['convert']['name'];
 $lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert']['desc'];
 $lang->admin->menuList->convert['link']  = 'convert|convertjira';
-$lang->admin->menuList->convert['order'] = 10;
+$lang->admin->menuList->convert['order'] = 50;
 
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");
 $lang->admin->menuList->system['subMenu']['backup']      = array('link' => "{$lang->backup->common}|backup|index|");
