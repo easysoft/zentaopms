@@ -165,3 +165,57 @@ $lang->my->featureBar['todo']['thisMonth']       = 'This Month';
 $lang->my->featureBar['todo']['thisYear']        = 'This Year';
 $lang->my->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
 $lang->my->featureBar['todo']['cycle']           = 'Recurrence';
+
+$lang->my->featureBar['audit']['all']      = 'All';
+$lang->my->featureBar['audit']['story']    = 'Story';
+$lang->my->featureBar['audit']['testcase'] = 'Test case';
+
+$lang->my->featureBar['project']['doing']      = 'Doing';
+$lang->my->featureBar['project']['wait']       = 'Waiting';
+$lang->my->featureBar['project']['suspended']  = 'Suspended';
+$lang->my->featureBar['project']['closed']     = 'Closed';
+$lang->my->featureBar['project']['openedbyme'] = 'CreatedByMe';
+
+$lang->my->featureBar['execution']['undone'] = 'Undone';
+$lang->my->featureBar['execution']['done']   = 'Done';
+
+$lang->my->featureBar['dynamic']['all']       = 'All';
+$lang->my->featureBar['dynamic']['today']     = 'Today';
+$lang->my->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->my->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->my->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->my->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->my->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->my->featureBar['work']['task']['assignedTo']     = $lang->my->assignedToMe;
+$lang->my->featureBar['work']['testcase']['assigntome'] = $lang->my->assignedToMe;
+
+$lang->my->featureBar['work']['requirement'] = $lang->my->featureBar['work']['task'];
+$lang->my->featureBar['work']['requirement']['reviewBy'] = 'ReviewByMe';
+
+$lang->my->featureBar['work']['story'] = $lang->my->featureBar['work']['requirement'];
+$lang->my->featureBar['work']['bug']   = $lang->my->featureBar['work']['task'];
+
+$lang->my->featureBar['contribute']['task']['openedBy']   = 'CreatedByMe';
+$lang->my->featureBar['contribute']['task']['finishedBy'] = 'FinishedByMe';
+$lang->my->featureBar['contribute']['task']['closedBy']   = 'ClosedByMe';
+$lang->my->featureBar['contribute']['task']['canceledBy'] = 'CancelledByMe';
+$lang->my->featureBar['contribute']['task']['assignedBy'] = 'AssignedByMe';
+
+$lang->my->featureBar['contribute']['requirement']['openedBy']   = 'CreatedByMe';
+$lang->my->featureBar['contribute']['requirement']['reviewedBy'] = 'ReviewedByMe';
+$lang->my->featureBar['contribute']['requirement']['closedBy']   = 'ClosedByMe';
+$lang->my->featureBar['contribute']['requirement']['assignedBy'] = 'AssignedByMe';
+
+$lang->my->featureBar['contribute']['story'] = $lang->my->featureBar['contribute']['requirement'];
+$lang->my->featureBar['contribute']['bug']   = $lang->my->featureBar['contribute']['requirement'];
+
+$lang->my->featureBar['contribute']['testcase']['openedbyme'] = 'CreatedByMe';
+
+$lang->my->featureBar['contribute']['testtask']['done'] = 'Tested';
+
+$lang->my->featureBar['contribute']['audit']['reviewedbyme'] = 'ReviewedByMe';
+$lang->my->featureBar['contribute']['audit']['createdbyme']  = 'CreatedByMe';
+
+$lang->my->featureBar['contribute']['doc']['openedbyme'] = 'CreatedByMe';
+$lang->my->featureBar['contribute']['doc']['editedbyme'] = 'EditedByMe';
