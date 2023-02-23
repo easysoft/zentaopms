@@ -9,8 +9,7 @@ $(function()
      */
     function addActive(id)
     {
-        $('[labelid=' + id + ']').addClass('text-primary');
-        $('[iconid=' + id + ']').removeClass('hidden');
+        $('[data-id=' + id + ']').addClass('text-primary active');
     }
 
     /**
@@ -22,8 +21,7 @@ $(function()
      */
     function removeActive(id)
     {
-        $('[labelid=' + id + ']').removeClass('text-primary');
-        $('[iconid=' + id + ']').addClass('hidden');
+        $('[data-id=' + id + ']').removeClass('text-primary active');
     }
 
     /**
@@ -35,10 +33,10 @@ $(function()
      */
     function handleClickItem(clickId)
     {
-	      var clearId = $('.label-list > .text-primary').attr('labelid');
+	    var clearId = $('.form-item.active').attr('data-id');
         if(clearId !== clickId)
         {
-            if(clearId) removeActive(clearId); 
+            if(clearId) removeActive(clearId);
             if(clickId) addActive(clickId);
         };
     }
@@ -87,17 +85,16 @@ $(function()
         var childern = null;
         if (item && item.children)
         {
-             children = [];
-             for (var i = 0; i < item.children.length; i++)
-             {
-                 item.children[i].children = filterChildren(item.children[i], val);
-                 if (item.children[i].title.indexOf(val) != -1 || (item.children[i].key && item.children[i].key.indexOf(val) != -1) || item.children[i].children)
-                 {
-                     children.push(item.children[i]);
-                 }
-             }
+            children = [];
+            for (var i = 0; i < item.children.length; i++)
+            {
+                item.children[i].children = filterChildren(item.children[i], val);
+                if (item.children[i].title.indexOf(val) != -1 || (item.children[i].key && item.children[i].key.indexOf(val) != -1) || item.children[i].children)
+                {
+                    children.push(item.children[i]);
+                }
+            }
         }
-
         return children;
     }
 
@@ -127,12 +124,11 @@ $(function()
         {
             var target = $(e.target);
             if (target.attr('data-has-children') === 'true') return;
-
             self.location.href = createLink('dev', 'langItem', 'type=' + type + '&module=' + target.attr('data-module') + '&method=' + target.attr('data-method'));
         })
     }
 
-    $(".input-list").on("click", 'input', function(e)
+    $(".form-item-content").on("click", 'input', function(e)
     {
         handleClickItem(e.target.id);
     }).on("blur", 'input', function(e)
@@ -140,13 +136,21 @@ $(function()
         removeActive(e.target.id);
     });
 
-    $('.label-list > .input-label').on('click', function()
+    $('.form-item-content > .form-item > .input-label').on('click', function()
     {
-        handleClickItem($(this).attr('labelid'));
+        handleClickItem($(this).data('id'));
     });
+
+    $(".form-item-content").on('mouseover', '.form-item', function()
+    {
+        $(this).addClass('text-primary');
+    }).on('mouseout', '.form-item', function()
+    {
+        $(this).removeClass('text-primary');
+    })
 
     initMenu();
     handleInputSearch();
 
-    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary")
+    $('li.has-list > ul').addClass("menu-active-primary menu-hover-primary");
 })

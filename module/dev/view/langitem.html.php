@@ -35,52 +35,45 @@
     <?php endforeach;?>
   </div>
 </div>
-<div class="flex gap-15">
-<?php if(in_array($type, $config->dev->navTypes)):?>
+<div class="flex main-box">
+  <?php if(in_array($type, $config->dev->navTypes)):?>
   <div class="menu-tree">
     <div class="input-control search-box has-icon-left has-icon-right search-example">
-      <input type="search" class="form-control search-input" />
+      <input type="search" class="form-control search-input"/>
       <label class="input-control-icon-left search-icon flex align-center justify-center"><i class="icon icon-search"></i></label>
     </div>
     <div id="menuTree" class="menu-active-primary menu-hover-primary"></div>
   </div>
-<?php endif;?>
+  <?php endif;?>
+
   <form class='main-form form-ajax flex-1' method='post'>
-    <div id='mainContent' class='main-content flex'>
-      <?php if(str_replace('-', '_', $this->app->getClientLang()) != $language):?>
-      <div class="side-left">
-        <div class="title"><?php echo $lang->dev->currentLang;?> </div>
-        <div class="label-list">
-          <?php foreach($currentLangs as $langKey => $originalLang):?>
-          <div labelId="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-32 my-12"><?php echo $originalLang?></div>
-          <?php endforeach;?>
-        </div>
-      </div>
-      <?php endif;?>
-      <div class="side-left">
-        <div class="title"><?php echo $lang->dev->defaultValue ?> </div>
-        <div class="label-list">
-          <?php foreach($originalLangs as $langKey => $originalLang):?>
-          <div labelId="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-32 my-12"><?php echo $originalLang?></div>
-          <?php endforeach;?>
-        </div>
-      </div>
-      <div class="side-right">
+    <div class="main-content">
+      <div class="title-content flex">
+        <?php if(str_replace('-', '_', $this->app->getClientLang()) != $language):?>
+          <div class="title"><?php echo $lang->dev->currentLang;?> </div>
+        <?php endif;?>
+        <div class="title"><?php echo $lang->dev->defaultValue?></div>
         <div class="title"><?php echo $lang->dev->modifyValue?></div>
-        <div class="input-list">
-          <?php foreach($originalLangs as $langKey => $originalLang):?>
-          <div class="input-control h-32 my-12">
-            <?php echo html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$originalLang}'");?>
-            <i iconId="<?php echo "{$moduleName}_{$langKey}"?>" class="icon icon-angle-right text-primary hidden"></i>
-          </div>
-          <?php endforeach;?>
-        </div>
       </div>
-      <div class="side-main"></div>
+      <div class="form-item-content">
+        <?php foreach($originalLangs as $langKey => $originalLang):?>
+        <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="form-item flex">
+          <?php if(str_replace('-', '_', $this->app->getClientLang()) != $language):?>
+          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
+          <?php endif;?>
+          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
+          <i class="icon icon-angle-right text-primary"></i>
+          <div class="input-control">
+            <?php echo html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$originalLang}'");?>
+          </div>
+        </div>
+        <?php endforeach;?>
+      </div>
     </div>
+
     <div class="bottom-btn">
       <?php echo html::submitButton(); ?>
-      <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&method={$method}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide ml-20'");?>
+      <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&method={$method}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide reset-btn'");?>
     </div>
   </form>
 </div>
