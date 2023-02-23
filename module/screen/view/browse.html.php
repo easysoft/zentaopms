@@ -25,7 +25,7 @@
           <?php $i++;?>
           <?php if($i == 13) $i = 1;?>
           <?php endif?>
-          <div class='bottom' data-builtin='<?php echo $screen->builtin;?>'>
+          <div class='bottom' data-builtin='<?php echo $screen->builtin;?>' data-status='<?php echo $screen->status;?>'>
             <div class='screen-title text-ellipsis' title='<?php echo $screen->name?>'><?php echo $screen->name;?></div>
             <div class='screen-desc' title="<?php echo $screen->desc;?>">
             <?php echo empty($screen->desc) ? $lang->screen->noDesc : $screen->desc;?>
