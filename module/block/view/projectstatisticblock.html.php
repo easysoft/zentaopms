@@ -134,7 +134,7 @@ $(function()
       <?php foreach($projects as $project):?>
       <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id='<?php echo "tab3{$blockNavId}Content{$project->id}";?>'>
         <div class="table-row">
-          <?php if($project->model == 'scrum' or $project->model == 'kanban'):?>
+          <?php if(in_array($project->model, array('scrum', 'kanban', 'agileplus'))):?>
           <div class='table-row'>
             <div class="col-4 text-center">
               <div><h4><?php echo $lang->block->storyCount;?></h4></div>

@@ -105,7 +105,16 @@ class dev extends control
 
         if($type == 'third')
         {
-            if(empty($method)) $method = 'work';
+            if($this->config->vision == 'lite')
+            {
+                $module = $module == '' ? 'kanbanProject' : $module;
+                $method = $method == '' ? 'settings' : $method;
+            }
+            elseif(empty($method))
+            {
+                $module = 'my';
+                $method = 'work';
+            }
             $moduleName = $module . 'SubMenu';
         }
 

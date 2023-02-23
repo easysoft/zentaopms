@@ -15,7 +15,7 @@
 <?php js::set('confirmDelete', $lang->todo->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->todo->featureBar['todo'] as $period => $label):?>
+    <?php foreach($lang->my->featureBar['todo'] as $period => $label):?>
     <?php
     $vars = "date=$period";
     if($period == 'before') $vars .= "&userID={$app->user->id}&status=undone";

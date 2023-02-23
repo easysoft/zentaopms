@@ -119,15 +119,6 @@ $lang->todo->unfinishedTodo = "Les entrées de l'ID %s ne sont pas terminés et 
 $lang->todo->today          = 'Todo Today';
 $lang->todo->selectProduct  = "Please select a product";
 
-$lang->todo->featureBar['todo']['all']             = 'Toutes les entrées';
-$lang->todo->featureBar['todo']['before']          = 'Non terminée';
-$lang->todo->featureBar['todo']['future']          = 'A définir';
-$lang->todo->featureBar['todo']['thisWeek']        = 'This Week';
-$lang->todo->featureBar['todo']['thisMonth']       = 'This Month';
-$lang->todo->featureBar['todo']['thisYear']        = 'Cette Année';
-$lang->todo->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
-$lang->todo->featureBar['todo']['cycle']           = 'Récurrence';
-
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, est $extra par <strong>$actor</strong>.', 'extra' => 'reasonList');
 $lang->todo->action->marked   = array('main' => '$date, est marqué par <strong>$actor</strong> comme <strong>$extra</strong>.', 'extra' => 'statusList');

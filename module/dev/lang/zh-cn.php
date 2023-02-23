@@ -28,6 +28,7 @@ $lang->dev->currentLang = '当前语言';
 $lang->dev->change      = '修改值';
 $lang->dev->UR          = '用户需求';
 $lang->dev->SR          = '软件需求';
+$lang->dev->branch      = '平台/分支';
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = '序号';
@@ -198,3 +199,4 @@ $lang->dev->projectMenu['project']       = "{$lang->projectCommon}通用";
 $lang->dev->projectMenu['scrum']         = "敏捷{$lang->projectCommon}";
 $lang->dev->projectMenu['waterfall']     = "瀑布{$lang->projectCommon}";
 $lang->dev->projectMenu['kanbanProject'] = "看板{$lang->projectCommon}";
+if($config->vision == 'lite') $lang->dev->projectMenu['kanbanProject'] = $lang->projectCommon;

@@ -15,6 +15,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('isStage', $execution->type == 'stage');?>
+<?php js::set('executionAttr', $execution->attribute);?>
 <?php js::set('manageProductsLang', $lang->project->manageProducts);?>
 <?php js::set('manageProductPlanLang', $lang->project->manageProductPlan);?>
 <div id='mainContent' class='main-content'>
@@ -161,7 +162,7 @@
         <?php $i = 0;?>
         <?php foreach($linkedProducts as $product):?>
         <tr class="<?php echo $hidden;?>">
-          <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
+          <th id='productTitle'><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan="3">
             <div class='row'>
               <div class="col-sm-6 productBox">
@@ -252,7 +253,7 @@
         <?php $i = 0;?>
         <?php foreach($linkedProducts as $product):?>
         <tr>
-          <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
+          <th id="productTitle"><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan="3">
             <div class='row'>
               <div class="col-sm-6 productBox">
@@ -261,7 +262,7 @@
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
                       <span class='input-group-addon'><?php echo $lang->product->common;?></span>
-                      <?php $disabled = $execution->type == 'stage' ? "disabled='disabled'" : '';?>
+                      <?php $disabled = ($project->model == 'waterfall' or $project->model == 'waterfallplus') ? "disabled='disabled'" : '';?>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                       <?php if($execution->type == 'stage' and !$project->division) echo html::hidden("products[$i]", $product->id);?>
                     </div>

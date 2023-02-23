@@ -319,3 +319,23 @@ $lang->user->mkdirLinux = <<<EOT
 EOT;
 
 $lang->user->jumping = "This page will redirect to the previous page in <span id='time'>3</span> seconds. <a href='%s' class='btn btn-primary btn-xs'>Redirect Now</a>";
+
+$lang->user->zentaoapp = new stdclass();
+$lang->user->zentaoapp->logout = 'Logout';
+
+$lang->user->featureBar['todo']['all']             = 'Assigned To Yourself';
+$lang->user->featureBar['todo']['before']          = 'Unfinished';
+$lang->user->featureBar['todo']['future']          = 'TBD';
+$lang->user->featureBar['todo']['thisWeek']        = 'This Week';
+$lang->user->featureBar['todo']['thisMonth']       = 'This Month';
+$lang->user->featureBar['todo']['thisYear']        = 'This Year';
+$lang->user->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->user->featureBar['todo']['cycle']           = 'Recurrence';
+
+$lang->user->featureBar['dynamic']['all']       = 'All';
+$lang->user->featureBar['dynamic']['today']     = 'Today';
+$lang->user->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->user->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->user->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->user->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->user->featureBar['dynamic']['lastMonth'] = 'Last Month';

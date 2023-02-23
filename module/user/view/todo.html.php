@@ -19,7 +19,7 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
-      foreach($lang->todo->periods as $period => $label)
+      foreach($lang->user->featureBar['todo'] as $period => $label)
       {
           $active = $type == $period ? 'active' : '';
           $vars = "userID={$user->id}&date=$period";

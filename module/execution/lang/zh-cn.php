@@ -639,3 +639,11 @@ $lang->execution->boardColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F
 
 $lang->execution->linkBranchStoryByPlanTips = "执行按计划关联需求时，只导入本执行所关联%s的激活状态的需求。";
 $lang->execution->linkNormalStoryByPlanTips = "执行按计划关联需求时，只导入激活状态的需求。";
+
+$lang->execution->featureBar['dynamic']['all']       = '全部';
+$lang->execution->featureBar['dynamic']['today']     = '今天';
+$lang->execution->featureBar['dynamic']['yesterday'] = '昨天';
+$lang->execution->featureBar['dynamic']['thisWeek']  = '本周';
+$lang->execution->featureBar['dynamic']['lastWeek']  = '上周';
+$lang->execution->featureBar['dynamic']['thisMonth'] = '本月';
+$lang->execution->featureBar['dynamic']['lastMonth'] = '上月';

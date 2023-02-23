@@ -123,7 +123,7 @@ $(function()
             hidePlanBox(attribute);
         })
 
-        $('#attribute').change();
+        hidePlanBox(executionAttr);
     }
 })
 var lastProjectID = $("#project").val();

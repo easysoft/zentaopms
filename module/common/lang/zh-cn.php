@@ -85,7 +85,7 @@ $lang->waterfallModel     = '瀑布模型';
 $lang->scrumModel         = '敏捷模型';
 $lang->agilePlusModel     = '融合敏捷模型';
 $lang->waterfallPlusModel = '融合瀑布模型';
-$lang->all                = '所有';
+$lang->all                = '全部';
 $lang->viewDetails        = '查看详情';
 
 $lang->actions         = '操作';

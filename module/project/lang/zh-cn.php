@@ -412,3 +412,11 @@ $lang->project->linkBranchStoryByPlanTips = "项目按计划关联需求时，�
 $lang->project->linkNormalStoryByPlanTips = "项目按计划关联需求时，只导入激活状态的需求。";
 
 $lang->project->cannotManageProducts = "该项目为项目型项目，不能关联产品。";
+
+$lang->project->featureBar['dynamic']['all']       = '全部';
+$lang->project->featureBar['dynamic']['today']     = '今天';
+$lang->project->featureBar['dynamic']['yesterday'] = '昨天';
+$lang->project->featureBar['dynamic']['thisWeek']  = '本周';
+$lang->project->featureBar['dynamic']['lastWeek']  = '上周';
+$lang->project->featureBar['dynamic']['thisMonth'] = '本月';
+$lang->project->featureBar['dynamic']['lastMonth'] = '上月';

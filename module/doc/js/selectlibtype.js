@@ -39,6 +39,7 @@ function loadDocLibs(type)
         $('#lib').replaceWith(data);
         $('#lib_chosen').remove();
         $('#lib').chosen();
+        $('#lib').siblings('div').css('width', 'calc(100% - 25px)');
 
         if($('#lib').find('option').length == 0)
         {

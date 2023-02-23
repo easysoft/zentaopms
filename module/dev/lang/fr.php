@@ -14,7 +14,6 @@ $lang->dev->post         = 'POST Parameter';
 $lang->dev->modifyValue  = 'modifyValue';
 $lang->dev->defaultValue = 'defaultValue';
 
-
 $lang->dev->paramRange     = 'Parameter Range: %s';
 $lang->dev->paramDate      = 'Date format: YY-mm-dd, e.g 2019-01-01';
 $lang->dev->paramColor     = 'Color format: #RGB, e.g. #3da7f5';
@@ -23,10 +22,13 @@ $lang->dev->noteEditor     = "The editor is disabled for security reasons. To us
 $lang->dev->noteTranslate  = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
 $lang->dev->confirmRestore = 'Do you want to reset?';
 
-$lang->dev->default = 'Default';
-$lang->dev->change  = 'Change';
-$lang->dev->UR      = 'Epic';
-$lang->dev->SR      = 'Story';
+$lang->dev->language    = 'Language: %s';
+$lang->dev->default     = 'Default';
+$lang->dev->currentLang = 'Current Language';
+$lang->dev->change      = 'Change';
+$lang->dev->UR          = 'Epic';
+$lang->dev->SR          = 'Story';
+$lang->dev->branch      = 'Branch';
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = 'ID';
@@ -197,3 +199,4 @@ $lang->dev->projectMenu['project']       = "{$lang->projectCommon} Common";
 $lang->dev->projectMenu['scrum']         = "Scrum {$lang->projectCommon}";
 $lang->dev->projectMenu['waterfall']     = "Waterfall {$lang->projectCommon}";
 $lang->dev->projectMenu['kanbanProject'] = "Kanban {$lang->projectCommon}";
+if($config->vision == 'lite') $lang->dev->projectMenu['kanbanProject'] = $lang->projectCommon;
