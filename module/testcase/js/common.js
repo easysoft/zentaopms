@@ -131,7 +131,7 @@ function setStories()
     productID = $('#product').val();
     branch    = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&limit=0&type=full&hasParent=1&executionID=' + executionID);
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=&limit=0&type=full&hasParent=1&executionID=' + executionID);
 
     $.get(link, function(stories)
     {
