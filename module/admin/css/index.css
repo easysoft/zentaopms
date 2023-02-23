@@ -45,7 +45,7 @@
 .settings-list > .setting-box > .btn > h4 {padding-right: 5px;}
 .settings-list > .setting-box > .btn > h4  > div {gap: 3px;}
 .settings-list > .setting-box > .btn > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
-.settings-list > .setting-box > .btn > .setting-desc {padding-bottom: 16px; color: #5E626D; line-height: 25px; height: 50px; overflow: hidden;}
+.settings-list > .setting-box > .btn > .setting-desc {padding-bottom: 16px; line-height: 25px; height: 50px; overflow: hidden;}
 .settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
