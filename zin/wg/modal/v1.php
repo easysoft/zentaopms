@@ -20,7 +20,7 @@ class modal extends wg
         return $child;
     }
 
-    protected function build()
+    private function button()
     {
         $btn = null;
         if($this->prop('type') == 'a')
@@ -44,9 +44,15 @@ class modal extends wg
             );
         }
 
+        return $btn;
+    }
+
+    protected function build()
+    {
+
         return array
         (
-            $btn,
+            $this->button(),
             h::div
             (
                 setClass('modal'),

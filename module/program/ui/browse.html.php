@@ -101,6 +101,22 @@ $pagerData = array(
     'onClickItem' => '(info)=>{console.log("> pager.onClickItem" => info)}'
 );
 
+$tabsData = array(
+    array(
+        'label' => '标签1',
+        'id'    => 'tab1',
+        'data'  => array(
+            p('tab1 content'),
+            avatar(set('name', $app->user->account), set('avatar', $app->user->avatar))
+        )
+    ),
+    array(
+        'label'  => '标签2',
+        'data'   => div('content'),
+        'active' => true
+    )
+);
+
 page(
     set('title', $title),
     pageheader
@@ -158,6 +174,11 @@ page(
                     btn('保存', setClass('primary'))
                 )
             )
+        ),
+        tabs
+        (
+            set('direction', 'h'),
+            set('items', $tabsData)
         )
     ),
     dropdown
