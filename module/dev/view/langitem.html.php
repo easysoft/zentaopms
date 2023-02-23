@@ -36,7 +36,7 @@
   </div>
 </div>
 <div class="flex gap-15">
-<?php if(in_array($type, $config->dev->navTypes)):?>
+  <?php if(in_array($type, $config->dev->navTypes)):?>
   <div class="menu-tree">
     <div class="input-control search-box has-icon-left has-icon-right search-example">
       <input type="search" class="form-control search-input"/>
@@ -44,7 +44,7 @@
     </div>
     <div id="menuTree" class="menu-active-primary menu-hover-primary"></div>
   </div>
-<?php endif;?>
+  <?php endif;?>
 
   <form class='main-form form-ajax flex-1' method='post'>
     <div class="main-content">
@@ -57,16 +57,16 @@
       </div>
       <div class="form-item-content">
         <?php foreach($originalLangs as $langKey => $originalLang):?>
-          <div itemid="<?php echo "{$moduleName}_{$langKey}"?>" class="form-item flex">
-            <?php if(str_replace('-', '_', $this->app->getClientLang()) != $language):?>
-              <div labelId="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
-            <?php endif;?>
-            <div labelId="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
-            <i class="icon icon-angle-right text-primary"></i>
-            <div class="input-control">
-              <?php echo html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$originalLang}'");?>
-            </div>
+        <div itemid="<?php echo "{$moduleName}_{$langKey}"?>" class="form-item flex">
+          <?php if(str_replace('-', '_', $this->app->getClientLang()) != $language):?>
+          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
+          <?php endif;?>
+          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
+          <i class="icon icon-angle-right text-primary"></i>
+          <div class="input-control">
+            <?php echo html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$originalLang}'");?>
           </div>
+        </div>
         <?php endforeach;?>
       </div>
     </div>

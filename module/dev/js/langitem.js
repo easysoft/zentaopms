@@ -138,7 +138,7 @@ $(function()
 
     $('.form-item-content > .form-item > .input-label').on('click', function()
     {
-        handleClickItem($(this).attr('labelid'));
+        handleClickItem($(this).data('id'));
     });
 
     $(".form-item-content").on('mouseover', '.form-item', function()
