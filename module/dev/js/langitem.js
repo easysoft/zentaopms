@@ -143,7 +143,6 @@ $(function()
 
     $(".form-item-content").on('mouseover', '.form-item', function()
     {
-        if ($(this).hasClass('text-primary')) return;
         $(this).addClass('text-primary');
     }).on('mouseout', '.form-item', function()
     {
