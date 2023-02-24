@@ -56,15 +56,30 @@
         <div class="title"><?php echo $lang->dev->modifyValue?></div>
       </div>
       <div class="form-item-content">
+        <?php $isCurrentLang = str_replace('-', '_', $this->app->getClientLang()) == $language;?>
         <?php foreach($originalLangs as $langKey => $originalLang):?>
+        <?php
+        $defaultValue    = $originalLang;
+        $defaultValueBox = $originalLang;
+        foreach($config->dev->commonLang as $commonKey => $commonLang)
+        {
+            if(strpos($originalLang, $commonKey) !== false)
+            {
+                $defaultValue    = str_replace($commonKey, '', $defaultValue);
+                $defaultValueBox = str_replace($commonKey, "<span class='input-group-addon'>{$commonLang}</span>", $defaultValueBox);
+                $originalLang    = str_replace($commonKey, $commonLang, $originalLang);
+            }
+        }
+        $defaultValueBox = str_replace($defaultValue, '%s', $defaultValueBox);
+        ?>
         <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="form-item flex">
-          <?php if(str_replace('-', '_', $this->app->getClientLang()) != $language):?>
+          <?php if(!$isCurrentLang):?>
           <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
           <?php endif;?>
           <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
           <i class="icon icon-angle-right text-primary"></i>
-          <div class="input-control">
-            <?php echo html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$originalLang}'");?>
+          <div class="input-group">
+            <?php printf($defaultValueBox, html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$defaultValue}'"));?>
           </div>
         </div>
         <?php endforeach;?>

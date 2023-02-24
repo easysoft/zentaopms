@@ -513,11 +513,11 @@ class devModel extends model
         if(empty($langFilesToLoad)) return false;
 
         $lang = $module == 'common' ? new language() : $this->defaultLang;
-        $lang->URCommon        = $this->lang->URCommon;
-        $lang->SRCommon        = $this->lang->SRCommon;
-        $lang->productCommon   = $this->lang->productCommon;
-        $lang->projectCommon   = $this->lang->projectCommon;
-        $lang->executionCommon = $this->lang->executionCommon;
+        $lang->URCommon        = '$URCOMMON';
+        $lang->SRCommon        = '$SRCOMMON';
+        $lang->productCommon   = '$PRODUCTCOMMON';
+        $lang->projectCommon   = '$PROJECTCOMMON';
+        $lang->executionCommon = '$EXECUTIONCOMMON';
         $lang->hourCommon      = $this->lang->hourCommon;
         if(!isset($lang->common)) $lang->common = new stdclass();
 

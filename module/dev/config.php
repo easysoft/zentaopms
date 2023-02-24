@@ -254,3 +254,6 @@ if($config->vision == 'lite')
     $config->dev->projectMenus = array('project', 'kanbanProject');
     $config->dev->hideMainMenu = array('execution', 'kanban', 'admin');
 }
+
+global $lang;
+$config->dev->commonLang = array('$URCOMMON' => $lang->URCommon, '$SRCOMMON' => $lang->SRCommon, '$PRODUCTCOMMON' => $lang->productCommon, '$PROJECTCOMMON' => $lang->projectCommon, '$EXECUTIONCOMMON' => $lang->executionCommon);
