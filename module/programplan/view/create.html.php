@@ -50,7 +50,7 @@
       <?php
       foreach($lang->programplan->typeList as $key => $value)
       {
-          $label = "<label class='radio-inline'><input type='radio' name='executionType' value='{$key}'" . ($key == $executionType ? " checked='checked'" : '') . "id='product{$key}'>{$value}</label>";
+          $label = "<label class='radio-inline'><input type='radio' name='executionType' value='{$key}'" . ($key == $executionType ? " checked='checked'" : '') . ">{$value}</label>";
           echo html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$productID&planID=$planID&type=$key"), $label);
       }
       ?>
