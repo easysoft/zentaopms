@@ -382,6 +382,8 @@ class devModel extends model
         }
         elseif($type == 'tag')
         {
+            if(!isset($defaultLang->$module->featureBar)) return $originalLangs;
+
             $langKey     = 'featureBar-' . $method . '_';
             $featureBars = zget($defaultLang->$module->featureBar, $method, array());
             if(strpos($method, '_') !== false)
