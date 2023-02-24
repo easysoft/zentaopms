@@ -139,7 +139,7 @@ $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = "{$lang->executionCommon} List";
 $lang->execution->allProject          = 'All';
-$lang->execution->method              = 'Method';
+$lang->execution->method              = 'Management Method';
 $lang->execution->sameAsParent        = "Same as parent";
 
 /* Fields of zt_team. */

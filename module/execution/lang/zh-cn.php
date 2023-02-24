@@ -139,7 +139,7 @@ $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon
 $lang->execution->myTask              = "我的任务";
 $lang->execution->list                = '列表';
 $lang->execution->allProject          = '全部项目';
-$lang->execution->method              = '方法';
+$lang->execution->method              = '管理方法';
 $lang->execution->sameAsParent        = "同父阶段";
 
 /* Fields of zt_team. */
