@@ -48,10 +48,17 @@
       <div class='methodTitle'><strong><?php echo $lang->programplan->subPlanManage . ':'?></strong></div>
       <div class='type-list-radio'>
       <?php
-      foreach($lang->programplan->typeList as $key => $value)
+      if(count($lang->programplan->typeList) > 1)
       {
-          $label = "<label class='radio-inline'><input type='radio' name='executionType' value='{$key}'" . ($key == $executionType ? " checked='checked'" : '') . ">{$value}</label>";
-          echo html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$productID&planID=$planID&type=$key"), $label);
+          foreach($lang->programplan->typeList as $key => $value)
+          {
+              $label = "<label class='radio-inline'><input type='radio' name='executionType' value='{$key}'" . ($key == $executionType ? " checked='checked'" : '') . ">{$value}</label>";
+              echo html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$productID&planID=$planID&type=$key"), $label);
+          }
+      }
+      else
+      {
+          echo zget($lang->programplan->typeList, $executionType);
       }
       ?>
       </div>
