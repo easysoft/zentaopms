@@ -130,6 +130,8 @@ $(function()
     $(".form-item-content").on("click", 'input', function(e)
     {
         handleClickItem(e.target.id);
+    }).on("click", '.label', function(){
+        handleClickItem($(this).data('id'));
     }).on("blur", 'input', function(e)
     {
         removeActive(e.target.id);
