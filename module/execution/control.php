@@ -2812,7 +2812,7 @@ class execution extends control
     {
         $this->loadModel('project');
         $projects   = $this->project->getPairsByProgram('', 'noclosed');
-        $executions = $this->execution->getStatData(0, 'all', 0, 0, false, '', 'id_desc');
+        $executions = $this->execution->getStatData(0, 'all', 0, 0, false, 'withchild', 'id_desc');
 
         foreach($executions as $execution)
         {

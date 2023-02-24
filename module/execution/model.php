@@ -2042,7 +2042,11 @@ class executionModel extends model
             }
         }
 
-        foreach($childList as $childID) unset($executions[$childID]);
+        if(strpos($param, 'withchild') === false)
+        {
+            foreach($childList as $childID) unset($executions[$childID]);
+        }
+
         foreach($parentList as $parentID) unset($executions[$parentID]);
 
         return array_values($executions);
