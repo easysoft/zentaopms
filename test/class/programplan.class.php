@@ -336,4 +336,53 @@ class programplanTest
 
         return implode(',', $objects);
     }
+
+    /**
+     * Test get parent stage's children types.
+     *
+     * @param  int    $parentID
+     * @access public
+     * @return string
+     */
+    public function getParentChildrenTypesTest($parentID)
+    {
+        $objects = $this->objectModel->getParentChildrenTypes($parentID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test check code unique.
+     *
+     * @param array $codes
+     * @param array $planIDList
+     * @access public
+     * @return string
+     */
+    public function checkCodeUniqueTest($codes, $planIDList = array())
+    {
+        $objects = $this->objectModel->checkCodeUnique($codes, $planIDList);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test check name unique.
+     *
+     * @param array $names
+     * @access public
+     * @return string
+     */
+    public function checkNameUniqueTest($names)
+    {
+        $objects = $this->objectModel->checkNameUnique($names);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
 }
