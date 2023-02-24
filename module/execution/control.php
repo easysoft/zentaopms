@@ -3188,6 +3188,9 @@ class execution extends control
 
         $this->loadModel('product');
         $execution = $this->execution->getById($executionID);
+        $project   = $this->loadModel('project')->getByID($execution->project);
+        if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus') return print(js::error(sprintf($this->lang->execution->cannotManageProducts, zget($this->lang->project->modelList, $project->model))) . js::locate('back'));
 
         if(!empty($_POST))
         {

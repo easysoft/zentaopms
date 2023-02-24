@@ -430,6 +430,7 @@ $lang->execution->hasStartedTaskOrSubStage     = "Tasks or subphases under %s %s
 $lang->execution->hasSuspendedOrClosedChildren = "The sub-stages under stage %s are not all suspended or closed, cannot be modified, and have been filtered.";
 $lang->execution->hasNotClosedChildren         = "The sub-stages under stage %s are not all closed, cannot be modified, and have been filtered.";
 $lang->execution->hasStartedTask               = "The task under %s %s has already started, cannot be modified, and has been filtered.";
+$lang->execution->cannotManageProducts         = 'The ' . strtolower($lang->project->common). ' model of this ' . strtolower($lang->execution->common) . " is %s and this " . strtolower($lang->execution->common) . ' cannot be associated with products.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
