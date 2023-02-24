@@ -84,7 +84,6 @@ class project extends control
                 $project->PM         = zget($users, $project->PM);
                 $project->status     = $this->processStatus('project', $project);
                 $project->model      = zget($projectLang->modelList, $project->model);
-                $project->budget     = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
                 $project->budget     = $project->budget != 0 ? $project->budget . zget($projectLang->unitList, $project->budgetUnit) : $this->lang->project->future;
                 $project->parent     = $project->parentName;
                 $project->hasProduct = zget($projectLang->projectTypeList, $project->hasProduct);

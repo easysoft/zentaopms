@@ -17,7 +17,7 @@
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php if(isset($lang->execution->menu->qa)):?>
+    <?php if($features['qa']):?>
     <div class="input-control space c-type">
       <?php echo html::select('type', $lang->kanban->type, $browseType, 'class="form-control chosen" data-max_drop_width="215"');?>
     </div>
@@ -62,7 +62,7 @@
         $link = common::hasPriv('execution', 'importTask') ?  $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
         echo "<li $misc>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
 
-        if(isset($lang->execution->menu->qa))
+        if($features['qa'])
         {
             $misc = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
             $link = common::hasPriv('execution', 'importBug') ?  $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
@@ -103,14 +103,14 @@
       <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <?php $showDivider = false;?>
-        <?php if(isset($lang->execution->menu->story) and $hasStoryButton):?>
+        <?php if($features['story'] and $hasStoryButton):?>
         <?php if($canCreateStory) echo '<li>' . html::a(helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->createStory, '', "class='iframe' data-width='80%'") . '</li>';?>
         <?php if($canBatchCreateStory) echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStory, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStory) echo '<li>' . html::a(helper::createLink('execution', 'linkStory', "execution=$execution->id", '', true), $lang->execution->linkStory, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStoryByPlan) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . '</li>';?>
         <?php $showDivider = true;?>
         <?php endif;?>
-        <?php if(isset($lang->execution->menu->qa)):?>
+        <?php if($features['qa']):?>
         <?php if($showDivider) echo '<li class="divider"></li>';?>
         <?php if($canCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', true), $lang->bug->create, '', "class='iframe'") . '</li>';?>
         <?php if($canBatchCreateBug)
@@ -238,6 +238,6 @@ js::set('priv',
 <?php js::set('defaultMinColWidth', $this->config->minColWidth);?>
 <?php js::set('defaultMaxColWidth', $this->config->maxColWidth);?>
 <?php js::set('teamWords', $lang->execution->teamWords);?>
-<?php js::set('canImportBug', isset($lang->execution->menu->qa));?>
+<?php js::set('canImportBug', $features['qa']);?>
 
 <?php include '../../common/view/footer.html.php';?>

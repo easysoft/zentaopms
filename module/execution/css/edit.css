@@ -9,3 +9,5 @@
 .form-date {min-width: 90px;}
 
 .productsBox div[id^='branch'].chosen-disabled {pointer-events: none;}
+
+#dataform th.c-name, #dataform th.c-projectName, #dataform th.c-method {width: 120px;}
