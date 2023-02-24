@@ -59,7 +59,8 @@
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
+          <?php $width = (strpos($app->getClientLang(), 'zh-') === false and !empty($project->model) and $project->model == 'agileplus') ? 'w-150px' : 'w-120px';?>
+          <th class='<?php echo $width;?>'><?php echo $lang->execution->projectName;?></th>
           <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
           <td colspan='2'></td>
         </tr>

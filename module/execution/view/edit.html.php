@@ -33,14 +33,14 @@
         <?php if(isset($project)):?>
         <?php if($project->model == 'scrum'):?>
         <tr>
-          <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
+          <th class='c-projectName'><?php echo $lang->execution->projectName;?></th>
           <td><?php echo html::select('project', $allProjects, $execution->project, "class='form-control chosen' onchange='changeProject(this.value)' required");?></td><td></td>
         </tr>
         <?php elseif($project->model == 'kanban'):?>
         <?php echo html::hidden('project', $project->id);?>
         <?php elseif($project->model == 'agileplus'):?>
         <tr>
-          <th class='w-120px'><?php echo $lang->execution->method;?></th>
+          <th class='c-method'><?php echo $lang->execution->method;?></th>
           <td><?php echo zget($lang->execution->typeList, $execution->type);?></td><td></td>
         </tr>
         <?php elseif($app->tab == 'project' and $project->model == 'waterfallplus'):?>
@@ -51,7 +51,7 @@
         <?php endif;?>
         <?php endif;?>
         <tr>
-          <th class='w-120px'><?php echo $lang->execution->name;?></th>
+          <th class='c-name'><?php echo $lang->execution->name;?></th>
           <td><?php echo html::input('name', $execution->name, "class='form-control' required");?></td><td></td>
         </tr>
         <?php if(isset($config->setCode) and $config->setCode == 1):?>
