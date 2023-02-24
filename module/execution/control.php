@@ -506,9 +506,10 @@ class execution extends control
 
         $execution   = $this->commonAction($toExecution);
         $toExecution = $execution->id;
+        $project     = $this->loadModel('project')->getByID($execution->project);
         $branches    = $this->execution->getBranches($toExecution);
         $tasks       = $this->execution->getTasks2Imported($toExecution, $branches);
-        $executions  = $this->execution->getToImport(array_keys($tasks), $execution->type);
+        $executions  = $this->execution->getToImport(array_keys($tasks), $execution->type, $project->model);
         unset($executions[$toExecution]);
         unset($tasks[$toExecution]);
 
