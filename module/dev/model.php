@@ -360,9 +360,10 @@ class devModel extends model
         if(empty($language)) $language = $this->app->getClientLang();
         $originalLangs = array();
         $defaultLang   = $this->loadDefaultLang($language);
-        if($type == 'tag' and in_array($module, $this->config->dev->projectMenus)) $module = 'project';
         if($type == 'tag')
         {
+            if(in_array($module, $this->config->dev->projectMenus)) $module = 'project';
+
             $this->defaultLang = $defaultLang;
             $defaultLang       = $this->loadDefaultLang($language, $module);
         }
@@ -389,6 +390,7 @@ class devModel extends model
                 list($subMethod, $thirdMethod) = explode('_', $method);
                 $featureBars = $defaultLang->$module->featureBar[$subMethod][$thirdMethod];
             }
+
             foreach($featureBars as $feature => $featureName)
             {
                 $selectKey = $feature . 'Selects';
