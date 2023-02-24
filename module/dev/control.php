@@ -122,6 +122,8 @@ class dev extends control
         {
             if(empty($module)) $module = 'my';
             if(empty($method)) $method = 'todo';
+
+            $moduleName = $module;
         }
 
         if($this->server->request_method == 'POST')
@@ -141,6 +143,7 @@ class dev extends control
 
                 $this->custom->setItem("{$language}." . str_replace('_', '.', $langKey), $customedLang);
             }
+
             if($type == 'common' and $this->config->custom->URSR)
             {
                 $post  = $_POST;
