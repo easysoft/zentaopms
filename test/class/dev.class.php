@@ -55,6 +55,7 @@ class devTest
     public function getModulesTest()
     {
         $result = $this->objectModel->getModules();
+        foreach($result as $module => $group) $result[$module] = current($group);
         return $result;
     }
 
