@@ -448,7 +448,7 @@ class executionModel extends model
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
             ->checkFlow()
             ->exec();
-        
+
         /* Add the creater to the team. */
         if(!dao::isError())
         {
@@ -719,6 +719,7 @@ class executionModel extends model
     {
         $this->loadModel('user');
         $this->loadModel('project');
+        $this->app->loadLang('programplan');
 
         $executions    = array();
         $allChanges    = array();
@@ -770,10 +771,10 @@ class executionModel extends model
             $executions[$executionID]->lastEditedBy   = $this->app->user->account;
             $executions[$executionID]->lastEditedDate = helper::now();
 
-            if(isset($data->codes))      $executions[$executionID]->code      = $executionCode;
-            if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
-            if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
-            if(isset($data->lifetimes))  $executions[$executionID]->lifetime  = $data->lifetimes[$executionID];
+            if(isset($data->codes))    $executions[$executionID]->code    = $executionCode;
+            if(isset($data->projects)) $executions[$executionID]->project = zget($data->projects, $executionID, 0);
+            if(isset($data->attributes[$executionID])) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
+            if(isset($data->lifetimes[$executionID]))  $executions[$executionID]->lifetime  = $data->lifetimes[$executionID];
 
             $oldExecution = $oldExecutions[$executionID];
             $projectID    = isset($executions[$executionID]->project) ? $executions[$executionID]->project : $oldExecution->project;
@@ -801,7 +802,8 @@ class executionModel extends model
                 {
                     if($parentID == $parents[$repeatID])
                     {
-                        dao::$errors["names$executionID"][] = $this->lang->execution->errorNameRepeat;
+                        $type = $oldExecution->type == 'stage' ? 'stage' : 'agileplus';
+                        dao::$errors["names$executionID"][] = sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
                         break;
                     }
                 }
