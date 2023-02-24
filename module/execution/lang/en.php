@@ -400,6 +400,7 @@ $lang->execution->errorLetterParent            = 'The begin cannot be less than 
 $lang->execution->errorGreaterParent           = 'The end cannot be greater than the end of the parent stage to which it belongs：%s.';
 $lang->execution->errorNameRepeat              = 'Child stages of the same parent stage cannot have the same name.';
 $lang->execution->errorAttrMatch               = "Parent stage's attribute is [%s], the attribute needs to be consistent with the parent stage.";
+$lang->execution->errorLetterPlan              = "『%s』cannot be less than the plan start time『%s』。";
 $lang->execution->accessDenied                 = "Your access to {$lang->executionCommon} is denied!";
 $lang->execution->tips                         = 'Note';
 $lang->execution->afterInfo                    = "{$lang->executionCommon} is created. Next you can ";

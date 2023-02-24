@@ -400,6 +400,7 @@ $lang->execution->errorLetterParent            = '计划开始时间不能小于
 $lang->execution->errorGreaterParent           = '计划完成时间不能大于所属父阶段的计划完成时间：%s。';
 $lang->execution->errorNameRepeat              = '相同父阶段的子阶段名称不能相同';
 $lang->execution->errorAttrMatch               = "父阶段类型为[%s]，阶段类型需与父阶段一致";
+$lang->execution->errorLetterPlan              = "『%s』应当不小于计划开始时间『%s』。";
 $lang->execution->accessDenied                 = "您无权访问该{$lang->executionCommon}！";
 $lang->execution->tips                         = '提示';
 $lang->execution->afterInfo                    = "{$lang->executionCommon}添加成功，您现在可以进行以下操作：";

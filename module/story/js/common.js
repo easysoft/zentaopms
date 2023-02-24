@@ -20,7 +20,7 @@ $(function()
         $('#navbar .nav>li[data-id=story]>a').html($('#navbar .nav li.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
     }
 
-    $('#saveButton').on('click', function()
+    $('#saveButton').on('click', function(e)
     {
         $('#saveButton').attr('type', 'submit').attr('disabled', true);
         $('#saveDraftButton').attr('disabled', true);
@@ -28,15 +28,16 @@ $(function()
         var storyStatus = !$('#reviewer').val() || $('#needNotReview').is(':checked') ? 'active' : 'reviewing';
         $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', storyStatus).appendTo('#dataform');
         $('#dataform').submit();
+        e.preventDefault();
 
         setTimeout(function()
         {
             $('#saveButton').attr('type', 'button').removeAttr('disabled');
             $('#saveDraftButton').removeAttr('disabled');
-        }, 1000);
+        }, 10000);
     });
 
-    $('#saveDraftButton').on('click', function()
+    $('#saveDraftButton').on('click', function(e)
     {
         $('#saveButton').attr('disabled', true);
         $('#saveDraftButton').attr('type', 'submit').attr('disabled', true);
@@ -46,12 +47,13 @@ $(function()
         if(typeof(page) !== 'undefined' && page == 'edit' && $('#status').val() == 'changing') storyStatus = 'changing';
         $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', storyStatus).appendTo('#dataform');
         $('#dataform').submit();
+        e.preventDefault();
 
         setTimeout(function()
         {
             $('#saveButton').removeAttr('disabled');
             $('#saveDraftButton').attr('type', 'button').removeAttr('disabled');
-        }, 1000);
+        }, 10000);
     });
 })
 
