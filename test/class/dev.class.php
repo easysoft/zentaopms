@@ -91,6 +91,21 @@ class devTest
     }
 
     /**
+     * Test get customed lang method.
+     *
+     * @param  string $type
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return int|array
+     */
+    public function getCustomedLangTest($type = 'common', $module = '', $method = '')
+    {
+        $result = $this->objectModel->getCustomedLang($type, $module, $method);
+        return empty($result) ? 0 : $result;
+    }
+
+    /**
      * Get nav lang.
      *
      * @param  string $type
