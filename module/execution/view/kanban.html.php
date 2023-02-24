@@ -61,40 +61,27 @@ js::set('rdSearchValue', '');
 js::set('defaultMinColWidth', $this->config->minColWidth);
 js::set('defaultMaxColWidth', $this->config->maxColWidth);
 
-$canSortRegion      = (commonModel::hasPriv('kanban', 'sortRegion') and count($regions) > 1);
-$canCreateRegion    = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
+$canSortRegion      = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
+$canCreateRegion    = common::hasPriv('kanban', 'createRegion') && $groupBy == 'default';
 $canEditRegion      = commonModel::hasPriv('kanban', 'editRegion');
 $canDeleteRegion    = commonModel::hasPriv('kanban', 'deleteRegion');
 $canCreateLane      = commonModel::hasPriv('kanban', 'createLane');
 $canCreateTask      = common::hasPriv('task', 'create');
 $canBatchCreateTask = common::hasPriv('task', 'batchCreate');
-$canImportTask      = (common::hasPriv('execution', 'importTask') and $execution->multiple);
+$canImportTask      = common::hasPriv('execution', 'importTask') && $execution->multiple;
 
-if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review')))
-{
-    $canCreateBug        = ($productID and common::hasPriv('bug', 'create'));
-    $canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate') and $execution->multiple);
-    $canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
-    $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
-    $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
-    $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory') and !empty($execution->hasProduct));
-    $canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories') and !empty($project->hasProduct));
-    $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
-    $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
-}
-else
-{
-    $canCreateBug        = false;
-    $canBatchCreateBug   = false;
-    $canImportBug        = false;
-    $canCreateStory      = false;
-    $canBatchCreateStory = false;
-    $canLinkStory        = false;
-    $canLinkStoryByPlan  = false;
-    $hasStoryButton      = false;
-    $hasBugButton        = false;
-}
-$hasTaskButton = ($canCreateTask or $canBatchCreateTask or $canImportBug);
+$canCreateBug        = $features['qa'] && $productID && common::hasPriv('bug', 'create');
+$canBatchCreateBug   = $features['qa'] && $productID && common::hasPriv('bug', 'batchCreate') && $execution->multiple;
+$canImportBug        = $features['qa'] && $productID && common::hasPriv('execution', 'importBug');
+$hasBugButton        = $features['qa'] && ($canCreateBug || $canBatchCreateBug);
+
+$canCreateStory      = $features['story'] && $productID && common::hasPriv('story', 'create');
+$canBatchCreateStory = $features['story'] && $productID && common::hasPriv('story', 'batchCreate');
+$canLinkStory        = $features['story'] && $productID && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct);
+$canLinkStoryByPlan  = $features['story'] && $productID && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct);
+$hasStoryButton      = $features['story'] && ($canCreateStory || $canBatchCreateStory || $canLinkStory || $canLinkStoryByPlan);
+
+$hasTaskButton = $canCreateTask || $canBatchCreateTask || $canImportBug;
 
 js::set('priv',
     array(
@@ -134,7 +121,7 @@ js::set('priv',
         'canDeleteStory'        => common::hasPriv('story', 'delete'),
         'canChangeStory'        => common::hasPriv('story', 'change'),
         'canCloseStory'         => common::hasPriv('story', 'close'),
-        'canUnlinkStory'        => (common::hasPriv('execution', 'unlinkStory') and !empty($execution->hasProduct)),
+        'canUnlinkStory'        => (common::hasPriv('execution', 'unlinkStory') && !empty($execution->hasProduct)),
         'canViewStory'          => common::hasPriv('execution', 'storyView'),
     )
 );
@@ -142,13 +129,17 @@ js::set('priv',
 <?php if($groupBy == 'story' and $browseType == 'task'):?>
 <style>.kanban-cols {left: 0px !important;}</style>
 <?php endif;?>
-<?php if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))):?>
+<?php if(!($features['story'] or $features['qa'])):?>
 <style>#mainMenu .c-group{margin-left: 0px;}</style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
+    <?php if($features['story'] or $features['qa']):?>
     <div class="input-control space c-type">
+      <?php
+      if(!$features['story']) unset($lang->kanban->type['story']);
+      if(!$features['qa']) unset($lang->kanban->type['bug']);
+      ?>
       <?php echo html::select('type', $lang->kanban->type, $browseType, 'class="form-control chosen" data-max_drop_width="215"');?>
     </div>
     <?php endif;?>
@@ -226,13 +217,14 @@ js::set('priv',
         <?php if($canLinkStoryByPlan) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . '</li>';?>
         <?php if($hasStoryButton and $hasBugButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', true), $lang->bug->create, '', "class='iframe'") . '</li>';?>
-        <?php if($canBatchCreateBug)
+        <?php
+        if($canBatchCreateBug)
         {
-
             $batchCreateBugLink = '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';
             if($productNum > 1) $batchCreateBugLink = '<li>' . html::a('#batchCreateBug', $lang->bug->batchCreate, '', "data-toggle='modal'") . '</li>';
             echo $batchCreateBugLink;
-        }?>
+        }
+        ?>
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
         <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width=90%") . '</li>';?>
