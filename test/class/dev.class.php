@@ -76,6 +76,21 @@ class devTest
     }
 
     /**
+     * Test get original lang method.
+     *
+     * @param  string $type
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return int|array
+     */
+    public function getOriginalLangTest($type = 'common', $module = '', $method = '')
+    {
+        $result = $this->objectModel->getOriginalLang($type, $module, $method);
+        return empty($result) ? 0 : $result;
+    }
+
+    /**
      * Get nav lang.
      *
      * @param  string $type
