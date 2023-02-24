@@ -51,6 +51,44 @@ class executionModel extends model
     }
 
     /**
+     * Get features of execution.
+     *
+     * @param object $execution
+     * @access public
+     * @return array
+     */
+    public function getExecutionFeatures($execution)
+    {
+        $features = array('story' => true, 'task' => true, 'qa' => true, 'devops' => true, 'burn' => true, 'build' => true, 'other' => true);
+
+        /* Unset story, bug, build and testtask if type is ops. */
+        if($execution->lifetime == 'ops')
+        {
+            $features['story']  = false;
+            $features['qa']     = false;
+            $features['build']  = false;
+            $features['burn']   = false;
+        }
+        elseif(!empty($execution->attribute))
+        {
+            $features['other'] = false;
+            if(in_array($execution->attribute, array('request', 'design', 'review')))
+            {
+                $features['qa']     = false;
+                $features['devops'] = false;
+                $features['build']  = false;
+
+                if(in_array($execution->attribute, array('request', 'review')))
+                {
+                    $features['story'] = false;
+                }
+            }
+        }
+
+        return $features;
+    }
+
+    /**
      * Set menu.
      *
      * @param  int    $executionID
@@ -105,30 +143,16 @@ class executionModel extends model
 
         if(isset($execution->acl) and $execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
 
-        /* Unset story, bug, build and testtask if type is ops. */
-        if($execution and $execution->lifetime == 'ops')
-        {
-            unset($this->lang->execution->menu->story);
-            unset($this->lang->execution->menu->qa);
-            unset($this->lang->execution->menu->build);
-            unset($this->lang->execution->menu->burn);
-        }
-
-        $stageFilter = array('request', 'design', 'review');
-        if(isset($execution->attribute) and in_array($execution->attribute, $stageFilter))
-        {
-            if(in_array($execution->attribute, array('request', 'review')))
-            {
-                unset($this->lang->execution->menu->story);
-                unset($this->lang->execution->menu->view['subMenu']->groupTask);
-                unset($this->lang->execution->menu->view['subMenu']->tree);
-                unset($this->lang->execution->menu->other);
-            }
-
-            unset($this->lang->execution->menu->devops);
-            unset($this->lang->execution->menu->qa);
-            unset($this->lang->execution->menu->build);
-        }
+        /* Redjust menus. */
+        $features = $this->getExecutionFeatures($execution);
+        if(!$features['story'])  unset($this->lang->execution->menu->story);
+        if(!$features['story'])  unset($this->lang->execution->menu->view['subMenu']->groupTask);
+        if(!$features['story'])  unset($this->lang->execution->menu->view['subMenu']->tree);
+        if(!$features['qa'])     unset($this->lang->execution->menu->qa);
+        if(!$features['devops']) unset($this->lang->execution->menu->devops);
+        if(!$features['build'])  unset($this->lang->execution->menu->build);
+        if(!$features['burn'])   unset($this->lang->execution->menu->burn);
+        if(!$features['other'])  unset($this->lang->execution->menu->other);
 
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
 
@@ -383,6 +407,7 @@ class executionModel extends model
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('days', '0')
             ->setDefault('team', $this->post->name)
             ->setDefault('parent', $this->post->project)
             ->setIF($this->post->parent, 'parent', $this->post->parent)
@@ -448,7 +473,7 @@ class executionModel extends model
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
             ->checkFlow()
             ->exec();
-        
+
         /* Add the creater to the team. */
         if(!dao::isError())
         {
@@ -573,6 +598,7 @@ class executionModel extends model
             ->setIF($this->post->status == 'closed' and $oldExecution->status != 'closed', 'closedDate', helper::now())
             ->setIF($this->post->status == 'suspended' and $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
             ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
+            ->setDefault('days', '0')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
@@ -719,6 +745,7 @@ class executionModel extends model
     {
         $this->loadModel('user');
         $this->loadModel('project');
+        $this->app->loadLang('programplan');
 
         $executions    = array();
         $allChanges    = array();
@@ -770,10 +797,10 @@ class executionModel extends model
             $executions[$executionID]->lastEditedBy   = $this->app->user->account;
             $executions[$executionID]->lastEditedDate = helper::now();
 
-            if(isset($data->codes))      $executions[$executionID]->code      = $executionCode;
-            if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
-            if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
-            if(isset($data->lifetimes))  $executions[$executionID]->lifetime  = $data->lifetimes[$executionID];
+            if(isset($data->codes))    $executions[$executionID]->code    = $executionCode;
+            if(isset($data->projects)) $executions[$executionID]->project = zget($data->projects, $executionID, 0);
+            if(isset($data->attributes[$executionID])) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
+            if(isset($data->lifetimes[$executionID]))  $executions[$executionID]->lifetime  = $data->lifetimes[$executionID];
 
             $oldExecution = $oldExecutions[$executionID];
             $projectID    = isset($executions[$executionID]->project) ? $executions[$executionID]->project : $oldExecution->project;
@@ -801,7 +828,8 @@ class executionModel extends model
                 {
                     if($parentID == $parents[$repeatID])
                     {
-                        dao::$errors["names$executionID"][] = $this->lang->execution->errorNameRepeat;
+                        $type = $oldExecution->type == 'stage' ? 'stage' : 'agileplus';
+                        dao::$errors["names$executionID"][] = sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
                         break;
                     }
                 }
@@ -1991,10 +2019,15 @@ class executionModel extends model
                 if($execution->parent) $parentList[$execution->parent] = $execution->parent;
                 if($execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
             }
-            elseif($param === 'hasParentName')
+            elseif(strpos($param, 'hasParentName') !== false)
             {
                 $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
                 $executions[$execution->id]->title = implode('/', $parentExecutions);
+                if(strpos($param, 'skipParent') !== false)
+                {
+                    $children = $this->getChildExecutions($execution->id);
+                    if(count($children) > 0) $parentList[$execution->id] = $execution->id;
+                }
             }
             elseif(isset($executions[$execution->parent]))
             {

@@ -2615,19 +2615,26 @@ class execution extends control
         $execution = $this->commonAction($executionID);
         if($execution->type != 'kanban') return print(js::locate(inlink('view', "executionID=$executionID")));
 
-        if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
-        {
-            $browseType = 'task';
-            unset($this->lang->kanban->group->task['story']);
-        }
-
         /* Set Session. */
         $this->session->set('execGroupBy', $groupBy);
         $this->session->set('storyList', $this->app->getURI(true), 'execution');
         $this->session->set('rdSearchValue', '');
         $this->session->set('execLaneType', $browseType);
 
-        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
+        $features   = $this->execution->getExecutionFeatures($execution);
+        $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
+
+        /* Remove lanes if no feature. */
+        foreach($kanbanData as $regionID => $region)
+        {
+            foreach($region->groups as $groupID => $group)
+            {
+                if(!$features['story'] and $group->lanes[0]->type == 'story') unset($kanbanData[$regionID]->groups[$groupID]);
+                if(!$features['qa']    and $group->lanes[0]->type == 'bug')   unset($kanbanData[$regionID]->groups[$groupID]);
+            }
+            $kanbanData[$regionID]->groups = array_values($kanbanData[$regionID]->groups);
+        }
+
         $executionActions = array();
         foreach($this->config->execution->statusActions as $action)
         {
@@ -2688,6 +2695,7 @@ class execution extends control
         $this->view->projectID        = $projectID;
         $this->view->project          = $this->loadModel('project')->getByID($projectID);
         $this->view->allPlans         = $allPlans;
+        $this->view->features         = $features;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
         $this->view->kanban           = $this->lang->execution->kanban;
@@ -2744,7 +2752,7 @@ class execution extends control
 
         /* Show lanes of the attribute: no story&bug in request, no bug in design. */
         if(!isset($this->lang->execution->menu->story)) unset($kanbanGroup['story']);
-        if(!isset($this->lang->execution->menu->qa)) unset($kanbanGroup['bug']);
+        if(!isset($this->lang->execution->menu->qa))    unset($kanbanGroup['bug']);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);
@@ -2783,6 +2791,7 @@ class execution extends control
         $this->view->productNum   = count($products);
         $this->view->allPlans     = $allPlans;
         $this->view->browseType   = $browseType;
+        $this->view->features     = $this->execution->getExecutionFeatures($execution);
         $this->view->kanbanGroup  = $kanbanGroup;
         $this->view->execution    = $execution;
         $this->view->groupBy      = $groupBy;
@@ -3179,6 +3188,9 @@ class execution extends control
 
         $this->loadModel('product');
         $execution = $this->execution->getById($executionID);
+        $project   = $this->loadModel('project')->getByID($execution->project);
+        if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus') return print(js::error(sprintf($this->lang->execution->cannotManageProducts, zget($this->lang->project->modelList, $project->model))) . js::locate('back'));
 
         if(!empty($_POST))
         {

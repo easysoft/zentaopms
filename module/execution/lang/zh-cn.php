@@ -139,7 +139,7 @@ $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon
 $lang->execution->myTask              = "我的任务";
 $lang->execution->list                = '列表';
 $lang->execution->allProject          = '全部项目';
-$lang->execution->method              = '方法';
+$lang->execution->method              = '管理方法';
 $lang->execution->sameAsParent        = "同父阶段";
 
 /* Fields of zt_team. */
@@ -398,7 +398,7 @@ $lang->execution->errorCommonBegin             = $lang->executionCommon . '开�
 $lang->execution->errorCommonEnd               = $lang->executionCommon . '截止日期应小于等于项目的截止日期：%s。';
 $lang->execution->errorLetterParent            = '计划开始时间不能小于所属父阶段的计划开始时间：%s。';
 $lang->execution->errorGreaterParent           = '计划完成时间不能大于所属父阶段的计划完成时间：%s。';
-$lang->execution->errorNameRepeat              = '相同父阶段的子阶段名称不能相同';
+$lang->execution->errorNameRepeat              = "相同父阶段的子%s名称不能相同";
 $lang->execution->errorAttrMatch               = "父阶段类型为[%s]，阶段类型需与父阶段一致";
 $lang->execution->errorLetterPlan              = "『%s』应当不小于计划开始时间『%s』。";
 $lang->execution->accessDenied                 = "您无权访问该{$lang->executionCommon}！";
@@ -430,6 +430,7 @@ $lang->execution->hasStartedTaskOrSubStage     = "%s%s下的任务或子阶段�
 $lang->execution->hasSuspendedOrClosedChildren = "阶段%s下的子阶段未全部挂起或关闭，无法修改，已过滤。";
 $lang->execution->hasNotClosedChildren         = "阶段%s下的子阶段未全部关闭，无法修改，已过滤。";
 $lang->execution->hasStartedTask               = "%s%s下的任务已经开始，无法修改，已过滤。";
+$lang->execution->cannotManageProducts         = "当前{$lang->execution->common}的{$lang->project->common}为%s{$lang->project->common}，不能关联产品。";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();

@@ -922,7 +922,11 @@ class story extends control
             $this->view->hiddenParent  = true;
 
             if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
-            if(!$project->multiple)          $this->view->hiddenPlan = true;
+            if(!$project->multiple)
+            {
+                $this->view->hiddenPlan = true;
+                unset($this->lang->story->stageList[''], $this->lang->story->stageList['wait'], $this->lang->story->stageList['planned']);
+            }
             if($project->model === 'kanban') $this->view->hiddenURS  = true;
         }
 

@@ -139,7 +139,7 @@ $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = 'List';
 $lang->execution->allProject          = 'All';
-$lang->execution->method              = 'Method';
+$lang->execution->method              = 'Management Method';
 $lang->execution->sameAsParent        = "Same as parent";
 
 /* Fields of zt_team. */
@@ -398,7 +398,7 @@ $lang->execution->errorCommonBegin             = 'The start date of ' . $lang->e
 $lang->execution->errorCommonEnd               = 'The deadline of ' . $lang->executionCommon .  ' should be ≤ the deadline of project : %s.';
 $lang->execution->errorLetterParent            = 'The begin cannot be less than the begin of the parent stage to which it belongs: %s.';
 $lang->execution->errorGreaterParent           = 'The end cannot be greater than the end of the parent stage to which it belongs：%s.';
-$lang->execution->errorNameRepeat              = 'Child stages of the same parent stage cannot have the same name.';
+$lang->execution->errorNameRepeat              = "Child %s of the same parent stage cannot have the same name.";
 $lang->execution->errorAttrMatch               = "Parent stage's attribute is [%s], the attribute needs to be consistent with the parent stage.";
 $lang->execution->errorLetterPlan              = "『%s』cannot be less than the plan start time『%s』。";
 $lang->execution->accessDenied                 = "Your access to {$lang->executionCommon} is denied!";
@@ -430,6 +430,7 @@ $lang->execution->hasStartedTaskOrSubStage     = "Tasks or subphases under %s %s
 $lang->execution->hasSuspendedOrClosedChildren = "The sub-stages under stage %s are not all suspended or closed, cannot be modified, and have been filtered.";
 $lang->execution->hasNotClosedChildren         = "The sub-stages under stage %s are not all closed, cannot be modified, and have been filtered.";
 $lang->execution->hasStartedTask               = "The task under %s %s has already started, cannot be modified, and has been filtered.";
+$lang->execution->cannotManageProducts         = 'The ' . strtolower($lang->project->common). ' model of this ' . strtolower($lang->execution->common) . " is %s and this " . strtolower($lang->execution->common) . ' cannot be associated with products.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
