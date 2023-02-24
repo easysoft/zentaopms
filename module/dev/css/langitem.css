@@ -22,11 +22,16 @@
 
 /* form-content */
 .form-item-content {padding-left: 44px;}
-.form-item-content > .form-item {gap: 20px; height: 56px; align-items: center; position: relative;}
-.form-item-content > .form-item >  .input-label {flex: 0 0 160px; padding-left: 40px; background: #F8F8F8; display: flex; align-items: center;}
+.form-item-content > .form-item {gap: 64px; height: 56px; align-items: center; position: relative;}
+.form-item-content > .form-item >  .label {flex: 0 0 160px; padding-left: 40px; background: #F8F8F8; display: flex; align-items: center; color: currentColor;}
+.form-item-content > .form-item >  .input-group {margin-left: 20px;}
 .form-item-content > .form-item >  .input-control > input {margin-left: 40px;}
-.form-item-content > .form-item.active > .icon {display: unset;}
-.form-item-content > .form-item> .icon {display: none; position: absolute; left: 180px; font-size: 25px;}
+.form-item-content > .form-item.active .icon {display: unset;}
+.form-item-content > .form-item .icon {display: none; position: absolute; left: -50px; top: 2px; font-size: 25px;}
+.form-item-content.hover-color-primary > .form-item.active > .label {color: blue;}
+.form-item-content.hover-color-primary > .form-item.active .form-control {border-color: blue;}
+.form-item-content.border-color-primary > .form-item .form-control {border: 1px solid blue;}
+
 
 /* bottom-btn */
 .bottom-btn {display: flex; align-items: center; background: #fff; padding-left: 150px; padding-bottom: 20px;}

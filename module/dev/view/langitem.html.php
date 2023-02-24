@@ -55,7 +55,7 @@
         <div class="title"><?php echo $lang->dev->defaultValue?></div>
         <div class="title"><?php echo $lang->dev->modifyValue?></div>
       </div>
-      <div class="form-item-content">
+      <div class="form-item-content form-active-primary">
         <?php $isCurrentLang = str_replace('-', '_', $this->app->getClientLang()) == $language;?>
         <?php foreach($originalLangs as $langKey => $originalLang):?>
         <?php
@@ -75,11 +75,11 @@
         ?>
         <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="form-item flex">
           <?php if(!$isCurrentLang):?>
-          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $currentLangs[$langKey]?></div>
+          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="label h-full"><?php echo $currentLangs[$langKey]?></div>
           <?php endif;?>
-          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
-          <i class="icon icon-angle-right text-primary"></i>
+          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="label h-full"><?php echo $originalLang?></div>
           <div class="input-group">
+            <i class="icon icon-angle-right text-primary"></i>
             <?php printf($defaultValueBox, html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$defaultValue}'"));?>
           </div>
         </div>
