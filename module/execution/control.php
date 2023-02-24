@@ -4019,7 +4019,6 @@ class execution extends control
         $this->view->status         = $status;
         $this->view->from           = $from;
         $this->view->param          = $param;
-        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->view->showBatchEdit  = $this->cookie->showExecutionBatchEdit;
 
         $this->display();
