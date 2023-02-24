@@ -68,13 +68,14 @@
                 $defaultValue    = str_replace($commonKey, '', $defaultValue);
                 $defaultValueBox = str_replace($commonKey, "<span class='input-group-addon'>{$commonLang}</span>", $defaultValueBox);
                 $originalLang    = str_replace($commonKey, $commonLang, $originalLang);
+                if(!$isCurrentLang) $currentLangs[$langKey] = $originalLang;
             }
         }
         $defaultValueBox = str_replace($defaultValue, '%s', $defaultValueBox);
         ?>
         <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="form-item flex">
           <?php if(!$isCurrentLang):?>
-          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
+          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $currentLangs[$langKey]?></div>
           <?php endif;?>
           <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="input-label h-full"><?php echo $originalLang?></div>
           <i class="icon icon-angle-right text-primary"></i>
