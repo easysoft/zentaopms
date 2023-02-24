@@ -24,6 +24,11 @@ title=测试executionModel->batchChangeStatus();
 cid=1
 pid=1
 
+测试批量修改执行状态为进行中 >> empty
+测试批量修改执行状态为未开始 >> empty
+测试批量修改执行状态为已挂起 >> empty
+测试批量修改执行状态为已关闭 >> 阶段a子1
+
 */
 
 $execution = new executionTest();
