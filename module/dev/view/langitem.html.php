@@ -55,7 +55,7 @@
         <div class="title"><?php echo $lang->dev->defaultValue?></div>
         <div class="title"><?php echo $lang->dev->modifyValue?></div>
       </div>
-      <div class="form-item-content">
+      <div class="form-item-content form-active-primary">
         <?php $isCurrentLang = str_replace('-', '_', $this->app->getClientLang()) == $language;?>
         <?php foreach($originalLangs as $langKey => $originalLang):?>
         <?php
