@@ -305,7 +305,7 @@ class devModel extends model
      */
     public function getNavLang($type, $module, $method, $language = 'zh-cn', $defaultLang = null)
     {
-        if(empty($defaultLang)) $defaultLang = $this->loadDefaultLang();
+        if(empty($defaultLang)) $defaultLang = $this->loadDefaultLang($language);
 
         $menus = new stdclass();
         if($type == 'second')
@@ -339,7 +339,7 @@ class devModel extends model
         }
         else
         {
-           $menus = $type == 'third' ? $defaultLang->$module->menu->{$method}['subMenu'] : $defaultLang->mainNav;
+           $menus = ($type == 'third' and isset($defaultLang->$module->menu->{$method}['subMenu'])) ? $defaultLang->$module->menu->{$method}['subMenu'] : $defaultLang->mainNav;
         }
 
         return $menus;
@@ -505,7 +505,7 @@ class devModel extends model
     public function loadDefaultLang($language = 'zh-cn', $module = 'common')
     {
         $clientLang = $this->app->clientLang;
-        if($language != $clientLang) $this->app->clientLang = $language;
+        if($language and $language != $clientLang) $this->app->clientLang = $language;
 
         $langFilesToLoad = $this->app->getMainAndExtFiles($module);
         if($language != $clientLang) $this->app->clientLang = $clientLang;

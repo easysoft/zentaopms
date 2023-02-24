@@ -57,4 +57,20 @@ class devTest
         $result = $this->objectModel->getModules();
         return $result;
     }
+
+    /**
+     * Get nav lang.
+     *
+     * @param  string $type
+     * @param  string $module
+     * @param  string $method
+     * @param  string $language
+     * @param  object $defaultLang
+     * @access public
+     * @return object
+     */
+    public function getNavLangTest($type, $module, $method, $language = 'zh-cn', $defaultLang = null)
+    {
+        return $this->objectModel->getNavLang($type, $module, $method, $language, $defaultLang);
+    }
 }
