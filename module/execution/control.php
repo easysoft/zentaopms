@@ -2615,6 +2615,12 @@ class execution extends control
         $execution = $this->commonAction($executionID);
         if($execution->type != 'kanban') return print(js::locate(inlink('view', "executionID=$executionID")));
 
+        /* Set Session. */
+        $this->session->set('execGroupBy', $groupBy);
+        $this->session->set('storyList', $this->app->getURI(true), 'execution');
+        $this->session->set('rdSearchValue', '');
+        $this->session->set('execLaneType', $browseType);
+
         $features   = $this->execution->getExecutionFeatures($execution);
         $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
 
@@ -2625,17 +2631,10 @@ class execution extends control
             {
                 if(!$features['story'] and $group->lanes[0]->type == 'story') unset($kanbanData[$regionID]->groups[$groupID]);
                 if(!$features['qa']    and $group->lanes[0]->type == 'bug')   unset($kanbanData[$regionID]->groups[$groupID]);
-                $kanbanData[$regionID]->groups = array_values($kanbanData[$regionID]->groups);
             }
+            $kanbanData[$regionID]->groups = array_values($kanbanData[$regionID]->groups);
         }
 
-        /* Set Session. */
-        $this->session->set('execGroupBy', $groupBy);
-        $this->session->set('storyList', $this->app->getURI(true), 'execution');
-        $this->session->set('rdSearchValue', '');
-        $this->session->set('execLaneType', $browseType);
-
-        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
         foreach($this->config->execution->statusActions as $action)
         {
