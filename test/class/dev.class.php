@@ -34,6 +34,22 @@ class devTest
     }
 
     /**
+     * Test set field method.
+     *
+     * @param  array  $type
+     * @access public
+     * @return array
+     */
+    public function setFieldTest($type)
+    {
+        $this->objectModel->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+        $sql = "DESC zt_product";
+        $rawFields = $this->objectModel->dbh->query($sql)->fetchAll();
+        return $this->objectModel->setField((array)$rawFields[1], (object)$rawFields[1], $type, 1);
+    }
+
+
+    /**
      * Test get APIs of a module.
      *
      * @param string $module
