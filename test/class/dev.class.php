@@ -75,6 +75,12 @@ class devTest
         return $this->objectModel->getNavLang($type, $module, $method, $language, $defaultLang);
     }
 
+    /**
+     * Get links title.
+     *
+     * @access public
+     * @return array
+     */
     public function getLinkTitleTest()
     {
         $lang = $this->objectModel->lang->mainNav;
