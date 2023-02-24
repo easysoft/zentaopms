@@ -135,7 +135,7 @@ $(function()
         removeActive(e.target.id);
     });
 
-    $('.form-item-content > .form-item > .input-label').on('click', function()
+    $('.form-item-content > .form-item > .input-group').on('click', function()
     {
         handleClickItem($(this).data('id'));
     });
