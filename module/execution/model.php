@@ -69,16 +69,19 @@ class executionModel extends model
             $features['build']  = false;
             $features['burn']   = false;
         }
-        else if(in_array($execution->attribute, array('request', 'design', 'review')))
+        elseif(!empty($execution->attribute))
         {
-            $features['qa']     = false;
-            $features['devops'] = false;
-            $features['build']  = false;
-            $features['other']  = false;
-
-            if(in_array($execution->attribute, array('request', 'review')))
+            $features['other'] = false;
+            if(in_array($execution->attribute, array('request', 'design', 'review')))
             {
-                $features['story'] = false;
+                $features['qa']     = false;
+                $features['devops'] = false;
+                $features['build']  = false;
+
+                if(in_array($execution->attribute, array('request', 'review')))
+                {
+                    $features['story'] = false;
+                }
             }
         }
 
