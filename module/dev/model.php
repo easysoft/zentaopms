@@ -612,6 +612,11 @@ class devModel extends model
                 if(strpos($link, '|') === false) continue;
                 list($label, $thisModule, $thisMethod) = explode('|', $link);
 
+                if(isset($this->config->dev->linkMethods[$module]["{$thisModule}-{$thisMethod}"]))
+                {
+                    list($thisModule, $thisMethod) = $this->config->dev->linkMethods[$module]["{$thisModule}-{$thisMethod}"];
+                }
+
                 $subMenu = new stdclass();
                 $subMenu->title    = $label;
                 $subMenu->key      = '';
