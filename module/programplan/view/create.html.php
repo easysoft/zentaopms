@@ -46,17 +46,14 @@
     <?php if(!empty($planID) and $project->model == 'waterfallplus'):?>
     <div class="pull-left">
       <div class='methodTitle'><strong><?php echo $lang->programplan->subPlanManage . ':'?></strong></div>
-      <div class='btn-group'>
-        <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo zget($lang->programplan->typeList, $executionType);?>'><?php echo zget($lang->programplan->typeList, $executionType);?></span> <span class='caret'></span></a>
-        <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-          <?php
-          foreach($lang->programplan->typeList as $key => $value)
-          {
-              $class = $executionType == $key ? 'class="active"' : '';
-              echo "<li $class>" . html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$productID&planID=$planID&type=$key"), $value) . "</li>";
-          }
-          ?>
-        </ul>
+      <div class='type-list-radio'>
+      <?php
+      foreach($lang->programplan->typeList as $key => $value)
+      {
+          $label = "<label class='radio-inline'><input type='radio' name='executionType' value='{$key}'" . ($key == $executionType ? " checked='checked'" : '') . "id='product{$key}'>{$value}</label>";
+          echo html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$productID&planID=$planID&type=$key"), $label);
+      }
+      ?>
       </div>
       <div class='methodTip'><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->programplan->methodTip;?>"></icon></div>
     </div>
