@@ -2014,10 +2014,15 @@ class executionModel extends model
                 if($execution->parent) $parentList[$execution->parent] = $execution->parent;
                 if($execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
             }
-            elseif($param === 'hasParentName')
+            elseif(strpos($param, 'hasParentName') !== false)
             {
                 $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
                 $executions[$execution->id]->title = implode('/', $parentExecutions);
+                if(strpos($param, 'skipParent') !== false)
+                {
+                    $children = $this->getChildExecutions($execution->id);
+                    if(count($children) > 0) $parentList[$execution->id] = $execution->id;
+                }
             }
             elseif(isset($executions[$execution->parent]))
             {

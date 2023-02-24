@@ -2624,7 +2624,7 @@ class projectModel extends model
         $this->loadModel('program');
 
         $projects   = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
-        $executions = $this->loadModel('execution')->getStatData(0, 'doing');
+        $executions = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
 
         $doingExecutions  = array();
         $latestExecutions = array();
