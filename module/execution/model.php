@@ -881,7 +881,7 @@ class executionModel extends model
             {
                 if($executions[$executionID]->begin > $executions[$executionID]->end)
                 {
-                    dao::$errors["ends{$executionID}"][] = sprintf($this->lang->execution->ge, $executions[$executionID]->end, $executions[$executionID]->begin);
+                    dao::$errors["ends{$executionID}"][] = sprintf($this->lang->execution->errorLetterPlan, $executions[$executionID]->end, $executions[$executionID]->begin);
                 }
 
                 if($project and $executions[$executionID]->begin < $project->begin)
