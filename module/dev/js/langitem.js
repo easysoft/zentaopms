@@ -123,7 +123,7 @@ $(function()
         {
             var target = $(e.target);
             if (target.attr('data-has-children') === 'true') return;
-            self.location.href = createLink('dev', 'langItem', 'type=' + type + '&module=' + target.attr('data-module') + '&method=' + target.attr('data-method'));
+            self.location.href = createLink('dev', 'langItem', 'type=' + type + '&module=' + target.attr('data-module') + '&method=' + target.attr('data-method') + '&language=' + language);
         })
     }
 

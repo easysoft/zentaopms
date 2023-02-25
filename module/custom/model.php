@@ -27,7 +27,15 @@ class customModel extends model
             $stmt = $this->dbh->query($sql);
 
             $allCustomLang = array();
-            while($row = $stmt->fetch()) $allCustomLang[$row->id] = $row;
+            while($row = $stmt->fetch())
+            {
+                /* Replace common lang for menu. */
+                if(strpos($row->module, 'Menu') !== false or strpos($row->section, 'featureBar-') !== false or $row->section == 'mainNav')
+                {
+                    $row->value = strtr($row->value, $this->config->custom->commonLang);
+                }
+                $allCustomLang[$row->id] = $row;
+            }
         }
         catch(PDOException $e)
         {

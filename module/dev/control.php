@@ -128,35 +128,26 @@ class dev extends control
 
         if($this->server->request_method == 'POST')
         {
-            $section = '';
-            if($type == 'common')  $section = '&section=';
-            if($type == 'first')   $section = '&section=mainNav';
-            if($type == 'feature') $section = str_replace('_', '-', "&section=featureBar-{$method}");
-            $this->loadModel('custom')->deleteItems("lang={$language}&module={$moduleName}&vision={$this->config->vision}{$section}");
-
-            $data = fixer::input('post')->get();
-            if($type == 'common') unset($data->common_SRCommon, $data->common_URCommon);
-            foreach($data as $langKey => $customedLang)
-            {
-                if(strpos($langKey, "{$moduleName}_") !== 0) continue;
-                if(empty($customedLang)) continue;
-
-                $this->custom->setItem("{$language}." . str_replace('_', '.', $langKey), $customedLang);
-            }
-
-            if($type == 'common' and $this->config->custom->URSR)
-            {
-                $post  = $_POST;
-                $_POST = array();
-                if(!empty($post['common_SRCommon'])) $_POST['SRName'] = $post['common_SRCommon'];
-                if(!empty($post['common_URCommon'])) $_POST['URName'] = $post['common_URCommon'];
-                $this->custom->updateURAndSR($this->config->custom->URSR, $language);
-            }
-
+            $this->dev->saveCustomedLang($common, $moduleName, $method, $language);
             return $this->send(array('result' => 'success', 'locate' => 'reload', 'message' => $this->lang->saveSuccess));
         }
 
-        if($clientLang != $language) $this->view->currentLangs = $this->dev->getOriginalLang($type, $module, $method, $clientLang);
+        if($clientLang != $language)
+        {
+            $currentCommonLang = $this->config->custom->commonLang;
+
+            $commonLang = $this->dev->getOriginalLang('common', '', '', $language);
+            $commonLang = array_merge($commonLang, $this->dev->getCustomedLang('common', '', '', $language));
+            foreach($commonLang as $commonKey => $langValue)
+            {
+                $upperKey = '$' . strtoupper($commonKey);
+                if(isset($this->config->custom->commonLang[$upperKey])) $this->config->custom->commonLang[$upperKey] = $langValue;
+            }
+
+            $this->view->currentLangs      = $this->dev->getOriginalLang($type, $module, $method, $clientLang);
+            $this->view->currentCommonLang = $currentCommonLang;
+        }
+
         $this->view->title         = $this->lang->langItem;
         $this->view->type          = $type;
         $this->view->originalLangs = $this->dev->getOriginalLang($type, $module, $method, $language);
@@ -172,7 +163,7 @@ class dev extends control
     /**
      * Reset customed menu lang.
      *
-     * @param  string $type       common|first|second|third|feature
+     * @param  string $type       common|first|second|third|tag
      * @param  string $module
      * @param  string $method
      * @param  string $language   zh_cn|en|fr|de|zh_tw
@@ -186,9 +177,9 @@ class dev extends control
 
         $language = str_replace('_', '-', $language);
         $section  = '';
-        if($type == 'common')  $section = '&section=';
-        if($type == 'first')   $section = '&section=mainNav';
-        if($type == 'feature') $section = str_replace('_', '-', "&section=featureBar-{$method}");
+        if($type == 'common') $section = '&section=';
+        if($type == 'first')  $section = '&section=mainNav';
+        if($type == 'tag')    $section = str_replace('_', '-', "&section=featureBar-{$method}");
         $this->loadModel('custom')->deleteItems("lang={$language}&module={$module}&vision={$this->config->vision}{$section}");
         if($type == 'common' and $this->config->custom->URSR)
         {

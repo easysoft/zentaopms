@@ -793,4 +793,101 @@ class devModel extends model
 
         return $linksTitle;
     }
+
+    /**
+     * Parse lang that with commonLang.
+     *
+     * @param  string $lang
+     * @access public
+     * @return string|array
+     */
+    public function parseCommonLang($lang)
+    {
+        if(empty($lang)) return $lang;
+
+        $reg = implode('|', str_replace('$', '\$', array_keys($this->config->custom->commonLang)));
+        if(!preg_match("/($reg)/", $lang)) return $lang;
+
+        $lang     = preg_replace("/($reg)/", '$$$1$$', $lang);
+        $subLangs = array_filter(explode('$$', $lang));
+
+        return $subLangs;
+    }
+
+    /**
+     * Check original lang changed.
+     *
+     * @param  string|array $defaultValue
+     * @param  string|array $customedLang
+     * @access public
+     * @return bool
+     */
+    public function isOriginalLangChanged($defaultValue, $customedLang)
+    {
+        if(empty($customedLang)) return false;
+        if(!is_array($defaultValue) and !is_array($customedLang)) return false;
+        if(!is_array($defaultValue) and is_array($customedLang)) return true;
+        if(!is_array($customedLang) or count($defaultValue) != count($customedLang)) return true;
+
+        $commonLang = $this->config->custom->commonLang;
+        foreach($defaultValue as $i => $subLang)
+        {
+            if(!isset($customedLang[$i])) return true;
+
+            $customedSubLang = $customedLang[$i];
+            if(!isset($commonLang[$subLang]) and isset($commonLang[$customedSubLang])) return true;
+            if(isset($commonLang[$subLang]) and !isset($commonLang[$customedSubLang])) return true;
+            if(isset($commonLang[$subLang]) and $subLang != $customedSubLang) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Save customed lang.
+     *
+     * @param  string    $type        common|first|second|third|tag
+     * @param  string    $moduleName
+     * @param  string    $method
+     * @param  string    $language    zh-cn|zh-tw|en|fr|de
+     * @access public
+     * @return void
+     */
+    public function saveCustomedLang($type, $moduleName, $method, $language)
+    {
+        $section = '';
+        if($type == 'common') $section = '&section=';
+        if($type == 'first')  $section = '&section=mainNav';
+        if($type == 'tag')    $section = str_replace('_', '-', "&section=featureBar-{$method}");
+        $this->loadModel('custom')->deleteItems("lang={$language}&module={$moduleName}&vision={$this->config->vision}{$section}");
+
+        $data = fixer::input('post')->get();
+        if($type == 'common') unset($data->common_SRCommon, $data->common_URCommon);
+        foreach($data as $langKey => $customedLang)
+        {
+            if(strpos($langKey, "{$moduleName}_") !== 0) continue;
+            if(is_array($customedLang))
+            {
+                $isCustomed = false;
+                foreach($customedLang as $subLang)
+                {
+                    if(!isset($this->config->custom->commonLang[$subLang]) and !empty($subLang)) $isCustomed = true;
+                }
+                $customedLang = $isCustomed ? implode(common::checkNotCN() ? ' ' : '', $customedLang) : '';
+            }
+            if(empty($customedLang)) continue;
+
+            $this->custom->setItem("{$language}." . str_replace('_', '.', $langKey), $customedLang);
+        }
+
+        if($type == 'common' and $this->config->custom->URSR)
+        {
+            $post  = $_POST;
+            $_POST = array();
+            if(!empty($post['common_SRCommon'])) $_POST['SRName'] = $post['common_SRCommon'];
+            if(!empty($post['common_URCommon'])) $_POST['URName'] = $post['common_URCommon'];
+            $this->custom->updateURAndSR($this->config->custom->URSR, $language);
+
+            $_POST = $post;
+        }
+    }
 }

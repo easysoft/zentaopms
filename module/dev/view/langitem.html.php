@@ -10,12 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php include 'header.html.php';?>
 <?php js::set('type', $type); ?>
 <?php js::set('navTypes', $config->dev->navTypes); ?>
 <?php js::set('menuTree', $menuTree)?>
-<?php include 'header.html.php';?>
+<?php js::set('language', $language)?>
 <div id='mainMenu' class='clearfix menu-secondary'>
-  <div class="btn-toolBar pull-left">
+  <div class="btn-toolbar pull-left">
     <div class="dropdown">
       <button class="btn" type="button" data-toggle="dropdown"><?php printf($lang->dev->language, $config->langs[str_replace('_', '-', $language)]);?> <span class="caret"></span></button>
       <ul class="dropdown-menu">
@@ -59,34 +60,42 @@
         <?php $isCurrentLang = str_replace('-', '_', $this->app->getClientLang()) == $language;?>
         <?php foreach($originalLangs as $langKey => $originalLang):?>
         <?php
-        $defaultValue    = $originalLang;
-        $defaultValueBox = $originalLang;
-        foreach($config->dev->commonLang as $commonKey => $commonLang)
-        {
-            if(strpos($originalLang, $commonKey) !== false)
-            {
-                $defaultValue    = str_replace($commonKey, '', $defaultValue);
-                $defaultValueBox = str_replace($commonKey, "<span class='input-group-addon'>{$commonLang}</span>", $defaultValueBox);
-                $originalLang    = str_replace($commonKey, $commonLang, $originalLang);
-                if(!$isCurrentLang) $currentLangs[$langKey] = $originalLang;
-            }
-        }
-        $defaultValueBox = str_replace($defaultValue, '%s', $defaultValueBox);
+        $itemKey = "{$moduleName}_{$langKey}";
+        if(!$isCurrentLang) $currentLangs[$langKey] = strtr($currentLangs[$langKey], $currentCommonLang);
+        $defaultValue = $this->dev->parseCommonLang($originalLang);
+        $customedLang = $this->dev->parseCommonLang(zget($customedLangs, $langKey, ''));
+        $originalLang = strtr($originalLang, $config->custom->commonLang);
         ?>
-        <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="form-item flex">
+        <div data-id="<?php echo $itemKey?>" class="form-item flex">
           <?php if(!$isCurrentLang):?>
-          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="label h-full"><?php echo $currentLangs[$langKey]?></div>
+          <div data-id="<?php echo $itemKey?>" class="label h-full"><?php echo $currentLangs[$langKey]?></div>
           <?php endif;?>
-          <div data-id="<?php echo "{$moduleName}_{$langKey}"?>" class="label h-full"><?php echo $originalLang?></div>
+          <div data-id="<?php echo $itemKey?>" class="label h-full"><?php echo $originalLang?></div>
           <div class="input-group">
             <i class="icon icon-angle-right text-primary"></i>
-            <?php printf($defaultValueBox, html::input("{$moduleName}_{$langKey}", zget($customedLangs, $langKey, ''), "class='form-control shadow-primary-hover' placeholder='{$defaultValue}'"));?>
+            <?php $originalLangChanged = $this->dev->isOriginalLangChanged($defaultValue, $customedLang);?>
+            <?php if(($originalLangChanged and is_array($customedLang)) or (!$originalLangChanged and is_array($defaultValue))):?>
+            <?php $foreachLang = $originalLangChanged ? $customedLang : $defaultValue;?>
+            <?php foreach($foreachLang as $i => $subLang):?>
+            <?php if(isset($config->custom->commonLang[$subLang])):?>
+            <span class='input-group-addon'><?php echo $config->custom->commonLang[$subLang] . html::hidden("{$itemKey}[]", $subLang);?></span>
+            <?php else:?>
+            <?php
+            $placeholder     = $originalLangChanged ? '' : "placeholder='{$subLang}'";
+            $customedSubLang = $subLang;
+            if(!$originalLangChanged) $customedSubLang = empty($customedLang) ? '' : zget($customedLang, $i, '');
+            echo html::input("{$itemKey}[]", $customedSubLang, "class='form-control shadow-primary-hover' $placeholder");
+            ?>
+            <?php endif;?>
+            <?php endforeach;?>
+            <?php else:?>
+            <?php echo html::input($itemKey, $customedLang, "class='form-control shadow-primary-hover' placeholder='{$originalLang}'");?>
+            <?php endif;?>
           </div>
         </div>
         <?php endforeach;?>
       </div>
     </div>
-
     <div class="bottom-btn">
       <?php echo html::submitButton(); ?>
       <?php echo html::a(inlink('resetLang', "type={$type}&module={$moduleName}&method={$method}&language={$language}"), $lang->restore, 'hiddenwin', "id='reset' class='btn btn-wide reset-btn'");?>

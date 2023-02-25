@@ -255,7 +255,4 @@ if($config->vision == 'lite')
     $config->dev->hideMainMenu = array('execution', 'kanban', 'admin');
 }
 
-global $lang;
-$config->dev->commonLang = array('$URCOMMON' => $lang->URCommon, '$SRCOMMON' => $lang->SRCommon, '$PRODUCTCOMMON' => $lang->productCommon, '$PROJECTCOMMON' => $lang->projectCommon, '$EXECUTIONCOMMON' => $lang->executionCommon);
-
 $config->dev->linkMethods['my']['my-calendar'] = array('my', 'todo');
