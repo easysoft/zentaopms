@@ -197,7 +197,7 @@ class cron extends control
 
                 if($now > $cron['time'])
                 {
-                    if(!$this->cron->changeStatusRunning($id, $cronInfo->lastTime)) continue;
+                    if(!$this->cron->changeStatusRunning($id)) continue;
                     $parsedCrons[$id]['time'] = $cron['cron']->getNextRunDate();
 
                     /* Execution command. */
