@@ -112,7 +112,8 @@ class prepareUpdate
             $stories = array_filter(explode(',', trim($release->stories, ',')));
             $bugs    = array_filter(explode(',', trim($release->bugs, ',')));
 
-            if(!empty($stories)) $doneStories .= $title[$product] . "\n";
+            if(!empty($stories))   $doneStories .= $title[$product] . "\n";
+            if(!empty($fixedBugs)) $fixedBugs   .= $title[$product] . "\n";
             foreach($stories as $storyID)
             {
                 $storyTitle   = $this->getStoryOrBugTitle('story', $storyID);
@@ -288,7 +289,14 @@ class prepareUpdate
      */
     public function addConfirmedSql()
     {
-        `sed -i "s/ \/\/ confirm insert position\.$/\\n             case '{$this->internalZT->lastPmsVersionAB}':\\n                \\\$confirmContent .= file_get_contents(\\\$this->getUpgradeFile('{$this->internalZT->lastPmsVersion}')); \/\/ confirm insert position\./" ../module/upgrade/model.php`;
+        if(file_exists("../db/update{$this->internalZT->lastPmsVersion}.sql"))
+        {
+            `sed -i "s/ \/\/ confirm insert position\.$/\\n             case '{$this->internalZT->lastPmsVersionAB}':\\n                \\\$confirmContent .= file_get_contents(\\\$this->getUpgradeFile('{$this->internalZT->lastPmsVersion}')); \/\/ confirm insert position\./" ../module/upgrade/model.php`;
+        }
+        else
+        {
+            `sed -i "s/ \/\/ confirm insert position\.$/\\n             case '{$this->internalZT->lastPmsVersionAB}': \/\/ confirm insert position\./" ../module/upgrade/model.php`;
+        }
     }
 
     /**
@@ -299,13 +307,20 @@ class prepareUpdate
      */
     public function exportStandardSql()
     {
+        $updateSqlFile = "../db/update{$this->internalZT->lastPmsVersion}.sql";
+        if(!file_exists($updateSqlFile))
+        {
+            `cp ../db/standard/zentao{$this->internalZT->lastPmsVersion}.sql ../db/standard/zentao{$this->internalZT->pmsVersion}.sql`;
+            return true;
+        }
+
         $lastStandardSql = file_get_contents("../db/standard/zentao{$this->internalZT->lastPmsVersion}.sql");
-        $tmpStandardSql  = file_put_contents("/tmp/lastStandard.sql", "SET @@sql_mode='';\n$lastStandardSql");
+        file_put_contents("/tmp/lastStandard.sql", "SET @@sql_mode='';\n$lastStandardSql");
 
         `mysql -u{$this->mysqlConfig->account} -p{$this->mysqlConfig->password} -e "DROP DATABASE IF EXISTS {$this->mysqlConfig->databaseName}"`;
         `mysql -u{$this->mysqlConfig->account} -p{$this->mysqlConfig->password} -e "CREATE DATABASE IF NOT EXISTS {$this->mysqlConfig->databaseName}"`;
         `mysql -u{$this->mysqlConfig->account} -p{$this->mysqlConfig->password} -D {$this->mysqlConfig->databaseName} < /tmp/lastStandard.sql`;
-        `mysql -u{$this->mysqlConfig->account} -p{$this->mysqlConfig->password} -D {$this->mysqlConfig->databaseName} < ../db/update{$this->internalZT->lastPmsVersion}.sql`;
+        `mysql -u{$this->mysqlConfig->account} -p{$this->mysqlConfig->password} -D {$this->mysqlConfig->databaseName} < $updateSqlFile`;
 
         `mysqldump -u{$this->mysqlConfig->account} -p{$this->mysqlConfig->password} --compact --no-data {$this->mysqlConfig->databaseName} > ../db/standard/zentao{$this->internalZT->pmsVersion}.sql`;
 
@@ -322,7 +337,10 @@ class prepareUpdate
      */
     public function checkInstallSql()
     {
-        $updateSql = file_get_contents("../db/update{$this->internalZT->lastPmsVersion}.sql");
+        $updateSqlFile = "../db/update{$this->internalZT->lastPmsVersion}.sql";
+        if(!file_exists($updateSqlFile)) return true;
+
+        $updateSql = file_get_contents($updateSqlFile);
         $sqlList   = explode(';', $updateSql);
         $errorSql  = '';
 
@@ -350,14 +368,16 @@ class prepareUpdate
             /* Alter table sql. */
             foreach(explode(',', $sql) as $option)
             {
+                $option = preg_replace('/ AFTER `.*`/', '', $option);
+                $option = trim($option, ';');
                 if(stripos($option, 'ADD ') !== false or stripos($option, 'MODIFY ') !== false)
                 {
-                    preg_match("/(ADD|MODIFY) (COLUMN )*(`(.*?)`) (.*)/i", $option, $matches);
+                    preg_match("/(ADD|MODIFY) (COLUMN )*((`(.*?)`) (.*)?)/i", $option, $matches);
                     if(strpos($createTableSql, $matches[3]) === false) $errorSql .= $option . "\n";
                 }
                 if(stripos($option, 'CHANGE ') !== false)
                 {
-                    preg_match("/CHANGE (COLUMN )*(`(.*?)`) (`(.*?)`) (.*)/i", $option, $matches);
+                    preg_match("/CHANGE (COLUMN )*(`(.*?)`) ((`(.*?)`) (.*)?)/i", $option, $matches);
                     if(strpos($createTableSql, $matches[4]) === false) $errorSql .= $option . "\n";
                 }
                 if(stripos($option, 'DROP ') !== false)
