@@ -4596,7 +4596,7 @@ class storyModel extends model
                 if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
-                    $title   = $this->lang->story->subdivide;
+                    $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
                     if(!$isClick and $story->status != 'closed')
                     {
                         if($story->parent > 0)
@@ -4650,7 +4650,12 @@ class storyModel extends model
             $menu .= $this->buildMenu('story', 'review', $params . "&from={$this->app->tab}&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody');
 
             $executionID = empty($execution) ? 0 : $execution->id;
-            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
+            if(!isonlybody())
+            {
+                $subdivideTitle = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
+                $menu          .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $subdivideTitle);
+
+            }
 
             $menu .= $this->buildMenu('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'close',    $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
@@ -4780,7 +4785,7 @@ class storyModel extends model
                 if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
-                    $title   = $this->lang->story->subdivide;
+                    $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
                     if(!$isClick and $story->status != 'closed')
                     {
                         if($story->parent > 0)

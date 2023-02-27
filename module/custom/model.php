@@ -51,14 +51,31 @@ class customModel extends model
         $processedLang = array();
         foreach($allCustomLang as $id => $customLang)
         {
-            if(isset($sectionLang[$customLang->module][$customLang->section]['all']) && isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) && $customLang->lang == 'all') continue;
+            if(isset($sectionLang[$customLang->module][$customLang->section]['all']) and isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) and $customLang->lang == 'all') continue;
 
-            $sections     = explode('-', $customLang->section);
-            $sectionIndex = count($sections) - 1;
-            $sectionArr   = array($customLang->key => $customLang->value);
-            for($index = $sectionIndex; $index >= 0; $index --) $sectionArr = array($sections[$index] => $sectionArr);
+            if(strpos($customLang->section, 'featureBar-') !== false)
+            {
+                $sections      = explode('-', $customLang->section);
+                $sectionIndex  = count($sections) - 1;
+                $sectionArr    = array($customLang->key => $customLang->value);
+                $oldSectionArr = empty($processedLang[$customLang->module]) ? array() : $processedLang[$customLang->module];
+                if(!empty($oldSectionArr))
+                {
+                    for($i = 0; $i <= $sectionIndex; $i ++)
+                    {
+                        $sectionKey    = $sections[$i];
+                        $oldSectionArr = $oldSectionArr[$sectionKey];
+                    }
+                    $sectionArr = array_merge($oldSectionArr, $sectionArr);
+                }
 
-            $processedLang[$customLang->module] = $sectionArr;
+                for($index = $sectionIndex; $index >= 0; $index --) $sectionArr = array($sections[$index] => $sectionArr);
+                $processedLang[$customLang->module] = $sectionArr;
+            }
+            else
+            {
+                $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
+            }
         }
 
         return $processedLang;
