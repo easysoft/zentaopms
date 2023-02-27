@@ -58,6 +58,8 @@ $lang->custom->executionCommon      = 'Execution';
 $lang->custom->selectDefaultProgram = 'Please select default program';
 $lang->custom->defaultProgram       = 'Default program';
 $lang->custom->modeManagement       = 'Mode Management';
+$lang->custom->percent              = $lang->stage->percent;
+$lang->custom->setPercent           = "Enable or Disable {$lang->stage->percent}";
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -198,6 +200,7 @@ $lang->custom->notice->storyReviewTip      = 'After selecting by individual, pos
 $lang->custom->notice->selectAllTip        = 'After selecting all people, the reviewers will be emptied and grayed out while hiding their positions and departments.';
 $lang->custom->notice->repeatKey           = 'Repeat Key %s';
 $lang->custom->notice->readOnlyOfCode      = "Le code est un terme de gestion utilisé pour la confidentialité ou comme alias. Lorsque la gestion du code est activée, le produit, le projet et l'exécution dans le système afficheront les informations de code sur les pages de création, de modification, de détails et de liste.";
+$lang->custom->notice->readOnlyOfPercent   = 'The "Workload Ratio" is used to divide the workload of a project into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the "Workload Ratio", users have to fill in the ratio fields when setting up the stages in the Waterfall project and Waterfall Plus project management models.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";

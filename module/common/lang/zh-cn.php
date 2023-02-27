@@ -203,6 +203,7 @@ $lang->design->DBDS       = '数据库设计';
 $lang->design->ADS        = '接口设计';
 $lang->stage->common      = '阶段';
 $lang->stage->list        = '阶段列表';
+$lang->stage->percent     = '工作量占比';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
 $lang->backup->common     = '备份';
