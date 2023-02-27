@@ -124,7 +124,7 @@
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
         <?php endif;?>
-        <?php if($isStage):?>
+        <?php if($isStage and isset($config->setPercent) and $config->setPercent == 1):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
           <td class='required'>
