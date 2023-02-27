@@ -1581,7 +1581,7 @@ class programplanModel extends model
     }
 
     /**
-     * Change whether it is the top stage.
+     * Check whether it is the top stage.
      *
      * @param  int    $planID
      * @access public
@@ -1600,23 +1600,22 @@ class programplanModel extends model
      *
      * @param  int    $planID
      * @param  string $attribute
-     * @param  bool   $withDeleted
      * @access public
      * @return bool
      */
-    public function updateSubStageAttr($planID, $attribute, $withDeleted = false)
+    public function updateSubStageAttr($planID, $attribute)
     {
         if($attribute == 'mix') return true;
 
         $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)
             ->where('parent')->eq($planID)
-            ->beginIF(!$withDeleted)->andWhere('deleted')->eq(0)->fi()
+            ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
         $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in(array_keys($subStageList))->exec();
 
         foreach($subStageList as $childID => $subStage)
         {
-            $this->updateSubStageAttr($childID, $attribute, $withDeleted);
+            $this->updateSubStageAttr($childID, $attribute);
         }
     }
 

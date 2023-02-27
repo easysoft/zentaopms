@@ -1019,7 +1019,6 @@ class executionModel extends model
     public function batchChangeStatus($executionIdList, $status)
     {
         $this->loadModel('programplan');
-        $this->loadModel('action');
 
         /* Sort the IDs, the child stage comes first, and the parent stage follows. */
         $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchPairs();
@@ -1068,6 +1067,9 @@ class executionModel extends model
      */
     public function changeStatus2Wait($executionID, $selfAndChildren, $siblingStages)
     {
+        $this->loadModel('programplan');
+        $this->loadModel('action');
+
         $parentID = $selfAndChildren[$executionID]->parent;
 
         /* There are already tasks consuming work in this phase or its sub-phases already have start times. */
@@ -1075,7 +1077,7 @@ class executionModel extends model
         $hasConsumedTasks   = $this->dao->select('count(consumed) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in(array_keys($selfAndChildren))->andWhere('consumed')->gt(0)->fetch('count');
         if($hasStartedChildren or $hasConsumedTasks) return "'{$selfAndChildren[$executionID]->name}',";
 
-        $newExecution = $this->buildExecutionBySstatus('wait');
+        $newExecution = $this->buildExecutionByStatus('wait');
         $this->dao->update(TABLE_EXECUTION)->data($newExecution)->where('id')->eq($executionID)->exec();
 
         if(!dao::isError())
@@ -1112,7 +1114,7 @@ class executionModel extends model
                     $parentStatus = (!helper::isZeroDate($parent->realBegan) or $parentHasConsumedTasks) ? 'doing' : 'wait';
                     if($parent->status == $parentStatus) return '';
 
-                    $newParent = $this->buildExecutionBySstatus($parentStatus);
+                    $newParent = $this->buildExecutionByStatus($parentStatus);
                     $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($parentID)->exec();
 
                     if(!dao::isError())
@@ -1139,10 +1141,13 @@ class executionModel extends model
      */
     public function changeStatus2Doing($executionID, $selfAndChildren)
     {
+        $this->loadModel('programplan');
+        $this->loadModel('action');
+
         $type     = $selfAndChildren[$executionID]->type;
         $parentID = $selfAndChildren[$executionID]->parent;
 
-        $newExecution = $this->buildExecutionBySstatus('doing');
+        $newExecution = $this->buildExecutionByStatus('doing');
         $this->dao->update(TABLE_EXECUTION)->data($newExecution)->where('id')->eq($executionID)->exec();
         if(!dao::isError())
         {
@@ -1159,7 +1164,7 @@ class executionModel extends model
                 $parent = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch();
                 if($parent->status == 'doing') return '';
 
-                $newParent = $this->buildExecutionBySstatus('doing');
+                $newParent = $this->buildExecutionByStatus('doing');
                 $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($parentID)->exec();
 
                 if(!dao::isError())
@@ -1186,6 +1191,9 @@ class executionModel extends model
      */
     public function changeStatus2Inactived($executionID, $status, $selfAndChildren, $siblingStages)
     {
+        $this->loadModel('programplan');
+        $this->loadModel('action');
+
         $type          = $selfAndChildren[$executionID]->type;
         $parentID      = $selfAndChildren[$executionID]->parent;
         $checkedStatus = $status == 'suspended' ? 'wait,doing' : 'wait,doing,suspended';
@@ -1203,7 +1211,7 @@ class executionModel extends model
             }
         }
 
-        $newExecution = $this->buildExecutionBySstatus($status);
+        $newExecution = $this->buildExecutionByStatus($status);
         $this->dao->update(TABLE_EXECUTION)->data($newExecution)->where('id')->eq($executionID)->exec();
         if(!dao::isError())
         {
@@ -1235,7 +1243,7 @@ class executionModel extends model
                     $parent = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch();
                     if($parent->status == $status) return '';
 
-                    $newParent = $this->buildExecutionBySstatus($status);
+                    $newParent = $this->buildExecutionByStatus($status);
                     $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($parentID)->exec();
 
                     if(!dao::isError())
@@ -1248,7 +1256,6 @@ class executionModel extends model
                 }
             }
         }
-
     }
 
     /**
@@ -5915,7 +5922,7 @@ class executionModel extends model
      * @access public
      * @return object
      */
-    public function buildExecutionBySstatus($status)
+    public function buildExecutionByStatus($status)
     {
         $execution = new stdclass();
         $execution->status         = $status;
