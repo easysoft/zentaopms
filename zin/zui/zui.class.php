@@ -11,8 +11,8 @@
 
 namespace zin;
 
-require_once 'wg.class.php';
-require_once 'wg.func.php';
+require_once dirname(__DIR__) . DS . 'core' . DS . 'wg.class.php';
+require_once dirname(__DIR__) . DS . 'core' . DS . 'wg.func.php';
 
 class zui extends wg
 {

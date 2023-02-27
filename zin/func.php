@@ -12,6 +12,7 @@
 namespace zin;
 
 require_once __DIR__ . DS . 'core' . DS . 'h.func.php';
+require_once __DIR__ . DS . 'zui' . DS . 'zui.class.php';
 
 function icon()        {return createWg('icon', func_get_args());}
 function btn()         {return createWg('btn', func_get_args());}
