@@ -17,7 +17,6 @@ function changeParams(obj)
         for(i=0 ; i < endarray.length ; i++) end = end + endarray[i];
     }
 
-    var params = window.btoa('begin=' + begin + '&end=' + end + '&product=' + product + '&execution=' + execution);
-    var link = createLink('report', 'preview', 'dimension=' + dimension + '&group=' + group + '&module=report&method=bugcreate&params=' + params);
-    location.href = link;
+    link = createLink('report', 'bugcreate', 'begin=' + begin + '&end=' + end + '&product=' + product + '&execution=' + execution);
+    location.href=link;
 }

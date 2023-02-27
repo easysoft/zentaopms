@@ -1085,7 +1085,9 @@ class upgradeModel extends model
             case '18_0_beta3':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.0.beta3'));
              case '18_0':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0')); // confirm insert position.
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.0'));
+             case '18_1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.1')); // confirm insert position.
         }
 
         return $confirmContent;
