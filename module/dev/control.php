@@ -129,7 +129,7 @@ class dev extends control
         if($this->server->request_method == 'POST')
         {
             $this->dev->saveCustomedLang($type, $moduleName, $method, $language);
-            return $this->send(array('result' => 'success', 'locate' => 'reload', 'message' => $this->lang->saveSuccess));
+            return $this->send(array('result' => 'success', 'locate' => 'top', 'message' => $this->lang->saveSuccess));
         }
 
         if($clientLang != $language)
@@ -194,6 +194,6 @@ class dev extends control
             }
         }
 
-        return print(js::reload('parent'));
+        return print(js::reload('parent.parent'));
     }
 }
