@@ -202,6 +202,7 @@ $lang->design->DDS        = '详细设计';
 $lang->design->DBDS       = '数据库设计';
 $lang->design->ADS        = '接口设计';
 $lang->stage->common      = '阶段';
+$lang->stage->type        = '阶段类型';
 $lang->stage->list        = '阶段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
