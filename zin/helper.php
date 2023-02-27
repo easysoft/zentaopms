@@ -49,10 +49,5 @@ function createWg($name, $args)
 
     $wgName = "\\zin\\$name";
 
-    if(function_exists($wgName))
-    {
-        return call_user_func_array($wgName, $args);
-    }
-
     return class_exists($wgName) ? (new $wgName($args)) : $wgName($args);
 }
