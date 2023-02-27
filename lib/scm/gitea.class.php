@@ -218,8 +218,8 @@ class Gitea
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
         /* compatible with svn. */
-        if($fromRevision == 'HEAD' and $this->branch) $fromRevision = $this->branch;
-        if($toRevision   == 'HEAD' and $this->branch) $toRevision   = $this->branch;
+        if($fromRevision === 'HEAD' and $this->branch) $fromRevision = $this->branch;
+        if($toRevision   === 'HEAD' and $this->branch) $toRevision   = $this->branch;
         if($fromRevision === $toRevision)
         {
             $logs = array();
