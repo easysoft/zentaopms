@@ -9,6 +9,7 @@ class select extends wg
     {
         $text = $item['text'];
         unset($item['text']);
+        $item = array_filter($item, function($v) {return $v !== false;});
         if(!($item instanceof item)) $item = item(set($item));
         return h::option(inherit($item), $text);
     }
