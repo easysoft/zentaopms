@@ -36,6 +36,7 @@ $lang->todo->project      = "Project";
 $lang->todo->product      = "Product";
 $lang->todo->execution    = $lang->executionCommon;
 $lang->todo->changeDate   = "Change Date";
+$lang->todo->future       = 'TBD';
 
 $lang->todo->reasonList['story'] = "Story übertragen";
 $lang->todo->reasonList['task']  = "Aufgabe übertragen";

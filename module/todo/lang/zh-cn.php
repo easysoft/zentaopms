@@ -36,6 +36,7 @@ $lang->todo->project      = "所属项目";
 $lang->todo->product      = "所属产品";
 $lang->todo->execution    = "所属{$lang->execution->common}";
 $lang->todo->changeDate   = "修改日期";
+$lang->todo->future       = '待定';
 
 $lang->todo->reasonList['story'] = "转{$lang->SRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
