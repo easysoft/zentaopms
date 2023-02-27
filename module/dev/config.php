@@ -246,7 +246,7 @@ $config->dev->navTypes = array('second', 'third', 'tag');
 $config->disableFeature = array();
 if(!helper::hasFeature('waterfall')) $config->disableFeature = array('design', 'stage', 'programplan', 'weekly', 'researchplan', 'researchreport', 'gapanalysis');
 
-$config->dev->disableMainMenu = array('project', 'product', 'execution');
+$config->dev->disableMainMenu = array('project', 'product');
 $config->dev->projectMenus    = array('project', 'scrum', 'waterfall', 'kanbanProject');
 $config->dev->hideMainMenu    = array('admin', 'kanban');
 if($config->vision == 'lite')
