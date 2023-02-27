@@ -72,6 +72,7 @@ $lang->admin->registerNotice->click      = 'Sign Up';
 $lang->admin->registerNotice->lblAccount = '>= 3 letters and numbers';
 $lang->admin->registerNotice->lblPasswd  = '>= 6 letters and numbers';
 $lang->admin->registerNotice->submit     = 'Submit';
+$lang->admin->registerNotice->submitHere = 'RegistierenHere';
 $lang->admin->registerNotice->bind       = "Bind Exsiting Account";
 $lang->admin->registerNotice->success    = "You have signed up!";
 
