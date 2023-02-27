@@ -131,7 +131,7 @@ page(
                     setClass('items-center'),
                     setStyle(array('align-items' => 'center')),
                     formrow(
-                        array_map(function($v, $k) {return radio(set(array('text' => $v, 'value' => $k, 'checked' => $k === empty($task->id) ? 'continueAdding' : 'toTaskList')));}, $lang->task->afterChoices, array_keys($lang->task->afterChoices))
+                        array_map(function($v, $k) {return radio(set(array('text' => $v, 'value' => $k, 'checked' => $k === (empty($task->id) ? 'continueAdding' : 'toTaskList'))));}, $lang->task->afterChoices, array_keys($lang->task->afterChoices))
                     )
                 ),
                 formgroup(
