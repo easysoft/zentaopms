@@ -802,16 +802,16 @@ class customModel extends model
         if(empty($lang)) $lang = $this->app->getClientLang();
         $data = fixer::input('post')->get();
 
-        if(!$data->SRName || !$data->URName) return false;
+        if(empty($data->SRName) || empty($data->URName)) return false;
 
         $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($key)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($lang)->andWhere('module')->eq('custom')->fetch('value');
         $oldValue = json_decode($oldValue);
 
         $URSRList = new stdclass();
-        $URSRList->SRName        = $data->SRName;
-        $URSRList->URName        = $data->URName;
         $URSRList->defaultSRName = zget($oldValue, 'defaultSRName', $oldValue->SRName);
         $URSRList->defaultURName = zget($oldValue, 'defaultURName', $oldValue->URName);
+        $URSRList->SRName        = empty($data->SRName) ? $URSRList->defaultSRName : $data->SRName;
+        $URSRList->URName        = empty($data->URName) ? $URSRList->defaultURName : $data->URName;
 
         $value = json_encode($URSRList);
         $this->dao->update(TABLE_LANG)->set('value')->eq($value)

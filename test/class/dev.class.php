@@ -132,4 +132,54 @@ class devTest
         $lang = $this->objectModel->lang->mainNav;
         return $this->objectModel->getLinkTitle($lang);
     }
+
+    /**
+     * Test parse common lang.
+     *
+     * @param  string    $lang
+     * @access public
+     * @return string
+     */
+    public function parseCommonLangTest($lang)
+    {
+        $lang = $this->objectModel->parseCommonLang($lang);
+        return empty($lang) ? 'null' : $lang;
+    }
+
+    /**
+     * Test is original lang changed.
+     *
+     * @param  array|string    $defaultValue
+     * @param  array|string    $customedLang
+     * @access public
+     * @return string
+     */
+    public function isOriginalLangChangedTest($defaultValue, $customedLang)
+    {
+        $isOriginalLangChanged = $this->objectModel->isOriginalLangChanged($defaultValue, $customedLang);
+        return $isOriginalLangChanged ? 'TRUE' : 'FALSE';
+    }
+
+    /**
+     * Test save customed lang.
+     *
+     * @param  string    $type
+     * @param  string    $module
+     * @param  string    $method
+     * @param  string    $language
+     * @access public
+     * @return string
+     */
+    public function saveCustomedLangTest($type, $module, $method, $language)
+    {
+        $moduleName = $module;
+        if($type == 'common' or $type == 'first') $moduleName = 'common';
+        if($type == 'second') $moduleName = $module . 'Menu';
+        if($type == 'third')  $moduleName = $module . 'SubMenu';
+
+        $this->objectModel->config->custom->URSR = $this->objectModel->dao->select('*')->from(TABLE_LANG)->where('section')->eq('URSRList')->andWhere('module')->eq('custom')->andWhere('lang')->eq($language)->orderBy('id')->limit(1)->fetch('key');
+        $this->objectModel->saveCustomedLang($type, $moduleName, $method, $language);
+        $customedLang = $this->objectModel->getCustomedLang($type, $module, $method, $language);
+        return empty($customedLang) ? 'null' : implode('|', $customedLang);
+    }
 }

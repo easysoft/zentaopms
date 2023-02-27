@@ -811,7 +811,7 @@ class devModel extends model
         $lang     = preg_replace("/($reg)/", '$$$1$$', $lang);
         $subLangs = array_filter(explode('$$', $lang));
 
-        return $subLangs;
+        return array_values($subLangs);
     }
 
     /**
@@ -883,8 +883,12 @@ class devModel extends model
         {
             $post  = $_POST;
             $_POST = array();
-            if(!empty($post['common_SRCommon'])) $_POST['SRName'] = $post['common_SRCommon'];
-            if(!empty($post['common_URCommon'])) $_POST['URName'] = $post['common_URCommon'];
+
+            $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($this->config->custom->URSR)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($language)->andWhere('module')->eq('custom')->fetch('value');
+            $oldValue = json_decode($oldValue);
+
+            $_POST['SRName'] = !empty($post['common_SRCommon']) ? $post['common_SRCommon'] : zget($oldValue, 'defaultSRName', $oldValue->SRName);
+            $_POST['URName'] = !empty($post['common_URCommon']) ? $post['common_URCommon'] : zget($oldValue, 'defaultURName', $oldValue->URName);
             $this->custom->updateURAndSR($this->config->custom->URSR, $language);
 
             $_POST = $post;
