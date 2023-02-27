@@ -202,6 +202,7 @@ $lang->design->DDS        = 'Detailed Design';
 $lang->design->DBDS       = 'Database Design';
 $lang->design->ADS        = 'Interface Design';
 $lang->stage->common      = 'Stage';
+$lang->stage->type        = 'Stage Type';
 $lang->stage->list        = 'Stage List';
 $lang->execution->list    = "{$lang->executionCommon} List";
 $lang->kanban->common     = 'Kanban';
