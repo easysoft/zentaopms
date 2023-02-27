@@ -33,6 +33,7 @@ $lang->story->edit               = "Edit Story";
 $lang->story->editDraft          = "Edit Draft";
 $lang->story->batchEdit          = "Batch Edit";
 $lang->story->subdivide          = 'Decompose';
+$lang->story->subdivideSR        = $lang->SRCommon . 'Decompose';
 $lang->story->link               = 'Link';
 $lang->story->unlink             = 'Unlink';
 $lang->story->track              = 'Track';

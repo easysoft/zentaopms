@@ -33,6 +33,7 @@ $lang->story->edit               = "Bearbeiten";
 $lang->story->editDraft          = "Entwurf bearbeiten";
 $lang->story->batchEdit          = "Mehere bearbeiten";
 $lang->story->subdivide          = 'Aufteilen';
+$lang->story->subdivideSR        = $lang->SRCommon . 'Aufteilen';
 $lang->story->link               = 'Link';
 $lang->story->unlink             = 'Unlink';
 $lang->story->track              = 'Track';
