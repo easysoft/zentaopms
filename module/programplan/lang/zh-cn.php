@@ -73,7 +73,7 @@ $lang->programplan->emptyBegin       = '『计划开始』日期不能为空';
 $lang->programplan->emptyEnd         = '『计划完成』日期不能为空';
 $lang->programplan->checkBegin       = '『计划开始』应当为合法的日期';
 $lang->programplan->checkEnd         = '『计划完成』应当为合法的日期';
-$lang->programplan->methodTip        = '融合瀑布项目阶段子阶段创建时，可以选择创建为阶段或创建为迭代/看板。子阶段为迭代/看板，不支持继续向下创建子级。';
+$lang->programplan->methodTip        = '您可以在该阶段下选择继续创建阶段或创建迭代/看板进行工作。迭代/看板不支持继续拆分。';
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';

@@ -85,13 +85,13 @@ $lang->admin->menuList->model['menuOrder']['20'] = 'agileplus';
 $lang->admin->menuList->model['menuOrder']['25'] = 'waterfallplus';
 
 $lang->admin->menuList->model['tabMenu']['common']['project']      = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set', 'exclude' => 'custom', 'links' => array('custom|set|'));
-$lang->admin->menuList->model['tabMenu']['common']['stage']        = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage', 'links' => array('stage|browse|'));
+$lang->admin->menuList->model['tabMenu']['common']['stage']        = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage', 'links' => array('stage|browse|'));
 $lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 $lang->admin->menuList->model['tabMenu']['common']['code']         = array('link' => "{$lang->code}|custom|code|");
 $lang->admin->menuList->model['tabMenu']['common']['hours']        = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|'));
-$lang->admin->menuList->model['tabMenu']['waterfall']['stage']     = array('link' => "{$lang->stage->common}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-plusbrowse');
-$lang->admin->menuList->model['tabMenu']['waterfallplus']['stage'] = array('link' => "{$lang->stage->common}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-browse');
+$lang->admin->menuList->model['tabMenu']['waterfall']['stage']     = array('link' => "{$lang->stage->list}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-plusbrowse');
+$lang->admin->menuList->model['tabMenu']['waterfallplus']['stage'] = array('link' => "{$lang->stage->list}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-browse');
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']        = 'project';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']       = 'build';
