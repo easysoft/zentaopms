@@ -222,7 +222,7 @@ function renderExecutionItem(item, $item)
 
     if(!$title.length)
     {
-        if((item.type == 'kanban' && window.userPrivs.kanban) || (item.type != 'kanban' && window.userPrivs.execution))
+        if(!item.hasOwnProperty('children') && ((item.type == 'kanban' && window.userPrivs.kanban) || (item.type != 'kanban' && window.userPrivs.execution)))
         {
             var method = item.type == 'kanban' ? 'kanban' : 'task';
 

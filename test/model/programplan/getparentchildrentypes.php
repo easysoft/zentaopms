@@ -37,16 +37,12 @@ $parentIDList = array(1, 2, 3, 4);
 $programplan = new programplanTest();
 
 r($programplan->getParentChildrenTypesTest($parentIDList[0]))        && p('stage')  && e('stage');  // 查找父ID为 1 未删除的阶段类型 stage
-r($programplan->getParentChildrenTypesTest($parentIDList[0]))        && p('sprint') && e('');       // 查找父ID为 1 未删除的阶段类型 sprint
 r($programplan->getParentChildrenTypesTest($parentIDList[0]))        && p('kanban') && e('kanban'); // 查找父ID为 1 未删除的阶段类型 kanban
 r(count($programplan->getParentChildrenTypesTest($parentIDList[0]))) && p()         && e('2');      // 查找父ID为 1 未删除的阶段类型数量
-r($programplan->getParentChildrenTypesTest($parentIDList[1]))        && p('stage')  && e('');       // 查找父ID为 2 未删除的阶段类型 stage
 r($programplan->getParentChildrenTypesTest($parentIDList[1]))        && p('sprint') && e('sprint'); // 查找父ID为 2 未删除的阶段类型 sprint
-r($programplan->getParentChildrenTypesTest($parentIDList[1]))        && p('kanban') && e('');       // 查找父ID为 2 未删除的阶段类型 kanban
 r(count($programplan->getParentChildrenTypesTest($parentIDList[1]))) && p()         && e('1');      // 查找父ID为 2 未删除的阶段类型数量
 r($programplan->getParentChildrenTypesTest($parentIDList[2]))        && p('stage')  && e('stage');  // 查找父ID为 3 未删除的阶段类型 stage
 r($programplan->getParentChildrenTypesTest($parentIDList[2]))        && p('sprint') && e('sprint'); // 查找父ID为 3 未删除的阶段类型 sprint
-r($programplan->getParentChildrenTypesTest($parentIDList[2]))        && p('kanban') && e('');       // 查找父ID为 3 未删除的阶段类型 kanban
 r(count($programplan->getParentChildrenTypesTest($parentIDList[2]))) && p()         && e('2');      // 查找父ID为 3 未删除的阶段类型数量
 r($programplan->getParentChildrenTypesTest($parentIDList[3]))        && p('stage')  && e('0');      // 查找父ID为 1 未删除的阶段类型 stage
 r($programplan->getParentChildrenTypesTest($parentIDList[3]))        && p('sprint') && e('0');      // 查找父ID为 1 未删除的阶段类型 sprint

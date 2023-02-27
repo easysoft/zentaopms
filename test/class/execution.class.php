@@ -322,6 +322,127 @@ class executionTest
     }
 
     /**
+     * function batchChangeStatus test by execution
+     *
+     * @param  array   $executionIdList
+     * @param  string  $status
+     * @access public
+     * @return array
+     */
+    public function batchChangeStatusObject($executionIdList = '', $status = '')
+    {
+        $result = $this->executionModel->batchChangeStatus($executionIdList, $status);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return empty($result) ? 'empty' : $result;
+        }
+    }
+
+    /**
+     * function changeStatus2Wait test by execution
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string|array
+     */
+    public function changeStatus2WaitObject($executionID)
+    {
+        global $tester;
+
+        $tester->loadModel('programplan');
+        $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
+        $siblingStages       = $tester->programplan->getSiblings($executionID);
+
+        $selfAndChildren = $selfAndChildrenList[$executionID];
+        $execution       = $selfAndChildren[$executionID];
+        $executionType   = $execution->type;
+
+        $siblingList = array();
+        if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
+
+        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren, $siblingList);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return (empty($result) or $result == "'',") ? 'empty' : $result;
+        }
+    }
+
+    /**
+     * function changeStatus2Doing test by execution
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return bool|array
+     */
+    public function changeStatus2DoingObject($executionID)
+    {
+        global $tester;
+
+        $tester->loadModel('programplan');
+        $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
+
+        $selfAndChildren = $selfAndChildrenList[$executionID];
+        $execution       = $selfAndChildren[$executionID];
+        $executionType   = $execution->type;
+
+        $this->executionModel->changeStatus2Doing($executionID, $selfAndChildren);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    /**
+     * function changeStatus2Inactived test by execution
+     *
+     * @param  int         $executionID
+     * @param  string      $status       suspended|closed
+     * @access public
+     * @return bool|array
+     */
+    public function changeStatus2InactivedObject($executionID, $status)
+    {
+        global $tester;
+
+        $tester->loadModel('programplan');
+        $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
+        $siblingStages       = $tester->programplan->getSiblings($executionID);
+
+        $selfAndChildren = $selfAndChildrenList[$executionID];
+        $execution       = $selfAndChildren[$executionID];
+        $executionType   = $execution->type;
+
+        $siblingList = array();
+        if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
+
+        $result = $this->executionModel->changeStatus2Inactived($executionID, $status, $selfAndChildren, $siblingList);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return (empty($result) or $result == "'',") ? 'empty' : $result;
+        }
+    }
+
+    /**
      * function start test by execution
      *
      * @param  string $executionID
@@ -2805,6 +2926,18 @@ class executionTest
             ->where('execution')->eq((int)$executionID)
             ->andWhere('date')->eq($date)
             ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+    }
+
+    /**
+     * Test build execution object by status.
+     *
+     * @param  string $status
+     * @access public
+     * @return object
+     */
+    public function buildExecutionByStatusTest($status)
+    {
+        return $this->executionModel->buildExecutionByStatus($status);
     }
 
     /**

@@ -506,9 +506,10 @@ class execution extends control
 
         $execution   = $this->commonAction($toExecution);
         $toExecution = $execution->id;
+        $project     = $this->loadModel('project')->getByID($execution->project);
         $branches    = $this->execution->getBranches($toExecution);
         $tasks       = $this->execution->getTasks2Imported($toExecution, $branches);
-        $executions  = $this->execution->getToImport(array_keys($tasks), $execution->type);
+        $executions  = $this->execution->getToImport(array_keys($tasks), $execution->type, $project->model);
         unset($executions[$toExecution]);
         unset($tasks[$toExecution]);
 
@@ -2812,7 +2813,7 @@ class execution extends control
     {
         $this->loadModel('project');
         $projects   = $this->project->getPairsByProgram('', 'noclosed');
-        $executions = $this->execution->getStatData(0, 'all', 0, 0, false, '', 'id_desc');
+        $executions = $this->execution->getStatData(0, 'all', 0, 0, false, 'withchild', 'id_desc');
 
         foreach($executions as $execution)
         {
@@ -4019,7 +4020,6 @@ class execution extends control
         $this->view->status         = $status;
         $this->view->from           = $from;
         $this->view->param          = $param;
-        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->view->showBatchEdit  = $this->cookie->showExecutionBatchEdit;
 
         $this->display();
