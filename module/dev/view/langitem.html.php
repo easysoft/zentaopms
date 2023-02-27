@@ -54,7 +54,7 @@
           <div class="title"><?php echo $lang->dev->currentLang;?> </div>
         <?php endif;?>
         <div class="title"><?php echo $lang->dev->defaultValue?></div>
-        <div class="title"><?php echo $lang->dev->modifyValue?></div>
+        <div class="title title-input"><?php echo $lang->dev->modifyValue?></div>
       </div>
       <div class="form-item-content form-active-primary">
         <?php $isCurrentLang = str_replace('-', '_', $this->app->getClientLang()) == $language;?>
@@ -66,19 +66,19 @@
         $customedLang = $this->dev->parseCommonLang(zget($customedLangs, $langKey, ''));
         $originalLang = strtr($originalLang, $config->custom->commonLang);
         ?>
-        <div data-id="<?php echo $itemKey?>" class="form-item flex">
+        <div data-id="<?php echo $itemKey?>" class="form-item flex <?php if(!$isCurrentLang):?>w-expand<?php endif;?>">
           <?php if(!$isCurrentLang):?>
           <div data-id="<?php echo $itemKey?>" class="label h-full"><?php echo $currentLangs[$langKey]?></div>
           <?php endif;?>
           <div data-id="<?php echo $itemKey?>" class="label h-full"><?php echo $originalLang?></div>
-          <div class="input-group">
+          <div class="input-group flex">
             <i class="icon icon-angle-right text-primary"></i>
             <?php $originalLangChanged = $this->dev->isOriginalLangChanged($defaultValue, $customedLang);?>
             <?php if(($originalLangChanged and is_array($customedLang)) or (!$originalLangChanged and is_array($defaultValue))):?>
             <?php $foreachLang = $originalLangChanged ? $customedLang : $defaultValue;?>
             <?php foreach($foreachLang as $i => $subLang):?>
             <?php if(isset($config->custom->commonLang[$subLang])):?>
-            <span class='input-group-addon'><?php echo $config->custom->commonLang[$subLang] . html::hidden("{$itemKey}[]", $subLang);?></span>
+            <span class='input-group-addon flex-center'><?php echo $config->custom->commonLang[$subLang] . html::hidden("{$itemKey}[]", $subLang);?></span>
             <?php else:?>
             <?php
             $placeholder     = $originalLangChanged ? '' : "placeholder='{$subLang}'";

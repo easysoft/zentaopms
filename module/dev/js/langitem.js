@@ -127,14 +127,9 @@ $(function()
         })
     }
 
-    $(".form-item-content").on("click", 'input', function(e)
+    $(".form-item-content").on("click", '.form-item', function(e)
     {
-        handleClickItem(e.target.id);
-    }).on("click", '.label', function(){
         handleClickItem($(this).data('id'));
-    }).on("blur", 'input', function(e)
-    {
-        removeActive(e.target.id);
     });
 
     $('.form-item-content > .form-item > .input-group').on('click', function()
