@@ -868,7 +868,7 @@ class programplanModel extends model
             if($data->id)
             {
                 $stageID = $data->id;
-                unset($data->id);
+                unset($data->id, $data->type);
 
                 $oldStage    = $this->getByID($stageID);
                 $planChanged = ($oldStage->name != $data->name || $oldStage->milestone != $data->milestone || $oldStage->begin != $data->begin || $oldStage->end != $data->end);
