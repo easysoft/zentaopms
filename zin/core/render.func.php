@@ -11,30 +11,42 @@
 
 namespace zin;
 
-$globalRenderList = array();
+class globalRender
+{
+    public static $list = array();
 
-$isGlobalMode = true;
+    public static $enabled = true;
+}
 
 function enableGlobalRender()
 {
-    global $isGlobalMode;
-    $isGlobalMode = true;
+    globalRender::$enabled = true;
 }
 
 function disableGlobalRender()
 {
-    global $isGlobalMode;
-    $isGlobalMode = false;
+    globalRender::$enabled = false;
 }
 
-function render($wgName)
+function renderInGlobal()
 {
-    global $globalRenderList;
+    if(!globalRender::$enabled) return false;
 
-    if(function_exists($wgName))
+    globalRender::$list = array_merge(globalRender::$list, func_get_args());
+}
+
+function render($wgName = '\\zin\\page')
+{
+    if(is_string($wgName) && strpos($wgName, '\\zin\\') === false) $wgName = "\\zin\\$wgName";
+
+    $args = array();
+    foreach(globalRender::$list as $item)
     {
-        return call_user_func_array($wgName, $globalRenderList);
+        if(is_object($item) && isset($item->parent) && $item->parent) continue;
+        $args[] = $item;
     }
 
-    return class_exists($wgName) ? (new $wgName($globalRenderList)) : $wgName($globalRenderList);
+    $wg = class_exists($wgName) ? (new $wgName($args)) : $wgName($args);
+
+    if(!$wg->displayed) $wg->display();
 }

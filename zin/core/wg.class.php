@@ -13,6 +13,7 @@ namespace zin;
 
 require_once 'props.class.php';
 require_once 'directive.func.php';
+require_once 'render.func.php';
 
 class wg
 {
@@ -42,6 +43,8 @@ class wg
 
     public $gid;
 
+    public $displayed = false;
+
     public function __construct(/* string|element|object|array|null ...$args */)
     {
         $this->props = new props();
@@ -50,6 +53,8 @@ class wg
         $this->setDefaultProps(static::getDefaultProps());
         $this->add(func_get_args());
         $this->created();
+
+        renderInGlobal($this);
     }
 
     /**
@@ -58,17 +63,25 @@ class wg
      */
     public function render()
     {
+        disableGlobalRender();
+
         $before   = $this->buildBefore();
         $after    = $this->buildAfter();
         $children = $this->build();
+
+        enableGlobalRender();
 
         return static::renderToHtml(array($before, $after, $children), $this);
     }
 
     public function display()
     {
+        disableGlobalRender();
+
         $html = $this->render(true);
         echo $html;
+
+        $this->displayed = true;
         return $this;
     }
 
@@ -111,10 +124,14 @@ class wg
             return $this;
         }
 
+        disableGlobalRender();
+
         if($item instanceof wg)    $this->addToBlock($blockName, $item);
         elseif(is_string($item))   $this->addToBlock($blockName, htmlentities($item));
         elseif(isDirective($item)) $this->directive($item, $blockName);
         else                       $this->addToBlock($blockName, htmlentities(strval($item)));
+
+        enableGlobalRender();
 
         return $this;
     }
@@ -162,10 +179,11 @@ class wg
      * Apply directive
      * @param object $directive
      */
-    public function directive($directive, $blockName)
+    public function directive(&$directive, $blockName)
     {
         $data = $directive->data;
         $type = $directive->type;
+        $directive->parent = &$this;
 
         if($type === 'prop')
         {
