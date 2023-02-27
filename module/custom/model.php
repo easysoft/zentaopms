@@ -64,7 +64,7 @@ class customModel extends model
                     for($i = 0; $i <= $sectionIndex; $i ++)
                     {
                         $sectionKey    = $sections[$i];
-                        $oldSectionArr = $oldSectionArr[$sectionKey];
+                        $oldSectionArr = isset($oldSectionArr[$sectionKey]) ? $oldSectionArr[$sectionKey] : array();
                     }
                     $sectionArr = array_merge($oldSectionArr, $sectionArr);
                 }

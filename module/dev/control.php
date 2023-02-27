@@ -128,7 +128,7 @@ class dev extends control
 
         if($this->server->request_method == 'POST')
         {
-            $this->dev->saveCustomedLang($common, $moduleName, $method, $language);
+            $this->dev->saveCustomedLang($type, $moduleName, $method, $language);
             return $this->send(array('result' => 'success', 'locate' => 'reload', 'message' => $this->lang->saveSuccess));
         }
 
