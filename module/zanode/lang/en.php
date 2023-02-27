@@ -48,7 +48,6 @@ $lang->zanode->confirmReboot   = "Are you sure to restart the ZenAgent Node?";
 $lang->zanode->confirmShutdown = "Are you sure to shutdown the ZenAgent Node?";
 $lang->zanode->confirmSuspend  = "Are you sure to suspend the ZenAgent Node?";
 $lang->zanode->confirmResume   = "Are you sure to resume the ZenAgent Node?";
-$lang->zanode->confirmRestore  = "Are you sure to restore the ZenAgent Node?";
 $lang->zanode->confirmRestore  = "The ZenAgent Node will be restored to this snapshot state, are you sure you want to continue?";
 $lang->zanode->actionSuccess   = 'Success';
 $lang->zanode->deleted         = "Deleted";
@@ -92,6 +91,7 @@ $lang->zanode->deleteSnapshot        = 'Delete Snapshot';
 $lang->zanode->snapshotEmpty         = 'No snapshots';
 $lang->zanode->confirmDeleteSnapshot = "The snapshot cannot be restored from the recycle bin after being deleted. Are you sure to continue?";
 
+$lang->zanode->snapshot = new stdClass();
 $lang->zanode->snapshot->statusList['creating']          = 'Creating';
 $lang->zanode->snapshot->statusList['completed']         = 'Create Completed';
 $lang->zanode->snapshot->statusList['failed']            = 'Create Failed';
@@ -151,8 +151,8 @@ $lang->zanode->init->title          = "Initialize Node";
 $lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
 $lang->zanode->init->initDesc       = "Execute the init script on the node: %s %s   <br>- Click check service status button.";
 
-$lang->zanode->tips = "The execution node is a virtual machine or container instance created by the host machine, which is a test environment for executing test tasks. After the execution node is configured with the automated test environment, the script can be automatically executed, and the results can be viewed in the execution results of Zen Dao's application cases.";
-$lang->zanode->scriptTips = 'Write the directory where the script is located on the execution node.';
-$lang->zanode->shellTips  = 'Before running the automated test script on the execution node, you can execute a custom shell command.';
+$lang->zanode->tips           = "The execution node is a virtual machine or container instance created by the host machine, which is a test environment for executing test tasks. After the execution node is configured with the automated test environment, the script can be automatically executed, and the results can be viewed in the execution results of Zen Dao's application cases.";
+$lang->zanode->scriptTips     = 'Write the directory where the script is located on the execution node.';
+$lang->zanode->shellTips      = 'Before running the automated test script on the execution node, you can execute a custom shell command.';
 $lang->zanode->automationTips = 'Before executing the test task on the execution node, you need to set up the execution node corresponding to the product, the directory of the automated test script, and the custom Shell command to execute.';
 $lang->zanode->nameUnique     = $lang->zanode->name . 'already exist';
