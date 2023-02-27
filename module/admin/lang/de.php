@@ -186,6 +186,7 @@ $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
 $lang->admin->upgradeRecommend = 'Recommend Upgrade';
 $lang->admin->zentaoUsed       = 'You have used ZenTao';
+$lang->admin->noPriv           = 'You have no permission to visit this block.';
 
 $lang->admin->openTag = 'ZenTao Opensource ';
 $lang->admin->bizTag  = 'ZenTao Biz ';
