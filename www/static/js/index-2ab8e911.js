@@ -1,0 +1,1 @@
+import{j as e,o as _,m as c}from"./index.js";const s={},t={class:"go-canvas-select"};function a(n,o){return _(),c("div",t," \u5F00\u53D1\u4E2D... ")}var d=e(s,[["render",a],["__scopeId","data-v-3927ccc6"]]);export{d as default};

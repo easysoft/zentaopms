@@ -1,6 +1,6 @@
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
-<script type="module" crossorigin src="<?php echo $webRoot;?>static/js/index-ed17d07a.js"></script>
-<link rel="stylesheet" href="<?php echo $webRoot;?>static/css/index-bd4452ef.css">
+<script type="module" crossorigin src="<?php echo $webRoot;?>static/js/index.js"></script>
+<link rel="stylesheet" href="<?php echo $webRoot;?>static/css/index.css">
 <?php js::set('screen', $screen);?>
 <?php js::set('year', $year);?>
 <?php js::set('dept', $dept);?>
