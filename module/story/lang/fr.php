@@ -481,7 +481,7 @@ $lang->story->recallTip['actived'] = "Aucun processus de révision n'a été lan
 $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['subStory']   = 'Les sous-stories ne peuvent pas être décomposées.';
 $lang->story->subDivideTip['notWait']    = "L'exigence %s ne peut pas être subdivisée.";
-$lang->story->subDivideTip['notActive']  = "Cette Story n'est pas active et ne peut être subdivisée.";
+$lang->story->subDivideTip['notActive']  = "The %s is not active and cannot be subdivided.";
 $lang->story->subDivideTip['twinsSplit'] = 'The Twins Story cannot be subdivided.';
 
 $lang->story->featureBar['browse']['all']       = $lang->all;

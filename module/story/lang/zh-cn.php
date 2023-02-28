@@ -481,7 +481,7 @@ $lang->story->recallTip['actived'] = "该{$lang->SRCommon}未发起评审流程�
 $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['subStory']   = "子{$lang->SRCommon}无法细分";
 $lang->story->subDivideTip['notWait']    = "该{$lang->SRCommon}%s，无法进行细分操作";
-$lang->story->subDivideTip['notActive']  = "{$lang->SRCommon}不是激活状态，无法进行细分操作";
+$lang->story->subDivideTip['notActive']  = "%s不是激活状态，无法进行细分操作";
 $lang->story->subDivideTip['twinsSplit'] = '孪生需求不可细分';
 
 $lang->story->featureBar['browse']['all']       = '全部';
