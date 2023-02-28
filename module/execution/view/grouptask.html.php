@@ -63,7 +63,7 @@
         $link  = common::hasPriv('execution', 'importTask') ? $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
         echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
 
-        if(isset($this->lang->execution->menu->qa))
+        if($features['qa'])
         {
             $class = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
             $misc  = common::hasPriv('execution', 'importBug') ? "class='import'" : "class=disabled";

@@ -1957,7 +1957,7 @@ class executionModel extends model
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->fetchPairs();

@@ -9,6 +9,7 @@ $lang->custom->restore              = '恢复默认';
 $lang->custom->key                  = '键';
 $lang->custom->value                = '值';
 $lang->custom->working              = '工作方式';
+$lang->custom->hours                = '工时';
 $lang->custom->select               = '请选择流程：';
 $lang->custom->branch               = '多分支';
 $lang->custom->owner                = '所有者';

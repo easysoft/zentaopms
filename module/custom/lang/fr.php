@@ -10,6 +10,7 @@ $lang->custom->key                  = 'Clé';
 $lang->custom->value                = 'Valeur';
 $lang->custom->working              = 'Mode';
 $lang->custom->select               = 'Choix du Concept';
+$lang->custom->hours                = 'Hours';
 $lang->custom->branch               = 'Multi-Branches';
 $lang->custom->owner                = 'Propriétaire';
 $lang->custom->module               = 'Module';

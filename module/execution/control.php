@@ -472,6 +472,7 @@ class execution extends control
         $this->view->users       = $users;
         $this->view->moduleID    = 0;
         $this->view->moduleName  = $this->lang->tree->all;
+        $this->view->features    = $this->execution->getExecutionFeatures($execution);
         $this->view->filter      = $filter;
         $this->view->allCount    = $allCount;
         $this->display();
@@ -1548,6 +1549,7 @@ class execution extends control
         $this->view->executionName = $execution->name;
         $this->view->executionID   = $executionID;
         $this->view->chartData     = $chartData;
+        $this->view->features      = $this->execution->getExecutionFeatures($execution);
         $this->view->begin         = $begin;
         $this->view->end           = $end;
         $this->view->minDate       = $minDate;
@@ -2590,6 +2592,7 @@ class execution extends control
         $this->view->chartData    = $chartData;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->type         = $type;
+        $this->view->features     = $this->execution->getExecutionFeatures($execution);
         $this->view->project      = $this->loadModel('project')->getByID($execution->project);
 
         $this->display();
@@ -2951,6 +2954,7 @@ class execution extends control
         $this->view->executionID = $executionID;
         $this->view->level       = $type;
         $this->view->tree        = $this->execution->printTree($tree, $project->hasProduct);
+        $this->view->features    = $this->execution->getExecutionFeatures($execution);
         $this->display();
     }
 
