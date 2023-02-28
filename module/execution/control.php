@@ -1993,7 +1993,7 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $project = $this->loadModel('project')->getById($projectID);
+            $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'edit');
 
             /* Link the plan stories. */
@@ -2290,7 +2290,7 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $project = $this->loadModel('project')->getById($projectID);
+            $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'start');
 
             $this->loadModel('common')->syncPPEStatus($executionID);
@@ -2383,7 +2383,7 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $project = $this->loadModel('project')->getById($projectID);
+            $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'suspend');
 
             $this->executeHooks($executionID);
@@ -2424,7 +2424,7 @@ class execution extends control
             $this->execution->activate($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $project = $this->loadModel('project')->getById($projectID);
+            $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'activate');
 
             $this->executeHooks($executionID);
@@ -2473,7 +2473,7 @@ class execution extends control
             $this->execution->close($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $project = $this->loadModel('project')->getById($projectID);
+            $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'close');
 
             $this->executeHooks($executionID);
@@ -3166,7 +3166,7 @@ class execution extends control
             $this->execution->updateUserView($executionID);
             $this->loadModel('common')->syncPPEStatus($executionID);
 
-            $project = $this->loadModel('project')->getById($projectID);
+            $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID);
 
             $this->session->set('execution', '');
