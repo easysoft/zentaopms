@@ -91,7 +91,8 @@ class hostHeartbeatEntry extends baseEntry
                     if(!empty($node))
                     {
                         $snaps = $this->loadModel('zanode')->getSnapshotList($node->id);
-                        if(empty($snaps)){
+                        if(empty($snaps))
+                        {
                             if($vm->status == 'running') $this->loadModel('zanode')->createDefaultSnapshot($node->id);
                         }
                     }
