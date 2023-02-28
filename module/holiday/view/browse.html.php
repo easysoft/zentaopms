@@ -34,7 +34,7 @@
       </div>
     </div>
     <table class='table has-sort-head'>
-      <thead class="shadow-sm">
+      <thead <?php if(empty($holidays)) echo 'class="shadow-sm"';?>>
         <tr>
           <th class='c-name'><?php echo $lang->holiday->name;?></th>
           <th class='c-time-limit'><?php echo $lang->holiday->holiday;?></th>
