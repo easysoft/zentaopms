@@ -1,75 +1,67 @@
 <?php
 
-namespace zin\wg;
+namespace zin;
 
-use zin\core\h5;
-
-use function zin\setId;
-
-use function zin\toolbar;
-
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'h5.class.php';
-require_once dirname(__DIR__) . DS . 'icon' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'btngroup' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'toolbar' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
-
-class mainmenu extends \zin\core\wg
+class mainmenu extends wg
 {
-    static $tag = 'div';
+    static $defineProps = 'statuses?:array,btnGroup?:array,others?:array';
 
-    static $defaultProps = array('id' => 'mainMenu', 'class' => 'flex justify-between');
-
-    static $customProps = 'statuses,btnGroup';
-
-    protected function buildOther($props)
+    protected function buildOther($item)
     {
-        if ($props['type'] === 'checkbox')
+        if ($item['type'] === 'checkbox')
         {
-            unset($props['type']);
-            return checkbox::create($props);
+            unset($item['type']);
+            return checkbox(inherit(item(set($item))));
         }
 
-        if ($props['type'] === 'button')
+        if ($item['type'] === 'button')
         {
-            unset($props['type']);
-            return btn::create($props);
+            unset($item['type']);
+            return btn(inherit(item(set($item))));
         }
+
+        return null;
     }
 
-    /**
-     * @return builder
-     */
-    protected function build($isPrint = false, $parent = NULL)
+    protected function build()
     {
-        $builder = parent::build($isPrint, $parent);
-
         $others = $this->prop('others');
-        $this->props->remove('others');
 
-        $btnGroup = $this->prop('btnGroup');
-
-        $flexDom = h5::div(
-            h5::div(toolbar::create($this->prop('statuses'))),
-        )->addClass('flex');
-
-        if(!empty($others)) foreach($others as $props) $flexDom->append($this->buildOther($props));
-
-        $builder->append($flexDom);
-
-        if(!empty($btnGroup))
+        if(empty($others))
         {
-
-            $builder->append(
-                h5::div(
-                    setId('featureBarBtns'),
-                    toolbar(btngroup::create($btnGroup)->addClass('toolbar-btn-group')->setStyle('gap', '0.625rem'))
-                    )
-                );
+            $otherElms = null;
         }
-        $this->props->remove('btnGroup');
+        else
+        {
+            $otherElms = array();
+            foreach($others as $item) $otherElms[] = $this->buildOther($item);
+        }
 
-        return $builder;
+
+        return div
+        (
+            setId('mainMenu'),
+            setClass('flex justify-between'),
+            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            div
+            (
+                setClass('flex'),
+                div
+                (
+                    toolbar(set(array('items' => $this->prop('statuses'))))
+                ),
+                $otherElms
+            ),
+            div
+            (
+                setId('featureBarBtns'),
+                toolbar
+                (
+                    setClass('toolbar-btn-group'),
+                    setStyle('gap', '0.625rem'),
+                    set(array('items' => $this->prop('btnGroup')))
+                )
+            )
+        );
     }
 }
