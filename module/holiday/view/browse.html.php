@@ -41,7 +41,7 @@
           <th class='c-name'><?php echo $lang->holiday->name;?></th>
           <th class='c-time-limit'><?php echo $lang->holiday->holiday;?></th>
           <th class='c-status'><?php echo $lang->holiday->type;?></th>
-          <th class='c-object'><?php echo $lang->holiday->desc;?></th>
+          <th class='c-desc'><?php echo $lang->holiday->desc;?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -51,7 +51,7 @@
         <td><?php echo $holiday->name;?></td>
         <td><?php echo formatTime($holiday->begin, DT_DATE1) . ' ~ ' . formatTime($holiday->end, DT_DATE1);?></td>
         <td><?php echo zget($lang->holiday->typeList, $holiday->type);?></td>
-        <td><?php echo $holiday->desc;?></td>
+        <td><p class='c-desc'><?php echo $holiday->desc;?></p></td>
         <td class=" c-actions">
           <?php common::printIcon('holiday', 'edit', "id=$holiday->id", $holiday, 'list', '', '', 'iframe', 'yes');?>
           <?php common::printIcon('holiday', 'delete', "id=$holiday->id", $holiday, 'list', '', 'hiddenwin');?>
