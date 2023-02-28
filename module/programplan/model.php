@@ -1478,8 +1478,9 @@ class programplanModel extends model
      */
     public function computeProgress($stageID, $action = '', $isParent = false)
     {
-        $stage = $this->loadModel('execution')->getByID($stageID);
-        if(empty($stage) or empty($stage->path) or $stage->type != 'stage') return false;
+        $stage   = $this->loadModel('execution')->getByID($stageID);
+        $project = $this->loadModel('project')->getByID($stage->project);
+        if(empty($stage) or empty($stage->path) or ($prject->model != 'waterfall' and $prject->model != 'waterfallplus')) return false;
 
         $this->loadModel('execution');
         $this->loadModel('action');
