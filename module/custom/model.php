@@ -958,9 +958,13 @@ class customModel extends model
             foreach($this->config->custom->dataFeatures as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
-                if(!$this->$function()) $disabledFeatures .= "$feature,";
+                if(!$this->$function())
+                {
+                    $disabledFeatures .= "$feature,";
+                    if(strpos($feature, 'scrum') === 0) $disabledFeatures .= 'agileplus' . substr($feature, 5) . ',';
+                }
             }
-            $disabledFeatures .= 'scrumMeasrecord,productTrack,productRoadmap';
+            $disabledFeatures .= 'scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap';
         }
 
         $disabledFeatures = rtrim($disabledFeatures, ',');
