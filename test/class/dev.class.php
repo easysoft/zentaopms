@@ -182,4 +182,22 @@ class devTest
         $customedLang = $this->objectModel->getCustomedLang($type, $module, $method, $language);
         return empty($customedLang) ? 'null' : implode('|', $customedLang);
     }
+
+    /**
+     * Sort menus.
+     *
+     * @param  object|array $menus
+     * @access public
+     * @return string
+     */
+    public function sortMenusTest($menus)
+    {
+        $result = '';
+        $menus  = $this->objectModel->sortMenus($menus);
+        foreach($menus as $key => $value)
+        {
+            $result .= $key . ',';
+        }
+        return $result;
+    }
 }
