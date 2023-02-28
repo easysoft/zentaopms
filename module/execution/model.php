@@ -383,7 +383,7 @@ class executionModel extends model
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        if($project->model == 'waterfall')
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
             $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
@@ -1567,7 +1567,7 @@ class executionModel extends model
             }
         }
 
-        if($type == 'update' and $oldExecution->grade == 2)
+        if($type == 'update' and $oldExecution->grade > 1)
         {
             $parentPlan           = $this->loadModel('programPlan')->getByID($oldExecution->parent);
             $childrenTotalPercent = $this->dao->select('SUM(percent) as total')->from(TABLE_EXECUTION)->where('parent')->eq($oldExecution->parent)->andWhere('deleted')->eq(0)->fetch('total');
@@ -1575,7 +1575,7 @@ class executionModel extends model
 
             if($childrenTotalPercent > 100)
             {
-                dao::$errors['parent'] = sprintf($this->lang->execution->workloadTotal, '%', $childrenTotalPercent . '%');
+                dao::$errors['percent'] = sprintf($this->lang->execution->workloadTotal, '%', $childrenTotalPercent . '%');
                 return false;
             }
         }
