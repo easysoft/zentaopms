@@ -44,7 +44,9 @@
           <th class='c-hour'><?php echo $lang->task->leftAB;?></th>
           <th class='c-date text-center'><?php echo $lang->task->deadlineAB;?></th>
           <th class='c-status'><?php echo $lang->statusAB;?></th>
+          <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
           <th class='c-story'><?php echo $lang->task->story;?></th>
+          <?php endif;?>
         </tr>
       </thead>
       <tbody>
@@ -65,6 +67,7 @@
           <td title="<?php echo $task->left . ' ' . $lang->execution->workHour;?>"><?php echo $task->left . ' ' . $lang->execution->workHourUnit;?></td>
           <td class="text-center <?php if(isset($task->delay)) echo 'delayed';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo '<span>' . $task->deadline . '</span>';?></td>
           <td><span class='status-task status-<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></span></td>
+          <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
           <td class='text-left text-ellipsis' title="<?php echo $task->storyTitle;?>">
             <?php
             if($task->storyID)
@@ -80,6 +83,7 @@
             }
             ?>
           </td>
+          <?php endif;?>
         </tr>
         <?php endforeach;?>
       </tbody>
