@@ -75,11 +75,11 @@ $config->admin->videoAPIURL    = $config->admin->apiSite . 'publicclass.json';
 $config->admin->liteMenuList   = array('system', 'user', 'feature', 'message', 'extension', 'dev');
 
 $config->admin->helpURL['system']    = 'https://www.zentao.net/book/zentaopms/538.html';
-$config->admin->helpURL['user']      = 'https://www.zentao.net/book/zentaopms/538.html';
-$config->admin->helpURL['switch']    = 'https://www.zentao.net/book/zentaopms/538.html';
+$config->admin->helpURL['user']      = 'https://www.zentao.net/book/zentaopms/38.html';
+$config->admin->helpURL['switch']    = 'https://www.zentao.net/book/zentaopms/38.html';
 $config->admin->helpURL['model']     = 'https://www.zentao.net/book/zentaopms/533.html';
-$config->admin->helpURL['feature']   = 'https://www.zentao.net/book/zentaopms/538.html';
-$config->admin->helpURL['template']  = 'https://www.zentao.net/book/zentaopms/538.html';
+$config->admin->helpURL['feature']   = 'https://www.zentao.net/book/zentaopms/38.html';
+$config->admin->helpURL['template']  = 'https://www.zentao.net/book/zentaopms/38.html';
 $config->admin->helpURL['message']   = 'https://www.zentao.net/book/zentaopms/email-notification-541.html';
 $config->admin->helpURL['extension'] = 'https://www.zentao.net/book/zentaopms/536.html';
 $config->admin->helpURL['dev']       = 'https://www.zentao.net/book/zentaopms/537.html';

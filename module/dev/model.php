@@ -417,6 +417,7 @@ class devModel extends model
                     if($type == $menuType and in_array($linkKey, $skipMenus)) continue 2;
                 }
 
+                if($menu == '@branch@') $menu = $this->lang->dev->branch;
                 $originalLangs[$langKey . $linkKey] = $menu;
             }
         }
