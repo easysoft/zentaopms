@@ -217,12 +217,9 @@ function showEditCheckbox(show)
 
             $tr.find('td:first').prepend("<div class='checkbox-primary'><input type='checkbox' name='executionIDList[]' value='" + executionID + "' id='executionIDList" + executionID + "'/><label for='executionIDList" + executionID + "'></lable></div>");
             $tr.find('td:first').find('.checkbox-primary').css('margin-left', marginLeft).css('width', '14');
-            $tr.find('td:first').find('span.table-nest-icon').css('margin-left', '0');
         }
         else
         {
-            var marginLeft = $tr.find('td:first').find('.checkbox-primary').css('margin-left');
-            $tr.find('td:first').find('span.table-nest-icon').css('margin-left', marginLeft);
             $tr.find('td:first').find('[name^="executionIDList"]').parent().remove();
         }
     });
