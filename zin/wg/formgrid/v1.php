@@ -5,7 +5,7 @@ class formgrid extends wg
 {
     protected function build()
     {
-        return div
+        return h::form
         (
             setClass('form-grid'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
