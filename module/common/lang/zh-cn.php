@@ -265,8 +265,8 @@ $lang->calendar        = '日程';
 
 $lang->my->work = '待处理';
 
-$lang->project->list   = '项目列表';
-$lang->project->kanban = '项目看板';
+$lang->project->list   = $lang->projectCommon . '列表';
+$lang->project->kanban = $lang->projectCommon . '看板';
 
 $lang->execution->executionKanban = "{$lang->execution->common}看板";
 $lang->execution->all             = "{$lang->execution->common}列表";
@@ -274,8 +274,8 @@ $lang->execution->all             = "{$lang->execution->common}列表";
 $lang->doc->recent    = '最近文档';
 $lang->doc->my        = '我的文档';
 $lang->doc->favorite  = '我的收藏';
-$lang->doc->product   = '产品库';
-$lang->doc->project   = '项目库';
+$lang->doc->product   = $lang->productCommon . '库';
+$lang->doc->project   = $lang->projectCommon . '库';
 $lang->doc->api       = '接口库';
 $lang->doc->execution = "{$lang->execution->common}库";
 $lang->doc->custom    = '自定义库';

@@ -265,8 +265,8 @@ $lang->calendar        = 'Calendar';
 
 $lang->my->work = 'Work';
 
-$lang->project->list   = 'Project List';
-$lang->project->kanban = 'Project Kanban';
+$lang->project->list   = $lang->projectCommon . ' List';
+$lang->project->kanban = $lang->projectCommon . ' Kanban';
 
 $lang->execution->executionKanban = "{$lang->execution->common} Kanban";
 $lang->execution->all             = "{$lang->execution->common} List";
@@ -274,8 +274,8 @@ $lang->execution->all             = "{$lang->execution->common} List";
 $lang->doc->recent    = 'Recent';
 $lang->doc->my        = 'My';
 $lang->doc->favorite  = 'Favorite';
-$lang->doc->product   = 'Product';
-$lang->doc->project   = 'Project';
+$lang->doc->product   = $lang->productCommon;
+$lang->doc->project   = $lang->projectCommon;
 $lang->doc->api       = 'API';
 $lang->doc->execution = $lang->execution->common;
 $lang->doc->custom    = 'Custom';

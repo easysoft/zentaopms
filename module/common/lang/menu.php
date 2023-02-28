@@ -137,8 +137,8 @@ $lang->program->homeMenu->browse = array('link' => "{$lang->program->list}|progr
 $lang->program->homeMenu->kanban = array('link' => "{$lang->program->kanban}|program|kanban|");
 
 $lang->program->menu = new stdclass();
-$lang->program->menu->product     = array('link' => "{$lang->product->common}|program|product|programID=%s", 'alias' => 'view');
-$lang->program->menu->project     = array('link' => "{$lang->project->common}|program|project|programID=%s");
+$lang->program->menu->product     = array('link' => "{$lang->productCommon}|program|product|programID=%s", 'alias' => 'view');
+$lang->program->menu->project     = array('link' => "{$lang->projectCommon}|program|project|programID=%s");
 $lang->program->menu->personnel   = array('link' => "{$lang->personnel->common}|personnel|invest|programID=%s");
 $lang->program->menu->stakeholder = array('link' => "{$lang->stakeholder->common}|program|stakeholder|programID=%s", 'alias' => 'createstakeholder');
 
@@ -163,7 +163,7 @@ $lang->product->menu              = new stdclass();
 $lang->product->menu->dashboard   = array('link' => "{$lang->dashboard}|product|dashboard|productID=%s");
 $lang->product->menu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->plan        = array('link' => "{$lang->productplan->shortCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan,bug');
-$lang->product->menu->project     = array('link' => "{$lang->project->common}|product|project|status=all&productID=%s");
+$lang->product->menu->project     = array('link' => "{$lang->projectCommon}|product|project|status=all&productID=%s");
 $lang->product->menu->release     = array('link' => "{$lang->release->common}|release|browse|productID=%s", 'subModule' => 'release');
 $lang->product->menu->roadmap     = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
 $lang->product->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
@@ -248,7 +248,7 @@ $lang->scrum->menu->qa['subMenu']->testreport = array('link' => "{$lang->testrep
 
 $lang->scrum->menu->settings['subMenu']              = new stdclass();
 $lang->scrum->menu->settings['subMenu']->view        = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
-$lang->scrum->menu->settings['subMenu']->products    = array('link' => "{$lang->product->common}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
+$lang->scrum->menu->settings['subMenu']->products    = array('link' => "{$lang->productCommon}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
 $lang->scrum->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
 $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
 $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
@@ -324,7 +324,7 @@ $lang->kanbanProject->menuOrder[15] = 'settings';
 
 $lang->kanbanProject->menu->settings['subMenu']            = new stdclass();
 $lang->kanbanProject->menu->settings['subMenu']->view      = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
-$lang->kanbanProject->menu->settings['subMenu']->products  = array('link' => "{$lang->product->common}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
+$lang->kanbanProject->menu->settings['subMenu']->products  = array('link' => "{$lang->productCommon}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
 $lang->kanbanProject->menu->settings['subMenu']->members   = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
 $lang->kanbanProject->menu->settings['subMenu']->whitelist = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
 $lang->kanbanProject->menu->settings['subMenu']->module    = array('link' => "{$lang->module}|tree|browse|product=%s&view=story");
