@@ -576,7 +576,7 @@ class story extends control
         if(!empty($_POST))
         {
             $mails = $this->story->batchCreate($productID, $branch, $storyType);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $stories = array();
             foreach($mails as $mail) $stories[] = $mail->storyID;
@@ -600,7 +600,7 @@ class story extends control
             if($storyID and !empty($mails))
             {
                 $this->story->subdivide($storyID, $stories);
-                if(dao::isError()) return print(js::error(dao::getError()));
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
@@ -619,7 +619,7 @@ class story extends control
                         $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                         $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
                         $kanbanData    = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.updateKanban($kanbanData)"));
                     }
                     else
                     {
@@ -628,12 +628,12 @@ class story extends control
                         $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
                         $kanbanData      = $kanbanData[$kanbanType];
                         $kanbanData      = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.updateKanban(\"story\", $kanbanData)"));
                     }
                 }
                 else
                 {
-                    return print(js::reload('parent.parent'));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'reloadByAjaxForm()'));
                 }
             }
 
@@ -641,24 +641,26 @@ class story extends control
             {
                 if($this->app->tab == 'product')
                 {
-                    return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+                    $locateLink = $this->inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType");
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
                 }
                 else
                 {
+                    /* Lite. */
                     $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('projectstory', 'view', "storyID=$storyID");
-                    return print(js::locate($locateLink, 'parent'));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
                 }
             }
             elseif($executionID)
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                return print(js::locate($this->session->storyList, 'parent'));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->storyList));
             }
             else
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
-                return print(js::locate($locateLink, 'parent'));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
             }
         }
 
@@ -1211,7 +1213,7 @@ class story extends control
             if(dao::isError())
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
             if($this->post->comment != '' or !empty($changes))
@@ -1241,7 +1243,7 @@ class story extends control
                         $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                         $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
                         $kanbanData    = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.updateKanban($kanbanData)"));
                     }
                     if($from == 'taskkanban')
                     {
@@ -1250,12 +1252,12 @@ class story extends control
                         $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
                         $kanbanData      = $kanbanData[$kanbanType];
                         $kanbanData      = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.updateKanban(\"story\", $kanbanData)"));
                     }
                 }
                 else
                 {
-                    return print(js::reload('parent.parent'));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'reloadByAjaxForm()'));
                 }
             }
 
