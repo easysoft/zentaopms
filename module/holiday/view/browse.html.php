@@ -15,8 +15,10 @@
   <div class='side-col' id='sidebar'>
     <div class='cell'>
       <div class='nav list-group tab-menu'>
+        <?php if(common::hasPriv('custom', 'hours')):?>
         <a href="<?php echo $this->createLink('custom', 'hours', 'type=hours')?>"><?php echo $lang->custom->setHours;?></a>
         <a href="<?php echo $this->createLink('custom', 'hours', 'type=weekend')?>"><?php echo $lang->custom->setWeekend;?></a>
+        <?php endif;?>
         <?php echo html::a($this->createLink('holiday', 'browse'), $lang->custom->setHoliday, '', "class='active'");?>
       </div>
     </div>

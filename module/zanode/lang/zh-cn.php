@@ -99,7 +99,6 @@ $lang->zanode->snapshot->statusList['restoring']         = '还原中';
 $lang->zanode->snapshot->statusList['restore_failed']    = '还原失败';
 $lang->zanode->snapshot->statusList['restore_completed'] = '还原成功';
 
-$lang->zanode->imageNameEmpty = '名称不能为空';
 $lang->zanode->imageNameEmpty  = '名称不能为空';
 $lang->zanode->snapStatusError = '快照不可用';
 $lang->zanode->snapRestoring   = '快照正在还原中';
@@ -130,7 +129,7 @@ $lang->zanode->statusList['restoring']    = '还原中';
 $lang->zanode->initNotice = "保存成功，请初始化执行节点或返回列表。";
 $lang->zanode->initButton = "去初始化";
 
-$lang->zanode->init = new stdclass;
+$lang->zanode->init = new stdClass();
 $lang->zanode->init->statusTitle   = "服务状态";
 $lang->zanode->init->checkStatus   = "检测服务状态";
 $lang->zanode->init->not_install   = "未安装";
@@ -152,8 +151,8 @@ $lang->zanode->init->title          = "初始化执行节点";
 $lang->zanode->init->descTitle      = "请根据引导完成执行节点上的初始化: ";
 $lang->zanode->init->initDesc       = "- 在执行节点上执行命令：%s %s  <br>- 点击检测服务状态。";$lang->zanode->init->statusTitle    = "服务状态";
 
-$lang->zanode->tips = '执行节点是由宿主机创建的虚拟机或容器实例，是执行测试任务的测试环境，在执行节点配置自动化测试环境后可以自动执行脚本，结果可以在禅道对应用例执行结果中查看。';
-$lang->zanode->scriptTips = '填写执行节点上自动化测试脚本所在的目录。';
-$lang->zanode->shellTips  = '在执行节点上运行自动化测试脚本前，可以执行自定义的shell命令。';
+$lang->zanode->tips           = '执行节点是由宿主机创建的虚拟机或容器实例，是执行测试任务的测试环境，在执行节点配置自动化测试环境后可以自动执行脚本，结果可以在禅道对应用例执行结果中查看。';
+$lang->zanode->scriptTips     = '填写执行节点上自动化测试脚本所在的目录。';
+$lang->zanode->shellTips      = '在执行节点上运行自动化测试脚本前，可以执行自定义的shell命令。';
 $lang->zanode->automationTips = '在执行节点上执行测试任务前，需要设置产品对应的执行节点，自动化测试脚本的目录以及需要执行的自定义Shell命令。';
 $lang->zanode->nameUnique     = $lang->zanode->name . '已存在';
