@@ -362,7 +362,7 @@ $(function()
                 var menuModule = task.nav.menuModule || task.nav['module'];
                 var $navbar    = $$('#navbar');
                 var adminMenu  = false;
-                if(!$navbar.find('li').length) i
+                if(!$navbar.find('li').length)
                 {
                     adminMenu = true;
                     $navbar   = $$('.settings-list');
