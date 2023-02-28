@@ -66,7 +66,7 @@ $lang->admin->notice->ignore   = "Ignore";
 $lang->admin->notice->int      = "『%s』should be a positive integer.";
 
 $lang->admin->registerNotice = new stdclass();
-$lang->admin->registerNotice->common     = 'Bind Account';
+$lang->admin->registerNotice->common     = 'Register Account';
 $lang->admin->registerNotice->caption    = 'ZenTao Community Signup';
 $lang->admin->registerNotice->click      = 'Sign Up';
 $lang->admin->registerNotice->lblAccount = '>= 3 letters and numbers';

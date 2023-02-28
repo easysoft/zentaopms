@@ -66,7 +66,7 @@ $lang->admin->notice->ignore   = "Ignorieren";
 $lang->admin->notice->int      = "『%s』sollte eine positive Zahl sein.";
 
 $lang->admin->registerNotice = new stdclass();
-$lang->admin->registerNotice->common     = 'Verbinde neues Konto';
+$lang->admin->registerNotice->common     = 'Register Account';
 $lang->admin->registerNotice->caption    = 'In der Zentao Community registieren';
 $lang->admin->registerNotice->click      = 'Bitte registieren Sie sich hier';
 $lang->admin->registerNotice->lblAccount = 'mindestens 3 Zeichen bitte; mit Buchsten und Ziffern.';

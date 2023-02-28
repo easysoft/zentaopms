@@ -383,7 +383,7 @@ class executionModel extends model
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        if($project->model == 'waterfall')
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
             $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
@@ -657,6 +657,8 @@ class executionModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+
+        if(isset($_POST['parent'])) $this->loadModel('programplan')->setTreePath($executionID);
 
         /* Get team and language item. */
         $this->loadModel('user');
@@ -1567,7 +1569,7 @@ class executionModel extends model
             }
         }
 
-        if($type == 'update' and $oldExecution->grade == 2)
+        if($type == 'update' and $oldExecution->grade > 1)
         {
             $parentPlan           = $this->loadModel('programPlan')->getByID($oldExecution->parent);
             $childrenTotalPercent = $this->dao->select('SUM(percent) as total')->from(TABLE_EXECUTION)->where('parent')->eq($oldExecution->parent)->andWhere('deleted')->eq(0)->fetch('total');
@@ -1575,7 +1577,7 @@ class executionModel extends model
 
             if($childrenTotalPercent > 100)
             {
-                dao::$errors['parent'] = sprintf($this->lang->execution->workloadTotal, '%', $childrenTotalPercent . '%');
+                dao::$errors['percent'] = sprintf($this->lang->execution->workloadTotal, '%', $childrenTotalPercent . '%');
                 return false;
             }
         }
@@ -2124,7 +2126,10 @@ class executionModel extends model
 
                 $executionName = '';
                 $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
-                foreach($paths as $path) $executionName .= '/' . $allExecutions[$path]->name;
+                foreach($paths as $path)
+                {
+                    if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
+                }
 
                 if($executionName) $execution->name = ltrim($executionName, '/');
                 if(isset($executionProducts[$id])) $execution->name = $executionProducts[$id] . '/' . $execution->name;
@@ -5274,11 +5279,13 @@ class executionModel extends model
         $class = !empty($execution->children) ? 'disabled' : '';
         common::printIcon('task', 'create', "executionID={$execution->id}", '', 'list', '', '', $class, false, "data-app='execution'");
 
-        if($execution->type == 'stage')
+        $project = $this->loadModel('project')->getByID($execution->project);
+        if($execution->type == 'stage' or ($this->app->tab == 'project' and !empty($project->model) and $project->model == 'waterfallplus'))
         {
             $isCreateTask = $this->loadModel('programplan')->isCreateTask($execution->id);
             $disabled     = ($isCreateTask and $execution->type == 'stage') ? '' : ' disabled';
             $title        = !$isCreateTask ? $this->lang->programplan->error->createdTask : $this->lang->programplan->createSubPlan;
+            $title        = (!empty($disabled) and $execution->type != 'stage') ? $this->lang->programplan->error->notStage : $title;
             common::printIcon('programplan', 'create', "program={$execution->project}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', $disabled, '', '', $title);
         }
 
@@ -5710,7 +5717,7 @@ class executionModel extends model
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
-            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . html::a($link, $execution->name);
+            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name) : $execution->name);
             $execution->project  = $execution->projectName;
             $execution->parent   = ($execution->parent and $execution->grade > 1) ? $execution->parent : '';
             $execution->asParent = !empty($execution->children);
