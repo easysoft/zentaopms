@@ -340,9 +340,31 @@ class devModel extends model
         else
         {
            $menus = ($type == 'third' and isset($defaultLang->$module->menu->{$method}['subMenu'])) ? $defaultLang->$module->menu->{$method}['subMenu'] : $defaultLang->mainNav;
+           $menus = $this->sortMenus($menus);
         }
 
         return $menus;
+    }
+
+    /**
+     * Sort menus.
+     *
+     * @param  array|object $menus
+     * @access public
+     * @return array
+     */
+    public function sortMenus($menus)
+    {
+        if(!is_array($menus)) $menus = (array)$menus;
+        if(!isset($menus['menuOrder'])) return $menus;
+        $sortedMenus = array();
+        $menuOrders  = $menus['menuOrder'];
+        ksort($menuOrders);
+        foreach($menuOrders as $menuKey)
+        {
+            if(isset($menus[$menuKey])) $sortedMenus[$menuKey] = $menus[$menuKey];
+        }
+        return $sortedMenus;
     }
 
     /**
@@ -789,6 +811,7 @@ class devModel extends model
     public function getLinkTitle($menus)
     {
         $linksTitle = array();
+        $menus      = $this->sortMenus($menus);
         foreach($menus as $menuKey => $menu)
         {
             if(is_array($menu) and !isset($menu['link'])) continue;
