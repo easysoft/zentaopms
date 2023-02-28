@@ -2229,6 +2229,7 @@ class productModel extends model
                 /* Program name. */
                 $productStructure[$product->program]['programName'] = $product->programName;
                 $productStructure[$product->program]['programPM']   = $product->programPM;
+                $productStructure[$product->program]['id']          = $product->program;
                 $productStructure[$product->program] = $this->statisticData('program', $productStructure, $product);
             }
         }

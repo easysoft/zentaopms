@@ -1,78 +1,245 @@
 <?php
-common::sortFeatureMenu();
+namespace zin;
 
-js::set('edit', $lang->edit);
-js::set('browseType', $browseType);
-js::set('orderBy', $orderBy);
-js::set('selectAll', $lang->selectAll);
-js::set('checkedProjects', $lang->program->checkedProjects);
-js::set('cilentLang', $this->app->getClientLang());
-js::set('editLang', $this->lang->edit);
-js::set('pagerLang', $this->lang->pager);
-js::set('recTotal', $pager->recTotal);
-js::set('recPerPage', $pager->recPerPage);
-js::set('pageID', $pager->pageID);
-js::set('productSummary', '');
-js::set('pagerLink', $this->createLink('product', 'all', "browseType=$browseType&orderBy=$orderBy&param=0&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"));
+\commonModel::setMainMenu();
 
-/* Set toolbar. */
-$toolbar = toolbar();
-foreach($this->lang->product->featureBar['all'] as $key => $label)
+$navItems = array();
+foreach(\customModel::getMainMenu() as $menuItem)
 {
-    if($key == $browseType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    $tab = tab($label)->link(inlink('all', "browseType=$key&orderBy=$orderBy"))->active($key == $browseType);
-    $toolbar->append($tab);
+  $navItems[] = array(
+    'text'   => $menuItem->text,
+    'url'    => \commonModel::createMenuLink($menuItem, $app->tab),
+    'active' => $menuItem->order === 1,
+  );
 }
 
-if(common::hasPriv('project', 'batchEdit')) $toolbar->append(html::checkbox('showEdit', array('1' => $lang->product->edit), $showBatchEdit));
+/* Generate dropdown menus. */
+$userMenu         = \commonModel::printUserBarZin();
+$globalCreateMenu = \commonModel::printCreateListZin();
+$switcherMenu     = \commonModel::printVisionSwitcherZin();
 
-$searchClass = $browseType == 'bySearch' ? 'active' : '';
-$toolbar->append("<a class='querybox-toggle $searchClass' id='searchFormBtn'><i class='icon icon-search'></i> <span>" . $lang->user->search . '</span></a>');
-
-/* Set actionbar. */
-$actionbar = actionbar();
-if(common::hasPriv('product', 'export'))
+$cols = array_values($config->product->all->dtable->fieldList);
+foreach($cols as $idx => $col)
 {
-    $button = button("<i class='icon-export muted'> </i>" . $lang->export)->link($this->createLink('product', 'export', "status=$browseType&orderBy=$orderBy", 'html', true))->addClass('btn btn-link export');
-    $actionbar->append($button);
+    if($col['name'] != 'name')
+    {
+        unset($cols[$idx]['width']);
+        $cols[$idx]['minWidth'] = 200;
+    }
+
+    if($col['name'] != 'actions') continue;
+
+    $cols[$idx]['actionsMap'] = array(
+        'edit'      => array('icon'=> 'icon-edit',         'hint'=> '编辑'),
+        'group'     => array('icon'=> 'icon-group',        'hint'=> '团队'),
+        'split'     => array('icon'=> 'icon-split',        'hint'=> '添加子项目集'),
+        'delete'    => array('icon'=> 'icon-trash',        'hint'=> '删除', 'text' => '删除'),
+        'close'     => array('icon'=> 'icon-off',          'hint'=> '关闭'),
+        'start'     => array('icon'=> 'icon-start',        'hint'=> '开始'),
+        'pause'     => array('icon'=> 'icon-pause',        'text'=> '挂起项目集'),
+        'active'    => array('icon'=> 'icon-magic',        'text'=> '激活项目集'),
+        'other'     => array('type'=> 'dropdown',          'hint'=> '其他操作', 'caret' => true),
+        'link'      => array('icon'=> 'icon-link',         'text'=> '关联产品', 'name' => 'link'),
+        'more'      => array('icon'=> 'icon-ellipsis-v',   'hint'=> '更多', 'type' => 'dropdown', 'caret' => false),
+        'whitelist' => array('icon'=> 'icon-shield-check', 'text'=> '项目白名单', 'name' => 'whitelist'),
+    );
+    $cols[$idx]['type'] = 'actions';
 }
 
-if($config->systemMode == 'ALM' and common::hasPriv('product', 'manageLine'))
+/* TODO implements extend fields. */
+$extendFields = $this->product->getFlowExtendFields();
+
+$data         = array();
+$totalStories = 0;
+foreach($productStructure as $programID => $program)
 {
-    $button = button("<i class='icon-edit'> </i>" . $lang->product->line)->link($this->createLink('product', 'manageLine', '', 'html', true))->addClass('btn btn-link iframe');
-    $actionbar->append($button);
+    if(isset($programLines[$programID]))
+    {
+        foreach($programLines[$programID] as $lineID => $lineName)
+        {
+            if(!isset($program[$lineID]))
+            {
+                $program[$lineID] = array();
+                $program[$lineID]['product']  = '';
+                $program[$lineID]['lineName'] = $lineName;
+            }
+        }
+    }
+
+    /* ALM mode with more data. */
+    if(isset($program['programName']) and $config->systemMode == 'ALM')
+    {
+        $item = new \stdClass();
+
+        $item->programPM = '';
+        if(!empty($program['programPM']))
+        {
+            /* TODO generate avatar and link. */
+            $programPM = $program['programPM'];
+            $userName  = zget($users, $programPM);
+            // echo html::smallAvatar(array('avatar' => $usersAvatar[$programPM], 'account' => $programPM, 'name' => $userName), 'avatar-circle avatar-top avatar-' . zget($userIdPairs, $programPM));
+
+            $userID = isset($userIdPairs[$programPM]) ? $userIdPairs[$programPM] : '';
+            // echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' class='iframe' data-width='600'");
+
+            $item->programPM = $userName;
+            $item->PO        = $userName;
+        }
+
+        $totalStories = $program['finishClosedStories'] + $program['unclosedStories'];
+
+        $item->name             = $program['programName'];
+        $item->id               = $program['id'];
+        $item->type             = 'program';
+        $item->level            = 1;
+        $item->asParent         = true;
+        $item->programName      = $program['programName'];
+        $item->draftStories     = $program['draftStories'];
+        $item->activeStories    = $program['activeStories'];
+        $item->changingStories  = $program['changingStories'];
+        $item->reviewingStories = $program['reviewingStories'];
+        $item->totalStories     = ($totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100) . '%';
+        $item->unResolvedBugs   = $program['unResolvedBugs'];
+        $item->totalBugs        = (($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100) . '%';
+        $item->plans            = $program['plans'];
+        $item->releases         = $program['releases'];
+        /* TODO attach extend fields. */
+        $item->actions          = 'close|other:-pause,active|group|-edit|more:delete,link';
+
+        $data[] = $item;
+    }
+
+    foreach($program as $lineID => $line)
+    {
+
+        /* ALM mode with Product Line. */
+        if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and $config->systemMode == 'ALM')
+        {
+            $totalStories = (isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) + (isset($line['unclosedStories']) ? $line['unclosedStories'] : 0);
+
+            $item = new \stdClass();
+            $item->name             = $line['lineName'];
+            $item->id               = $line['id'];
+            $item->type             = 'productLine';
+            $item->asParent         = true;
+            $item->programName      = $line['lineName'];
+            $item->draftStories     = $line['draftStories'];
+            $item->activeStories    = $line['activeStories'];
+            $item->changingStories  = $line['changingStories'];
+            $item->reviewingStories = $line['reviewingStories'];
+            $item->totalStories     = ($totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100) . '%';
+            $item->unResolvedBugs   = $line['unResolvedBugs'];
+            $item->totalBugs        = ((isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0) . '%';
+            $item->plans            = $line['plans'];
+            $item->releases         = $line['releases'];
+            /* TODO attach extend fields. */
+            $item->actions          = 'close|other:-pause,active|group|-edit|more:delete,link';
+
+            $data[] = $item;
+        }
+
+        /* Products of Product Line. */
+        if(isset($line['products']) and is_array($line['products']))
+        {
+            foreach($line['products'] as $productID => $product)
+            {
+                $item = new \stdClass();
+
+                if(!empty($product->PO))
+                {
+                    $userName  = zget($users, $product->PO);
+                    //echo html::smallAvatar(array('avatar' => $usersAvatar[$product->PO], 'account' => $product->PO, 'name' => $userName), 'avatar-circle avatar-' . zget($userIdPairs, $product->PO));
+
+                    $userID = isset($userIdPairs[$product->PO]) ? $userIdPairs[$product->PO] : '';
+                    //echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' class='iframe' data-width='600'");
+
+                    $item->PO = $userName;
+                }
+                $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
+
+                $item->name             = $product->name; /* TODO replace with <a> */
+                $item->id               = $product->id;
+                $item->type             = 'project';
+                $item->level            = 2;
+                $item->asParent         = false;
+                $item->programName      = $product->name; /* TODO replace with <a> */
+                $item->draftStories     = $product->stories['draft'];
+                $item->activeStories    = $product->stories['active'];
+                $item->changingStories  = $product->stories['changing'];
+                $item->reviewingStories = $product->stories['reviewing'];
+                $item->totalStories     = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100) . '%';
+                $item->unResolvedBugs   = $product->unResolved;
+                $item->totalBugs        = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
+                $item->plans            = $product->plans;
+                $item->releases         = $product->releases;
+                $item->parent           = $product->program ? $product->program : '';
+                /* TODO attach extend fields. */
+                $item->actions          = 'close|other:-pause,active|group|-edit|more:delete,link';
+
+                $data[] = $item;
+            }
+        }
+    }
 }
 
-if(common::hasPriv('product', 'create'))
-{
-    $button = button("<i class='icon icon-plus'> </i>" . $lang->product->create)->link($this->createLink('product', 'create'))->addClass('btn primary create-product-btn');
-    $actionbar->append($button);
-}
+$footer = array(
+    'items' => array(
+        array('type' => 'info', 'text' => '共 {recTotal} 项'),
+        array('type' => 'info', 'text' => '{page}/{pageTotal}'),
+    ),
+    'page' => 1,
+    'recTotal' => 101,
+    'recPerPage' => 10,
+    'linkCreator' => '#?page{page}&recPerPage={recPerPage}'
+);
 
-$menu = block('h');
-$menu->toolbar   = $toolbar;
-$menu->actionbar = $actionbar;
-
-/* Table. */
-$table = dtable();
-$table->buildCols($this->config->product->all->dtable->fieldList);
-
-$rows = $this->product->buildRows($productStructure, array('programLines' => $programLines, 'users' => $users, 'usersAvatar' => $usersAvatar, 'userIdPairs' => $userIdPairs));
-
-$table->search($browseType, $moduleName);
-$sortLink = $this->createLink('product', 'all', "browseType=$browseType&orderBy=\${orderBy}&param=0&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-$table->setSort($sortLink, $orderBy);
-$table->data($rows);
-
-$pagerLink = $this->createLink('product', 'all', "browseType=$browseType&orderBy=$orderBy&param=0&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}");
-$table->appendFootToolBar(array('size' => 'sm', 'text' => $lang->edit, 'btnType' => 'primary', 'className' => 'edit-btn'));
-$table->setPager($pager, $pagerLink);
-
-$content = block();
-$content->table = $table;
-
-/* Layout. */
-$page = page('list');
-$page->top->menu      = $menu;
-$page->right->content = $content;
-$page->x();
+page
+(
+    set('title', $title),
+    dropdown
+    (
+        setId('userMenu'),
+        set('items', $userMenu)
+    ),
+    dropdown
+    (
+        setId('globalCreateMenu'),
+        set('items', $globalCreateMenu)
+    ),
+    dropdown
+    (
+        setId('switcherMenu'),
+        set('items', $switcherMenu)
+    ),
+    pageheader
+    (
+        pageheading
+        (
+            set('text', $lang->{$app->tab}->common),
+            set('icon', $app->tab),
+            set('url', \helper::createLink($app->tab, 'browse')),
+        ),
+        pagenavbar
+        (
+            setId('navbar'),
+            set('items', $navItems)
+        ),
+        pagetoolbar
+        (
+            set('create',   array('href'=>'#globalCreateMenu')),
+            set('switcher', array('href'=>'#switcherMenu', 'text' => $lang->visionList[$app->config->vision])),
+            block('avatar', avatar(set('name', $app->user->account), set('avatar', $app->user->avatar), set('trigger', '#userMenu')))
+        )
+    ),
+    pagemain
+    (
+        dtable
+        (
+            set('width', '100%'),
+            set('cols',  $cols),
+            set('data',  $data),
+            set('footPager', $footer),
+            set('footToolbar', array('items' => array(array('size' => 'sm', 'text' => '编辑', 'btnType' => 'primary'))))
+        )
+    )
+);
