@@ -21,19 +21,28 @@
       </div>
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
+          <?php if($zanode->type == 'node'):?>
           <tr>
             <th><?php echo $lang->zanode->hostName;?></th>
             <td class='p-25f'><?php echo html::input('', $host->name, "class='form-control'  readonly='readonly'");?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th class='w-120px'><?php echo $lang->zanode->name;?></th>
             <td class='p-25f'><?php echo html::input('name', $zanode->name, "class='form-control' placeholder=\"{$lang->zanode->nameValid}\" readonly='readonly'");?></td>
             <td></td>
           </tr>
+          <?php if($zanode->type == 'node'):?>
           <tr>
             <th><?php echo $lang->zanode->image;?></th>
             <td class='p-25f'><?php echo html::input('', $image->name, "class='form-control'  readonly='readonly'");?></td>
           </tr>
+          <?php else:?>
+          <tr>
+            <th class='w-120px'><?php echo $lang->zahost->IP;?></th>
+            <td class='p-25f'><?php echo html::input('extranet', $zanode->extranet, "class='form-control' readonly='readonly'");?></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->zanode->cpuCores;?></th>
             <td class='p-25f'><?php echo html::input('', zget($config->zanode->os->cpuCores, $zanode->cpuCores), "class='form-control'  readonly='readonly'");?></td>

@@ -33,7 +33,7 @@
   <div class="col-8 main-col">
     <div class="cell">
       <div class="detail zahost-detail">
-        <div class="detail-title"><?php echo $lang->zahost->view;?></div>
+        <div class="detail-title"><?php echo $lang->zahost->baseInfo;?></div>
         <div class="detail-content article-content">
           <div class="main-row zanode-mt-8">
             <div class="col-4">
@@ -95,6 +95,10 @@
           </div>
         </div>
       </div>
+      <div class="detail zahost-detail">
+        <div class="detail-title"><?php echo $lang->zahost->desc;?></div>
+        <div class="detail-content article-content"><?php echo !empty($zahost->desc) ? htmlspecialchars_decode($zahost->desc) : $lang->noData;?></div>
+      </div>
     </div>
     <div class="cell">
       <div class="detail zahost-detail">
@@ -121,12 +125,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="cell">
-      <div class="detail zahost-detail">
-        <div class="detail-title"><?php echo $lang->zahost->desc;?></div>
-        <div class="detail-content article-content"><?php echo !empty($zahost->desc) ? htmlspecialchars_decode($zahost->desc) : $lang->noData;?></div>
       </div>
     </div>
     <?php if(commonModel::hasPriv('zanode', 'browse')):?>

@@ -63,6 +63,9 @@ $lang->zanode->initializing    = 'Initializing';
 $lang->zanode->showPwd         = 'Show Password';
 $lang->zanode->hidePwd         = 'Hide Password';
 
+$lang->zanode->typeList['node']    = 'Virtual machine';
+$lang->zanode->typeList['physics'] = 'Physical machine';
+
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
 $lang->automation->node       = $lang->zanode->common;
@@ -73,6 +76,7 @@ $lang->zanode->noVncPort      = 'Failed to get vnc port';
 $lang->zanode->nameValid      = "The name can only be letters, numbers, '-', '_', '.', and cannot start with a symbol";
 $lang->zanode->empty          = 'No zanode is found';
 $lang->zanode->runCaseConfirm = 'The system detects the presence of an automation script. Whether to execute?';
+$lang->zanode->netError       = 'Unable to connect to the physical machine, please check the network and try again.';
 
 $lang->zanode->createImage        = 'Create Image';
 $lang->zanode->createImaging      = 'Creating';

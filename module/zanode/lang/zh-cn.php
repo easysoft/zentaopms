@@ -63,6 +63,9 @@ $lang->zanode->initializing    = '初始化中';
 $lang->zanode->showPwd         = '显示密码';
 $lang->zanode->hidePwd         = '隐藏密码';
 
+$lang->zanode->typeList['node']    = '虚拟机';
+$lang->zanode->typeList['physics'] = '物理机';
+
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
 $lang->automation->node       = $lang->zanode->common;
@@ -73,6 +76,7 @@ $lang->zanode->noVncPort      = '无法获取执行节点端口';
 $lang->zanode->nameValid      = "名称只能是字母、数字，'-'，'_'，'.'，且不能以符号开头";
 $lang->zanode->empty          = '暂时没有执行节点';
 $lang->zanode->runCaseConfirm = '系统检测到选择的用例存在自动化测试脚本，是否自动执行用例？';
+$lang->zanode->netError       = '无法连接到物理机，请检查网络后重试。';
 
 $lang->zanode->createImage        = '导出镜像';
 $lang->zanode->createImaging      = '正在导出镜像';

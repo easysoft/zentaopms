@@ -16,6 +16,7 @@ $lang->zahost->browseNode     = 'ZAnode Browse';
 $lang->zahost->deleted        = "Deleted";
 $lang->zahost->copy           = 'Click to copy';
 $lang->zahost->copied         = 'Copy successful';
+$lang->zahost->baseInfo       = 'Basic information';
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'Extranet Address';

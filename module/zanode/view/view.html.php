@@ -44,7 +44,7 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
   <div class="col-8 main-col">
     <div class="cell">
       <div class="detail zanode-detail">
-        <div class="detail-title"><?php echo $lang->zanode->view; ?></div>
+        <div class="detail-title"><?php echo $lang->zahost->baseInfo; ?></div>
         <div class="detail-content article-content">
           <div class="main-row zanode-mt-8">
             <div class="col-4">
@@ -97,11 +97,11 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4">
               <div class="main-row">
                 <div class="col-3 text-right"><?php echo $lang->zanode->defaultPwd; ?>:</div>
-                <div class="col-8 default-pwd"><?php 
+                <div class="col-8 default-pwd"><?php
                 echo '<span id="pwd-text">' . str_repeat('*', strlen($config->zanode->defaultPwd)) . '</span>'
                  . ' '
                  . "<button type='button' class='btn btn-info btn-mini btn-pwd-copy'><i class='icon-common-copy icon-copy' title='" . $lang->zanode->copy .  "'></i></button>"
-                 . "<button type='button' class='btn btn-info btn-mini btn-pwd-show'><i class='icon-common-eye icon-eye' title='" . $lang->zanode->showPwd .  "'></i></button>"; 
+                 . "<button type='button' class='btn btn-info btn-mini btn-pwd-show'><i class='icon-common-eye icon-eye' title='" . $lang->zanode->showPwd .  "'></i></button>";
                 ?></div>
                 <textarea style="display:none;" id="pwd-copy"><?php echo $config->zanode->defaultPwd; ?></textarea>
               </div>
@@ -115,6 +115,10 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
             <div class="col-4"></div>
           </div>
         </div>
+      </div>
+      <div class="detail zanode-detail">
+        <div class="detail-title"><?php echo $lang->zanode->desc; ?></div>
+        <div class="detail-content article-content"><?php echo !empty($zanode->desc) ? htmlspecialchars_decode($zanode->desc) : $lang->noData; ?></div>
       </div>
 
       <?php
@@ -147,12 +151,6 @@ $account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccou
               <span class='init-fail hide'><?php echo $lang->zanode->init->initFailNoticeTitle . '<br/>' . $lang->zanode->init->initFailNoticeDesc;?></span>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="cell">
-        <div class="detail zanode-detail">
-          <div class="detail-title"><?php echo $lang->zanode->desc; ?></div>
-          <div class="detail-content article-content"><?php echo !empty($zanode->desc) ? htmlspecialchars_decode($zanode->desc) : $lang->noData; ?></div>
         </div>
       </div>
       <?php if(common::hasPriv('zanode', 'browseSnapshot')):?>
