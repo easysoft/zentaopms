@@ -10,9 +10,9 @@ $lang->admin->menuList->switch['desc']  = $lang->admin->menuSetting['switch']['d
 $lang->admin->menuList->switch['link']  = 'admin|setmodule';
 $lang->admin->menuList->switch['order'] = 10;
 
-$lang->admin->menuList->user['name']  = $lang->admin->menuSetting['user']['name'];
-$lang->admin->menuList->user['desc']  = $lang->admin->menuSetting['user']['desc'];
-$lang->admin->menuList->user['order'] = 15;
+$lang->admin->menuList->company['name']  = $lang->admin->menuSetting['user']['name'];
+$lang->admin->menuList->company['desc']  = $lang->admin->menuSetting['user']['desc'];
+$lang->admin->menuList->company['order'] = 15;
 
 $lang->admin->menuList->model['name']  = $lang->admin->menuSetting['model']['name'];
 $lang->admin->menuList->model['desc']  = $lang->admin->menuSetting['model']['desc'];
@@ -64,13 +64,13 @@ $lang->admin->menuList->system['menuOrder']['50'] = 'tableengine';
 
 $lang->admin->menuList->system['dividerMenu'] = ',safe,';
 
-$lang->admin->menuList->user['subMenu']['dept']  = array('link' => "{$lang->dept->common}|dept|browse|", 'subModule' => 'dept');
-$lang->admin->menuList->user['subMenu']['user']  = array('link' => "{$lang->user->common}|company|browse|", 'subModule' => 'user');
-$lang->admin->menuList->user['subMenu']['group'] = array('link' => "{$lang->priv}|group|browse|", 'subModule' => 'group');
+$lang->admin->menuList->company['subMenu']['dept']       = array('link' => "{$lang->dept->common}|dept|browse|", 'subModule' => 'dept');
+$lang->admin->menuList->company['subMenu']['browseUser'] = array('link' => "{$lang->user->common}|company|browse|", 'subModule' => 'user,tutorial');
+$lang->admin->menuList->company['subMenu']['group']      = array('link' => "{$lang->priv}|group|browse|", 'subModule' => 'group');
 
-$lang->admin->menuList->user['menuOrder']['5']  = 'dept';
-$lang->admin->menuList->user['menuOrder']['10'] = 'user';
-$lang->admin->menuList->user['menuOrder']['15'] = 'group';
+$lang->admin->menuList->company['menuOrder']['5']  = 'dept';
+$lang->admin->menuList->company['menuOrder']['10'] = 'browseUser';
+$lang->admin->menuList->company['menuOrder']['15'] = 'group';
 
 $lang->admin->menuList->model['subMenu']['common']        = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday,stage', 'exclude' => 'stage-browse,stage-plusbrowse,stage-create,stage-edit,stage-batchcreate');
 $lang->admin->menuList->model['subMenu']['scrum']         = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
