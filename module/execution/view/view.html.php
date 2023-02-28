@@ -420,14 +420,13 @@
                 <table class="table table-data data-basic">
                   <tbody>
                     <tr>
-                      <?php if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))):?>
-                      <th><?php echo $lang->task->common;?></th>
-                      <td><?php echo $statData->taskCount;?></td>
-                      <?php else:?>
+                      <?php if($features['story']):?>
                       <th><?php echo $lang->story->common;?></th>
                       <td><?php echo $statData->storyCount;?></td>
+                      <?php endif;?>
                       <th><?php echo $lang->task->common;?></th>
                       <td><?php echo $statData->taskCount;?></td>
+                      <?php if($features['qa']):?>
                       <th><?php echo $lang->bug->common;?></th>
                       <td><?php echo $statData->bugCount;?></td>
                       <?php endif;?>

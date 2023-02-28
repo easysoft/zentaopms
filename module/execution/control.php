@@ -1548,6 +1548,7 @@ class execution extends control
         $this->view->executionName = $execution->name;
         $this->view->executionID   = $executionID;
         $this->view->chartData     = $chartData;
+        $this->view->features      = $this->execution->getExecutionFeatures($execution);
         $this->view->begin         = $begin;
         $this->view->end           = $end;
         $this->view->minDate       = $minDate;
@@ -2590,6 +2591,7 @@ class execution extends control
         $this->view->chartData    = $chartData;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->type         = $type;
+        $this->view->features     = $this->execution->getExecutionFeatures($execution);
         $this->view->project      = $this->loadModel('project')->getByID($execution->project);
 
         $this->display();
