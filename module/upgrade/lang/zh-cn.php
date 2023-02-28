@@ -94,8 +94,8 @@ $lang->upgrade->productCount      = "%s个{$lang->productCommon}";
 $lang->upgrade->projectCount      = "%s个{$lang->projectCommon}";
 $lang->upgrade->mergeByProject    = "当前提供如下2种数据迁移方式，如果历史的{$lang->projectCommon}都是长周期的，那么我们建议把历史的{$lang->projectCommon}作为项目升级。</br>如果历史的{$lang->projectCommon}都是短周期的，那么我们建议把历史的{$lang->projectCommon}作为{$lang->executionCommon}升级。";
 $lang->upgrade->mergeRepoTips     = "将选中的版本库归并到所选产品下。";
-$lang->upgrade->needBuild4Add     = '本次升级需要创建索引。请到 [后台->系统->重建索引] 页面，重新创建索引。';
-$lang->upgrade->needChangeEngine  = '本次升级需要更换表引擎， [后台->系统->表引擎] 页面更换引擎。';
+$lang->upgrade->needBuild4Add     = '本次升级需要创建索引。请到 [后台->系统设置->重建索引] 页面，重新创建索引。';
+$lang->upgrade->needChangeEngine  = '本次升级需要更换表引擎， [后台->系统设置->表引擎] 页面更换引擎。';
 $lang->upgrade->errorEngineInnodb = '您当前的数据库不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
 $lang->upgrade->duplicateProject  = "同一个项目集内项目名称不能重复，请调整重名的项目名称";
 $lang->upgrade->upgradeTips       = "历史删除数据不参与升级，升级后将不支持还原，请知悉";
@@ -138,4 +138,4 @@ $lang->upgrade->recoveryActions->cancel = '取消';
 $lang->upgrade->recoveryActions->review = '评审';
 
 $lang->upgrade->remark     = '备注';
-$lang->upgrade->remarkDesc = '后续您还可以在禅道的后台-系统-模式中进行切换。';
+$lang->upgrade->remarkDesc = '后续您还可以在禅道的后台-系统设置-模式中进行切换。';

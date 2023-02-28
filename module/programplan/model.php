@@ -123,7 +123,7 @@ class programplanModel extends model
      */
     public function getPairs($executionID, $productID = 0, $type = 'all')
     {
-        $plans = $this->getStage($executionID, $productID, 'all', $orderBy);
+        $plans = $this->getStage($executionID, $productID, $type);
 
         $pairs = array(0 => '');
 

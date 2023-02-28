@@ -99,6 +99,7 @@ function checkServiceStatus(){
         }
         setTimeout(function() {
             $('#serviceContent').removeClass('loading');
+            $(".service-status, .status-notice").show()
         }, 500);
     });
     return
@@ -186,7 +187,7 @@ $('#jumpManual').click(function()
 
 
 $(function(){
-    checkServiceStatus();
+    $('#checkServiceStatus').trigger("click")
     checkInterval = setInterval(() => {
         intervalTimes++;
         if(intervalTimes > 300)

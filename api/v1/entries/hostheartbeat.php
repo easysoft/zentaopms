@@ -84,6 +84,19 @@ class hostHeartbeatEntry extends baseEntry
                 if($heartbeat > 0) $vmData['heartbeat'] = date("Y-m-d H:i:s", $heartbeat);
                 
                 $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('mac')->eq($vm->macAddress)->exec();
+                
+                if($vm->status == 'running')
+                {
+                    $node  = $this->loadModel('zanode')->getNodeByMac($vm->macAddress);
+                    if(!empty($node))
+                    {
+                        $snaps = $this->loadModel('zanode')->getSnapshotList($node->id);
+                        if(empty($snaps))
+                        {
+                            if($vm->status == 'running') $this->loadModel('zanode')->createDefaultSnapshot($node->id);
+                        }
+                    }
+                }
             }
         }
 
