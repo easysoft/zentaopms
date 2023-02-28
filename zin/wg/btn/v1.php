@@ -5,7 +5,7 @@ require_once dirname(__DIR__) . DS . 'icon' . DS . 'v1.php';
 
 class btn extends wg
 {
-    static $defineProps = 'type?:string, icon?:string, text?:string, square?:bool, disabled?:bool, active?:bool, url?:string, target?:string, size?:string|number, trailingIcon?:string, caret?:string|bool, hint?:string, btnType?:string';
+    static $defineProps = 'icon?:string, text?:string, square?:bool, disabled?:bool, active?:bool, url?:string, target?:string, size?:string|number, trailingIcon?:string, caret?:string|bool, hint?:string, btnType?:string';
 
     public function onAddChild($child)
     {
@@ -28,7 +28,7 @@ class btn extends wg
 
         if(empty($url))
         {
-            $props['type']        = $this->prop('btnType');
+            // $props['type']        = $this->prop('btnType');
             $props['data-url']    = $url;
             $props['data-target'] = $target;
         }
@@ -51,7 +51,6 @@ class btn extends wg
         $classList = array
         (
             'btn',
-            $this->prop('type'),
             'disabled' => $this->prop('disabled'),
             'active' => $this->prop('active'),
             'btn-caret' => $onlyCaret,
