@@ -220,7 +220,6 @@ function showEditCheckbox(show)
         }
         else
         {
-            var marginLeft = $tr.find('td:first').find('.checkbox-primary').css('margin-left');
             $tr.find('td:first').find('[name^="executionIDList"]').parent().remove();
         }
     });
