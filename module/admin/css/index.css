@@ -41,7 +41,9 @@
 .settings-list > .setting-box > button.btn {padding: 5px 10px; height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset; border: 1px solid rgba(227, 228, 233, 0.6)}
 .settings-list > .setting-box > .btn:hover {background: unset;}
 .settings-list > .setting-box > .btn[disabled] {cursor: not-allowed; pointer-events: unset;}
-.settings-list > .setting-box > .btn[disabled] > a {pointer-events: none;}
+.settings-list > .setting-box > .btn[disabled] > a,
+.settings-list > .setting-box > .btn[disabled] a.setting-help,
+.settings-list > .setting-box > .btn[disabled] p.setting-desc {pointer-events: none;}
 .settings-list > .setting-box > .btn > h4 {padding-right: 5px;}
 .settings-list > .setting-box > .btn > h4  > div {gap: 3px;}
 .settings-list > .setting-box > .btn > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}

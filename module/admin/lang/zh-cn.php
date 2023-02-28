@@ -186,6 +186,7 @@ $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';
 $lang->admin->upgradeRecommend = '推荐升级';
 $lang->admin->zentaoUsed       = '您已使用禅道';
+$lang->admin->noPriv           = '您没有访问该区块的权限。';
 
 $lang->admin->openTag = '禅道';
 $lang->admin->bizTag  = '禅道企业版';

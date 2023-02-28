@@ -10,9 +10,9 @@ $lang->admin->menuList->switch['desc']  = $lang->admin->menuSetting['switch']['d
 $lang->admin->menuList->switch['link']  = 'admin|setmodule';
 $lang->admin->menuList->switch['order'] = 10;
 
-$lang->admin->menuList->user['name']  = $lang->admin->menuSetting['user']['name'];
-$lang->admin->menuList->user['desc']  = $lang->admin->menuSetting['user']['desc'];
-$lang->admin->menuList->user['order'] = 15;
+$lang->admin->menuList->company['name']  = $lang->admin->menuSetting['user']['name'];
+$lang->admin->menuList->company['desc']  = $lang->admin->menuSetting['user']['desc'];
+$lang->admin->menuList->company['order'] = 15;
 
 $lang->admin->menuList->model['name']  = $lang->admin->menuSetting['model']['name'];
 $lang->admin->menuList->model['desc']  = $lang->admin->menuSetting['model']['desc'];
@@ -64,13 +64,13 @@ $lang->admin->menuList->system['menuOrder']['50'] = 'tableengine';
 
 $lang->admin->menuList->system['dividerMenu'] = ',safe,';
 
-$lang->admin->menuList->user['subMenu']['dept']  = array('link' => "{$lang->dept->common}|dept|browse|", 'subModule' => 'dept');
-$lang->admin->menuList->user['subMenu']['user']  = array('link' => "{$lang->user->common}|company|browse|", 'subModule' => 'user');
-$lang->admin->menuList->user['subMenu']['group'] = array('link' => "{$lang->priv}|group|browse|", 'subModule' => 'group');
+$lang->admin->menuList->company['subMenu']['dept']       = array('link' => "{$lang->dept->common}|dept|browse|", 'subModule' => 'dept');
+$lang->admin->menuList->company['subMenu']['browseUser'] = array('link' => "{$lang->user->common}|company|browse|", 'subModule' => 'user,tutorial');
+$lang->admin->menuList->company['subMenu']['group']      = array('link' => "{$lang->priv}|group|browse|", 'subModule' => 'group');
 
-$lang->admin->menuList->user['menuOrder']['5']  = 'dept';
-$lang->admin->menuList->user['menuOrder']['10'] = 'user';
-$lang->admin->menuList->user['menuOrder']['15'] = 'group';
+$lang->admin->menuList->company['menuOrder']['5']  = 'dept';
+$lang->admin->menuList->company['menuOrder']['10'] = 'browseUser';
+$lang->admin->menuList->company['menuOrder']['15'] = 'group';
 
 $lang->admin->menuList->model['subMenu']['common']        = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday,stage', 'exclude' => 'stage-browse,stage-plusbrowse,stage-create,stage-edit,stage-batchcreate');
 $lang->admin->menuList->model['subMenu']['scrum']         = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
@@ -85,21 +85,22 @@ $lang->admin->menuList->model['menuOrder']['20'] = 'agileplus';
 $lang->admin->menuList->model['menuOrder']['25'] = 'waterfallplus';
 
 $lang->admin->menuList->model['tabMenu']['common']['project']      = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set', 'exclude' => 'custom', 'links' => array('custom|set|module=project&field=unitList'));
-$lang->admin->menuList->model['tabMenu']['common']['stage']        = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage', 'links' => array('stage|browse|'));
+if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage', 'links' => array('stage|browse|'));
 $lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 $lang->admin->menuList->model['tabMenu']['common']['code']         = array('link' => "{$lang->code}|custom|code|");
 $lang->admin->menuList->model['tabMenu']['common']['hours']        = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|', 'custom|hours'));
-$lang->admin->menuList->model['tabMenu']['waterfall']['stage']     = array('link' => "{$lang->stage->list}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-plusbrowse');
-$lang->admin->menuList->model['tabMenu']['waterfallplus']['stage'] = array('link' => "{$lang->stage->list}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-browse');
+if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->list}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-plusbrowse');
+if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['waterfallplus']['stage'] = array('link' => "{$lang->stage->list}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-browse');
+
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']        = 'project';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
+if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']       = 'build';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']       = 'flow';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']       = 'code';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']       = 'hours';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5']     = 'stage';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['waterfallplus']['5'] = 'stage';
+if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5']     = 'stage';
+if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfallplus']['5'] = 'stage';
 
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo&field=priList", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'exclude' => 'set,required', 'alias' => 'browsestoryconcept,product');

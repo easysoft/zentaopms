@@ -8,7 +8,7 @@ if(!isset($config->safe))       $config->safe = new stdclass();
 if(!isset($config->safe->weak)) $config->safe->weak = '123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123';
 
 $config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice', 'conference', 'client');
-$config->admin->menuGroup['user']      = array('dept', 'company', 'user', 'group');
+$config->admin->menuGroup['company']   = array('dept', 'company', 'user', 'group', 'tutorial');
 $config->admin->menuGroup['switch']    = array('admin|setmodule');
 $config->admin->menuGroup['model']     = array('auditcl', 'stage', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'reviewsetting');
 $config->admin->menuGroup['feature']   = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'approvalflow', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report');
@@ -72,14 +72,14 @@ $config->admin->extAPIURL      = $config->admin->apiSite . 'extension-apiGetExte
 $config->admin->patchAPIURL    = $config->admin->apiSite . 'extension-apiGetExtensions-bymodule-MTIxOA==-0-100-1.json';
 $config->admin->downloadAPIURL = $config->admin->apiSite . 'download.json';
 $config->admin->videoAPIURL    = $config->admin->apiSite . 'publicclass.json';
-$config->admin->liteMenuList   = array('system', 'user', 'feature', 'message', 'extension', 'dev');
+$config->admin->liteMenuList   = array('system', 'company', 'feature', 'message', 'extension', 'dev');
 
 $config->admin->helpURL['system']    = 'https://www.zentao.net/book/zentaopms/538.html';
-$config->admin->helpURL['user']      = 'https://www.zentao.net/book/zentaopms/538.html';
-$config->admin->helpURL['switch']    = 'https://www.zentao.net/book/zentaopms/538.html';
+$config->admin->helpURL['company']   = 'https://www.zentao.net/book/zentaopms/38.html';
+$config->admin->helpURL['switch']    = 'https://www.zentao.net/book/zentaopms/38.html';
 $config->admin->helpURL['model']     = 'https://www.zentao.net/book/zentaopms/533.html';
-$config->admin->helpURL['feature']   = 'https://www.zentao.net/book/zentaopms/538.html';
-$config->admin->helpURL['template']  = 'https://www.zentao.net/book/zentaopms/538.html';
+$config->admin->helpURL['feature']   = 'https://www.zentao.net/book/zentaopms/38.html';
+$config->admin->helpURL['template']  = 'https://www.zentao.net/book/zentaopms/38.html';
 $config->admin->helpURL['message']   = 'https://www.zentao.net/book/zentaopms/email-notification-541.html';
 $config->admin->helpURL['extension'] = 'https://www.zentao.net/book/zentaopms/536.html';
 $config->admin->helpURL['dev']       = 'https://www.zentao.net/book/zentaopms/537.html';
