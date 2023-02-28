@@ -784,6 +784,7 @@ class devModel extends model
             }
             else
             {
+                if($this->config->vision == 'lite' and $menuKey == 'project') $menuKey = 'kanbanProject';
                 $menuItem->children = $this->$childFunc($menuKey, $module, $method);
             }
             $menuItem->children = array_values($menuItem->children);
