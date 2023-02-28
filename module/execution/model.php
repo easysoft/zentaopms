@@ -658,6 +658,8 @@ class executionModel extends model
 
         if(dao::isError()) return false;
 
+        if(isset($_POST['parent'])) $this->loadModel('programplan')->setTreePath($executionID);
+
         /* Get team and language item. */
         $this->loadModel('user');
         $team    = $this->user->getTeamMemberPairs($executionID, 'execution');
