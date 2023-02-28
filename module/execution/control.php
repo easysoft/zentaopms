@@ -2102,6 +2102,7 @@ class execution extends control
         {
             $productID       = $this->product->getProductIDByProject($executionID);
             $parentStageList = $this->loadModel('programplan')->getParentStageList($execution->project, $executionID, $productID);
+            unset($parentStageList[0]);
         }
 
         $this->view->title                = $title;
