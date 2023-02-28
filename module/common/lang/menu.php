@@ -234,8 +234,8 @@ $lang->scrum->menuOrder[25] = 'devops';
 $lang->scrum->menuOrder[30] = 'doc';
 $lang->scrum->menuOrder[35] = 'build';
 $lang->scrum->menuOrder[40] = 'release';
-$lang->scrum->menuOrder[48] = 'dynamic';
-$lang->scrum->menuOrder[50] = 'settings';
+$lang->scrum->menuOrder[45] = 'dynamic';
+$lang->scrum->menuOrder[55] = 'settings';
 
 $lang->scrum->menu->doc['subMenu'] = new stdclass();
 
