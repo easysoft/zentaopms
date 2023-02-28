@@ -194,10 +194,8 @@ class devTest
     {
         $result = '';
         $menus  = $this->objectModel->sortMenus($menus);
-        foreach($menus as $key => $value)
-        {
-            $result .= $key . ',';
-        }
+        foreach($menus as $key => $value) $result .= $key . ',';
+
         return $result;
     }
 }
