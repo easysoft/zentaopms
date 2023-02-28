@@ -607,6 +607,7 @@ class devModel extends model
     public function getThirdMenus($menu, $module = '', $method = '')
     {
         $menus = array();
+        if($this->config->vision == 'lite' and $menu == 'project') $menu = 'kanbanProject';
         if(!isset($this->lang->$menu->menu)) return $menus;
 
         $menuLang    = $this->getLinkTitle($this->lang->$menu->menu);
@@ -784,7 +785,6 @@ class devModel extends model
             }
             else
             {
-                if($this->config->vision == 'lite' and $menuKey == 'project') $menuKey = 'kanbanProject';
                 $menuItem->children = $this->$childFunc($menuKey, $module, $method);
             }
             $menuItem->children = array_values($menuItem->children);
