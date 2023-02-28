@@ -412,7 +412,10 @@ class devModel extends model
             $menus = $this->getLinkTitle($lang);
             foreach($menus as $linkKey => $menu)
             {
-                if($type == 'first' and in_array($linkKey, $this->config->dev->disableMainMenu)) continue;
+                foreach($this->config->dev->skipMenus as $menuType => $skipMenus)
+                {
+                    if($type == $menuType and in_array($linkKey, $skipMenus)) continue 2;
+                }
 
                 $originalLangs[$langKey . $linkKey] = $menu;
             }
