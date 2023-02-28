@@ -45,7 +45,7 @@
         </tr>
         <?php elseif($app->tab == 'project' and $project->model == 'waterfallplus'):?>
         <tr>
-          <th><?php echo $lang->programplan->parent;?></th>
+          <th class='c-name'><?php echo $lang->programplan->parent;?></th>
           <td><?php echo html::select('parent', $parentStageList, $execution->parent, "class='form-control chosen '");?></td><td></td>
         </tr>
         <?php endif;?>

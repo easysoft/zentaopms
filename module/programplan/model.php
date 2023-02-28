@@ -1027,17 +1027,26 @@ class programplanModel extends model
         $stage  = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($planID)->fetch();
         $parent = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($stage->parent)->fetch();
 
+        $this->loadModel('execution');
         if($parent->type == 'project')
         {
             $path['path']  =  ",{$parent->id},{$stage->id},";
             $path['grade'] = 1;
         }
-        elseif($parent->type == 'stage')
+        elseif(isset($this->lang->execution->typeList[$parent->type]))
         {
             $path['path']  = $parent->path . "{$stage->id},";
             $path['grade'] = $parent->grade + 1;
+
+            $children = $this->execution->getChildExecutions($planID);
         }
+
         $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($stage->id)->exec();
+
+        if(count($children) > 0)
+        {
+            foreach($children as $id => $child) $this->setTreePath($id);
+        }
     }
 
     /**
@@ -1478,8 +1487,9 @@ class programplanModel extends model
      */
     public function computeProgress($stageID, $action = '', $isParent = false)
     {
-        $stage = $this->loadModel('execution')->getByID($stageID);
-        if(empty($stage) or empty($stage->path) or $stage->type != 'stage') return false;
+        $stage   = $this->loadModel('execution')->getByID($stageID);
+        $project = $this->loadModel('project')->getByID($stage->project);
+        if(empty($stage) or empty($stage->path) or ($project->model != 'waterfall' and $project->model != 'waterfallplus')) return false;
 
         $this->loadModel('execution');
         $this->loadModel('action');
@@ -1489,7 +1499,7 @@ class programplanModel extends model
         foreach($parentIdList as $id)
         {
             $parent = $this->execution->getByID($id);
-            if($parent->type != 'stage' or (!$isParent and $id == $stageID)) continue;
+            if(empty($this->lang->execution->typeList[$parent->type]) or (!$isParent and $id == $stageID)) continue;
 
             $statusCount = array();
             $children    = $this->execution->getChildExecutions($parent->id);

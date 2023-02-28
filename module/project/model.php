@@ -2709,6 +2709,13 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('execution', 'id');
 
+        $projects = $this->dao->select('t1.id,t2.model')
+            ->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.id')->in(array_keys($executions))
+            ->fetchPairs();
+
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $executionID => $executionTasks)
         {
@@ -2721,7 +2728,7 @@ class projectModel extends model
             }
             $hours[$executionID] = $hour;
 
-            if(isset($executions[$executionID]) and $executions[$executionID]->type == 'stage' and $executions[$executionID]->grade > 1)
+            if(isset($executions[$executionID]) and $executions[$executionID]->grade > 1 and isset($projects[$executionID]) and ($projects[$executionID] == 'waterfall' or $projects[$executionID] == 'waterfallplus'))
             {
                 $stageParents = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in(trim($executions[$executionID]->path, ','))->andWhere('type')->eq('stage')->andWhere('id')->ne($executions[$executionID]->id)->orderBy('grade')->fetchPairs();
                 foreach($stageParents as $stageParent)

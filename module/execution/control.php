@@ -1995,7 +1995,8 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'edit');
+            $project = $this->loadModel('project')->getById($execution->project);
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'edit');
 
             /* Link the plan stories. */
             $oldPlans = explode(',', implode(',' ,$oldPlans));
@@ -2291,7 +2292,8 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'start');
+            $project = $this->loadModel('project')->getById($execution->project);
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'start');
 
             $this->loadModel('common')->syncPPEStatus($executionID);
             $this->executeHooks($executionID);
@@ -2383,7 +2385,8 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'suspend');
+            $project = $this->loadModel('project')->getById($execution->project);
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'suspend');
 
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
@@ -2423,7 +2426,8 @@ class execution extends control
             $this->execution->activate($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'activate');
+            $project = $this->loadModel('project')->getById($execution->project);
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'activate');
 
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
@@ -2471,7 +2475,8 @@ class execution extends control
             $this->execution->close($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID, 'close');
+            $project = $this->loadModel('project')->getById($execution->project);
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'close');
 
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
@@ -3165,7 +3170,8 @@ class execution extends control
             $this->execution->updateUserView($executionID);
             $this->loadModel('common')->syncPPEStatus($executionID);
 
-            if($execution->type == 'stage') $this->loadModel('programplan')->computeProgress($executionID);
+            $project = $this->loadModel('project')->getById($execution->project);
+            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID);
 
             $this->session->set('execution', '');
             $message = $this->executeHooks($executionID);

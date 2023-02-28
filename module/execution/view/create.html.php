@@ -166,7 +166,8 @@
                     <div class='input-group required'>
                       <span class='input-group-addon fix-border'><?php echo $lang->project->branch;?></span>
                       <?php $branchIdList = isset($product->branches) ? join(',', $product->branches) : '';?>
-                      <?php echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
+                      <?php if(!isset($linkedBranches)) echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
+                      <?php if(isset($linkedBranches)) echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), !empty($linkedBranches[$product->id]) ? $linkedBranches[$product->id] : array(), "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
                     </div>
                   </div>
                 </div>
@@ -174,7 +175,8 @@
               <div class="col-sm-6 planBox">
                 <div class='input-group' <?php echo "id='plan$i'";?>>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
-                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), isset($product->plans) ? $product->plans : '', "class='form-control chosen' multiple");?>
+                  <?php if(empty($productID) or (!empty($productID) and $productID != $product->id)) echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), isset($product->plans) ? $product->plans : '', "class='form-control chosen' multiple");?>
+                  <?php if(!empty($productID) and $productID == $product->id) echo html::select("plans[$product->id][]", !empty($productPlan) ? $productPlan : array(), isset($productPlan[$plan->id]) ? $plan->id : '', "class='form-control chosen' multiple");?>
                   <?php if(!($isStage and !$project->division)):?>
                   <div class='input-group-btn'>
                     <a href='javascript:;' onclick='addNewLine(this)' class='btn btn-link addLine'><i class='icon-plus'></i></a>

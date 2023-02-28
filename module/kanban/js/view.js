@@ -472,7 +472,6 @@ function renderExecutionItem(item, $item)
     ].join('')).appendTo($item);
 
     var $titleBox = $header.children('.executionName');
-    debugger
     if(!$titleBox.length) $titleBox = $(
     [
         '<div class="executionName">',
