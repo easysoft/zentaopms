@@ -53,3 +53,4 @@ function tooltip()     {return createWg('tooltip', func_get_args());}
 function inputaddon()  {return createWg('inputaddon', func_get_args());}
 function inputgroup()  {return createWg('inputgroup', func_get_args());}
 function inputbtn()    {return createWg('inputbtn', func_get_args());}
+function toolbar()     {return createWg('toolbar', func_get_args());}

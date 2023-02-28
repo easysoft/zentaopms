@@ -114,6 +114,11 @@ class h extends wg
         return static::create('input', prop('type', 'date'), func_get_args());
     }
 
+    public static function file()
+    {
+        return static::create('input', prop('type', 'file'), func_get_args());
+    }
+
     public static function textarea()
     {
         $children = h::convertStrToRawHtml(func_get_args());
