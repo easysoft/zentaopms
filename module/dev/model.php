@@ -512,6 +512,10 @@ class devModel extends model
      */
     public function loadDefaultLang($language = 'zh-cn', $module = 'common')
     {
+        if(empty($language)) $language = 'zh-cn';
+        if(empty($module))   $module = 'common';
+        if($module != 'common' and !isset($this->defaultLang)) return null;
+
         $clientLang = $this->app->clientLang;
         if($language and $language != $clientLang) $this->app->clientLang = $language;
 
