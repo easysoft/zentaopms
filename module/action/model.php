@@ -938,6 +938,8 @@ class actionModel extends model
             }
             else
             {
+                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
+                
                 $desc = str_replace('$' . $key, $value, $desc);
             }
         }

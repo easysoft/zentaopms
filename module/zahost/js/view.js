@@ -35,6 +35,7 @@ function ajaxGetServiceStatus()
 
         setTimeout(function() {
             $('#serviceContent').removeClass('loading');
+            $(".service-status, .status-notice").show()
         }, 500);
     });
     return

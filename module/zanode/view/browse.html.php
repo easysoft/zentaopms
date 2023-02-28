@@ -78,16 +78,24 @@
               <td class='c-actions'>
                 <?php
                 $suspendAttr  = "title='{$lang->zanode->suspend}' target='hiddenwin'";
-                $suspendAttr .= $node->status != 'running' && $node->status != 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
+                $suspendAttr .= $node->status != 'running' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmSuspend}\")==false) return false;'";
 
                 $resumeAttr  = "title='{$lang->zanode->resume}' target='hiddenwin'";
                 $resumeAttr .= $node->status == 'running' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmResume}\")==false) return false;'";
 
                 $rebootAttr  = "title='{$lang->zanode->reboot}' target='hiddenwin'";
-                $rebootAttr .= $node->status == 'shutoff' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+                $rebootAttr .= $node->status == 'shutoff' || $node->status == 'wait' ? ' class="btn disabled"' : "class='btn' target='hiddenwin' onclick='if(confirm(\"{$lang->zanode->confirmReboot}\")==false) return false;'";
+
+                $closeAttr = "title='{$lang->zanode->shutdown}'";
+                $closeAttr .= $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
+
+                $startAttr = "title='{$lang->zanode->boot}'";
+                $startAttr .= $node->status == 'wait' ? ' class="btn disabled"' : ' class="btn iframe"';
 
                 $snapshotAttr = "title='{$lang->zanode->createSnapshot}'";
                 $snapshotAttr .= $node->status != 'running' ? ' class="btn disabled"' : ' class="btn iframe"';
+
+                $imageAttr = $node->status != 'running' ? ' class="btn btn-action iframe createImage disabled"' : ' class="btn btn-action iframe createImage"';
 
                 common::printLink('zanode', 'getVNC', "id={$node->id}", "<i class='icon icon-remote'></i> ", (in_array($node->status ,array('running', 'launch', 'wait')) ? '_blank' : ''), "title='{$lang->zanode->getVNC}' class='btn desktop  " . (in_array($node->status ,array('running', 'launch', 'wait')) ? '':'disabled') . "'", '');
                 if($node->status == "suspend")
@@ -101,11 +109,11 @@
 
                 if($node->status == "shutoff")
                 {
-                    common::printLink('zanode', 'start', "zanodeID={$node->id}", "<i class='icon icon-play'></i> ", '', "class='btn ' title='{$lang->zanode->boot}'");
+                    common::printLink('zanode', 'start', "zanodeID={$node->id}", "<i class='icon icon-play'></i> ", '', $startAttr);
                 }
                 else
                 {
-                    common::printLink('zanode', 'close', "zanodeID={$node->id}", "<i class='icon icon-off'></i> ", '', "class='btn ' title='{$lang->zanode->shutdown}'");
+                    common::printLink('zanode', 'close', "zanodeID={$node->id}", "<i class='icon icon-off'></i> ", '', $closeAttr);
                 }
 
                 common::printLink('zanode', 'reboot', "zanodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
@@ -117,7 +125,7 @@
                     echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                     common::printIcon('zanode', 'edit', "id={$node->id}", $node, 'list', '', '', 'btn-action');
-                    common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-export'></i> ", '', "class='btn btn-action iframe createImage' title='{$lang->zanode->createImage}' data-width='55%'", '', true);
+                    common::printLink('zanode', 'createImage', "zanodeID={$node->id}", "<i class='icon icon-export'></i> ", '', $imageAttr . " title='{$lang->zanode->createImage}' data-width='55%'", '', true);
                     common::printLink('zanode', 'destroy', "zanodeID={$node->id}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->zanode->destroy}' class='btn btn-action' target='hiddenwin'");
                     echo "</ul>";
                     echo "</div>";

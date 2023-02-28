@@ -243,9 +243,7 @@ class zanode extends control
 
         if($error)
         {
-             $response['result']  = 'fail';
-             $response['message'] = $error;
-             return $this->send($response);
+            return print(js::alert($error) . js::reload('parent'));
         }
         else
         {
@@ -558,7 +556,7 @@ class zanode extends control
     {
         $node          = $this->zanode->getNodeById($hostID);
         $serviceStatus = $this->zanode->getServiceStatus($node);
-        if ($node->status != 'running' && $node->status != 'wait')
+        if ($node->status != 'running')
         {
             $serviceStatus['ZenAgent'] = "unknown";
             $serviceStatus['ZTF'] = "unknown";
