@@ -1,49 +1,29 @@
 <?php
-namespace zin\wg;
+namespace zin;
 
-require_once dirname(dirname(__DIR__)) . DS . 'core' . DS . 'wg.class.php';
-require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
-
-use \zin\core\h5;
-
-class toolbar extends \zin\core\wg
+class toolbar extends wg
 {
-    static $tag = 'div';
+    protected static $defineProps = 'items?:array';
 
-    static $defaultProps = array('class' => 'toolbar');
-
-    static $customProps = 'wrap,gap,items,btnProps,itemRender,beforeRender,afterRender,firstRender';
-
-    static function create($props)
+    protected function onBuildItem($item)
     {
-        $toolbar = new toolbar();
-        foreach($props as $key => $value) $toolbar->prop($key, $value);
-        return $toolbar;
+        if (isset($item['type']) && $item['type'] === 'divider') return div()->addClass('toolbar-divider');
+
+        if(!($item instanceof item)) $item = item(set($item));
+        return btn(
+            setClass('toolbar-item'),
+            inherit($item)
+        );
     }
 
-    protected function buildItem($item)
+    protected function build()
     {
-        if (isset($item['type']) && $item['type'] === 'divider') return h5::div()->addClass('toolbar-divider');
-
-        return btn::create($item)->addClass('toolbar-item ghost');
-    }
-
-    protected function build($isPrint = false, $parent = null)
-    {
-        $builder = parent::build($isPrint, $parent);
-
-        $jsRender = $this->prop('js-render');
-        if ($jsRender)
-        {
-            $id = $this->prop('id');
-            $this->props->remove('id');
-            $builder->jsVar('options', $this->props->data);
-            $builder->js(<<<END
-            domReady(() => {
-                const toolbar = new zui.Toolbar('#$id', options);
-            });
-            END);
-        }
-        return $builder;
+        $items = $this->prop('items');
+        return div(
+            setClass('toolbar'),
+            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
+            $this->children()
+        );
     }
 }
