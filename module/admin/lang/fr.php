@@ -66,7 +66,7 @@ $lang->admin->notice->ignore   = "Ignorer";
 $lang->admin->notice->int      = "『 %s 』 devrait être un entier positif.";
 
 $lang->admin->registerNotice = new stdclass();
-$lang->admin->registerNotice->common     = 'Connectez-vous avec votre nouveau compte';
+$lang->admin->registerNotice->common     = 'Register Account';
 $lang->admin->registerNotice->caption    = "S'enregistrer sur la communauté Zentao";
 $lang->admin->registerNotice->click      = "S'enregistrer ici";
 $lang->admin->registerNotice->lblAccount = '>= 3 lettres et chiffres';
