@@ -1665,10 +1665,10 @@ class executionModel extends model
         if($projectID)
         {
             $executionModel = $this->dao->select('model')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('model');
-            $orderBy = $executionModel == 'waterfall' ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
+            $orderBy = in_array($executionModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
 
             /* Waterfall execution, when all phases are closed, in reverse order of date. */
-            if($executionModel == 'waterfall')
+            if(in_array($executionModel, array('waterfall', 'waterfallplus')))
             {
                 $summary = $this->dao->select('count(id) as executions, sum(IF(INSTR("closed", status) < 1, 0, 1)) as closedExecutions')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
                 if($summary->executions == $summary->closedExecutions) $orderBy = 'sortStatus_asc,begin_desc,id_asc';
@@ -1707,7 +1707,7 @@ class executionModel extends model
         {
             if(strpos($mode, 'leaf') !== false and isset($parents[$execution->id])) continue; // Only show leaf.
             if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
-            if(strpos($mode, 'stagefilter') !== false and isset($executionModel) and $executionModel == 'waterfall' and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
+            if(strpos($mode, 'stagefilter') !== false and isset($executionModel) and in_array($executionModel, array('waterfall', 'waterfallplus')) and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall and waterfallplus not need.
 
             if(empty($execution->multiple)) $noMultiples[$execution->id] = $execution->project;
 
