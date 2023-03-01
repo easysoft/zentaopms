@@ -21,7 +21,7 @@ $switcherMenu     = \commonModel::printVisionSwitcherZin();
 $cols = array_values($config->product->all->dtable->fieldList);
 foreach($cols as $idx => $col)
 {
-    if($col['name'] != 'name')
+    if($col['name'] == 'name')
     {
         unset($cols[$idx]['width']);
         $cols[$idx]['minWidth'] = 200;
@@ -43,7 +43,8 @@ foreach($cols as $idx => $col)
         'more'      => array('icon'=> 'icon-ellipsis-v',   'hint'=> '更多', 'type' => 'dropdown', 'caret' => false),
         'whitelist' => array('icon'=> 'icon-shield-check', 'text'=> '项目白名单', 'name' => 'whitelist'),
     );
-    $cols[$idx]['type'] = 'actions';
+    $cols[$idx]['type']  = 'actions';
+    $cols[$idx]['width'] = 128;
 }
 
 /* TODO implements extend fields. */
@@ -193,6 +194,57 @@ $footer = array(
     'linkCreator' => '#?page{page}&recPerPage={recPerPage}'
 );
 
+\common::sortFeatureMenu();
+$statuses = array();
+foreach ($lang->product->featureBar['all'] as $key => $text)
+{
+    $statuses[] = array(
+        'text'   => $text,
+        'active' => ($key == $browseType),
+        'url'    => \helper::createLink($this->moduleName, $this->methodName, 'all', "browseType=$key&orderBy=$orderBy"),
+        'class'  => 'btn btn-link'
+    );
+}
+
+$others = array();
+if (\common::hasPriv('product', 'batchEdit'))
+{
+    $others[] = array(
+        'text'    => $lang->product->edit,
+        'checked' => $this->cookie->editProject,
+        'type'    => 'checkbox'
+    );
+}
+$others[] = array(
+    'type'  => 'button',
+    'icon'  => 'search',
+    'text'  => $lang->product->searchStory,
+    'class' => 'ghost'
+);
+
+$btnGroup = array();
+$btnGroup[] = array(
+    'text'  => $lang->product->export,
+    'icon'  => 'export',
+    'class' => 'btn secondary',
+    'url'   => \helper::createLink('product', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
+);
+if($config->systemMode == 'ALM')
+{
+    $btnGroup[] = array(
+        'text'  => $lang->product->line,
+        'icon'  => 'edit',
+        'class' => 'btn secondary',
+        'url'   => \helper::createLink('product', 'manageLine', $browseType),
+    );
+}
+$btnGroup[] = array(
+    'text'  => $lang->product->create,
+    'icon'  => 'plus',
+    'class' => 'btn primary',
+    'url'   => \helper::createLink('product', 'create')
+);
+
 page
 (
     set('title', $title),
@@ -233,6 +285,12 @@ page
     ),
     pagemain
     (
+        mainmenu
+        (
+            set('statuses', $statuses),
+            set('others',   $others),
+            set('btnGroup', $btnGroup)
+        ),
         dtable
         (
             set('width', '100%'),
