@@ -1511,16 +1511,7 @@ class programplanModel extends model
             {
                 if($parent->status != 'wait')
                 {
-                    $newParent = new stdclass();
-                    $newParent->status         = 'wait';
-                    $newParent->realBegan      = '';
-                    $newParent->closedDate     = '';
-                    $newParent->closedBy       = '';
-                    $newParent->canceledDate   = '';
-                    $newParent->canceledBy     = '';
-                    $newParent->suspendedDate  = '';
-                    $newParent->lastEditedBy   = $this->app->user->account;
-                    $newParent->lastEditedDate = helper::now();
+                    $newParent    = $this->execution->buildExecutionByStatus('wait');
                     $parentAction = 'waitbychild';
                 }
             }
@@ -1528,12 +1519,7 @@ class programplanModel extends model
             {
                 if($parent->status != 'closed')
                 {
-                    $newParent = new stdclass();
-                    $newParent->status         = 'closed';
-                    $newParent->closedDate     = helper::now();
-                    $newParent->closedBy       = $this->app->user->account;
-                    $newParent->lastEditedBy   = $this->app->user->account;
-                    $newParent->lastEditedDate = helper::now();
+                    $newParent    = $this->execution->buildExecutionByStatus('closed');
                     $parentAction = 'closedbychild';
                 }
             }
@@ -1541,11 +1527,7 @@ class programplanModel extends model
             {
                 if($parent->status != 'suspended')
                 {
-                    $newParent = new stdclass();
-                    $newParent->status         = 'suspended';
-                    $newParent->suspendedDate  = helper::now();
-                    $newParent->lastEditedBy   = $this->app->user->account;
-                    $newParent->lastEditedDate = helper::now();
+                    $newParent    = $this->execution->buildExecutionByStatus('suspended');
                     $parentAction = 'suspendedbychild';
                 }
             }
@@ -1553,16 +1535,7 @@ class programplanModel extends model
             {
                 if($parent->status != 'doing')
                 {
-                    $newParent = new stdclass();
-                    $newParent->status         = 'doing';
-                    $newParent->realBegan      = helper::today();
-                    $newParent->closedDate     = '';
-                    $newParent->closedBy       = '';
-                    $newParent->canceledDate   = '';
-                    $newParent->canceledBy     = '';
-                    $newParent->suspendedDate  = '';
-                    $newParent->lastEditedBy   = $this->app->user->account;
-                    $newParent->lastEditedDate = helper::now();
+                    $newParent    = $this->execution->buildExecutionByStatus('doing');
                     $parentAction = $parent->status == 'wait' ?'startbychildstart' : 'startbychild' . $action;
                 }
             }
