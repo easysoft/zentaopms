@@ -777,10 +777,13 @@ class programplanModel extends model
             {
                 dao::$errors[$index]['end'] = $this->lang->programplan->error->planFinishSmall;
             }
-            if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
+            if(isset($parentStage) and $plan->begin < $parentStage->begin)
             {
-                if($plan->begin < $parentStage->begin and empty(dao::$errors[$index]['begin'])) dao::$errors[$index]['begin'] = $this->lang->programplan->error->parentDuration;
-                if($plan->end > $parentStage->end and empty(dao::$errors[$index]['end']))       dao::$errors[$index]['end']   = $this->lang->programplan->error->parentDuration;
+                 dao::$errors[$index]['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
+            }
+            if(isset($parentStage) and $plan->end > $parentStage->end)
+            {
+                 dao::$errors[$index]['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
             }
             if($plan->begin < $project->begin and empty(dao::$errors[$index]['begin']))
             {
@@ -1075,9 +1078,14 @@ class programplanModel extends model
         if(dao::isError()) return false;
 
         if($plan->parent) $parentStage = $this->getByID($plan->parent);
-        if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
+        if(isset($parentStage) and $plan->begin < $parentStage->begin)
         {
-            dao::$errors['message'][] = $this->lang->programplan->error->parentDuration;
+            dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
+            return false;
+        }
+        if(isset($parentStage) and $plan->end > $parentStage->end)
+        {
+            dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
             return false;
         }
 

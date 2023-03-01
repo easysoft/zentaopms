@@ -613,7 +613,7 @@ class executionModel extends model
 
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 
-        if(empty($execution->project) or $execution->project == $oldExecution->project) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
+        if(empty($execution->project) or $execution->project == $oldExecution->project) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end, $execution);
         if(dao::isError()) return false;
 
         /* Child stage inherits parent stage permissions. */
@@ -1506,16 +1506,24 @@ class executionModel extends model
      * @param  int    $projectID
      * @param  string $begin
      * @param  string $end
+     * @param  object $execution
      * @access public
      * @return void
      */
-    public function checkBeginAndEndDate($projectID, $begin, $end)
+    public function checkBeginAndEndDate($projectID, $begin, $end, $execution = null)
     {
         $project = $this->loadModel('project')->getByID($projectID);
         if(empty($project)) return;
 
         if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
         if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
+        if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and isset($execution) and $execution->parent != $projectID)
+        {
+            $this->app->loadLang('programplan');
+            $parent = $this->getByID($execution->parent);
+            if($begin < $parent->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
+            if($end > $parent->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
+        }
     }
 
     /*
