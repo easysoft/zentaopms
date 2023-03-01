@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if(isonlybody()):?>
+<style>#importTaskForm .table-footer .pager {z-index: 105;}</style>
+<?php endif;?>
 <?php js::set('isonlybody', isonlybody());?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
