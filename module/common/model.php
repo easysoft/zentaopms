@@ -156,10 +156,8 @@ class commonModel extends model
             $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
         }
 
-        if($execution->type == 'stage')
-        {
-            $this->loadModel('programplan')->computeProgress($execution->id);
-        }
+        $project = $this->loadModel('project')->getByID($execution->project);
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($execution->id);
 
         return $parentExecution;
     }
