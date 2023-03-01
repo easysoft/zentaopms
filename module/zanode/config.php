@@ -2,9 +2,10 @@
 $config->zanode->create         = new stdClass();
 $config->zanode->edit           = new stdClass();
 $config->zanode->createimage    = new stdClass();
-$config->zanode->create->requiredFields = 'name,host,image,cpu,memory,disk,osName';
-$config->zanode->edit->requiredFields   = '';
-$config->zanode->createimage->requiredFields = 'name';
+$config->zanode->create->requiredFields        = 'name,host,image,cpu,memory,disk,osName';
+$config->zanode->create->physicsRequiredFields = 'name,extranet,cpu,memory,osName';
+$config->zanode->edit->requiredFields          = '';
+$config->zanode->createimage->requiredFields   = 'name';
 
 $config->zanode->defaultPort       = '55001';
 $config->zanode->defaultAccount    = 'z';
