@@ -23,7 +23,7 @@
           <button class="btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?> data-link='<?php echo $menu['link'];?>'>
             <h4 class="flex align-center w-full">
               <div class="flex align-center">
-                <img src="/static/svg/admin-<?php echo $menuKey;?>.svg"/>
+                <img src="static/svg/admin-<?php echo $menuKey;?>.svg"/>
                 <?php echo $menu['name'];?>
               </div>
               <?php echo html::a($config->admin->helpURL[$menuKey], "<i class='icon icon-help'></i> ", '_blank', 'class="text-muted setting-help"');?>
