@@ -2093,7 +2093,7 @@ class execution extends control
         $project = $this->project->getById($execution->project);
         if(!$project->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
-        if($execution->type == 'stage')
+        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
         {
             $parentStage = $this->project->getByID($execution->parent, 'stage');
 
@@ -2182,6 +2182,8 @@ class execution extends control
         if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
         $executionIDList = $this->post->executionIDList;
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
+        $projects        = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->in($executionIDList)->fetchPairs();
+        $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
 
         $appendPoUsers = $appendPmUsers = $appendQdUsers = $appendRdUsers = array();
         foreach($executions as $execution)
@@ -2214,6 +2216,7 @@ class execution extends control
         $this->view->position[]  = $this->lang->execution->batchEdit;
         $this->view->executions  = $executions;
         $this->view->allProjects = $allProjects;
+        $this->view->projects    = $projects;
         $this->view->pmUsers     = $pmUsers;
         $this->view->poUsers     = $poUsers;
         $this->view->qdUsers     = $qdUsers;

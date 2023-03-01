@@ -277,7 +277,7 @@
                   <?php if($execution->deleted):?>
                   <span class='label label-danger label-outline'><?php echo $lang->execution->deleted;?></span>
                   <?php endif;?>
-                  <?php if(!empty($execution->lifetime) and $execution->type != 'kanban'):?>
+                  <?php if(!empty($execution->lifetime) and $execution->type != 'kanban' and $project->model != 'waterfall' and  $project->model != 'waterfallplus'):?>
                   <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $execution->lifetime);?></span>
                   <?php endif;?>
                   <?php if(isset($execution->delay)):?>
