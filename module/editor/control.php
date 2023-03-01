@@ -12,6 +12,20 @@
 class editor extends control
 {
     /**
+     * Construct
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function __construct($module = '', $method = '')
+    {
+        parent::__construct($module, $method);
+        if($this->app->getMethodName() != 'switch' and empty($this->config->global->editor)) $this->locate($this->createLink('dev', 'editor'));
+    }
+
+    /**
      * Show module files and edit them.
      *
      * @access public
@@ -59,7 +73,7 @@ class editor extends control
         if($filePath)
         {
             $filePath = helper::safe64Decode($filePath);
-            if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) die($this->lang->editor->editFileError);
+            if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return print($this->lang->editor->editFileError);
             if($action == 'extendOther' and file_exists($filePath))
             {
                 $this->view->showContent = file_get_contents($filePath);
@@ -88,7 +102,7 @@ class editor extends control
             {
                 $okUrl = $this->editor->getExtendLink($filePath, 'extendControl', 'yes');
                 $cancelUrl = $this->editor->getExtendLink($filePath, 'extendControl', 'no');
-                if(!$isExtends) die(js::confirm($this->lang->editor->extendConfirm, $okUrl, $cancelUrl));
+                if(!$isExtends) return print(js::confirm($this->lang->editor->extendConfirm, $okUrl, $cancelUrl));
                 $fileContent = $this->editor->extendControl($filePath, $isExtends);
             }
             elseif($action == 'newPage')
@@ -124,8 +138,8 @@ class editor extends control
         {
             $saveFilePath = $this->editor->getSavePath($filePath, 'newMethod');
             $extendLink   = $this->editor->getExtendLink($saveFilePath, 'newPage');
-            if(file_exists($saveFilePath) and !$this->post->override) die(js::confirm($this->lang->editor->repeatPage, $extendLink, '', 'parent'));
-            die(js::locate($extendLink, 'parent'));
+            if(file_exists($saveFilePath) and !$this->post->override) return print(js::confirm($this->lang->editor->repeatPage, $extendLink, '', 'parent'));
+            return print(js::locate($extendLink, 'parent'));
         }
         $this->view->filePath    = $filePath;
         $this->display();
@@ -140,20 +154,22 @@ class editor extends control
      */
     public function save($filePath = '', $action = '')
     {
+        /* Reduce expiration time for check safe file. */
+        $this->config->safeFileTimeout = 15 * 60;
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
-            die(js::alert(sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile))));
+            return print(js::alert(sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile))));
         }
         if($filePath and $_POST)
         {
             $filePath = helper::safe64Decode($filePath);
-            if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) die($this->lang->editor->editFileError);
+            if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return print($this->lang->editor->editFileError);
             if($action != 'edit' and $action != 'newPage') $filePath = $this->editor->getSavePath($filePath, $action);
-            if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) die(js::error($this->lang->editor->repeatFile));
+            if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) return print(js::error($this->lang->editor->repeatFile));
             $this->editor->save($filePath);
             echo js::reload('parent.parent.extendWin');
-            die(js::locate(inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'parent'));
+            return print(js::locate(inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'parent'));
         }
     }
 
@@ -169,11 +185,11 @@ class editor extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->editor->deleteConfirm, inlink('delete', "filePath=$filePath&confirm=yes")));
+            return print(js::confirm($this->lang->editor->deleteConfirm, inlink('delete', "filePath=$filePath&confirm=yes")));
         }
         $filePath = helper::safe64Decode($filePath);
-        if(file_exists($filePath) and unlink($filePath)) die(js::reload('parent'));
-        die(js::alert($this->lang->editor->notDelete));
+        if(file_exists($filePath) and unlink($filePath)) return print(js::reload('parent'));
+        return print(js::alert($this->lang->editor->notDelete));
 
     }
 

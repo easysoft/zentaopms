@@ -2398,7 +2398,7 @@ EOD;
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
 
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ok.txt';
-        return (!is_file($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
+        return (!is_file($statusFile) or (time() - filemtime($statusFile)) > $this->config->safeFileTimeout) ? $statusFile : false;
     }
 
     /**
