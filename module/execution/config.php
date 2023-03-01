@@ -223,7 +223,7 @@ $config->execution->datatable->fieldList['status']['required'] = 'no';
 $config->execution->datatable->fieldList['status']['fixed']    = 'no';
 
 $config->execution->datatable->fieldList['PM']['title']    = 'owner';
-$config->execution->datatable->fieldList['PM']['width']    = '70';
+$config->execution->datatable->fieldList['PM']['width']    = '90';
 $config->execution->datatable->fieldList['PM']['required'] = 'no';
 $config->execution->datatable->fieldList['PM']['fixed']    = 'no';
 

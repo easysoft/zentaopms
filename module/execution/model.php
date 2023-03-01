@@ -5541,7 +5541,8 @@ class executionModel extends model
 
         foreach($fieldList as $field => $items)
         {
-            $title = zget($this->lang->execution, $items['title'], zget($this->lang, $items['title'], $items['title']));
+            $fieldKey = in_array($field, array('name', 'code', 'type', 'PM', 'status')) ? 'exec' . ucfirst($field) : $field;
+            $title    = $field == 'id' ? 'ID' : zget($this->lang->execution, $fieldKey, zget($this->lang, $field, $field));
             $fieldList[$field]['title'] = $title;
         }
 
