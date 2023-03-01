@@ -1153,7 +1153,7 @@ class programplanModel extends model
         $this->updateSubStageAttr($planID, $plan->attribute);
         if($plan->acl != 'open')
         {
-            $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->eq('stage')->fetchAll('id');
+            $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->ne('project')->fetchAll('id');
             $this->loadModel('user')->updateUserView(array_keys($planIdList), 'sprint');
         }
 
