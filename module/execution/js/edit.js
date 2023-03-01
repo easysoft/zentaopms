@@ -115,14 +115,8 @@ $(function()
 
     $('[data-toggle="popover"]').popover();
 
-    if(isStage)
+    if(isWaterfall)
     {
-        $('#attribute').change(function()
-        {
-            var attribute = $(this).val();
-            hidePlanBox(attribute);
-        })
-
         hidePlanBox(executionAttr);
     }
 })
