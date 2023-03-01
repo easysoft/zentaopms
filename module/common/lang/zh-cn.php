@@ -90,6 +90,8 @@ $lang->viewDetails        = '查看详情';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';
+$lang->confirmDraft    = '有未保存的%s%表单，是否恢复？';
+$lang->resume          = '恢复';
 $lang->comment         = '备注';
 $lang->history         = '历史记录';
 $lang->attatch         = '附件';
