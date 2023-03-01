@@ -20,10 +20,12 @@ $(function()
         $('#navbar .nav>li[data-id=story]>a').html($('#navbar .nav li.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
     }
 
-    $('#saveButton').on('click', function(e)
+    var $saveButton      = $('#saveButton');
+    var $saveDraftButton = $('#saveDraftButton');
+    $saveButton.on('click', function(e)
     {
-        $('#saveButton').attr('type', 'submit').attr('disabled', true);
-        $('#saveDraftButton').attr('disabled', true);
+        $saveButton.attr('type', 'submit').attr('disabled', true);
+        $saveDraftButton.attr('disabled', true);
 
         var storyStatus = !$('#reviewer').val() || $('#needNotReview').is(':checked') ? 'active' : 'reviewing';
         $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', storyStatus).appendTo('#dataform');
@@ -32,15 +34,26 @@ $(function()
 
         setTimeout(function()
         {
-            $('#saveButton').attr('type', 'button').removeAttr('disabled');
-            $('#saveDraftButton').removeAttr('disabled');
-        }, 10000);
+            if($saveButton.attr('disabled') == 'disabled')
+            {
+                setTimeout(function()
+                {
+                    console.log(11);
+                    $saveButton.attr('type', 'button').removeAttr('disabled');
+                    $saveDraftButton.removeAttr('disabled');
+                }, 10000);
+            }
+            else
+            {
+                $saveDraftButton.removeAttr('disabled');
+            }
+        }, 100);
     });
 
-    $('#saveDraftButton').on('click', function(e)
+    $saveDraftButton.on('click', function(e)
     {
-        $('#saveButton').attr('disabled', true);
-        $('#saveDraftButton').attr('type', 'submit').attr('disabled', true);
+        $saveButton.attr('disabled', true);
+        $saveDraftButton.attr('type', 'submit').attr('disabled', true);
 
         storyStatus = 'draft';
         if(typeof(page) != 'undefined' && page == 'change') storyStatus = 'changing';
@@ -51,9 +64,19 @@ $(function()
 
         setTimeout(function()
         {
-            $('#saveButton').removeAttr('disabled');
-            $('#saveDraftButton').attr('type', 'button').removeAttr('disabled');
-        }, 10000);
+            if($saveDraftButton.attr('disabled') == 'disabled')
+            {
+                setTimeout(function()
+                {
+                    $saveButton.removeAttr('disabled');
+                    $saveDraftButton.attr('type', 'button').removeAttr('disabled');
+                }, 10000);
+            }
+            else
+            {
+                $saveButton.removeAttr('disabled');
+            }
+        }, 100);
     });
 })
 
