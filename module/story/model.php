@@ -4074,12 +4074,6 @@ class storyModel extends model
                 $property = '';
             }
             $storyPairs[$story->id] = $story->id . ':' . $story->title . ' ' . $property;
-
-            if($limit > 0 && ++$i > $limit)
-            {
-                $storyPairs['showmore'] = $this->lang->more . $this->lang->ellipsis;
-                break;
-            }
         }
         return $storyPairs;
     }
@@ -4684,7 +4678,7 @@ class storyModel extends model
                 $menu .= "</ul></div>";
             }
 
-            if(($this->app->tab == 'execution' || $execution->multiple === '0') and $story->status == 'active') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
+            if(($this->app->tab == 'execution' || (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
 
             $menu .= "<div class='divider'></div>";
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
