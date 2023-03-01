@@ -1120,8 +1120,6 @@ class executionModel extends model
             $actionID = $this->action->create('execution', $executionID, 'Started');
             $this->action->logHistory($actionID, $changes);
 
-            if($type != 'stage') return '';
-
             /* This stage has a parent stage. */
             $checkTopStage = $this->programplan->checkTopStage($executionID);
             if(!$checkTopStage) $this->programplan->computeProgress($executionID);
@@ -1167,8 +1165,6 @@ class executionModel extends model
             $changes  = common::createChanges($selfAndChildren[$executionID], $newExecution);
             $actionID = $this->action->create('execution', $executionID, strtoupper($status));
             $this->action->logHistory($actionID, $changes);
-
-            if($type != 'stage') return '';
 
             /* Suspended: When all child stages at the same level are suspended or closed, the status of the parent stage becomes "suspended". */
             /* Closed: When all child stages at the same level are closed, the status of the parent stage becomes "closed". */
