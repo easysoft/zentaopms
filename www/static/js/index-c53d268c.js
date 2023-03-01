@@ -1,0 +1,1 @@
+import{j as _,r as n,o as c,c as s}from"./index.js";const a={};function o(t,r){const e=n("n-space");return c(),s(e,{class:"header-left-btn",size:25})}var p=_(a,[["render",o],["__scopeId","data-v-2fdf3bbb"]]);export{p as default};
