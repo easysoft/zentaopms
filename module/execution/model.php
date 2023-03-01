@@ -1091,46 +1091,8 @@ class executionModel extends model
             $this->action->logHistory($actionID, $changes);
 
             /* This stage has a parent stage. */
-            $checkTopStage   = $this->programplan->checkTopStage($executionID);
-            $siblingsAllWait = true;
-            if(!$checkTopStage)
-            {
-                /* Check sibling stages are all wait. */
-                foreach($siblingStages as $siblingID => $sibling)
-                {
-                    if($siblingID == $executionID) continue;
-
-                    if($sibling->status != 'wait')
-                    {
-                        $siblingsAllWait = false;
-                        break;
-                    }
-                }
-
-                if($siblingsAllWait)
-                {
-                    /* Actual start or consumed work exists for the parent phase. */
-                    $parent                 = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch();
-                    $parentsChildren        = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("%,$executionID,%")->andWhere('id')->ne($parentID)->fetchPairs();
-                    $parentHasConsumedTasks = $this->dao->select('count(id) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($parentsChildren)->andWhere('consumed')->gt(0)->fetch('count');
-
-                    $parentStatus = (!helper::isZeroDate($parent->realBegan) or $parentHasConsumedTasks) ? 'doing' : 'wait';
-                    if($parent->status == $parentStatus) return '';
-
-                    $newParent = $this->buildExecutionByStatus($parentStatus);
-                    $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($parentID)->exec();
-
-                    if(!dao::isError())
-                    {
-                        $changes    = common::createChanges($parent, $newParent);
-                        $actionType = $parentStatus == 'doing' ? 'started' : 'waitbychild';
-                        $actionID   = $this->action->create('execution', $parentID, $actionType, '', $actionType);
-                        $this->action->logHistory($actionID, $changes);
-
-                        if($parent->status == 'wait' and $parentStatus == 'doing') $this->loadModel('common')->syncPPEStatus($parentID);
-                    }
-                }
-            }
+            $checkTopStage = $this->programplan->checkTopStage($executionID);
+            if(!$checkTopStage) $this->programplan->computeProgress($executionID);
         }
     }
 
@@ -1162,23 +1124,7 @@ class executionModel extends model
 
             /* This stage has a parent stage. */
             $checkTopStage = $this->programplan->checkTopStage($executionID);
-            if(!$checkTopStage)
-            {
-                $parent = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch();
-                if($parent->status == 'doing') return '';
-
-                $newParent = $this->buildExecutionByStatus('doing');
-                $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($parentID)->exec();
-
-                if(!dao::isError())
-                {
-                    $changes  = common::createChanges($parent, $newParent);
-                    $actionID = $this->action->create('execution', $parentID, 'startbychildedit', '', 'startbychildedit');
-                    $this->action->logHistory($actionID, $changes);
-
-                    if($parent->status == 'wait') $this->loadModel('common')->syncPPEStatus($parentID);
-                }
-            }
+            if(!$checkTopStage) $this->programplan->computeProgress($executionID);
         }
     }
 
@@ -1226,38 +1172,8 @@ class executionModel extends model
 
             /* Suspended: When all child stages at the same level are suspended or closed, the status of the parent stage becomes "suspended". */
             /* Closed: When all child stages at the same level are closed, the status of the parent stage becomes "closed". */
-            $checkTopStage        = $this->programplan->checkTopStage($executionID);
-            $siblingsAllInactived = true;
-            if(!$checkTopStage)
-            {
-                foreach($siblingStages as $siblingID => $sibling)
-                {
-                    if($siblingID == $executionID) continue;
-
-                    if(strpos($checkedStatus, $sibling->status) !== false)
-                    {
-                        $siblingsAllInactived = false;
-                        break;
-                    }
-                }
-
-                if($siblingsAllInactived)
-                {
-                    $parent = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch();
-                    if($parent->status == $status) return '';
-
-                    $newParent = $this->buildExecutionByStatus($status);
-                    $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($parentID)->exec();
-
-                    if(!dao::isError())
-                    {
-                        $changes    = common::createChanges($parent, $newParent);
-                        $actionType = $status == 'suspended' ? 'suspendbychild' : 'closebychild';
-                        $actionID   = $this->action->create('execution', $parentID, $actionType, '', $actionType);
-                        $this->action->logHistory($actionID, $changes);
-                    }
-                }
-            }
+            $checkTopStage = $this->programplan->checkTopStage($executionID);
+            if(!$checkTopStage) $this->programplan->computeProgress($executionID);
         }
     }
 
