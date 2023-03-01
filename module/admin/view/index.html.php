@@ -23,7 +23,7 @@
           <button class="btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?> data-link='<?php echo $menu['link'];?>'>
             <h4 class="flex align-center w-full">
               <div class="flex align-center">
-                <img src="/static/svg/admin-<?php echo $menuKey;?>.svg"/>
+                <img src="static/svg/admin-<?php echo $menuKey;?>.svg"/>
                 <?php echo $menu['name'];?>
               </div>
               <?php echo html::a($config->admin->helpURL[$menuKey], "<i class='icon icon-help'></i> ", '_blank', 'class="text-muted setting-help"');?>
@@ -45,7 +45,7 @@
         <?php foreach($plugins as $plugin):?>
         <?php $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract));?>
         <div class="plugin-item shadow-primary-hover" data-link='<?php echo $plugin->viewLink;?>'>
-          <a href="<?php echo $plugin->viewLink;?>" class='ext-download' target='_blank'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></a>
+          <span class='ext-download'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></span>
           <h4 class="plug-title" title="<?php echo $plugin->name;?>"><?php echo $plugin->name;?></h4>
           <p class='extension-desc text-muted' title="<?php echo $pluginDesc;?>"><?php echo $pluginDesc;?></p>
         </div>
@@ -70,7 +70,7 @@
               <div class="content"> <?php echo $lang->admin->followUsContent?></div>
             </div>
             </div>
-            <?php if(!$bind and !$ignore and common::hasPriv('admin', 'register')):?>
+            <?php if(!$bind and !$ignore and $hasInternet and common::hasPriv('admin', 'register')):?>
               <div class="panel-link"> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->registerNotice->submitHere, '', 'class="text-primary"'));?></div>
             <?php endif;?>
         </div>
