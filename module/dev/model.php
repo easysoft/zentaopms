@@ -343,7 +343,7 @@ class devModel extends model
         else
         {
            $menus = ($type == 'third' and isset($defaultLang->$module->menu->{$method}['subMenu'])) ? $defaultLang->$module->menu->{$method}['subMenu'] : $defaultLang->mainNav;
-           if(isset($defaultLang->$module->menu->{$method}['menuOrder'])) $menus->menuOrder = $defaultLang->$module->menu->{$method}['menuOrder'];
+           if(!empty($module) and isset($defaultLang->$module->menu->{$method}['menuOrder'])) $menus->menuOrder = $defaultLang->$module->menu->{$method}['menuOrder'];
            $menus = $this->sortMenus($menus);
         }
 
@@ -614,7 +614,7 @@ class devModel extends model
         $menusPinYin = common::convert2Pinyin($menuLang);
         foreach($menuLang as $menuKey => $menuName)
         {
-            if(!isset($this->lang->$menu->menu->{$menuKey}['subMenu']) or !get_object_vars($this->lang->$menu->menu->{$menuKey}['subMenu'])) continue;
+            if(!isset($this->lang->$menu->menu->{$menuKey}['subMenu']) or (is_object($this->lang->$menu->menu->{$menuKey}['subMenu']) and !get_object_vars($this->lang->$menu->menu->{$menuKey}['subMenu']))) continue;
 
             $subMenu = new stdClass();
             $subMenu->title  = $menuName;
