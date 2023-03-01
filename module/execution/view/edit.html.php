@@ -14,7 +14,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
-<?php js::set('isStage', $execution->type == 'stage');?>
+<?php js::set('isWaterfall', (isset($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')));?>
 <?php js::set('executionAttr', $execution->attribute);?>
 <?php js::set('manageProductsLang', $lang->project->manageProducts);?>
 <?php js::set('manageProductPlanLang', $lang->project->manageProductPlan);?>
