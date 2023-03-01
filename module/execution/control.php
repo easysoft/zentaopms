@@ -2629,10 +2629,13 @@ class execution extends control
         $this->session->set('execGroupBy', $groupBy);
         $this->session->set('storyList', $this->app->getURI(true), 'execution');
         $this->session->set('rdSearchValue', '');
-        $this->session->set('execLaneType', $browseType);
 
         $features   = $this->execution->getExecutionFeatures($execution);
         $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
+
+        /* Set lane type. */
+        if(!$features['story'] and !$features['qa']) $browseType = 'task';
+        $this->session->set('execLaneType', $browseType);
 
         /* Remove lanes if no feature. */
         foreach($kanbanData as $regionID => $region)
@@ -2732,7 +2735,6 @@ class execution extends control
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
-        $this->app->session->set('execLaneType', $browseType);
         $this->app->session->set('execGroupBy', $groupBy);
 
         /* Load language. */
@@ -2750,6 +2752,8 @@ class execution extends control
             $browseType = 'task';
             unset($this->lang->kanban->group->task['story']);
         }
+
+        $this->app->session->set('execLaneType', $browseType);
 
         if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
