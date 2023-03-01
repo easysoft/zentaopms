@@ -67,6 +67,11 @@ class transfer extends control
             $this->config->transfer->sysDataList = $this->transfer->initSysDataFields();
 
             $fields = $this->config->$model->templateFields;
+            if($model == 'task')
+            {
+                $execution = $this->loadModel('execution')->getByID($executionID);
+                if(isset($execution) and $execution->type == 'ops' or in_array($execution->attribute, array('request', 'review'))) $fields = str_replace('story,', '', $fields);
+            }
 
             /* Init config fieldList. */
             $fieldList = $this->transfer->initFieldList($model, $fields);

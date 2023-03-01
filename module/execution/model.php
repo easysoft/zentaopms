@@ -153,6 +153,7 @@ class executionModel extends model
         if(!$features['build'])  unset($this->lang->execution->menu->build);
         if(!$features['burn'])   unset($this->lang->execution->menu->burn);
         if(!$features['other'])  unset($this->lang->execution->menu->other);
+        if(!$features['story'] and $this->config->edition == 'open') unset($this->lang->execution->menu->view);
 
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
 
