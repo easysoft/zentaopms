@@ -85,7 +85,7 @@ $lang->admin->menuList->model['menuOrder']['20'] = 'agileplus';
 $lang->admin->menuList->model['menuOrder']['25'] = 'waterfallplus';
 
 $lang->admin->menuList->model['tabMenu']['common']['project']      = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set', 'exclude' => 'custom', 'links' => array('custom|set|module=project&field=unitList'));
-if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage', 'links' => array('stage|browse|'));
+if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage');
 $lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 $lang->admin->menuList->model['tabMenu']['common']['code']         = array('link' => "{$lang->code}|custom|code|");
