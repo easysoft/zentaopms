@@ -150,7 +150,6 @@
         return $.createLink(link);
     }
 
-
     /** Init */
     function init()
     {
