@@ -70,7 +70,7 @@
               <div class="content"> <?php echo $lang->admin->followUsContent?></div>
             </div>
             </div>
-            <?php if(!$bind and !$ignore and common::hasPriv('admin', 'register')):?>
+            <?php if(!$bind and !$ignore and $hasInternet and common::hasPriv('admin', 'register')):?>
               <div class="panel-link"> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->registerNotice->submitHere, '', 'class="text-primary"'));?></div>
             <?php endif;?>
         </div>
