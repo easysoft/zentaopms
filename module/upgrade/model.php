@@ -8184,7 +8184,7 @@ class upgradeModel extends model
             ->fetchAll();
         foreach($typeList as $type)
         {
-            $langFile = $this->app->getModuleRoot() . DS . 'stage' . DS . 'lang' . DS . $type->lang . '.php';
+            $langFile = $this->app->getModuleRoot() . DS . 'stage' . DS . 'lang' . DS . ($type->lang == 'all' ? $this->app->clientLang : $type->lang) . '.php';
             if(is_file($langFile)) include $langFile;
 
             $this->dao->replace(TABLE_LANG)
