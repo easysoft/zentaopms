@@ -172,14 +172,15 @@ class build extends control
         if($this->app->tab == 'execution') $this->execution->setMenu($build->execution);
 
         $builds = array();
+        $status = empty($this->config->CRProduct) ? 'noclosed' : '';
         if($build->execution)
         {
-            $productGroups = $this->product->getProducts($build->execution);
+            $productGroups = $this->product->getProducts($build->execution, $status);
             $branches      = $this->loadModel('branch')->getList($build->product, $build->execution, 'all');
         }
         else
         {
-            $productGroups = $this->product->getProducts($build->project);
+            $productGroups = $this->product->getProducts($build->project, $status);
             $branches      = $this->loadModel('branch')->getList($build->product, $build->project, 'all');
             $builds        = $this->build->getBuildPairs($build->product, 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
         }
