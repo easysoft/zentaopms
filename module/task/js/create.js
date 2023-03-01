@@ -414,6 +414,9 @@ function toggleSelectTestStory()
         $('.colorpicker').css('right', '0');
         $('#dataform .table-form>tbody>tr>th').css('width', '130px');
         $('[lang^="zh-"] #dataform .table-form>tbody>tr>th').css('width', '120px');
+
+        $('[name^=multiple]').attr('checked', false);
+        showTeamMenu();
     }
     else
     {
