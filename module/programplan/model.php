@@ -715,7 +715,7 @@ class programplanModel extends model
 
         $project   = $this->loadModel('project')->getByID($projectID);
         $setCode   = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
-        $sameCodes = $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '');
+        $sameCodes = $setCode ? $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '') : false;
 
         $datas = array();
         foreach($names as $key => $name)
