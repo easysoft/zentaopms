@@ -4609,7 +4609,7 @@ class storyModel extends model
                         }
                         else
                         {
-                            if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
+                            if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
                             if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                         }
                     }
@@ -4789,7 +4789,7 @@ class storyModel extends model
                         }
                         else
                         {
-                            if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
+                            if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
                             if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                         }
                     }
