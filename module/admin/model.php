@@ -338,7 +338,7 @@ class adminModel extends model
                         $this->loadModel('mail');
                         if(!$this->config->mail->turnon and !$this->session->mailConfig) $subMenu['link'] = $this->lang->mail->common . '|mail|detect|';
                     }
-                    if($menuKey == 'dev' and $subMenuKey == 'editor' and $this->config->global->editor) $subMenu['link'] = $this->lang->editor->common . '|editor|index|';
+                    if($menuKey == 'dev' and $subMenuKey == 'editor' and !empty($this->config->global->editor)) $subMenu['link'] = $this->lang->editor->common . '|editor|index|';
 
                     $link = array();
                     if(isset($menu['tabMenu'][$subMenuKey]))
