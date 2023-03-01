@@ -2204,7 +2204,12 @@ class projectModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         $childSprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
-        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $linkedProducts = $this->dao->select("t2.id")->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.project')->eq($projectID)
+            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->fetchPairs();
 
         $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
         if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);

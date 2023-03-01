@@ -1472,7 +1472,7 @@ class executionModel extends model
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.grade')->eq(1)
                 ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t2.parent')->eq($oldExecution->id)
+                ->andWhere('t2.parent')->eq($oldExecution->parent)
                 ->fetch('total');
 
             if(!$oldPercentTotal) $oldPercentTotal = 0;
@@ -3675,7 +3675,13 @@ class executionModel extends model
         if($changedAccounts)
         {
             $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
-            $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
+            $linkedProducts = $this->dao->select("t2.id")->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->where('t2.deleted')->eq(0)
+                ->andWhere('t1.project')->eq($projectID)
+                ->andWhere('t2.vision')->eq($this->config->vision)
+                ->fetchPairs();
+
             if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
         }
     }
@@ -5541,7 +5547,8 @@ class executionModel extends model
 
         foreach($fieldList as $field => $items)
         {
-            $title = zget($this->lang->execution, $items['title'], zget($this->lang, $items['title'], $items['title']));
+            $fieldKey = in_array($field, array('name', 'code', 'type', 'PM', 'status')) ? 'exec' . ucfirst($field) : $field;
+            $title    = $field == 'id' ? 'ID' : zget($this->lang->execution, $fieldKey, zget($this->lang, $field, $field));
             $fieldList[$field]['title'] = $title;
         }
 

@@ -519,7 +519,7 @@ class adminModel extends model
     {
         if($hasInternet)
         {
-            $searchType = $type == 'plugin' ? 'byUpdatedTime,offcial' : 'byModule';
+            $searchType = $type == 'plugin' ? 'byModule,offcial' : 'byModule';
             $param      = $type == 'plugin' ? '' : 'MTIxOA==';
             $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
             $plugins    = isset($extensions->extensions) ? (array)$extensions->extensions : array();
