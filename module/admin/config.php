@@ -14,7 +14,7 @@ $config->admin->menuGroup['model']     = array('auditcl', 'stage', 'design', 'cm
 $config->admin->menuGroup['feature']   = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'approvalflow', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report');
 $config->admin->menuGroup['template']  = array('custom|set', 'baseline');
 $config->admin->menuGroup['message']   = array('mail', 'webhook', 'sms', 'message');
-$config->admin->menuGroup['dev']       = array('dev', 'entry');
+$config->admin->menuGroup['dev']       = array('dev', 'entry', 'editor');
 $config->admin->menuGroup['extension'] = array('extension');
 $config->admin->menuGroup['convert']   = array('convert');
 

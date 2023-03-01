@@ -90,6 +90,7 @@ $lang->dev->tableList['backup']                = 'Backup';
 $lang->dev->tableList['common']                = 'Common';
 $lang->dev->tableList['convert']               = 'Konvertieren';
 $lang->dev->tableList['dev']                   = 'Entwickeln';
+$lang->dev->tableList['editor']                = 'Editor';
 $lang->dev->tableList['git']                   = 'GIT';
 $lang->dev->tableList['index']                 = 'Home';
 $lang->dev->tableList['install']               = 'Installation';

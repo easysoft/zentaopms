@@ -87,6 +87,7 @@ $config->dev->group['mail']            = 'admin';
 $config->dev->group['backup']          = 'admin';
 $config->dev->group['cron']            = 'admin';
 $config->dev->group['dev']             = 'admin';
+$config->dev->group['editor']          = 'admin';
 $config->dev->group['custom']          = 'admin';
 $config->dev->group['score']           = 'admin';
 $config->dev->group['config']          = 'admin';

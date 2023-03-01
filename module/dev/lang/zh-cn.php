@@ -18,7 +18,7 @@ $lang->dev->paramRange     = '取值范围：%s';
 $lang->dev->paramDate      = '日期格式：YY-mm-dd，如：2019-01-01';
 $lang->dev->paramColor     = '颜色格式：#RGB，如：#3da7f5';
 $lang->dev->paramMailto    = "填写帐号，多个账号用','分隔。";
-$lang->dev->noteEditor     = "编辑器功能因为安全原因被禁用。使用该功能，请到官网下载安装 <a href='https://www.zentao.net/extension-viewExt-150.html' target='_blank'>扩展编辑器</a> 插件。";
+$lang->dev->noteEditor     = "编辑器功能存在部分安全问题，如需使用该功能，可在此开启。";
 $lang->dev->noteTranslate  = "翻译功能因为安全原因被禁用。使用该功能，请到官网下载安装 <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>翻译</a> 插件。";
 $lang->dev->confirmRestore = '是否要恢复默认？';
 
@@ -37,6 +37,9 @@ $lang->dev->fields['desc']   = '描述';
 $lang->dev->fields['type']   = '类型';
 $lang->dev->fields['length'] = '长度';
 $lang->dev->fields['null']   = '是否可空';
+
+$lang->dev->switchList['1'] = '开启';
+$lang->dev->switchList['0'] = '关闭';
 
 $lang->dev->tableList = array();
 $lang->dev->tableList['action']                = '系统日志';
@@ -90,6 +93,7 @@ $lang->dev->tableList['backup']                = '备份';
 $lang->dev->tableList['common']                = '公有模块';
 $lang->dev->tableList['convert']               = '导入';
 $lang->dev->tableList['dev']                   = '二次开发';
+$lang->dev->tableList['editor']                = '编辑器';
 $lang->dev->tableList['git']                   = 'GIT';
 $lang->dev->tableList['index']                 = '首页';
 $lang->dev->tableList['install']               = '安装';

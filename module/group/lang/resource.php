@@ -69,13 +69,14 @@ $lang->moduleOrder[195] = 'misc';
 $lang->moduleOrder[200] = 'backup';
 $lang->moduleOrder[205] = 'cron';
 $lang->moduleOrder[210] = 'dev';
-$lang->moduleOrder[215] = 'message';
-$lang->moduleOrder[220] = 'gitlab';
-$lang->moduleOrder[225] = 'mr';
-$lang->moduleOrder[230] = 'app';
-$lang->moduleOrder[235] = 'gogs';
-$lang->moduleOrder[240] = 'gitea';
-$lang->moduleOrder[245] = 'holiday';
+$lang->moduleOrder[215] = 'editor';
+$lang->moduleOrder[220] = 'message';
+$lang->moduleOrder[225] = 'gitlab';
+$lang->moduleOrder[230] = 'mr';
+$lang->moduleOrder[235] = 'app';
+$lang->moduleOrder[240] = 'gogs';
+$lang->moduleOrder[245] = 'gitea';
+$lang->moduleOrder[250] = 'holiday';
 
 $lang->resource = new stdclass();
 
@@ -1996,13 +1997,26 @@ $lang->cron->methodOrder[35] = 'openProcess';
 $lang->resource->dev = new stdclass();
 $lang->resource->dev->api       = 'api';
 $lang->resource->dev->db        = 'db';
-$lang->resource->dev->editor    = 'editor';
 $lang->resource->dev->translate = 'translate';
 
 $lang->dev->methodOrder[5]  = 'api';
 $lang->dev->methodOrder[10] = 'db';
-$lang->dev->methodOrder[15] = 'editor';
-$lang->dev->methodOrder[20] = 'translate';
+$lang->dev->methodOrder[15] = 'translate';
+
+$lang->resource->editor = new stdclass();
+$lang->resource->editor->index   = 'index';
+$lang->resource->editor->extend  = 'extend';
+$lang->resource->editor->edit    = 'edit';
+$lang->resource->editor->newPage = 'newPage';
+$lang->resource->editor->save    = 'save';
+$lang->resource->editor->delete  = 'delete';
+
+$lang->editor->methodOrder[5]  = 'index';
+$lang->editor->methodOrder[10] = 'extend';
+$lang->editor->methodOrder[15] = 'edit';
+$lang->editor->methodOrder[20] = 'newPage';
+$lang->editor->methodOrder[25] = 'save';
+$lang->editor->methodOrder[30] = 'delete';
 
 global $config;
 $inUpgrade = (defined('IN_UPGRADE') and IN_UPGRADE);

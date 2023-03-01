@@ -333,6 +333,13 @@ class adminModel extends model
                 /* Check sub menu priv. */
                 foreach($subMenuList as $subMenuKey => $subMenu)
                 {
+                    if($menuKey == 'message' and $subMenuKey == 'mail')
+                    {
+                        $this->loadModel('mail');
+                        if(!$this->config->mail->turnon and !$this->session->mailConfig) $subMenu['link'] = $this->lang->mail->common . '|mail|detect|';
+                    }
+                    if($menuKey == 'dev' and $subMenuKey == 'editor' and $this->config->global->editor) $subMenu['link'] = $this->lang->editor->common . '|editor|index|';
+
                     $link = array();
                     if(isset($menu['tabMenu'][$subMenuKey]))
                     {
@@ -362,12 +369,6 @@ class adminModel extends model
                     }
                     else
                     {
-                        if($menuKey == 'message' and $subMenuKey == 'mail')
-                        {
-                            $this->loadModel('mail');
-                            if(!$this->config->mail->turnon and !$this->session->mailConfig) $subMenu['link'] = $this->lang->mail->common . '|mail|detect|';
-                        }
-
                         $link = $this->getHasPrivLink($subMenu);
                     }
 
@@ -640,17 +641,18 @@ class adminModel extends model
      */
     public function checkInternet()
     {
+        $timeoutMS = 500;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $this->config->admin->apiSite);
-        curl_setopt($curl, CURLOPT_TIMEOUT_MS, 1000);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
+        curl_setopt($curl, CURLOPT_TIMEOUT_MS, $timeoutMS);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, $timeoutMS);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
         $connected = curl_exec($curl);
         curl_close($curl);
 
-        return (bool)$connected;
+        return $connected ? true : false;
     }
 
     /**

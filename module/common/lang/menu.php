@@ -693,6 +693,7 @@ $lang->navGroup->cron      = 'admin';
 $lang->navGroup->backup    = 'admin';
 $lang->navGroup->mail      = 'admin';
 $lang->navGroup->dev       = 'admin';
+$lang->navGroup->editor    = 'admin';
 $lang->navGroup->entry     = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';

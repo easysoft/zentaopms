@@ -1,0 +1,5 @@
+body{padding-bottom:0px;background-color:#fff;}
+.expandable > ul {display: none!important}
+.collapsable > ul {display: block!important}
+.tree li:before {margin-right: 4px;}
+.tree li>a{display:inline;}

@@ -65,6 +65,7 @@ $lang->custom      = new stdclass();
 $lang->mail        = new stdclass();
 $lang->cron        = new stdclass();
 $lang->dev         = new stdclass();
+$lang->editor      = new stdclass();
 $lang->entry       = new stdclass();
 $lang->webhook     = new stdclass();
 $lang->message     = new stdclass();

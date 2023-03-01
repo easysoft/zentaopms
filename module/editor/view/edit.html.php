@@ -1,0 +1,141 @@
+<?php
+/**
+ * The editor view file of dir module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @package     editor
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+?>
+<?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
+<?php
+js::set('jsRoot', $jsRoot);
+js::set('clientLang', $app->clientLang);
+js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
+?>
+<div class='main-header'>
+  <div class='heading'>
+    <i class='icon-edit'></i>
+    <?php if($filePath):?>
+    <strong><?php echo $lang->editor->filePath;?></strong>
+    <code><?php echo $filePath?></code>
+    <?php endif?>
+  </div>
+</div>
+<form method='post' target='hiddenwin' action='<?php echo inlink('save', "filePath=$safeFilePath&action=$action")?>'>
+  <div class='main-content'>
+    <table class='table table-form'>
+      <?php if(!empty($showContent)):?>
+      <tr>
+        <td>
+          <?php echo "<span class='strong'>" . $lang->editor->sourceFile . '</span>'?><br />
+          <div id='showContentEditor'></div>
+        </td>
+      </tr>
+      <?php endif?>
+      <tr>
+        <td>
+          <div id='fileContentEditor'></div>
+          <?php echo html::hidden('fileContent');?>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <?php if($action and $action != 'edit' and $action != 'newPage' and $action != 'override' and $action != 'extendControl'):?>
+          <div class='form-group'>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->editor->fileName;?></span>
+              <?php echo html::input('fileName', '', "class='form-control'");?>
+              <span class='input-group-addon'>
+                <?php
+                if($action == 'newHook')
+                {
+                    echo $lang->editor->exampleHook;
+                }
+                elseif($action and $action == 'extendOther' and strpos(basename($filePath), '.js') !== false or $action == 'newJS')
+                {
+                    echo $lang->editor->exampleJs;
+                }
+                elseif($action and $action == 'extendOther' and strpos(basename($filePath), '.css') !== false or $action == 'newCSS')
+                {
+                    echo $lang->editor->exampleCss;
+                }
+                else
+                {
+                    echo $lang->editor->examplePHP;
+                }
+                ?>
+              </span>
+            </div>
+          </div>
+          <?php endif;?>
+          <?php if($action and $action != 'edit' and $action != 'newPage'):?>
+          <div class='checkbox-primary'>
+            <input type='checkbox' name='override' id='override' />
+            <label for='override'><?php echo $lang->editor->isOverride?></span>
+          </div>
+          <?php endif;?>
+        </td>
+      </tr>
+      <tr><td align='center'><?php echo html::submitButton()?></td></tr>
+    </table>
+  </div>
+</form>
+<?php if(!empty($showContent)) js::set('showContent', $showContent);?>
+<?php js::set('fileContent', $fileContent);?>
+<script>
+$(function()
+{
+    var lang = 'php';
+    fileContentEditor = showContentEditor = null;
+    require.config({
+        paths: {vs: jsRoot + 'monaco-editor/min/vs'},
+        'vs/nls': {
+            availableLanguages:{'*': clientLang}
+        }
+    });
+    require(['vs/editor/editor.main'], function ()
+    {
+        <?php if(!empty($showContent)):?>
+        showContentEditor = monaco.editor.create(document.getElementById('showContentEditor'),
+        {
+            value:                showContent.toString(),
+            language:             lang,
+            readOnly:             true,
+            autoIndent:           true,
+            contextmenu:          true,
+            automaticLayout:      true,
+            EditorMinimapOptions: {enabled: false}
+        });
+        <?php endif;?>
+        fileContentEditor = monaco.editor.create(document.getElementById('fileContentEditor'),
+        {
+            value:                fileContent.toString(),
+            language:             lang,
+            readOnly:             false,
+            autoIndent:           true,
+            contextmenu:          true,
+            automaticLayout:      true,
+            EditorMinimapOptions: {enabled: false}
+        });
+        <?php if(!empty($showContent)):?>
+        contentHeight = showContentEditor.getContentHeight();
+        if(contentHeight > 300) contentHeight = 300;
+        if(contentHeight < 200) contentHeight = 200;
+        $('#showContentEditor').height(contentHeight);
+        <?php endif;?>
+        contentHeight = fileContentEditor.getContentHeight();
+        if(contentHeight > 450) contentHeight = 450;
+        if(contentHeight < 100) contentHeight = 100;
+        $('#fileContentEditor').height(contentHeight);
+    });
+    $('#submit').click(function()
+    {
+        $('#fileContent').val(fileContentEditor.getValue());
+    })
+})
+</script>
+<?php include $app->getModuleRoot() . 'common/view/footer.lite.html.php';?>
