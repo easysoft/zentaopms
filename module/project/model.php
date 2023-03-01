@@ -438,6 +438,8 @@ class projectModel extends model
         foreach($projectList as $projectID => $stageList)
         {
             $progress = 0;
+            $projectConsumed = 0;
+            $projectLeft     = 0;
             foreach($stageList as $stageID => $stage)
             {
                 if($stage->project != $projectID) continue;
@@ -445,10 +447,13 @@ class projectModel extends model
                 $stageTotalConsumed = isset($totalHour[$projectID][$stageID]) ? $totalHour[$projectID][$stageID]->totalConsumed : 0;
                 $stageTotalLeft     = isset($totalHour[$projectID][$stageID]) ? round($totalHour[$projectID][$stageID]->totalLeft, 1) : 0;
 
-                $stageProgress = ($stageTotalConsumed + $stageTotalLeft) ? floor($stageTotalConsumed / ($stageTotalConsumed + $stageTotalLeft) * 1000) / 1000 * 100 : 0;
+                $projectConsumed += $stageTotalConsumed;
+                $projectLeft     += $stageTotalLeft;
 
-                $progress += $stageProgress * ($stage->percent / 100);
             }
+
+            $progress += ($projectConsumed + $projectLeft) == 0 ? 0 : floor($projectConsumed / ($projectConsumed + $projectLeft) * 1000) / 1000 * 100;
+
             $progressList[$projectID] = $progress;
         }
 
@@ -1520,7 +1525,7 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('parent', 0)
+            ->setDefault('parent', $oldProject->parent)
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')

@@ -64,7 +64,10 @@
             <th class='c-user<?php echo zget($visibleFields, 'RD',       ' hidden') . zget($requiredFields, 'RD',     '', ' required');?>'><?php echo $lang->execution->RD;?></th>
             <th class='c-type<?php echo zget($visibleFields, 'type',     ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'>
               <?php echo $lang->execution->$type;?>
-              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
+              <?php if($this->app->tab == 'execution' or (isset($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))):?>
+              <?php $typeTip = $this->app->tab == 'execution' ? $lang->execution->waterfallTip . lcfirst($lang->execution->typeTip) : $lang->execution->typeTip;?>
+              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $typeTip;?>"></icon>
+              <?php endif;?>
             </th>
             <th class='c-date required'><?php echo $lang->execution->begin;?></th>
             <th class='c-date required'><?php echo $lang->execution->end;?></th>

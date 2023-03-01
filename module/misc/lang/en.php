@@ -200,7 +200,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['18.2'][]       = array('title' => 'Agile Plus and Waterfall Plus management models are newly added. Support for unlimited splitting of waterfall project stages. The UI of Admin is completely upgraded and redesigned.', 'desc' => '');
+$lang->misc->feature->all['18.2'][]       = array('title' => 'Agile Plus and Waterfall Plus management models are newly added. Support for unlimited splitting of waterfall project stages. The UI of Admin is completely upgraded and redesigned. Fix bugs.', 'desc' => '');
 $lang->misc->feature->all['18.1'][]       = array('title' => 'The automation testing solution interaction is optimized, while a new snapshot management function is newly added. ZenTao IM implemented online collaboration of PPT documents.Fix bugs.', 'desc' => '');
 $lang->misc->feature->all['18.0'][]       = array('title' => "Automated test solutions are proposed. Work order related functions are added to the Operation Management Interface. Approval workflow support for adding all types of notifications. And at the same time, we have further improved the earned value calculation rules.", 'desc' => '');
 $lang->misc->feature->all['18.0.beta3'][] = array('title' => "The module Statistic is upgraded to BI, with 5 built-in large screens of macro management dimensions.", 'desc' => '');

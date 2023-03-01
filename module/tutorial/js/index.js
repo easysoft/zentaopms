@@ -414,7 +414,7 @@ $(function()
                     else
                     {
                         var $modulemenu = $$('#subNavbar');
-                        if(adminMenu) $modulemenu = $$('#navbar');
+                        if(task.nav.app == 'admin') $modulemenu = $$('#navbar');
                         var $modulemenuItem = $modulemenu.find('[data-id="' + task.nav.menu + '"]');
                         if($modulemenuItem.length && !$modulemenuItem.hasClass('active'))
                         {

@@ -153,6 +153,7 @@ class executionModel extends model
         if(!$features['build'])  unset($this->lang->execution->menu->build);
         if(!$features['burn'])   unset($this->lang->execution->menu->burn);
         if(!$features['other'])  unset($this->lang->execution->menu->other);
+        if(!$features['story'] and $this->config->edition == 'open') unset($this->lang->execution->menu->view);
 
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
 
@@ -2936,13 +2937,16 @@ class executionModel extends model
         $this->loadModel('task');
 
         $taskStories = array();
+        $parents     = array();
         $execution   = $this->getByID($executionID);
-        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $tasks       = $this->dao->select('id,execution,assignedTo,story,consumed,status,parent')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to execution. */
             $assignedToes[$task->assignedTo] = $task->execution;
             $taskStories[$task->story]       = $task->story;
+
+            if($task->parent < 0) $parents[$task->id] = $task->id;
 
             $data = new stdclass();
             $data->project   = $execution->project;
@@ -2962,6 +2966,10 @@ class executionModel extends model
 
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->execution);
         }
+
+        /* Get stories of children task. */
+        $childrens = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($parents)->fetchAll('id');
+        foreach($childrens as $children) $taskStories[$children->story] = $children->story;
 
         /* Remove empty story. */
         unset($taskStories[0]);
