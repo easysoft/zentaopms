@@ -843,9 +843,7 @@ class executionModel extends model
             /* Attribute check. */
             if(isset($data->attributes))
             {
-                $executionType = $oldExecutions[$executionID]->type;
-
-                if($executionType == 'stage')
+                if(isset($project->model) and ($project->model == 'waterfall' or  $project->model == 'waterfallplus'))
                 {
                     $this->app->loadLang('stage');
                     $attribute = $executions[$executionID]->attribute;
