@@ -26,7 +26,6 @@ js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
   </div>
 </div>
 <form method='post' target='hiddenwin' action='<?php echo inlink('save', "filePath=$safeFilePath&action=$action")?>'>
-  <div class='main-content'>
     <table class='table table-form'>
       <?php if(!empty($showContent)):?>
       <tr>
@@ -72,6 +71,11 @@ js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
             </div>
           </div>
           <?php endif;?>
+        </td>
+      </tr>
+      <tr>
+        <td class='text-center'>
+          <?php echo html::submitButton()?>
           <?php if($action and $action != 'edit' and $action != 'newPage'):?>
           <div class='checkbox-primary'>
             <input type='checkbox' name='override' id='override' />
@@ -80,16 +84,14 @@ js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
           <?php endif;?>
         </td>
       </tr>
-      <tr><td align='center'><?php echo html::submitButton()?></td></tr>
     </table>
-  </div>
 </form>
 <?php if(!empty($showContent)) js::set('showContent', $showContent);?>
 <?php js::set('fileContent', $fileContent);?>
+<?php js::set('language', $fileExtension == 'js' ? 'javascript' : $fileExtension);?>
 <script>
 $(function()
 {
-    var lang = 'php';
     fileContentEditor = showContentEditor = null;
     require.config({
         paths: {vs: jsRoot + 'monaco-editor/min/vs'},
@@ -102,35 +104,35 @@ $(function()
         <?php if(!empty($showContent)):?>
         showContentEditor = monaco.editor.create(document.getElementById('showContentEditor'),
         {
-            value:                showContent.toString(),
-            language:             lang,
-            readOnly:             true,
-            autoIndent:           true,
-            contextmenu:          true,
-            automaticLayout:      true,
-            EditorMinimapOptions: {enabled: false}
+            value:           showContent.toString(),
+            language:        language,
+            readOnly:        true,
+            autoIndent:      true,
+            contextmenu:     true,
+            automaticLayout: true,
+            minimap:         {enabled: false}
         });
         <?php endif;?>
         fileContentEditor = monaco.editor.create(document.getElementById('fileContentEditor'),
         {
-            value:                fileContent.toString(),
-            language:             lang,
-            readOnly:             false,
-            autoIndent:           true,
-            contextmenu:          true,
-            automaticLayout:      true,
-            EditorMinimapOptions: {enabled: false}
+            value:           fileContent.toString(),
+            language:        language,
+            readOnly:        false,
+            autoIndent:      true,
+            contextmenu:     true,
+            automaticLayout: true,
+            minimap:         {enabled: false}
         });
+        var codeHeight = top.window.innerHeight - 300;
         <?php if(!empty($showContent)):?>
         contentHeight = showContentEditor.getContentHeight();
         if(contentHeight > 300) contentHeight = 300;
         if(contentHeight < 200) contentHeight = 200;
         $('#showContentEditor').height(contentHeight);
+        codeHeight -= contentHeight + 30;
+        if(codeHeight < 300) codeHeight = 300;
         <?php endif;?>
-        contentHeight = fileContentEditor.getContentHeight();
-        if(contentHeight > 450) contentHeight = 450;
-        if(contentHeight < 100) contentHeight = 100;
-        $('#fileContentEditor').height(contentHeight);
+        $('#fileContentEditor').height(codeHeight);
     });
     $('#submit').click(function()
     {

@@ -38,7 +38,7 @@ class editor extends control
     {
         $moduleFiles = $this->editor->getModuleFiles($moduleDir);
         $this->view->module = $moduleDir;
-        $this->view->tree = $this->editor->printTree($moduleFiles);
+        $this->view->tree   = $this->editor->printTree($moduleFiles);
         $this->display();
     }
 
@@ -54,7 +54,8 @@ class editor extends control
     public function edit($filePath = '', $action = '', $isExtends = '')
     {
         $this->view->safeFilePath = $filePath;
-        $fileContent  = '';
+        $fileContent = '';
+        $extension   = 'php';
         if($filePath)
         {
             $filePath = helper::safe64Decode($filePath);
@@ -98,10 +99,14 @@ class editor extends control
             {
                 $fileContent = "<?php\n";
             }
+
+            $fileName  = basename($filePath);
+            if(strpos($fileName, '.') !== false) $extension = substr($fileName, strpos($fileName, '.') + 1);
         }
-        $this->view->fileContent = $fileContent;
-        $this->view->filePath    = $filePath;
-        $this->view->action      = $action;
+        $this->view->fileContent   = $fileContent;
+        $this->view->filePath      = $filePath;
+        $this->view->fileExtension = $extension;
+        $this->view->action        = $action;
         $this->display();
     }
 
