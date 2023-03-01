@@ -1372,7 +1372,7 @@ class repo extends control
                 $content  = file($logFile);
                 $lastLine = $content[count($content) - 1];
 
-                if(strpos($lastLine, 'done') !== false)
+                if(strpos($lastLine, 'done') === false)
                 {
                     if(strpos($lastLine, 'empty repository') !== false)
                     {
