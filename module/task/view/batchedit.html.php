@@ -59,7 +59,7 @@ js::set('requiredFields', $config->task->edit->requiredFields);
             <th class='required <?php if(count($visibleFields) > 10) echo 'c-name';?>'><?php echo $lang->task->name?></th>
             <th class='c-module<?php echo zget($visibleFields,    'module',       ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->task->module?></th>
             <th class='c-assigned<?php echo zget($visibleFields,  'assignedTo',   ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
-            <th class='c-type required'><?php echo $lang->typeAB; ?></th>
+            <th class='c-type required'><?php echo $lang->task->type; ?></th>
             <th class='c-status<?php echo zget($visibleFields,    'status',       ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->task->status;?></th>
             <th class='c-date<?php  echo zget($visibleFields,     'estStarted',   ' hidden') . zget($requiredFields, 'estStarted', '', ' required');?>'><?php echo $lang->task->estStarted?></th>
             <th class='c-date<?php  echo zget($visibleFields,     'deadline',     ' hidden') . zget($requiredFields, 'deadline', '', ' required');?>'><?php echo $lang->task->deadline?></th>

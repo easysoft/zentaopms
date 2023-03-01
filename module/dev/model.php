@@ -321,7 +321,10 @@ class devModel extends model
 
             if(isset($defaultLang->$module->menu))
             {
-                foreach($defaultLang->$module->menu as $menuKey => $menu)
+                $menuList = $defaultLang->$module->menu;
+                if(isset($defaultLang->$module->menuOrder)) $menuList->menuOrder = $defaultLang->$module->menuOrder;
+                $menuList = $this->sortMenus($menuList);
+                foreach($menuList as $menuKey => $menu)
                 {
                     if(is_array($menu) and !isset($menu['link'])) continue;
 
@@ -340,9 +343,32 @@ class devModel extends model
         else
         {
            $menus = ($type == 'third' and isset($defaultLang->$module->menu->{$method}['subMenu'])) ? $defaultLang->$module->menu->{$method}['subMenu'] : $defaultLang->mainNav;
+           if(isset($defaultLang->$module->menu->{$method}['menuOrder'])) $menus->menuOrder = $defaultLang->$module->menu->{$method}['menuOrder'];
+           $menus = $this->sortMenus($menus);
         }
 
         return $menus;
+    }
+
+    /**
+     * Sort menus.
+     *
+     * @param  array|object $menus
+     * @access public
+     * @return array
+     */
+    public function sortMenus($menus)
+    {
+        if(!is_array($menus)) $menus = (array)$menus;
+        if(!isset($menus['menuOrder'])) return $menus;
+        $sortedMenus = array();
+        $menuOrders  = $menus['menuOrder'];
+        ksort($menuOrders);
+        foreach($menuOrders as $menuKey)
+        {
+            if(isset($menus[$menuKey])) $sortedMenus[$menuKey] = $menus[$menuKey];
+        }
+        return $sortedMenus;
     }
 
     /**
@@ -412,8 +438,12 @@ class devModel extends model
             $menus = $this->getLinkTitle($lang);
             foreach($menus as $linkKey => $menu)
             {
-                if($type == 'first' and in_array($linkKey, $this->config->dev->disableMainMenu)) continue;
+                foreach($this->config->dev->skipMenus as $menuType => $skipMenus)
+                {
+                    if($type == $menuType and in_array($linkKey, $skipMenus)) continue 2;
+                }
 
+                if($menu == '@branch@') $menu = $this->lang->dev->branch;
                 $originalLangs[$langKey . $linkKey] = $menu;
             }
         }
@@ -508,6 +538,10 @@ class devModel extends model
      */
     public function loadDefaultLang($language = 'zh-cn', $module = 'common')
     {
+        if(empty($language)) $language = 'zh-cn';
+        if(empty($module))   $module = 'common';
+        if($module != 'common' and !isset($this->defaultLang)) return null;
+
         $clientLang = $this->app->clientLang;
         if($language and $language != $clientLang) $this->app->clientLang = $language;
 
@@ -573,6 +607,7 @@ class devModel extends model
     public function getThirdMenus($menu, $module = '', $method = '')
     {
         $menus = array();
+        if($this->config->vision == 'lite' and $menu == 'project') $menu = 'kanbanProject';
         if(!isset($this->lang->$menu->menu)) return $menus;
 
         $menuLang    = $this->getLinkTitle($this->lang->$menu->menu);
@@ -609,7 +644,14 @@ class devModel extends model
         foreach(array('homeMenu', 'menu') as $menu)
         {
             if(!isset($this->lang->$module->$menu)) continue;
-            foreach($this->lang->$module->$menu as $menuKey => $menuValue)
+            $menuList = $this->lang->$module->$menu;
+            if($menu == 'menu' and isset($this->lang->$module->menuOrder))
+            {
+                $menuList->menuOrder = $this->lang->$module->menuOrder;
+                $menuList = $this->sortMenus($menuList);
+            }
+
+            foreach($menuList as $menuKey => $menuValue)
             {
                 if(is_array($menuValue) and !isset($menuValue['link'])) continue;
                 $link = is_array($menuValue) ? $menuValue['link'] : $menuValue;
@@ -638,6 +680,11 @@ class devModel extends model
                     foreach(array('subMenu', 'dropMenu') as $menu)
                     {
                         if(!isset($menuValue[$menu])) continue;
+                        if($menu == 'subMenu' and isset($menuValue['menuOrder']))
+                        {
+                            $menuValue[$menu]->menuOrder = $menuValue['menuOrder'];
+                            $menuValue[$menu] = $this->sortMenus($menuValue[$menu]);
+                        }
                         foreach($menuValue[$menu] as $subMenuKey => $subMenuValue)
                         {
                             if(is_array($subMenuValue) and !isset($subMenuValue['link'])) continue;
@@ -781,6 +828,7 @@ class devModel extends model
     public function getLinkTitle($menus)
     {
         $linksTitle = array();
+        $menus      = $this->sortMenus($menus);
         foreach($menus as $menuKey => $menu)
         {
             if(is_array($menu) and !isset($menu['link'])) continue;

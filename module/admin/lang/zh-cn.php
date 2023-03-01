@@ -66,7 +66,7 @@ $lang->admin->notice->ignore   = "不再提示";
 $lang->admin->notice->int      = "『%s』应当是正整数。";
 
 $lang->admin->registerNotice = new stdclass();
-$lang->admin->registerNotice->common     = '注册新帐号绑定';
+$lang->admin->registerNotice->common     = '注册新帐号';
 $lang->admin->registerNotice->caption    = '禅道社区登记';
 $lang->admin->registerNotice->click      = '点击此处';
 $lang->admin->registerNotice->lblAccount = '请设置您的用户名，英文字母和数字的组合，三位以上。';
@@ -186,6 +186,7 @@ $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';
 $lang->admin->upgradeRecommend = '推荐升级';
 $lang->admin->zentaoUsed       = '您已使用禅道';
+$lang->admin->noPriv           = '您没有访问该区块的权限。';
 
 $lang->admin->openTag = '禅道';
 $lang->admin->bizTag  = '禅道企业版';

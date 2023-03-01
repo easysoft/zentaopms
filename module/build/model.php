@@ -112,6 +112,7 @@ class buildModel extends model
                 $buildQuery = str_replace($field, "t1." . $field, $buildQuery);
             }
         }
+        if(strpos($this->session->projectBuildQuery, 'execution') !== false) $buildQuery = str_replace('`execution`', 't2.`id`', $buildQuery);
 
         return $this->getProjectBuilds($projectID, 'bysearch', $buildQuery);
     }

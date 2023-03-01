@@ -19,7 +19,7 @@
       <div class="settings-list <?php if($config->vision == 'lite') echo 'lite-setting';?>">
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
-        <div class="setting-box">
+        <div class="setting-box" <?php if($menu['disabled']) echo "title={$lang->admin->noPriv}";?> data-id="<?php echo $menuKey;?>">
           <button class="btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?> data-link='<?php echo $menu['link'];?>'>
             <h4 class="flex align-center w-full">
               <div class="flex align-center">

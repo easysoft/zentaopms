@@ -48,7 +48,6 @@ $lang->zanode->confirmReboot   = "Are you sure to restart the ZenAgent Node?";
 $lang->zanode->confirmShutdown = "Are you sure to shutdown the ZenAgent Node?";
 $lang->zanode->confirmSuspend  = "Are you sure to suspend the ZenAgent Node?";
 $lang->zanode->confirmResume   = "Are you sure to resume the ZenAgent Node?";
-$lang->zanode->confirmRestore  = "Are you sure to restore the ZenAgent Node?";
 $lang->zanode->confirmRestore  = "The ZenAgent Node will be restored to this snapshot state, are you sure you want to continue?";
 $lang->zanode->actionSuccess   = 'Success';
 $lang->zanode->deleted         = "Deleted";
@@ -64,6 +63,9 @@ $lang->zanode->initializing    = 'Initializing';
 $lang->zanode->showPwd         = 'Show Password';
 $lang->zanode->hidePwd         = 'Hide Password';
 
+$lang->zanode->typeList['node']    = 'Virtual machine';
+$lang->zanode->typeList['physics'] = 'Physical machine';
+
 $lang->automation = new stdClass();
 $lang->automation->scriptPath = $lang->zanode->scriptPath;
 $lang->automation->node       = $lang->zanode->common;
@@ -74,6 +76,7 @@ $lang->zanode->noVncPort      = 'Failed to get vnc port';
 $lang->zanode->nameValid      = "The name can only be letters, numbers, '-', '_', '.', and cannot start with a symbol";
 $lang->zanode->empty          = 'No zanode is found';
 $lang->zanode->runCaseConfirm = 'The system detects the presence of an automation script. Whether to execute?';
+$lang->zanode->netError       = 'Unable to connect to the physical machine, please check the network and try again.';
 
 $lang->zanode->createImage        = 'Create Image';
 $lang->zanode->createImaging      = 'Creating';
@@ -87,17 +90,22 @@ $lang->zanode->snapshotName          = 'Snapshot Name';
 $lang->zanode->browseSnapshot        = 'Snapshot List';
 $lang->zanode->createSnapshot        = 'Create Snapshot';
 $lang->zanode->editSnapshot          = 'Edit Snapshot';
-$lang->zanode->restoreSnapshot       = 'Revert Snapshot';
+$lang->zanode->restoreSnapshot       = 'Revert From This Snapshot';
 $lang->zanode->deleteSnapshot        = 'Delete Snapshot';
 $lang->zanode->snapshotEmpty         = 'No snapshots';
 $lang->zanode->confirmDeleteSnapshot = "The snapshot cannot be restored from the recycle bin after being deleted. Are you sure to continue?";
 
+$lang->zanode->snapshot = new stdClass();
 $lang->zanode->snapshot->statusList['creating']          = 'Creating';
-$lang->zanode->snapshot->statusList['completed']         = 'Create Completed';
+$lang->zanode->snapshot->statusList['inprogress']        = 'Creating';
+$lang->zanode->snapshot->statusList['completed']         = 'Usable';
 $lang->zanode->snapshot->statusList['failed']            = 'Create Failed';
 $lang->zanode->snapshot->statusList['restoring']         = 'Restoring';
 $lang->zanode->snapshot->statusList['restore_failed']    = 'Restore Failed';
-$lang->zanode->snapshot->statusList['restore_completed'] = 'Restore Completed';
+$lang->zanode->snapshot->statusList['restore_completed'] = 'Usable';
+
+$lang->zanode->snapshot->defaultSnapName = 'DefaultSnapshot';
+$lang->zanode->snapshot->defaultSnapUser = 'System';
 
 $lang->zanode->imageNameEmpty  = 'Name can not be empty.';
 $lang->zanode->snapStatusError = 'Snapshot is not ready.';
@@ -151,8 +159,8 @@ $lang->zanode->init->title          = "Initialize Node";
 $lang->zanode->init->descTitle      = "Follow these steps to complete the initialization on the node:";
 $lang->zanode->init->initDesc       = "Execute the init script on the node: %s %s   <br>- Click check service status button.";
 
-$lang->zanode->tips = "The execution node is a virtual machine or container instance created by the host machine, which is a test environment for executing test tasks. After the execution node is configured with the automated test environment, the script can be automatically executed, and the results can be viewed in the execution results of Zen Dao's application cases.";
-$lang->zanode->scriptTips = 'Write the directory where the script is located on the execution node.';
-$lang->zanode->shellTips  = 'Before running the automated test script on the execution node, you can execute a custom shell command.';
+$lang->zanode->tips           = "The execution node is a virtual machine or container instance created by the host machine, which is a test environment for executing test tasks. After the execution node is configured with the automated test environment, the script can be automatically executed, and the results can be viewed in the execution results of Zen Dao's application cases.";
+$lang->zanode->scriptTips     = 'Write the directory where the script is located on the execution node.';
+$lang->zanode->shellTips      = 'Before running the automated test script on the execution node, you can execute a custom shell command.';
 $lang->zanode->automationTips = 'Before executing the test task on the execution node, you need to set up the execution node corresponding to the product, the directory of the automated test script, and the custom Shell command to execute.';
 $lang->zanode->nameUnique     = $lang->zanode->name . 'already exist';

@@ -511,9 +511,11 @@ class story extends control
             $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
             if($execution->type == 'project')
             {
+                $model = $execution->model == 'waterfallplus' ? 'waterfall' : $execution->model;
+                $model = $execution->model == 'agileplus' ? 'scrum' : $model;
                 $this->project->setMenu($executionID);
                 $this->lang->navGroup->story = 'project';
-                $this->lang->product->menu   = $this->lang->{$execution->model}->menu;
+                $this->lang->product->menu   = $this->lang->{$model}->menu;
             }
             else
             {

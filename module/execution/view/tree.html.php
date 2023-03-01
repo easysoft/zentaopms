@@ -41,9 +41,12 @@
         $link = common::hasPriv('execution', 'importTask') ?  $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
         echo "<li $misc>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
 
-        $misc = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
-        $link = common::hasPriv('execution', 'importBug') ?  $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
-        echo "<li $misc>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
+        if($features['qa'])
+        {
+            $misc = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
+            $link = common::hasPriv('execution', 'importBug') ?  $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
+            echo "<li $misc>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
+        }
         ?>
       </ul>
     </div>

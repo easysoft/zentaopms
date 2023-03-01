@@ -236,7 +236,7 @@ class group extends control
             }
 
             $this->lang->custom->common = $this->lang->group->config;
-            if($this->config->edition == 'max' and $this->config->vision == 'rnd' and (!$menu or $menu == 'admin')) $this->lang->baseline->common = $this->lang->group->docTemplate;
+            if($this->config->edition == 'max' and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
 
             $this->view->group      = $group;
             $this->view->changelogs = ',' . join(',', $changelog) . ',';

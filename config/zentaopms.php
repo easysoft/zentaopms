@@ -406,6 +406,7 @@ $config->objectTables['apistruct']    = TABLE_APISTRUCT;
 $config->objectTables['repo']         = TABLE_REPO;
 $config->objectTables['dataview']     = TABLE_DATAVIEW;
 $config->objectTables['zahost']       = TABLE_ZAHOST;
+$config->objectTables['zanode']       = TABLE_ZAHOST;
 $config->objectTables['automation']   = TABLE_AUTOMATION;
 $config->objectTables['stepResult']   = TABLE_TESTRUN;
 

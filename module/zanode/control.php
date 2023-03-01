@@ -137,10 +137,15 @@ class zanode extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title     = $this->lang->zanode->editAction;
-        $this->view->zanode    = $this->zanode->getNodeByID($id);
-        $this->view->host      = $this->zanode->getHostByID($this->view->zanode->parent);
-        $this->view->image     = $this->zanode->getImageByID($this->view->zanode->image);
+        $zanode = $this->zanode->getNodeByID($id);
+
+        $this->view->title  = $this->lang->zanode->editAction;
+        $this->view->zanode = $zanode;
+        if($zanode->type == 'node')
+        {
+            $this->view->host  = $this->zanode->getHostByID($this->view->zanode->parent);
+            $this->view->image = $this->zanode->getImageByID($this->view->zanode->image);
+        }
         $this->display();
     }
 
@@ -243,9 +248,7 @@ class zanode extends control
 
         if($error)
         {
-             $response['result']  = 'fail';
-             $response['message'] = $error;
-             return $this->send($response);
+            return print(js::alert($error) . js::reload('parent'));
         }
         else
         {
@@ -558,7 +561,7 @@ class zanode extends control
     {
         $node          = $this->zanode->getNodeById($hostID);
         $serviceStatus = $this->zanode->getServiceStatus($node);
-        if ($node->status != 'running' && $node->status != 'wait')
+        if ($node->status != 'running')
         {
             $serviceStatus['ZenAgent'] = "unknown";
             $serviceStatus['ZTF'] = "unknown";

@@ -5,7 +5,7 @@ include dirname(dirname(dirname(__FILE__))) . '/class/dev.class.php';
 
 /**
 
-title=测试 devModel::getTagMenus();
+title=测试 devModel::getThirdMenus();
 cid=1
 pid=1
 
