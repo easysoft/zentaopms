@@ -1035,7 +1035,8 @@ class execution extends control
         $execution   = $this->commonAction($executionID);
         $project     = $this->loadModel('project')->getByID($execution->project);
         $executionID = $execution->id;
-        $products    = $this->product->getProducts($execution->id);
+	$products    = $this->product->getProducts($execution->id);
+	if(count($products) === 1) $productID = current($products)->id;
 
         if($execution->hasProduct)
         {
