@@ -1,8 +1,6 @@
 /* Tab session */
 (function($)
 {
-    if(!config.tabSession) return;
-
     /**
      * Handle the logic save form draft.
      *
@@ -121,7 +119,9 @@
              }   
          }, 500);
      }  
+    handleSaveFormDraft();
 
+    if(!config.tabSession) return;
     /** Store current tab id */
     var _tid = '';
 
