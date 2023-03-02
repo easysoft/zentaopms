@@ -60,6 +60,7 @@
         <?php $isCurrentLang = str_replace('-', '_', $this->app->getClientLang()) == $language;?>
         <?php foreach($originalLangs as $langKey => $originalLang):?>
         <?php
+        if(isset($config->custom->commonLang[$originalLang])) continue;
         $itemKey = "{$moduleName}_{$langKey}";
         if(!$isCurrentLang) $currentLangs[$langKey] = strtr($currentLangs[$langKey], $currentCommonLang);
         $defaultValue = $this->dev->parseCommonLang($originalLang);
