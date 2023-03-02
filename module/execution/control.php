@@ -2633,7 +2633,6 @@ class execution extends control
         $this->session->set('execGroupBy', $groupBy);
         $this->session->set('storyList', $this->app->getURI(true), 'execution');
         $this->session->set('rdSearchValue', '');
-        $this->session->set('execLaneType', $browseType);
 
         $features         = $this->execution->getExecutionFeatures($execution);
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
@@ -2642,6 +2641,11 @@ class execution extends control
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
         }
+
+        /* Set lane type. */
+        if(!$features['story'] and !$features['qa']) $browseType = 'task';
+        if(!$features['story']) unset($this->lang->kanban->group->task['story']);
+        $this->session->set('execLaneType', $browseType);
 
         $userList    = array();
         $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
