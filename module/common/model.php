@@ -1855,7 +1855,8 @@ EOD;
         $pipelineList = $app->dbh->query("SELECT type,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
         if(empty($pipelineList)) return;
 
-        $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->app->common}<span class='caret'></span></a>";
+        $appCommon = isset($lang->db->custom['devopsMenu']['menu']['app']) ? $lang->db->custom['devopsMenu']['menu']['app'] : $lang->app->common;
+        $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$appCommon}<span class='caret'></span></a>";
         $html .= "<ul class='dropdown-menu'>";
 
         foreach($pipelineList as $pipeline)
