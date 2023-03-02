@@ -53,7 +53,7 @@ class admin extends control
 
         $this->loadModel('misc');
 
-        $hasInternet = $this->admin->checkInternet();
+        $hasInternet = !$this->admin->checkInternet();
         $clientLang  = $this->app->getClientLang();
         $langNotCN   = common::checkNotCN();
         $dateUsed    = $this->admin->genDateUsed();
