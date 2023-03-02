@@ -69,6 +69,11 @@ class hostHeartbeatEntry extends baseEntry
             foreach($vms as $vm)
             {
                 $heartbeat = strtotime(substr($vm->heartbeat, 0, 19));
+                $node      = $this->loadModel('zanode')->getNodeByMac($vm->macAddress);
+
+                if(empty($node)) continue;
+                if(in_array($node->status, array('restoring', 'Creating_img', 'Creating_snap')))
+                    $vm->status = $node->status;
                 $vmData = array(
                     'vnc'       => $vm->vncPortOnHost,
                     'zap'       => $vm->agentPortOnHost,
@@ -87,7 +92,6 @@ class hostHeartbeatEntry extends baseEntry
                 
                 if($vm->status == 'running')
                 {
-                    $node  = $this->loadModel('zanode')->getNodeByMac($vm->macAddress);
                     if(!empty($node))
                     {
                         $snaps = $this->loadModel('zanode')->getSnapshotList($node->id);
