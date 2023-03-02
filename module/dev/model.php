@@ -628,6 +628,7 @@ class devModel extends model
         $menus = array();
         if($this->config->vision == 'lite' and $menu == 'project') $menu = 'kanbanProject';
         if(!isset($this->lang->$menu->menu)) return $menus;
+        if(isset($this->lang->$menu->menuOrder)) $this->lang->$menu->menu->menuOrder = $this->lang->$menu->menuOrder;
 
         $menuLang    = $this->getLinkTitle($this->lang->$menu->menu);
         $menusPinYin = common::convert2Pinyin($menuLang);
