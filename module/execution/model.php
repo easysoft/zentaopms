@@ -5783,6 +5783,17 @@ class executionModel extends model
         $post    = $_POST;
 
         $_POST = array();
+        $extendFields = $this->dao->select('field')
+            ->from(TABLE_WORKFLOWFIELD)
+            ->where('module')->eq('project')
+            ->andWhere('buildin')->eq(0)
+            ->andWhere('role')->eq('custom')
+            ->fetchPairs('field');
+        foreach(array_keys($extendFields) as $key)
+        {
+            if(isset($post[$key])) $_POST[$key] = $post[$key];
+        }
+
         $_POST['project']   = $projectID;
         $_POST['name']      = $project->name;
         $_POST['begin']     = $project->begin;
