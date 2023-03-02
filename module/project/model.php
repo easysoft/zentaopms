@@ -1250,6 +1250,7 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('days', '0')
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
