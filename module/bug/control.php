@@ -1398,7 +1398,7 @@ class bug extends control
         }
 
         /* Set users. */
-        $users = $this->user->getPairs('devfirst', '', $this->config->maxCount);
+        $users = $this->user->getPairs('devfirst');
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
