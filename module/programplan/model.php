@@ -1046,7 +1046,7 @@ class programplanModel extends model
 
         $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($stage->id)->exec();
 
-        if(count($children) > 0)
+        if(!empty($children))
         {
             foreach($children as $id => $child) $this->setTreePath($id);
         }
