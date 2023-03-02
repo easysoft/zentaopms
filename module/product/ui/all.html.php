@@ -201,7 +201,7 @@ foreach ($lang->product->featureBar['all'] as $key => $text)
     $statuses[] = array(
         'text'   => $text,
         'active' => ($key == $browseType),
-        'url'    => \helper::createLink($this->moduleName, $this->methodName, 'all', "browseType=$key&orderBy=$orderBy"),
+        'url'    => createLink($this->moduleName, $this->methodName, 'all', "browseType=$key&orderBy=$orderBy"),
         'class'  => 'btn btn-link'
     );
 }
@@ -227,7 +227,7 @@ $btnGroup[] = array(
     'text'  => $lang->product->export,
     'icon'  => 'export',
     'class' => 'btn secondary',
-    'url'   => \helper::createLink('product', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
+    'url'   => createLink('product', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
 );
 if($config->systemMode == 'ALM')
 {
@@ -235,14 +235,14 @@ if($config->systemMode == 'ALM')
         'text'  => $lang->product->line,
         'icon'  => 'edit',
         'class' => 'btn secondary',
-        'url'   => \helper::createLink('product', 'manageLine', $browseType),
+        'url'   => createLink('product', 'manageLine', $browseType),
     );
 }
 $btnGroup[] = array(
     'text'  => $lang->product->create,
     'icon'  => 'plus',
     'class' => 'btn primary',
-    'url'   => \helper::createLink('product', 'create')
+    'url'   => createLink('product', 'create')
 );
 
 page
@@ -269,7 +269,7 @@ page
         (
             set('text', $lang->{$app->tab}->common),
             set('icon', $app->tab),
-            set('url', \helper::createLink($app->tab, 'browse')),
+            set('url', createLink($app->tab, 'browse')),
         ),
         pagenavbar
         (
