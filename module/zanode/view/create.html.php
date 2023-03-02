@@ -22,7 +22,7 @@
       </div>
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
-          <tr>
+          <tr class='hidden'>
             <th><?php echo $lang->zahost->type;?></th>
             <td><?php echo html::select('type', $lang->zanode->typeList, 'virtual', "class='form-control chosen' onchange='zahostType()'")?></td>
             <td></td>
