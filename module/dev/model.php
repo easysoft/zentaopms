@@ -366,6 +366,14 @@ class devModel extends model
         ksort($menuOrders);
         foreach($menuOrders as $menuKey)
         {
+            if($menuKey == 'project')
+            {
+                $projectTypeList = array('scrum', 'waterfall', 'kanbanProject');
+                foreach($projectTypeList as $projectType)
+                {
+                    if(isset($menus[$projectType])) $sortedMenus[$projectType] = $menus[$projectType];
+                }
+            }
             if(isset($menus[$menuKey])) $sortedMenus[$menuKey] = $menus[$menuKey];
         }
 
