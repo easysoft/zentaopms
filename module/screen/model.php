@@ -66,6 +66,7 @@ class screenModel extends model
         $this->filter->charts  = array();
 
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
+        if(!isset($screen->scheme) or empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
         $screen->chartData = $this->genChartData($screen, $year, $dept, $account);
 
         return $screen;
@@ -83,6 +84,8 @@ class screenModel extends model
      */
     public function genChartData($screen)
     {
+        if(!$screen->builtin) return json_decode($screen->scheme);
+
         $config = new stdclass();
         $config->width            = 1300;
         $config->height           = 1080;
@@ -116,17 +119,10 @@ class screenModel extends model
         }
         $config->height += 50;
 
-        if($screen->builtin)
-        {
-            $chartData = new stdclass();
-            $chartData->editCanvasConfig    = $config;
-            $chartData->componentList       = $this->buildComponentList($componentList);
-            $chartData->requestGlobalConfig =  json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
-        }
-        else
-        {
-            return json_decode($screen->scheme);
-        }
+        $chartData = new stdclass();
+        $chartData->editCanvasConfig    = $config;
+        $chartData->componentList       = $this->buildComponentList($componentList);
+        $chartData->requestGlobalConfig =  json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
 
         return $chartData;
     }
