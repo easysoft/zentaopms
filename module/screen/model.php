@@ -116,10 +116,17 @@ class screenModel extends model
         }
         $config->height += 50;
 
-        $chartData = new stdclass();
-        $chartData->editCanvasConfig    = $config;
-        $chartData->componentList       = $this->buildComponentList($componentList);
-        $chartData->requestGlobalConfig =  json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } return $chartData; }');
+        if($screen->builtin)
+        {
+            $chartData = new stdclass();
+            $chartData->editCanvasConfig    = $config;
+            $chartData->componentList       = $this->buildComponentList($componentList);
+            $chartData->requestGlobalConfig =  json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
+        }
+        else
+        {
+            return json_decode($screen->scheme);
+        }
 
         return $chartData;
     }
