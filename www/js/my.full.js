@@ -1,4 +1,3 @@
-/* Tab session */
 (function($)
 {
     /**
@@ -9,8 +8,8 @@
      */
     function handleSaveFormDraft()
     {
-        if (config.currentMethod === 'login') return;
-        setTimeout(() => {
+        if(config.currentMethod === 'login') return;
+        setTimeout(function() {
             var form = $('.table-form').parent();
             if(form.length)
             {
@@ -18,7 +17,7 @@
                 var formDataStored = $.zui.store.get(formDataID);
                 if(formDataStored)
                 {
-                    var message = lang.confirmDraft.replace('%s%', lang[config.currentModule] || '');
+                    var message = lang.confirmDraft.replace('%name%', lang[config.currentModule] ? lang[config.currentModule] : '');
                     new $.zui.Messager(message, {
                         type: 'success',
                         close: true,
@@ -34,8 +33,7 @@
                                     for(var i = 0; i < formDataStored.length; i++)
                                     {
                                         var item = formDataStored[i];
-
-                                        /* formItem === checkbox || formItem === multipleSelect */
+                                        /* formItem === checkbox or formItem === multipleSelect */
                                         if(item.name.indexOf('[]') != -1)
                                         {
                                             var formItem = $('[name^=' + item.name.replace('[]', '') + ']');
@@ -63,10 +61,7 @@
                                                  if($(formItem).attr('multiple'))
                                                  {
                                                      var value = [];
-                                                     if (!valueMultiple[item.name])
-                                                     {
-                                                         valueMultiple[item.name] = [];
-                                                     }   
+                                                     if(!valueMultiple[item.name]) valueMultiple[item.name] = [];
                                                      valueMultiple[item.name].push(item.value);
                                                      $(formItem).data('zui.picker').setValue(valueMultiple[item.name]);
                                                  }   
@@ -110,17 +105,16 @@
                  }).on('change', function()
                  {
                      $.zui.store.set(formDataID, $(form).serializeArray());
-                     console.log($(form).serializeArray());
                  }).on('success.form.zui', function(event, res)
                  {
-                     if (res.result === 'fail' || res.status === 'fail') return
-                     $.zui.store.remove(formDataID);
+                     if(res.result === 'fail' || res.status === 'fail') $.zui.store.remove(formDataID);
                  })  
              }   
          }, 500);
      }  
     handleSaveFormDraft();
 
+    /* Tab session */
     if(!config.tabSession) return;
     /** Store current tab id */
     var _tid = '';

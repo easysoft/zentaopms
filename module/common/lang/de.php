@@ -90,6 +90,8 @@ $lang->viewDetails        = 'View Details';
 
 $lang->actions         = 'Aktionen';
 $lang->restore         = 'Wiederherstellen';
+$lang->confirmDraft    = 'There are unsaved form of %name%. Do you want to restore them?';
+$lang->resume          = 'resume';
 $lang->comment         = 'Notiz';
 $lang->history         = 'Historie';
 $lang->attatch         = 'Anlagen';
