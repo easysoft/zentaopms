@@ -276,6 +276,7 @@ $lang->task->error->consumedThisTime  = 'Entrez le "Coût en Heures"';
 $lang->task->error->left              = 'Entrez les "Heures Restantes"';
 $lang->task->error->work              = '"Commentaire" doit être <  %d caractères.';
 $lang->task->error->teamMember        = 'Team members must be at least 2 people';
+$lang->task->error->teamCantOperate   = 'Please activate the closed, suspended, and canceled tasks before setting the team.';
 $lang->task->error->skipClose         = 'Tâche: %s non “Finie” ou “Annulée”. Voulez-vous la fermer malgré tout ?';
 $lang->task->error->closeParent       = 'Task: %s is the Parent Task, which is automatically closed after all subtasks under the Parent Task are closed and cannot be closed manually.';
 $lang->task->error->consumed          = 'Tâche: %s heures doivent être < 0. Ignorer changements de cette tâche.';

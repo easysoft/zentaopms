@@ -285,7 +285,12 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
           </button>
           <h4 class="modal-title"><?php echo $lang->task->team?></h4>
         </div>
-        <div class="modal-content with-padding" id='taskTeamEditor'>
+	<div class="modal-content with-padding" id='taskTeamEditor'>
+	  <?php if(strpos('|closed|cancel|pause|', $task->status) !== false):?>
+	     <h2 class='label label-info'>
+               <?php echo $this->lang->task->error->teamCantOperate;?>                                             
+             </h2>
+	  <?php endif;?>
           <table class='table table-form'>
             <tbody class="sortable">
               <?php include dirname(__FILE__) . DS . 'taskteam.html.php';?>
