@@ -51,7 +51,7 @@
         <td><?php echo $holiday->name;?></td>
         <td><?php echo formatTime($holiday->begin, DT_DATE1) . ' ~ ' . formatTime($holiday->end, DT_DATE1);?></td>
         <td><?php echo zget($lang->holiday->typeList, $holiday->type);?></td>
-        <td><p class='c-desc'><?php echo $holiday->desc;?></p></td>
+        <td><p class='c-desc' title='<?php echo $holiday->desc?>'><?php echo $holiday->desc;?></p></td>
         <td class=" c-actions">
           <?php common::printIcon('holiday', 'edit', "id=$holiday->id", $holiday, 'list', '', '', 'iframe', 'yes');?>
           <?php common::printIcon('holiday', 'delete', "id=$holiday->id", $holiday, 'list', '', 'hiddenwin');?>

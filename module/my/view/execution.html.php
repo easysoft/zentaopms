@@ -48,9 +48,10 @@
     </thead>
     <tbody>
       <?php foreach($executions as $execution):?>
+      <?php $isParent = isset($parentGroup[$execution->id]);?>
       <?php $link = $this->createLink('execution', 'browse', "id=$execution->id", '', '', $execution->project);?>
       <tr class='text-left'>
-        <td><?php echo html::a($link, sprintf('%03d', $execution->id));?></td>
+        <td><?php echo $isParent ? sprintf('%03d', $execution->id) : html::a($link, sprintf('%03d', $execution->id));?></td>
         <td class='c-name text-left'>
           <?php if($config->systemMode == 'ALM'):?>
           <?php
@@ -59,7 +60,7 @@
           if($execution->type === 'kanban') echo "<span class='project-type-label label label-outline label-info'>{$lang->execution->kanban}</span> ";
           ?>
           <?php endif;?>
-          <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
+          <?php echo $isParent ? $execution->name : html::a($link, $execution->name, '', "title='$execution->name'");?>
         </td>
         <td class="c-status">
           <?php if(isset($execution->delay)):?>

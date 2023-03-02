@@ -522,11 +522,14 @@ class adminModel extends model
             $searchType = $type == 'plugin' ? 'byModule,offcial' : 'byModule';
             $param      = $type == 'plugin' ? '' : 'MTIxOA==';
             $extensions = $this->loadModel('extension')->getExtensionsByAPI($searchType, $param, 0, $limit);
-            $plugins    = isset($extensions->extensions) ? (array)$extensions->extensions : array();
-            foreach($plugins as $id => $plugin)
+            $extensions = isset($extensions->extensions) ? (array)$extensions->extensions : array();
+            $plugins    = array();
+            foreach($extensions as $extension)
             {
-                $plugin->viewLink = str_replace(array('info', 'client'), '', $plugin->viewLink);
-                if($type == 'patch' and !isset($plugin->compatibleRelease)) unset($plugins[$id]);
+                if($type == 'patch' and !isset($extension->compatibleRelease)) continue;
+
+                $extension->viewLink = str_replace(array('info', 'client'), '', $extension->viewLink);
+                $plugins[] = $extension;
             }
         }
         else

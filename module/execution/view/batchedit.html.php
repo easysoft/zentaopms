@@ -105,7 +105,7 @@
             <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$executionID]", $qdUsers, $executions[$executionID]->QD, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$executionID]", $rdUsers, $executions[$executionID]->RD, "class='form-control picker-select'");?></td>
             <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>'>
-              <?php if($executions[$executionID]->type == 'stage'):?>
+              <?php if(isset($projects[$execution->project]) and ($projects[$execution->project]->model == 'waterfall' or $projects[$execution->project]->model == 'waterfallplus')):?>
               <?php echo html::select("attributes[$executionID]", $lang->stage->typeList, $executions[$executionID]->attribute, 'class=form-control');?>
               <?php else:?>
               <?php echo html::select("lifetimes[$executionID]", $lang->execution->lifeTimeList, $executions[$executionID]->lifetime, 'class=form-control');?>

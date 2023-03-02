@@ -715,7 +715,7 @@ class programplanModel extends model
 
         $project   = $this->loadModel('project')->getByID($projectID);
         $setCode   = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
-        $sameCodes = $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '');
+        $sameCodes = $setCode ? $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '') : false;
 
         $datas = array();
         foreach($names as $key => $name)
@@ -777,10 +777,13 @@ class programplanModel extends model
             {
                 dao::$errors[$index]['end'] = $this->lang->programplan->error->planFinishSmall;
             }
-            if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
+            if(isset($parentStage) and $plan->begin < $parentStage->begin)
             {
-                if($plan->begin < $parentStage->begin and empty(dao::$errors[$index]['begin'])) dao::$errors[$index]['begin'] = $this->lang->programplan->error->parentDuration;
-                if($plan->end > $parentStage->end and empty(dao::$errors[$index]['end']))       dao::$errors[$index]['end']   = $this->lang->programplan->error->parentDuration;
+                 dao::$errors[$index]['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
+            }
+            if(isset($parentStage) and $plan->end > $parentStage->end)
+            {
+                 dao::$errors[$index]['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
             }
             if($plan->begin < $project->begin and empty(dao::$errors[$index]['begin']))
             {
@@ -1075,9 +1078,14 @@ class programplanModel extends model
         if(dao::isError()) return false;
 
         if($plan->parent) $parentStage = $this->getByID($plan->parent);
-        if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
+        if(isset($parentStage) and $plan->begin < $parentStage->begin)
         {
-            dao::$errors['message'][] = $this->lang->programplan->error->parentDuration;
+            dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
+            return false;
+        }
+        if(isset($parentStage) and $plan->end > $parentStage->end)
+        {
+            dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
             return false;
         }
 
@@ -1153,7 +1161,7 @@ class programplanModel extends model
         $this->updateSubStageAttr($planID, $plan->attribute);
         if($plan->acl != 'open')
         {
-            $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->eq('stage')->fetchAll('id');
+            $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->ne('project')->fetchAll('id');
             $this->loadModel('user')->updateUserView(array_keys($planIdList), 'sprint');
         }
 
@@ -1506,6 +1514,8 @@ class programplanModel extends model
             $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->andWhere('id')->ne($id)->fetchPairs();
             $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
             foreach($children as $childID => $childExecution) $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $statusCount[$childExecution->status] ++;
+
+            if(empty($statusCount)) continue;
 
             if(isset($statusCount['wait']) and count($statusCount) == 1 and helper::isZeroDate($parent->realBegan) and $startTasks == 0)
             {
