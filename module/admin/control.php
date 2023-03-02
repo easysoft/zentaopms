@@ -53,21 +53,50 @@ class admin extends control
 
         $this->loadModel('misc');
 
-        $hasInternet = $this->admin->checkInternet();
-        $clientLang  = $this->app->getClientLang();
-        $langNotCN   = common::checkNotCN();
-        $dateUsed    = $this->admin->genDateUsed();
+        $clientLang = $this->app->getClientLang();
+        $langNotCN  = common::checkNotCN();
+        $dateUsed   = $this->admin->genDateUsed();
+
+        $zentaoData  = $this->admin->getZentaoData();
+        $hasInternet = $zentaoData->hasData;
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->position[]  = $this->lang->admin->index;
-        $this->view->plugins     = $this->admin->getExtensionsByAPI('plugin', $langNotCN ? 5 : 6, $hasInternet);
-        $this->view->patches     = $this->admin->getExtensionsByAPI('patch', 5, $hasInternet);
+        $this->view->plugins     = $zentaoData->plugins;
+        $this->view->patches     = $zentaoData->patches;
         $this->view->dateUsed    = $dateUsed;
         $this->view->hasInternet = $hasInternet;
-        $this->view->dynamics    = ($hasInternet and !$langNotCN) ? $this->admin->getDynamicsByAPI(3) : array();
-        $this->view->publicClass = ($hasInternet and !$langNotCN) ? $this->admin->getPublicClassByAPI(3) : array();
+        $this->view->dynamics    = $zentaoData->news;
+        $this->view->publicClass = $zentaoData->publicclass;
         $this->view->langNotCN   = $langNotCN;
         $this->display();
+    }
+
+    /**
+     * Get zentao.net data by api.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSetZentaoData()
+    {
+        $hasInternet = $this->admin->checkInternet();
+
+        if($hasInternet)
+        {
+            $nextWeek   = date('Y-m-d', strtotime('-7 days'));
+            $zentaoData = $this->loadModel('block')->getZentaoData($nextWeek);
+
+            if(empty($zentaoData))
+            {
+                $this->admin->setExtensionsByAPI('plugin', 6);
+                $this->admin->setExtensionsByAPI('patch', 5);
+                $this->admin->setDynamicsByAPI(3);
+                $this->admin->setPublicClassByAPI(3);
+            }
+        }
+
+        return $this->send(array('result' => 'success'));
     }
 
     /**
