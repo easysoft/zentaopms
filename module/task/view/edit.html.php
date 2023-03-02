@@ -295,9 +295,11 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
             <tbody class="sortable">
               <?php include dirname(__FILE__) . DS . 'taskteam.html.php';?>
             </tbody>
-            <tfoot>
+	    <tfoot>
+	      <?php if(strpos('|closed|cancel|pause|', $task->status) === false):?>
               <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary btn-wide'");?></td></tr>
-            </tfoot>
+	      <?php endif;?> 
+	    </tfoot>
           </table>
         </div>
       </div>
