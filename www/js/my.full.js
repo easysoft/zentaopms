@@ -93,9 +93,14 @@
                                              $(formItem).kindeditor();
                                          }
                                      }
+                                     $.zui.store.remove(formDataID);
                                  }
                              }
-                         ]
+                         ],
+                         onAction: function(name, action, messager)
+                         {
+                             $.zui.store.remove(formDataID);
+                         }
                      }).show();
                  }
                  form.on('input', function()
