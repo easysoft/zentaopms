@@ -226,7 +226,7 @@
                     <th><?php echo $lang->execution->totalEstimate;?></th>
                     <td><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></td>
                     <th><?php echo $lang->execution->totalDays;?></th>
-                    <td><?php echo $project->days;?></td>
+                    <td><?php echo (float)$project->days . $lang->execution->day;?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->execution->totalConsumed;?></th>
