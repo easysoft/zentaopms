@@ -5164,7 +5164,7 @@ class executionModel extends model
         }
         else
         {
-            $path     = str_replace(",$execution->project", '', $execution->path);
+            $path     = str_replace(",$execution->project,", ',', $execution->path);
             $trClass  = 'table-nest-hide';
             $trAttrs  = "data-id={$execution->id} data-parent={$execution->parent} data-status={$execution->status}";
             $trAttrs .= " data-nest-parent='$execution->parent' data-order='$execution->order' data-nest-path='$path'";
