@@ -643,10 +643,11 @@ class adminModel extends model
      */
     public function checkInternet()
     {
+        $timeoutMS = 400;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $this->config->admin->apiSite);
-        curl_setopt($curl, CURLOPT_TIMEOUT_MS, 1000);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
+        curl_setopt($curl, CURLOPT_TIMEOUT_MS, $timeoutMS);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, $timeoutMS);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
