@@ -53,21 +53,44 @@ class admin extends control
 
         $this->loadModel('misc');
 
-        $hasInternet = $this->admin->checkInternet();
-        $clientLang  = $this->app->getClientLang();
-        $langNotCN   = common::checkNotCN();
-        $dateUsed    = $this->admin->genDateUsed();
+        $clientLang = $this->app->getClientLang();
+        $langNotCN  = common::checkNotCN();
+        $dateUsed   = $this->admin->genDateUsed();
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->position[]  = $this->lang->admin->index;
-        $this->view->plugins     = $this->admin->getExtensionsByAPI('plugin', $langNotCN ? 5 : 6, $hasInternet);
-        $this->view->patches     = $this->admin->getExtensionsByAPI('patch', 5, $hasInternet);
+        $this->view->plugins     = $this->admin->getExtensionsByAPI('plugin');
+        $this->view->patches     = $this->admin->getExtensionsByAPI('patch');
         $this->view->dateUsed    = $dateUsed;
-        $this->view->hasInternet = $hasInternet;
-        $this->view->dynamics    = ($hasInternet and !$langNotCN) ? $this->admin->getDynamicsByAPI(3) : array();
-        $this->view->publicClass = ($hasInternet and !$langNotCN) ? $this->admin->getPublicClassByAPI(3) : array();
+        $this->view->dynamics    = array();
+        $this->view->publicClass = array();
         $this->view->langNotCN   = $langNotCN;
         $this->display();
+    }
+
+    /**
+     * Get zentao.net data by api.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetZentaoData()
+    {
+        $hasInternet = $this->admin->checkInternet();
+        $langNotCN   = common::checkNotCN();
+
+        $data['result'] = $hasInternet ? 'success' : 'fail';
+        $data['data']   = new stdClass();
+
+        if($hasInternet)
+        {
+            $data['data']->plugins     = $this->admin->getExtensionsByAPI('plugin', $langNotCN ? 5 : 6, true);
+            $data['data']->patches     = $this->admin->getExtensionsByAPI('patch', 5, true);
+            $data['data']->dynamics    = !$langNotCN ? $this->admin->getDynamicsByAPI(3) : array();
+            $data['data']->publicClass = !$langNotCN ? $this->admin->getPublicClassByAPI(3) : array();
+        }
+
+        return $this->send($data);
     }
 
     /**

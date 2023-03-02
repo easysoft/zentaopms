@@ -514,7 +514,7 @@ class adminModel extends model
      * @access public
      * @return array
      */
-    public function getExtensionsByAPI($type = 'plugin', $limit = 6, $hasInternet = true)
+    public function getExtensionsByAPI($type = 'plugin', $limit = 6, $hasInternet = false)
     {
         if($hasInternet)
         {
@@ -643,11 +643,11 @@ class adminModel extends model
      */
     public function checkInternet()
     {
-        $timeoutMS = 400;
-        $curl = curl_init();
+        $timeout = 3;
+        $curl    = curl_init();
         curl_setopt($curl, CURLOPT_URL, $this->config->admin->apiSite);
-        curl_setopt($curl, CURLOPT_TIMEOUT_MS, $timeoutMS);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, $timeoutMS);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
