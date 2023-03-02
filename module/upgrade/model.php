@@ -7064,6 +7064,8 @@ class upgradeModel extends model
             foreach($labels as $method => $label)
             {
                 $workflowAction = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($method)->fetch();
+                if(!$workflowAction) continue;
+
                 unset($workflowAction->id);
                 $workflowAction->vision = $workflowAction->vision == 'lite' ? 'rnd' : 'lite';
                 $this->dao->replace(TABLE_WORKFLOWACTION)->data($workflowAction)->exec();
