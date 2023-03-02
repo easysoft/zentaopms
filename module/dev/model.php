@@ -368,6 +368,8 @@ class devModel extends model
         {
             if(isset($menus[$menuKey])) $sortedMenus[$menuKey] = $menus[$menuKey];
         }
+
+        $sortedMenus = array_merge($sortedMenus, $menus);
         return $sortedMenus;
     }
 
@@ -442,6 +444,7 @@ class devModel extends model
                 {
                     if($type == $menuType and in_array($linkKey, $skipMenus)) continue 2;
                 }
+                if(in_array($module, array('scrum', 'waterfall', 'execution')) and in_array($linkKey, $this->config->dev->skipMenus[$module])) continue;
 
                 if($menu == '@branch@') $menu = $this->lang->dev->branch;
                 $originalLangs[$langKey . $linkKey] = $menu;
