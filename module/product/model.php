@@ -1537,6 +1537,8 @@ class productModel extends model
         if($projectID) $executions = $this->loadModel('execution')->resetExecutionSorts($executions);
         foreach($executions as $execution)
         {
+            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue;
+
             if(isset($execution->children))
             {
                 $executionPairs = $executionPairs + $execution->children;
@@ -1544,7 +1546,6 @@ class productModel extends model
             }
 
             /* Some stage of waterfall not need.*/
-            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue;
             if(isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
         }
 
