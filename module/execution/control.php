@@ -2633,25 +2633,10 @@ class execution extends control
         $this->session->set('execGroupBy', $groupBy);
         $this->session->set('storyList', $this->app->getURI(true), 'execution');
         $this->session->set('rdSearchValue', '');
-
-        $features   = $this->execution->getExecutionFeatures($execution);
-        $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
-
-        /* Set lane type. */
-        if(!$features['story'] and !$features['qa']) $browseType = 'task';
         $this->session->set('execLaneType', $browseType);
 
-        /* Remove lanes if no feature. */
-        foreach($kanbanData as $regionID => $region)
-        {
-            foreach($region->groups as $groupID => $group)
-            {
-                if(!$features['story'] and $group->lanes[0]->type == 'story') unset($kanbanData[$regionID]->groups[$groupID]);
-                if(!$features['qa']    and $group->lanes[0]->type == 'bug')   unset($kanbanData[$regionID]->groups[$groupID]);
-            }
-            $kanbanData[$regionID]->groups = array_values($kanbanData[$regionID]->groups);
-        }
-
+        $features         = $this->execution->getExecutionFeatures($execution);
+        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
         foreach($this->config->execution->statusActions as $action)
         {
