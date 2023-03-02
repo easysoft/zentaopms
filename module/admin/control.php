@@ -57,13 +57,17 @@ class admin extends control
         $langNotCN  = common::checkNotCN();
         $dateUsed   = $this->admin->genDateUsed();
 
+        $zentaoData  = $this->admin->getZentaoData();
+        $hasInternet = $zentaoData->hasData;
+
         $this->view->title       = $this->lang->admin->common;
         $this->view->position[]  = $this->lang->admin->index;
-        $this->view->plugins     = $this->admin->getExtensionsByAPI('plugin');
-        $this->view->patches     = $this->admin->getExtensionsByAPI('patch');
+        $this->view->plugins     = $zentaoData->plugins;
+        $this->view->patches     = $zentaoData->patches;
         $this->view->dateUsed    = $dateUsed;
-        $this->view->dynamics    = array();
-        $this->view->publicClass = array();
+        $this->view->hasInternet = $hasInternet;
+        $this->view->dynamics    = $zentaoData->news;
+        $this->view->publicClass = $zentaoData->publicclass;
         $this->view->langNotCN   = $langNotCN;
         $this->display();
     }
@@ -74,23 +78,25 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function ajaxGetZentaoData()
+    public function ajaxSetZentaoData()
     {
         $hasInternet = $this->admin->checkInternet();
-        $langNotCN   = common::checkNotCN();
-
-        $data['result'] = $hasInternet ? 'success' : 'fail';
-        $data['data']   = new stdClass();
 
         if($hasInternet)
         {
-            $data['data']->plugins     = $this->admin->getExtensionsByAPI('plugin', $langNotCN ? 5 : 6, true);
-            $data['data']->patches     = $this->admin->getExtensionsByAPI('patch', 5, true);
-            $data['data']->dynamics    = !$langNotCN ? $this->admin->getDynamicsByAPI(3) : array();
-            $data['data']->publicClass = !$langNotCN ? $this->admin->getPublicClassByAPI(3) : array();
+            $nextWeek   = date('Y-m-d', strtotime('-7 days'));
+            $zentaoData = $this->loadModel('block')->getZentaoData($nextWeek);
+
+            if(empty($zentaoData))
+            {
+                $this->admin->setExtensionsByAPI('plugin', 6);
+                $this->admin->setExtensionsByAPI('patch', 5);
+                $this->admin->setDynamicsByAPI(3);
+                $this->admin->setPublicClassByAPI(3);
+            }
         }
 
-        return $this->send($data);
+        return $this->send(array('result' => 'success'));
     }
 
     /**

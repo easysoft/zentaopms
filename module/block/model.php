@@ -1072,4 +1072,43 @@ class blockModel extends model
     {
         return $this->dao->select('count(estimate) as estimate')->from(TABLE_STORY)->where('id')->in($storyID)->fetch('estimate');
     }
+
+    /**
+     * Get zentao.net data.
+     *
+     * @param  string $minTime
+     * @access public
+     * @return array
+     */
+    public function getZentaoData($minTime = '')
+    {
+        return $this->dao->select('type,params')->from(TABLE_BLOCK)
+            ->where('account')->eq('system')
+            ->andWhere('vision')->eq('rnd')
+            ->andWhere('module')->eq('zentao')
+            ->beginIF($minTime)->andWhere('source')->ge($minTime)->fi()
+            ->andWhere('type')->in('plugin,patch,publicclass,news')
+            ->fetchPairs('type');
+    }
+
+    /**
+     * Set zentao data.
+     *
+     * @param  string $type
+     * @param  string $params
+     * @access public
+     * @return void
+     */
+    public function setZentaoData($type = 'patch', $params = '')
+    {
+        $data = new stdclass();
+        $data->account = 'system';
+        $data->vision  = 'rnd';
+        $data->module  = 'zentao';
+        $data->type    = $type;
+        $data->source  = date('Y-m-d');
+        $data->params  = json_encode($params);
+
+        $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
+    }
 }

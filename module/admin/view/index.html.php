@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('hasInternet', false);?>
+<?php js::set('hasInternet', $hasInternet);?>
 <div id='mainContent' class='main-content admin'>
   <div class="main <?php if(!$hasInternet) echo 'without-internet';?>">
     <div class="settings panel">
