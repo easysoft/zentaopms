@@ -69,6 +69,8 @@ $lang->whitelist    = 'Lista bianca';
 
 $lang->actions         = 'Hành động';
 $lang->restore         = 'Thiết lập lại';
+$lang->confirmDraft    = 'There are unsaved form of %name%. Do you want to restore them?';
+$lang->resume          = 'resume';
 $lang->comment         = 'Ghi chú';
 $lang->history         = 'Lịch sử';
 $lang->attatch         = 'Files';
