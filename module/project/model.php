@@ -1664,7 +1664,7 @@ class projectModel extends model
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if(!$project->hasProduct) $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', current($linkedProducts));
+            if(!$oldProject->hasProduct) $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', current($linkedProducts));
             if($project->acl != 'open')
             {
                 $this->loadModel('user')->updateUserView($projectID, 'project');
