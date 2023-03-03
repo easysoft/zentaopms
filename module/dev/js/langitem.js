@@ -114,7 +114,7 @@ $(function()
                 initialState: 'active',
                 itemCreator: function($li, item)
                 {
-                    $li.append('<a data-module="' + item.module  + '" data-method="' + item.method + '" data-has-children="' + (item.children ? !!item.children.length : false) + '" href=# >' + item.title + '</a>');
+                    $li.append('<a data-module="' + item.module  + '" data-method="' + item.method + '" data-has-children="' + (item.children ? !!item.children.length : false) + '" href=# title="' + item.title + '">' + item.title + '</a>');
                     if (item.active) $li.addClass('active open in');
                 }
             });
