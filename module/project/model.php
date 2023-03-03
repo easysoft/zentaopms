@@ -1347,12 +1347,6 @@ class projectModel extends model
         $requiredFields = $this->config->project->create->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
-        /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $requiredFields) as $field)
-        {
-            if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
-        }
-
         $this->lang->error->unique = $this->lang->error->repeat;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
@@ -1591,12 +1585,6 @@ class projectModel extends model
 
         $requiredFields = $this->config->project->edit->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $requiredFields) as $field)
-        {
-            if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
-        }
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PROJECT)->data($project)
