@@ -5725,9 +5725,9 @@ class executionModel extends model
             ->andWhere('buildin')->eq(0)
             ->andWhere('role')->eq('custom')
             ->fetchPairs('field');
-        foreach(array_keys($extendFields) as $key)
+        foreach(array_keys($extendFields) as $field)
         {
-            if(isset($post[$key])) $_POST[$key] = $post[$key];
+            if(isset($post[$field])) $_POST[$field] = $post[$field];
         }
 
         $_POST['project']     = $projectID;
@@ -5789,9 +5789,9 @@ class executionModel extends model
             ->andWhere('buildin')->eq(0)
             ->andWhere('role')->eq('custom')
             ->fetchPairs('field');
-        foreach(array_keys($extendFields) as $key)
+        foreach(array_keys($extendFields) as $field)
         {
-            if(isset($post[$key])) $_POST[$key] = $post[$key];
+            if(isset($post[$field])) $_POST[$field] = $post[$field];
         }
 
         $_POST['project']   = $projectID;
