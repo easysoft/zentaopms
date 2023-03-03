@@ -26,13 +26,11 @@ $lang->projectstory->confirm           = '确定';
 $lang->projectstory->whyNoStories   = "看起来没有{$lang->SRCommon}可以关联。请检查下项目关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->projectstory->batchUnlinkTip = '其他需求已经移除，如下需求已与该项目下执行相关联，请从执行中移除后再操作。';
 
-global $app;
-$app->loadLang('product');
 $lang->projectstory->featureBar['story']['allstory']          = '全部';
-$lang->projectstory->featureBar['story']['unclosed']          = $lang->product->unclosed;
-$lang->projectstory->featureBar['story']['draft']             = $lang->product->draftStory;
-$lang->projectstory->featureBar['story']['reviewing']         = $lang->product->reviewingStory;
-$lang->projectstory->featureBar['story']['changing']          = $lang->product->changingStory;
-$lang->projectstory->featureBar['story']['closed']            = $lang->product->closedStory;
+$lang->projectstory->featureBar['story']['unclosed']          = '未关闭';
+$lang->projectstory->featureBar['story']['draft']             = '草稿';
+$lang->projectstory->featureBar['story']['reviewing']         = '评审中';
+$lang->projectstory->featureBar['story']['changing']          = '变更中';
+$lang->projectstory->featureBar['story']['closed']            = '已关闭';
 $lang->projectstory->featureBar['story']['linkedExecution']   = '已关联' . $lang->execution->common;
 $lang->projectstory->featureBar['story']['unlinkedExecution'] = '未关联' . $lang->execution->common;
