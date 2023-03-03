@@ -260,6 +260,11 @@ $config->dev->linkMethods['my']['my-calendar'] = array('my', 'todo');
 $config->dev->skipMenus['first']  = array('project', 'product');
 $config->dev->skipMenus['second'] = array('menu_storyGroup', 'menu_story', 'menu_other', 'menu_more');
 $config->dev->skipMenus['third']  = array('bysearch');
+if($config->vision == 'lite')
+{
+    $config->dev->skipMenus['first'][] = 'execution';
+    $config->dev->skipMenus['second']  = array('menu_other', 'menu_more');
+}
 
 $config->dev->skipMenus['scrum'] = array();
 if(!helper::hasFeature('scrum_issue')      and !helper::hasFeature('agileplus_issue'))      $config->dev->skipMenus['scrum']['issue']      = 'otherDropMenu_issue';

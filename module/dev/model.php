@@ -408,22 +408,29 @@ class devModel extends model
         $langKey = '';
         if($type == 'common')
         {
-            $projectKey = (int)$this->loadModel('setting')->getItem('owner=system&key=sprintConcept');
-            $originalLangs['productCommon']   = $this->config->productCommonList[$language][PRODUCT_KEY];
-            $originalLangs['projectCommon']   = $this->config->projectCommonList[$language][PROJECT_KEY];
-            $originalLangs['executionCommon'] = $this->config->executionCommonList[$language][$projectKey];
-            $originalLangs['URCommon']        = $this->lang->dev->UR;
-            $originalLangs['SRCommon']        = $this->lang->dev->SR;
-
-            $URSRList = $this->loadModel('custom')->getItems("lang={$language}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
-            $URSRList = array_shift($URSRList);
-            if($URSRList)
+            if($this->config->vision == 'rnd')
             {
-                $URSRList = json_decode($URSRList->value);
-                $originalLangs['URCommon'] = isset($URSRList->defaultURName) ? $URSRList->defaultURName : $URSRList->URName;
-                $originalLangs['SRCommon'] = isset($URSRList->defaultSRName) ? $URSRList->defaultSRName : $URSRList->SRName;
+                $projectKey = (int)$this->loadModel('setting')->getItem('owner=system&key=sprintConcept');
+                $originalLangs['productCommon'] = $this->config->productCommonList[$language][PRODUCT_KEY];
+                $originalLangs['projectCommon'] = $this->config->projectCommonList[$language][PROJECT_KEY];
+                $originalLangs['executionCommon'] = $this->config->executionCommonList[$language][$projectKey];
+                $originalLangs['URCommon']        = $this->lang->dev->UR;
+                $originalLangs['SRCommon']        = $this->lang->dev->SR;
+
+                $URSRList = $this->loadModel('custom')->getItems("lang={$language}&module=custom&section=URSRList&key={$this->config->custom->URSR}&vision={$this->config->vision}");
+                $URSRList = array_shift($URSRList);
+                if($URSRList)
+                {
+                    $URSRList = json_decode($URSRList->value);
+                    $originalLangs['URCommon'] = isset($URSRList->defaultURName) ? $URSRList->defaultURName : $URSRList->URName;
+                    $originalLangs['SRCommon'] = isset($URSRList->defaultSRName) ? $URSRList->defaultSRName : $URSRList->SRName;
+                }
+                if(!$this->config->URAndSR) unset($customedLangs['URCommon']);
             }
-            if(!$this->config->URAndSR) unset($customedLangs['URCommon']);
+            else
+            {
+                $originalLangs['projectCommon'] = $this->config->projectCommonList[$language][PROJECT_KEY];
+            }
         }
         elseif($type == 'tag')
         {
@@ -626,7 +633,6 @@ class devModel extends model
     public function getThirdMenus($menu, $module = '', $method = '')
     {
         $menus = array();
-        if($this->config->vision == 'lite' and $menu == 'project') $menu = 'kanbanProject';
         if(!isset($this->lang->$menu->menu)) return $menus;
         if(isset($this->lang->$menu->menuOrder)) $this->lang->$menu->menu->menuOrder = $this->lang->$menu->menuOrder;
 
@@ -926,7 +932,10 @@ class devModel extends model
         if($type == 'common') $section = '&section=';
         if($type == 'first')  $section = '&section=mainNav';
         if($type == 'tag')    $section = str_replace('_', '-', "&section=featureBar-{$method}");
-        $this->loadModel('custom')->deleteItems("lang={$language}&module={$moduleName}&vision={$this->config->vision}{$section}");
+        $key = '';
+        if($type == 'common') $key = '&key=projectCommon,productCommon,executionCommon';
+
+        $this->loadModel('custom')->deleteItems("lang={$language}&module={$moduleName}&vision={$this->config->vision}{$section}{$key}");
 
         $data = fixer::input('post')->get();
         if($type == 'common') unset($data->common_SRCommon, $data->common_URCommon);

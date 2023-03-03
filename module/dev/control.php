@@ -180,8 +180,11 @@ class dev extends control
         if($type == 'common') $section = '&section=';
         if($type == 'first')  $section = '&section=mainNav';
         if($type == 'tag')    $section = str_replace('_', '-', "&section=featureBar-{$method}");
-        $this->loadModel('custom')->deleteItems("lang={$language}&module={$module}&vision={$this->config->vision}{$section}");
-        if($type == 'common' and $this->config->custom->URSR)
+        $key = '';
+        if($type == 'common') $key = '&key=projectCommon,productCommon,executionCommon';
+
+        $this->loadModel('custom')->deleteItems("lang={$language}&module={$module}&vision={$this->config->vision}{$section}{$key}");
+        if($this->config->vision == 'rnd' and $type == 'common' and $this->config->custom->URSR)
         {
             $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($this->config->custom->URSR)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($language)->andWhere('module')->eq('custom')->fetch('value');
             if($oldValue)
