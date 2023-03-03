@@ -30,7 +30,7 @@ class customModel extends model
             while($row = $stmt->fetch())
             {
                 /* Replace common lang for menu. */
-                if(strpos($row->module, 'Menu') !== false or strpos($row->section, 'featureBar-') !== false or $row->section == 'mainNav')
+                if(strpos($row->module, 'Menu') !== false or strpos($row->section, 'featureBar-') !== false or $row->section == 'mainNav' or strpos($row->section, 'moreSelects-') !== false)
                 {
                     $row->value = strtr($row->value, $this->config->custom->commonLang);
                 }
@@ -53,27 +53,19 @@ class customModel extends model
         {
             if(isset($sectionLang[$customLang->module][$customLang->section]['all']) and isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) and $customLang->lang == 'all') continue;
 
-            if(strpos($customLang->section, 'featureBar-') !== false)
+            if(strpos($customLang->section, 'featureBar-') !== false or strpos($customLang->section, 'moreSelects-') !== false)
             {
-                $sections      = explode('-', $customLang->section);
-                $firstKey      = $sections[0];
-                $sectionIndex  = count($sections) - 1;
-                $sectionArr    = array($customLang->key => $customLang->value);
-                $oldSectionArr = empty($processedLang[$customLang->module]) ? array() : $processedLang[$customLang->module];
-                $oldFeatureBar = empty($oldSectionArr[$firstKey]) ? array() : $oldSectionArr[$firstKey];
-                if(!empty($oldSectionArr))
+                $sections = explode('-', $customLang->section);
+                $sections = array_reverse($sections);
+                if(!isset($processedLang[$customLang->module])) $processedLang[$customLang->module] = array();
+                $sectionArr = array($customLang->key => $customLang->value);
+                foreach($sections as $section)
                 {
-                    for($i = 0; $i <= $sectionIndex; $i ++)
-                    {
-                        $sectionKey    = $sections[$i];
-                        $oldSectionArr = isset($oldSectionArr[$sectionKey]) ? $oldSectionArr[$sectionKey] : array();
-                    }
-                    $sectionArr = array_merge($oldSectionArr, $sectionArr);
+                    $sectionKey = key($sectionArr);
+                    $sectionArr[$section] = $sectionArr;
+                    unset($sectionArr[$sectionKey]);
                 }
-
-                for($index = $sectionIndex; $index >= 0; $index --) $sectionArr = array($sections[$index] => $sectionArr);
-                $sectionArr[$firstKey] = array_merge($oldFeatureBar, $sectionArr[$firstKey]);
-                $processedLang[$customLang->module] = $sectionArr;
+                if(!empty($sectionArr)) $processedLang[$customLang->module] = array_merge_recursive($processedLang[$customLang->module], $sectionArr);
             }
             else
             {

@@ -448,10 +448,10 @@ class devModel extends model
 
             foreach($featureBars as $feature => $featureName)
             {
-                $selectKey = $feature . 'Selects';
-                if(isset($defaultLang->$module->$selectKey))
+                $moreSelectsTags = isset($defaultLang->{$module}->moreSelects[$method][$feature]) ? $defaultLang->{$module}->moreSelects[$method][$feature] : '';
+                if($moreSelectsTags)
                 {
-                    foreach($defaultLang->$module->$selectKey as $feature => $featureName) $originalLangs[$langKey . $feature] = $featureName;
+                    foreach($moreSelectsTags as $tagKey => $tagName) $originalLangs["moreSelects-{$method}-{$feature}_" . $tagKey] = $tagName;
                     continue;
                 }
                 $originalLangs[$langKey . $feature] = $featureName;
@@ -530,16 +530,28 @@ class devModel extends model
                 if($this->config->vision == 'lite' and isset($this->config->dev->liteTagMethod["$module-$method"])) $method = $this->config->dev->liteTagMethod["$module-$method"];
 
                 $method = str_replace('_', '-', $method);
-                $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}&section=featureBar-$method&vision={$this->config->vision}");
-                $langKey   = "featureBar-{$method}_";
+                $customeds['featureBar']    = $this->loadModel('custom')->getItems("lang={$language}&module={$module}&section=featureBar-$method&vision={$this->config->vision}");
+                $customeds['moreSelects']   = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->eq($language)->andWhere('module')->eq($module)->andWhere('section')->like("moreSelects-$method%")->andWhere('vision')->eq($this->config->vision)->fetchAll();
                 break;
         }
 
-        foreach($customeds as $customed)
+        foreach($customeds as $type => $customed)
         {
-            $customedKey = $customed->key;
-            if($type == 'second') $customedKey = $customed->section . '_' . $customed->key;
-            $customedLangs[$langKey . $customedKey] = $customed->value;
+            if(is_array($customed))
+            {
+                foreach($customed as $row)
+                {
+                    $langKey = $type == 'featureBar' ? "featureBar-{$method}_" : $row->section . '_';
+                    $rowKey  = $row->key;
+                    $customedLangs[$langKey . $rowKey] = $row->value;
+                }
+            }
+            else
+            {
+                $customedKey = $customed->key;
+                if($type == 'second') $customedKey = $customed->section . '_' . $customed->key;
+                $customedLangs[$langKey . $customedKey] = $customed->value;
+            }
         }
 
         return $customedLangs;

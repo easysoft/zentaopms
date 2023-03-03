@@ -124,7 +124,7 @@ class router extends baseRouter
         {
             foreach($lang->db->custom[$moduleName] as $section => $fields)
             {
-                if($section == 'featureBar')
+                if(in_array($section, array('featureBar', 'moreSelects')))
                 {
                     foreach($fields as $featureBarMethod => $featureBarValues)
                     {

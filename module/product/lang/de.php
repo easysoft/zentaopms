@@ -232,15 +232,15 @@ $lang->product->featureBar['project']['doing']     = 'In Arbeit';
 $lang->product->featureBar['project']['suspended'] = 'Ausgesetzt';
 $lang->product->featureBar['project']['closed']    = 'Geschlossen';
 
-$lang->product->moreSelects['openedbyme']     = $lang->product->openedByMe;
-$lang->product->moreSelects['reviewedbyme']   = $lang->product->reviewedByMe;
-$lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
-$lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
-$lang->product->moreSelects['activestory']    = $lang->product->activeStory;
-$lang->product->moreSelects['changingstory']  = $lang->product->changingStory;
-$lang->product->moreSelects['reviewingstory'] = $lang->product->reviewingStory;
-$lang->product->moreSelects['willclose']      = $lang->product->willClose;
-$lang->product->moreSelects['closedstory']    = $lang->product->closedStory;
+$lang->product->moreSelects['more']['openedbyme']     = $lang->product->openedByMe;
+$lang->product->moreSelects['more']['reviewedbyme']   = $lang->product->reviewedByMe;
+$lang->product->moreSelects['more']['assignedbyme']   = $lang->product->assignedByMe;
+$lang->product->moreSelects['more']['closedbyme']     = $lang->product->closedByMe;
+$lang->product->moreSelects['more']['activestory']    = $lang->product->activeStory;
+$lang->product->moreSelects['more']['changingstory']  = $lang->product->changingStory;
+$lang->product->moreSelects['more']['reviewingstory'] = $lang->product->reviewingStory;
+$lang->product->moreSelects['more']['willclose']      = $lang->product->willClose;
+$lang->product->moreSelects['more']['closedstory']    = $lang->product->closedStory;
 
 $lang->product->featureBar['dynamic']['all']       = 'All';
 $lang->product->featureBar['dynamic']['today']     = 'Today';
