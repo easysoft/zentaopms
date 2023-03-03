@@ -13,24 +13,65 @@ namespace zin;
 
 class zin
 {
-    public static $list = array();
+    public static $globalRenderList = array();
 
-    public static $enabled = true;
+    public static $enabledGlobalRender = true;
+
+    public static $globalRenderMap = array();
+
+    public static $data = array();
+
+    public static function getData($namePath, $defaultValue = NULL)
+    {
+        $names = explode('.', $namePath);
+        $data = &self::$data;
+        foreach($names as $name)
+        {
+            if(is_object(($data)))
+            {
+                if(!isset($data->$name)) return $defaultValue;
+                $data = &$data->$name;
+                continue;
+            }
+            if(!is_array($data) || !isset($data[$name])) return $defaultValue;
+            $data = &$data[$name];
+        }
+        return $data === NULL ? $defaultValue : $data;
+    }
+
+    public static function setData($namePath, $value)
+    {
+        $names = explode('.', $namePath);
+        $lastName = array_pop($names);
+        $data = &self::$data;
+        if(!empty($names))
+        {
+            foreach($names as $name)
+            {
+                if(!is_array($data)) return;
+
+                if(!isset($data[$name])) $data[$name] = array();
+                $data = &$data[$name];
+            }
+        }
+
+        $data[$lastName] = $value;
+    }
 
     public static function enableGlobalRender()
     {
-        self::$enabled = true;
+        self::$enabledGlobalRender = true;
     }
 
     public static function disableGlobalRender()
     {
-        self::$enabled = false;
+        self::$enabledGlobalRender = false;
     }
 
     public static function renderInGlobal()
     {
-        if(!self::$enabled) return false;
+        if(!self::$enabledGlobalRender) return false;
 
-        self::$list = array_merge(self::$list, func_get_args());
+        self::$globalRenderList = array_merge(self::$globalRenderList, func_get_args());
     }
 }

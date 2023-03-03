@@ -963,10 +963,16 @@ class baseControl
         chdir(dirname($viewFile));
 
         /**
+         * Set zin context data
+         */
+        \zin\zin::$data = (array)$this->view;
+
+        /**
          * 使用extract安定ob方法渲染$viewFile里面的代码。
          * Use extract and ob functions to eval the codes in $viewFile.
          */
-        extract((array)$this->view);
+        extract(\zin\zin::$data);
+
         include $viewFile;
         /*
         extract((array)$this->view);

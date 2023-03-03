@@ -15,16 +15,21 @@ require_once 'zin.class.php';
 
 function render($wgName = '\\zin\\page')
 {
-    if(is_string($wgName) && strpos($wgName, '\\zin\\') === false) $wgName = "\\zin\\$wgName";
-
     $args = array();
-    foreach(zin::$list as $item)
+    foreach(zin::$globalRenderList as $item)
     {
         if(is_object($item) && isset($item->parent) && $item->parent) continue;
         $args[] = $item;
     }
 
-    $wg = class_exists($wgName) ? (new $wgName($args)) : $wgName($args);
+    if(is_string($wgName))
+    {
+        if(strpos($wgName, '\\zin\\') !== false)  $wgName = str_replace('\\zin\\', '', $wgName);
+        if(isset(zin::$globalRenderMap[$wgName])) $wgName = zin::$globalRenderMap[$wgName];
+    }
+
+    $className = "\\zin\\$wgName";
+    $wg        = class_exists($className) ? (new $className($args)) : $className($args);
 
     if(!$wg->displayed) $wg->display();
 }
