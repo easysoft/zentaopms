@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if(empty($filePath)) die();?>
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <?php
 js::set('jsRoot', $jsRoot);
@@ -41,9 +42,9 @@ js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
           <?php echo html::hidden('fileContent');?>
         </td>
       </tr>
-      <tr>
+      <?php if($action and $action != 'edit' and $action != 'newPage' and $action != 'override' and $action != 'extendControl'):?>
+      <tr id='fileNameBox'>
         <td>
-          <?php if($action and $action != 'edit' and $action != 'newPage' and $action != 'override' and $action != 'extendControl'):?>
           <div class='form-group'>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->editor->fileName;?></span>
@@ -70,9 +71,9 @@ js::import($jsRoot . 'monaco-editor/min/vs/loader.js');
               </span>
             </div>
           </div>
-          <?php endif;?>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <td class='text-center'>
           <?php echo html::submitButton()?>
@@ -123,7 +124,8 @@ $(function()
             automaticLayout: true,
             minimap:         {enabled: false}
         });
-        var codeHeight = top.window.innerHeight - 300;
+        var codeHeight = top.window.innerHeight - 280;
+        if($('#fileNameBox').length == 0) codeHeight += 56;
         <?php if(!empty($showContent)):?>
         contentHeight = showContentEditor.getContentHeight();
         if(contentHeight > 300) contentHeight = 300;
