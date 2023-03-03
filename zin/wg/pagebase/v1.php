@@ -8,7 +8,7 @@ class pagebase extends wg
     static $defineProps = array
     (
         'metas' => array('type' => 'string|array', 'default' => array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')),
-        'title' => array('type' => 'string', 'default' => ''),
+        'title' => array('type' => 'string'),
         'bodyProps' => array('type' => 'array', 'optional' => true),
         'zui'   => array('type' => 'bool', 'default' => false),
         'display' => array('type' => 'bool', 'default' => true)
