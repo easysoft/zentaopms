@@ -914,7 +914,8 @@ class product extends control
     {
         $this->loadModel('build');
         if(!$executionID) return print(html::select('product', array(), '', "class='form-control chosen' required"));
-        $products = $this->product->getProductPairsByProject($executionID);
+        $status   = empty($this->config->CRProduct) ? 'noclosed' : '';
+        $products = $this->product->getProductPairsByProject($executionID, $status);
         if(empty($products))
         {
             return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
