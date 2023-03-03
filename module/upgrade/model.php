@@ -750,6 +750,7 @@ class upgradeModel extends model
             //    $this->addDefaultModules4BI('chart');
             //    $modules = $this->addDefaultModules4BI('report');
             //    $this->processReportModules($modules);
+            //    $this->processDataset();
         }
     }
 
@@ -8011,6 +8012,75 @@ class upgradeModel extends model
             ->exec();
 
         return $modules;
+    }
+
+    /**
+     * Add default modules for dataview.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function processDataset()
+    {
+        $this->loadModel('dataset');
+        $this->loadModel('dataview');
+
+        /* Create default module. */
+        $defaultModuleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('dataview')->andWhere('name')->eq($this->lang->dataview->default)->fetch('id');
+        if(empty($defaultModuleID))
+        {
+            $group = new stdclass();
+            $group->root   = 0;
+            $group->name   = $this->lang->dataview->default;
+            $group->parent = 0;
+            $group->grade  = 1;
+            $group->order  = 10;
+            $group->type   = 'dataview';
+
+            $this->dao->insert(TABLE_MODULE)->data($group)->exec();
+            $defaultModuleID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")->where('id')->eq($defaultModuleID)->exec();
+        }
+
+        $dataview = new stdclass();
+        $dataview->group = $defaultModuleID;
+        $dataview->createdBy   = 'system';
+        $dataview->createdDate = helper::now();
+
+        /* Process default dataset. */
+        foreach($this->lang->dataset->tables as $code => $dataset)
+        {
+            $dataview->name = $dataset['name'];
+            $dataview->code = $code;
+            $dataview->view = 'ztv_' . $code;
+
+            $table = $this->dataset->getTableInfo($code);
+            $dataview->sql = $this->dataset->getTableData($table->schema, 'id_desc', 100, true);
+
+            $fields = array();
+            foreach($table->schema->fields as $key => $field)
+            {
+                if($field['type'] == 'object' and isset($field['show'])) $key = str_replace('.', '_', $field['show']);
+                if(!isset($fields[$key])) $fields[$key] = array();
+
+                $defaultObject = $field['type'] == 'date' ? 'date' : 'string';
+                $defaultType   = strpos(',number,string,date,null,', ",{$field['type']},") !== false ? $field['type'] : 'string';
+
+                $fields[$key]['name']   = $field['name'];
+                $fields[$key]['object'] = $defaultObject;
+                $fields[$key]['field']  = $key;
+                $fields[$key]['type']   = $defaultType;
+
+            }
+            $dataview->fields = json_encode($fields);
+
+            $this->dao->insert(TABLE_DATAVIEW)->data($dataview)->exec();
+            $dataviewID = $this->dao->lastInsertID();
+            if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
+        }
+
+        return true;
     }
 
     /**
