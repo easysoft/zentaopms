@@ -30,7 +30,7 @@
           <tr>
             <th><?php echo $lang->zanode->hostName;?></th>
             <td id='hostIdBox'><?php echo html::select('parent', $hostPairs, $hostID, "class='form-control chosen'")?></td>
-            <td><?php echo html::a($this->createLink('zahost', 'create') . '?onlybody=yes', $lang->zahost->create, '', "class='text-primary iframe'");?></td>
+            <td><?php echo html::a($this->createLink('zahost', 'create', array(), '', true), $lang->zahost->create, '', "class='text-primary iframe'");?></td>
           </tr>
           <tr>
             <th class='w-120px'><?php echo $lang->zanode->name;?></th>
