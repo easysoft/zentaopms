@@ -672,6 +672,7 @@ class devModel extends model
         $menus = array();
         if($this->config->vision == 'lite' and $module == 'execution') return $menus;
 
+        $titleList = array();
         foreach(array('homeMenu', 'menu') as $menu)
         {
             if(!isset($this->lang->$module->$menu)) continue;
@@ -693,6 +694,8 @@ class devModel extends model
                 {
                     list($thisModule, $thisMethod) = $this->config->dev->linkMethods[$module]["{$thisModule}-{$thisMethod}"];
                 }
+
+                $titleList[] = $label;
 
                 $subMenu = new stdclass();
                 $subMenu->title    = $label;
@@ -727,6 +730,8 @@ class devModel extends model
                             $this->app->loadLang($thisModule);
                             if(isset($this->lang->$thisModule->featureBar[$menuKey][$subMenuKey]))
                             {
+                                $titleList[] = $label;
+
                                 $thirdMenu = new stdClass();
                                 $thirdMenu->title  = $label;
                                 $thirdMenu->key    = '';
@@ -746,6 +751,8 @@ class devModel extends model
                                     if(is_array($this->lang->$thisModule->featureBar[$thisMethod][$arrayKey])) continue;
                                 }
 
+                                $titleList[] = $label;
+
                                 $subMenu = new stdClass();
                                 $subMenu->title    = $label;
                                 $subMenu->key      = '';
@@ -764,6 +771,26 @@ class devModel extends model
                 if($hasFeatureBar) $menus[$menuKey] = $subMenu;
             }
         }
+
+        if(in_array($module, $this->config->dev->onlyMainMenu))
+        {
+            $mainNav = strip_tags($this->lang->mainNav->$module);
+            list($label, $thisModule, $thisMethod) = explode('|', $mainNav);
+            $titleList[] = $label;
+
+            $subMenu = new stdClass();
+            $subMenu->title    = $label;
+            $subMenu->key      = '';
+            $subMenu->module   = $thisModule;
+            $subMenu->method   = $thisMethod;
+            $subMenu->active   = ($methodName == $thisMethod and $moduleName == $thisModule) ? 1 : 0;
+            $subMenu->children = array();
+
+            $menus[] = $subMenu;
+        }
+
+        $titlePinYin = common::convert2Pinyin($titleList);
+        foreach($menus as &$menu) $menu->key = zget($titlePinYin, $menu->title, '');
 
         return $menus;
     }

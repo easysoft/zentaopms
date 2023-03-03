@@ -293,3 +293,5 @@ if(!helper::hasFeature('auditplan'))    $config->dev->skipMenus['execution']['au
 if(!helper::hasFeature('meeting'))      $config->dev->skipMenus['execution']['meeting']      = 'otherDropMenu_meeting';
 
 $config->dev->liteTagMethod['my-contribute'] = 'contribute_task';
+
+$config->dev->onlyMainMenu = array('kanban');
