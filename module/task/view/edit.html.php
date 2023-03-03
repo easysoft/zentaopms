@@ -287,7 +287,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
         </div>
 	<div class="modal-content with-padding" id='taskTeamEditor'>
 	  <?php if(strpos('|closed|cancel|pause|', $task->status) !== false):?>
-	     <h2 class='label label-info'>
+	     <h2 class='label label-info' style="margin-top:0;">
                <?php echo $this->lang->task->error->teamCantOperate;?>                                             
              </h2>
 	  <?php endif;?>
