@@ -82,8 +82,8 @@ $(function()
      */
     function filterChildren(item, val)
     {
-        var childern = null;
-        if (item && item.children)
+        var children = null;
+        if (item && item.children && item.children.length)
         {
             children = [];
             for (var i = 0; i < item.children.length; i++)
@@ -95,7 +95,7 @@ $(function()
                 }
             }
         }
-        return children;
+        return children && children.length ? children : null;
     }
 
     /**
