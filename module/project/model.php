@@ -1527,7 +1527,6 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('parent', $oldProject->parent)
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
@@ -1539,6 +1538,8 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->get();
+
+        if(!isset($project->parent)) $project->parent = $oldProject->parent;
 
         $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->fetch('count');
 
