@@ -55,16 +55,24 @@ class editorModel extends model
         foreach($this->config->editor->extSort as $ext)
         {
             $extModulePaths = $this->app->getModuleExtPath('', $moduleName, $ext);
-            foreach($extModulePaths as $extensionFullDir)
+            foreach($extModulePaths as $extType => $extensionFullDir)
             {
-                if(!is_dir($extensionFullDir)) continue;
+                if(empty($extensionFullDir) or !is_dir($extensionFullDir)) continue;
 
+                if($extType == 'common') $extType = $this->config->edition;
                 if($ext == 'lang' or $ext == 'js' or $ext == 'css')
                 {
-                    $extensionList[$extensionFullDir] = $this->getTwoGradeFiles($extensionFullDir);
-                    continue;
+                    $extensionList[$extType][$extensionFullDir] = $this->getTwoGradeFiles($extensionFullDir);
                 }
-                foreach(glob($extensionFullDir . '*') as $extensionFullFile) $extensionList[$extensionFullDir][$extensionFullFile] = basename($extensionFullFile);
+                else
+                {
+                    foreach(glob($extensionFullDir . '*') as $extensionFullFile)
+                    {
+                        $fileName = basename($extensionFullFile);
+                        if($fileName == 'index.html') continue;
+                        $extensionList[$extType][$extensionFullDir][$extensionFullFile] = $fileName;
+                    }
+                }
             }
         }
         return $extensionList;
@@ -79,18 +87,19 @@ class editorModel extends model
      */
     public function getTwoGradeFiles($extensionFullDir)
     {
-        $zfile    = $this->app->loadClass('zfile');
         $fileList = array();
-        $langDirs = $zfile->readDir($extensionFullDir);
+        $langDirs = scandir($extensionFullDir);
         foreach($langDirs as $langDir)
         {
-            $langFullDir = $extensionFullDir . DS . $langDir;
+            if($langDir == '.' or $langDir == '..' or $langDir == '.svn' or $langDir == 'index.html') continue;
+            $langFullDir = $extensionFullDir . $langDir;
             $fileList[$langFullDir] = array();
             if(is_dir($langFullDir))
             {
-                $langFiles = $zfile->readDir($langFullDir);
+                $langFiles = scandir($langFullDir);
                 foreach($langFiles as $langFile)
                 {
+                    if($langFile == '.' or $langFile == '..' or $langFile == '.svn' or $langFile == 'index.html') continue;
                     $langFullFile = $langFullDir . DS . $langFile;
                     $fileList[$langFullDir][$langFullFile] = $langFile;
                 }
@@ -109,19 +118,7 @@ class editorModel extends model
     public function analysis($fileName)
     {
         $classMethod = array();
-        $class       = strstr($fileName, DS . 'module' . DS);
-        if(empty($class))
-        {
-            $class = strstr($fileName, DS . 'extension' . DS);
-            $class = str_replace(DS . 'extension' . DS, '', $class);
-            $class = ltrim(strstr($class, DS), DS);
-        }
-        else
-        {
-            $class = str_replace(DS . 'module' . DS, '', $class);
-        }
-
-        $class = dirname($class);
+        $class       = $this->getClassNameByPath($fileName);
         if(strpos($fileName, 'model.php') !== false) $class .= 'Model';
         if(!class_exists($class)) include $fileName;
         $reflection = new ReflectionClass($class);
@@ -159,8 +156,8 @@ class editorModel extends model
             }
 
             $this->module = '';
-            if(isset($lang->$module))       $this->module = $lang->$module;
-            if(isset($this->lang->$module)) $this->module = $this->lang->$module;
+            if(isset($lang->$module)) $this->module = $lang->$module;
+            if(empty($this->module) and isset($this->lang->$module)) $this->module = $this->lang->$module;
         }
 
         foreach($files as $key => $file)
@@ -393,8 +390,7 @@ EOD;
      */
     public function newControl($filePath)
     {
-        $className  = substr($filePath, 0, strpos($filePath, DS . 'ext' . DS . 'control' . DS));
-        $className  = basename($className);
+        $className  = $this->getClassNameByPath($filePath);
         $methodName = basename($filePath, '.php');
         return <<<EOD
 <?php
@@ -475,9 +471,7 @@ EOD;
         if(strpos($sourceFileName, '.') !== false) $fileExtension = substr($sourceFileName, strpos($sourceFileName, '.') + 1);
 
         $fileName   = empty($_POST['fileName']) ? '' : trim($this->post->fileName);
-        $moduleName = strstr($filePath, DS . 'module' . DS);
-        $moduleName = substr($moduleName, 0, strpos($moduleName, DS, 9));
-        $moduleName = basename($moduleName);
+        $moduleName = $this->getClassNameByPath($filePath);
         $extPath    = $this->app->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS;
         if($fileName and (strpos($fileName, '.' . $fileExtension) !== (strlen($fileName) - strlen($fileExtension) - 1))) $fileName .= '.' . $fileExtension;
         switch($action)
@@ -509,5 +503,35 @@ EOD;
             if($action == 'css')    return $extPath . 'css' . DS . basename($fileName, ".{$fileExtension}") . DS . $fileName;
             return $extPath . 'lang' . DS . str_replace('_', '-', $action) . DS . $fileName;
         }
+    }
+
+    /**
+     * Get class name by path.
+     *
+     * @param  string    $filePath
+     * @access public
+     * @return string
+     */
+    public function getClassNameByPath($filePath)
+    {
+        $className = '';
+        if(strpos($filePath, DS . 'module' . DS) !== false)
+        {
+            $className = strstr($filePath, DS . 'module' . DS);
+            $className = substr($className, 0, strpos($className, DS, 9));
+        }
+        elseif(strpos($filePath, DS . 'ext' . DS) !== false)
+        {
+            $className = substr($filePath, 0, strpos($filePath, DS . 'ext' . DS));
+        }
+        elseif(strpos($filePath, DS . 'extension' . DS) !== false)
+        {
+            $className = strstr($filePath, DS . 'extension' . DS);
+            $className = str_replace(DS . 'extension' . DS, '', $className);
+            $className = substr($className, 0, strpos($className, DS, strpos($className, DS) + 1));
+        }
+        $className = basename($className);
+
+        return $className;
     }
 }

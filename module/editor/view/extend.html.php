@@ -12,7 +12,10 @@
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <div class='main-header'>
-  <div class='heading'><i class='icon-list-ul'></i> <strong><?php echo isset($lang->editor->modules[$module])? $lang->editor->modules[$module] : $module;?></strong></div>
+  <div class='heading'>
+    <i class='icon-list-ul'></i>
+    <strong><?php echo zget($lang->editor->modules, $module, isset($lang->{$module}->common) ? $lang->{$module}->common : $module);?></strong>
+  </div>
 </div>
 <div class='main-content'>
   <?php echo $tree?>
