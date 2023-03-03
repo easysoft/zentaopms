@@ -56,9 +56,11 @@ class customModel extends model
             if(strpos($customLang->section, 'featureBar-') !== false)
             {
                 $sections      = explode('-', $customLang->section);
+                $firstKey      = $sections[0];
                 $sectionIndex  = count($sections) - 1;
                 $sectionArr    = array($customLang->key => $customLang->value);
                 $oldSectionArr = empty($processedLang[$customLang->module]) ? array() : $processedLang[$customLang->module];
+                $oldFeatureBar = empty($oldSectionArr[$firstKey]) ? array() : $oldSectionArr[$firstKey];
                 if(!empty($oldSectionArr))
                 {
                     for($i = 0; $i <= $sectionIndex; $i ++)
@@ -70,6 +72,7 @@ class customModel extends model
                 }
 
                 for($index = $sectionIndex; $index >= 0; $index --) $sectionArr = array($sections[$index] => $sectionArr);
+                $sectionArr[$firstKey] = array_merge($oldFeatureBar, $sectionArr[$firstKey]);
                 $processedLang[$customLang->module] = $sectionArr;
             }
             else
