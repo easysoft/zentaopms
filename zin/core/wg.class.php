@@ -370,25 +370,29 @@ class wg
         $parentClass = get_parent_class(get_called_class());
         $props = $parentClass ? call_user_func("$parentClass::getDefinedProps") : array();
 
-        if(is_string($definition)) $definition = explode(',', $definition);
-        if(!is_array($definition))
+        if((!is_array($definition) && !is_string($definition)) || ($parentClass && $definition === $parentClass::$defineProps))
         {
-            foreach($props as $name => $value)
+            if(static::$defaultProps && static::$defaultProps !== $parentClass::$defaultProps)
             {
-                if(is_array(static::$defaultProps) && isset(static::$defaultProps[$name]))
+                foreach($props as $name => $value)
                 {
-                    $value['default'] = static::$defaultProps[$name];
-                    $props['name'] = $value;
+                    if(is_array(static::$defaultProps) && isset(static::$defaultProps[$name]))
+                    {
+                        $value['default'] = static::$defaultProps[$name];
+                        $props[$name]    = $value;
+                    }
                 }
             }
             return $props;
         }
 
+        if(is_string($definition)) $definition = explode(',', $definition);
+
         foreach($definition as $name => $value)
         {
             $optional = false;
             $type     = 'mixed';
-            $default  = NULL;
+            $default  = (isset($props[$name]) && isset($props[$name]['default'])) ? $props[$name]['default'] : NULL;
 
             if(is_int($name) && is_string($value))
             {
