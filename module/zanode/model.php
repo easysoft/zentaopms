@@ -622,7 +622,7 @@ class zanodemodel extends model
     {
         return $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)
-            ->andWhere("type")->eq('node')
+            ->andWhere("type")->in('node,physics')
             ->orderBy($orderBy)
             ->fetchAll('id');
     }
@@ -638,7 +638,7 @@ class zanodemodel extends model
     {
         return $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)
-            ->andWhere("type")->eq('node')
+            ->andWhere("type")->in('node,physics')
             ->orderBy($orderBy)
             ->fetchPairs('id', 'name');
     }

@@ -17,4 +17,5 @@
 .node-not-wrap{white-space: nowrap;}
 .btn-info {background-color: unset;}
 .btn.disabled i {color: #fff;}
+.btn-toolbar a img{margin-bottom: 1px;}
 #serviceContent{min-height: 120px;}

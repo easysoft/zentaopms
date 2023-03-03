@@ -22,15 +22,15 @@
       </div>
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
-          <tr class='hidden'>
+          <tr>
             <th><?php echo $lang->zahost->type;?></th>
-            <td><?php echo html::select('type', $lang->zanode->typeList, 'virtual', "class='form-control chosen' onchange='zahostType()'")?></td>
+            <td><?php echo html::select('type', $lang->zanode->typeList, 'virtual', "class='form-control chosen' onchange='zanodeType()'")?></td>
             <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->zanode->hostName;?></th>
-            <td><?php echo html::select('parent', $hostPairs, $hostID, "class='form-control chosen'")?></td>
-            <td></td>
+            <td id='hostIdBox'><?php echo html::select('parent', $hostPairs, $hostID, "class='form-control chosen'")?></td>
+            <td><?php echo html::a($this->createLink('zahost', 'create') . '?onlybody=yes', $lang->zahost->create, '', "class='text-primary iframe'");?></td>
           </tr>
           <tr>
             <th class='w-120px'><?php echo $lang->zanode->name;?></th>

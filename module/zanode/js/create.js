@@ -1,4 +1,10 @@
-function zahostType()
+/**
+ * Change zanode type.
+ *
+ * @access public
+ * @return void
+ */
+function zanodeType()
 {
     if($('#type').val() == 'physics')
     {
@@ -16,4 +22,19 @@ function zahostType()
         $('#osName').removeClass('hidden');
         $('#osNamePhysics').addClass('hidden');
     }
+}
+
+/**
+ * Load hosts.
+ *
+ * @access public
+ * @return void
+ */
+function loadHosts()
+{
+    var hostLink = createLink('zahost', 'ajaxGetHosts');
+    $('#hostIdBox').load(hostLink, function()
+    {
+        $('#hostIdBox').find('#parent').chosen();
+    });
 }
