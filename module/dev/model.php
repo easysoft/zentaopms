@@ -425,7 +425,7 @@ class devModel extends model
                     $originalLangs['URCommon'] = isset($URSRList->defaultURName) ? $URSRList->defaultURName : $URSRList->URName;
                     $originalLangs['SRCommon'] = isset($URSRList->defaultSRName) ? $URSRList->defaultSRName : $URSRList->SRName;
                 }
-                if(!$this->config->URAndSR) unset($customedLangs['URCommon']);
+                if(!$this->config->URAndSR) unset($originalLangs['URCommon']);
             }
             else
             {
