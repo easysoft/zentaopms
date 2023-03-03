@@ -1029,7 +1029,7 @@ class myModel extends model
         foreach($typeList as $type)
         {
             $this->app->loadLang($type);
-            $menu->$type = isset($this->lang->$type->common) ? $this->lang->$type->common : zget($flows, $type);
+            $menu->$type = isset($this->lang->my->featureBar['audit'][$type]) ? $this->lang->my->featureBar['audit'][$type] : zget($flows, $type);
         }
 
         return $menu;
