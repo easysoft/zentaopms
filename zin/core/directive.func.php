@@ -11,7 +11,7 @@
 
 namespace zin;
 
-require_once 'render.func.php';
+require_once 'zin.class.php';
 
 use stdClass;
 
@@ -36,7 +36,7 @@ function directive($type, $data, $options = NULL)
     $directive->data      = $data;
     $directive->options   = $options;
 
-    renderInGlobal($directive);
+    zin::renderInGlobal($directive);
 
     return $directive;
 }

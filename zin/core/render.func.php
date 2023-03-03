@@ -11,36 +11,14 @@
 
 namespace zin;
 
-class globalRender
-{
-    public static $list = array();
-
-    public static $enabled = true;
-}
-
-function enableGlobalRender()
-{
-    globalRender::$enabled = true;
-}
-
-function disableGlobalRender()
-{
-    globalRender::$enabled = false;
-}
-
-function renderInGlobal()
-{
-    if(!globalRender::$enabled) return false;
-
-    globalRender::$list = array_merge(globalRender::$list, func_get_args());
-}
+require_once 'zin.class.php';
 
 function render($wgName = '\\zin\\page')
 {
     if(is_string($wgName) && strpos($wgName, '\\zin\\') === false) $wgName = "\\zin\\$wgName";
 
     $args = array();
-    foreach(globalRender::$list as $item)
+    foreach(zin::$list as $item)
     {
         if(is_object($item) && isset($item->parent) && $item->parent) continue;
         $args[] = $item;

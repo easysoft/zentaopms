@@ -13,7 +13,7 @@ namespace zin;
 
 require_once 'props.class.php';
 require_once 'directive.func.php';
-require_once 'render.func.php';
+require_once 'zin.class.php';
 
 class wg
 {
@@ -54,7 +54,7 @@ class wg
         $this->add(func_get_args());
         $this->created();
 
-        renderInGlobal($this);
+        zin::renderInGlobal($this);
     }
 
     /**
@@ -63,20 +63,20 @@ class wg
      */
     public function render()
     {
-        disableGlobalRender();
+        zin::disableGlobalRender();
 
         $before   = $this->buildBefore();
         $after    = $this->buildAfter();
         $children = $this->build();
 
-        enableGlobalRender();
+        zin::enableGlobalRender();
 
         return static::renderToHtml(array($before, $after, $children), $this);
     }
 
     public function display()
     {
-        disableGlobalRender();
+        zin::disableGlobalRender();
 
         $html = $this->render(true);
         echo $html;
@@ -124,14 +124,14 @@ class wg
             return $this;
         }
 
-        disableGlobalRender();
+        zin::disableGlobalRender();
 
         if($item instanceof wg)    $this->addToBlock($blockName, $item);
         elseif(is_string($item))   $this->addToBlock($blockName, htmlentities($item));
         elseif(isDirective($item)) $this->directive($item, $blockName);
         else                       $this->addToBlock($blockName, htmlentities(strval($item)));
 
-        enableGlobalRender();
+        zin::enableGlobalRender();
 
         return $this;
     }
