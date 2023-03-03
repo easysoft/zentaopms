@@ -179,7 +179,11 @@ class dev extends control
         $section  = '';
         if($type == 'common') $section = '&section=';
         if($type == 'first')  $section = '&section=mainNav';
-        if($type == 'tag')    $section = str_replace('_', '-', "&section=featureBar-{$method}");
+        if($type == 'tag')
+        {
+            if($this->config->vision == 'lite' and isset($this->config->dev->liteTagMethod["$module-$method"])) $method = $this->config->dev->liteTagMethod["$module-$method"];
+            $section = str_replace('_', '-', "&section=featureBar-{$method}");
+        }
         $key = '';
         if($type == 'common') $key = '&key=projectCommon,productCommon,executionCommon';
 

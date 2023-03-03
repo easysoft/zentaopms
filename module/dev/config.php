@@ -291,3 +291,5 @@ if(!helper::hasFeature('opportunity'))  $config->dev->skipMenus['execution']['op
 if(!helper::hasFeature('process'))      $config->dev->skipMenus['execution']['process']      = 'otherDropMenu_pssp';
 if(!helper::hasFeature('auditplan'))    $config->dev->skipMenus['execution']['auditplan']    = 'otherDropMenu_auditplan';
 if(!helper::hasFeature('meeting'))      $config->dev->skipMenus['execution']['meeting']      = 'otherDropMenu_meeting';
+
+$config->dev->liteTagMethod['my-contribute'] = 'contribute_task';

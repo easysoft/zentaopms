@@ -120,6 +120,15 @@ $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not 
 $lang->todo->today          = 'Todo Today';
 $lang->todo->selectProduct  = "Please select a product";
 
+$lang->todo->periods['all']             = 'Assigned To Yourself';
+$lang->todo->periods['before']          = 'Unfinished';
+$lang->todo->periods['future']          = 'TBD';
+$lang->todo->periods['thisWeek']        = 'This Week';
+$lang->todo->periods['thisMonth']       = 'This Month';
+$lang->todo->periods['thisYear']        = 'This Year';
+$lang->todo->periods['assignedToOther'] = 'Assigned To Other';
+$lang->todo->periods['cycle']           = 'Recurrence';
+
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, is $extra by <strong>$actor</strong>.', 'extra' => 'reasonList');
 $lang->todo->action->marked   = array('main' => '$date, is marked by <strong>$actor</strong> as <strong>$extra</strong>.', 'extra' => 'statusList');

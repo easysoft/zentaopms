@@ -435,6 +435,7 @@ class devModel extends model
         elseif($type == 'tag')
         {
             if(!isset($defaultLang->$module->featureBar)) return $originalLangs;
+            if($this->config->vision == 'lite' and isset($this->config->dev->liteTagMethod["$module-$method"])) $method = $this->config->dev->liteTagMethod["$module-$method"];
 
             $langKey     = 'featureBar-' . $method . '_';
             $featureBars = zget($defaultLang->$module->featureBar, $method, array());
@@ -526,6 +527,8 @@ class devModel extends model
                 $langKey   = "{$method}_";
                 break;
             case 'tag':
+                if($this->config->vision == 'lite' and isset($this->config->dev->liteTagMethod["$module-$method"])) $method = $this->config->dev->liteTagMethod["$module-$method"];
+
                 $method = str_replace('_', '-', $method);
                 $customeds = $this->loadModel('custom')->getItems("lang={$language}&module={$module}&section=featureBar-$method&vision={$this->config->vision}");
                 $langKey   = "featureBar-{$method}_";
