@@ -670,6 +670,8 @@ class devModel extends model
     public function getTagMenus($module, $moduleName = '', $methodName = '')
     {
         $menus = array();
+        if($this->config->vision == 'lite' and $module == 'execution') return $menus;
+
         foreach(array('homeMenu', 'menu') as $menu)
         {
             if(!isset($this->lang->$module->$menu)) continue;
