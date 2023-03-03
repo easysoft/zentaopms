@@ -3023,11 +3023,6 @@ class storyModel extends model
      */
     public function getProductStoryPairs($productID = 0, $branch = 'all', $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full', $storyType = 'story', $hasParent = true)
     {
-        if($moduleIdList)
-        {
-            $moduleInfo   = $this->loadModel('tree')->getByID($moduleIdList);
-            $moduleIdList = (isset($moduleInfo->type) and $moduleInfo->type == 'bug') ? 0 : $moduleIdList;
-        }
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('1=1')

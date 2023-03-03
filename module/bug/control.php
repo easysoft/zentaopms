@@ -859,7 +859,7 @@ class bug extends control
         $this->view->users            = $this->user->getPairs('devfirst|noclosed');
         $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->projectID        = $projectID;
-        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, 'multiple');
+        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, 'multiple,stagefilter');
         $this->view->executionID      = $executionID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
         $this->view->moduleID         = $moduleID;
@@ -1398,7 +1398,7 @@ class bug extends control
         }
 
         /* Set users. */
-        $users = $this->user->getPairs('devfirst', '', $this->config->maxCount);
+        $users = $this->user->getPairs('devfirst');
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */

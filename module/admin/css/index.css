@@ -85,6 +85,7 @@
 /* css for without internet */
 .main.without-internet {display: flex; flex-wrap: wrap;}
 .main.without-internet > .plug.panel {flex: 1 1 60%; margin-bottom: unset; margin-right: 16px;}
+.main.without-internet > .bottom {flex: 1 1 30%;}
 .main.without-internet > .bottom > .official.panel {margin-right: unset;}
 .main.without-internet > .bottom > .official.panel > .main-panel {flex-direction: row-reverse;}
 

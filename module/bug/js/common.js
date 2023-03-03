@@ -369,7 +369,7 @@ function loadProductExecutions(productID, projectID = 0)
         var execution = $('#execution').val();
     }
 
-    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=&executionID=' + execution);
+    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=&executionID=' + execution + '&from=&mode=stagefilter');
     $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();

@@ -1250,6 +1250,7 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('days', '0')
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
@@ -1446,6 +1447,7 @@ class projectModel extends model
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertId();
+                if(!$project->hasProduct) $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
                 $this->loadModel('action')->create('product', $productID, 'opened');
                 $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
                 if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
