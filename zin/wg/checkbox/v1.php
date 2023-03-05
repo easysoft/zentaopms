@@ -18,8 +18,13 @@ class checkbox extends wg
     {
         return h::label
         (
+            setClass('pl-2'),
+            set($this->props->skip(array_keys(static::getDefinedProps(), true))),
             setClass('checkbox'),
-            h::checkbox(set($this->props->skip(array_keys(static::getDefinedProps()), true))),
+            h::checkbox
+            (
+                setId($this->prop('id'))
+            ),
             $this->prop('text')
         );
     }

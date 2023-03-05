@@ -61,8 +61,8 @@ class btn extends wg
         if(!empty($size)) $classList[] = "size-$size";
 
         $children      = array();
-        if(!empty($icon))         $children[] = new icon($icon);
-        if(!empty($text))         $children[] = h::span($text, setClass('text'));
+        if(!empty($icon)) $children[] = new icon($icon);
+        if(!empty($text)) $children[] = h::span($text, setClass('text'));
 
         $children[] = parent::build();
 

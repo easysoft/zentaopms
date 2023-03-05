@@ -84,7 +84,8 @@ class modal extends wg
                         h::div
                         (
                             setClass('modal-body'),
-                            !isset($this->blocks['body']) ? null : $this->blocks['body']
+                            !isset($this->blocks['body']) ? null : $this->blocks['body'],
+                            $this->children()
                         ),
                         /* Footer. */
                         h::div
