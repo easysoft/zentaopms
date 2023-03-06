@@ -29,7 +29,7 @@ $lang->build->basicInfo = 'Basic Info';
 
 $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
-$lang->build->project        = 'Project';
+$lang->build->project        = $lang->projectCommon;
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchAll      = 'All associated %s';
 $lang->build->branchName     = '%s';
