@@ -41,6 +41,16 @@ function directive($type, $data, $options = NULL)
     return $directive;
 }
 
+function isHtml($object)
+{
+    return is_object($object) && $object->type === 'html' && is_string($object->data);
+}
+
+function isText($object)
+{
+    return is_object($object) && $object->type === 'text' && is_string($object->data);
+}
+
 /**
  * Check if an object is a directive
  *

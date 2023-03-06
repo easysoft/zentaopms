@@ -11,6 +11,8 @@
 
 namespace zin;
 
+use stdClass;
+
 require_once 'props.class.php';
 require_once 'directive.func.php';
 require_once 'zin.class.php';
@@ -209,7 +211,7 @@ class wg
         }
         if($type === 'html')
         {
-            $this->addToBlock($blockName, $data);
+            $this->addToBlock($blockName, $directive);
             return;
         }
         if($type === 'text')
@@ -508,6 +510,8 @@ class wg
             elseif(is_object($child))
             {
                 if(method_exists($child, 'render')) $html[] = $child->render();
+                elseif(isHtml($child))              $html[] = $child->data;
+                elseif(isText($child))              $html[] = htmlspecialchars($child->data);
                 elseif(isset($child->html))         $html[] = $child->html;
                 elseif(isset($child->text))         $html[] = htmlspecialchars($child->text);
                 else                                $html[] = strval($child);

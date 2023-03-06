@@ -88,9 +88,5 @@ function after()
 function inherit($item)
 {
     if(!($item instanceof wg)) $item = new wg($item);
-    return array
-    (
-        set($item->props),
-        $item->children()
-    );
+    return array(set($item->props), $item->children());
 }
