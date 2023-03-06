@@ -773,7 +773,7 @@ class devModel extends model
                                 $subMenu->active   = ($methodName == $thisMethod and $moduleName == $thisModule) ? 1 : 0;
                                 $subMenu->children = array();
 
-                                $menus[$subMenuKey] = $subMenu;
+                                $menus["$thisModule-$thisMethod"] = $subMenu;
                                 $hasFeatureBar = false;
                             }
                         }
@@ -851,7 +851,11 @@ class devModel extends model
             if($type == 'tag' and in_array($menuKey, $this->config->dev->projectMenus))
             {
                 if($menuKey != 'project') continue;
-                foreach($this->config->dev->projectMenus as $projectModule) $menuItem->children += $this->getTagMenus($projectModule, $module, $method);
+                foreach($this->config->dev->projectMenus as $projectModule)
+                {
+                    $children = $this->getTagMenus($projectModule, $module, $method);
+                    $menuItem->children = array_merge($menuItem->children, $children);
+                }
             }
             else
             {
@@ -975,7 +979,12 @@ class devModel extends model
         $section = '';
         if($type == 'common') $section = '&section=';
         if($type == 'first')  $section = '&section=mainNav';
-        if($type == 'tag')    $section = str_replace('_', '-', "&section=featureBar-{$method}");
+        if($type == 'tag')
+        {
+            $section = str_replace('_', '-', "&section=featureBar-{$method}");
+            $this->dao->delete()->from(TABLE_LANG)->where('lang')->eq($language)->andWhere('module')->eq($moduleName)->andWhere('section')->like("moreSelects-$method%")->andWhere('vision')->eq($this->config->vision)->exec();
+        }
+
         $key = '';
         if($type == 'common') $key = '&key=projectCommon,productCommon,executionCommon';
 
