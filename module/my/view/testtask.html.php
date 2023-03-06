@@ -18,10 +18,13 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    foreach($lang->my->featureBar[$app->rawMethod]['testtask'] as $typeKey => $name)
+    if($app->rawMethod == 'contribute')
     {
-        echo html::a(inlink($app->rawMethod, "mode=$mode&type=$typeKey"), "<span class='text'>{$name}</span>" . ($type == $typeKey ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == $typeKey ? ' btn-active-text' : '') . "'");
+        $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        foreach($lang->my->featureBar[$app->rawMethod]['testtask'] as $typeKey => $name)
+        {
+            echo html::a(inlink($app->rawMethod, "mode=$mode&type=$typeKey"), "<span class='text'>{$name}</span>" . ($type == $typeKey ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == $typeKey ? ' btn-active-text' : '') . "'");
+        }
     }
     ?>
   </div>
