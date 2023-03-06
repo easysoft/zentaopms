@@ -63,7 +63,7 @@ class customModel extends model
                 {
                     $sectionKey = key($sectionArr);
                     $sectionArr[$section] = $sectionArr;
-                    unset($sectionArr[$sectionKey]);
+                    if($sectionKey != $section) unset($sectionArr[$sectionKey]);
                 }
                 if(!empty($sectionArr)) $processedLang[$customLang->module] = array_merge_recursive($processedLang[$customLang->module], $sectionArr);
             }

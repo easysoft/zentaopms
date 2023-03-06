@@ -183,7 +183,9 @@ class dev extends control
         {
             if($this->config->vision == 'lite' and isset($this->config->dev->liteTagMethod["$module-$method"])) $method = $this->config->dev->liteTagMethod["$module-$method"];
             $section = str_replace('_', '-', "&section=featureBar-{$method}");
+            $this->dao->delete()->from(TABLE_LANG)->where('lang')->eq($language)->andWhere('module')->eq($module)->andWhere('section')->like("moreSelects-$method%")->andWhere('vision')->eq($this->config->vision)->exec();
         }
+
         $key = '';
         if($type == 'common') $key = '&key=projectCommon,productCommon,executionCommon';
 
