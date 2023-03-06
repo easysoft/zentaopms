@@ -186,7 +186,7 @@ $lang->testcase->summary               = "Total <strong>%s</strong> CasTests sur
 $lang->testcase->confirmDelete         = 'Voulez-vous supprimer ce CasTest ?';
 $lang->testcase->confirmBatchDelete    = 'Voulez-vous supprimer des Castests par Lot ?';
 $lang->testcase->ditto                 = 'Idem';
-$lang->testcase->dittoNotice           = "Ce CasTest n'est pas associé au Product alors que le précédent l'était !";
+$lang->testcase->dittoNotice           = "This Case is not linked to the {$lang->productCommon} as the last one is!";
 $lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
 
 $lang->testcase->reviewList[0] = 'NON';

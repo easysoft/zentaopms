@@ -186,7 +186,7 @@ $lang->testcase->summary               = "Fälle auf dieser Seite: <strong>%s</s
 $lang->testcase->confirmDelete         = 'Möchten Sie diesen Testfall schließen?';
 $lang->testcase->confirmBatchDelete    = 'Möchten Sie diese Testfälle schließen?';
 $lang->testcase->ditto                 = 'Dito';
-$lang->testcase->dittoNotice           = 'Dieser Fall gehört nicht zu den Produkt!';
+$lang->testcase->dittoNotice           = "This Case is not linked to the {$lang->productCommon} as the last one is!";
 $lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
 
 $lang->testcase->reviewList[0] = 'Nein';
