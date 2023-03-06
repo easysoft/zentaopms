@@ -711,7 +711,7 @@ class devModel extends model
                 $titleList[] = $label;
 
                 $subMenu = new stdclass();
-                $subMenu->title    = $label;
+                $subMenu->title    = isset($this->lang->dev->replaceLable["$thisModule-$thisMethod"]) ? $this->lang->dev->replaceLable["$thisModule-$thisMethod"] : $label;
                 $subMenu->key      = '';
                 $subMenu->module   = $thisModule;
                 $subMenu->method   = $thisMethod;

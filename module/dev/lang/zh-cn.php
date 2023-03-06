@@ -204,3 +204,5 @@ $lang->dev->projectMenu['scrum']         = "敏捷 / 融合敏捷{$lang->project
 $lang->dev->projectMenu['waterfall']     = "瀑布 / 融合瀑布{$lang->projectCommon}";
 $lang->dev->projectMenu['kanbanProject'] = "看板{$lang->projectCommon}";
 if($config->vision == 'lite') $lang->dev->projectMenu['kanbanProject'] = $lang->projectCommon;
+
+$this->lang->dev->replaceLable['project-execution'] = "{$lang->executionCommon} / 阶段";
