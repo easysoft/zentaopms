@@ -76,7 +76,7 @@ $lang->block->consumedHours       = 'Cost';
 $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->month               = 'Month';
-$lang->block->selectProduct       = 'Product selection';
+$lang->block->selectProduct       = "{$lang->productCommon} selection";
 $lang->block->of                  = ' von ';
 $lang->block->remain              = 'Left';
 $lang->block->allStories          = 'All';
@@ -572,9 +572,9 @@ $lang->block->gridOptions[4] = 'Rechts';
 
 $lang->block->flowchart            = array();
 $lang->block->flowchart['admin']   = array('Administrator', 'Add Departments', 'Benutzer erstellen', 'Rechte pflegen');
-if($config->systemMode == 'ALM') $lang->block->flowchart['program'] = array('Program Owner', 'Create Program', 'Link Product', "Create Project", "Budgeting and planning", 'Add Stakeholder');
+if($config->systemMode == 'ALM') $lang->block->flowchart['program'] = array('Program Owner', 'Create Program', "Link {$lang->productCommon}", "Create {$lang->projectCommon}", "Budgeting and planning", 'Add Stakeholder');
 $lang->block->flowchart['product'] = array($lang->productCommon . ' Besitzer', $lang->productCommon . ' erstellen', 'Module pflegen', 'Pläne pflegen', 'Storys pflegen', 'Release erstellen');
-$lang->block->flowchart['project'] = array('Project Manager', 'Add projects and ' . $lang->execution->common . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
+$lang->block->flowchart['project'] = array('Project Manager', "Add {$lang->productCommon}s and " . $lang->execution->common . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
 $lang->block->flowchart['dev']     = array('Entwickler', 'Aufgabe/Bugs anfordern', 'Update Status', 'Aufgaben/Bugs abschließen');
 $lang->block->flowchart['tester']  = array('QS Team', 'Fälle erstellen', 'Fälle ausführen', 'Bug Berichte', 'Bugs überprüfen', 'Bugs schließen');
 
@@ -587,7 +587,7 @@ $lang->block->zentaoapp->allStorySum          = 'Total Stories';
 $lang->block->zentaoapp->storyCompleteRate    = 'Story CompleteRate';
 $lang->block->zentaoapp->latestExecution      = 'Latest Execution';
 $lang->block->zentaoapp->involvedExecution    = 'Involved Execution';
-$lang->block->zentaoapp->mangedProduct        = 'Manged Product';
+$lang->block->zentaoapp->mangedProduct        = "Manged {$lang->productCommon}";
 $lang->block->zentaoapp->involvedProject      = 'Involved Project';
 $lang->block->zentaoapp->customIndexCard      = 'Custom Index Cards';
 $lang->block->zentaoapp->createStory          = 'Story Create';
@@ -632,7 +632,7 @@ $lang->block->visionTitle            = 'The user interface of ZenTao is divided 
 $lang->block->visions['rnd']         = new stdclass();
 $lang->block->visions['rnd']->key    = 'rnd';
 $lang->block->visions['rnd']->title  = 'Full feature interface';
-$lang->block->visions['rnd']->text   = 'Integrate the program, product, project, execution, test, etc., and provide the lifecycle project management solution.';
+$lang->block->visions['rnd']->text   = "Integrate the program, {$lang->productCommon}, {$lang->projectCommon}, execution, test, etc., and provide the lifecycle project management solution.";
 $lang->block->visions['lite']        = new stdclass();
 $lang->block->visions['lite']->key   = 'lite';
 $lang->block->visions['lite']->title = 'Operation Management Interface';
