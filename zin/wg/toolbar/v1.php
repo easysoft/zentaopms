@@ -5,7 +5,7 @@ class toolbar extends wg
 {
     protected static $defineProps = 'items?:array';
 
-    protected function onBuildItem($item)
+    public function onBuildItem($item)
     {
         $item = ($item instanceof item) ? $item : (item(set($item)));
         $type = $item->prop('type');
