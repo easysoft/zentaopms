@@ -9,28 +9,28 @@
  * @version     $Id
  * @link        http://www.zentao.net
  */
-$lang->weekly->common   = 'Project Weekly';
+$lang->weekly->common   = $lang->projectCommon . ' Weekly';
 $lang->weekly->index    = 'Weekly Overview';
 $lang->weekly->progress = 'Progress';
 $lang->weekly->workload = 'Workload';
 $lang->weekly->total    = 'Total';
 
-$lang->weekly->reportTtitle   = 'Project: % s Weekly (Week % s)';
-$lang->weekly->summary        = 'Project Progress';
+$lang->weekly->reportTtitle   = $lang->projectCommon . ': % s Weekly (Week % s)';
+$lang->weekly->summary        = $lang->projectCommon . ' Progress';
 $lang->weekly->finished       = 'Work finished this week (100% completed work)';
 $lang->weekly->postponed      = 'Work unfinished this week';
 $lang->weekly->nextWeek       = 'Work planned for next week';
 $lang->weekly->workloadByType = 'Workload Summary';
 
 $lang->weekly->term    = 'Reporting Cycle';
-$lang->weekly->project = 'Project Name';
+$lang->weekly->project = $lang->projectCommon . ' Name';
 $lang->weekly->master  = 'Project Manager ';
 $lang->weekly->staff   = 'Weekly Effort';
 
 $lang->weekly->weekDesc       = 'Week % s (% s ~% s)';
-$lang->weekly->progress       = 'Progress';
+$lang->weekly->progress       = 'Progress of the ' . $lang->projectCommon;
 $lang->weekly->analysisResult = 'Analysis';
-$lang->weekly->cost           = 'Project Cost';
+$lang->weekly->cost           = $lang->projectCommon . ' Cost';
 
 $lang->weekly->pv = 'Planned Value(PV)';
 $lang->weekly->ev = 'Earned Value(EV)';

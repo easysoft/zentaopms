@@ -1,16 +1,16 @@
 <?php
 /* Field. */
-$lang->projectstory->project = "Project ID";
+$lang->projectstory->project = "{$lang->projectCommon} ID";
 $lang->projectstory->product = "Product ID";
 $lang->projectstory->story   = "{$lang->SRCommon} List";
 $lang->projectstory->version = "Version";
 $lang->projectstory->order   = "Order";
 
-$lang->projectstory->storyCommon = 'Project Story';
-$lang->projectstory->storyList   = 'Project Story List';
-$lang->projectstory->storyView   = 'Project Story Detail';
+$lang->projectstory->storyCommon = $lang->projectCommon . ' Story';
+$lang->projectstory->storyList   = $lang->projectCommon . ' Story List';
+$lang->projectstory->storyView   = $lang->projectCommon . ' Story Detail';
 
-$lang->projectstory->common            = "Project {$lang->SRCommon}";
+$lang->projectstory->common            = "{$lang->projectCommon} {$lang->SRCommon}";
 $lang->projectstory->index             = "{$lang->SRCommon} Home";
 $lang->projectstory->view              = "{$lang->SRCommon} Detail";
 $lang->projectstory->story             = "{$lang->SRCommon} List";
@@ -23,8 +23,8 @@ $lang->projectstory->trackAction       = 'Matrix';
 $lang->projectstory->confirm           = 'Confirm';
 
 /* Notice. */
-$lang->projectstory->whyNoStories   = "No story can be linked. Please check whether there is any story in project which is linked to {$lang->productCommon} and make sure it has been reviewed.";
-$lang->projectstory->batchUnlinkTip = 'Other requirements are removed. The following requirements are linked to the execution of this project. Please remove them from the execution first.';
+$lang->projectstory->whyNoStories   = "No story can be linked. Please check whether there is any story in {$lang->projectCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
+$lang->projectstory->batchUnlinkTip = "Other requirements are removed. The following requirements are linked to the execution of this {$lang->projectCommon}. Please remove them from the execution first.";
 
 $lang->projectstory->featureBar['story']['allstory']          = 'All';
 $lang->projectstory->featureBar['story']['unclosed']          = 'Open';

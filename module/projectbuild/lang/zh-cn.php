@@ -9,7 +9,7 @@
  * @version     $Id: zh-cn.php 4129 2020-11-27 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->projectbuild->common           = '项目版本';
+$lang->projectbuild->common           = $lang->projectCommon . '版本';
 $lang->projectbuild->browse           = '版本列表';
 $lang->projectbuild->create           = "创建集成版本";
 $lang->projectbuild->edit             = "编辑集成版本";
