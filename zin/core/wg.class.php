@@ -29,6 +29,8 @@ class wg
 
     protected static $defineBlocks = NULL;
 
+    protected static $wgBlockMap = NULL;
+
     /**
      * The props of the element
      *
@@ -157,7 +159,24 @@ class wg
 
         if($child instanceof wg && empty($child->parent)) $child->parent = &$this;
 
-        $result = $name === 'children' ? $this->onAddChild($child) : $this->onAddBlock($child, $name);
+        $result = NULL;
+        if($name === 'children')
+        {
+            if($child instanceof wg && static::$wgBlockMap !== NULL && isset(static::$wgBlockMap[$child->type()]))
+            {
+                $name = static::$wgBlockMap[$child->type()];
+                $result = $this->onAddBlock($child, $name);
+            }
+            else
+            {
+                $result = $this->onAddChild($child);
+            }
+        }
+        else
+        {
+            $result = $this->onAddBlock($child, $name);
+        }
+
         if($result === false) return;
         if($result !== NULL && $result !== true) $child = $result;
 
@@ -286,6 +305,11 @@ class wg
         }
     }
 
+    public function type()
+    {
+        return get_called_class();
+    }
+
     protected function onCreated() {}
 
     protected function toJsonData()
@@ -294,7 +318,7 @@ class wg
         $data['gid'] = $this->gid;
         $data['props'] = $this->props->toJsonData();
 
-        $data['type'] = get_called_class();
+        $data['type'] = $this->type();
         if(strpos($data['type'], 'zin\\') === 0) $data['type'] = substr($data['type'], 4);
 
         $data['blocks'] = array();
