@@ -23,6 +23,7 @@ $lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或�
 $lang->group->allTips            = '勾选此项后，管理员可管理系统中所有对象，包括后续创建的对象。';
 $lang->group->manageMember       = '成员维护';
 $lang->group->manageProjectAdmin = '维护项目管理员';
+$lang->group->permissionedit     = '权限编辑';
 $lang->group->confirmDelete      = '您确定删除“%s”用户分组吗？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '没有保存，请确认选择了权限数据。';

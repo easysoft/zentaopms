@@ -18,6 +18,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->group->browse;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>
+    <?php if(common::hasPriv('group', 'permissionedit')) echo html::a($this->createLink('group', 'permissionedit', '', '', false), '<i class="icon-backend text-primary"></i>', '', 'class="btn btn-link"');?>
     <?php if(common::hasPriv('group', 'managePriv')) echo html::a($this->createLink('group', 'managePriv', 'type=byModule', '', true), $lang->group->managePrivByModule, '', 'class="btn btn-link iframe"');?>
     <?php if(common::hasPriv('group', 'create')) echo html::a($this->createLink('group', 'create', '', '', true), '<i class="icon-plus"></i> ' . $lang->group->create, '', 'class="btn btn-primary iframe" data-width="550"');?>
   </div>
