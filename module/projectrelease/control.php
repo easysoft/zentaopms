@@ -326,6 +326,7 @@ class projectrelease extends control
         $this->view->bugPager     = $bugPager;
         $this->view->leftBugPager = $leftBugPager;
         $this->view->builds       = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject', 0, 'execution', '', false);
+        $this->view->summary       = $this->product->summary($stories);
 
         if($this->app->getViewType() == 'json')
         {
