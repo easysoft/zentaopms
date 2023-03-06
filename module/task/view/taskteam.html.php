@@ -26,7 +26,7 @@ $memberStatus   = $member->status;
 if($memberStatus == 'done') $memberDisabled = true;
 if($memberStatus != 'wait' and $task->mode == 'linear') $sortDisabled = true;
 if($memberStatus == 'done' and $task->mode == 'multi')  $sortDisabled = true;
-if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !== false and $app->rawMethod != 'activate')
+if(strpos('|closed|cancel|pause|', $task->status) !== false and $app->rawMethod != 'activate')
 {
     $memberStatus   = $task->status;
     $memberDisabled = true;

@@ -59,6 +59,8 @@ $lang->custom->executionCommon      = '执行';
 $lang->custom->selectDefaultProgram = '请选择一个默认项目集';
 $lang->custom->defaultProgram       = '默认项目集';
 $lang->custom->modeManagement       = '模式管理';
+$lang->custom->percent              = $lang->stage->percent;
+$lang->custom->setPercent           = "是否启用{$lang->stage->percent}";
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -188,7 +190,7 @@ $lang->custom->notice->noClosedBlock       = '没有永久关闭的区块';
 $lang->custom->notice->required            = '页面提交时，选中的字段必填';
 $lang->custom->notice->conceptResult       = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath         = '您可以在：后台 -> 自定义 -> 流程页面修改。';
-$lang->custom->notice->readOnlyOfProduct   = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
+$lang->custom->notice->readOnlyOfProduct   = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划、版本都禁止修改。';
 $lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、版本、日志以及关联需求都禁止修改。";
 $lang->custom->notice->readOnlyOfKanban    = "禁止修改后，已关闭{$lang->custom->kanban}下的卡片以及相关设置都禁止修改。";
 $lang->custom->notice->URSREmpty           = '自定义需求名称不能为空！';
@@ -199,6 +201,7 @@ $lang->custom->notice->storyReviewTip      = '按人员、职位、部门勾选�
 $lang->custom->notice->selectAllTip        = '勾选所有人员后，会清空并置灰评审人员，同时隐藏职位、部门。';
 $lang->custom->notice->repeatKey           = '%s键重复';
 $lang->custom->notice->readOnlyOfCode      = '代号是一种管理话术，主要便于保密或作为别名存在。启用代号管理后，系统中的产品、项目、执行在创建、编辑、详情、列表等页面均会展示代号信息。';
+$lang->custom->notice->readOnlyOfPercent   = '工作量占比用于划分项目中存在多个阶段时的工作量的占比，同一级阶段的百分比之和最高为100%。启用工作量占比后，系统中的瀑布项目和融合瀑布项目模型中设置阶段时需要维护阶段的工作量占比。';
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";

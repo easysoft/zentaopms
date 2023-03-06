@@ -590,6 +590,9 @@ class upgradeModel extends model
             case '18_1':
                 $this->insertMixStage();
                 break;
+            case '18_2':
+                $this->loadModel('setting')->setSN();
+                break;
         }
 
         $this->deletePatch();
