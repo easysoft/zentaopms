@@ -1703,6 +1703,7 @@ $lang->group->methodOrder[25] = 'delete';
 $lang->group->methodOrder[30] = 'managePriv';
 $lang->group->methodOrder[35] = 'manageMember';
 $lang->group->methodOrder[40] = 'manageProjectAdmin';
+$lang->group->methodOrder[45] = 'permissionedit';
 
 /* User. */
 $lang->resource->user = new stdclass();

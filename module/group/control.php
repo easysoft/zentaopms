@@ -389,6 +389,7 @@ class group extends control
      */
     public function permissionedit()
     {
+        $this->view->title = $this->lang->group->permissionedit;
         $this->display();
     }
 }
