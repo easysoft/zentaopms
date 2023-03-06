@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div class='btn-toolbar pull-right'>
-  <?php echo html::a($this->createLink('group', 'browse', '', '', false), $lang->logout, '', 'class="btn btn-primary"');?>
+   <?php echo html::backButton();?>
 </div>
 </div>
 <div id='mainContent' class='main-table'>
