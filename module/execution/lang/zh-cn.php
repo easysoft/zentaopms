@@ -286,7 +286,7 @@ $lang->execution->importPlanStory           = '创建' . $lang->executionCommon 
 $lang->execution->importEditPlanStory       = '编辑' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？导入时将自动过滤掉草稿状态的' . $lang->SRCommon . '。';
 $lang->execution->importBranchPlanStory     = '创建' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？导入时将只关联本' . $lang->executionCommon . '所关联分支的激活需求。';
 $lang->execution->importBranchEditPlanStory = '编辑' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？导入时将只关联本' . $lang->executionCommon . '所关联分支的激活需求。';
-$lang->execution->needLinkProducts          = '该执行还未关联任何产品，相关功能无法使用，请先关联产品后再试。';
+$lang->execution->needLinkProducts          = "该执行还未关联任何{$lang->productCommon}，相关功能无法使用，请先关联{$lang->productCommon}后再试。";
 $lang->execution->iteration                 = '版本迭代';
 $lang->execution->iterationInfo             = '迭代%s次';
 $lang->execution->viewAll                   = '查看所有';
@@ -335,7 +335,7 @@ $lang->execution->aboveAllExecution = "以上所有{$lang->executionCommon}";
 
 /* 页面提示。*/
 $lang->execution->linkStoryByPlanTips  = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此{$lang->executionCommon}中";
-$lang->execution->batchCreateStoryTips = '请选择需要批量新建研发需求的产品';
+$lang->execution->batchCreateStoryTips = "请选择需要批量新建研发需求的{$lang->productCommon}";
 $lang->execution->selectExecution      = "请选择{$lang->execution->common}";
 $lang->execution->beginAndEnd          = '起止时间';
 $lang->execution->lblStats             = '工时统计';
@@ -375,15 +375,15 @@ $lang->execution->noExecution          = "暂时没有{$lang->executionCommon}�
 $lang->execution->noExecutions         = "暂时没有{$lang->execution->common}。";
 $lang->execution->noPrintData          = "暂无数据可打印";
 $lang->execution->noMembers            = '暂时没有团队成员。';
-$lang->execution->workloadTotal        = "工作量占比累计不应当超过100%s, 当前产品下的工作量之和为%s";
-$lang->execution->linkAllStoryTip      = "({$lang->projectCommon}下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联产品的{$lang->SRCommon})";
+$lang->execution->workloadTotal        = "工作量占比累计不应当超过100%s, 当前{$lang->productCommon}下的工作量之和为%s";
+$lang->execution->linkAllStoryTip      = "({$lang->projectCommon}下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联{$lang->productCommon}的{$lang->SRCommon})";
 $lang->execution->copyTeamTitle        = "选择一个{$lang->project->common}或{$lang->execution->common}团队";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete                = "您确定删除{$lang->executionCommon}[%s]吗？";
 $lang->execution->confirmUnlinkMember          = "您确定从该{$lang->executionCommon}中移除该用户吗？";
 $lang->execution->confirmUnlinkStory           = "移除该{$lang->SRCommon}后，该{$lang->SRCommon}关联的用例将被移除，该{$lang->SRCommon}关联的任务将被取消，请确认。";
-$lang->execution->confirmSync                  = "修改所属{$lang->projectCommon}后,为了保持数据的一致性，该执行所关联的产品、需求、团队和白名单数据将会同步到新的{$lang->projectCommon}中，请知悉。";
+$lang->execution->confirmSync                  = "修改所属{$lang->projectCommon}后,为了保持数据的一致性，该执行所关联的{$lang->productCommon}、{$lang->SRCommon}、团队和白名单数据将会同步到新的{$lang->projectCommon}中，请知悉。";
 $lang->execution->confirmUnlinkExecutionStory  = "您确定从该{$lang->projectCommon}中移除该{$lang->SRCommon}吗？";
 $lang->execution->notAllowedUnlinkStory        = "该{$lang->SRCommon}已经与{$lang->projectCommon}下{$lang->executionCommon}相关联，请从{$lang->executionCommon}中移除后再操作。";
 $lang->execution->notAllowRemoveProducts       = "该{$lang->productCommon}中的{$lang->SRCommon}%s已与该{$lang->executionCommon}进行了关联，请取消关联后再操作。";
@@ -430,7 +430,7 @@ $lang->execution->hasStartedTaskOrSubStage     = "%s%s下的任务或子阶段�
 $lang->execution->hasSuspendedOrClosedChildren = "阶段%s下的子阶段未全部挂起或关闭，无法修改，已过滤。";
 $lang->execution->hasNotClosedChildren         = "阶段%s下的子阶段未全部关闭，无法修改，已过滤。";
 $lang->execution->hasStartedTask               = "%s%s下的任务已经开始，无法修改，已过滤。";
-$lang->execution->cannotManageProducts         = "当前{$lang->execution->common}的{$lang->project->common}为%s{$lang->project->common}，不能关联产品。";
+$lang->execution->cannotManageProducts         = "当前{$lang->execution->common}的{$lang->project->common}为%s{$lang->project->common}，不能关联{$lang->productCommon}。";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
@@ -567,7 +567,7 @@ $lang->execution->action = new stdclass();
 $lang->execution->action->opened               = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
 $lang->execution->action->managed              = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
 $lang->execution->action->edited               = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
-$lang->execution->action->extra                = '相关产品为 %s。';
+$lang->execution->action->extra                = "相关{$lang->productCommon}为 %s。";
 $lang->execution->action->startbychildactivate = '$date, 系统判断由于子阶段激活，将' . $lang->executionCommon . '状态置为进行中。' . "\n";
 $lang->execution->action->waitbychilddelete    = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为未开始。' . "\n";
 $lang->execution->action->closebychilddelete   = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为已关闭。' . "\n";

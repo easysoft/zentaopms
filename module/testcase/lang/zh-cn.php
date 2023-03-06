@@ -186,7 +186,7 @@ $lang->testcase->summary               = "本页共 <strong>%s</strong> 个用�
 $lang->testcase->confirmDelete         = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete    = '您确认要批量删除这些测试用例吗？';
 $lang->testcase->ditto                 = '同上';
-$lang->testcase->dittoNotice           = '该用例与上一用例不属于同一产品！';
+$lang->testcase->dittoNotice           = "该用例与上一用例不属于同一{$lang->productCommon}！";
 $lang->testcase->confirmUnlinkTesttask = '用例[%s]已关联在之前所属平台/分支的测试单中，调整平台/分支后，将从之前所属平台/分支的测试单中移除，请确认是否继续修改。';
 
 $lang->testcase->reviewList[0] = '否';
