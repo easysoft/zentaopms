@@ -1,0 +1,5 @@
+body{padding-bottom:0px;background-color:#fff;}
+#showContentEditor, #fileContentEditor {border:1px solid #ddd;}
+.main-content {padding:0px;}
+.checkbox-primary {display:inline-block; padding-left:12px;}
+.checkbox-primary label {padding-left:12px;}

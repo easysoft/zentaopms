@@ -33,6 +33,7 @@ $lang->story->edit               = "编辑";
 $lang->story->editDraft          = "编辑草稿";
 $lang->story->batchEdit          = "批量编辑";
 $lang->story->subdivide          = '细分';
+$lang->story->subdivideSR        = $lang->SRCommon . '细分';
 $lang->story->link               = '关联';
 $lang->story->unlink             = '移除';
 $lang->story->track              = '跟踪矩阵';

@@ -384,7 +384,7 @@ class executionModel extends model
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
+        if(($project->model == 'waterfall' or $project->model == 'waterfallplus') and isset($this->config->setPercent) and $this->config->setPercent == 1)
         {
             $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
@@ -433,7 +433,7 @@ class executionModel extends model
         }
 
         /* Check the workload format and total. */
-        if(!empty($sprint->percent)) $this->checkWorkload('create', $sprint->percent, $sprint->project);
+        if(!empty($sprint->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('create', $sprint->percent, $sprint->project);
 
         /* Set planDuration and realDuration. */
         if($this->config->edition == 'max')
@@ -622,7 +622,7 @@ class executionModel extends model
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->edit['id'], $this->post->uid);
 
         /* Check the workload format and total. */
-        if(!empty($execution->percent)) $this->checkWorkload('update', $execution->percent, $oldExecution);
+        if(!empty($execution->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('update', $execution->percent, $oldExecution);
 
         /* Set planDuration and realDuration. */
         if($this->config->edition == 'max')

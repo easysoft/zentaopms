@@ -333,6 +333,13 @@ class adminModel extends model
                 /* Check sub menu priv. */
                 foreach($subMenuList as $subMenuKey => $subMenu)
                 {
+                    if($menuKey == 'message' and $subMenuKey == 'mail')
+                    {
+                        $this->loadModel('mail');
+                        if(!$this->config->mail->turnon and !$this->session->mailConfig) $subMenu['link'] = $this->lang->mail->common . '|mail|detect|';
+                    }
+                    if($menuKey == 'dev' and $subMenuKey == 'editor' and !empty($this->config->global->editor)) $subMenu['link'] = $this->lang->editor->common . '|editor|index|';
+
                     $link = array();
                     if(isset($menu['tabMenu'][$subMenuKey]))
                     {
@@ -362,12 +369,6 @@ class adminModel extends model
                     }
                     else
                     {
-                        if($menuKey == 'message' and $subMenuKey == 'mail')
-                        {
-                            $this->loadModel('mail');
-                            if(!$this->config->mail->turnon and !$this->session->mailConfig) $subMenu['link'] = $this->lang->mail->common . '|mail|detect|';
-                        }
-
                         $link = $this->getHasPrivLink($subMenu);
                     }
 
@@ -634,7 +635,7 @@ class adminModel extends model
         $connected = curl_exec($curl);
         curl_close($curl);
 
-        return (bool)$connected;
+        return $connected ? true : false;
     }
 
     /**

@@ -9,7 +9,7 @@
  * @version     $Id: zh-cn.php 4129 2020-11-27 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->projectbuild->common           = 'Project Build';
+$lang->projectbuild->common           = $lang->projectCommon . ' Build';
 $lang->projectbuild->browse           = 'Build List';
 $lang->projectbuild->create           = "Create Build";
 $lang->projectbuild->edit             = "Edit Build";

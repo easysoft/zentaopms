@@ -108,28 +108,26 @@ js::set('vision',        $this->config->vision);
             if(isset($menuItem->hidden)) continue;
             if($menuItem->name == 'emptysr' && $storyType == 'story') continue;
             $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
-            if($menuItem->name == 'more')
+            $moreSelects = empty($lang->product->moreSelects[$app->rawMethod][$menuItem->name]) ? '' : $lang->product->moreSelects[$app->rawMethod][$menuItem->name];
+            if($moreSelects)
             {
-                if(!empty($lang->product->moreSelects))
+                $moreLabel       = $lang->more;
+                $moreLabelActive = '';
+                $storyBrowseType = $this->session->storyBrowseType;
+                if(isset($moreSelects[$storyBrowseType]))
                 {
-                    $moreLabel       = $lang->more;
-                    $moreLabelActive = '';
-                    $storyBrowseType = $this->session->storyBrowseType;
-                    if(isset($lang->product->moreSelects[$storyBrowseType]))
-                    {
-                        $moreLabel       = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-                        $moreLabelActive = 'btn-active-text';
-                    }
-                    echo '<div class="btn-group" id="more">';
-                    echo html::a('javascript:;', $moreLabel . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $moreLabelActive'");
-                    echo "<ul class='dropdown-menu'>";
-                    foreach($lang->product->moreSelects as $key => $value)
-                    {
-                        $active = $key == $storyBrowseType ? 'btn-active-text' : '';
-                        echo '<li>' . html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
-                    }
-                    echo '</ul></div>';
+                    $moreLabel       = "<span class='text'>{$moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    $moreLabelActive = 'btn-active-text';
                 }
+                echo '<div class="btn-group" id="more">';
+                echo html::a('javascript:;', $moreLabel . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $moreLabelActive'");
+                echo "<ul class='dropdown-menu'>";
+                foreach($moreSelects as $key => $value)
+                {
+                    $active = $key == $storyBrowseType ? 'btn-active-text' : '';
+                    echo '<li>' . html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
+                }
+                echo '</ul></div>';
             }
             elseif($menuItem->name == 'QUERY')
             {

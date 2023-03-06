@@ -100,3 +100,6 @@ $lang->job->pipelineVariables                 = "Variables";
 $lang->job->pipelineVariablesKeyPlaceHolder   = "Input variable key";
 $lang->job->pipelineVariablesValuePlaceHolder = "Input variable value";
 $lang->job->pipelineVariablesTips             = "Specify variable values to be used in this run. The values specified in CI/CD settings will be used by default.";
+
+$lang->job->featureBar['browse']['job']     = 'List';
+$lang->job->featureBar['browse']['compile'] = 'History';

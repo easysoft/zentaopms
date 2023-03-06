@@ -176,3 +176,14 @@ function popoverCancel(index)
 
     $('[data-id="' + index + '"]').addClass('hide');
 }
+
+/**
+ * Reload parent window When operating in a pop-up window.
+ *
+ * @access public
+ * @return void
+ */
+function reloadByAjaxForm()
+{
+    parent.location.reload();
+}

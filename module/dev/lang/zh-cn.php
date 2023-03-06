@@ -1,23 +1,34 @@
 <?php
-$lang->dev->common     = '二次开发';
-$lang->dev->api        = 'API';
-$lang->dev->db         = '数据库';
-$lang->dev->editor     = '编辑器';
-$lang->dev->translate  = '翻译';
-$lang->dev->dbList     = '数据库';
-$lang->dev->moduleList = '模块列表';
-$lang->dev->params     = '参数列表';
-$lang->dev->type       = '类型';
-$lang->dev->desc       = '描述';
-$lang->dev->noParams   = '无参数';
-$lang->dev->post       = 'POST参数';
+$lang->dev->common       = '二次开发';
+$lang->dev->api          = 'API';
+$lang->dev->db           = '数据库';
+$lang->dev->editor       = '编辑器';
+$lang->dev->translate    = '翻译';
+$lang->dev->dbList       = '数据库';
+$lang->dev->moduleList   = '模块列表';
+$lang->dev->params       = '参数列表';
+$lang->dev->type         = '类型';
+$lang->dev->desc         = '描述';
+$lang->dev->noParams     = '无参数';
+$lang->dev->post         = 'POST参数';
+$lang->dev->modifyValue  = '修改值';
+$lang->dev->defaultValue = '默认值';
 
-$lang->dev->paramRange    = '取值范围：%s';
-$lang->dev->paramDate     = '日期格式：YY-mm-dd，如：2019-01-01';
-$lang->dev->paramColor    = '颜色格式：#RGB，如：#3da7f5';
-$lang->dev->paramMailto   = "填写帐号，多个账号用','分隔。";
-$lang->dev->noteEditor    = "编辑器功能因为安全原因被禁用。使用该功能，请到官网下载安装 <a href='https://www.zentao.net/extension-viewExt-150.html' target='_blank'>扩展编辑器</a> 插件。";
-$lang->dev->noteTranslate = "翻译功能因为安全原因被禁用。使用该功能，请到官网下载安装 <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>翻译</a> 插件。";
+$lang->dev->paramRange     = '取值范围：%s';
+$lang->dev->paramDate      = '日期格式：YY-mm-dd，如：2019-01-01';
+$lang->dev->paramColor     = '颜色格式：#RGB，如：#3da7f5';
+$lang->dev->paramMailto    = "填写帐号，多个账号用','分隔。";
+$lang->dev->noteEditor     = "编辑器功能存在部分安全问题，如需使用该功能，可在此开启。";
+$lang->dev->noteTranslate  = "翻译功能因为安全原因被禁用。使用该功能，请到官网下载安装 <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>翻译</a> 插件。";
+$lang->dev->confirmRestore = '是否要恢复默认？';
+
+$lang->dev->language    = '语言：%s';
+$lang->dev->default     = '默认值';
+$lang->dev->currentLang = '当前语言';
+$lang->dev->change      = '修改值';
+$lang->dev->UR          = '用户需求';
+$lang->dev->SR          = '软件需求';
+$lang->dev->branch      = '平台/分支';
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = '序号';
@@ -26,6 +37,9 @@ $lang->dev->fields['desc']   = '描述';
 $lang->dev->fields['type']   = '类型';
 $lang->dev->fields['length'] = '长度';
 $lang->dev->fields['null']   = '是否可空';
+
+$lang->dev->switchList['1'] = '开启';
+$lang->dev->switchList['0'] = '关闭';
 
 $lang->dev->tableList = array();
 $lang->dev->tableList['action']                = '系统日志';
@@ -79,6 +93,7 @@ $lang->dev->tableList['backup']                = '备份';
 $lang->dev->tableList['common']                = '公有模块';
 $lang->dev->tableList['convert']               = '导入';
 $lang->dev->tableList['dev']                   = '二次开发';
+$lang->dev->tableList['editor']                = '编辑器';
 $lang->dev->tableList['git']                   = 'GIT';
 $lang->dev->tableList['index']                 = '首页';
 $lang->dev->tableList['install']               = '安装';
@@ -177,3 +192,15 @@ if($config->systemMode != 'ALM') unset($lang->dev->groupList['program']);
 $lang->dev->endGroupList['admin']  = '后台';
 $lang->dev->endGroupList['system'] = '系统';
 $lang->dev->endGroupList['other']  = '其他';
+
+$lang->dev->featureBar['langItem']['common']  = '公共';
+$lang->dev->featureBar['langItem']['first']   = '一级菜单';
+$lang->dev->featureBar['langItem']['second']  = '二级菜单';
+$lang->dev->featureBar['langItem']['third']   = '三级菜单';
+$lang->dev->featureBar['langItem']['tag']     = '检索标签';
+
+$lang->dev->projectMenu['project']       = "{$lang->projectCommon}通用";
+$lang->dev->projectMenu['scrum']         = "敏捷 / 融合敏捷{$lang->projectCommon}";
+$lang->dev->projectMenu['waterfall']     = "瀑布 / 融合瀑布{$lang->projectCommon}";
+$lang->dev->projectMenu['kanbanProject'] = "看板{$lang->projectCommon}";
+if($config->vision == 'lite') $lang->dev->projectMenu['kanbanProject'] = $lang->projectCommon;

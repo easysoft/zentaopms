@@ -20,15 +20,10 @@
   <ul class='nav'>
   <?php
   $methodName = strtolower($this->app->getMethodName());
-  foreach($lang->attend->featurebar as $key => $menu)
+  foreach($lang->attend->featureBar['personal'] as $type => $name)
   {
-      if(is_string($menu)) $link = $menu;
-      if(is_array($menu)) $link = $menu['link'];
-
-      list($name, $currentModule, $currentMethod, $params) = explode('|', $link);
-      $class = strtolower($key) == $methodName ? "class='active'" : '';
-      if(isset($menu['alias'])) $class = strpos(strtolower($menu['alias']), strtolower($key)) !== false ? "class='active'" : $class;
-      if(common::hasPriv($currentModule, $currentMethod)) echo "<li id='$key' $class>" . html::a($this->createLink($currentModule, $currentMethod, $params), $name) . '</li>';
+      $class = strtolower($type) == $methodName ? "class='active'" : '';
+      if(common::hasPriv('attend', $type)) echo "<li id='$type' $class>" . html::a($this->createLink('attend', $type), $name) . '</li>';
   }
   ?>
   </ul>

@@ -281,6 +281,31 @@ $lang->project->featureBar['browse']['doing']     = 'En Cours';
 $lang->project->featureBar['browse']['suspended'] = 'Suspendues';
 $lang->project->featureBar['browse']['closed']    = 'Fermées';
 
+$lang->project->featureBar['index']['all']       = 'All';
+$lang->project->featureBar['index']['undone']    = 'Unfinished';
+$lang->project->featureBar['index']['wait']      = 'Waiting';
+$lang->project->featureBar['index']['doing']     = 'Doing';
+$lang->project->featureBar['index']['suspended'] = 'Suspended';
+$lang->project->featureBar['index']['closed']    = 'Closed';
+
+$lang->project->featureBar['execution']['all']       = "Tous les {$lang->executionCommon}s";
+$lang->project->featureBar['execution']['undone']    = 'Non Terminé';
+$lang->project->featureBar['execution']['wait']      = 'En attente';
+$lang->project->featureBar['execution']['doing']     = 'En cours';
+$lang->project->featureBar['execution']['suspended'] = 'Suspendu';
+$lang->project->featureBar['execution']['closed']    = 'Fermé';
+
+$lang->project->featureBar['bug']['all']        = 'All';
+$lang->project->featureBar['bug']['unresolved'] = 'Unresolved';
+
+$lang->project->featureBar['testcase']['all']         = 'Tous';
+$lang->project->featureBar['testcase']['wait']        = 'En Attente';
+$lang->project->featureBar['testcase']['needconfirm'] = "Story Changée";
+$lang->project->featureBar['testcase']['group']       = 'Group View';
+$lang->project->featureBar['testcase']['zerocase']    = "Zero Case Story";
+$lang->project->featureBar['testcase']['suite']       = 'Suite';
+$lang->project->featureBar['testcase']['autocase']    = 'Automated';
+
 $lang->project->featureBar['build']['all'] = 'Build List';
 
 $lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
@@ -393,3 +418,11 @@ $lang->project->copyProject->daysTips           = '『Available working days』S
 $lang->project->linkBranchStoryByPlanTips = "When the project is scheduled to associate requirements, only the activated requirements associated with the %s of the project are imported.";
 $lang->project->linkNormalStoryByPlanTips = "When the project plans to associate requirements, only the requirements that are active are imported.";
 $lang->project->cannotManageProducts      = "This project is a project-type project and cannot be associated with products.";
+
+$lang->project->featureBar['dynamic']['all']       = 'All';
+$lang->project->featureBar['dynamic']['today']     = 'Today';
+$lang->project->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->project->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->project->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->project->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->project->featureBar['dynamic']['lastMonth'] = 'Last Month';

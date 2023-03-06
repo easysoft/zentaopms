@@ -41,3 +41,11 @@ $lang->company->guestOptions[1] = '允许';
 
 $lang->company->order['date_desc'] = '倒序排列';
 $lang->company->order['date_asc']  = '正序排列';
+
+$lang->company->featureBar['dynamic']['all']       = '全部';
+$lang->company->featureBar['dynamic']['today']     = '今天';
+$lang->company->featureBar['dynamic']['yesterday'] = '昨天';
+$lang->company->featureBar['dynamic']['thisWeek']  = '本周';
+$lang->company->featureBar['dynamic']['lastWeek']  = '上周';
+$lang->company->featureBar['dynamic']['thisMonth'] = '本月';
+$lang->company->featureBar['dynamic']['lastMonth'] = '上月';

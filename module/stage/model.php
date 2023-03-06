@@ -27,10 +27,13 @@ class stageModel extends model
             ->add('createdDate', helper::today())
             ->get();
 
-        $totalPercent = $this->getTotalPercent($type);
+        if(isset($this->config->setPercent) and $this->config->setPercent == 1)
+        {
+            $totalPercent = $this->getTotalPercent($type);
 
-        if(!is_numeric($stage->percent)) return dao::$errors['message'][] = $this->lang->stage->error->notNum;
-        if(round($totalPercent + $stage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+            if(!is_numeric($stage->percent)) return dao::$errors['message'][] = $this->lang->stage->error->notNum;
+            if(round($totalPercent + $stage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+        }
 
         $this->dao->insert(TABLE_STAGE)
             ->data($stage)
@@ -53,9 +56,12 @@ class stageModel extends model
     {
         $data = fixer::input('post')->get();
 
-        $totalPercent = $this->getTotalPercent($type);
-
-        if(round($totalPercent + array_sum($data->percent)) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+        $setPercent = (isset($this->config->setPercent) and $this->config->setPercent == 1) ? true : false;
+        if($setPercent)
+        {
+            $totalPercent = $this->getTotalPercent($type);
+            if(round($totalPercent + array_sum($data->percent)) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+        }
 
         $this->loadModel('action');
         foreach($data->name as $i => $name)
@@ -64,7 +70,7 @@ class stageModel extends model
 
             $stage = new stdclass();
             $stage->name        = $name;
-            $stage->percent     = $data->percent[$i];
+            if($setPercent) $stage->percent = $data->percent[$i];
             $stage->type        = $data->type[$i];
             $stage->projectType = $type;
             $stage->createdBy   = $this->app->user->account;
@@ -100,9 +106,11 @@ class stageModel extends model
             ->add('editedDate', helper::today())
             ->get();
 
-        $totalPercent = $this->getTotalPercent($oldStage->projectType);
-
-        if(round($totalPercent + $stage->percent - $oldStage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+        if(isset($this->config->setPercent) and $this->config->setPercent == 1)
+        {
+            $totalPercent = $this->getTotalPercent($oldStage->projectType);
+            if(round($totalPercent + $stage->percent - $oldStage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+        }
 
         $this->dao->update(TABLE_STAGE)
             ->data($stage)

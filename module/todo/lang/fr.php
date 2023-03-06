@@ -36,6 +36,7 @@ $lang->todo->project      = "Project";
 $lang->todo->product      = "Product";
 $lang->todo->execution    = $lang->executionCommon;
 $lang->todo->changeDate   = "Change Date";
+$lang->todo->future       = 'TBD';
 
 $lang->todo->reasonList['story'] = "Convertir en Story";
 $lang->todo->reasonList['task']  = "Convertir en Tâche";
@@ -119,14 +120,14 @@ $lang->todo->unfinishedTodo = "Les entrées de l'ID %s ne sont pas terminés et 
 $lang->todo->today          = 'Todo Today';
 $lang->todo->selectProduct  = "Please select a product";
 
-$lang->todo->periods['all']             = 'Toutes les entrées';
-$lang->todo->periods['before']          = 'Non terminée';
-$lang->todo->periods['future']          = 'A définir';
+$lang->todo->periods['all']             = 'Assigned To Yourself';
+$lang->todo->periods['before']          = 'Unfinished';
+$lang->todo->periods['future']          = 'TBD';
 $lang->todo->periods['thisWeek']        = 'This Week';
 $lang->todo->periods['thisMonth']       = 'This Month';
-$lang->todo->periods['thisYear']        = 'Cette Année';
+$lang->todo->periods['thisYear']        = 'This Year';
 $lang->todo->periods['assignedToOther'] = 'Assigned To Other';
-$lang->todo->periods['cycle']           = 'Récurrence';
+$lang->todo->periods['cycle']           = 'Recurrence';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, est $extra par <strong>$actor</strong>.', 'extra' => 'reasonList');

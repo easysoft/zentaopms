@@ -225,6 +225,13 @@ $lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
+$lang->product->featureBar['project']['all']       = 'All';
+$lang->product->featureBar['project']['undone']    = 'Unfinished';
+$lang->product->featureBar['project']['wait']      = 'Waiting';
+$lang->product->featureBar['project']['doing']     = 'Doing';
+$lang->product->featureBar['project']['suspended'] = 'Suspended';
+$lang->product->featureBar['project']['closed']    = 'Closed';
+
 $lang->product->moreSelects['openedbyme']     = $lang->product->openedByMe;
 $lang->product->moreSelects['reviewedbyme']   = $lang->product->reviewedByMe;
 $lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
@@ -234,3 +241,11 @@ $lang->product->moreSelects['changingstory']  = $lang->product->changingStory;
 $lang->product->moreSelects['reviewingstory'] = $lang->product->reviewingStory;
 $lang->product->moreSelects['willclose']      = $lang->product->willClose;
 $lang->product->moreSelects['closedstory']    = $lang->product->closedStory;
+
+$lang->product->featureBar['dynamic']['all']       = 'All';
+$lang->product->featureBar['dynamic']['today']     = 'Today';
+$lang->product->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->product->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->product->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->product->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';

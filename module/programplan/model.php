@@ -201,7 +201,7 @@ class programplanModel extends model
             $data->type          = 'plan';
             $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
             $data->name          = $plan->name;
-            $data->percent       = $plan->percent;
+            if(isset($this->config->setPercent) and $this->config->setPercent == 1) $data->percent = $plan->percent;
             $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
             $data->milestone     = zget($this->lang->programplan->milestoneList, $plan->milestone);
             $data->owner_id      = $plan->PM;
@@ -717,6 +717,7 @@ class programplanModel extends model
         $setCode   = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
         $sameCodes = $setCode ? $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '') : false;
 
+        $setPercent = (isset($this->config->setPercent) and $this->config->setPercent == 1) ? true : false;
         $datas = array();
         foreach($names as $key => $name)
         {
@@ -728,8 +729,8 @@ class programplanModel extends model
             $plan->project    = $projectID;
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->name       = $names[$key];
-            if($setCode) $plan->code = $codes[$key];
-            $plan->percent    = $percents[$key];
+            if($setCode)    $plan->code    = $codes[$key];
+            if($setPercent) $plan->percent = $percents[$key];
             $plan->attribute  = (empty($parentID) or $parentAttribute == 'mix') ? $attributes[$key] : $parentAttribute;
             $plan->milestone  = $milestone[$key];
             $plan->begin      = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
@@ -753,7 +754,7 @@ class programplanModel extends model
             if(!empty($sameNames) and in_array($plan->name, $sameNames)) dao::$errors[$index]['name'] = empty($type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
             if($setCode and $sameCodes !== true and !empty($sameCodes) and in_array($plan->code, $sameCodes)) dao::$errors[$index]['code'] = sprintf($this->lang->error->repeat, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code, $plan->code);
 
-            if($plan->percent and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $plan->percent))
+            if($setPercent and $plan->percent and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $plan->percent))
             {
                 dao::$errors[$index]['percent'] = $this->lang->programplan->error->percentNumber;
             }
@@ -809,13 +810,16 @@ class programplanModel extends model
                 }
             }
 
-            $plan->percent = (float)$plan->percent;
-            $totalPercent += $plan->percent;
+            if($setPercent)
+            {
+                $plan->percent = (float)$plan->percent;
+                $totalPercent += $plan->percent;
+            }
 
             if($plan->milestone) $milestone = 1;
         }
 
-        if($totalPercent > 100) dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
+        if($setPercent and $totalPercent > 100) dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
         if(dao::isError()) return false;
 
         $this->loadModel('action');
@@ -880,7 +884,7 @@ class programplanModel extends model
                 $this->dao->update(TABLE_PROJECT)->data($data)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
-                    ->checkIF($plan->percent != '', 'percent', 'float')
+                    ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
                     ->where('id')->eq($stageID)
                     ->exec();
 
@@ -937,7 +941,7 @@ class programplanModel extends model
                 $this->dao->insert(TABLE_PROJECT)->data($data)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->create->requiredFields, 'notempty')
-                    ->checkIF($plan->percent != '', 'percent', 'float')
+                    ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
                     ->exec();
 
                 if(!dao::isError())
@@ -1101,15 +1105,18 @@ class programplanModel extends model
 
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
 
+        $setPercent = isset($this->config->setPercent) and $this->config->setPercent == 1 ? true : false;
         if($plan->parent > 0)
         {
             $plan->attribute = $parentStage->attribute == 'mix' ? $plan->attribute : $parentStage->attribute;
             $plan->acl       = $parentStage->acl;
-            $parentPercent   = $parentStage->percent;
-
-            $childrenTotalPercent = $this->getTotalPercent($parentStage, true);
-            $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
-            if($childrenTotalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
+            if($setPercent)
+            {
+                $parentPercent        = $parentStage->percent;
+                $childrenTotalPercent = $this->getTotalPercent($parentStage, true);
+                $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
+                if($childrenTotalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
+            }
 
             /* If child plan has milestone, update parent plan set milestone eq 0 . */
             if($plan->milestone and $parentStage->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
@@ -1122,9 +1129,12 @@ class programplanModel extends model
 
             /* The workload of the parent plan cannot exceed 100%. */
             $oldPlan->parent = $plan->parent;
-            $totalPercent    = $this->getTotalPercent($oldPlan);
-            $totalPercent    = $totalPercent + $plan->percent;
-            if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
+            if($setPercent)
+            {
+                $totalPercent    = $this->getTotalPercent($oldPlan);
+                $totalPercent    = $totalPercent + $plan->percent;
+                if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
+            }
         }
 
         /* Set planDuration and realDuration. */

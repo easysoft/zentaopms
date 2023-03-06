@@ -205,3 +205,10 @@ $lang->mr->confirmUnlinkTask = "Are you sure to remove this task?";
 $lang->mr->taskSummary       = "There are <strong>%s</strong> tasks on this page";
 $lang->mr->notDelbranch      = "The source branch cannot be deleted when it is a protected branch";
 $lang->mr->addForApp         = "There are no projects under this server, do you want to go to add?";
+
+$lang->mr->featureBar['browse']['all']      = $lang->mr->statusList['all'];
+$lang->mr->featureBar['browse']['opened']   = $lang->mr->statusList['opened'];
+$lang->mr->featureBar['browse']['merged']   = $lang->mr->statusList['merged'];
+$lang->mr->featureBar['browse']['closed']   = $lang->mr->statusList['closed'];
+$lang->mr->featureBar['browse']['assignee'] = $lang->mr->assignedToMe;
+$lang->mr->featureBar['browse']['creator']  = $lang->mr->createdByMe;

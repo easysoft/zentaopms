@@ -12,6 +12,11 @@
 ?>
 <?php include 'header.html.php';?>
 <div id='mainContent' class='main-content'>
-    <div class='alert alert-danger'><?php echo $lang->dev->noteEditor;?></div>
+  <div class='text-center'>
+    <?php
+    echo $lang->dev->noteEditor;
+    if(common::hasPriv('editor', 'switch')) echo html::a($this->createLink('editor', 'switch', 'status=1'), $lang->dev->switchList[1], 'hiddenwin', "class='btn btn-primary'");
+    ?>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,23 +1,34 @@
 <?php
-$lang->dev->common     = 'Entwicklung';
-$lang->dev->api        = 'API';
-$lang->dev->db         = 'Datenbank';
-$lang->dev->editor     = 'Bearbeiter';
-$lang->dev->translate  = 'Translate';
-$lang->dev->dbList     = 'Datenbank';
-$lang->dev->moduleList = 'Module';
-$lang->dev->params     = 'Parameter';
-$lang->dev->type       = 'Typ';
-$lang->dev->desc       = 'Beschreibung';
-$lang->dev->noParams   = 'Keine Parameter';
-$lang->dev->post       = 'POST Parameter';
+$lang->dev->common       = 'Entwicklung';
+$lang->dev->api          = 'API';
+$lang->dev->db           = 'Datenbank';
+$lang->dev->editor       = 'Bearbeiter';
+$lang->dev->translate    = 'Translate';
+$lang->dev->dbList       = 'Datenbank';
+$lang->dev->moduleList   = 'Module';
+$lang->dev->params       = 'Parameter';
+$lang->dev->type         = 'Typ';
+$lang->dev->desc         = 'Beschreibung';
+$lang->dev->noParams     = 'Keine Parameter';
+$lang->dev->post         = 'POST Parameter';
+$lang->dev->modifyValue  = 'modifyValue';
+$lang->dev->defaultValue = 'defaultValue';
 
-$lang->dev->paramRange    = 'Parameter Range: %s';
-$lang->dev->paramDate     = 'Date format: YY-mm-dd, e.g 2019-01-01';
-$lang->dev->paramColor    = 'Color format: #RGB, e.g. #3da7f5';
-$lang->dev->paramMailto   = "User account. Separate accounts by ','.";
-$lang->dev->noteEditor    = "The editor is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of the <a href='https://www.zentao.net/extension-viewExt-150.html' target='_blank'>editor</a>.";
-$lang->dev->noteTranslate = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
+$lang->dev->paramRange     = 'Parameter Range: %s';
+$lang->dev->paramDate      = 'Date format: YY-mm-dd, e.g 2019-01-01';
+$lang->dev->paramColor     = 'Color format: #RGB, e.g. #3da7f5';
+$lang->dev->paramMailto    = "User account. Separate accounts by ','.";
+$lang->dev->noteEditor     = "The editor is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of the <a href='https://www.zentao.net/extension-viewExt-150.html' target='_blank'>editor</a>.";
+$lang->dev->noteTranslate  = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
+$lang->dev->confirmRestore = 'Do you want to reset?';
+
+$lang->dev->language    = 'Language: %s';
+$lang->dev->default     = 'Default';
+$lang->dev->currentLang = 'Current Language';
+$lang->dev->change      = 'Change';
+$lang->dev->UR          = 'Epic';
+$lang->dev->SR          = 'Story';
+$lang->dev->branch      = 'Branch';
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = 'ID';
@@ -79,6 +90,7 @@ $lang->dev->tableList['backup']                = 'Backup';
 $lang->dev->tableList['common']                = 'Common';
 $lang->dev->tableList['convert']               = 'Konvertieren';
 $lang->dev->tableList['dev']                   = 'Entwickeln';
+$lang->dev->tableList['editor']                = 'Editor';
 $lang->dev->tableList['git']                   = 'GIT';
 $lang->dev->tableList['index']                 = 'Home';
 $lang->dev->tableList['install']               = 'Installation';
@@ -177,3 +189,15 @@ if($config->systemMode != 'ALM') unset($lang->dev->groupList['program']);
 $lang->dev->endGroupList['admin']  = 'Admin';
 $lang->dev->endGroupList['system'] = 'System';
 $lang->dev->endGroupList['other']  = 'Andere';
+
+$lang->dev->featureBar['langItem']['common']  = 'Common';
+$lang->dev->featureBar['langItem']['first']   = 'First Menu';
+$lang->dev->featureBar['langItem']['second']  = 'Second Menu';
+$lang->dev->featureBar['langItem']['third']   = 'Third Menu';
+$lang->dev->featureBar['langItem']['tag']     = 'Search Tag';
+
+$lang->dev->projectMenu['project']       = "{$lang->projectCommon} Common";
+$lang->dev->projectMenu['scrum']         = "Scrum / Scrum + {$lang->projectCommon}";
+$lang->dev->projectMenu['waterfall']     = "Waterfall / Waterfall + {$lang->projectCommon}";
+$lang->dev->projectMenu['kanbanProject'] = "Kanban {$lang->projectCommon}";
+if($config->vision == 'lite') $lang->dev->projectMenu['kanbanProject'] = $lang->projectCommon;

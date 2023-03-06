@@ -41,3 +41,11 @@ $lang->company->guestOptions[1] = 'Autorisée';
 
 $lang->company->order['date_desc'] = 'Descending';
 $lang->company->order['date_asc']  = 'Ascending';
+
+$lang->company->featureBar['dynamic']['all']       = 'All';
+$lang->company->featureBar['dynamic']['today']     = 'Today';
+$lang->company->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->company->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->company->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->company->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->company->featureBar['dynamic']['lastMonth'] = 'Last Month';

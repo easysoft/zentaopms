@@ -281,6 +281,31 @@ $lang->project->featureBar['browse']['doing']     = '进行中';
 $lang->project->featureBar['browse']['suspended'] = '已挂起';
 $lang->project->featureBar['browse']['closed']    = '已关闭';
 
+$lang->project->featureBar['index']['all']       = '全部';
+$lang->project->featureBar['index']['undone']    = '未完成';
+$lang->project->featureBar['index']['wait']      = '未开始';
+$lang->project->featureBar['index']['doing']     = '进行中';
+$lang->project->featureBar['index']['suspended'] = '已挂起';
+$lang->project->featureBar['index']['closed']    = '已关闭';
+
+$lang->project->featureBar['execution']['all']       = '全部';
+$lang->project->featureBar['execution']['undone']    = '未完成';
+$lang->project->featureBar['execution']['wait']      = '未开始';
+$lang->project->featureBar['execution']['doing']     = '进行中';
+$lang->project->featureBar['execution']['suspended'] = '已挂起';
+$lang->project->featureBar['execution']['closed']    = '已关闭';
+
+$lang->project->featureBar['bug']['all']        = '全部';
+$lang->project->featureBar['bug']['unresolved'] = '未解决';
+
+$lang->project->featureBar['testcase']['all']         = '所有';
+$lang->project->featureBar['testcase']['wait']        = '待评审';
+$lang->project->featureBar['testcase']['needconfirm'] = "需求变动";
+$lang->project->featureBar['testcase']['group']       = '分组查看';
+$lang->project->featureBar['testcase']['zerocase']    = "零用例需求";
+$lang->project->featureBar['testcase']['suite']       = '套件';
+$lang->project->featureBar['testcase']['autocase']    = '自动化';
+
 $lang->project->featureBar['build']['all'] = '全部版本';
 
 $lang->project->aclList['private'] = "私有 (只有项目负责人、团队成员和干系人可访问)";
@@ -392,5 +417,12 @@ $lang->project->copyProject->daysTips           = '『可用工作日』应当�
 
 $lang->project->linkBranchStoryByPlanTips = "项目按计划关联需求时，只导入本项目所关联%s的激活状态的需求。";
 $lang->project->linkNormalStoryByPlanTips = "项目按计划关联需求时，只导入激活状态的需求。";
+$lang->project->cannotManageProducts      = "该项目为项目型项目，不能关联产品。";
 
-$lang->project->cannotManageProducts = "该项目为项目型项目，不能关联产品。";
+$lang->project->featureBar['dynamic']['all']       = '全部';
+$lang->project->featureBar['dynamic']['today']     = '今天';
+$lang->project->featureBar['dynamic']['yesterday'] = '昨天';
+$lang->project->featureBar['dynamic']['thisWeek']  = '本周';
+$lang->project->featureBar['dynamic']['lastWeek']  = '上周';
+$lang->project->featureBar['dynamic']['thisMonth'] = '本月';
+$lang->project->featureBar['dynamic']['lastMonth'] = '上月';

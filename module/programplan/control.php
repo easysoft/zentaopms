@@ -205,6 +205,7 @@ class programplan extends control
                 if(strpos(",{$this->config->programplan->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
             }
         }
+        if(empty($this->config->setPercent)) unset($visibleFields['percent'], $requiredFields['percent']);
 
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 

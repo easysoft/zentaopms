@@ -315,10 +315,10 @@ $lang->kanbanspace->empty = 'No Space';
 $lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
 $lang->kanbanspace->aclList['private'] = 'Private (For the space owner, team and whitelist members only)';
 
-$lang->kanbanspace->featureBar['involved']    = 'Involved';
-$lang->kanbanspace->featureBar['cooperation'] = 'Cooperation Space';
-$lang->kanbanspace->featureBar['public']      = 'Public Space';
-$lang->kanbanspace->featureBar['private']     = 'Private Space';
+$lang->kanban->featureBar['space']['involved']    = 'Involved';
+$lang->kanban->featureBar['space']['cooperation'] = 'Cooperation Space';
+$lang->kanban->featureBar['space']['public']      = 'Public Space';
+$lang->kanban->featureBar['space']['private']     = 'Private Space';
 
 $lang->kanbanspace->typeList['cooperation'] = 'Cooperation Space';
 $lang->kanbanspace->typeList['public']      = 'Public Space';
