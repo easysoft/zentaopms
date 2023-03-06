@@ -276,6 +276,7 @@ $lang->task->error->consumedThisTime  = 'Bitte geben Sie die Stunden an';
 $lang->task->error->left              = 'Bitte geben Sie die verbleibenden Stunden an"';
 $lang->task->error->work              = '"Bemerkung" muss kleiner als %d Zeichen sein.';
 $lang->task->error->teamMember        = 'Team members must be at least 2 people';
+$lang->task->error->teamCantOperate   = 'Please activate the closed, suspended, and canceled tasks before setting the team.';
 $lang->task->error->skipClose         = 'Aufgabe: %s ist nicht “Erledigt” oder “Abgebrochen”. Möchten Sie die Aufgabe jetzt schließen?';
 $lang->task->error->closeParent       = 'Task: %s is the Parent Task, which is automatically closed after all subtasks under the Parent Task are closed and cannot be closed manually.';
 $lang->task->error->consumed          = 'Aufgabe: %s Hour must be more than 0. Ignore changes to this Task.';

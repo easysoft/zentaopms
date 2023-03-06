@@ -59,6 +59,8 @@ $lang->custom->executionCommon      = 'Execution';
 $lang->custom->selectDefaultProgram = 'Please select default program';
 $lang->custom->defaultProgram       = 'Default program';
 $lang->custom->modeManagement       = 'Mode Management';
+$lang->custom->percent              = $lang->stage->percent;
+$lang->custom->setPercent           = "Enable or Disable {$lang->stage->percent}";
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -188,7 +190,7 @@ $lang->custom->notice->noClosedBlock       = 'You have no blocks that are closed
 $lang->custom->notice->required            = 'The selected field is required.';
 $lang->custom->notice->conceptResult       = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath         = 'Go to Admin -> Custom -> Concept to set it.';
-$lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
+$lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases, plans and builds of the closed product is also forbidden.';
 $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->executionCommon} is also forbidden.";
 $lang->custom->notice->readOnlyOfKanban    = "If Change Forbidden, any change on kanban card and related operations of {$lang->custom->kanban} is also forbidden.";
 $lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
@@ -199,6 +201,7 @@ $lang->custom->notice->storyReviewTip      = 'After selecting by individual, pos
 $lang->custom->notice->selectAllTip        = 'After selecting all people, the reviewers will be emptied and grayed out while hiding their positions and departments.';
 $lang->custom->notice->repeatKey           = 'Repeat Key %s';
 $lang->custom->notice->readOnlyOfCode      = 'A code is a management term that exists for secrecy or as an antonym. When code management is enabled, the code information of product, project, and execution in the system will be displayed in the creation, editing, detail, and list pages.';
+$lang->custom->notice->readOnlyOfPercent   = 'The "Workload Ratio" is used to divide the workload of a project into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the "Workload Ratio", users have to fill in the ratio fields when setting up the stages in the Waterfall project and Waterfall Plus project management models.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";

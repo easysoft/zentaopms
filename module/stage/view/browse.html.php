@@ -38,7 +38,9 @@
         <tr>
         <th class='text-left w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->stage->id);?></th>
           <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->stage->name);?></th>
+          <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <th class='w-100px'><?php common::printOrderLink('percent', $orderBy, $vars, $lang->stage->percent);?></th>
+          <?php endif;?>
           <th class='w-120px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->stage->type);?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
@@ -48,7 +50,9 @@
         <tr>
           <td><?php echo $stage->id;?></td>
           <td><?php echo $stage->name;?></td>
+          <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <td class='text-center'><?php echo $stage->percent;?></td>
+          <?php endif;?>
           <td><?php echo zget($lang->stage->typeList, $stage->type);?></td>
           <td class="c-actions">
             <?php

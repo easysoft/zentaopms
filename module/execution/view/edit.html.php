@@ -144,7 +144,7 @@
             </div>
           </td>
         </tr>
-        <?php if($execution->type == 'stage'):?>
+        <?php if($execution->type == 'stage' and isset($config->setPercent) and $config->setPercent == 1):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
           <td>
