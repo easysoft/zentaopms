@@ -685,6 +685,7 @@ class devModel extends model
         if($this->config->vision == 'lite' and $module == 'execution') return $menus;
 
         $titleList = array();
+        /* Convenience secondary menu. */
         foreach(array('homeMenu', 'menu') as $menu)
         {
             if(!isset($this->lang->$module->$menu)) continue;
@@ -723,6 +724,7 @@ class devModel extends model
 
                 if(is_array($menuValue))
                 {
+                    /* Convenience third menu and secondary drop menu. */
                     foreach(array('subMenu', 'dropMenu') as $menu)
                     {
                         if(!isset($menuValue[$menu])) continue;
@@ -739,42 +741,57 @@ class devModel extends model
                             list($label, $thisModule, $thisMethod) = explode('|', $link);
                             if($label == '@branch@') $label = $this->lang->dev->branch;
 
-                            $this->app->loadLang($thisModule);
-                            if(isset($this->lang->$thisModule->featureBar[$menuKey][$subMenuKey]))
-                            {
-                                $titleList[] = $label;
+                            /* Get the three-level menu under the drop mene . */
+                            $moduleList = array($thisModule);
+                            if(isset($subMenuValue['subModule'])) $moduleList = array_merge($moduleList, explode(',', $subMenuValue['subModule']));
+                            $moduleList = array_unique($moduleList);
 
-                                $thirdMenu = new stdClass();
-                                $thirdMenu->title  = $label;
-                                $thirdMenu->key    = '';
-                                $thirdMenu->module = $thisModule;
-                                $thirdMenu->method = "{$thisMethod}_{$subMenuKey}";
-                                $thirdMenu->active = ($methodName == $thirdMenu->method and $moduleName == $thisModule) ? 1 : 0;
-
-                                $subMenu->active     = 0;
-                                $subMenu->children[] = $thirdMenu;
-                                $hasFeatureBar = true;
-                            }
-                            elseif(isset($this->lang->$thisModule->featureBar[$thisMethod]))
+                            foreach($moduleList as $moduleKey)
                             {
-                                if(is_array($this->lang->$thisModule->featureBar[$thisMethod]))
+                                if(empty($moduleKey)) continue;
+                                if(isset($menuList[$subMenuKey]) and isset($menuList[$subMenuKey]['subMenu']->$moduleKey))
                                 {
-                                    $arrayKey = key($this->lang->$thisModule->featureBar[$thisMethod]);
-                                    if(is_array($this->lang->$thisModule->featureBar[$thisMethod][$arrayKey])) continue;
+                                    $labelList = $this->getLinkTitle(array($moduleKey => $menuList[$subMenuKey]['subMenu']->$moduleKey));
+                                    $label     = zget($labelList, $moduleKey, $label);
                                 }
 
-                                $titleList[] = $label;
+                                $this->app->loadLang($moduleKey);
+                                if(isset($this->lang->$moduleKey->featureBar[$menuKey][$subMenuKey]))
+                                {
+                                    $titleList[] = $label;
 
-                                $subMenu = new stdClass();
-                                $subMenu->title    = $label;
-                                $subMenu->key      = '';
-                                $subMenu->module   = $thisModule;
-                                $subMenu->method   = $thisMethod;
-                                $subMenu->active   = ($methodName == $thisMethod and $moduleName == $thisModule) ? 1 : 0;
-                                $subMenu->children = array();
+                                    $thirdMenu = new stdClass();
+                                    $thirdMenu->title  = $label;
+                                    $thirdMenu->key    = '';
+                                    $thirdMenu->module = $moduleKey;
+                                    $thirdMenu->method = "{$thisMethod}_{$subMenuKey}";
+                                    $thirdMenu->active = ($methodName == $thirdMenu->method and $moduleName == $moduleKey) ? 1 : 0;
 
-                                $menus["$thisModule-$thisMethod"] = $subMenu;
-                                $hasFeatureBar = false;
+                                    $subMenu->active     = 0;
+                                    $subMenu->children[] = $thirdMenu;
+                                    $hasFeatureBar = true;
+                                }
+                                elseif(isset($this->lang->$moduleKey->featureBar[$thisMethod]))
+                                {
+                                    if(is_array($this->lang->$moduleKey->featureBar[$thisMethod]))
+                                    {
+                                        $arrayKey = key($this->lang->$moduleKey->featureBar[$thisMethod]);
+                                        if(is_array($this->lang->$moduleKey->featureBar[$thisMethod][$arrayKey])) continue;
+                                    }
+
+                                    $titleList[] = $label;
+
+                                    $subMenu = new stdClass();
+                                    $subMenu->title  = $label;
+                                    $subMenu->key      = '';
+                                    $subMenu->module   = $moduleKey;
+                                    $subMenu->method   = $thisMethod;
+                                    $subMenu->active   = ($methodName == $thisMethod and $moduleName == $moduleKey) ? 1 : 0;
+                                    $subMenu->children = array();
+
+                                    $menus["$moduleKey-$thisMethod"] = $subMenu;
+                                    $hasFeatureBar = false;
+                                }
                             }
                         }
                     }
