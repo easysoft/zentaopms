@@ -29,8 +29,6 @@ class wg
 
     protected static $defineBlocks = NULL;
 
-    protected static $wgBlockMap = NULL;
-
     /**
      * The props of the element
      *
@@ -159,23 +157,13 @@ class wg
 
         if($child instanceof wg && empty($child->parent)) $child->parent = &$this;
 
-        $result = NULL;
-        if($name === 'children')
+        if($name === 'children' && $child instanceof wg)
         {
-            if($child instanceof wg && static::$wgBlockMap !== NULL && isset(static::$wgBlockMap[$child->type()]))
-            {
-                $name = static::$wgBlockMap[$child->type()];
-                $result = $this->onAddBlock($child, $name);
-            }
-            else
-            {
-                $result = $this->onAddChild($child);
-            }
+            $blockName = static::getBlockNameForWg($child);
+            if($blockName !== NULL) $name = $blockName;
         }
-        else
-        {
-            $result = $this->onAddBlock($child, $name);
-        }
+
+        $result = $name === 'children' ? $this->onAddChild($child) : $this->onAddBlock($child, $name);
 
         if($result === false) return;
         if($result !== NULL && $result !== true) $child = $result;
@@ -360,9 +348,34 @@ class wg
         return $defaultProps;
     }
 
-    public static $definedPropsMap = array();
+    protected static $wgToBlockMap = array();
+
+    protected static $definedPropsMap = array();
 
     private static $gidSeed = 0;
+
+    public static function getBlockNameForWg($wgType)
+    {
+        if($wgType instanceof wg) $wgType = $wgType->type();
+
+        $wgName = get_called_class();
+        if(!isset(wg::$wgToBlockMap[$wgName]))
+        {
+            $wgBlockMap = array();
+            if(isset(static::$defineBlocks))
+            {
+                foreach(static::$defineBlocks as $blockName => $setting)
+                {
+                    if(!isset($setting['map'])) continue;
+                    $map = $setting['map'];
+                    if(is_string($map)) $map = explode(',', $map);
+                    foreach($map as $name) $wgBlockMap[$name] = $blockName;
+                }
+            }
+            wg::$wgToBlockMap[$wgName] = $wgBlockMap;
+        }
+        return isset(wg::$wgToBlockMap[$wgName][$wgType]) ? wg::$wgToBlockMap[$wgName][$wgType] : NULL;
+    }
 
     public static function nextGid()
     {
