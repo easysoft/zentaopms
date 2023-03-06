@@ -44,7 +44,7 @@ $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Fermer {$lang->productCommon}";
 $lang->product->orderAction  = "Rang {$lang->productCommon}";
 $lang->product->exportAction = "Export {$lang->productCommon}";
-$lang->product->link2Project = "Link Project";
+$lang->product->link2Project = "Link {$lang->projectCommon}";
 
 $lang->product->basicInfo = 'Infos de Base';
 $lang->product->otherInfo = 'Autres Infos';
@@ -53,7 +53,7 @@ $lang->product->plans       = 'Plans';
 $lang->product->releases    = 'Releases';
 $lang->product->docs        = 'Doc';
 $lang->product->bugs        = 'Bug Liés';
-$lang->product->projects    = "Linked Project";
+$lang->product->projects    = "Linked {$lang->projectCommon}";
 $lang->product->executions  = "{$lang->execution->common}s Liés";
 $lang->product->cases       = 'CasTests';
 $lang->product->builds      = 'Build';
@@ -62,7 +62,7 @@ $lang->product->doc         = "Documents {$lang->productCommon}";
 $lang->product->project     = ' Liste ' . $lang->executionCommon;
 $lang->product->build       = 'Liste Builds';
 $lang->product->moreProduct = "More Product";
-$lang->product->projectInfo = "Les Projects qui sont associés à ce {$lang->productCommon} sont listés ci-dessous.";
+$lang->product->projectInfo = "Les {$lang->projectCommon}s qui sont associés à ce {$lang->productCommon} sont listés ci-dessous.";
 $lang->product->progress    = "Progress";
 
 $lang->product->currentExecution      = "Current Execution";
@@ -93,14 +93,14 @@ $lang->product->unfoldClosed          = 'Unfold Closed';
 $lang->product->confirmDelete        = "Voulez-vous vraiment supprimer le {$lang->productCommon} ?";
 $lang->product->errorNoProduct       = "Aucun {$lang->productCommon} n'est créé pour l'instant !";
 $lang->product->accessDenied         = "Vous n'avez pas accès au {$lang->productCommon}.";
-$lang->product->programChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
-$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
-$lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
-$lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
-$lang->product->changeLineError      = "Products already exist under the product line, so the program within them cannot be modified.";
+$lang->product->programChangeTip     = "The {$lang->projectCommon}s linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
+$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following {$lang->projectCommon}s, please cancel the link before proceeding";
+$lang->product->confirmChangeProgram = "The {$lang->projectCommon}s linked with this {$lang->productCommon}: %s is also linked with other {$lang->productCommon}s, whether to transfer {$lang->projectCommon}s to the modified program set.";
+$lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the {$lang->projectCommon}, please unlink it before proceeding";
+$lang->product->changeLineError      = "{$lang->productCommon}s already exist under the {$lang->productCommon} line, so the program within them cannot be modified.";
 $lang->product->programEmpty         = 'Program should not be empty!';
-$lang->product->nameIsDuplicate      = "『%s』 product line already exists, please reset!";
-$lang->product->nameIsDuplicated     = "Product Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
+$lang->product->nameIsDuplicate      = "『%s』 {$lang->productCommon} line already exists, please reset!";
+$lang->product->nameIsDuplicated     = "{$lang->productCommon} Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 $lang->product->reviewStory          = 'You are not a reviewer for needs "%s" , and cannot review. This operation has been filtered';
 
 $lang->product->id             = 'ID';
@@ -163,7 +163,7 @@ $lang->product->otherProduct          = 'Other Products';
 $lang->product->unclosedProduct       = 'Open Products';
 $lang->product->unexpiredPlan         = 'Unexpired Plans';
 $lang->product->doing                 = 'Doing';
-$lang->product->doingProject          = 'Ongoing Projects';
+$lang->product->doingProject          = "Ongoing {$lang->projectCommon}s";
 $lang->product->doingExecution        = 'Ongoing Executions';
 $lang->product->doingClassicExecution = 'Ongoing ' . $lang->executionCommon;
 $lang->product->normalRelease         = 'Normal Releases';
@@ -192,11 +192,11 @@ $lang->product->statusList['closed'] = 'Fermé';
 global $config;
 if($config->systemMode == 'ALM')
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 else
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated project can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 $lang->product->aclList['open']    = "Défaut (Les utilisateurs ayant des droits sur {$lang->productCommon} peuvent accéder à ce {$lang->productCommon}.)";
 //$lang->product->aclList['custom']  = "Personnalisé (les membres de l'équipe et les membres de la Liste blanche peuvent y accéder.)";

@@ -44,7 +44,7 @@ $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Close {$lang->productCommon}";
 $lang->product->orderAction  = "Rank {$lang->productCommon}";
 $lang->product->exportAction = "Export {$lang->productCommon}";
-$lang->product->link2Project = "Link Project";
+$lang->product->link2Project = "Link {$lang->projectCommon}";
 
 $lang->product->basicInfo = 'Basis Info';
 $lang->product->otherInfo = 'Andere Info';
@@ -62,7 +62,7 @@ $lang->product->doc         = 'Dok';
 $lang->product->project     = $lang->executionCommon . 'Liste';
 $lang->product->build       = 'Build';
 $lang->product->moreProduct = "More Product";
-$lang->product->projectInfo = "Projects that are linked to this {$lang->productCommon} are listed below.";
+$lang->product->projectInfo = "{$lang->projectCommon}s that are linked to this {$lang->productCommon} are listed below.";
 $lang->product->progress    = "Progress";
 
 $lang->product->currentExecution      = "Aktuelle Execution";
@@ -93,15 +93,15 @@ $lang->product->unfoldClosed          = 'Unfold Closed';
 $lang->product->confirmDelete        = " Möchten Sie {$lang->productCommon} löschen?";
 $lang->product->errorNoProduct       = "Kein {$lang->productCommon} erstellt!";
 $lang->product->accessDenied         = "Sie haben keinen Zugriff auf {$lang->productCommon}.";
-$lang->product->programChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
-$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
-$lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
-$lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
-$lang->product->changeLineError      = "Products already exist under the product line, so the program within them cannot be modified.";
+$lang->product->programChangeTip     = "The {$lang->projectCommon}s linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
+$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following {$lang->projectCommon}s, please cancel the link before proceeding";
+$lang->product->confirmChangeProgram = "The {$lang->projectCommon}s linked with this {$lang->productCommon}: %s is also linked with other {$lang->productCommon}s, whether to transfer {$lang->projectCommon}s to the modified program set.";
+$lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the {$lang->projectCommon}, please unlink it before proceeding";
+$lang->product->changeLineError      = "{$lang->productCommon}s already exist under the {$lang->productCommon} line, so the program within them cannot be modified.";
 $lang->product->programEmpty         = 'Program should not be empty!';
-$lang->product->nameIsDuplicate      = "『%s』 product line already exists, please reset!";
-$lang->product->nameIsDuplicated     = "Product Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
-$lang->product->reviewStory          = 'You are not a reviewer for needs " %s %s", and cannot review. This operation has been filtered';
+$lang->product->nameIsDuplicate      = "『%s』 {$lang->productCommon} line already exists, please reset!";
+$lang->product->nameIsDuplicated     = "{$lang->productCommon} Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
+$lang->product->reviewStory          = 'You are not a reviewer for needs "%s" , and cannot review. This operation has been filtered';
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
@@ -163,7 +163,7 @@ $lang->product->otherProduct          = 'Other Products';
 $lang->product->unclosedProduct       = 'Open Products';
 $lang->product->unexpiredPlan         = 'Unexpired Plans';
 $lang->product->doing                 = 'Doing';
-$lang->product->doingProject          = 'Ongoing Projects';
+$lang->product->doingProject          = "Ongoing {$lang->projectCommon}s";
 $lang->product->doingExecution        = 'Ongoing Executions';
 $lang->product->doingClassicExecution = 'Ongoing ' . $lang->executionCommon;
 $lang->product->normalRelease         = 'Normal Releases';
@@ -192,11 +192,11 @@ $lang->product->statusList['closed'] = 'Geschlossen';
 global $config;
 if($config->systemMode == 'ALM')
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 else
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated project can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 $lang->product->aclList['open']    = "Standard (Benutzer mit Rechten für {$lang->productCommon} können zugreifen.)";
 //$lang->product->aclList['custom']  = 'Benutzerdefiniert (Teammitglieder und Whitelist Benutzer haben Zugriff.)';
