@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div class='btn-toolbar pull-right'>
-   <?php echo html::backButton();?>
+   <?php echo html::backButton($lang->logout, '', 'btn-primary');?>
 </div>
 </div>
 <div id='mainContent' class='main-table'>
